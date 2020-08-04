@@ -69,6 +69,13 @@ void MaximalSublineStringMatcher::setConfiguration(const Settings& s)
   _sublineMatcher.reset(
     Factory::getInstance().constructObject<SublineMatcher>(co.getWaySublineMatcher()));
   _configureSublineMatcher();
+  std::shared_ptr<MaximalSublineMatcher> maximalSublineMatcher =
+    std::dynamic_pointer_cast<MaximalSublineMatcher>(_sublineMatcher);
+  if (maximalSublineMatcher)
+  {
+    // See MaximalSubline::__maxRecursionComplexity
+    maximalSublineMatcher->setMaxRecursionComplexity(co.getMaximalSublineMaxRecursiveComplexity());
+  }
 }
 
 void MaximalSublineStringMatcher::setMaxRelevantAngle(Radians r)
@@ -110,6 +117,7 @@ void MaximalSublineStringMatcher::setSublineMatcher(const std::shared_ptr<Sublin
 vector<WayPtr> MaximalSublineStringMatcher::_changeMap(const vector<ConstWayPtr>& ways,
   OsmMapPtr map) const
 {
+  LOG_TRACE("Changing map...");
   vector<WayPtr> result;
   result.reserve(ways.size());
   for (size_t i = 0; i < ways.size(); ++i)
@@ -143,12 +151,13 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
   }
   LOG_VART(maxRelevantDistance);
 
-  // make sure the inputs are legit. If either element isn't legit then throw a NeedsReviewException
+  // Make sure the inputs are legit. If either element isn't legit then throw a
+  // NeedsReviewException.
   _validateElement(map, e1->getElementId());
   _validateElement(map, e2->getElementId());
 
-  // extract the ways from the elements. In most cases it will return a vector of 1, but
-  // multilinestrings may contain multiple ways
+  // Extract the ways from the elements. In most cases it will return a vector of 1, but
+  // multilinestrings may contain multiple ways.
   vector<ConstWayPtr> ways1 = WaysVisitor::extractWays(map, e1);
   vector<ConstWayPtr> ways2 = WaysVisitor::extractWays(map, e2);
   LOG_VART(ways1.size());
@@ -168,11 +177,12 @@ WaySublineMatchString MaximalSublineStringMatcher::findMatch(const ConstOsmMapPt
     _findBestMatch(map, maxRelevantDistance, ways1, ways2, reversed1, reversed2);
   LOG_VART(scoredResult);
 
-  // convert the best match into a WaySublineStringMatch and return.
+  // Convert the best match into a WaySublineStringMatch and return.
   try
   {
     WaySublineMatchString result = scoredResult.matches;
-    // This likely shouldn't be necessary. See https://github.com/ngageoint/hootenanny/issues/157.
+    // TODO: This likely shouldn't be necessary. See
+    // https://github.com/ngageoint/hootenanny/issues/157.
     result.removeEmptyMatches();
     LOG_VART(result);
     return result;
@@ -193,6 +203,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
   vector<WaySublineMatch> matches;
 
   // make a copy of the map and the ways we need so we can reverse the ways as needed.
+  LOG_TRACE("Copying map subset...");
   set<ElementId> eids;
   _insertElementIds(ways1, eids);
   _insertElementIds(ways2, eids);
@@ -201,6 +212,8 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
 
   vector<WayPtr> prep1 = _changeMap(ways1, copiedMap);
   vector<WayPtr> prep2 = _changeMap(ways2, copiedMap);
+  LOG_VART(prep1.size());
+  LOG_VART(prep2.size());
 
   // reversed ways as appropriate
   _reverseWays(prep1, reversed1);
@@ -209,6 +222,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
   double scoreSum = 0;
 
   // go through and match each way against every other way
+  LOG_TRACE("Matching ways...");
   for (size_t i = 0; i < prep1.size(); i++)
   {
     for (size_t j = 0; j < prep2.size(); j++)
@@ -222,6 +236,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
     }
   }
 
+  LOG_TRACE("Indexing reversed...");
   HashMap<long, bool> wayIdToReversed1, wayIdToReversed2;
   // create a map from way id to reverse status
   for (size_t i = 0; i < prep1.size(); i++)
@@ -234,6 +249,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
   }
 
   // go through all the matches
+  LOG_TRACE("Scoring matches...");
   for (size_t i = 0; i < matches.size(); i++)
   {
     WaySubline ws1, ws2;
@@ -278,7 +294,7 @@ MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_evaluateM
 
 MaximalSublineStringMatcher::ScoredMatch MaximalSublineStringMatcher::_findBestMatch(
   const ConstOsmMapPtr& map, Meters maxDistance, vector<ConstWayPtr>& ways1,
-  vector<ConstWayPtr> &ways2, vector<bool>& reversed1, vector<bool> &reversed2, size_t i,
+  vector<ConstWayPtr>& ways2, vector<bool>& reversed1, vector<bool>& reversed2, size_t i,
   size_t j) const
 {
   const double epsilon = 1e-2;
@@ -332,9 +348,10 @@ void MaximalSublineStringMatcher::_insertElementIds(const vector<ConstWayPtr>& w
   }
 }
 
-void MaximalSublineStringMatcher::_reverseWays(const vector<WayPtr> &ways,
+void MaximalSublineStringMatcher::_reverseWays(const vector<WayPtr>& ways,
   const vector<bool>& reversed) const
 {
+  LOG_TRACE("Reversing ways...");
   for (size_t i = 0; i < ways.size(); i++)
   {
     if (reversed[i])

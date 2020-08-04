@@ -45,7 +45,6 @@ public:
   static std::string className() { return "hoot::SublineMatcher"; }
 
   SublineMatcher() = default;
-
   virtual ~SublineMatcher() = default;
 
   /**
@@ -57,10 +56,8 @@ public:
     const ConstWayPtr& way2, double& score, Meters maxRelevantDistance = -1) const = 0;
 
   virtual void setMaxRelevantAngle(Radians r) = 0;
-
   virtual void setMinSplitSize(Meters minSplitSize) = 0;
-
-  virtual void setHeadingDelta(Meters headingDelta)  = 0;
+  virtual void setHeadingDelta(Meters headingDelta) = 0;
 };
 
 typedef std::shared_ptr<SublineMatcher> SublineMatcherPtr;

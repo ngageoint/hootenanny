@@ -30,8 +30,7 @@
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/util/Exception.h>
 
 namespace hoot
 {
@@ -41,7 +40,6 @@ HOOT_FACTORY_REGISTER(Merger, RiverSnapMerger)
 RiverSnapMerger::RiverSnapMerger() :
 HighwaySnapMerger()
 {
-  setConfiguration(conf());
 }
 
 RiverSnapMerger::RiverSnapMerger(
@@ -51,76 +49,34 @@ RiverSnapMerger::RiverSnapMerger(
 HighwaySnapMerger(pairs, sublineMatcher),
 _sublineMatcher2(sublineMatcher2)
 {
-  setConfiguration(conf());
-}
-
-void RiverSnapMerger::setConfiguration(const Settings& conf)
-{
-  ConfigOptions opts(conf);
-  _nodeCountThreshold = opts.getWaterwayLongWayNodeCountThreshold();
-  _lengthThreshold = opts.getWaterwayLongWayLengthThreshold();
+  // The subline matchers have already been initialized by the conflate script by this point.
 }
 
 WaySublineMatchString RiverSnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
 {
-  if (e1->getElementType() != ElementType::Node && e2->getElementType() != ElementType::Node &&
-      isLongPair(map, e1, e2))
-  {
-    LOG_TRACE(
-      "Matching long river sublines for merging: " << e1->getElementId() << ", " <<
-       e2->getElementId() << "...");
-   return _sublineMatcher2->findMatch(map, e1, e2);
-  }
-  else
+  WaySublineMatchString match;
+  if (e1->getElementType() != ElementType::Node && e2->getElementType() != ElementType::Node)
   {
     LOG_TRACE(
       "Matching river sublines for merging: " << e1->getElementId() << ", " <<
        e2->getElementId() << "...");
-    return _sublineMatcher->findMatch(map, e1, e2);
+    try
+    {
+      match = _sublineMatcher->findMatch(map, e1, e2);
+    }
+    catch (const RecursiveComplexityException&)
+    {
+      // If we receive this exception with the more accurate but sometimes slower maximal subline
+      // matcher (assuming _sublineMatcher was configured to be Maximal), we'll try again with the
+      // Frechet matcher, which is sometimes less accurate but usually much faster (assuming
+      // _sublineMatcher2 was configured to be Frechet).
+      LOG_TRACE(
+        "Encountered max recursive complexity. Re-matching river sublines for merging: " <<
+        e1->getElementId() << ", " <<  e2->getElementId() << "...");
+      match = _sublineMatcher2->findMatch(map, e1, e2);
+    }
   }
-}
-
-bool RiverSnapMerger::isLongPair(
-  ConstOsmMapPtr map, ConstElementPtr element1, ConstElementPtr element2)
-{
-  if (element1->getElementType() == ElementType::Node ||
-      element2->getElementType() == ElementType::Node)
-  {
-    return false;
-  }
-
-  ElementConverter lengthCalc(map);
-  const double totalLength =
-    lengthCalc.calculateLength(element1) + lengthCalc.calculateLength(element2);
-
-  int nodeCount1 = 0;
-  if (element1->getElementType() == ElementType::Way)
-  {
-    nodeCount1 = std::dynamic_pointer_cast<const Way>(element1)->getNodeCount();
-  }
-  else
-  {
-    nodeCount1 =
-      RelationMemberUtils::getMemberWayNodeCount(
-        std::dynamic_pointer_cast<const Relation>(element1), map);
-  }
-  int nodeCount2 = 0;
-  if (element2->getElementType() == ElementType::Way)
-  {
-    nodeCount2 = std::dynamic_pointer_cast<const Way>(element2)->getNodeCount();
-  }
-  else
-  {
-    nodeCount2 =
-      RelationMemberUtils::getMemberWayNodeCount(
-        std::dynamic_pointer_cast<const Relation>(element2), map);
-  }
-  const int totalNodeCount = nodeCount1 + nodeCount2;
-
-  LOG_VART(totalLength);
-  LOG_VART(totalNodeCount);
-
-  return totalLength > _lengthThreshold || totalNodeCount > _nodeCountThreshold;
+  return match;
 }
 
 }

@@ -394,14 +394,6 @@ function snapRivers(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatc
 }
 
 /**
- * Determines if a river is considered "long" by River Conflation standards
- */
-function isLongRiverPair(map, e1, e2)
-{
-  return hoot.OsmSchema.isLongRiverPair(map, e1, e2);
-}
-
-/**
  * Uses the SearchRadiusCalculator to automatically calculate a search radius based on tie points found
  * in the two input datasets.
  *

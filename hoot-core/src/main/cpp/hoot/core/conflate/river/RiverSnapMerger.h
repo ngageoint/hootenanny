@@ -29,8 +29,6 @@
 
 // Hoot
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -43,7 +41,7 @@ class WaySublineMatchString;
  * This class primarily exists so that we can select a subline matcher based on properties of the
  * input data for runtime performance reasons.
  */
-class RiverSnapMerger : public HighwaySnapMerger, public Configurable
+class RiverSnapMerger : public HighwaySnapMerger
 {
 
 public:
@@ -57,27 +55,6 @@ public:
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher2);
   virtual ~RiverSnapMerger() = default;
 
-  /**
-   * @see Configurable
-   */
-  virtual void setConfiguration(const Settings& conf);
-
-  /**
-   * Determines if either of two features is considered "long" by the standards of River Conflation.
-   * Both way length and node count are examined.
-   *
-   * Note that relations are allowed here to despite the fact relation isn't an element type
-   * conflatable by River Conflation. This is due to the fact that relations are passed to matching
-   * during match conflict resolution and trying to prevent that causes regression test failures
-   * for an unknown reason. See comments in ScriptMatch::_isOrderedConflicting.
-   *
-   * @param map map owning the input elements
-   * @param element1 the first input element
-   * @param element2 the second input element
-   * @return true if either of the elements is considered "long"; false otherwise
-   */
-  bool isLongPair(ConstOsmMapPtr map, ConstElementPtr element1, ConstElementPtr element2);
-
   virtual QString getDescription() const { return "Merges rivers"; }
 
   virtual QString getName() const { return QString::fromStdString(className()); }
@@ -90,11 +67,6 @@ protected:
   virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
 
 private:
-
-  // way node count above which an element is considered "long"
-  int _nodeCountThreshold;
-  // way length above  which an elementis considered "long"
-  int _lengthThreshold;
 
   // This is our backup matcher to use for long ways for runtime performance reasons. It may be
   // a little less accurate but prevents extremely long ways from slowing things down too much.

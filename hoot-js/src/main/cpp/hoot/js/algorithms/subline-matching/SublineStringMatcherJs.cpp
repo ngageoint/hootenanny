@@ -35,6 +35,7 @@
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/algorithms/linearreference/WaySublineMatchStringJs.h>
@@ -76,12 +77,25 @@ void SublineStringMatcherJs::extractMatchingSublines(const FunctionCallbackInfo<
   ConstElementPtr e2 = e2Js->getConstElement();
 
   Handle<Value> result;
-
   try
   {
-    // Some attempts were made to cache this match for performance reasons, but the results were
-    // unstable. See branch 3969b.
-    WaySublineMatchString match = sm->findMatch(m, e1, e2);
+    // Some attempts were made to cache this match for performance reasons (could be used later
+    // during match conflict resolution), but the results were unstable. See branch 3969b.
+    WaySublineMatchString match;
+    try
+    {
+      // We'll try matching with whatever matching we're given...
+      match = sm->findMatch(m, e1, e2);
+    }
+    catch (const RecursiveComplexityException& e)
+    {
+      // If we receive this exception, we'll return a string with its exception name to the calling
+      // conflate script. This give it a change to retry the match with a different matcher. Kind
+      // of kludgy, but don't know how to send exceptions back to the js scripts at this time.
+      LOG_TRACE("Encountered max recursive complexity.");
+      args.GetReturnValue().Set(String::NewFromUtf8(current, e.getWhat().toUtf8().data()));
+      return;
+    }
 
     if (match.isEmpty())
     {

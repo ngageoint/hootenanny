@@ -173,7 +173,7 @@ std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map
   }
   catch (const HootException&)
   {
-    //unrecoverable error...we'll end up using the default search distance instead
+    // unrecoverable error...we'll end up using the default search distance instead
   }
   return tiePointDistances;
 }

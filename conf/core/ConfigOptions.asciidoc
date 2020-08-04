@@ -2501,11 +2501,20 @@ Size is specified in bytes unless followed by one of these suffixes.
 * MB = size * 1000 * 1000
 * GB = size * 1000 * 1000 * 1000
 
-For instance setting the value to 500KB is equivalent to 500000 bytes.
+For instance, setting the value to 500KB is equivalent to 500000 bytes.
 
 The Linux utility RLIMIT_AS is used for limiting virtual memory. This is analagous to RAM, but
 less RAM will be utilized than the value specified. Typically this is most useful when limiting
 RAM usage of applications in a shared server environment.
+
+=== maximal.subline.max.recursive.complexity
+
+* Data Type: int
+* Default Value: `-1`
+
+Maximum recursive calls allowed in MaximalSubline as it looks for line matches. Too low of a number
+may degrade Unifying algorithm line matching conflate performance. Too high of a number may result
+in runaway line matching processing times. -1 indicates no limit.
 
 === maximal.subline.spacing
 
@@ -5018,22 +5027,6 @@ SampledAngleHistogramExtractor
 Automatically calculates the search radius to be used during conflation of waterways using rubber
 sheet tie point distances.
 
-=== waterway.long.way.length.threshold
-
-* Data Type: int
-* Default Value: `150000`
-
-Way length threshold, in meters, at or above which River Conflation will switch from the configured
-subline matcher to Frechet subline matching to increase runtime performance.
-
-=== waterway.long.way.node.count.threshold
-
-* Data Type: int
-* Default Value: `750`
-
-Way node count threshold at or above which River Conflation will switch from the configured subline
-matcher to Frechet subline matching to increase runtime performance.
-
 === waterway.matcher.heading.delta
 
 * Data Type: double
@@ -5048,6 +5041,13 @@ The distance around a point on a waterway to look when calculating the heading. 
 * Default Value: `90.0`
 
 Sets that maximum angle that is still considered a waterway match. Units in degrees.
+
+=== waterway.maximal.subline.max.recursive.complexity
+
+* Data Type: int
+* Default Value: `50`
+
+River specific version of maximal.subline.max.recursive.complexity.
 
 === waterway.name.threshold
 

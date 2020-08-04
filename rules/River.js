@@ -26,28 +26,28 @@ exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 // used during subline matching
 var sublineMatcherName = hoot.get("waterway.subline.matcher");
 
-var sublineMatcher =
+var sublineMatcher = // default subline matcher
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": sublineMatcherName }); // default subline matcher
-var frechetSublineMatcher =
+      "way.subline.matcher": sublineMatcherName,
+      "maximal.subline.max.recursive.complexity": hoot.get("waterway.maximal.subline.max.recursive.complexity")/*50*/ });
+var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": "hoot::FrechetSublineMatcher" }); // we'll switch over to this one in certain situations
+      "way.subline.matcher": "hoot::FrechetSublineMatcher" }); 
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
     { "way.angle.sample.distance" : hoot.get("waterway.angle.sample.distance"),
       "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta"),
-      "angle.histogram.extractor.process.relations" : "false" }); // TODO:
+      "angle.histogram.extractor.process.relations" : "false" });
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
 
 var nameExtractor = new hoot.NameExtractor(
   new hoot.MaxWordSetDistance(
-    {"token.separator": "[\\s-,';]+"},
+    { "token.separator": "[\\s-,';]+" },
     // runs just a little faster w/ tokenize off
-    {"translate.string.distance.tokenize": "false"},
-    new hoot.LevenshteinDistance(
-      {"levenshtein.distance.alpha": 1.15})));
+    { "translate.string.distance.tokenize": "false" },
+    new hoot.LevenshteinDistance( { "levenshtein.distance.alpha": 1.15 } )));
 
 /**
  * Runs before match creation occurs and provides an opportunity to perform custom initialization.
@@ -80,6 +80,9 @@ exports.calculateSearchRadius = function(map)
  */
 exports.isMatchCandidate = function(map, e)
 {
+  hoot.trace("e: " + e.getElementId());
+  hoot.trace("isLinearWaterway: " + isLinearWaterway(e));
+
   return isLinearWaterway(e);
 };
 
@@ -145,23 +148,17 @@ function geometryMismatch(map, e1, e2)
 {
   hoot.trace("Processing geometry...");
 
-  var longRivers = isLongRiverPair(map, e1, e2);
-  hoot.trace("longRivers: " + longRivers);
-
   var sublines;
-  var sublineMatcherUsed = sublineMatcherName;
-  if (!longRivers)
-  {
-    hoot.trace("Extracting sublines with default...");
-    sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
-  }
-  else
+  hoot.trace("Extracting sublines with default...");
+  sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
+  hoot.trace(sublines);
+  if (sublines && sublines == "RecursiveComplexityException")
   {
     // Longer ways are can be very computationally expensive with the default subline matching. 
     // Frechet subline matching is a little less accurate but much faster, so we'll switch over 
     // to it for longer ways. Tried tweaking the configuration of MaximalSublineMatcher for 
     // performance, but it didn't help.
-    hoot.trace("Extracting sublines with Frechet...");
+    hoot.debug("Extracting sublines with Frechet...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
   }
 
