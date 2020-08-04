@@ -161,7 +161,7 @@ function geometryMismatch(map, e1, e2)
     // how to handle hoot exceptions in a js script at this point). So now we'll try a backup matcher
     // that may be a little less accurate but much faster. Previously tried tweaking the configuration 
     // of MaximalSublineMatcher for performance instead of using this approach, but it didn't help.
-    hoot.debug("Extracting sublines with Frechet...");
+    hoot.trace("Extracting sublines with Frechet...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
   }
 

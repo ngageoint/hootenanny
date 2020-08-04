@@ -35,7 +35,6 @@
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/algorithms/linearreference/WaySublineMatchStringJs.h>
