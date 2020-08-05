@@ -726,15 +726,21 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     _combineMaps(
       conflatedMap, immediatelyConnectedOutOfBoundsWays, true, "conflated-connected-combined");
 
-    // Snap only the connected ways to other ways in the conflated map. Mark the ways that were
+    // Snap the connected ways to other ways in the conflated map. Mark the ways that were
     // snapped, as we'll need that info in the next step.
     if (_waySnappingEnabled)
     {
       LOG_VART(linearFilterClassNames);
       for (int i = 0; i < linearFilterClassNames.size(); i++)
       {
+        QStringList snapWayStatuses("Input2");
+        snapWayStatuses.append("Conflated");
+        snapWayStatuses.append("Input1");
+        QStringList snapToWayStatuses("Input1");
+        snapToWayStatuses.append("Conflated");
+        snapToWayStatuses.append("Input2");
         _snapUnconnectedWays(
-          conflatedMap, QStringList("Input1"), QStringList("Input1"), linearFilterClassNames.at(i),
+          conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i),
           true, "conflated-snapped-immediately-connected-out-of-bounds");
       }
     }
@@ -1300,6 +1306,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VARD(_currentChangeDerivationPassIsLinear);
   LOG_VARD(doughMap->getElementCount());
   LOG_VARD(cutterMap->size());
+  OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map-input");
+  OsmMapWriterFactory::writeDebugMap(cutterMap, "cutter-map-input");
 
   /*
    * lenient/overlapping - cutter shape is all overlapping sec data inside the bounds and
@@ -1358,7 +1366,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
       {
         // If our map contains linear features only, the sec map is empty, we're doing full
         // replacement, AND there isn't a strict interpretation of the bounds, we want everything
-        // deleted out of the ref inside the replacement bounds and featres immediately connected
+        // deleted out of the ref inside the replacement bounds and features immediately connected
         // outside of the bounds. So, return an empty map.
         LOG_DEBUG(
           "Nothing in cutter map for linear features. Full replacement and lenient bounds "
@@ -1477,7 +1485,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   }
 
   LOG_VART(cutterMapToUse->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-map");
+  OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-map-to-use");
 
   LOG_STATUS("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
 

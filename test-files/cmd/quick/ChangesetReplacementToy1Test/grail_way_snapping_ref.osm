@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat="32.66639316019" minlon="-80.06245851785" maxlat="32.66808435424" maxlon="-80.05948663026"/>
+  <node id='49' version='1' visible='true' lat='32.66884075921' lon='-80.06140709996' />
+  <node id='51' version='1' visible='true' lat='32.66742278959' lon='-80.06128908277' />
+  <node id='52' version='1' visible='true' lat='32.66645638975' lon='-80.06139637113' />
+  <node id='53' version='1' visible='true' lat='32.6652732131' lon='-80.06136418462' />
+  <node id='55' version='1' visible='true' lat='32.6652732131' lon='-80.06432534337' />
+  <node id='56' version='1' visible='true' lat='32.66525514921' lon='-80.05931497693' />
+  <node id='69' version='1' visible='true' lat='32.66742278959' lon='-80.06128908277' />
+  <way id='82' version='1' visible='true'>
+    <nd ref='49' />
+    <nd ref='51' />
+    <nd ref='52' />
+    <nd ref='53' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='road 2' />
+  </way>
+  <way id='86' version='1' visible='true'>
+    <nd ref='55' />
+    <nd ref='53' />
+    <nd ref='56' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='road 1' />
+  </way>
+</osm>
