@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat="32.66639316019" minlon="-80.06245851785" maxlat="32.66808435424" maxlon="-80.05948663026"/>
+  <node id='774' version='1' visible='true' lat='32.66884075921' lon='-80.06140709996' />
+  <node id='775' version='1' visible='true' lat='32.66742278959' lon='-80.06128908277' />
+  <node id='776' version='1' visible='true' lat='32.66645638975' lon='-80.06139637113' />
+  <node id='777' version='1' visible='true' lat='32.6652732131' lon='-80.06136418462' />
+  <way id='830' version='1' visible='true'>
+    <nd ref='774' />
+    <nd ref='775' />
+    <nd ref='776' />
+    <nd ref='777' />
+    <tag k='highway' v='residential' />
+    <tag k='name' v='road 3' />
+  </way>
+</osm>

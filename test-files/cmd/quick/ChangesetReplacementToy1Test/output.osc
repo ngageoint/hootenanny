@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+    <create>
+        <node id="-1" version="0" lat="32.6664562313495495" lon="-80.0613963711299874"/>
+        <node id="-2" version="0" lat="32.6674226311967786" lon="-80.0612890827700028"/>
+        <node id="-3" version="0" lat="32.6688406008273873" lon="-80.0614070999599932"/>
+    </create>
+    <delete>
+        <node id="49" version="1" lat="32.6688407486511849" lon="-80.0614070999599932"/>
+        <node id="51" version="1" lat="32.6674227790304244" lon="-80.0612890827700028"/>
+        <node id="52" version="1" lat="32.6664563791899383" lon="-80.0613963711299874"/>
+    </delete>
+    <create>
+        <way id="-1" version="0">
+            <nd ref="-3"/>
+            <nd ref="-2"/>
+            <nd ref="-1"/>
+            <nd ref="53"/>
+            <tag k="highway" v="residential"/>
+            <tag k="name" v="road 3"/>
+        </way>
+    </create>
+    <delete>
+        <way id="82" version="1">
+            <nd ref="49"/>
+            <nd ref="51"/>
+            <nd ref="52"/>
+            <nd ref="53"/>
+            <tag k="highway" v="residential"/>
+            <tag k="name" v="road 2"/>
+        </way>
+    </delete>
+</osmChange>

@@ -40,12 +40,12 @@ Deriving a changeset between the osm api db and the hoot api db layers over: -71
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoadTest/ServiceChangesetReplacementRoadTest-changeset-db.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.4604927, num_changes=282
+Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.4604927, num_changes=283
 Node(s) Created: 135
-Node(s) Modified: 2
+Node(s) Modified: 1
 Node(s) Deleted: 130
 Way(s) Created: 7
-Way(s) Modified: 1
+Way(s) Modified: 3
 Way(s) Deleted: 7
 Relation(s) Created: 0
 Relation(s) Modified: 0
@@ -74,12 +74,12 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoadTest/ServiceChangesetReplacementRoadTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.4604927, num_changes=282
+Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.4604927, num_changes=283
 Node(s) Created: 135
-Node(s) Modified: 2
+Node(s) Modified: 1
 Node(s) Deleted: 130
 Way(s) Created: 7
-Way(s) Modified: 1
+Way(s) Modified: 3
 Way(s) Deleted: 7
 Relation(s) Created: 0
 Relation(s) Modified: 0
@@ -108,12 +108,12 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoadTest/ServiceChangesetReplacementRoadTest-changeset-json.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.4604927, num_changes=282
+Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.4604927, num_changes=283
 Node(s) Created: 135
-Node(s) Modified: 2
+Node(s) Modified: 1
 Node(s) Deleted: 130
 Way(s) Created: 7
-Way(s) Modified: 1
+Way(s) Modified: 3
 Way(s) Deleted: 7
 Relation(s) Created: 0
 Relation(s) Modified: 0
