@@ -140,7 +140,8 @@ private:
   // id mappings for created elements
   QMap<ElementId, ElementId> _remappedIds;
 
-  QList<Change> _parsedChanges;
+  // element IDs associated with a changes encountered
+  QList<ElementId> _parsedChangeIds;
 
   // list of metadata tag keys allowed to be written to the changeset
   QStringList _metadataAllowKeys;

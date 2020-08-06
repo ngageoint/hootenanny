@@ -88,7 +88,8 @@ private:
   int _precision;
 
   Change _change;
-  QList<Change> _parsedChanges;
+  // element IDs associated with a changes encountered
+  QList<ElementId> _parsedChangeIds;
 
   bool _addTimestamp;
   bool _includeDebugTags;

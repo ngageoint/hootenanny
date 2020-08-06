@@ -92,7 +92,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
     QString changesetStatType;
     if (sqlStatement.toUpper().startsWith("INSERT INTO CHANGESETS"))
     {
-      //flush
+      // flush
       if (!changesetInsertStatement.isEmpty())
       {
         if (elementSqlStatements.trimmed().isEmpty())

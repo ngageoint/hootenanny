@@ -460,6 +460,8 @@ void ChangesetReplacementCreator::create(
         "Adding ref map of size: " << refMap->size() << " and conflated map of size: " <<
         conflatedMap->size() << " to changeset derivation queue for geometry type: " <<
         GeometryTypeCriterion::typeToString(itr.key()) << "...");
+      // TODO: move set name here to inside _getMapsForGeometryType, so we can see the geometry type
+      // in the name??
       refMap->setName(refMap->getName() + "-" + GeometryTypeCriterion::typeToString(itr.key()));
       refMaps.append(refMap);
       conflatedMap->setName(
