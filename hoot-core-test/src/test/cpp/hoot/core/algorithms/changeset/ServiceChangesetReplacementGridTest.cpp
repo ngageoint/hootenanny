@@ -53,23 +53,23 @@ static const QString REPLACEMENT_DATA_URL =
   ServicesDbTestUtils::getDbModifyUrl(TEST_NAME).toString();
 static const QString REPLACEMENT_DATA_FILE = "OSMData.osm";
 
-// all - ? changesets; fails on 3rd changeset
+// all - ? changesets; fails on ? changeset
 //static const QString CROP_INPUT_BOUNDS = "";
 //static const QString REPLACEMENT_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447";
 
-// 4 sq blocks - ? changesets; completes in ?
-//static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387";
-//static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
+// 4 sq blocks - 5 changesets; completes in 2:33
+static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387";
+static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
 
-// 1/4 of city - 64 changesets; fails on application of 12th changeset at 9.5min
-static const QString CROP_INPUT_BOUNDS = "-115.3441,36.2012,-115.1942,36.3398";
-static const QString REPLACEMENT_BOUNDS = "-115.3332,36.2178,-115.1837,36.3400";
+// 1/4 of city - 64 changesets; completes in 47:52
+//static const QString CROP_INPUT_BOUNDS = "-115.3441,36.2012,-115.1942,36.3398";
+//static const QString REPLACEMENT_BOUNDS = "-115.3332,36.2178,-115.1837,36.3400";
 
 static const QString TASK_GRID_FILE = ROOT_DIR + "/bounds.osm";
 
 /*
  * This is meant for manually testing cut and replace across adjacent task grid cells. Not meant to
- * be run automatically.
+ * be run automatically as part of the unit tests.
  *
  * TODO: add the option to pass in a uniform grid
  * TODO: add the option to pass in specific grid cells
@@ -117,13 +117,13 @@ public:
       _cleanup();
 
       LOG_STATUS(
-        "Entire task grid cell replacement operation finished in: " <<
+        "Entire task grid cell replacement operation successfully completed in: " <<
         StringUtils::millisecondsToDhms(_opTimer.elapsed()));
     }
     catch (const HootException& e)
     {
       LOG_ERROR(
-        "Entire task grid cell replacement operation failed in: " <<
+        "Entire task grid cell replacement operation partially completed with error in: " <<
         StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
     }
   }
@@ -140,7 +140,7 @@ private:
   {
     conf().set(ConfigOptions::getOsmapidbBulkInserterReserveRecordIdsBeforeWritingDataKey(), true);
     conf().set(ConfigOptions::getApidbBulkInserterValidateDataKey(), true);
-    conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
+    conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), false);
     conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
     conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
@@ -184,8 +184,8 @@ private:
     cropOutputFile = cropOutputFile.replace(".osm", "-cropped.osm");
     _dataToReplaceFile = cropOutputFile;
     LOG_STATUS(
-      "Cropping data to replace from: " << ROOT_DIR << "/" << DATA_TO_REPLACE_FILE << " to: " <<
-      ROOT_DIR << "/" << _dataToReplaceFile << "...");
+      "Reading data to replace from: ..." << ROOT_DIR << "/" << DATA_TO_REPLACE_FILE << " to: " <<
+      ROOT_DIR << "/" << _dataToReplaceFile.right(25) << "...");
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, ROOT_DIR + "/" + DATA_TO_REPLACE_FILE, true, Status::Unknown1);
     LOG_STATUS(
@@ -203,8 +203,8 @@ private:
     cropOutputFile = cropOutputFile.replace(".osm", "-cropped.osm");
     _replacementDataFile = cropOutputFile;
     LOG_STATUS(
-      "Cropping replacement data from: " << ROOT_DIR << "/" << REPLACEMENT_DATA_FILE << " to: " <<
-      ROOT_DIR << "/" << _replacementDataFile << "...");
+      "Reading replacement data from: ..." << ROOT_DIR << "/" << REPLACEMENT_DATA_FILE << " to: " <<
+      ROOT_DIR << "/" << _replacementDataFile.right(25) << "...");
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, ROOT_DIR + "/" + REPLACEMENT_DATA_FILE, true, Status::Unknown2);
     LOG_STATUS(
@@ -276,7 +276,7 @@ private:
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
     conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
-    // IMPORTANT: must be unknown1 for node density to work
+    // IMPORTANT: this must be unknown1 for node density to work
     OsmMapReaderFactory::read(map, ROOT_DIR + "/" + _replacementDataFile, true, Status::Unknown1);
     LOG_STATUS("Replacement elements: " << StringUtils::formatLargeNumber(map->size()));
     LOG_STATUS(
@@ -284,10 +284,12 @@ private:
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
 
-    LOG_STATUS("Calculating task grid cells for replacement data to: " << TASK_GRID_FILE << "...");
+    LOG_STATUS(
+      "Calculating task grid cells for replacement data to: ..." << TASK_GRID_FILE.right(25) <<
+      "...");
     NodeDensityTileBoundsCalculator boundsCalc;
     boundsCalc.setPixelSize(0.001);
-    boundsCalc.setMaxNodesPerTile(/*100000*/10000);
+    boundsCalc.setMaxNodesPerTile(/*100000*/1000);
     boundsCalc.setMaxNumTries(3);
     boundsCalc.setMaxTimePerAttempt(300);
     boundsCalc.setPixelSizeRetryReductionFactor(10);
@@ -307,8 +309,8 @@ private:
     LOG_STATUS(
       "Minimum node count in any one tile: " <<
       StringUtils::formatLargeNumber(boundsCalc.getMinNodeCountInOneTile()));
-    LOG_STATUS("Pixel size used: " << boundsCalc.getPixelSize());
-    LOG_STATUS(
+    LOG_INFO("Pixel size used: " << boundsCalc.getPixelSize());
+    LOG_INFO(
       "Maximum node count per tile used: " <<
       StringUtils::formatLargeNumber(boundsCalc.getMaxNodesPerTile()));
     LOG_STATUS(
@@ -349,20 +351,20 @@ private:
         LOG_STATUS(
           "Deriving changeset " << StringUtils::formatLargeNumber(boundsCtr) << " / " <<
           StringUtils::formatLargeNumber(numTiles) << ": " << changesetId << " over bounds: " <<
-          boundsStr << " to file: " << changesetFile.fileName() << "...");
+          boundsStr << " to file: ..." << changesetFile.fileName().right(25) << "...");
         changesetCreator.create(
           DATA_TO_REPLACE_URL, /*REPLACEMENT_DATA_URL*/ROOT_DIR + "/" + _replacementDataFile,
           bounds, changesetFile.fileName());
-        LOG_STATUS(
-          "Changeset derived in: " <<
-          StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-        _subTaskTimer.restart();
+//        LOG_STATUS(
+//          "Changeset derived in: " <<
+//          StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+//        _subTaskTimer.restart();
 
         // apply the difference back to the data being replaced
         LOG_STATUS(
           "Applying changeset: " << StringUtils::formatLargeNumber(boundsCtr) << " / " <<
           StringUtils::formatLargeNumber(numTiles) << ": " << changesetId << " over bounds: " <<
-          boundsStr << " from file: " << changesetFile.fileName() << "...");
+          boundsStr << " from file: ..." << changesetFile.fileName().right(25) << "...");
         changesetApplier.write(changesetFile);
         LOG_STATUS(
           "Changeset applied in: " <<
@@ -376,7 +378,17 @@ private:
 
   void _getUpdatedData()
   {
-    LOG_STATUS("Reading the modified data out of: " << DATA_TO_REPLACE_URL << "...");
+    const QString replaceDataFile = ROOT_DIR + "/replaced-data.osm";
+    LOG_STATUS(
+      "Reading the modified data out of: " << DATA_TO_REPLACE_URL << " to: ..." <<
+      replaceDataFile.right(25) << "...");
+
+    // clear this out so we get all the data back
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
+    // change these, so we can open the files in josm
+    conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
+    conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, DATA_TO_REPLACE_URL, true, Status::Unknown1);
     LOG_STATUS("Modified data size: " << StringUtils::formatLargeNumber(map->size()));

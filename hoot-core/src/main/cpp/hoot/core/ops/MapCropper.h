@@ -91,8 +91,7 @@ public:
 
   virtual QString getDescription() const override { return "Crops a map"; }
 
-  virtual QString getInitStatusMessage() const override
-  { return "Cropping map..."; }
+  virtual QString getInitStatusMessage() const override;
 
   virtual QString getCompletedStatusMessage() const override
   {

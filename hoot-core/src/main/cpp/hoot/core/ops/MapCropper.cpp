@@ -132,6 +132,21 @@ _logWarningsForMissingElements(true)
 {
 }
 
+QString MapCropper::getInitStatusMessage() const
+{
+  QString msg = "Cropping map at bounds: ";
+  if (!_envelope.isNull())
+  {
+    msg += GeometryUtils::envelopeToConfigString(_envelope);
+  }
+  else if (_envelopeG)
+  {
+    msg += QString::fromStdString(_envelopeG->toString());
+  }
+  msg += "...";
+  return msg;
+}
+
 void MapCropper::setBounds(const geos::geom::Envelope& bounds)
 {
   _nodeBounds = bounds;

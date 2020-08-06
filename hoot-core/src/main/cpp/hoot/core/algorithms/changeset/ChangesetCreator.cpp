@@ -706,7 +706,8 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     }
     else
     {
-      LOG_WARN("Changeset statistics not implemented for output: " << output);
+      LOG_INFO(
+        "Skipping changeset statistics generation, as not implemented for output: " << output);
     }
   }
 

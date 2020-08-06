@@ -96,6 +96,9 @@
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 
+// Qt
+#include <QElapsedTimer>
+
 namespace hoot
 {
 
@@ -388,6 +391,9 @@ void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
+  QElapsedTimer timer;
+  timer.start();
+
   // INPUT VALIDATION AND SETUP
 
   _validateInputs(input1, input2, output);
@@ -417,7 +423,7 @@ void ChangesetReplacementCreator::create(
   {
     LOG_STATUS("******************************************");
     LOG_STATUS(
-      "Preparing maps for changeset derivation given geometry type: "<<
+      "Generating maps for changeset derivation given geometry type: "<<
       GeometryTypeCriterion::typeToString(itr.key()) << ". Pass: " << passCtr << " / " <<
       refFilters.size() << "...");
 
@@ -512,7 +518,8 @@ void ChangesetReplacementCreator::create(
 
   LOG_STATUS(
     "Derived replacement changeset: ..." <<
-    output.right(ConfigOptions().getProgressVarPrintLengthMax()));
+    output.right(ConfigOptions().getProgressVarPrintLengthMax()) << " in " <<
+    StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 
 void ChangesetReplacementCreator::_getMapsForGeometryType(
@@ -534,8 +541,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // load the ref dataset and crop to the specified aoi; can't cache here b/c the map is cropped
   // during reading differently based on the geometry type
-  // TODO: we could maybe load the full map the first time and then crop the raw map only based
-  // on geometry type each time, rather than reload it from the source
+  // TODO: If we knew the map was pre cut down to something reasonable (e.g. via overpass query) we
+  // could maybe load the full map the first time and then crop the raw map only based on geometry
+  //type each time, rather than reload it from the source.
   refMap = _loadRefMap(input1);
   MemoryUsageChecker::getInstance().check();
 
@@ -656,7 +664,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     // want to snap ways of like types together, so we'll loop through each applicable linear type
     // and snap them separately.
 
-    LOG_STATUS("Snapping unconnected ways to each other...");
+    LOG_INFO("Snapping unconnected ways to each other...");
     QStringList snapWayStatuses("Input2");
     snapWayStatuses.append("Conflated");
     QStringList snapToWayStatuses("Input1");
@@ -699,6 +707,14 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   if (_boundsInterpretation == BoundsInterpretation::Lenient &&
       _currentChangeDerivationPassIsLinear)
   {
+    QStringList snapWayStatuses("Input2");
+    snapWayStatuses.append("Conflated");
+    snapWayStatuses.append("Input1");
+    QStringList snapToWayStatuses("Input1");
+    snapToWayStatuses.append("Conflated");
+    snapToWayStatuses.append("Input2");
+    LOG_VARD(linearFilterClassNames);
+
     if (_waySnappingEnabled)
     {
       // The non-strict way replacement workflow benefits from a second snapping run right before
@@ -708,14 +724,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
       // we're being as lenient as possible with the snapping here, allowing basically anything to
       // join to anything else, which could end up causing problems...we'll go with it for now.
 
-      LOG_STATUS("Snapping unconnected ways to each other...");
-      QStringList snapWayStatuses("Input2");
-      snapWayStatuses.append("Conflated");
-      snapWayStatuses.append("Input1");
-      QStringList snapToWayStatuses("Input1");
-      snapToWayStatuses.append("Conflated");
-      snapToWayStatuses.append("Input2");
-      LOG_VARD(linearFilterClassNames);
+      LOG_INFO("Snapping unconnected ways to each other...");
       for (int i = 0; i < linearFilterClassNames.size(); i++)
       {
         _snapUnconnectedWays(
@@ -732,15 +741,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     // snapped, as we'll need that info in the next step.
     if (_waySnappingEnabled)
     {
-      LOG_VART(linearFilterClassNames);
+      LOG_INFO("Snapping unconnected ways to each other...");
       for (int i = 0; i < linearFilterClassNames.size(); i++)
       {
-        QStringList snapWayStatuses("Input2");
-        snapWayStatuses.append("Conflated");
-        snapWayStatuses.append("Input1");
-        QStringList snapToWayStatuses("Input1");
-        snapToWayStatuses.append("Conflated");
-        snapToWayStatuses.append("Input2");
         _snapUnconnectedWays(
           conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i),
           true, "conflated-snapped-immediately-connected-out-of-bounds");
@@ -841,7 +844,7 @@ void ChangesetReplacementCreator::_setGlobalOpts(const QString& boundsStr)
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
 
   // This needs to be lowered a bit from the default of 7 to make feature de-duping work...a little
-  // concerning, why?
+  // concerning...why does this need to be done?
   conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6);
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
@@ -1257,7 +1260,7 @@ void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& ma
   elementMarker.setMarkWaysForReview(false);
   elementMarker.setRelationKvp(MetadataTags::HootMissingChild() + "=yes");
   elementMarker.setWayKvp(MetadataTags::HootMissingChild() + "=yes");
-  LOG_STATUS("Marking elements with missing child elements...");
+  LOG_INFO("Marking elements with missing child elements...");
   map->visitRelationsRw(elementMarker);
   LOG_DEBUG(
     "Marked " << elementMarker.getNumWaysTagged() << " ways with missing child elements.");
@@ -1272,7 +1275,7 @@ void ChangesetReplacementCreator::_filterFeatures(
   OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
   const QString& debugFileName)
 {
-  LOG_STATUS(
+  LOG_INFO(
     "Filtering features for: " << map->getName() << " based on input filter: " +
     featureFilter->toString() << "...");
 
@@ -1496,7 +1499,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VART(cutterMapToUse->size());
   OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-map-to-use");
 
-  LOG_STATUS("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
+  LOG_INFO("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
 
   LOG_VART(cookieCutterAlpha);
   LOG_VART(cookieCutterAlphaShapeBuffer);
@@ -1526,7 +1529,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, "cutter-shape");
 
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
-  LOG_STATUS("Cutting cutter shape out of: " << cookieCutMap->getName() << "...");
+  LOG_INFO("Cutting cutter shape out of: " << cookieCutMap->getName() << "...");
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
@@ -1547,7 +1550,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
 QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
   const OsmMapPtr& map) const
 {
-  LOG_STATUS("Mapping element IDs to element versions for: " << map->getName() << "...");
+  LOG_INFO("Mapping element IDs to element versions for: " << map->getName() << "...");
 
   ElementIdToVersionMapper idToVersionMapper;
   //LOG_STATUS("\t" << idToVersionMapper.getInitStatusMessage());
@@ -1561,7 +1564,7 @@ QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
 
 void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& map)
 {
-  LOG_STATUS(
+  LOG_INFO(
     "Setting connected way features outside of bounds to be excluded from deletion for: " <<
     map->getName() << "...");
 
@@ -1609,7 +1612,7 @@ void ChangesetReplacementCreator::_combineMaps(
     return;
   }
 
-  LOG_STATUS("Combining maps: " << map1->getName() << " and " << map2->getName() << "...");
+  LOG_INFO("Combining maps: " << map1->getName() << " and " << map2->getName() << "...");
 
   map1->append(map2, throwOutDupes);
   LOG_VART(MapProjector::toWkt(map1->getProjection()));
@@ -1733,7 +1736,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
   const ConstOsmMapPtr& map) const
 {
   const QString outputMapName = "connected-ways";
-  LOG_STATUS(
+  LOG_INFO(
     "Copying immediately connected out of bounds ways from: " << map->getName() <<
     " to new map: " << outputMapName << "...");
 
@@ -1760,7 +1763,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
     return;
   }
 
-  LOG_STATUS("Cropping map: " << map->getName() << " for changeset derivation...");
+  LOG_INFO("Cropping map: " << map->getName() << " for changeset derivation...");
   LOG_VART(MapProjector::toWkt(map->getProjection()));
 
   MapCropper cropper(bounds);
@@ -1783,7 +1786,7 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
 void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(
   OsmMapPtr& map)
 {
-  LOG_STATUS(
+  LOG_INFO(
     "Removing any immediately connected ways that were not previously snapped in: " <<
     map->getName() << "...");
 
@@ -1879,7 +1882,7 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
 
 void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 {
-  LOG_STATUS("Cleaning up duplicated elements for " << map->getName() << "...");
+  LOG_INFO("Cleaning up duplicated elements for " << map->getName() << "...");
 
   // Due to mixed geometry type relations explained in _getDefaultGeometryFilters, we may have
   // introduced some duplicate relation members by this point.
