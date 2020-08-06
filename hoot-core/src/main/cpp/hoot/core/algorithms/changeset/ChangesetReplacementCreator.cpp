@@ -1304,10 +1304,18 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VARD(_fullReplacement);
   LOG_VARD(_boundsInterpretationToString(_boundsInterpretation));
   LOG_VARD(_currentChangeDerivationPassIsLinear);
-  LOG_VARD(doughMap->getElementCount());
+  LOG_VARD(doughMap->size());
   LOG_VARD(cutterMap->size());
   OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map-input");
   OsmMapWriterFactory::writeDebugMap(cutterMap, "cutter-map-input");
+
+  // It could just be an byproduct of how data is being read out by core scripts during testing, but
+  // when doing adjacent cell updates I'm getting cropped data with a bunch of empty relations in
+  // them as input. That eventually needs to be dealt with, but regardless, checking node/way count
+  // and not including relations in the size count is a better check for the total map size so that
+  // the alpha shape gets calculated correctly.
+  const int doughMapInputSize = doughMap->getWayCount() + doughMap->getNodeCount();
+  const int cutterMapInputSize = cutterMap->getWayCount() + cutterMap->getNodeCount();
 
   /*
    * lenient/overlapping - cutter shape is all overlapping sec data inside the bounds and
@@ -1324,7 +1332,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
 
   // If the passed in dough map is empty, there's nothing to be cut out. So, just return the empty
   // ref map.
-  if (doughMap->getElementCount() == 0)
+  if (doughMapInputSize == 0)
   {
     LOG_DEBUG(
       "Nothing to cut from dough map, so returning the empty dough map as the map after " <<
@@ -1332,7 +1340,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cut");
     return doughMap;
   }
-  else if (cutterMap->size() == 0)
+  else if (cutterMapInputSize == 0)
   {
     // Linear features need to be handled slightly differently, due to the need to snap cut features
     // back to reference features when the strict bounds interpretation is enabled.
@@ -1411,10 +1419,9 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     }
   }
 
-  LOG_VART(doughMap->getElementCount());
+  LOG_VART(doughMap->size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map");
-  LOG_VART(cutterMap->getElementCount());
+  OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map");;
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
@@ -1423,7 +1430,6 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_DEBUG("Preparing to cookie cut: " << cookieCutMap->getName() << "...");
 
   OsmMapPtr cutterMapToUse;
-  LOG_VART(cutterMap->getElementCount());
   ConfigOptions opts(conf());
   LOG_VART(MapUtils::mapIsPointsOnly(cutterMap));
   const double cookieCutterAlpha = opts.getCookieCutterAlpha();
@@ -1471,7 +1477,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   // not be possible (or at least don't know how to yet). So instead, go through the points in the
   // map and replace them with small square shaped polys...from that we can generate the alpha
   // shape.
-  if ((int)cutterMapToUse->getElementCount() < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
+  const int cutterMapToUseSize = cutterMapToUse->getNodeCount();
+  if ((int)cutterMapToUseSize < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
   {
     LOG_DEBUG("Creating a cutter shape map transformation for point map...");
     // Make a copy here since we're making destructive changes to the geometry here for alpha shape
@@ -1484,7 +1491,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     MapProjector::projectToWgs84(cutterMapToUse);
   }
 
-  LOG_VART(cutterMapToUse->getElementCount());
+  LOG_VART(cutterMapToUse->size());
   OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-map-to-use");
 
   LOG_STATUS("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
@@ -1526,9 +1533,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     _boundsOpts.cookieCutKeepOnlyInsideBounds, false)
     .cut(cutterShapeOutlineMap, cookieCutMap);
   MapProjector::projectToWgs84(cookieCutMap); // not exactly sure yet why this needs to be done
-  LOG_VARD(cookieCutMap->getElementCount());
+  LOG_VARD(cookieCutMap->size());
   MapProjector::projectToWgs84(doughMap);
-  LOG_VART(doughMap->getElementCount());
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
