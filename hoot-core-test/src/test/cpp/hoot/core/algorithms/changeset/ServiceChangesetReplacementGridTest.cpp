@@ -53,15 +53,15 @@ static const QString REPLACEMENT_DATA_URL =
   ServicesDbTestUtils::getDbModifyUrl(TEST_NAME).toString();
 static const QString REPLACEMENT_DATA_FILE = "OSMData.osm";
 
-// all - fails on 3rd changeset
+// all - ? changesets; fails on 3rd changeset
 //static const QString CROP_INPUT_BOUNDS = "";
 //static const QString REPLACEMENT_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447";
 
-// 4 sq blocks - good
+// 4 sq blocks - ? changesets; completes in ?
 //static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387";
 //static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
 
-// 1/4 of city - fails with zero alpha shape
+// 1/4 of city - 64 changesets; fails on application of 12th changeset at 9.5min
 static const QString CROP_INPUT_BOUNDS = "-115.3441,36.2012,-115.1942,36.3398";
 static const QString REPLACEMENT_BOUNDS = "-115.3332,36.2178,-115.1837,36.3400";
 
@@ -77,7 +77,7 @@ static const QString TASK_GRID_FILE = ROOT_DIR + "/bounds.osm";
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
-  // FOR DEBUGGING ONLY
+  // ENABLE FOR DEBUGGING ONLY
   //CPPUNIT_TEST(runGridCellTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -144,7 +144,6 @@ private:
     conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
     conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
     conf().set(ConfigOptions::getDebugMapsRemoveMissingElementsKey(), true);
     conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
     conf().set(ConfigOptions::getApiDbEmailKey(), USER_EMAIL);
@@ -154,7 +153,7 @@ private:
     conf().set(ConfigOptions::getChangesetMaxSizeKey(), 999999);
     conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 0.5);
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), ROOT_DIR + "/debug.osm");
   }
 
