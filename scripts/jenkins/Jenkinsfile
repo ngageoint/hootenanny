@@ -214,7 +214,7 @@ pipeline {
                 // Copy over the test-output directory and add it to the artifacts
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; tar czf failed-test-output.tar.gz test-output'"
                 sh "vagrant scp ${params.Box}:~/hoot/failed-test-output.tar.gz ./"
-                archiveArtifacts '**/failed-test-output.tar.gz'
+                archiveArtifacts artifacts: '**/failed-test-output.tar.gz'
             }
         }
         cleanup {
