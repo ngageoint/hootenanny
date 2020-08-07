@@ -229,9 +229,9 @@ private:
 
   QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
 
-  void _validateInputs(const QString& input1, const QString& input2);
+  void _validateInputs(const QString& input1, const QString& input2, const QString& output);
 
-  QString _getJobDescription(
+  void _printJobDescription(
     const QString& input1, const QString& input2, const QString& bounds,
     const QString& output) const;
 

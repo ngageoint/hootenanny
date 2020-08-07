@@ -75,7 +75,7 @@ IDs in the secondary data are not retained and those elements treated as complet
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--disable-way-snapping] [--disable-conflation] [--disable-oob-way-handling] [--stats filename] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds | --hybrid-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--disable-way-snapping] [--disable-conflation] [--disable-cleaning] [--disable-oob-way-handling] [--stats filename] [--write-bounds]
 --------------------------------------
 
 === Examples

@@ -88,8 +88,6 @@ private:
   static void isSpecificallyConflatable(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   static void hasName(const v8::FunctionCallbackInfo<v8::Value>& args);
-
-  static void isLongRiverPair(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 inline v8::Handle<v8::Value> toV8(const SchemaVertex& tv)

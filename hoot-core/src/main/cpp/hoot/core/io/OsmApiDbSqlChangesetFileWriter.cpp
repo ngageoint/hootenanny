@@ -83,7 +83,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
 
   _remappedIds.clear();
   _changesetBounds.init();
-  _parsedChanges.clear();
+  _parsedChangeIds.clear();
 
   _outputSql.setFileName(path);
   if (_outputSql.open(QIODevice::WriteOnly | QIODevice::Text) == false)
@@ -108,9 +108,9 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
       Change change = changesetProvider->readNextChange();
 
       // See related note in OsmXmlChangesetFileWriter::write.
-      if (_parsedChanges.contains(change))
+      if (_parsedChangeIds.contains(change.getElement()->getElementId()))
       {
-        LOG_TRACE("Skipping adding duplicated change: " << change << "...");
+        LOG_TRACE("Skipping change for element ID already having change: " << change << "...");
         continue;
       }
 
@@ -140,7 +140,7 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
           ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
           _changesetBounds.expandToInclude(node->getX(), node->getY());
         }
-        _parsedChanges.append(change);
+        _parsedChangeIds.append(change.getElement()->getElementId());
         changes++;
       }
     }

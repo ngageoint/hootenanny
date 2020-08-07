@@ -42,7 +42,6 @@
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/criterion/NonBuildingAreaCriterion.h>
 #include <hoot/core/criterion/CollectionRelationCriterion.h>
-#include <hoot/core/conflate/river/RiverSnapMerger.h>
 
 #include <hoot/js/elements/TagsJs.h>
 #include <hoot/js/JsRegistrar.h>
@@ -121,8 +120,6 @@ void OsmSchemaJs::Init(Handle<Object> exports)
               FunctionTemplate::New(current, hasName)->GetFunction());
   schema->Set(String::NewFromUtf8(current, "isSpecificallyConflatable"),
               FunctionTemplate::New(current, isSpecificallyConflatable)->GetFunction());
-  schema->Set(String::NewFromUtf8(current, "isLongRiverPair"),
-              FunctionTemplate::New(current, isLongRiverPair)->GetFunction());
 }
 
 void OsmSchemaJs::getAllTags(const FunctionCallbackInfo<Value>& args)
@@ -456,19 +453,6 @@ void OsmSchemaJs::mostSpecificType(const FunctionCallbackInfo<Value>& args)
   ConstElementPtr element = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
   const QString kvp = OsmSchema::getInstance().mostSpecificType(element->getTags());
   args.GetReturnValue().Set(String::NewFromUtf8(current, kvp.toUtf8().data()));
-}
-
-void OsmSchemaJs::isLongRiverPair(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
-  ConstElementPtr e1 = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject())->getConstElement();
-  ConstElementPtr e2 = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(
-    Boolean::New(current, RiverSnapMerger().isLongPair(mapJs->getConstMap(), e1, e2)));
 }
 
 }

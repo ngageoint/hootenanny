@@ -164,11 +164,13 @@ public:
    *
    * @param map the map containing the nodes
    */
-  void calculateTiles(OsmMapPtr map);
+  void calculateTiles(const ConstOsmMapPtr& map);
 
   static QString tilesToString(const std::vector<std::vector<geos::geom::Envelope>>& tiles);
 
   std::vector<std::vector<geos::geom::Envelope>> getTiles() const { return _tiles; }
+
+  int getTileCount() const { return _tileCount; }
 
   /**
    * Returns the node counts for each computed tile bounding box
@@ -233,6 +235,7 @@ private:
 
   std::vector<std::vector<long>> _nodeCounts;
   std::vector<std::vector<geos::geom::Envelope>> _tiles;
+  int _tileCount;
 
   /*
    * Calculates a set of rectangular bounding boxes that at most contain a configured set of nodes;
@@ -240,8 +243,8 @@ private:
    */
   void _calculateTiles();
 
-  void _renderImage(const std::shared_ptr<OsmMap>& map);
-  void _renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& r1, cv::Mat& r2);
+  void _renderImage(const ConstOsmMapPtr& map);
+  void _renderImage(const ConstOsmMapPtr& map, cv::Mat& r1, cv::Mat& r2);
   void _setImages(const cv::Mat& r1, const cv::Mat& r2);
 
   void _calculateMin();

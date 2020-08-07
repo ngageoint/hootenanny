@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HOOTAPIDBREADER_H
 #define HOOTAPIDBREADER_H
@@ -57,7 +57,7 @@ public:
 
   virtual void open(const QString& urlStr) override;
 
-  virtual void read(const OsmMapPtr &map) override;
+  virtual void read(const OsmMapPtr& map) override;
 
 protected:
 

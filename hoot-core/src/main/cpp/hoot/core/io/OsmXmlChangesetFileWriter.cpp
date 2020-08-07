@@ -94,7 +94,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
 
   _initIdCounters();
   _initStats();
-  _parsedChanges.clear();
+  _parsedChangeIds.clear();
 
   long changesetProgress = 1;
 
@@ -131,13 +131,19 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       _change = changesetProvider->readNextChange();
       LOG_VART(_change.toString());
 
-      // When multiple changeset providers are passed in sometimes a duplicated change might exist
-      // between them, so we're skipping those dupes here. You could make the argument to prevent
-      // dupes from occurring before outputting this changeset file, but not quite sure how to do
-      // that yet, due to the fact that the changeset providers have a streaming interface.
-      if (_parsedChanges.contains(_change))
+      // When multiple changeset providers are passed in, sometimes multiple changes for the same
+      // element may exist as a result of combining their results together, so we're skipping those
+      // dupes here. Formerly, we only checked for exact duplicate statements and now we're more
+      // lenient not allowing multiple changes for the same element. Keeping the first change and
+      // throwing out subsequent dupes is a bit arbitrary, but will go with it for now, as it seems
+      // to work well. Other options could be to favor certain change types over others. This check
+      // must be here and not in ChangesetDeriver, as the problem has only been seen when combining
+      // multiple derivers. You could make the argument to prevent these types of dupes from
+      // occurring before outputting this changeset file, but not quite sure how to do that yet, due
+      // to the fact that the changeset providers have a streaming interface.
+      if (_parsedChangeIds.contains(_change.getElement()->getElementId()))
       {
-        LOG_TRACE("Skipping adding duplicated change: " << _change << "...");
+        LOG_TRACE("Skipping change for element ID already having change: " << _change << "...");
         continue;
       }
 
@@ -147,7 +153,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         if (last != Change::Unknown)
         {
           writer.writeEndElement();
-          _parsedChanges.append(_change);
+          _parsedChangeIds.append(_change.getElement()->getElementId());
         }
         switch (_change.getType())
         {
@@ -203,7 +209,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       LOG_TRACE("Writing change end element...");
       writer.writeEndElement();
       last = Change::Unknown;
-      _parsedChanges.append(_change);
+      _parsedChangeIds.append(_change.getElement()->getElementId());
     }
   }
 

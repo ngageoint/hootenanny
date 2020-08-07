@@ -307,11 +307,11 @@ QString ChangesetReplacementCreator::_boundsInterpretationToString(
   }
 }
 
-QString ChangesetReplacementCreator::_getJobDescription(
+void ChangesetReplacementCreator::_printJobDescription(
   const QString& input1, const QString& input2, const QString& bounds,
   const QString& output) const
 {
-  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax() * 2;
   QString boundsStr = "Bounds calculation is " +
     _boundsInterpretationToString(_boundsInterpretation);
   const QString replacementTypeStr = _fullReplacement ? "full" : "overlapping only";
@@ -363,6 +363,9 @@ QString ChangesetReplacementCreator::_getJobDescription(
   str += "\nBeing replaced: ..." + input1.right(maxFilePrintLength);
   str += "\nReplacing with ..." + input2.right(maxFilePrintLength);
   str += "\nOutput Changeset: ..." + output.right(maxFilePrintLength);
+  LOG_STATUS(str);
+
+  str = "";
   str += "\nBounds interpretation: " + bounds + "; " + boundsStr;
   str += "\nReplacement is: " + replacementTypeStr;
   str += "\nGeometry filters: " + geometryFiltersStr;
@@ -372,7 +375,7 @@ QString ChangesetReplacementCreator::_getJobDescription(
   str += "\nCleaning: " + cleaningStr;
   str += "\nWay snapping: " + waySnappingStr;
   str += "\nOut of bounds way handling: " + oobWayHandlingStr;
-  return str;
+  LOG_DEBUG(str);
 }
 
 void ChangesetReplacementCreator::setRetainmentFilterOptions(const QStringList& optionKvps)
@@ -387,11 +390,10 @@ void ChangesetReplacementCreator::create(
 {
   // INPUT VALIDATION AND SETUP
 
-  _validateInputs(input1, input2);
+  _validateInputs(input1, input2, output);
   const QString boundsStr = GeometryUtils::envelopeToConfigString(bounds);
   _setGlobalOpts(boundsStr);
-
-  LOG_DEBUG(_getJobDescription(input1, input2, boundsStr, output));
+  _printJobDescription(input1, input2, boundsStr, output);
 
   // If a retainment filter was specified, we'll AND it together with each geometry type filter to
   // further restrict what reference data gets replaced in the final changeset.
@@ -458,6 +460,8 @@ void ChangesetReplacementCreator::create(
         "Adding ref map of size: " << refMap->size() << " and conflated map of size: " <<
         conflatedMap->size() << " to changeset derivation queue for geometry type: " <<
         GeometryTypeCriterion::typeToString(itr.key()) << "...");
+      // TODO: move set name here to inside _getMapsForGeometryType, so we can see the geometry type
+      // in the name??
       refMap->setName(refMap->getName() + "-" + GeometryTypeCriterion::typeToString(itr.key()));
       refMaps.append(refMap);
       conflatedMap->setName(
@@ -528,7 +532,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // DATA LOAD AND INITIAL PREP
 
-  // load the ref dataset and crop to the specified aoi
+  // load the ref dataset and crop to the specified aoi; can't cache here b/c the map is cropped
+  // during reading differently based on the geometry type
+  // TODO: we could maybe load the full map the first time and then crop the raw map only based
+  // on geometry type each time, rather than reload it from the source
   refMap = _loadRefMap(input1);
   MemoryUsageChecker::getInstance().check();
 
@@ -565,7 +572,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     refMap, refFeatureFilter, conf(),
     "ref-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
 
-  // load the sec dataset and crop to the specified aoi
+  // load the sec dataset and crop to the specified aoi; see note for ref map load
   OsmMapPtr secMap = _loadSecMap(input2);
   MemoryUsageChecker::getInstance().check();
 
@@ -577,8 +584,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
+  const Settings secFilterSettings =
+    _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
   _filterFeatures(
-    secMap, secFeatureFilter, _replacementFilterOptions,
+    secMap, secFeatureFilter, secFilterSettings,
     "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
 
   const int refMapSize = refMap->size();
@@ -611,6 +620,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // conflate the cookie cut ref map with the sec map if conflation is enabled
 
+  // TODO: rename var since this map isn't necessary conflated; also rename everything in terms of
+  // "toReplace" and "replacement"
   conflatedMap = cookieCutRefMap;
   if (secMapSize > 0)
   {
@@ -645,6 +656,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     // want to snap ways of like types together, so we'll loop through each applicable linear type
     // and snap them separately.
 
+    LOG_STATUS("Snapping unconnected ways to each other...");
     QStringList snapWayStatuses("Input2");
     snapWayStatuses.append("Conflated");
     QStringList snapToWayStatuses("Input1");
@@ -696,6 +708,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
       // we're being as lenient as possible with the snapping here, allowing basically anything to
       // join to anything else, which could end up causing problems...we'll go with it for now.
 
+      LOG_STATUS("Snapping unconnected ways to each other...");
       QStringList snapWayStatuses("Input2");
       snapWayStatuses.append("Conflated");
       snapWayStatuses.append("Input1");
@@ -715,15 +728,21 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     _combineMaps(
       conflatedMap, immediatelyConnectedOutOfBoundsWays, true, "conflated-connected-combined");
 
-    // Snap only the connected ways to other ways in the conflated map. Mark the ways that were
+    // Snap the connected ways to other ways in the conflated map. Mark the ways that were
     // snapped, as we'll need that info in the next step.
     if (_waySnappingEnabled)
     {
       LOG_VART(linearFilterClassNames);
       for (int i = 0; i < linearFilterClassNames.size(); i++)
       {
+        QStringList snapWayStatuses("Input2");
+        snapWayStatuses.append("Conflated");
+        snapWayStatuses.append("Input1");
+        QStringList snapToWayStatuses("Input1");
+        snapToWayStatuses.append("Conflated");
+        snapToWayStatuses.append("Input2");
         _snapUnconnectedWays(
-          conflatedMap, QStringList("Input1"), QStringList("Input1"), linearFilterClassNames.at(i),
+          conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i),
           true, "conflated-snapped-immediately-connected-out-of-bounds");
       }
     }
@@ -745,7 +764,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     _excludeFeaturesFromChangesetDeletion(refMap, boundsStr);
   }
 
-  // clean up introduced mistakes
+  // clean up any mistakes introduced
   _cleanup(refMap);
   _cleanup(conflatedMap);
 
@@ -753,7 +772,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VART(conflatedMap->getElementCount());
 }
 
-void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2)
+void ChangesetReplacementCreator::_validateInputs(const QString& input1, const QString& input2,
+                                                  const QString& output)
 {
   // Fail if the reader that supports either input doesn't implement Boundable.
   std::shared_ptr<Boundable> boundable =
@@ -778,6 +798,15 @@ void ChangesetReplacementCreator::_validateInputs(const QString& input1, const Q
   {
     throw IllegalArgumentException(
       "GeoJSON inputs are not supported by replacement changeset derivation.");
+  }
+
+  QFile outputFile(output);
+  if (outputFile.exists())
+  {
+    if (!outputFile.remove())
+    {
+      throw HootException("Unable to remove changeset output file: " + output);
+    }
   }
 
   LOG_VARD(_fullReplacement);
@@ -1228,12 +1257,12 @@ void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& ma
   elementMarker.setMarkWaysForReview(false);
   elementMarker.setRelationKvp(MetadataTags::HootMissingChild() + "=yes");
   elementMarker.setWayKvp(MetadataTags::HootMissingChild() + "=yes");
-  LOG_STATUS("\tMarking elements with missing child elements...");
+  LOG_STATUS("Marking elements with missing child elements...");
   map->visitRelationsRw(elementMarker);
-  LOG_STATUS(
-    "\tMarked " << elementMarker.getNumWaysTagged() << " ways with missing child elements.");
-  LOG_STATUS(
-    "\tMarked " << elementMarker.getNumRelationsTagged() <<
+  LOG_DEBUG(
+    "Marked " << elementMarker.getNumWaysTagged() << " ways with missing child elements.");
+  LOG_DEBUG(
+    "Marked " << elementMarker.getNumRelationsTagged() <<
     " relations with missing child elements.");
 
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-missing-marked");
@@ -1257,9 +1286,9 @@ void ChangesetReplacementCreator::_filterFeatures(
   // If recursion isn't used here, nasty crashes that are hard to track down occur at times. Not
   // completely convinced recursion should be used here, though.
   elementPruner.setRecursive(true);
-  LOG_STATUS("\t" << elementPruner.getInitStatusMessage());
+  //LOG_STATUS("\t" << elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);
-  LOG_STATUS("\t" << elementPruner.getCompletedStatusMessage());
+  LOG_INFO(elementPruner.getCompletedStatusMessage());
 
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
@@ -1277,8 +1306,18 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VARD(_fullReplacement);
   LOG_VARD(_boundsInterpretationToString(_boundsInterpretation));
   LOG_VARD(_currentChangeDerivationPassIsLinear);
-  LOG_VARD(doughMap->getElementCount());
+  LOG_VARD(doughMap->size());
   LOG_VARD(cutterMap->size());
+  OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map-input");
+  OsmMapWriterFactory::writeDebugMap(cutterMap, "cutter-map-input");
+
+  // It could just be an byproduct of how data is being read out by core scripts during testing, but
+  // when doing adjacent cell updates I'm getting cropped data with a bunch of empty relations in
+  // them as input. That eventually needs to be dealt with, but regardless, checking node/way count
+  // and not including relations in the size count is a better check for the total map size so that
+  // the alpha shape gets calculated correctly.
+  const int doughMapInputSize = doughMap->getWayCount() + doughMap->getNodeCount();
+  const int cutterMapInputSize = cutterMap->getWayCount() + cutterMap->getNodeCount();
 
   /*
    * lenient/overlapping - cutter shape is all overlapping sec data inside the bounds and
@@ -1295,7 +1334,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
 
   // If the passed in dough map is empty, there's nothing to be cut out. So, just return the empty
   // ref map.
-  if (doughMap->getElementCount() == 0)
+  if (doughMapInputSize == 0)
   {
     LOG_DEBUG(
       "Nothing to cut from dough map, so returning the empty dough map as the map after " <<
@@ -1303,7 +1342,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cut");
     return doughMap;
   }
-  else if (cutterMap->size() == 0)
+  else if (cutterMapInputSize == 0)
   {
     // Linear features need to be handled slightly differently, due to the need to snap cut features
     // back to reference features when the strict bounds interpretation is enabled.
@@ -1337,7 +1376,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
       {
         // If our map contains linear features only, the sec map is empty, we're doing full
         // replacement, AND there isn't a strict interpretation of the bounds, we want everything
-        // deleted out of the ref inside the replacement bounds and featres immediately connected
+        // deleted out of the ref inside the replacement bounds and features immediately connected
         // outside of the bounds. So, return an empty map.
         LOG_DEBUG(
           "Nothing in cutter map for linear features. Full replacement and lenient bounds "
@@ -1350,7 +1389,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
         // we want simply the rectangular replacement bounds cut out. No need to use the cookie
         // cutter here. Just use the map cropper.
         LOG_DEBUG(
-          "Nothing in cutter map. Full replacement with strict boundsenabled, so cropping out " <<
+          "Nothing in cutter map. Full replacement with strict bounds enabled, so cropping out " <<
           "the rectangular bounds area of the dough map to be the map after cutting: " <<
           doughMap->getName() << "...");
         OsmMapPtr cookieCutMap(new OsmMap(doughMap));
@@ -1363,9 +1402,9 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
         // We're not going to remove missing elements, as we want to have as minimal of an impact on
         // the resulting changeset as possible.
         cropper.setRemoveMissingElements(false);
-        LOG_STATUS("\t" << cropper.getInitStatusMessage());
+        LOG_STATUS(cropper.getInitStatusMessage());
         cropper.apply(cookieCutMap);
-        LOG_STATUS("\t" << cropper.getCompletedStatusMessage());
+        LOG_INFO(cropper.getCompletedStatusMessage());
         OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
         return cookieCutMap;
       }
@@ -1382,10 +1421,9 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     }
   }
 
-  LOG_VART(doughMap->getElementCount());
+  LOG_VART(doughMap->size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map");
-  LOG_VART(cutterMap->getElementCount());
+  OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map");;
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
@@ -1394,7 +1432,6 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_DEBUG("Preparing to cookie cut: " << cookieCutMap->getName() << "...");
 
   OsmMapPtr cutterMapToUse;
-  LOG_VART(cutterMap->getElementCount());
   ConfigOptions opts(conf());
   LOG_VART(MapUtils::mapIsPointsOnly(cutterMap));
   const double cookieCutterAlpha = opts.getCookieCutterAlpha();
@@ -1442,21 +1479,22 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   // not be possible (or at least don't know how to yet). So instead, go through the points in the
   // map and replace them with small square shaped polys...from that we can generate the alpha
   // shape.
-  if ((int)cutterMapToUse->getElementCount() < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
+  const int cutterMapToUseSize = cutterMapToUse->getNodeCount();
+  if ((int)cutterMapToUseSize < 3 && MapUtils::mapIsPointsOnly(cutterMapToUse))
   {
     LOG_DEBUG("Creating a cutter shape map transformation for point map...");
     // Make a copy here since we're making destructive changes to the geometry here for alpha shape
     // generation purposes only.
     cutterMapToUse.reset(new OsmMap(cutterMap));
     PointsToPolysConverter pointConverter;
-    LOG_STATUS("\t" << pointConverter.getInitStatusMessage());
+    LOG_STATUS(pointConverter.getInitStatusMessage());
     pointConverter.apply(cutterMapToUse);
-    LOG_STATUS("\t" << pointConverter.getCompletedStatusMessage());
+    LOG_INFO(pointConverter.getCompletedStatusMessage());
     MapProjector::projectToWgs84(cutterMapToUse);
   }
 
-  LOG_VART(cutterMapToUse->getElementCount());
-  OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-map");
+  LOG_VART(cutterMapToUse->size());
+  OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-map-to-use");
 
   LOG_STATUS("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
 
@@ -1488,7 +1526,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, "cutter-shape");
 
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
-  LOG_STATUS("Cookie cutting cutter shape out of: " << cookieCutMap->getName() << "...");
+  LOG_STATUS("Cutting cutter shape out of: " << cookieCutMap->getName() << "...");
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
@@ -1497,9 +1535,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     _boundsOpts.cookieCutKeepOnlyInsideBounds, false)
     .cut(cutterShapeOutlineMap, cookieCutMap);
   MapProjector::projectToWgs84(cookieCutMap); // not exactly sure yet why this needs to be done
-  LOG_VARD(cookieCutMap->getElementCount());
+  LOG_VARD(cookieCutMap->size());
   MapProjector::projectToWgs84(doughMap);
-  LOG_VART(doughMap->getElementCount());
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
@@ -1510,13 +1547,13 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
 QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
   const OsmMapPtr& map) const
 {
-  LOG_DEBUG("Mapping element IDs to element versions for: " << map->getName() << "...");
+  LOG_STATUS("Mapping element IDs to element versions for: " << map->getName() << "...");
 
   ElementIdToVersionMapper idToVersionMapper;
-  LOG_STATUS("\t" << idToVersionMapper.getInitStatusMessage());
+  //LOG_STATUS("\t" << idToVersionMapper.getInitStatusMessage());
   idToVersionMapper.apply(map);
   MemoryUsageChecker::getInstance().check();
-  LOG_STATUS("\t" << idToVersionMapper.getCompletedStatusMessage());
+  LOG_DEBUG(idToVersionMapper.getCompletedStatusMessage());
   const QMap<ElementId, long> idToVersionMappings = idToVersionMapper.getMappings();
   LOG_VART(idToVersionMappings.size());
   return idToVersionMappings;
@@ -1531,14 +1568,14 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
   // Add the changeset deletion exclusion tag to all connected ways previously tagged upon load.
 
   SetTagValueVisitor addTagVis(MetadataTags::HootChangeExcludeDelete(), "yes");
-  LOG_STATUS("\t" << addTagVis.getInitStatusMessage());
+  //LOG_STATUS("\t" << addTagVis.getInitStatusMessage());
   ChainCriterion addTagCrit(
     std::shared_ptr<WayCriterion>(new WayCriterion()),
     std::shared_ptr<TagKeyCriterion>(
       new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds())));
   FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
   map->visitRw(deleteExcludeTagVis);
-  LOG_STATUS("\t" << addTagVis.getCompletedStatusMessage());
+  LOG_DEBUG(addTagVis.getCompletedStatusMessage());
 
   // Add the changeset deletion exclusion tag to all children of those connected ways.
 
@@ -1549,9 +1586,9 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
         new TagKeyCriterion(MetadataTags::HootChangeExcludeDelete()))));
   RecursiveSetTagValueOp childDeletionExcludeTagOp(
     MetadataTags::HootChangeExcludeDelete(), "yes", childAddTagCrit);
-  LOG_STATUS("\t" << childDeletionExcludeTagOp.getInitStatusMessage());
+  //LOG_STATUS("\t" << childDeletionExcludeTagOp.getInitStatusMessage());
   childDeletionExcludeTagOp.apply(map);
-  LOG_STATUS("\t" << childDeletionExcludeTagOp.getCompletedStatusMessage());
+  LOG_DEBUG(childDeletionExcludeTagOp.getCompletedStatusMessage());
 
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclusion-tagging");
@@ -1637,9 +1674,9 @@ void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
             QString::fromStdString(ReportMissingElementsVisitor::className()))))));
   removeVis.setChainCriteria(true);
   removeVis.setRecursive(false);
-  LOG_STATUS("\t" << removeVis.getInitStatusMessage());
+  //LOG_STATUS("\t" << removeVis.getInitStatusMessage());
   map->visitRw(removeVis);
-  LOG_STATUS("\t" << removeVis.getCompletedStatusMessage());
+  LOG_DEBUG(removeVis.getCompletedStatusMessage());
 
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -1666,7 +1703,7 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
   OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
   const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
 {
-  LOG_STATUS(
+  LOG_DEBUG(
     "Snapping ways for map: " << map->getName() << ", with filter type: " <<
     typeCriterionClassName << ", snap way statuses: " << snapWayStatuses <<
     ", snap to way statuses: " << snapToWayStatuses << " ...");
@@ -1682,9 +1719,9 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
     QString::fromStdString(WayNodeCriterion::className()));
   lineSnapper.setWayToSnapCriterionClassName(typeCriterionClassName);
   lineSnapper.setWayToSnapToCriterionClassName(typeCriterionClassName);
-  LOG_STATUS("\t" << lineSnapper.getInitStatusMessage());
+  //LOG_STATUS("\t" << lineSnapper.getInitStatusMessage());
   lineSnapper.apply(map);
-  LOG_STATUS("\t" << lineSnapper.getCompletedStatusMessage());
+  LOG_DEBUG(lineSnapper.getCompletedStatusMessage());
 
   MapProjector::projectToWgs84(map);   // snapping works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -1732,9 +1769,10 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
   cropper.setRemoveMissingElements(false);
-  LOG_STATUS("\t" << cropper.getInitStatusMessage());
+  // TODO: should removing superfluous features be suppressed here?
+  //LOG_STATUS("\t" << cropper.getInitStatusMessage());
   cropper.apply(map);
-  LOG_STATUS("\t" << cropper.getCompletedStatusMessage());
+  LOG_DEBUG(cropper.getCompletedStatusMessage());
 
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -1760,9 +1798,9 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
           new TagCriterion(MetadataTags::HootSnapped(), "snapped_way")))));
   removeVis.setChainCriteria(true);
   removeVis.setRecursive(true);
-  LOG_STATUS("\t" << removeVis.getInitStatusMessage());
+  //LOG_STATUS("\t" << removeVis.getInitStatusMessage());
   map->visitRw(removeVis);
-  LOG_STATUS("\t" << removeVis.getCompletedStatusMessage());
+  LOG_DEBUG(removeVis.getCompletedStatusMessage());
 
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -1788,9 +1826,9 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(
     new ChainCriterion(std::shared_ptr<WayCriterion>(new WayCriterion()), notInBoundsCrit));
 
   RecursiveSetTagValueOp tagSetter(MetadataTags::HootChangeExcludeDelete(), "yes", elementCrit);
-  LOG_STATUS("\t" << tagSetter.getInitStatusMessage());
+  //LOG_STATUS("\t" << tagSetter.getInitStatusMessage());
   tagSetter.apply(map);
-  LOG_STATUS("\t" << tagSetter.getCompletedStatusMessage());
+  LOG_DEBUG(tagSetter.getCompletedStatusMessage());
 
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -1846,22 +1884,22 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
   // Due to mixed geometry type relations explained in _getDefaultGeometryFilters, we may have
   // introduced some duplicate relation members by this point.
   RemoveDuplicateRelationMembersVisitor dupeMembersRemover;
-  LOG_STATUS("\t" << dupeMembersRemover.getInitStatusMessage());
+  //LOG_STATUS("\t" << dupeMembersRemover.getInitStatusMessage());
   map->visitRw(dupeMembersRemover);
-  LOG_STATUS("\t" << dupeMembersRemover.getCompletedStatusMessage());
+  LOG_DEBUG(dupeMembersRemover.getCompletedStatusMessage());
 
   // get rid of straggling nodes
   SuperfluousNodeRemover orphanedNodeRemover;
-  LOG_STATUS("\t" << orphanedNodeRemover.getInitStatusMessage());
+  //LOG_STATUS("\t" << orphanedNodeRemover.getInitStatusMessage());
   orphanedNodeRemover.apply(map);
-  LOG_STATUS("\t" << orphanedNodeRemover.getCompletedStatusMessage());
+  LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
 
   // This will remove any relations that were already empty or became empty after we removed
   // duplicated members.
   RemoveEmptyRelationsOp emptyRelationRemover;
-  LOG_STATUS("\t" << emptyRelationRemover.getInitStatusMessage());
+  //LOG_STATUS("\t" << emptyRelationRemover.getInitStatusMessage());
   emptyRelationRemover.apply(map);
-  LOG_STATUS("\t" << emptyRelationRemover.getCompletedStatusMessage());
+  LOG_DEBUG(emptyRelationRemover.getCompletedStatusMessage());
 
   // get out of orthographic
   MapProjector::projectToWgs84(map);

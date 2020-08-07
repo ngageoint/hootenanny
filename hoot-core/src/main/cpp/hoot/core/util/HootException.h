@@ -47,15 +47,10 @@ public:
   static std::string className() { return "hoot::HootException"; }
 
   HootException() { }
-
   HootException(const char* str) { _what = QString::fromUtf8(str); }
-
   HootException(const std::string& str) { _what = QString::fromStdString(str); }
-
   HootException(QString str) { _what = str; }
-
   HootException(const HootException& e) { _what = e._what; }
-
   virtual ~HootException() throw() {}
 
   virtual HootException* clone() const { return new HootException(*this); }
@@ -63,7 +58,6 @@ public:
   virtual std::string getClassName() const { return className(); }
 
   const QString& getWhat() const { return _what; }
-
   virtual const char* what() const throw() { _tmp = _what.toLatin1(); return _tmp.constData(); }
 
 private:
@@ -189,6 +183,7 @@ HOOT_DEFINE_EXCEPTION(InternalErrorException)
 HOOT_DEFINE_EXCEPTION(IoException)
 HOOT_DEFINE_EXCEPTION(NeedsReviewException)
 HOOT_DEFINE_EXCEPTION(UnsupportedException)
+HOOT_DEFINE_EXCEPTION_STR(RecursiveComplexityException, "RecursiveComplexityException")
 HOOT_DEFINE_EXCEPTION_STR(NotImplementedException, "Not Implemented")
 
 }

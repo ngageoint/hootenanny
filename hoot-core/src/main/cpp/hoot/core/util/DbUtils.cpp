@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DbUtils.h"
@@ -47,7 +47,9 @@ QSqlQuery DbUtils::execNoPrepare(const QSqlDatabase& database, const QString& sq
   if (q.exec(sql) == false)
   {
     throw HootException(
-      QString("Error executing query: %1 (%2)").arg(q.lastError().text().left(500)).arg(sql));
+      QString("Error executing query. Error: %1 ...\nSQL: %2 ...")
+        .arg(q.lastError().text().left(200))
+        .arg(sql.left(200)));
   }
   LOG_VART(q.numRowsAffected());
 

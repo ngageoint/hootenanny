@@ -77,7 +77,6 @@ void RandomMapCropper::setTileFootprintOutputPath(QString path)
 
 void RandomMapCropper::apply(OsmMapPtr& map)
 {
-  //LOG_VARD(_maxNodeCount);
   if (_maxNodeCount < 1 || _maxNodeCount > (int)map->size())
   {
     throw IllegalArgumentException("Invalid max node count: " + _maxNodeCount);

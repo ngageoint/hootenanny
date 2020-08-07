@@ -216,7 +216,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   cropper.setInclusionCriterion(inclusionCrit);
 
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
-  LOG_INFO(cropper.getInitStatusMessage());
+  LOG_STATUS(cropper.getInitStatusMessage());
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));

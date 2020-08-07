@@ -32,7 +32,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Units.h>
 
-
 using namespace std;
 
 namespace hoot
@@ -40,30 +39,32 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(SublineMatcher, MaximalSublineMatcher)
 
-MaximalSublineMatcher::MaximalSublineMatcher()
+MaximalSublineMatcher::MaximalSublineMatcher() :
+_maxAngle(-1.0),
+_minSplitSize(-1.0),
+_maxRecursionComplexity(-1)
 {
-  _minSplitSize = -1.0;
-  _maxAngle = -1.0;
 }
 
-WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr &map,
+WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr& map,
   const ConstWayPtr& way1, const ConstWayPtr& way2, double& score, Meters maxRelevantDistance) const
 {
-  Meters mrd = maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
+  Meters mrd =
+    maxRelevantDistance == -1 ? way1->getCircularError() + way2->getCircularError() :
     maxRelevantDistance;
   LOG_VART(maxRelevantDistance);
   LOG_VART(_minSplitSize);
   LOG_VART(_maxAngle);
-//  assert(_minSplitSize >= 0.0 && _maxAngle >= 0.0 && mrd >= 0.0);
 
   MaximalSubline::ThresholdMatchCriteria* threshold =
     new MaximalSubline::ThresholdMatchCriteria(mrd, _maxAngle);
-  // This should use the _minSplitSize rather than mrd, but that causes some tests to fail. We
-  // should look into the problem and solve it. See redmine #6159
+  // This should use _minSplitSize rather than mrd, but that causes some tests to fail. We should
+  // look into the problem and solve it. See redmine #6159.
   MaximalSubline ms(threshold, mrd);
+  // See MaximalSubline::__maxRecursionComplexity
+  ms.setMaxRecursionComplexity(_maxRecursionComplexity);
 
   vector<WaySublineMatch> matches = ms.findAllMatches(map, way1, way2, score);
-
   return WaySublineMatchString(matches);
 }
 
@@ -72,6 +73,7 @@ void MaximalSublineMatcher::setConfiguration(const Settings &conf)
   ConfigOptions co(conf);
   _maxAngle = toRadians(co.getWayMatcherMaxAngle());
   _minSplitSize = co.getWayMergerMinSplitSize();
+  _maxRecursionComplexity = co.getMaximalSublineMaxRecursiveComplexity();
 }
 
 }

@@ -134,7 +134,8 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
         }
         if (conflatableCrit)
         {
-          const GeometryTypeCriterion::GeometryType geometryType = conflatableCrit->getGeometryType();
+          const GeometryTypeCriterion::GeometryType geometryType =
+            conflatableCrit->getGeometryType();
           if (geometryType != GeometryTypeCriterion::GeometryType::Line &&
               geometryType != GeometryTypeCriterion::GeometryType::Polygon)
           {
@@ -658,8 +659,8 @@ bool RubberSheet::_findTies()
   if ((long)_ties.size() >= _minimumTies)
   {
     LOG_DEBUG(
-      "Found " << _ties.size() << " tie points, out of a required minimum of " <<
-      _minimumTies << ", which is enough to perform rubbersheeting.");
+      "Found " << StringUtils::formatLargeNumber(_ties.size()) << " tie points out of a " <<
+      "required minimum of " << _minimumTies << ", which is enough to perform rubbersheeting.");
 
     // experimentally determine the best interpolator.
     _interpolatorClassName.clear();
