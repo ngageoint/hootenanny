@@ -2,6 +2,8 @@
 // Load shared libraries
 @Library('radiant-pipeline-library')_
 
+buildFailed = "no"
+
 pipeline {
     agent { label 'master' }
 
@@ -28,6 +30,7 @@ pipeline {
         booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
         booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
         booleanParam(name: 'Sonar', defaultValue: false)
+        booleanParam(name: 'Halt_on_failure', defaultValue: true)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
     }
 
@@ -184,38 +187,48 @@ pipeline {
         }
     }
     post {
-        always {
-            script {
-                if (!env.BRANCH_NAME.startsWith("release")) {
-                    // Always halt the VM to save resources, but don't destroy so devs can troubleshoot on failures
-                    sh "vagrant halt ${params.Box}"
-                }
-            }
-        }
+        //  always runs first so halting on non-release VM should happen at the end in cleanup
         aborted {
             script {
+                buildFailed = "no"
                 notifySlack("ABORTED", "#builds_hoot")
             }
         }
         success {
             script {
+                buildFailed = "no"
                 notifySlack("SUCCESS", "#builds_hoot")
                 if (env.BRANCH_NAME.startsWith("release")) {
                     // Don't clean up this workspace.  We want to leave it up for acceptance testing
                     slackSend channel: "#builds_hoot", message: "Release candidate version ${SYS_VER} ready for testing http://${SYS_URL}:8080/hootenanny-id/"
-                } else {
-                    // If all tests passed, clean everything up
-                    sh "vagrant destroy -f ${params.Box}"
-                    cleanWs()
                 }
             }
         }
         failure {
             script {
+                buildFailed = "yes"
                 notifySlack("FAILURE", "#builds_hoot")
                 // Copy over any UI failure screenshots and send to slack
                 sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
                 postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
+                // Copy over the test-output directory and add it to the artifacts
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; tar czf failed-test-output.tar.gz test-output'"
+                sh "vagrant scp ${params.Box}:~/hoot/failed-test-output.tar.gz ./"
+                archiveArtifacts artifacts: '**/failed-test-output.tar.gz'
+            }
+        }
+        cleanup {
+            script {
+                if (!env.BRANCH_NAME.startsWith("release")) {
+                    if (params.Halt_on_failure && buildFailed.equals('yes')) {
+                        // Halt failed VMs so that the developer can debug
+                        sh "vagrant halt ${params.Box}"
+                    } else {
+                        // Destroy all non-release VMs since the test output files are archived
+                        sh "vagrant destroy -f ${params.Box}"
+                        cleanWs()
+                    }
+                }
             }
         }
     }
