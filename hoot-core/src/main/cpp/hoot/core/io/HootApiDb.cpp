@@ -310,7 +310,7 @@ void HootApiDb::createPendingMapIndexes()
 
 void HootApiDb::deleteMap(long mapId)
 {
-  LOG_DEBUG("Deleting map: " << mapId << "...");
+  LOG_STATUS("Deleting map: " << mapId << "...");
 
   // Drop related sequences
   dropSequence(getCurrentRelationMembersSequenceName(mapId));

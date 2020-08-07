@@ -269,7 +269,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
                                      long& nodeCount, long& wayCount)
 {
   LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
-  // TODO: This is extremely slow for large numbers of node IDs.
+  // TODO: This query is extremely slow for large numbers of node IDs. - #4192
   std::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
   while (wayIdItr->next())
   {
@@ -327,7 +327,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
       additionalNodeIds.insert(QString::number(nodeId));
     }
 
-    //subtract nodeIds from additionalNodeIds, so no dupes get added
+    // subtract nodeIds from additionalNodeIds, so no dupes get added
     LOG_VARD(nodeIds.size());
     LOG_VARD(additionalNodeIds.size());
     additionalNodeIds = additionalNodeIds.subtract(nodeIds);
@@ -353,6 +353,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
 void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 {
   // TODO: This proves very slow for AOI's with a lot of data. Need something better.
+  // see _readWaysByNodeIds. - #4192
 
   long boundedNodeCount = 0;
   long boundedWayCount = 0;

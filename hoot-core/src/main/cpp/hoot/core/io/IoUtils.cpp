@@ -167,7 +167,6 @@ void IoUtils::loadMaps(const OsmMapPtr& map, const QStringList& paths, bool useF
   }
 }
 
-// TODO: Get rid of this??
 void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 {
   // We could pass a progress in here to get more granular write status feedback.

@@ -111,7 +111,8 @@ public:
 
     @param map the map object to save
     @param path the file path to save the map to
-    */
+    @todo get rid of this?
+   */
   static void saveMap(const OsmMapPtr& map, const QString& path);
 
   /**

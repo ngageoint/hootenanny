@@ -906,8 +906,6 @@ void ChangesetReplacementCreator::_parseConfigOpts(
   }
 
   // These settings have been are customized for each geometry type and bounds handling preference.
-  // They were derived from small test cases, so we may need to do some tweaking as we encounter
-  // real world data.
 
   if (geometryType == GeometryTypeCriterion::GeometryType::Point)
   {
@@ -924,37 +922,30 @@ void ChangesetReplacementCreator::_parseConfigOpts(
   }
   else if (geometryType == GeometryTypeCriterion::GeometryType::Line)
   {
+    _boundsOpts.loadRefKeepEntireCrossingBounds = true;
+    _boundsOpts.loadSecKeepOnlyInsideBounds = false;
+    _boundsOpts.cookieCutKeepEntireCrossingBounds = false;
+    _boundsOpts.changesetRefKeepEntireCrossingBounds = true;
+    _boundsOpts.changesetSecKeepEntireCrossingBounds = true;
+    _boundsOpts.changesetSecKeepOnlyInsideBounds = false;
+    _boundsOpts.inBoundsStrict = false;
     if (_boundsInterpretation == BoundsInterpretation::Lenient)
     {
-      _boundsOpts.loadRefKeepEntireCrossingBounds = true;
       _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = true;
       _boundsOpts.loadSecKeepEntireCrossingBounds = true;
-      _boundsOpts.loadSecKeepOnlyInsideBounds = false;
-      _boundsOpts.cookieCutKeepEntireCrossingBounds = false;
-      _boundsOpts.changesetRefKeepEntireCrossingBounds = true;
-      _boundsOpts.changesetSecKeepEntireCrossingBounds = true;
-      _boundsOpts.changesetSecKeepOnlyInsideBounds = false;
       _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
-      _boundsOpts.inBoundsStrict = false;
     }
     else
     {
-      _boundsOpts.loadRefKeepEntireCrossingBounds = true;
       _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
       _boundsOpts.loadSecKeepEntireCrossingBounds = false;
-      _boundsOpts.loadSecKeepOnlyInsideBounds = false;
-      _boundsOpts.cookieCutKeepEntireCrossingBounds = false;
-      _boundsOpts.changesetRefKeepEntireCrossingBounds = true;
-      _boundsOpts.changesetSecKeepEntireCrossingBounds = true;
-      _boundsOpts.changesetSecKeepOnlyInsideBounds = false;
       _boundsOpts.changesetAllowDeletingRefOutsideBounds = false;
-      _boundsOpts.inBoundsStrict = false;
 
       // Conflate way joining needs to happen later in the post ops for strict linear replacements.
       // Changing the default ordering of the post ops to accommodate this had detrimental effects
       // on other conflation. The best location seems to be at the end just before tag truncation.
-      // would like to get rid of this...isn't a foolproof fix by any means if the conflate post
-      // ops end up getting reordered for some reason.
+      // Would like to get rid of this...isn't a foolproof fix by any means if the conflate post
+      // ops end up getting re-ordered for some reason.
 
       LOG_VART(conf().getList(ConfigOptions::getConflatePostOpsKey()));
       QStringList conflatePostOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
@@ -969,15 +960,15 @@ void ChangesetReplacementCreator::_parseConfigOpts(
   }
   else if (geometryType == GeometryTypeCriterion::GeometryType::Polygon)
   {
+    _boundsOpts.loadRefKeepEntireCrossingBounds = true;
+    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+    _boundsOpts.cookieCutKeepEntireCrossingBounds = true;
+    _boundsOpts.changesetRefKeepEntireCrossingBounds = true;
     if (_boundsInterpretation == BoundsInterpretation::Lenient ||
         _boundsInterpretation == BoundsInterpretation::Hybrid)
     {
-      _boundsOpts.loadRefKeepEntireCrossingBounds = true;
-      _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
       _boundsOpts.loadSecKeepEntireCrossingBounds = true;
       _boundsOpts.loadSecKeepOnlyInsideBounds = false;
-      _boundsOpts.cookieCutKeepEntireCrossingBounds = true;
-      _boundsOpts.changesetRefKeepEntireCrossingBounds = true;
       _boundsOpts.changesetSecKeepEntireCrossingBounds = true;
       _boundsOpts.changesetSecKeepOnlyInsideBounds = false;
       _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
@@ -985,12 +976,8 @@ void ChangesetReplacementCreator::_parseConfigOpts(
     }
     else
     {
-      _boundsOpts.loadRefKeepEntireCrossingBounds = true;
-      _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
       _boundsOpts.loadSecKeepEntireCrossingBounds = false;
       _boundsOpts.loadSecKeepOnlyInsideBounds = true;
-      _boundsOpts.cookieCutKeepEntireCrossingBounds = true;
-      _boundsOpts.changesetRefKeepEntireCrossingBounds = true;
       _boundsOpts.changesetSecKeepEntireCrossingBounds = false;
       _boundsOpts.changesetSecKeepOnlyInsideBounds = true;
       _boundsOpts.changesetAllowDeletingRefOutsideBounds = false;
@@ -1773,7 +1760,6 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   // the resulting changeset as possible.
   cropper.setRemoveMissingElements(false);
   // TODO: should removing superfluous features be suppressed here?
-  //LOG_STATUS("\t" << cropper.getInitStatusMessage());
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
 
