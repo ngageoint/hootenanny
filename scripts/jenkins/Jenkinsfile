@@ -221,7 +221,7 @@ pipeline {
             script {
                 if (!env.BRANCH_NAME.startsWith("release")) {
                     if (params.Halt_on_failure && buildFailed.equals('yes')) {
-                        // Halt failed VMs so that the developer
+                        // Halt failed VMs so that the developer can debug
                         sh "vagrant halt ${params.Box}"
                     } else {
                         // Destroy all non-release VMs since the test output files are archived
