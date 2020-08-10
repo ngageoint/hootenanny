@@ -640,6 +640,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
 
+  LOG_STATUS("Replacing data...");
+
   // CUT
 
   // cut the secondary data out of the reference data
@@ -1250,7 +1252,8 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
     // warn now to give the chance to back out of the replacement earlier.
     conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
 
-    if (/*_isDbUrl(_input1) &&*/ !ConfigOptions().getChangesetReplacementCacheInputMaps())
+    // Caching inputs only helps with file based inputs, so skip if the source is a db.
+    if (_isDbUrl(_input1) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
     {
       // If input caching is not enabled, we'll read from the source data each time and crop
       // appropriately during the read. If the source input is a very large file or database layer
@@ -1263,7 +1266,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
     {
       // If input caching is enabled, we'll read the full map once and then copy it and crop it
       // in subsequent loads. You only want to be doing this if the input is a file or db layer that
-      // will fit easily in memory.
+      // will fit easily into available memory.
       if (!_input1Map)
       {
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
@@ -1320,12 +1323,13 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
 
   // see related loading notes about this loading procedure in _loadRefMap
+
   // TODO: consolidate this and _loadRefMap into a single _loadInput method
 
   OsmMapPtr secMap;
   if (!_input2.isEmpty())
   {
-    if (/*_isDbUrl(_input2) &&*/ !ConfigOptions().getChangesetReplacementCacheInputMaps())
+    if (_isDbUrl(_input2) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
     {
       // load the replacement data cropped to the specified aoi in the appropriate manner
       LOG_STATUS("Loading secondary map from: " << _input2 << "...");
@@ -1542,8 +1546,6 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
       }
     }
   }
-
-  LOG_STATUS("Removing data...");
 
   LOG_VART(doughMap->size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
