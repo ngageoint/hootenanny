@@ -135,17 +135,30 @@ public:
 
   /**
    * Creates a changeset that replaces features in the first input with features from the second
-   * input.
+   * input
    *
-   * @param input1 the target data for the changeset in which to replace features; must support
-   * Boundable
-   * @param input2 the source data for the changeset to get replacement features from; must support
-   * Boundable
+   * @param input1 the target data file path for the changeset in which to replace features; must
+   * support Boundable
+   * @param input2 the source data file path for the changeset to get replacement features from;
+   * must support Boundable
    * @param bounds the bounds over which features are to be replaced
-   * @param output the changeset file output locationn
+   * @param output the changeset file output location
    */
   void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+    const QString& output);
+
+  /**
+   * Creates a changeset that replaces features in the first map with features from the second
+   * map
+   *
+   * @param input1 the target data for the changeset in which to replace features
+   * @param input2 the source data for the changeset to get replacement features from
+   * @param bounds the bounds over which features are to be replaced
+   * @param output the changeset file output location
+   */
+  void create(
+    const OsmMapPtr& input1, const OsmMapPtr& input2, const geos::geom::Envelope& bounds,
     const QString& output);
 
   void setFullReplacement(const bool full) { _fullReplacement = full; }
@@ -166,6 +179,16 @@ public:
 private:
 
   friend class ChangesetReplacementCreatorTest;
+
+  // TODO: rename
+  QString _input1;
+  OsmMapPtr _input1Map;
+  QString _input2;
+  OsmMapPtr _input2Map;
+  QString _output;
+
+  // TODO
+  geos::geom::Envelope _replacementBounds;
 
   // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
   // alpha shape of the sec data gets replaced.
@@ -227,13 +250,13 @@ private:
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
 
+  void _create();
+
   QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
 
-  void _validateInputs(const QString& input1, const QString& input2, const QString& output);
+  void _validateInputs();
 
-  void _printJobDescription(
-    const QString& input1, const QString& input2, const QString& bounds,
-    const QString& output) const;
+  void _printJobDescription() const;
 
   /*
    * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
@@ -243,6 +266,8 @@ private:
     _getDefaultGeometryFilters() const;
 
   bool _roadFilterExists() const;
+
+  bool _isDbUrl(const QString& url) const;
 
   void _setInputFilter(
     std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
@@ -260,11 +285,11 @@ private:
     OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
     const QString& debugFileName);
 
-  void _setGlobalOpts(const QString& boundsStr);
+  void _setGlobalOpts();
   void _parseConfigOpts(const GeometryTypeCriterion::GeometryType& geometryType);
 
-  OsmMapPtr _loadRefMap(const QString& input);
-  OsmMapPtr _loadSecMap(const QString& input);
+  OsmMapPtr _loadRefMap();
+  OsmMapPtr _loadSecMap();
 
   /*
    * Adds a custom tag to any element from the input with a missing child. This is primarily useful
@@ -300,7 +325,7 @@ private:
   /*
    * Excludes all features within the specified bounds from deletion during changeset derivation
    */
-  void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map, const QString& boundsStr);
+  void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map);
 
   /*
    * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
@@ -342,8 +367,7 @@ private:
    * can then used to derive the replacement changeset.
    */
   void _getMapsForGeometryType(
-    OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const QString& input1, const QString& input2,
-    const QString& boundsStr, const ElementCriterionPtr& refFeatureFilter,
+    OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const ElementCriterionPtr& refFeatureFilter,
     const ElementCriterionPtr& secFeatureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList());

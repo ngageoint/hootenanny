@@ -278,6 +278,13 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
+=== apidb.reader.read.full.then.crop.on.bounded
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === area.tag.threshold
 
 * Data Type: double

@@ -131,7 +131,9 @@ protected:
   Tgs::BigMap<long, long> _wayIdMap;
 
   geos::geom::Envelope _bounds;
-  geos::geom::Envelope _overrideBounds; //this will override _bounds
+  geos::geom::Envelope _overrideBounds; // this will override _bounds
+  // TODO
+  bool _readFullThenCropOnBounded;
 
   bool _returnNodesOnly;
 
@@ -150,9 +152,17 @@ protected:
   virtual std::shared_ptr<ApiDb> _getDatabase() const = 0;
 
   /*
+   * TODO
+   */
+  void _fullRead(OsmMapPtr map);
+  /*
    * This is the same logic as in the Map.java query method.
    */
-  virtual void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
+  void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
+  /*
+   * TODO
+   */
+  void _readByBounds2(OsmMapPtr map, const geos::geom::Envelope& bounds);
   void _readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds, QSet<QString>& wayIds,
                           QSet<QString>& additionalNodeIds, long& nodeCount, long& wayCount);
   void _updateMetadataOnElement(ElementPtr element);
