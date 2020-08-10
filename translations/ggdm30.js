@@ -777,6 +777,7 @@ ggdm30 = {
         ['t.diplomatic && !(t.amenity)','t.amenity = "embassy"'],
         ['t.boundary == "protected_area" && !(t.protect_class)','t.protect_class = "4"'],
         ['t.bunker_type && !(t.military)','t.military = "bunker"'],
+        ['t.defensive','t.man_made = "tower";t["tower:type"] = "defensive"'],
         ['t.cable =="yes" && t["cable:type"] == "power"',' t.power = "line"; delete t.cable; delete t["cable:type"]'],
         ['t.control_tower == "yes" && t.use == "air_traffic_control"','t["tower:type"] = "observation"'],
         ['t.crossing == "tank"','t.highway = "crossing"'],
@@ -810,7 +811,6 @@ ggdm30 = {
         ['t["tower:type"] && !(t.man_made)','t.man_made = "tower"'],
         ['t.use == "islamic_prayer_hall" && !(t.amenity)','t.amenity = "place_of_worship"'],
         ['t.water || t.landuse == "basin"','t.natural = "water"'],
-        ['t.waterway == "flow_control"','t.flow_control = "sluice_gate"'],
         ['t.waterway == "vanishing_point" && t["water:sink:type"] == "sinkhole"','t.natural = "sinkhole"; delete t.waterway; delete t["water:sink:type"]'],
         ['t.wetland && !(t.natural)','t.natural = "wetland"'],
         ['t["width:minimum_traveled_way"] && !(t.width)','t.width = t["width:minimum_traveled_way"]']
@@ -852,6 +852,10 @@ ggdm30 = {
       }
     } // End crossing_point
 
+    // Military fixes
+
+
+
 
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
@@ -859,7 +863,6 @@ ggdm30 = {
     {
       tags.building = 'yes';
     }
-
 
     // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
     if (tags.building == 'yes' && tags.use)
@@ -1107,6 +1110,17 @@ ggdm30 = {
         delete tags[i];
         continue;
       }
+
+      // Convert "construction:XXX" features
+      if (i.indexOf('construction:') !== -1)
+      {
+        // Hopeing there is only one ':' in the tag name...
+        var tList = i.split(':');
+        tags[tList[1]] = tags[i];
+        tags.condition = 'construction';
+        delete tags[i];
+        continue;
+      }    
     } // End Cleanup loop
 
     // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of
@@ -1322,6 +1336,16 @@ ggdm30 = {
     {
       if (ggdm30.tdsPreRules[i][0](tags)) ggdm30.tdsPreRules[i][1](tags,attrs);
     }
+
+
+    // Fix Keeps and Martello Towers
+    if (tags.defensive)
+    {
+      tags.military = 'bunker';
+      delete tags['tower:type'];
+      delete tags.man_made;
+    }
+
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
@@ -2141,6 +2165,11 @@ ggdm30 = {
       attrs.VSP = '19'; // Mangrove
       break;
     } // End Wetlands
+
+    // BA010 - Land Water Boundary has a different code for 'glacier' then the SLT list has
+    // This gets swapped to "SHO" during export
+    if (attrs.F_CODE == 'BA010' && attrs.SLT == '17') attrs.SLT = '8';
+
   }, // End applyToOgrPostProcessing
 
   // #####################################################################################################

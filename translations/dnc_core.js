@@ -728,6 +728,17 @@ dnc = {
         delete tags[i];
         continue;
       }
+
+      // Convert "construction:XXX" features
+      if (i.indexOf('construction:') !== -1)
+      {
+        // Hopeing there is only one ':' in the tag name...
+        var tList = i.split(':');
+        tags[tList[1]] = tags[i];
+        tags.condition = 'construction';
+        delete tags[i];
+        continue;
+      }    
     } // End Cleanup loop
 
     // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of

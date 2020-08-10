@@ -866,6 +866,7 @@ tds61 = {
         ['t.diplomatic && !(t.amenity)','t.amenity = "embassy"'],
         ['t.boundary == "protected_area" && !(t.protect_class)','t.protect_class = "4"'],
         ['t.bunker_type && !(t.military)','t.military = "bunker"'],
+        ['t.defensive','t.man_made = "tower";t["tower:type"] = "defensive"'],
         ['t.cable =="yes" && t["cable:type"] == "power"',' t.power = "line"; delete t.cable; delete t["cable:type"]'],
         ['t.control_tower == "yes" && t.use == "air_traffic_control"','t["tower:type"] = "observation"'],
         ['t.crossing == "tank"','t.highway = "crossing"'],
@@ -897,7 +898,6 @@ tds61 = {
         ['t["tower:type"] && !(t.man_made)','t.man_made = "tower"'],
         ['t.use == "islamic_prayer_hall" && !(t.amenity)','t.amenity = "place_of_worship"'],
         ['t.water || t.landuse == "basin"','t.natural = "water"'],
-        ['t.waterway == "flow_control"','t.flow_control = "sluice_gate"'],
         ['t.wetland && !(t.natural)','t.natural = "wetland"'],
         ['t["width:minimum_traveled_way"] && !(t.width)','t.width = t["width:minimum_traveled_way"]']
       ];
@@ -1251,6 +1251,16 @@ tds61 = {
         delete tags[i];
         continue;
       }
+      // Convert "construction:XXX" features
+      if (i.indexOf('construction:') !== -1)
+      {
+        // Hopeing there is only one ':' in the tag name...
+        var tList = i.split(':');
+        tags[tList[1]] = tags[i];
+        tags.condition = 'construction';
+        delete tags[i];
+        continue;
+      }    
     } // End Cleanup loop
 
     // Fix Bunkers. Putting this first to skip the building=* rules
@@ -1493,6 +1503,15 @@ tds61 = {
 
       delete tags.barrier; // Take away the walls...
     }
+
+    // Fix Keeps and Martello Towers
+    if (tags.defensive)
+    {
+      tags.military = 'bunker';
+      delete tags['tower:type'];
+      delete tags.man_made;
+    }
+
 
     // going out on a limb and processing OSM specific tags:
     // - Building == a thing,

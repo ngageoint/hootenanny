@@ -3737,20 +3737,20 @@ gifd.rules = {
 
     // SHL - Shoreline Type Left
     ['SHL','0','raw:SHL','unknown'], // Unknown
-    ['SHL','6','raw:SHL','mangrove/nipa'], // Mangrove/Nipa
-    ['SHL','8','raw:SHL','marsh,_swamp'], // Marsh, Swamp
-    ['SHL','10','raw:SHL','rocky'], // Rocky
-    ['SHL','11','raw:SHL','rubble'], // Rubble
-    ['SHL','13','raw:SHL','sandy'], // Sandy
-    ['SHL','14','raw:SHL','stony,_shingly'], // Stony, Shingly
+    ['SHL','6','shoreline:type:left','mangrove'], // Mangrove/Nipa
+    ['SHL','8','shoreline:type:left','marshy'], // Marsh, Swamp
+    ['SHL','10','shoreline:type:left','rocky'], // Rocky
+    ['SHL','11','shoreline:type:left','rubble'], // Rubble
+    ['SHL','13','shoreline:type:left','sandy'], // Sandy
+    ['SHL','14','shoreline:type:left','shingly'], // Stony, Shingly
     ['SHL','997',undefined,undefined], // Unpopulated
-    ['SHL','999','raw:SHL','other'], // Other
+    ['SHL','999','shoreline:type:left','other'], // Other
 
     // SHO - Shoreline Category
-    ['SHO','2','raw:SHO','flat'], // Flat
-    ['SHO','6','raw:SHO','steep'], // Steep
-    ['SHO','7','raw:SHO','glacier'], // Glacier
-    ['SHO','8','raw:SHO','ice_coast'], // Ice Coast
+    ['SHO','2','shoreline:type','flat'], // Flat
+    ['SHO','6','shoreline:type','steep'], // Steep
+    ['SHO','7','shoreline:type','glacier'], // Glacier
+    ['SHO','8','shoreline:type','ice'], // Ice Coast
 
     // SHP - Shape of Beacon
     ['SHP','0','seamark:beacon:shape','undefined'], // Undefined
@@ -3765,15 +3765,15 @@ gifd.rules = {
     ['SHP','10','seamark:daymark:shape','rectangle'], // Daymark Board - Rectangle
 
     // SHR - Shoreline Type Right
-    ['SHR','0','raw:SHR','unknown'], // Unknown
-    ['SHR','6','raw:SHR','mangrove/nipa'], // Mangrove/Nipa
-    ['SHR','8','raw:SHR','marsh,_swamp'], // Marsh, Swamp
-    ['SHR','10','raw:SHR','rocky'], // Rocky
-    ['SHR','11','raw:SHR','rubble'], // Rubble
-    ['SHR','13','raw:SHR','sandy'], // Sandy
-    ['SHR','14','raw:SHR','stony,_shingly'], // Stony, Shingly
+    ['SHR','0','shoreline:type:right','unknown'], // Unknown
+    ['SHR','6','shoreline:type:right','mangrove'], // Mangrove/Nipa
+    ['SHR','8','shoreline:type:right','marshy'], // Marsh, Swamp
+    ['SHR','10','shoreline:type:right','rocky'], // Rocky
+    ['SHR','11','shoreline:type:right','rubble'], // Rubble
+    ['SHR','13','shoreline:type:right','sandy'], // Sandy
+    ['SHR','14','shoreline:type:right','shingly'], // Stony, Shingly
     ['SHR','997',undefined,undefined], // Unpopulated
-    ['SHR','999','raw:SHR','other'], // Other
+    ['SHR','999','shoreline:type:right','other'], // Other
 
     // SIC - Snow/Ice Category
     ['SIC','0','landcover','unknown'], // Unknown

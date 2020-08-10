@@ -750,8 +750,7 @@ mgcp = {
       ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
       ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
-      ["t.water && !(t.natural)","t.natural = 'water'"],
-      ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"]
+      ["t.water && !(t.natural)","t.natural = 'water'"]
       ];
 
       mgcp.osmPostRules = translate.buildComplexRules(rulesList);
@@ -1023,6 +1022,17 @@ mgcp = {
         delete tags[i];
         continue;
       }
+
+      // Convert "construction:XXX" features
+      if (i.indexOf('construction:') !== -1)
+      {
+        // Hopeing there is only one ':' in the tag name...
+        var tList = i.split(':');
+        tags[tList[1]] = tags[i];
+        tags.condition = 'construction';
+        delete tags[i];
+        continue;
+      }    
     } // End Cleanup loop
 
     // Lifecycle and general cleaning

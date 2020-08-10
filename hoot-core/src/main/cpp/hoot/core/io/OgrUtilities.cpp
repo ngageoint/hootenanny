@@ -54,7 +54,8 @@ void OgrUtilities::loadDriverInfo()
   _drivers.push_back(OgrDriverInfo(".db",       "SQLite",         true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".mif",      "MapInfo File",   true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".tab",      "MapInfo File",   true,     true,   GDAL_OF_VECTOR));
-  _drivers.push_back(OgrDriverInfo(".s57",      "S57",            true,     true,   GDAL_OF_VECTOR));
+//  _drivers.push_back(OgrDriverInfo(".s57",      "S57",            true,     true,   GDAL_OF_VECTOR));
+  _drivers.push_back(OgrDriverInfo(".000",      "S57",            true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".bna",      "BNA",            true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".csv",      "CSV",            true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".gml",      "GML",            true,     true,   GDAL_OF_VECTOR));
@@ -212,6 +213,20 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   else if (QString(driverInfo._driverName) == "LIBKML")
   {
     options["OSM_USE_CUSTOM_INDEXING"] = "NO";
+  }
+  else if (QString(driverInfo._driverName) == "S57")
+  {
+    // From the GDAL docs:
+    // SPLIT_MULTIPOINT=ON/OFF: Should multipoint soundings be split into many single point sounding
+    //    features. Multipoint geometries are not well handle by many formats, so it can be convenient
+    //    to split single sounding features with many points into many single point features.
+    //    Default is OFF.
+    options["SPLIT_MULTIPOINT"] = "ON";
+
+    // ADD_SOUNDG_DEPTH=ON/OFF: Should a DEPTH attribute be added on SOUNDG features and assign the
+    //    depth of the sounding. This should only be enabled with SPLIT_MULTIPOINT is also enabled.
+    //    Default is OFF.
+    options["ADD_SOUNDG_DEPTH"] = "ON";
   }
 
   std::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),

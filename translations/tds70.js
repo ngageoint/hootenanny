@@ -875,13 +875,14 @@ tds70 = {
         ['t.diplomatic && !(t.amenity)','t.amenity = "embassy"'],
         ['t.boundary == "protected_area" && !(t.protect_class)','t.protect_class = "4"'],
         ['t.bunker_type && !(t.military)','t.military = "bunker"'],
+        ['t.defensive','t.man_made = "tower";t["tower:type"] = "defensive"'],
         ['t.cable =="yes" && t["cable:type"] == "power"',' t.power = "line"; delete t.cable; delete t["cable:type"]'],
         ['t.control_tower == "yes" && t.use == "air_traffic_control"','t["tower:type"] = "observation"'],
         ['t.crossing == "tank"','t.highway = "crossing"'],
         ['t.desert_surface','t.surface = t.desert_surface; delete t.desert_surface'],
         ['t.dock && !(t.waterway)','t.waterway = "dock"'],
         ['t.drive_in == "yes"','t.amenity = "cinema"'],
-        //             ["t['generator:source']","t.power = 'generator'"],
+        // ["t['generator:source']","t.power = 'generator'"],
         ['t["glacier:type"] == "icecap" && t.natural == "glacier"','delete t.natural'],
         ['t.golf == "driving_range" && !(t.leisure)','t.leisure = "golf_course"'],
         ['t.historic == "castle" && !(t.ruins) && !(t.building)','t.building = "yes"'],
@@ -906,7 +907,6 @@ tds70 = {
         ['t["tower:type"] && !(t.man_made)','t.man_made = "tower"'],
         ['t.use == "islamic_prayer_hall" && !(t.amenity)','t.amenity = "place_of_worship"'],
         ['t.water || t.landuse == "basin"','t.natural = "water"'],
-        ['t.waterway == "flow_control"','t.flow_control = "sluice_gate"'],
         ['t.wetland && !(t.natural)','t.natural = "wetland"'],
         ['t["width:minimum_traveled_way"] && !(t.width)','t.width = t["width:minimum_traveled_way"]']
       ];
@@ -1239,6 +1239,17 @@ tds70 = {
         continue;
       }
 
+      // Convert "construction:XXX" features
+      if (i.indexOf('construction:') !== -1)
+      {
+        // Hopeing there is only one ':' in the tag name...
+        var tList = i.split(':');
+        tags[tList[1]] = tags[i];
+        tags.condition = 'construction';
+        delete tags[i];
+        continue;
+      }    
+
     } // End Cleanup loop
 
     if (tds70.tdsPreRules == undefined)
@@ -1312,6 +1323,15 @@ tds70 = {
     {
       if (tds70.tdsPreRules[i][0](tags)) tds70.tdsPreRules[i][1](tags,attrs);
     }
+
+    // Fix Keeps and Martello Towers
+    if (tags.defensive)
+    {
+      tags.military = 'bunker';
+      delete tags['tower:type'];
+      delete tags.man_made;
+    }
+
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')

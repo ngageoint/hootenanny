@@ -821,6 +821,7 @@ tds40 = {
         ['t.diplomatic && !(t.amenity)','t.amenity = "embassy"'],
         ['t["generator:source"] == "wind"','t.power = "generator"'],
         ['t.historic == "castle" && !(t.ruins) && !(t.building)','t.building = "yes"'],
+        ['t.defensive','t.man_made = "tower";t["tower:type"] = "defensive"'],
         ['(t.landuse == "built_up_area" || t.place == "settlement") && t.building','t["settlement:type"] = t.building; delete t.building'],
         ['t.leisure == "stadium"','t.building = "yes"'],
         ['t["material:vertical"]','t.material = t["material:vertical"]; delete t["material:vertical"]'],
@@ -838,7 +839,6 @@ tds40 = {
         ['t["tower:type"] && !(t.man_made)','t.man_made = "tower"'],
         ['t.use == "islamic_prayer_hall" && !(t.amenity)','t.amenity = "place_of_worship"'],
         ['t.water || t.landuse == "basin"','t.natural = "water"'],
-        ['t.waterway == "flow_control"','t.flow_control = "sluice_gate"'],
         ['t.waterway == "vanishing_point" && t["water:sink:type"] == "sinkhole"','t.natural = "sinkhole"; delete t.waterway; delete t["water:sink:type"]'],
         ['t.wetland && !(t.natural)','t.natural = "wetland"']
       ];
@@ -1257,6 +1257,17 @@ tds40 = {
         delete tags[i];
         continue;
       }
+
+      // Convert "construction:XXX" features
+      if (i.indexOf('construction:') !== -1)
+      {
+        // Hopeing there is only one ':' in the tag name...
+        var tList = i.split(':');
+        tags[tList[1]] = tags[i];
+        tags.condition = 'construction';
+        delete tags[i];
+        continue;
+      }    
     } // End Cleanup loop
 
     // Fix Bunkers. Putting this first to skip the building=* rules
@@ -1482,6 +1493,15 @@ tds40 = {
     {
       if (tds40.PreRules[i][0](tags)) tds40.PreRules[i][1](tags,attrs);
     }
+
+    // Fix Keeps and Martello Towers
+    if (tags.defensive)
+    {
+      tags.military = 'bunker';
+      delete tags['tower:type'];
+      delete tags.man_made;
+    }
+
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
