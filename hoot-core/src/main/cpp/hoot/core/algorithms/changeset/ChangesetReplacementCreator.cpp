@@ -377,12 +377,12 @@ void ChangesetReplacementCreator::_printJobDescription() const
     str += "\nBeing replaced: ..." + _input1Map->getName().right(maxFilePrintLength);
     str += "\nReplacing with ..." + _input2Map->getName().right(maxFilePrintLength);
   }
+  str += "\nAt Bounds: ..." + GeometryUtils::envelopeToConfigString(_replacementBounds);
   str += "\nOutput Changeset: ..." + _output.right(maxFilePrintLength);
   LOG_STATUS(str);
 
   str = "";
-  str += "\nBounds interpretation: " + boundsStr + "; " +
-    GeometryUtils::envelopeToConfigString(_replacementBounds);
+  str += "\nBounds interpretation: " + boundsStr;
   str += "\nReplacement is: " + replacementTypeStr;
   str += "\nGeometry filters: " + geometryFiltersStr;
   str += "\nReplacement filter: " + replacementFiltersStr;
@@ -460,7 +460,7 @@ void ChangesetReplacementCreator::_create()
   for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
          refFilters.begin(); itr != refFilters.end(); ++itr)
   {
-    LOG_STATUS("******************************************");
+    LOG_INFO("******************************************");
     LOG_STATUS(
       "Generating maps for changeset derivation given geometry type: "<<
       GeometryTypeCriterion::typeToString(itr.key()) << ". Pass: " << passCtr << " / " <<
@@ -547,6 +547,8 @@ void ChangesetReplacementCreator::_create()
   }
 
   // CHANGESET GENERATION
+
+  LOG_STATUS("Generating changesets...");
 
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
@@ -684,6 +686,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
       conflatedMap->setName("cleaned");
     }
   }
+
+  LOG_STATUS("Preparing changeset derivation maps...");
 
   // SNAP
 
@@ -1236,26 +1240,30 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
 
-  // TODO: clean this up
-
   OsmMapPtr refMap;
+  // existence of the file input takes precedence over the pre-loaded map
   if (!_input1.isEmpty())
   {
-    // We want to alert the user to the fact their ref versions *could* be being populated incorrectly
-    // to avoid difficulties during changeset application at the end. Its likely if they are incorrect
-    // at this point the changeset derivation will fail at the end anyway, but let's warn now to give
-    // the chance to back out of the replacement earlier.
+    // We want to alert the user to the fact their ref versions *could* be being populated
+    // incorrectly to avoid difficulties during changeset application at the end. Its likely if they
+    // are incorrect at this point the changeset derivation will fail at the end anyway, but let's
+    // warn now to give the chance to back out of the replacement earlier.
     conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
 
-    if (_isDbUrl(_input1))
+    if (/*_isDbUrl(_input1) &&*/ !ConfigOptions().getChangesetReplacementCacheInputMaps())
     {
-      // load the data being replaced cropped to the specified aoi in the appropriate manner
+      // If input caching is not enabled, we'll read from the source data each time and crop
+      // appropriately during the read. If the source input is a very large file or database layer
+      // you don't want to be doing this.
       LOG_STATUS("Loading reference map from: " << _input1 << "...");
       refMap.reset(new OsmMap());
       IoUtils::loadMap(refMap, _input1, true, Status::Unknown1);
     }
     else
     {
+      // If input caching is enabled, we'll read the full map once and then copy it and crop it
+      // in subsequent loads. You only want to be doing this if the input is a file or db layer that
+      // will fit easily in memory.
       if (!_input1Map)
       {
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
@@ -1275,9 +1283,12 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
         refMap, _replacementBounds, _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
     }
 
-    // We only care about the zero version warning for the ref data, so restore default setting value.
+    // We only care about the zero version warning for the ref data, so restore default setting
+    // value before we load secondary data.
     conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
   }
+  // If no file input was specified, then we must have a pre-loaded raw map, which we'll copy and
+  // crop based on what we need to do with it.
   else if (_input1Map)
   {
     LOG_STATUS("Copying reference map from: " << _input1Map->getName() << "...");
@@ -1287,7 +1298,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
   }
   else
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("No reference map specified.");
   }
   refMap->setName("ref");
 
@@ -1308,12 +1319,13 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
 
-  // TODO: clean this up
+  // see related loading notes about this loading procedure in _loadRefMap
+  // TODO: consolidate this and _loadRefMap into a single _loadInput method
 
   OsmMapPtr secMap;
   if (!_input2.isEmpty())
   {
-    if (_isDbUrl(_input2))
+    if (/*_isDbUrl(_input2) &&*/ !ConfigOptions().getChangesetReplacementCacheInputMaps())
     {
       // load the replacement data cropped to the specified aoi in the appropriate manner
       LOG_STATUS("Loading secondary map from: " << _input2 << "...");
@@ -1348,7 +1360,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
   }
   else
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("No secondary map specified.");
   }
   secMap->setName("sec");
 
@@ -1382,7 +1394,7 @@ void ChangesetReplacementCreator::_filterFeatures(
   OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
   const QString& debugFileName)
 {
-  LOG_INFO(
+  LOG_STATUS(
     "Filtering features for: " << map->getName() << " based on input filter: " +
     featureFilter->toString() << "...");
 
@@ -1530,6 +1542,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
       }
     }
   }
+
+  LOG_STATUS("Removing data...");
 
   LOG_VART(doughMap->size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
@@ -1987,7 +2001,7 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
 
 void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 {
-  LOG_INFO("Cleaning up duplicated elements for " << map->getName() << "...");
+  LOG_INFO("Cleaning up changeset derivation input " << map->getName() << "...");
 
   // Due to mixed geometry type relations explained in _getDefaultGeometryFilters, we may have
   // introduced some duplicate relation members by this point.

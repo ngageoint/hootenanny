@@ -180,14 +180,22 @@ private:
 
   friend class ChangesetReplacementCreatorTest;
 
-  // TODO: rename
+  // TODO: rename these for clarity
+
+  // path to the input with data being replaced; overrides use of _input1Map
   QString _input1;
+  // preloaded input with data being replaced; overrides use of _input1
   OsmMapPtr _input1Map;
+
+  // path to the input with data used for replacement; overrides use of _input2Map
   QString _input2;
+  // preloaded input with data used for replacement; overrides use of _input2
   OsmMapPtr _input2Map;
+
+  // path to the changeset output file
   QString _output;
 
-  // TODO
+  // the AOI over which the replacement is being performed
   geos::geom::Envelope _replacementBounds;
 
   // If true, all the ref data gets replaced. If false, only the ref data that intersects with the

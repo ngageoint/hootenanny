@@ -595,7 +595,6 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
 void ApiDbReader::_readByBounds2(OsmMapPtr map, const Envelope& bounds)
 {
-  // TODO
   _fullRead(map);
   IoUtils::cropToBounds(map, bounds, _keepImmediatelyConnectedWaysOutsideBounds);
 }
@@ -630,9 +629,9 @@ void ApiDbReader::read(const OsmMapPtr& map)
     else
     {
       // The cropped read from db inputs gets very slow for large datasets (#4192). Therefore, if we
-      // know the input data was cut down to something reasonable in size beforehand (e.g. input
-      // from overpass query) we can allow the full dataset to be read in from the db input and then
-      // crop it after the fact.
+      // we need to perform a cropped query from a very large dataset, we can allow the full dataset
+      // to be read in from the db input and then crop it after the fact as a runtime performance
+      // optimization at the expense of extra memory usage.
 
       LOG_DEBUG(
         "Executing API bounded read query via read all then crop at bounds " << bounds.toString() <<

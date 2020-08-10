@@ -58,7 +58,7 @@ static const QString TASK_GRID_FILE = ROOT_DIR + "/bounds.osm";
 static const long MAX_NODES_PER_CELL = 100000;
 static const int KILL_AFTER_NUM_CHANGESET_DERIVATIONS = 2;
 
-static const bool WRITE_REPLACEMENT_DATA_TO_DB = true;
+static const bool WRITE_REPLACEMENT_DATA_TO_DB = false;
 static const bool PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION = true;
 static const bool CROP_AFTER_BOUNDED_QUERY = false;
 
@@ -81,51 +81,119 @@ static const QString REPLACEMENT_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447";
  * TODO: add the option to pass in a uniform grid
  * TODO: add the option to pass in specific grid cells
  *
- * 1) pass in secondary file replacement map
+ * 1a) secondary file input; no cached maps
  *   - WRITE_REPLACEMENT_DATA_TO_DB=false
  *   - PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION=false
  *   - CROP_AFTER_BOUNDED_QUERY=false
+ *   - conf().set(ConfigOptions::getChangesetReplacementCacheInputMapsKey(), false);
  *
- * 2) load secondary into db and cropped query
+ * 1b) secondary file input; cached maps
+ *   - WRITE_REPLACEMENT_DATA_TO_DB=false
+ *   - PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION=false
+ *   - CROP_AFTER_BOUNDED_QUERY=false
+ *   - conf().set(ConfigOptions::getChangesetReplacementCacheInputMapsKey(), true);
+ *
+ * 2a) load secondary into db and regular bounded query; no cached maps
  *   - WRITE_REPLACEMENT_DATA_TO_DB=true
  *   - PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION=false
  *   - CROP_AFTER_BOUNDED_QUERY=false
+ *   - conf().set(ConfigOptions::getChangesetReplacementCacheInputMapsKey(), false);
  *
- * 3) load secondary into db and crop after query replacement
+ * 2b) load secondary into db and crop after query in changeset creator; cached maps
+ *   - WRITE_REPLACEMENT_DATA_TO_DB=true
+ *   - PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION=false
+ *   - CROP_AFTER_BOUNDED_QUERY=false
+ *   - conf().set(ConfigOptions::getChangesetReplacementCacheInputMapsKey(), true);
+ *
+ * 3a) load secondary into db and crop after query in db reader; no cached maps
  *   - WRITE_REPLACEMENT_DATA_TO_DB=true
  *   - PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION=false
  *   - CROP_AFTER_BOUNDED_QUERY=true
+ *   - conf().set(ConfigOptions::getChangesetReplacementCacheInputMapsKey(), false);
  *
- * 4) send in pre-loaded maps
+ * 3b) load secondary into db and crop after query in db reader; cached maps
+ *   - WRITE_REPLACEMENT_DATA_TO_DB=true
+ *   - PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION=false
+ *   - CROP_AFTER_BOUNDED_QUERY=true
+ *   - conf().set(ConfigOptions::getChangesetReplacementCacheInputMapsKey(), true);
+ *
+ * 4a) send in pre-loaded maps*; no cached maps
  *   - WRITE_REPLACEMENT_DATA_TO_DB=true
  *   - PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION=true
  *   - CROP_AFTER_BOUNDED_QUERY=false
+ *   - conf().set(ConfigOptions::getChangesetReplacementCacheInputMapsKey(), false);
  *
- * ~1/4 city average derivation times
+ * 4b) send in pre-loaded maps; cached maps
+ *   - WRITE_REPLACEMENT_DATA_TO_DB=true
+ *   - PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION=true
+ *   - CROP_AFTER_BOUNDED_QUERY=false
+ *   - conf().set(ConfigOptions::getChangesetReplacementCacheInputMapsKey(), true);
+ *
+ * ****************************************
+ *
+ * ~1/4 city average derivation
  *
  * MAX_NODES_PER_CELL=10000
  * KILL_AFTER_NUM_CHANGESET_DERIVATIONS=5
  *
- * 1) 13s
- * 2) 7s
- * 3) 76s
- * 4) ?s (fails)
+ * #1 (cached input maps)
  *
- * whole city average derivation times
+ * 1b) 25s
+ * 2b) 30s
+ * 3b) 30s
+ * 4b) 6s?* (fails)
+ *
+ * #2 (no cached input maps)
+ *
+ * 1a) 22s
+ * 2a) 7s*
+ * 3a) 76s
+ * 4a) 6s?* (fails)
+ *
+ * At this size, pre-loaded maps and regular bounded queries without input caching work best (input
+ * caching is ignored for pre-loaded maps). Caching input maps hurts regular bounded query
+ * performance, slightly helps file read performance, and greatly helps reads with cropping done
+ * after the query. However, since cropping after the query gains us nothing here, there's no point
+ * in using it.
+ *
+ * *****************************************
+ *
+ * whole city average derivation
  *
  * MAX_NODES_PER_CELL=100000
  * KILL_AFTER_NUM_CHANGESET_DERIVATIONS=2
  *
- * 1) 456s
- * 2) 265s
- * 3) 582s
- * 4) 180s
+ * #1 (cached input maps)
+ *
+ * 1b) 273s
+ * 2b) 305s
+ * 3b) 310s
+ * 4b) 179s*
+ *
+ * #2 (no cached input maps)
+ *
+ * 1a) 516s
+ * 2a) 268s
+ * 3a) 563s
+ * 4a) 167s*
+ *
+ * At this size, pre-loaded maps perform best (input caching is ignored for pre-loaded maps; think
+ * the time differences between cached and not cached here are ignorable). Input caching only helps
+ * for file inputs, db inputs w/o caching are similar in performance to file inputs with caching,
+ * and cropping after query gains us nothing.
+ *
+ * *****************************************
+ *
+ * task grid input load with crop after query: 1:34*
+ * task grid input load with regular bounded query: > 8 minutes
+ *
+ * *****************************************
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
   // ENABLE FOR DEBUGGING ONLY
-  //CPPUNIT_TEST(runGridCellTest);
+  CPPUNIT_TEST(runGridCellTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -133,7 +201,7 @@ public:
   ServiceChangesetReplacementGridTest() :
   _dataToReplaceFile(DATA_TO_REPLACE_FILE),
   _replacementDataFile(REPLACEMENT_DATA_FILE),
-  _numChangesetsDerived(0.0),
+  _numChangesetsDerived(0),
   _totalChangesetDeriveTime(0.0),
   _averageChangesetDeriveTime(0.0)
   {
@@ -162,9 +230,6 @@ public:
       _loadDataToReplaceDb();
       if (WRITE_REPLACEMENT_DATA_TO_DB)
       {
-        // Technically, we could skip loading the replacement data into a db and read straight from
-        // the file during each replacement. If the bounded db queries weren't so slow at larger
-        // data sizes, it would be a no-brainer to always load it into the db.
         _loadReplacementDataDb();
       }
       if (PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION)
@@ -200,9 +265,9 @@ public:
       }
     }
 
-    _cleanup();
-
     LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
+
+    _cleanup();
   }
 
 private:
@@ -216,7 +281,7 @@ private:
   OsmMapPtr _dataToReplaceFullMap;
   OsmMapPtr _replacementDataFullMap;
 
-  double _numChangesetsDerived;
+  int _numChangesetsDerived;
   // seconds
   double _totalChangesetDeriveTime;
   double _averageChangesetDeriveTime;
@@ -240,6 +305,8 @@ private:
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), ROOT_DIR + "/debug.osm"); 
+    conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
+    conf().set(ConfigOptions::getChangesetReplacementCacheInputMapsKey(), false);
   }
 
   void _cropInputs()
@@ -482,7 +549,7 @@ private:
 
     // for each task grid cell
     int boundsCtr = 1;
-    _numChangesetsDerived = 0.0;
+    _numChangesetsDerived = 0;
     _totalChangesetDeriveTime = 0.0;
     for (size_t tx = 0; tx < taskGrid.size(); tx++)
     {
@@ -514,6 +581,8 @@ private:
         }
         else
         {
+          // By passing in pre-loaded maps, we can cut down on I/O quite a bit. Need enough memory
+          // available to store both complete datasets x2.
           assert(!_dataToReplaceFullMap->isEmpty());
           assert(!_replacementDataFullMap->isEmpty());
           changesetCreator.create(
@@ -521,7 +590,7 @@ private:
         }
         _numChangesetsDerived++;
         _totalChangesetDeriveTime += _subTaskTimer.elapsed() / 1000.0;
-        _averageChangesetDeriveTime = _totalChangesetDeriveTime / _numChangesetsDerived;
+        _averageChangesetDeriveTime = _totalChangesetDeriveTime / (double)_numChangesetsDerived;
         _subTaskTimer.restart();
 
         if (KILL_AFTER_NUM_CHANGESET_DERIVATIONS > 0 &&
