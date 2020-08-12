@@ -1088,7 +1088,7 @@ enc311.rules = {
     ['CONDTN','2','condition','destroyed'], // ruined
     ['CONDTN','3','condition','under_reclamation'], // under reclamation
     ['CONDTN','4','condition','wingless'], // wingless
-    ['CONDTN','5','condition','planned_construction'], // planned construction
+    ['CONDTN','5','condition','planned'], // planned construction
 
     // CONRAD - Conspicuous, radar
     ['CONRAD','1','radar_conspicuous','yes'], // radar conspicuous

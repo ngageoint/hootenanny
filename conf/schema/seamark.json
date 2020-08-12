@@ -1,34 +1,25 @@
 [
-    {
-        "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area"
-        ],
-        "influence": 1,
-        "isA": "poi",
-        "mismatchScore": 0.1,
-        "name": "seamark:type",
-        "objectType": "tag"
-    },
-    {
-        "description": "Defines the type of seamarks and other navigation aids for marine charts.",
-        "isA": "seamark:type",
-        "name": "seamark:type=*",
-        "objectType": "tag"
-    },
-    {
-        "geometries": ["linestring"],
-        "isA": "seamark:type",
-        "name": "seamark:type=measured_distance_line",
-        "objectType": "tag"
-    },
-    {
-        "geometries": ["linestring"],
-        "isA": "seamark:type",
-        "name": "seamark:type=radar_line",
-        "objectType": "tag"
-    },
+ {
+  "dataType": "enumeration",
+  "geometries": ["node", "area"],
+  "influence": 1,
+  "isA": "poi",
+  "mismatchScore": 0.1,
+  "name": "seamark:type",
+  "objectType": "tag"
+ },
+ {
+  "description": "Defines the type of seamarks and other navigation aids for marine charts.",
+  "isA": "seamark:type",
+  "name": "seamark:type=*",
+  "objectType": "tag"
+ },
+ {
+  "geometries": ["linestring"],
+  "isA": "seamark:type",
+  "name": "seamark:type=measured_distance_line",
+  "objectType": "tag"
+ },
 {
  "geometries":["node","area"],
  "isA": "seamark:type",

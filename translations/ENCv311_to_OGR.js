@@ -247,8 +247,13 @@ enc311 = {
       }
     } // End Cleanup loop
 
+    // Cleanup before Life Cycle fixes
+    // Old Railway that is now a road/cycleway/bridleway etc
+    if (tags.highway && (tags.railway == 'disused' || tags.railway == 'abandoned')) delete tags.railway;
+
     // Lifecycle tags
-    for (var typ of ['highway','bridge','railway','building'])
+    var cycleList = {'highway':'road','bridge':'yes','railway':'rail','building':'yes'};
+    for (var typ in cycleList)
     {
       switch (tags[typ])
       {
@@ -256,16 +261,45 @@ enc311 = {
           break;
 
         case 'construction':
-          tags[typ] = tags.construction;
-          delete tags.construction;
+          if (tags.construction)
+          {
+            tags[typ] = tags.construction;
+            delete tags.construction;           
+          }
+          else
+          {
+            tags[typ] = cycleList[typ]; 
+          }
           tags.condition = 'construction';
           break;
 
-        // Might need to add Demolished etc
-        // case '':
-        //   break;
+        case 'proposed':
+          if (tags.proposed)
+          {
+            tags[typ] = tags.proposed;
+            delete tags.proposed;
+          }
+          else
+          {
+            tags[typ] = cycleList[typ];
+          }
+          tags.condition = 'proposed';
+          break;
+
+        case 'abandoned':
+        case 'disused':
+          tags[typ] = cycleList[typ];
+          tags.STATUS = 'not_in_use';
+          break;
+
+        case 'destroyed':
+        case 'demolished':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'destroyed';
+          tags.STATUS = 'destroyed';
+          break;
       }
-    }
+    } // End cycleList
 
     // Names
     if (tags['seamark:name'])

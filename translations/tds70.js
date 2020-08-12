@@ -1250,6 +1250,59 @@ tds70 = {
 
     } // End Cleanup loop
 
+    // Lifecycle tags
+    var cycleList = {'highway':'road','bridge':'yes','railway':'rail','building':'yes'};
+    for (var typ in cycleList)
+    {
+      switch (tags[typ])
+      {
+        case undefined: // Break early if no value
+          break;
+
+        case 'construction':
+          if (tags.construction)
+          {
+            tags[typ] = tags.construction;
+            delete tags.construction;           
+          }
+          else
+          {
+            tags[typ] = cycleList[typ]; 
+          }
+          tags.condition = 'construction';
+          break;
+
+        case 'proposed':
+          if (tags.proposed)
+          {
+            tags[typ] = tags.proposed;
+            delete tags.proposed;
+          }
+          else
+          {
+            tags[typ] = cycleList[typ];
+          }
+          tags.condition = 'proposed';
+          break;
+
+        case 'abandoned':
+        case 'disused':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'abandoned';
+          break;
+
+        case 'destroyed':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'destroyed';
+          break;
+
+        case 'demolished':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'dismantled';
+          break;
+      }
+    } // End cycleList
+
     if (tds70.tdsPreRules == undefined)
     {
       // See ToOsmPostProcessing for more details about rulesList.
