@@ -356,6 +356,14 @@ public:
   bool hasAnyKvp(const QStringList& kvps) const;
 
   /**
+   * Returns the first matching key/value pair (kvp) from the input list
+   *
+   * @param kvps list of kvp string to match
+   * @return a kvp or an empty string if no matching kvp is found
+   */
+  QString getFirstKvp(const QStringList& kvps) const;
+
+  /**
    * Returns true if the tags have any key in the input list
    *
    * @param keys tag keys to search for

@@ -884,6 +884,30 @@ void Tags::_valueRegexParser(const QString& str, QString& num, QString& units) c
   units = copyStr.replace(sRegExp, QString("")).trimmed();
 }
 
+QString Tags::getFirstKvp(const QStringList& kvps) const
+{
+  for (int i = 0; i < kvps.size(); i++)
+  {
+    const QString kvp = kvps.at(i);
+    if (!kvp.contains("="))
+    {
+      throw IllegalArgumentException("Invalid kvp: " + kvp);
+    }
+    const QStringList kvpParts = kvp.split("=");
+    if (!kvpParts.size() == 2)
+    {
+      throw IllegalArgumentException("Invalid kvp: " + kvp);
+    }
+    const QString key = kvpParts[0];
+    const QString value = kvpParts[1];
+    if ((value != "*" && get(key) == value) || (value == "*" && contains(key)))
+    {
+      return key + "=" + value;
+    }
+  }
+  return "";
+}
+
 bool Tags::hasKvp(const QString& kvp) const
 {
   return hasAnyKvp(QStringList(kvp));
@@ -905,11 +929,7 @@ bool Tags::hasAnyKvp(const QStringList& kvps) const
     }
     const QString key = kvpParts[0];
     const QString value = kvpParts[1];
-    if (value != "*" && get(key) == value)
-    {
-      return true;
-    }
-    else if (value == "*" && contains(key))
+    if ((value != "*" && get(key) == value) || (value == "*" && contains(key)))
     {
       return true;
     }

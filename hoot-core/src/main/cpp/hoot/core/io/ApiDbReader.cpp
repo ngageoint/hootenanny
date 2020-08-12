@@ -54,6 +54,7 @@ _useDataSourceIds(true),
 _status(Status::Invalid),
 _open(false),
 _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
+_readFullThenCropOnBounded(ConfigOptions().getApidbReaderReadFullThenCropOnBounded()),
 _returnNodesOnly(false),
 _keepStatusTag(ConfigOptions().getReaderKeepStatusTag()),
 _circularErrorTagKeys(ConfigOptions().getCircularErrorTagKeys()),
@@ -84,6 +85,26 @@ void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 {
   _overrideBounds = GeometryUtils::envelopeFromConfigString(bbox);
 }
+
+void ApiDbReader::initializePartial()
+{
+  _partialMap.reset(new OsmMap());
+
+  _firstPartialReadCompleted = false;
+  _elementsRead = 0;
+  _selectElementType = ElementType::Node;
+  _lastId = 0;
+  _maxNodeId = 0;
+  _maxWayId = 0;
+  _maxRelationId = 0;
+  _totalNumMapNodes = 0;
+  _totalNumMapWays = 0;
+  _totalNumMapRelations = 0;
+  _numNodesRead = 0;
+  _numWaysRead = 0;
+  _numRelationsRead = 0;
+}
+
 
 bool ApiDbReader::_hasBounds()
 {
@@ -269,7 +290,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
                                      long& nodeCount, long& wayCount)
 {
   LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
-  // TODO: This is extremely slow for large numbers of node IDs.
+  // TODO: This query is extremely slow for large numbers of node IDs. - #4192
   std::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
   while (wayIdItr->next())
   {
@@ -327,7 +348,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
       additionalNodeIds.insert(QString::number(nodeId));
     }
 
-    //subtract nodeIds from additionalNodeIds, so no dupes get added
+    // subtract nodeIds from additionalNodeIds, so no dupes get added
     LOG_VARD(nodeIds.size());
     LOG_VARD(additionalNodeIds.size());
     additionalNodeIds = additionalNodeIds.subtract(nodeIds);
@@ -350,9 +371,23 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
   }
 }
 
+void ApiDbReader::_fullRead(OsmMapPtr map)
+{
+  LOG_DEBUG("Executing API full read query...");
+  for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
+  {
+    if (_returnNodesOnly && ctr != ElementType::Node)
+    {
+      break;
+    }
+    _read(map, static_cast<ElementType::Type>(ctr));
+  }
+}
+
 void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 {
   // TODO: This proves very slow for AOI's with a lot of data. Need something better.
+  // see _readWaysByNodeIds. - #4192
 
   long boundedNodeCount = 0;
   long boundedWayCount = 0;
@@ -558,23 +593,10 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   LOG_VARD(map->getRelations().size());
 }
 
-void ApiDbReader::initializePartial()
+void ApiDbReader::_readByBounds2(OsmMapPtr map, const Envelope& bounds)
 {
-  _partialMap.reset(new OsmMap());
-
-  _firstPartialReadCompleted = false;
-  _elementsRead = 0;
-  _selectElementType = ElementType::Node;
-  _lastId = 0;
-  _maxNodeId = 0;
-  _maxWayId = 0;
-  _maxRelationId = 0;
-  _totalNumMapNodes = 0;
-  _totalNumMapWays = 0;
-  _totalNumMapRelations = 0;
-  _numNodesRead = 0;
-  _numWaysRead = 0;
-  _numRelationsRead = 0;
+  _fullRead(map);
+  IoUtils::cropToBounds(map, bounds, _keepImmediatelyConnectedWaysOutsideBounds);
 }
 
 void ApiDbReader::read(const OsmMapPtr& map)
@@ -584,15 +606,7 @@ void ApiDbReader::read(const OsmMapPtr& map)
 
   if (!_hasBounds())
   {
-    LOG_DEBUG("Executing API read query...");
-    for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
-    {
-      if (_returnNodesOnly && ctr != ElementType::Node)
-      {
-        break;
-      }
-      _read(map, static_cast<ElementType::Type>(ctr));
-    }
+    _fullRead(map);
   }
   else
   {
@@ -605,8 +619,25 @@ void ApiDbReader::read(const OsmMapPtr& map)
     {
       bounds = _bounds;
     }
-    LOG_DEBUG("Executing API bounded read query with bounds " << bounds.toString() << "...");
-    _readByBounds(map, bounds);
+    if (!_readFullThenCropOnBounded)
+    {
+      LOG_DEBUG(
+        "Executing API bounded read query via SQL filtering at bounds " << bounds.toString() <<
+        "...");
+      _readByBounds(map, bounds);
+    }
+    else
+    {
+      // The cropped read from db inputs gets very slow for large datasets (#4192). Therefore, if we
+      // we need to perform a cropped query from a very large dataset, we can allow the full dataset
+      // to be read in from the db input and then crop it after the fact as a runtime performance
+      // optimization at the expense of extra memory usage.
+
+      LOG_DEBUG(
+        "Executing API bounded read query via read all then crop at bounds " << bounds.toString() <<
+        "...");
+      _readByBounds2(map, bounds);
+    }
   }
 }
 
