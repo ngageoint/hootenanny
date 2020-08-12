@@ -1667,105 +1667,42 @@ enc311.rules = {
 
   // This is the opposite of "seamarkTypeTag" and is used to convert back to a seamark type
   tagToSeamarkType : {
-"channel":"COMCHA",
-"clearance_height":"VERCLR",
-"clearance_height_closed":"VERCCL",
-"clearance_height_open":"VERCOP",
-"clearance_height_safe":"VERCSA",
-"clearance_width":"HORCLR",
-"colour":"COLOUR",
-"colour_pattern":"COLPAT",
-"conspicuity":"CONVIS",
-"construction":"NATCON",
-"depth":"VALSOU",
-"depth_buried":"BURDEP",
-"elevation":"ELEVAT",
-"frequency":"SIGFRQ",
-"function":"FUNCTN",
-"group":"SIGGRP",
-"height":"HEIGHT",
-"length":"HORLEN",
-"maximum_depth":"DRVAL2",
-"maximum_load":"LIFCAP",
-"maximum_range":"VALMXR",
-"minimum_depth":"DRVAL1",
-"multiple":"MLTYLT",
-"orientation":"ORIENT",
-"period":"SIGPER",
-"picture":"PICREP",
-"product":"PRODCT",
-"radius":"RADIUS",
-"range":"VALNMR",
-"restriction":"RESTRN",
-"sector_end":"SECTR2",
-"sector_start":"SECTR1",
-"sequence":"SIGSEQ",
-"sounding_quality":"QUASOU",
-"sounding_technique":"TECSOU",
-"status":"STATUS",
-"surface":"NATSUR",
-"surface_qualification":"NATQUA",
-"system":"MARSYS",
-"tidal_prediction_method":"T_MTOD",
-"traffic_flow":"TRAFIC",
-"vertical_datum":"VERDAT",
-"vertical_length":"VERLEN",
-"visibility":"LITVIS",
-"water_level":"WATLEV",
-"water_level_accuracy":"T_ACWL",
-"wavelength":"RADWAL",
-"width":"HORWID",
+  "channel":"COMCHA","clearance_height":"VERCLR","clearance_height_closed":"VERCCL",
+  "clearance_height_open":"VERCOP","clearance_height_safe":"VERCSA","clearance_width":"HORCLR",
+  "colour":"COLOUR","colour_pattern":"COLPAT","conspicuity":"CONVIS",
+  "construction":"NATCON","depth":"VALSOU","depth_buried":"BURDEP",
+  "elevation":"ELEVAT","frequency":"SIGFRQ","function":"FUNCTN",
+  "group":"SIGGRP","height":"HEIGHT","length":"HORLEN",
+  "maximum_depth":"DRVAL2","maximum_load":"LIFCAP","maximum_range":"VALMXR",
+  "minimum_depth":"DRVAL1","multiple":"MLTYLT","orientation":"ORIENT",
+  "period":"SIGPER","picture":"PICREP","product":"PRODCT",
+  "radius":"RADIUS","range":"VALNMR","restriction":"RESTRN",
+  "sector_end":"SECTR2","sector_start":"SECTR1","sequence":"SIGSEQ",
+  "sounding_quality":"QUASOU","sounding_technique":"TECSOU","status":"STATUS",
+  "surface":"NATSUR","surface_qualification":"NATQUA","system":"MARSYS",
+  "tidal_prediction_method":"T_MTOD","traffic_flow":"TRAFIC","vertical_datum":"VERDAT",
+  "vertical_length":"VERLEN","visibility":"LITVIS","water_level":"WATLEV",
+  "water_level_accuracy":"T_ACWL","wavelength":"RADWAL","width":"HORWID",
   },
 
   // There are quite a few different "category" lists
   categoryTagToSeamarkType : {
-'seamark:daymark:shape':'TOPSHP',
-'seamark:topmark:shape':'TOPSHP',
-'seamark:beacon_cardinal:shape':'BCNSHP',
-'seamark:beacon_isolated_danger:shape':'BCNSHP',
-'seamark:beacon_lateral:shape':'BCNSHP',
-'seamark:beacon_safe_water:shape':'BCNSHP',
-'seamark:beacon_special_purpose:shape':'BCNSHP',
-'seamark:buoy_cardinal:shape':'BOYSHP',
-'seamark:buoy_installation:shape':'BOYSHP',
-'seamark:buoy_isolated_danger:shape':'BOYSHP',
-'seamark:buoy_lateral:shape':'BOYSHP',
-'seamark:buoy_safe_water:shape':'BOYSHP',
-'seamark:buoy_special_purpose:shape':'BOYSHP',
-'seamark:mooring:shape':'BOYSHP',
-'seamark:building:shape':'BUISHP',
-'seamark:silo:shape':'BUISHP',
-'seamark:anchor_berth:category':'CATACH',
-'seamark:anchorage:category':'CATACH',
-'seamark:airport:category':'CATAIR',
-'seamark:bridge:category':'CATBRG',
-'seamark:cable_area:category':'CATCBL',
-'seamark:cable_overhead:category':'CATCBL',
-'seamark:cable_submarine:category':'CATCBL',
-'seamark:beacon_cardinal:category':'CATCAM',
-'seamark:buoy_cardinal:category':'CATCAM',
-'seamark:dumping_ground:category':'CATDPG',
-'seamark:harbour:category':'CATHAF',
-'seamark:hulf:category':'CATHLK',
-'seamark:beacon_lateral:category':'CATLAM',
-'seamark:buoy_lateral:category':'CATLAM',
-'seamark:light:category':'CATLIT',
-'seamark:landmark:category':'CATLMK',
-'seamark:military_area:category':'CATMPA',
-'seamark:platform:category':'CATOFP',
-'seamark:pipeline_area:category':'CATPIP',
-'seamark:pipeline_overhead:category':'CATPIP',
-'seamark:pipeline_submarine:category':'CATPIP',
-'seamark:restricted_area:category':'CATREA',
-'seamark:radio_station:category':'CATROS',
-'seamark:rescue_station:category':'CATRSC',
-'seamark:small_craft_facility:category':'CATSCF',
-'seamark:signal_station_traffic:category':'CATSIT',
-'seamark:signal_station_warning:category':'CATSIW',
-'seamark:beacon_special_purpose:category':'CATSPM',
-'seamark:buoy_special_purpose:category':'CATSPM',
-'seamark:daymark:category':'CATSPM',
-'seamark:vegetation:category':'CATVEG',
+  'seamark:daymark:shape':'TOPSHP','seamark:topmark:shape':'TOPSHP','seamark:beacon_cardinal:shape':'BCNSHP',
+  'seamark:beacon_isolated_danger:shape':'BCNSHP','seamark:beacon_lateral:shape':'BCNSHP','seamark:beacon_safe_water:shape':'BCNSHP',
+  'seamark:beacon_special_purpose:shape':'BCNSHP','seamark:buoy_cardinal:shape':'BOYSHP','seamark:buoy_installation:shape':'BOYSHP',
+  'seamark:buoy_isolated_danger:shape':'BOYSHP','seamark:buoy_lateral:shape':'BOYSHP','seamark:buoy_safe_water:shape':'BOYSHP',
+  'seamark:buoy_special_purpose:shape':'BOYSHP','seamark:mooring:shape':'BOYSHP','seamark:building:shape':'BUISHP',
+  'seamark:silo:shape':'BUISHP','seamark:anchor_berth:category':'CATACH','seamark:anchorage:category':'CATACH',
+  'seamark:airport:category':'CATAIR','seamark:bridge:category':'CATBRG','seamark:cable_area:category':'CATCBL',
+  'seamark:cable_overhead:category':'CATCBL','seamark:cable_submarine:category':'CATCBL','seamark:beacon_cardinal:category':'CATCAM',
+  'seamark:buoy_cardinal:category':'CATCAM','seamark:dumping_ground:category':'CATDPG','seamark:harbour:category':'CATHAF',
+  'seamark:hulf:category':'CATHLK','seamark:beacon_lateral:category':'CATLAM','seamark:buoy_lateral:category':'CATLAM',
+  'seamark:light:category':'CATLIT','seamark:landmark:category':'CATLMK','seamark:military_area:category':'CATMPA',
+  'seamark:platform:category':'CATOFP','seamark:pipeline_area:category':'CATPIP','seamark:pipeline_overhead:category':'CATPIP',
+  'seamark:pipeline_submarine:category':'CATPIP','seamark:restricted_area:category':'CATREA','seamark:radio_station:category':'CATROS',
+  'seamark:rescue_station:category':'CATRSC','seamark:small_craft_facility:category':'CATSCF','seamark:signal_station_traffic:category':'CATSIT',
+  'seamark:signal_station_warning:category':'CATSIW','seamark:beacon_special_purpose:category':'CATSPM','seamark:buoy_special_purpose:category':'CATSPM',
+  'seamark:daymark:category':'CATSPM','seamark:vegetation:category':'CATVEG',
   },
 
   // StringList Translation Rules:
@@ -2743,6 +2680,26 @@ enc311.rules = {
     ['FUNCTN','41','leisure','stadium'], // stadium
     ['FUNCTN','42','amenity','bus_station'], // bus station
 
+    // NATSUR - Nature of surface
+    ['NATSUR','1','surface','mud'], // mud
+    ['NATSUR','2','surface','clay'], // clay
+    ['NATSUR','3','surface','silt'], // silt
+    ['NATSUR','4','surface','sand'], // sand
+    ['NATSUR','5','surface','stone'], // stone
+    ['NATSUR','6','surface','gravel'], // gravel
+    ['NATSUR','7','surface','pebbles'], // pebbles
+    ['NATSUR','8','surface','cobblestone'], // cobbles
+    ['NATSUR','9','surface','rock'], // rock
+    // ['NATSUR','10','surface','marsh'], // marsh
+    ['NATSUR','11','surface','lava'], // lava
+    ['NATSUR','12','surface','snow'], // snow
+    ['NATSUR','13','surface','ice'], // ice
+    ['NATSUR','14','surface','coral'], // coral
+    // ['NATSUR','15','surface','swamp'], // swamp
+    // ['NATSUR','16','surface','bog/moor'], // bog/moor
+    ['NATSUR','17','surface','shells'], // shells
+    ['NATSUR','18','surface','boulders'], // boulder
+
     // PRODCT - Product
     ['PRODCT','1','product','oil'], // oil
     ['PRODCT','2','product','gas'], // gas
@@ -2799,38 +2756,6 @@ enc311.rules = {
     ['BUISHP','8','shape','spherical'], // spherical
     ['BUISHP','9','shape','cubic'], // cubic
 
-    // VERDAT - Vertical datum
-    ['VERDAT','1','source:datum:sounding','mean_low_water_springs'], // Mean low water springs
-    ['VERDAT','2','source:datum:sounding','mean_lower_low_water_springs'], // Mean lower low water springs
-    ['VERDAT','3','source:datum:sounding','mean_sea_level'], // Mean sea level
-    ['VERDAT','4','source:datum:sounding','lowest_low_water'], // Lowest low water
-    ['VERDAT','5','source:datum:sounding','mean_low_water'], // Mean low water
-    ['VERDAT','6','source:datum:sounding','lowest_low_water_springs'], // Lowest low water springs
-    ['VERDAT','7','source:datum:sounding','approximate_mean_low_water_springs'], // Approximate mean low water springs
-    ['VERDAT','8','source:datum:sounding','indian_spring_low_water'], // Indian spring low water
-    ['VERDAT','9','source:datum:sounding','low_water_springs'], // Low water springs
-    ['VERDAT','10','source:datum:sounding','approximate_lowest_astronomical_tide'], // Approximate lowest astronomical tide
-    ['VERDAT','11','source:datum:sounding','nearly_lowest_low_water'], // Nearly lowest low water
-    ['VERDAT','12','source:datum:sounding','mean_lower_low_water'], // Mean lower low water
-    ['VERDAT','13','source:datum:sounding','low_water'], // Low water
-    ['VERDAT','14','source:datum:sounding','approximate_mean_low_water'], // Approximate mean low water
-    ['VERDAT','15','source:datum:sounding','approximate_mean_lower_low_water'], // Approximate mean lower low water
-    ['VERDAT','16','source:datum:sounding','mean_high_water'], // Mean high water
-    ['VERDAT','17','source:datum:sounding','mean_high_water_springs'], // Mean high water springs
-    ['VERDAT','18','source:datum:sounding','high_water'], // High water
-    ['VERDAT','19','source:datum:sounding','approximate_mean_sea_level'], // Approximate mean sea level
-    ['VERDAT','20','source:datum:sounding','high_water_springs'], // High water springs
-    ['VERDAT','21','source:datum:sounding','mean_higher_high_water'], // Mean higher high water
-    ['VERDAT','22','source:datum:sounding','equinoctial_spring_low_water'], // Equinoctial spring low water
-    ['VERDAT','23','source:datum:sounding','lowest_astronomical_tide'], // Lowest astronomical tide
-    ['VERDAT','24','source:datum:sounding','local_datum'], // Local datum
-    ['VERDAT','25','source:datum:sounding','international_great_lakes_datum_1985'], // International Great Lakes Datum 1985
-    ['VERDAT','26','source:datum:sounding','mean_water_level'], // Mean water level
-    ['VERDAT','27','source:datum:sounding','lower_low_water_large_tide'], // Lower low water large tide
-    ['VERDAT','28','source:datum:sounding','higher_high_water_large_tide'], // Higher high water large tide
-    ['VERDAT','29','source:datum:sounding','nearly_highest_high_water'], // Nearly highest high water
-    ['VERDAT','30','source:datum:sounding','highest_astronomical_tide'], // Highest astronomical tide (HAT)
-
     // CATCBL - Category of cable
     ['CATCBL','1','cable:type','power'], // power line
     ['CATCBL','2','cable:type','telephone/telegraph'], // telephone/telegraph
@@ -2873,6 +2798,38 @@ enc311.rules = {
     // ['CATROD','5','highway','secondary'], // major street
     // ['CATROD','6','highway','tertiary'], // minor street
     // ['CATROD','7','highway','crossing'], // crossing
+
+    // VERDAT - Vertical datum
+    ['VERDAT','1','source:datum:sounding','mean_low_water_springs'], // Mean low water springs
+    ['VERDAT','2','source:datum:sounding','mean_lower_low_water_springs'], // Mean lower low water springs
+    ['VERDAT','3','source:datum:sounding','mean_sea_level'], // Mean sea level
+    ['VERDAT','4','source:datum:sounding','lowest_low_water'], // Lowest low water
+    ['VERDAT','5','source:datum:sounding','mean_low_water'], // Mean low water
+    ['VERDAT','6','source:datum:sounding','lowest_low_water_springs'], // Lowest low water springs
+    ['VERDAT','7','source:datum:sounding','approximate_mean_low_water_springs'], // Approximate mean low water springs
+    ['VERDAT','8','source:datum:sounding','indian_spring_low_water'], // Indian spring low water
+    ['VERDAT','9','source:datum:sounding','low_water_springs'], // Low water springs
+    ['VERDAT','10','source:datum:sounding','approximate_lowest_astronomical_tide'], // Approximate lowest astronomical tide
+    ['VERDAT','11','source:datum:sounding','nearly_lowest_low_water'], // Nearly lowest low water
+    ['VERDAT','12','source:datum:sounding','mean_lower_low_water'], // Mean lower low water
+    ['VERDAT','13','source:datum:sounding','low_water'], // Low water
+    ['VERDAT','14','source:datum:sounding','approximate_mean_low_water'], // Approximate mean low water
+    ['VERDAT','15','source:datum:sounding','approximate_mean_lower_low_water'], // Approximate mean lower low water
+    ['VERDAT','16','source:datum:sounding','mean_high_water'], // Mean high water
+    ['VERDAT','17','source:datum:sounding','mean_high_water_springs'], // Mean high water springs
+    ['VERDAT','18','source:datum:sounding','high_water'], // High water
+    ['VERDAT','19','source:datum:sounding','approximate_mean_sea_level'], // Approximate mean sea level
+    ['VERDAT','20','source:datum:sounding','high_water_springs'], // High water springs
+    ['VERDAT','21','source:datum:sounding','mean_higher_high_water'], // Mean higher high water
+    ['VERDAT','22','source:datum:sounding','equinoctial_spring_low_water'], // Equinoctial spring low water
+    ['VERDAT','23','source:datum:sounding','lowest_astronomical_tide'], // Lowest astronomical tide
+    ['VERDAT','24','source:datum:sounding','local_datum'], // Local datum
+    ['VERDAT','25','source:datum:sounding','international_great_lakes_datum_1985'], // International Great Lakes Datum 1985
+    ['VERDAT','26','source:datum:sounding','mean_water_level'], // Mean water level
+    ['VERDAT','27','source:datum:sounding','lower_low_water_large_tide'], // Lower low water large tide
+    ['VERDAT','28','source:datum:sounding','higher_high_water_large_tide'], // Higher high water large tide
+    ['VERDAT','29','source:datum:sounding','nearly_highest_high_water'], // Nearly highest high water
+    ['VERDAT','30','source:datum:sounding','highest_astronomical_tide'], // Highest astronomical tide (HAT)
   ], // End extraTagList
 
 
@@ -2888,6 +2845,7 @@ enc311.rules = {
     ['encLayerName','ADMARE','boundary','administrative'], // ADMARE Administration area (Named)
     ['encLayerName','AIRARE','aeroway','aerodrome'], // AIRARE Airport / airfield
     ['encLayerName','BRIDGE','bridge','yes'], // BRIDGE Bridge
+    ['encLayerName','BRIDGE','man_made','bridge'], // BRIDGE Bridge - From some OSM data
     // ['encLayerName','BUISGL','building','yes'], // BUISGL Building single
     ['encLayerName','BUAARE','landuse','built_up_area'], // BUAARE Built-up area
     // ['encLayerName','CBLOHD','location','overhead'], // CBLOHD Cable overhead
@@ -2909,11 +2867,21 @@ enc311.rules = {
     ['encLayerName','HRBARE','landuse','harbour'], // HRBARE Harbour area (administrative)
     ['encLayerName','LAKARE','water','lake'], // LAKARE Lake
     ['encLayerName','LAKARE','landuse','reservoir'], // LAKARE Lake
+    ['encLayerName','LAKARE','water','reservoir'], // LAKARE Lake
     ['encLayerName','LNDMRK','man_made','lighthouse'], // LNDMRK Landmark
+    ['encLayerName','LNDARE','place','island'], // LNDARE Land area
     ['encLayerName','LOCMAG','natural','magnetic_anomaly'], // LOCMAG Local magnetic anomaly
     ['encLayerName','LOGPON','water','log_pond'], // LOGPON Log pond
     ['encLayerName','MARCUL','landuse','aquaculture'], // MARCUL Marine farm/culture
+    ['encLayerName','PRDARE','power','plant'], // PRDARE Production/storage area
+    ['encLayerName','RAILWY','railway','funicular'], // RAILWY Railway
+    ['encLayerName','RAILWY','railway','light_rail'], // RAILWY Railway
+    ['encLayerName','RAILWY','railway','minitature'], // RAILWY Railway
+    ['encLayerName','RAILWY','railway','monorail'], // RAILWY Railway
+    ['encLayerName','RAILWY','railway','narrow_gauge'], // RAILWY Railway
     ['encLayerName','RAILWY','railway','rail'], // RAILWY Railway
+    ['encLayerName','RAILWY','railway','subway'], // RAILWY Railway
+    ['encLayerName','RAILWY','railway','tram'], // RAILWY Railway
     ['encLayerName','RAPIDS','waterway','rapids'], // RAPIDS Rapids
     ['encLayerName','RIVERS','waterway','river'], // RIVERS River
     ['encLayerName','ROADWY','highway','road'], // ROADWY Road
@@ -2929,11 +2897,38 @@ enc311.rules = {
     ['CATBUA','1','landuse','residential'], // urban area
     ['CATBUA','1','landuse','retail'], // urban area
 
+    // CATFNC - Category of fence/wall
+    ['CATFNC','1','barrier','guard_rail'], // Fence
+    ['CATFNC','1','barrier','cable_barrier'], // Fence
+    ['CATFNC','4','barrier','city_wall'], // Wall
+    ['CATFNC','4','barrier','retaining_wall'], // Wall
+
+    // CATGAT - Category of gate
+    ['CATGAT','1','barrier','sliding_gate'], // gate in general
+    ['CATGAT','1','barrier','swing_gate'], // gate in general
+    ['CATGAT','1','barrier','hampshire_gate'], // gate in general
+    ['CATGAT','1','barrier','kissing_gate'], // gate in general
+    ['CATGAT','1','barrier','lift_gate'], // gate in general
+    ['CATGAT','1','barrier','wicket_gate'], // gate in general
+
+    // CATHAF - Category of harbour facility
+    ['CATHAF','3','amenity','ferry_terminal'], // ferry terminal
+
+    // CATLMK - Category of landmark
+    ['CATLMK','18','historic','windmill'], // windmill
+    ['CATLMK','19','plant:source','wind'], // windmotor
+    ['CATLMK','19','generator:source','wind'], // windmotor
+    ['CATLMK','19','generator:source',':wind_turbine:'], // windmotor
+
     // CATLND - Category of land region
     ['CATLND','9','landuse','allotments'], // agricultural land
     ['CATLND','9','landuse','meadow'], // agricultural land
     ['CATLND','9','landuse','orchard'], // agricultural land
     ['CATLND','9','landuse','farmyard'], // agricultural land
+    ['CATLND','12','natural','wetland'], // swamp
+
+    // CATREA - Category of restricted area
+    ['CATREA','4','leisure','nature_reserve'], // nature reserve
 
     // CATROD - Category of road
     ['CATROD','1','highway','motorway_link'], // motorway
@@ -2954,16 +2949,30 @@ enc311.rules = {
     ['CATROD','6','highway','unclassified'], // minor street
     // ['CATROD','7','highway','crossing'], // crossing
 
+    // CATSEA - Category of sea area
+    ['CATSEA','8','wetland','tidalflat'], // mud flats
+
     // CATVEG - Category of vegetation
     ['CATVEG','1','landuse','grass'], // grass
     ['CATVEG','6','landuse','forest'], // wood in general (inc mixed wood)
-
+    ['CATVEG','6','toponym','forest'], // wood in general (inc mixed wood)
 
     ['FUNCTN','5','amenity','hospital'], // hospital
+    ['FUNCTN','5','building','hospital'], // hospital
+    ['FUNCTN','18','building','government'], // Administrative
+    ['FUNCTN','18','building','public'], // Administrative
     ['FUNCTN','19','amenity','school'], // educational facility
+    ['FUNCTN','19','building','school'], // educational facility
     ['FUNCTN','19','amenity','college'], // educational facility
     ['FUNCTN','19','amenity','university'], // educational facility
+    ['FUNCTN','19','building','university'], // educational facility
+    ['FUNCTN','19','amenity','kindergarten'], // educational facility
+    ['FUNCTN','19','building','kindergarten'], // educational facility
     ['FUNCTN','19','amenity','music_school'], // educational facility
+
+    // NATSUR - Nature of surface
+    ['NATSUR','4','natural','sand'], // sand
+
   ], // End one2oneOut
   // ##### End of One2One Rules #####
 

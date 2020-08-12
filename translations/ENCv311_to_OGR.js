@@ -125,15 +125,34 @@ enc311 = {
   // findLayerName: Figure out what the layer could/should be
   findLayerName: function(tags,attrs,geometryType)
   {
-    if (attrs.CATBRG) return 'BRIDGE';
-    if (attrs.CATBUA) return 'BUAARE';
-    if (attrs.CATLMK) return 'LNDMRK';
-    if (attrs.CATLND) return 'LNDRGN';
-    if (attrs.CATROD) return 'ROADWY';
-    if (attrs.CATRUN) return 'RUNWAY';
-    if (attrs.CATSEA) return 'SEAARE';
-    if (attrs.CATSIL) return 'SILTNK';
-    if (attrs.CATVEG) return 'VEGATN';
+    // Unique CAT to layer list
+    var cList = {
+    'CALSGN':'RDOSTA',
+    'CATAIR':'AIRARE',
+    'CATACH':'ACHARE',
+    'CATBRG':'BRIDGE',
+    'CATBUA':'BUAARE',
+    'CATFNC':'FNCLNE',
+    'CATFOR':'FORSTC',
+    'CATGAT':'GATCON',
+    'CATHAF':'HRBFAC',
+    'CATLMK':'LNDMRK',
+    'CATLND':'LNDRGN',
+    'CATREA':'RESARE',
+    'CATROD':'ROADWY',
+    'CATRUN':'RUNWAY',
+    'CATSEA':'SEAARE',
+    'CATSIL':'SILTNK',
+    'CATSLC':'SLCONS',
+    'CATVEG':'VEGATN',
+    'JRSDTN':'ADMARE'
+    } // End cList
+
+    for (var cat in cList)
+    {
+      if (attrs[cat]) return cList[cat];
+    }
+
     if (tags.building || tags.office || tags.shop) return 'BUISGL'
 
     // Some tags imply that they are buildings but don't actually say so.
@@ -164,9 +183,7 @@ enc311 = {
 
     if (tags.natural == 'water') return (geometryType == 'Line') ? 'RIVERS' : 'LAKARE';
 
-    if (tags.waterway == 'riverbank') return 'RIVBNK';
-
-
+    if (tags.natural == 'beach' || tags.natural == 'sand') return 'LNDRGN'; 
 
     // If nothing, send back undefined so it stays unset
     return undefined;      
@@ -202,24 +219,53 @@ enc311 = {
       // Convert "abandoned:XXX" and "disused:XXX"features
       if ((i.indexOf('abandoned:') == 0) || (i.indexOf('disused:') == 0))
       {
-        // Hopeing there is only one ':' in the tag name...
-        var tList = i.split(':');
-        tags[tList[1]] = tags[i];
-        tags.condition = 'abandoned';
+        var tTag = i.replace('abandoned:','').replace('disused:','');
+        tags[tTag] = tags[i];
+        tags.STATUS = 'not_in_use';
         delete tags[i];
         continue;
       }
       // Convert "construction:XXX" features
       if (i.indexOf('construction:') == 0)
       {
-        // Hopeing there is only one ':' in the tag name...
-        var tList = i.split(':');
-        tags[tList[1]] = tags[i];
+        var tTag = i.replace('construction:','');
+        tags[tTag] = tags[i];
         tags.condition = 'construction';
         delete tags[i];
         continue;
-      }    
+      }
+
+      // Convert "demolished:XXX" features
+      if (i.indexOf('demolished:') !== -1)
+      {
+        var tTag = i.replace('demolished:','');
+        tags[tTag] = tags[i];
+        tags.condition = 'destroyed';
+        tags.STATUS = 'destroyed'
+        delete tags[i];
+        continue;
+      }
     } // End Cleanup loop
+
+    // Lifecycle tags
+    for (var typ of ['highway','bridge','railway','building'])
+    {
+      switch (tags[typ])
+      {
+        case undefined: // Break early if no value
+          break;
+
+        case 'construction':
+          tags[typ] = tags.construction;
+          delete tags.construction;
+          tags.condition = 'construction';
+          break;
+
+        // Might need to add Demolished etc
+        // case '':
+        //   break;
+      }
+    }
 
     // Names
     if (tags['seamark:name'])
@@ -234,6 +280,57 @@ enc311 = {
         delete tags['seamark:name'];
       }
     }
+
+    // Countries
+    if (tags['is_in:country_code'])
+    {
+      tags['addr:country'] = tags['is_in:country_code'];
+      delete tags['is_in:country_code'];
+    }
+    else if (tags['is_in:country'])
+    {
+      tags['addr:country'] = translate.findCountryCode('c2',tags['is_in:country']);
+      if (tags['addr:country'] == '') delete tags['addr:country'];
+    }
+
+    // Make sure the country code is in the right format - 2ch
+    if (tags['addr:country'])
+    {
+      tags['addr:country'] = translate.findCountryCode('c2',tags['addr:country']);
+      if (tags['addr:country'] == '') delete tags['addr:country'];      
+    }
+
+    // Power plants & generation
+    switch (tags.power)
+    {
+      case undefined:
+        break;
+
+      case 'generator':
+        if (tags['generator:source'] !== 'wind' && tags['generator:source'] !== 'solar') tags.FUNCTN = 'power_station';
+        break;
+
+      case 'plant':
+        if (tags.landuse == 'industrial') delete tags.landuse; // Avoid making it into a BUA
+        if (tags['plant:source'] == 'wind') break;  // Windfarms are LNDMRK features
+        if (tags.barrier == 'fence') delete tags.barrier; // Remove the fence from the facility
+        attrs.CATPRA = '4'; // power_station
+        break;
+
+      case 'cable':
+      case 'line':
+        tags['cable:type'] = 'power'
+        delete tags.power;
+        break;
+    } // End switch power
+
+    // Fairways
+    if (tags.waterway == 'fairway' && !tags['seamark:type'])
+      {
+        tags['seamark:type'] = 'fairway';
+        delete tags.waterway;
+      }
+
 
     // Uuid vs FIDN 
     if (tags.uuid && tags['s57:feature_identification_number']) delete tags.uuid;
@@ -256,14 +353,7 @@ enc311 = {
       delete tags['source:datetime'];
     }
 
-    if (tags['source:date'])
-    {
-      // Debug
-      print('In date' + tags['source:date']);
-      tags['source:date'] = tags['source:date'].split('T')[0].replace(/-/g,'');
-      print('Out date' + tags['source:date']);
-    }
-
+    if (tags['source:date']) tags['source:date'] = tags['source:date'].split('T')[0].replace(/-/g,'');
 
     // Start looking for a output layer
     if (tags['seamark:type'] && enc311.seaMarkToLayer[tags['seamark:type']])
@@ -385,10 +475,33 @@ enc311 = {
     // Cleanup
     delete notUsedTags.area;
 
+    // Admin Boundary levels
+    if (tags.admin_level)
+    {
+      var aLevel = parseInt(tags.admin_level,10);
+      attrs.JRSDTN = (aLevel < 3) ? '2' : '3';
+    }
+
+    // Shrines & Temples
+    switch (tags.religion)
+    {
+      case undefined:
+        break;
+
+      case 'buddhist':
+        attrs.FUNCTN = '25';
+        break;
+
+      case 'shinto':
+        attrs.FUNCTN = '24';
+        break;
+    }
+
     // Keep looking for an output layer
     if (!attrs.encLayerName) attrs.encLayerName = enc311.findLayerName(tags,attrs,geometryType);
     print('Post: encLayerName: ' + attrs.encLayerName);
   }, // End applyToOgrPostProcessing
+
 
   // Convert Tags to Attributes
   toOgr: function (tags, elementType, geometryType)

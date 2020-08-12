@@ -28,5 +28,1019 @@
         "isA": "seamark:type",
         "name": "seamark:type=radar_line",
         "objectType": "tag"
-    }
+    },
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=anchorage",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=anchor_berth",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=administration_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=airport",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=archipelagic_sea_lane",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=archipelagic_sea_lane_axis",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=beacon_cardinal",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=beacon_isolated_danger",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=beacon_lateral",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=beacon_safe_water",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=beacon_special_purpose",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=berth",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=buoy_cardinal",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=buoy_installation",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=buoy_isolated_danger",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=buoy_lateral",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=buoy_safe_water",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=buoy_special_purpose",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=bridge",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=built_up_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=building",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=canal",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=causeway",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=cable_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=cable_overhead",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=cable_submarine",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=coastguard_station",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=checkpoint",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=coastline",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=conveyor",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=contiguous_zone",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=continental_shelf_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=crane",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=caution_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=control_point",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=cargo_transhipment_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=non_gravitational_current",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=custom_zone",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=dam",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=daymark",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=depth_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=depth_contour",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=distance_mark",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=dumping_ground",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=dock",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=dredged_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=dry_dock",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=deep_water_route_centerline",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=deep_water_route_part",
+ "objectType": "tag"
+},
+{
+ "geometries":["area","linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=dyke",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=exclusive_economic_zone",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=fairway",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=ferry_route",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=floating_dock",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=wall",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=fog_signal",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=fortified_structure",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=free_port_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=fishing_facility",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=fishing_ground",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=fishery_zone",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=gate",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=gridiron",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=harbour_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=harbour",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=hulk",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=ice_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=incineration_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=inshore_traffic_zone",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=lake",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=light",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=light_float",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=light_vessel",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=land_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=land_elevation",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=landmark",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=land_region",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=local_magnetic_anomaly",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=log_pond",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=lock_basin",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=magnetic_variation",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=marine_farm",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=military_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=mooring",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=data_accuracy",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=coverage",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=compilation_scale",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=horizontal_datum_shift_parameters",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=nautical_publication",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=navigation_system_of_marks",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=data_quality",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=sounding_datum",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=survey_reliability",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=vertical_datum",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=navigation_line",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=new_object",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=obstruction",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=platform",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=oil_barrier",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=production_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=pilot_boarding",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=pile",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=pipeline_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=pipeline_overhead",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=pipeline_submarine",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=pontoon",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=precautionary_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=production_storage_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=pylon",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=radar_line",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=radar_reflector",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=radar_range",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=radar_station",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=rail",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=rapids",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=reccomended_route_centerline",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=reccomended_traffic_lane",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=calling_in_point",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=radio_station",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=reccomended_track",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=restricted_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=retro_reflector",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=river",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=road",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=rescue_station",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=radar_transponder",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=runway",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=seabed_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=sea_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=silo",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=signal_station_traffic",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=signal_station_warning",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=shoreline_construction",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=sloping_ground",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=slope_topline",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=small_craft_facility",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=sand_waves",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=sounding",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=seaplane_landing_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=spring",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=straight_territorial_sea_baseline",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=submarine_transit_lane",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=swept_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=territorial_sea_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=tideway",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=topmark",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=separation_line",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=separation_zone",
+ "objectType": "tag"
+},
+{
+ "geometries":["linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=separation_boundary",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=separation_crossing",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=separation_lane",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=separation_roundabout",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=tidal_stream",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=tidal_stream_panel_data",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=tidal_stream_non-harmonic_prediction",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=tidal_stream_harmonic_prediction",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=tidal_stream_time_series",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=tunnel",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=two-way_route",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=tide_harmonic_prediction",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=tide_non-harmonic_prediction",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=tide_time_series",
+ "objectType": "tag"
+},
+{
+ "geometries":["area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=unsurveyed_area",
+ "objectType": "tag"
+},
+{
+ "geometries":["node"],
+ "isA": "seamark:type",
+ "name": "seamark:type=rock",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=vegetation",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring"],
+ "isA": "seamark:type",
+ "name": "seamark:type=waterfall",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","linestring","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=water_turbulence",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=weed",
+ "objectType": "tag"
+},
+{
+ "geometries":["node","area"],
+ "isA": "seamark:type",
+ "name": "seamark:type=wreck",
+ "objectType": "tag"
+}
 ]

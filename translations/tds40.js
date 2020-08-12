@@ -1237,33 +1237,30 @@ tds40 = {
       }
 
       // Convert "abandoned:XXX" and "disused:XXX"features
-      if ((i.indexOf('abandoned:') !== -1) || (i.indexOf('disused:') !== -1))
+      if ((i.indexOf('abandoned:') == 0) || (i.indexOf('disused:') == 0))
       {
-        // Hopeing there is only one ':' in the tag name...
-        var tList = i.split(':');
-        tags[tList[1]] = tags[i];
+        var tTag = i.replace('abandoned:','').replace('disused:','');
+        tags[tTag] = tags[i];
         tags.condition = 'abandoned';
         delete tags[i];
         continue;
       }
 
       // Convert "demolished:XXX" features
-      if (i.indexOf('demolished:') !== -1)
+      if (i.indexOf('demolished:') == 0)
       {
-        // Hopeing there is only one ':' in the tag name...
-        var tList = i.split(':');
-        tags[tList[1]] = tags[i];
+        var tTag = i.replace('demolished:','');
+        tags[tTag] = tags[i];
         tags.condition = 'dismantled';
         delete tags[i];
         continue;
       }
 
       // Convert "construction:XXX" features
-      if (i.indexOf('construction:') !== -1)
+      if (i.indexOf('construction:') == 0)
       {
-        // Hopeing there is only one ':' in the tag name...
-        var tList = i.split(':');
-        tags[tList[1]] = tags[i];
+        var tTag = i.replace('construction:','');
+        tags[tTag] = tags[i];
         tags.condition = 'construction';
         delete tags[i];
         continue;
