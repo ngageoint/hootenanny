@@ -1059,7 +1059,7 @@ NOT EXISTS
         createQuery().delete(reviewBookmarks).where(reviewBookmarks.mapId.eq(mapId)).execute();
     }
 
-    public static long getLastPushedId(String jobId) {
+    public static String getLastPushedId(String jobId) {
         String stdOutWithId = createQuery()
                 .select(commandStatus.stdout)
                 .from(commandStatus)
@@ -1070,8 +1070,8 @@ NOT EXISTS
 
         Pattern pattern = Pattern.compile(patternString);
         Matcher matcher = pattern.matcher(stdOutWithId);
-        matcher.find();
+        boolean found = matcher.find();
 
-        return Long.parseLong(matcher.group(1));
+        return found ? matcher.group(1) : "";
     }
 }

@@ -31,9 +31,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,16 +49,18 @@ import static hoot.services.HootProperties.replaceSensitiveData;
  */
 class WaitOverpassUpdate extends GrailCommand {
     private static final Logger logger = LoggerFactory.getLogger(WaitOverpassUpdate.class);
-    private String jobId;
+    private final String jobId;
+    private final GrailParams params;
     private final Class<?> caller;
-    private final int timeoutTime = 300000;
-    private final int sleepTime = 30000;
+    private final int TIMEOUT_TIME = 300000;
+    private final int SLEEP_TIME = 30000;
 
     WaitOverpassUpdate(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
         logger.info("Params: " + params);
 
         this.jobId = jobId;
+        this.params = params;
         this.caller = caller;
     }
 
@@ -84,43 +83,38 @@ class WaitOverpassUpdate extends GrailCommand {
             long timeSpent = 0;
             String url = null;
 
-            long lastId = DbUtils.getLastPushedId(jobId);
-
-            String query = "[out:json];"
+            String lastId = DbUtils.getLastPushedId(jobId);
+            String time = LocalDateTime.now().minusMinutes(5).toString(); // get 5 minutes before in case the update happened before this command was run
+            String query = "[out:csv(::changeset)][bbox:{{bbox}}];"
                     + "("
-                    + "node(id:" + lastId + ");"
-                    + "way(id:" + lastId + ");"
-                    + "rel(id:" + lastId + ");"
+                    + "node(newer:\"" + time + "\");"
                     + ");"
-                    + "out tags;";
+                    + "out meta;";
 
             try {
                 logger.info("Database sync starting...");
 
                 BufferedReader br;
                 InputStream responseStream;
-                JSONParser parser = new JSONParser();
-                while (timeoutTime > timeSpent) {
-                    url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(PRIVATE_OVERPASS_URL), null, "json", query);
+                while (TIMEOUT_TIME > timeSpent) {
+                    url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(PRIVATE_OVERPASS_URL), this.params.getBounds(), "csv", query);
                     responseStream = PullApiCommand.getHttpResponseWithSSL(url);
 
-                    // Get json object result
                     br = new BufferedReader(new InputStreamReader(responseStream));
-                    StringBuilder sb = new StringBuilder();
                     String line;
+                    boolean foundChangesetId = false;
                     while ((line = br.readLine()) != null) {
-                        sb.append(line + "\n");
+                        if (line.contains(lastId)) {
+                            foundChangesetId = true;
+                        }
                     }
                     br.close();
 
-                    // If elements is > 0 then feature was found
-                    JSONObject result = (JSONObject) parser.parse(sb.toString());
-                    JSONArray elements = (JSONArray) result.get("elements");
-                    if (elements.size() > 0) {
+                    if (foundChangesetId) {
                         break;
                     } else {
-                        Thread.sleep(sleepTime);
-                        timeSpent += sleepTime;
+                        Thread.sleep(SLEEP_TIME);
+                        timeSpent += SLEEP_TIME;
                     }
                 }
             } catch (InterruptedException exc) {
