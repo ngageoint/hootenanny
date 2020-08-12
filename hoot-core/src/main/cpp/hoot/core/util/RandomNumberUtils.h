@@ -42,7 +42,6 @@ class RandomNumberUtils
       Generates a seed to pass to a random number generator
       */
     static int generateSeed();
-
 };
 
 }

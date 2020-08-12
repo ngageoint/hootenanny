@@ -170,6 +170,14 @@ public:
    * @return
    */
   static QList<geos::geom::Envelope> readBoundsFile(const QString& input);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @return
+   */
+  static QMap<int, geos::geom::Envelope> readBoundsFileWithIds(const QString& input);
 };
 
 }

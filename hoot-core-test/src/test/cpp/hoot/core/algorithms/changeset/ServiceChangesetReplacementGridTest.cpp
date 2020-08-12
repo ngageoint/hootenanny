@@ -52,17 +52,18 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
 static const QString REPLACEMENT_DATA_URL =
   ServicesDbTestUtils::getDbModifyUrl(TEST_NAME).toString();
 
-// end a large replacement early
-static const int KILL_AFTER_NUM_CHANGESET_DERIVATIONS = 2;
+// end a large replacement early; set to -1 to disable
+static const int KILL_AFTER_NUM_CHANGESET_DERIVATIONS = -1;
 // read the replacement data just from the source file or load it into a hootapidb layer first?;
 // data replaced is always loaded into osmapidb for changeset application purposes
-static const bool WRITE_REPLACEMENT_DATA_TO_DB = true;
+static const bool WRITE_REPLACEMENT_DATA_TO_DB = false;
 // By passing in pre-loaded maps, we can cut down on I/O quite a bit (requires memory double the
 // combined size of both maps).
 static const bool PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION = false;
 
-// CROP_INPUT_BOUNDS - always for working with a subset of the input data
-// REPLACEMENT_BOUNDS - section of the data being replaced
+// CROP_INPUT_BOUNDS - always for working with a subset of the input data; leave empty to disable
+// TASK_GRID_BOUNDS - section of the sum off data in all task grid cells; needed for node density
+//                    calc only
 // MAX_NODE_DENSITY_NODES_PER_CELL - allows for attempting to cap the max number of node density
 //                                   nodes per grid cell
 // TASK_GRID_INPUT_FILE - overrides node density calc with a custom bounds file
@@ -72,37 +73,44 @@ static const bool PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION = false;
 
 // Vegas
 
-static const QString ROOT_DIR = "/home/vagrant/hoot/tmp/4158/combined-data";
-static const QString DATA_TO_REPLACE_FILE = "NOMEData.osm";
-static const QString REPLACEMENT_DATA_FILE = "OSMData.osm";
-static const QString NODE_DENSITY_TASK_GRID_OUTPUT_FILE = ROOT_DIR + "/bounds.osm";
+//static const QString ROOT_DIR = "/home/vagrant/hoot/tmp/4158/combined-data";
+//static const QString DATA_TO_REPLACE_FILE = "NOMEData.osm";
+//static const QString REPLACEMENT_DATA_FILE = "OSMData.osm";
+//static const QString NODE_DENSITY_TASK_GRID_OUTPUT_FILE = ROOT_DIR + "/bounds.osm";
+//static const QString TASK_GRID_INPUT_FILE = "";
+//static const bool REVERSE_TASK_GRID = false;
 
-// 4 sq blocks of the city - 4 changesets; completes in ? (use 1000 max node count)
+// 4 sq blocks of the city - 4 changesets
 // FAILS ON CHANGESET APP FOR PRELOADED MAPS ONLY
 //static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387";
-//static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
+//static const QString TASK_GRID_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
 //static const long MAX_NODE_DENSITY_NODES_PER_CELL = 1000;
-//static const QString TASK_GRID_INPUT_FILE = "";
-//static const bool REVERSE_TASK_GRID = false;
 
-// ~1/4 of city - 64 changesets; completes in ? (use 10000 max node count)
+// ~1/4 of city - 64 changesets
 // FAILS ON CHANGESET APP FOR PRELOADED MAPS ONLY WHEN HOOTAPIDB ISN'T USED
-static const QString CROP_INPUT_BOUNDS = "-115.3441,36.2012,-115.1942,36.3398";
-static const QString REPLACEMENT_BOUNDS = "-115.3332,36.2178,-115.1837,36.3400";
-static const long MAX_NODE_DENSITY_NODES_PER_CELL = 10000;
-static const QString TASK_GRID_INPUT_FILE = "";
+//static const QString CROP_INPUT_BOUNDS = "-115.3441,36.2012,-115.1942,36.3398";
+//static const QString TASK_GRID_BOUNDS = "-115.3332,36.2178,-115.1837,36.3400";
+//static const long MAX_NODE_DENSITY_NODES_PER_CELL = 10000;
+
+// whole city - 64 changesets
+//static const QString CROP_INPUT_BOUNDS = "";
+//static const QString TASK_GRID_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447";
+//static const long MAX_NODE_DENSITY_NODES_PER_CELL = 100000;
+
+/////////////////////////
+
+// 1622b
+
+static const QString ROOT_DIR = "/home/vagrant/hoot/tmp/4182";
+static const QString DATA_TO_REPLACE_FILE = "329_ReferenceNOMEData_31JULY2020.osm";
+static const QString REPLACEMENT_DATA_FILE = "329_SecondaryOSMData_31JULY2020.osm";
+static const QString NODE_DENSITY_TASK_GRID_OUTPUT_FILE = "";
+static const QString TASK_GRID_INPUT_FILE = ROOT_DIR + "/Task14and15.osm";
 static const bool REVERSE_TASK_GRID = false;
 
-// whole city - 64 changesets; completes in ? (use 100000 max node count)
-//static const QString CROP_INPUT_BOUNDS = ""; // no input cropping
-//static const QString REPLACEMENT_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447";
-//static const long MAX_NODE_DENSITY_NODES_PER_CELL = 100000;
-//static const QString TASK_GRID_INPUT_FILE = "";
-//static const bool REVERSE_TASK_GRID = false;
-
-////////////////////////////////////////////////
-
-
+static const QString CROP_INPUT_BOUNDS = "";
+static const QString TASK_GRID_BOUNDS = "";
+static const long MAX_NODE_DENSITY_NODES_PER_CELL = 10000;
 
 ////////////////////////////////////////////////
 
@@ -123,7 +131,10 @@ public:
 
   ServiceChangesetReplacementGridTest() :
   _dataToReplaceFile(DATA_TO_REPLACE_FILE),
+  _originalDataSize(0),
   _replacementDataFile(REPLACEMENT_DATA_FILE),
+  _changesetCreator(ChangesetReplacementCreator(true, "", DATA_TO_REPLACE_URL)),
+  _changesetApplier(DATA_TO_REPLACE_URL),
   _numChangesetsDerived(0),
   _totalChangesetDeriveTime(0.0),
   _averageChangesetDeriveTime(0.0)
@@ -166,7 +177,7 @@ public:
       bool exceptionOccurred = false;
       try
       {
-        _replaceData(_getTaskGrid());
+        _replaceEntireTaskGrid(_getTaskGrid());
       }
       catch (const HootException& e)
       {
@@ -217,11 +228,13 @@ private:
   QElapsedTimer _subTaskTimer;
 
   QString _dataToReplaceFile;
+  int _originalDataSize;
   QString _replacementDataFile;
-
   OsmMapPtr _dataToReplaceFullMap;
   OsmMapPtr _replacementDataFullMap;
 
+  ChangesetReplacementCreator _changesetCreator;
+  OsmApiDbSqlChangesetApplier _changesetApplier;
   int _numChangesetsDerived;
   // seconds
   double _totalChangesetDeriveTime;
@@ -318,6 +331,7 @@ private:
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, dataToReplacePath, true, Status::Unknown1);
     OsmMapWriterFactory::write(map, DATA_TO_REPLACE_URL);
+    _originalDataSize = (int)map->size();
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " elements to replace loaded in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
@@ -342,7 +356,7 @@ private:
   void _cacheFullMaps()
   {
     // turn off cropping on read
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
+    //conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
     LOG_STATUS(
       "Caching the full data to be replaced out of the db for changeset calculation from: " <<
@@ -374,25 +388,22 @@ private:
     _subTaskTimer.restart();
 
     // revert back to original value
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), REPLACEMENT_BOUNDS);
+    //conf().set(ConfigOptions::getConvertBoundingBoxKey(), TASK_GRID_BOUNDS);
   }
 
-  QList<geos::geom::Envelope> _getTaskGrid()
+  QMap<int, geos::geom::Envelope> _getTaskGrid()
   {
-    QList<geos::geom::Envelope> taskGrid;
+    QMap<int, geos::geom::Envelope> taskGrid;
     if (!TASK_GRID_INPUT_FILE.isEmpty())
     {
-      taskGrid = GeometryUtils::readBoundsFile(TASK_GRID_INPUT_FILE);
+      LOG_STATUS("Reading task grid file: ..." << TASK_GRID_INPUT_FILE.right(25) << "...")
+      taskGrid = GeometryUtils::readBoundsFileWithIds(TASK_GRID_INPUT_FILE);
+      LOG_STATUS(
+        "Read " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells.");
     }
     else
     {
       taskGrid = _calcNodeDensityTaskGrid(_getNodeDensityTaskGridInput());
-    }
-    if (REVERSE_TASK_GRID)
-    {
-      std::list<geos::geom::Envelope> tempTaskGrid = taskGrid.toStdList();
-      tempTaskGrid.reverse();
-      taskGrid = QList<geos::geom::Envelope>::fromStdList(tempTaskGrid);
     }
     return taskGrid;
   }
@@ -402,7 +413,7 @@ private:
     OsmMapPtr map(new OsmMap());
 
     // changeset derive will overwrite these later, if needed
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), REPLACEMENT_BOUNDS);
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), TASK_GRID_BOUNDS);
     conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
     conf().set(
       ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
@@ -418,7 +429,7 @@ private:
       StatusUpdateVisitor statusUpdater(Status::Unknown1);
       // LOG_STATUS(statusUpdater.getInitStatusMessage());
       map->visitRw(statusUpdater);
-      MapCropper cropper(GeometryUtils::envelopeFromConfigString(REPLACEMENT_BOUNDS));
+      MapCropper cropper(GeometryUtils::envelopeFromConfigString(TASK_GRID_BOUNDS));
       LOG_STATUS(cropper.getInitStatusMessage());
       cropper.apply(map);
     }
@@ -457,7 +468,7 @@ private:
     return map;
   }
 
-  QList<geos::geom::Envelope> _calcNodeDensityTaskGrid(OsmMapPtr map)
+  QMap<int, geos::geom::Envelope> _calcNodeDensityTaskGrid(OsmMapPtr map)
   { 
     LOG_STATUS(
       "Calculating task grid cells for replacement data to: ..." <<
@@ -476,12 +487,14 @@ private:
     TileBoundsWriter::writeTilesToOsm(rawTaskGrid, nodeCounts, NODE_DENSITY_TASK_GRID_OUTPUT_FILE);
 
     // flatten the collection; use a list to maintain order
-    QList<geos::geom::Envelope> taskGrid;
+    QMap<int, geos::geom::Envelope> taskGrid;
+    int cellCtr = 1;
     for (size_t tx = 0; tx < rawTaskGrid.size(); tx++)
     {
       for (size_t ty = 0; ty < rawTaskGrid[tx].size(); ty++)
       {
-        taskGrid.append(rawTaskGrid[tx][ty]);
+        taskGrid[cellCtr] = rawTaskGrid[tx][ty];
+        cellCtr++;
       }
     }
     assert(boundsCalc.getTileCount() == taskGrid.size());
@@ -506,87 +519,117 @@ private:
     return taskGrid;
   }
 
-  void _replaceData(const QList<geos::geom::Envelope>& taskGrid)
+  void _replaceEntireTaskGrid(const QMap<int, geos::geom::Envelope>& taskGrid)
   {
     // recommended C&R production config
-    ChangesetReplacementCreator changesetCreator(true, "", DATA_TO_REPLACE_URL);
-    changesetCreator.setFullReplacement(true);
-    changesetCreator.setBoundsInterpretation(
+    _changesetCreator.setFullReplacement(true);
+    _changesetCreator.setBoundsInterpretation(
       ChangesetReplacementCreator::BoundsInterpretation::Lenient);
-    changesetCreator.setWaySnappingEnabled(true);
-    changesetCreator.setConflationEnabled(false);
-    changesetCreator.setCleaningEnabled(false);
-    changesetCreator.setTagOobConnectedWays(true);
-
-    OsmApiDbSqlChangesetApplier changesetApplier(DATA_TO_REPLACE_URL);
+    _changesetCreator.setWaySnappingEnabled(true);
+    _changesetCreator.setConflationEnabled(false);
+    _changesetCreator.setCleaningEnabled(false);
+    _changesetCreator.setTagOobConnectedWays(true);
 
     // for each task grid cell
+      // derive the difference between the replacement data and the being replaced
+      // apply the difference back to the data being replaced
 
     _numChangesetsDerived = 0;
     _totalChangesetDeriveTime = 0.0;
-    for (int i = 0; i < taskGrid.size(); i++)
+    int changesetCtr = 0;
+    // probably a cleaner way to do this...
+    if (!REVERSE_TASK_GRID)
     {
-      const QString changesetId = QString::number(i + 1);
-      const geos::geom::Envelope bounds = taskGrid.at(i);
-      const QString boundsStr = GeometryUtils::toString(bounds);
-      QFile changesetFile(ROOT_DIR + "/changeset-" + changesetId + ".osc.sql");
-
-      // derive the difference between the replacement data and the being replaced
-
-      LOG_STATUS(
-        "Deriving changeset " <<changesetId << " / " <<
-        StringUtils::formatLargeNumber(taskGrid.size()) << ": " << changesetId <<
-        " over bounds: " << boundsStr << " to file: ..." << changesetFile.fileName().right(25) <<
-        "...");
-      if (!PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION)
+      for (QMap<int, geos::geom::Envelope>::const_iterator taskGridItr = taskGrid.begin();
+           taskGridItr != taskGrid.end(); ++taskGridItr)
       {
-        QString secondaryInput;
-        if (WRITE_REPLACEMENT_DATA_TO_DB)
+        _replaceTaskGridCell(
+          taskGridItr.key(), changesetCtr + 1, taskGridItr.value(), taskGrid.size());
+
+        if (KILL_AFTER_NUM_CHANGESET_DERIVATIONS > 0 &&
+            _numChangesetsDerived >= KILL_AFTER_NUM_CHANGESET_DERIVATIONS)
         {
-          secondaryInput = REPLACEMENT_DATA_URL;
+          throw HootException(
+            "Killing replacement after " + QString::number(_numChangesetsDerived) +
+            " changeset derivations...");
         }
-        else
+
+        changesetCtr++;
+      }
+    }
+    else
+    {
+      QMapIterator<int, geos::geom::Envelope> taskGridItr(taskGrid);
+      taskGridItr.toBack();
+      while (taskGridItr.hasPrevious())
+      {
+        taskGridItr.previous();
+
+        _replaceTaskGridCell(
+          taskGridItr.key(), changesetCtr + 1, taskGridItr.value(), taskGrid.size());
+
+        if (KILL_AFTER_NUM_CHANGESET_DERIVATIONS > 0 &&
+            _numChangesetsDerived >= KILL_AFTER_NUM_CHANGESET_DERIVATIONS)
         {
-          secondaryInput = ROOT_DIR + "/" + _replacementDataFile;
+          throw HootException(
+            "Killing replacement after " + QString::number(_numChangesetsDerived) +
+            " changeset derivations...");
         }
-        changesetCreator.create(
-          DATA_TO_REPLACE_URL, secondaryInput, bounds, changesetFile.fileName());
+
+        changesetCtr++;
+      }
+    }
+  }
+
+  void _replaceTaskGridCell(const int taskGridCellId, const int changesetId,
+                            const geos::geom::Envelope& bounds, const int taskGridSize)
+  {
+    const QString boundsStr = GeometryUtils::toString(bounds);
+    QFile changesetFile(ROOT_DIR + "/changeset-" + QString::number(changesetId) + ".osc.sql");
+
+    LOG_STATUS(
+      "Deriving changeset " << changesetId << " / " <<
+      StringUtils::formatLargeNumber(taskGridSize) << " for task grid cell: " << taskGridCellId <<
+      ", over bounds: " << boundsStr << ", to file: ..." << changesetFile.fileName().right(25) <<
+      "...");
+    if (!PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION)
+    {
+      QString secondaryInput;
+      if (WRITE_REPLACEMENT_DATA_TO_DB)
+      {
+        secondaryInput = REPLACEMENT_DATA_URL;
       }
       else
       {
-        assert(!_dataToReplaceFullMap->isEmpty());
-        assert(!_replacementDataFullMap->isEmpty());
-        changesetCreator.create(
-          _dataToReplaceFullMap, _replacementDataFullMap, bounds, changesetFile.fileName());
+        secondaryInput = ROOT_DIR + "/" + _replacementDataFile;
       }
-      _numChangesetsDerived++;
-      _totalChangesetDeriveTime += _subTaskTimer.elapsed() / 1000.0;
-      _averageChangesetDeriveTime = _totalChangesetDeriveTime / (double)_numChangesetsDerived;
-      _subTaskTimer.restart();
-
-      LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
-
-      // apply the difference back to the data being replaced
-
-      LOG_STATUS(
-        "Applying changeset: " << changesetId << " / " <<
-        StringUtils::formatLargeNumber(taskGrid.size()) << ": " << changesetId <<
-        " over bounds: " << boundsStr << " from file: ..." << changesetFile.fileName().right(25) <<
-        "...");
-      changesetApplier.write(changesetFile);
-      LOG_STATUS(
-        "Changeset applied in: " <<
-        StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-      _subTaskTimer.restart();
-
-      if (KILL_AFTER_NUM_CHANGESET_DERIVATIONS > 0 &&
-          _numChangesetsDerived >= KILL_AFTER_NUM_CHANGESET_DERIVATIONS)
-      {
-        throw HootException(
-          "Killing replacement after " + QString::number(_numChangesetsDerived) +
-          " changeset derivations...");
-      }
+      _changesetCreator.create(
+        DATA_TO_REPLACE_URL, secondaryInput, bounds, changesetFile.fileName());
     }
+    else
+    {
+      assert(!_dataToReplaceFullMap->isEmpty());
+      assert(!_replacementDataFullMap->isEmpty());
+      _changesetCreator.create(
+        _dataToReplaceFullMap, _replacementDataFullMap, bounds, changesetFile.fileName());
+    }
+    _numChangesetsDerived++;
+    _totalChangesetDeriveTime += _subTaskTimer.elapsed() / 1000.0;
+    _averageChangesetDeriveTime = _totalChangesetDeriveTime / (double)_numChangesetsDerived;
+    _subTaskTimer.restart();
+
+    LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
+
+    LOG_STATUS(
+      "Applying changeset: " << changesetId << " / " <<
+      StringUtils::formatLargeNumber(taskGridSize) << " for task grid cell: " << taskGridCellId <<
+      ", over bounds: " << boundsStr << ", from file: ..." << changesetFile.fileName().right(25) <<
+      "...");
+    _changesetApplier.write(changesetFile);
+    LOG_STATUS(
+      "Changeset applied in: " <<
+      StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+    _subTaskTimer.restart();
   }
 
   void _getUpdatedData()
@@ -598,18 +641,20 @@ private:
 
     // clear this out so we get all the data back
     conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
-    // change these, so we can open the files in josm
+    // change these, so we can open the files in josm; TODO: this isn't helping
     conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
     conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
 
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, DATA_TO_REPLACE_URL, true, Status::Unknown1);
-    LOG_STATUS("Modified data size: " << StringUtils::formatLargeNumber(map->size()));
     OsmMapWriterFactory::write(map, ROOT_DIR + "/replaced-data.osm");
     LOG_STATUS(
       "Modified data read in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
+    LOG_STATUS(
+      "Modified data original size: " << StringUtils::formatLargeNumber(_originalDataSize));
+    LOG_STATUS("Modified data current size: " << StringUtils::formatLargeNumber(map->size()));
   }
 
   void _cleanup()

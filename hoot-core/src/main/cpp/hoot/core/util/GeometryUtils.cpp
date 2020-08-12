@@ -49,6 +49,9 @@
 // Standard
 #include <stdint.h>
 
+// TGS
+#include <tgs/Statistics/Random.h>
+
 using namespace geos::geom;
 using namespace std;
 
@@ -382,11 +385,6 @@ ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geo
 
 QList<geos::geom::Envelope> GeometryUtils::readBoundsFile(const QString& input)
 {
-  if (!input.toLower().endsWith(".geojson"))
-  {
-    throw IllegalArgumentException("TODO");
-  }
-
   QList<geos::geom::Envelope> boundList;
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, input);
@@ -396,6 +394,34 @@ QList<geos::geom::Envelope> GeometryUtils::readBoundsFile(const QString& input)
     boundList.append(wayItr->second->getEnvelopeInternal(map));
   }
   return boundList;
+}
+
+QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QString& input)
+{
+  QMap<int, geos::geom::Envelope> boundsById;
+  OsmMapPtr map(new OsmMap());
+  OsmMapReaderFactory::read(map, input);
+  const WayMap ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  {
+    ConstWayPtr way = wayItr->second;
+    int id = -1;
+    bool ok = false;
+    if (way->getTags().contains("id"))
+    {
+      id = way->getTags().get("id").toInt(&ok);
+      if (!ok)
+      {
+        throw IllegalArgumentException("TODO");
+      }
+    }
+    else
+    {
+      id = Tgs::Random::instance()->generateInt(1000);
+    }
+    boundsById[id] = way->getEnvelopeInternal(map);
+  }
+  return boundsById;
 }
 
 QString GeometryUtils::geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId)
