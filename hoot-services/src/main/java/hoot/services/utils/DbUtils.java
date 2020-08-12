@@ -32,6 +32,7 @@ import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
 import static hoot.services.models.db.QMaps.maps;
+import static hoot.services.models.db.QCommandStatus.commandStatus;
 import static hoot.services.models.db.QReviewBookmarks.reviewBookmarks;
 import static hoot.services.models.db.QUsers.users;
 
@@ -51,6 +52,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Provider;
 import javax.sql.DataSource;
@@ -58,6 +61,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 
+import org.apache.xerces.impl.xpath.regex.Match;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -1053,5 +1057,21 @@ NOT EXISTS
 
     public static void deleteBookmarksByMapId(Long mapId) {
         createQuery().delete(reviewBookmarks).where(reviewBookmarks.mapId.eq(mapId)).execute();
+    }
+
+    public static long getLastPushedId(String jobId) {
+        String stdOutWithId = createQuery()
+                .select(commandStatus.stdout)
+                .from(commandStatus)
+                .where(commandStatus.stdout.like("%Last changeset pushed ID:%").and(commandStatus.jobId.eq(jobId)))
+                .fetchFirst();
+
+        String patternString = "Last changeset pushed ID: ([0-9]*)";
+
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(stdOutWithId);
+        matcher.find();
+
+        return Long.parseLong(matcher.group(1));
     }
 }
