@@ -49,6 +49,13 @@
         "EXPORTPATH" : "translations/RenderDb.js"
     },
     {
+        "NAME" : "ENC",
+        "DESCRIPTION" : "S-57 Electronic Navigation Chart V3.1.1",
+        "CANEXPORT" : true,
+        "IMPORTPATH" : "translations/ENCv311_to_OSM.js",
+        "EXPORTPATH" : "translations/ENCv311_to_OGR.js"
+    },
+    {
         "NAME" : "GIFD D4",
         "DESCRIPTION" : "Geospatial Intelligence Feature Database (GIFD) D4",
         "CANEXPORT" : false,
