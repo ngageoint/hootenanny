@@ -55,23 +55,23 @@ static const QString REPLACEMENT_DATA_URL =
 static const QString REPLACEMENT_DATA_FILE = "OSMData.osm";
 static const QString TASK_GRID_FILE = ROOT_DIR + "/bounds.osm";
 
-static const long MAX_NODES_PER_CELL = 100000;
+static const long MAX_NODES_PER_CELL = 1000;
 static const int KILL_AFTER_NUM_CHANGESET_DERIVATIONS = 2;
 
 static const bool WRITE_REPLACEMENT_DATA_TO_DB = false;
 static const bool PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION = true;
 
 // 4 sq blocks of the city - 4 changesets; completes in ? (use 1000 max node count)
-//static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387";
-//static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
+static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387";
+static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
 
 // ~1/4 of city - 64 changesets; completes in ? (use 10000 max node count)
 //static const QString CROP_INPUT_BOUNDS = "-115.3441,36.2012,-115.1942,36.3398";
 //static const QString REPLACEMENT_BOUNDS = "-115.3332,36.2178,-115.1837,36.3400";
 
 // whole city - 64 changesets; completes in ? (use 100000 max node count)
-static const QString CROP_INPUT_BOUNDS = ""; // no input cropping
-static const QString REPLACEMENT_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447";
+//static const QString CROP_INPUT_BOUNDS = ""; // no input cropping
+//static const QString REPLACEMENT_BOUNDS = "-115.3528,36.0919,-114.9817,36.3447";
 
 /*
  * This is meant as a test harness for debugging cut and replace across adjacent task grid cells.
@@ -84,7 +84,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
   // ENABLE FOR DEBUGGING ONLY
-  //CPPUNIT_TEST(runGridCellTest);
+  CPPUNIT_TEST(runGridCellTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -123,10 +123,12 @@ public:
       {
         _loadReplacementDataDb();
       }
-      // TODO: optimize this
       if (PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION)
       {
-        _readFullMaps();
+        // There needs to be some optimization here that avoids unnecessary loading of the maps.
+        // Have tried to do it but keep getting changeset element ID errors, so leaving it alone for
+        // now.
+        _cacheFullMaps();
       }
 
       int numTaskGridCells = 0;
@@ -198,7 +200,7 @@ private:
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), ROOT_DIR + "/debug.osm"); 
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
-    conf().set(ConfigOptions::getChangesetReplacementCacheInputFileMapsKey(), false);
+    conf().set(ConfigOptions::getChangesetReplacementCacheInputFileMapsKey(), true);
   }
 
   void _cropInputs()
@@ -211,8 +213,8 @@ private:
     cropOutputFile = cropOutputFile.replace(".osm", "-cropped.osm");
     _dataToReplaceFile = cropOutputFile;
     LOG_STATUS(
-      "Reading data to replace from: ..." << ROOT_DIR << "/" << DATA_TO_REPLACE_FILE << " to: " <<
-      ROOT_DIR << "/" << _dataToReplaceFile.right(25) << "...");
+      "Reading data to replace from: ..." << ROOT_DIR << "/" << DATA_TO_REPLACE_FILE <<
+      " to: ..." << ROOT_DIR << "/" << _dataToReplaceFile.right(25) << "...");
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, ROOT_DIR + "/" + DATA_TO_REPLACE_FILE, true, Status::Unknown1);
     LOG_STATUS(
@@ -230,8 +232,8 @@ private:
     cropOutputFile = cropOutputFile.replace(".osm", "-cropped.osm");
     _replacementDataFile = cropOutputFile;
     LOG_STATUS(
-      "Reading replacement data from: ..." << ROOT_DIR << "/" << REPLACEMENT_DATA_FILE << " to: " <<
-      ROOT_DIR << "/" << _replacementDataFile.right(25) << "...");
+      "Reading replacement data from: ..." << ROOT_DIR << "/" << REPLACEMENT_DATA_FILE <<
+      " to: ..." << ROOT_DIR << "/" << _replacementDataFile.right(25) << "...");
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(map, ROOT_DIR + "/" + REPLACEMENT_DATA_FILE, true, Status::Unknown2);
     LOG_STATUS(
@@ -290,13 +292,13 @@ private:
     _subTaskTimer.restart();
   }
 
-  void _readFullMaps()
+  void _cacheFullMaps()
   {
     // turn off cropping on read
     conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
     LOG_STATUS(
-      "Reading the full data to be replaced out of the db for changeset calculation from: " <<
+      "Caching the full data to be replaced out of the db for changeset calculation from: " <<
       DATA_TO_REPLACE_URL << "...");
     OsmMapReaderFactory::read(_dataToReplaceFullMap, DATA_TO_REPLACE_URL, true, Status::Unknown1);
     LOG_STATUS(
@@ -307,7 +309,7 @@ private:
     if (WRITE_REPLACEMENT_DATA_TO_DB)
     {
       LOG_STATUS(
-        "Reading the full replacement data out of the db for changeset calculation from: " <<
+        "Caching the full replacement data out of the db for changeset calculation from: " <<
         REPLACEMENT_DATA_URL << "...");
       OsmMapReaderFactory::read(
         _replacementDataFullMap, REPLACEMENT_DATA_URL, false, Status::Unknown2);
@@ -315,7 +317,7 @@ private:
     else
     {
       const QString replacementDataPath = ROOT_DIR + "/" + _replacementDataFile;
-      LOG_STATUS("Reading the full replacement data from: ..." << replacementDataPath << "...");
+      LOG_STATUS("Caching the full replacement data from: ..." << replacementDataPath << "...");
       OsmMapReaderFactory::read(
         _replacementDataFullMap, replacementDataPath, false, Status::Unknown2);
     }

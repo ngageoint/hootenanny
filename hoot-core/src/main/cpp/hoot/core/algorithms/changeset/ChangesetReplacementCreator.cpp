@@ -477,7 +477,7 @@ void ChangesetReplacementCreator::_create()
   {
     LOG_INFO("******************************************");
     LOG_STATUS(
-      "Generating maps for changeset derivation given geometry type: "<<
+      "Generating diff maps for changeset derivation for geometry type: "<<
       GeometryTypeCriterion::typeToString(itr.key()) << ". Pass: " << passCtr << " / " <<
       refFilters.size() << "...");
 
@@ -563,7 +563,7 @@ void ChangesetReplacementCreator::_create()
 
   // CHANGESET GENERATION
 
-  LOG_STATUS("Generating changesets...");
+  LOG_STATUS("Generating changesets for " << refMaps.size() << " sets of maps...");
 
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
@@ -655,7 +655,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
 
-  LOG_STATUS("Replacing data...");
+  LOG_STATUS(
+    "Replacing " << StringUtils::formatLargeNumber(refMap->size()) << " features with " <<
+    StringUtils::formatLargeNumber(secMap->size()) << " features...");
 
   // CUT
 
@@ -704,7 +706,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     }
   }
 
-  LOG_STATUS("Preparing changeset derivation maps...");
+  LOG_STATUS(
+    "Preparing changeset derivation maps of sizes: " <<
+    StringUtils::formatLargeNumber(refMap->size()) << " and " <<
+    StringUtils::formatLargeNumber(conflatedMap->size()) << "...");
 
   // SNAP
 
@@ -1296,7 +1301,9 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
         // Restore it back to original.
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
       }
-      LOG_STATUS("Copying reference map from: " << _input1Map->getName() << "...");
+      LOG_STATUS(
+        "Copying reference map of size: " << StringUtils::formatLargeNumber(_input1Map->size()) <<
+        " from: " << _input1Map->getName() << "...");
       refMap.reset(new OsmMap(_input1Map));
       IoUtils::cropToBounds(
         refMap, GeometryUtils::envelopeFromConfigString(_replacementBounds),
@@ -1311,7 +1318,9 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
   // crop based on what we need to do with it.
   else if (_input1Map)
   {
-    LOG_STATUS("Copying reference map from: " << _input1Map->getName() << "...");
+    LOG_STATUS(
+      "Copying reference map of size: " << StringUtils::formatLargeNumber(_input1Map->size()) <<
+      " from: " << _input1Map->getName() << "...");
     refMap.reset(new OsmMap(_input1Map));
     IoUtils::cropToBounds(
       refMap, GeometryUtils::envelopeFromConfigString(_replacementBounds),
@@ -1367,7 +1376,9 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
 
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
       }
-      LOG_STATUS("Copying secondary map from: " << _input2Map->getName() << "...");
+      LOG_STATUS(
+        "Copying secondary map of size: " << StringUtils::formatLargeNumber(_input2Map->size()) <<
+        " from: " << _input2Map->getName() << "...");
       secMap.reset(new OsmMap(_input2Map));
       IoUtils::cropToBounds(
         secMap, GeometryUtils::envelopeFromConfigString(_replacementBounds), false);
@@ -1375,7 +1386,9 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
   }
   else if (_input2Map)
   {
-    LOG_STATUS("Copying secondary map from: " << _input2Map->getName() << "...");
+    LOG_STATUS(
+      "Copying secondary map of size: " << StringUtils::formatLargeNumber(_input2Map->size()) <<
+      " from: " << _input2Map->getName() << "...");
     secMap.reset(new OsmMap(_input2Map));
     IoUtils::cropToBounds(
       secMap, GeometryUtils::envelopeFromConfigString(_replacementBounds), false);
@@ -1417,8 +1430,8 @@ void ChangesetReplacementCreator::_filterFeatures(
   const QString& debugFileName)
 {
   LOG_STATUS(
-    "Filtering features for: " << map->getName() << " based on input filter: " +
-    featureFilter->toString() << "...");
+    "Filtering " << map->size() << " features for: " << map->getName() <<
+    " based on input filter: " << featureFilter->toString() << "...");
 
   // Negate the input filter, since we're removing everything but what passes the input filter.
   RemoveElementsVisitor elementPruner(true);
