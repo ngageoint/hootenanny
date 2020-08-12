@@ -127,25 +127,10 @@ enc311 = {
   {
     // Unique CAT to layer list
     var cList = {
-    'CALSGN':'RDOSTA',
-    'CATAIR':'AIRARE',
-    'CATACH':'ACHARE',
-    'CATBRG':'BRIDGE',
-    'CATBUA':'BUAARE',
-    'CATFNC':'FNCLNE',
-    'CATFOR':'FORSTC',
-    'CATGAT':'GATCON',
-    'CATHAF':'HRBFAC',
-    'CATLMK':'LNDMRK',
-    'CATLND':'LNDRGN',
-    'CATREA':'RESARE',
-    'CATROD':'ROADWY',
-    'CATRUN':'RUNWAY',
-    'CATSEA':'SEAARE',
-    'CATSIL':'SILTNK',
-    'CATSLC':'SLCONS',
-    'CATVEG':'VEGATN',
-    'JRSDTN':'ADMARE'
+    'CALSGN':'RDOSTA', 'CATAIR':'AIRARE', 'CATACH':'ACHARE', 'CATBRG':'BRIDGE', 'CATBUA':'BUAARE',
+    'CATFNC':'FNCLNE', 'CATFOR':'FORSTC', 'CATGAT':'GATCON', 'CATHAF':'HRBFAC', 'CATLMK':'LNDMRK',
+    'CATLND':'LNDRGN', 'CATPYL':'PYLONS', 'CATREA':'RESARE', 'CATROD':'ROADWY', 'CATRUN':'RUNWAY',
+    'CATSEA':'SEAARE', 'CATSIL':'SILTNK', 'CATSLC':'SLCONS', 'CATVEG':'VEGATN', 'JRSDTN':'ADMARE'
     } // End cList
 
     for (var cat in cList)
@@ -352,9 +337,13 @@ enc311 = {
         break;
 
       case 'cable':
-      case 'line':
+      case 'minor_line':
         tags['cable:type'] = 'power'
-        delete tags.power;
+        break;
+
+      case 'line':
+        attrs.encLayerName = 'CBLOHD'; // Overhead cable
+        tags['cable:type'] = 'transmission'
         break;
     } // End switch power
 
@@ -394,7 +383,7 @@ enc311 = {
     {
       attrs.encLayerName = enc311.seaMarkToLayer[tags['seamark:type']];
       // Debug
-      // print('Got encLayerName: ' + attrs.encLayerName);
+      print('Got encLayerName: ' + attrs.encLayerName);
     }
 
     // Now break up the seamark:XXX and seamark:XXX:YYY tags

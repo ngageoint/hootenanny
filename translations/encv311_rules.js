@@ -2927,6 +2927,11 @@ enc311.rules = {
     ['CATLND','9','landuse','farmyard'], // agricultural land
     ['CATLND','12','natural','wetland'], // swamp
 
+    // CATPYL - Category of pylon
+    ['CATPYL','1','power','tower'], // power transmission pylon/pole
+    ['CATPYL','2','power','pole'], // telephone/telegraph pylon/pole
+    ['CATPYL','3','aerialway','pylon'], // aerial cableway/sky pylon
+
     // CATREA - Category of restricted area
     ['CATREA','4','leisure','nature_reserve'], // nature reserve
 
