@@ -231,7 +231,7 @@ private:
     conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 0.5);
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
-    conf().set(ConfigOptions::getDebugMapsFilenameKey(), ROOT_DIR + "/debug.osm"); 
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), ROOT_DIR + "/debug.osm");
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementCacheInputFileMapsKey(), true);
   }
@@ -425,7 +425,7 @@ private:
 
   std::vector<std::vector<geos::geom::Envelope>> _calcNodeDensityTaskGrid(
     OsmMapPtr map, int& numTaskGridCells)
-  { 
+  {
     LOG_STATUS(
       "Calculating task grid cells for replacement data to: ..." <<
       NODE_DENSITY_TASK_GRID_OUTPUT_FILE.right(25) << "...");
@@ -530,7 +530,7 @@ private:
         LOG_STATUS(
           "Applying changeset: " << StringUtils::formatLargeNumber(boundsCtr) << " / " <<
           StringUtils::formatLargeNumber(numTiles) << ": " << changesetId << " over bounds: " <<
-          boundsStr << " from file: ..." << changesetFile.fileName().right(25) << "..."); 
+          boundsStr << " from file: ..." << changesetFile.fileName().right(25) << "...");
         changesetApplier.write(changesetFile);
         LOG_STATUS(
           "Changeset applied in: " <<
