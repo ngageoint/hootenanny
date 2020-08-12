@@ -118,7 +118,7 @@ static const long MAX_NODE_DENSITY_NODES_PER_CELL = 10000;
  * This is meant as a test harness for debugging cut and replace across adjacent task grid cells.
  * Not meant to be run automatically as part of the unit tests.
  *
- * TODO: add the option to pass in a uniform grid
+ * TODO: add the option to auto-generate a uniform grid
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
@@ -257,7 +257,7 @@ private:
     conf().set(ConfigOptions::getChangesetMaxSizeKey(), 999999);
     conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 0.5);
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), ROOT_DIR + "/debug.osm");
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementCacheInputFileMapsKey(), true);
@@ -581,17 +581,19 @@ private:
     }
   }
 
-  void _replaceTaskGridCell(const int taskGridCellId, const int changesetId,
+  void _replaceTaskGridCell(const int taskGridCellId, const int changesetNum,
                             const geos::geom::Envelope& bounds, const int taskGridSize)
   {
     const QString boundsStr = GeometryUtils::toString(bounds);
-    QFile changesetFile(ROOT_DIR + "/changeset-" + QString::number(changesetId) + ".osc.sql");
+    QFile changesetFile(
+      ROOT_DIR + "/changeset-cell-" + QString::number(taskGridCellId) + ".osc.sql");
 
     LOG_STATUS(
-      "Deriving changeset " << changesetId << " / " <<
+      "Deriving changeset " << changesetNum << " / " <<
       StringUtils::formatLargeNumber(taskGridSize) << " for task grid cell: " << taskGridCellId <<
       ", over bounds: " << boundsStr << ", to file: ..." << changesetFile.fileName().right(25) <<
       "...");
+    _changesetCreator.setChangesetId(QString::number(taskGridCellId));
     if (!PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION)
     {
       QString secondaryInput;
@@ -621,7 +623,7 @@ private:
     LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
 
     LOG_STATUS(
-      "Applying changeset: " << changesetId << " / " <<
+      "Applying changeset: " << changesetNum << " / " <<
       StringUtils::formatLargeNumber(taskGridSize) << " for task grid cell: " << taskGridCellId <<
       ", over bounds: " << boundsStr << ", from file: ..." << changesetFile.fileName().right(25) <<
       "...");

@@ -175,6 +175,7 @@ public:
   void setConflationEnabled(const bool enabled) { _conflationEnabled = enabled; }
   void setCleaningEnabled(const bool enabled) { _cleaningEnabled = enabled; }
   void setTagOobConnectedWays(const bool addTag) { _tagOobConnectedWays = addTag; }
+  void setChangesetId(const QString& id) { _changesetId = id; }
 
 private:
 
@@ -198,6 +199,9 @@ private:
   // the AOI over which the replacement is being performed
   //geos::geom::Envelope _replacementBounds;
   QString _replacementBounds;
+
+  // TODO
+  QString _changesetId;
 
   // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
   // alpha shape of the sec data gets replaced.
