@@ -356,10 +356,10 @@ public:
   bool hasAnyKvp(const QStringList& kvps) const;
 
   /**
-   * TODO
+   * Returns the first matching key/value pair (kvp) from the input list
    *
-   * @param kvp
-   * @return
+   * @param kvps list of kvp string to match
+   * @return a kvp or an empty string if no matching kvp is found
    */
   QString getFirstKvp(const QStringList& kvps) const;
 

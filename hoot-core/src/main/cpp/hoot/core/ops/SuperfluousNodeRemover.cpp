@@ -126,8 +126,6 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     LOG_VART(n->getElementId());
     LOG_VART(n->getTags().getNonDebugCount());
 
-    // TODO: change these back to trace
-
     // There original reason behind adding this is that there a potential bug in
     // HighwaySnapMerger::_snapEnds that will leave turning circle nodes orphaned from roads.
     // Turning circles are always expected to be a road way node. If its an actual bug, it should
