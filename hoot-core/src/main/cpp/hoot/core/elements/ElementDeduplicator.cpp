@@ -96,7 +96,7 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
 {
   _validateInputs();
 
-  LOG_STATUS("De-duping map: " << map1->getName() << " and " << map2->getName() << "...");
+  LOG_INFO("De-duping map: " << map1->getName() << " and " << map2->getName() << "...");
   LOG_DEBUG(map1->getName() << " size before de-duping: " << map1->size());
   LOG_DEBUG(map2->getName() << " size before de-duping: " << map2->size());
 

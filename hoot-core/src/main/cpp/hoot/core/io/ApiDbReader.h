@@ -131,7 +131,9 @@ protected:
   Tgs::BigMap<long, long> _wayIdMap;
 
   geos::geom::Envelope _bounds;
-  geos::geom::Envelope _overrideBounds; //this will override _bounds
+  geos::geom::Envelope _overrideBounds; // this will override _bounds
+  // controls use of _readByBounds2 vs the default _readByBounds
+  bool _readFullThenCropOnBounded;
 
   bool _returnNodesOnly;
 
@@ -150,9 +152,23 @@ protected:
   virtual std::shared_ptr<ApiDb> _getDatabase() const = 0;
 
   /*
-   * This is the same logic as in the Map.java query method.
+   * Reads the entire dataset into a map
    */
-  virtual void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
+  void _fullRead(OsmMapPtr map);
+
+  /*
+   * Reads a portion of the dataset into a map over the specified bounds. This uses the same bounded
+   * query logic as used in the Map.java query method.
+   */
+  void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
+
+  /*
+   * Reads a portion of the dataset into a map over the specified bounds. This reads the entire
+   * dataset in and then crops it after the fact. See the description of the
+   * apidb.reader.read.full.then.crop.on.bounded configuration option for more information.
+   */
+  void _readByBounds2(OsmMapPtr map, const geos::geom::Envelope& bounds);
+
   void _readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds, QSet<QString>& wayIds,
                           QSet<QString>& additionalNodeIds, long& nodeCount, long& wayCount);
   void _updateMetadataOnElement(ElementPtr element);

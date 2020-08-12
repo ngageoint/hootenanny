@@ -38,7 +38,6 @@
 
 // Qt
 #include <QFileInfo>
-#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -65,16 +64,11 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
     LOG_VARD(args);
 
     // If needed for testing, can manually load separate implementations with
     // ConfigOptions().getChangesetReplacementImplementation().
     run(args);
-
-    LOG_STATUS(
-      "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }

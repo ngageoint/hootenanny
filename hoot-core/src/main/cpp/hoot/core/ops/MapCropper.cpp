@@ -132,6 +132,21 @@ _logWarningsForMissingElements(true)
 {
 }
 
+QString MapCropper::getInitStatusMessage() const
+{
+  QString msg = "Cropping map at bounds: ";
+  if (!_envelope.isNull())
+  {
+    msg += GeometryUtils::envelopeToConfigString(_envelope);
+  }
+  else if (_envelopeG)
+  {
+    msg += QString::fromStdString(_envelopeG->toString());
+  }
+  msg += "...";
+  return msg;
+}
+
 void MapCropper::setBounds(const geos::geom::Envelope& bounds)
 {
   _nodeBounds = bounds;
@@ -346,6 +361,7 @@ void MapCropper::apply(OsmMapPtr& map)
         StringUtils::formatLargeNumber(ways.size()) << " ways.");
     }
   }
+  LOG_VARD(map->size());
 
   std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
 
@@ -452,6 +468,7 @@ void MapCropper::apply(OsmMapPtr& map)
         StringUtils::formatLargeNumber(nodes.size()) << " nodes.");
     }
   }
+  LOG_VARD(map->size());
 
   // Remove dangling features here now, which used to be done in CropCmd only. Haven't seen any
   // bad side effects yet.
@@ -463,23 +480,27 @@ void MapCropper::apply(OsmMapPtr& map)
     numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
   }
 
-  // Most of the time we want to remove missing refs in order for the output to be clean, but in
-  // some workflows, like cut and replace, we need to keep them around to prevent the resulting
-  // changeset from being too heavy handed.
+  // Most of the time we want to remove missing refs in order for the output to be clean. In some
+  // workflows like cut and replace where the input relations may not have been fully hydrated,
+  // however, we need to keep them around to prevent the resulting changeset from being too heavy
+  // handed.
   if (_removeMissingElements)
   {
     // This will handle removing refs in relation members we've cropped out.
+    LOG_VARD(map->size());
     RemoveMissingElementsVisitor missingElementsRemover;
     LOG_INFO("\t" << missingElementsRemover.getInitStatusMessage());
     map->visitRw(missingElementsRemover);
     LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
-  }
+    LOG_VARD(map->size());
 
-  // This will remove any relations that were already empty or became empty after the previous step.
-  RemoveEmptyRelationsOp emptyRelationRemover;
-  LOG_INFO("\t" << emptyRelationRemover.getInitStatusMessage());
-  emptyRelationRemover.apply(map);
-  LOG_DEBUG("\t" << emptyRelationRemover.getCompletedStatusMessage());
+    // This will remove any relations that were already empty or became empty after the previous step.
+    LOG_VARD(map->size());
+    RemoveEmptyRelationsOp emptyRelationRemover;
+    LOG_INFO("\t" << emptyRelationRemover.getInitStatusMessage());
+    emptyRelationRemover.apply(map);
+    LOG_DEBUG("\t" << emptyRelationRemover.getCompletedStatusMessage());
+  }
 
   LOG_VARD(_numAffected);
   LOG_VARD(map->size());

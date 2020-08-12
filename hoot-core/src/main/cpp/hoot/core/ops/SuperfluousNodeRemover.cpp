@@ -65,6 +65,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 
   // Let's collect the IDs of all the nodes we can't remove first.
 
+  LOG_VARD(map->getRelationCount());
   const RelationMap& relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
@@ -88,7 +89,12 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         " total elements.");
     }
   }
+  LOG_DEBUG(
+    "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+    " nodes from removal that belong to relations after processing " <<
+    StringUtils::formatLargeNumber(_numProcessed) << " total elements.");
 
+  LOG_VARD(map->getWayCount());
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
@@ -107,7 +113,12 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         " total elements.");
     }
   }
+  LOG_DEBUG(
+    "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+    " nodes from removal that belong to ways after processing " <<
+    StringUtils::formatLargeNumber(_numProcessed) << " total elements.");
 
+  LOG_VARD(map->getNodeCount());
   const NodeMap nodes = map->getNodes();
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
@@ -123,12 +134,15 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     if (_usedNodes.find(n->getId()) == _usedNodes.end() &&
         n->getTags().hasAnyKvp(_unallowedOrphanKvps))
     {
-      LOG_TRACE("Skipping " << n->getElementId() << " with unallowed orphan kvp...");
+      LOG_TRACE(
+        "Skipping " << n->getElementId() << " with unallowed orphan kvp: " <<
+        n->getTags().getFirstKvp(_unallowedOrphanKvps) << "...");
     }
     else if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
     {
       LOG_TRACE(
-        "Not marking " << n->getElementId() << " for removal due to having non-metadata tags...");
+        "Not marking " << n->getElementId() << " for removal due to having " <<
+        n->getTags().getNonDebugCount() << " non-metadata tags...");
       _usedNodes.insert(n->getId());
     }
     else
@@ -145,7 +159,12 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         " total elements.");
     }
   }
-  LOG_VART(_usedNodes.size());
+  LOG_DEBUG(
+    "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+    " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
+    " total elements.");
+
+  LOG_VARD(_usedNodes.size());
   //LOG_VART(_usedNodes);
 
   std::shared_ptr<OsmMap> reprojected;
