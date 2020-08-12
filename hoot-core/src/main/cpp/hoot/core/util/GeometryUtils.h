@@ -104,6 +104,25 @@ public:
    */
   static QString toConfigString(const geos::geom::Envelope& e);
 
+  /**
+   * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
+   * from an envelope
+   *
+   * @param boundsStr bounds string in the format used in the hoot options config to an envelope
+   * @return an envelope string
+   * @todo This should be replaced by toConfigString.
+   */
+  static QString envelopeToConfigString(const geos::geom::Envelope& bounds);
+
+  /**
+   * Converts a bounds in the format used in the hoot options config (minx,miny,maxx,maxy) to an
+   * envelope
+   *
+   * @param boundsStr bounds string in the format used in the hoot options config to an envelope
+   * @return an envelope
+   */
+  static geos::geom::Envelope envelopeFromConfigString(const QString& boundsStr);
+
   static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry *g);
 
   static geos::geom::Geometry* validateGeometryCollection(const geos::geom::GeometryCollection* gc);
@@ -118,24 +137,6 @@ public:
    * - Removes linear rings less than 3 points
    */
   static geos::geom::Geometry* validatePolygon(const geos::geom::Polygon* p);
-
-  /**
-   * Converts a bounds in the format used in the hoot options config (minx,miny,maxx,maxy) to an
-   * envelope
-   *
-   * @param boundsStr bounds string in the format used in the hoot options config to an envelope
-   * @return an envelope
-   */
-  static geos::geom::Envelope envelopeFromConfigString(const QString& boundsStr);
-
-  /**
-   * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
-   * from an envelope
-   *
-   * @param boundsStr bounds string in the format used in the hoot options config to an envelope
-   * @return an envelope string
-   */
-  static QString envelopeToConfigString(const geos::geom::Envelope& bounds);
 
   /**
    * Creates a rectangular map representing a bounding box; useful for debugging
@@ -161,6 +162,14 @@ public:
    * @return a string
    */
   static QString geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId);
+
+  /**
+   * TODO
+   *
+   * @param input
+   * @return
+   */
+  static QList<geos::geom::Envelope> readBoundsFile(const QString& input);
 };
 
 }

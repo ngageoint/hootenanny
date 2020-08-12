@@ -40,6 +40,7 @@
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
 
 // Qt
 #include <QString>
@@ -64,8 +65,8 @@ union DoubleCast
 
 double GeometryUtils::MEAN_EARTH_RADIUS = 6371009;
 
-Coordinate GeometryUtils::calculateDestination(const Coordinate& start, Degrees bearing,
-  Meters d)
+Coordinate GeometryUtils::calculateDestination(
+  const Coordinate& start, Degrees bearing, Meters d)
 {
   Radians theta = toRadians(bearing);
   Radians lambda1 = toRadians(start.x);
@@ -189,6 +190,40 @@ QString GeometryUtils::toConfigString(const Envelope& e)
       arg(e.getMaxY(), 0, 'f', precision);
 }
 
+QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
+{
+  return QString::number(bounds.getMinX()) + "," +
+    QString::number(bounds.getMinY()) + "," +
+    QString::number(bounds.getMaxX()) + "," +
+    QString::number(bounds.getMaxY());
+}
+
+Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
+{
+  LOG_VART(boundsStr);
+  if (boundsStr.trimmed().isEmpty())
+  {
+    return Envelope();
+  }
+
+  const QString errorMsg = "Invalid envelope string: " + boundsStr;
+  const QRegExp boundsRegEx("(-*\\d+\\.*\\d*,){3}-*\\d+\\.*\\d*");
+  if (!boundsRegEx.exactMatch(boundsStr))
+  {
+    throw HootException(errorMsg);
+  }
+  const QStringList boundsParts = boundsStr.split(",");
+  assert(boundsParts.size() == 4);
+  if ((boundsParts.at(2).toDouble() <= boundsParts.at(0).toDouble()) ||
+       boundsParts.at(3).toDouble() <= boundsParts.at(1).toDouble())
+  {
+    throw HootException(errorMsg);
+  }
+  return
+    Envelope(boundsParts.at(0).toDouble(), boundsParts.at(2).toDouble(),
+      boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
+}
+
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)
 {
   switch (g->getGeometryTypeId())
@@ -219,8 +254,7 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
   }
 }
 
-Geometry* GeometryUtils::validateGeometryCollection(
-  const GeometryCollection *gc)
+Geometry* GeometryUtils::validateGeometryCollection(const GeometryCollection *gc)
 {
   Geometry* result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
 
@@ -301,40 +335,6 @@ Geometry* GeometryUtils::validatePolygon(const Polygon* p)
   return result;
 }
 
-Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
-{
-  LOG_VART(boundsStr);
-  if (boundsStr.trimmed().isEmpty())
-  {
-    return Envelope();
-  }
-
-  const QString errorMsg = "Invalid envelope string: " + boundsStr;
-  const QRegExp boundsRegEx("(-*\\d+\\.*\\d*,){3}-*\\d+\\.*\\d*");
-  if (!boundsRegEx.exactMatch(boundsStr))
-  {
-    throw HootException(errorMsg);
-  }
-  const QStringList boundsParts = boundsStr.split(",");
-  assert(boundsParts.size() == 4);
-  if ((boundsParts.at(2).toDouble() <= boundsParts.at(0).toDouble()) ||
-       boundsParts.at(3).toDouble() <= boundsParts.at(1).toDouble())
-  {
-    throw HootException(errorMsg);
-  }
-  return
-    Envelope(boundsParts.at(0).toDouble(), boundsParts.at(2).toDouble(),
-      boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
-}
-
-QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
-{
-  return QString::number(bounds.getMinX()) + "," +
-    QString::number(bounds.getMinY()) + "," +
-    QString::number(bounds.getMaxX()) + "," +
-    QString::number(bounds.getMaxY());
-}
-
 OsmMapPtr GeometryUtils::createMapFromBounds(const geos::geom::Envelope& bounds)
 {
   OsmMapPtr boundaryMap(new OsmMap());
@@ -378,6 +378,24 @@ ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geo
   map->addWay(bbox);
 
   return bbox->getElementId();
+}
+
+QList<geos::geom::Envelope> GeometryUtils::readBoundsFile(const QString& input)
+{
+  if (!input.toLower().endsWith(".geojson"))
+  {
+    throw IllegalArgumentException("TODO");
+  }
+
+  QList<geos::geom::Envelope> boundList;
+  OsmMapPtr map(new OsmMap());
+  OsmMapReaderFactory::read(map, input);
+  const WayMap ways = map->getWays();
+  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+  {
+    boundList.append(wayItr->second->getEnvelopeInternal(map));
+  }
+  return boundList;
 }
 
 QString GeometryUtils::geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId)
