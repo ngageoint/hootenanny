@@ -80,12 +80,12 @@ enc311 = {
         if (attrList.indexOf(val) == -1)
         {
           // Debug
-          print('Validate: Dropping ' + val + '  from ' + tableName);
+          // print('Validate: Dropping ' + val + '  from ' + tableName);
           if (val in transMap)
           {
             notUsed[transMap[val][1]] = transMap[val][2];
             // Debug:
-            print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+            // print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
           }
           delete attrs[val];
 
@@ -183,10 +183,10 @@ enc311 = {
 
     if (tags.natural == 'water') return (geometryType == 'Line') ? 'RIVERS' : 'LAKARE';
 
-    if (tags.natural == 'beach' || tags.natural == 'sand') return 'LNDRGN'; 
+    if (tags.natural == 'beach' || tags.natural == 'sand') return 'LNDRGN';
 
     // If nothing, send back undefined so it stays unset
-    return undefined;      
+    return undefined;     
   }, // End findLayerName
 
 
@@ -264,11 +264,11 @@ enc311 = {
           if (tags.construction)
           {
             tags[typ] = tags.construction;
-            delete tags.construction;           
+            delete tags.construction;          
           }
           else
           {
-            tags[typ] = cycleList[typ]; 
+            tags[typ] = cycleList[typ];
           }
           tags.condition = 'construction';
           break;
@@ -331,7 +331,7 @@ enc311 = {
     if (tags['addr:country'])
     {
       tags['addr:country'] = translate.findCountryCode('c2',tags['addr:country']);
-      if (tags['addr:country'] == '') delete tags['addr:country'];      
+      if (tags['addr:country'] == '') delete tags['addr:country'];     
     }
 
     // Power plants & generation
@@ -366,7 +366,7 @@ enc311 = {
       }
 
 
-    // Uuid vs FIDN 
+    // Uuid vs FIDN
     if (tags.uuid && tags['s57:feature_identification_number']) delete tags.uuid;
 
     // Remove extra/addded tags
@@ -424,7 +424,7 @@ enc311 = {
       {
         // print('End element: ' + endElement + ' value: ' + enc311.rules.tagToSeamarkType[endElement]);
         tags[enc311.rules.tagToSeamarkType[endElement]] = tags[tag];
-        delete tags[tag]; 
+        delete tags[tag];
         continue;
       }
       // Debug
@@ -451,7 +451,7 @@ enc311 = {
             var row = enc311.stringListLookup[col][valList[value]];
 
             var nAttr = row[0];
-            if (!attrs[nAttr]) 
+            if (!attrs[nAttr])
             {
               attrs[nAttr] = row[1];
             }
@@ -487,7 +487,7 @@ enc311 = {
     {
       attrs.FIDN = enc311.FIDN;
       enc311.FIDN = enc311.FIDN + 1;
-    } 
+    }
 
     // Primitives
     if (!attrs.PRIM)
@@ -533,7 +533,7 @@ enc311 = {
 
     // Keep looking for an output layer
     if (!attrs.encLayerName) attrs.encLayerName = enc311.findLayerName(tags,attrs,geometryType);
-    print('Post: encLayerName: ' + attrs.encLayerName);
+    // print('Post: encLayerName: ' + attrs.encLayerName);
   }, // End applyToOgrPostProcessing
 
 
@@ -631,15 +631,15 @@ enc311 = {
     }
 
     // Testing/Debug
-    if (tags['s57:primitive'])
-    {
-      print('Tag: ' + tags['s57:primitive'] + '  Geom: ' + geometryType);
-      if (geometryType !== tags['s57:primitive'])
-      {
-        print('### Geom Different');
-        geometryType = tags['s57:primitive'].toString();
-      }
-    }
+    // if (tags['s57:primitive'])
+    // {
+    //   print('Tag: ' + tags['s57:primitive'] + '  Geom: ' + geometryType);
+    //   if (geometryType !== tags['s57:primitive'])
+    //   {
+    //     print('### Geom Different');
+    //     geometryType = tags['s57:primitive'].toString();
+    //   }
+    // }
 
     // Pre Processing
     enc311.applyToOgrPreProcessing(notUsedTags, attrs, geometryType);
@@ -664,7 +664,9 @@ enc311 = {
 
     // Output layer name is <ENC Object>_<P,L,A>
     var encLayerName = '';
-    print('attrs:encLayerName: ' + attrs.encLayerName);
+    // Debug
+    // print('attrs:encLayerName: ' + attrs.encLayerName);
+
     if (attrs.encLayerName)
     {
       encLayerName = attrs.encLayerName + '_' + geometryType.toString().charAt(0);
@@ -673,11 +675,12 @@ enc311 = {
 
       // Debug
       // Now, check that it is a valid layername & geometry
-      if (!enc311.attrLookup[encLayerName]) 
-        {
-          print('After: ' + encLayerName + ' is dropped');
-          encLayerName = '';
-        }
+      if (!enc311.attrLookup[encLayerName])
+      {
+        // Debug
+        // print('After: ' + encLayerName + ' is dropped');
+        encLayerName = '';
+      }
     }
 
     // If we do not have an ENC layer name then just dump the feature to O2S_X

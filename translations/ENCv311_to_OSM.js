@@ -47,7 +47,9 @@ enc311 = {
     // Parse the field then translate each part
     for (var col in notUsedAttrs)
     {
+      // Debug
       // print('stringList: ' + col + ' ' + notUsedAttrs[col]);
+
       if (col in enc311.stringListLookup)
       {
         var valList = notUsedAttrs[col].split(',');
@@ -60,7 +62,7 @@ enc311 = {
             var row = enc311.stringListLookup[col][valList[value]];
 
             var ntag = row[0];
-            if (!tags[ntag]) 
+            if (!tags[ntag])
             {
               tags[ntag] = row[1];
             }
@@ -82,7 +84,8 @@ enc311 = {
             var ntag = row[0];
             while (tags[ntag])
             {
-              print('Increment ntag: ' + ntag);
+              // Debug
+              // print('Increment ntag: ' + ntag);
               ntag = translate.incrementTag(ntag);
             }
             tags[ntag] = row[1];
@@ -192,13 +195,13 @@ enc311 = {
     // These add to the seamark ones.
     // E.g. seamark:building:function = post_office => amenity=post_office
     // First, add some generic tags based on the layer name. These get refined later
-    
+  
     // Save this for use later
     var smType = tags['seamark:type'];
 
     if (enc311.rules.extraLayerTagList[smType])
     {
-      for (var i in enc311.rules.extraLayerTagList[smType]) 
+      for (var i in enc311.rules.extraLayerTagList[smType])
       {
         // DOn't stomp on existing tags. E.g. bridge=aqueduct vs bridge=yes
         if (!tags[i]) tags[i] = enc311.rules.extraLayerTagList[smType][i];
@@ -239,7 +242,7 @@ enc311 = {
     if (tags['bridge:movable']) tags.bridge = 'movable';
 
     // Land elevations - Can either be a spot height or a contour
-    if (smType == 'land_elevation') 
+    if (smType == 'land_elevation')
     {
       if (tags['seamark:land_elevation:elevation']) tags.ele = tags['seamark:land_elevation:elevation'];
 
