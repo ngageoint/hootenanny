@@ -48,26 +48,40 @@ namespace hoot
 static const QString ROOT_DIR = "/home/vagrant/hoot/tmp/4158/combined-data";
 static const QString TEST_NAME = "ChangesetReplacementGridTest::runGridCellTest";
 static const QString USER_EMAIL = TEST_NAME + "@hoottestcpp.org";
+
 static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl().toString();
 static const QString DATA_TO_REPLACE_FILE = "NOMEData.osm";
 static const QString REPLACEMENT_DATA_URL =
   ServicesDbTestUtils::getDbModifyUrl(TEST_NAME).toString();
 static const QString REPLACEMENT_DATA_FILE = "OSMData.osm";
-static const QString TASK_GRID_FILE = ROOT_DIR + "/bounds.osm";
 
-static const long MAX_NODES_PER_CELL = 1000;
+static const QString NODE_DENSITY_TASK_GRID_OUTPUT_FILE = ROOT_DIR + "/bounds.osm";
+// allows for attempting to cap the max number of node density nodes per grid cell
+static const long MAX_NODE_DENSITY_NODES_PER_CELL = 10000;
+// This overrides node density calc with a custom bounds file.
+static const QString TASK_GRID_INPUT_FILE = "";//ROOT_DIR + "/?.osm";
+
+// end a large replacement early
 static const int KILL_AFTER_NUM_CHANGESET_DERIVATIONS = 2;
-
-static const bool WRITE_REPLACEMENT_DATA_TO_DB = false;
+// read the replacement data just from the source file or load it into a hootapidb layer first?;
+// data replaced is always loaded into osmapidb for changeset application purposes
+static const bool WRITE_REPLACEMENT_DATA_TO_DB = true;
+// cache the full input maps for performance boost (requires memory double the combined size of
+// both maps)
 static const bool PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION = true;
 
+// CROP_INPUT_BOUNDS - always for working with a subset of the input data
+// REPLACEMENT_BOUNDS - section of the data being replaced
+
 // 4 sq blocks of the city - 4 changesets; completes in ? (use 1000 max node count)
-static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387";
-static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
+// FAILS ON CHANGESET APP FOR PRELOADED MAPS ONLY
+//static const QString CROP_INPUT_BOUNDS = "-115.3314,36.2825,-115.2527,36.3387";
+//static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
 
 // ~1/4 of city - 64 changesets; completes in ? (use 10000 max node count)
-//static const QString CROP_INPUT_BOUNDS = "-115.3441,36.2012,-115.1942,36.3398";
-//static const QString REPLACEMENT_BOUNDS = "-115.3332,36.2178,-115.1837,36.3400";
+// FAILS ON CHANGESET APP FOR PRELOADED MAPS ONLY WHEN HOOTAPIDB ISN'T USED
+static const QString CROP_INPUT_BOUNDS = "-115.3441,36.2012,-115.1942,36.3398";
+static const QString REPLACEMENT_BOUNDS = "-115.3332,36.2178,-115.1837,36.3400";
 
 // whole city - 64 changesets; completes in ? (use 100000 max node count)
 //static const QString CROP_INPUT_BOUNDS = ""; // no input cropping
@@ -83,7 +97,7 @@ static const QString REPLACEMENT_BOUNDS = "-115.3059,36.2849,-115.2883,36.2991";
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
-  // ENABLE FOR DEBUGGING ONLY
+  // ENABLE TEST FOR DEBUGGING ONLY
   CPPUNIT_TEST(runGridCellTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -133,30 +147,49 @@ public:
 
       int numTaskGridCells = 0;
       const std::vector<std::vector<geos::geom::Envelope>> taskGrid =
-        _calcTaskGrid(_getTaskGridInput(), numTaskGridCells);
+        _calcNodeDensityTaskGrid(_getNodeDensityTaskGridInput(), numTaskGridCells);
 
-      _replaceData(taskGrid, numTaskGridCells);
+      bool exceptionOccurred = false;
+      try
+      {
+        _replaceData(taskGrid, numTaskGridCells);
+      }
+      catch (const HootException& e)
+      {
+        exceptionOccurred = true;
+        const QString exceptionMsg = e.getWhat().toLower();
+        if (exceptionMsg.startsWith("killing"))
+        {
+          LOG_STATUS(
+            "Entire task grid cell replacement halted early at " <<
+            KILL_AFTER_NUM_CHANGESET_DERIVATIONS << " changeset derivations in: " <<
+            StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+        }
+        else if (exceptionMsg.startsWith("error executing query"))
+        {
+          LOG_ERROR(
+            "Error applying changeset at: " <<
+            StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
+        }
+        else
+        {
+          throw e;
+        }
+      }
       _getUpdatedData();
 
-      LOG_STATUS(
-        "Entire task grid cell replacement operation successfully completed in: " <<
-        StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+      if (!exceptionOccurred)
+      {
+        LOG_STATUS(
+          "Task grid cell replacement operation successfully completed in: " <<
+          StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+      }
     }
     catch (const HootException& e)
     {
-      if (!e.getWhat().toLower().startsWith("killing"))
-      {
-        LOG_ERROR(
-          "Entire task grid cell replacement operation partially completed with error in: " <<
-          StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
-      }
-      else
-      {
-        LOG_STATUS(
-          "Entire task grid cell replacement halted early at " <<
-          KILL_AFTER_NUM_CHANGESET_DERIVATIONS << " changeset derivations in: " <<
-          StringUtils::millisecondsToDhms(_opTimer.elapsed()));
-      }
+      LOG_ERROR(
+        "Entire task grid cell replacement operation partially completed with error at: " <<
+        StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
     }
 
     LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
@@ -330,7 +363,7 @@ private:
     conf().set(ConfigOptions::getConvertBoundingBoxKey(), REPLACEMENT_BOUNDS);
   }
 
-  OsmMapPtr _getTaskGridInput()
+  OsmMapPtr _getNodeDensityTaskGridInput()
   {
     OsmMapPtr map(new OsmMap());
 
@@ -341,38 +374,35 @@ private:
       ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
     conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
 
-    if (WRITE_REPLACEMENT_DATA_TO_DB)
+    // IMPORTANT: data used here must be unknown1 for node density calc to work
+    if (PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION)
+    {
+      LOG_STATUS(
+        "Preparing input data for task grid cell calculation from: " <<
+        _replacementDataFullMap->getName() << "...");
+      map.reset(new OsmMap(_replacementDataFullMap));
+      StatusUpdateVisitor statusUpdater(Status::Unknown1);
+      // LOG_STATUS(statusUpdater.getInitStatusMessage());
+      map->visitRw(statusUpdater);
+      MapCropper cropper(GeometryUtils::envelopeFromConfigString(REPLACEMENT_BOUNDS));
+      LOG_STATUS(cropper.getInitStatusMessage());
+      cropper.apply(map);
+    }
+    else if (WRITE_REPLACEMENT_DATA_TO_DB)
     {
       // read from hootapidb
 
-      if (PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION)
-      {
-        LOG_STATUS(
-          "Preparing input data for task grid cell calculation from: " <<
-          _replacementDataFullMap->getName() << "...");
-        map.reset(new OsmMap(_replacementDataFullMap));
-        StatusUpdateVisitor statusUpdater(Status::Unknown1);
-        // LOG_STATUS(statusUpdater.getInitStatusMessage());
-        map->visitRw(statusUpdater);
-        MapCropper cropper(GeometryUtils::envelopeFromConfigString(REPLACEMENT_BOUNDS));
-        LOG_STATUS(cropper.getInitStatusMessage());
-        cropper.apply(map);
-      }
-      else
-      {
-        LOG_STATUS(
-          "Reading the replacement data out of the db for task grid cell calculation from: " <<
-          REPLACEMENT_DATA_URL << "...");
-        // Reading by bounds ends up being much slower than it should be here. The bounded query
-        // needs work (#4180). We'll read all and crop after the fact instead. This is really bad
-        // memory-wise if the source db is very large, of course.
-        conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), true);
-        // IMPORTANT: must be unknown1 for node density to work
-        OsmMapReaderFactory::read(map, REPLACEMENT_DATA_URL, true, Status::Unknown1);
-        // Restore the default setting, or the changeset replacement maps will be loaded very slowly
-        // if loading from URL.
-        conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
-      }
+      LOG_STATUS(
+        "Preparing input data for task grid cell calculation from: " << REPLACEMENT_DATA_URL <<
+        "...");
+      // Reading by bounds ends up being much slower than it should be here. The bounded query
+      // needs work (#4180). We'll read all and crop after the fact instead. This is really bad
+      // memory-wise if the source db is very large, of course.
+      conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), true);
+      OsmMapReaderFactory::read(map, REPLACEMENT_DATA_URL, true, Status::Unknown1);
+      // Restore the default setting, or the changeset replacement maps will be loaded very slowly
+      // if loading from URL.
+      conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     }
     else
     {
@@ -380,9 +410,8 @@ private:
 
       const QString replacementDataPath = ROOT_DIR + "/" + _replacementDataFile;
       LOG_STATUS(
-        "Reading the replacement data for task grid cell calculation from: ..." <<
+        "Preparing input data for task grid cell calculation: ..." <<
         replacementDataPath.right(25) << "...");
-      // IMPORTANT: this must be unknown1 for node density to work
       OsmMapReaderFactory::read(map, ROOT_DIR + "/" + _replacementDataFile, true, Status::Unknown1);
     }
 
@@ -394,15 +423,15 @@ private:
     return map;
   }
 
-  std::vector<std::vector<geos::geom::Envelope>> _calcTaskGrid(
+  std::vector<std::vector<geos::geom::Envelope>> _calcNodeDensityTaskGrid(
     OsmMapPtr map, int& numTaskGridCells)
   { 
     LOG_STATUS(
-      "Calculating task grid cells for replacement data to: ..." << TASK_GRID_FILE.right(25) <<
-      "...");
+      "Calculating task grid cells for replacement data to: ..." <<
+      NODE_DENSITY_TASK_GRID_OUTPUT_FILE.right(25) << "...");
     NodeDensityTileBoundsCalculator boundsCalc;
     boundsCalc.setPixelSize(0.001);
-    boundsCalc.setMaxNodesPerTile(MAX_NODES_PER_CELL);
+    boundsCalc.setMaxNodesPerTile(MAX_NODE_DENSITY_NODES_PER_CELL);
     boundsCalc.setMaxNumTries(3);
     boundsCalc.setMaxTimePerAttempt(300);
     boundsCalc.setPixelSizeRetryReductionFactor(10);
@@ -413,7 +442,7 @@ private:
     numTaskGridCells = boundsCalc.getTileCount();
     LOG_VAR(taskGrid.size());
     const std::vector<std::vector<long>> nodeCounts = boundsCalc.getNodeCounts();
-    TileBoundsWriter::writeTilesToOsm(taskGrid, nodeCounts, TASK_GRID_FILE);
+    TileBoundsWriter::writeTilesToOsm(taskGrid, nodeCounts, NODE_DENSITY_TASK_GRID_OUTPUT_FILE);
     LOG_STATUS(
       "Calculated " << StringUtils::formatLargeNumber(numTaskGridCells) << " task grid cells.");
     LOG_STATUS(
@@ -495,6 +524,19 @@ private:
         _averageChangesetDeriveTime = _totalChangesetDeriveTime / (double)_numChangesetsDerived;
         _subTaskTimer.restart();
 
+        LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
+
+        // apply the difference back to the data being replaced
+        LOG_STATUS(
+          "Applying changeset: " << StringUtils::formatLargeNumber(boundsCtr) << " / " <<
+          StringUtils::formatLargeNumber(numTiles) << ": " << changesetId << " over bounds: " <<
+          boundsStr << " from file: ..." << changesetFile.fileName().right(25) << "..."); 
+        changesetApplier.write(changesetFile);
+        LOG_STATUS(
+          "Changeset applied in: " <<
+          StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+        _subTaskTimer.restart();
+
         if (KILL_AFTER_NUM_CHANGESET_DERIVATIONS > 0 &&
             _numChangesetsDerived >= KILL_AFTER_NUM_CHANGESET_DERIVATIONS)
         {
@@ -502,22 +544,6 @@ private:
             "Killing replacement after " + QString::number(_numChangesetsDerived) +
             " changeset derivations...");
         }
-        else
-        {
-          LOG_STATUS(
-            "Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
-        }
-
-        // apply the difference back to the data being replaced
-        LOG_STATUS(
-          "Applying changeset: " << StringUtils::formatLargeNumber(boundsCtr) << " / " <<
-          StringUtils::formatLargeNumber(numTiles) << ": " << changesetId << " over bounds: " <<
-          boundsStr << " from file: ..." << changesetFile.fileName().right(25) << "...");
-        changesetApplier.write(changesetFile);
-        LOG_STATUS(
-          "Changeset applied in: " <<
-          StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-        _subTaskTimer.restart();
 
         boundsCtr++;
       }

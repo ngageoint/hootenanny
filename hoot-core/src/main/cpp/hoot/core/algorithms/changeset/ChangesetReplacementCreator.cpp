@@ -1430,8 +1430,8 @@ void ChangesetReplacementCreator::_filterFeatures(
   const QString& debugFileName)
 {
   LOG_STATUS(
-    "Filtering " << map->size() << " features for: " << map->getName() <<
-    " based on input filter: " << featureFilter->toString() << "...");
+    "Filtering " << StringUtils::formatLargeNumber(map->size()) << " features for: " <<
+    map->getName() << " based on input filter: " << featureFilter->toString() << "...");
 
   // Negate the input filter, since we're removing everything but what passes the input filter.
   RemoveElementsVisitor elementPruner(true);
