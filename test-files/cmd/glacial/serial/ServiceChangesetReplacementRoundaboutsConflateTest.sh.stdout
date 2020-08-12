@@ -39,18 +39,18 @@ Writing the secondary dataset from: test-files/cmd/glacial/serial/ServiceChanges
 
 Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/sec-original.osm over: -89.625447,20.99394,-89.612892,21.002564, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ServiceChangesetReplacementRoundaboutsConflateTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
 
-21:46:26.912 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
-21:46:26.915 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
-21:46:26.917 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
-21:46:26.919 WARN   ...thms/FindNodesInWayFactory.cpp(  75) hoot::FindNodesInWayFactory: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+13:38:47.235 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+13:38:47.238 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+13:38:47.240 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+13:38:47.242 WARN   ...thms/FindNodesInWayFactory.cpp(  75) hoot::FindNodesInWayFactory: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ServiceChangesetReplacementRoundaboutsConflateTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=20.5214724, max_lat=21.1611171, min_lon=-90.0160752, max_lon=-89.60090099999999, num_changes=2632
+Changeset Details: min_lat=20.5214724, max_lat=21.1611171, min_lon=-90.0160752, max_lon=-89.60090099999999, num_changes=2603
 Node(s) Created: 441
-Node(s) Modified: 16
-Node(s) Deleted: 1683
+Node(s) Modified: 17
+Node(s) Deleted: 1653
 Way(s) Created: 103
 Way(s) Modified: 56
 Way(s) Deleted: 329

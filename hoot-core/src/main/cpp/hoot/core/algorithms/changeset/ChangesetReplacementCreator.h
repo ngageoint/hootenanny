@@ -196,7 +196,8 @@ private:
   QString _output;
 
   // the AOI over which the replacement is being performed
-  geos::geom::Envelope _replacementBounds;
+  //geos::geom::Envelope _replacementBounds;
+  QString _replacementBounds;
 
   // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
   // alpha shape of the sec data gets replaced.
@@ -322,8 +323,7 @@ private:
    * map, add that data in (not applicable in the cut only scenario).
    */
   OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
-                             const GeometryTypeCriterion::GeometryType& geometryType,
-                             const geos::geom::Envelope& replacementBounds);
+                             const GeometryTypeCriterion::GeometryType& geometryType);
 
   /*
    * Copies all ways that are tagged with MetadataTags::HootConnectedWayOutsideBounds() out of a map
@@ -367,7 +367,7 @@ private:
    * cropping than done during initial load and cookie cutting.
    */
   void _cropMapForChangesetDerivation(
-    OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,
+    OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
     const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName);
 
   /*

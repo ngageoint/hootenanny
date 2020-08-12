@@ -104,6 +104,11 @@ namespace hoot
 
 ChangesetReplacementCreator::ChangesetReplacementCreator(
   const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl) :
+_input1(""),
+_input2(""),
+_output(""),
+//_replacementBounds(geos::geom::Envelope()),
+_replacementBounds(""),
 _fullReplacement(false),
 _boundsInterpretation(BoundsInterpretation::Lenient),
 _geometryFiltersSpecified(false),
@@ -118,6 +123,9 @@ _currentChangeDerivationPassIsLinear(false)
   _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
 
   setGeometryFilters(QStringList());
+
+  _input1Map.reset();
+  _input2Map.reset();
 }
 
 void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterClassNames)
@@ -377,7 +385,8 @@ void ChangesetReplacementCreator::_printJobDescription() const
     str += "\nBeing replaced: ..." + _input1Map->getName().right(maxFilePrintLength);
     str += "\nReplacing with ..." + _input2Map->getName().right(maxFilePrintLength);
   }
-  str += "\nAt Bounds: ..." + GeometryUtils::envelopeToConfigString(_replacementBounds);
+  //str += "\nAt Bounds: ..." + GeometryUtils::envelopeToConfigString(_replacementBounds);
+  str += "\nAt Bounds: ..." + _replacementBounds;
   str += "\nOutput Changeset: ..." + _output.right(maxFilePrintLength);
   LOG_STATUS(str);
 
@@ -410,7 +419,12 @@ void ChangesetReplacementCreator::create(
   _input2 = input2;
   _input2Map.reset();
   _output = output;
-  _replacementBounds = bounds;
+  //_replacementBounds = bounds;
+  // TODO: It makes more sense to store the bounds and then just convert it to a string as needed.
+  // The default string stores six decimal places, which should be fine for a bounds. Strangely,
+  // when I store the bounds or try to increase the precision of the bounds string, I'm getting a
+  // lot of test output issues...needs to be looked into.
+  _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
 
   _create();
 }
@@ -424,7 +438,8 @@ void ChangesetReplacementCreator::create(
   _input2Map = input2;
   _input2 = "";
   _output = output;
-  _replacementBounds = bounds;
+  //_replacementBounds = bounds;
+  _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
 
   _create();
 }
@@ -645,7 +660,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // CUT
 
   // cut the secondary data out of the reference data
-  OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap, geometryType, _replacementBounds);
+  OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap, geometryType);
 
   // At one point it was necessary to re-number the relations in the sec map, as they could have ID
   // overlap with those in the cookie cut ref map at this point. It seemed that this was due to the
@@ -735,10 +750,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   // Crop the original ref and conflated maps appropriately for changeset derivation.
   _cropMapForChangesetDerivation(
-    refMap, _replacementBounds, _boundsOpts.changesetRefKeepEntireCrossingBounds,
+    refMap, _boundsOpts.changesetRefKeepEntireCrossingBounds,
     _boundsOpts.changesetRefKeepOnlyInsideBounds, "ref-cropped-for-changeset");
   _cropMapForChangesetDerivation(
-    conflatedMap, _replacementBounds, _boundsOpts.changesetSecKeepEntireCrossingBounds,
+    conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, "sec-cropped-for-changeset");
 
   if (_boundsInterpretation == BoundsInterpretation::Lenient &&
@@ -875,10 +890,10 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-  conf().set(
+/*  conf().set(
     ConfigOptions::getConvertBoundingBoxKey(),
-    GeometryUtils::envelopeToConfigString(_replacementBounds));
-  // TODO: set db crop on read option here?
+    GeometryUtils::envelopeToConfigString(_replacementBounds))*/;
+  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
 
   // For this being enabled to have any effect,
   // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
@@ -1112,7 +1127,7 @@ bool ChangesetReplacementCreator::_roadFilterExists() const
 
 bool ChangesetReplacementCreator::_isDbUrl(const QString& url) const
 {
-  return url.toLower().startsWith("osmapidb://") ||  url.toLower().startsWith("hootapidb://");
+  return url.toLower().startsWith("osmapidb://") || url.toLower().startsWith("hootapidb://");
 }
 
 QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
@@ -1244,7 +1259,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
 
   OsmMapPtr refMap;
   // existence of the file input takes precedence over the pre-loaded map
-  if (!_input1.isEmpty())
+  if (!_input1.trimmed().isEmpty())
   {
     // We want to alert the user to the fact their ref versions *could* be being populated
     // incorrectly to avoid difficulties during changeset application at the end. Its likely if they
@@ -1269,21 +1284,23 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
       // will fit easily into available memory.
       if (!_input1Map)
       {
+        // Clear out the bounding box param temporarily, so that we can read the full map here. Kind
+        // of kludgy, but there is no access to it from here via IoUtils::loadMap.
+        const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
         LOG_STATUS("Loading reference map from: " << _input1 << "...");
         _input1Map.reset(new OsmMap());
-        _input1Map->setName("ref");
         IoUtils::loadMap(_input1Map, _input1, true, Status::Unknown1);
 
-        conf().set(
-          ConfigOptions::getConvertBoundingBoxKey(),
-          GeometryUtils::envelopeToConfigString(_replacementBounds));
+        // Restore it back to original.
+        conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
       }
       LOG_STATUS("Copying reference map from: " << _input1Map->getName() << "...");
       refMap.reset(new OsmMap(_input1Map));
       IoUtils::cropToBounds(
-        refMap, _replacementBounds, _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
+        refMap, GeometryUtils::envelopeFromConfigString(_replacementBounds),
+        _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
     }
 
     // We only care about the zero version warning for the ref data, so restore default setting
@@ -1297,7 +1314,8 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
     LOG_STATUS("Copying reference map from: " << _input1Map->getName() << "...");
     refMap.reset(new OsmMap(_input1Map));
     IoUtils::cropToBounds(
-      refMap, _replacementBounds, _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);;
+      refMap, GeometryUtils::envelopeFromConfigString(_replacementBounds),
+      _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
   }
   else
   {
@@ -1327,7 +1345,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
   // TODO: consolidate this and _loadRefMap into a single _loadInput method
 
   OsmMapPtr secMap;
-  if (!_input2.isEmpty())
+  if (!_input2.trimmed().isEmpty())
   {
     if (_isDbUrl(_input2) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
     {
@@ -1340,27 +1358,27 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
     {
       if (!_input2Map)
       {
+        const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
         LOG_STATUS("Loading secondary map from: " << _input2 << "...");
         _input2Map.reset(new OsmMap());
-        _input2Map->setName("sec");
         IoUtils::loadMap(_input2Map, _input2, false, Status::Unknown2);
 
-        conf().set(
-          ConfigOptions::getConvertBoundingBoxKey(),
-          GeometryUtils::envelopeToConfigString(_replacementBounds));
+        conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
       }
       LOG_STATUS("Copying secondary map from: " << _input2Map->getName() << "...");
       secMap.reset(new OsmMap(_input2Map));
-      IoUtils::cropToBounds(secMap, _replacementBounds, false);
+      IoUtils::cropToBounds(
+        secMap, GeometryUtils::envelopeFromConfigString(_replacementBounds), false);
     }
   }
   else if (_input2Map)
   {
     LOG_STATUS("Copying secondary map from: " << _input2Map->getName() << "...");
     secMap.reset(new OsmMap(_input2Map));
-    IoUtils::cropToBounds(secMap, _replacementBounds, false);
+    IoUtils::cropToBounds(
+      secMap, GeometryUtils::envelopeFromConfigString(_replacementBounds), false);
   }
   else
   {
@@ -1421,8 +1439,7 @@ void ChangesetReplacementCreator::_filterFeatures(
 }
 
 OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
-  OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType,
-  const geos::geom::Envelope& replacementBounds)
+  OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType)
 {
   // This logic has become extremely complicated over time to handle all the different cut
   // and replace use cases. There may be way to simplify some of this logic related to
@@ -1520,7 +1537,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
           doughMap->getName() << "...");
         OsmMapPtr cookieCutMap(new OsmMap(doughMap));
         cookieCutMap->setName("cookie-cut");
-        MapCropper cropper(replacementBounds);
+        MapCropper cropper(GeometryUtils::envelopeFromConfigString(_replacementBounds));
         cropper.setRemoveSuperflousFeatures(false);
         cropper.setKeepEntireFeaturesCrossingBounds(false);
         cropper.setKeepOnlyFeaturesInsideBounds(false);
@@ -1676,7 +1693,6 @@ QMap<ElementId, long> ChangesetReplacementCreator::_getIdToVersionMappings(
   LOG_INFO("Mapping element IDs to element versions for: " << map->getName() << "...");
 
   ElementIdToVersionMapper idToVersionMapper;
-  //LOG_STATUS("\t" << idToVersionMapper.getInitStatusMessage());
   idToVersionMapper.apply(map);
   MemoryUsageChecker::getInstance().check();
   LOG_DEBUG(idToVersionMapper.getCompletedStatusMessage());
@@ -1694,7 +1710,6 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
   // Add the changeset deletion exclusion tag to all connected ways previously tagged upon load.
 
   SetTagValueVisitor addTagVis(MetadataTags::HootChangeExcludeDelete(), "yes");
-  //LOG_STATUS("\t" << addTagVis.getInitStatusMessage());
   ChainCriterion addTagCrit(
     std::shared_ptr<WayCriterion>(new WayCriterion()),
     std::shared_ptr<TagKeyCriterion>(
@@ -1712,7 +1727,6 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
         new TagKeyCriterion(MetadataTags::HootChangeExcludeDelete()))));
   RecursiveSetTagValueOp childDeletionExcludeTagOp(
     MetadataTags::HootChangeExcludeDelete(), "yes", childAddTagCrit);
-  //LOG_STATUS("\t" << childDeletionExcludeTagOp.getInitStatusMessage());
   childDeletionExcludeTagOp.apply(map);
   LOG_DEBUG(childDeletionExcludeTagOp.getCompletedStatusMessage());
 
@@ -1877,7 +1891,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
 }
 
 void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
-  OsmMapPtr& map, const geos::geom::Envelope& bounds, const bool keepEntireFeaturesCrossingBounds,
+  OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
   const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName)
 {
   if (map->size() == 0)
@@ -1889,13 +1903,14 @@ void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
   LOG_INFO("Cropping map: " << map->getName() << " for changeset derivation...");
   LOG_VART(MapProjector::toWkt(map->getProjection()));
 
-  MapCropper cropper(bounds);
+  MapCropper cropper(GeometryUtils::envelopeFromConfigString(_replacementBounds));
   cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);
   cropper.setKeepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds);
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
   cropper.setRemoveMissingElements(false);
   // TODO: should removing superfluous features be suppressed here?
+  //cropper.setRemoveSuperflousFeatures(false);
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
 
@@ -1943,14 +1958,13 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
     "Marking reference features in: " << map->getName() << " for exclusion from deletion...");
 
   std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(_boundsOpts.inBoundsStrict));
-  boundsCrit->setBounds(_replacementBounds);
+  boundsCrit->setBounds(GeometryUtils::envelopeFromConfigString(_replacementBounds));
   boundsCrit->setOsmMap(map.get());
   std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
   std::shared_ptr<ChainCriterion> elementCrit(
     new ChainCriterion(std::shared_ptr<WayCriterion>(new WayCriterion()), notInBoundsCrit));
 
   RecursiveSetTagValueOp tagSetter(MetadataTags::HootChangeExcludeDelete(), "yes", elementCrit);
-  //LOG_STATUS("\t" << tagSetter.getInitStatusMessage());
   tagSetter.apply(map);
   LOG_DEBUG(tagSetter.getCompletedStatusMessage());
 
@@ -2008,20 +2022,17 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
   // Due to mixed geometry type relations explained in _getDefaultGeometryFilters, we may have
   // introduced some duplicate relation members by this point.
   RemoveDuplicateRelationMembersVisitor dupeMembersRemover;
-  //LOG_STATUS("\t" << dupeMembersRemover.getInitStatusMessage());
   map->visitRw(dupeMembersRemover);
   LOG_DEBUG(dupeMembersRemover.getCompletedStatusMessage());
 
   // get rid of straggling nodes
   SuperfluousNodeRemover orphanedNodeRemover;
-  //LOG_STATUS("\t" << orphanedNodeRemover.getInitStatusMessage());
   orphanedNodeRemover.apply(map);
   LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
 
   // This will remove any relations that were already empty or became empty after we removed
   // duplicated members.
   RemoveEmptyRelationsOp emptyRelationRemover;
-  //LOG_STATUS("\t" << emptyRelationRemover.getInitStatusMessage());
   emptyRelationRemover.apply(map);
   LOG_DEBUG(emptyRelationRemover.getCompletedStatusMessage());
 
