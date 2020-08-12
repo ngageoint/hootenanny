@@ -88,6 +88,8 @@ class WaitOverpassUpdate extends GrailCommand {
             String query = "[out:csv(::changeset)][bbox:{{bbox}}];"
                     + "("
                     + "node(newer:\"" + time + "\");"
+                    + "way(newer:\"" + time + "\");"
+                    + "rel(newer:\"" + time + "\");"
                     + ");"
                     + "out meta;";
 
@@ -106,6 +108,7 @@ class WaitOverpassUpdate extends GrailCommand {
                     while ((line = br.readLine()) != null) {
                         if (line.contains(lastId)) {
                             foundChangesetId = true;
+                            break;
                         }
                     }
                     br.close();
