@@ -353,9 +353,9 @@ public class GrailResource {
             InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
             workflow.add(cleanFolders);
 
-            // Wait to detect osm 'Last changeset pushed ID'
+            // Wait to detect overpass 'Last changeset pushed ID'
             GrailParams waitParams = new GrailParams(reqParams);
-            workflow.add(grailCommandFactory.build(jobId, waitParams, "info", WaitOsmUpdate.class, this.getClass()));
+            workflow.add(grailCommandFactory.build(jobId, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();

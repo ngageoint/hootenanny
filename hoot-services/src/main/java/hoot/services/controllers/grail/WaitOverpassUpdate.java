@@ -44,21 +44,20 @@ import hoot.services.command.CommandResult;
 import hoot.services.utils.DbUtils;
 
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
-import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
 
 /**
- * Used for pushing OSM data to the database
+ * Used for pushing overpass data to the database
  */
-class WaitOsmUpdate extends GrailCommand {
-    private static final Logger logger = LoggerFactory.getLogger(WaitOsmUpdate.class);
+class WaitOverpassUpdate extends GrailCommand {
+    private static final Logger logger = LoggerFactory.getLogger(WaitOverpassUpdate.class);
     private String jobId;
     private final Class<?> caller;
     private final int timeoutTime = 300000;
     private final int sleepTime = 30000;
 
-    WaitOsmUpdate(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
+    WaitOverpassUpdate(String jobId, GrailParams params, String debugLevel, Class<?> caller) {
         super(jobId, params);
         logger.info("Params: " + params);
 
@@ -70,9 +69,9 @@ class WaitOsmUpdate extends GrailCommand {
     public CommandResult execute() {
         CommandResult commandResultStart = new CommandResult();
         commandResultStart.setStart(LocalDateTime.now());
-        commandResultStart.setCommand("OSM sync wait");
+        commandResultStart.setCommand("Overpass sync wait");
         commandResultStart.setJobId(jobId);
-        commandResultStart.setStdout("Starting wait on osm sync...\n");
+        commandResultStart.setStdout("Starting wait on overpass sync...\n");
         commandResultStart.setStderr("");
         commandResultStart.setPercentProgress(0);
         commandResultStart.setCaller(caller.getName());
@@ -125,12 +124,12 @@ class WaitOsmUpdate extends GrailCommand {
                     }
                 }
             } catch (InterruptedException exc) {
-                String msg = "Waiting for OSM update failed due to interrupted exception. [" + url + "]" + exc.getMessage();
+                String msg = "Waiting for overpass update failed due to interrupted exception. [" + url + "]" + exc.getMessage();
                 throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
 
             }
             catch (Exception exc) {
-                String msg = "Waiting for OSM update failed. [" + url + "]" + exc.getMessage();
+                String msg = "Waiting for overpass update failed. [" + url + "]" + exc.getMessage();
                 throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
             }
 
@@ -139,9 +138,9 @@ class WaitOsmUpdate extends GrailCommand {
 
         CommandResult commandResultFinish = new CommandResult();
         commandResultFinish.setStart(LocalDateTime.now());
-        commandResultFinish.setCommand("OSM sync wait complete");
+        commandResultFinish.setCommand("Overpass sync wait complete");
         commandResultFinish.setJobId(jobId);
-        commandResultFinish.setStdout("Finished wait on osm sync...\n");
+        commandResultFinish.setStdout("Finished wait on overpass sync...\n");
         commandResultFinish.setStderr("");
         commandResultFinish.setPercentProgress(0);
         commandResultFinish.setCaller(caller.getName());
