@@ -352,6 +352,10 @@ public class GrailResource {
             deleteFiles.add(workDir);
             InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
             workflow.add(cleanFolders);
+
+            // Wait to detect overpass 'Last changeset pushed ID'
+            GrailParams waitParams = new GrailParams(reqParams);
+            workflow.add(grailCommandFactory.build(jobId, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();

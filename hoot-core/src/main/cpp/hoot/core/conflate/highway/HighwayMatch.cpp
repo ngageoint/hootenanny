@@ -67,7 +67,9 @@ HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
   _classifier(classifier),
   _eid1(eid1),
   _eid2(eid2),
-  _sublineMatcher(sublineMatcher)
+  _sublineMatcher(sublineMatcher),
+  _minSplitSize(0.0),
+  _score(0.0)
 {
   assert(_eid1 != _eid2);
 
