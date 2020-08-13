@@ -133,6 +133,10 @@ enc311 = {
       }
     } // End in attrs loop
 
+    // Chop depths to two decimal places
+    // NOTE: It starts as a string and ends up as a string
+    if (attrs.VALSOU) attrs.VALSOU = '' + Number(attrs.VALSOU).toFixed(2);
+
   }, // End of applyToOsmPreProcessing
 
 
