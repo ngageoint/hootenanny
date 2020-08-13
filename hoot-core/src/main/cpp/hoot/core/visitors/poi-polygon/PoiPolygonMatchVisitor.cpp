@@ -259,7 +259,7 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
     _getMap()->visitRelationsRo(v);
     v.finalizeIndex();
 
-    LOG_STATUS(
+    LOG_INFO(
       "POI/Polygon feature index created with " << StringUtils::formatLargeNumber(v.getSize()) <<
       " elements.");
   }

@@ -67,7 +67,7 @@ static const bool PRELOAD_MAPS_BEFORE_CHANGESET_DERIVATION = false;
 // MAX_NODE_DENSITY_NODES_PER_CELL - allows for attempting to cap the max number of node density
 //                                   nodes per grid cell
 // TASK_GRID_INPUT_FILE - overrides node density calc with a custom bounds file
-// REVERSE_TASK_GRID - swap the ordering the cells for testing adjacency replacement issues
+// REVERSE_TASK_GRID - swap the ordering the cells for testing adjacency replacement ordering issues
 
 ///////////////////////////////////////////////////////
 
@@ -140,11 +140,6 @@ public:
   _averageChangesetDeriveTime(0.0)
   {
     setResetType(ResetAll);
-
-    _dataToReplaceFullMap.reset(new OsmMap());
-    _dataToReplaceFullMap->setName("DataToReplace");
-    _replacementDataFullMap.reset(new OsmMap());
-    _replacementDataFullMap->setName("ReplacementData");
   }
 
   void runGridCellTest()
@@ -201,7 +196,7 @@ public:
           throw e;
         }
       }
-      _getUpdatedData();
+      _getUpdatedData(ROOT_DIR + "/final-replaced-data.osm");
 
       if (!exceptionOccurred)
       {
@@ -244,7 +239,8 @@ private:
   {
     conf().set(ConfigOptions::getOsmapidbBulkInserterReserveRecordIdsBeforeWritingDataKey(), true);
     conf().set(ConfigOptions::getApidbBulkInserterValidateDataKey(), true);
-    conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), false);
+    conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
+    conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
     conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
     conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
     conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
@@ -261,6 +257,7 @@ private:
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), ROOT_DIR + "/debug.osm");
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementCacheInputFileMapsKey(), true);
+    conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
   }
 
   void _cropInputs()
@@ -356,17 +353,21 @@ private:
   void _cacheFullMaps()
   {
     // turn off cropping on read
-    //conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
     LOG_STATUS(
       "Caching the full data to be replaced out of the db for changeset calculation from: " <<
       DATA_TO_REPLACE_URL << "...");
+    _dataToReplaceFullMap.reset(new OsmMap());
+    _dataToReplaceFullMap->setName("DataToReplace");
     OsmMapReaderFactory::read(_dataToReplaceFullMap, DATA_TO_REPLACE_URL, true, Status::Unknown1);
     LOG_STATUS(
       StringUtils::formatLargeNumber(_dataToReplaceFullMap->size()) << " elements loaded in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
 
+    _replacementDataFullMap.reset(new OsmMap());
+    _replacementDataFullMap->setName("ReplacementData");
     if (WRITE_REPLACEMENT_DATA_TO_DB)
     {
       LOG_STATUS(
@@ -524,10 +525,10 @@ private:
     // recommended C&R production config
     _changesetCreator.setFullReplacement(true);
     _changesetCreator.setBoundsInterpretation(
-      ChangesetReplacementCreator::BoundsInterpretation::Lenient);
+      ChangesetReplacementCreator::BoundsInterpretation::Lenient/*Hybrid*/);
     _changesetCreator.setWaySnappingEnabled(true);
-    _changesetCreator.setConflationEnabled(false);
-    _changesetCreator.setCleaningEnabled(false);
+    _changesetCreator.setConflationEnabled(/*false*/true);
+    _changesetCreator.setCleaningEnabled(/*false*/true);
     _changesetCreator.setTagOobConnectedWays(true);
 
     // for each task grid cell
@@ -632,24 +633,29 @@ private:
       "Changeset applied in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
+
+    // VERY SLOW
+    if (ConfigOptions().getDebugMapsWrite() && changesetNum < taskGridSize)
+    {
+      _getUpdatedData(ROOT_DIR + "/" + QString::number(taskGridCellId) + "-replaced-data.osm");
+    }
   }
 
-  void _getUpdatedData()
+  void _getUpdatedData(const QString& outputFile)
   {
-    const QString replaceDataFile = ROOT_DIR + "/replaced-data.osm";
     LOG_STATUS(
       "Reading the modified data out of: " << DATA_TO_REPLACE_URL << " to: ..." <<
-      replaceDataFile.right(25) << "...");
+      outputFile.right(25) << "...");
 
     // clear this out so we get all the data back
     conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
     // change these, so we can open the files in josm; TODO: this isn't helping
-    conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
-    conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
+    //conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
+    //conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
 
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, DATA_TO_REPLACE_URL, true, Status::Unknown1);
-    OsmMapWriterFactory::write(map, ROOT_DIR + "/replaced-data.osm");
+    OsmMapWriterFactory::write(map, outputFile);
     LOG_STATUS(
       "Modified data read in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
@@ -657,6 +663,8 @@ private:
     LOG_STATUS(
       "Modified data original size: " << StringUtils::formatLargeNumber(_originalDataSize));
     LOG_STATUS("Modified data current size: " << StringUtils::formatLargeNumber(map->size()));
+
+    //conf().set(ConfigOptions::getConvertBoundingBoxKey(), TASK_GRID_BOUNDS);
   }
 
   void _cleanup()

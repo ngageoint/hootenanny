@@ -898,9 +898,6 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-/*  conf().set(
-    ConfigOptions::getConvertBoundingBoxKey(),
-    GeometryUtils::envelopeToConfigString(_replacementBounds))*/;
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
 
   // For this being enabled to have any effect,
@@ -935,8 +932,9 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   // _markElementsWithMissingChildren is called for more info on why this tag is added.
   if (ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren())
   {
-    QStringList metadataAllowTagKeys(MetadataTags::HootMissingChild());
-    conf().set(ConfigOptions::getChangesetMetadataAllowedTagKeysKey(), metadataAllowTagKeys);
+    conf().set(
+      ConfigOptions::getChangesetMetadataAllowedTagKeysKey(),
+      QStringList(MetadataTags::HootMissingChild()));
   }
 
   // Came across a very odd bug in #4101, where if RemoveInvalidMultilineStringMembersVisitor ran
@@ -1299,6 +1297,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
 
         LOG_STATUS("Loading reference map from: " << _input1 << "...");
         _input1Map.reset(new OsmMap());
+        _input1Map->setName("ref");
         IoUtils::loadMap(_input1Map, _input1, true, Status::Unknown1);
 
         // Restore it back to original.
@@ -1336,7 +1335,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
   refMap->setName("ref");
 
   LOG_VART(MapProjector::toWkt(refMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
+  OsmMapWriterFactory::writeDebugMap(refMap, _changesetId + "-ref-after-cropped-load");
 
   return refMap;
 }
@@ -1375,6 +1374,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
 
         LOG_STATUS("Loading secondary map from: " << _input2 << "...");
         _input2Map.reset(new OsmMap());
+        _input2Map->setName("sec");
         IoUtils::loadMap(_input2Map, _input2, false, Status::Unknown2);
 
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
@@ -1724,7 +1724,7 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
     "Setting connected way features outside of bounds to be excluded from deletion for: " <<
     map->getName() << "...");
 
-  // Add the changeset deletion exclusion tag to all connected ways previously tagged upon load.
+  // Add the changeset deletion exclusion tag to all connected ways previously tagged during load.
 
   SetTagValueVisitor addTagVis(MetadataTags::HootChangeExcludeDelete(), "yes");
   ChainCriterion addTagCrit(
@@ -1749,7 +1749,7 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
 
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging");
+    map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-1");
 }
 
 void ChangesetReplacementCreator::_combineMaps(
@@ -1780,9 +1780,6 @@ void ChangesetReplacementCreator::_combineMaps(
 void ChangesetReplacementCreator::_conflate(OsmMapPtr& map)
 {
   map->setName("conflated");
-  LOG_STATUS(
-    "Conflating the cookie cut reference map with the secondary map into " << map->getName() <<
-    "...");
 
   conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), true);
   if (_boundsInterpretation != BoundsInterpretation::Lenient)
@@ -1803,11 +1800,16 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map)
     SuperfluousConflateOpRemover::removeSuperfluousOps();
   }
 
+  LOG_STATUS("Applying pre-conflate operations...");
   NamedOp preOps(ConfigOptions().getConflatePreOps());
   preOps.apply(map);
 
+  LOG_STATUS(
+    "Conflating the cookie cut reference map with the secondary map into " << map->getName() <<
+    "...");
   UnifyingConflator().apply(map);
 
+  LOG_STATUS("Applying post-conflate operations...");
   NamedOp postOps(ConfigOptions().getConflatePostOps());
   postOps.apply(map);
 
@@ -1819,7 +1821,7 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map)
 
 void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
 {
-  LOG_STATUS("Removing reviews added during conflation from " << map->getName() << "...");
+  LOG_INFO("Removing reviews added during conflation from " << map->getName() << "...");
 
   RemoveElementsVisitor removeVis;
   removeVis.addCriterion(ElementCriterionPtr(new RelationCriterion("review")));
@@ -1974,8 +1976,11 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
     return;
   }
 
-  LOG_STATUS(
+  LOG_INFO(
     "Marking reference features in: " << map->getName() << " for exclusion from deletion...");
+
+  // Exclude ways and all their children from deletion that are not entirely within the replacement
+  // bounds (?).
 
   std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(_boundsOpts.inBoundsStrict));
   boundsCrit->setBounds(GeometryUtils::envelopeFromConfigString(_replacementBounds));
@@ -1991,7 +1996,7 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-after-delete-exclude-tags");
+    map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-2");
 }
 
 void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)

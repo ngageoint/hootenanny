@@ -450,7 +450,7 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
     searchRadiusStr =
       "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
   }
-  LOG_STATUS("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
+  LOG_INFO("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
 
@@ -459,7 +459,7 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
   map->visitRelationsRo(v);
   const int matchesSizeAfter = matches.size();
 
-  LOG_STATUS(
+  LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
     " building match candidates and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<

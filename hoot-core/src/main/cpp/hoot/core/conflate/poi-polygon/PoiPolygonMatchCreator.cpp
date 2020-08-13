@@ -101,7 +101,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
       searchRadiusStr += QString::number(additionalDistance / 1000.0, 'g', 3) + " kilometers";
     }
   }
-  LOG_STATUS("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
+  LOG_INFO("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
 
@@ -118,7 +118,7 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   map->visitNodesRo(matchVis);
   const int matchesSizeAfter = matches.size();
 
-  LOG_STATUS(
+  LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(matchVis.getNumMatchCandidatesFound()) <<
     " POI to Polygon match candidate features and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) << " total matches in: " <<
