@@ -72,6 +72,30 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["linestring"],
+        "isA": "natural",
+        "name": "natural=ridge",
+        "similarTo": [
+            { "name": "natural=cliff", "weight": 0.6 }
+         ],
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["linestring"],
+        "isA": "natural",
+        "name": "natural=arete",
+        "similarTo": [
+            { "name": "natural=ridge", "weight": 0.7 }
+         ],
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["node","linestring"],
+        "isA": "natural",
+        "name": "natural=valley",
+        "objectType": "tag"
+    },
+    {
         "geometries": ["node", "area"],
         "isA": "natural",
         "name": "natural=glacier",

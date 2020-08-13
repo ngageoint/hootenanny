@@ -2843,6 +2843,7 @@ enc311.rules = {
   // These are only used for EXPORT and get added to the standard one2one rules
   one2oneOut : [
     ['encLayerName','ADMARE','boundary','administrative'], // ADMARE Administration area (Named)
+    ['encLayerName','ADMARE','place','archipelago'], // ADMARE Administration area (Named)
     ['encLayerName','AIRARE','aeroway','aerodrome'], // AIRARE Airport / airfield
     ['encLayerName','BRIDGE','bridge','yes'], // BRIDGE Bridge
     ['encLayerName','BRIDGE','man_made','bridge'], // BRIDGE Bridge - From some OSM data
@@ -2884,6 +2885,7 @@ enc311.rules = {
     ['encLayerName','RAILWY','railway','tram'], // RAILWY Railway
     ['encLayerName','RAPIDS','waterway','rapids'], // RAPIDS Rapids
     ['encLayerName','RIVERS','waterway','river'], // RIVERS River
+    // ['encLayerName','RIVERS','waterway','stream'], // RIVERS River
     ['encLayerName','ROADWY','highway','road'], // ROADWY Road
     // ['encLayerName','RUNWAY','aeroway','runway'], // RUNWAY Runway
     ['encLayerName','SPRING','natural','spring'], // SPRING Spring
@@ -2895,6 +2897,7 @@ enc311.rules = {
     // CATBUA - Category of built-up area
     ['CATBUA','1','landuse','industrial'], // urban area
     ['CATBUA','1','landuse','residential'], // urban area
+    ['CATBUA','1','landuse','commercial'], // urban area
     ['CATBUA','1','landuse','retail'], // urban area
 
     // CATFNC - Category of fence/wall
@@ -2921,6 +2924,7 @@ enc311.rules = {
     ['CATLMK','19','generator:source',':wind_turbine:'], // windmotor
 
     // CATLND - Category of land region
+    ['CATLND','3','wetland','bog'], // moor/bog
     ['CATLND','9','landuse','allotments'], // agricultural land
     ['CATLND','9','landuse','meadow'], // agricultural land
     ['CATLND','9','landuse','orchard'], // agricultural land
@@ -2952,6 +2956,7 @@ enc311.rules = {
     ['CATROD','6','highway','service'], // minor street
     ['CATROD','6','highway','tertiary'], // minor street
     ['CATROD','6','highway','unclassified'], // minor street
+    ['CATROD','6','highway','living_street'], // minor street
     // ['CATROD','7','highway','crossing'], // crossing
 
     // CATSEA - Category of sea area
@@ -2963,7 +2968,6 @@ enc311.rules = {
     ['CATVEG','6','toponym','forest'], // wood in general (inc mixed wood)
 
     ['FUNCTN','5','amenity','hospital'], // hospital
-    ['FUNCTN','5','building','hospital'], // hospital
     ['FUNCTN','18','building','government'], // Administrative
     ['FUNCTN','18','building','public'], // Administrative
     ['FUNCTN','19','amenity','school'], // educational facility
