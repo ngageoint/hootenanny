@@ -107,8 +107,8 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
   const long map2WaysBefore = map2->getWayCount();
   const long map2RelationsBefore = map2->getRelationCount();
 
-  // calculate our unique hashes per element for each map and get a list of duplicate pairs within
-  // each map
+  // Calculate our unique hashes per element for each map and get a list of duplicate pairs within
+  // each map.
 
   QMap<QString, ElementId> map1Hashes;
   QSet<std::pair<ElementId, ElementId>> duplicates1;
@@ -138,9 +138,9 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
       duplicates2, map1, map2, elementsToRemove, elementIdsToRemoveFromMap);
   }
 
-  // now, calculate the duplicates when comparing the map's between each other; we'll arbitrarily
-  // remove features from the second map except where _favorMoreConnectedWays has influence if it
-  // has been enabled
+  // Now, calculate the duplicates when comparing the maps between each other. We'll arbitrarily
+  // remove features from the second map except where _favorMoreConnectedWays has influence, if it
+  // has been enabled.
   _dupeHashesToElementIdsCheckMap(
     map1HashesSet.intersect(map2HashesSet), map1, map2, map1Hashes, map2Hashes, elementsToRemove,
     elementIdsToRemoveFromMap);
@@ -209,6 +209,7 @@ void ElementDeduplicator::_calcElementHashes(
   hashVis.setOsmMap(map.get());
   map->visitRw(hashVis);
   hashes = hashVis.getHashes();
+  LOG_VARD(hashes.size());
   duplicates = hashVis.getDuplicates();
   LOG_VARD(duplicates.size());
 }

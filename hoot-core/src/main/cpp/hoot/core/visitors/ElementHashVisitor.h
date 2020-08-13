@@ -88,7 +88,8 @@ private:
 
   // determines if element circular error will be used in computation of the hash
   bool _includeCe;
-  // allows for ignoring info tag keys on a case by case basis
+  // an optional list of metadata tag keys to factor into the comparison; by default no metadata
+  // keys are examined during comparison
   QStringList _nonMetadataIgnoreKeys;
   // determines whether hashes are written to an element's tags
   bool _writeHashes;

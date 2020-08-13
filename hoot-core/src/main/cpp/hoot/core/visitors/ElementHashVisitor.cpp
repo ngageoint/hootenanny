@@ -65,17 +65,20 @@ void ElementHashVisitor::visit(const ElementPtr& e)
 
     if (_writeHashes)
     {
+      LOG_TRACE("Writing hash: " << hash << " to " << e->getElementId() << "...");
       e->getTags()[MetadataTags::HootHash()] = hash;
     }
     if (_collectHashes)
     {
       if (_hashesToElementIds.contains(hash))
       {
+        LOG_TRACE("Marking duplicate hash: " << hash << " for " << e->getElementId() << "...");
         _duplicates.insert(
           std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
       }
       else
       {
+        LOG_TRACE("Collecting hash: " << hash << " for " << e->getElementId() << "...");
         _hashesToElementIds[hash] = e->getElementId();
       }
     }

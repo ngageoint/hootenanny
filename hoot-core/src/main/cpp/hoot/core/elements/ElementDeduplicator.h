@@ -66,10 +66,10 @@ public:
 
   /**
    * Removes intra-map and inter-map duplicate elements from two maps. Ignores element ID, version,
-   * changeset, and metadata tags. The first map's elementsare kept when inter-map duplicate
+   * changeset, and metadata tags. The first map's elements are kept when inter-map duplicate
    * elements are found.
    *
-   * @param map the first map to de-duplicate
+   * @param map1 the first map to de-duplicate
    * @param map2 the second map to de-duplicate
    */
   void dedupe(OsmMapPtr map1, OsmMapPtr map2);

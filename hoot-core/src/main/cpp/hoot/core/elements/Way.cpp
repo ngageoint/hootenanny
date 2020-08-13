@@ -394,6 +394,7 @@ void Way::replaceNode(long oldId, long newId)
     _makeWritable();
 
     vector<long>& newIds = _wayData->getNodeIds();
+    LOG_TRACE("Replacement IDs: " << newIds);
     for (size_t i = 0; i < newIds.size(); i++)
     {
       if (newIds[i] == oldId)

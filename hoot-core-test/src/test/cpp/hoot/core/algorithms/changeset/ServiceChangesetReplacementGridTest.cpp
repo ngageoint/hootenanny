@@ -124,7 +124,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
   // ENABLE TEST FOR DEBUGGING ONLY
-  CPPUNIT_TEST(runGridCellTest);
+  //CPPUNIT_TEST(runGridCellTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -527,8 +527,8 @@ private:
     _changesetCreator.setBoundsInterpretation(
       ChangesetReplacementCreator::BoundsInterpretation::Lenient/*Hybrid*/);
     _changesetCreator.setWaySnappingEnabled(true);
-    _changesetCreator.setConflationEnabled(/*false*/true);
-    _changesetCreator.setCleaningEnabled(/*false*/true);
+    _changesetCreator.setConflationEnabled(false/*true*/);
+    _changesetCreator.setCleaningEnabled(false/*true*/);
     _changesetCreator.setTagOobConnectedWays(true);
 
     // for each task grid cell
