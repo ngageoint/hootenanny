@@ -147,7 +147,9 @@ class PullOverpassCommand implements InternalCommand {
         }
 
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
-        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+        if (bbox != null) {
+            overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+        }
 
         if (outputFormat.equals("xml") && overpassQuery.contains("out:json")) {
             overpassQuery = overpassQuery.replace("out:json", "out:xml"); // Need this because the rails pull data is also xml
