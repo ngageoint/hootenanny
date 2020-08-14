@@ -40,6 +40,7 @@ import javax.ws.rs.core.Response;
 import hoot.services.command.CommandResult;
 import hoot.services.utils.DbUtils;
 
+import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PATH;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
 import static hoot.services.HootProperties.replaceSensitiveData;
 
@@ -100,7 +101,13 @@ class WaitOverpassUpdate extends GrailCommand {
                 InputStream responseStream;
                 while (TIMEOUT_TIME > timeSpent) {
                     url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(PRIVATE_OVERPASS_URL), this.params.getBounds(), "csv", query);
-                    responseStream = PullApiCommand.getHttpResponseWithSSL(url);
+
+                    // if cert path and phrase are specified then we assume to use them for the request
+                    if (!replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH).equals(PRIVATE_OVERPASS_CERT_PATH)) {
+                        responseStream = PullApiCommand.getHttpResponseWithSSL(url);
+                    } else {
+                        responseStream = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
+                    }
 
                     br = new BufferedReader(new InputStreamReader(responseStream));
                     String line;
@@ -126,7 +133,7 @@ class WaitOverpassUpdate extends GrailCommand {
 
             }
             catch (Exception exc) {
-                String msg = "Waiting for overpass update failed. [" + url + "]" + exc.getMessage();
+                String msg = "Failure to pull data from overpass during WaitOverpassUpdate. [" + url + "]" + exc.getMessage();
                 throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
             }
 
