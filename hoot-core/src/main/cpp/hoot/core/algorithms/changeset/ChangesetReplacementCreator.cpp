@@ -50,11 +50,13 @@
 #include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
 #include <hoot/core/criterion/RoundaboutCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
 #include <hoot/core/elements/ElementDeduplicator.h>
+#include <hoot/core/elements/ElementIdSynchronizer.h>
 #include <hoot/core/elements/MapUtils.h>
 
 #include <hoot/core/index/OsmMapIndex.h>
@@ -551,15 +553,20 @@ void ChangesetReplacementCreator::_create()
 
   // If we have the maps for only one geometry type, then there isn't a possibility of duplication
   // created by the replacement operation.
-  if (ConfigOptions().getChangesetReplacementDeduplicateCalculatedMaps() && refMaps.size() > 1)
+  // TODO: get rid of this dedupe option
+  if (ConfigOptions().getChangesetReplacementDeduplicateCalculatedMaps() /*&& refMaps.size() > 1*/)
   {
     // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
     // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
     // de-duping. Mostly worried that not doing so could break the overlapping only replacement
     // (non-full) scenario...we'll see...
     //_dedupeMaps(refMaps);
+    //_intraDedupeMap(refMaps);
     _dedupeMaps(conflatedMaps);
   }
+
+  // Synchronize IDs between the two maps in order to cut down on unnecessary changeset statements.
+  _synchronizeIds(refMaps, conflatedMaps);
 
   // CHANGESET GENERATION
 
@@ -650,7 +657,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
-  // changeset with delete statements if the option to allow deleting reference features is enabled.
+  // changeset with only delete statements if the option to allow deleting reference features is
+  // enabled.
   const int secMapSize = secMap->size();
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
@@ -672,7 +680,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // for relations here, which has since been removed from the codebase.
 
   // Combine the cookie cut ref map back with the secondary map, so we can conflate the two
-  // together.
+  // together if needed.
   _combineMaps(cookieCutRefMap, secMap, false, _changesetId + "-combined-before-conflation");
   secMap.reset();
 
@@ -1768,7 +1776,6 @@ void ChangesetReplacementCreator::_combineMaps(
   }
 
   LOG_INFO("Combining maps: " << map1->getName() << " and " << map2->getName() << "...");
-
   map1->append(map2, throwOutDupes);
   LOG_VART(MapProjector::toWkt(map1->getProjection()));
   LOG_DEBUG("Combined map size: " << map1->size());
@@ -1999,16 +2006,36 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
     map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-2");
 }
 
+void ChangesetReplacementCreator::_intraDedupeMap(const QList<OsmMapPtr>& maps)
+{
+  ElementDeduplicator deduper;
+  deduper.setDedupeIntraMap(true);
+  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
+  deduper.setNodeCriterion(pointCrit);
+  deduper.setFavorMoreConnectedWays(true);
+
+  for (int i = 0; i < maps.size(); i++)
+  {
+    OsmMapPtr map = maps.at(i);
+    pointCrit->setOsmMap(map.get());
+    OsmMapWriterFactory::writeDebugMap(
+      map, _changesetId + "-" + map->getName() + "-before-deduping");
+    deduper.dedupe(map);
+    OsmMapWriterFactory::writeDebugMap(
+      map, _changesetId + "-" + map->getName() + "-after-deduping");
+  }
+}
+
 void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
 {
   ElementDeduplicator deduper;
-  // intra-map de-duping breaks the roundabouts test when ref maps are de-duped
+  // Intra-map de-duping breaks the roundabouts test when ref maps are de-duped.
   deduper.setDedupeIntraMap(true);
   // When nodes are removed (cleaned/conflated only), out of spec, single point, and riverbank tests
   // fail, so being a little more strict by removing points instead (node + not a way node).
   std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
   deduper.setNodeCriterion(pointCrit);
-  // this prevents connected ways separated by geometry type from being broken up in the output
+  // This prevents connected ways separated by geometry type from being broken up in the output.
   deduper.setFavorMoreConnectedWays(true);
 
   // See notes in _getDefaultGeometryFilters, but basically the point and poly geometry maps may
@@ -2035,9 +2062,17 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
     OsmMapPtr otherMap = otherMaps.at(i);
     // set the point's map to be the map we're removing features from
     pointCrit->setOsmMap(otherMap.get());
+    OsmMapWriterFactory::writeDebugMap(
+      lineMap, _changesetId + "-" + lineMap->getName() + "-before-deduping");
+    OsmMapWriterFactory::writeDebugMap(
+      otherMap, _changesetId + "-" + otherMap->getName() + "-before-deduping");
     LOG_DEBUG(
       "De-duping map: " << lineMap->getName() << " and " << otherMap->getName() << "...");
     deduper.dedupe(lineMap, otherMap);
+    OsmMapWriterFactory::writeDebugMap(
+      lineMap, _changesetId + "-" + lineMap->getName() + "-after-deduping");
+    OsmMapWriterFactory::writeDebugMap(
+      otherMap, _changesetId + "-" + otherMap->getName() + "-after-deduping");
   }
 }
 
@@ -2064,6 +2099,42 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 
   // get out of orthographic
   MapProjector::projectToWgs84(map);
+}
+
+void ChangesetReplacementCreator::_synchronizeIds(
+  const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps)
+{
+  // When replacing data, we always load the replacement data without its original IDs in case there
+  // are overlapping IDs in the reference data. If you were only replacing unmodified data from one
+  // source with updated data from another source (e.g. replacing newer OSM with older OSM), this
+  // wouldn't be necessary, but we're not guaranteed just that scenario. The downside to loading
+  // up a separate set of unique IDs for the secondary data is that identical elements in the
+  // secondary can end up unnecessarily replacing elements in the reference. This gets mitigated
+  // here where we find all identical elements between the data being replaced and the replacement
+  // data and overwrite IDs in the replacement data from those in the data being replaced to
+  // prevent unnecessary changeset modifications from being generated. Its possible we could do
+  // this earlier in the replace process, however that has proven difficult so far.
+  assert(mapsBeingReplaced.size() == replacementMaps.size());
+  ElementIdSynchronizer idSync;
+  for (int i = 0; i < mapsBeingReplaced.size(); i++)
+  {
+    OsmMapPtr mapBeingReplaced = mapsBeingReplaced.at(i);
+    OsmMapPtr replacementMap = replacementMaps.at(i);
+    OsmMapWriterFactory::writeDebugMap(
+      mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() + "-source-before-id-sync");
+    OsmMapWriterFactory::writeDebugMap(
+      replacementMap, _changesetId + "-" + replacementMap->getName() + "-target-before-id-sync");
+
+    idSync.synchronize(mapBeingReplaced, replacementMap);
+
+    // get rid of straggling nodes
+    // TODO: should we run _cleanup here instead and move it from its earlier call?
+    SuperfluousNodeRemover orphanedNodeRemover;
+    orphanedNodeRemover.apply(replacementMap);
+    LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
+    OsmMapWriterFactory::writeDebugMap(
+      replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
+  }
 }
 
 }

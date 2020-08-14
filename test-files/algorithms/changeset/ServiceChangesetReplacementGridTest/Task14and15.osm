@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-105700' action='modify' visible='true' lat='39.05331810083' lon='-119.75097654105' />
+  <node id='-105701' action='modify' visible='true' lat='39.05331810083' lon='-119.73999021293' />
+  <node id='-105702' action='modify' visible='true' lat='39.06184912838' lon='-119.73999021293' />
+  <node id='-105703' action='modify' visible='true' lat='39.06184912838' lon='-119.75097654105' />
+  <node id='-105704' action='modify' visible='true' lat='39.04478604259' lon='-119.75097654105' />
+  <node id='-105705' action='modify' visible='true' lat='39.04478604259' lon='-119.73999021293' />
+  <way id='-133269' action='modify' visible='true'>
+    <nd ref='-105700' />
+    <nd ref='-105701' />
+    <nd ref='-105702' />
+    <nd ref='-105703' />
+    <nd ref='-105700' />
+    <tag k='angle' v='0.0' />
+    <tag k='feature_area' v='898725.6' />
+    <tag k='id' v='15' />
+    <tag k='length' v='949.7' />
+    <tag k='locked' v='false' />
+    <tag k='priority' v='0' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='Unknown' />
+    <tag k='specific_zoom' v='15.0' />
+    <tag k='standard_size' v='false' />
+    <tag k='state' v='2' />
+    <tag k='width' v='949.7' />
+    <tag k='x' v='5484' />
+    <tag k='y' v='20251' />
+    <tag k='zoom' v='15' />
+  </way>
+  <way id='-133270' action='modify' visible='true'>
+    <nd ref='-105704' />
+    <nd ref='-105705' />
+    <nd ref='-105701' />
+    <nd ref='-105700' />
+    <nd ref='-105704' />
+    <tag k='angle' v='0.0' />
+    <tag k='feature_area' v='898942.8' />
+    <tag k='id' v='14' />
+    <tag k='length' v='949.8' />
+    <tag k='locked' v='true' />
+    <tag k='priority' v='0' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source:imagery' v='Unknown' />
+    <tag k='specific_zoom' v='15.0' />
+    <tag k='standard_size' v='false' />
+    <tag k='state' v='0' />
+    <tag k='width' v='949.8' />
+    <tag k='x' v='5484' />
+    <tag k='y' v='20250' />
+    <tag k='zoom' v='15' />
+  </way>
+</osm>

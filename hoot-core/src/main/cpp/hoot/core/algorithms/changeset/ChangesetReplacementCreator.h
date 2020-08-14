@@ -352,6 +352,11 @@ private:
   void _dedupeMaps(const QList<OsmMapPtr>& maps);
 
   /*
+   * TODO
+   */
+  void _intraDedupeMap(const QList<OsmMapPtr>& maps);
+
+  /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
    * MetadataTags::HootSnapped()=snapped_way tags
    */
@@ -385,6 +390,13 @@ private:
     const QStringList& linearFilterClassNames = QStringList());
 
   void _cleanup(OsmMapPtr& map);
+
+  /*
+   * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
+   * being replaced with the IDs from the maps being replaced.
+   */
+  void _synchronizeIds(
+    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
 };
 
 }
