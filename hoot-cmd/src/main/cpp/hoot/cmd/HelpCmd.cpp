@@ -60,6 +60,7 @@ public:
     _forceToRndList.append("perty");
     _forceToRndList.append("score-matches");
     _forceToRndList.append("score-matches-diff");
+    _forceToRndList.append("sync-element-ids");
     _forceToRndList.append("type-tagger-rules");
     _forceToRndList.append("write-name-counts");
   }
@@ -188,8 +189,9 @@ private:
 
     cout << "For detailed command help type: hoot help (command name)" << endl << endl;
 
+    cout << endl << "Basic Commands:" << endl << endl;
     _printCommands(coreCmds);
-    cout << endl << "Advanced:" << endl << endl;
+    cout << endl << "Advanced Commands:" << endl << endl;
     _printCommands(rndCmds);
 
     return 0;

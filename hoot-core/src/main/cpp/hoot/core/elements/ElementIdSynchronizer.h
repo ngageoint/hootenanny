@@ -42,19 +42,32 @@ class ElementIdSynchronizer
 
 public:
 
+  ElementIdSynchronizer();
+
   /**
-   * For all identical elements between two maps this updates the identical elements in the second
+   * For all identical elements between two maps, this updates the identical elements in the second
    * map with the element IDs from the first map.
    *
-   * @param map1 reference map to use as an element ID source and is not modified; note
-   * ConstOsmMapPtr can't be used here due to use of ElementHashVisitor
+   * @param map1 reference map to use as an element ID source and is not modified; Note that
+   * ConstOsmMapPtr can't be used here due to the use of ElementHashVisitor, even though the map
+   * is not modified.
    * @param map2 map to update element IDs on
    */
-  static void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2);
+  void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2);
+
+  int getNumNodeIdsSynchronized() const { return _updatedNodeCtr; }
+  int getNumWayIdsSynchronized() const { return _updatedWayCtr; }
+  int getNumRelationIdsSynchronized() const { return _updatedRelationCtr; }
+  int getNumTotalFeatureIdsSynchronized() const
+  { return _updatedNodeCtr + _updatedWayCtr + _updatedRelationCtr; }
 
 private:
 
-  static QMap<QString, ElementId> _calcElementHashes(const OsmMapPtr& map);
+  int _updatedNodeCtr;
+  int _updatedWayCtr;
+  int _updatedRelationCtr;
+
+  QMap<QString, ElementId> _calcElementHashes(const OsmMapPtr& map);
 };
 
 }

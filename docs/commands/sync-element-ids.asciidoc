@@ -1,0 +1,24 @@
+[[sync-element-ids]]
+== sync-element-ids
+
+=== Description
+
+The +sync-element-ids+ command copies element IDs from a first map to a second map for elements that are identical between the two of them.
+
+* +input1+ - Source input from which to copy element IDs from; may be any supported input format.
+* +input2+ - Target input to copy element IDs to; may be any supported input format.
+* +output+ - Modified output for input2; may be any supported output format.
+
+=== Usage
+
+--------------------------------------
+hoot sync-element-ids (input1) (input2) (output)
+--------------------------------------
+
+=== Examples
+
+* [Basic Examples](TODO)
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

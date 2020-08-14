@@ -40,15 +40,15 @@ using namespace std;
 namespace hoot
 {
 
-class SplitMapCmd : public BaseCommand
+class SplitCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::SplitMapCmd"; }
+  static string className() { return "hoot::SplitCmd"; }
 
-  SplitMapCmd() = default;
+  SplitCmd() = default;
 
-  virtual QString getName() const override { return "split-map"; }
+  virtual QString getName() const override { return "split"; }
 
   virtual QString getDescription() const override
   { return "Split a map geospatially into tiled maps"; }
@@ -88,6 +88,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, SplitMapCmd)
+HOOT_FACTORY_REGISTER(Command, SplitCmd)
 
 }

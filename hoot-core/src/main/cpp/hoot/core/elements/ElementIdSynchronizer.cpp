@@ -35,8 +35,19 @@
 namespace hoot
 {
 
+ElementIdSynchronizer::ElementIdSynchronizer() :
+_updatedNodeCtr(0),
+_updatedWayCtr(0),
+_updatedRelationCtr(0)
+{
+}
+
 void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
+  _updatedNodeCtr = 0;
+  _updatedWayCtr = 0;
+  _updatedRelationCtr = 0;
+
   QString msg = "Synchronizing IDs for identical elements";
   if (!map1->getName().trimmed().isEmpty() && !map2->getName().trimmed().isEmpty())
   {
@@ -53,9 +64,8 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
 
   // Obtain the hashes for the elements that are identical between the two maps.
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
-  LOG_VARD(dupeHashes.size());
+  LOG_VARD(identicalHashes.size());
 
-  int updatedIdCtr = 0;
   for (QSet<QString>::const_iterator itr = identicalHashes.begin(); itr != identicalHashes.end();
        ++itr)
   {
@@ -79,19 +89,36 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
             "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
             map1IdenticalElement->getElementId() << "...");
 
+          // Add a custom metadata tag for debugging purposes.
+          map1IdenticalElementCopy->getTags().set("hoot:synced:id", "yes");
           // Add the element from the ref map.
           map2->addElement(map1IdenticalElementCopy);
           // Replace the element from the sec map with the newly added element, which removes the
           // old element.
           map2->replace(map2IdenticalElement, map1IdenticalElementCopy);
 
-          updatedIdCtr++;
+          switch (map1IdenticalElementCopy->getElementType().getEnum())
+          {
+            case ElementType::Node:
+              _updatedNodeCtr++;
+              break;
+            case ElementType::Way:
+              _updatedWayCtr++;
+              break;
+            case ElementType::Relation:
+              _updatedRelationCtr++;
+              break;
+            default:
+              throw IllegalArgumentException("Invalid element type.");
+          }
         }
       }
     }
   }
 
-  LOG_DEBUG("Updated IDs on identical " << updatedIdCtr << " elements in second map.");
+  LOG_DEBUG(
+    "Updated IDs on " << getNumTotalFeatureIdsSynchronized() <<
+    " identical elements in second map.");
 }
 
 QMap<QString, ElementId> ElementIdSynchronizer::_calcElementHashes(const OsmMapPtr& map)

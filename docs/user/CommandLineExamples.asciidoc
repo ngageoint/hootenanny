@@ -290,6 +290,30 @@ See the User Guide for more details on command usage.
     hoot convert -D convert.ops="hoot::ConflatableCriteriaVisitor" input.osm output.osm
 -----
 
+===== Remove intra-map duplicates within a single map:
+
+-----
+    hoot de-duplicate input.osm output.osm
+-----
+
+===== Remove intra-map and inter-map duplicates across two maps:
+
+-----
+    hoot de-duplicate input1.osm input2.osm output1.osm output2.osm
+-----
+
+===== Remove only inter-map duplicates across two maps:
+
+-----
+    hoot de-duplicate input1.osm input2.osm output1.osm output2.osm --skip-intra-map
+-----
+
+===== Copy element IDs from one map to another where identical elements are found between them:
+
+-----
+    hoot sync-element-ids input1.osm input2.osm output.osm
+-----
+
 ==== Comparison
 
 ===== Calculate the difference between two maps:
@@ -778,6 +802,18 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
 
 -----
     hoot convert -D convert.ops="hoot::WayGeneralizeVisitor" -D way.generalizer.epsilon=5.0 input.osm output.osm
+-----
+
+===== Remove intra-map duplicates within a single map but skip removing nodes:
+
+-----
+    hoot de-duplicate input.osm output.osm --skip-nodes
+-----
+
+===== Remove intra-map duplicates within a single map with a node filter:
+
+-----
+    hoot de-duplicate input.osm output.osm --node-filter "hoot::PoiCriterion"
 -----
 
 ==== Statistics
