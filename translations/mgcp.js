@@ -750,8 +750,7 @@ mgcp = {
       ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
       ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
-      ["t.water && !(t.natural)","t.natural = 'water'"],
-      ["t.waterway == 'flow_control'","t.flow_control = 'sluice_gate'"]
+      ["t.water && !(t.natural)","t.natural = 'water'"]
       ];
 
       mgcp.osmPostRules = translate.buildComplexRules(rulesList);
@@ -1003,57 +1002,93 @@ mgcp = {
       }
 
       // Convert "abandoned:XXX" features
-      if ((i.indexOf('abandoned:') !== -1) || (i.indexOf('disused:') !== -1))
+      if ((i.indexOf('abandoned:') == 0) || (i.indexOf('disused:') == 0))
       {
-        // Hopeing there is only one ':' in the tag name...
-        var tList = i.split(':');
-        tags[tList[1]] = tags[i];
+        var tTag = i.replace('abandoned:','').replace('disused:','');
+        tags[tTag] = tags[i];
         tags.condition = 'abandoned';
         delete tags[i];
         continue;
       }
 
       // Convert "demolished:XXX" features
-      if (i.indexOf('demolished:') !== -1)
+      if (i.indexOf('demolished:') == 0)
       {
-        // Hopeing there is only one ':' in the tag name...
-        var tList = i.split(':');
-        tags[tList[1]] = tags[i];
+        var tTag = i.replace('demolished:','');
+        tags[tTag] = tags[i];
         tags.condition = 'dismantled';
         delete tags[i];
         continue;
       }
+
+      // Convert "construction:XXX" features
+      if (i.indexOf('construction:') == 0)
+      {
+        var tTag = i.replace('construction:','');
+        tags[tTag] = tags[i];
+        tags.condition = 'construction';
+        delete tags[i];
+        continue;
+      }    
     } // End Cleanup loop
 
-    // Lifecycle and general cleaning
-    // This is a bit funky and should probably be done with a fancy function instead of repeating the code
+    // Lifecycle tags
+    var cycleList = {'highway':'road','bridge':'yes','railway':'rail','building':'yes'};
+    for (var typ in cycleList)
+    {
+      switch (tags[typ])
+      {
+        case undefined: // Break early if no value
+          break;
+
+        case 'construction':
+          if (tags.construction)
+          {
+            tags[typ] = tags.construction;
+            delete tags.construction;           
+          }
+          else
+          {
+            tags[typ] = cycleList[typ]; 
+          }
+          tags.condition = 'construction';
+          break;
+
+        case 'proposed':
+          if (tags.proposed)
+          {
+            tags[typ] = tags.proposed;
+            delete tags.proposed;
+          }
+          else
+          {
+            tags[typ] = cycleList[typ];
+          }
+          tags.condition = 'proposed';
+          break;
+
+        case 'abandoned':
+        case 'disused':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'abandoned';
+          break;
+
+        case 'destroyed':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'destroyed';
+          break;
+
+        case 'demolished':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'dismantled';
+          break;
+      }
+    } // End cycleList
+
+    // Highway cleanup
     switch (tags.highway)
     {
       case undefined: // Break early if no value
-        break;
-
-      case 'abandoned':
-      case 'disused':
-        tags.highway = 'road';
-        tags.condition = 'abandoned';
-        break;
-
-      case 'demolished':
-        tags.highway = 'road';
-        tags.condition = 'dismantled';
-        break;
-
-      case 'construction':
-        if (tags.construction)
-        {
-          tags.highway = tags.construction;
-          delete tags.construction;
-        }
-        else
-        {
-          tags.highway = 'road';
-        }
-        tags.condition = 'construction';
         break;
 
       // Doing this here so we preserve the "highway" tag
@@ -1071,105 +1106,6 @@ mgcp = {
         break;
     } // End highway
 
-    switch (tags.railway)
-    {
-      case undefined: // Break early if no value
-        break;
-
-      case 'abandoned':
-      case 'disused':
-        tags.railway = 'rail';
-        tags.condition = 'abandoned';
-        break;
-
-      case 'demolished':
-        tags.railway = 'yes';
-        tags.condition = 'dismantled';
-        break;
-
-      case 'construction':
-        if (tags.construction)
-        {
-          tags.railway = tags.construction;
-          delete tags.construction;
-        }
-        else
-        {
-          tags.railway = 'rail';
-        }
-        tags.condition = 'construction';
-        break;
-    }
-
-    switch (tags.building)
-    {
-      case undefined: // Break early if no value
-        break;
-
-      case 'abandoned':
-      case 'disused':
-        tags.building = 'yes';
-        tags.condition = 'abandoned';
-        break;
-
-      case 'destroyed':
-        tags.building = 'yes';
-        tags.condition = 'destroyed';
-        break;
-
-      case 'demolished':
-        tags.building = 'yes';
-        tags.condition = 'dismantled';
-        break;
-
-      case 'construction':
-        if (tags.construction)
-        {
-          tags.building = tags.construction;
-          delete tags.construction;
-        }
-        else
-        {
-          tags.building = 'yes';
-        }
-        tags.condition = 'construction';
-        break;
-    }
-
-    switch (tags.bridge)
-    {
-      case undefined: // Break early if no value
-        break;
-
-      case 'abandoned':
-      case 'disused':
-        tags.bridge = 'yes';
-        tags.condition = 'abandoned';
-        break;
-
-      case 'destroyed':
-        tags.bridge = 'yes';
-        tags.condition = 'destroyed';
-        break;
-
-      case 'demolished':
-        tags.bridge = 'yes';
-        tags.condition = 'dismantled';
-        break;
-
-      case 'construction':
-        if (tags.construction)
-        {
-          tags.bridge = tags.construction;
-          delete tags.construction;
-        }
-        else
-        {
-          tags.bridge = 'yes';
-        }
-        tags.condition = 'construction';
-        break;
-    }
 
     if (mgcp.mgcpPreRules == undefined)
     {

@@ -3499,7 +3499,7 @@ ufd = {
     if (attrs.F_CODE == 'AT020') tags['radar:use'] = 'early_warning';
 
     // Sluice Gate
-    if (attrs.F_CODE == 'BI040') tags.flow_control = 'sluice_gate';
+    if (attrs.F_CODE == 'BI040') tags.waterway = 'sluice_gate';
 
     translate.fixConstruction(tags, 'highway');
     translate.fixConstruction(tags, 'railway');

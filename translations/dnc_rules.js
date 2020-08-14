@@ -205,7 +205,7 @@ dnc.rules = {
     ['F_CODE','GB010','aeroway:light','yes'], // Airport Lights
     ['F_CODE','GB055','aeroway','runway'], // Runway
     ['F_CODE','GB070','seamark:type','seaplane_landing_area'], // Seaplane Run
-    ['F_CODE','ZC040','natural','magnetic_anomoly'], // GGDM3/NAS7 LOCAL_MAGNETIC_ANOMALY
+    ['F_CODE','ZC040','natural','magnetic_anomaly'], // GGDM3/NAS7 LOCAL_MAGNETIC_ANOMALY
     ['F_CODE','ZD040','named_location','yes'] // Named Location
   ], // End fcodeOne2oneIn
 
@@ -702,30 +702,30 @@ dnc.rules = {
     // MAC - Maritime Area Category
     // ['MAC','0','maritime_area:type','unknown'], // Unknown
     ['MAC','0',undefined,undefined], // Unknown
-    ['MAC','2','maritime_area:type','dredged_channel/dredged_area'], // Dredged Channel/Dredged Area
+    ['MAC','2','seamark:type','dredged_area'], // Dredged Channel/Dredged Area
     ['MAC','4','maritime_area:type','mine_danger_area'], // Mine Danger Area
     ['MAC','5','maritime_area:type','prohibited_shipping_area/entry_prohibited'], // Prohibited Shipping Area/Entry Prohibited
     ['MAC','9','maritime_area:type','works_in_progress_area'], // Works in Progress Area
-    ['MAC','11','maritime_area:type','anchorage_(general)'], // Anchorage (general)
-    ['MAC','12','maritime_area:type','anchoring_berths'], // Anchoring Berths
-    ['MAC','13','maritime_area:type','explosives_anchorage'], // Explosives anchorage
-    ['MAC','14','maritime_area:type','large_vessel/deep_water/deep_draft_anchorage'], // Large Vessel/Deep Water/Deep Draft anchorage
+    ['MAC','11','seamark:type','anchorage'], // Anchorage (general)
+    ['MAC','12','seamark:type','anchor_berth'], // Anchoring Berths
+    ['MAC','13','seamark:anchorage:category','explosives'], // Explosives anchorage
+    ['MAC','14','seamark:anchorage:category','deep_water'], // Large Vessel/Deep Water/Deep Draft anchorage
     ['MAC','15','maritime_area:type','anchoring_prohibited'], // Anchoring Prohibited
-    ['MAC','16','maritime_area:type','quarantine_anchorage'], // Quarantine Anchorage
+    ['MAC','16','seamark:anchorage:category','quarantine'], // Quarantine Anchorage
     ['MAC','17','maritime_area:type','reserved_anchorage'], // Reserved Anchorage
-    ['MAC','19','maritime_area:type','tanker_anchorage'], // Tanker Anchorage
+    ['MAC','19','seamark:anchorage:category','tanker'], // Tanker Anchorage
     ['MAC','20','maritime_area:type','submarine_cable_area'], // Submarine Cable Area
     ['MAC','21','maritime_area:type','pipeline_area'], // Pipeline Area
     ['MAC','22','maritime_area:type','fishing_prohibited'], // Fishing Prohibited
     ['MAC','23','maritime_area:type','cable_and_pipeline_area'], // Cable and Pipeline Area
     ['MAC','24','maritime_area:type','turning_area/swinging_circle'], // Turning Area/Swinging Circle
     ['MAC','25','maritime_area:type','spoil_area/spoil_ground_(see_ops_for_status)'], // Spoil Area/Spoil Ground (See OPS for status)
-    ['MAC','26','maritime_area:type','unsurveyed_area'], // Unsurveyed Area
-    ['MAC','27','maritime_area:type','submarine_exercise_area'], // Submarine Exercise Area
-    ['MAC','28','maritime_area:type','mine_laying_practice_area'], // Mine Laying Practice Area
-    ['MAC','29','maritime_area:type','firing_danger_area'], // Firing Danger Area
+    ['MAC','26','seamark:type','unsurveyed_area'], // Unsurveyed Area
+    ['MAC','27','seamark:military_area:category','submarine'], // Submarine Exercise Area
+    ['MAC','28','seamark:military_area:category','mine_laying'], // Mine Laying Practice Area
+    ['MAC','29','seamark:military_area:category','firing'], // Firing Danger Area
     ['MAC','30','maritime_area:type','dumping_ground_for_hazardous_materials'], // Dumping Ground for Hazardous Materials
-    ['MAC','31','maritime_area:type','incineration_area'], // Incineration Area
+    ['MAC','31','seamark:type','incineration_area'], // Incineration Area
     ['MAC','32','maritime_area:type','oil_field'], // Oil Field
     ['MAC','33','maritime_area:type','gas_field'], // Gas Field
     ['MAC','35','maritime_area:type','explosive_dumping_ground'], // Explosive Dumping Ground
@@ -737,13 +737,13 @@ dnc.rules = {
     ['MAC','44','maritime_area:type','degaussing_range'], // Degaussing Range
     ['MAC','45','maritime_area:type','outfall_area'], // Outfall Area
     ['MAC','46','maritime_area:type','intake_area'], // Intake Area
-    ['MAC','48','maritime_area:type','pilot_boarding_area'], // Pilot Boarding Area
-    ['MAC','49','maritime_area:type','cargo_transshipment_area'], // Cargo Transshipment Area
+    ['MAC','48','seamark:type','pilot_boarding'], // Pilot Boarding Area
+    ['MAC','49','seamark:type','cargo_transshipment_area'], // Cargo Transshipment Area
     ['MAC','53','maritime_area:type','seaplane'], // Seaplane
     ['MAC','54','maritime_area:type','time_limited'], // Time Limited
-    ['MAC','55','maritime_area:type','fairway'], // Fairway
+    ['MAC','55','seamark:type','fairway'], // Fairway
     ['MAC','56','maritime_area:type','fish_trap_area'], // Fish Trap Area
-    ['MAC','57','maritime_area:type','marine_farm'], // Marine Farm
+    ['MAC','57','seamark:type','marine_farm'], // Marine Farm
     ['MAC','58','maritime_area:type','dredging_area'], // Dredging Area
     ['MAC','61','maritime_area:type','sewer_area'], // Sewer Area
     ['MAC','999','maritime_area:type','other'], // Other

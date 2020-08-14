@@ -320,7 +320,7 @@ fcodeCommon = {
       ['F_CODE','BI010','man_made','cistern'], // Cistern
       ['F_CODE','BI020','waterway','dam'], // Dam/Weir
       ['F_CODE','BI030','lock','yes'], // Lock
-      ['F_CODE','BI040','waterway','flow_control'], // Sluice Gate
+      ['F_CODE','BI040','waterway','sluice_gate'], // Sluice Gate
       ['F_CODE','BI044','flood_control','yes'], // Flood Control Structure
       ['F_CODE','BI045','man_made','basin_gate'], // Basin Gate
       ['F_CODE','BI050','tower','water_intake'], // Water Intake Tower

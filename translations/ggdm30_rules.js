@@ -2411,12 +2411,12 @@ ggdm30.rules = {
 
     // FZR - Fortified Building Type
     // ['FZR','-999999',undefined,undefined], // No Information
-    ['FZR','1','fortified:type','blockhouse'], // Blockhouse
-    ['FZR','2','fortified:type','casement'], // Casement
-    ['FZR','3','fortified:type','keep'], // Keep
-    ['FZR','4','fortified:type','martello_tower'], // Martello Tower
-    ['FZR','5','fortified:type','non-specific_fortified'], // Non-specific Fortified
-    ['FZR','6','fortified:type','pillbox'], // Pillbox
+    ['FZR','1','bunker_type','blockhouse'], // Blockhouse
+    ['FZR','2','bunker_type','casement'], // Casement
+    ['FZR','3','defensive','keep'], // Keep
+    ['FZR','4','defensive','martello_tower'], // Martello Tower
+    ['FZR','5','fortified:type','non-specific'], // Non-specific Fortified
+    ['FZR','6','bunker_type','pillbox'], // Pillbox
     ['FZR','999','fortified:type','other'], // Other
 
     // GDBV - Geodatabase Schema Version
@@ -3558,9 +3558,9 @@ ggdm30.rules = {
     ['MRR','14','seamark:restricted_area:category','international_council_for_the_seas_(ices)_fishery_zone'], // International Council for the Seas (ICES) Fishery Zone
     ['MRR','15','seamark:restricted_area:category','compass_adjustment'], // Compass Adjustment
     ['MRR','16','seamark:restricted_area:category','degaussing_range'], // Degaussing Range
-    ['MRR','17','seamark:restricted_area:category','dredging_area'], // Dredging Area
+    ['MRR','17','seamark:restricted_area:category','dredging'], // Dredging Area
     ['MRR','18','seamark:restricted_area:category','fairway'], // Fairway
-    ['MRR','19','seamark:restricted_area:category','historic_wreck_area'], // Historic Wreck Area
+    ['MRR','19','seamark:restricted_area:category','historic_wreck'], // Historic Wreck Area
     ['MRR','20','seamark:restricted_area:category','incineration_area'], // Incineration Area
     ['MRR','21','seamark:restricted_area:category','joint_economic_development_zone'], // Joint Economic Development Zone
     ['MRR','22','seamark:restricted_area:category','maritime_mass_grave'], // Maritime Mass Grave
@@ -3572,22 +3572,22 @@ ggdm30.rules = {
     ['MRR','28','seamark:restricted_area:category','reclamation_area'], // Reclamation Area
     ['MRR','29','seamark:restricted_area:category','research'], // Research Area
     ['MRR','30','seamark:restricted_area:category','stranding_danger_area'], // Stranding Danger Area
-    ['MRR','31','seamark:restricted_area:category','swimming_area'], // Swimming Area
-    ['MRR','32','seamark:restricted_area:category','swinging_area'], // Swinging Area
-    ['MRR','33','seamark:restricted_area:category','waiting_area'], // Waiting Area
-    ['MRR','34','seamark:restricted_area:category','water_skiing_area'], // Water Skiing Area
+    ['MRR','31','seamark:restricted_area:category','swimming'], // Swimming Area
+    ['MRR','32','seamark:restricted_area:category','swinging'], // Swinging Area
+    ['MRR','33','seamark:restricted_area:category','waiting'], // Waiting Area
+    ['MRR','34','seamark:restricted_area:category','water_skiing'], // Water Skiing Area
     ['MRR','35','seamark:restricted_area:category','exclusive_economic_zone'], // Exclusive Economic Zone
     ['MRR','36','seamark:restricted_area:category','extended_continental_shelf_area'], // Extended Continental Shelf Area
     ['MRR','37','seamark:restricted_area:category','continental_shelf_area'], // Continental Shelf Area
     ['MRR','38','seamark:restricted_area:category','contiguous_zone'], // Contiguous Zone
     ['MRR','39','seamark:restricted_area:category','territorial_sea_area'], // Territorial Sea Area
     ['MRR','40','seamark:restricted_area:category','internal_waters'], // Internal Waters
-    ['MRR','41','seamark:restricted_area:category','no_wake_area'], // No Wake Area
+    ['MRR','41','seamark:restricted_area:category','no_wake'], // No Wake Area
     ['MRR','42','seamark:restricted_area:category','traffic_services_limit'], // Traffic Services Limit
     ['MRR','45','seamark:restricted_area:category','environmentally_sensitive_sea_area'], // Environmentally Sensitive Sea Area
     ['MRR','46','seamark:restricted_area:category','particularly_sensitive_sea_area'], // Particularly Sensitive Sea Area
-    ['MRR','47','seamark:restricted_area:category','military_area'], // Military Area
-    ['MRR','52','seamark:restricted_area:category','disengagement_area'], // Disengagement Area
+    ['MRR','47','seamark:restricted_area:category','military'], // Military Area
+    ['MRR','52','seamark:restricted_area:category','disengagement'], // Disengagement Area
     ['MRR','999','seamark:restricted_area:category','other'], // Other
 
     // MRR2 - Maritime Area Restriction [2]
@@ -4221,14 +4221,14 @@ ggdm30.rules = {
     ['SHD','1000','shoreline:delineated','no'],
     ['SHD','1001','shoreline:delineated','yes'],
 
-    // SHO - Coast Type
+    // SHO - Coast Type - see SLT
     // ['SHO','-999999',undefined,undefined], // No Information
-    ['SHO','1','coast:type','hillocks'], // Hillocks
-    ['SHO','2','coast:type','flat_coast'], // Flat Coast
-    ['SHO','7','coast:type','glacier'], // Glacier
-    ['SHO','8','coast:type','ice_coast'], // Ice Coast
-    ['SHO','9','coast:type','steep_coast'], // Steep Coast
-    ['SHO','999','coast:type','other'], // Other
+    // ['SHO','1','coast:type','hillocks'], // Hillocks
+    // ['SHO','2','coast:type','flat'], // Flat Coast
+    // ['SHO','7','coast:type','glacier'], // Glacier
+    // ['SHO','8','coast:type','ice'], // Ice Coast
+    // ['SHO','9','coast:type','steep'], // Steep Coast
+    // ['SHO','999','coast:type','other'], // Other
 
     // SHT - Shipping Container Type
     // ['SHT','-999999',undefined,undefined], // No Information
@@ -4253,8 +4253,13 @@ ggdm30.rules = {
 
     // SLT - Shoreline Type
     // ['SLT','-999999',undefined,undefined], // No Information
+    ['SLT','1','shoreline:type','hillocks'], // Hillocks - SHO
+    ['SLT','2','shoreline:type','flat'], // Flat Coast - SHO
     ['SLT','6','shoreline:type','mangrove'], // Mangrove
+    ['SLT','7','shoreline:type','glacier'], // Glacier - SHO
+    // ['SHO','8','coast:type','ice'], // Ice Coast
     ['SLT','8','shoreline:type','marshy'], // Marshy
+    ['SLT','9','shoreline:type','steep'], // Steep Coast - SHO
     ['SLT','10','shoreline:type','stony'], // Stony
     ['SLT','11','shoreline:type','building_rubble'], // Building Rubble
     ['SLT','12','shoreline:type','erosion_rubble'], // Erosion Rubble
@@ -4266,6 +4271,7 @@ ggdm30.rules = {
     // ['SLT','998',undefined,undefined], // Not Applicable
     ['SLT','998','shoreline:type','not_applicable'], // Not Applicable
     ['SLT','999','shoreline:type','other'], // Other
+
 
     // SNDC - Snow or Ice Depth <interval closure>
     ['SNDC','2','ice:depth:closure','open_interval'], // Open Interval
@@ -4925,14 +4931,14 @@ ggdm30.rules = {
 
     // VIS - Light Visibility
     // ['VIS','-999999',undefined,undefined], // No Information
-    ['VIS','1','light_visibility','high_intensity'], // High Intensity
-    ['VIS','2','light_visibility','low_intensity'], // Low Intensity
+    ['VIS','1','light_visibility','high'], // High Intensity
+    ['VIS','2','light_visibility','low'], // Low Intensity
     ['VIS','3','light_visibility','faint'], // Faint
     ['VIS','4','light_visibility','intensified'], // Intensified
     ['VIS','5','light_visibility','unintensified'], // Unintensified
-    ['VIS','6','light_visibility','visibility_deliberately_restricted'], // Visibility Deliberately Restricted
+    ['VIS','6','light_visibility','restricted'], // Visibility Deliberately Restricted
     ['VIS','7','light_visibility','obscured'], // Obscured
-    ['VIS','8','light_visibility','partially_obscured'], // Partially Obscured
+    ['VIS','8','light_visibility','part_obscured'], // Partially Obscured
     ['VIS','999','light_visibility','other'], // Other
 
     // VIS2 - Light Visibility [2]
@@ -6409,6 +6415,7 @@ ggdm30.rules = {
     'RCG':'ZI004_RCG',
     'RTN':'RIN_RTN', 'RTN2':'RIN_RTN2', 'RTN3':'RIN_RTN3',
     'SUR':'ZI026_SUR',
+    'SHO':'SLT',
     'WBD':'PWA',
     'WD1':'ZI016_WD1',
     'WTBB':'ZI024_WTBB',
@@ -6479,7 +6486,7 @@ ggdm30.rules = {
     'AT005':{'WLE':'ZI025_WLE'},
     'AT042':{'GUG':'ZI032_GUG','PYC':'ZI032_PYC','PYM':'ZI032_PYM',
       'TOS':'ZI032_TOS','CAB':'AT005_CAB'},
-    'BA010':{'ZHDP_VDR':'BA000_VDR','ZHDP_VDC':'BA000_VDC'},
+    'BA010':{'ZHDP_VDR':'BA000_VDR','ZHDP_VDC':'BA000_VDC','SLT':'SHO'},
     'BA030':{'ZHDP_VDR':'BA000_VDR','ZHDP_VDC':'BA000_VDC'},
     'BB010':{'ZI025_HDP':'HDP'},
     'BB155':{'BC034_BRF':'ZI018_BRF'},

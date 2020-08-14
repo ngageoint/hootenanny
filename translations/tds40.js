@@ -821,6 +821,7 @@ tds40 = {
         ['t.diplomatic && !(t.amenity)','t.amenity = "embassy"'],
         ['t["generator:source"] == "wind"','t.power = "generator"'],
         ['t.historic == "castle" && !(t.ruins) && !(t.building)','t.building = "yes"'],
+        ['t.defensive','t.man_made = "tower";t["tower:type"] = "defensive"'],
         ['(t.landuse == "built_up_area" || t.place == "settlement") && t.building','t["settlement:type"] = t.building; delete t.building'],
         ['t.leisure == "stadium"','t.building = "yes"'],
         ['t["material:vertical"]','t.material = t["material:vertical"]; delete t["material:vertical"]'],
@@ -838,7 +839,6 @@ tds40 = {
         ['t["tower:type"] && !(t.man_made)','t.man_made = "tower"'],
         ['t.use == "islamic_prayer_hall" && !(t.amenity)','t.amenity = "place_of_worship"'],
         ['t.water || t.landuse == "basin"','t.natural = "water"'],
-        ['t.waterway == "flow_control"','t.flow_control = "sluice_gate"'],
         ['t.waterway == "vanishing_point" && t["water:sink:type"] == "sinkhole"','t.natural = "sinkhole"; delete t.waterway; delete t["water:sink:type"]'],
         ['t.wetland && !(t.natural)','t.natural = "wetland"']
       ];
@@ -1237,26 +1237,34 @@ tds40 = {
       }
 
       // Convert "abandoned:XXX" and "disused:XXX"features
-      if ((i.indexOf('abandoned:') !== -1) || (i.indexOf('disused:') !== -1))
+      if ((i.indexOf('abandoned:') == 0) || (i.indexOf('disused:') == 0))
       {
-        // Hopeing there is only one ':' in the tag name...
-        var tList = i.split(':');
-        tags[tList[1]] = tags[i];
+        var tTag = i.replace('abandoned:','').replace('disused:','');
+        tags[tTag] = tags[i];
         tags.condition = 'abandoned';
         delete tags[i];
         continue;
       }
 
       // Convert "demolished:XXX" features
-      if (i.indexOf('demolished:') !== -1)
+      if (i.indexOf('demolished:') == 0)
       {
-        // Hopeing there is only one ':' in the tag name...
-        var tList = i.split(':');
-        tags[tList[1]] = tags[i];
+        var tTag = i.replace('demolished:','');
+        tags[tTag] = tags[i];
         tags.condition = 'dismantled';
         delete tags[i];
         continue;
       }
+
+      // Convert "construction:XXX" features
+      if (i.indexOf('construction:') == 0)
+      {
+        var tTag = i.replace('construction:','');
+        tags[tTag] = tags[i];
+        tags.condition = 'construction';
+        delete tags[i];
+        continue;
+      }    
     } // End Cleanup loop
 
     // Fix Bunkers. Putting this first to skip the building=* rules
@@ -1281,137 +1289,59 @@ tds40 = {
       }
     }
 
-    // Lifecycle: This is a bit funky and should probably be done with a fancy function instead of
-    // repeating the code
-    switch (tags.highway)
+    // Lifecycle tags
+    var cycleList = {'highway':'road','bridge':'yes','railway':'rail','building':'yes'};
+    for (var typ in cycleList)
     {
-    case undefined: // Break early if no value
-      break;
-
-    case 'abandoned':
-    case 'disused':
-      tags.highway = 'road';
-      tags.condition = 'abandoned';
-      break;
-
-    case 'demolished':
-      tags.highway = 'road';
-      tags.condition = 'dismantled';
-      break;
-
-    case 'construction':
-      if (tags.construction)
+      switch (tags[typ])
       {
-        tags.highway = tags.construction;
-        delete tags.construction;
+        case undefined: // Break early if no value
+          break;
+
+        case 'construction':
+          if (tags.construction)
+          {
+            tags[typ] = tags.construction;
+            delete tags.construction;           
+          }
+          else
+          {
+            tags[typ] = cycleList[typ]; 
+          }
+          tags.condition = 'construction';
+          break;
+
+        case 'proposed':
+          if (tags.proposed)
+          {
+            tags[typ] = tags.proposed;
+            delete tags.proposed;
+          }
+          else
+          {
+            tags[typ] = cycleList[typ];
+          }
+          tags.condition = 'proposed';
+          break;
+
+        case 'abandoned':
+        case 'disused':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'abandoned';
+          break;
+
+        case 'destroyed':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'destroyed';
+          break;
+
+        case 'demolished':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'dismantled';
+          break;
       }
-      else
-      {
-        tags.highway = 'road';
-      }
-      tags.condition = 'construction';
-      break;
-    }
+    } // End cycleList
 
-    switch (tags.railway)
-    {
-    case undefined: // Break early if no value
-      break;
-
-    case 'abandoned':
-    case 'disused':
-      tags.railway = 'rail';
-      tags.condition = 'abandoned';
-      break;
-
-    case 'demolished':
-      tags.railway = 'yes';
-      tags.condition = 'dismantled';
-      break;
-
-    case 'construction':
-      if (tags.construction)
-      {
-        tags.railway = tags.construction;
-        delete tags.construction;
-      }
-      else
-      {
-        tags.railway = 'rail';
-      }
-      tags.condition = 'construction';
-      break;
-    }
-
-    switch (tags.building)
-    {
-    case undefined: // Break early if no value
-      break;
-
-    case 'abandoned':
-    case 'disused':
-      tags.building = 'yes';
-      tags.condition = 'abandoned';
-      break;
-
-    case 'destroyed':
-      tags.building = 'yes';
-      tags.condition = 'destroyed';
-      break;
-
-    case 'demolished':
-      tags.building = 'yes';
-      tags.condition = 'dismantled';
-      break;
-
-    case 'construction':
-      if (tags.construction)
-      {
-        tags.building = tags.construction;
-        delete tags.construction;
-      }
-      else
-      {
-        tags.building = 'yes';
-      }
-      tags.condition = 'construction';
-      break;
-    }
-
-    switch (tags.bridge)
-    {
-    case undefined: // Break early if no value
-      break;
-
-    case 'abandoned':
-    case 'disused':
-      tags.bridge = 'yes';
-      tags.condition = 'abandoned';
-      break;
-
-    case 'destroyed':
-      tags.bridge = 'yes';
-      tags.condition = 'destroyed';
-      break;
-
-    case 'demolished':
-      tags.bridge = 'yes';
-      tags.condition = 'dismantled';
-      break;
-
-    case 'construction':
-      if (tags.construction)
-      {
-        tags.bridge = tags.construction;
-        delete tags.construction;
-      }
-      else
-      {
-        tags.bridge = 'yes';
-      }
-      tags.condition = 'construction';
-      break;
-    }
 
     if (tds40.PreRules == undefined)
     {
@@ -1482,6 +1412,15 @@ tds40 = {
     {
       if (tds40.PreRules[i][0](tags)) tds40.PreRules[i][1](tags,attrs);
     }
+
+    // Fix Keeps and Martello Towers
+    if (tags.defensive)
+    {
+      tags.military = 'bunker';
+      delete tags['tower:type'];
+      delete tags.man_made;
+    }
+
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')

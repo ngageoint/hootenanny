@@ -875,13 +875,14 @@ tds70 = {
         ['t.diplomatic && !(t.amenity)','t.amenity = "embassy"'],
         ['t.boundary == "protected_area" && !(t.protect_class)','t.protect_class = "4"'],
         ['t.bunker_type && !(t.military)','t.military = "bunker"'],
+        ['t.defensive','t.man_made = "tower";t["tower:type"] = "defensive"'],
         ['t.cable =="yes" && t["cable:type"] == "power"',' t.power = "line"; delete t.cable; delete t["cable:type"]'],
         ['t.control_tower == "yes" && t.use == "air_traffic_control"','t["tower:type"] = "observation"'],
         ['t.crossing == "tank"','t.highway = "crossing"'],
         ['t.desert_surface','t.surface = t.desert_surface; delete t.desert_surface'],
         ['t.dock && !(t.waterway)','t.waterway = "dock"'],
         ['t.drive_in == "yes"','t.amenity = "cinema"'],
-        //             ["t['generator:source']","t.power = 'generator'"],
+        // ["t['generator:source']","t.power = 'generator'"],
         ['t["glacier:type"] == "icecap" && t.natural == "glacier"','delete t.natural'],
         ['t.golf == "driving_range" && !(t.leisure)','t.leisure = "golf_course"'],
         ['t.historic == "castle" && !(t.ruins) && !(t.building)','t.building = "yes"'],
@@ -906,7 +907,6 @@ tds70 = {
         ['t["tower:type"] && !(t.man_made)','t.man_made = "tower"'],
         ['t.use == "islamic_prayer_hall" && !(t.amenity)','t.amenity = "place_of_worship"'],
         ['t.water || t.landuse == "basin"','t.natural = "water"'],
-        ['t.waterway == "flow_control"','t.flow_control = "sluice_gate"'],
         ['t.wetland && !(t.natural)','t.natural = "wetland"'],
         ['t["width:minimum_traveled_way"] && !(t.width)','t.width = t["width:minimum_traveled_way"]']
       ];
@@ -1229,17 +1229,79 @@ tds70 = {
       }
 
       // Convert "abandoned:XXX" and "disused:XXX"features
-      if ((i.indexOf('abandoned:') !== -1) || (i.indexOf('disused:') !== -1))
+      if ((i.indexOf('abandoned:') == 0) || (i.indexOf('disused:') == 0))
       {
-        // Hopeing there is only one ':' in the tag name...
-        var tList = i.split(':');
-        tags[tList[1]] = tags[i];
+        var tTag = i.replace('abandoned:','').replace('disused:','');
+        tags[tTag] = tags[i];
         tags.condition = 'abandoned';
         delete tags[i];
         continue;
       }
 
+      // Convert "construction:XXX" features
+      if (i.indexOf('construction:') == 0)
+      {
+        var tTag = i.replace('construction:','');
+        tags[tTag] = tags[i];
+        tags.condition = 'construction';
+        delete tags[i];
+        continue;
+      }    
+
     } // End Cleanup loop
+
+    // Lifecycle tags
+    var cycleList = {'highway':'road','bridge':'yes','railway':'rail','building':'yes'};
+    for (var typ in cycleList)
+    {
+      switch (tags[typ])
+      {
+        case undefined: // Break early if no value
+          break;
+
+        case 'construction':
+          if (tags.construction)
+          {
+            tags[typ] = tags.construction;
+            delete tags.construction;           
+          }
+          else
+          {
+            tags[typ] = cycleList[typ]; 
+          }
+          tags.condition = 'construction';
+          break;
+
+        case 'proposed':
+          if (tags.proposed)
+          {
+            tags[typ] = tags.proposed;
+            delete tags.proposed;
+          }
+          else
+          {
+            tags[typ] = cycleList[typ];
+          }
+          tags.condition = 'proposed';
+          break;
+
+        case 'abandoned':
+        case 'disused':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'abandoned';
+          break;
+
+        case 'destroyed':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'destroyed';
+          break;
+
+        case 'demolished':
+          tags[typ] = cycleList[typ];
+          tags.condition = 'dismantled';
+          break;
+      }
+    } // End cycleList
 
     if (tds70.tdsPreRules == undefined)
     {
@@ -1312,6 +1374,15 @@ tds70 = {
     {
       if (tds70.tdsPreRules[i][0](tags)) tds70.tdsPreRules[i][1](tags,attrs);
     }
+
+    // Fix Keeps and Martello Towers
+    if (tags.defensive)
+    {
+      tags.military = 'bunker';
+      delete tags['tower:type'];
+      delete tags.man_made;
+    }
+
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
