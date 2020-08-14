@@ -200,7 +200,7 @@ private:
   //geos::geom::Envelope _replacementBounds;
   QString _replacementBounds;
 
-  // TODO
+  // helpful to name the debug map files when doing successive replacements
   QString _changesetId;
 
   // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
@@ -350,10 +350,6 @@ private:
    * Removes duplicates between one map and another, ignoring elemment IDs
    */
   void _dedupeMaps(const QList<OsmMapPtr>& maps);
-
-  /*
-   * TODO
-   */
   void _intraDedupeMap(const QList<OsmMapPtr>& maps);
 
   /*

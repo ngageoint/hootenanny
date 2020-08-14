@@ -412,7 +412,7 @@ QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QStri
       id = way->getTags().get("id").toInt(&ok);
       if (!ok)
       {
-        throw IllegalArgumentException("TODO");
+        throw IllegalArgumentException("Invalid bounds file: way features have no \"id\" tag.");
       }
     }
     else

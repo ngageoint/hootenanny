@@ -191,7 +191,6 @@ void NamedOp::_updateProgress(const int currentStep, const QString& message)
 {
   // Always check for a valid task weight and that the job was set to running. Otherwise, this is
   // just an empty progress object, and we shouldn't log progress.
-  // TODO: change back to trace
   LOG_VART(_progress.getTaskWeight());
   LOG_VART(_progress.getState());
   if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)

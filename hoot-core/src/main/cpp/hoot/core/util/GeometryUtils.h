@@ -164,18 +164,22 @@ public:
   static QString geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId);
 
   /**
-   * TODO
+   * Reads a file containing one or more rectangular AOIs
    *
-   * @param input
-   * @return
+   * @param input path to the bounds file
+   * @return a collection of bounds rectangles
+   * @throws IllegalArgumentException if the features in the input are not ways
    */
   static QList<geos::geom::Envelope> readBoundsFile(const QString& input);
 
   /**
-   * TODO
+   * Reads a file containing one or more rectangular AOIs where individual features have an
+   * identifier
    *
-   * @param input
-   * @return
+   * @param input path to the bounds file; must contain way features with an "id" field
+   * @return a collection of bounds rectangles
+   * @throws IllegalArgumentException if the features in the input are not ways containing an "id"
+   * tag
    */
   static QMap<int, geos::geom::Envelope> readBoundsFileWithIds(const QString& input);
 };

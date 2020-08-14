@@ -54,7 +54,7 @@ public:
   virtual QString getName() const override { return "de-duplicate"; }
 
   virtual QString getDescription() const override
-  { return "TODO"; }
+  { return "Removes duplicate features within a map or between two maps"; }
 
   virtual int runSimple(QStringList& args) override
   {  

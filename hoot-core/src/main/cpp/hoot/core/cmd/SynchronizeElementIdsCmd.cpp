@@ -54,7 +54,7 @@ public:
   virtual QString getName() const override { return "sync-element-ids"; }
 
   virtual QString getDescription() const override
-  { return "TODO"; }
+  { return "Copies element IDs from one map to another when identical elements are found"; }
 
   virtual int runSimple(QStringList& args) override
   {
