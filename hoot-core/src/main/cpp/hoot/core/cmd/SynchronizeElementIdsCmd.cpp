@@ -84,7 +84,8 @@ public:
     OsmMapPtr input2Map(new OsmMap());
     IoUtils::loadMap(input2Map, input2, true, Status::Unknown2);
 
-    ElementIdSynchronizer().synchronize(input1Map, input2Map);
+    ElementIdSynchronizer idSynchronizer;
+    idSync.synchronize(input1Map, input2Map);
 
     IoUtils::saveMap(input2Map, output);
 
