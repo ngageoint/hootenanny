@@ -45,7 +45,7 @@ tds70.rules = {
     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
     ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
-    ['F_CODE','AD010','power','station'], // Electric Power Station, Power Plant
+    ['F_CODE','AD010','power','plant'], // Electric Power Station, Power Plant
     ['F_CODE','AJ110','building','greenhouse_horticulture'], // Greenhouse
     ['F_CODE','AK030','leisure','water_park'], // Amusement Park
     ['F_CODE','AK120','landuse','recreation_ground'], // Park
@@ -1388,12 +1388,12 @@ tds70.rules = {
 
     // FZR - Fortified Building Type
     // ['FZR','-999999',undefined,undefined], // No Information
-    ['FZR','1','fortified:type','blockhouse'], // Blockhouse
-    ['FZR','2','fortified:type','casement'], // Casement
-    ['FZR','3','fortified:type','keep'], // Keep
-    ['FZR','4','fortified:type','martello_tower'], // Martello Tower
-    ['FZR','5','fortified:type','non-specific_fortified'], // Non-specific Fortified
-    ['FZR','6','fortified:type','pillbox'], // Pillbox
+    ['FZR','1','bunker_type','blockhouse'], // Blockhouse
+    ['FZR','2','bunker_type','casement'], // Casement
+    ['FZR','3','defensive','keep'], // Keep
+    ['FZR','4','defensive','martello_tower'], // Martello Tower
+    ['FZR','5','fortified:type','non-specific'], // Non-specific Fortified
+    ['FZR','6','bunker_type','pillbox'], // Pillbox
     ['FZR','999','fortified:type','other'], // Other
 
     // GEC - Geopolitical Entity Type
@@ -2940,7 +2940,7 @@ tds70.rules = {
     // ['ZHBH_TEC','-999999',undefined,undefined], // noInformation
     ['ZHBH_TEC','6','source:datum:sounding:method','area_swept_by_wire-drag'], // Area Swept by Wire-drag
     ['ZHBH_TEC','999','source:datum:sounding:method','other'], // Other
-    ['ZHBH_TEC','1001','source:datum:sounding:method','depth_known_by_other_then_wire_drag'],  // Depth Known by Other Than Wire Drag
+    ['ZHBH_TEC','1001','source:datum:sounding:method','depth_known_by_other_then_wire-drag'],  // Depth Known by Other Than Wire Drag
 
     // ZI001_SPS - Source Information : Spatial Source
     // ['ZI001_SPS','-999999',undefined,undefined], // No Information

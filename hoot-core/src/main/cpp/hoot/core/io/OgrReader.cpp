@@ -1196,6 +1196,12 @@ void OgrReaderInternal::_translate(Tags& t)
 
     switch (wkbFlatten(_layer->GetGeomType()))
     {
+    // Sometimes we get a layer that GDAL says has an Unknown geometry type
+    // This has been seen in ENC/S57 datasets
+    case wkbUnknown:
+      geomType = "Unknown";
+      break;
+
     case wkbPoint:
     case wkbMultiPoint:
       geomType = "Point";
@@ -1216,7 +1222,7 @@ void OgrReaderInternal::_translate(Tags& t)
       break;
 
     default:
-      throw HootException("Unsupported geometry type.");
+      throw HootException("Translate: Unsupported geometry type.");
     }
 
     LOG_TRACE("Translating tags of size: " << t.size() << " to OSM...");

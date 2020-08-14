@@ -1639,11 +1639,11 @@ tds61.rules = {
     // ['FZR','-999999',undefined,undefined], // No Information
     ['FZR','1','bunker_type','blockhouse'], // Blockhouse
     ['FZR','2','bunker_type','casement'], // Casement
-    ['FZR','3','bunker_type','keep'], // Keep
-    ['FZR','4','bunker_type','martello_tower'], // Martello Tower
-    ['FZR','5','bunker_type','non-specific_fortified'], // Non-specific Fortified
+    ['FZR','3','defensive','keep'], // Keep
+    ['FZR','4','defensive','martello_tower'], // Martello Tower
+    ['FZR','5','fortified:type','non-specific'], // Non-specific Fortified
     ['FZR','6','bunker_type','pillbox'], // Pillbox
-    ['FZR','999','bunker_type','other'], // Other
+    ['FZR','999','fortified:type','other'], // Other
 
     // GFT - Geologic Fault Trace Visible
     // ['GFT','-999999',undefined,undefined], // No Information
