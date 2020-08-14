@@ -85,7 +85,7 @@ public:
     IoUtils::loadMap(input2Map, input2, true, Status::Unknown2);
 
     ElementIdSynchronizer idSynchronizer;
-    idSync.synchronize(input1Map, input2Map);
+    idSynchronizer.synchronize(input1Map, input2Map);
 
     IoUtils::saveMap(input2Map, output);
 
