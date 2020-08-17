@@ -554,7 +554,7 @@ void ChangesetReplacementCreator::_create()
   // If we have the maps for only one geometry type, then there isn't a possibility of duplication
   // created by the replacement operation.
   // TODO: get rid of this dedupe option
-  if (ConfigOptions().getChangesetReplacementDeduplicateCalculatedMaps() /*&& refMaps.size() > 1*/)
+  if (ConfigOptions().getChangesetReplacementDeduplicateCalculatedMaps() && refMaps.size() > 1)
   {
     // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
     // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
@@ -565,7 +565,8 @@ void ChangesetReplacementCreator::_create()
     _dedupeMaps(conflatedMaps);
   }
 
-  // Synchronize IDs between the two maps in order to cut down on unnecessary changeset statements.
+  // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
+  // create/delete statements.
   _synchronizeIds(refMaps, conflatedMaps);
 
   // CHANGESET GENERATION
