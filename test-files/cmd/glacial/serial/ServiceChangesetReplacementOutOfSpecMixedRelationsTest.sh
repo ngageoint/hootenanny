@@ -9,6 +9,10 @@ set -e
 # Any relations in the output owning the commented out member should be tagged with the 'hoot::missing_child' tag after the changeset is 
 # applied.
 #
+# The main one to check here is the large unlabeled green way that is inside the shop=mall way named "The Forum Shops at Caesars". That way
+# may get unncessarily duplicated due to belonging to multiple relations. Drag it slightly to ensure a duplicate isn't hidden underneath of it.
+# Also, make sure it is still connected to all the shop polys it should be.
+#
 # Output issues: 
 # 1. Drag the top left or right corners of "Victoria's Secret' down a bit and see the duplicated info nodes with the tag, "Map of the 
 # Shopping Centre". Generally, way nodes don't get info tag so not a critical problem.

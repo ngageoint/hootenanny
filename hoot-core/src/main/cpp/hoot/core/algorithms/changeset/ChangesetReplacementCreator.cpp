@@ -49,7 +49,7 @@
 #include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
-#include <hoot/core/criterion/RoundaboutCriterion.h>
+//#include <hoot/core/criterion/RoundaboutCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
@@ -551,19 +551,20 @@ void ChangesetReplacementCreator::_create()
   // some duplicated features that need to be cleaned up before we generate the changesets. This
   // is kind of a band-aid :-(
 
+  // UPDATE 8/17/20: This de-duplication appears no longer necessary after applying the ID
+  // synchronization just after it. More testing needs to happen before verifying that, though.
+
   // If we have the maps for only one geometry type, then there isn't a possibility of duplication
   // created by the replacement operation.
-  // TODO: get rid of this dedupe option
-  if (ConfigOptions().getChangesetReplacementDeduplicateCalculatedMaps() && refMaps.size() > 1)
-  {
-    // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
-    // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
-    // de-duping. Mostly worried that not doing so could break the overlapping only replacement
-    // (non-full) scenario...we'll see...
-    //_dedupeMaps(refMaps);
-    //_intraDedupeMap(refMaps);
-    _dedupeMaps(conflatedMaps);
-  }
+//  if (refMaps.size() > 1)
+//  {
+//    // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
+//    // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
+//    // de-duping. Mostly worried that not doing so could break the overlapping only replacement
+//    // (non-full) scenario...we'll see...
+//    //_dedupeMaps(refMaps);
+//    _dedupeMaps(conflatedMaps);
+//  }
 
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements.
@@ -1170,6 +1171,11 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
       // re-classification for a feature is necessary. If other instances of this occur things could
       // get messy really quick, but we'll only worry about that if it actually happens.
 
+      // UPDATE 8/17/20: Used to do this just for roundabouts, but there are some highway types
+      // (e.g. highway=pedstrian) that can be polys. Really, probably just need some generic way to
+      // make sure no elements of the same type get processed in separate geometry handling loops
+      // instead of code like this.
+
       ElementCriterionPtr updatedGeometryCrit;
       LOG_VART(_roadFilterExists());
       if (_roadFilterExists())
@@ -1179,7 +1185,8 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
           LOG_TRACE("Adding roundabouts to line filter due to presence of road filter...");
           updatedGeometryCrit.reset(
             new OrCriterion(
-              geometryCrit, std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())));
+              geometryCrit,
+              std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())));
         }
         else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
         {
@@ -1189,7 +1196,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
               geometryCrit,
               NotCriterionPtr(
                 new NotCriterion(
-                  std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())))));
+                  std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())))));
         }
       }
       else
@@ -1234,7 +1241,8 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
         LOG_TRACE("Adding roundabouts to line filter...");
         updatedGeometryCrit.reset(
           new OrCriterion(
-            geometryCrit, std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())));
+            geometryCrit,
+            std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())));
       }
       else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
       {
@@ -1244,7 +1252,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
             geometryCrit,
             NotCriterionPtr(
               new NotCriterion(
-                std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())))));
+                std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())))));
       }
       else
       {
@@ -2108,13 +2116,15 @@ void ChangesetReplacementCreator::_synchronizeIds(
   // When replacing data, we always load the replacement data without its original IDs in case there
   // are overlapping IDs in the reference data. If you were only replacing unmodified data from one
   // source with updated data from another source (e.g. replacing newer OSM with older OSM), this
-  // wouldn't be necessary, but we're not guaranteed just that scenario. The downside to loading
-  // up a separate set of unique IDs for the secondary data is that identical elements in the
-  // secondary can end up unnecessarily replacing elements in the reference. This gets mitigated
+  // wouldn't be necessary, but we're not guaranteed just that scenario occurring. The downside to
+  // loading up a separate set of unique IDs for the secondary data is that identical elements in
+  // the secondary can end up unnecessarily replacing elements in the reference. This gets mitigated
   // here where we find all identical elements between the data being replaced and the replacement
   // data and overwrite IDs in the replacement data from those in the data being replaced to
   // prevent unnecessary changeset modifications from being generated. Its possible we could do
-  // this earlier in the replace process, however that has proven difficult so far.
+  // this earlier in the replacement process, however that has proven difficult to accomplish so
+  // far.
+
   assert(mapsBeingReplaced.size() == replacementMaps.size());
   ElementIdSynchronizer idSync;
   for (int i = 0; i < mapsBeingReplaced.size(); i++)
@@ -2122,7 +2132,8 @@ void ChangesetReplacementCreator::_synchronizeIds(
     OsmMapPtr mapBeingReplaced = mapsBeingReplaced.at(i);
     OsmMapPtr replacementMap = replacementMaps.at(i);
     OsmMapWriterFactory::writeDebugMap(
-      mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() + "-source-before-id-sync");
+      mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() +
+      "-source-before-id-sync");
     OsmMapWriterFactory::writeDebugMap(
       replacementMap, _changesetId + "-" + replacementMap->getName() + "-target-before-id-sync");
 

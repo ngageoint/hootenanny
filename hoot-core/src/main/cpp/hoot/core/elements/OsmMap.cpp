@@ -584,7 +584,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
       }
     }
 
-    // create a copy of the set b/c we may modify it with replace commands.
+    // Create a copy of the set b/c we may modify it with replace commands.
     const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
     for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
     {

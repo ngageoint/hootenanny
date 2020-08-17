@@ -31,6 +31,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
+//#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
@@ -44,6 +45,9 @@ _updatedRelationCtr(0)
 
 void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
+  // TODO: remove
+  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 4);
+
   _updatedNodeCtr = 0;
   _updatedWayCtr = 0;
   _updatedRelationCtr = 0;
@@ -58,8 +62,10 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
 
   // Calc element hashes associated with element IDs.
   const QMap<QString, ElementId> map1Hashes = _calcElementHashes(map1);
+  LOG_VARD(map1Hashes.size());
   QSet<QString> map1HashesSet = map1Hashes.keys().toSet();
   const QMap<QString, ElementId> map2Hashes = _calcElementHashes(map2);
+  LOG_VARD(map2Hashes.size());
   QSet<QString> map2HashesSet = map2Hashes.keys().toSet();
 
   // Obtain the hashes for the elements that are identical between the two maps.
@@ -70,17 +76,28 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
        ++itr)
   {
     const QString identicalHash = *itr;
+    LOG_VART(identicalHash);
 
     // Get the element with matching hash from the ref map.
     ConstElementPtr map1IdenticalElement = map1->getElement(map1Hashes[identicalHash]);
     if (map1IdenticalElement)
     {
+      LOG_VART(map1IdenticalElement->getElementId());
+
+//      if (WayNodeCriterion(map1).isSatisfied(map1IdenticalElement))
+//      {
+//        continue;
+//      }
+
       // Copy it to be safe.
       ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
+      LOG_VART(map1IdenticalElementCopy->getElementId());
       // Get the element with matching hash from the sec map.
       ElementPtr map2IdenticalElement = map2->getElement(map2Hashes[identicalHash]);
       if (map2IdenticalElement)
       {
+        LOG_VART(map2IdenticalElement->getElementId());
+
         // Make sure the map being updated doesn't already have an element with this ID (this check
         // may not be necessary).
         if (!map2->containsElement(map1IdenticalElement->getElementId()))
@@ -119,6 +136,9 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
   LOG_DEBUG(
     "Updated IDs on " << getNumTotalFeatureIdsSynchronized() <<
     " identical elements in second map.");
+
+  // TODO: remove
+  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6);
 }
 
 QMap<QString, ElementId> ElementIdSynchronizer::_calcElementHashes(const OsmMapPtr& map)

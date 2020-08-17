@@ -58,7 +58,8 @@ void ElementHashVisitor::visit(const ElementPtr& e)
   // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
   {
-    LOG_VART(e->getElementId());
+    //LOG_VART(e->getElementId());
+    LOG_VART(e);
 
     const QString hash = toHashString(e);
     LOG_VART(hash);
@@ -100,7 +101,7 @@ QString ElementHashVisitor::toJson(const ConstElementPtr& e) const
   {
     result = _toJson(std::dynamic_pointer_cast<const Relation>(e));
   }
-  //LOG_VART(result);
+  LOG_TRACE("json for " << e->getElementId() << ":\n" << result);
   return result;
 }
 

@@ -71,10 +71,12 @@ public:
 
   void orphanedNodes1Test()
   {
+    // TODO: test description
+
     _testName = "orphanedNodes1Test";
     _prepInput(
-      _inputPath + "/329_ReferenceNOMEData_31JULY2020.osm",
-      _inputPath + "/329_SecondaryOSMData_31JULY2020.osm", "");
+      _inputPath + "/orphanedNodes1Test-Input1.osm",
+      _inputPath + "/orphanedNodes1Test-Input2.osm", "");
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
