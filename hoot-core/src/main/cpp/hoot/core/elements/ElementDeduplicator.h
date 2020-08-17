@@ -42,8 +42,6 @@ namespace hoot
  * This has a more strict definition of way duplicates than DuplicateWayRemover and will only remove
  * exact duplicates.
  *
- * @todo For now, this is being tested from tests exercising ChangesetReplacementCreator, but it
- * would be good to give it its own test eventually.
  * @todo its convoluted to have both a boolean and a criterion for each element type; removal should
  * be able to all be done with a single criterion and all elements, regardless of type, can be
  * processed in one pass...will just take a decent amount of refactoring

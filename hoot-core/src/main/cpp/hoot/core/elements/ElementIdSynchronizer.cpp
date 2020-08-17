@@ -31,7 +31,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
-//#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
@@ -45,9 +44,6 @@ _updatedRelationCtr(0)
 
 void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
-  // TODO: remove
-  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 4);
-
   _updatedNodeCtr = 0;
   _updatedWayCtr = 0;
   _updatedRelationCtr = 0;
@@ -83,11 +79,6 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
     if (map1IdenticalElement)
     {
       LOG_VART(map1IdenticalElement->getElementId());
-
-//      if (WayNodeCriterion(map1).isSatisfied(map1IdenticalElement))
-//      {
-//        continue;
-//      }
 
       // Copy it to be safe.
       ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
@@ -136,9 +127,6 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
   LOG_DEBUG(
     "Updated IDs on " << getNumTotalFeatureIdsSynchronized() <<
     " identical elements in second map.");
-
-  // TODO: remove
-  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6);
 }
 
 QMap<QString, ElementId> ElementIdSynchronizer::_calcElementHashes(const OsmMapPtr& map)
