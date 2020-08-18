@@ -72,12 +72,13 @@ class ServiceHootApiDbReaderTest : public HootTestFixture
   // TODO: fix
   //CPPUNIT_TEST(runMultipleMapsSameNameNoUserPublicTest);
   CPPUNIT_TEST(readByBoundsLeaveConnectedOobWaysTest);
+  CPPUNIT_TEST(runAccessPrivateMapWithAdminUserTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  QString userEmail()
-  { return QString("%1.ServiceHootApiDbReaderTest@hoottestcpp.org").arg(_testName); }
+  QString userEmail(const QString& test_name)
+  { return QString("%1.ServiceHootApiDbReaderTest@hoottestcpp.org").arg(test_name); }
 
   ServiceHootApiDbReaderTest()
     : HootTestFixture("test-files/io/ServiceHootApiDbReaderTest/",
@@ -86,22 +87,21 @@ public:
     setResetType(ResetAll);
   }
 
-  void setUpTest(const QString& testName)
+  void setUpTest(const QString& testName, bool adminUser = false)
   {
     _mapId = -1;
     _testName = testName;
-    ServicesDbTestUtils::deleteUser(userEmail());
+    ServicesDbTestUtils::deleteUser(userEmail(testName));
     HootApiDb database;
 
     database.open(ServicesDbTestUtils::getDbModifyUrl());
-    database.getOrCreateUser(userEmail(), QString("%1.ServiceHootApiDbReaderTest").arg(_testName));
+    database.getOrCreateUser(userEmail(testName), QString("%1.ServiceHootApiDbReaderTest").arg(testName), adminUser);
     database.close();
   }
 
   virtual void tearDown()
   {
-    ServicesDbTestUtils::deleteUser(userEmail());
-
+    //  Delete the current map
     if (_mapId != -1)
     {
       HootApiDb database;
@@ -114,6 +114,8 @@ public:
 
       database.close();
     }
+    //  Delete the current user afterwards
+    ServicesDbTestUtils::deleteUser(userEmail(_testName));
   }
 
   long populateMap(const bool putInFolder = false, const bool folderIsPublic = false)
@@ -123,7 +125,7 @@ public:
     OsmMapPtr map = ServicesDbTestUtils::createServiceTestMap();
 
     HootApiDbWriter writer;
-    writer.setUserEmail(userEmail());
+    writer.setUserEmail(userEmail(_testName));
     writer.setRemap(false);
     writer.setIncludeDebug(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
@@ -137,7 +139,7 @@ public:
       db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
       db.insertFolderMapMapping(
         writer.getMapId(),
-        db.insertFolder(_testName, -1, db.getUserId(userEmail(), true), folderIsPublic));
+        db.insertFolder(_testName, -1, db.getUserId(userEmail(_testName), true), folderIsPublic));
       db.close();
     }
 
@@ -151,7 +153,7 @@ public:
       map, _inputPath + "runReadByBoundsTestInput.osm", false, Status::Unknown1);
 
     HootApiDbWriter writer;
-    writer.setUserEmail(userEmail());
+    writer.setUserEmail(userEmail(_testName));
     writer.setRemap(true);
     writer.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     writer.write(map);
@@ -176,7 +178,7 @@ public:
     _mapId = populateMap();
 
     HootApiDbReader reader;
-    reader.setUserEmail(userEmail());
+    reader.setUserEmail(userEmail(_testName));
     QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
     reader.open(url);
     HOOT_STR_EQUALS("Env[0:0.4,0:0]", reader.calculateEnvelope().toString());
@@ -188,7 +190,7 @@ public:
     _mapId = populateMap();
 
     HootApiDbReader reader;
-    reader.setUserEmail(userEmail());
+    reader.setUserEmail(userEmail(_testName));
     // make sure all the element ids start with -1
     OsmMapPtr map(new OsmMap());
     reader.setUseDataSourceIds(false);
@@ -213,7 +215,7 @@ public:
   {
     setUpTest("runUrlInvalidMapIdTest");
     HootApiDbReader reader;
-    reader.setUserEmail(userEmail());
+    reader.setUserEmail(userEmail(_testName));
     QString exceptionMsg("");
     const long invalidMapId = _mapId + 1;
     try
@@ -397,7 +399,7 @@ public:
     _mapId = populateMap();
 
     HootApiDbReader reader;
-    reader.setUserEmail(userEmail());
+    reader.setUserEmail(userEmail(_testName));
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     reader.read(map);
@@ -411,7 +413,7 @@ public:
     _mapId = populateMap();
 
     HootApiDbReader reader;
-    reader.setUserEmail(userEmail());
+    reader.setUserEmail(userEmail(_testName));
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId, 3, "node").toString());
     reader.read(map);
@@ -425,7 +427,7 @@ public:
     _mapId = populateMap();
 
     OsmMapPtr map(new OsmMap());
-    conf().set("api.db.email", userEmail());
+    conf().set("api.db.email", userEmail(_testName));
     OsmMapReaderFactory::read(map, ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
     verifyFullReadOutput(map);
 
@@ -438,7 +440,7 @@ public:
     _mapId = populateMap();
 
     HootApiDbReader reader;
-    reader.setUserEmail(userEmail());
+    reader.setUserEmail(userEmail(_testName));
     const int chunkSize = 3;
     reader.setMaxElementsPerMap(chunkSize);
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
@@ -610,7 +612,7 @@ public:
     _mapId = insertDataForBoundTest();
 
     HootApiDbReader reader;
-    reader.setUserEmail(userEmail());
+    reader.setUserEmail(userEmail(_testName));
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
 
@@ -774,7 +776,7 @@ public:
     // Configure the reader for the original user, and we should be able to read out the map.
     // There are two maps with the same name, but they are owned by different users.
     LOG_DEBUG("Reading first map with first user...");
-    reader.setUserEmail(userEmail());
+    reader.setUserEmail(userEmail(_testName));
     reader.open(url);
     reader.read(map);
     verifyFullReadOutput(map);
@@ -835,7 +837,7 @@ public:
     url = url.replace("/" + QString::number(_mapId), "/" + _testName);
     // Configure the reader for the original user, and we should be able to read out the second map.
     // There are two maps with the same name, but they are owned by different users.
-    reader.setUserEmail(userEmail());
+    reader.setUserEmail(userEmail(_testName));
     reader.open(url);
     reader.read(map);
     verifyFullReadOutput(map);
@@ -867,7 +869,7 @@ public:
     LOG_VARD(_mapId);
     HootApiDb db;
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
-    const long firstUserId = db.getUserId(userEmail(), true);
+    const long firstUserId = db.getUserId(userEmail(_testName), true);
     LOG_VARD(firstUserId);
 
     // create a user different than the one who wrote the original map
@@ -934,7 +936,7 @@ public:
     _mapId = insertDataForBoundTest();
 
     HootApiDbReader reader;
-    reader.setUserEmail(userEmail());
+    reader.setUserEmail(userEmail(_testName));
     reader.setKeepImmediatelyConnectedWaysOutsideBounds(true);
     OsmMapPtr map(new OsmMap());
     reader.open(ServicesDbTestUtils::getDbReadUrl(_mapId).toString());
@@ -983,6 +985,39 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, (int)map->getRelations().size());
 
     reader.close();
+  }
+
+  void runAccessPrivateMapWithAdminUserTest()
+  {
+    //  First test has a private map
+    QString testMap1 = "runAccessPrivateMapWithAdminUserTest1";
+    setUpTest(testMap1, false);
+    LOG_DEBUG("Creating original map...");
+    LOG_VARD(_mapId);
+    //  Don't make a folder for the map and keep the map private for this test
+    _mapId = populateMap(false, false);
+
+    // Create an admin user
+    QString testMap2 = "runAccessPrivateMapWithAdminUserTest2";
+    HootApiDb db;
+    db.open(ServicesDbTestUtils::getDbModifyUrl(testMap2).toString());
+    const long adminUser = db.getOrCreateUser(userEmail(testMap2), testMap2, true);
+    LOG_VARD(adminUser);
+
+    //  Attempt to read the original map with the admin user
+    LOG_DEBUG("Reading map with second user...");
+    HootApiDbReader reader;
+    OsmMapPtr map(new OsmMap());
+    QString url = ServicesDbTestUtils::getDbReadUrl(_mapId).toString();
+    reader.setUserEmail(userEmail(testMap2));
+    reader.open(url);
+    reader.read(map);
+    verifyFullReadOutput(map);
+    reader.close();
+
+    db.open(ServicesDbTestUtils::getDbModifyUrl(testMap1).toString());
+    db.deleteUser(adminUser);
+    db.close();
   }
 
 private:

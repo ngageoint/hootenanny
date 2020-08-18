@@ -137,7 +137,7 @@ public:
    */
   void createPendingMapIndexes();
 
-  long getOrCreateUser(QString email, QString displayName);
+  long getOrCreateUser(QString email, QString displayName, bool admin = false);
 
   /**
    * Set user ID for current session, will be passed to DB in all places user ID is required
@@ -626,6 +626,8 @@ private:
   std::shared_ptr<QSqlQuery> _deleteJobById;
   std::shared_ptr<QSqlQuery> _getJobStatusResourceId;
   std::shared_ptr<QSqlQuery> _updateIdSequence;
+  std::shared_ptr<QSqlQuery> _setUserAsAdmin;
+  std::shared_ptr<QSqlQuery> _isUserAdmin;
 
   /** Ignore any insertion conflicts and continue with the rest */
   bool _ignoreInsertConflicts;
