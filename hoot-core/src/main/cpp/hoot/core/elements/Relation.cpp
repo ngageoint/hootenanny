@@ -219,17 +219,19 @@ const Envelope& Relation::getEnvelopeInternal(const std::shared_ptr<const Elemen
     }
 
     const std::shared_ptr<const Element> e = ep->getElement(m.getElementId());
-    LOG_VART(e.get())
-    std::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
-
-    if (childEnvelope->isNull())
+    if (e)
     {
-      LOG_TRACE("Child envelope for " << m.getElementId() << " null.  Returning empty envelope...");
-      _cachedEnvelope.setToNull();
-      return _cachedEnvelope;
-    }
+      std::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
 
-    _cachedEnvelope.expandToInclude(childEnvelope.get());
+      if (childEnvelope->isNull())
+      {
+        LOG_TRACE("Child envelope for " << m.getElementId() << " null.  Returning empty envelope...");
+        _cachedEnvelope.setToNull();
+        return _cachedEnvelope;
+      }
+
+      _cachedEnvelope.expandToInclude(childEnvelope.get());
+    }
   }
 
   LOG_VART(_cachedEnvelope);

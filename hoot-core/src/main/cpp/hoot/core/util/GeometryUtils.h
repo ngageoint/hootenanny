@@ -176,7 +176,7 @@ public:
    * Reads a file containing one or more rectangular AOIs where individual features have an
    * identifier
    *
-   * @param input path to the bounds file; must contain way features with an "id" field
+   * @param input path to the bounds file; input must contain way features with an "id" field
    * @return a collection of bounds rectangles
    * @throws IllegalArgumentException if the features in the input are not ways containing an "id"
    * tag

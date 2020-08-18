@@ -33,6 +33,7 @@
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/StringUtils.h>
 
 // GEOS
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -374,7 +375,7 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
     }
   }
 
-  LOG_DEBUG("Joining " << tmp.size() << " faces...");
+  LOG_DEBUG("Joining " << StringUtils::formatLargeNumber(tmp.size()) << " faces...");
 
   // while there is more than one geometry
   while (tmp.size() > 1)

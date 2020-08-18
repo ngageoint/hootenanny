@@ -276,7 +276,7 @@ void ParallelBoundedApiReader::writeDebugMap(const QString& data, const QString&
     }
     //  Get the unique file number and increment it
     _filenumberMutex.lock();
-    const QString filenumber = StringUtils::getNumberStringPaddedWithZeroes(_filenumber++, 3);
+    const QString filenumber = StringUtils::padFrontOfNumberStringWithZeroes(_filenumber++, 3);
     _filenumberMutex.unlock();
     //  Write out the text to a uniquely named file
     FileUtils::writeFully(QString("tmp/%1-%2.%3").arg(name).arg(filenumber).arg(ext), data);

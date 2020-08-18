@@ -45,17 +45,26 @@ static const QString USER_EMAIL = "ServiceChangesetReplacementGridTest@hoottestc
 static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl().toString();
 
 /*
- * This test allows for testing the Cut and Replace workflow across adjacent AOI's. Either a node
- * density generated task grid or a task grid from an input file may be used.
+ * This test harness allows for testing the Cut and Replace workflow across adjacent task grid
+ * cells. By removing the processes of input data generation and changeset application via API, bugs
+ * can more easily be narrowed down to just those in the ChangesetReplacementGenerator (most of the
+ * time).
+ *
+ * Either an auto node density generated task grid or a task grid from one or more bounds inputs
+ * file may be used to partition the data replacements.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
+
   CPPUNIT_TEST(orphanedNodes1Test);
- // ENABLE THESE TESTS FOR DEBUGGING ONLY
-//  CPPUNIT_TEST(vegasSmallTest);
-//  CPPUNIT_TEST(vegasMediumTest);
-//  CPPUNIT_TEST(vegasLargeTest);
+  //CPPUNIT_TEST(roadDelete1Test);
+
+  // ENABLE THESE TESTS FOR DEBUGGING ONLY
+  //CPPUNIT_TEST(northVegasSmallTest);
+  //CPPUNIT_TEST(northVegasMediumTest);
+  //CPPUNIT_TEST(northVegasLargeTest);
+
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -69,18 +78,37 @@ public:
     setResetType(ResetAll);
   }
 
+  virtual void setUp()
+  {
+    //DisableLog dl;
+    _subTaskTimer.start();
+    _initConfig();
+    _cleanupDataToReplace();
+  }
+
+  virtual void takeDown()
+  {
+    _cleanupDataToReplace();
+    _cleanupReplacementData();
+  }
+
   void orphanedNodes1Test()
   {
-    // TODO: test description
+    // This tests that orphaned nodes are not left behind after two adjoining, successive grid cell
+    // replacements with some data overlapping due to using the lenient bounds interpretation. The
+    // road "Hot Springs Drive" should remain snapped to connecting roads and no orphaned nodes
+    // should be hidden underneath it. Other roads to check in the are include
+    // "Santa Barbara Drive".
 
     _testName = "orphanedNodes1Test";
     _prepInput(
       _inputPath + "/orphanedNodes1Test-Input1.osm",
-      _inputPath + "/orphanedNodes1Test-Input2.osm", "");
+      _inputPath + "/orphanedNodes1Test-Input2.osm",
+      "");
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
-    uut.setGridInput(_inputPath + "/Task14and15.osm");
+    uut.setGridInputs(QStringList(_inputPath + "/Task14and15.osm"));
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
@@ -88,83 +116,103 @@ public:
     uut.setOriginalDataSize(_originalDataSize);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
 
-    _cleanup();
-
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
-  void vegasSmallTest()
+  void roadDelete1Test()
   {
-    // 4 sq blocks of the city - 4 changesets
+    // TODO: test description
+
+    _testName = "roadDelete1Test";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4196";
+    const QString outDir = rootDir + "/" + _testName;
+    QDir().mkpath(outDir);
+    _prepInput(
+      rootDir + "/NOMEData.osm", rootDir + "/OSMData.osm", "-115.1017,36.02439,-114.9956,36.0733");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
+    QStringList inputs;
+    inputs.append(rootDir + "/1/Task38_07Aug2020_VGI_1666/Task38Bounds.osm");
+    inputs.append(rootDir + "/1/Task43_VGI_1666/Task43Extend.osm");
+    uut.setGridInputs(inputs);
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+
+    //HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void northVegasSmallTest()
+  {
+    // 4 sq blocks of the city, 4 changesets, avg derivation: ?, total time: ~2 min
 
     _testName = "vegasSmallTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158/combined-data";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
+    const QString outDir = rootDir + "/" + _testName;
+    QDir().mkpath(outDir);
     _prepInput(
-      rootDir + "/NOMEData.osm", rootDir + "/OSMData.osm", "-115.3314,36.2825,-115.2527,36.3387");
+      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
+      "-115.3314,36.2825,-115.2527,36.3387");
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
-    uut.setKillAfterNumChangesetDerivations(2);
+    //uut.setKillAfterNumChangesetDerivations(2);
     uut.setNodeDensityGridBounds("-115.3059,36.2849,-115.2883,36.2991");
     uut.setNodeDensityMaxNodesPerCell(1000);
-    uut.setNodeDensityTaskGridOutputFile(
-      _outputPath + "/" + _testName + "-" + "taskGridBounds.osm");
-    uut.setChangesetsOutputDir(_outputPath);
-    const QString finalOutput = _outputPath + "/" + _testName + "-out.osm";
-    uut.setWriteFinalOutput(finalOutput);
+    uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
-
-    _cleanup();
   }
 
-  void vegasMediumTest()
+  void northVegasMediumTest()
   {
-    // ~1/4 of city - 64 changesets
+    // ~1/4 of the northern half of the city, 64 changesets, avg derivation: 16s, total time:
+    // ~23 min
 
     _testName = "vegasMediumTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158/combined-data";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
+    const QString outDir = rootDir + "/" + _testName;
+    QDir().mkpath(outDir);
     _prepInput(
-      rootDir + "/NOMEData.osm", rootDir + "/OSMData.osm", "-115.3441,36.2012,-115.1942,36.3398");
+      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
+      "-115.3441,36.2012,-115.1942,36.3398");
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
-    uut.setKillAfterNumChangesetDerivations(2);
+    //uut.setKillAfterNumChangesetDerivations(2);
     uut.setNodeDensityGridBounds("-115.3332,36.2178,-115.1837,36.3400");
     uut.setNodeDensityMaxNodesPerCell(10000);
-    uut.setNodeDensityTaskGridOutputFile(
-      _outputPath + "/" + _testName + "-" + "taskGridBounds.osm");
-    uut.setChangesetsOutputDir(_outputPath);
-    const QString finalOutput = _outputPath + "/" + _testName + "-out.osm";
-    uut.setWriteFinalOutput(finalOutput);
+    uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
-
-    _cleanup();
   }
 
-  void vegasLargeTest()
+  void northVegasLargeTest()
   {
-    // whole city - 64 changesets
+    // whole northern half of city, 64 changesets, ? minutes
 
     _testName = "vegasLargeTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158/combined-data";
-    _prepInput(rootDir + "/NOMEData.osm", rootDir + "/OSMData.osm", "");
+    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
+    const QString outDir = rootDir + "/" + _testName;
+    QDir().mkpath(outDir);
+    _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
     uut.setKillAfterNumChangesetDerivations(2);
     uut.setNodeDensityGridBounds("-115.3528,36.0919,-114.9817,36.3447");
     uut.setNodeDensityMaxNodesPerCell(100000);
-    uut.setNodeDensityTaskGridOutputFile(
-      _outputPath + "/" + _testName + "-" + "taskGridBounds.osm");
-    uut.setChangesetsOutputDir(_outputPath);
-    const QString finalOutput = _outputPath + "/" + _testName + "-out.osm";
-    uut.setWriteFinalOutput(finalOutput);
+    uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
-
-    _cleanup();
   }
 
 private:
@@ -173,21 +221,20 @@ private:
 
   QElapsedTimer _subTaskTimer;
 
-  // for working with a subset of the input data; leave empty to disable
+  // for working with a subset of the input data in order to save unnecessary processing time; leave
+  // empty to disable
   QString _inputCropBounds;
   // read the replacement data just from the source file or load it into a hootapidb layer first?;
   // data replaced is always loaded into osmapidb for changeset application purposes
   //bool _writeReplacementDataToDb;
   QString _replacementDataUrl;
+  // original size of the data to be replaced
   int _originalDataSize;
 
   void _prepInput(const QString& toReplace, const QString& replacement,
                   const QString& cropInputBounds = "")
   {
-    _subTaskTimer.start();
-    _initConfig();
     _replacementDataUrl = ServicesDbTestUtils::getDbModifyUrl(_testName).toString();
-    _cleanup();
     _loadDataToReplaceDb(toReplace, cropInputBounds);
     // TODO: later will make replacement db load optional and support file as well
     _loadReplacementDataDb(replacement, cropInputBounds);
@@ -209,6 +256,7 @@ private:
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementCacheInputFileMapsKey(), true);
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
+    conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 
     // leave enabled for debugging only
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
@@ -216,7 +264,9 @@ private:
 
   void _loadDataToReplaceDb(const QString& input, const QString& cropBounds = "")
   {
-    LOG_STATUS("Initializing the data to replace db at: " << DATA_TO_REPLACE_URL << "...");
+    LOG_STATUS("Loading the data to replace db...");
+
+    // make sure the db is empty
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     ApiDb::execSqlFile(DATA_TO_REPLACE_URL, "test-files/servicesdb/users.sql");
     OsmMapPtr map(new OsmMap());
@@ -225,10 +275,6 @@ private:
     {
       throw HootException("Data to replace db is not empty at start.");
     }
-    LOG_STATUS(
-      "Data to replace db initialized in: " <<
-      StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-    _subTaskTimer.restart();
 
     map.reset(new OsmMap());
     LOG_STATUS("Reading the data to replace from: ..." << input.right(25) << "...");
@@ -252,7 +298,7 @@ private:
         StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
       _subTaskTimer.restart();
     }
-    LOG_STATUS("Loading the data to replace db to: " << DATA_TO_REPLACE_URL << "...");
+    LOG_STATUS("Loading the data to replace db to: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
     OsmMapWriterFactory::write(map, DATA_TO_REPLACE_URL);
     _originalDataSize = (int)map->size();
     LOG_STATUS(
@@ -265,7 +311,7 @@ private:
   {
     LOG_STATUS(
       "Loading the replacement data db from: ..." << input <<
-      " to: " << _replacementDataUrl << "...");
+      " to: ..." << _replacementDataUrl.right(25) << "...");
     OsmMapPtr map(new OsmMap());
     LOG_STATUS("Reading the replacement data from: ..." << input.right(25) << "...");
     OsmMapReaderFactory::read(map, input, false, Status::Unknown2);
@@ -288,7 +334,7 @@ private:
         StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
       _subTaskTimer.restart();
     }
-    LOG_STATUS("Loading the replacement data db to: " << _replacementDataUrl << "...");
+    LOG_STATUS("Loading the replacement data db to: ..." << _replacementDataUrl.right(25) << "...");
     OsmMapWriterFactory::write(map, _replacementDataUrl);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " replacement elements loaded in: " <<
@@ -296,7 +342,7 @@ private:
     _subTaskTimer.restart();
   }
 
-  void _cleanup()
+  void _cleanupDataToReplace()
   {
     LOG_STATUS("Cleaning up the modified db at: " << DATA_TO_REPLACE_URL << "...");
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
@@ -304,14 +350,17 @@ private:
       "Modified db cleaned in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
+  }
 
-//    LOG_STATUS("Cleaning up the replacement data db at: " << _replacementDataUrl << "...");
-//    ServicesDbTestUtils::deleteUser(USER_EMAIL);
-//    HootApiDbWriter().deleteMap(_testName);
-//    LOG_STATUS(
-//      "Replacement data cleaned in: " <<
-//      StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-//    _subTaskTimer.restart();
+  void _cleanupReplacementData()
+  {
+    LOG_STATUS("Cleaning up the replacement data db at: " << _replacementDataUrl << "...");
+    ServicesDbTestUtils::deleteUser(USER_EMAIL);
+    HootApiDbWriter().deleteMap(_testName);
+    LOG_STATUS(
+      "Replacement data cleaned in: " <<
+      StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+    _subTaskTimer.restart();
   }
 };
 

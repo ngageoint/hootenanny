@@ -311,10 +311,10 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     {
       LOG_DEBUG("Retrieving way IDs immediately connected to the current ways...");
       connectedWayIds = _getDatabase()->selectConnectedWayIds(wayIds);
-      LOG_VARD(connectedWayIds);
+      LOG_VART(connectedWayIds);
       LOG_VARD(connectedWayIds.size());
       wayIds.unite(connectedWayIds);
-      LOG_VARD(wayIds);
+      LOG_VART(wayIds);
       LOG_VARD(wayIds.size());
     }
 

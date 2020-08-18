@@ -748,7 +748,11 @@ void OsmMap::visitNodesRo(ConstElementVisitor& visitor) const
   {
     if (containsNode(it->first))
     {
-      visitor.visit(std::dynamic_pointer_cast<const Node>(it->second));
+      ConstNodePtr node = std::dynamic_pointer_cast<const Node>(it->second);
+      if (node)
+      {
+        visitor.visit(node);
+      }
     }
 
     numVisited++;
@@ -777,7 +781,11 @@ void OsmMap::visitWaysRo(ConstElementVisitor& visitor) const
   {
     if (containsWay(it->first))
     {
-      visitor.visit(std::dynamic_pointer_cast<const Way>(it->second));
+      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(it->second);
+      if (way)
+      {
+        visitor.visit(way);
+      }
     }
 
     numVisited++;
@@ -806,7 +814,11 @@ void OsmMap::visitRelationsRo(ConstElementVisitor& visitor) const
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
+      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(it->second);
+      if (relation)
+      {
+        visitor.visit(relation);
+      }
     }
 
     numVisited++;
@@ -835,7 +847,11 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
   {
     if (containsNode(it->first))
     {
-      visitor.visit(std::dynamic_pointer_cast<const Node>(it->second));
+      ConstNodePtr node = std::dynamic_pointer_cast<const Node>(it->second);
+      if (node)
+      {
+        visitor.visit(node);
+      }
     }
 
     numVisited++;
@@ -854,7 +870,11 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
   {
     if (containsWay(it->first))
     {
-      visitor.visit(std::dynamic_pointer_cast<const Way>(it->second));
+      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(it->second);
+      if (way)
+      {
+        visitor.visit(way);
+      }
     }
 
     numVisited++;
@@ -873,7 +893,11 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
+      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(it->second);
+      if (relation)
+      {
+        visitor.visit(relation);
+      }
     }
 
     numVisited++;
@@ -902,7 +926,11 @@ void OsmMap::visitRw(ElementVisitor& visitor)
   {
     if (containsNode(it->first))
     {
-      visitor.visit(it->second);
+      NodePtr node = it->second;
+      if (node)
+      {
+        visitor.visit(node);
+      }
     }
 
     numVisited++;
@@ -921,7 +949,11 @@ void OsmMap::visitRw(ElementVisitor& visitor)
   {
     if (containsWay(it->first))
     {
-      visitor.visit(it->second);
+      WayPtr way = it->second;
+      if (way)
+      {
+        visitor.visit(way);
+      }
     }
 
     numVisited++;
@@ -940,7 +972,11 @@ void OsmMap::visitRw(ElementVisitor& visitor)
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(it->second);
+      RelationPtr relation = it->second;
+      if (relation)
+      {
+        visitor.visit(relation);
+      }
     }
 
     numVisited++;
@@ -969,7 +1005,11 @@ void OsmMap::visitWaysRw(ConstElementVisitor& visitor)
   {
     if (containsWay(it->first))
     {
-      visitor.visit(std::dynamic_pointer_cast<const Way>(it->second));
+      ConstWayPtr way = std::dynamic_pointer_cast<const Way>(it->second);
+      if (way)
+      {
+        visitor.visit(way);
+      }
     }
 
     numVisited++;
@@ -998,7 +1038,11 @@ void OsmMap::visitWaysRw(ElementVisitor& visitor)
   {
     if (containsWay(it->first))
     {
-      visitor.visit(std::dynamic_pointer_cast<Way>(it->second));
+      WayPtr way = std::dynamic_pointer_cast<Way>(it->second);
+      if (way)
+      {
+        visitor.visit(way);
+      }
     }
 
     numVisited++;
@@ -1027,7 +1071,11 @@ void OsmMap::visitRelationsRw(ConstElementVisitor& visitor)
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(std::dynamic_pointer_cast<const Relation>(it->second));
+      ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(it->second);
+      if (relation)
+      {
+        visitor.visit(relation);
+      }
     }
 
     numVisited++;
@@ -1056,7 +1104,11 @@ void OsmMap::visitRelationsRw(ElementVisitor& visitor)
   {
     if (containsRelation(it->first))
     {
-      visitor.visit(std::dynamic_pointer_cast<Relation>(it->second));
+      RelationPtr relation = std::dynamic_pointer_cast<Relation>(it->second);
+      if (relation)
+      {
+        visitor.visit(relation);
+      }
     }
 
     numVisited++;

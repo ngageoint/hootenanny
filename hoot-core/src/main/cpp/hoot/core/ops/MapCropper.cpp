@@ -283,7 +283,7 @@ void MapCropper::apply(OsmMapPtr& map)
         if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("Couldn't convert " << w->getElementId() << " to line string. Keeping way...");
-          LOG_VARW(w);
+          LOG_VARD(w);
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {

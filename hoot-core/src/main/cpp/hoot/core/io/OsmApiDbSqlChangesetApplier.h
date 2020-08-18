@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBSQLCHANGESETAPPLIER_H
 #define OSMAPIDBSQLCHANGESETAPPLIER_H
@@ -70,7 +70,7 @@ public:
    * within the target database for changesets
    * @param timeStr a time string of the format specified by the OsmApiDb::TIME_FORMAT constant;
    * only searches for changesets created after the time
-   * @return
+   * @return true if a conflict exists; false otherwise
    */
   bool conflictExistsInTarget(const QString& boundsStr, const QString& timeStr);
 
@@ -84,7 +84,8 @@ public:
 private:
 
   void _initChangesetStats();
-  void _execTransaction(const QString& changesetInsertStatement, const QString& elementSqlStatements);
+  void _execTransaction(const QString& changesetInsertStatement,
+                        const QString& elementSqlStatements);
 
   OsmApiDb _db;
 

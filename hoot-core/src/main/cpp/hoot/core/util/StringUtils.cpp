@@ -143,7 +143,7 @@ std::shared_ptr<boost::property_tree::ptree> StringUtils::stringListToJsonString
   return strArr;
 }
 
-QString StringUtils::getNumberStringPaddedWithZeroes(const int number, const int padSize)
+QString StringUtils::padFrontOfNumberStringWithZeroes(const int number, const int padSize)
 {
   return QString("%1").arg(number, padSize, 10, QChar('0'));
 }

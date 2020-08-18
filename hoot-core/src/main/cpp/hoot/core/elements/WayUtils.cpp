@@ -144,19 +144,31 @@ geos::geom::Coordinate WayUtils::closestWayCoordToNode(
   // split the way up into coords
   std::vector<geos::geom::Coordinate> discretizedWayCoords;
   WayDiscretizer wayDiscretizer(map, way);
-  wayDiscretizer.discretize(discretizationSpacing, discretizedWayCoords);
+  if (!wayDiscretizer.discretize(discretizationSpacing, discretizedWayCoords))
+  {
+    return geos::geom::Coordinate();
+  }
+
   // add the first and last coords in (one or both could already be there, but it won't hurt if
   // they're duplicated)
-  discretizedWayCoords.insert(
-    discretizedWayCoords.begin(), map->getNode(way->getFirstNodeId())->toCoordinate());
-  discretizedWayCoords.push_back(map->getNode(way->getLastNodeId())->toCoordinate());
+  ConstNodePtr firstNode = map->getNode(way->getFirstNodeId());
+  ConstNodePtr lastNode = map->getNode(way->getLastNodeId());
+  if (!firstNode || !lastNode)
+  {
+    return geos::geom::Coordinate();
+  }
+  discretizedWayCoords.insert(discretizedWayCoords.begin(), firstNode->toCoordinate());
+  discretizedWayCoords.push_back(lastNode->toCoordinate());
+  LOG_VART(discretizedWayCoords.size());
+  LOG_VART(discretizedWayCoords);
+
   // determine which end of the way is closer to our input node (to handle ways looping back on
   // themselves)
   if (endWayNodeIsCloserToNodeThanStart(node, way, map))
   {
     std::reverse(discretizedWayCoords.begin(), discretizedWayCoords.end());
   }
-  LOG_VART(discretizedWayCoords);
+  LOG_VART(discretizedWayCoords.size());
 
   // find the closest coord to the input node
   double shortestDistance = DBL_MAX;
