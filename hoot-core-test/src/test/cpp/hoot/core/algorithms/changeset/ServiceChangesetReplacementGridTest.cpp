@@ -80,6 +80,7 @@ public:
 
   virtual void setUp()
   {
+    //DisableLog dl;
     _subTaskTimer.start();
     _initConfig();
     _cleanupDataToReplace();
@@ -145,7 +146,7 @@ public:
 
   void northVegasSmallTest()
   {
-    // 4 sq blocks of the city, 4 changesets, ~2 min
+    // 4 sq blocks of the city, 4 changesets, avg derivation: ?, total time: ~2 min
 
     _testName = "vegasSmallTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -169,8 +170,8 @@ public:
 
   void northVegasMediumTest()
   {
-    // ~1/4 of the northern half of the city, 64 changesets, fails while snapping nodes when
-    // deriving changeset 14
+    // ~1/4 of the northern half of the city, 64 changesets, avg derivation: 16s, total time:
+    // ~23 min
 
     _testName = "vegasMediumTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -255,6 +256,7 @@ private:
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementCacheInputFileMapsKey(), true);
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
+    conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 
     // leave enabled for debugging only
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);

@@ -350,10 +350,11 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
 {
   const QString boundsStr = GeometryUtils::toString(bounds);
   QFile changesetFile(
-    _changesetsOutputDir + "/changeset-cell-" + QString::number(taskGridCellId) + ".osc.sql");
+    _changesetsOutputDir + "/changeset-cell-" +
+    StringUtils::padFrontOfNumberStringWithZeroes(taskGridCellId, 3) + ".osc.sql");
 
   QString msg =
-    "Deriving changeset " + QString::number(changesetNum) + " / " +
+    "*****************************\nDeriving changeset " + QString::number(changesetNum) + " / " +
     StringUtils::formatLargeNumber(taskGridSize) + " for task grid cell: " +
     QString::number(taskGridCellId) + ", ";
   if (numReplacementNodes != -1)
@@ -387,6 +388,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     ", over bounds: " << boundsStr << ", from file: ..." << changesetFile.fileName().right(25) <<
     "...");
   _changesetApplier->write(changesetFile);
+  LOG_STATUS(_changesetApplier->getChangesetStats());
   LOG_STATUS(
     "\tChangeset applied in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));

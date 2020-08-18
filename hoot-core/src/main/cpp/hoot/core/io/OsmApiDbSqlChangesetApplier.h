@@ -70,7 +70,7 @@ public:
    * within the target database for changesets
    * @param timeStr a time string of the format specified by the OsmApiDb::TIME_FORMAT constant;
    * only searches for changesets created after the time
-   * @return
+   * @return true if a conflict exists; false otherwise
    */
   bool conflictExistsInTarget(const QString& boundsStr, const QString& timeStr);
 
@@ -84,7 +84,8 @@ public:
 private:
 
   void _initChangesetStats();
-  void _execTransaction(const QString& changesetInsertStatement, const QString& elementSqlStatements);
+  void _execTransaction(const QString& changesetInsertStatement,
+                        const QString& elementSqlStatements);
 
   OsmApiDb _db;
 
