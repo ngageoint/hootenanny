@@ -355,12 +355,12 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   QString msg =
     "Deriving changeset " + QString::number(changesetNum) + " / " +
     StringUtils::formatLargeNumber(taskGridSize) + " for task grid cell: " +
-    QString::number(taskGridCellId) + ", over bounds: " + boundsStr + ",";
+    QString::number(taskGridCellId) + ", ";
   if (numReplacementNodes != -1)
   {
-    msg += " replacement nodes: " + StringUtils::formatLargeNumber(numReplacementNodes) + ", ";
+    msg += "replacement nodes: " + StringUtils::formatLargeNumber(numReplacementNodes) + ", ";
   }
-  msg += "to file: ..." + changesetFile.fileName().right(25) + "...";
+  msg += "over bounds: " + boundsStr + ", to file: ..." + changesetFile.fileName().right(25) + "...";
   LOG_STATUS(msg);
   _changesetCreator->setChangesetId(QString::number(taskGridCellId));
 //    QString secondaryInput;

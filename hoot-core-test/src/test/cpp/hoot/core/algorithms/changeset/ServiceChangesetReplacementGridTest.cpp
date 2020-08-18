@@ -45,9 +45,10 @@ static const QString USER_EMAIL = "ServiceChangesetReplacementGridTest@hoottestc
 static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl().toString();
 
 /*
- * This test allows for testing the Cut and Replace workflow across adjacent AOI's. By removing the
- * process of input data generation and changeset application via API, bugs can be narrowed down to
- * just those in the ChangesetReplacementGenerator (most of the time).
+ * This test harness allows for testing the Cut and Replace workflow across adjacent task grid
+ * cells. By removing the processes of input data generation and changeset application via API, bugs
+ * can more easily be narrowed down to just those in the ChangesetReplacementGenerator (most of the
+ * time).
  *
  * Either an auto node density generated task grid or a task grid from one or more bounds inputs
  * file may be used to partition the data replacements.
@@ -55,13 +56,15 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
-  // TODO: re-enable
-  //CPPUNIT_TEST(orphanedNodes1Test);
+
+  CPPUNIT_TEST(orphanedNodes1Test);
   //CPPUNIT_TEST(roadDelete1Test);
- // ENABLE THESE TESTS FOR DEBUGGING ONLY
-  //CPPUNIT_TEST(vegasSmallTest);
-  CPPUNIT_TEST(vegasMediumTest);
-  //CPPUNIT_TEST(vegasLargeTest);
+
+  // ENABLE THESE TESTS FOR DEBUGGING ONLY
+  //CPPUNIT_TEST(northVegasSmallTest);
+  //CPPUNIT_TEST(northVegasMediumTest);
+  //CPPUNIT_TEST(northVegasLargeTest);
+
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -75,9 +78,26 @@ public:
     setResetType(ResetAll);
   }
 
+  virtual void setUp()
+  {
+    _subTaskTimer.start();
+    _initConfig();
+    _cleanupDataToReplace();
+  }
+
+  virtual void takeDown()
+  {
+    _cleanupDataToReplace();
+    _cleanupReplacementData();
+  }
+
   void orphanedNodes1Test()
   {
-    // TODO: test description
+    // This tests that orphaned nodes are not left behind after two adjoining, successive grid cell
+    // replacements with some data overlapping due to using the lenient bounds interpretation. The
+    // road "Hot Springs Drive" should remain snapped to connecting roads and no orphaned nodes
+    // should be hidden underneath it. Other roads to check in the are include
+    // "Santa Barbara Drive".
 
     _testName = "orphanedNodes1Test";
     _prepInput(
@@ -95,9 +115,6 @@ public:
     uut.setOriginalDataSize(_originalDataSize);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
 
-    _cleanupDataToReplace();
-    _cleanupReplacementData();
-
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -108,6 +125,7 @@ public:
     _testName = "roadDelete1Test";
     const QString rootDir = "/home/vagrant/hoot/tmp/4196";
     const QString outDir = rootDir + "/" + _testName;
+    QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/NOMEData.osm", rootDir + "/OSMData.osm", "-115.1017,36.02439,-114.9956,36.0733");
 
@@ -122,13 +140,10 @@ public:
     uut.setOriginalDataSize(_originalDataSize);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
 
-    _cleanupDataToReplace();
-    _cleanupReplacementData();
-
     //HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
-  void vegasSmallTest()
+  void northVegasSmallTest()
   {
     // 4 sq blocks of the city, 4 changesets, ~2 min
 
@@ -150,14 +165,12 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
-
-    _cleanupDataToReplace();
-    _cleanupReplacementData();
   }
 
-  void vegasMediumTest()
+  void northVegasMediumTest()
   {
-    // ~1/4 of city, 64 changesets, ? min
+    // ~1/4 of the northern half of the city, 64 changesets, fails while snapping nodes when
+    // deriving changeset 14
 
     _testName = "vegasMediumTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -176,13 +189,10 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
-
-    _cleanupDataToReplace();
-    _cleanupReplacementData();
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl); 
   }
 
-  void vegasLargeTest()
+  void northVegasLargeTest()
   {
     // whole northern half of city, 64 changesets, ? minutes
 
@@ -202,9 +212,6 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
-
-    _cleanupDataToReplace();
-    _cleanupReplacementData();
   }
 
 private:
@@ -213,21 +220,20 @@ private:
 
   QElapsedTimer _subTaskTimer;
 
-  // for working with a subset of the input data; leave empty to disable
+  // for working with a subset of the input data in order to save unnecessary processing time; leave
+  // empty to disable
   QString _inputCropBounds;
   // read the replacement data just from the source file or load it into a hootapidb layer first?;
   // data replaced is always loaded into osmapidb for changeset application purposes
   //bool _writeReplacementDataToDb;
   QString _replacementDataUrl;
+  // original size of the data to be replaced
   int _originalDataSize;
 
   void _prepInput(const QString& toReplace, const QString& replacement,
                   const QString& cropInputBounds = "")
   {
-    _subTaskTimer.start();
-    _initConfig();
     _replacementDataUrl = ServicesDbTestUtils::getDbModifyUrl(_testName).toString();
-    _cleanupDataToReplace();
     _loadDataToReplaceDb(toReplace, cropInputBounds);
     // TODO: later will make replacement db load optional and support file as well
     _loadReplacementDataDb(replacement, cropInputBounds);
