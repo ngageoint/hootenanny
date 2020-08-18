@@ -1054,10 +1054,12 @@ enc311.rules = {
     ['CATWAT','5','seamark:water_turbulence:category','bombora'], // bombora
 
     // CATWED - Category of weed/kelp
-    ['CATWED','1','seamark:vegeation:category','kelp'], // kelp
-    ['CATWED','2','seamark:vegetation:category','sea_weed'], // sea weed
-    ['CATWED','3','seamark:vegetation:category','sea_grass'], // sea grass
-    ['CATWED','4','seamark:vegetation:category','saragasso'], // saragasso
+    // NOTE: These are fixed in pre/post processing to be seamark:vegetation:category
+    // Why, OSM, why?
+    ['CATWED','1','seamark:weed:category','kelp'], // kelp
+    ['CATWED','2','seamark:weed:category','sea_weed'], // sea weed
+    ['CATWED','3','seamark:weed:category','sea_grass'], // sea grass
+    ['CATWED','4','seamark:weed:category','saragasso'], // saragasso
 
     // CATWRK - Category of wreck
     ['CATWRK','1','seamark:wreck:category','non-dangerous'], // non-dangerous wreck
