@@ -37,9 +37,13 @@ namespace hoot
 {
 
 /*
- * This only tests some input validation checks, as its easier to test the actual changeset
- * generation from command line tests (ServiceChangesetReplacement*Test.sh), as you can see the
- * results of applying the changesets back to the source data.
+ * Currently, this primarily tests some input validation checks, as it has been easier to test the
+ * actual changeset generation from command line tests instead
+ * (ServiceChangesetReplacement*Test.sh), since it is easy to see the results of applying the
+ * changesets back to the source data. That being said, the command line tests are slow and
+ * numerous. Eventually, when C&R is more stable the command line tests will probably be rolled back
+ * to just a handful and many of them will be converted to unit tests with a workflow similar to,
+ * but not as complicated as, that in ServiceChangesetReplacementGridTest.
  */
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {

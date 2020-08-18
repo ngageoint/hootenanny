@@ -39,11 +39,10 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, ReplaceElementOp)
 
-ReplaceElementOp::ReplaceElementOp()
-  : _clearAndRemove(false)
+ReplaceElementOp::ReplaceElementOp() :
+_clearAndRemove(false)
 {
 }
-
 
 ReplaceElementOp::ReplaceElementOp(ElementId from, ElementId to, bool clearAndRemove) :
   _from(from),
@@ -105,12 +104,12 @@ void ReplaceElementOp::apply(const OsmMapPtr& map)
       }
     case ElementType::Way:
       {
-        // this should never happen.
+        // This should never happen.
         if (from->getElementType() != ElementType::Node)
         {
           map->validate();
           throw InternalErrorException(
-            "Internal Error: Somehow a non-node is being reported as part of a way. From element: " +
+            "Internal Error: A non-node is being reported as part of a way. From element: " +
             from->getElementId().toString() + ", To element: " + to->getElementId().toString());
         }
         else if (to->getElementType() == ElementType::Node)

@@ -49,12 +49,14 @@
 #include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
-#include <hoot/core/criterion/RoundaboutCriterion.h>
+//#include <hoot/core/criterion/RoundaboutCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
 #include <hoot/core/elements/ElementDeduplicator.h>
+#include <hoot/core/elements/ElementIdSynchronizer.h>
 #include <hoot/core/elements/MapUtils.h>
 
 #include <hoot/core/index/OsmMapIndex.h>
@@ -107,8 +109,8 @@ ChangesetReplacementCreator::ChangesetReplacementCreator(
 _input1(""),
 _input2(""),
 _output(""),
-//_replacementBounds(geos::geom::Envelope()),
 _replacementBounds(""),
+_changesetId("1"),
 _fullReplacement(false),
 _boundsInterpretation(BoundsInterpretation::Lenient),
 _geometryFiltersSpecified(false),
@@ -477,7 +479,7 @@ void ChangesetReplacementCreator::_create()
   {
     LOG_INFO("******************************************");
     LOG_STATUS(
-      "Generating maps for changeset derivation given geometry type: "<<
+      "Generating diff maps for changeset derivation for geometry type: "<<
       GeometryTypeCriterion::typeToString(itr.key()) << ". Pass: " << passCtr << " / " <<
       refFilters.size() << "...");
 
@@ -549,21 +551,28 @@ void ChangesetReplacementCreator::_create()
   // some duplicated features that need to be cleaned up before we generate the changesets. This
   // is kind of a band-aid :-(
 
+  // UPDATE 8/17/20: This de-duplication appears no longer necessary after applying the ID
+  // synchronization just after it. More testing needs to happen before verifying that, though.
+
   // If we have the maps for only one geometry type, then there isn't a possibility of duplication
   // created by the replacement operation.
-  if (ConfigOptions().getChangesetReplacementDeduplicateCalculatedMaps() && refMaps.size() > 1)
-  {
-    // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
-    // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
-    // de-duping. Mostly worried that not doing so could break the overlapping only replacement
-    // (non-full) scenario...we'll see...
-    //_dedupeMaps(refMaps);
-    _dedupeMaps(conflatedMaps);
-  }
+//  if (refMaps.size() > 1)
+//  {
+//    // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
+//    // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
+//    // de-duping. Mostly worried that not doing so could break the overlapping only replacement
+//    // (non-full) scenario...we'll see...
+//    //_dedupeMaps(refMaps);
+//    _dedupeMaps(conflatedMaps);
+//  }
+
+  // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
+  // create/delete statements.
+  _synchronizeIds(refMaps, conflatedMaps);
 
   // CHANGESET GENERATION
 
-  LOG_STATUS("Generating changesets...");
+  LOG_STATUS("Generating changesets for " << refMaps.size() << " sets of maps...");
 
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
@@ -628,7 +637,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // up modifying anything else.
   _filterFeatures(
     refMap, refFeatureFilter, conf(),
-    "ref-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
+    _changesetId + "-ref-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
 
   // load the data that we're replacing with
   OsmMapPtr secMap = _loadSecMap();
@@ -650,12 +659,15 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
-  // changeset with delete statements if the option to allow deleting reference features is enabled.
+  // changeset with only delete statements if the option to allow deleting reference features is
+  // enabled.
   const int secMapSize = secMap->size();
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
 
-  LOG_STATUS("Replacing data...");
+  LOG_STATUS(
+    "Replacing " << StringUtils::formatLargeNumber(refMap->size()) << " features with " <<
+    StringUtils::formatLargeNumber(secMap->size()) << " features...");
 
   // CUT
 
@@ -670,8 +682,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // for relations here, which has since been removed from the codebase.
 
   // Combine the cookie cut ref map back with the secondary map, so we can conflate the two
-  // together.
-  _combineMaps(cookieCutRefMap, secMap, false, "combined-before-conflation");
+  // together if needed.
+  _combineMaps(cookieCutRefMap, secMap, false, _changesetId + "-combined-before-conflation");
   secMap.reset();
 
   // CONFLATE / CLEAN
@@ -704,7 +716,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     }
   }
 
-  LOG_STATUS("Preparing changeset derivation maps...");
+  LOG_STATUS(
+    "Preparing changeset derivation maps of sizes: " <<
+    StringUtils::formatLargeNumber(refMap->size()) << " and " <<
+    StringUtils::formatLargeNumber(conflatedMap->size()) << "...");
 
   // SNAP
 
@@ -725,7 +740,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     {
       _snapUnconnectedWays(
         conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
-        "conflated-snapped-sec-to-ref-1");
+        _changesetId + "-conflated-snapped-sec-to-ref-1");
     }
 
     // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
@@ -751,10 +766,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Crop the original ref and conflated maps appropriately for changeset derivation.
   _cropMapForChangesetDerivation(
     refMap, _boundsOpts.changesetRefKeepEntireCrossingBounds,
-    _boundsOpts.changesetRefKeepOnlyInsideBounds, "ref-cropped-for-changeset");
+    _boundsOpts.changesetRefKeepOnlyInsideBounds, _changesetId + "-ref-cropped-for-changeset");
   _cropMapForChangesetDerivation(
     conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
-    _boundsOpts.changesetSecKeepOnlyInsideBounds, "sec-cropped-for-changeset");
+    _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId + "-sec-cropped-for-changeset");
 
   if (_boundsInterpretation == BoundsInterpretation::Lenient &&
       _currentChangeDerivationPassIsLinear)
@@ -781,13 +796,14 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
       {
         _snapUnconnectedWays(
           conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
-          "conflated-snapped-sec-to-ref-2");
+         _changesetId + "-conflated-snapped-sec-to-ref-2");
       }
     }
 
     // combine the conflated map with the immediately connected out of bounds ways
     _combineMaps(
-      conflatedMap, immediatelyConnectedOutOfBoundsWays, true, "conflated-connected-combined");
+      conflatedMap, immediatelyConnectedOutOfBoundsWays, true,
+      _changesetId + "-conflated-connected-combined");
 
     // Snap the connected ways to other ways in the conflated map. Mark the ways that were
     // snapped, as we'll need that info in the next step.
@@ -798,7 +814,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
       {
         _snapUnconnectedWays(
           conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i),
-          true, "conflated-snapped-immediately-connected-out-of-bounds");
+          true, _changesetId + "-conflated-snapped-immediately-connected-out-of-bounds");
       }
     }
 
@@ -807,7 +823,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
     // Copy the connected ways back into the ref map as well, so the changeset will derive
     // properly.
-    _combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true, "ref-connected-combined");
+    _combineMaps(
+      refMap, immediatelyConnectedOutOfBoundsWays, true,
+      _changesetId + "-ref-connected-combined");
 
     immediatelyConnectedOutOfBoundsWays.reset();
   }
@@ -890,9 +908,6 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-/*  conf().set(
-    ConfigOptions::getConvertBoundingBoxKey(),
-    GeometryUtils::envelopeToConfigString(_replacementBounds))*/;
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
 
   // For this being enabled to have any effect,
@@ -927,8 +942,9 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   // _markElementsWithMissingChildren is called for more info on why this tag is added.
   if (ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren())
   {
-    QStringList metadataAllowTagKeys(MetadataTags::HootMissingChild());
-    conf().set(ConfigOptions::getChangesetMetadataAllowedTagKeysKey(), metadataAllowTagKeys);
+    conf().set(
+      ConfigOptions::getChangesetMetadataAllowedTagKeysKey(),
+      QStringList(MetadataTags::HootMissingChild()));
   }
 
   // Came across a very odd bug in #4101, where if RemoveInvalidMultilineStringMembersVisitor ran
@@ -1155,6 +1171,11 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
       // re-classification for a feature is necessary. If other instances of this occur things could
       // get messy really quick, but we'll only worry about that if it actually happens.
 
+      // UPDATE 8/17/20: Used to do this just for roundabouts, but there are some highway types
+      // (e.g. highway=pedstrian) that can be polys. Really, probably just need some generic way to
+      // make sure no elements of the same type get processed in separate geometry handling loops
+      // instead of code like this.
+
       ElementCriterionPtr updatedGeometryCrit;
       LOG_VART(_roadFilterExists());
       if (_roadFilterExists())
@@ -1164,7 +1185,8 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
           LOG_TRACE("Adding roundabouts to line filter due to presence of road filter...");
           updatedGeometryCrit.reset(
             new OrCriterion(
-              geometryCrit, std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())));
+              geometryCrit,
+              std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())));
         }
         else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
         {
@@ -1174,7 +1196,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
               geometryCrit,
               NotCriterionPtr(
                 new NotCriterion(
-                  std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())))));
+                  std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())))));
         }
       }
       else
@@ -1219,7 +1241,8 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
         LOG_TRACE("Adding roundabouts to line filter...");
         updatedGeometryCrit.reset(
           new OrCriterion(
-            geometryCrit, std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())));
+            geometryCrit,
+            std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())));
       }
       else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
       {
@@ -1229,7 +1252,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
             geometryCrit,
             NotCriterionPtr(
               new NotCriterion(
-                std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())))));
+                std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())))));
       }
       else
       {
@@ -1291,12 +1314,15 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
 
         LOG_STATUS("Loading reference map from: " << _input1 << "...");
         _input1Map.reset(new OsmMap());
+        _input1Map->setName("ref");
         IoUtils::loadMap(_input1Map, _input1, true, Status::Unknown1);
 
         // Restore it back to original.
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
       }
-      LOG_STATUS("Copying reference map from: " << _input1Map->getName() << "...");
+      LOG_STATUS(
+        "Copying reference map of size: " << StringUtils::formatLargeNumber(_input1Map->size()) <<
+        " from: " << _input1Map->getName() << "...");
       refMap.reset(new OsmMap(_input1Map));
       IoUtils::cropToBounds(
         refMap, GeometryUtils::envelopeFromConfigString(_replacementBounds),
@@ -1311,7 +1337,9 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
   // crop based on what we need to do with it.
   else if (_input1Map)
   {
-    LOG_STATUS("Copying reference map from: " << _input1Map->getName() << "...");
+    LOG_STATUS(
+      "Copying reference map of size: " << StringUtils::formatLargeNumber(_input1Map->size()) <<
+      " from: " << _input1Map->getName() << "...");
     refMap.reset(new OsmMap(_input1Map));
     IoUtils::cropToBounds(
       refMap, GeometryUtils::envelopeFromConfigString(_replacementBounds),
@@ -1324,7 +1352,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
   refMap->setName("ref");
 
   LOG_VART(MapProjector::toWkt(refMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(refMap, "ref-after-cropped-load");
+  OsmMapWriterFactory::writeDebugMap(refMap, _changesetId + "-ref-after-cropped-load");
 
   return refMap;
 }
@@ -1363,11 +1391,14 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
 
         LOG_STATUS("Loading secondary map from: " << _input2 << "...");
         _input2Map.reset(new OsmMap());
+        _input2Map->setName("sec");
         IoUtils::loadMap(_input2Map, _input2, false, Status::Unknown2);
 
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
       }
-      LOG_STATUS("Copying secondary map from: " << _input2Map->getName() << "...");
+      LOG_STATUS(
+        "Copying secondary map of size: " << StringUtils::formatLargeNumber(_input2Map->size()) <<
+        " from: " << _input2Map->getName() << "...");
       secMap.reset(new OsmMap(_input2Map));
       IoUtils::cropToBounds(
         secMap, GeometryUtils::envelopeFromConfigString(_replacementBounds), false);
@@ -1375,7 +1406,9 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
   }
   else if (_input2Map)
   {
-    LOG_STATUS("Copying secondary map from: " << _input2Map->getName() << "...");
+    LOG_STATUS(
+      "Copying secondary map of size: " << StringUtils::formatLargeNumber(_input2Map->size()) <<
+      " from: " << _input2Map->getName() << "...");
     secMap.reset(new OsmMap(_input2Map));
     IoUtils::cropToBounds(
       secMap, GeometryUtils::envelopeFromConfigString(_replacementBounds), false);
@@ -1387,7 +1420,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
   secMap->setName("sec");
 
   LOG_VART(MapProjector::toWkt(secMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(secMap, "sec-after-cropped-load");
+  OsmMapWriterFactory::writeDebugMap(secMap, _changesetId + "-sec-after-cropped-load");
 
   return secMap;
 }
@@ -1409,7 +1442,8 @@ void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& ma
     "Marked " << elementMarker.getNumRelationsTagged() <<
     " relations with missing child elements.");
 
-  OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-missing-marked");
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-after-missing-marked");
 }
 
 void ChangesetReplacementCreator::_filterFeatures(
@@ -1417,8 +1451,8 @@ void ChangesetReplacementCreator::_filterFeatures(
   const QString& debugFileName)
 {
   LOG_STATUS(
-    "Filtering features for: " << map->getName() << " based on input filter: " +
-    featureFilter->toString() << "...");
+    "Filtering " << StringUtils::formatLargeNumber(map->size()) << " features for: " <<
+    map->getName() << " based on input filter: " << featureFilter->toString() << "...");
 
   // Negate the input filter, since we're removing everything but what passes the input filter.
   RemoveElementsVisitor elementPruner(true);
@@ -1451,8 +1485,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VARD(_currentChangeDerivationPassIsLinear);
   LOG_VARD(doughMap->size());
   LOG_VARD(cutterMap->size());
-  OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map-input");
-  OsmMapWriterFactory::writeDebugMap(cutterMap, "cutter-map-input");
+  OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map-input");
+  OsmMapWriterFactory::writeDebugMap(cutterMap, _changesetId + "-cutter-map-input");
 
   // It could just be an byproduct of how data is being read out by core scripts during testing, but
   // when doing adjacent cell updates I'm getting cropped data with a bunch of empty relations in
@@ -1482,7 +1516,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     LOG_DEBUG(
       "Nothing to cut from dough map, so returning the empty dough map as the map after " <<
       "cutting: " << doughMap->getName() << "...");
-    OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cut");
+    OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
     return doughMap;
   }
   else if (cutterMapInputSize == 0)
@@ -1509,7 +1543,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
         LOG_DEBUG(
           "Nothing in cutter map. Full replacement not enabled, so returning the entire dough " <<
           "map as the map after cutting: " << doughMap->getName() << "...");
-        OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cut");
+        OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
         return doughMap;
       }
     }
@@ -1548,7 +1582,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
         LOG_STATUS(cropper.getInitStatusMessage());
         cropper.apply(cookieCutMap);
         LOG_INFO(cropper.getCompletedStatusMessage());
-        OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
+        OsmMapWriterFactory::writeDebugMap(cookieCutMap, _changesetId + "-cookie-cut");
         return cookieCutMap;
       }
       else
@@ -1558,7 +1592,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
         LOG_DEBUG(
           "Nothing in cutter map for linear features. Full replacement not enabled, so returning the "
           "entire dough map as the map after cutting: " << doughMap->getName() << "...");
-        OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cut");
+        OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
         return doughMap;
       }
     }
@@ -1566,7 +1600,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
 
   LOG_VART(doughMap->size());
   LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(doughMap, "dough-map");;
+  OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map");;
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
@@ -1637,7 +1671,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   }
 
   LOG_VART(cutterMapToUse->size());
-  OsmMapWriterFactory::writeDebugMap(cutterMapToUse, "cutter-map-to-use");
+  OsmMapWriterFactory::writeDebugMap(cutterMapToUse, _changesetId + "-cutter-map-to-use");
 
   LOG_INFO("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
 
@@ -1666,7 +1700,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   // not exactly sure yet why this projection needs to be done
   MapProjector::projectToWgs84(cutterShapeOutlineMap);
   LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, "cutter-shape");
+  OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, _changesetId + "-cutter-shape");
 
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
   LOG_INFO("Cutting cutter shape out of: " << cookieCutMap->getName() << "...");
@@ -1682,7 +1716,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   MapProjector::projectToWgs84(doughMap);
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cut");
+  OsmMapWriterFactory::writeDebugMap(cookieCutMap, _changesetId + "-cookie-cut");
 
   return cookieCutMap;
 }
@@ -1707,7 +1741,7 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
     "Setting connected way features outside of bounds to be excluded from deletion for: " <<
     map->getName() << "...");
 
-  // Add the changeset deletion exclusion tag to all connected ways previously tagged upon load.
+  // Add the changeset deletion exclusion tag to all connected ways previously tagged during load.
 
   SetTagValueVisitor addTagVis(MetadataTags::HootChangeExcludeDelete(), "yes");
   ChainCriterion addTagCrit(
@@ -1731,7 +1765,8 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
   LOG_DEBUG(childDeletionExcludeTagOp.getCompletedStatusMessage());
 
   MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclusion-tagging");
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-1");
 }
 
 void ChangesetReplacementCreator::_combineMaps(
@@ -1750,7 +1785,6 @@ void ChangesetReplacementCreator::_combineMaps(
   }
 
   LOG_INFO("Combining maps: " << map1->getName() << " and " << map2->getName() << "...");
-
   map1->append(map2, throwOutDupes);
   LOG_VART(MapProjector::toWkt(map1->getProjection()));
   LOG_DEBUG("Combined map size: " << map1->size());
@@ -1762,9 +1796,6 @@ void ChangesetReplacementCreator::_combineMaps(
 void ChangesetReplacementCreator::_conflate(OsmMapPtr& map)
 {
   map->setName("conflated");
-  LOG_STATUS(
-    "Conflating the cookie cut reference map with the secondary map into " << map->getName() <<
-    "...");
 
   conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), true);
   if (_boundsInterpretation != BoundsInterpretation::Lenient)
@@ -1785,23 +1816,28 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map)
     SuperfluousConflateOpRemover::removeSuperfluousOps();
   }
 
+  LOG_STATUS("Applying pre-conflate operations...");
   NamedOp preOps(ConfigOptions().getConflatePreOps());
   preOps.apply(map);
 
+  LOG_STATUS(
+    "Conflating the cookie cut reference map with the secondary map into " << map->getName() <<
+    "...");
   UnifyingConflator().apply(map);
 
+  LOG_STATUS("Applying post-conflate operations...");
   NamedOp postOps(ConfigOptions().getConflatePostOps());
   postOps.apply(map);
 
   MapProjector::projectToWgs84(map);  // conflation works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, "conflated");
+  OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-conflated");
   LOG_DEBUG("Conflated map size: " << map->size());
 }
 
 void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
 {
-  LOG_STATUS("Removing reviews added during conflation from " << map->getName() << "...");
+  LOG_INFO("Removing reviews added during conflation from " << map->getName() << "...");
 
   RemoveElementsVisitor removeVis;
   removeVis.addCriterion(ElementCriterionPtr(new RelationCriterion("review")));
@@ -1820,7 +1856,8 @@ void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
 
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-conflate-reviews-removed");
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-conflate-reviews-removed");
 }
 
 void ChangesetReplacementCreator::_clean(OsmMapPtr& map)
@@ -1835,7 +1872,7 @@ void ChangesetReplacementCreator::_clean(OsmMapPtr& map)
 
   MapProjector::projectToWgs84(map);  // cleaning works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, "cleaned");
+  OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-cleaned");
   LOG_DEBUG("Cleaned map size: " << map->size());
 }
 
@@ -1886,7 +1923,7 @@ OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
   connectedWays->setName(outputMapName);
   LOG_VART(MapProjector::toWkt(connectedWays->getProjection()));
   MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(connectedWays, "connected-ways");
+  OsmMapWriterFactory::writeDebugMap(connectedWays, _changesetId + "-connected-ways");
   return connectedWays;
 }
 
@@ -1944,7 +1981,8 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
 
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-unsnapped-removed");
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-unsnapped-removed");
 }
 
 void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& map)
@@ -1954,8 +1992,11 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
     return;
   }
 
-  LOG_STATUS(
+  LOG_INFO(
     "Marking reference features in: " << map->getName() << " for exclusion from deletion...");
+
+  // Exclude ways and all their children from deletion that are not entirely within the replacement
+  // bounds (?).
 
   std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(_boundsOpts.inBoundsStrict));
   boundsCrit->setBounds(GeometryUtils::envelopeFromConfigString(_replacementBounds));
@@ -1970,19 +2011,40 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
 
   MemoryUsageChecker::getInstance().check();
   LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, map->getName() + "-after-delete-exclude-tags");
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-2");
+}
+
+void ChangesetReplacementCreator::_intraDedupeMap(const QList<OsmMapPtr>& maps)
+{
+  ElementDeduplicator deduper;
+  deduper.setDedupeIntraMap(true);
+  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
+  deduper.setNodeCriterion(pointCrit);
+  deduper.setFavorMoreConnectedWays(true);
+
+  for (int i = 0; i < maps.size(); i++)
+  {
+    OsmMapPtr map = maps.at(i);
+    pointCrit->setOsmMap(map.get());
+    OsmMapWriterFactory::writeDebugMap(
+      map, _changesetId + "-" + map->getName() + "-before-deduping");
+    deduper.dedupe(map);
+    OsmMapWriterFactory::writeDebugMap(
+      map, _changesetId + "-" + map->getName() + "-after-deduping");
+  }
 }
 
 void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
 {
   ElementDeduplicator deduper;
-  // intra-map de-duping breaks the roundabouts test when ref maps are de-duped
+  // Intra-map de-duping breaks the roundabouts test when ref maps are de-duped.
   deduper.setDedupeIntraMap(true);
   // When nodes are removed (cleaned/conflated only), out of spec, single point, and riverbank tests
   // fail, so being a little more strict by removing points instead (node + not a way node).
   std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
   deduper.setNodeCriterion(pointCrit);
-  // this prevents connected ways separated by geometry type from being broken up in the output
+  // This prevents connected ways separated by geometry type from being broken up in the output.
   deduper.setFavorMoreConnectedWays(true);
 
   // See notes in _getDefaultGeometryFilters, but basically the point and poly geometry maps may
@@ -2009,9 +2071,17 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
     OsmMapPtr otherMap = otherMaps.at(i);
     // set the point's map to be the map we're removing features from
     pointCrit->setOsmMap(otherMap.get());
+    OsmMapWriterFactory::writeDebugMap(
+      lineMap, _changesetId + "-" + lineMap->getName() + "-before-deduping");
+    OsmMapWriterFactory::writeDebugMap(
+      otherMap, _changesetId + "-" + otherMap->getName() + "-before-deduping");
     LOG_DEBUG(
       "De-duping map: " << lineMap->getName() << " and " << otherMap->getName() << "...");
     deduper.dedupe(lineMap, otherMap);
+    OsmMapWriterFactory::writeDebugMap(
+      lineMap, _changesetId + "-" + lineMap->getName() + "-after-deduping");
+    OsmMapWriterFactory::writeDebugMap(
+      otherMap, _changesetId + "-" + otherMap->getName() + "-after-deduping");
   }
 }
 
@@ -2038,6 +2108,45 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 
   // get out of orthographic
   MapProjector::projectToWgs84(map);
+}
+
+void ChangesetReplacementCreator::_synchronizeIds(
+  const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps)
+{
+  // When replacing data, we always load the replacement data without its original IDs in case there
+  // are overlapping IDs in the reference data. If you were only replacing unmodified data from one
+  // source with updated data from another source (e.g. replacing newer OSM with older OSM), this
+  // wouldn't be necessary, but we're not guaranteed just that scenario occurring. The downside to
+  // loading up a separate set of unique IDs for the secondary data is that identical elements in
+  // the secondary can end up unnecessarily replacing elements in the reference. This gets mitigated
+  // here where we find all identical elements between the data being replaced and the replacement
+  // data and overwrite IDs in the replacement data from those in the data being replaced to
+  // prevent unnecessary changeset modifications from being generated. Its possible we could do
+  // this earlier in the replacement process, however that has proven difficult to accomplish so
+  // far.
+
+  assert(mapsBeingReplaced.size() == replacementMaps.size());
+  ElementIdSynchronizer idSync;
+  for (int i = 0; i < mapsBeingReplaced.size(); i++)
+  {
+    OsmMapPtr mapBeingReplaced = mapsBeingReplaced.at(i);
+    OsmMapPtr replacementMap = replacementMaps.at(i);
+    OsmMapWriterFactory::writeDebugMap(
+      mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() +
+      "-source-before-id-sync");
+    OsmMapWriterFactory::writeDebugMap(
+      replacementMap, _changesetId + "-" + replacementMap->getName() + "-target-before-id-sync");
+
+    idSync.synchronize(mapBeingReplaced, replacementMap);
+
+    // get rid of straggling nodes
+    // TODO: should we run _cleanup here instead and move it from its earlier call?
+    SuperfluousNodeRemover orphanedNodeRemover;
+    orphanedNodeRemover.apply(replacementMap);
+    LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
+    OsmMapWriterFactory::writeDebugMap(
+      replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
+  }
 }
 
 }

@@ -58,24 +58,28 @@ void ElementHashVisitor::visit(const ElementPtr& e)
   // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
   {
-    LOG_VART(e->getElementId());
+    //LOG_VART(e->getElementId());
+    LOG_VART(e);
 
     const QString hash = toHashString(e);
     LOG_VART(hash);
 
     if (_writeHashes)
     {
+      LOG_TRACE("Writing hash: " << hash << " to " << e->getElementId() << "...");
       e->getTags()[MetadataTags::HootHash()] = hash;
     }
     if (_collectHashes)
     {
       if (_hashesToElementIds.contains(hash))
       {
+        LOG_TRACE("Marking duplicate hash: " << hash << " for " << e->getElementId() << "...");
         _duplicates.insert(
           std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
       }
       else
       {
+        LOG_TRACE("Collecting hash: " << hash << " for " << e->getElementId() << "...");
         _hashesToElementIds[hash] = e->getElementId();
       }
     }
@@ -97,7 +101,7 @@ QString ElementHashVisitor::toJson(const ConstElementPtr& e) const
   {
     result = _toJson(std::dynamic_pointer_cast<const Relation>(e));
   }
-  //LOG_VART(result);
+  LOG_TRACE("json for " << e->getElementId() << ":\n" << result);
   return result;
 }
 

@@ -112,7 +112,15 @@ void NamedOp::apply(OsmMapPtr& map)
         Factory::getInstance().constructObject<OsmMapOperation>(s));
       statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(op);
 
-      _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
+      if (_progress.getState() == Progress::JobState::Running)
+      {
+        _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
+      }
+      else
+      {
+        // In case the caller isn't using progress, we still want to get status logging.
+        LOG_STATUS(_getInitMessage(s, statusInfo));
+      }
 
       Configurable* c = dynamic_cast<Configurable*>(op.get());
       if (_conf != 0 && c != 0)
@@ -128,10 +136,15 @@ void NamedOp::apply(OsmMapPtr& map)
         Factory::getInstance().constructObject<ElementVisitor>(s));
       statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(vis);
 
-      _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
-      // I swear the init status isn't being logged all the time with the above statement. Need to
-      // make sure and then remove the line below.
-      //LOG_STATUS(_getInitMessage(s, statusInfo));
+      if (_progress.getState() == Progress::JobState::Running)
+      {
+        _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
+      }
+      else
+      {
+        // In case the caller isn't using progress, we still want to get status logging.
+        LOG_STATUS(_getInitMessage(s, statusInfo));
+      }
 
       // The ordering of setting the config before the map here seems to make sense, but all
       // ElementVisitors implementing OsmMapConsumer will need to be aware of it.
@@ -162,7 +175,7 @@ void NamedOp::apply(OsmMapPtr& map)
       StringUtils::formatLargeNumber(map->getElementCount()));
     if (statusInfo.get() && !statusInfo->getCompletedStatusMessage().trimmed().isEmpty())
     {
-      LOG_STATUS(
+      LOG_INFO(
         "\t" << statusInfo->getCompletedStatusMessage() + " in " +
         StringUtils::millisecondsToDhms(timer.elapsed()));
     }

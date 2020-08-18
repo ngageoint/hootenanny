@@ -204,6 +204,7 @@ private:
 #define LOG_VART(var) LOG_TRACE(#var << ": " << (var))
 #define LOG_VARD(var) LOG_DEBUG(#var << ": " << (var))
 #define LOG_VARI(var) LOG_INFO(#var << ": " << (var))
+#define LOG_VARS(var) LOG_STATUS(#var << ": " << (var))
 #define LOG_VARW(var) LOG_WARN(#var << ": " << (var))
 #define LOG_VARE(var) LOG_ERROR(#var << ": " << (var))
 #define LOG_VAR(var) LOG_VARI(var)

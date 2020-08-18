@@ -39,10 +39,9 @@ namespace hoot
  * This class de-duplicates features within a map or across multiple maps. It ignores element IDs,
  * versions and other OSM metadata.
  *
- * This has a more strict definition of way duplicates than DuplicateWayRemover.
+ * This has a more strict definition of way duplicates than DuplicateWayRemover and will only remove
+ * exact duplicates.
  *
- * @todo For now, this is being tested from tests exercising ChangesetReplacementCreator, but it
- * would be good to give it its own test eventually.
  * @todo its convoluted to have both a boolean and a criterion for each element type; removal should
  * be able to all be done with a single criterion and all elements, regardless of type, can be
  * processed in one pass...will just take a decent amount of refactoring
@@ -66,13 +65,24 @@ public:
 
   /**
    * Removes intra-map and inter-map duplicate elements from two maps. Ignores element ID, version,
-   * changeset, and metadata tags. The first map's elementsare kept when inter-map duplicate
+   * changeset, and metadata tags. The first map's elements are kept when inter-map duplicate
    * elements are found.
    *
-   * @param map the first map to de-duplicate
+   * @param map1 the first map to de-duplicate
    * @param map2 the second map to de-duplicate
    */
   void dedupe(OsmMapPtr map1, OsmMapPtr map2);
+
+  int getMap1DuplicateNodesRemoved() const { return _map1DuplicateNodesRemoved; }
+  int getMap1DuplicateWaysRemoved() const { return _map1DuplicateWaysRemoved; }
+  int getMap1DuplicateRelationsRemoved() const { return _map1DuplicateRelationsRemoved; }
+  int getMap1DuplicateTotalFeaturesRemoved() const
+  { return _map1DuplicateNodesRemoved + _map1DuplicateWaysRemoved + _map1DuplicateRelationsRemoved; }
+  int getMap2DuplicateNodesRemoved() const { return _map2DuplicateNodesRemoved; }
+  int getMap2DuplicateWaysRemoved() const { return _map1DuplicateWaysRemoved; }
+  int getMap2DuplicateRelationsRemoved() const { return _map1DuplicateRelationsRemoved; }
+  int getMap2DuplicateTotalFeaturesRemoved() const
+  { return _map2DuplicateNodesRemoved + _map2DuplicateWaysRemoved + _map2DuplicateRelationsRemoved; }
 
   void setDedupeIntraMap(bool dedupe) { _dedupeIntraMap = dedupe; }
   void setDedupeNodes(bool dedupe) { _dedupeNodes = dedupe; }
@@ -103,6 +113,13 @@ private:
   // If true when ways are deduped, the way sharing more nodes with other ways is kept over the one
   // with less shared nodes.
   bool _favorMoreConnectedWays;
+
+  int _map1DuplicateNodesRemoved;
+  int _map1DuplicateWaysRemoved;
+  int _map1DuplicateRelationsRemoved;
+  int _map2DuplicateNodesRemoved;
+  int _map2DuplicateWaysRemoved;
+  int _map2DuplicateRelationsRemoved;
 
   void _validateInputs();
 

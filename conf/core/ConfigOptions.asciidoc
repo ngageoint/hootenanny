@@ -653,14 +653,6 @@ loaded input rather than reading the input data separately for each geometry typ
 This is advantageous for file inputs only. Only enable this if the file inputs to
 `changeset-derive-replacement` consist of data that will fit easily into available memory.
 
-=== changeset.replacement.deduplicate.calculated.maps
-
-* Data Type: bool
-* Default Value: `true`
-
-If enabled, changeset replacement derivation will perform an extra element de-duplication step
-before calculating the changeset.
-
 === changeset.replacement.implementation
 
 * Data Type: string

@@ -164,7 +164,7 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
     if (containsElement(ElementId(node->getElementId())))
     {
       // If they have the same ID but aren't considered to be identical elements, throw an error.
-      // Otherwise we'll just skip adding the identical element, since we already have it.
+      // Otherwise, we'll just skip adding the identical element, since we already have it.
       // throwOutDupes being enabled lets us skip it whether the two are identical or not.
       ElementPtr existingElement = getElement(node->getElementId());
       if (!throwOutDupes && !elementComparer.isSame(node, existingElement))
@@ -562,8 +562,8 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
   {
     if (n2w->getWaysByNode(from->getId()).size() != 0)
     {
-      throw HootException("Trying to replace a node with multiple nodes or a non-node when the "
-        "node is part of a way.");
+      throw IllegalArgumentException(
+        "Trying to replace a node with multiple nodes or a non-node when the node is part of a way.");
     }
   }
 
@@ -584,7 +584,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
       }
     }
 
-    // create a copy of the set b/c we may modify it with replace commands.
+    // Create a copy of the set b/c we may modify it with replace commands.
     const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
     for (set<long>::const_iterator it = rids.begin(); it != rids.end(); ++it)
     {

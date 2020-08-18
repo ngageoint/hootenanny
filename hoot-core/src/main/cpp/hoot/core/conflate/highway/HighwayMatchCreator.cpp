@@ -375,7 +375,7 @@ void HighwayMatchCreator::createMatches(
     searchRadiusStr =
       "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
   }
-  LOG_STATUS("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
+  LOG_INFO("Looking for matches with: " << className() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
 
@@ -386,7 +386,7 @@ void HighwayMatchCreator::createMatches(
   map->visitRelationsRo(v);
   const int matchesSizeAfter = matches.size();
 
-  LOG_STATUS(
+  LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) <<
     " highway match candidates and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<

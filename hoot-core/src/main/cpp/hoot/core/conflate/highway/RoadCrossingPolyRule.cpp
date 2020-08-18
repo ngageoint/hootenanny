@@ -71,7 +71,7 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
     throw IllegalArgumentException("Road crossing polygon rules file does not exist.");
   }
 
-  LOG_DEBUG("Reading rules...");
+  LOG_STATUS("Creating road crossing polygon rules...");
 
   boost::property_tree::ptree propTree;
   try
@@ -296,7 +296,7 @@ ElementCriterionPtr RoadCrossingPolyRule::tagRuleStringToFilter(const QString& k
 
 void RoadCrossingPolyRule::createIndex()
 {
-  LOG_STATUS("\tCreating roads crossing polys index for rule: " << _name << "...");
+  LOG_INFO("\tCreating roads crossing polys index for rule: " << _name << "...");
 
   // create an index for all roads and all polys that satisfy our crit within the default
   // search radius
@@ -317,7 +317,7 @@ void RoadCrossingPolyRule::createIndex()
   _map->visitRo(v);
   v.finalizeIndex();
 
-  LOG_STATUS(
+  LOG_DEBUG(
     "\tRoads crossing polys feature index for rule: " << _name << " created with " <<
     StringUtils::formatLargeNumber(v.getSize()) << " elements.");
 }

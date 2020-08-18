@@ -175,6 +175,7 @@ public:
   void setConflationEnabled(const bool enabled) { _conflationEnabled = enabled; }
   void setCleaningEnabled(const bool enabled) { _cleaningEnabled = enabled; }
   void setTagOobConnectedWays(const bool addTag) { _tagOobConnectedWays = addTag; }
+  void setChangesetId(const QString& id) { _changesetId = id; }
 
 private:
 
@@ -198,6 +199,9 @@ private:
   // the AOI over which the replacement is being performed
   //geos::geom::Envelope _replacementBounds;
   QString _replacementBounds;
+
+  // helpful to name the debug map files when doing successive replacements
+  QString _changesetId;
 
   // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
   // alpha shape of the sec data gets replaced.
@@ -346,6 +350,7 @@ private:
    * Removes duplicates between one map and another, ignoring elemment IDs
    */
   void _dedupeMaps(const QList<OsmMapPtr>& maps);
+  void _intraDedupeMap(const QList<OsmMapPtr>& maps);
 
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
@@ -381,6 +386,13 @@ private:
     const QStringList& linearFilterClassNames = QStringList());
 
   void _cleanup(OsmMapPtr& map);
+
+  /*
+   * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
+   * being replaced with the IDs from the maps being replaced.
+   */
+  void _synchronizeIds(
+    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
 };
 
 }

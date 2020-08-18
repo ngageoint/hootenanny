@@ -400,7 +400,7 @@ public:
   {
     if (!_index)
     {
-      LOG_STATUS("Creating script feature index for: " << _scriptPath << "...");
+      LOG_INFO("Creating script feature index for: " << _scriptPath << "...");
 
       // No tuning was done, I just copied these settings from OsmMapIndex.
       // 10 children - 368 - see #3054
@@ -463,7 +463,7 @@ public:
         numElementsIndexed = v.getSize();
       }
 
-      LOG_STATUS(
+      LOG_INFO(
         "Script feature index created for: " << _scriptPath << " with " <<
         StringUtils::formatLargeNumber(numElementsIndexed) << " elements.");
     }
@@ -821,7 +821,7 @@ void ScriptMatchCreator::createMatches(
     searchRadiusStr =
       "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
   }
-  LOG_STATUS(
+  LOG_INFO(
     "Looking for matches with: " << scriptFileInfo.fileName() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
   const int matchesSizeBefore = matches.size();
@@ -865,7 +865,7 @@ void ScriptMatchCreator::createMatches(
   {
     matchType = "PointPolygon";
   }
-  LOG_STATUS(
+  LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     matchType << " match candidates and " <<
     StringUtils::formatLargeNumber(matchesSizeAfter - matchesSizeBefore) <<
