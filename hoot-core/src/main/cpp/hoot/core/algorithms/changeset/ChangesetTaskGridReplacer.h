@@ -57,6 +57,12 @@ public:
     InputFile
   };
 
+  struct TaskGridCell
+  {
+    int replacementNodeCount;
+    geos::geom::Envelope bounds;
+  };
+
   ChangesetTaskGridReplacer();
 
   /**
@@ -69,11 +75,10 @@ public:
   void replace(const QString& toReplace, const QString& replacement);
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
-  void setPreloadMaps(bool preload) { _preloadMapsBeforeChangesetDerivation = preload; }
   void setTaskGridType(GridType gridType) { _gridType = gridType; }
   void setNodeDensityGridBounds(const QString& bounds) { _nodeDensityGridBounds = bounds; }
   void setNodeDensityMaxNodesPerCell(int maxNodes) { _maxNodeDensityNodesPerCell = maxNodes; }
-  void setGridInput(const QString& input) { _gridInput = input; }
+  void setGridInputs(const QStringList& inputs) { _gridInputs = inputs; }
   void setNodeDensityTaskGridOutputFile(const QString& output)
   { _nodeDensityTaskGridOutputFile = output; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
@@ -97,14 +102,6 @@ private:
   // replacement data
   QString _replacementUrl;
 
-  // By passing in pre-loaded maps, we can cut down on I/O quite a bit (requires memory double the
-  // combined size of both maps). Unfortunately, have seen bugs occur under certain circumstances
-  // when enabling this that need to be tracked down.
-  bool _preloadMapsBeforeChangesetDerivation;
-  // cached maps
-  OsmMapPtr _dataToReplaceFullMap;
-  OsmMapPtr _replacementDataFullMap;
-
   // manner in which to generate the task grid
   GridType _gridType;
   // area of the sum of all task grid cells; needed for node density calc only
@@ -113,8 +110,8 @@ private:
   int _maxNodeDensityNodesPerCell;
   // output location of the generated node density task grid file; useful for debugging
   QString _nodeDensityTaskGridOutputFile;
-  // path to a custom task grid
-  QString _gridInput;
+  // one or more paths to a custom task grid
+  QStringList _gridInputs;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues
   bool _reverseTaskGrid;
 
@@ -135,17 +132,15 @@ private:
 
   void _initConfig();
 
-  void _cacheFullMaps();
-
-  QMap<int, geos::geom::Envelope> _getTaskGrid();
+  QMap<int, TaskGridCell> _getTaskGrid();
   // This preps the input for node density calc based task grid generation.
   OsmMapPtr _getNodeDensityTaskGridInput();
-  QMap<int, geos::geom::Envelope> _calcNodeDensityTaskGrid(OsmMapPtr map);
+  QMap<int, TaskGridCell> _calcNodeDensityTaskGrid(OsmMapPtr map);
 
-  void _replaceEntireTaskGrid(const QMap<int, geos::geom::Envelope>& taskGrid);
+  void _replaceEntireTaskGrid(const QMap<int, TaskGridCell>& taskGrid);
   void _replaceTaskGridCell(
     const int taskGridCellId, const int changesetNum, const geos::geom::Envelope& bounds,
-    const int taskGridSize);
+    const int taskGridSize, const int numReplacementNodes = -1);
 
   // writes out all of the ref data; useful for debugging...expensive
   void _getUpdatedData(const QString& outputFile);

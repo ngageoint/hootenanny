@@ -479,8 +479,8 @@ void ChangesetReplacementCreator::_create()
   {
     LOG_INFO("******************************************");
     LOG_STATUS(
-      "Generating diff maps for changeset derivation for geometry type: "<<
-      GeometryTypeCriterion::typeToString(itr.key()) << ". Pass: " << passCtr << " / " <<
+      "Generating " << GeometryTypeCriterion::typeToString(itr.key()) << " diff maps for " <<
+      "changeset derivation with ID: " << _changesetId << ". Pass: " << passCtr << " / " <<
       refFilters.size() << "...");
 
     OsmMapPtr refMap;
@@ -665,9 +665,11 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
 
+  const QString geometryTypeStr = GeometryTypeCriterion::typeToString(geometryType);
   LOG_STATUS(
-    "Replacing " << StringUtils::formatLargeNumber(refMap->size()) << " features with " <<
-    StringUtils::formatLargeNumber(secMap->size()) << " features...");
+    "Replacing " << StringUtils::formatLargeNumber(refMap->size()) << " " << geometryTypeStr <<
+    " feature(s) with " << StringUtils::formatLargeNumber(secMap->size()) << " " << geometryTypeStr <<
+    " feature(s)...");
 
   // CUT
 
