@@ -108,15 +108,18 @@ public:
   void getAccessTokensTest()
   {
     const QString sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
+    QString testName = "ServicesHootServicesLoginManagerTest_getAccessTokensTest";
+    QString email = testName + "@hoottestcpp.org";
     const long userId =
       ServicesDbTestUtils::insertTestUser(
-        "ServicesHootServicesLoginManagerTest::getAccessTokensTest",
-        "ServicesHootServicesLoginManagerTest::getAccessTokensTest@hoot.com",
+        testName, email,
         sessionId, "testAccessToken", "testAccessTokenSecret");
 
     QString accessToken;
     QString accessTokenSecret;
     HootServicesLoginManager().getAccessTokens(userId, accessToken, accessTokenSecret);
+
+    ServicesDbTestUtils::deleteUser(email);
 
     HOOT_STR_EQUALS("testAccessToken", accessToken);
     HOOT_STR_EQUALS("testAccessTokenSecret", accessTokenSecret);
