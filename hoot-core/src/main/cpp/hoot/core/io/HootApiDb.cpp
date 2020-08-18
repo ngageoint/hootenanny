@@ -310,6 +310,10 @@ void HootApiDb::createPendingMapIndexes()
 
 void HootApiDb::deleteMap(long mapId)
 {
+  //  Don't try to delete an invalid map ID
+  if (mapId == -1)
+    return;
+
   LOG_STATUS("Deleting map: " << mapId << "...");
 
   // Drop related sequences
