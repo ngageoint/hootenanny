@@ -190,7 +190,7 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl); 
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
   }
 
   void northVegasLargeTest()
