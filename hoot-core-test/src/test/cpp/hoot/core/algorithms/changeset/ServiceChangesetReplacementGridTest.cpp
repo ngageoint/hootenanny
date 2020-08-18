@@ -51,7 +51,9 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
-  CPPUNIT_TEST(orphanedNodes1Test);
+  // TODO: re-enable
+  //CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(roadDelete1Test);
  // ENABLE THESE TESTS FOR DEBUGGING ONLY
 //  CPPUNIT_TEST(vegasSmallTest);
 //  CPPUNIT_TEST(vegasMediumTest);
@@ -91,6 +93,11 @@ public:
     _cleanup();
 
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void roadDelete1Test()
+  {
+
   }
 
   void vegasSmallTest()
@@ -216,7 +223,7 @@ private:
 
   void _loadDataToReplaceDb(const QString& input, const QString& cropBounds = "")
   {
-    LOG_STATUS("Initializing the data to replace db at: " << DATA_TO_REPLACE_URL << "...");
+    // make sure the db is empty
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     ApiDb::execSqlFile(DATA_TO_REPLACE_URL, "test-files/servicesdb/users.sql");
     OsmMapPtr map(new OsmMap());
@@ -225,10 +232,6 @@ private:
     {
       throw HootException("Data to replace db is not empty at start.");
     }
-    LOG_STATUS(
-      "Data to replace db initialized in: " <<
-      StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-    _subTaskTimer.restart();
 
     map.reset(new OsmMap());
     LOG_STATUS("Reading the data to replace from: ..." << input.right(25) << "...");
@@ -305,13 +308,13 @@ private:
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
 
-//    LOG_STATUS("Cleaning up the replacement data db at: " << _replacementDataUrl << "...");
-//    ServicesDbTestUtils::deleteUser(USER_EMAIL);
-//    HootApiDbWriter().deleteMap(_testName);
-//    LOG_STATUS(
-//      "Replacement data cleaned in: " <<
-//      StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-//    _subTaskTimer.restart();
+    LOG_STATUS("Cleaning up the replacement data db at: " << _replacementDataUrl << "...");
+    ServicesDbTestUtils::deleteUser(USER_EMAIL);
+    HootApiDbWriter().deleteMap(_testName);
+    LOG_STATUS(
+      "Replacement data cleaned in: " <<
+      StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+    _subTaskTimer.restart();
   }
 };
 
