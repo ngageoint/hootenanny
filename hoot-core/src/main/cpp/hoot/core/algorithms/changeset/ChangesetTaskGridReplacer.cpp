@@ -143,7 +143,7 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_g
   QMap<int, TaskGridCell> taskGrid;
   if (!_gridInput.isEmpty())
   {
-    LOG_STATUS("\tReading task grid file: ..." << _gridInput.right(25) << "...")
+    LOG_STATUS("Reading task grid file: ..." << _gridInput.right(25) << "...")
     const QMap<int, geos::geom::Envelope> taskGridTemp =
       GeometryUtils::readBoundsFileWithIds(_gridInput);
     for (QMap<int, geos::geom::Envelope>::const_iterator taskGridTempItr = taskGridTemp.begin();
@@ -156,7 +156,7 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_g
       taskGrid[taskGridTempItr.key()] = taskGridCell;
     }
     LOG_STATUS(
-      "\tRead " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells.");
+      "Read " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells.");
   }
   else
   {
@@ -182,8 +182,7 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
     // read from hootapidb
 
     LOG_STATUS(
-      "\tPreparing input data for task grid cell calculation from: " << _replacementUrl <<
-      "...");
+      "Preparing input data for task grid cell calculation from: " << _replacementUrl << "...");
     // Reading by bounds ends up being much slower than it should be here. The bounded query
     // needs work (#4180). We'll read all and crop after the fact instead. This is really bad
     // memory-wise if the source db is very large, of course.
@@ -199,13 +198,13 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
 
 //    const QString replacementDataPath = ROOT_DIR + "/" + _replacementDataFile;
 //    LOG_STATUS(
-//      "\tPreparing input data for task grid cell calculation: ..." <<
+//      "Preparing input data for task grid cell calculation: ..." <<
 //      replacementDataPath.right(25) << "...");
 //    OsmMapReaderFactory::read(map, ROOT_DIR + "/" + _replacementDataFile, true, Status::Unknown1);
 //  }
 
   LOG_STATUS(
-    "\t" <<StringUtils::formatLargeNumber(map->size()) << " task grid calc elements prepared " <<
+    StringUtils::formatLargeNumber(map->size()) << " task grid calc elements prepared " <<
     "in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
@@ -216,7 +215,7 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_c
   OsmMapPtr map)
 {
   LOG_STATUS(
-    "\tCalculating task grid cells for replacement data to: ..." <<
+    "Calculating task grid cells for replacement data to: ..." <<
     _nodeDensityTaskGridOutputFile.right(25) << "...");
   NodeDensityTileBoundsCalculator boundsCalc;
   boundsCalc.setPixelSize(0.001);
@@ -248,7 +247,7 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_c
   assert(boundsCalc.getTileCount() == taskGrid.size());
 
   LOG_STATUS(
-    "\tCalculated " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells.");
+    "Calculated " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells.");
   LOG_STATUS(
     "\tMaximum node count in any one tile: " <<
     StringUtils::formatLargeNumber(boundsCalc.getMaxNodeCountInOneTile()));
@@ -375,7 +374,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   _averageChangesetDeriveTime = _totalChangesetDeriveTime / (double)_numChangesetsDerived;
   _subTaskTimer.restart();
 
-  LOG_STATUS("\tAverage changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
+  LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
 
   LOG_STATUS(
     "Applying changeset: " << changesetNum << " / " <<

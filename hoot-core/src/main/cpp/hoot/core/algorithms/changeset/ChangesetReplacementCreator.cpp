@@ -480,7 +480,8 @@ void ChangesetReplacementCreator::_create()
     LOG_INFO("******************************************");
     LOG_STATUS(
       "Generating " << GeometryTypeCriterion::typeToString(itr.key()) << " diff maps for " <<
-      "changeset derivation. Pass: " << passCtr << " / " << refFilters.size() << "...");
+      "changeset derivation: " << _changesetId << ". Pass: " << passCtr << " / " <<
+      refFilters.size() << "...");
 
     OsmMapPtr refMap;
     // This is a bit of a misnomer after recent changes, as this map may have only been cleaned by

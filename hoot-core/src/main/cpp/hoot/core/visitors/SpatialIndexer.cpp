@@ -92,8 +92,11 @@ void SpatialIndexer::finalizeIndex()
 
 void SpatialIndexer::visit(const ConstElementPtr& e)
 {
-  LOG_VART(e->getElementId());
-  if (!_criterion || _criterion->isSatisfied(e))
+  if (e)
+  {
+    LOG_VART(e->getElementId());
+  }
+  if (e && (!_criterion || _criterion->isSatisfied(e)))
   {
     LOG_TRACE("is satisfied: " << e->getElementId());
 

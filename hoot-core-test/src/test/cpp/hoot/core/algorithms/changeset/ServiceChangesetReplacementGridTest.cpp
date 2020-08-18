@@ -81,7 +81,8 @@ public:
     _testName = "orphanedNodes1Test";
     _prepInput(
       _inputPath + "/orphanedNodes1Test-Input1.osm",
-      _inputPath + "/orphanedNodes1Test-Input2.osm", "");
+      _inputPath + "/orphanedNodes1Test-Input2.osm",
+      "");
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
@@ -101,7 +102,26 @@ public:
 
   void roadDelete1Test()
   {
+    // TODO: test description
 
+    _testName = "roadDelete1Test";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4196";
+    const QString outDir = rootDir + "/" + _testName;
+    _prepInput(
+      rootDir + "/NOMEData.osm", rootDir + "/OSMData.osm", "-115.1017,36.02439,-114.9956,36.0733");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
+    uut.setGridInput(rootDir + "/Task14and15.osm"); // TODO: fix for multiple files
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+
+    _cleanupDataToReplace();
+    _cleanupReplacementData();
+
+    //HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
   void vegasSmallTest()
@@ -232,9 +252,7 @@ private:
 
   void _loadDataToReplaceDb(const QString& input, const QString& cropBounds = "")
   {
-    LOG_STATUS(
-      "Loading the data to replace db from: ..." << input <<
-      " to: " << DATA_TO_REPLACE_URL << "...");
+    LOG_STATUS("Loading the data to replace db...");
 
     // make sure the db is empty
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
@@ -247,7 +265,7 @@ private:
     }
 
     map.reset(new OsmMap());
-    LOG_STATUS("\tReading the data to replace from: ..." << input.right(25) << "...");
+    LOG_STATUS("Reading the data to replace from: ..." << input.right(25) << "...");
     OsmMapReaderFactory::read(map, input, true, Status::Unknown1);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " elements to replace read in: " <<
@@ -259,20 +277,20 @@ private:
       cropper.setRemoveMissingElements(false);
       cropper.setRemoveSuperflousFeatures(false);
       LOG_STATUS(
-        "\tData to replace pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
+        "Data to replace pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
       LOG_STATUS(cropper.getInitStatusMessage());
       cropper.apply(map);
-      LOG_STATUS("\tData to replace cropped size: " << StringUtils::formatLargeNumber(map->size()));
+      LOG_STATUS("Data to replace cropped size: " << StringUtils::formatLargeNumber(map->size()));
       LOG_STATUS(
-        "\tData to replace cropped in: " <<
+        "Data to replace cropped in: " <<
         StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
       _subTaskTimer.restart();
     }
-    LOG_STATUS("\tLoading the data to replace db to: " << DATA_TO_REPLACE_URL << "...");
+    LOG_STATUS("Loading the data to replace db to: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
     OsmMapWriterFactory::write(map, DATA_TO_REPLACE_URL);
     _originalDataSize = (int)map->size();
     LOG_STATUS(
-      "\t" << StringUtils::formatLargeNumber(map->size()) << " elements to replace loaded in: " <<
+      StringUtils::formatLargeNumber(map->size()) << " elements to replace loaded in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
   }
@@ -281,9 +299,9 @@ private:
   {
     LOG_STATUS(
       "Loading the replacement data db from: ..." << input <<
-      " to: " << _replacementDataUrl << "...");
+      " to: ..." << _replacementDataUrl.right(25) << "...");
     OsmMapPtr map(new OsmMap());
-    LOG_STATUS("\tReading the replacement data from: ..." << input.right(25) << "...");
+    LOG_STATUS("Reading the replacement data from: ..." << input.right(25) << "...");
     OsmMapReaderFactory::read(map, input, false, Status::Unknown2);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " replacement elements read in: " <<
@@ -295,19 +313,19 @@ private:
       cropper.setRemoveMissingElements(false);
       cropper.setRemoveSuperflousFeatures(false);
       LOG_STATUS(
-        "\tReplacement data pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
+        "Replacement data pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
       LOG_STATUS(cropper.getInitStatusMessage());
       cropper.apply(map);
-      LOG_STATUS("\tReplacement data cropped size: " << StringUtils::formatLargeNumber(map->size()));
+      LOG_STATUS("Replacement data cropped size: " << StringUtils::formatLargeNumber(map->size()));
       LOG_STATUS(
-        "\tReplacement data cropped in: " <<
+        "Replacement data cropped in: " <<
         StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
       _subTaskTimer.restart();
     }
-    LOG_STATUS("\tLoading the replacement data db to: " << _replacementDataUrl << "...");
+    LOG_STATUS("Loading the replacement data db to: ..." << _replacementDataUrl.right(25) << "...");
     OsmMapWriterFactory::write(map, _replacementDataUrl);
     LOG_STATUS(
-      "\t" << StringUtils::formatLargeNumber(map->size()) << " replacement elements loaded in: " <<
+      StringUtils::formatLargeNumber(map->size()) << " replacement elements loaded in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
   }

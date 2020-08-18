@@ -462,7 +462,7 @@ void UnconnectedWaySnapper::_createFeatureIndex(const ElementCriterionPtr& featu
         featureIndex, featureIndexToEid, featureCrit,
         std::bind(&UnconnectedWaySnapper::_getWaySearchRadius, this, placeholders::_1), _map));
   }
-  LOG_TRACE(spatialIndexer->getInitStatusMessage());
+  LOG_DEBUG(spatialIndexer->getInitStatusMessage());
   if (elementType == ElementType::Node)
   {
     _map->visitNodesRo(*spatialIndexer);
@@ -472,9 +472,9 @@ void UnconnectedWaySnapper::_createFeatureIndex(const ElementCriterionPtr& featu
     _map->visitWaysRo(*spatialIndexer);
   }
   spatialIndexer->finalizeIndex();
-  LOG_TRACE(spatialIndexer->getCompletedStatusMessage());
-  LOG_VART(featureIndexToEid.size());
-  LOG_VART(_map->getIndex().getElementToRelationMap()->size());
+  LOG_DEBUG(spatialIndexer->getCompletedStatusMessage());
+  LOG_VARD(featureIndexToEid.size());
+  LOG_VARD(_map->getIndex().getElementToRelationMap()->size());
 }
 
 std::set<long> UnconnectedWaySnapper::_getUnconnectedEndNodeIds(
