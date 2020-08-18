@@ -8,7 +8,8 @@ IN_DIR=/home/vagrant/hoot/tmp/3923
 OUT_DIR=$IN_DIR
 #CROP_BOUNDS="-94.5466,39.0990,-94.5357,39.1097"
 
-CONFIG="--info -C DifferentialConflation.conf -C NetworkAlgorithm.conf -D differential.snap.unconnected.roads=true -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D debug.maps.write=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
+HOOT_EMAIL="ServiceGrailDiffTest@hoottestcpp.org"
+CONFIG="--info -C DifferentialConflation.conf -C NetworkAlgorithm.conf -D differential.snap.unconnected.roads=true -D writer.include.debug.tags=true -D uuid.helper.repeatable=true -D debug.maps.write=false -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1"
 # -C Testing.conf
 #-D reader.keep.status.tag=true -D reader.use.file.status=true -D reader.add.source.datetime=false
 #CONFIG+="-D log.class.filter=RemoveEmptyAreasVisitor"
@@ -25,7 +26,7 @@ rm -f $OUT_DIR/changeset-applied.osm
 echo "Creating the OSM API DB..."
 source conf/database/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
-export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
+export PSQL_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 REF_DB_INPUT=$OSM_API_DB_URL
 scripts/database/CleanAndInitializeOsmApiDb.sh
@@ -81,3 +82,6 @@ hoot changeset-apply $CONFIG -D debug.maps.filename=$IN_DIR/debug-changeset-appl
 echo "Reading out the final map for comparison with expected map..."
 hoot convert $CONFIG -D debug.maps.filename=$IN_DIR/debug-final-map.osm $OSM_API_DB_URL $OUT_DIR/changeset-applied.osm
 #hoot diff $CONFIG $IN_DIR/changeset-applied.osm $OUT_DIR/changeset-applied.osm
+
+# Delete the user
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

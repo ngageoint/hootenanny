@@ -5,18 +5,19 @@ set -e
 
 source conf/database/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
-export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
+export PSQL_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 REF_DB_INPUT=$OSM_API_DB_URL
 SEC_DB_INPUT="$HOOT_DB_URL/ServiceChangesetReplacementAdjacentCellsTest-sec"
+HOOT_EMAIL="ServiceChangesetReplacementAdjacentCellsTest@hoottestcpp.org"
 
 CROP_AOI="" # leave empty to avoid cropping
 # 4183
 #CROP_AOI="-115.1083193,36.0045951,-115.0225009,36.0811562" # leave empty to avoid cropping
 LOG_LEVEL="--status"
 GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=true -D log.class.filter= "
-DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
+DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999"
 
 # 4182
 #SOURCE_FILE_1="/home/vagrant/hoot/tmp/4182/329_ReferenceNOMEData_31JULY2020.osm"
@@ -131,3 +132,6 @@ echo ""
 echo "Removing data from secondary input..."
 echo ""
 hoot db-delete-map $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/cleanup-db.osm $SEC_DB_INPUT
+
+# Delete the user
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
