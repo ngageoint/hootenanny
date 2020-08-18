@@ -78,7 +78,7 @@ public:
   void setTaskGridType(GridType gridType) { _gridType = gridType; }
   void setNodeDensityGridBounds(const QString& bounds) { _nodeDensityGridBounds = bounds; }
   void setNodeDensityMaxNodesPerCell(int maxNodes) { _maxNodeDensityNodesPerCell = maxNodes; }
-  void setGridInput(const QString& input) { _gridInput = input; }
+  void setGridInputs(const QStringList& inputs) { _gridInputs = inputs; }
   void setNodeDensityTaskGridOutputFile(const QString& output)
   { _nodeDensityTaskGridOutputFile = output; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
@@ -110,8 +110,8 @@ private:
   int _maxNodeDensityNodesPerCell;
   // output location of the generated node density task grid file; useful for debugging
   QString _nodeDensityTaskGridOutputFile;
-  // path to a custom task grid
-  QString _gridInput;
+  // one or more paths to a custom task grid
+  QStringList _gridInputs;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues
   bool _reverseTaskGrid;
 

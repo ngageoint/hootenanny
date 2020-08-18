@@ -49,7 +49,8 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
  * process of input data generation and changeset application via API, bugs can be narrowed down to
  * just those in the ChangesetReplacementGenerator (most of the time).
  *
- * Either a node density generated task grid or a task grid from an input file may be used.
+ * Either an auto node density generated task grid or a task grid from one or more bounds inputs
+ * file may be used to partition the data replacements.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
@@ -58,8 +59,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(orphanedNodes1Test);
   //CPPUNIT_TEST(roadDelete1Test);
  // ENABLE THESE TESTS FOR DEBUGGING ONLY
-  CPPUNIT_TEST(vegasSmallTest);
-  //CPPUNIT_TEST(vegasMediumTest);
+  //CPPUNIT_TEST(vegasSmallTest);
+  CPPUNIT_TEST(vegasMediumTest);
   //CPPUNIT_TEST(vegasLargeTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -86,7 +87,7 @@ public:
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
-    uut.setGridInput(_inputPath + "/Task14and15.osm");
+    uut.setGridInputs(QStringList(_inputPath + "/Task14and15.osm"));
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
@@ -112,7 +113,10 @@ public:
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
-    uut.setGridInput(rootDir + "/Task14and15.osm"); // TODO: fix for multiple files
+    QStringList inputs;
+    inputs.append(rootDir + "/1/Task38_07Aug2020_VGI_1666/Task38Bounds.osm");
+    inputs.append(rootDir + "/1/Task43_VGI_1666/Task43Extend.osm");
+    uut.setGridInputs(inputs);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
@@ -126,7 +130,7 @@ public:
 
   void vegasSmallTest()
   {
-    // 4 sq blocks of the city - 4 changesets
+    // 4 sq blocks of the city, 4 changesets, ~2 min
 
     _testName = "vegasSmallTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -153,7 +157,7 @@ public:
 
   void vegasMediumTest()
   {
-    // ~1/4 of city - 64 changesets
+    // ~1/4 of city, 64 changesets, ? min
 
     _testName = "vegasMediumTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -180,7 +184,7 @@ public:
 
   void vegasLargeTest()
   {
-    // whole city - 64 changesets
+    // whole northern half of city, 64 changesets, ? minutes
 
     _testName = "vegasLargeTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";

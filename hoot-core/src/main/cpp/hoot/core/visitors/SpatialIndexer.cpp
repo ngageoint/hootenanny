@@ -106,15 +106,19 @@ void SpatialIndexer::visit(const ConstElementPtr& e)
     Box b(2);
     Meters searchRadius = _getSearchRadius(e);
     LOG_VART(searchRadius);
+    LOG_VART(_map == 0);
     std::shared_ptr<Envelope> env(e->getEnvelope(_map->shared_from_this()));
-    env->expandBy(searchRadius);
-    LOG_VART(env);
-    b.setBounds(0, env->getMinX(), env->getMaxX());
-    b.setBounds(1, env->getMinY(), env->getMaxY());
+    if (!env->isNull())
+    {
+      env->expandBy(searchRadius);
+      LOG_VART(env);
+      b.setBounds(0, env->getMinX(), env->getMaxX());
+      b.setBounds(1, env->getMinY(), env->getMaxY());
 
-    _boxes.push_back(b);
+      _boxes.push_back(b);
 
-    _numAffected++;
+      _numAffected++;
+    }
   }
 }
 

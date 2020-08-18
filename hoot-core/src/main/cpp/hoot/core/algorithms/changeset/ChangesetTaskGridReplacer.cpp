@@ -141,19 +141,24 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_g
   LOG_STATUS("Creating task grid...");
 
   QMap<int, TaskGridCell> taskGrid;
-  if (!_gridInput.isEmpty())
+  if (!_gridInputs.isEmpty())
   {
-    LOG_STATUS("Reading task grid file: ..." << _gridInput.right(25) << "...")
-    const QMap<int, geos::geom::Envelope> taskGridTemp =
-      GeometryUtils::readBoundsFileWithIds(_gridInput);
-    for (QMap<int, geos::geom::Envelope>::const_iterator taskGridTempItr = taskGridTemp.begin();
-         taskGridTempItr != taskGridTemp.end(); ++taskGridTempItr)
+    LOG_STATUS("Reading " << _gridInputs.size() << " task grid file(s)...");
+    QMap<int, geos::geom::Envelope> taskGridTemp;
+    for (int i = 0; i < _gridInputs.size(); i++)
     {
-      TaskGridCell taskGridCell;
-      // We don't know the node count when reading the custom grid file.
-      taskGridCell.replacementNodeCount = -1;
-      taskGridCell.bounds = taskGridTempItr.value();
-      taskGrid[taskGridTempItr.key()] = taskGridCell;
+      const QString gridInput = _gridInputs.at(i);
+      LOG_INFO("Reading task grid file: ..." << gridInput.right(25) << "...");
+      taskGridTemp = GeometryUtils::readBoundsFileWithIds(gridInput);
+      for (QMap<int, geos::geom::Envelope>::const_iterator taskGridTempItr = taskGridTemp.begin();
+           taskGridTempItr != taskGridTemp.end(); ++taskGridTempItr)
+      {
+        TaskGridCell taskGridCell;
+        // We don't know the node count when reading the custom grid file.
+        taskGridCell.replacementNodeCount = -1;
+        taskGridCell.bounds = taskGridTempItr.value();
+        taskGrid[taskGridTempItr.key()] = taskGridCell;
+      }
     }
     LOG_STATUS(
       "Read " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells.");
