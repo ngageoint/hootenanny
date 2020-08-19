@@ -86,7 +86,7 @@ public:
     _cleanupDataToReplace();
   }
 
-  virtual void takeDown()
+  virtual void tearDown()
   {
     _cleanupDataToReplace();
     _cleanupReplacementData();
