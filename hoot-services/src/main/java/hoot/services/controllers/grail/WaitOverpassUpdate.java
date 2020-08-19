@@ -73,7 +73,7 @@ class WaitOverpassUpdate extends GrailCommand {
         commandResultStart.setJobId(jobId);
         commandResultStart.setStdout("Starting wait on overpass sync...\n");
         commandResultStart.setStderr("");
-        commandResultStart.setPercentProgress(0);
+        commandResultStart.setPercentProgress(100);
         commandResultStart.setCaller(caller.getName());
         commandResultStart.setExitCode(CommandResult.SUCCESS);
         commandResultStart.setFinish(LocalDateTime.now());
@@ -146,7 +146,7 @@ class WaitOverpassUpdate extends GrailCommand {
         commandResultFinish.setJobId(jobId);
         commandResultFinish.setStdout("Finished wait on overpass sync...\n");
         commandResultFinish.setStderr("");
-        commandResultFinish.setPercentProgress(0);
+        commandResultFinish.setPercentProgress(100);
         commandResultFinish.setCaller(caller.getName());
         commandResultFinish.setExitCode(CommandResult.SUCCESS);
         commandResultFinish.setFinish(LocalDateTime.now());

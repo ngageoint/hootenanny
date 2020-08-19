@@ -310,7 +310,7 @@ public class JobStatusManagerImpl implements JobStatusManager {
                 isVisible = isVisible.and(jobStatus.userId.eq(userId));
             }
 
-            return createQuery().select(commandStatus).from(commandStatus, jobStatus).where(isVisible).fetch();
+            return createQuery().select(commandStatus).from(commandStatus, jobStatus).where(isVisible).orderBy(commandStatus.start.asc()).fetch();
         }
         catch (Exception e) {
             logger.error("{} failed to fetch command status(es) for job with ID = {}", jobId, e);
