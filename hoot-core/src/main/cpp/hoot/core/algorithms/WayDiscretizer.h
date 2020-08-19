@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __WAY_DISCRETIZER_H__
 #define __WAY_DISCRETIZER_H__
@@ -62,9 +62,11 @@ public:
    * Given an input way, discretize the way out into discrete coordinates. The first and last nodes
    * are guaranteed to be included.
    *
-   * @param spacing - The maximum distance between points
+   * @param spacing the maximum distance between points
+   * @param result discretized coordinates
+   * @return true if the operation was successful; false otherwise
    */
-  void discretize(double spacing, std::vector<geos::geom::Coordinate>& result);
+  bool discretize(double spacing, std::vector<geos::geom::Coordinate>& result);
 
   /**
    * The above function is much more efficient.
@@ -72,16 +74,19 @@ public:
    * Split a way up into a number of equally spaced way locations. As long as the way length > 0
    * you are guaranteed to get at least two points, one for the beginning and one for the end.
    *
+   * @param spacing the maximum distance between points
+   * @param result discretized coordinates
+   * @return true if the operation was successful; false otherwise
    * @optimize make this more efficient by using the _lengthNodes array.
    */
-  void discretize(double spacing, std::vector<WayLocation>& result);
+  bool discretize(double spacing, std::vector<WayLocation>& result);
 
   /**
    * Interpolates the coordinate at the given distance d.
    */
   geos::geom::Coordinate interpolate(double d);
 
-protected:
+private:
 
   ConstOsmMapPtr _map;
   std::shared_ptr<const hoot::Way> _way;

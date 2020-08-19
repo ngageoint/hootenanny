@@ -46,10 +46,9 @@ namespace hoot
 {
 
 WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, const ConstWayPtr& way) :
-  _map(map)
+_map(map),
+_way(way)
 {
-  _way = way;
-
   LOG_TRACE("Preparing way for discretization: " << _way);
 
   // Go through all the nodes
@@ -61,28 +60,49 @@ WayDiscretizer::WayDiscretizer(const ConstOsmMapPtr& map, const ConstWayPtr& way
     throw IllegalArgumentException("Empty way passed to WayDiscretizer.");
   }
   ConstNodePtr lastNode = _map->getNode(nodeIds[0]);
+  // TODO: change back to trace
   LOG_VART(lastNode.get());
-  LOG_VART(lastNode->getElementId());
-  for (size_t i = 0; i < nodeIds.size(); i++)
+  if (!lastNode)
   {
-    // calculate the distance from the last node to this node.
-    ConstNodePtr n = _map->getNode(nodeIds[i]);
-    LOG_VART(n.get());
-    LOG_VART(n->getElementId());
-    double d = Distance::euclidean(*lastNode, *n);
-    LOG_VART(d);
-
-    // add the distance to a running total
-    l += d;
-    // keep track of the distance from the beginning of the way to this node.
-    _lengthNodes.push_back(l);
-    lastNode = n;
+    // can't recover from this; let's declare discretization impossible
+    _way.reset();
   }
-  LOG_VART(_lengthNodes.size());
+  else
+  {
+    LOG_VART(lastNode->getElementId());
+    for (size_t i = 0; i < nodeIds.size(); i++)
+    {
+      // calculate the distance from the last node to this node.
+      ConstNodePtr n = _map->getNode(nodeIds[i]);
+      LOG_VART(n.get());
+      if (!n)
+      {
+        // can't recover from this; let's declare discretization impossible
+        _way.reset();
+      }
+      else if (_way)
+      {
+        LOG_VART(n->getElementId());
+        double d = Distance::euclidean(*lastNode, *n);
+        LOG_VART(d);
+
+        // add the distance to a running total
+        l += d;
+        // keep track of the distance from the beginning of the way to this node.
+        _lengthNodes.push_back(l);
+        lastNode = n;
+      }
+    }
+    LOG_VART(_lengthNodes.size());
+  }
 }
 
-void WayDiscretizer::discretize(double spacing, vector<Coordinate>& result)
+bool WayDiscretizer::discretize(double spacing, vector<Coordinate>& result)
 {
+  if (!_way)
+  {
+    return false;
+  }
   if (spacing <= 0.0)
   {
     throw IllegalArgumentException("Way discretization spacing must be greater than zero.");
@@ -97,10 +117,16 @@ void WayDiscretizer::discretize(double spacing, vector<Coordinate>& result)
     result.push_back(interpolate(d));
     d += spacing;
   } while (d <= length);
+
+  return true;
 }
 
-void WayDiscretizer::discretize(double spacing, vector<WayLocation>& result)
+bool WayDiscretizer::discretize(double spacing, vector<WayLocation>& result)
 {
+  if (!_way)
+  {
+    return false;
+  }
   if (spacing <= 0.0)
   {
     throw IllegalArgumentException("Way discretization spacing must be greater than zero.");
@@ -124,6 +150,8 @@ void WayDiscretizer::discretize(double spacing, vector<WayLocation>& result)
     result[i] = WayLocation(_map, _way, double(i) * spacing);
   }
   LOG_VART(result.size());
+
+  return true;
 }
 
 geos::geom::Coordinate WayDiscretizer::interpolate(double d)

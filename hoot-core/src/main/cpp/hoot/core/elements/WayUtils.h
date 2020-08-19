@@ -102,7 +102,8 @@ public:
    * value results in a more accurate distance value, generates more coordinates on the way, and
    * increase runtime
    * @param map the map containing the input node and way
-   * @return a coordinate
+   * @return a valid coordinate or an empty coordinate if the closest coordinate could not be
+   * calculated
    */
   static geos::geom::Coordinate closestWayCoordToNode(
     const ConstNodePtr& node, const ConstWayPtr& way, double& distance,

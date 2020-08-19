@@ -112,7 +112,7 @@ public:
    * @param padSize the number of zeroes to add
    * @return a padded number string
    */
-  static QString getNumberStringPaddedWithZeroes(const int number, const int padSize);
+  static QString padFrontOfNumberStringWithZeroes(const int number, const int padSize);
 
   /**
    * Removes all empty/blank strings from a list
