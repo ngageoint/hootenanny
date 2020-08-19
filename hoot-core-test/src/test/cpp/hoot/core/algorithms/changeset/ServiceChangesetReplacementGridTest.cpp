@@ -54,11 +54,10 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  // TODO: re-enable
-  //CPPUNIT_TEST(orphanedNodes1Test);
-  CPPUNIT_TEST(roadDelete1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
+  //CPPUNIT_TEST(vgi1666Test);
   //CPPUNIT_TEST(northVegasSmallTest);
   //CPPUNIT_TEST(northVegasMediumTest);
   //CPPUNIT_TEST(northVegasLargeTest);
@@ -116,16 +115,17 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
-  void roadDelete1Test()
+  void vgi1666Test()
   {
-    // TODO: test description
+    // wasn't able to reproduce the deletion of way "Perry Ellis Drive" with this; possibly the
+    // issue was fixed by vgi 1622
 
     _testName = "roadDelete1Test";
     const QString rootDir = "/home/vagrant/hoot/tmp/4196";
     const QString outDir = rootDir + "/" + _testName;
     QDir().mkpath(outDir);
     _prepInput(
-      rootDir + "/NOMEData.osm", rootDir + "/OSMData.osm", "-115.1017,36.02439,-114.9956,36.0733");
+      rootDir + "/NOME_Data.osm", rootDir + "/OSM_Data.osm", "-115.1017,36.02439,-114.9956,36.0733");
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
@@ -137,8 +137,6 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
-
-    //HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
   void northVegasSmallTest()

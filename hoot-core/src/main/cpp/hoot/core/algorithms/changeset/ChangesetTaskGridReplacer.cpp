@@ -40,6 +40,10 @@
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 #include <hoot/core/io/HootApiDbReader.h>
+//#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
+#include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 
 namespace hoot
 {
@@ -166,7 +170,7 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_g
   QMap<int, TaskGridCell> taskGrid;
   if (!_gridInputs.isEmpty())
   {
-    LOG_STATUS("Reading " << _gridInputs.size() << " task grid file(s)...");
+    LOG_INFO("Reading " << _gridInputs.size() << " task grid file(s)...");
     QMap<int, geos::geom::Envelope> taskGridTemp;
     for (int i = 0; i < _gridInputs.size(); i++)
     {
@@ -403,7 +407,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   {
     msg += ", replacement nodes: " + StringUtils::formatLargeNumber(numReplacementNodes);
   }
-  msg+= "*******";
+  msg+= "*********";
   LOG_STATUS(msg);
 
   _changesetCreator->setChangesetId(QString::number(taskGridCellId));
@@ -428,8 +432,8 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   LOG_STATUS(
     "Applying changeset: " << changesetNum << " / " <<
     StringUtils::formatLargeNumber(taskGridSize) << " for task grid cell: " << taskGridCellId <<
-    ", over bounds: " << boundsStr << ", from file: ..." << changesetFile.fileName().right(25) <<
-    "...");
+    ", over bounds: " << GeometryUtils::envelopeFromConfigString(boundsStr) << ", from file: ..." <<
+    changesetFile.fileName().right(25) << "...");
 
   _changesetApplier->write(changesetFile);
   _printChangesetStats();
@@ -493,13 +497,22 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
 
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
-  // change these, so we can open the files in josm; TODO: this isn't helping
-  //conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
-  //conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
+  // change these, so we can open the files in josm; not sure if these are helping...
+  conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
+  conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
 
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
+
+  // had to do this cleaning to get the relations to behave
+  RemoveMissingElementsVisitor missingElementRemover;
+  map->visitRw(missingElementRemover);
+  RemoveInvalidRelationVisitor invalidRelationRemover;
+  map->visitRw(invalidRelationRemover);
+  RemoveEmptyRelationsOp().apply(map);
+
   OsmMapWriterFactory::write(map, outputFile);
+
   LOG_STATUS(
     "\tModified data read in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
@@ -507,8 +520,6 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   LOG_STATUS(
     "\tModified data original size: " << StringUtils::formatLargeNumber(_originalDataSize));
   LOG_STATUS("\tModified data current size: " << StringUtils::formatLargeNumber(map->size()));
-
-  //conf().set(ConfigOptions::getConvertBoundingBoxKey(), _nodeDensityGridBounds);
 }
 
 }
