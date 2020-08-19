@@ -2,8 +2,10 @@
 set -e
 
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
+export PSQL_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
+export HOOT_EMAIL="ServiceHootApiDbConflateTest@hoottestcpp.org"
 
-export HOOT_OPTS="-C Testing.conf -D hootapi.db.writer.create.user=true -D api.db.email=ServiceHootApiDbConflateTest@hoottestcpp.org -D hootapi.db.writer.overwrite.map=true -D writer.include.debug.tags=true --warn"
+export HOOT_OPTS="-C Testing.conf -D hootapi.db.writer.create.user=true -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.overwrite.map=true -D writer.include.debug.tags=true --warn"
 export CONFLATE_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf"
 
 export DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
@@ -58,5 +60,5 @@ export PGPASSWORD=$DB_PASSWORD
 psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcGisRoads-ServiceHootApiDbConflateTest && echo "Error: db-delete-map did not remove DcGisRoads-ServiceHootApiDbConflateTest dataset"
 psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcTigerRoads-ServiceHootApiDbConflateTest && echo "Error: db-delete-map did not remove DcTigerRoads-ServiceHootApiDbConflateTest dataset"
 
-
-
+# Delete the user
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

@@ -310,6 +310,10 @@ void HootApiDb::createPendingMapIndexes()
 
 void HootApiDb::deleteMap(long mapId)
 {
+  //  Don't try to delete an invalid map ID
+  if (mapId == -1)
+    return;
+
   LOG_STATUS("Deleting map: " << mapId << "...");
 
   // Drop related sequences
@@ -968,19 +972,38 @@ bool HootApiDb::insertRelationMember(const long relationId, const ElementType& t
 
   if (!_insertRelationMembers->exec())
   {
-    throw HootException("Error inserting relation memeber: " +
+    throw HootException("Error inserting relation member: " +
       _insertRelationMembers->lastError().text());
   }
   return true;
 }
 
-long HootApiDb::getOrCreateUser(QString email, QString displayName)
+long HootApiDb::getOrCreateUser(QString email, QString displayName, bool admin)
 {
   long result = getUserId(email, false);
 
   if (result == -1)
   {
     result = insertUser(email, displayName);
+    if (admin)
+    {
+      if (!_setUserAsAdmin)
+      {
+        _setUserAsAdmin.reset(new QSqlQuery(_db));
+        _setUserAsAdmin->prepare(
+          "UPDATE " + this->getUsersTableName() +
+          " SET privileges = privileges || '\"admin\"=>\"true\"' :: hstore"
+          " WHERE id=:id;");
+      }
+      //  Add the "admin => true" value to the HSTORE
+      _setUserAsAdmin->bindValue(":id", (qlonglong)result);
+
+      if (!_setUserAsAdmin->exec())
+      {
+        throw HootException("Error setting user as admin: " +
+          _setUserAsAdmin->lastError().text());
+      }
+    }
   }
 
   return result;
@@ -1196,6 +1219,8 @@ void HootApiDb::_resetQueries()
   _wayIdReserver.reset();
 
   _updateIdSequence.reset();
+  _setUserAsAdmin.reset();
+  _isUserAdmin.reset();
 }
 
 long HootApiDb::getMapIdFromUrl(const QUrl& url)
@@ -1307,6 +1332,7 @@ bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
 
   long userId = -1;
   bool isPublic = false;
+  bool isAdmin = false;
   if (_getMapPermissionsById->next())
   {
     bool ok;
@@ -1319,15 +1345,33 @@ bool HootApiDb::currentUserCanAccessMap(const long mapId, const bool write)
     isPublic = _getMapPermissionsById->value(1).toBool();
     LOG_VART(isPublic);
   }
+  //  Only query for admin permissions if the map isn't owned by the current user
+  if (_currUserId != userId)
+  {
+    //  Create the admin query if it doesn't exist
+    if (!_isUserAdmin)
+    {
+      _isUserAdmin.reset(new QSqlQuery(_db));
+      _isUserAdmin->prepare(
+        "SELECT (u.privileges -> 'admin')::boolean AS is_admin FROM users u WHERE id=:id;");
+    }
+    //  Query for the admin privileges of the current user
+    _isUserAdmin->bindValue(":id", (qlonglong)_currUserId);
+    if (!_isUserAdmin->exec())
+      throw HootException(_isUserAdmin->lastError().text());
+    else if (_isUserAdmin->next())
+      isAdmin = _isUserAdmin->value(0).toBool();
+    _isUserAdmin->finish();
+  }
   _getMapPermissionsById->finish();
 
   if (write)
   {
-    return _currUserId == userId;
+    return _currUserId == userId || isAdmin;
   }
   else
   {
-    return isPublic || _currUserId == userId;
+    return isPublic || _currUserId == userId || isAdmin;
   }
 }
 

@@ -213,9 +213,11 @@ mkdir -p $OUT_DIR
 
 source conf/database/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
-export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
+export PSQL_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 REF_DB_INPUT=$OSM_API_DB_URL
+
+HOOT_EMAIL="${TEST_NAME}@hoottestcpp.org"
 
 # SET UP HOOT CONFIGURATION
 
@@ -235,7 +237,7 @@ GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatabl
 if [ "$CROP_OPTS" == "" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D map.reader.add.child.refs.when.missing=true"
 fi
-DB_OPTS="-D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999 $EXTRA_PARAMS"
+DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999 $EXTRA_PARAMS"
 PERTY_OPTS="-D random.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 $EXTRA_PARAMS -D perty.ops= "
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE $EXTRA_PARAMS "
 CUSTOM_TAG_KEY="note"
@@ -451,3 +453,7 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   hoot diff $LOG_LEVEL $GENERAL_OPTS $IN_DIR/$OUT_XML $OUT_DIR/$OUT_JSON
 
 fi
+
+# Delete the user
+psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
+

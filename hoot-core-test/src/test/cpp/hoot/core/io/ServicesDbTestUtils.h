@@ -94,7 +94,7 @@ public:
   static OsmMapPtr createServiceTestMap();
 
   static long insertTestUser(const QString& userName, const QString& email, const QString& sessionId,
-                             const QString& accessToken, const QString& accessTokenSecret);
+                             const QString& accessToken, const QString& accessTokenSecret, bool isAdmin = false);
 
   static bool deleteUserByUserName(const QString& userName);
 

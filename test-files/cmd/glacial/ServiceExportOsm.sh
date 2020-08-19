@@ -4,6 +4,7 @@ set -e
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
 
 export DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
+export PSQL_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD
 export outputname=service-export-test
 export outputfolder=$HOOT_HOME/tmp/$outputname
@@ -38,3 +39,6 @@ hoot db-delete-map $HOOT_OPTS $DB_URL/$input
 
 # Remove file output
 rm -rf $outputfolder
+
+# Delete the user
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='test@test.com';" > /dev/null
