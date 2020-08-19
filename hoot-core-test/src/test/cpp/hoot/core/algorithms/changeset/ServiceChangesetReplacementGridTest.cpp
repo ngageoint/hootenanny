@@ -362,14 +362,11 @@ private:
   void _cleanupReplacementData()
   {
     LOG_STATUS("Cleaning up the replacement data db at: " << _replacementDataUrl << "...");
+    HootApiDb database;
+    database.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
+    database.deleteMap(database.getMapIdByName(_testName));
+    database.close();
     ServicesDbTestUtils::deleteUser(USER_EMAIL);
-    try
-    {
-      HootApiDbWriter().deleteMap(_testName);
-    }
-    catch (const HootException&)
-    {
-    }
     LOG_STATUS(
       "Replacement data cleaned in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));

@@ -51,11 +51,11 @@ RUN_DEBUG_STEPS=false
 LOAD_REF_DATA=true
 LOAD_SEC_DATA=true
 CONFLATE_DATA=true
-HOOT_EMAIL=OsmApiDbHootApiDbConflate@hoottestcpp.org
+HOOT_EMAIL="$TEST_NAME@hoottestcpp.org"
 
 source conf/database/DatabaseConfig.sh
 export OSM_API_DB_URL="osmapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME_OSMAPI"
-export OSM_API_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
+export PSQL_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export PGPASSWORD=$DB_PASSWORD_OSMAPI
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 # generic debugging options applicable to multiple commands
@@ -235,3 +235,6 @@ if [ "$CONFLATE_DATA" == "true" ]; then
   hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8a-conflated-$TEST_NAME"
   hoot db-delete-map -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/8b-conflated-$TEST_NAME"
 fi
+
+# Delete the user
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

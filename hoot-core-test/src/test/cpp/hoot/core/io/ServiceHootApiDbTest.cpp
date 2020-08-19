@@ -461,7 +461,8 @@ public:
 
   void runAvailableMapNamesTest()
   {
-    setUpTest("runAvailableMapNamesTest");
+    QString test_name = "runAvailableMapNamesTest";
+    setUpTest(test_name);
     const QString differentUserEmail = userEmail().replace(testName, testName + "-different-user");
     ServicesDbTestUtils::deleteUser(differentUserEmail);
 
@@ -478,9 +479,9 @@ public:
     const long currentUserId = database.getOrCreateUser(userEmail(), userName());
     LOG_VART(currentUserId);
     database.setUserId(currentUserId);
+    QString currentUser = testName + "-current-user";
     const long currentUserPrivateFolderId =
-      database.insertFolder(
-        testName.replace(testName, testName + "-current-user"), -1, currentUserId, false);
+      database.insertFolder(currentUser, -1, currentUserId, false);
     long testMapId = database.insertMap("runAvailableMapNamesTest-1");
     database.insertFolderMapMapping(testMapId, currentUserPrivateFolderId);
     testMapId = database.insertMap("runAvailableMapNamesTest-2");
@@ -488,14 +489,14 @@ public:
 
     // insert a couple of public maps owned by a different user; these should be returned by
     // selectMapNamesAvailableToCurrentUser
+    QString differentUser = testName + "-different-user";
     const long differentUserId =
-      database.getOrCreateUser(
-        differentUserEmail, userName().replace(testName, testName + "-different-user"));
+      database.getOrCreateUser(differentUserEmail, differentUser);
     LOG_VART(differentUserId);
     database.setUserId(differentUserId);
+    QString differentUser1 = testName + "-different-user-1";
     const long differentUserPublicFolderId =
-      database.insertFolder(
-        testName.replace(testName, testName + "-different-user-1"), -1, differentUserId, true);
+      database.insertFolder(differentUser1, -1, differentUserId, true);
     testMapId = database.insertMap("runAvailableMapNamesTest-3");
     database.insertFolderMapMapping(testMapId, differentUserPublicFolderId);
     testMapId = database.insertMap("runAvailableMapNamesTest-4");
@@ -503,10 +504,9 @@ public:
 
     // insert a couple of private maps owned by a different user; these should *not* be returned by
     // selectMapNamesAvailableToCurrentUser
-
+    QString differentUser2 = testName + "-different-user-2";
     const long differentUserPrivateFolderId =
-      database.insertFolder(
-        testName.replace(testName, testName + "-different-user-2"), -1, differentUserId, false);
+      database.insertFolder(differentUser2, -1, differentUserId, false);
     testMapId = database.insertMap("runAvailableMapNamesTest-5");
     database.insertFolderMapMapping(testMapId, differentUserPrivateFolderId);
     testMapId = database.insertMap("runAvailableMapNamesTest-6");

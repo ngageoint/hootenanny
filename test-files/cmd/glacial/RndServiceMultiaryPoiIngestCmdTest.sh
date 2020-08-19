@@ -9,8 +9,11 @@ mkdir -p $OUTPUT_DIR
 
 source conf/database/DatabaseConfig.sh
 HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
+PSQL_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
+PGPASSWORD=$DB_PASSWORD_OSMAPI
+HOOT_EMAIL="RndServiceMultiaryPoiIngestCmdTest@hoottestcpp.org"
 # set the max elements per map in such a way that the partial reading occurs
-HOOT_OPTS="--warn -C Testing.conf -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=OsmApiDbHootApiDbConflate@hoottestcpp.org -D hootapi.db.writer.create.user=true -D max.elements.per.partial.map=2"
+HOOT_OPTS="--warn -C Testing.conf -D uuid.helper.repeatable=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D max.elements.per.partial.map=2"
 
 GOLD_OUTPUT=$REF_DIR/allCountries-geonames-output.osm
 GOLD_ADD_CHANGESET=$REF_DIR/allCountries-geonames-changeset-add.spark.1
@@ -188,3 +191,5 @@ echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."
 echo ""
 hoot db-delete-map $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 
+# Delete the user
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

@@ -328,11 +328,11 @@ OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
 
 long ServicesDbTestUtils::insertTestUser(const QString& userName, const QString& email,
                                          const QString& sessionId, const QString& accessToken,
-                                         const QString& accessTokenSecret)
+                                         const QString& accessTokenSecret, bool isAdmin)
 {
   HootApiDb db;
   db.open(QUrl(HootApiDb::getBaseUrl().toString() + "/blah"));
-  const long userId = db.insertUser(email, userName);
+  const long userId = db.getOrCreateUser(email, userName, isAdmin);
   db.insertUserSession(userId, sessionId);
   db.updateUserAccessTokens(userId, accessToken, accessTokenSecret);
   db.close();
