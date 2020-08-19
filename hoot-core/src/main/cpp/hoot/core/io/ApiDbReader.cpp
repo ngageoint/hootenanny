@@ -290,7 +290,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
                                      long& nodeCount, long& wayCount)
 {
   LOG_DEBUG("Retrieving way IDs referenced by the selected nodes...");
-  // TODO: This query is extremely slow for large numbers of node IDs. - #4192
+
   std::shared_ptr<QSqlQuery> wayIdItr = _getDatabase()->selectWayIdsByWayNodeIds(nodeIds);
   while (wayIdItr->next())
   {
@@ -386,9 +386,6 @@ void ApiDbReader::_fullRead(OsmMapPtr map)
 
 void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 {
-  // TODO: This proves very slow for AOI's with a lot of data. Need something better.
-  // see _readWaysByNodeIds. - #4192
-
   long boundedNodeCount = 0;
   long boundedWayCount = 0;
   long boundedRelationCount = 0;
@@ -628,10 +625,11 @@ void ApiDbReader::read(const OsmMapPtr& map)
     }
     else
     {
-      // The cropped read from db inputs gets very slow for large datasets (#4192). Therefore, if we
-      // we need to perform a cropped query from a very large dataset, we can allow the full dataset
-      // to be read in from the db input and then crop it after the fact as a runtime performance
-      // optimization at the expense of extra memory usage.
+      // The cropped read from db inputs may get slower for very large datasets. The index added
+      // as part of #4192 alleviated this quite a bit but there still can be a runtime performance
+      // difference. Therefore, if we we need to perform a cropped query from a very large dataset,
+      // we can allow the full dataset to be read in from the db input and then crop it after the
+      // fact as a runtime performance optimization at the expense of extra memory usage.
 
       LOG_DEBUG(
         "Executing API bounded read query via read all then crop at bounds " << bounds.toString() <<

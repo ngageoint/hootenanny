@@ -95,7 +95,7 @@ public:
   /**
    * This value should be updated after the DB is upgraded and all tests run successfully.
    */
-  static QString expectedHootDbVersion() { return "30:jack.grossman"; }
+  static QString expectedHootDbVersion() { return "31:brandon.witham"; }
   static int maximumChangeSetEdits() { return 50000; }
 
   static const Status DEFAULT_ELEMENT_STATUS;
@@ -320,31 +320,31 @@ public:
 
   QSqlError getLastError() const { return _db.lastError(); }
 
-  inline static QString getChangesetsTableName()                { return "changesets"; }
-  inline static QString getChangesetCommentsTableName()         { return "changeset_comments"; }
-  inline static QString getChangesetsSubscribersTableName()     { return "changesets_subscribers"; }
-  inline static QString getChangesetTagsTableName()             { return "changeset_tags"; }
-  inline static QString getCurrentNodeTagsTableName()           { return "current_node_tags"; }
-  inline static QString getCurrentNodesTableName()              { return "current_nodes"; }
-  inline static QString getCurrentRelationMembersTableName()    { return "current_relation_members"; }
-  inline static QString getCurrentRelationTagsTableName()       { return "current_relation_tags"; }
-  inline static QString getCurrentRelationsTableName()          { return "current_relations"; }
-  inline static QString getCurrentWayNodesTableName()           { return "current_way_nodes"; }
-  inline static QString getCurrentWayTagsTableName()            { return "current_way_tags"; }
-  inline static QString getCurrentWaysTableName()               { return "current_ways"; }
+  inline static QString getChangesetsTableName()              { return "changesets"; }
+  inline static QString getChangesetCommentsTableName()       { return "changeset_comments"; }
+  inline static QString getChangesetsSubscribersTableName()   { return "changesets_subscribers"; }
+  inline static QString getChangesetTagsTableName()           { return "changeset_tags"; }
+  inline static QString getCurrentNodeTagsTableName()         { return "current_node_tags"; }
+  inline static QString getCurrentNodesTableName()            { return "current_nodes"; }
+  inline static QString getCurrentRelationMembersTableName()  { return "current_relation_members"; }
+  inline static QString getCurrentRelationTagsTableName()     { return "current_relation_tags"; }
+  inline static QString getCurrentRelationsTableName()        { return "current_relations"; }
+  inline static QString getCurrentWayNodesTableName()         { return "current_way_nodes"; }
+  inline static QString getCurrentWayTagsTableName()          { return "current_way_tags"; }
+  inline static QString getCurrentWaysTableName()             { return "current_ways"; }
 
-  inline static QString getNodeTagsTableName()                  { return "node_tags"; }
-  inline static QString getNodesTableName()                     { return "nodes"; }
-  inline static QString getRelationMembersTableName()           { return "relation_members"; }
-  inline static QString getRelationTagsTableName()              { return "relation_tags"; }
-  inline static QString getRelationsTableName()                 { return "relations"; }
-  inline static QString getWayNodesTableName()                  { return "way_nodes"; }
-  inline static QString getWayTagsTableName()                   { return "way_tags"; }
-  inline static QString getWaysTableName()                      { return "ways"; }
+  inline static QString getNodeTagsTableName()                { return "node_tags"; }
+  inline static QString getNodesTableName()                   { return "nodes"; }
+  inline static QString getRelationMembersTableName()         { return "relation_members"; }
+  inline static QString getRelationTagsTableName()            { return "relation_tags"; }
+  inline static QString getRelationsTableName()               { return "relations"; }
+  inline static QString getWayNodesTableName()                { return "way_nodes"; }
+  inline static QString getWayTagsTableName()                 { return "way_tags"; }
+  inline static QString getWaysTableName()                    { return "ways"; }
 
-  inline static QString getUsersTableName()                     { return "users"; }
+  inline static QString getUsersTableName()                   { return "users"; }
 
-  inline static QString getSequenceId()                         { return "_id_seq"; }
+  inline static QString getSequenceId()                       { return "_id_seq"; }
 
   inline static QString getChangesetsSequenceName()
   { return getChangesetsTableName() + getSequenceId(); }
