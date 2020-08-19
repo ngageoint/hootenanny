@@ -106,10 +106,6 @@ namespace hoot
 
 ChangesetReplacementCreator::ChangesetReplacementCreator(
   const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl) :
-_input1(""),
-_input2(""),
-_output(""),
-_replacementBounds(""),
 _changesetId("1"),
 _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 2),
 _fullReplacement(false),
@@ -377,16 +373,8 @@ void ChangesetReplacementCreator::_printJobDescription() const
 
   QString str;
   str += "Deriving replacement output changeset:";
-  if (!_input1.isEmpty() && !_input2.isEmpty())
-  {
-    str += "\nBeing replaced: ..." + _input1.right(_maxFilePrintLength);
-    str += "\nReplacing with ..." + _input2.right(_maxFilePrintLength);
-  }
-  else
-  {
-    str += "\nBeing replaced: ..." + _input1Map->getName().right(_maxFilePrintLength);
-    str += "\nReplacing with ..." + _input2Map->getName().right(_maxFilePrintLength);
-  }
+  str += "\nBeing replaced: ..." + _input1.right(_maxFilePrintLength);
+  str += "\nReplacing with ..." + _input2.right(_maxFilePrintLength);
   str += "\nAt Bounds: " + _replacementBounds;
   str += "\nOutput Changeset: ..." + _output.right(_maxFilePrintLength);
   LOG_STATUS(str);
@@ -425,21 +413,6 @@ void ChangesetReplacementCreator::create(
   // The default string stores six decimal places, which should be fine for a bounds. Strangely,
   // when I store the bounds or try to increase the precision of the bounds string, I'm getting a
   // lot of test output issues...needs to be looked into.
-  _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
-
-  _create();
-}
-
-void ChangesetReplacementCreator::create(
-  const OsmMapPtr& input1, const OsmMapPtr& input2, const geos::geom::Envelope& bounds,
-  const QString& output)
-{
-  _input1Map = input1;
-  _input1 = "";
-  _input2Map = input2;
-  _input2 = "";
-  _output = output;
-  //_replacementBounds = bounds;
   _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
 
   _create();
@@ -855,38 +828,30 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
 void ChangesetReplacementCreator::_validateInputs()
 {
-  if (!_input1.isEmpty() && !_input2.isEmpty())
+  // Fail if the reader that supports either input doesn't implement Boundable.
+  std::shared_ptr<Boundable> boundable =
+    std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input1));
+  if (!boundable)
   {
-    // Fail if the reader that supports either input doesn't implement Boundable.
-    std::shared_ptr<Boundable> boundable =
-      std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input1));
-    if (!boundable)
-    {
-      throw IllegalArgumentException(
-        "Reader for " + _input1 + " must implement Boundable for replacement changeset derivation.");
+    throw IllegalArgumentException(
+      "Reader for " + _input1 + " must implement Boundable for replacement changeset derivation.");
     }
-    boundable = std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input2));
-    if (!boundable)
-    {
-      throw IllegalArgumentException(
-        "Reader for " + _input2 + " must implement Boundable for replacement changeset derivation.");
-    }
-
-    // Fail for GeoJSON - GeoJSON coming from Overpass does not have way nodes, so their versions
-    // are lost when new way nodes are added to existing ways. For that reason, we can't support it
-    // (or at least not sure how to yet).
-    OsmGeoJsonReader geoJsonReader;
-    if (geoJsonReader.isSupported(_input1) || geoJsonReader.isSupported(_input2))
-    {
-      throw IllegalArgumentException(
-        "GeoJSON inputs are not supported by replacement changeset derivation.");
-    }
-  }
-  else if ((_input1Map && _input1Map->isEmpty()) || (_input2Map && _input2Map->isEmpty()))
+  boundable = std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input2));
+  if (!boundable)
   {
-    throw IllegalArgumentException("Empty map(s) passed to replacement changeset derivation.");
+    throw IllegalArgumentException(
+      "Reader for " + _input2 + " must implement Boundable for replacement changeset derivation.");
   }
 
+  // Fail for GeoJSON - GeoJSON coming from Overpass does not have way nodes, so their versions
+  // are lost when new way nodes are added to existing ways. For that reason, we can't support it
+  // (or at least not sure how to yet).
+  OsmGeoJsonReader geoJsonReader;
+  if (geoJsonReader.isSupported(_input1) || geoJsonReader.isSupported(_input2))
+  {
+    throw IllegalArgumentException(
+      "GeoJSON inputs are not supported by replacement changeset derivation.");
+  }
   QFile outputFile(_output);
   if (outputFile.exists())
   {
@@ -1289,64 +1254,44 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
 
   OsmMapPtr refMap;
-  // existence of the file input takes precedence over the pre-loaded map
-  if (!_input1.trimmed().isEmpty())
+  // We want to alert the user to the fact their ref versions *could* be being populated
+  // incorrectly to avoid difficulties during changeset application at the end. Its likely if they
+  // are incorrect at this point the changeset derivation will fail at the end anyway, but let's
+  // warn now to give the chance to back out of the replacement earlier.
+  conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
+
+  // Caching inputs only helps with file based inputs, so skip if the source is a db.
+  // TODO: think we can cache maps based on the loadRefKeep* config option config
+  if (_isDbUrl(_input1) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
   {
-    // We want to alert the user to the fact their ref versions *could* be being populated
-    // incorrectly to avoid difficulties during changeset application at the end. Its likely if they
-    // are incorrect at this point the changeset derivation will fail at the end anyway, but let's
-    // warn now to give the chance to back out of the replacement earlier.
-    conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
-
-    // Caching inputs only helps with file based inputs, so skip if the source is a db.
-    // TODO: think we can cache maps based on the loadRefKeep* config option config
-    if (_isDbUrl(_input1) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
-    {
-      // If input caching is not enabled, we'll read from the source data each time and crop
-      // appropriately during the read. If the source input is a very large file or database layer
-      // you don't want to be doing this.
-      LOG_STATUS("Loading reference map from: ..." << _input1.right(_maxFilePrintLength) << "...");
-      refMap.reset(new OsmMap());
-      IoUtils::loadMap(refMap, _input1, true, Status::Unknown1);
-    }
-    else
-    {
-      // If input caching is enabled, we'll read the full map once and then copy it and crop it
-      // in subsequent loads. You only want to be doing this if the input is a file or db layer that
-      // will fit easily into available memory.
-      if (!_input1Map)
-      {
-        // Clear out the bounding box param temporarily, so that we can read the full map here. Kind
-        // of kludgy, but there is no access to it from here via IoUtils::loadMap.
-        const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
-        conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
-
-        LOG_STATUS(
-          "Loading reference map from: ..." << _input1.right(_maxFilePrintLength) << "...");
-        _input1Map.reset(new OsmMap());
-        _input1Map->setName("ref");
-        IoUtils::loadMap(_input1Map, _input1, true, Status::Unknown1);
-
-        // Restore it back to original.
-        conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
-      }
-      LOG_STATUS(
-        "Copying reference map of size: " << StringUtils::formatLargeNumber(_input1Map->size()) <<
-        " from: " << _input1Map->getName() << "...");
-      refMap.reset(new OsmMap(_input1Map));
-      IoUtils::cropToBounds(
-        refMap, GeometryUtils::envelopeFromConfigString(_replacementBounds),
-        _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
-    }
-
-    // We only care about the zero version warning for the ref data, so restore default setting
-    // value before we load secondary data.
-    conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
+    // If input caching is not enabled, we'll read from the source data each time and crop
+    // appropriately during the read. If the source input is a very large file or database layer
+    // you don't want to be doing this.
+    LOG_STATUS("Loading reference map from: ..." << _input1.right(_maxFilePrintLength) << "...");
+    refMap.reset(new OsmMap());
+    IoUtils::loadMap(refMap, _input1, true, Status::Unknown1);
   }
-  // If no file input was specified, then we must have a pre-loaded raw map, which we'll copy and
-  // crop based on what we need to do with it.
-  else if (_input1Map)
+  else
   {
+    // If input caching is enabled, we'll read the full map once and then copy it and crop it
+    // in subsequent loads. You only want to be doing this if the input is a file or db layer that
+    // will fit easily into available memory.
+    if (!_input1Map)
+    {
+      // Clear out the bounding box param temporarily, so that we can read the full map here. Kind
+      // of kludgy, but there is no access to it from here via IoUtils::loadMap.
+      const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
+      conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
+
+      LOG_STATUS(
+        "Loading reference map from: ..." << _input1.right(_maxFilePrintLength) << "...");
+      _input1Map.reset(new OsmMap());
+      _input1Map->setName("ref");
+      IoUtils::loadMap(_input1Map, _input1, true, Status::Unknown1);
+
+      // Restore it back to original.
+      conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
+    }
     LOG_STATUS(
       "Copying reference map of size: " << StringUtils::formatLargeNumber(_input1Map->size()) <<
       " from: " << _input1Map->getName() << "...");
@@ -1355,10 +1300,11 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
       refMap, GeometryUtils::envelopeFromConfigString(_replacementBounds),
       _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
   }
-  else
-  {
-    throw IllegalArgumentException("No reference map specified.");
-  }
+
+  // We only care about the zero version warning for the ref data, so restore default setting
+  // value before we load secondary data.
+  conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
+
   refMap->setName("ref");
 
   LOG_VART(MapProjector::toWkt(refMap->getProjection()));
@@ -1384,50 +1330,34 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
   // TODO: consolidate this and _loadRefMap into a single _loadInput method
 
   OsmMapPtr secMap;
-  if (!_input2.trimmed().isEmpty())
+  if (_isDbUrl(_input2) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
   {
-    if (_isDbUrl(_input2) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
-    {
-      // load the replacement data cropped to the specified aoi in the appropriate manner
-      LOG_STATUS("Loading secondary map from: ..." << _input2.right(_maxFilePrintLength) << "...");
-      secMap.reset(new OsmMap());
-      IoUtils::loadMap(secMap, _input2, false, Status::Unknown2);
-    }
-    else
-    {
-      if (!_input2Map)
-      {
-        const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
-        conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
-
-        LOG_STATUS(
-          "Loading secondary map from: ..." << _input2.right(_maxFilePrintLength) << "...");
-        _input2Map.reset(new OsmMap());
-        _input2Map->setName("sec");
-        IoUtils::loadMap(_input2Map, _input2, false, Status::Unknown2);
-
-        conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
-      }
-      LOG_STATUS(
-        "Copying secondary map of size: " << StringUtils::formatLargeNumber(_input2Map->size()) <<
-        " from: " << _input2Map->getName() << "...");
-      secMap.reset(new OsmMap(_input2Map));
-      IoUtils::cropToBounds(
-        secMap, GeometryUtils::envelopeFromConfigString(_replacementBounds), false);
-    }
+    // load the replacement data cropped to the specified aoi in the appropriate manner
+    LOG_STATUS("Loading secondary map from: ..." << _input2.right(_maxFilePrintLength) << "...");
+    secMap.reset(new OsmMap());
+    IoUtils::loadMap(secMap, _input2, false, Status::Unknown2);
   }
-  else if (_input2Map)
+  else
   {
+    if (!_input2Map)
+    {
+      const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
+      conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
+
+      LOG_STATUS(
+        "Loading secondary map from: ..." << _input2.right(_maxFilePrintLength) << "...");
+      _input2Map.reset(new OsmMap());
+      _input2Map->setName("sec");
+      IoUtils::loadMap(_input2Map, _input2, false, Status::Unknown2);
+
+      conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
+    }
     LOG_STATUS(
       "Copying secondary map of size: " << StringUtils::formatLargeNumber(_input2Map->size()) <<
       " from: " << _input2Map->getName() << "...");
     secMap.reset(new OsmMap(_input2Map));
     IoUtils::cropToBounds(
       secMap, GeometryUtils::envelopeFromConfigString(_replacementBounds), false);
-  }
-  else
-  {
-    throw IllegalArgumentException("No secondary map specified.");
   }
   secMap->setName("sec");
 

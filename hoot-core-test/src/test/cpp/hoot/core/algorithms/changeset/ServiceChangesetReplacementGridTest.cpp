@@ -196,8 +196,8 @@ public:
   void northVegasLargeTest()
   {
     // whole northern half of city, 64 changesets, avg derivation: 8m26s, 9h27m
-    // TODO: redo this now that query has been optimized...guessing it shaves off a couple of hours
-    // at least
+    // TODO: redo this now that the query has been optimized...guessing it shaves off a couple of
+    // hours at least
 
     _testName = "vegasLargeTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";

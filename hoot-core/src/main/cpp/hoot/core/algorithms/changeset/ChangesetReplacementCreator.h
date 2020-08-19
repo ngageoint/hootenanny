@@ -148,19 +148,6 @@ public:
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output);
 
-  /**
-   * Creates a changeset that replaces features in the first map with features from the second
-   * map
-   *
-   * @param input1 the target data for the changeset in which to replace features
-   * @param input2 the source data for the changeset to get replacement features from
-   * @param bounds the bounds over which features are to be replaced
-   * @param output the changeset file output location
-   */
-  void create(
-    const OsmMapPtr& input1, const OsmMapPtr& input2, const geos::geom::Envelope& bounds,
-    const QString& output);
-
   void setFullReplacement(const bool full) { _fullReplacement = full; }
   void setBoundsInterpretation(const BoundsInterpretation& interpretation)
   { _boundsInterpretation = interpretation; }
@@ -185,12 +172,12 @@ private:
 
   // path to the input with data being replaced; overrides use of _input1Map
   QString _input1;
-  // preloaded input with data being replaced; overrides use of _input1
+  // cached data being replaced
   OsmMapPtr _input1Map;
 
   // path to the input with data used for replacement; overrides use of _input2Map
   QString _input2;
-  // preloaded input with data used for replacement; overrides use of _input2
+  // cached replacement data
   OsmMapPtr _input2Map;
 
   // path to the changeset output file
