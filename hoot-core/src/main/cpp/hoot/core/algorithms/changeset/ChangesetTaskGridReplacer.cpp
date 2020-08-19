@@ -40,7 +40,6 @@
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 #include <hoot/core/io/HootApiDbReader.h>
-//#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>

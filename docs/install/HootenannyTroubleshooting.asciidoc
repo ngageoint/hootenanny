@@ -2,7 +2,7 @@
 [[HootInstallTroubleshooting]]
 == Troubleshooting
 
-*8/19/20: Many items in the document are now obsolete.*
+*8/19/20: Many items in this document are now obsolete.*
 
 === Core
 
