@@ -228,7 +228,8 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
 
     // small optimization since node density only needs nodes in the input; can only do this with
     // a db reader right now
-    // TODO: I don't think the node only read is working correctly.
+    // TODO: I don't think the node only read is working correctly. Put a note in
+    // NodeDensityTilesCmd.
 //    std::shared_ptr<ApiDbReader> reader =
 //      std::dynamic_pointer_cast<ApiDbReader>(
 //        OsmMapReaderFactory::createReader(_replacementUrl, true, Status::Unknown1));

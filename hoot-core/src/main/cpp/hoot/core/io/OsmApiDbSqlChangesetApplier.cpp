@@ -251,7 +251,7 @@ QString OsmApiDbSqlChangesetApplier::getChangesetStatsSummary() const
     "Relation(s) Deleted: " + StringUtils::formatLargeNumber(_changesetStats[RELATION_DELETE_KEY]) + "\n" +
     "Total Creations: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_CREATE_KEY]) + "\n" +
     "Total Modifications: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_MODIFY_KEY]) + "\n" +
-    "Total Deletions: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_DELETE_KEY]);
+    "Total Deletions: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_DELETE_KEY]) + "\n";
 }
 
 bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString& boundsStr,

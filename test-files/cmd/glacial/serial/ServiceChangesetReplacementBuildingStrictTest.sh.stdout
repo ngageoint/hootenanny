@@ -53,6 +53,9 @@ Way(s) Deleted: 56
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
+Total Creations: 527
+Total Modifications: 1
+Total Deletions: 539
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementBuildingStrictTest-xml-replaced.osm for verification...
 

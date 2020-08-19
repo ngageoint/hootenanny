@@ -44,7 +44,7 @@ Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplaceme
 
 Changeset(s) Created: 1
 Changeset Details: min_lat=32.7152155, max_lat=32.8616392, min_lon=52.914367, max_lon=53.2669396, num_changes=3247
-Node(s) Created: 2288
+Node(s) Created: 2,288
 Node(s) Modified: 22
 Node(s) Deleted: 292
 Way(s) Created: 548
@@ -53,6 +53,9 @@ Way(s) Deleted: 71
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
+Total Creations: 2,836
+Total Modifications: 48
+Total Deletions: 363
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementRefSinglePointTest-xml-replaced.osm for verification...
 
