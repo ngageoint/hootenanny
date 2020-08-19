@@ -51,7 +51,16 @@ _reverseTaskGrid(false),
 _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
-_averageChangesetDeriveTime(0.0)
+_averageChangesetDeriveTime(0.0),
+_totalNodesCreated(0),
+_totalNodesModified(0),
+_totalNodesDeleted(0),
+_totalWaysCreated(0),
+_totalWaysModified(0),
+_totalWaysDeleted(0),
+_totalRelationsCreated(0),
+_totalRelationsModified(0),
+_totalRelationsDeleted(0)
 {
 }
 
@@ -59,12 +68,12 @@ void ChangesetTaskGridReplacer::replace(const QString& toReplace, const QString&
 {
   if (!toReplace.toLower().startsWith("osmapidb://"))
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("Data being replaced must be from an OSM API database.");
   }
   // will support file for this later
   if (!replacement.toLower().startsWith("hootapidb://"))
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("Replacement data must be from a Hootenanny API database.");
   }
 
   _opTimer.start();
@@ -72,6 +81,15 @@ void ChangesetTaskGridReplacer::replace(const QString& toReplace, const QString&
 
   _dataToReplaceUrl = toReplace;
   _replacementUrl = replacement;
+  _totalNodesCreated = 0;
+  _totalNodesModified = 0;
+  _totalNodesDeleted = 0;
+  _totalWaysCreated = 0;
+  _totalWaysModified = 0;
+  _totalWaysDeleted = 0;
+  _totalRelationsCreated = 0;
+  _totalRelationsModified = 0;
+  _totalRelationsDeleted = 0;
 
   _initConfig();
 
@@ -187,10 +205,15 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
     // read from hootapidb
 
     LOG_STATUS(
-      "Preparing input data for task grid cell calculation from: " << _replacementUrl << "...");
-    // Reading by bounds ends up being much slower than it should be here. The bounded query
-    // needs work (#4180). We'll read all and crop after the fact instead. This is really bad
-    // memory-wise if the source db is very large, of course.
+      "Preparing input data for task grid cell calculation from: ..." <<
+      _replacementUrl.right(25) << "...");
+    // Getting large amounts of data via bbox can actually be slower than reading all of the data
+    // and then cropping it, due to bounded query performance. #4192 improved this gap, but the full
+    // read then crop can still be faster sometimes if the memory is available for it. All of North
+    // Vegas takes 2:01 to read fully then crop to just the city bounds vs 2:30 to get via bbox
+    // query.
+    // TODO: make this configurable
+    // TODO: This map only needs nodes read into it
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), true);
     OsmMapReaderFactory::read(map, _replacementUrl, true, Status::Unknown1);
     // Restore the default setting, or the changeset replacement maps will be loaded very slowly
@@ -252,7 +275,8 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_c
   assert(boundsCalc.getTileCount() == taskGrid.size());
 
   LOG_STATUS(
-    "Calculated " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells.");
+    "Calculated " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells in: " <<
+    StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << ".");
   LOG_STATUS(
     "\tMaximum node count in any one tile: " <<
     StringUtils::formatLargeNumber(boundsCalc.getMaxNodeCountInOneTile()));
@@ -263,9 +287,6 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_c
   LOG_INFO(
     "\tMaximum node count per tile used: " <<
     StringUtils::formatLargeNumber(boundsCalc.getMaxNodesPerTile()));
-  LOG_STATUS(
-    "\tTask grid cells calculated in: " <<
-    StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
   return taskGrid;
@@ -354,14 +375,13 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     StringUtils::padFrontOfNumberStringWithZeroes(taskGridCellId, 3) + ".osc.sql");
 
   QString msg =
-    "*****************************\nDeriving changeset " + QString::number(changesetNum) + " / " +
-    StringUtils::formatLargeNumber(taskGridSize) + " for task grid cell: " +
-    QString::number(taskGridCellId) + ", ";
+    "************************************************************************\nDeriving changeset " +
+    QString::number(changesetNum) + " / " + StringUtils::formatLargeNumber(taskGridSize) +
+    " for task grid cell: " + QString::number(taskGridCellId) + "\n";
   if (numReplacementNodes != -1)
   {
-    msg += "replacement nodes: " + StringUtils::formatLargeNumber(numReplacementNodes) + ", ";
+    msg += "replacement nodes: " + StringUtils::formatLargeNumber(numReplacementNodes);
   }
-  msg += "over bounds: " + boundsStr + ", to file: ..." + changesetFile.fileName().right(25) + "...";
   LOG_STATUS(msg);
   _changesetCreator->setChangesetId(QString::number(taskGridCellId));
 //    QString secondaryInput;
@@ -388,11 +408,12 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     ", over bounds: " << boundsStr << ", from file: ..." << changesetFile.fileName().right(25) <<
     "...");
   _changesetApplier->write(changesetFile);
-  LOG_STATUS(_changesetApplier->getChangesetStats());
+  _printChangesetStats();
   LOG_STATUS(
     "\tChangeset applied in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
+
 
   // VERY SLOW
   if (ConfigOptions().getDebugMapsWrite() && changesetNum < taskGridSize)
@@ -400,6 +421,36 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     _getUpdatedData(
       _changesetsOutputDir + "/" + QString::number(taskGridCellId) + "-replaced-data.osm");
   }
+
+  LOG_STATUS(
+    "Total replacement time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+}
+
+void ChangesetTaskGridReplacer::_printChangesetStats()
+{
+  QMap<QString, long> changesetStats = _changesetApplier->getChangesetStats();
+  _totalNodesCreated += changesetStats["node-create"];
+  _totalNodesModified += changesetStats["node-modify"];
+  _totalNodesDeleted += changesetStats["node-delete"];
+  _totalWaysCreated += changesetStats["way-create"];
+  _totalWaysModified += changesetStats["way-modify"];
+  _totalWaysDeleted += changesetStats["node-delete"];
+  _totalRelationsCreated += changesetStats["relation-create"];
+  _totalRelationsModified += changesetStats["relation-modify"];
+  _totalRelationsDeleted += changesetStats["relation-delete"];
+  LOG_STATUS(
+    "Node Totals:\n" <<
+    "\tCreated: " << StringUtils::formatLargeNumber(_totalNodesCreated) << "\n" <<
+    "\tModified: " << StringUtils::formatLargeNumber(_totalNodesModified) << "\n" <<
+    "\tDeleted: " << StringUtils::formatLargeNumber(_totalNodesDeleted) << "\n" <<
+    "Way Totals:\n" <<
+    "\tCreated: " << StringUtils::formatLargeNumber(_totalWaysCreated) << "\n" <<
+    "\tModified: " << StringUtils::formatLargeNumber(_totalWaysModified) << "\n" <<
+    "\tDeleted: " << StringUtils::formatLargeNumber(_totalWaysDeleted) << "\n" <<
+    "Relation Totals:\n" <<
+    "\tCreated: " << StringUtils::formatLargeNumber(_totalRelationsCreated) << "\n" <<
+    "\tModified: " << StringUtils::formatLargeNumber(_totalRelationsModified) << "\n" <<
+    "\tDeleted: " << StringUtils::formatLargeNumber(_totalRelationsDeleted) << "\n");
 }
 
 void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)

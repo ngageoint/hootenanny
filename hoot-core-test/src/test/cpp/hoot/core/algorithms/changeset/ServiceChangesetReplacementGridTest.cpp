@@ -46,12 +46,9 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
 
 /*
  * This test harness allows for testing the Cut and Replace workflow across adjacent task grid
- * cells. By removing the processes of input data generation and changeset application via API, bugs
+ * cells. By removing the processes of input data retrieval and changeset application via API, bugs
  * can more easily be narrowed down to just those in the ChangesetReplacementGenerator (most of the
  * time).
- *
- * Either an auto node density generated task grid or a task grid from one or more bounds inputs
- * file may be used to partition the data replacements.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
@@ -80,13 +77,12 @@ public:
 
   virtual void setUp()
   {
-    //DisableLog dl;
     _subTaskTimer.start();
     _initConfig();
     _cleanupDataToReplace();
   }
 
-  virtual void takeDown()
+  virtual void tearDown()
   {
     _cleanupDataToReplace();
     _cleanupReplacementData();
@@ -132,10 +128,10 @@ public:
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
-    QStringList inputs;
-    inputs.append(rootDir + "/1/Task38_07Aug2020_VGI_1666/Task38Bounds.osm");
-    inputs.append(rootDir + "/1/Task43_VGI_1666/Task43Extend.osm");
-    uut.setGridInputs(inputs);
+    QStringList gridInputs;
+    gridInputs.append(rootDir + "/1/Task38_07Aug2020_VGI_1666/Task38Bounds.osm");
+    gridInputs.append(rootDir + "/1/Task43_VGI_1666/Task43Extend.osm");
+    uut.setGridInputs(gridInputs);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
@@ -195,17 +191,18 @@ public:
 
   void northVegasLargeTest()
   {
-    // whole northern half of city, 64 changesets, ? minutes
+    // whole northern half of city, 64 changesets, avg derivation: 8m26s, 9h27m
 
     _testName = "vegasLargeTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
+    QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
     _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
-    uut.setKillAfterNumChangesetDerivations(2);
+    //uut.setKillAfterNumChangesetDerivations(2);
     uut.setNodeDensityGridBounds("-115.3528,36.0919,-114.9817,36.3447");
     uut.setNodeDensityMaxNodesPerCell(100000);
     uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
@@ -344,10 +341,11 @@ private:
 
   void _cleanupDataToReplace()
   {
-    LOG_STATUS("Cleaning up the modified db at: " << DATA_TO_REPLACE_URL << "...");
-    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     LOG_STATUS(
-      "Modified db cleaned in: " <<
+      "Cleaning up the data to replace db at: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
+    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+    LOG_INFO(
+      "Data to replace db cleaned in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
   }

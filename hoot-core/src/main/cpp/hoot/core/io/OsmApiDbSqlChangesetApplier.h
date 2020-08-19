@@ -77,9 +77,11 @@ public:
   /**
    * Writes a summary of the contents of a changeset
    *
-   * @return a summary string
+   * @return a changeset summary string
    */
-  QString getChangesetStats() const;
+  QString getChangesetStatsSummary() const;
+
+  QMap<QString, long> getChangesetStats() const { return _changesetStats; }
 
 private:
 

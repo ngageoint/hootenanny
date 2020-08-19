@@ -31,6 +31,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QtSql/QSqlDatabase>
@@ -160,6 +161,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
       _changesetStats[changesetStatType] = 1;
     }
   }
+  // TODO: add total changes stat here
 
   // flush
   if (!changesetInsertStatement.isEmpty())
@@ -209,20 +211,21 @@ void OsmApiDbSqlChangesetApplier::write(QFile& changesetSqlFile)
   }
 }
 
-QString OsmApiDbSqlChangesetApplier::getChangesetStats() const
+QString OsmApiDbSqlChangesetApplier::getChangesetStatsSummary() const
 {
   return
-    "Changeset(s) Created: " + QString::number(_changesetStats["changeset-create"]) + "\n" +
+    // TODO: move these map key strings to public constants
+    "Changeset(s) Created: " + StringUtils::formatLargeNumber(_changesetStats["changeset-create"]) + "\n" +
     "Changeset Details: " + _changesetDetailsStr + "\n" +
-    "Node(s) Created: " + QString::number(_changesetStats["node-create"]) + "\n" +
-    "Node(s) Modified: " + QString::number(_changesetStats["node-modify"]) + "\n" +
-    "Node(s) Deleted: " + QString::number(_changesetStats["node-delete"]) + "\n" +
-    "Way(s) Created: " + QString::number(_changesetStats["way-create"]) + "\n" +
-    "Way(s) Modified: " + QString::number(_changesetStats["way-modify"]) + "\n" +
-    "Way(s) Deleted: " + QString::number(_changesetStats["way-delete"]) + "\n" +
-    "Relation(s) Created: " + QString::number(_changesetStats["relation-create"]) + "\n" +
-    "Relation(s) Modified: " + QString::number(_changesetStats["relation-modify"]) + "\n" +
-    "Relation(s) Deleted: " + QString::number(_changesetStats["relation-delete"]) + "\n";
+    "Node(s) Created: " + StringUtils::formatLargeNumber(_changesetStats["node-create"]) + "\n" +
+    "Node(s) Modified: " + StringUtils::formatLargeNumber(_changesetStats["node-modify"]) + "\n" +
+    "Node(s) Deleted: " + StringUtils::formatLargeNumber(_changesetStats["node-delete"]) + "\n" +
+    "Way(s) Created: " + StringUtils::formatLargeNumber(_changesetStats["way-create"]) + "\n" +
+    "Way(s) Modified: " + StringUtils::formatLargeNumber(_changesetStats["way-modify"]) + "\n" +
+    "Way(s) Deleted: " + StringUtils::formatLargeNumber(_changesetStats["way-delete"]) + "\n" +
+    "Relation(s) Created: " + StringUtils::formatLargeNumber(_changesetStats["relation-create"]) + "\n" +
+    "Relation(s) Modified: " + StringUtils::formatLargeNumber(_changesetStats["relation-modify"]) + "\n" +
+    "Relation(s) Deleted: " + StringUtils::formatLargeNumber(_changesetStats["relation-delete"]);
 }
 
 //This method may go away after #716.

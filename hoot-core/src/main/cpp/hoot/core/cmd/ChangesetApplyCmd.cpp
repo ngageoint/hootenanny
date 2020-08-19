@@ -200,7 +200,7 @@ public:
       QFile changesetSqlFile(args[0]);
       changesetWriter.write(changesetSqlFile);
       //The tests rely on this being output, so leave it as a cout and not a log statement.
-      cout << changesetWriter.getChangesetStats();
+      cout << changesetWriter.getChangesetStatsSummary();
     }
     else
     {

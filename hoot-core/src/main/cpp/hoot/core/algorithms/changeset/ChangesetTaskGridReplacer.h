@@ -41,9 +41,12 @@ class OsmApiDbSqlChangesetApplier;
 
 /**
  * This class can replace data in an OSM API database across multiple AOI's via changeset generation
- * and application. Either a node density generated task grid or a task grid from an input file may
- * be used. Node density calc requires reading in all of the replacement data, so may not be
- * feasible when replacing very large amounts of data.
+ * and application.
+ *
+ * Either an auto node density generated task grid or a task grid from one or more bounds input
+ * files may be used to partition the data replacements. Node density calc requires reading in all
+ * of the replacement node data, so may not be feasible when replacing extremely large amounts of
+ * data.
  */
 class ChangesetTaskGridReplacer
 {
@@ -117,8 +120,6 @@ private:
 
   // derives the replacement changesets
   std::shared_ptr<ChangesetReplacementCreator> _changesetCreator;
-  // applies the replacement changesets
-  std::shared_ptr<OsmApiDbSqlChangesetApplier> _changesetApplier;
   // all changeset files generated are stored here
   QString _changesetsOutputDir;
   // allows for ending a large replacement early; useful for debugging; set to -1 to disable
@@ -127,6 +128,18 @@ private:
   // seconds
   double _totalChangesetDeriveTime;
   double _averageChangesetDeriveTime;
+
+  // applies the replacement changesets
+  std::shared_ptr<OsmApiDbSqlChangesetApplier> _changesetApplier;
+  int _totalNodesCreated;
+  int _totalNodesModified;
+  int _totalNodesDeleted;
+  int _totalWaysCreated;
+  int _totalWaysModified;
+  int _totalWaysDeleted;
+  int _totalRelationsCreated;
+  int _totalRelationsModified;
+  int _totalRelationsDeleted;
 
   QString _finalOutput;
 
@@ -141,6 +154,7 @@ private:
   void _replaceTaskGridCell(
     const int taskGridCellId, const int changesetNum, const geos::geom::Envelope& bounds,
     const int taskGridSize, const int numReplacementNodes = -1);
+  void _printChangesetStats();
 
   // writes out all of the ref data; useful for debugging...expensive
   void _getUpdatedData(const QString& outputFile);
