@@ -78,7 +78,6 @@ void ChangesetTaskGridReplacer::replace(const QString& toReplace, const QString&
   {
     throw IllegalArgumentException("Data being replaced must be from an OSM API database.");
   }
-  // will support file for this later
   if (!replacement.toLower().startsWith("hootapidb://"))
   {
     throw IllegalArgumentException("Replacement data must be from a Hootenanny API database.");
@@ -205,56 +204,41 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
 
-  OsmMapPtr map(new OsmMap());
+  LOG_STATUS(
+    "Preparing input data for task grid cell calculation from: ..." <<
+    _replacementUrl.right(25) << "...");
+  assert(HootApiDbReader::isSupported(_replacementUrl));
+
+  // Getting large amounts of data via bbox can actually be slower than reading all of the data
+  // and then cropping it, due to bounded query performance. #4192 improved this gap, but the
+  // full read then crop can still be faster sometimes if the memory is available for it. All of
+  // North Vegas takes 2:01 to read fully then crop to just the city bounds vs 2:30 to get via
+  // bbox query.
+  if (_readNodeDensityInputFullThenCrop)
+  {
+    conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), true);
+  }
+
   // IMPORTANT: data used here must be unknown1 for node density calc to work
-  //if (_writeReplacementDataToDb)
-  //{
-    // read from hootapidb
-
-    LOG_STATUS(
-      "Preparing input data for task grid cell calculation from: ..." <<
-      _replacementUrl.right(25) << "...");
-    assert(HootApiDbReader::isSupported(_replacementUrl));
-
-    // Getting large amounts of data via bbox can actually be slower than reading all of the data
-    // and then cropping it, due to bounded query performance. #4192 improved this gap, but the
-    // full read then crop can still be faster sometimes if the memory is available for it. All of
-    // North Vegas takes 2:01 to read fully then crop to just the city bounds vs 2:30 to get via
-    // bbox query.
-    if (_readNodeDensityInputFullThenCrop)
-    {
-      conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), true);
-    }
-
-    // small optimization since node density only needs nodes in the input; can only do this with
-    // a db reader right now
-    // TODO: I don't think the node only read is working correctly. Put a note in
-    // NodeDensityTilesCmd.
+  OsmMapPtr map(new OsmMap());
+  // small optimization since node density only needs nodes in the input; can only do this with
+  // a db reader right now
+  // TODO: I don't think the node only read is working correctly. Put a note in
+  // NodeDensityTilesCmd.
 //    std::shared_ptr<ApiDbReader> reader =
 //      std::dynamic_pointer_cast<ApiDbReader>(
 //        OsmMapReaderFactory::createReader(_replacementUrl, true, Status::Unknown1));
 //    reader->setReturnNodesOnly(true);
 //    reader->open(_replacementUrl);
 //    reader->read(map);
-    OsmMapReaderFactory::read(map, _replacementUrl, true, Status::Unknown1);
+  OsmMapReaderFactory::read(map, _replacementUrl, true, Status::Unknown1);
 
-    if (_readNodeDensityInputFullThenCrop)
-    {
-      // Restore the default setting, or the changeset replacement maps will be loaded very slowly
-      // if loading from URL.
-      conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
-    }
-  //}
-//  else
-//  {
-//    // read from file
-
-//    const QString replacementDataPath = ROOT_DIR + "/" + _replacementDataFile;
-//    LOG_STATUS(
-//      "Preparing input data for task grid cell calculation: ..." <<
-//      replacementDataPath.right(25) << "...");
-//    OsmMapReaderFactory::read(map, ROOT_DIR + "/" + _replacementDataFile, true, Status::Unknown1);
-//  }
+  if (_readNodeDensityInputFullThenCrop)
+  {
+    // Restore the default setting, or the changeset replacement maps will be loaded very slowly
+    // if loading from URL.
+    conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
+  }
 
   LOG_STATUS(
     StringUtils::formatLargeNumber(map->size()) << " task grid calc elements prepared " <<
@@ -411,15 +395,6 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   LOG_STATUS(msg);
 
   _changesetCreator->setChangesetId(QString::number(taskGridCellId));
-//    QString secondaryInput;
-//    if (_writeReplacementDataToDb)
-//    {
-//      secondaryInput = REPLACEMENT_DATA_URL;
-//    }
-//    else
-//    {
-//      secondaryInput = ROOT_DIR + "/" + _replacementDataFile;
-//    }
   _changesetCreator->create(
     _dataToReplaceUrl, _replacementUrl, bounds, changesetFile.fileName());
 

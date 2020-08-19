@@ -142,8 +142,7 @@ public:
 
   void northVegasSmallTest()
   {
-    // 4 sq blocks of the city, 4 changesets, ~9k changes applied, avg derivation: 4s,
-    // total time: 24s
+    // 4 sq blocks of the city, 4 changesets, ~9k changes, avg derivation: 4s, total time: ~.5m
 
     _testName = "vegasSmallTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -169,8 +168,8 @@ public:
 
   void northVegasMediumTest()
   {
-    // ~1/4 of the northern half of the city, 64 changesets, ~4.02M changes applied avg
-    // derivation: 9s, total time: 12m22s
+    // ~1/4 of the northern half of the city, 64 changesets, ~4.02M changes, avg derivation: 9s,
+    // total time: ~12.5m
 
     _testName = "vegasMediumTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -196,9 +195,7 @@ public:
 
   void northVegasLargeTest()
   {
-    // whole northern half of city, 64 changesets, avg derivation: 8m26s, 9h27m
-    // TODO: redo this now that the query has been optimized...guessing it shaves off a couple of
-    // hours at least
+    // whole northern half of city, 64 changesets, ? changes, avg derivation: ?m, ?h
 
     _testName = "vegasLargeTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -229,9 +226,6 @@ private:
   // for working with a subset of the input data in order to save unnecessary processing time; leave
   // empty to disable
   QString _inputCropBounds;
-  // read the replacement data just from the source file or load it into a hootapidb layer first?;
-  // data replaced is always loaded into osmapidb for changeset application purposes
-  //bool _writeReplacementDataToDb;
   QString _replacementDataUrl;
   // original size of the data to be replaced
   int _originalDataSize;

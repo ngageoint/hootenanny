@@ -697,10 +697,17 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     }
   }
 
-  LOG_STATUS(
-    "Preparing changeset derivation maps of sizes: " <<
-    StringUtils::formatLargeNumber(refMap->size()) << " and " <<
-    StringUtils::formatLargeNumber(conflatedMap->size()) << "...");
+  if (refMapSize == 0 && conflatedMap == 0)
+  {
+    LOG_STATUS("Both maps empty, so skipping changeset derivation...");
+  }
+  else
+  {
+    LOG_STATUS(
+      "Preparing changeset derivation maps of sizes: " <<
+      StringUtils::formatLargeNumber(refMap->size()) << " and " <<
+      StringUtils::formatLargeNumber(conflatedMap->size()) << "...");
+  }
 
   // SNAP
 
@@ -1588,6 +1595,9 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapWriterFactory::writeDebugMap(cutterMapToUse, _changesetId + "-cutter-map-to-use");
 
   LOG_INFO("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
+
+  // TODO: Alpha shape generation and/or cookie cutting for line features is our bottleneck for C&R.
+  // Not sure if anything can be done to improve the performance...
 
   LOG_VART(cookieCutterAlpha);
   LOG_VART(cookieCutterAlphaShapeBuffer);
