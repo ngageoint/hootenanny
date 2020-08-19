@@ -54,6 +54,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
+  // TODO: re-enable
   CPPUNIT_TEST(orphanedNodes1Test);
   //CPPUNIT_TEST(roadDelete1Test);
 
@@ -158,6 +159,7 @@ public:
     uut.setNodeDensityGridBounds("-115.3059,36.2849,-115.2883,36.2991");
     uut.setNodeDensityMaxNodesPerCell(1000);
     uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    uut.setReadNodeDensityInputFullThenCrop(true);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
@@ -183,6 +185,7 @@ public:
     uut.setNodeDensityGridBounds("-115.3332,36.2178,-115.1837,36.3400");
     uut.setNodeDensityMaxNodesPerCell(10000);
     uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    uut.setReadNodeDensityInputFullThenCrop(true);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
@@ -192,6 +195,7 @@ public:
   void northVegasLargeTest()
   {
     // whole northern half of city, 64 changesets, avg derivation: 8m26s, 9h27m
+    // TODO: redo this now that query has been optimized
 
     _testName = "vegasLargeTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -206,6 +210,7 @@ public:
     uut.setNodeDensityGridBounds("-115.3528,36.0919,-114.9817,36.3447");
     uut.setNodeDensityMaxNodesPerCell(100000);
     uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    uut.setReadNodeDensityInputFullThenCrop(true);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
@@ -354,7 +359,13 @@ private:
   {
     LOG_STATUS("Cleaning up the replacement data db at: " << _replacementDataUrl << "...");
     ServicesDbTestUtils::deleteUser(USER_EMAIL);
-    HootApiDbWriter().deleteMap(_testName);
+    try
+    {
+      HootApiDbWriter().deleteMap(_testName);
+    }
+    catch (const HootException&)
+    {
+    }
     LOG_STATUS(
       "Replacement data cleaned in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));

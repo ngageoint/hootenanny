@@ -664,12 +664,18 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
 
-  // TODO: If these are both zero here, should we be logging something different?
   const QString geometryTypeStr = GeometryTypeCriterion::typeToString(geometryType);
-  LOG_STATUS(
-    "Replacing " << StringUtils::formatLargeNumber(refMap->size()) << " " << geometryTypeStr <<
-    " feature(s) with " << StringUtils::formatLargeNumber(secMap->size()) << " " << geometryTypeStr <<
-    " feature(s)...");
+  if (refMapSize == 0 && secMapSize == 0)
+  {
+    LOG_STATUS("Both maps empty, so skipping data removal...");
+  }
+  else
+  {
+    LOG_STATUS(
+      "Replacing " << StringUtils::formatLargeNumber(refMapSize) << " " << geometryTypeStr <<
+      " feature(s) with " << StringUtils::formatLargeNumber(secMapSize) << " " << geometryTypeStr <<
+      " feature(s)...");
+  }
 
   // CUT
 

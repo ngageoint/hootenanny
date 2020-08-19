@@ -80,6 +80,8 @@ public:
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setTaskGridType(GridType gridType) { _gridType = gridType; }
   void setNodeDensityGridBounds(const QString& bounds) { _nodeDensityGridBounds = bounds; }
+  void setReadNodeDensityInputFullThenCrop(bool readFull)
+  { _readNodeDensityInputFullThenCrop = readFull; }
   void setNodeDensityMaxNodesPerCell(int maxNodes) { _maxNodeDensityNodesPerCell = maxNodes; }
   void setGridInputs(const QStringList& inputs) { _gridInputs = inputs; }
   void setNodeDensityTaskGridOutputFile(const QString& output)
@@ -109,6 +111,8 @@ private:
   GridType _gridType;
   // area of the sum of all task grid cells; needed for node density calc only
   QString _nodeDensityGridBounds;
+  // runtime optimization for large amounts of data at the expense of using extra memory
+  bool _readNodeDensityInputFullThenCrop;
   // allows for capping the max number of node density nodes per grid cell
   int _maxNodeDensityNodesPerCell;
   // output location of the generated node density task grid file; useful for debugging
@@ -140,6 +144,9 @@ private:
   int _totalRelationsCreated;
   int _totalRelationsModified;
   int _totalRelationsDeleted;
+  int _totalCreations;
+  int _totalModifications;
+  int _totalDeletions;
 
   QString _finalOutput;
 

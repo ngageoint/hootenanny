@@ -267,9 +267,7 @@ private:
       if (apiDbReader)
       {
         // The tiles calculation is only concerned with nodes, and the only readers capable of
-        // filtering down to nodes up front right now are the api db readers. More importantly,
-        // setting this to true also prevents any features from being returned outside of
-        // convert.bounding.box, if it was specified (ways partially inside the bounds, etc.)
+        // filtering down to nodes up front right now are the api db readers.
         apiDbReader->setReturnNodesOnly(true);
       }
 

@@ -44,6 +44,20 @@ class OsmApiDbSqlChangesetApplier
 
 public:
 
+  static const QString CHANGESET_CREATE_KEY;
+  static const QString NODE_CREATE_KEY;
+  static const QString NODE_MODIFY_KEY;
+  static const QString NODE_DELETE_KEY;
+  static const QString WAY_CREATE_KEY;
+  static const QString WAY_MODIFY_KEY;
+  static const QString WAY_DELETE_KEY;
+  static const QString RELATION_CREATE_KEY;
+  static const QString RELATION_MODIFY_KEY;
+  static const QString RELATION_DELETE_KEY;
+  static const QString TOTAL_CREATE_KEY;
+  static const QString TOTAL_MODIFY_KEY;
+  static const QString TOTAL_DELETE_KEY;
+
   OsmApiDbSqlChangesetApplier(const QUrl targetDatabaseUrl);
 
   ~OsmApiDbSqlChangesetApplier();

@@ -44,6 +44,20 @@ using namespace geos::geom;
 namespace hoot
 {
 
+const QString OsmApiDbSqlChangesetApplier::CHANGESET_CREATE_KEY = "changeset-create";
+const QString OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY = "node-create";
+const QString OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY = "node-modify";
+const QString OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY = "node-delete";
+const QString OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY = "way-create";
+const QString OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY = "way-modify";
+const QString OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY = "way-delete";
+const QString OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY = "relation-create";
+const QString OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY = "relation-modify";
+const QString OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY = "relation-delete";
+const QString OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY = "total-create";
+const QString OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY = "total-modify";
+const QString OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY = "total-delete";
+
 OsmApiDbSqlChangesetApplier::OsmApiDbSqlChangesetApplier(const QUrl targetDatabaseUrl) :
 _precision(ConfigOptions().getWriterPrecision())
 {
@@ -111,7 +125,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
       }
 
       changesetInsertStatement = sqlStatement + ";";
-      changesetStatType = "changeset-create";
+      changesetStatType = CHANGESET_CREATE_KEY;
     }
     else
     {
@@ -124,7 +138,9 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
       {
         const QStringList statementParts = sqlStatement.trimmed().split(" ");
         assert(statementParts.length() >= 3);
-        changesetStatType = statementParts[2] + "-" + statementParts[1]; //e.g. "node-create"
+        // e.g. "node-create"; note this could be at odds with the string key constants if they are
+        // changed...don't see that happening
+        changesetStatType = statementParts[2] + "-" + statementParts[1];
         LOG_VART(changesetStatType);
       }
       else if (sqlStatement.contains("UPDATE " + ApiDb::getChangesetsTableName()))
@@ -161,7 +177,15 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
       _changesetStats[changesetStatType] = 1;
     }
   }
-  // TODO: add total changes stat here
+  _changesetStats["total-create"] =
+    _changesetStats["node-create"] + _changesetStats["way-create"] +
+    _changesetStats["relation-create"];
+  _changesetStats["total-modify"] =
+    _changesetStats["node-modify"] + _changesetStats["way-modify"] +
+    _changesetStats["relation-modify"];
+  _changesetStats["total-delete"] =
+    _changesetStats["node-delete"] + _changesetStats["way-delete"] +
+    _changesetStats["relation-delete"];
 
   // flush
   if (!changesetInsertStatement.isEmpty())
@@ -214,21 +238,22 @@ void OsmApiDbSqlChangesetApplier::write(QFile& changesetSqlFile)
 QString OsmApiDbSqlChangesetApplier::getChangesetStatsSummary() const
 {
   return
-    // TODO: move these map key strings to public constants
-    "Changeset(s) Created: " + StringUtils::formatLargeNumber(_changesetStats["changeset-create"]) + "\n" +
+    "Changeset(s) Created: " + StringUtils::formatLargeNumber(_changesetStats[CHANGESET_CREATE_KEY]) + "\n" +
     "Changeset Details: " + _changesetDetailsStr + "\n" +
-    "Node(s) Created: " + StringUtils::formatLargeNumber(_changesetStats["node-create"]) + "\n" +
-    "Node(s) Modified: " + StringUtils::formatLargeNumber(_changesetStats["node-modify"]) + "\n" +
-    "Node(s) Deleted: " + StringUtils::formatLargeNumber(_changesetStats["node-delete"]) + "\n" +
-    "Way(s) Created: " + StringUtils::formatLargeNumber(_changesetStats["way-create"]) + "\n" +
-    "Way(s) Modified: " + StringUtils::formatLargeNumber(_changesetStats["way-modify"]) + "\n" +
-    "Way(s) Deleted: " + StringUtils::formatLargeNumber(_changesetStats["way-delete"]) + "\n" +
-    "Relation(s) Created: " + StringUtils::formatLargeNumber(_changesetStats["relation-create"]) + "\n" +
-    "Relation(s) Modified: " + StringUtils::formatLargeNumber(_changesetStats["relation-modify"]) + "\n" +
-    "Relation(s) Deleted: " + StringUtils::formatLargeNumber(_changesetStats["relation-delete"]);
+    "Node(s) Created: " + StringUtils::formatLargeNumber(_changesetStats[NODE_CREATE_KEY]) + "\n" +
+    "Node(s) Modified: " + StringUtils::formatLargeNumber(_changesetStats[NODE_MODIFY_KEY]) + "\n" +
+    "Node(s) Deleted: " + StringUtils::formatLargeNumber(_changesetStats[NODE_DELETE_KEY]) + "\n" +
+    "Way(s) Created: " + StringUtils::formatLargeNumber(_changesetStats[WAY_CREATE_KEY]) + "\n" +
+    "Way(s) Modified: " + StringUtils::formatLargeNumber(_changesetStats[WAY_MODIFY_KEY]) + "\n" +
+    "Way(s) Deleted: " + StringUtils::formatLargeNumber(_changesetStats[WAY_DELETE_KEY]) + "\n" +
+    "Relation(s) Created: " + StringUtils::formatLargeNumber(_changesetStats[RELATION_CREATE_KEY]) + "\n" +
+    "Relation(s) Modified: " + StringUtils::formatLargeNumber(_changesetStats[RELATION_MODIFY_KEY]) + "\n" +
+    "Relation(s) Deleted: " + StringUtils::formatLargeNumber(_changesetStats[RELATION_DELETE_KEY]) + "\n" +
+    "Total Creations: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_CREATE_KEY]) + "\n" +
+    "Total Modifications: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_MODIFY_KEY]) + "\n" +
+    "Total Deletions: " + StringUtils::formatLargeNumber(_changesetStats[TOTAL_DELETE_KEY]);
 }
 
-//This method may go away after #716.
 bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString& boundsStr,
                                                          const QString& timeStr)
 {

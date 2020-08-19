@@ -39,6 +39,7 @@
 #include <hoot/core/visitors/StatusUpdateVisitor.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
+#include <hoot/core/io/HootApiDbReader.h>
 
 namespace hoot
 {
@@ -46,6 +47,7 @@ namespace hoot
 ChangesetTaskGridReplacer::ChangesetTaskGridReplacer() :
 _originalDataSize(0),
 _gridType(GridType::NodeDensity),
+_readNodeDensityInputFullThenCrop(false),
 _maxNodeDensityNodesPerCell(1000),
 _reverseTaskGrid(false),
 _killAfterNumChangesetDerivations(-1),
@@ -60,7 +62,10 @@ _totalWaysModified(0),
 _totalWaysDeleted(0),
 _totalRelationsCreated(0),
 _totalRelationsModified(0),
-_totalRelationsDeleted(0)
+_totalRelationsDeleted(0),
+_totalCreations(0),
+_totalModifications(0),
+_totalDeletions(0)
 {
 }
 
@@ -190,8 +195,6 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_g
 
 OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
 {
-  OsmMapPtr map(new OsmMap());
-
   // changeset derive will overwrite these later, if needed
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), _nodeDensityGridBounds);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
@@ -199,6 +202,7 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
 
+  OsmMapPtr map(new OsmMap());
   // IMPORTANT: data used here must be unknown1 for node density calc to work
   //if (_writeReplacementDataToDb)
   //{
@@ -207,18 +211,33 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
     LOG_STATUS(
       "Preparing input data for task grid cell calculation from: ..." <<
       _replacementUrl.right(25) << "...");
+    assert(HootApiDbReader::isSupported(_replacementUrl));
+
     // Getting large amounts of data via bbox can actually be slower than reading all of the data
-    // and then cropping it, due to bounded query performance. #4192 improved this gap, but the full
-    // read then crop can still be faster sometimes if the memory is available for it. All of North
-    // Vegas takes 2:01 to read fully then crop to just the city bounds vs 2:30 to get via bbox
-    // query.
-    // TODO: make this configurable
-    // TODO: This map only needs nodes read into it
-    conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), true);
-    OsmMapReaderFactory::read(map, _replacementUrl, true, Status::Unknown1);
-    // Restore the default setting, or the changeset replacement maps will be loaded very slowly
-    // if loading from URL.
-    conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
+    // and then cropping it, due to bounded query performance. #4192 improved this gap, but the
+    // full read then crop can still be faster sometimes if the memory is available for it. All of
+    // North Vegas takes 2:01 to read fully then crop to just the city bounds vs 2:30 to get via
+    // bbox query.
+    if (_readNodeDensityInputFullThenCrop)
+    {
+      conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), true);
+    }
+
+    // small optimization since node density only needs nodes in the input; can only do this with
+    // a db reader right now
+    std::shared_ptr<ApiDbReader> reader =
+      std::dynamic_pointer_cast<ApiDbReader>(
+        OsmMapReaderFactory::createReader(_replacementUrl, true, Status::Unknown1));
+    reader->setReturnNodesOnly(true);
+    reader->open(_replacementUrl);
+    reader->read(map);
+
+    if (_readNodeDensityInputFullThenCrop)
+    {
+      // Restore the default setting, or the changeset replacement maps will be loaded very slowly
+      // if loading from URL.
+      conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
+    }
   //}
 //  else
 //  {
@@ -375,14 +394,15 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     StringUtils::padFrontOfNumberStringWithZeroes(taskGridCellId, 3) + ".osc.sql");
 
   QString msg =
-    "************************************************************************\nDeriving changeset " +
+    "**********************************************************************\nDeriving changeset " +
     QString::number(changesetNum) + " / " + StringUtils::formatLargeNumber(taskGridSize) +
-    " for task grid cell: " + QString::number(taskGridCellId) + "\n";
+    " for task grid cell: " + QString::number(taskGridCellId);
   if (numReplacementNodes != -1)
   {
-    msg += "replacement nodes: " + StringUtils::formatLargeNumber(numReplacementNodes);
+    msg += "\nreplacement nodes: " + StringUtils::formatLargeNumber(numReplacementNodes);
   }
   LOG_STATUS(msg);
+
   _changesetCreator->setChangesetId(QString::number(taskGridCellId));
 //    QString secondaryInput;
 //    if (_writeReplacementDataToDb)
@@ -395,11 +415,11 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
 //    }
   _changesetCreator->create(
     _dataToReplaceUrl, _replacementUrl, bounds, changesetFile.fileName());
+
   _numChangesetsDerived++;
   _totalChangesetDeriveTime += _subTaskTimer.elapsed() / 1000.0;
   _averageChangesetDeriveTime = _totalChangesetDeriveTime / (double)_numChangesetsDerived;
   _subTaskTimer.restart();
-
   LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
 
   LOG_STATUS(
@@ -407,8 +427,10 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     StringUtils::formatLargeNumber(taskGridSize) << " for task grid cell: " << taskGridCellId <<
     ", over bounds: " << boundsStr << ", from file: ..." << changesetFile.fileName().right(25) <<
     "...");
+
   _changesetApplier->write(changesetFile);
   _printChangesetStats();
+
   LOG_STATUS(
     "\tChangeset applied in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
@@ -428,16 +450,19 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
 
 void ChangesetTaskGridReplacer::_printChangesetStats()
 {
-  QMap<QString, long> changesetStats = _changesetApplier->getChangesetStats();
-  _totalNodesCreated += changesetStats["node-create"];
-  _totalNodesModified += changesetStats["node-modify"];
-  _totalNodesDeleted += changesetStats["node-delete"];
-  _totalWaysCreated += changesetStats["way-create"];
-  _totalWaysModified += changesetStats["way-modify"];
-  _totalWaysDeleted += changesetStats["node-delete"];
-  _totalRelationsCreated += changesetStats["relation-create"];
-  _totalRelationsModified += changesetStats["relation-modify"];
-  _totalRelationsDeleted += changesetStats["relation-delete"];
+  const QMap<QString, long> changesetStats = _changesetApplier->getChangesetStats();
+  _totalNodesCreated += changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY];
+  _totalNodesModified += changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY];
+  _totalNodesDeleted += changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY];
+  _totalWaysCreated += changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY];
+  _totalWaysModified += changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY];
+  _totalWaysDeleted += changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY];
+  _totalRelationsCreated += changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY];
+  _totalRelationsModified += changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY];
+  _totalRelationsDeleted += changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY];
+  _totalCreations += changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY];
+  _totalModifications += changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY];
+  _totalDeletions += changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY];
   LOG_STATUS(
     "Node Totals:\n" <<
     "\tCreated: " << StringUtils::formatLargeNumber(_totalNodesCreated) << "\n" <<
@@ -450,7 +475,11 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
     "Relation Totals:\n" <<
     "\tCreated: " << StringUtils::formatLargeNumber(_totalRelationsCreated) << "\n" <<
     "\tModified: " << StringUtils::formatLargeNumber(_totalRelationsModified) << "\n" <<
-    "\tDeleted: " << StringUtils::formatLargeNumber(_totalRelationsDeleted) << "\n");
+    "\tDeleted: " << StringUtils::formatLargeNumber(_totalRelationsDeleted) << "\n" <<
+    "Overall Totals:\n" <<
+    "\tCreated: " << StringUtils::formatLargeNumber(_totalCreations) << "\n" <<
+    "\tModified: " << StringUtils::formatLargeNumber(_totalModifications) << "\n" <<
+    "\tDeleted: " << StringUtils::formatLargeNumber(_totalDeletions));
 }
 
 void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)

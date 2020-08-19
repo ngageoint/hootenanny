@@ -203,7 +203,7 @@ private:
   // helpful to name the debug map files when doing successive replacements
   QString _changesetId;
 
-  // TODO
+  // used to keep log messages with urls in them shorter
   int _maxFilePrintLength;
 
   // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
