@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="brandon.witham" id="31" context="default">
+
+      <comment>
+        Adding this index makes bbox queries for areas with large numbers of nodes must faster.
+      </comment>
+
+      <createIndex tableName="current_way_nodes" indexName="current_way_nodes_node_idx">
+        <column name="node_id"></column>
+      </createIndex>
+
+    </changeSet>
+</databaseChangeLog>
