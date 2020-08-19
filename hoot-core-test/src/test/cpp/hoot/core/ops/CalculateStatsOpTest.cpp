@@ -72,7 +72,7 @@ public:
     conf().set(ConfigOptions::getStatsTranslateScriptKey(), "${HOOT_HOME}/translations/HootTest.js");
   }
 
-  virtual void takeDown()
+  virtual void tearDown()
   {
     conf().set(
       ConfigOptions::getStatsTranslateScriptKey(),

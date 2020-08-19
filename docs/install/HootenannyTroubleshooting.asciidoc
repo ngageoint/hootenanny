@@ -1,6 +1,9 @@
 
 [[HootInstallTroubleshooting]]
 == Troubleshooting
+
+*8/19/20: Many items in this document are now obsolete.*
+
 === Core
 
 * *You cannot resolve any Hootenanny commands by typing 'hoot' at the command line?* -> Hootenanny Core has been installed incorrectly by the InstallHoot.sh script.  The script is designed to clear existing

@@ -41,9 +41,12 @@ class OsmApiDbSqlChangesetApplier;
 
 /**
  * This class can replace data in an OSM API database across multiple AOI's via changeset generation
- * and application. Either a node density generated task grid or a task grid from an input file may
- * be used. Node density calc requires reading in all of the replacement data, so may not be
- * feasible when replacing very large amounts of data.
+ * and application.
+ *
+ * Either an auto node density generated task grid or a task grid from one or more bounds input
+ * files may be used to partition the data replacements. Node density calc requires reading in all
+ * of the replacement node data, so may not be feasible when replacing extremely large amounts of
+ * data.
  */
 class ChangesetTaskGridReplacer
 {
@@ -77,6 +80,8 @@ public:
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setTaskGridType(GridType gridType) { _gridType = gridType; }
   void setNodeDensityGridBounds(const QString& bounds) { _nodeDensityGridBounds = bounds; }
+  void setReadNodeDensityInputFullThenCrop(bool readFull)
+  { _readNodeDensityInputFullThenCrop = readFull; }
   void setNodeDensityMaxNodesPerCell(int maxNodes) { _maxNodeDensityNodesPerCell = maxNodes; }
   void setGridInputs(const QStringList& inputs) { _gridInputs = inputs; }
   void setNodeDensityTaskGridOutputFile(const QString& output)
@@ -106,6 +111,8 @@ private:
   GridType _gridType;
   // area of the sum of all task grid cells; needed for node density calc only
   QString _nodeDensityGridBounds;
+  // runtime optimization for large amounts of data at the expense of using extra memory
+  bool _readNodeDensityInputFullThenCrop;
   // allows for capping the max number of node density nodes per grid cell
   int _maxNodeDensityNodesPerCell;
   // output location of the generated node density task grid file; useful for debugging
@@ -117,8 +124,6 @@ private:
 
   // derives the replacement changesets
   std::shared_ptr<ChangesetReplacementCreator> _changesetCreator;
-  // applies the replacement changesets
-  std::shared_ptr<OsmApiDbSqlChangesetApplier> _changesetApplier;
   // all changeset files generated are stored here
   QString _changesetsOutputDir;
   // allows for ending a large replacement early; useful for debugging; set to -1 to disable
@@ -127,6 +132,21 @@ private:
   // seconds
   double _totalChangesetDeriveTime;
   double _averageChangesetDeriveTime;
+
+  // applies the replacement changesets
+  std::shared_ptr<OsmApiDbSqlChangesetApplier> _changesetApplier;
+  int _totalNodesCreated;
+  int _totalNodesModified;
+  int _totalNodesDeleted;
+  int _totalWaysCreated;
+  int _totalWaysModified;
+  int _totalWaysDeleted;
+  int _totalRelationsCreated;
+  int _totalRelationsModified;
+  int _totalRelationsDeleted;
+  int _totalCreations;
+  int _totalModifications;
+  int _totalDeletions;
 
   QString _finalOutput;
 
@@ -141,6 +161,7 @@ private:
   void _replaceTaskGridCell(
     const int taskGridCellId, const int changesetNum, const geos::geom::Envelope& bounds,
     const int taskGridSize, const int numReplacementNodes = -1);
+  void _printChangesetStats();
 
   // writes out all of the ref data; useful for debugging...expensive
   void _getUpdatedData(const QString& outputFile);

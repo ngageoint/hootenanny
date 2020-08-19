@@ -262,14 +262,15 @@ private:
           "convert.bounding.box configuration option is specified.");
       }
 
+      // TODO: While working on #4196, I'm not completely sure this works as intended. It is tested
+      // in ServiceNodeDensityTilesCmdTest, so need to take a look at that output and see if it
+      // truly looks ok.
       std::shared_ptr<ApiDbReader> apiDbReader =
         std::dynamic_pointer_cast<ApiDbReader>(reader);
       if (apiDbReader)
       {
         // The tiles calculation is only concerned with nodes, and the only readers capable of
-        // filtering down to nodes up front right now are the api db readers. More importantly,
-        // setting this to true also prevents any features from being returned outside of
-        // convert.bounding.box, if it was specified (ways partially inside the bounds, etc.)
+        // filtering down to nodes up front right now are the api db readers.
         apiDbReader->setReturnNodesOnly(true);
       }
 

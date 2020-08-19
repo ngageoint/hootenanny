@@ -48,6 +48,9 @@ You can create your own custom conflation algorithms for additional feature type
 # [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) Workflows
 
 A conflation workflow defines the manner in which two maps are merged together. Hootenanny has the following workflows:
+* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** **(default)** - _Keep the best of both while favoring one of them_
+  * Conflate the best geometry and tag parts of map B into map A, favoring map A's data. 
+  * Use this type of conflation when you want conflated output based on the best state of both input datasets.
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to existing geometries_
   * Conflate map A with B where only tags are transferred from B to matching features in A and no changes are made to A's geometries.
   * Use this type of conflation when the first dataset's geometry is superior to a second dataset, but the attributes of the second dataset are superior to that of the first dataset. 
@@ -65,9 +68,6 @@ of adding new non-conflicting featues.
     * Define a region in map A and replace data in that region with data in the same region from map B OR 
     * Define a region in map A to preserve and replace data outside of it with data outside of the region from map B. 
   * Use this type of conflation if you have a specific region of your dataset that you would like to replace with data from another dataset or you would like to surround your dataset with new data.
-* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** **(default)** - _Keep the best of both while favoring one of them_
-  * Conflate the best geometry and tag parts of map B into map A, favoring map A's data. 
-  * Use this type of conflation when you want conflated output based on the best state of both input datasets.
 
 # Feature Filtering
 
@@ -163,6 +163,7 @@ In addition to conflating map data, Hootenanny also provides these capabilities:
 * [Compute bounding tiles](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/node-density-tiles.asciidoc) based on node density
 * [Convert maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc) between [different geodata formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 * [Crop a map](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop.asciidoc) to a geospatial extent
+* [De-duplicate map features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#remove-intra-map-duplicates-within-a-single-map)
 * [Derive large changesets between maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive.asciidoc) and [push](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-apply.asciidoc) them through the OpenStreetMap API with automatic conflict resolution
 * [Detect spoken languages](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) in a map's tag data
 * [Explore tag data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/TagExploration.asciidoc)

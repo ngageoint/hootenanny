@@ -111,6 +111,7 @@ _input2(""),
 _output(""),
 _replacementBounds(""),
 _changesetId("1"),
+_maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 2),
 _fullReplacement(false),
 _boundsInterpretation(BoundsInterpretation::Lenient),
 _geometryFiltersSpecified(false),
@@ -322,7 +323,6 @@ QString ChangesetReplacementCreator::_boundsInterpretationToString(
 
 void ChangesetReplacementCreator::_printJobDescription() const
 {
-  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax() * 2;
   QString boundsStr = "Bounds calculation is " +
     _boundsInterpretationToString(_boundsInterpretation);
   const QString replacementTypeStr = _fullReplacement ? "full" : "overlapping only";
@@ -379,17 +379,16 @@ void ChangesetReplacementCreator::_printJobDescription() const
   str += "Deriving replacement output changeset:";
   if (!_input1.isEmpty() && !_input2.isEmpty())
   {
-    str += "\nBeing replaced: ..." + _input1.right(maxFilePrintLength);
-    str += "\nReplacing with ..." + _input2.right(maxFilePrintLength);
+    str += "\nBeing replaced: ..." + _input1.right(_maxFilePrintLength);
+    str += "\nReplacing with ..." + _input2.right(_maxFilePrintLength);
   }
   else
   {
-    str += "\nBeing replaced: ..." + _input1Map->getName().right(maxFilePrintLength);
-    str += "\nReplacing with ..." + _input2Map->getName().right(maxFilePrintLength);
+    str += "\nBeing replaced: ..." + _input1Map->getName().right(_maxFilePrintLength);
+    str += "\nReplacing with ..." + _input2Map->getName().right(_maxFilePrintLength);
   }
-  //str += "\nAt Bounds: ..." + GeometryUtils::envelopeToConfigString(_replacementBounds);
-  str += "\nAt Bounds: ..." + _replacementBounds;
-  str += "\nOutput Changeset: ..." + _output.right(maxFilePrintLength);
+  str += "\nAt Bounds: " + _replacementBounds;
+  str += "\nOutput Changeset: ..." + _output.right(_maxFilePrintLength);
   LOG_STATUS(str);
 
   str = "";
@@ -666,10 +665,17 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VARD(secMapSize);
 
   const QString geometryTypeStr = GeometryTypeCriterion::typeToString(geometryType);
-  LOG_STATUS(
-    "Replacing " << StringUtils::formatLargeNumber(refMap->size()) << " " << geometryTypeStr <<
-    " feature(s) with " << StringUtils::formatLargeNumber(secMap->size()) << " " << geometryTypeStr <<
-    " feature(s)...");
+  if (refMapSize == 0 && secMapSize == 0)
+  {
+    LOG_STATUS("Both maps empty, so skipping data removal...");
+  }
+  else
+  {
+    LOG_STATUS(
+      "Replacing " << StringUtils::formatLargeNumber(refMapSize) << " " << geometryTypeStr <<
+      " feature(s) with " << StringUtils::formatLargeNumber(secMapSize) << " " << geometryTypeStr <<
+      " feature(s)...");
+  }
 
   // CUT
 
@@ -1293,12 +1299,13 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
     conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
 
     // Caching inputs only helps with file based inputs, so skip if the source is a db.
+    // TODO: think we can cache maps based on the loadRefKeep* config option config
     if (_isDbUrl(_input1) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
     {
       // If input caching is not enabled, we'll read from the source data each time and crop
       // appropriately during the read. If the source input is a very large file or database layer
       // you don't want to be doing this.
-      LOG_STATUS("Loading reference map from: " << _input1 << "...");
+      LOG_STATUS("Loading reference map from: ..." << _input1.right(_maxFilePrintLength) << "...");
       refMap.reset(new OsmMap());
       IoUtils::loadMap(refMap, _input1, true, Status::Unknown1);
     }
@@ -1314,7 +1321,8 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
         const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
-        LOG_STATUS("Loading reference map from: " << _input1 << "...");
+        LOG_STATUS(
+          "Loading reference map from: ..." << _input1.right(_maxFilePrintLength) << "...");
         _input1Map.reset(new OsmMap());
         _input1Map->setName("ref");
         IoUtils::loadMap(_input1Map, _input1, true, Status::Unknown1);
@@ -1361,6 +1369,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
 
 OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
 {
+  // TODO: think we can cache maps based on the loadSecKeep* config option config
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
     _boundsOpts.loadSecKeepEntireCrossingBounds);
@@ -1380,7 +1389,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
     if (_isDbUrl(_input2) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
     {
       // load the replacement data cropped to the specified aoi in the appropriate manner
-      LOG_STATUS("Loading secondary map from: " << _input2 << "...");
+      LOG_STATUS("Loading secondary map from: ..." << _input2.right(_maxFilePrintLength) << "...");
       secMap.reset(new OsmMap());
       IoUtils::loadMap(secMap, _input2, false, Status::Unknown2);
     }
@@ -1391,7 +1400,8 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
         const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
-        LOG_STATUS("Loading secondary map from: " << _input2 << "...");
+        LOG_STATUS(
+          "Loading secondary map from: ..." << _input2.right(_maxFilePrintLength) << "...");
         _input2Map.reset(new OsmMap());
         _input2Map->setName("sec");
         IoUtils::loadMap(_input2Map, _input2, false, Status::Unknown2);
@@ -2115,17 +2125,17 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 void ChangesetReplacementCreator::_synchronizeIds(
   const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps)
 {
-  // When replacing data, we always load the replacement data without its original IDs in case there
-  // are overlapping IDs in the reference data. If you were only replacing unmodified data from one
-  // source with updated data from another source (e.g. replacing newer OSM with older OSM), this
-  // wouldn't be necessary, but we're not guaranteed just that scenario occurring. The downside to
-  // loading up a separate set of unique IDs for the secondary data is that identical elements in
-  // the secondary can end up unnecessarily replacing elements in the reference. This gets mitigated
-  // here where we find all identical elements between the data being replaced and the replacement
-  // data and overwrite IDs in the replacement data from those in the data being replaced to
-  // prevent unnecessary changeset modifications from being generated. Its possible we could do
-  // this earlier in the replacement process, however that has proven difficult to accomplish so
-  // far.
+//   When replacing data, we always load the replacement data without its original IDs in case there
+//   are overlapping IDs in the reference data. If you were only replacing unmodified data from one
+//   source with updated data from another source with the same IDs (e.g. replacing newer OSM with
+//   older OSM), this wouldn't be necessary, but we're not guaranteed just that scenario occurring.
+//   The downside to loading up a separate set of unique IDs for the secondary data is that
+//   identical elements in the secondary can end up unnecessarily replacing elements in the
+//   reference. This gets mitigated here where we find all identical elements between the data being
+//   replaced and the replacement data and overwrite IDs in the replacement data from those in the
+//   data being replaced to prevent unnecessary changeset modifications from being generated. Its
+//   possible we could do this earlier in the replacement process, however that has proven difficult
+//   to accomplish so far.
 
   assert(mapsBeingReplaced.size() == replacementMaps.size());
   ElementIdSynchronizer idSync;

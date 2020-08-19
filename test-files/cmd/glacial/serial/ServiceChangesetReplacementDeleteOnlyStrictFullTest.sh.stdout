@@ -46,13 +46,16 @@ Changeset(s) Created: 1
 Changeset Details: min_lat=1.3293372, max_lat=1.359953, min_lon=29.0272827, max_lon=29.0444794, num_changes=1963
 Node(s) Created: 18
 Node(s) Modified: 12
-Node(s) Deleted: 1654
+Node(s) Deleted: 1,654
 Way(s) Created: 1
 Way(s) Modified: 16
 Way(s) Deleted: 260
 Relation(s) Created: 1
 Relation(s) Modified: 0
 Relation(s) Deleted: 1
+Total Creations: 20
+Total Modifications: 28
+Total Deletions: 1,915
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementDeleteOnlyStrictFullTest-xml-replaced.osm for verification...
 

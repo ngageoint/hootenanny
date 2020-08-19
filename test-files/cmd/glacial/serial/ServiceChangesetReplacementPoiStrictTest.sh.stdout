@@ -50,6 +50,9 @@ Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
+Total Creations: 3
+Total Modifications: 2
+Total Deletions: 1
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementPoiStrictTest-db-replaced.osm for verification...
 
@@ -84,6 +87,9 @@ Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
+Total Creations: 3
+Total Modifications: 2
+Total Deletions: 1
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementPoiStrictTest-xml-replaced.osm for verification...
 
@@ -118,6 +124,9 @@ Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
+Total Creations: 3
+Total Modifications: 2
+Total Deletions: 1
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementPoiStrictTest-json-replaced.osm for verification...
 
