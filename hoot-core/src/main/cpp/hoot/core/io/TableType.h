@@ -42,7 +42,7 @@ class TableType
 
 public:
 
-  //we could add the changesets table to this
+  // we could add the changesets table to this
   typedef enum Type
   {
     Node = 0,

@@ -598,9 +598,9 @@ std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
   const vector<Range> tileRanges = _getTileRanges(bounds);
   LOG_VARD(tileRanges.size());
 
-  //I'm not sure yet if the number of tile ID ranges is constant or not.  If it is, then we could
-  //modify this to add placeholders for the tile ID ranges and make it so the query only gets
-  //prepared once.
+  // I'm not sure yet if the number of tile ID ranges is constant or not.  If it is, then we could
+  // modify this to add placeholders for the tile ID ranges and make it so the query only gets
+  // prepared once.
   if (!_selectNodesByBounds)
   {
     _selectNodesByBounds.reset(new QSqlQuery(_db));
@@ -653,9 +653,8 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& 
     _selectWayIdsByWayNodeIds->setForwardOnly(true);
   }
   //this has to be prepared every time due to the varying number of IDs passed in
-  QString sql = "SELECT DISTINCT way_id FROM " + tableTypeToTableName(TableType::WayNode) + " WHERE";
-  sql += " node_id IN (" + QStringList(nodeIds.toList()).join(",") + ")";
-  //sql += " ORDER BY way_id desc";
+  QString sql = "SELECT DISTINCT way_id FROM " + tableTypeToTableName(TableType::WayNode);
+  sql += " WHERE node_id IN (" + QStringList(nodeIds.toList()).join(",") + ")";
   _selectWayIdsByWayNodeIds->prepare(sql);
   LOG_VARD(_selectWayIdsByWayNodeIds->lastQuery().right(100));
 

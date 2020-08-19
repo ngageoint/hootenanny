@@ -287,7 +287,7 @@ This changes the behavior for reads from API databases over a bounds using `conv
 read in the full dataset and crop the data after the reading is complete instead of cropping the
 input as part of the query. This is more inefficient for memory consumption but can be faster
 overall for significantly large datasets, as the cropped database query performs slowly at larger
-input sizes (#4192).
+input sizes.
 
 === area.tag.threshold
 
