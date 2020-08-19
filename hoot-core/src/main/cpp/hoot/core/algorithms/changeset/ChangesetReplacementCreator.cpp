@@ -1241,42 +1241,48 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   return combinedFilters;
 }
 
-OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
-{ 
+OsmMapPtr ChangesetReplacementCreator::_loadInputMap(
+  const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
+  const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
+  const bool keepImmediatelyConnectedWaysOutsideBounds, const bool warnOnZeroVersions,
+  OsmMapPtr& cachedMap)
+{
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-    _boundsOpts.loadRefKeepEntireCrossingBounds);
+    keepEntireFeaturesCrossingBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-   _boundsOpts.loadRefKeepOnlyInsideBounds);
+   keepOnlyFeaturesInsideBounds);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
-    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
+    keepImmediatelyConnectedWaysOutsideBounds);
 
-  OsmMapPtr refMap;
-  // We want to alert the user to the fact their ref versions *could* be being populated
-  // incorrectly to avoid difficulties during changeset application at the end. Its likely if they
-  // are incorrect at this point the changeset derivation will fail at the end anyway, but let's
-  // warn now to give the chance to back out of the replacement earlier.
-  conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
 
-  // Caching inputs only helps with file based inputs, so skip if the source is a db.
-  // TODO: think we can cache maps based on the loadRefKeep* config option config
-  if (_isDbUrl(_input1) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
+  if (warnOnZeroVersions)
   {
-    // If input caching is not enabled, we'll read from the source data each time and crop
-    // appropriately during the read. If the source input is a very large file or database layer
-    // you don't want to be doing this.
-    LOG_STATUS("Loading reference map from: ..." << _input1.right(_maxFilePrintLength) << "...");
-    refMap.reset(new OsmMap());
-    IoUtils::loadMap(refMap, _input1, true, Status::Unknown1);
+    // We want to alert the user to the fact their ref versions *could* be being populated
+    // incorrectly to avoid difficulties during changeset application at the end. Its likely if they
+    // are incorrect at this point the changeset derivation will fail at the end anyway, but let's
+    // warn now to give the chance to back out of the replacement earlier.
+    conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), true);
+  }
+
+  OsmMapPtr map;
+  if (_isDbUrl(inputUrl))
+  {
+    // Caching inputs only helps with file based inputs and isn't really possible for db inputs due
+    // to the potential size, so skip caching if the source is a db. Our db query crops
+    // automatically for us without reading all of the source data in.
+    LOG_STATUS(
+      "Loading " << mapName << " map from: ..." << inputUrl.right(_maxFilePrintLength) << "...");
+    map.reset(new OsmMap());
+    IoUtils::loadMap(map, inputUrl, useFileIds, status);
   }
   else
   {
-    // If input caching is enabled, we'll read the full map once and then copy it and crop it
-    // in subsequent loads. You only want to be doing this if the input is a file or db layer that
-    // will fit easily into available memory.
-    if (!_input1Map)
+    // File inputs always have to read in completely before cropping. Rather than read the file
+    // completely for each processing pass, we'll read it once and crop it down as needed per pass.
+    if (!cachedMap)
     {
       // Clear out the bounding box param temporarily, so that we can read the full map here. Kind
       // of kludgy, but there is no access to it from here via IoUtils::loadMap.
@@ -1284,87 +1290,53 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
       conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
       LOG_STATUS(
-        "Loading reference map from: ..." << _input1.right(_maxFilePrintLength) << "...");
-      _input1Map.reset(new OsmMap());
-      _input1Map->setName("ref");
-      IoUtils::loadMap(_input1Map, _input1, true, Status::Unknown1);
+        "Loading reference map from: ..." << inputUrl.right(_maxFilePrintLength) << "...");
+      cachedMap.reset(new OsmMap());
+      cachedMap->setName(mapName);
+      IoUtils::loadMap(cachedMap, inputUrl, useFileIds, status);
 
       // Restore it back to original.
       conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
     }
     LOG_STATUS(
-      "Copying reference map of size: " << StringUtils::formatLargeNumber(_input1Map->size()) <<
-      " from: " << _input1Map->getName() << "...");
-    refMap.reset(new OsmMap(_input1Map));
+      "Copying reference map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<
+      " from: " << cachedMap->getName() << "...");
+    map.reset(new OsmMap(cachedMap));
     IoUtils::cropToBounds(
-      refMap, GeometryUtils::envelopeFromConfigString(_replacementBounds),
-      _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds);
+      map, GeometryUtils::envelopeFromConfigString(_replacementBounds),
+      keepImmediatelyConnectedWaysOutsideBounds);
   }
 
-  // We only care about the zero version warning for the ref data, so restore default setting
-  // value before we load secondary data.
-  conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
+  if (warnOnZeroVersions)
+  {
+    // Restore default setting value.
+    conf().set(ConfigOptions::getReaderWarnOnZeroVersionElementKey(), false);
+  }
+  map->setName(mapName);
 
-  refMap->setName("ref");
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-after-cropped-load");
 
-  LOG_VART(MapProjector::toWkt(refMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(refMap, _changesetId + "-ref-after-cropped-load");
+  return map;
+}
 
-  return refMap;
+OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
+{ 
+  // We only care about the zero version warning for the ref data.
+  return
+    _loadInputMap(
+      "ref", _input1, true, Status::Unknown1, _boundsOpts.loadRefKeepEntireCrossingBounds,
+      _boundsOpts.loadRefKeepOnlyInsideBounds,
+      _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds, true, _input1Map);
 }
 
 OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
 {
-  // TODO: think we can cache maps based on the loadSecKeep* config option config
-  conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
-    _boundsOpts.loadSecKeepEntireCrossingBounds);
-  conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
-    _boundsOpts.loadSecKeepOnlyInsideBounds);
-  conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
-
-  // see related loading notes about this loading procedure in _loadRefMap
-
-  // TODO: consolidate this and _loadRefMap into a single _loadInput method
-
-  OsmMapPtr secMap;
-  if (_isDbUrl(_input2) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
-  {
-    // load the replacement data cropped to the specified aoi in the appropriate manner
-    LOG_STATUS("Loading secondary map from: ..." << _input2.right(_maxFilePrintLength) << "...");
-    secMap.reset(new OsmMap());
-    IoUtils::loadMap(secMap, _input2, false, Status::Unknown2);
-  }
-  else
-  {
-    if (!_input2Map)
-    {
-      const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
-      conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
-
-      LOG_STATUS(
-        "Loading secondary map from: ..." << _input2.right(_maxFilePrintLength) << "...");
-      _input2Map.reset(new OsmMap());
-      _input2Map->setName("sec");
-      IoUtils::loadMap(_input2Map, _input2, false, Status::Unknown2);
-
-      conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
-    }
-    LOG_STATUS(
-      "Copying secondary map of size: " << StringUtils::formatLargeNumber(_input2Map->size()) <<
-      " from: " << _input2Map->getName() << "...");
-    secMap.reset(new OsmMap(_input2Map));
-    IoUtils::cropToBounds(
-      secMap, GeometryUtils::envelopeFromConfigString(_replacementBounds), false);
-  }
-  secMap->setName("sec");
-
-  LOG_VART(MapProjector::toWkt(secMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(secMap, _changesetId + "-sec-after-cropped-load");
-
-  return secMap;
+  return
+    _loadInputMap(
+      "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+      _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
 }
 
 void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& map)

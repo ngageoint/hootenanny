@@ -293,6 +293,11 @@ private:
 
   OsmMapPtr _loadRefMap();
   OsmMapPtr _loadSecMap();
+  OsmMapPtr _loadInputMap(
+    const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
+    const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
+    const bool keepImmediatelyConnectedWaysOutsideBounds, const bool warnOnZeroVersions,
+    OsmMapPtr& cachedMap);
 
   /*
    * Adds a custom tag to any element from the input with a missing child. This is primarily useful

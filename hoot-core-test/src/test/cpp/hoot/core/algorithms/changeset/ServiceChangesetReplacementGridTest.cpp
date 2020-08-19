@@ -46,21 +46,22 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
 
 /*
  * This test harness allows for testing the Cut and Replace workflow across adjacent task grid
- * cells. By removing the processes of input data retrieval and changeset application via API, bugs
- * can more easily be narrowed down to just those in the ChangesetReplacementGenerator (most of the
- * time).
+ * cells. By removing the processes of input data retrieval and changeset application via API from
+ * the test workflow, bugs can more easily be narrowed down to just those caused by
+ * ChangesetReplacementGenerator (most of the time).
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  CPPUNIT_TEST(orphanedNodes1Test);
+  // TODO: re-enable
+  //CPPUNIT_TEST(orphanedNodes1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
   //CPPUNIT_TEST(vgi1666Test);
   //CPPUNIT_TEST(northVegasSmallTest);
   //CPPUNIT_TEST(northVegasMediumTest);
-  //CPPUNIT_TEST(northVegasLargeTest);
+  CPPUNIT_TEST(northVegasLargeTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -258,7 +259,6 @@ private:
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
-    conf().set(ConfigOptions::getChangesetReplacementCacheInputFileMapsKey(), true);
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 
@@ -313,6 +313,8 @@ private:
 
   void _loadReplacementDataDb(const QString& input, const QString& cropBounds = "")
   {
+    // TODO: Can this be converted over to use the bulk inserter?
+
     LOG_STATUS(
       "Loading the replacement data db from: ..." << input <<
       " to: ..." << _replacementDataUrl.right(25) << "...");
