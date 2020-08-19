@@ -225,12 +225,14 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
 
     // small optimization since node density only needs nodes in the input; can only do this with
     // a db reader right now
-    std::shared_ptr<ApiDbReader> reader =
-      std::dynamic_pointer_cast<ApiDbReader>(
-        OsmMapReaderFactory::createReader(_replacementUrl, true, Status::Unknown1));
-    reader->setReturnNodesOnly(true);
-    reader->open(_replacementUrl);
-    reader->read(map);
+    // TODO: I don't think the node only read is working correctly.
+//    std::shared_ptr<ApiDbReader> reader =
+//      std::dynamic_pointer_cast<ApiDbReader>(
+//        OsmMapReaderFactory::createReader(_replacementUrl, true, Status::Unknown1));
+//    reader->setReturnNodesOnly(true);
+//    reader->open(_replacementUrl);
+//    reader->read(map);
+    OsmMapReaderFactory::read(map, _replacementUrl, true, Status::Unknown1);
 
     if (_readNodeDensityInputFullThenCrop)
     {
@@ -394,13 +396,14 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     StringUtils::padFrontOfNumberStringWithZeroes(taskGridCellId, 3) + ".osc.sql");
 
   QString msg =
-    "**********************************************************************\nDeriving changeset " +
+    "***********Deriving changeset " +
     QString::number(changesetNum) + " / " + StringUtils::formatLargeNumber(taskGridSize) +
     " for task grid cell: " + QString::number(taskGridCellId);
   if (numReplacementNodes != -1)
   {
-    msg += "\nreplacement nodes: " + StringUtils::formatLargeNumber(numReplacementNodes);
+    msg += ", replacement nodes: " + StringUtils::formatLargeNumber(numReplacementNodes);
   }
+  msg+= "*******";
   LOG_STATUS(msg);
 
   _changesetCreator->setChangesetId(QString::number(taskGridCellId));

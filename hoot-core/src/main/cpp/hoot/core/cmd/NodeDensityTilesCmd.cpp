@@ -262,14 +262,16 @@ private:
           "convert.bounding.box configuration option is specified.");
       }
 
-      std::shared_ptr<ApiDbReader> apiDbReader =
-        std::dynamic_pointer_cast<ApiDbReader>(reader);
-      if (apiDbReader)
-      {
-        // The tiles calculation is only concerned with nodes, and the only readers capable of
-        // filtering down to nodes up front right now are the api db readers.
-        apiDbReader->setReturnNodesOnly(true);
-      }
+      // TODO: While working on #4196, I'm not sure this works as intended. Need to check to see
+      // if a good test is in place for it before re-enabling.
+//      std::shared_ptr<ApiDbReader> apiDbReader =
+//        std::dynamic_pointer_cast<ApiDbReader>(reader);
+//      if (apiDbReader)
+//      {
+//        // The tiles calculation is only concerned with nodes, and the only readers capable of
+//        // filtering down to nodes up front right now are the api db readers.
+//        apiDbReader->setReturnNodesOnly(true);
+//      }
 
       reader->open(input);
       reader->read(map);

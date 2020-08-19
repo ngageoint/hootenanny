@@ -55,8 +55,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   // TODO: re-enable
-  CPPUNIT_TEST(orphanedNodes1Test);
-  //CPPUNIT_TEST(roadDelete1Test);
+  //CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(roadDelete1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
   //CPPUNIT_TEST(northVegasSmallTest);
@@ -143,11 +143,13 @@ public:
 
   void northVegasSmallTest()
   {
-    // 4 sq blocks of the city, 4 changesets, avg derivation: ?, total time: ~2 min
+    // 4 sq blocks of the city, 4 changesets, ~9k changes applied, avg derivation: 4s,
+    // total time: 24s
 
     _testName = "vegasSmallTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
+    QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
@@ -168,12 +170,13 @@ public:
 
   void northVegasMediumTest()
   {
-    // ~1/4 of the northern half of the city, 64 changesets, avg derivation: 16s, total time:
-    // ~23 min
+    // ~1/4 of the northern half of the city, 64 changesets, ~4.02M changes applied avg
+    // derivation: 9s, total time: 12m22s
 
     _testName = "vegasMediumTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
+    QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
@@ -195,7 +198,8 @@ public:
   void northVegasLargeTest()
   {
     // whole northern half of city, 64 changesets, avg derivation: 8m26s, 9h27m
-    // TODO: redo this now that query has been optimized
+    // TODO: redo this now that query has been optimized...guessing it shaves off a couple of hours
+    // at least
 
     _testName = "vegasLargeTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";

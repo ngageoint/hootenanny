@@ -1305,7 +1305,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
       // If input caching is not enabled, we'll read from the source data each time and crop
       // appropriately during the read. If the source input is a very large file or database layer
       // you don't want to be doing this.
-      LOG_STATUS("Loading reference map from: " << _input1.right(_maxFilePrintLength) << "...");
+      LOG_STATUS("Loading reference map from: ..." << _input1.right(_maxFilePrintLength) << "...");
       refMap.reset(new OsmMap());
       IoUtils::loadMap(refMap, _input1, true, Status::Unknown1);
     }
@@ -1321,7 +1321,8 @@ OsmMapPtr ChangesetReplacementCreator::_loadRefMap()
         const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
-        LOG_STATUS("Loading reference map from: " << _input1.right(_maxFilePrintLength) << "...");
+        LOG_STATUS(
+          "Loading reference map from: ..." << _input1.right(_maxFilePrintLength) << "...");
         _input1Map.reset(new OsmMap());
         _input1Map->setName("ref");
         IoUtils::loadMap(_input1Map, _input1, true, Status::Unknown1);
@@ -1388,7 +1389,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
     if (_isDbUrl(_input2) || !ConfigOptions().getChangesetReplacementCacheInputFileMaps())
     {
       // load the replacement data cropped to the specified aoi in the appropriate manner
-      LOG_STATUS("Loading secondary map from: " << _input2.right(_maxFilePrintLength) << "...");
+      LOG_STATUS("Loading secondary map from: ..." << _input2.right(_maxFilePrintLength) << "...");
       secMap.reset(new OsmMap());
       IoUtils::loadMap(secMap, _input2, false, Status::Unknown2);
     }
@@ -1399,7 +1400,8 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
         const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
         conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
-        LOG_STATUS("Loading secondary map from: " << _input2.right(_maxFilePrintLength) << "...");
+        LOG_STATUS(
+          "Loading secondary map from: ..." << _input2.right(_maxFilePrintLength) << "...");
         _input2Map.reset(new OsmMap());
         _input2Map->setName("sec");
         IoUtils::loadMap(_input2Map, _input2, false, Status::Unknown2);
