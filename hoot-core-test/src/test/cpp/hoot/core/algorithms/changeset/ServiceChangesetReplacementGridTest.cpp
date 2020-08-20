@@ -150,11 +150,11 @@ public:
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.05723,36.2408,-114.9911,36.3234");
+      "-115.1217,36.2150,-114.9911,36.3234");
 
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
-    uut.setGridInputs(QStringList(rootDir + "/combined-data/Task52_53_boundaries"));
+    uut.setGridInputs(QStringList(rootDir + "/combined-data/Task52_53_boundaries.osm"));
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
@@ -287,8 +287,6 @@ private:
 
   void _loadDataToReplaceDb(const QString& input, const QString& cropBounds = "")
   {
-    LOG_STATUS("Loading the data to replace db...");
-
     // make sure the db is empty
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
     ApiDb::execSqlFile(DATA_TO_REPLACE_URL, "test-files/servicesdb/users.sql");
@@ -315,10 +313,9 @@ private:
         "Data to replace pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
       LOG_STATUS(cropper.getInitStatusMessage());
       cropper.apply(map);
-      LOG_STATUS("Data to replace cropped size: " << StringUtils::formatLargeNumber(map->size()));
       LOG_STATUS(
-        "Data to replace cropped in: " <<
-        StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+        "Data to replace cropped size: " << StringUtils::formatLargeNumber(map->size()) <<
+        "; cropped in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
       _subTaskTimer.restart();
     }
     LOG_STATUS("Loading the data to replace db to: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
@@ -334,9 +331,6 @@ private:
   {
     // TODO: Can this be converted over to use the bulk inserter?
 
-    LOG_STATUS(
-      "Loading the replacement data db from: ..." << input <<
-      " to: ..." << _replacementDataUrl.right(25) << "...");
     OsmMapPtr map(new OsmMap());
     LOG_STATUS("Reading the replacement data from: ..." << input.right(25) << "...");
     OsmMapReaderFactory::read(map, input, false, Status::Unknown2);
@@ -353,10 +347,9 @@ private:
         "Replacement data pre-cropped size: " << StringUtils::formatLargeNumber(map->size()));
       LOG_STATUS(cropper.getInitStatusMessage());
       cropper.apply(map);
-      LOG_STATUS("Replacement data cropped size: " << StringUtils::formatLargeNumber(map->size()));
       LOG_STATUS(
-        "Replacement data cropped in: " <<
-        StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+        "Replacement data cropped size: " << StringUtils::formatLargeNumber(map->size()) <<
+        "; cropped in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
       _subTaskTimer.restart();
     }
     LOG_STATUS("Loading the replacement data db to: ..." << _replacementDataUrl.right(25) << "...");

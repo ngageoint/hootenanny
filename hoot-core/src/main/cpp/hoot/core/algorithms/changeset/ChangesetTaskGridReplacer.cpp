@@ -169,30 +169,38 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_g
   QMap<int, TaskGridCell> taskGrid;
   if (!_gridInputs.isEmpty())
   {
-    LOG_INFO("Reading " << _gridInputs.size() << " task grid file(s)...");
-    QMap<int, geos::geom::Envelope> taskGridTemp;
-    for (int i = 0; i < _gridInputs.size(); i++)
-    {
-      const QString gridInput = _gridInputs.at(i);
-      LOG_INFO("Reading task grid file: ..." << gridInput.right(25) << "...");
-      taskGridTemp = GeometryUtils::readBoundsFileWithIds(gridInput);
-      for (QMap<int, geos::geom::Envelope>::const_iterator taskGridTempItr = taskGridTemp.begin();
-           taskGridTempItr != taskGridTemp.end(); ++taskGridTempItr)
-      {
-        TaskGridCell taskGridCell;
-        // We don't know the node count when reading the custom grid file.
-        taskGridCell.replacementNodeCount = -1;
-        taskGridCell.bounds = taskGridTempItr.value();
-        taskGrid[taskGridTempItr.key()] = taskGridCell;
-      }
-    }
-    LOG_STATUS(
-      "Read " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells.");
+    taskGrid = _getTaskGridFromBoundsFiles(_gridInputs);
   }
   else
   {
     taskGrid = _calcNodeDensityTaskGrid(_getNodeDensityTaskGridInput());
   }
+  return taskGrid;
+}
+
+QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGridFromBoundsFiles(
+  const QStringList& inputs)
+{
+  LOG_INFO("Reading " << inputs.size() << " task grid file(s)...");
+  QMap<int, TaskGridCell> taskGrid;
+  QMap<int, geos::geom::Envelope> taskGridTemp;
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    const QString gridInput = inputs.at(i);
+    LOG_INFO("Reading task grid file: ..." << gridInput.right(25) << "...");
+    taskGridTemp = GeometryUtils::readBoundsFileWithIds(gridInput);
+    for (QMap<int, geos::geom::Envelope>::const_iterator taskGridTempItr = taskGridTemp.begin();
+         taskGridTempItr != taskGridTemp.end(); ++taskGridTempItr)
+    {
+      TaskGridCell taskGridCell;
+      // We don't know the node count when reading the custom grid file.
+      taskGridCell.replacementNodeCount = -1;
+      taskGridCell.bounds = taskGridTempItr.value();
+      taskGrid[taskGridTempItr.key()] = taskGridCell;
+    }
+  }
+  LOG_STATUS(
+    "Read " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells.");
   return taskGrid;
 }
 

@@ -156,6 +156,8 @@ private:
   // This preps the input for node density calc based task grid generation.
   OsmMapPtr _getNodeDensityTaskGridInput();
   QMap<int, TaskGridCell> _calcNodeDensityTaskGrid(OsmMapPtr map);
+  QMap<int, ChangesetTaskGridReplacer::TaskGridCell> _getTaskGridFromBoundsFiles(
+    const QStringList& inputs);
 
   void _replaceEntireTaskGrid(const QMap<int, TaskGridCell>& taskGrid);
   void _replaceTaskGridCell(
