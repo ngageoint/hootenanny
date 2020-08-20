@@ -53,13 +53,20 @@ class ChangesetTaskGridReplacer
 
 public:
 
-  // TODO: add the option to auto-generate a uniform grid
+  /**
+   * TODO
+   *
+   * @todo add the option to auto-generate a uniform grid
+   */
   enum GridType
   {
     NodeDensity = 0,
     InputFile
   };
 
+  /**
+   * TODO
+   */
   struct TaskGridCell
   {
     int replacementNodeCount;
@@ -72,8 +79,7 @@ public:
    * Replaces data
    *
    * @param toReplace URL to the data to replace; must be an OSM API database
-   * @param replacement URL to the replacement data; currently must be a Hoot API database, but
-   * will update to support files again soon
+   * @param replacement URL to the replacement data; must be a Hoot API database
    */
   void replace(const QString& toReplace, const QString& replacement);
 
@@ -105,7 +111,7 @@ private:
   QString _dataToReplaceUrl;
   // TODO: get rid of this; hacky
   int _originalDataSize;
-  // replacement data
+  // replacement data; must be hootapidb://
   QString _replacementUrl;
 
   // manner in which to generate the task grid
@@ -143,6 +149,7 @@ private:
   std::shared_ptr<OsmApiDbSqlChangesetApplier> _changesetApplier;
   QMap<QString, long> _changesetStats;
 
+  // TODO
   QString _finalOutput;
 
   void _initConfig();

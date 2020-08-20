@@ -255,7 +255,7 @@ private:
 
   QString _replacementDataUrl;
 
-  // original size of the data to be replaced; TODO: remove?
+  // original size of the data to be replaced; TODO: remove this?
   int _originalDataSize;
 
   void _prepInput(const QString& toReplace, const QString& replacement,

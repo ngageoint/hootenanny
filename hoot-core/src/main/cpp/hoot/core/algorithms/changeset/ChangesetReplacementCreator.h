@@ -29,15 +29,16 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
-#include <hoot/core/criterion/ChainCriterion.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
 
 namespace hoot
 {
+
+class ChangesetCreator;
+class ChainCriterion;
 
 /**
  * High level class for prepping data for replacement changeset generation (changesets which
@@ -57,9 +58,15 @@ namespace hoot
  * potential manual repairing of those relations after the changeset is written, and after that the
  * tag can then be removed. This is also a configurable feature, which can be turned off.
  *
- * TODO: implement progress
- * TODO: can probably break some of this up into separate classes now; e.g. filtering, etc.
- * TODO: need to test missing way node refs
+ * @todo implement progress
+ * @todo break this up into separate classes by function:
+ *  - input prep
+ *  - data replacement
+ *  - conflation
+ *  - snapping?
+ *  - changeset derivation
+ *  - cleanup
+ * @todo need to test missing way node refs
  */
 class ChangesetReplacementCreator
 {
@@ -102,8 +109,8 @@ class ChangesetReplacementCreator
     // Determines whether only secondary features completely inside the bounds should be kept when
     // deriving a changeset.
     bool changesetSecKeepOnlyInsideBounds;
-    // Determines whether deleting reference features existing either partially of completely outside
-    // of the bounds is allowed during changeset generation
+    // Determines whether deleting reference features existing either partially of completely
+    // outside of the bounds is allowed during changeset generation
     bool changesetAllowDeletingRefOutsideBounds;
     // the strictness of the bounds calculation used in conjunction with
     // _changesetAllowDeletingRefOutsideBounds
@@ -112,8 +119,12 @@ class ChangesetReplacementCreator
 
 public:
 
-  // see command doc for more detail
-  // TODO: Hybrid may go away
+  /**
+   * The manner in which replacement boundary conditions are handled. See the
+   * changeset-derive-replacement CLI doc for more detail.
+   *
+   * @todo Hybrid may go away
+   */
   enum BoundsInterpretation
   {
     Strict = 0, // only features completely inside or lines crossing that get cut at the boundary
@@ -168,7 +179,7 @@ private:
 
   friend class ChangesetReplacementCreatorTest;
 
-  // TODO: rename these for clarity
+  // TODO: rename these input vars for clarity
 
   // path to the input with data being replaced; overrides use of _input1Map
   QString _input1;

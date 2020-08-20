@@ -473,7 +473,7 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
     changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY];
 
   LOG_STATUS(
-    "Node Totals:\n" <<
+    "\nNode Totals:\n" <<
     "   Created: " <<
       StringUtils::formatLargeNumber(
         _changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]) << "\n" <<
