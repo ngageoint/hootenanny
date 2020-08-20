@@ -101,8 +101,8 @@ Hootenanny has a variety of map cleaning capabilities to automatically correct e
 # Scalability
 Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of Hootenanny supported a map-reduce 
 architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance 
-costs to support the seldomly used capability (so some of the conflation algorithms are actually capable of supporting distributed 
-computing, if you want to go that route...but they're probably out of date with the rest of the codebase and may have some limitations). 
+costs to support the seldomly used capability. So, some of the conflation algorithms are actually capable of supporting distributed 
+computing, if you want to try and go that route and revive the capability. However, they are likely out of date with the rest of the current codebase and also may have some additional limitations. 
 
 Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the 
 density of the data being conflated and the RAM available on the machine. Beyond that, new conflation algorithms and/or parallelization of
