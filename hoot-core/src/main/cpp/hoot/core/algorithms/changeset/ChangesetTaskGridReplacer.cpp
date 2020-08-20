@@ -82,6 +82,7 @@ void ChangesetTaskGridReplacer::replace(const QString& toReplace, const QString&
   {
     throw IllegalArgumentException("Replacement data must be from a Hootenanny API database.");
   }
+  // TODO: add input error handling for task grid generation type
 
   _opTimer.start();
   _subTaskTimer.start();

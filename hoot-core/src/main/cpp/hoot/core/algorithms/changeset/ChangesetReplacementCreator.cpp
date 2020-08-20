@@ -1373,7 +1373,7 @@ void ChangesetReplacementCreator::_filterFeatures(
 {
   LOG_STATUS(
     "Filtering " << StringUtils::formatLargeNumber(map->size()) << " features for: " <<
-    map->getName() << " based on input filter: " << featureFilter->toString() << "...");
+    map->getName() << " with filter: " << featureFilter->toString() << "...");
 
   // Negate the input filter, since we're removing everything but what passes the input filter.
   RemoveElementsVisitor elementPruner(true);

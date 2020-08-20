@@ -59,9 +59,10 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
   //CPPUNIT_TEST(vgi1666Test);
+  CPPUNIT_TEST(vgi1645Test);
   //CPPUNIT_TEST(northVegasSmallTest);
   //CPPUNIT_TEST(northVegasMediumTest);
-  CPPUNIT_TEST(northVegasLargeTest);
+  //CPPUNIT_TEST(northVegasLargeTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -121,7 +122,7 @@ public:
     // wasn't able to reproduce the deletion of way "Perry Ellis Drive" with this; possibly the
     // issue was fixed by vgi 1622
 
-    _testName = "roadDelete1Test";
+    _testName = "vgi1666Test";
     const QString rootDir = "/home/vagrant/hoot/tmp/4196";
     const QString outDir = rootDir + "/" + _testName;
     QDir().mkpath(outDir);
@@ -140,9 +141,30 @@ public:
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
   }
 
+  void vgi1645Test()
+  {
+    _testName = "vgi1645Test";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
+    const QString outDir = rootDir + "/" + _testName;
+    QDir(outDir).removeRecursively();
+    QDir().mkpath(outDir);
+    _prepInput(
+      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
+      "-115.05723,36.2408,-114.9911,36.3234");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
+    uut.setGridInputs(QStringList(rootDir + "/combined-data/Task52_53_boundaries"));
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+  }
+
   void northVegasSmallTest()
   {
-    // 4 sq blocks of the city, 4 changesets, ~9k changes, avg derivation: 4s, total time: ~.5m
+    // 4 sq blocks of the city, 4 changesets, ~9k changes, avg derivation: 4s, total time: ~.5m,
+    // ~18k changes/min
 
     _testName = "vegasSmallTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -169,7 +191,7 @@ public:
   void northVegasMediumTest()
   {
     // ~1/4 of the northern half of the city, 64 changesets, ~4.02M changes, avg derivation: 9s,
-    // total time: ~12.5m
+    // total time: ~12.5m, ~320k changes/min
 
     _testName = "vegasMediumTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -195,7 +217,8 @@ public:
 
   void northVegasLargeTest()
   {
-    // whole northern half of city, 64 changesets, ? changes, avg derivation: ?m, ?h
+    // whole northern half of city, 64 changesets, ~26.5M changes, avg derivation: 2.8m,
+    // total time: 3.27h, ~135k changes/min
 
     _testName = "vegasLargeTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -226,8 +249,10 @@ private:
   // for working with a subset of the input data in order to save unnecessary processing time; leave
   // empty to disable
   QString _inputCropBounds;
+
   QString _replacementDataUrl;
-  // original size of the data to be replaced
+
+  // original size of the data to be replaced; TODO: remove?
   int _originalDataSize;
 
   void _prepInput(const QString& toReplace, const QString& replacement,
