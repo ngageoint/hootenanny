@@ -155,6 +155,9 @@ public:
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
     uut.setGridInputs(QStringList(rootDir + "/combined-data/Task52_53_boundaries.osm"));
+    QList<int> skipIds;
+    skipIds.append(52);
+    uut.setTaskCellSkipIds(skipIds);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);

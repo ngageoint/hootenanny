@@ -87,6 +87,7 @@ public:
   void setNodeDensityTaskGridOutputFile(const QString& output)
   { _nodeDensityTaskGridOutputFile = output; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
+  void setTaskCellSkipIds(const QList<int>& ids) { _taskCellSkipIds = ids; }
   void setChangesetsOutputDir(const QString& dir)
   { _changesetsOutputDir = dir; }
   void setKillAfterNumChangesetDerivations(int numDerivations)
@@ -109,6 +110,10 @@ private:
 
   // manner in which to generate the task grid
   GridType _gridType;
+  // allows for skipping the processing of any grid cell with an "id" tag value in this ID list;
+  // applies to both node density and file based grids
+  QList<int> _taskCellSkipIds;
+
   // area of the sum of all task grid cells; needed for node density calc only
   QString _nodeDensityGridBounds;
   // runtime optimization for large amounts of data at the expense of using extra memory
@@ -117,6 +122,7 @@ private:
   int _maxNodeDensityNodesPerCell;
   // output location of the generated node density task grid file; useful for debugging
   QString _nodeDensityTaskGridOutputFile;
+
   // one or more paths to a custom task grid
   QStringList _gridInputs;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues

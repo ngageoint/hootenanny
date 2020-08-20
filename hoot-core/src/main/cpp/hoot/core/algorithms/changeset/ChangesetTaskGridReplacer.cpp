@@ -387,6 +387,13 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   const int taskGridCellId, const int changesetNum, const geos::geom::Envelope& bounds,
   const int taskGridSize, const int numReplacementNodes)
 {
+  if (_taskCellSkipIds.contains(taskGridCellId))
+  {
+    LOG_STATUS("***********Skipping task grid cell: " << taskGridCellId << "*********");
+    _subTaskTimer.restart();
+    return;
+  }
+
   const QString boundsStr = GeometryUtils::toString(bounds);
   QFile changesetFile(
     _changesetsOutputDir + "/changeset-cell-" +
