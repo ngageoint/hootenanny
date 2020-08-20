@@ -202,7 +202,7 @@ In addition to conflating map data, Hootenanny also provides these capabilities:
 * [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
 
 Don't hesitate to ask for help if features aren't conflating how you expect them to or if you're experiencing difficulty while installing the 
-software. We officially support installing RPMs to CentOS and launching CentOS virtual matchines...anything else we'll do our best to help you out, but there are no guarantees. If you have any support questions, please create an issue in this repository.
+software. We officially support installing RPMs to CentOS and launching CentOS virtual machines...anything else we'll do our best to help you out, but there are no guarantees. If you have any support questions, please create an issue in this repository.
 
 As there are lot of different data scenarios out in the wild, there is no one-size fits all conflation workflow or algorithm. Hootenanny 
 attempts to provide a useful set of conflation workflows with pre-configured options that capture most conflation requirements. However, you
