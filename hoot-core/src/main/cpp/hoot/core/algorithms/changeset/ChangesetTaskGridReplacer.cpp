@@ -56,19 +56,7 @@ _reverseTaskGrid(false),
 _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
-_averageChangesetDeriveTime(0.0),
-_totalNodesCreated(0),
-_totalNodesModified(0),
-_totalNodesDeleted(0),
-_totalWaysCreated(0),
-_totalWaysModified(0),
-_totalWaysDeleted(0),
-_totalRelationsCreated(0),
-_totalRelationsModified(0),
-_totalRelationsDeleted(0),
-_totalCreations(0),
-_totalModifications(0),
-_totalDeletions(0)
+_averageChangesetDeriveTime(0.0)
 {
 }
 
@@ -89,15 +77,7 @@ void ChangesetTaskGridReplacer::replace(const QString& toReplace, const QString&
 
   _dataToReplaceUrl = toReplace;
   _replacementUrl = replacement;
-  _totalNodesCreated = 0;
-  _totalNodesModified = 0;
-  _totalNodesDeleted = 0;
-  _totalWaysCreated = 0;
-  _totalWaysModified = 0;
-  _totalWaysDeleted = 0;
-  _totalRelationsCreated = 0;
-  _totalRelationsModified = 0;
-  _totalRelationsDeleted = 0;
+  _initChangesetStats();
 
   _initConfig();
 
@@ -160,6 +140,23 @@ void ChangesetTaskGridReplacer::_initConfig()
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
+}
+
+void ChangesetTaskGridReplacer::_initChangesetStats()
+{
+  _changesetStats.clear();
+  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY] = 0;
+  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY] = 0;
 }
 
 QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGrid()
@@ -449,35 +446,73 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
 void ChangesetTaskGridReplacer::_printChangesetStats()
 {
   const QMap<QString, long> changesetStats = _changesetApplier->getChangesetStats();
-  _totalNodesCreated += changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY];
-  _totalNodesModified += changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY];
-  _totalNodesDeleted += changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY];
-  _totalWaysCreated += changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY];
-  _totalWaysModified += changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY];
-  _totalWaysDeleted += changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY];
-  _totalRelationsCreated += changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY];
-  _totalRelationsModified += changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY];
-  _totalRelationsDeleted += changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY];
-  _totalCreations += changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY];
-  _totalModifications += changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY];
-  _totalDeletions += changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY];
+
+  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY];
+  _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY] +=
+    changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY];
+
   LOG_STATUS(
     "Node Totals:\n" <<
-    "\tCreated: " << StringUtils::formatLargeNumber(_totalNodesCreated) << "\n" <<
-    "\tModified: " << StringUtils::formatLargeNumber(_totalNodesModified) << "\n" <<
-    "\tDeleted: " << StringUtils::formatLargeNumber(_totalNodesDeleted) << "\n" <<
+    "   Created: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]) << "\n" <<
+    "   Modified: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]) << "\n" <<
+    "   Deleted: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]) << "\n" <<
     "Way Totals:\n" <<
-    "\tCreated: " << StringUtils::formatLargeNumber(_totalWaysCreated) << "\n" <<
-    "\tModified: " << StringUtils::formatLargeNumber(_totalWaysModified) << "\n" <<
-    "\tDeleted: " << StringUtils::formatLargeNumber(_totalWaysDeleted) << "\n" <<
+    "   Created: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]) << "\n" <<
+    "   Modified: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]) << "\n" <<
+    "   Deleted: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]) << "\n" <<
     "Relation Totals:\n" <<
-    "\tCreated: " << StringUtils::formatLargeNumber(_totalRelationsCreated) << "\n" <<
-    "\tModified: " << StringUtils::formatLargeNumber(_totalRelationsModified) << "\n" <<
-    "\tDeleted: " << StringUtils::formatLargeNumber(_totalRelationsDeleted) << "\n" <<
+    "   Created: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]) << "\n" <<
+    "   Modified: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]) << "\n" <<
+    "   Deleted: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]) << "\n" <<
     "Overall Totals:\n" <<
-    "\tCreated: " << StringUtils::formatLargeNumber(_totalCreations) << "\n" <<
-    "\tModified: " << StringUtils::formatLargeNumber(_totalModifications) << "\n" <<
-    "\tDeleted: " << StringUtils::formatLargeNumber(_totalDeletions));
+    "   Created: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY]) << "\n" <<
+    "   Modified: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY]) << "\n" <<
+    "   Deleted: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY]));
 }
 
 void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)

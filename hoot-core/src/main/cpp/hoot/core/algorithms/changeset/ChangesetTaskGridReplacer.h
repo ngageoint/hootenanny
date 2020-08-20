@@ -141,18 +141,7 @@ private:
 
   // applies the replacement changesets
   std::shared_ptr<OsmApiDbSqlChangesetApplier> _changesetApplier;
-  int _totalNodesCreated;
-  int _totalNodesModified;
-  int _totalNodesDeleted;
-  int _totalWaysCreated;
-  int _totalWaysModified;
-  int _totalWaysDeleted;
-  int _totalRelationsCreated;
-  int _totalRelationsModified;
-  int _totalRelationsDeleted;
-  int _totalCreations;
-  int _totalModifications;
-  int _totalDeletions;
+  QMap<QString, long> _changesetStats;
 
   QString _finalOutput;
 
@@ -169,6 +158,7 @@ private:
   void _replaceTaskGridCell(
     const int taskGridCellId, const int changesetNum, const geos::geom::Envelope& bounds,
     const int taskGridSize, const int numReplacementNodes = -1);
+  void _initChangesetStats();
   void _printChangesetStats();
 
   // writes out all of the ref data; useful for debugging...expensive
