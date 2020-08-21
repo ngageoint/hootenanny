@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/changeset/TaskGridGenerator.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -55,26 +56,6 @@ class ChangesetTaskGridReplacer
 
 public:
 
-  /**
-   * TODO
-   */
-  enum GridType
-  {
-    NodeDensity = 0,
-    InputFile,
-    Uniform
-  };
-
-  /**
-   * TODO
-   */
-  struct TaskGridCell
-  {
-    int id;
-    int replacementNodeCount;
-    geos::geom::Envelope bounds;
-  };
-
   ChangesetTaskGridReplacer();
 
   /**
@@ -82,23 +63,12 @@ public:
    *
    * @param toReplace URL to the data to replace; must be an OSM API database
    * @param replacement URL to the replacement data; must be a Hoot API database
+   * @param taskGrid TODO
    */
-  void replace(const QString& toReplace, const QString& replacement);
+  void replace(const QString& toReplace, const QString& replacement,
+               const TaskGridGenerator::TaskGrid& taskGrid);
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
-
-  void setTaskGridType(GridType gridType) { _gridType = gridType; }
-  void setTaskGridBounds(const QString& bounds) { _taskGridBounds = bounds; }
-  void setTaskGridOutputFile(const QString& output) { _taskGridOutputFile = output; }
-
-  void setReadNodeDensityInputFullThenCrop(bool readFull)
-  { _readNodeDensityInputFullThenCrop = readFull; }
-  void setNodeDensityMaxNodesPerCell(int maxNodes) { _maxNodeDensityNodesPerCell = maxNodes; }
-
-  void setGridInputs(const QStringList& inputs) { _gridInputs = inputs; }
-
-  void setUniformGridDimensionSize(int dimensionSize) { _uniformGridDimensionSize = dimensionSize; }
-
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
   void setTaskCellSkipIds(const QList<int>& ids) { _taskCellSkipIds = ids; }
   void setChangesetsOutputDir(const QString& dir)
@@ -121,37 +91,11 @@ private:
   // replacement data; must be hootapidb://
   QString _replacementUrl;
 
-  // manner in which to generate the task grid
-  GridType _gridType;
   // allows for skipping the processing of any grid cell with an "id" tag value in this ID list;
   // applies to both node density and file based grids
   QList<int> _taskCellSkipIds;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues
   bool _reverseTaskGrid;
-
-  // for GridType::NodeDensity or GridType::Uniform only
-
-  // area of the sum of all task grid cells;
-  QString _taskGridBounds;
-  // output location of the generated task grid file; useful for debugging, should be a *.osm file
-  QString _taskGridOutputFile;
-
-  // for GridType::NodeDensity only
-
-  // runtime optimization for large amounts of data at the expense of using extra memory
-  bool _readNodeDensityInputFullThenCrop;
-  // allows for capping the max number of node density nodes per grid cell
-  int _maxNodeDensityNodesPerCell;
-
-  // for GridType::InputFile only
-
-  // one or more paths to a custom task grid
-  QStringList _gridInputs;
-
-  // for GridType::Uniform only
-
-  // TODO
-  int _uniformGridDimensionSize;
 
   // derives the replacement changesets
   std::shared_ptr<ChangesetReplacementCreator> _changesetCreator;
@@ -173,16 +117,10 @@ private:
 
   void _initConfig();
 
-  QList<TaskGridCell> _getTaskGrid();
-  // This preps the input for node density calc based task grid generation.
-  OsmMapPtr _getNodeDensityTaskGridInput();
-  QList<TaskGridCell> _calcNodeDensityTaskGrid(OsmMapPtr map);
-  QList<TaskGridCell> _getTaskGridFromBoundsFiles(const QStringList& inputs);
-  QList<TaskGridCell> _getUniformTaskGrid(const int gridDimensionSize);
-
-  void _replaceEntireTaskGrid(const QList<TaskGridCell>& taskGrid);
+  void _replaceEntireTaskGrid(const TaskGridGenerator::TaskGrid& taskGrid);
   void _replaceTaskGridCell(
-    const TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize);
+    const TaskGridGenerator::TaskGridCell& taskGridCell, const int changesetNum,
+    const int taskGridSize);
   void _initChangesetStats();
   void _printChangesetStats();
 

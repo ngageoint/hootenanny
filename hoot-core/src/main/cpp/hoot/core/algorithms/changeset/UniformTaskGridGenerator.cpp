@@ -1,0 +1,110 @@
+/*
+ * This file is part of Hootenanny.
+ *
+ * Hootenanny is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * --------------------------------------------------------------------
+ *
+ * The following copyright notices are generated automatically. If you
+ * have a new notice to add, please use the format:
+ * " * @copyright Copyright ..."
+ * This will properly maintain the copyright information. DigitalGlobe
+ * copyrights will be updated automatically.
+ *
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ */
+#include "UniformTaskGridGenerator.h"
+
+// Hoot
+#include <hoot/core/util/Log.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/StringUtils.h>
+
+namespace hoot
+{
+
+UniformTaskGridGenerator::UniformTaskGridGenerator(
+  const QString& bounds, const int gridDimensionSize, const QString& output) :
+_bounds(bounds),
+_gridDimensionSize(gridDimensionSize),
+_output(output)
+{
+}
+
+TaskGridGenerator::TaskGrid UniformTaskGridGenerator::generateTaskGrid()
+{
+  LOG_INFO(
+    "Creating uniform task grid with " << _gridDimensionSize << "x" << _gridDimensionSize <<
+    " cells across bounds: " << _bounds << "...");
+
+  QList<TaskGridCell> taskGrid;
+
+  const geos::geom::Envelope taskGridEnv = GeometryUtils::envelopeFromConfigString(_bounds);
+  const double widthPerCell = taskGridEnv.getWidth() / (double)_gridDimensionSize;
+  const double heightPerCell = taskGridEnv.getHeight() / (double)_gridDimensionSize;
+
+  const int rows = ceil(taskGridEnv.getHeight() / heightPerCell);
+  const int cols = ceil(taskGridEnv.getWidth() / widthPerCell);
+
+  const double cellXLeftOrigin = taskGridEnv.getMinX();
+  const double cellXRightOrigin = taskGridEnv.getMinX() + widthPerCell;
+  const double cellYTopOrigin = taskGridEnv.getMaxY();
+  const double cellYBottomOrigin = taskGridEnv.getMaxY() - heightPerCell;
+
+  int cellCtr = 1;
+  // used to write boundaries to file after the grid is created
+  QList<geos::geom::Envelope> boundaries;
+  double cellXLeft = cellXLeftOrigin;
+  double cellXRight = cellXRightOrigin;
+  for (int i = 0; i < cols; i++)
+  {
+    double cellYTop = cellYTopOrigin;
+    double cellYBottom = cellYBottomOrigin;
+
+    for (int j = 0; j < rows; j++)
+    {
+      TaskGridCell taskGridCell;
+      taskGridCell.id = cellCtr;
+      // We don't know the individual cell node counts when creating a uniform grid.
+      taskGridCell.replacementNodeCount = -1;
+      geos::geom::Envelope taskGridCellEnv(cellXLeft, cellXRight, cellYBottom, cellYTop);
+      taskGridCell.bounds = taskGridCellEnv;
+      boundaries.append(taskGridCell.bounds);
+      taskGrid.append(taskGridCell);
+
+      cellYTop = cellYTop - heightPerCell;
+      cellYBottom = cellYBottom - heightPerCell;
+
+      cellCtr++;
+    }
+
+    cellXLeft = cellXLeft + widthPerCell;
+    cellXRight = cellXRight + widthPerCell;
+  }
+
+  if (!_output.trimmed().isEmpty())
+  {
+    // write out task grid to file
+    OsmMapWriterFactory::write(GeometryUtils::createMapFromBoundsCollection(boundaries), _output);
+  }
+
+  LOG_STATUS(
+    "Created uniform task grid with " << _gridDimensionSize << "x" << _gridDimensionSize <<
+    " cells across bounds: " << _bounds << "...");
+  return taskGrid;
+}
+
+}

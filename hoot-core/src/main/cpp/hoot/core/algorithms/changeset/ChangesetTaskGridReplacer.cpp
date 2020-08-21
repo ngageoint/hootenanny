@@ -30,16 +30,11 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/io/TileBoundsWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/visitors/StatusUpdateVisitor.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
-#include <hoot/core/io/HootApiDbReader.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
@@ -49,11 +44,7 @@ namespace hoot
 
 ChangesetTaskGridReplacer::ChangesetTaskGridReplacer() :
 _originalDataSize(0),
-_gridType(GridType::NodeDensity),
 _reverseTaskGrid(false),
-_readNodeDensityInputFullThenCrop(false),
-_maxNodeDensityNodesPerCell(1000),
-_uniformGridDimensionSize(2),
 _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
@@ -61,7 +52,8 @@ _averageChangesetDeriveTime(0.0)
 {
 }
 
-void ChangesetTaskGridReplacer::replace(const QString& toReplace, const QString& replacement)
+void ChangesetTaskGridReplacer::replace(
+  const QString& toReplace, const QString& replacement, const TaskGridGenerator::TaskGrid& taskGrid)
 {
   if (!toReplace.toLower().startsWith("osmapidb://"))
   {
@@ -71,7 +63,6 @@ void ChangesetTaskGridReplacer::replace(const QString& toReplace, const QString&
   {
     throw IllegalArgumentException("Replacement data must be from a Hootenanny API database.");
   }
-  // TODO: add input error handling for task grid generation type
 
   _opTimer.start();
   _subTaskTimer.start();
@@ -87,7 +78,7 @@ void ChangesetTaskGridReplacer::replace(const QString& toReplace, const QString&
     bool exceptionOccurred = false;
     try
     {
-      _replaceEntireTaskGrid(_getTaskGrid());
+      _replaceEntireTaskGrid(taskGrid);
     }
     catch (const HootException& e)
     {
@@ -160,235 +151,7 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
   _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY] = 0;
 }
 
-QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGrid()
-{
-  QList<TaskGridCell> taskGrid;
-  if (_gridType == GridType::InputFile)
-  {
-    if (_gridInputs.isEmpty())
-    {
-      throw IllegalArgumentException("TODO");
-    }
-
-    taskGrid = _getTaskGridFromBoundsFiles(_gridInputs);
-  }
-  else if (_gridType == GridType::NodeDensity)
-  {
-    if (_taskGridOutputFile.trimmed().isEmpty())
-    {
-      throw IllegalArgumentException("TODO");
-    }
-
-    taskGrid = _calcNodeDensityTaskGrid(_getNodeDensityTaskGridInput());
-  }
-  else
-  {
-    if (_taskGridOutputFile.trimmed().isEmpty())
-    {
-      throw IllegalArgumentException("TODO");
-    }
-
-    taskGrid = _getUniformTaskGrid(_uniformGridDimensionSize);
-  }
-  return taskGrid;
-}
-
-QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGridFromBoundsFiles(
-  const QStringList& inputs)
-{
-  LOG_INFO("Reading " << inputs.size() << " task grid file(s)...");
-  QList<TaskGridCell> taskGrid;
-  QMap<int, geos::geom::Envelope> taskGridTemp;
-  for (int i = 0; i < inputs.size(); i++)
-  {
-    const QString gridInput = inputs.at(i);
-    LOG_INFO("Reading task grid file: ..." << gridInput.right(25) << "...");
-    taskGridTemp = GeometryUtils::readBoundsFileWithIds(gridInput);
-    for (QMap<int, geos::geom::Envelope>::const_iterator taskGridTempItr = taskGridTemp.begin();
-         taskGridTempItr != taskGridTemp.end(); ++taskGridTempItr)
-    {
-      TaskGridCell taskGridCell;
-      taskGridCell.id = taskGridTempItr.key();
-      // We don't know the node count when reading the custom grid file.
-      taskGridCell.replacementNodeCount = -1;
-      taskGridCell.bounds = taskGridTempItr.value();
-      taskGrid.append(taskGridCell);
-    }
-  }
-  LOG_STATUS(
-    "Read " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells from " <<
-    inputs.size() << " file(s).");
-  return taskGrid;
-}
-
-QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getUniformTaskGrid(
-  const int dimensionSize)
-{
-  LOG_INFO(
-    "Creating uniform task grid with " << dimensionSize << "x" << dimensionSize <<
-    " cells across bounds: " << _taskGridBounds << "...");
-
-  QList<TaskGridCell> taskGrid;
-
-  const geos::geom::Envelope taskGridEnv = GeometryUtils::envelopeFromConfigString(_taskGridBounds);
-  const double widthPerCell = taskGridEnv.getWidth() / (double)dimensionSize;
-  const double heightPerCell = taskGridEnv.getHeight() / (double)dimensionSize;
-
-  const int rows = ceil(taskGridEnv.getHeight() / heightPerCell);
-  const int cols = ceil(taskGridEnv.getWidth() / widthPerCell);
-
-  const double cellXLeftOrigin = taskGridEnv.getMinX();
-  const double cellXRightOrigin = taskGridEnv.getMinX() + widthPerCell;
-  const double cellYTopOrigin = taskGridEnv.getMaxY();
-  const double cellYBottomOrigin = taskGridEnv.getMaxY() - heightPerCell;
-
-  int cellCtr = 1;
-  // used to write boundaries to file after the grid is created
-  QList<geos::geom::Envelope> boundaries;
-  double cellXLeft = cellXLeftOrigin;
-  double cellXRight = cellXRightOrigin;
-  for (int i = 0; i < cols; i++)
-  {
-    double cellYTop = cellYTopOrigin;
-    double cellYBottom = cellYBottomOrigin;
-
-    for (int j = 0; j < rows; j++)
-    {
-      TaskGridCell taskGridCell;
-      taskGridCell.id = cellCtr;
-      // We don't know the individual cell node counts when creating a uniform grid.
-      taskGridCell.replacementNodeCount = -1;
-      geos::geom::Envelope taskGridCellEnv(cellXLeft, cellXRight, cellYBottom, cellYTop);
-      taskGridCell.bounds = taskGridCellEnv;
-      boundaries.append(taskGridCell.bounds);
-      taskGrid.append(taskGridCell);
-
-      cellYTop = cellYTop - heightPerCell;
-      cellYBottom = cellYBottom - heightPerCell;
-
-      cellCtr++;
-    }
-
-    cellXLeft = cellXLeft + widthPerCell;
-    cellXRight = cellXRight + widthPerCell;
-  }
-
-  // write out task grid to file
-  OsmMapWriterFactory::write(
-    GeometryUtils::createMapFromBoundsCollection(boundaries), _taskGridOutputFile);
-
-  LOG_STATUS(
-    "Created uniform task grid with " << dimensionSize << "x" << dimensionSize <<
-    " cells across bounds: " << _taskGridBounds << "...");
-  return taskGrid;
-}
-
-OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
-{
-  // changeset derive will overwrite these later, if needed
-  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _taskGridBounds);
-  conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
-  conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
-  conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
-
-  // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
-  LOG_STATUS(
-    "Preparing input data for task grid cell calculation from: ..." <<
-    _replacementUrl.right(25) << ", across bounds: " << _taskGridBounds << "...");
-  assert(HootApiDbReader::isSupported(_replacementUrl));
-
-  // Getting large amounts of data via bbox can actually be slower than reading all of the data
-  // and then cropping it, due to bounded query performance. #4192 improved this gap, but the
-  // full read then crop can still be faster sometimes if the memory is available for it. All of
-  // North Vegas takes 2:01 to read fully then crop to just the city bounds vs 2:30 to get via
-  // bbox query.
-  if (_readNodeDensityInputFullThenCrop)
-  {
-    conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), true);
-  }
-
-  // IMPORTANT: data used here must be unknown1 for node density calc to work
-  OsmMapPtr map(new OsmMap());
-  // small optimization since node density only needs nodes in the input; can only do this with
-  // a db reader right now
-  // TODO: I don't think the node only read is working correctly. Put a note in
-  // NodeDensityTilesCmd.
-//    std::shared_ptr<ApiDbReader> reader =
-//      std::dynamic_pointer_cast<ApiDbReader>(
-//        OsmMapReaderFactory::createReader(_replacementUrl, true, Status::Unknown1));
-//    reader->setReturnNodesOnly(true);
-//    reader->open(_replacementUrl);
-//    reader->read(map);
-  OsmMapReaderFactory::read(map, _replacementUrl, true, Status::Unknown1);
-
-  // Restore the default setting if it was changed, or the changeset replacement maps will be loaded
-  // very slowly if loading from URL.
-  conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
-
-  LOG_STATUS(
-    StringUtils::formatLargeNumber(map->size()) << " task grid calc elements prepared " <<
-    "in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  _subTaskTimer.restart();
-
-  return map;
-}
-
-QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_calcNodeDensityTaskGrid(
-  OsmMapPtr map)
-{
-  LOG_STATUS(
-    "Calculating task grid cells for replacement data to: ..." <<
-    _taskGridOutputFile.right(25) << "...");
-  NodeDensityTileBoundsCalculator boundsCalc;
-  boundsCalc.setPixelSize(0.001);
-  boundsCalc.setMaxNodesPerTile(_maxNodeDensityNodesPerCell);
-  boundsCalc.setMaxNumTries(3);
-  boundsCalc.setMaxTimePerAttempt(300);
-  boundsCalc.setPixelSizeRetryReductionFactor(10);
-  boundsCalc.setSlop(0.1);
-  boundsCalc.calculateTiles(map);
-  map.reset();
-  const std::vector<std::vector<geos::geom::Envelope>> rawTaskGrid = boundsCalc.getTiles();
-  const std::vector<std::vector<long>> nodeCounts = boundsCalc.getNodeCounts();
-  TileBoundsWriter::writeTilesToOsm(rawTaskGrid, nodeCounts, _taskGridOutputFile);
-
-  // flatten the collection; use a list to maintain order
-  QList<TaskGridCell> taskGrid;
-  int cellCtr = 1;
-  for (size_t tx = 0; tx < rawTaskGrid.size(); tx++)
-  {
-    for (size_t ty = 0; ty < rawTaskGrid[tx].size(); ty++)
-    {
-      TaskGridCell taskGridCell;
-      taskGridCell.id = cellCtr;
-      taskGridCell.replacementNodeCount = nodeCounts[tx][ty];
-      taskGridCell.bounds = rawTaskGrid[tx][ty];
-      taskGrid.append(taskGridCell);
-      cellCtr++;
-    }
-  }
-  assert(boundsCalc.getTileCount() == taskGrid.size());
-
-  LOG_STATUS(
-    "Calculated " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells in: " <<
-    StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << ".");
-  LOG_STATUS(
-    "\tMaximum node count in any one tile: " <<
-    StringUtils::formatLargeNumber(boundsCalc.getMaxNodeCountInOneTile()));
-  LOG_STATUS(
-    "\tMinimum node count in any one tile: " <<
-    StringUtils::formatLargeNumber(boundsCalc.getMinNodeCountInOneTile()));
-  LOG_INFO("Pixel size used: " << boundsCalc.getPixelSize());
-  LOG_INFO(
-    "\tMaximum node count per tile used: " <<
-    StringUtils::formatLargeNumber(boundsCalc.getMaxNodesPerTile()));
-  _subTaskTimer.restart();
-
-  return taskGrid;
-}
-
-void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QList<TaskGridCell>& taskGrid)
+void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGridGenerator::TaskGrid& taskGrid)
 {
   // recommended C&R production config
   _changesetCreator.reset(new ChangesetReplacementCreator(true, "", _dataToReplaceUrl));
@@ -412,10 +175,10 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QList<TaskGridCell>
   // probably a cleaner way to do this reversal handling...
   if (!_reverseTaskGrid)
   {
-    for (QList<TaskGridCell>::const_iterator taskGridItr = taskGrid.begin();
+    for (TaskGridGenerator::TaskGrid::const_iterator taskGridItr = taskGrid.begin();
          taskGridItr != taskGrid.end(); ++taskGridItr)
     {
-      const TaskGridCell taskGridCell = *taskGridItr;
+      const TaskGridGenerator::TaskGridCell taskGridCell = *taskGridItr;
       _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGrid.size());
 
       if (_killAfterNumChangesetDerivations > 0 &&
@@ -431,10 +194,10 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QList<TaskGridCell>
   }
   else
   {
-    for (QList<TaskGridCell>::const_reverse_iterator taskGridItr = taskGrid.crbegin();
+    for (TaskGridGenerator::TaskGrid::const_reverse_iterator taskGridItr = taskGrid.crbegin();
          taskGridItr != taskGrid.crend(); ++taskGridItr)
     {
-      const TaskGridCell taskGridCell = *taskGridItr;
+      const TaskGridGenerator::TaskGridCell taskGridCell = *taskGridItr;
       _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGrid.size());
 
       if (_killAfterNumChangesetDerivations > 0 &&
@@ -451,7 +214,8 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QList<TaskGridCell>
 }
 
 void ChangesetTaskGridReplacer::_replaceTaskGridCell(
-  const TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize)
+  const TaskGridGenerator::TaskGridCell& taskGridCell, const int changesetNum,
+  const int taskGridSize)
 {
   if (_taskCellSkipIds.contains(taskGridCell.id))
   {

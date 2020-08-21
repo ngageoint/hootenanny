@@ -37,6 +37,9 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
+#include <hoot/core/algorithms/changeset/BoundsFileTaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
 
 namespace hoot
 {
@@ -60,7 +63,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
   //CPPUNIT_TEST(github4196Test);
   //CPPUNIT_TEST(github4174Test);
-  //CPPUNIT_TEST(northVegasSmallTest);
+  CPPUNIT_TEST(northVegasSmallTest);
   CPPUNIT_TEST(northVegasSmallUniformTest);
   //CPPUNIT_TEST(northVegasMediumTest);
   //CPPUNIT_TEST(northVegasLargeTest);
@@ -107,14 +110,15 @@ public:
       "");
 
     ChangesetTaskGridReplacer uut;
-    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
-    uut.setGridInputs(QStringList(_inputPath + "/Task14and15.osm"));
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsFileTaskGridGenerator(QStringList(_inputPath + "/Task14and15.osm")).generateTaskGrid());
 
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
@@ -131,16 +135,16 @@ public:
     _prepInput(
       rootDir + "/NOME_Data.osm", rootDir + "/OSM_Data.osm", "-115.1017,36.02439,-114.9956,36.0733");
 
-    ChangesetTaskGridReplacer uut;
-    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
     QStringList gridInputs;
     gridInputs.append(rootDir + "/1/Task38_07Aug2020_VGI_1666/Task38Bounds.osm");
     gridInputs.append(rootDir + "/1/Task43_VGI_1666/Task43Extend.osm");
-    uut.setGridInputs(gridInputs);
+    BoundsFileTaskGridGenerator taskGridGen(gridInputs);
+
+    ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
   }
 
   void github4174Test()
@@ -155,15 +159,17 @@ public:
       "-115.1217,36.2150,-114.9911,36.3234");
 
     ChangesetTaskGridReplacer uut;
-    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::InputFile);
-    uut.setGridInputs(QStringList(rootDir + "/combined-data/Task52_53_boundaries.osm"));
     QList<int> skipIds;
     skipIds.append(52);
     uut.setTaskCellSkipIds(skipIds);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+     _replacementDataUrl,
+     BoundsFileTaskGridGenerator(QStringList(rootDir + "/combined-data/Task52_53_boundaries.osm"))
+       .generateTaskGrid());
   }
 
   void northVegasSmallTest()
@@ -180,17 +186,17 @@ public:
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
       "-115.3314,36.2825,-115.2527,36.3387");
 
+    NodeDensityTaskGridGenerator taskGridGen(
+      "-115.3059,36.2849,-115.2883,36.2991", _replacementDataUrl, 1000,
+      outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    taskGridGen.setReadInputFullThenCrop(true);
+
     ChangesetTaskGridReplacer uut;
-    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
     //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setTaskGridBounds("-115.3059,36.2849,-115.2883,36.2991");
-    uut.setNodeDensityMaxNodesPerCell(1000);
-    uut.setTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
-    uut.setReadNodeDensityInputFullThenCrop(true);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
   }
 
   void northVegasSmallUniformTest()
@@ -205,15 +211,17 @@ public:
       "-115.3314,36.2825,-115.2527,36.3387");
 
     ChangesetTaskGridReplacer uut;
-    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::Uniform);
     //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setTaskGridBounds("-115.3059,36.2849,-115.2883,36.2991");
-    uut.setUniformGridDimensionSize(4);
-    uut.setTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.3059,36.2849,-115.2883,36.2991", 4,
+        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
   }
 
   void northVegasMediumTest()
@@ -230,17 +238,17 @@ public:
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
       "-115.3441,36.2012,-115.1942,36.3398");
 
+    NodeDensityTaskGridGenerator taskGridGen(
+      "-115.3332,36.2178,-115.1837,36.3400", _replacementDataUrl, 10000,
+      outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    taskGridGen.setReadInputFullThenCrop(true);
+
     ChangesetTaskGridReplacer uut;
-    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
     //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setTaskGridBounds("-115.3332,36.2178,-115.1837,36.3400");
-    uut.setNodeDensityMaxNodesPerCell(10000);
-    uut.setTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
-    uut.setReadNodeDensityInputFullThenCrop(true);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
   }
 
   void northVegasLargeTest()
@@ -262,17 +270,17 @@ public:
     QDir().mkpath(outDir);
     _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
 
+    NodeDensityTaskGridGenerator taskGridGen(
+      "-115.3528,36.0919,-114.9817,36.3447", _replacementDataUrl, 100000,
+      outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    taskGridGen.setReadInputFullThenCrop(true);
+
     ChangesetTaskGridReplacer uut;
-    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
     //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setTaskGridBounds("-115.3528,36.0919,-114.9817,36.3447");
-    uut.setNodeDensityMaxNodesPerCell(100000);
-    uut.setTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
-    uut.setReadNodeDensityInputFullThenCrop(true);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
   }
 
   void northVegasLargeUniformTest()
@@ -295,15 +303,17 @@ public:
     _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
 
     ChangesetTaskGridReplacer uut;
-    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::Uniform);
     //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setTaskGridBounds("-115.3528,36.0919,-114.9817,36.3447");
-    uut.setUniformGridDimensionSize(8);
-    uut.setTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.3528,36.0919,-114.9817,36.3447", 8,
+        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
   }
 
 private:
