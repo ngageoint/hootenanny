@@ -159,9 +159,9 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
   _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY] = 0;
 }
 
-QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGrid()
+QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGrid()
 {
-  QMap<int, TaskGridCell> taskGrid;
+  QList<TaskGridCell> taskGrid;
   if (!_gridInputs.isEmpty())
   {
     taskGrid = _getTaskGridFromBoundsFiles(_gridInputs);
@@ -173,11 +173,11 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_g
   return taskGrid;
 }
 
-QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGridFromBoundsFiles(
+QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGridFromBoundsFiles(
   const QStringList& inputs)
 {
   LOG_STATUS("Reading " << inputs.size() << " task grid file(s)...");
-  QMap<int, TaskGridCell> taskGrid;
+  QList<TaskGridCell> taskGrid;
   QMap<int, geos::geom::Envelope> taskGridTemp;
   for (int i = 0; i < inputs.size(); i++)
   {
@@ -188,10 +188,11 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_g
          taskGridTempItr != taskGridTemp.end(); ++taskGridTempItr)
     {
       TaskGridCell taskGridCell;
+      taskGridCell.id = taskGridTempItr.key();
       // We don't know the node count when reading the custom grid file.
       taskGridCell.replacementNodeCount = -1;
       taskGridCell.bounds = taskGridTempItr.value();
-      taskGrid[taskGridTempItr.key()] = taskGridCell;
+      taskGrid.append(taskGridCell);
     }
   }
   LOG_STATUS(
@@ -202,7 +203,7 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_g
 OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
 {
   // changeset derive will overwrite these later, if needed
-  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _nodeDensityGridBounds);
+  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _taskGridBounds);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
@@ -237,12 +238,9 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
 //    reader->read(map);
   OsmMapReaderFactory::read(map, _replacementUrl, true, Status::Unknown1);
 
-  if (_readNodeDensityInputFullThenCrop)
-  {
-    // Restore the default setting, or the changeset replacement maps will be loaded very slowly
-    // if loading from URL.
-    conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
-  }
+  // Restore the default setting if it was changed, or the changeset replacement maps will be loaded
+  // very slowly if loading from URL.
+  conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
 
   LOG_STATUS(
     StringUtils::formatLargeNumber(map->size()) << " task grid calc elements prepared " <<
@@ -252,7 +250,7 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
   return map;
 }
 
-QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_calcNodeDensityTaskGrid(
+QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_calcNodeDensityTaskGrid(
   OsmMapPtr map)
 {
   LOG_STATUS(
@@ -272,16 +270,17 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_c
   TileBoundsWriter::writeTilesToOsm(rawTaskGrid, nodeCounts, _nodeDensityTaskGridOutputFile);
 
   // flatten the collection; use a list to maintain order
-  QMap<int, ChangesetTaskGridReplacer::TaskGridCell> taskGrid;
+  QList<TaskGridCell> taskGrid;
   int cellCtr = 1;
   for (size_t tx = 0; tx < rawTaskGrid.size(); tx++)
   {
     for (size_t ty = 0; ty < rawTaskGrid[tx].size(); ty++)
     {
       TaskGridCell taskGridCell;
+      taskGridCell.id = cellCtr;
       taskGridCell.replacementNodeCount = nodeCounts[tx][ty];
       taskGridCell.bounds = rawTaskGrid[tx][ty];
-      taskGrid[cellCtr] = taskGridCell;
+      taskGrid.append(taskGridCell);
       cellCtr++;
     }
   }
@@ -305,7 +304,7 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_c
   return taskGrid;
 }
 
-void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QMap<int, TaskGridCell>& taskGrid)
+void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QList<TaskGridCell>& taskGrid)
 {
   // recommended C&R production config
   _changesetCreator.reset(new ChangesetReplacementCreator(true, "", _dataToReplaceUrl));
@@ -329,14 +328,11 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QMap<int, TaskGridC
   // probably a cleaner way to do this reversal handling...
   if (!_reverseTaskGrid)
   {
-    for (QMap<int, TaskGridCell>::const_iterator taskGridItr = taskGrid.begin();
+    for (QList<TaskGridCell>::const_iterator taskGridItr = taskGrid.begin();
          taskGridItr != taskGrid.end(); ++taskGridItr)
     {
-      const int taskGridCellId = taskGridItr.key();
-      const TaskGridCell taskGridCell = taskGridItr.value();
-      _replaceTaskGridCell(
-        taskGridCellId, changesetCtr + 1, taskGridCell.bounds, taskGrid.size(),
-        taskGridCell.replacementNodeCount);
+      const TaskGridCell taskGridCell = *taskGridItr;
+      _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGrid.size());
 
       if (_killAfterNumChangesetDerivations > 0 &&
           _numChangesetsDerived >= _killAfterNumChangesetDerivations)
@@ -351,17 +347,11 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QMap<int, TaskGridC
   }
   else
   {
-    QMapIterator<int, TaskGridCell> taskGridItr(taskGrid);
-    taskGridItr.toBack();
-    while (taskGridItr.hasPrevious())
+    for (QList<TaskGridCell>::const_reverse_iterator taskGridItr = taskGrid.crbegin();
+         taskGridItr != taskGrid.crend(); ++taskGridItr)
     {
-      taskGridItr.previous();
-
-      const int taskGridCellId = taskGridItr.key();
-      const TaskGridCell taskGridCell = taskGridItr.value();
-      _replaceTaskGridCell(
-        taskGridCellId, changesetCtr + 1, taskGridCell.bounds, taskGrid.size(),
-        taskGridCell.replacementNodeCount);
+      const TaskGridCell taskGridCell = *taskGridItr;
+      _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGrid.size());
 
       if (_killAfterNumChangesetDerivations > 0 &&
           _numChangesetsDerived >= _killAfterNumChangesetDerivations)
@@ -377,35 +367,35 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QMap<int, TaskGridC
 }
 
 void ChangesetTaskGridReplacer::_replaceTaskGridCell(
-  const int taskGridCellId, const int changesetNum, const geos::geom::Envelope& bounds,
-  const int taskGridSize, const int numReplacementNodes)
+  const TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize)
 {
-  if (_taskCellSkipIds.contains(taskGridCellId))
+  if (_taskCellSkipIds.contains(taskGridCell.id))
   {
-    LOG_STATUS("***********Skipping task grid cell: " << taskGridCellId << "*********");
+    LOG_STATUS("***********Skipping task grid cell: " << taskGridCell.id << "*********");
     _subTaskTimer.restart();
     return;
   }
 
-  const QString boundsStr = GeometryUtils::toString(bounds);
+  const QString boundsStr = GeometryUtils::toString(taskGridCell.bounds);
   QFile changesetFile(
     _changesetsOutputDir + "/changeset-cell-" +
-    StringUtils::padFrontOfNumberStringWithZeroes(taskGridCellId, 3) + ".osc.sql");
+    StringUtils::padFrontOfNumberStringWithZeroes(taskGridCell.id, 3) + ".osc.sql");
 
   QString msg =
     "***********Deriving changeset " +
     QString::number(changesetNum) + " / " + StringUtils::formatLargeNumber(taskGridSize) +
-    " for task grid cell: " + QString::number(taskGridCellId);
-  if (numReplacementNodes != -1)
+    " for task grid cell: " + QString::number(taskGridCell.id);
+  if (taskGridCell.replacementNodeCount != -1)
   {
-    msg += ", replacement nodes: " + StringUtils::formatLargeNumber(numReplacementNodes);
+    msg +=
+      ", replacement nodes: " + StringUtils::formatLargeNumber(taskGridCell.replacementNodeCount);
   }
   msg+= "*********";
   LOG_STATUS(msg);
 
-  _changesetCreator->setChangesetId(QString::number(taskGridCellId));
+  _changesetCreator->setChangesetId(QString::number(taskGridCell.id));
   _changesetCreator->create(
-    _dataToReplaceUrl, _replacementUrl, bounds, changesetFile.fileName());
+    _dataToReplaceUrl, _replacementUrl, taskGridCell.bounds, changesetFile.fileName());
 
   _numChangesetsDerived++;
   _totalChangesetDeriveTime += _subTaskTimer.elapsed() / 1000.0;
@@ -415,7 +405,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
 
   LOG_STATUS(
     "Applying changeset: " << changesetNum << " / " <<
-    StringUtils::formatLargeNumber(taskGridSize) << " for task grid cell: " << taskGridCellId <<
+    StringUtils::formatLargeNumber(taskGridSize) << " for task grid cell: " << taskGridCell.id <<
     ", over bounds: " << GeometryUtils::envelopeFromConfigString(boundsStr) << ", from file: ..." <<
     changesetFile.fileName().right(25) << "...");
 
@@ -432,7 +422,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   if (ConfigOptions().getDebugMapsWrite() && changesetNum < taskGridSize)
   {
     _getUpdatedData(
-      _changesetsOutputDir + "/" + QString::number(taskGridCellId) + "-replaced-data.osm");
+      _changesetsOutputDir + "/" + QString::number(taskGridCell.id) + "-replaced-data.osm");
   }
 
   LOG_STATUS(

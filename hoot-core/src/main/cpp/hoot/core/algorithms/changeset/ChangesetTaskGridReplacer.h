@@ -69,6 +69,7 @@ public:
    */
   struct TaskGridCell
   {
+    int id;
     int replacementNodeCount;
     geos::geom::Envelope bounds;
   };
@@ -85,7 +86,7 @@ public:
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setTaskGridType(GridType gridType) { _gridType = gridType; }
-  void setNodeDensityGridBounds(const QString& bounds) { _nodeDensityGridBounds = bounds; }
+  void setTaskGridBounds(const QString& bounds) { _taskGridBounds = bounds; }
   void setReadNodeDensityInputFullThenCrop(bool readFull)
   { _readNodeDensityInputFullThenCrop = readFull; }
   void setNodeDensityMaxNodesPerCell(int maxNodes) { _maxNodeDensityNodesPerCell = maxNodes; }
@@ -119,9 +120,9 @@ private:
   // allows for skipping the processing of any grid cell with an "id" tag value in this ID list;
   // applies to both node density and file based grids
   QList<int> _taskCellSkipIds;
+  // area of the sum of all task grid cells; currently needed for node density calc only
+  QString _taskGridBounds;
 
-  // area of the sum of all task grid cells; needed for node density calc only
-  QString _nodeDensityGridBounds;
   // runtime optimization for large amounts of data at the expense of using extra memory
   bool _readNodeDensityInputFullThenCrop;
   // allows for capping the max number of node density nodes per grid cell
@@ -154,17 +155,15 @@ private:
 
   void _initConfig();
 
-  QMap<int, TaskGridCell> _getTaskGrid();
+  QList<TaskGridCell> _getTaskGrid();
   // This preps the input for node density calc based task grid generation.
   OsmMapPtr _getNodeDensityTaskGridInput();
-  QMap<int, TaskGridCell> _calcNodeDensityTaskGrid(OsmMapPtr map);
-  QMap<int, ChangesetTaskGridReplacer::TaskGridCell> _getTaskGridFromBoundsFiles(
-    const QStringList& inputs);
+  QList<TaskGridCell> _calcNodeDensityTaskGrid(OsmMapPtr map);
+  QList<TaskGridCell> _getTaskGridFromBoundsFiles(const QStringList& inputs);
 
-  void _replaceEntireTaskGrid(const QMap<int, TaskGridCell>& taskGrid);
+  void _replaceEntireTaskGrid(const QList<TaskGridCell>& taskGrid);
   void _replaceTaskGridCell(
-    const int taskGridCellId, const int changesetNum, const geos::geom::Envelope& bounds,
-    const int taskGridSize, const int numReplacementNodes = -1);
+    const TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize);
   void _initChangesetStats();
   void _printChangesetStats();
 

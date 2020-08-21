@@ -55,14 +55,14 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   // TODO: re-enable
-  //CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
-  //CPPUNIT_TEST(vgi1666Test);
-  //CPPUNIT_TEST(vgi1645Test);
+  //CPPUNIT_TEST(github4196Test);
+  //CPPUNIT_TEST(github4174Test);
   //CPPUNIT_TEST(northVegasSmallTest);
   //CPPUNIT_TEST(northVegasMediumTest);
-  CPPUNIT_TEST(northVegasLargeTest);
+  //CPPUNIT_TEST(northVegasLargeTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -117,7 +117,7 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
-  void vgi1666Test()
+  void github4196Test()
   {
     // wasn't able to reproduce the deletion of way "Perry Ellis Drive" with this; possibly the
     // issue was fixed by vgi 1622
@@ -141,9 +141,9 @@ public:
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
   }
 
-  void vgi1645Test()
+  void github4174Test()
   {
-    _testName = "vgi1645Test";
+    _testName = "github4174Test";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
     QDir(outDir).removeRecursively();
@@ -181,7 +181,7 @@ public:
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
     //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setNodeDensityGridBounds("-115.3059,36.2849,-115.2883,36.2991");
+    uut.setTaskGridBounds("-115.3059,36.2849,-115.2883,36.2991");
     uut.setNodeDensityMaxNodesPerCell(1000);
     uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     uut.setReadNodeDensityInputFullThenCrop(true);
@@ -208,7 +208,7 @@ public:
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
     //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setNodeDensityGridBounds("-115.3332,36.2178,-115.1837,36.3400");
+    uut.setTaskGridBounds("-115.3332,36.2178,-115.1837,36.3400");
     uut.setNodeDensityMaxNodesPerCell(10000);
     uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     uut.setReadNodeDensityInputFullThenCrop(true);
@@ -240,7 +240,7 @@ public:
     ChangesetTaskGridReplacer uut;
     uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
     //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setNodeDensityGridBounds("-115.3528,36.0919,-114.9817,36.3447");
+    uut.setTaskGridBounds("-115.3528,36.0919,-114.9817,36.3447");
     uut.setNodeDensityMaxNodesPerCell(100000);
     uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     uut.setReadNodeDensityInputFullThenCrop(true);
