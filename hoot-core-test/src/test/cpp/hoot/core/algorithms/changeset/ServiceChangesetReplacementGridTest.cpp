@@ -54,13 +54,14 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  CPPUNIT_TEST(orphanedNodes1Test);
+  // TODO: re-enable
+  //CPPUNIT_TEST(orphanedNodes1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
   //CPPUNIT_TEST(github4196Test);
   //CPPUNIT_TEST(github4174Test);
   //CPPUNIT_TEST(northVegasSmallTest);
-  //CPPUNIT_TEST(northVegasSmallUniformTest);
+  CPPUNIT_TEST(northVegasSmallUniformTest);
   //CPPUNIT_TEST(northVegasMediumTest);
   //CPPUNIT_TEST(northVegasLargeTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
@@ -294,7 +295,7 @@ public:
     _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
 
     ChangesetTaskGridReplacer uut;
-    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
+    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::Uniform);
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.setTaskGridBounds("-115.3528,36.0919,-114.9817,36.3447");
     uut.setUniformGridDimensionSize(8);

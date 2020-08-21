@@ -237,18 +237,20 @@ QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getUn
   const int rows = ceil(taskGridEnv.getHeight() / heightPerCell);
   const int cols = ceil(taskGridEnv.getWidth() / widthPerCell);
 
-  double xLeftOrigin = taskGridEnv.getMinX();
-  double xRightOrigin = taskGridEnv.getMinX() + widthPerCell;
-  const double yTopOrigin = taskGridEnv.getMaxY();
-  const double yBottomOrigin = taskGridEnv.getMaxY() - heightPerCell;
+  const double cellXLeftOrigin = taskGridEnv.getMinX();
+  const double cellXRightOrigin = taskGridEnv.getMinX() + widthPerCell;
+  const double cellYTopOrigin = taskGridEnv.getMaxY();
+  const double cellYBottomOrigin = taskGridEnv.getMaxY() - heightPerCell;
 
   int cellCtr = 1;
   // used to write boundaries to file after the grid is created
   QList<geos::geom::Envelope> boundaries;
+  double cellXLeft = cellXLeftOrigin;
+  double cellXRight = cellXRightOrigin;
   for (int i = 0; i < cols; i++)
   {
-    double cellYTop = yTopOrigin;
-    double cellYBottom = yBottomOrigin;
+    double cellYTop = cellYTopOrigin;
+    double cellYBottom = cellYBottomOrigin;
 
     for (int j = 0; j < rows; j++)
     {
@@ -256,7 +258,7 @@ QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getUn
       taskGridCell.id = cellCtr;
       // We don't know the individual cell node counts when creating a uniform grid.
       taskGridCell.replacementNodeCount = -1;
-      geos::geom::Envelope taskGridCellEnv(xLeftOrigin, xRightOrigin, cellYBottom, cellYTop);
+      geos::geom::Envelope taskGridCellEnv(cellXLeft, cellXRight, cellYBottom, cellYTop);
       taskGridCell.bounds = taskGridCellEnv;
       boundaries.append(taskGridCell.bounds);
       taskGrid.append(taskGridCell);
@@ -267,8 +269,8 @@ QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getUn
       cellCtr++;
     }
 
-    xLeftOrigin = xLeftOrigin + widthPerCell;
-    xRightOrigin = xRightOrigin + widthPerCell;
+    cellXLeft = cellXLeft + widthPerCell;
+    cellXRight = cellXRight + widthPerCell;
   }
 
   // write out task grid to file
