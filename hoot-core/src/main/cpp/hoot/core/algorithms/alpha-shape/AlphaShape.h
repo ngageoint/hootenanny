@@ -61,6 +61,8 @@ class FaceGroup;
 class OsmMap;
 class Way;
 
+typedef std::shared_ptr<geos::geom::Geometry> GeometryPtr;
+
 /**
  * Representation of an Alpha Shape. Technically an Alpha complex, not an Alpha Shape, but the
  * literature seems to alternate between the terms.
@@ -89,7 +91,7 @@ public:
    *
    * @return a GEOS geometry
    */
-  std::shared_ptr<geos::geom::Geometry> toGeometry();
+  GeometryPtr toGeometry();
 
   /**
    * Inserts points which are used to build the shape
@@ -126,27 +128,23 @@ private:
   std::shared_ptr<Tgs::DelaunayTriangulation> _pDelauneyTriangles;
   std::set<std::pair<double, double>> _outsidePoint;
 
-  std::shared_ptr<geos::geom::Polygon> _convertFaceToPolygon(const Tgs::Face& face) const;
+  GeometryPtr _convertFaceToPolygon(const Tgs::Face& face) const;
 
   /*
    * Returns true if the face is on the boundary of the triangulation
    */
-  bool _isBoundary(const Tgs::Edge& e) const;
+  bool _isBoundary(const double alpha, const Tgs::Edge& e) const;
 
   /*
    * Returns true if the face is inside an alpha shape.
    */
-  bool _isInside(const Tgs::Face& face) const;
+  bool _isInside(const double alpha, const Tgs::Face& face) const;
 
-  /*
-   * Returns true if this edge is part of the artificial outer bounds of the triangulation.
-   */
-  bool _isOutsideEdge(const Tgs::Edge& e) const;
+  bool _isTooLong(const double alpha, const Tgs::Edge& e) const;
 
-  bool _isTooLong(const Tgs::Edge& e) const;
+  double _collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, geos::geom::Envelope& e);
 
-  std::shared_ptr<geos::geom::Geometry> _validateGeometry(
-    const std::shared_ptr<geos::geom::Geometry>& g);
+  GeometryPtr _validateGeometry(const GeometryPtr& g);
 
   std::shared_ptr<OsmMap> _toOsmMap();
 };

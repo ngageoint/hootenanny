@@ -108,6 +108,13 @@ const Edge Edge::getReverse() const { return _ie->Sym(); }
 const Edge Edge::getRightNext() const { return _ie->Rnext(); }
 const Edge Edge::getRightPrevious() const { return _ie->Rprev(); }
 
+inline double distance(double x1, double x2, double y1, double y2)
+{
+  return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
+
+double Edge::getLength() const { return distance(getOriginX(), getDestinationX(), getOriginY(), getDestinationY()); }
+
 bool Edge::operator<(const Edge& e) const
 {
   if (operator==(e))
