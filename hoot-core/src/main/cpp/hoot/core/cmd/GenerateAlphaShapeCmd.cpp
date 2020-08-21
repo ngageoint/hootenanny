@@ -64,17 +64,54 @@ public:
     QElapsedTimer timer;
     timer.start();
 
-    if (args.size() != 4)
+    switch (args.size())
     {
+    default:
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes four parameters.").arg(getName()));
+      throw HootException(QString("%1 takes two, four, or six parameters.").arg(getName()));
+      break;
+    case 2:   //  Input/output filenames only
+    case 4:   //  Input/output filenames and '--alpha'
+    case 6:   //  Input/output filenames, '--alpha' and '--buffer'
+      break;
     }
+    //  Parse and remove the alpha value from the arguments, if present
+    double alpha = -1.0;
+    if (args.contains("--alpha"))
+    {
+      int index = args.indexOf("--alpha");
+      if (index == -1 || index >= args.size() - 1 || args.at(index + 1).startsWith("--"))
+        throw HootException(QString("%1 takes --alpha followed by a positive number.").arg(getName()));
 
-    int i = 0;
-    QString pointsPath = args[i++];
-    double alpha = args[i++].toDouble();
-    double buffer = args[i++].toDouble();
-    QString outputPath = args[i++];
+      bool ok = false;
+      alpha = args.at(index + 1).toDouble(&ok);
+      if (!ok || alpha <= 0.0)
+        throw HootException(QString("%1 takes --alpha followed by a positive number.").arg(getName()));
+
+      args.removeAt(index + 1);
+      args.removeAll("--alpha");
+    }
+    else
+      throw HootException(QString("%1 takes --alpha followed by a positive number.").arg(getName()));
+    //  Parse and remove the buffer value from the arguments, if present
+    double buffer = 0.0;
+    if (args.contains("--buffer"))
+    {
+      int index = args.indexOf("--buffer");
+      if (index == -1 || index >= args.size() - 1 || args.at(index + 1).startsWith("--"))
+        throw HootException(QString("%1 takes --buffer followed by a non-negative number.").arg(getName()));
+
+      bool ok = false;
+      buffer = args.at(index + 1).toDouble(&ok);
+      if (!ok)
+        throw HootException(QString("%1 takes --buffer followed by a number.").arg(getName()));
+
+      args.removeAt(index + 1);
+      args.removeAll("--buffer");
+    }
+    //  Get the input and output paths from the two remaining arguments
+    QString pointsPath = args[0];
+    QString outputPath = args[1];
 
     OsmMapPtr pointsMap(new OsmMap());
     IoUtils::loadMap(pointsMap, pointsPath, false, Status::Unknown1);

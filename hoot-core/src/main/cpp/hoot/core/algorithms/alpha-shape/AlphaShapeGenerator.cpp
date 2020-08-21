@@ -44,12 +44,12 @@ using namespace std;
 namespace hoot
 {
 
-AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer) :
-_alpha(alpha),
-_buffer(buffer),
-_manuallyCoverSmallPointClusters(true),
-_retryOnTooSmallInitialAlpha(true),
-_maxTries(1)
+AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer)
+  : _alpha(alpha),
+    _buffer(buffer),
+    _manuallyCoverSmallPointClusters(true),
+    _retryOnTooSmallInitialAlpha(true),
+    _maxTries(1)
 {
   LOG_VART(_alpha);
   LOG_VART(_buffer);

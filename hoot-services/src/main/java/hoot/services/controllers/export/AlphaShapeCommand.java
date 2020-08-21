@@ -73,7 +73,7 @@ class AlphaShapeCommand extends ExportCommand {
         substitutionMap.put("ALPHA", String.valueOf(params.getAlpha()));
         substitutionMap.put("BUFFER", String.valueOf(params.getBuffer()));
 
-        String command = "hoot.bin generate-alpha-shape --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${ALPHA} ${BUFFER} ${OUTPUT}";
+        String command = "hoot.bin generate-alpha-shape --${DEBUG_LEVEL} ${HOOT_OPTIONS} --alpha ${ALPHA} --buffer ${BUFFER} ${INPUTS} ${OUTPUT}";
 
         super.configureCommand(command, substitutionMap, caller, new File("/tmp"));
     }

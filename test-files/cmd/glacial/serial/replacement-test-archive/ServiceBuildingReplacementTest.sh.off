@@ -64,7 +64,7 @@ hoot convert $GENERAL_OPTS $DB_OPTS $PRUNE_AND_CROP_OPTS -D debug.maps.filename=
 # COOKIE CUTTING
 
 echo "cookie cut"
-hoot generate-alpha-shape $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/alpha-shape.osm -D reader.use.data.source.ids=true $OUT_DIR/$TEST_NAME-sec-cropped.osm 1000 0 $OUT_DIR/$TEST_NAME-cutter-shape.osm
+hoot generate-alpha-shape $GENERAL_OPTS -D debug.maps.filename=$OUT_DIR/alpha-shape.osm -D reader.use.data.source.ids=true --alpha 1000 --buffer 0 $OUT_DIR/$TEST_NAME-sec-cropped.osm $OUT_DIR/$TEST_NAME-cutter-shape.osm
 # Need to force not cutting up any ref features crossing the bounds here.
 hoot cookie-cut $GENERAL_OPTS $COOKIE_CUT_OPTS $OUT_DIR/$TEST_NAME-cutter-shape.osm $OUT_DIR/$TEST_NAME-ref-cropped.osm $OUT_DIR/$TEST_NAME-cookie-cut.osm
 

@@ -11,15 +11,15 @@ value equal to the maximum distance between any two points in the data or larger
 can be found in the _Cookie Cutter_ section of <<hootalgo, Hootenanny - Algorithms>> and in the following documents:
 https://github.com/ngageoint/hootenanny/files/595246/Hootenanny.-.Alpha.Shape.2013-03-07.pptx[here].
 
-* +points+ - The input data to use for deriving the alpha shape; may be any supported input format (e.g. OSM file). The alpha shape algorithm 
-             is used to derive a polygon representing the bounds.
-* +alpha+  - The size in meters used for alpha. A larger value makes a smoother shape and a smaller value will create a rough shape with more 
-             holes. Value in meters.
-* +buffer+ - The buffer to add to the alpha shape before cutting. A negative value will make the shape smaller. Value in meters. Generally a 
-             buffer of zero will be used. If using the alpha shape command with cookie cutter it is a good idea to use a larger negative value 
-             on complex data shapes. This will limit the number of holes in the data. A negative value equal to the alpha value is a good rule 
-             of thumb.
-* +output+ - The output; may be any supported output format (e.g. OSM file).
+* +--alpha value+   - The size in meters used for alpha. A larger value makes a smoother shape and a smaller value will create a rough shape with more
+                      holes. Value in meters.
+* +--buffer value+  - The buffer to add to the alpha shape before cutting. A negative value will make the shape smaller. Value in meters. Generally a
+                      buffer of zero will be used. If using the alpha shape command with cookie cutter it is a good idea to use a larger negative value
+                      on complex data shapes. This will limit the number of holes in the data. A negative value equal to the alpha value is a good rule
+                      of thumb. Default value of the buffer is 0 meters.
+* +points+          - The input data to use for deriving the alpha shape; may be any supported input format (e.g. OSM file). The alpha shape algorithm
+                      is used to derive a polygon representing the bounds.
+* +output+          - The output; may be any supported output format (e.g. OSM file).
 
 When output to a +.osm+ file the alpha shape will always be a multi-polygon with one attribute +area=yes+. When output as a Shapefile it will 
 be a multipolygon shapefile with a single record. Hootenanny doesn't support relations in +.osm.pbf+ files.
@@ -27,16 +27,31 @@ be a multipolygon shapefile with a single record. Hootenanny doesn't support rel
 === Usage
 
 --------------------------------------
-generate-alpha-shape (points) (alpha) (buffer) (output)
+generate-alpha-shape (--alpha value) [--buffer value] (points) (alpha)
 --------------------------------------
 
 ==== Example
 
-Calculate an alpha shape using the points in CapitalHeightsBuildings.shp:
+Calculate an alpha shape using the points in CapitalHeightsBuildings.shp with an alpha value of 200 m:
+(Both commands are functionally equivalent.)
 
 --------------------------------------
-hoot generate-alpha-shape CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.shp
+hoot generate-alpha-shape --alpha 200 CapitalHeightsBuildings.shp CapitalHeightsShape.shp
+hoot generate-alpha-shape --alpha 200 --buffer 0 CapitalHeightsBuildings.shp CapitalHeightsShape.shp
 --------------------------------------
+
+Calculate an alpha shape using the same input with an alpha value of 200 m and a buffer of -10 m:
+
+--------------------------------------
+hoot generate-alpha-shape --alpha 200 --buffer -10 CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.shp
+--------------------------------------
+
+Calculate an alpha shape without an alpha value that is automatically generated based on the input data, and a buffer of 10 m:
+
+--------------------------------------
+hoot generate-alpha-shape --buffer 10 CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.shp
+--------------------------------------
+
 
 === See Also
 

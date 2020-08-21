@@ -214,7 +214,6 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
     LOG_STATUS(
       "Preparing input data for task grid cell calculation from: ..." <<
       _replacementUrl.right(25) << "...");
-    assert(HootApiDbReader::isSupported(_replacementUrl));
 
     // Getting large amounts of data via bbox can actually be slower than reading all of the data
     // and then cropping it, due to bounded query performance. #4192 improved this gap, but the
