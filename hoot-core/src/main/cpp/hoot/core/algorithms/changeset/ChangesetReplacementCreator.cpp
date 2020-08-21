@@ -34,11 +34,14 @@
 
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
+
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementIdCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
@@ -57,6 +60,7 @@
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
 #include <hoot/core/elements/ElementDeduplicator.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/elements/ElementIdSynchronizer.h>
 #include <hoot/core/elements/MapUtils.h>
 
@@ -67,18 +71,22 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/PointsToPolysConverter.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/ops/WayJoinerOp.h>
+
+#include <hoot/core/schema/OsmSchema.h>
 
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/CollectionUtils.h>
@@ -98,6 +106,11 @@
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
+
+// tgs
+#include <tgs/RStarTree/MemoryPageStore.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -540,8 +553,19 @@ void ChangesetReplacementCreator::_create()
 //  }
 
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
-  // create/delete statements.
+  // create/delete statements. This must be done with the ref/sec maps separated to avoid ID
+  // conflicts.
+  // TODO: move this to inside the geometry pass loop?
   _synchronizeIds(refMaps, conflatedMaps);
+
+  // TODO: explain
+  // TODO: This can probably be moved to inside the geometry pass loop.
+//  if (_boundsInterpretation == BoundsInterpretation::Lenient &&
+//      _currentChangeDerivationPassIsLinear)
+//  {
+//    _repairLinearGaps(
+//      _getMapByGeometryType(refMaps, "line"), _getMapByGeometryType(conflatedMaps, "line"));
+//  }
 
   // CHANGESET GENERATION
 
@@ -557,6 +581,173 @@ void ChangesetReplacementCreator::_create()
     "Derived replacement changeset: ..." <<
     _output.right(ConfigOptions().getProgressVarPrintLengthMax()) << " in " <<
     StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+}
+
+void ChangesetReplacementCreator::_repairLinearGaps(
+  OsmMapPtr& mapBeingReplaced, OsmMapPtr& replacementMap)
+{
+  // get a list of all mapBeingReplaced feature IDs that overlap the replacement bounds
+  std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(false));
+  boundsCrit->setBounds(GeometryUtils::envelopeFromConfigString(_replacementBounds));
+  boundsCrit->setOsmMap(mapBeingReplaced.get());
+  UniqueElementIdVisitor idVis1;
+  FilteredVisitor overlappingIdVis(*boundsCrit, idVis1);
+  mapBeingReplaced->visitRo(overlappingIdVis);
+  const std::set<ElementId>& overlappingRefIds = idVis1.getElementSet();
+
+  // filter the overlapping feature IDs down further to just those being replaced (all IDs in
+  // mapBeingReplaced and not in replacementMap)
+  ElementIdCriterion idCrit(overlappingRefIds);
+  UniqueElementIdVisitor idVis2;
+  FilteredVisitor containedInReplacementIdVis(idCrit, idVis2);
+  replacementMap->visitRo(containedInReplacementIdVis);
+  const std::set<ElementId>& overlappingContainedRefIds = idVis2.getElementSet();
+
+  // build up a temp map of the overlapping features
+  OsmMapPtr mapBeingReplacedTemp(new OsmMap());
+  for (std::set<ElementId>::const_iterator itr = overlappingContainedRefIds.begin();
+       itr != overlappingContainedRefIds.end(); ++itr)
+  {
+    ElementPtr overlappingRefElement = mapBeingReplaced->getElement(*itr);
+    if (overlappingRefElement)
+    {
+      mapBeingReplacedTemp->addElement(overlappingRefElement);
+    }
+  }
+  OsmMapWriterFactory::writeDebugMap(
+    mapBeingReplacedTemp,
+    _changesetId + "-" + mapBeingReplacedTemp->getName() + "-repair-linear-gaps-replaced-temp");
+
+  // filter a copy of the replacement map down to just bounds overlapping
+  boundsCrit->setOsmMap(replacementMap.get());
+  OsmMapPtr replacementMapTemp = MapUtils::getMapSubset(replacementMap, boundsCrit);
+
+  // combine the temp maps together; mapBeingReplaced features will have status1 and replacementMap
+  // features will have status2 (TODO: deal with conflated status)
+  _combineMaps(
+    replacementMapTemp, mapBeingReplacedTemp, true,
+    _changesetId + "-repair-linear-gaps-temp-combined");
+
+  // build up a spatial index for all linear features in the combined map
+  std::shared_ptr<Tgs::HilbertRTree> index;
+  std::deque<ElementId> indexToEid;
+  std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
+  index.reset(new Tgs::HilbertRTree(mps, 2));
+  SpatialIndexer v(
+    index, indexToEid, std::shared_ptr<LinearCriterion>(new LinearCriterion()),
+    std::bind(&ChangesetReplacementCreator::_getSearchRadius, this, std::placeholders::_1),
+    replacementMapTemp);
+  replacementMapTemp->visitRo(v);
+  v.finalizeIndex();
+
+  // TODO
+  OsmMapPtr boundsMap(new OsmMap());
+  const ElementId boundsWayId =
+    GeometryUtils::createBoundsInMap(
+      boundsMap, GeometryUtils::envelopeFromConfigString(_replacementBounds));
+  WayPtr boundsWay = boundsMap->getWay(boundsWayId.getId());
+  replacementMapTemp->addWay(boundsWay);
+
+  // for each mapBeingReplaced feature, find all nearby features
+  OsmSchema& schema = OsmSchema::getInstance();
+  for (std::set<ElementId>::const_iterator itr = overlappingContainedRefIds.begin();
+       itr != overlappingContainedRefIds.end(); ++itr)
+  {
+    ElementPtr overlappingRefElement = replacementMapTemp->getElement(*itr);
+    if (overlappingRefElement)
+    {
+      std::shared_ptr<geos::geom::Envelope> env(
+        overlappingRefElement->getEnvelope(replacementMapTemp));
+      env->expandBy(_getSearchRadius(overlappingRefElement));
+      std::set<ElementId> neighbors =
+        SpatialIndexer::findNeighbors(*env, index, indexToEid, replacementMapTemp);
+
+      // for each neighbor, check that the types match, it is a replacement features, and it is
+      // overlapping
+      for (std::set<ElementId>::const_iterator itr2 = neighbors.begin(); itr2 != neighbors.end();
+           ++itr2)
+      {
+        ElementPtr neighbor = replacementMapTemp->getElement(*itr2);
+        if (neighbor && neighbor->getStatus() == Status::Unknown2)
+        {
+          const bool hasExplicitTypeMismatch =
+            schema.explicitTypeMismatch(overlappingRefElement->getTags(), neighbor->getTags(), 0.8);
+          if (!hasExplicitTypeMismatch)
+          {
+            // for each overlapping subline replacementMap feature (hopefully, just one)
+            if (ElementGeometryUtils::haveGeometricRelationship(
+                  overlappingRefElement, neighbor, GeometricRelationship::Overlaps,
+                  replacementMapTemp))
+            {
+              // find the end of it that is out of bounds
+              WayPtr wayNeighbor = std::dynamic_pointer_cast<Way>(neighbor);
+              int nodeIndex = -1;
+              NodePtr firstNode = replacementMapTemp->getNode(wayNeighbor->getFirstNodeId());
+              NodePtr lastNode = replacementMapTemp->getNode(wayNeighbor->getLastNodeId());
+              if (firstNode &&
+                  ElementGeometryUtils::haveGeometricRelationship(
+                    boundsWay, firstNode, GeometricRelationship::Contains, replacementMapTemp))
+              {
+                nodeIndex = 0;
+              }
+              else if (lastNode &&
+                        ElementGeometryUtils::haveGeometricRelationship(
+                          boundsWay, lastNode, GeometricRelationship::Contains, replacementMapTemp))
+              {
+                nodeIndex = wayNeighbor->getNodeCount() - 1;
+              }
+              if (nodeIndex != -1)
+              {
+                WayPtr overlappingRefWay = std::dynamic_pointer_cast<Way>(overlappingRefElement);
+
+                // split the mapBeingReplaced feature at that point
+                WayLocation wayLoc(replacementMapTemp, wayNeighbor, nodeIndex, 0.0);
+                std::vector<WayPtr> splits =
+                  WaySplitter::split(replacementMapTemp, overlappingRefWay, wayLoc);
+
+                // discard the section that crosses into the replacement bounds
+                RemoveElementByEid::removeElement(replacementMapTemp, splits[1]->getElementId());
+
+                // snap the remaining section to the point
+                WayPtr modifiedRefWay = splits[0];
+                modifiedRefWay->getTags()["hoot::cr_linear_repaired"] = "yes";
+                // TODO: finish
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // copy all modified ref ways to the actual replacement map
+  CopyMapSubsetOp mapCopier(
+    replacementMapTemp,
+    std::shared_ptr<TagKeyCriterion>(new TagKeyCriterion("hoot::cr_linear_repaired")));
+  OsmMapPtr modifiedRefWays(new OsmMap());
+  mapCopier.apply(modifiedRefWays);
+  _combineMaps(
+    replacementMap, modifiedRefWays, true, _changesetId + "-repair-linear-gaps-replacement-final");
+}
+
+Meters ChangesetReplacementCreator::_getSearchRadius(const ConstElementPtr& e) const
+{
+  return e->getCircularError();
+}
+
+OsmMapPtr ChangesetReplacementCreator::_getMapByGeometryType(const QList<OsmMapPtr>& maps,
+                                                             const QString& geometryTypeStr)
+{
+  for (int i = 0; i < maps.size(); i++)
+  {
+    OsmMapPtr map = maps.at(i);
+    // TODO
+    if (map->getName().contains(geometryTypeStr))
+    {
+      return map;
+    }
+  }
+  return OsmMapPtr();
 }
 
 void ChangesetReplacementCreator::_getMapsForGeometryType(
@@ -698,7 +889,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     }
   }
 
-  if (refMapSize == 0 && conflatedMap == 0)
+  if (refMap->size() == 0 && conflatedMap->size() == 0)
   {
     LOG_STATUS("Both maps empty, so skipping changeset derivation...");
   }
@@ -720,7 +911,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     // want to snap ways of like types together, so we'll loop through each applicable linear type
     // and snap them separately.
 
-    LOG_INFO("Snapping unconnected ways to each other...");
+    LOG_INFO("Snapping unconnected ways to each other in replacement map...");
     QStringList snapWayStatuses("Input2");
     snapWayStatuses.append("Conflated");
     QStringList snapToWayStatuses("Input1");
@@ -745,7 +936,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
       _currentChangeDerivationPassIsLinear)
   {
     // If we're conflating linear features with the lenient bounds requirement, copy the
-    // immediately connected out of bounds ways to a new temp map. We'll lose those ways once we
+    // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
     // crop in preparation for changeset derivation. If we don't introduce them back during
     // changeset derivation, they may not end up being snapped back to the replacement data.
 
@@ -763,6 +954,14 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   if (_boundsInterpretation == BoundsInterpretation::Lenient &&
       _currentChangeDerivationPassIsLinear)
   {
+    // The non-strict bounds interpreation way replacement workflow benefits from a second
+    // set of snapping runs right before changeset derivation due to there being ways connected to
+    // replacement ways that fall completely outside of the replacement bounds. However, joining
+    // after this snapping caused changeset errors with some datasets and hasn't seem to be needed
+    // so far...so skipping it. Note that we're being as lenient as possible with the snapping
+    // here, allowing basically anything to join to anything else, which *could* end up causing
+    // problems...we'll go with it for now.
+
     QStringList snapWayStatuses("Input2");
     snapWayStatuses.append("Conflated");
     snapWayStatuses.append("Input1");
@@ -773,14 +972,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
     if (_waySnappingEnabled)
     {
-      // The non-strict way replacement workflow benefits from a second snapping run right before
-      // changeset derivation due to there being ways connected to replacement ways that fall
-      // completely outside of the bounds. However, joining after this snapping caused changeset
-      // errors with some datasets and hasn't seem to be needed for now...so skipping it. Note that
-      // we're being as lenient as possible with the snapping here, allowing basically anything to
-      // join to anything else, which could end up causing problems...we'll go with it for now.
-
-      LOG_INFO("Snapping unconnected ways to each other...");
+      // Snap anything that can be snapped per feature type.
+      LOG_INFO("Snapping unconnected ways to each other in replacement map...");
       for (int i = 0; i < linearFilterClassNames.size(); i++)
       {
         _snapUnconnectedWays(
@@ -794,11 +987,11 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
       conflatedMap, immediatelyConnectedOutOfBoundsWays, true,
       _changesetId + "-conflated-connected-combined");
 
-    // Snap the connected ways to other ways in the conflated map. Mark the ways that were
-    // snapped, as we'll need that info in the next step.
     if (_waySnappingEnabled)
     {
-      LOG_INFO("Snapping unconnected ways to each other...");
+      // Snap the connected ways to other ways in the conflated map. Mark the ways that were
+      // snapped, as we'll need that info in the next step.
+      LOG_INFO("Snapping unconnected ways to each other in replacement map...");
       for (int i = 0; i < linearFilterClassNames.size(); i++)
       {
         _snapUnconnectedWays(
@@ -1595,10 +1788,10 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VART(cutterMapToUse->size());
   OsmMapWriterFactory::writeDebugMap(cutterMapToUse, _changesetId + "-cutter-map-to-use");
 
-  LOG_INFO("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
+  LOG_STATUS("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
 
-  // TODO: Alpha shape generation and/or cookie cutting for line features is our bottleneck for C&R.
-  // Not sure if anything can be done to improve the performance...
+  // TODO: Alpha shape generation and cookie cutting for line features is our current bottleneck for
+  // C&R. Not sure yet if anything can be done to improve the performance...
 
   LOG_VART(cookieCutterAlpha);
   LOG_VART(cookieCutterAlphaShapeBuffer);
@@ -1618,7 +1811,6 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
         GeometryTypeCriterion::typeToString(geometryType) << ". Is your secondary data empty " <<
         "or have you filtered it to be empty? error: " << e.getWhat());
     }
-    // rethrow the original exception
     throw;
   }
 
@@ -1628,7 +1820,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, _changesetId + "-cutter-shape");
 
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
-  LOG_INFO("Cutting cutter shape out of: " << cookieCutMap->getName() << "...");
+  LOG_STATUS("Cutting cutter shape out of: " << cookieCutMap->getName() << "...");
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
@@ -1636,7 +1828,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
     false, 0.0, _boundsOpts.cookieCutKeepEntireCrossingBounds,
     _boundsOpts.cookieCutKeepOnlyInsideBounds, false)
     .cut(cutterShapeOutlineMap, cookieCutMap);
-  MapProjector::projectToWgs84(cookieCutMap); // not exactly sure yet why this needs to be done
+  // not exactly sure yet why this projection needs to be done
+  MapProjector::projectToWgs84(cookieCutMap);
   LOG_VARD(cookieCutMap->size());
   MapProjector::projectToWgs84(doughMap);
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
@@ -1921,7 +2114,7 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
     "Marking reference features in: " << map->getName() << " for exclusion from deletion...");
 
   // Exclude ways and all their children from deletion that are not entirely within the replacement
-  // bounds (?).
+  // bounds.
 
   std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(_boundsOpts.inBoundsStrict));
   boundsCrit->setBounds(GeometryUtils::envelopeFromConfigString(_replacementBounds));

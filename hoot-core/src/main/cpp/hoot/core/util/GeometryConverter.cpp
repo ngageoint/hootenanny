@@ -99,8 +99,8 @@ std::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const Geom
   }
 }
 
-std::shared_ptr<Element> GeometryConverter::convertGeometryToElement(const Geometry* g, Status s,
-  double circularError)
+std::shared_ptr<Element> GeometryConverter::convertGeometryToElement(
+  const Geometry* g, Status s, double circularError)
 {
   LOG_VART(g->getGeometryTypeId());
   switch (g->getGeometryTypeId())

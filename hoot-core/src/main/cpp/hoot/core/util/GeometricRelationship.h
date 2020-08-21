@@ -38,6 +38,10 @@ namespace hoot
 
 /**
  * Enumeration mirroring the types of geometric comparisons availabe from geos::geom::Geometry
+ *
+ * Helpful link visually explaining the relationship:
+ *
+ * https://gis.stackexchange.com/questions/217444/understanding-join-attributes-by-location-in-qgis
  */
 class GeometricRelationship
 {

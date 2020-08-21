@@ -59,10 +59,10 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
   //CPPUNIT_TEST(vgi1666Test);
-  CPPUNIT_TEST(vgi1645Test);
+  //CPPUNIT_TEST(vgi1645Test);
   //CPPUNIT_TEST(northVegasSmallTest);
   //CPPUNIT_TEST(northVegasMediumTest);
-  //CPPUNIT_TEST(northVegasLargeTest);
+  CPPUNIT_TEST(northVegasLargeTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -220,8 +220,15 @@ public:
 
   void northVegasLargeTest()
   {
+    // lenient
+
     // whole northern half of city, 64 changesets, ~26.5M changes, avg derivation: 2.8m,
     // total time: 3.27h, ~135k changes/min
+
+    // hybrid
+
+    // whole northern half of city, 64 changesets, ~26.5M changes, avg derivation: 2.5m,
+    // total time: ~3h, ~147k changes/min
 
     _testName = "vegasLargeTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";

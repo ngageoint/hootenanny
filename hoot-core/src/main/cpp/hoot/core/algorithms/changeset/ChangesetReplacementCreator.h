@@ -399,6 +399,14 @@ private:
    */
   void _synchronizeIds(
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
+
+  /*
+   * TODO
+   */
+  void _repairLinearGaps(OsmMapPtr& mapBeingReplaced, OsmMapPtr& replacementMap);
+  Meters _getSearchRadius(const ConstElementPtr& e) const;
+
+  OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
 };
 
 }

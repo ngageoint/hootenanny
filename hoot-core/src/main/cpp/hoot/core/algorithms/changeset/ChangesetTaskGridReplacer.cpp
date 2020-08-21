@@ -161,8 +161,6 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
 
 QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGrid()
 {
-  LOG_STATUS("Creating task grid...");
-
   QMap<int, TaskGridCell> taskGrid;
   if (!_gridInputs.isEmpty())
   {
@@ -178,7 +176,7 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_g
 QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGridFromBoundsFiles(
   const QStringList& inputs)
 {
-  LOG_INFO("Reading " << inputs.size() << " task grid file(s)...");
+  LOG_STATUS("Reading " << inputs.size() << " task grid file(s)...");
   QMap<int, TaskGridCell> taskGrid;
   QMap<int, geos::geom::Envelope> taskGridTemp;
   for (int i = 0; i < inputs.size(); i++)
@@ -309,8 +307,6 @@ QMap<int, ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_c
 
 void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QMap<int, TaskGridCell>& taskGrid)
 {
-  LOG_STATUS("Replacing data in task grid...");
-
   // recommended C&R production config
   _changesetCreator.reset(new ChangesetReplacementCreator(true, "", _dataToReplaceUrl));
   _changesetCreator->setFullReplacement(true);
@@ -330,7 +326,7 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const QMap<int, TaskGridC
   _numChangesetsDerived = 0;
   _totalChangesetDeriveTime = 0.0;
   int changesetCtr = 0;
-  // probably a cleaner way to do this...
+  // probably a cleaner way to do this reversal handling...
   if (!_reverseTaskGrid)
   {
     for (QMap<int, TaskGridCell>::const_iterator taskGridItr = taskGrid.begin();
@@ -540,12 +536,10 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   OsmMapWriterFactory::write(map, outputFile);
 
   LOG_STATUS(
-    "\tModified data read in: " <<
+    "Modified data original size: " << StringUtils::formatLargeNumber(_originalDataSize) <<
+    ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
-  LOG_STATUS(
-    "\tModified data original size: " << StringUtils::formatLargeNumber(_originalDataSize));
-  LOG_STATUS("\tModified data current size: " << StringUtils::formatLargeNumber(map->size()));
 }
 
 }
