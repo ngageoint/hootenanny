@@ -50,9 +50,10 @@ namespace hoot
 ChangesetTaskGridReplacer::ChangesetTaskGridReplacer() :
 _originalDataSize(0),
 _gridType(GridType::NodeDensity),
+_reverseTaskGrid(false),
 _readNodeDensityInputFullThenCrop(false),
 _maxNodeDensityNodesPerCell(1000),
-_reverseTaskGrid(false),
+_uniformGridDimensionSize(2),
 _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
@@ -162,13 +163,32 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
 QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGrid()
 {
   QList<TaskGridCell> taskGrid;
-  if (!_gridInputs.isEmpty())
+  if (_gridType == GridType::InputFile)
   {
+    if (_gridInputs.isEmpty())
+    {
+      throw IllegalArgumentException("TODO");
+    }
+
     taskGrid = _getTaskGridFromBoundsFiles(_gridInputs);
+  }
+  else if (_gridType == GridType::NodeDensity)
+  {
+    if (_taskGridOutputFile.trimmed().isEmpty())
+    {
+      throw IllegalArgumentException("TODO");
+    }
+
+    taskGrid = _calcNodeDensityTaskGrid(_getNodeDensityTaskGridInput());
   }
   else
   {
-    taskGrid = _calcNodeDensityTaskGrid(_getNodeDensityTaskGridInput());
+    if (_taskGridOutputFile.trimmed().isEmpty())
+    {
+      throw IllegalArgumentException("TODO");
+    }
+
+    taskGrid = _getUniformTaskGrid(_uniformGridDimensionSize);
   }
   return taskGrid;
 }
@@ -176,7 +196,7 @@ QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTa
 QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTaskGridFromBoundsFiles(
   const QStringList& inputs)
 {
-  LOG_STATUS("Reading " << inputs.size() << " task grid file(s)...");
+  LOG_INFO("Reading " << inputs.size() << " task grid file(s)...");
   QList<TaskGridCell> taskGrid;
   QMap<int, geos::geom::Envelope> taskGridTemp;
   for (int i = 0; i < inputs.size(); i++)
@@ -196,7 +216,68 @@ QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getTa
     }
   }
   LOG_STATUS(
-    "Read " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells.");
+    "Read " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells from " <<
+    inputs.size() << " file(s).");
+  return taskGrid;
+}
+
+QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_getUniformTaskGrid(
+  const int dimensionSize)
+{
+  LOG_INFO(
+    "Creating uniform task grid with " << dimensionSize << "x" << dimensionSize <<
+    " cells across bounds: " << _taskGridBounds << "...");
+
+  QList<TaskGridCell> taskGrid;
+
+  const geos::geom::Envelope taskGridEnv = GeometryUtils::envelopeFromConfigString(_taskGridBounds);
+  const double widthPerCell = taskGridEnv.getWidth() / (double)dimensionSize;
+  const double heightPerCell = taskGridEnv.getHeight() / (double)dimensionSize;
+
+  const int rows = ceil(taskGridEnv.getHeight() / heightPerCell);
+  const int cols = ceil(taskGridEnv.getWidth() / widthPerCell);
+
+  double xLeftOrigin = taskGridEnv.getMinX();
+  double xRightOrigin = taskGridEnv.getMinX() + widthPerCell;
+  const double yTopOrigin = taskGridEnv.getMaxY();
+  const double yBottomOrigin = taskGridEnv.getMaxY() - heightPerCell;
+
+  int cellCtr = 1;
+  // used to write boundaries to file after the grid is created
+  QList<geos::geom::Envelope> boundaries;
+  for (int i = 0; i < cols; i++)
+  {
+    double cellYTop = yTopOrigin;
+    double cellYBottom = yBottomOrigin;
+
+    for (int j = 0; j < rows; j++)
+    {
+      TaskGridCell taskGridCell;
+      taskGridCell.id = cellCtr;
+      // We don't know the individual cell node counts when creating a uniform grid.
+      taskGridCell.replacementNodeCount = -1;
+      geos::geom::Envelope taskGridCellEnv(xLeftOrigin, xRightOrigin, cellYBottom, cellYTop);
+      taskGridCell.bounds = taskGridCellEnv;
+      boundaries.append(taskGridCell.bounds);
+      taskGrid.append(taskGridCell);
+
+      cellYTop = cellYTop - heightPerCell;
+      cellYBottom = cellYBottom - heightPerCell;
+
+      cellCtr++;
+    }
+
+    xLeftOrigin = xLeftOrigin + widthPerCell;
+    xRightOrigin = xRightOrigin + widthPerCell;
+  }
+
+  // write out task grid to file
+  OsmMapWriterFactory::write(
+    GeometryUtils::createMapFromBoundsCollection(boundaries), _taskGridOutputFile);
+
+  LOG_STATUS(
+    "Created uniform task grid with " << dimensionSize << "x" << dimensionSize <<
+    " cells across bounds: " << _taskGridBounds << "...");
   return taskGrid;
 }
 
@@ -209,9 +290,10 @@ OsmMapPtr ChangesetTaskGridReplacer::_getNodeDensityTaskGridInput()
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
 
+  // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
   LOG_STATUS(
     "Preparing input data for task grid cell calculation from: ..." <<
-    _replacementUrl.right(25) << "...");
+    _replacementUrl.right(25) << ", across bounds: " << _taskGridBounds << "...");
   assert(HootApiDbReader::isSupported(_replacementUrl));
 
   // Getting large amounts of data via bbox can actually be slower than reading all of the data
@@ -255,7 +337,7 @@ QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_calcN
 {
   LOG_STATUS(
     "Calculating task grid cells for replacement data to: ..." <<
-    _nodeDensityTaskGridOutputFile.right(25) << "...");
+    _taskGridOutputFile.right(25) << "...");
   NodeDensityTileBoundsCalculator boundsCalc;
   boundsCalc.setPixelSize(0.001);
   boundsCalc.setMaxNodesPerTile(_maxNodeDensityNodesPerCell);
@@ -267,7 +349,7 @@ QList<ChangesetTaskGridReplacer::TaskGridCell> ChangesetTaskGridReplacer::_calcN
   map.reset();
   const std::vector<std::vector<geos::geom::Envelope>> rawTaskGrid = boundsCalc.getTiles();
   const std::vector<std::vector<long>> nodeCounts = boundsCalc.getNodeCounts();
-  TileBoundsWriter::writeTilesToOsm(rawTaskGrid, nodeCounts, _nodeDensityTaskGridOutputFile);
+  TileBoundsWriter::writeTilesToOsm(rawTaskGrid, nodeCounts, _taskGridOutputFile);
 
   // flatten the collection; use a list to maintain order
   QList<TaskGridCell> taskGrid;

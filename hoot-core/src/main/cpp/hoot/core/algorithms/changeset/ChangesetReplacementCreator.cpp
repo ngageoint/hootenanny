@@ -578,8 +578,7 @@ void ChangesetReplacementCreator::_create()
   _changesetCreator->create(refMaps, conflatedMaps, _output);
 
   LOG_STATUS(
-    "Derived replacement changeset: ..." <<
-    _output.right(ConfigOptions().getProgressVarPrintLengthMax()) << " in " <<
+    "Derived replacement changeset: ..." << _output.right(_maxFilePrintLength) << " in " <<
     StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 

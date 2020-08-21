@@ -345,6 +345,18 @@ OsmMapPtr GeometryUtils::createMapFromBounds(const geos::geom::Envelope& bounds)
   return boundaryMap;
 }
 
+OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
+  const QList<geos::geom::Envelope>& boundsCollection)
+{
+  OsmMapPtr boundariesMap(new OsmMap());
+  for (QList<geos::geom::Envelope>::const_iterator boundsItr = boundsCollection.begin();
+       boundsItr != boundsCollection.end(); ++boundsItr)
+  {
+    createBoundsInMap(boundariesMap, *boundsItr);
+  }
+  return boundariesMap;
+}
+
 ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds)
 {
   NodePtr lowerLeft(

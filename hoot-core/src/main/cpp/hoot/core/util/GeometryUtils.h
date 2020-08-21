@@ -139,12 +139,21 @@ public:
   static geos::geom::Geometry* validatePolygon(const geos::geom::Polygon* p);
 
   /**
-   * Creates a rectangular map representing a bounding box; useful for debugging
+   * Creates a rectangular map representing a single bounding box
    *
    * @param bounds bounding box
    * @return a bounding box map
    */
   static OsmMapPtr createMapFromBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * Creates a rectangular map representing multiple bounding boxes
+   *
+   * @param boundsCollection a collection of bounding boxes
+   * @return a bounding box map
+   */
+  static OsmMapPtr createMapFromBoundsCollection(
+    const QList<geos::geom::Envelope>& boundsCollection);
 
   /**
    * Creates a bounding rectangle within the specified map

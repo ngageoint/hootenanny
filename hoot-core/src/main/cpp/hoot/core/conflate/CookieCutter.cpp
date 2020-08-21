@@ -99,7 +99,8 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   cropper.setInvert(!_crop);
   cropper.setRemoveSuperflousFeatures(true);
   cropper.setRemoveMissingElements(_removeMissingElements);
-  LOG_STATUS(cropper.getInitStatusMessage());
+  LOG_STATUS("Cropping map...");
+  LOG_DEBUG(cropper.getInitStatusMessage());
   cropper.apply(doughMap);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
 

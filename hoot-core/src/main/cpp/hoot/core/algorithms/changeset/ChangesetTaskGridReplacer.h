@@ -43,10 +43,12 @@ class OsmApiDbSqlChangesetApplier;
  * This class can replace data in an OSM API database across multiple AOI's via changeset generation
  * and application.
  *
- * Either an auto node density generated task grid or a task grid from one or more bounds input
- * files may be used to partition the data replacements. Node density calc requires reading in all
- * of the replacement node data, so may not be feasible when replacing extremely large amounts of
- * data.
+ * Either an auto node density generated, uniform, or file based input task grid may be used to
+ * partition the data replacements. The file based task grid supports one or more bounds input
+ * files. Node density calc requires reading in all of the replacement node data, so may not be
+ * feasible when replacing extremely large amounts of data.
+ *
+ * @todo separate task grid generation out into its own class
  */
 class ChangesetTaskGridReplacer
 {
@@ -55,13 +57,12 @@ public:
 
   /**
    * TODO
-   *
-   * @todo add the option to auto-generate a uniform grid
    */
   enum GridType
   {
     NodeDensity = 0,
-    InputFile
+    InputFile,
+    Uniform
   };
 
   /**
@@ -85,14 +86,19 @@ public:
   void replace(const QString& toReplace, const QString& replacement);
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
+
   void setTaskGridType(GridType gridType) { _gridType = gridType; }
   void setTaskGridBounds(const QString& bounds) { _taskGridBounds = bounds; }
+  void setTaskGridOutputFile(const QString& output) { _taskGridOutputFile = output; }
+
   void setReadNodeDensityInputFullThenCrop(bool readFull)
   { _readNodeDensityInputFullThenCrop = readFull; }
   void setNodeDensityMaxNodesPerCell(int maxNodes) { _maxNodeDensityNodesPerCell = maxNodes; }
+
   void setGridInputs(const QStringList& inputs) { _gridInputs = inputs; }
-  void setNodeDensityTaskGridOutputFile(const QString& output)
-  { _nodeDensityTaskGridOutputFile = output; }
+
+  void setUniformGridDimensionSize(int dimensionSize) { _uniformGridDimensionSize = dimensionSize; }
+
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
   void setTaskCellSkipIds(const QList<int>& ids) { _taskCellSkipIds = ids; }
   void setChangesetsOutputDir(const QString& dir)
@@ -120,20 +126,32 @@ private:
   // allows for skipping the processing of any grid cell with an "id" tag value in this ID list;
   // applies to both node density and file based grids
   QList<int> _taskCellSkipIds;
-  // area of the sum of all task grid cells; currently needed for node density calc only
+  // swap the order in which the task grid cells; useful for testing adjacency replacement issues
+  bool _reverseTaskGrid;
+
+  // for GridType::NodeDensity or GridType::Uniform only
+
+  // area of the sum of all task grid cells;
   QString _taskGridBounds;
+  // output location of the generated task grid file; useful for debugging, should be a *.osm file
+  QString _taskGridOutputFile;
+
+  // for GridType::NodeDensity only
 
   // runtime optimization for large amounts of data at the expense of using extra memory
   bool _readNodeDensityInputFullThenCrop;
   // allows for capping the max number of node density nodes per grid cell
   int _maxNodeDensityNodesPerCell;
-  // output location of the generated node density task grid file; useful for debugging
-  QString _nodeDensityTaskGridOutputFile;
+
+  // for GridType::InputFile only
 
   // one or more paths to a custom task grid
   QStringList _gridInputs;
-  // swap the order in which the task grid cells; useful for testing adjacency replacement issues
-  bool _reverseTaskGrid;
+
+  // for GridType::Uniform only
+
+  // TODO
+  int _uniformGridDimensionSize;
 
   // derives the replacement changesets
   std::shared_ptr<ChangesetReplacementCreator> _changesetCreator;
@@ -160,6 +178,7 @@ private:
   OsmMapPtr _getNodeDensityTaskGridInput();
   QList<TaskGridCell> _calcNodeDensityTaskGrid(OsmMapPtr map);
   QList<TaskGridCell> _getTaskGridFromBoundsFiles(const QStringList& inputs);
+  QList<TaskGridCell> _getUniformTaskGrid(const int gridDimensionSize);
 
   void _replaceEntireTaskGrid(const QList<TaskGridCell>& taskGrid);
   void _replaceTaskGridCell(

@@ -54,15 +54,16 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  // TODO: re-enable
   CPPUNIT_TEST(orphanedNodes1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
   //CPPUNIT_TEST(github4196Test);
   //CPPUNIT_TEST(github4174Test);
   //CPPUNIT_TEST(northVegasSmallTest);
+  //CPPUNIT_TEST(northVegasSmallUniformTest);
   //CPPUNIT_TEST(northVegasMediumTest);
   //CPPUNIT_TEST(northVegasLargeTest);
+  //CPPUNIT_TEST(northVegasLargeUniformTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -169,7 +170,7 @@ public:
     // 4 sq blocks of the city, 4 changesets, ~9k changes, avg derivation: 4s, total time: ~.5m,
     // ~18k changes/min
 
-    _testName = "vegasSmallTest";
+    _testName = "northVegasSmallTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
     QDir(outDir).removeRecursively();
@@ -183,8 +184,31 @@ public:
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.setTaskGridBounds("-115.3059,36.2849,-115.2883,36.2991");
     uut.setNodeDensityMaxNodesPerCell(1000);
-    uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    uut.setTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     uut.setReadNodeDensityInputFullThenCrop(true);
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+  }
+
+  void northVegasSmallUniformTest()
+  {
+    _testName = "northVegasSmallUniformTest";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
+    const QString outDir = rootDir + "/" + _testName;
+    QDir(outDir).removeRecursively();
+    QDir().mkpath(outDir);
+    _prepInput(
+      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
+      "-115.3314,36.2825,-115.2527,36.3387");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::Uniform);
+    //uut.setKillAfterNumChangesetDerivations(2);
+    uut.setTaskGridBounds("-115.3059,36.2849,-115.2883,36.2991");
+    uut.setUniformGridDimensionSize(4);
+    uut.setTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
@@ -196,7 +220,7 @@ public:
     // ~1/4 of the northern half of the city, 64 changesets, ~4.02M changes, avg derivation: 9s,
     // total time: ~12.5m, ~320k changes/min
 
-    _testName = "vegasMediumTest";
+    _testName = "northVegasMediumTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
     QDir(outDir).removeRecursively();
@@ -210,7 +234,7 @@ public:
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.setTaskGridBounds("-115.3332,36.2178,-115.1837,36.3400");
     uut.setNodeDensityMaxNodesPerCell(10000);
-    uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    uut.setTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     uut.setReadNodeDensityInputFullThenCrop(true);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
@@ -230,7 +254,7 @@ public:
     // whole northern half of city, 64 changesets, ~26.5M changes, avg derivation: 2.5m,
     // total time: ~3h, ~147k changes/min
 
-    _testName = "vegasLargeTest";
+    _testName = "northVegasLargeTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
     QDir(outDir).removeRecursively();
@@ -242,8 +266,39 @@ public:
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.setTaskGridBounds("-115.3528,36.0919,-114.9817,36.3447");
     uut.setNodeDensityMaxNodesPerCell(100000);
-    uut.setNodeDensityTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
+    uut.setTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     uut.setReadNodeDensityInputFullThenCrop(true);
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl);
+  }
+
+  void northVegasLargeUniformTest()
+  {
+    // lenient
+
+    // whole northern half of city, ? changesets, ~?M changes, avg derivation: ?m,
+    // total time: ?h, ~?k changes/min
+
+    // hybrid
+
+    // whole northern half of city, ? changesets, ~?M changes, avg derivation: ?m,
+    // total time: ?h, ~?k changes/min
+
+    _testName = "northVegasLargeUniformTest";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
+    const QString outDir = rootDir + "/" + _testName;
+    QDir(outDir).removeRecursively();
+    QDir().mkpath(outDir);
+    _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setTaskGridType(ChangesetTaskGridReplacer::GridType::NodeDensity);
+    //uut.setKillAfterNumChangesetDerivations(2);
+    uut.setTaskGridBounds("-115.3528,36.0919,-114.9817,36.3447");
+    uut.setUniformGridDimensionSize(8);
+    uut.setTaskGridOutputFile(outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
@@ -308,6 +363,7 @@ private:
     }
 
     map.reset(new OsmMap());
+    // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
     LOG_STATUS("Reading the data to replace from: ..." << input.right(25) << "...");
     OsmMapReaderFactory::read(map, input, true, Status::Unknown1);
     LOG_STATUS(
