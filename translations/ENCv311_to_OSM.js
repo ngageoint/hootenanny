@@ -56,7 +56,11 @@ enc311 = {
         var used = false;
         for (var value in valList)
         {
-          // print('Checking: '+ valList[value]);
+          // print('Checking:'+ valList[value] + ':');
+
+          // Skip empty values
+          if (valList[value] == '') continue;
+
           if (valList[value] in enc311.stringListLookup[col])
           {
             var row = enc311.stringListLookup[col][valList[value]];

@@ -420,6 +420,14 @@ enc311 = {
       // print('## Got to the end:' + tag + ':');
     } // End breakup seamark
 
+    // CATWED vs CATVEG. Sigh....
+    if (tags['seamark:type'] == 'weed' && tags['seamark:vegetation:category'])
+    {
+      tags['seamark:weed:category'] = tags['seamark:vegetation:category'];
+      delete tags['seamark:vegetation:category']
+    }
+
+
     // Now split and translate the List attributes
     for (var col in tags)
     {
@@ -428,13 +436,17 @@ enc311 = {
       if (col in enc311.stringListLookup)
       {
         // Debug
-      // print('stringList: ' + col + ' ' + tags[col]);
+      print('stringList: ' + col + ' ' + tags[col]);
         var valList = tags[col].split(';');
         var used = false;
         for (var value in valList)
         {
           // Debug
-          // print('Checking: '+ valList[value]);
+          print('Checking: '+ valList[value]);
+
+          // Skip empty values
+          if (valList[value] == '') continue;
+
           if (valList[value] in enc311.stringListLookup[col])
           {
             var row = enc311.stringListLookup[col][valList[value]];
@@ -454,7 +466,8 @@ enc311 = {
           }
           else
           {
-            hoot.logError('StringList missing value ' + tags[col] + ' for ' + col);
+            // Making this a Warning not an Error. Exporting has lots of funky values
+            hoot.logWarn('StringList missing value ' + tags[col] + ' for ' + col);
           }
         } // End for valList
 
