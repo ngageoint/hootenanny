@@ -161,6 +161,11 @@ tds70.rules = {
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
     'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
+    'AEI':'source:imagery:id', // Acquisition Event Identifier. AKA image_id - non-spec
+    'img_layer':'source:imagery:layername', // Layer name - non-spec
+    'early_date':'source:imagery:earliestdate', // Earliest image in a mosaic - non-spec
+    'late_date':'source:imagery:latestdate', // Latest image in a mosaic - non-spec
+    'PFI':'source:imagery:sensor', // Acquisition Platform Identifier - non-spec
   }, // End txtBiased
 
   // One2one ruled for Number fields
@@ -234,6 +239,10 @@ tds70.rules = {
 
   // Common one2one rules. Used for both import and export
   one2one : [
+    // img_mosaic - Is the image a mosaic? - Added field
+    ['img_mosaic','yes','source:imagery:mosaic','yes'],
+    ['img_mosaic','no','source:imagery:mosaic','no'],
+
     // ACC - Horizontal Accuracy Category
     // ['ACC','-999999',undefined,undefined], // noInformation
     ['ACC','1','source:accuracy:horizontal:category','accurate'],

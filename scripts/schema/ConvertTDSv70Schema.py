@@ -603,9 +603,9 @@ enumValues = processValues(values_csv_file)
 
 schema = {}
 schema = processFile(main_csv_file,enumValues)
+
+# NOTE: In the TDSv6.1 spec we made this optional
 schema = addImgAttrs(schema)
-
-
 
 # Now dump the schema, rules etc out
 if args.rules:  # One2one Rules

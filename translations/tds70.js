@@ -1201,7 +1201,6 @@ tds70 = {
       }
     } // End for GE4 loop
 
-
   }, // End of applyToOsmPostProcessing
 
   // ##### End of the xxToOsmxx Block #####
@@ -2297,6 +2296,28 @@ tds70 = {
       attrs.VSP = '19'; // Mangrove
       break;
     } // End Wetlands
+
+    // Add imagery tags
+    if (notUsedTags['source.imagery.datetime'])
+    {
+      attrs.ZI006_SDV = notUsedTags['source.imagery.datetime'];
+      delete notUsedTags['source.imagery.datetime']
+    }
+
+    if (!attrs.ZI001_SRT)
+    {
+      // Not sure if this should be a default
+      attrs.ZI001_SRT == 'openSource';
+
+      if (notUsedTags['source:imagery'])
+      {
+        attrs.ZI001_SRT = 'imageryUnspecified';
+        delete notUsedTags['source:imagery'];
+      }
+      
+      // This should have already been removed from notUsedTags
+      if (tags['source.imagery:sensor'] == 'IK02') attrs.ZI001_SRT = 'ikonosImagery';
+    }
 
   }, // End applyToTdsPostProcessing
 
