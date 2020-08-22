@@ -1292,6 +1292,9 @@ def processFile(fileName):
 
             if fieldValue.find('interval closure') > -1:
                 aDefault = '5'
+
+        if aName == 'img_mosaic':
+            aDefault = 'no'
         #else:
             #print 'dataType not found:%s:' % (dataType)
 

@@ -252,6 +252,58 @@ default_list = {
 }
 
 
+# Go through the schema and add attributes for imagery tags
+def addImgAttrs(schema):
+    for featureName in schema:
+        # schema[featureName]['columns']['fName'] = {'name':'AEI'.encode('utf8'),
+        #                                         'desc':'Acquisition Event Identifier'.encode('utf8'),
+        #                                         'type':'String',
+        #                                         'defValue':'No Information'.encode('utf8'),
+        #                                         'length':'256'.encode('utf8'),
+        #                                         'optional':'R'
+        #                                         }
+        schema[featureName]['columns']['AEI'] = {}
+        schema[featureName]['columns']['AEI'] = {'name':'AEI','desc':'Acquisition Event Identifier','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['earlydate'] = {}
+        schema[featureName]['columns']['earlydate'] = {'name':'earlydate','desc':'Earliest image date in mosaic','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['latedate'] = {}
+        schema[featureName]['columns']['latedate'] = {'name':'AEI','desc':'Latest image date in mosaic','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['img_layer'] = {}
+        schema[featureName]['columns']['img_layer'] = {'name':'img_layer','desc':'Imagery Layer Name','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['img_mosaic'] = {}
+        schema[featureName]['columns']['img_mosaic'] = {'name':'img_mosaic','desc':'Image Mosaic','type':'String',
+                                                'defValue':'no','length':'3','optional':'R'}
+        schema[featureName]['columns']['PFI'] = {}
+        schema[featureName]['columns']['PFI'] = {'name':'PFI','desc':'Acquisition Platform Identifier','type':'String',
+                                                'defValue':'No Information','length':'15','optional':'R'}
+
+        if 'ZI001_SRT' not in schema[featureName]['columns']:
+            schema[featureName]['columns']['ZI001_SRT'] = {}
+            schema[featureName]['columns']['ZI001_SRT'] = {'name':'ZI001_SRT','desc':'Source Information : Source Type',
+                                                'type':'String',
+                                                'func':'full_ZI001_SRT',
+                                                'defValue':'noInformation','length':'30','optional':'R'}
+
+        if 'ZI001_SDV' not in schema[featureName]['columns']:
+            schema[featureName]['columns']['ZI001_SDV'] = {}
+            schema[featureName]['columns']['ZI001_SDV'] = {'name':'ZI001_SDV','desc':'Source Information : Source Date and Time',
+                                                'type':'String',
+                                                'defValue':'noInformation','length':'20','optional':'R'}
+
+        if 'ZI001_SDP' not in schema[featureName]['columns']:
+            schema[featureName]['columns']['ZI001_SDP'] = {}
+            schema[featureName]['columns']['ZI001_SDP'] = {'name':'ZI001_SDP','desc':'Source Information : Source Description',
+                                                'type':'String',
+                                                'defValue':'No Information','optional':'R'}
+
+    return schema
+# End addImgAttrs
+
+
 # Process the Layers file
 #
 # NOTE: This just supports the "compsite" version at the moment
@@ -551,6 +603,8 @@ enumValues = processValues(values_csv_file)
 
 schema = {}
 schema = processFile(main_csv_file,enumValues)
+schema = addImgAttrs(schema)
+
 
 
 # Now dump the schema, rules etc out
