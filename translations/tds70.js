@@ -2254,28 +2254,12 @@ tds70 = {
       }
     } // End for GE4 loop
 
-
     // Fix ZI001_SDV
-    // NOTE: We are going to override the normal source:datetime with what we get from JOSM
-    if (tags['source:imagery:datetime'])
+    // NOTE: We are going to override the normal source:datetime with what we get from JOSM    
+    if (notUsedTags['source.imagery.datetime'])
     {
-      attrs.ZI001_SDV = tags['source:imagery:datetime'];
-      // delete notUsedTags['source:imagery:datetime'];
-    }
-
-    // Now try using tags from Taginfo
-    if (! attrs.ZI001_SDV)
-    {
-      if (tags['source:date'])
-      {
-        attrs.ZI001_SDV = tags['source:date'];
-        // delete notUsedTags['source:date'];
-      }
-      else if (tags['source:geometry:date'])
-      {
-        attrs.ZI001_SDV = tags['source:geometry:date'];
-        // delete notUsedTags['source:geometry:date'];
-      }
+      attrs.ZI001_SDV = notUsedTags['source.imagery.datetime'];
+      delete notUsedTags['source.imagery.datetime']
     }
 
     // Amusement Parks
@@ -2297,26 +2281,37 @@ tds70 = {
       break;
     } // End Wetlands
 
-    // Add imagery tags
-    if (notUsedTags['source.imagery.datetime'])
+    // Now try using tags from Taginfo
+    if (!attrs.ZI001_SDV)
     {
-      attrs.ZI006_SDV = notUsedTags['source.imagery.datetime'];
-      delete notUsedTags['source.imagery.datetime']
+      if (tags['source:date'])
+      {
+        attrs.ZI001_SDV = tags['source:date'];
+        // delete notUsedTags['source:date'];
+      }
+      else if (tags['source:geometry:date'])
+      {
+        attrs.ZI001_SDV = tags['source:geometry:date'];
+        // delete notUsedTags['source:geometry:date'];
+      }
     }
 
+    // Add imagery tags
     if (!attrs.ZI001_SRT)
     {
       // Not sure if this should be a default
       attrs.ZI001_SRT == 'openSource';
 
-      if (notUsedTags['source:imagery'])
-      {
-        attrs.ZI001_SRT = 'imageryUnspecified';
-        delete notUsedTags['source:imagery'];
-      }
+      if (notUsedTags['source:imagery']) attrs.ZI001_SRT = 'imageryUnspecified';
       
       // This should have already been removed from notUsedTags
       if (tags['source.imagery:sensor'] == 'IK02') attrs.ZI001_SRT = 'ikonosImagery';
+    }
+
+    if (!attrs.ZI001_SDP && notUsedTags['source:imagery'])
+    {
+       attrs.ZI001_SDP = notUsedTags['source:imagery'];
+       delete notUsedTags['source:imagery'];
     }
 
   }, // End applyToTdsPostProcessing
