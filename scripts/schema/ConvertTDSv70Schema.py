@@ -251,6 +251,92 @@ default_list = {
     'textEnumeration':'noInformation'
 }
 
+srtList = {
+"commercial":"A non-military map or chart, in a digital (often proprietary) format, sold commercially and usually accompanied by distribution and/or use restrictions.",
+"deLormeDigitalAtlasEarth":"A DeLorme proprietary global feature data set consisting of a dense seamless topographical map of the world.",
+"gpsBasedFieldCollect":"GPS-based field-collected open source data.",
+"ikonosImagery":"Ikonos imagery of unspecified type and resolution.",
+"imageryUnspecified":"Imagery of unspecified type and resolution.",
+"militaryMapData":"A military (for example: NGA or defense service) map or chart, whether in hardcopy format or digitally scanned.",
+"navteqData":"A NAVTEQ proprietary road and feature information data set used for routing and identification of points of interest.",
+"ngaAutoAirFacInfoFile":"NGA Automated Aeronautical Facilities Information File.",
+"ngaControlledImageBase1":"NGA Controlled Imagery Base 1 metre data.",
+"ngaDigitalAirFltInfoFile":"NGA Digital Aeronautical Flight Information File.",
+"ngaDigitalNauticalChart":"NGA Digital Nautical Chart.",
+"ngaDigitalVertObstruction":"NGA Digital Vertical Obstruction File.",
+"ngaFoundationFeatureData":"NGA Foundation Feature Data.",
+"ngaGeoNames":"NGA GeoNames.",
+"ngaInterimTerrainData":"NGA Interim Terrain Data.",
+"ngaInterimVectorData":"NGA Interim Vector Data.",
+"ngaStereoAirfieldCollect":"NGA Stereo Airfield Collection.",
+"ngaUrbanVectorMap":"NGA Urban Vector Map.",
+"ngaVectorInterimTerrain":"NGA Vector Interim Terrain Data.",
+"ngaVectorMap2":"NGA Vector Map Level 2.",
+"nonMilitaryMap":"A non-military (for example: commercial or personally prepared) map or chart in hardcopy format.",
+"openSource":"Unclassified published information, whether obtained from digital or hardcopy sources.",
+"operationsData":"Mission-specific and/or operational data set prepared by a US Combatant Command.",
+"quickBirdImagery":"QuickBird imagery of unspecified type and resolution.",
+"tomTomData":"A TomTom proprietary road and feature data set generally used for routing and identification of points of interest.",
+"usModernizedIntegratedDB":"(US) Modernized Integrated Data Base.",
+"usNtmImagery":"Imagery from (US) National Technical Means (NTM)."
+}
+
+# Go through the schema and add attributes for imagery tags
+def addImgAttrs(schema):
+    for featureName in schema:
+        # schema[featureName]['columns']['fName'] = {'name':'AEI'.encode('utf8'),
+        #                                         'desc':'Acquisition Event Identifier'.encode('utf8'),
+        #                                         'type':'String',
+        #                                         'defValue':'No Information'.encode('utf8'),
+        #                                         'length':'256'.encode('utf8'),
+        #                                         'optional':'R'
+        #                                         }
+        schema[featureName]['columns']['AEI'] = {}
+        schema[featureName]['columns']['AEI'] = {'name':'AEI','desc':'Acquisition Event Identifier','type':'String',
+                                                'defValue':'No Information','length':'254','optional':'R'}
+        schema[featureName]['columns']['early_date'] = {}
+        schema[featureName]['columns']['early_date'] = {'name':'early_date','desc':'Earliest image date in mosaic','type':'String',
+                                                'defValue':'No Information','length':'20','optional':'R'}
+        schema[featureName]['columns']['late_date'] = {}
+        schema[featureName]['columns']['late_date'] = {'name':'late_date','desc':'Latest image date in mosaic','type':'String',
+                                                'defValue':'No Information','length':'20','optional':'R'}
+        schema[featureName]['columns']['img_layer'] = {}
+        schema[featureName]['columns']['img_layer'] = {'name':'img_layer','desc':'Imagery Layer Name','type':'String',
+                                                'defValue':'No Information','length':'254','optional':'R'}
+        schema[featureName]['columns']['img_mosaic'] = {}
+        schema[featureName]['columns']['img_mosaic'] = {'name':'img_mosaic','desc':'Image Mosaic','type':'String',
+                                                'defValue':'no','length':'3','optional':'R'}
+        schema[featureName]['columns']['PFI'] = {}
+        schema[featureName]['columns']['PFI'] = {'name':'PFI','desc':'Acquisition Platform Identifier','type':'String',
+                                                'defValue':'No Information','length':'15','optional':'R'}
+
+        if 'ZI001_SRT' not in schema[featureName]['columns']:
+            schema[featureName]['columns']['ZI001_SRT'] = {}
+            schema[featureName]['columns']['ZI001_SRT'] = {'name':'ZI001_SRT','desc':'Source Information : Source Type',
+                                                'type':'textEnumeration',
+                                                'func':'ZI001_SRT',
+                                                'enum':[],
+                                                'defValue':'noInformation','length':'30','optional':'R'}
+            # schema[featureName]['columns']['ZI001_SRT']['enum'] = []
+            for k in srtList:
+                schema[featureName]['columns']['ZI001_SRT']['enum'].append({'name':k,'value':srtList[k]})
+
+
+        if 'ZI001_SDV' not in schema[featureName]['columns']:
+            schema[featureName]['columns']['ZI001_SDV'] = {}
+            schema[featureName]['columns']['ZI001_SDV'] = {'name':'ZI001_SDV','desc':'Source Information : Source Date and Time',
+                                                'type':'String',
+                                                'defValue':'noInformation','length':'20','optional':'R'}
+
+        if 'ZI001_SDP' not in schema[featureName]['columns']:
+            schema[featureName]['columns']['ZI001_SDP'] = {}
+            schema[featureName]['columns']['ZI001_SDP'] = {'name':'ZI001_SDP','desc':'Source Information : Source Description',
+                                                'type':'String',
+                                                'defValue':'No Information','optional':'R'}
+
+    return schema
+# End addImgAttrs
+
 
 # Process the Layers file
 #
@@ -552,6 +638,8 @@ enumValues = processValues(values_csv_file)
 schema = {}
 schema = processFile(main_csv_file,enumValues)
 
+# NOTE: In the TDSv6.1 spec we made this optional
+schema = addImgAttrs(schema)
 
 # Now dump the schema, rules etc out
 if args.rules:  # One2one Rules
