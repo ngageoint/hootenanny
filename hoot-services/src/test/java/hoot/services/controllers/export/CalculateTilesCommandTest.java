@@ -79,7 +79,7 @@ public class CalculateTilesCommandTest {
         assertNotNull(command.getWorkDir());
         assertNotNull(command.getCommand());
 
-        String expectedCommand = "hoot.bin task-grid --node-density --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} --maxNodesPerTile ${MAX_NODE_COUNT_PER_TILE} --pixelSize ${PIXEL_SIZE}";
+        String expectedCommand = "hoot.bin task-grid --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} --maxNodesPerCell ${MAX_NODE_COUNT_PER_TILE} --pixelSize ${PIXEL_SIZE} --node-density";
         assertEquals(expectedCommand, command.getCommand());
 
         assertTrue(command.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
@@ -137,7 +137,7 @@ public class CalculateTilesCommandTest {
         assertNotNull(command.getWorkDir());
         assertNotNull(command.getCommand());
 
-        String expectedCommand = "hoot.bin task-grid --node-density --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
+        String expectedCommand = "hoot.bin task-grid --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT} --node-density";
         assertEquals(expectedCommand, command.getCommand());
 
         assertTrue(command.getSubstitutionMap().containsKey("DEBUG_LEVEL"));
