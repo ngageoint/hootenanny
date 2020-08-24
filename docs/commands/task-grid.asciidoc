@@ -60,7 +60,15 @@ hoot task-grid --node-density (input1.osm)[;input2.osm...] (output) [--bounds <v
 
 === Examples
 
-TODO
+==== Uniform
+
+* https://github.com/ngageoint/hootenanny/blob/4174/docs/user/CommandLineExamples.asciidoc#generate-a-grid-with-regular-shaped-cells-across-an-entire-map[Basic]
+* Advanced: TODO
+
+==== Node Density
+
+* https://github.com/ngageoint/hootenanny/blob/4174/docs/user/CommandLineExamples.asciidoc#generate-a-grid-with-irregular-shaped-cells-that-will-fit-at-most-1000-nodes-each-for-an-entire-map[Basic]
+* Advanced: TODO
 
 === See Also
 

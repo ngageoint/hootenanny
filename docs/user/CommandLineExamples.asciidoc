@@ -835,14 +835,14 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
     hoot de-duplicate input.osm output.osm --node-filter "hoot::PoiCriterion"
 -----
 
-Generate a grid based on node density, specifying the maximum allowed node count per grid cell and a pixel size:
+===== Generate a grid based on node density, specifying the maximum allowed node count per grid cell and a pixel size:
 
 --------------------------------------
 hoot task-grid "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson \
    --maxNodesPerCell 1000 --pixelSize 0.001 --node-density
 --------------------------------------
 
-Calculate a grid based on node density, specifying the maximum allowed node count per cell, a pixel size, 
+===== Calculate a grid based on node density, specifying the maximum allowed node count per cell, a pixel size, 
 and allow for more than one calculation attempt:
 
 --------------------------------------
@@ -850,13 +850,13 @@ hoot task-grid "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutpu
   --maxNodesPerCell 1000 --pixelSize 0.001 --maxAttempts 5 --pixelSizeAutoReductionFactor 10 --node-density
 --------------------------------------
 
-Select a random grid cell based on node density (works for --uniform as well):
+===== Select a random grid cell based on node density (works for --uniform as well):
 
 --------------------------------------
 hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --random --node-density
 --------------------------------------
 
-Select a random grid cell based on node density specifying a particular seed for the random number 
+===== Select a random grid cell based on node density specifying a particular seed for the random number 
 generator (works for --uniform as well):
 
 --------------------------------------

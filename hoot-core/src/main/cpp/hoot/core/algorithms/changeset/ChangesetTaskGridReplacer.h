@@ -48,8 +48,6 @@ class OsmApiDbSqlChangesetApplier;
  * partition the data replacements. The file based task grid supports one or more bounds input
  * files. Node density calc requires reading in all of the replacement node data, so may not be
  * feasible when replacing extremely large amounts of data.
- *
- * @todo separate task grid generation out into its own class
  */
 class ChangesetTaskGridReplacer
 {
@@ -63,7 +61,7 @@ public:
    *
    * @param toReplace URL to the data to replace; must be an OSM API database
    * @param replacement URL to the replacement data; must be a Hoot API database
-   * @param taskGrid TODO
+   * @param taskGrid the task grid that partitions the individual replacement operations
    */
   void replace(const QString& toReplace, const QString& replacement,
                const TaskGridGenerator::TaskGrid& taskGrid);
@@ -112,7 +110,7 @@ private:
   std::shared_ptr<OsmApiDbSqlChangesetApplier> _changesetApplier;
   QMap<QString, long> _changesetStats;
 
-  // TODO
+  // optional location to write the final completely replaced ref output
   QString _finalOutput;
 
   void _initConfig();

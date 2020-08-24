@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Creates a task grid made up of uniformly distributed, same sized rectangles
  */
 class UniformTaskGridGenerator : public TaskGridGenerator
 {
@@ -45,21 +45,22 @@ class UniformTaskGridGenerator : public TaskGridGenerator
 public:
 
   /**
-   * TODO
+   * Constructor
    *
-   * @param bounds
-   * @param gridDimensionSize
-   * @param output
+   * @param bounds the bounding box over which to generate the task grid
+   * @param gridDimensionSize dimension of the grid (number of columns or rows)
+   * @param output optional output URL to write the task grid to
    */
   UniformTaskGridGenerator(const QString& bounds, const int gridDimensionSize = 2,
                            const QString& output = "");
 
   /**
-   * TODO
+   * Constructor
    *
-   * @param inputs
-   * @param gridDimensionSize
-   * @param output
+   * @param inputs one or more inputs to base the task grid off of; the extent of the task grid is
+   * the sum of the extent of all input data
+   * @param gridDimensionSize dimension of the grid (number of columns or rows)
+   * @param output optional output URL to write the task grid to
    */
   UniformTaskGridGenerator(const QStringList& inputs, const int gridDimensionSize = 2,
                            const QString& output = "");
@@ -67,9 +68,7 @@ public:
   virtual ~UniformTaskGridGenerator() = default;
 
   /**
-   * TODO
-   *
-   * @return
+   * @see TaskGridGenerator
    */
   virtual TaskGrid generateTaskGrid();
 

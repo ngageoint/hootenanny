@@ -552,7 +552,6 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   LOG_VART(e.get());
   if (!e)
   {
-    // TODO: can we do this?
     return;
   }
 

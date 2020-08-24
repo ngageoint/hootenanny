@@ -39,7 +39,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Uses the node density of a map to create a task grid made up of potentially irregularly sized
+ * rectangles
  */
 class NodeDensityTaskGridGenerator : public TaskGridGenerator
 {
@@ -52,9 +53,7 @@ public:
   virtual ~NodeDensityTaskGridGenerator() = default;
 
   /**
-   * TODO
-   *
-   * @return
+   * @see TaskGridGenerator
    */
   virtual TaskGrid generateTaskGrid();
 
@@ -75,7 +74,7 @@ private:
   // per task timer
   QElapsedTimer _subTaskTimer;
 
-  // TODO
+  // one or more input files to base the grid calc from
   QStringList _inputs;
   // area of the sum of all task grid cells;
   QString _bounds;
@@ -84,12 +83,12 @@ private:
   // output location of the generated task grid file; useful for debugging, should be a *.osm file
   QString _output;
 
-  // TODO
+  // calculates the grid
   NodeDensityTileBoundsCalculator _boundsCalc;
 
-  // TODO
+  // creates a single randomly selected task grid cell, rather than an entire task grid
   bool _writeRandomCellOnly;
-  // TODO:
+  // allows for pseudo-randomizing the random cell selected
   int _randomSeed;
 
   // This preps the input for node density calc based task grid generation.

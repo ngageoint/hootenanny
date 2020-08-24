@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Generates a task grid from one or more bounds file inputs
  */
 class BoundsFileTaskGridGenerator : public TaskGridGenerator
 {
@@ -45,18 +45,16 @@ class BoundsFileTaskGridGenerator : public TaskGridGenerator
 public:
 
   /**
-   * TODO
+   * Constructor
    *
-   * @param inputs
+   * @param inputs one or more bounds file inputs
    */
   BoundsFileTaskGridGenerator(const QStringList& inputs);
 
   virtual ~BoundsFileTaskGridGenerator() = default;
 
   /**
-   * TODO
-   *
-   * @return
+   * @see TaskGridGenerator
    */
   virtual TaskGrid generateTaskGrid();
 

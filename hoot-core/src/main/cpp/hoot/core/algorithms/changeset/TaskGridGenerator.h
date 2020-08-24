@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Allows for creating a task grid for performing distributed map operations
  */
 class TaskGridGenerator
 {
@@ -45,7 +45,7 @@ class TaskGridGenerator
 public:
 
   /**
-   * TODO
+   * Individual component of a task grid
    */
   struct TaskGridCell
   {
@@ -57,9 +57,9 @@ public:
   typedef QList<TaskGridCell> TaskGrid;
 
   /**
-   * TODO
+   * Generates a task grid
    *
-   * @return
+   * @return a task grid
    */
   virtual TaskGrid generateTaskGrid() = 0;
 };

@@ -34,7 +34,6 @@
 #include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
 #include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/io/IoUtils.h>
 
 namespace hoot
 {
@@ -103,12 +102,6 @@ public:
       {
         // multiple inputs
         inputs = input.split(";");
-      }
-
-      // TODO: is this necessary?
-      if (!IoUtils::urlsAreBoundable(inputs))
-      {
-        throw IllegalArgumentException("TODO");
       }
     }
     else

@@ -105,10 +105,10 @@ public:
   static QString toConfigString(const geos::geom::Envelope& e);
 
   /**
-   * TODO
+   * Determines if a string represents an envelope
    *
-   * @param str
-   * @return
+   * @param str string to examine
+   * @return true if the input represents an envelope; false otherwise
    */
   static bool isEnvelopeConfigString(const QString& str);
 
@@ -164,10 +164,10 @@ public:
     const QList<geos::geom::Envelope>& boundsCollection);
 
   /**
-   * TODO
+   * Creates a rectangular map representing multiple bounding boxes with IDs
    *
-   * @param boundsCollection
-   * @return
+   * @param boundsCollection a collection of bounding boxes keyed by ID
+   * @return a bounding box map
    */
   static OsmMapPtr createMapFromBoundsCollection(
     const QMap<int, geos::geom::Envelope>& boundsCollection);
