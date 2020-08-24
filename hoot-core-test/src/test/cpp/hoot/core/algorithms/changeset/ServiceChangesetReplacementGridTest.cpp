@@ -58,13 +58,13 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   // TODO: re-enable
-  //CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
   //CPPUNIT_TEST(github4196Test);
   //CPPUNIT_TEST(github4174Test);
-  CPPUNIT_TEST(northVegasSmallTest);
-  CPPUNIT_TEST(northVegasSmallUniformTest);
+  //CPPUNIT_TEST(northVegasSmallTest);
+  //CPPUNIT_TEST(northVegasSmallUniformTest);
   //CPPUNIT_TEST(northVegasMediumTest);
   //CPPUNIT_TEST(northVegasLargeTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
@@ -187,7 +187,7 @@ public:
       "-115.3314,36.2825,-115.2527,36.3387");
 
     NodeDensityTaskGridGenerator taskGridGen(
-      "-115.3059,36.2849,-115.2883,36.2991", _replacementDataUrl, 1000,
+      QStringList(_replacementDataUrl), 1000, "-115.3059,36.2849,-115.2883,36.2991",
       outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     taskGridGen.setReadInputFullThenCrop(true);
 
@@ -239,7 +239,7 @@ public:
       "-115.3441,36.2012,-115.1942,36.3398");
 
     NodeDensityTaskGridGenerator taskGridGen(
-      "-115.3332,36.2178,-115.1837,36.3400", _replacementDataUrl, 10000,
+      QStringList(_replacementDataUrl), 10000, "-115.3332,36.2178,-115.1837,36.3400",
       outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     taskGridGen.setReadInputFullThenCrop(true);
 
@@ -271,7 +271,7 @@ public:
     _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
 
     NodeDensityTaskGridGenerator taskGridGen(
-      "-115.3528,36.0919,-114.9817,36.3447", _replacementDataUrl, 100000,
+      QStringList(_replacementDataUrl), 100000, "-115.3528,36.0919,-114.9817,36.3447",
       outDir + "/" + _testName + "-" + "taskGridBounds.osm");
     taskGridGen.setReadInputFullThenCrop(true);
 

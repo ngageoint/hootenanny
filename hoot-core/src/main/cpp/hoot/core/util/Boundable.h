@@ -35,7 +35,7 @@ namespace hoot
 
 /**
  * An interface defining a class that may have the bounds set. The exact meaning of setting the
- * bounds is context dependant, but in the case of OsmMapOperations it limits the scope of the
+ * bounds is context dependent, but in the case of OsmMapOperations it limits the scope of the
  * operation.
  */
 class Boundable

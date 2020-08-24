@@ -105,6 +105,14 @@ public:
   static QString toConfigString(const geos::geom::Envelope& e);
 
   /**
+   * TODO
+   *
+   * @param str
+   * @return
+   */
+  static bool isEnvelopeConfigString(const QString& str);
+
+  /**
    * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
    * from an envelope
    *
@@ -154,6 +162,15 @@ public:
    */
   static OsmMapPtr createMapFromBoundsCollection(
     const QList<geos::geom::Envelope>& boundsCollection);
+
+  /**
+   * TODO
+   *
+   * @param boundsCollection
+   * @return
+   */
+  static OsmMapPtr createMapFromBoundsCollection(
+    const QMap<int, geos::geom::Envelope>& boundsCollection);
 
   /**
    * Creates a bounding rectangle within the specified map

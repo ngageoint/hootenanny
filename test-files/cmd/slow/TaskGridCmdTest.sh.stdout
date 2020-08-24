@@ -1,0 +1,15 @@
+node density
+20:07:20.008 WARN   ...ensityTileBoundsCalculator.cpp( 426) Node density tiles bestSum isn't valid. 0,0,2,9 total: 756 size: 9
+20:07:20.777 WARN   ...ensityTileBoundsCalculator.cpp( 426) Node density tiles bestSum isn't valid. 0,0,2,9 total: 756 size: 9
+node density random
+node density small
+node density auto retry
+20:07:23.987 WARN   ...ensityTileBoundsCalculator.cpp( 426) Node density tiles bestSum isn't valid. 0,0,2,9 total: 756 size: 9
+20:07:23.995 WARN   ...ensityTileBoundsCalculator.cpp( 426) Node density tiles bestSum isn't valid. 10,0,13,17 total: 113 size: 17
+20:07:23.995 WARN   ...ensityTileBoundsCalculator.cpp( 426) Node density tiles bestSum isn't valid. 44,0,62,10 total: 189 size: 10
+20:07:24.602 WARN   ...ensityTileBoundsCalculator.cpp( 426) Node density tiles bestSum isn't valid. 0,0,2,9 total: 756 size: 9
+20:07:24.609 WARN   ...ensityTileBoundsCalculator.cpp( 426) Node density tiles bestSum isn't valid. 10,0,13,17 total: 113 size: 17
+20:07:24.609 WARN   ...ensityTileBoundsCalculator.cpp( 426) Node density tiles bestSum isn't valid. 44,0,62,10 total: 189 size: 10
+node density bounds
+uniform
+uniform bounds

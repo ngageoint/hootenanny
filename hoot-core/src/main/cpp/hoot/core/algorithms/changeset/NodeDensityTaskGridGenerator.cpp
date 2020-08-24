@@ -29,8 +29,7 @@
 // Hoot
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
-#include <hoot/core/io/TileBoundsWriter.h>
+#include <hoot/core/io/NodeDensityTaskGridWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/HootApiDbReader.h>
@@ -39,13 +38,22 @@ namespace hoot
 {
 
 NodeDensityTaskGridGenerator::NodeDensityTaskGridGenerator(
-  const QString& bounds, const QString& input, const int maxNodesPerCell, const QString& output) :
+  const QStringList& inputs, const int maxNodesPerCell, const QString& bounds,
+  const QString& output) :
+_inputs(inputs),
 _bounds(bounds),
-_input(input),
 _readInputFullThenCrop(false),
-_maxNodesPerCell(maxNodesPerCell),
-_output(output)
+_output(output),
+_writeRandomCellOnly(false),
+_randomSeed(-1)
 {
+  _boundsCalc.setMaxNodesPerTile(maxNodesPerCell);
+
+  _boundsCalc.setPixelSize(0.001);
+  _boundsCalc.setMaxNumTries(3);
+  _boundsCalc.setMaxTimePerAttempt(300);
+  _boundsCalc.setPixelSizeRetryReductionFactor(10);
+  _boundsCalc.setSlop(0.1); // TODO: make this configurable?
 }
 
 TaskGridGenerator::TaskGrid NodeDensityTaskGridGenerator::generateTaskGrid()
@@ -56,17 +64,25 @@ TaskGridGenerator::TaskGrid NodeDensityTaskGridGenerator::generateTaskGrid()
 OsmMapPtr NodeDensityTaskGridGenerator::_getNodeDensityTaskGridInput()
 {
   // changeset derive will overwrite these later, if needed
-  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _bounds);
-  conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
-  conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
-  conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+  if (!_bounds.trimmed().isEmpty())
+  {
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), _bounds);
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
+    conf().set(
+      ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+  }
 
   // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax
-  LOG_STATUS(
-    "Preparing input data for task grid cell calculation from: ..." <<
-    _output.right(25) << ", across bounds: " << _bounds << "...");
-  assert(HootApiDbReader::isSupported(_input));
+  QString msg =
+    "Preparing input data for task grid cell calculation from: ..." + _output.right(25);
+  if (!_bounds.trimmed().isEmpty())
+  {
+    msg += ", across bounds: " + _bounds;
+  }
+  msg += "...";
+  LOG_STATUS(msg);
+  //assert(HootApiDbReader::isSupported(_input));
 
   // Getting large amounts of data via bbox can actually be slower than reading all of the data
   // and then cropping it, due to bounded query performance. #4192 improved this gap, but the
@@ -82,15 +98,17 @@ OsmMapPtr NodeDensityTaskGridGenerator::_getNodeDensityTaskGridInput()
   OsmMapPtr map(new OsmMap());
   // small optimization since node density only needs nodes in the input; can only do this with
   // a db reader right now
-  // TODO: I don't think the node only read is working correctly. Put a note in
-  // NodeDensityTilesCmd.
+  // TODO: I don't think the node only read is working correctly.
 //    std::shared_ptr<ApiDbReader> reader =
 //      std::dynamic_pointer_cast<ApiDbReader>(
 //        OsmMapReaderFactory::createReader(_output, true, Status::Unknown1));
 //    reader->setReturnNodesOnly(true);
 //    reader->open(_output);
 //    reader->read(map);
-  OsmMapReaderFactory::read(map, _input, true, Status::Unknown1);
+  for (int i = 0; i < _inputs.size(); i++)
+  {
+    OsmMapReaderFactory::read(map, _inputs.at(i), /*true*/false, Status::Unknown1);
+  }
 
   // Restore the default setting if it was changed, or the changeset replacement maps will be loaded
   // very slowly if loading from URL.
@@ -108,21 +126,22 @@ TaskGridGenerator::TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGr
 {
   LOG_STATUS(
     "Calculating task grid cells for replacement data to: ..." << _output.right(25) << "...");
-  NodeDensityTileBoundsCalculator boundsCalc;
-  boundsCalc.setPixelSize(0.001);
-  boundsCalc.setMaxNodesPerTile(_maxNodesPerCell);
-  boundsCalc.setMaxNumTries(3);
-  boundsCalc.setMaxTimePerAttempt(300);
-  boundsCalc.setPixelSizeRetryReductionFactor(10);
-  boundsCalc.setSlop(0.1);
-  boundsCalc.calculateTiles(map);
-  map.reset();
-  const std::vector<std::vector<geos::geom::Envelope>> rawTaskGrid = boundsCalc.getTiles();
-      const std::vector<std::vector<long>> nodeCounts = boundsCalc.getNodeCounts();
-  if (!_output.trimmed().isEmpty())
+
+  _boundsCalc.calculateTiles(map);
+
+  const std::vector<std::vector<geos::geom::Envelope>> rawTaskGrid = _boundsCalc.getTiles();
+      const std::vector<std::vector<long>> nodeCounts = _boundsCalc.getNodeCounts();
+  if (_output.toLower().endsWith(".geojson"))
   {
-    TileBoundsWriter::writeTilesToOsm(rawTaskGrid, nodeCounts, _output);
+    NodeDensityTaskGridWriter::writeTilesToGeoJson(
+      rawTaskGrid, nodeCounts, _output, map->getSource(), _writeRandomCellOnly, _randomSeed);
   }
+  else
+  {
+    NodeDensityTaskGridWriter::writeTilesToOsm(
+      rawTaskGrid, nodeCounts, _output, _writeRandomCellOnly, _randomSeed);
+  }
+  map.reset();
 
   // flatten the collection; use a list to maintain order
   QList<TaskGridCell> taskGrid;
@@ -139,21 +158,21 @@ TaskGridGenerator::TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGr
       cellCtr++;
     }
   }
-  assert(boundsCalc.getTileCount() == taskGrid.size());
+  assert(_boundsCalc.getTileCount() == taskGrid.size());
 
   LOG_STATUS(
     "Calculated " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << ".");
   LOG_STATUS(
     "\tMaximum node count in any one tile: " <<
-    StringUtils::formatLargeNumber(boundsCalc.getMaxNodeCountInOneTile()));
+    StringUtils::formatLargeNumber(_boundsCalc.getMaxNodeCountInOneTile()));
   LOG_STATUS(
     "\tMinimum node count in any one tile: " <<
-    StringUtils::formatLargeNumber(boundsCalc.getMinNodeCountInOneTile()));
-  LOG_INFO("Pixel size used: " << boundsCalc.getPixelSize());
+    StringUtils::formatLargeNumber(_boundsCalc.getMinNodeCountInOneTile()));
+  LOG_INFO("Pixel size used: " << _boundsCalc.getPixelSize());
   LOG_INFO(
     "\tMaximum node count per tile used: " <<
-    StringUtils::formatLargeNumber(boundsCalc.getMaxNodesPerTile()));
+    StringUtils::formatLargeNumber(_boundsCalc.getMaxNodesPerTile()));
   _subTaskTimer.restart();
   return taskGrid;
 }

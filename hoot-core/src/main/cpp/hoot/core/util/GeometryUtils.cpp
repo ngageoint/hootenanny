@@ -193,6 +193,19 @@ QString GeometryUtils::toConfigString(const Envelope& e)
       arg(e.getMaxY(), 0, 'f', precision);
 }
 
+bool GeometryUtils::isEnvelopeConfigString(const QString& str)
+{
+  try
+  {
+    GeometryUtils::envelopeFromConfigString(str);
+  }
+  catch (const HootException&)
+  {
+    return false;
+  }
+  return true;
+}
+
 QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
 {
   return QString::number(bounds.getMinX()) + "," +
@@ -353,6 +366,20 @@ OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
        boundsItr != boundsCollection.end(); ++boundsItr)
   {
     createBoundsInMap(boundariesMap, *boundsItr);
+  }
+  return boundariesMap;
+}
+
+OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
+  const QMap<int, geos::geom::Envelope>& boundsCollection)
+{
+  OsmMapPtr boundariesMap(new OsmMap());
+  for (QMap<int, geos::geom::Envelope>::const_iterator boundsItr = boundsCollection.begin();
+       boundsItr != boundsCollection.end(); ++boundsItr)
+  {
+    const ElementId boundaryWayId = createBoundsInMap(boundariesMap, boundsItr.value());
+    boundariesMap->getWay(boundaryWayId.getId())->getTags()["id"] =
+      QString::number(boundsItr.key());
   }
   return boundariesMap;
 }

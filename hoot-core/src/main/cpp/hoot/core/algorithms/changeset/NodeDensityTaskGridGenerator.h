@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/TaskGridGenerator.h>
+#include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -45,9 +46,8 @@ class NodeDensityTaskGridGenerator : public TaskGridGenerator
 
 public:
 
-  NodeDensityTaskGridGenerator(const QString& bounds, const QString& input,
-                               const int maxNodesPerCell,
-                               const QString& output = "");
+  NodeDensityTaskGridGenerator(const QStringList& inputs, const int maxNodesPerCell,
+                               const QString& bounds = "", const QString& output = "");
 
   virtual ~NodeDensityTaskGridGenerator() = default;
 
@@ -61,21 +61,36 @@ public:
   void setReadInputFullThenCrop(const bool readInputFullThenCrop)
   { _readInputFullThenCrop = readInputFullThenCrop; }
 
+  void setPixelSize(const double pixelSize) { _boundsCalc.setPixelSize(pixelSize); }
+  void setMaxNumTries(const int numTries) { _boundsCalc.setMaxNumTries(numTries); }
+  void setMaxTimePerAttempt(const int maxTime) { _boundsCalc.setMaxTimePerAttempt(maxTime); }
+  void setPixelSizeRetryReductionFactor(const int factor)
+  { _boundsCalc.setPixelSizeRetryReductionFactor(factor); }
+  void setWriteRandomCellOnly(const bool writeRandomOnly)
+  { _writeRandomCellOnly = writeRandomOnly; }
+  void setRandomSeed(const int randomSeed) { _randomSeed = randomSeed; }
+
 private:
 
   // per task timer
   QElapsedTimer _subTaskTimer;
 
+  // TODO
+  QStringList _inputs;
   // area of the sum of all task grid cells;
   QString _bounds;
-  // TODO
-  QString _input;
   // runtime optimization for large amounts of data at the expense of using extra memory
   bool _readInputFullThenCrop;
-  // allows for capping the max number of node density nodes per grid cell
-  int _maxNodesPerCell;
   // output location of the generated task grid file; useful for debugging, should be a *.osm file
   QString _output;
+
+  // TODO
+  NodeDensityTileBoundsCalculator _boundsCalc;
+
+  // TODO
+  bool _writeRandomCellOnly;
+  // TODO:
+  int _randomSeed;
 
   // This preps the input for node density calc based task grid generation.
   OsmMapPtr _getNodeDensityTaskGridInput();

@@ -32,6 +32,8 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
 namespace hoot
 {
@@ -42,6 +44,19 @@ _bounds(bounds),
 _gridDimensionSize(gridDimensionSize),
 _output(output)
 {
+}
+
+UniformTaskGridGenerator::UniformTaskGridGenerator(
+ const QStringList& inputs, const int gridDimensionSize, const QString& output) :
+_gridDimensionSize(gridDimensionSize),
+_output(output)
+{
+  OsmMapPtr map(new OsmMap());
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    IoUtils::loadMap(map, inputs.at(i), true, Status::Invalid);
+  }
+  _bounds = GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map));
 }
 
 TaskGridGenerator::TaskGrid UniformTaskGridGenerator::generateTaskGrid()
@@ -66,7 +81,7 @@ TaskGridGenerator::TaskGrid UniformTaskGridGenerator::generateTaskGrid()
 
   int cellCtr = 1;
   // used to write boundaries to file after the grid is created
-  QList<geos::geom::Envelope> boundaries;
+  QMap<int, geos::geom::Envelope> boundaries;
   double cellXLeft = cellXLeftOrigin;
   double cellXRight = cellXRightOrigin;
   for (int i = 0; i < cols; i++)
@@ -82,7 +97,7 @@ TaskGridGenerator::TaskGrid UniformTaskGridGenerator::generateTaskGrid()
       taskGridCell.replacementNodeCount = -1;
       geos::geom::Envelope taskGridCellEnv(cellXLeft, cellXRight, cellYBottom, cellYTop);
       taskGridCell.bounds = taskGridCellEnv;
-      boundaries.append(taskGridCell.bounds);
+      boundaries[taskGridCell.id] = taskGridCell.bounds;
       taskGrid.append(taskGridCell);
 
       cellYTop = cellYTop - heightPerCell;
@@ -98,6 +113,8 @@ TaskGridGenerator::TaskGrid UniformTaskGridGenerator::generateTaskGrid()
   if (!_output.trimmed().isEmpty())
   {
     // write out task grid to file
+    // TODO: There are some differences between how geojson files are written by this class and
+    // NodeDensityTaskGridGenerator that may have to be dealt with at some point.
     OsmMapWriterFactory::write(GeometryUtils::createMapFromBoundsCollection(boundaries), _output);
   }
 

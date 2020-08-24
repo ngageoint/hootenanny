@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "TileBoundsWriter.h"
+#include "NodeDensityTaskGridWriter.h"
 
 // hoot
 #include <hoot/core/io/OsmGeoJsonWriter.h>
@@ -34,11 +34,12 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/conflate/tile/TileUtils.h>
+#include <hoot/core/util/PositiveIdGenerator.h>
 
 namespace hoot
 {
 
-void TileBoundsWriter::writeTilesToGeoJson(
+void NodeDensityTaskGridWriter::writeTilesToGeoJson(
   const std::vector<std::vector<geos::geom::Envelope>>& tiles,
   const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
   const QString& fileSource, const bool selectSingleRandomTile, int randomSeed)
@@ -65,7 +66,7 @@ void TileBoundsWriter::writeTilesToGeoJson(
   OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
 }
 
-void TileBoundsWriter::writeTilesToOsm(
+void NodeDensityTaskGridWriter::writeTilesToOsm(
   const std::vector<std::vector<geos::geom::Envelope>>& tiles,
   const std::vector<std::vector<long>>& nodeCounts, const QString& outputPath,
   const bool selectSingleRandomTile, int randomSeed)
@@ -83,12 +84,14 @@ void TileBoundsWriter::writeTilesToOsm(
   OsmMapWriterFactory::writeDebugMap(boundaryMap, "osm-tiles");
 }
 
-OsmMapPtr TileBoundsWriter::_tilesToOsmMap(
+OsmMapPtr NodeDensityTaskGridWriter::_tilesToOsmMap(
   const std::vector<std::vector<geos::geom::Envelope>>& tiles,
   const std::vector<std::vector<long>>& nodeCounts,
   int randomTileIndex, const bool selectSingleRandomTile)
 {
   OsmMapPtr boundaryMap(new OsmMap());
+  // This ensures the ways stay in the same order as the task IDs when the map is written out.
+  boundaryMap->setIdGenerator(std::shared_ptr<IdGenerator>(new PositiveIdGenerator));
   int bboxCtr = 1;
   for (size_t tx = 0; tx < tiles.size(); tx++)
   {
@@ -104,7 +107,9 @@ OsmMapPtr TileBoundsWriter::_tilesToOsmMap(
         ElementId eid = GeometryUtils::createBoundsInMap(boundaryMap, env);
         //  Update the tags on the bounding rectangle
         WayPtr bbox = boundaryMap->getWay(eid.getId());
+        LOG_VART(bbox->getElementId());
         bbox->setTag("node_count", QString::number(nodeCounts[tx][ty]));
+        LOG_VART(bboxCtr);
         bbox->setTag("task", QString::number(bboxCtr));
       }
       bboxCtr++;

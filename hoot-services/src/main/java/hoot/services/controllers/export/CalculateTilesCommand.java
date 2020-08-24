@@ -81,7 +81,7 @@ class CalculateTilesCommand extends ExportCommand {
             substitutionMap.put("PIXEL_SIZE", String.valueOf(params.getPixelSize()));
         }
 
-        String command = "hoot.bin node-density-tiles --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
+        String command = "hoot.bin task-grid --node-density --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${INPUTS} ${OUTPUT}";
         if ((params.getMaxNodeCountPerTile() != -1) && (params.getPixelSize() != -1.0)) {
             command += " --maxNodesPerTile ${MAX_NODE_COUNT_PER_TILE} --pixelSize ${PIXEL_SIZE}";
         }

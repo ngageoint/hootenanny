@@ -38,7 +38,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
-#include <hoot/core/io/TileBoundsWriter.h>
+#include <hoot/core/io/NodeDensityTaskGridWriter.h>
 #include <hoot/core/conflate/tile/TileUtils.h>
 
 namespace hoot
@@ -99,7 +99,7 @@ void RandomMapCropper::apply(OsmMapPtr& map)
   // the selected tile
 
   // TODO: integrate this with the node density retry params if they end up being useful with
-  // the node-density-tiles command
+  // the task-grid --node-density command
   NodeDensityTileBoundsCalculator tileCalc;
   tileCalc.setPixelSize(_pixelSize);
   tileCalc.setMaxNodesPerTile(_maxNodeCount);
@@ -109,7 +109,7 @@ void RandomMapCropper::apply(OsmMapPtr& map)
 
   if (!_tileFootprintOutputPath.isEmpty())
   {
-    TileBoundsWriter::writeTilesToOsm(tiles, nodeCounts, _tileFootprintOutputPath);
+    NodeDensityTaskGridWriter::writeTilesToOsm(tiles, nodeCounts, _tileFootprintOutputPath);
     LOG_INFO("Wrote tile footprints to: " << _tileFootprintOutputPath);
   }
   _cropper.setBounds(TileUtils::getRandomTile(tiles, _randomSeed));

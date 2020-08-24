@@ -314,6 +314,31 @@ See the User Guide for more details on command usage.
     hoot sync-element-ids input1.osm input2.osm output.osm
 -----
 
+===== Generate a grid with regular shaped cells across an entire map:
+
+-----
+    hoot task-grid "input1.osm;input2.osm" output.geojson --uniform
+-----
+
+===== Generate a grid with regular shaped cells across a subset of a map:
+
+-----
+    hoot task-grid  "-71.4698,42.4866,-71.4657,42.4902" output.geojson --uniform
+-----
+
+===== Generate a grid with irregular shaped cells that will fit at most 1000 nodes each for an entire map:
+
+-----
+    hoot task-grid "input1.osm;input2.osm" output.geojson --maxNodesPerCell 1000 --node-density
+-----
+
+===== Generate a grid with irregular shaped cells that will fit at most 1000 nodes each for a subset of a map:
+
+-----
+    hoot task-grid "input1.osm;input2.osm" output.geojson \
+      --maxNodesPerCell 1000 --bounds "-71.4698,42.4866,-71.4657,42.4902" --node-density
+-----
+
 ==== Comparison
 
 ===== Calculate the difference between two maps:
@@ -729,12 +754,6 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
     hoot schema
 -----
 
-===== Calculate a set of irregular shaped tiles that will fit at most 1000 nodes each for a map:
-
------
-    hoot node-density-tiles "input1.osm;input2.osm" output.geojson 1000
------
-
 ===== Split a map into multiple maps corresponding to irregular shaped tiles produced above:
 
 -----
@@ -815,6 +834,35 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
 -----
     hoot de-duplicate input.osm output.osm --node-filter "hoot::PoiCriterion"
 -----
+
+Generate a grid based on node density, specifying the maximum allowed node count per grid cell and a pixel size:
+
+--------------------------------------
+hoot task-grid "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson \
+   --maxNodesPerCell 1000 --pixelSize 0.001 --node-density
+--------------------------------------
+
+Calculate a grid based on node density, specifying the maximum allowed node count per cell, a pixel size, 
+and allow for more than one calculation attempt:
+
+--------------------------------------
+hoot task-grid "test-files/MyInputFile1.osm;test-files/MyInputFile2.osm" MyOutputFile.geojson \
+  --maxNodesPerCell 1000 --pixelSize 0.001 --maxAttempts 5 --pixelSizeAutoReductionFactor 10 --node-density
+--------------------------------------
+
+Select a random grid cell based on node density (works for --uniform as well):
+
+--------------------------------------
+hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --random --node-density
+--------------------------------------
+
+Select a random grid cell based on node density specifying a particular seed for the random number 
+generator (works for --uniform as well):
+
+--------------------------------------
+hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --maxNodesPerCell 1000 \
+  --pixelSize 0.001 --random --randomSeed 2 --node-density
+--------------------------------------
 
 ==== Statistics
 

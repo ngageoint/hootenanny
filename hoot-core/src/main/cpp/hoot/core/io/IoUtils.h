@@ -150,6 +150,14 @@ public:
    * @param dirName name of the directory to write
    */
   static void writeOutputDir(const QString& dirName);
+
+  /**
+   * TODO
+   *
+   * @param urls
+   * @return
+   */
+  static bool urlsAreBoundable(const QStringList& urls);
 };
 
 }

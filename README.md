@@ -160,7 +160,8 @@ In addition to conflating map data, Hootenanny also provides these capabilities:
 * [Calculate the geospatial extent](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/extent.asciidoc) of a map
 * [Clean map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/clean.asciidoc)
 * [Compare maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/diff.asciidoc) with each other
-* [Compute bounding tiles](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/node-density-tiles.asciidoc) based on node density
+* [Generate a uniform task grid](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/grid-uniform.asciidoc)
+* [Generate a task grid](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/grid-node-density.asciidoc) based on node density
 * [Convert maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc) between [different geodata formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 * [Crop a map](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop.asciidoc) to a geospatial extent
 * [De-duplicate map features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#remove-intra-map-duplicates-within-a-single-map)

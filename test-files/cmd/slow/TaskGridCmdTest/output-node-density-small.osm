@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.8845" minlon="-77.0551" maxlat="38.9031" maxlon="-77.02809999999999"/>
+    <node visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0550999999999959"/>
+    <node visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000020" lon="-77.0280999999999949"/>
+    <node visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9031000000000020" lon="-77.0550999999999959"/>
+    <node visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8845000000000027" lon="-77.0280999999999949"/>
+    <way visible="true" id="1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1"/>
+        <nd ref="3"/>
+        <nd ref="2"/>
+        <nd ref="4"/>
+        <nd ref="1"/>
+        <tag k="task" v="1"/>
+        <tag k="node_count" v="7487"/>
+    </way>
+</osm>

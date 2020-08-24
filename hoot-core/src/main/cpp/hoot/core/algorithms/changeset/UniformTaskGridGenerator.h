@@ -30,6 +30,9 @@
 // Hoot
 #include <hoot/core/algorithms/changeset/TaskGridGenerator.h>
 
+// Qt
+#include <QStringList>
+
 namespace hoot
 {
 
@@ -44,11 +47,21 @@ public:
   /**
    * TODO
    *
-   * @param taskGridBounds
+   * @param bounds
    * @param gridDimensionSize
    * @param output
    */
   UniformTaskGridGenerator(const QString& bounds, const int gridDimensionSize = 2,
+                           const QString& output = "");
+
+  /**
+   * TODO
+   *
+   * @param inputs
+   * @param gridDimensionSize
+   * @param output
+   */
+  UniformTaskGridGenerator(const QStringList& inputs, const int gridDimensionSize = 2,
                            const QString& output = "");
 
   virtual ~UniformTaskGridGenerator() = default;
