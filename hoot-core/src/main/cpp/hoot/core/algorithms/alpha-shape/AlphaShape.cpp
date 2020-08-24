@@ -104,7 +104,7 @@ public:
     _size = other._size;
   }
 
-  bool operator()(const std::shared_ptr<Geometry>& p1, const std::shared_ptr<Geometry>& p2)
+  bool operator()(const GeometryPtr& p1, const GeometryPtr& p2)
   {
     const Envelope* e1 = p1->getEnvelopeInternal();
     const Envelope* e2 = p2->getEnvelopeInternal();
@@ -144,7 +144,7 @@ private:
   double _size;
 };
 
-AlphaShape::AlphaShape(const double alpha)
+AlphaShape::AlphaShape(double alpha)
   : _alpha(alpha),
     _longestFaceEdge(0.0)
 {
@@ -216,15 +216,15 @@ bool AlphaShape::_isBoundary(const double alpha, const Edge& e) const
 
 bool AlphaShape::_isInside(const double alpha, const Face& face) const
 {
+  bool result = true;
   for (int i = 0; i < 6; i++)
   {
     const bool edgeTooLong = _isTooLong(alpha, face.getEdge(i));
     LOG_VART(edgeTooLong);
-    //  Short circut the loop if the edge is too long
     if (edgeTooLong)
-      return false;
+      result = false;
   }
-  return true;
+  return result;
 }
 
 bool AlphaShape::_isTooLong(const double alpha, const Edge& e) const
@@ -232,9 +232,7 @@ bool AlphaShape::_isTooLong(const double alpha, const Edge& e) const
   const double edgeDistance = e.getLength();
   LOG_VART(edgeDistance);
   if (edgeDistance > _longestFaceEdge)
-  {
     _longestFaceEdge = edgeDistance;
-  }
   return edgeDistance > alpha;
 }
 
@@ -255,7 +253,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
     maxY = max(points[i].second, maxY);
   }
 
-  double size = max(maxX - minX, maxY - minY);
+  double size = max(_alpha, max(maxX - minX, maxY - minY));
   double midX = (maxX + minX) / 2.0;
   double midY = (maxY + minY) / 2.0;
 
@@ -290,9 +288,9 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
   LOG_VARD(_pDelauneyTriangles->getFaces().size());
 }
 
-std::shared_ptr<OsmMap> AlphaShape::_toOsmMap()
+OsmMapPtr AlphaShape::_toOsmMap()
 {
-  std::shared_ptr<OsmMap> result(new OsmMap());
+  OsmMapPtr result(new OsmMap());
   GeometryConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
   const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
@@ -303,7 +301,7 @@ std::shared_ptr<OsmMap> AlphaShape::_toOsmMap()
   return result;
 }
 
-double AlphaShape::_collectValidFaces(const double alpha, std::vector<std::shared_ptr<Geometry>>& faces, Envelope& e)
+double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, Envelope& e)
 {
   double preUnionArea = 0.0;
   for (FaceIterator fi = _pDelauneyTriangles->getFaceIterator();
@@ -327,9 +325,10 @@ GeometryPtr AlphaShape::toGeometry()
   LOG_DEBUG("Traversing " << _pDelauneyTriangles->getFaces().size() << " faces...");
 
   // create a vector of all faces
-  vector<std::shared_ptr<Geometry>> faces, tmp2;
+  vector<GeometryPtr> faces, temp;
   Envelope e;
   double preUnionArea = _collectValidFaces(_alpha, faces, e);
+
   LOG_VARD(e);
   LOG_DEBUG("Area: " << (long)preUnionArea);
   LOG_VARD(faces.size());
@@ -347,7 +346,7 @@ GeometryPtr AlphaShape::toGeometry()
     else
     {
       // don't know how to handle it
-      return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+      return GeometryPtr(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     }
   }
 
@@ -363,7 +362,7 @@ GeometryPtr AlphaShape::toGeometry()
     sort(faces.begin(), faces.end(), compare);
 
     LOG_TRACE("Remaining pieces: " << faces.size());
-    vector<GeometryPtr> temp;
+    temp.resize(0);
     temp.reserve(faces.size() / 2 + 1);
     // Merge pairs at a time. This makes the join faster.
     for (size_t i = 0; i < faces.size() - 1; i += 2)
@@ -414,7 +413,7 @@ GeometryPtr AlphaShape::toGeometry()
       temp.push_back(faces[faces.size() - 1]);
     }
 
-    std::swap(faces, temp);
+    faces = temp;
   }
 
   LOG_DEBUG("Creating output geometry...");
