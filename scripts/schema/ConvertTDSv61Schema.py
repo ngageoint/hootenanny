@@ -1234,6 +1234,38 @@ text_SAX_RX8 = {
 }
 
 
+# Go through the schema and add attributes for imagery tags
+def addImgAttrs(schema):
+    for featureName in schema:
+        # schema[featureName]['columns']['fName'] = {'name':'AEI'.encode('utf8'),
+        #                                         'desc':'Acquisition Event Identifier'.encode('utf8'),
+        #                                         'type':'String',
+        #                                         'defValue':'No Information'.encode('utf8'),
+        #                                         'length':'256'.encode('utf8'),
+        #                                         'optional':'R'
+        #                                         }
+        schema[featureName]['columns']['AEI'] = {}
+        schema[featureName]['columns']['AEI'] = {'name':'AEI','desc':'Acquisition Event Identifier','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['earlydate'] = {}
+        schema[featureName]['columns']['earlydate'] = {'name':'earlydate','desc':'Earliest image date in mosaic','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['latedate'] = {}
+        schema[featureName]['columns']['latedate'] = {'name':'AEI','desc':'Latest image date in mosaic','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['img_layer'] = {}
+        schema[featureName]['columns']['img_layer'] = {'name':'img_layer','desc':'Imagery Layer Name','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['img_mosaic'] = {}
+        schema[featureName]['columns']['img_mosaic'] = {'name':'img_mosaic','desc':'Image Mosaic','type':'String',
+                                                'defValue':'no','length':'3','optional':'R'}
+        schema[featureName]['columns']['PFI'] = {}
+        schema[featureName]['columns']['PFI'] = {'name':'PFI','desc':'Acquisition Platform Identifier','type':'String',
+                                                'defValue':'No Information','length':'15','optional':'R'}
+
+    return schema
+# End addImgAttrs
+
 
 # The main loop to process a file
 def processFile(fileName):
@@ -1292,6 +1324,9 @@ def processFile(fileName):
 
             if fieldValue.find('interval closure') > -1:
                 aDefault = '5'
+
+        if aName == 'img_mosaic':
+            aDefault = 'no'
         #else:
             #print 'dataType not found:%s:' % (dataType)
 
@@ -1436,6 +1471,7 @@ def processFile(fileName):
 #
 parser = argparse.ArgumentParser(description='Process TDS files and build a schema')
 parser.add_argument('-q','--quiet', help="Don't print warning messages.",action='store_true')
+parser.add_argument('--addimgattr', help='add imagery attributes',action='store_true')
 parser.add_argument('--attributecsv', help='Dump out attributes as a CSV file',action='store_true')
 parser.add_argument('--attrlist', help='Dump out a list of attributes',action='store_true')
 parser.add_argument('--dumpenum', help='Dump out the enumerated attributes, one file per FCODE into a directory called enum',action='store_true')
@@ -1470,6 +1506,10 @@ for i in extraStuff:
 
 schema = {}
 schema = processFile(main_csv_file)
+
+# Add the Imagery attributes
+if args.addimgattr:
+    schema = addImgAttrs(schema)
 
 # Now add the TDSv61 changes to the standard TDSv60
 for i in schema:

@@ -10,3 +10,7 @@ Attributes that have been removed are:
 Files:
 * TDS_NGAv01_orig.csv - The raw file from NGA: 
 * TDS_NGAv01.csv - The NGA file with the "SUR" attribute removed 
+
+
+21 Aug 20: Update
+Added attributes to each feature to store image metadata.

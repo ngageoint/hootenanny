@@ -121,6 +121,59 @@ def printFuncList(schema):
 # End printFuncList
 
 
+# Go through the schema and add attributes for imagery tags
+def addImgAttrs(schema):
+    for featureName in schema:
+        # schema[featureName]['columns']['fName'] = {'name':'AEI'.encode('utf8'),
+        #                                         'desc':'Acquisition Event Identifier'.encode('utf8'),
+        #                                         'type':'String',
+        #                                         'defValue':'No Information'.encode('utf8'),
+        #                                         'length':'256'.encode('utf8'),
+        #                                         'optional':'R'
+        #                                         }
+        schema[featureName]['columns']['AEI'] = {}
+        schema[featureName]['columns']['AEI'] = {'name':'AEI','desc':'Acquisition Event Identifier','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['earlydate'] = {}
+        schema[featureName]['columns']['earlydate'] = {'name':'earlydate','desc':'Earliest image date in mosaic','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['latedate'] = {}
+        schema[featureName]['columns']['latedate'] = {'name':'AEI','desc':'Latest image date in mosaic','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['img_layer'] = {}
+        schema[featureName]['columns']['img_layer'] = {'name':'img_layer','desc':'Imagery Layer Name','type':'String',
+                                                'defValue':'No Information','length':'256','optional':'R'}
+        schema[featureName]['columns']['img_mosaic'] = {}
+        schema[featureName]['columns']['img_mosaic'] = {'name':'img_mosaic','desc':'Image Mosaic','type':'String',
+                                                'defValue':'no','length':'3','optional':'R'}
+        schema[featureName]['columns']['PFI'] = {}
+        schema[featureName]['columns']['PFI'] = {'name':'PFI','desc':'Acquisition Platform Identifier','type':'String',
+                                                'defValue':'No Information','length':'15','optional':'R'}
+
+        if 'ZI001_SRT' not in schema[featureName]['columns']:
+            schema[featureName]['columns']['ZI001_SRT'] = {}
+            schema[featureName]['columns']['ZI001_SRT'] = {'name':'ZI001_SRT','desc':'Source Information : Source Type',
+                                                'type':'String',
+                                                'func'] = 'full_ZI001_SRT',
+                                                'defValue':'noInformation','length':'30','optional':'R'}
+
+        if 'ZI001_SDV' not in schema[featureName]['columns']:
+            schema[featureName]['columns']['ZI001_SDV'] = {}
+            schema[featureName]['columns']['ZI001_SDV'] = {'name':'ZI001_SDV','desc':'Source Information : Source Date and Time',
+                                                'type':'String',
+                                                'defValue':'noInformation','length':'20','optional':'R'}
+
+        if 'ZI001_SDP' not in schema[featureName]['columns']:
+            schema[featureName]['columns']['ZI001_SDP'] = {}
+            schema[featureName]['columns']['ZI001_SDP'] = {'name':'ZI001_SDP','desc':'Source Information : Source Description',
+                                                'type':'String',
+                                                'defValue':'No Information','optional':'R'}
+
+    return schema
+# End addImgAttrs
+
+
+
 # Read all of the features in an XML document
 def readFeatures(xmlDoc,funcList):
     tSchema = {}
@@ -179,12 +232,12 @@ def readFeatures(xmlDoc,funcList):
                     defaultValue = fieldValue.getElementsByTagName('DefaultValue')[0].firstChild.data
                 else:
                     defaultValue = ''
-   
+
                 length = fieldValue.getElementsByTagName('Length')[0].firstChild.data
                 description = fieldValue.getElementsByTagName('AliasName')[0].firstChild.data
 
                 # Now start building the attribute
-                tSchema[featureName]['columns'][fName] = {}                
+                tSchema[featureName]['columns'][fName] = {}
                 tSchema[featureName]['columns'][fName] = { 'name':fName.encode('utf8'),
                                                         'desc':description.encode('utf8'),
                                                         'type':'',
@@ -196,7 +249,7 @@ def readFeatures(xmlDoc,funcList):
                 # Swap some of the enumerated lists for functions to save storge space
                 # E.g. having a full list of countries on EVERY feature is dumb
                 if fName in funcList:
-                    # Ugly bit of hard coding.  
+                    # Ugly bit of hard coding.
                     # We know that ZI020_GE4, ZI020_GE42, ZI020_GE43 etc are the same list
                     # Same with SGCC & *_CTUC etc
                     if fName.find('ZI020_GE4') > -1:
@@ -300,7 +353,13 @@ if __name__ == "__main__":
         'ZI026_CTUC','SGCC','ZSAX_RS0','CPS','ETS','HZD','VDT']
 
     # schema = readDomains(xmlDoc,funcList)
-    schema = readFeatures(xmlDoc,funcList)
+    # schema = readFeatures(xmlDoc,funcList)
+
+    # Add additional imagery relates attributes
+    # schema = addImgAttrs(schema)
+
+    schema = addImgAttrs(readFeatures(xmlDoc,funcList))
+
 
     # Now dump the schema out
     if args.rules:

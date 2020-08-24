@@ -101,8 +101,8 @@ Hootenanny has a variety of map cleaning capabilities to automatically correct e
 # Scalability
 Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of Hootenanny supported a map-reduce 
 architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance 
-costs to support the seldomly used capability (so some of the conflation algorithms are actually capable of supporting distributed 
-computing, if you want to go that route...but they're probably out of date with the rest of the codebase and may have some limitations). 
+costs to support the seldomly used capability. So, some of the conflation algorithms are actually capable of supporting distributed 
+computing, if you want to try and go that route and revive the capability. However, they are likely out of date with the rest of the current codebase and also may have some additional limitations. 
 
 Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the 
 density of the data being conflated and the RAM available on the machine. Beyond that, new conflation algorithms and/or parallelization of
@@ -203,7 +203,7 @@ In addition to conflating map data, Hootenanny also provides these capabilities:
 * [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
 
 Don't hesitate to ask for help if features aren't conflating how you expect them to or if you're experiencing difficulty while installing the 
-software. We officially support installing RPMs to CentOS and launching CentOS virtual matchines...anything else we'll do our best to help you out, but there are no guarantees. If you have any support questions, please create an issue in this repository.
+software. We officially support installing RPMs to CentOS and launching CentOS virtual machines...anything else we'll do our best to help you out, but there are no guarantees. If you have any support questions, please create an issue in this repository.
 
 As there are lot of different data scenarios out in the wild, there is no one-size fits all conflation workflow or algorithm. Hootenanny 
 attempts to provide a useful set of conflation workflows with pre-configured options that capture most conflation requirements. However, you
