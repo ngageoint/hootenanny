@@ -98,7 +98,7 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
             map1IdenticalElement->getElementId() << "...");
 
           // Add a custom metadata tag for debugging purposes.
-          map1IdenticalElementCopy->getTags().set("hoot:synced:id", "yes");
+          map1IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");
           // Add the element from the ref map.
           map2->addElement(map1IdenticalElementCopy);
           // Replace the element from the sec map with the newly added element, which removes the

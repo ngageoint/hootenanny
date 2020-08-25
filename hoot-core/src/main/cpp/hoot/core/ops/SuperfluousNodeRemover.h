@@ -67,11 +67,12 @@ public:
   SuperfluousNodeRemover();
   virtual ~SuperfluousNodeRemover() = default;
 
+  /**
+   * @see OsmMapOperation
+   */
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual std::string getClassName() const { return className(); }
-
-  virtual void readObject(QDataStream& is);
 
   /**
    * Removes superfluous nodes from a map
@@ -79,15 +80,36 @@ public:
    * @param map map from which to remove the nodes
    * @param ignoreInformationTags if true, will remove nodes even if they have an info tag
    * @param e bounds within which to remove nodes
-   * @return the number of nodes removed
+   * @return the number of superfluous nodes removed
    */
   static long removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
                           const geos::geom::Envelope& e = geos::geom::Envelope());
 
-  virtual void setBounds(const geos::geom::Envelope& bounds);
+  /**
+   * Counts superfluous nodes in a map without removing them
+   *
+   * @param map map from which to count the nodes
+   * @param ignoreInformationTags if true, will count nodes even if they have an info tag
+   * @param e bounds within which to count nodes
+   * @return the number of superfluous nodes found
+   */
+  static long countSuperfluousNodes(
+    std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
+    const geos::geom::Envelope& e = geos::geom::Envelope());
 
-  void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
+  /**
+   * Collects superfluous nodes from a map without removing them
+   *
+   * @param map map from which to collect the node IDs
+   * @param ignoreInformationTags if true, will collect IDs of nodes even if they have an info tag
+   * @param e bounds within which to collect node IDs
+   * @return the superfluous node IDs found
+   */
+  static std::set<long> collectSuperfluousNodeIds(
+    std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
+    const geos::geom::Envelope& e = geos::geom::Envelope());
 
+  virtual void readObject(QDataStream& is);
   virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const { return "Removes all nodes not part of a way"; }
@@ -97,11 +119,23 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " superfluous nodes"; }
 
+  std::set<long> getSuperfluousNodeIds() const { return _superfluousNodeIds; }
+
+  virtual void setBounds(const geos::geom::Envelope& bounds);
+  void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
+  void setRemoveNodes(bool remove) { _removeNodes = remove; }
+
 protected:
 
   geos::geom::Envelope _bounds;
 
-  std::set<long> _usedNodes;
+  // turning this off is useful for debugging the existence of orphaned nodes
+  bool _removeNodes;
+
+  // the non-superfluous nodes
+  std::set<long> _usedNodeIds;
+  // nodes either removed or counted; useful for debugging
+  std::set<long> _superfluousNodeIds;
 
   // if true, a node can be removed even if it has information tags (non-metadata)
   bool _ignoreInformationTags;

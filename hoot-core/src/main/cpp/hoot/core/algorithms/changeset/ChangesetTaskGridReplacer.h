@@ -33,6 +33,7 @@
 
 // Qt
 #include <QElapsedTimer>
+#include <QFile>
 
 namespace hoot
 {
@@ -76,6 +77,7 @@ public:
   void setKillAfterNumChangesetDerivations(int numDerivations)
   { _killAfterNumChangesetDerivations = numDerivations; }
   void setWriteFinalOutput(QString output) { _finalOutput = output; }
+  void setTagQualityIssues(bool tag) { _tagQualityIssues = tag; }
 
 private:
 
@@ -114,6 +116,8 @@ private:
 
   // optional location to write the final completely replaced ref output
   QString _finalOutput;
+  // adds tags to features that are suspect as result of the replacement op
+  bool _tagQualityIssues;
 
   void _initConfig();
 
@@ -126,6 +130,8 @@ private:
 
   // writes out all of the ref data; useful for debugging...expensive
   void _getUpdatedData(const QString& outputFile);
+  // tags elements with potential quality issues
+  void _writeQualityIssueTags(OsmMapPtr& map);
 };
 
 }

@@ -57,7 +57,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  CPPUNIT_TEST(orphanedNodes1Test);
+  // TODO: re-enable
+  //CPPUNIT_TEST(orphanedNodes1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
   //CPPUNIT_TEST(github4196Test);
@@ -65,7 +66,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(github4174UniformTest);
   //CPPUNIT_TEST(github4170UniformTest);
   //CPPUNIT_TEST(northVegasSmallTest);
-  //CPPUNIT_TEST(northVegasSmallUniformTest);
+  CPPUNIT_TEST(northVegasSmallUniformTest);
   //CPPUNIT_TEST(northVegasMediumTest);
   //CPPUNIT_TEST(northVegasLargeTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
@@ -116,6 +117,7 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -145,6 +147,7 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
   }
 
@@ -166,6 +169,7 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
      _replacementDataUrl,
@@ -188,6 +192,7 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -212,6 +217,7 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -245,6 +251,7 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
   }
 
@@ -264,6 +271,7 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -297,6 +305,7 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
   }
 
@@ -329,6 +338,7 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
     uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
   }
 
@@ -356,6 +366,7 @@ public:
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,

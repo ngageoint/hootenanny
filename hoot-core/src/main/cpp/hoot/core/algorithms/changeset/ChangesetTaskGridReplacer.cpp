@@ -38,6 +38,11 @@
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/criterion/DisconnectedWayCriterion.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/criterion/ElementIdCriterion.h>
 
 namespace hoot
 {
@@ -48,7 +53,8 @@ _reverseTaskGrid(false),
 _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
-_averageChangesetDeriveTime(0.0)
+_averageChangesetDeriveTime(0.0),
+_tagQualityIssues(false)
 {
 }
 
@@ -351,26 +357,32 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
 
 void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
 {
-  LOG_STATUS(
-    "Reading the modified data out of: " << _dataToReplaceUrl << " to: ..." <<
-    outputFile.right(25) << "...");
-
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
   // change these, so we can open the files in josm; not sure if these are helping...
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
 
+  LOG_STATUS("Reading the modified data out of: " << _dataToReplaceUrl << "...");
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
 
   // had to do this cleaning to get the relations to behave
+  LOG_STATUS("Cleaning output data...");
   RemoveMissingElementsVisitor missingElementRemover;
   map->visitRw(missingElementRemover);
   RemoveInvalidRelationVisitor invalidRelationRemover;
   map->visitRw(invalidRelationRemover);
   RemoveEmptyRelationsOp().apply(map);
 
+  if (_tagQualityIssues)
+  {
+    // tag element with potential data quality issues caused by the replacement operations
+    _writeQualityIssueTags(map);
+  }
+
+  // write the full map out
+  LOG_STATUS("Writing the modified data to: ..." << outputFile.right(25) << "...");
   OsmMapWriterFactory::write(map, outputFile);
 
   LOG_STATUS(
@@ -378,6 +390,33 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
     ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
+}
+
+void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
+{
+  LOG_STATUS("Tagging features with quality issues...");
+
+  std::shared_ptr<SetTagValueVisitor> tagVis;
+  std::shared_ptr<FilteredVisitor> filteredVis;
+
+  // orphaned nodes
+  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
+  filteredVis.reset(
+    new FilteredVisitor(
+      ElementIdCriterion(ElementType::Node, SuperfluousNodeRemover::collectSuperfluousNodeIds(map)),
+      tagVis));
+  map->visitRo(*filteredVis);
+  LOG_STATUS(
+    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
+    " nodes in output as superfluous.");
+
+  // disconnected ways
+  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
+  filteredVis.reset(new FilteredVisitor(DisconnectedWayCriterion(map), tagVis));
+  map->visitRo(*filteredVis);
+  LOG_STATUS(
+    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
+    " ways in output as disconnected.");
 }
 
 }

@@ -31,7 +31,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/algorithms/RdpWayGeneralizer.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 namespace hoot
 {
