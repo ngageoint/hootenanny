@@ -399,7 +399,6 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   std::shared_ptr<SetTagValueVisitor> tagVis;
   std::shared_ptr<FilteredVisitor> filteredVis;
 
-  // orphaned nodes
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
   filteredVis.reset(
     new FilteredVisitor(
@@ -408,9 +407,8 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   map->visitRo(*filteredVis);
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
-    " nodes in output as superfluous.");
+    " nodes in output as orphaned.");
 
-  // disconnected ways
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
   filteredVis.reset(new FilteredVisitor(DisconnectedWayCriterion(map), tagVis));
   map->visitRo(*filteredVis);

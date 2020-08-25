@@ -46,11 +46,7 @@ _map(map)
 
 bool DisconnectedWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e->getElementType() == ElementType::Way)
-  {
-    return WayUtils::hasConnectedWays(e->getId(), _map);
-  }
-  return false;
+  return e->getElementType() == ElementType::Way && !WayUtils::hasConnectedWays(e->getId(), _map);
 }
 
 }
