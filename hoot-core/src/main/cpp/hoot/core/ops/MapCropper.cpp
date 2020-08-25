@@ -141,7 +141,9 @@ QString MapCropper::getInitStatusMessage() const
   }
   else if (_envelopeG)
   {
-    msg += QString::fromStdString(_envelopeG->toString());
+    msg +=
+      QString::fromStdString(_envelopeG->toString())
+        .right(ConfigOptions().getProgressVarPrintLengthMax());
   }
   msg += "...";
   return msg;
@@ -548,6 +550,10 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   std::shared_ptr<Element> e =
     gc.convertGeometryToElement(g.get(), way->getStatus(), way->getCircularError());
   LOG_VART(e.get());
+  if (!e)
+  {
+    return;
+  }
 
   // If the cropped version of the way ends up being cropped down to a single node, throw it out.
   if (e->getElementType() == ElementType::Node)

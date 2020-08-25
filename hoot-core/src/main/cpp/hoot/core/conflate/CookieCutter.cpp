@@ -83,7 +83,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   if (cutterShape->getArea() == 0.0)
   {
     // would rather this be thrown than a warning logged, as the warning may go unoticed by web
-    // clients who are expecting the cookie cutting to occur
+    // clients who are expecting the cookie cutting to occur...
     throw HootException("Cutter area is zero. Try increasing the buffer size or check the input.");
   }
   LOG_VART(cutterShape->toString());
@@ -99,7 +99,10 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   cropper.setInvert(!_crop);
   cropper.setRemoveSuperflousFeatures(true);
   cropper.setRemoveMissingElements(_removeMissingElements);
+  LOG_STATUS("Cropping map...");
+  LOG_DEBUG(cropper.getInitStatusMessage());
   cropper.apply(doughMap);
+  LOG_DEBUG(cropper.getCompletedStatusMessage());
 
   OsmMapPtr cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodes().size());

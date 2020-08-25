@@ -193,6 +193,19 @@ QString GeometryUtils::toConfigString(const Envelope& e)
       arg(e.getMaxY(), 0, 'f', precision);
 }
 
+bool GeometryUtils::isEnvelopeConfigString(const QString& str)
+{
+  try
+  {
+    GeometryUtils::envelopeFromConfigString(str);
+  }
+  catch (const HootException&)
+  {
+    return false;
+  }
+  return true;
+}
+
 QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
 {
   return QString::number(bounds.getMinX()) + "," +
@@ -345,6 +358,32 @@ OsmMapPtr GeometryUtils::createMapFromBounds(const geos::geom::Envelope& bounds)
   return boundaryMap;
 }
 
+OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
+  const QList<geos::geom::Envelope>& boundsCollection)
+{
+  OsmMapPtr boundariesMap(new OsmMap());
+  for (QList<geos::geom::Envelope>::const_iterator boundsItr = boundsCollection.begin();
+       boundsItr != boundsCollection.end(); ++boundsItr)
+  {
+    createBoundsInMap(boundariesMap, *boundsItr);
+  }
+  return boundariesMap;
+}
+
+OsmMapPtr GeometryUtils::createMapFromBoundsCollection(
+  const QMap<int, geos::geom::Envelope>& boundsCollection)
+{
+  OsmMapPtr boundariesMap(new OsmMap());
+  for (QMap<int, geos::geom::Envelope>::const_iterator boundsItr = boundsCollection.begin();
+       boundsItr != boundsCollection.end(); ++boundsItr)
+  {
+    const ElementId boundaryWayId = createBoundsInMap(boundariesMap, boundsItr.value());
+    boundariesMap->getWay(boundaryWayId.getId())->getTags()["id"] =
+      QString::number(boundsItr.key());
+  }
+  return boundariesMap;
+}
+
 ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geom::Envelope& bounds)
 {
   NodePtr lowerLeft(
@@ -389,6 +428,7 @@ QList<geos::geom::Envelope> GeometryUtils::readBoundsFile(const QString& input)
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, input);
   const WayMap ways = map->getWays();
+  // read the bounds files in the order they are presented in the input
   for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     boundList.append(wayItr->second->getEnvelopeInternal(map));
@@ -398,6 +438,7 @@ QList<geos::geom::Envelope> GeometryUtils::readBoundsFile(const QString& input)
 
 QMap<int, geos::geom::Envelope> GeometryUtils::readBoundsFileWithIds(const QString& input)
 {
+  // This will sort the bounds inputs by their "id" tag.
   QMap<int, geos::geom::Envelope> boundsById;
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, input);

@@ -284,7 +284,6 @@ public:
         std::bind(&HighwayMatchVisitor::isMatchCandidate, this, placeholders::_1);
       std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));
 
-      // Instantiate our visitor
       SpatialIndexer v(
         _index, _indexToEid, pCrit,
         std::bind(&HighwayMatchVisitor::getSearchRadius, this, placeholders::_1), getMap());

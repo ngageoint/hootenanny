@@ -105,6 +105,14 @@ public:
   static QString toConfigString(const geos::geom::Envelope& e);
 
   /**
+   * Determines if a string represents an envelope
+   *
+   * @param str string to examine
+   * @return true if the input represents an envelope; false otherwise
+   */
+  static bool isEnvelopeConfigString(const QString& str);
+
+  /**
    * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
    * from an envelope
    *
@@ -139,12 +147,30 @@ public:
   static geos::geom::Geometry* validatePolygon(const geos::geom::Polygon* p);
 
   /**
-   * Creates a rectangular map representing a bounding box; useful for debugging
+   * Creates a rectangular map representing a single bounding box
    *
    * @param bounds bounding box
    * @return a bounding box map
    */
   static OsmMapPtr createMapFromBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * Creates a rectangular map representing multiple bounding boxes
+   *
+   * @param boundsCollection a collection of bounding boxes
+   * @return a bounding box map
+   */
+  static OsmMapPtr createMapFromBoundsCollection(
+    const QList<geos::geom::Envelope>& boundsCollection);
+
+  /**
+   * Creates a rectangular map representing multiple bounding boxes with IDs
+   *
+   * @param boundsCollection a collection of bounding boxes keyed by ID
+   * @return a bounding box map
+   */
+  static OsmMapPtr createMapFromBoundsCollection(
+    const QMap<int, geos::geom::Envelope>& boundsCollection);
 
   /**
    * Creates a bounding rectangle within the specified map

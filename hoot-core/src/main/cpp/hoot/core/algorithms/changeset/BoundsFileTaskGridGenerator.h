@@ -22,36 +22,48 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BOUNDABLE_H
-#define BOUNDABLE_H
+#ifndef BOUNDS_FILE_TASK_GRID_GENERATOR_H
+#define BOUNDS_FILE_TASK_GRID_GENERATOR_H
 
-// geos
-#include <geos/geom/Envelope.h>
+// Hoot
+#include <hoot/core/algorithms/changeset/TaskGridGenerator.h>
+
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
 
 /**
- * An interface defining a class that may have the bounds set. The exact meaning of setting the
- * bounds is context dependent, but in the case of OsmMapOperations it limits the scope of the
- * operation.
+ * Generates a task grid from one or more bounds file inputs
  */
-class Boundable
+class BoundsFileTaskGridGenerator : public TaskGridGenerator
 {
+
 public:
 
-  Boundable() = default;
-  virtual ~Boundable() = default;
+  /**
+   * Constructor
+   *
+   * @param inputs one or more bounds file inputs
+   */
+  BoundsFileTaskGridGenerator(const QStringList& inputs);
+
+  virtual ~BoundsFileTaskGridGenerator() = default;
 
   /**
-   * Sets the bounds in WGS84. It is important to note that even if the rest of the operation is
-   * not in WGS84 the bounds will still be in WGS84.
+   * @see TaskGridGenerator
    */
-  virtual void setBounds(const geos::geom::Envelope& bounds) = 0;
+  virtual TaskGrid generateTaskGrid();
+
+private:
+
+  // one or more paths to a custom task grid
+  QStringList _inputs;
 };
 
 }
 
-#endif // BOUNDABLE_H
+#endif // BOUNDS_FILE_TASK_GRID_GENERATOR_H

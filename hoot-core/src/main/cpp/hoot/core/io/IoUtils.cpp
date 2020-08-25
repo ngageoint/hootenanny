@@ -51,6 +51,23 @@
 namespace hoot
 {
 
+bool IoUtils::urlsAreBoundable(const QStringList& urls)
+{
+  for (int i = 0; i < urls.size(); i++)
+  {
+    const QString url = urls.at(i);
+    std::shared_ptr<OsmMapReader> reader =
+      OsmMapReaderFactory::createReader(url, true, Status::Invalid);
+
+    std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
+    if (!boundable)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 bool IoUtils::isSupportedOsmFormat(const QString& input)
 {
   const QString inputLower = input.toLower();

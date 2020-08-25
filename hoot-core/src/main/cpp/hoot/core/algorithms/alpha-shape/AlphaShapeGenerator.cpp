@@ -153,14 +153,12 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
     cutterShape.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
   cutterShape.reset(cutterShape->buffer(_buffer));
-  //OsmMapWriterFactory::writeDebugMap(cutterShape, inputMap->getProjection(), "cutter-shape-map");
 
-  // See _coverStragglers description. This is an add-on behavior that is separate from the Alpha
-  // Shape algorithm itself.
+  // See _coverStragglers description. This is an add-on behavior that is separate from the original
+  // Alpha Shape generation algorithm itself.
   if (_manuallyCoverSmallPointClusters)
   {
     _coverStragglers(cutterShape, inputMap);
-    //OsmMapWriterFactory::writeDebugMap(geometry, spatRef, "alpha-shape-after-covering-stragglers");
   }
 
   return cutterShape;

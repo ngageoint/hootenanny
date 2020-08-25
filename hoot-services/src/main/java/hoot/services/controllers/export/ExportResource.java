@@ -363,7 +363,7 @@ public class ExportResource {
     /**
      * Returns the contents of a geojson job output file
      * This is used by Hoot1 UI when creating a conflation task project
-     * using `hoot.bin node-density-tiles` to build a k-d tree output geojson
+     * using `hoot.bin task-grid --node-density` to build a k-d tree output geojson
      * of task areas with roughly equal numbers of features
      *
      * GET hoot-services/job/export/geojson/[job id from exportjob]

@@ -150,6 +150,15 @@ public:
    * @param dirName name of the directory to write
    */
   static void writeOutputDir(const QString& dirName);
+
+  /**
+   * Determines if all specified URLs are supported readers implementing Boundable
+   *
+   * @param urls one or more input URLs
+   * @return true if all of the URLs point to file formats whose readers support the Boundable
+   * interface
+   */
+  static bool urlsAreBoundable(const QStringList& urls);
 };
 
 }

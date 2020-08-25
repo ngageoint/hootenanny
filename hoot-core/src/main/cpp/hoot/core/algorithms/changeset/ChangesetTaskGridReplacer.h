@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/changeset/TaskGridGenerator.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -43,28 +44,15 @@ class OsmApiDbSqlChangesetApplier;
  * This class can replace data in an OSM API database across multiple AOI's via changeset generation
  * and application.
  *
- * Either an auto node density generated task grid or a task grid from one or more bounds input
- * files may be used to partition the data replacements. Node density calc requires reading in all
- * of the replacement node data, so may not be feasible when replacing extremely large amounts of
- * data.
+ * Either an auto node density generated, uniform, or file based input task grid may be used to
+ * partition the data replacements. The file based task grid supports one or more bounds input
+ * files. Node density calc requires reading in all of the replacement node data, so may not be
+ * feasible when replacing extremely large amounts of data.
  */
 class ChangesetTaskGridReplacer
 {
 
 public:
-
-  // TODO: add the option to auto-generate a uniform grid
-  enum GridType
-  {
-    NodeDensity = 0,
-    InputFile
-  };
-
-  struct TaskGridCell
-  {
-    int replacementNodeCount;
-    geos::geom::Envelope bounds;
-  };
 
   ChangesetTaskGridReplacer();
 
@@ -72,21 +60,15 @@ public:
    * Replaces data
    *
    * @param toReplace URL to the data to replace; must be an OSM API database
-   * @param replacement URL to the replacement data; currently must be a Hoot API database, but
-   * will update to support files again soon
+   * @param replacement URL to the replacement data; must be a Hoot API database
+   * @param taskGrid the task grid that partitions the individual replacement operations
    */
-  void replace(const QString& toReplace, const QString& replacement);
+  void replace(const QString& toReplace, const QString& replacement,
+               const TaskGridGenerator::TaskGrid& taskGrid);
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
-  void setTaskGridType(GridType gridType) { _gridType = gridType; }
-  void setNodeDensityGridBounds(const QString& bounds) { _nodeDensityGridBounds = bounds; }
-  void setReadNodeDensityInputFullThenCrop(bool readFull)
-  { _readNodeDensityInputFullThenCrop = readFull; }
-  void setNodeDensityMaxNodesPerCell(int maxNodes) { _maxNodeDensityNodesPerCell = maxNodes; }
-  void setGridInputs(const QStringList& inputs) { _gridInputs = inputs; }
-  void setNodeDensityTaskGridOutputFile(const QString& output)
-  { _nodeDensityTaskGridOutputFile = output; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
+  void setTaskCellSkipIds(const QList<int>& ids) { _taskCellSkipIds = ids; }
   void setChangesetsOutputDir(const QString& dir)
   { _changesetsOutputDir = dir; }
   void setKillAfterNumChangesetDerivations(int numDerivations)
@@ -104,21 +86,12 @@ private:
   QString _dataToReplaceUrl;
   // TODO: get rid of this; hacky
   int _originalDataSize;
-  // replacement data
+  // replacement data; must be hootapidb://
   QString _replacementUrl;
 
-  // manner in which to generate the task grid
-  GridType _gridType;
-  // area of the sum of all task grid cells; needed for node density calc only
-  QString _nodeDensityGridBounds;
-  // runtime optimization for large amounts of data at the expense of using extra memory
-  bool _readNodeDensityInputFullThenCrop;
-  // allows for capping the max number of node density nodes per grid cell
-  int _maxNodeDensityNodesPerCell;
-  // output location of the generated node density task grid file; useful for debugging
-  QString _nodeDensityTaskGridOutputFile;
-  // one or more paths to a custom task grid
-  QStringList _gridInputs;
+  // allows for skipping the processing of any grid cell with an "id" tag value in this ID list;
+  // applies to both node density and file based grids
+  QList<int> _taskCellSkipIds;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues
   bool _reverseTaskGrid;
 
@@ -135,32 +108,18 @@ private:
 
   // applies the replacement changesets
   std::shared_ptr<OsmApiDbSqlChangesetApplier> _changesetApplier;
-  int _totalNodesCreated;
-  int _totalNodesModified;
-  int _totalNodesDeleted;
-  int _totalWaysCreated;
-  int _totalWaysModified;
-  int _totalWaysDeleted;
-  int _totalRelationsCreated;
-  int _totalRelationsModified;
-  int _totalRelationsDeleted;
-  int _totalCreations;
-  int _totalModifications;
-  int _totalDeletions;
+  QMap<QString, long> _changesetStats;
 
+  // optional location to write the final completely replaced ref output
   QString _finalOutput;
 
   void _initConfig();
 
-  QMap<int, TaskGridCell> _getTaskGrid();
-  // This preps the input for node density calc based task grid generation.
-  OsmMapPtr _getNodeDensityTaskGridInput();
-  QMap<int, TaskGridCell> _calcNodeDensityTaskGrid(OsmMapPtr map);
-
-  void _replaceEntireTaskGrid(const QMap<int, TaskGridCell>& taskGrid);
+  void _replaceEntireTaskGrid(const TaskGridGenerator::TaskGrid& taskGrid);
   void _replaceTaskGridCell(
-    const int taskGridCellId, const int changesetNum, const geos::geom::Envelope& bounds,
-    const int taskGridSize, const int numReplacementNodes = -1);
+    const TaskGridGenerator::TaskGridCell& taskGridCell, const int changesetNum,
+    const int taskGridSize);
+  void _initChangesetStats();
   void _printChangesetStats();
 
   // writes out all of the ref data; useful for debugging...expensive

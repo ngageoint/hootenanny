@@ -22,36 +22,48 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef BOUNDABLE_H
-#define BOUNDABLE_H
+#ifndef TASK_GRID_GENERATOR_H
+#define TASK_GRID_GENERATOR_H
 
-// geos
+// GEOS
 #include <geos/geom/Envelope.h>
+
+// Qt
+#include <QList>
 
 namespace hoot
 {
 
 /**
- * An interface defining a class that may have the bounds set. The exact meaning of setting the
- * bounds is context dependent, but in the case of OsmMapOperations it limits the scope of the
- * operation.
+ * Allows for creating a task grid for performing distributed map operations
  */
-class Boundable
+class TaskGridGenerator
 {
+
 public:
 
-  Boundable() = default;
-  virtual ~Boundable() = default;
+  /**
+   * Individual component of a task grid
+   */
+  struct TaskGridCell
+  {
+    int id;
+    int replacementNodeCount;
+    geos::geom::Envelope bounds;
+  };
+
+  typedef QList<TaskGridCell> TaskGrid;
 
   /**
-   * Sets the bounds in WGS84. It is important to note that even if the rest of the operation is
-   * not in WGS84 the bounds will still be in WGS84.
+   * Generates a task grid
+   *
+   * @return a task grid
    */
-  virtual void setBounds(const geos::geom::Envelope& bounds) = 0;
+  virtual TaskGrid generateTaskGrid() = 0;
 };
 
 }
 
-#endif // BOUNDABLE_H
+#endif // TASK_GRID_GENERATOR_H
