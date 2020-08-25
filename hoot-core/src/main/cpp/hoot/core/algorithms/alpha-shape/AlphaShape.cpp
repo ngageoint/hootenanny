@@ -104,7 +104,7 @@ public:
     _size = other._size;
   }
 
-  bool operator()(const std::shared_ptr<Geometry>& p1, const std::shared_ptr<Geometry>& p2)
+  bool operator()(const GeometryPtr& p1, const GeometryPtr& p2)
   {
     const Envelope* e1 = p1->getEnvelopeInternal();
     const Envelope* e2 = p2->getEnvelopeInternal();
@@ -144,22 +144,17 @@ private:
   double _size;
 };
 
-inline double distance(double x1, double x2, double y1, double y2)
-{
-  return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-}
-
-AlphaShape::AlphaShape(double alpha) :
-_alpha(alpha),
-_longestFaceEdge(0.0)
+AlphaShape::AlphaShape(double alpha)
+  : _alpha(alpha),
+    _longestFaceEdge(0.0)
 {
   LOG_VARD(_alpha);
   _pDelauneyTriangles.reset(new Tgs::DelaunayTriangulation);
 }
 
-std::shared_ptr<Polygon> AlphaShape::_convertFaceToPolygon(const Face& face) const
+GeometryPtr AlphaShape::_convertFaceToPolygon(const Face& face) const
 {
-  std::shared_ptr<Polygon> result;
+  GeometryPtr result;
   CoordinateSequence* cs =
     GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(4, 2);
   LinearRing* lr;
@@ -187,16 +182,16 @@ std::shared_ptr<Polygon> AlphaShape::_convertFaceToPolygon(const Face& face) con
   return result;
 }
 
-bool AlphaShape::_isBoundary(const Edge& e) const
+bool AlphaShape::_isBoundary(const double alpha, const Edge& e) const
 {
   bool result = false;
-  if (_isTooLong(e) == false)
+  if (_isTooLong(alpha, e) == false)
   {
     Edge leftCcw = e.getLeftNext();
     Edge leftCw = e.getLeftPrevious();
     bool leftOpen = false;
 
-    if (_isTooLong(leftCcw) || _isTooLong(leftCw))
+    if (_isTooLong(alpha, leftCcw) || _isTooLong(alpha, leftCw))
     {
       leftOpen = true;
     }
@@ -205,7 +200,7 @@ bool AlphaShape::_isBoundary(const Edge& e) const
     Edge rightCw = e.getRightPrevious();
     bool rightOpen = false;
 
-    if (_isTooLong(rightCcw) || _isTooLong(rightCw))
+    if (_isTooLong(alpha, rightCcw) || _isTooLong(alpha, rightCw))
     {
       rightOpen = true;
     }
@@ -219,46 +214,26 @@ bool AlphaShape::_isBoundary(const Edge& e) const
   return result;
 }
 
-bool AlphaShape::_isInside(const Face& face) const
+bool AlphaShape::_isInside(const double alpha, const Face& face) const
 {
   bool result = true;
   for (int i = 0; i < 6; i++)
   {
-    const bool edgeTooLong = _isTooLong(face.getEdge(i));
+    const bool edgeTooLong = _isTooLong(alpha, face.getEdge(i));
     LOG_VART(edgeTooLong);
     if (edgeTooLong)
-    {
       result = false;
-    }
   }
   return result;
 }
 
-bool AlphaShape::_isOutsideEdge(const Tgs::Edge& e) const
+bool AlphaShape::_isTooLong(const double alpha, const Edge& e) const
 {
-  if (_outsidePoint.find(pair<double,double>(e.getOriginX(), e.getOriginY())) !=
-        _outsidePoint.end() &&
-      _outsidePoint.find(pair<double,double>(e.getDestinationX(), e.getDestinationY())) !=
-        _outsidePoint.end())
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
-bool AlphaShape::_isTooLong(const Edge& e) const
-{
-  const double edgeDistance =
-    distance(e.getOriginX(), e.getDestinationX(), e.getOriginY(), e.getDestinationY());
+  const double edgeDistance = e.getLength();
   LOG_VART(edgeDistance);
   if (edgeDistance > _longestFaceEdge)
-  {
     _longestFaceEdge = edgeDistance;
-  }
-  return edgeDistance > _alpha;
+  return edgeDistance > alpha;
 }
 
 void AlphaShape::insert(const vector<pair<double, double>>& points)
@@ -292,9 +267,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
   _outsidePoint.insert(randomized[2]);
 
   for (size_t i = 0; i < points.size(); i++)
-  {
     randomized.push_back(points[i]);
-  }
 
   // By randomizing the input we take the complexity from O(n^2) to O(n lg(n)).
   for (size_t i = 0; i < points.size() * 3; i++)
@@ -315,9 +288,9 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
   LOG_VARD(_pDelauneyTriangles->getFaces().size());
 }
 
-std::shared_ptr<OsmMap> AlphaShape::_toOsmMap()
+OsmMapPtr AlphaShape::_toOsmMap()
 {
-  std::shared_ptr<OsmMap> result(new OsmMap());
+  OsmMapPtr result(new OsmMap());
   GeometryConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
   const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
@@ -328,38 +301,40 @@ std::shared_ptr<OsmMap> AlphaShape::_toOsmMap()
   return result;
 }
 
-std::shared_ptr<Geometry> AlphaShape::toGeometry()
+double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPtr>& faces, Envelope& e)
 {
-  LOG_DEBUG("Traversing " << _pDelauneyTriangles->getFaces().size() << " faces...");
-
-  // create a vector of all faces
-  vector<std::shared_ptr<Geometry>> tmp, tmp2;
-  Envelope e;
   double preUnionArea = 0.0;
-  int i = 0;
-  int numPolys = 0;
   for (FaceIterator fi = _pDelauneyTriangles->getFaceIterator();
        fi != _pDelauneyTriangles->getFaceEnd(); fi++)
   {
     const Face& f = *fi;
-    i++;
-    if (_isInside(f))
+    if (_isInside(alpha, f))
     {
-      std::shared_ptr<Polygon> p = _convertFaceToPolygon(f);
+      GeometryPtr p = _convertFaceToPolygon(f);
       LOG_VART(p->getArea());
-      tmp.push_back(p);
+      faces.push_back(p);
       e.expandToInclude(p->getEnvelopeInternal());
       preUnionArea += p->getArea();
-      numPolys++;
     }
   }
-  LOG_VARD(numPolys);
+  return preUnionArea;
+}
+
+GeometryPtr AlphaShape::toGeometry()
+{
+  LOG_DEBUG("Traversing " << _pDelauneyTriangles->getFaces().size() << " faces...");
+
+  // create a vector of all faces
+  vector<GeometryPtr> faces, temp;
+  Envelope e;
+  double preUnionArea = _collectValidFaces(_alpha, faces, e);
+
   LOG_VARD(e);
   LOG_DEBUG("Area: " << (long)preUnionArea);
-  LOG_VARD(tmp.size());
+  LOG_VARD(faces.size());
 
   // if the result is an empty geometry
-  if (tmp.size() == 0)
+  if (faces.size() == 0)
   {
     if (_longestFaceEdge > _alpha)
     {
@@ -371,35 +346,35 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
     else
     {
       // don't know how to handle it
-      return std::shared_ptr<Geometry>(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+      return GeometryPtr(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     }
   }
 
-  LOG_DEBUG("Joining " << StringUtils::formatLargeNumber(tmp.size()) << " faces...");
+  LOG_DEBUG("Joining " << StringUtils::formatLargeNumber(faces.size()) << " faces...");
 
   // while there is more than one geometry
-  while (tmp.size() > 1)
+  while (faces.size() > 1)
   {
-    LOG_TRACE("Sorting size: " << tmp.size());
+    LOG_TRACE("Sorting size: " << faces.size());
     // Sort polygons using the Hilbert value. This increases the chances that nearby polygons will
     // be merged early and speed up the union process.
     ComparePolygon compare(e);
-    sort(tmp.begin(), tmp.end(), compare);
+    sort(faces.begin(), faces.end(), compare);
 
-    LOG_TRACE("Remaining pieces: " << tmp.size());
-    tmp2.resize(0);
-    tmp2.reserve(tmp.size() / 2 + 1);
+    LOG_TRACE("Remaining pieces: " << faces.size());
+    temp.resize(0);
+    temp.reserve(faces.size() / 2 + 1);
     // Merge pairs at a time. This makes the join faster.
-    for (size_t i = 0; i < tmp.size() - 1; i += 2)
+    for (size_t i = 0; i < faces.size() - 1; i += 2)
     {
-      std::shared_ptr<Geometry> g;
+      GeometryPtr g;
       // Sometimes GEOS gives results that are incorrect. In those cases we try cleaning the
       // geometries and attempting it again.
       bool cleanAndRetry = false;
       try
       {
-        double area = tmp[i]->getArea() + tmp[i + 1]->getArea();
-        g.reset(tmp[i]->Union(tmp[i + 1].get()));
+        double area = faces[i]->getArea() + faces[i + 1]->getArea();
+        g.reset(faces[i]->Union(faces[i + 1].get()));
         if (g->isEmpty() || fabs(g->getArea() - area) > 0.1)
         {
           cleanAndRetry = true;
@@ -413,40 +388,40 @@ std::shared_ptr<Geometry> AlphaShape::toGeometry()
 
       if (cleanAndRetry)
       {
-        tmp[i].reset(GeometryUtils::validateGeometry(tmp[i].get()));
-        tmp[i + 1].reset(GeometryUtils::validateGeometry(tmp[i + 1].get()));
+        faces[i].reset(GeometryUtils::validateGeometry(faces[i].get()));
+        faces[i + 1].reset(GeometryUtils::validateGeometry(faces[i + 1].get()));
         try
         {
-          g.reset(tmp[i]->Union(tmp[i + 1].get()));
+          g.reset(faces[i]->Union(faces[i + 1].get()));
         }
         // if the cleaning didn't fix the problem
         catch(const geos::util::GEOSException& e)
         {
           // report an error
           QString error = "Error unioning two geometries. " + QString(e.what()) + "\n" +
-              "geom1: " + QString::fromStdString(tmp[i]->toString()) + "\n" +
-              "geom2: " + QString::fromStdString(tmp[i + 1]->toString());
+              "geom1: " + QString::fromStdString(faces[i]->toString()) + "\n" +
+              "geom2: " + QString::fromStdString(faces[i + 1]->toString());
           throw HootException(error);
         }
       }
 
-      tmp2.push_back(g);
+      temp.push_back(g);
     }
     // If there are an odd number of entries, just add the last one.
-    if (tmp.size() % 2 == 1)
+    if (faces.size() % 2 == 1)
     {
-      tmp2.push_back(tmp[tmp.size() - 1]);
+      temp.push_back(faces[faces.size() - 1]);
     }
 
-    tmp = tmp2;
+    faces = temp;
   }
 
   LOG_DEBUG("Creating output geometry...");
 
-  std::shared_ptr<Geometry> result;
-  if (tmp.size() == 1)
+  GeometryPtr result;
+  if (faces.size() == 1)
   {
-    result = tmp[0];
+    result = faces[0];
   }
   else
   {

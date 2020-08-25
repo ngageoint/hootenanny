@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DelaunayTriangulation.h"
@@ -107,6 +107,13 @@ const Edge Edge::getReverse() const { return _ie->Sym(); }
 
 const Edge Edge::getRightNext() const { return _ie->Rnext(); }
 const Edge Edge::getRightPrevious() const { return _ie->Rprev(); }
+
+inline double distance(double x1, double x2, double y1, double y2)
+{
+  return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
+
+double Edge::getLength() const { return distance(getOriginX(), getDestinationX(), getOriginY(), getDestinationY()); }
 
 bool Edge::operator<(const Edge& e) const
 {
