@@ -42,7 +42,9 @@ class OsmApiDbSqlChangesetApplier;
 
 /**
  * This class can replace data in an OSM API database across multiple AOI's via changeset generation
- * and application.
+ * and application. Its primarily meant as a testing harness to support
+ * ServiceChangesetReplacementGridTest. However, in theory, with some tweaks it could be used in a
+ * production environment if desired.
  *
  * Either an auto node density generated, uniform, or file based input task grid may be used to
  * partition the data replacements. The file based task grid supports one or more bounds input

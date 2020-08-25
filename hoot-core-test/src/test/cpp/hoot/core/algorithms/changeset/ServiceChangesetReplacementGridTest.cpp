@@ -63,6 +63,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(github4196Test);
   //CPPUNIT_TEST(github4174Test);
   //CPPUNIT_TEST(github4174UniformTest);
+  //CPPUNIT_TEST(github4170UniformTest);
   //CPPUNIT_TEST(northVegasSmallTest);
   //CPPUNIT_TEST(northVegasSmallUniformTest);
   //CPPUNIT_TEST(northVegasMediumTest);
@@ -196,6 +197,29 @@ public:
         .generateTaskGrid());
   }
 
+  void github4170UniformTest()
+  {
+    _testName = "github4170UniformTest";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
+    const QString outDir = rootDir + "/" + _testName;
+    QDir(outDir).removeRecursively();
+    QDir().mkpath(outDir);
+    _prepInput(
+      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
+      "-115.2069,36.1696,-114.9439,36.4081");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.1365,36.2084,-115.0049,36.3151", 3,
+        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+  }
 
   void northVegasSmallTest()
   {

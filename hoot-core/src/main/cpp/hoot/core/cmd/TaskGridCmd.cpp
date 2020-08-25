@@ -257,8 +257,6 @@ public:
       LOG_VARD(randomSeed);
     }
 
-    //conf().set(ConfigOptions().getIdGeneratorKey(), "hoot::PositiveIdGenerator");
-
     if (!isUniformGrid)
     {
       NodeDensityTaskGridGenerator taskGridGen(inputs, maxNodesPerCell, bounds, output);
