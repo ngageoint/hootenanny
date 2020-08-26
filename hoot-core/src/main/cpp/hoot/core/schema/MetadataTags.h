@@ -201,6 +201,11 @@ public:
   inline static const QString HootDisconnected()        { return "hoot:disconnected"; }
 
   /**
+   * Used to identify empty ways for debugging purposes
+   */
+  inline static const QString HootEmptyWay()        { return "hoot:empty:way"; }
+
+  /**
    * Identifies features snapped with UnconnectedWaySnapper
    */
   inline static const QString HootSnapped()             { return "hoot:snapped"; }

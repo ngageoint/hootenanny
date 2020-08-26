@@ -65,8 +65,9 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(github4174Test);
   //CPPUNIT_TEST(github4174UniformTest);
   //CPPUNIT_TEST(github4170UniformTest);
+  CPPUNIT_TEST(github4216UniformTest);
   //CPPUNIT_TEST(northVegasSmallTest);
-  CPPUNIT_TEST(northVegasSmallUniformTest);
+  //CPPUNIT_TEST(northVegasSmallUniformTest);
   //CPPUNIT_TEST(northVegasMediumTest);
   //CPPUNIT_TEST(northVegasLargeTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
@@ -227,6 +228,34 @@ public:
         .generateTaskGrid());
   }
 
+  void github4216UniformTest()
+  {
+    _testName = "github4216UniformTest";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
+    const QString outDir = rootDir + "/" + _testName;
+    QDir(outDir).removeRecursively();
+    QDir().mkpath(outDir);
+    _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
+
+    ChangesetTaskGridReplacer uut;
+    //uut.setKillAfterNumChangesetDerivations(2);
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    QList<int> includeTaskGridCellIds;
+    includeTaskGridCellIds.append(38);
+    includeTaskGridCellIds.append(46);
+    uut.setTaskCellIncludeIds(includeTaskGridCellIds);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.3528,36.0919,-114.9817,36.3447", 8,
+        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+  }
+
   void northVegasSmallTest()
   {
     // 4 sq blocks of the city, 4 changesets, ~9k changes, avg derivation: 4s, total time: ~.5m,
@@ -346,13 +375,8 @@ public:
   {
     // lenient
 
-    // whole northern half of city, ? changesets, ~?M changes, avg derivation: ?m,
-    // total time: ?h, ~?k changes/min
-
-    // hybrid
-
-    // whole northern half of city, ? changesets, ~?M changes, avg derivation: ?m,
-    // total time: ?h, ~?k changes/min
+    // whole northern half of city, 64 changesets, ~33.2M changes, avg derivation: 2.3m,
+    // total time: 2.9h, ~192k changes/min
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";

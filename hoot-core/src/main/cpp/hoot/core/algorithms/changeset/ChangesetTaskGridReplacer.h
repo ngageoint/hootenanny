@@ -71,6 +71,7 @@ public:
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
+  void setTaskCellIncludeIds(const QList<int>& ids) { _taskCellIncludeIds = ids; }
   void setTaskCellSkipIds(const QList<int>& ids) { _taskCellSkipIds = ids; }
   void setChangesetsOutputDir(const QString& dir)
   { _changesetsOutputDir = dir; }
@@ -93,8 +94,10 @@ private:
   // replacement data; must be hootapidb://
   QString _replacementUrl;
 
+  // allows for including the processing of any grid cell with an "id" tag value in this ID list
+  QList<int> _taskCellIncludeIds;
   // allows for skipping the processing of any grid cell with an "id" tag value in this ID list;
-  // applies to both node density and file based grids
+  // overrides _taskCellIncludeIds
   QList<int> _taskCellSkipIds;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues
   bool _reverseTaskGrid;

@@ -24,34 +24,45 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "DisconnectedWayCriterion.h"
+#ifndef EMPTY_WAY_CRITERION_H
+#define EMPTY_WAY_CRITERION_H
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, DisconnectedWayCriterion)
-
-DisconnectedWayCriterion::DisconnectedWayCriterion()
+/**
+ * Ways with no nodes; will see this from time to time as a result of cut and replace, since we
+ * allow element references point to missing elements to persist
+ *
+ * @todo implement OperationStatusInfo
+ */
+class EmptyWayCriterion : public ElementCriterion
 {
+public:
+
+  static std::string className() { return "hoot::EmptyWayCriterion"; }
+
+  EmptyWayCriterion();
+  virtual ~EmptyWayCriterion() = default;
+
+  /**
+   * @see ElementCriterion
+   */
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+
+  virtual ElementCriterionPtr clone() override
+  { return ElementCriterionPtr(new EmptyWayCriterion()); }
+
+  virtual QString getDescription() const override
+  { return "Identifies ways with no nodes"; }
+
+  virtual QString toString() const override
+  { return QString::fromStdString(className()).remove("hoot::"); }
+};
+
 }
 
-DisconnectedWayCriterion::DisconnectedWayCriterion(ConstOsmMapPtr map) :
-_map(map)
-{
-}
-
-bool DisconnectedWayCriterion::isSatisfied(const ConstElementPtr& e) const
-{
-  if (e->getElementType() == ElementType::Way)
-  {
-    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-    return way && way->getNodeCount() > 0 && !WayUtils::hasConnectedWays(way->getId(), _map);
-  }
-  return false;
-}
-
-}
+#endif // EMPTY_WAY_CRITERION_H

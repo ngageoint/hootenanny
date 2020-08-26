@@ -43,6 +43,7 @@
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/ElementIdCriterion.h>
+#include <hoot/core/criterion/EmptyWayCriterion.h>
 
 namespace hoot
 {
@@ -223,7 +224,10 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   const TaskGridGenerator::TaskGridCell& taskGridCell, const int changesetNum,
   const int taskGridSize)
 {
-  if (_taskCellSkipIds.contains(taskGridCell.id))
+  // Include IDs override skip IDs. if include IDs is populated at all and this ID isn't in the
+  // list, skip it. Otherwise, if the skip IDs have it, also skip it.
+  if ((!_taskCellIncludeIds.isEmpty() && !_taskCellIncludeIds.contains(taskGridCell.id)) ||
+      _taskCellSkipIds.contains(taskGridCell.id))
   {
     LOG_STATUS("***********Skipping task grid cell: " << taskGridCell.id << "*********");
     _subTaskTimer.restart();
@@ -367,19 +371,23 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
 
-  // had to do this cleaning to get the relations to behave
-  LOG_STATUS("Cleaning output data...");
-  RemoveMissingElementsVisitor missingElementRemover;
-  map->visitRw(missingElementRemover);
-  RemoveInvalidRelationVisitor invalidRelationRemover;
-  map->visitRw(invalidRelationRemover);
-  RemoveEmptyRelationsOp().apply(map);
-
   if (_tagQualityIssues)
   {
-    // tag element with potential data quality issues caused by the replacement operations
+    // tag element with potential data quality issues caused by the replacement operations; *think*
+    // its best to do it before the cleaning in the next step...
     _writeQualityIssueTags(map);
   }
+
+  // had to do this cleaning to get the relations to behave
+  RemoveMissingElementsVisitor missingElementRemover;
+  map->visitRw(missingElementRemover);
+  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+  RemoveInvalidRelationVisitor invalidRelationRemover;
+  map->visitRw(invalidRelationRemover);
+  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
+  RemoveEmptyRelationsOp emptyRelationRemover;
+  emptyRelationRemover.apply(map);
+  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
 
   // write the full map out
   LOG_STATUS("Writing the modified data to: ..." << outputFile.right(25) << "...");
@@ -415,6 +423,13 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
     " ways in output as disconnected.");
+
+  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
+  filteredVis.reset(new FilteredVisitor(EmptyWayCriterion(), tagVis));
+  map->visitRo(*filteredVis);
+  LOG_STATUS(
+    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
+    " empty ways in output.");
 }
 
 }
