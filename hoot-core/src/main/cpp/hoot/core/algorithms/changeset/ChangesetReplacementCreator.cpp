@@ -131,7 +131,8 @@ _waySnappingEnabled(true),
 _conflationEnabled(true),
 _cleaningEnabled(true),
 _tagOobConnectedWays(false),
-_currentChangeDerivationPassIsLinear(false)
+_currentChangeDerivationPassIsLinear(false),
+_numChanges(0)
 {
   _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
 
@@ -567,9 +568,11 @@ void ChangesetReplacementCreator::_create()
   _changesetCreator->setIncludeReviews(
     _conflationEnabled && ConfigOptions().getChangesetReplacementPassConflateReviews());
   _changesetCreator->create(refMaps, conflatedMaps, _output);
+  _numChanges = _changesetCreator->getNumTotalChanges();
 
   LOG_STATUS(
-    "Derived replacement changeset: ..." << _output.right(_maxFilePrintLength) << " in " <<
+    "Derived replacement changeset: ..." << _output.right(_maxFilePrintLength) << " with " <<
+    StringUtils::formatLargeNumber(_numChanges) << " changes in " <<
     StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 
@@ -673,22 +676,28 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VARD(secMapSize);
 
   const QString geometryTypeStr = GeometryTypeCriterion::typeToString(geometryType);
+  bool bothMapsEmpty = false;
   if (refMapSize == 0 && secMapSize == 0)
   {
     LOG_STATUS("Both maps empty, so skipping data removal...");
-  }
-  else
-  {
-    LOG_STATUS(
-      "Replacing " << StringUtils::formatLargeNumber(refMapSize) << " " << geometryTypeStr <<
-      " feature(s) with " << StringUtils::formatLargeNumber(secMapSize) << " " << geometryTypeStr <<
-      " feature(s)...");
+    bothMapsEmpty = true;
   }
 
   // CUT
 
   // cut the secondary data out of the reference data
   OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap, geometryType);
+  const int cookieCutSize = cookieCutRefMap->size();
+  const int dataRemoved = refMapSize - cookieCutSize;
+
+  if (!bothMapsEmpty)
+  {
+    // sec map size may have changed after call to _getCookieCutMap
+    LOG_STATUS(
+      "Replacing " << StringUtils::formatLargeNumber(dataRemoved) << " " << geometryTypeStr <<
+      " feature(s) with " << StringUtils::formatLargeNumber(secMap->size()) << " " <<
+      geometryTypeStr << " feature(s)...");
+  }
 
   // At one point it was necessary to re-number the relations in the sec map, as they could have ID
   // overlap with those in the cookie cut ref map at this point. It seemed that this was due to the
@@ -1631,19 +1640,24 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VART(cutterMapToUse->size());
   OsmMapWriterFactory::writeDebugMap(cutterMapToUse, _changesetId + "-cutter-map-to-use");
 
-  LOG_STATUS("Generating cutter shape map from: " << cutterMapToUse->getName() << "...");
+  LOG_STATUS(
+    "Generating cutter shape map from: " << cutterMapToUse->getName() << " of size: " <<
+    StringUtils::formatLargeNumber(cutterMapToUse->size()) << "...");
 
   // TODO: Alpha shape generation and cookie cutting for line features is our current bottleneck for
-  // C&R. Not sure yet if anything can be done to improve the performance...
+  // C&R. Not sure yet if anything else can be done to improve the performance. Turning off covering
+  // stragglers can help a lot in certain situations for alpha shape generation. For cookie cutting,
+  // cropping specifically can slow, especially with node removal.
 
   LOG_VART(cookieCutterAlpha);
   LOG_VART(cookieCutterAlphaShapeBuffer);
   OsmMapPtr cutterShapeOutlineMap;
+  AlphaShapeGenerator alphaShapeGenerator(cookieCutterAlpha, cookieCutterAlphaShapeBuffer);
+  // I don't *think* we need to cover the stragglers here...
+  //alphaShapeGenerator.setManuallyCoverSmallPointClusters(false);
   try
   {
-    cutterShapeOutlineMap =
-      AlphaShapeGenerator(cookieCutterAlpha, cookieCutterAlphaShapeBuffer)
-        .generateMap(cutterMapToUse);
+    cutterShapeOutlineMap = alphaShapeGenerator.generateMap(cutterMapToUse);
   }
   catch (const HootException& e)
   {
@@ -1663,7 +1677,9 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapWriterFactory::writeDebugMap(cutterShapeOutlineMap, _changesetId + "-cutter-shape");
 
   // Cookie cut the shape of the cutter shape map out of the cropped ref map.
-  LOG_STATUS("Cutting cutter shape out of: " << cookieCutMap->getName() << "...");
+  LOG_STATUS(
+    "Cutting cutter shape out of: " << cookieCutMap->getName() << " with size: " <<
+    StringUtils::formatLargeNumber(cookieCutMap->size()) << "...");
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.

@@ -254,6 +254,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   _changesetCreator->setChangesetId(QString::number(taskGridCell.id));
   _changesetCreator->create(
     _dataToReplaceUrl, _replacementUrl, taskGridCell.bounds, changesetFile.fileName());
+  const int numChanges = _changesetCreator->getNumChanges();
 
   _numChangesetsDerived++;
   _totalChangesetDeriveTime += _subTaskTimer.elapsed() / 1000.0;
@@ -263,9 +264,10 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
 
   LOG_STATUS(
     "Applying changeset: " << changesetNum << " / " <<
-    StringUtils::formatLargeNumber(taskGridSize) << " for task grid cell: " << taskGridCell.id <<
-    ", over bounds: " << GeometryUtils::envelopeFromConfigString(boundsStr) << ", from file: ..." <<
-    changesetFile.fileName().right(25) << "...");
+    StringUtils::formatLargeNumber(taskGridSize) << " with " <<
+    StringUtils::formatLargeNumber(numChanges) << " changes, for task grid cell: " <<
+    taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeFromConfigString(boundsStr) <<
+    ", from file: ..." << changesetFile.fileName().right(25) << "...");
 
   _changesetApplier->write(changesetFile);
   _printChangesetStats();
@@ -371,13 +373,6 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
 
-  if (_tagQualityIssues)
-  {
-    // tag element with potential data quality issues caused by the replacement operations; *think*
-    // its best to do it before the cleaning in the next step...
-    _writeQualityIssueTags(map);
-  }
-
   // had to do this cleaning to get the relations to behave
   RemoveMissingElementsVisitor missingElementRemover;
   map->visitRw(missingElementRemover);
@@ -388,6 +383,13 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   RemoveEmptyRelationsOp emptyRelationRemover;
   emptyRelationRemover.apply(map);
   LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
+
+  if (_tagQualityIssues)
+  {
+    // tag element with potential data quality issues caused by the replacement operations; If this
+    // isn't done after the previous cleaning step, you'll get some element NPE's.
+    _writeQualityIssueTags(map);
+  }
 
   // write the full map out
   LOG_STATUS("Writing the modified data to: ..." << outputFile.right(25) << "...");
@@ -415,14 +417,14 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   map->visitRo(*filteredVis);
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
-    " nodes in output as orphaned.");
+    " orphaned nodes in output.");
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
   filteredVis.reset(new FilteredVisitor(DisconnectedWayCriterion(map), tagVis));
   map->visitRo(*filteredVis);
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
-    " ways in output as disconnected.");
+    " disconnected ways in output.");
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
   filteredVis.reset(new FilteredVisitor(EmptyWayCriterion(), tagVis));

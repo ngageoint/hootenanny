@@ -100,10 +100,10 @@ public:
 
   void orphanedNodes1Test()
   {
-    // This tests that orphaned nodes are not left behind after two adjoining, successive grid cell
-    // replacements with some data overlapping due to using the lenient bounds interpretation. The
-    // road "Hot Springs Drive" should remain snapped to connecting roads and no orphaned nodes
-    // should be hidden underneath it. Other roads to check in the are include
+    // (VGI 1622) This tests that orphaned nodes are not left behind after two adjoining, successive
+    // grid cell replacements with some data overlapping due to using the lenient bounds
+    // interpretation. The road "Hot Springs Drive" should remain snapped to connecting roads and no
+    // orphaned nodes should be hidden underneath it. Other roads to check in the are include
     // "Santa Barbara Drive".
 
     _testName = "orphanedNodes1Test";
@@ -129,8 +129,8 @@ public:
 
   void github4196Test()
   {
-    // wasn't able to reproduce the deletion of way "Perry Ellis Drive" with this; possibly the
-    // issue was fixed by vgi 1622
+    // (VGI 1666) wasn't able to reproduce the deletion of way "Perry Ellis Drive" with this;
+    // possibly the issue was fixed by VGI 1622
 
     _testName = "vgi1666Test";
     const QString rootDir = "/home/vagrant/hoot/tmp/4196";
@@ -154,6 +154,8 @@ public:
 
   void github4174Test()
   {
+    // This test reproduces the issue.
+
     _testName = "github4174Test";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
@@ -180,6 +182,8 @@ public:
 
   void github4174UniformTest()
   {
+    // This test illustrates that if you run the adjacent cells, the problem goes away.
+
     _testName = "github4174UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
@@ -205,6 +209,8 @@ public:
 
   void github4170UniformTest()
   {
+    // This test illustrates that if you run the adjacent cells, the problem goes away.
+
     _testName = "github4170UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
@@ -230,12 +236,16 @@ public:
 
   void github4216UniformTest()
   {
+    // reproduces orphaned nodes and zero length ways
+
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
-    _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
+    _prepInput(
+      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
+      "-115.1260,36.1525,-115.0246,36.2227");
 
     ChangesetTaskGridReplacer uut;
     //uut.setKillAfterNumChangesetDerivations(2);
@@ -243,15 +253,15 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    QList<int> includeTaskGridCellIds;
-    includeTaskGridCellIds.append(38);
-    includeTaskGridCellIds.append(46);
-    uut.setTaskCellIncludeIds(includeTaskGridCellIds);
+    //QList<int> includeTaskGridCellIds;
+    //includeTaskGridCellIds.append(38);
+    //includeTaskGridCellIds.append(46);
+    //uut.setTaskCellIncludeIds(includeTaskGridCellIds);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
       UniformTaskGridGenerator(
-        "-115.3528,36.0919,-114.9817,36.3447", 8,
+        "-115.1208,36.1550,-115.0280,36.2182", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
   }

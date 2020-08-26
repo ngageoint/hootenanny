@@ -112,6 +112,8 @@ public:
   int getNumCreateChanges() const { return _numCreateChanges; }
   int getNumModifyChanges() const { return _numModifyChanges; }
   int getNumDeleteChanges() const { return _numDeleteChanges; }
+  int getNumTotalChanges() const
+  { return _numCreateChanges + _numModifyChanges + _numDeleteChanges; }
 
   void setIncludeReviews(bool include) { _includeReviews = include; }
 

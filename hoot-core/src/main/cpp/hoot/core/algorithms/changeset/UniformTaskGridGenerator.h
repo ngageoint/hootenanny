@@ -76,7 +76,7 @@ private:
 
   // area of the sum of all task grid cells;
   QString _bounds;
-  // the size of the uniform grid matrix to generate
+  // the size of the uniform grid matrix to generate (number of rows/cols)
   int _gridDimensionSize;
   // output location of the generated task grid file; useful for debugging, should be a *.osm file
   QString _output;

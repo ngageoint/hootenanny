@@ -159,6 +159,8 @@ public:
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output);
 
+  int getNumChanges() const { return _numChanges; }
+
   void setFullReplacement(const bool full) { _fullReplacement = full; }
   void setBoundsInterpretation(const BoundsInterpretation& interpretation)
   { _boundsInterpretation = interpretation; }
@@ -263,6 +265,7 @@ private:
 
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
+  int _numChanges;
 
   void _create();
 

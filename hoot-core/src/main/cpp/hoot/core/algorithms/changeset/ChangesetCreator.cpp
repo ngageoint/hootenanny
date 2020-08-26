@@ -768,9 +768,9 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   }
   else
   {
-    LOG_DEBUG("Total create changes: " << _numCreateChanges);
-    LOG_DEBUG("Total modify changes: " << _numModifyChanges);
-    LOG_DEBUG("Total delete changes: " <<_numDeleteChanges);
+    LOG_DEBUG("Total create changes: " << StringUtils::formatLargeNumber(_numCreateChanges));
+    LOG_DEBUG("Total modify changes: " << StringUtils::formatLargeNumber(_numModifyChanges));
+    LOG_DEBUG("Total delete changes: " << StringUtils::formatLargeNumber(_numDeleteChanges));
   }
 }
 
