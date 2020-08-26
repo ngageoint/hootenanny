@@ -111,6 +111,8 @@ public:
   const Edge getRightNext() const;
   const Edge getRightPrevious() const;
 
+  double getLength() const;
+
   std::string toString() const;
 
 private:
