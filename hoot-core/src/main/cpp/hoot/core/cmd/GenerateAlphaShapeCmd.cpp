@@ -91,8 +91,6 @@ public:
       args.removeAt(index + 1);
       args.removeAll("--alpha");
     }
-    else
-      throw HootException(QString("%1 takes --alpha followed by a positive number.").arg(getName()));
     //  Parse and remove the buffer value from the arguments, if present
     double buffer = 0.0;
     if (args.contains("--buffer"))

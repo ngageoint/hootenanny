@@ -124,6 +124,10 @@ private:
   // size of the longest face edge
   mutable double _longestFaceEdge;
 
+  //  Size of the problem set in meters in the x, y directions
+  double _sizeX;
+  double _sizeY;
+
   // main data structures used to calculate the shape
   std::shared_ptr<Tgs::DelaunayTriangulation> _pDelauneyTriangles;
   std::set<std::pair<double, double>> _outsidePoint;

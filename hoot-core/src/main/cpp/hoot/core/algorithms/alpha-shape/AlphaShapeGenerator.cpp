@@ -47,18 +47,10 @@ namespace hoot
 AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer)
   : _alpha(alpha),
     _buffer(buffer),
-    _manuallyCoverSmallPointClusters(true),
-    _retryOnTooSmallInitialAlpha(true),
-    _maxTries(1)
+    _manuallyCoverSmallPointClusters(true)
 {
   LOG_VART(_alpha);
   LOG_VART(_buffer);
-  if (_retryOnTooSmallInitialAlpha)
-  {
-    // have not seen an instance yet where more than two tries are needed to complete successfully;
-    // in all other cases, no solution could be found no matter how many tries were attempted
-    _maxTries = 2;
-  }
 }
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
@@ -116,49 +108,31 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
 
   std::shared_ptr<Geometry> cutterShape;
 
-  int numTries = 0;
-  while (numTries < _maxTries)
+  AlphaShape alphaShape(_alpha);
+  alphaShape.insert(points);
+  try
   {
-    LOG_DEBUG(
-      "Generating alpha shape geometry with alpha: " << _alpha << "; attempt " << (numTries + 1) <<
-      " / " << _maxTries << "...");
-
-    AlphaShape alphaShape(_alpha);
-    alphaShape.insert(points);
-    try
-    {
-      cutterShape = alphaShape.toGeometry();
-    }
-    catch (const IllegalArgumentException& e)
-    {
-      if (_retryOnTooSmallInitialAlpha && e.getWhat().startsWith("Longest face edge of size"))
-      {
-        const double longestFaceEdge = alphaShape.getLongestFaceEdge();
-        LOG_INFO(
-          "Failed to generate alpha shape geometry with alpha value of: " <<
-          StringUtils::formatLargeNumber(_alpha) <<
-          ". Attempting to generate the shape again using the longest face edge size of: " <<
-          StringUtils::formatLargeNumber(longestFaceEdge) << " for alpha...");
-        _alpha = longestFaceEdge;
-      }
-      else
-      {
-        break;
-      }
-    }
-    numTries++;
+    cutterShape = alphaShape.toGeometry();
+  }
+  catch (const IllegalArgumentException& /*e*/)
+  {
+    LOG_INFO(
+      "Failed to generate alpha shape geometry with alpha value of: " <<
+      StringUtils::formatLargeNumber(_alpha) << ".");
   }
   if (!cutterShape)
   {
     cutterShape.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
   cutterShape.reset(cutterShape->buffer(_buffer));
+  //OsmMapWriterFactory::writeDebugMap(cutterShape, inputMap->getProjection(), "cutter-shape-map");
 
-  // See _coverStragglers description. This is an add-on behavior that is separate from the original
-  // Alpha Shape generation algorithm itself.
+  // See _coverStragglers description. This is an add-on behavior that is separate from the Alpha
+  // Shape algorithm itself.
   if (_manuallyCoverSmallPointClusters)
   {
     _coverStragglers(cutterShape, inputMap);
+    //OsmMapWriterFactory::writeDebugMap(geometry, spatRef, "alpha-shape-after-covering-stragglers");
   }
 
   return cutterShape;

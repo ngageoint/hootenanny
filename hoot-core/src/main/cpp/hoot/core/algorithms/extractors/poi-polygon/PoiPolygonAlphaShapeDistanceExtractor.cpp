@@ -63,7 +63,6 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
     ElementPtr polyTemp(poly->clone());
     polyMap->addElement(polyTemp);
     AlphaShapeGenerator alphaShapeGenerator(1000.0, 0.0);
-    alphaShapeGenerator.setRetryOnTooSmallInitialAlpha(false);
     std::shared_ptr<Geometry> polyAlphaShape = alphaShapeGenerator.generateGeometry(polyMap);
     // Oddly, even if the area is zero calc'ing the distance can have a positive effect. This may
     // be worth looking into at some point, but going with it for now.
