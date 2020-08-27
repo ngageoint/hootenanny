@@ -265,7 +265,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   LOG_STATUS(
     "Applying changeset: " << changesetNum << " / " <<
     StringUtils::formatLargeNumber(taskGridSize) << " with " <<
-    StringUtils::formatLargeNumber(numChanges) << " changes, for task grid cell: " <<
+    StringUtils::formatLargeNumber(numChanges) << " changes for task grid cell: " <<
     taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeFromConfigString(boundsStr) <<
     ", from file: ..." << changesetFile.fileName().right(25) << "...");
 
@@ -273,7 +273,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   _printChangesetStats();
 
   LOG_STATUS(
-    "\tChangeset applied in: " <<
+    "\tChangeset with " << StringUtils::formatLargeNumber(numChanges) << " changes applied in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
@@ -369,7 +369,7 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
 
-  LOG_STATUS("Reading the modified data out of: " << _dataToReplaceUrl << "...");
+  LOG_STATUS("Reading the modified data out of: ..." << _dataToReplaceUrl.right(25) << "...");
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
 

@@ -39,6 +39,7 @@ namespace hoot
 
 class ChangesetCreator;
 class ChainCriterion;
+class Settings;
 
 /**
  * High level class for prepping data for replacement changeset generation (changesets which
@@ -359,7 +360,6 @@ private:
    * Removes duplicates between one map and another, ignoring elemment IDs
    */
   void _dedupeMaps(const QList<OsmMapPtr>& maps);
-  void _intraDedupeMap(const QList<OsmMapPtr>& maps);
 
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
@@ -403,7 +403,11 @@ private:
   void _synchronizeIds(
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
 
-  Meters _getSearchRadius(const ConstElementPtr& e) const;
+  /*
+   * Removes any instance of the hoot:change:exclude:delete tag on way nodes which is no longer
+   * valid.
+   */
+  void _removeInvalidWayNodeExcludeDelete(OsmMapPtr map);
 
   OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
 };

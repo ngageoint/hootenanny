@@ -58,14 +58,17 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   // TODO: re-enable
-  //CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
+
   //CPPUNIT_TEST(github4196Test);
   //CPPUNIT_TEST(github4174Test);
   //CPPUNIT_TEST(github4174UniformTest);
   //CPPUNIT_TEST(github4170UniformTest);
-  CPPUNIT_TEST(github4216UniformTest);
+  //CPPUNIT_TEST(github4216UniformTest);
+
   //CPPUNIT_TEST(northVegasSmallTest);
   //CPPUNIT_TEST(northVegasSmallUniformTest);
   //CPPUNIT_TEST(northVegasMediumTest);
@@ -89,7 +92,7 @@ public:
   {
     _subTaskTimer.start();
     _initConfig();
-    _cleanupDataToReplace();
+    //_cleanupDataToReplace();
   }
 
   virtual void tearDown()
@@ -122,10 +125,41 @@ public:
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
-      BoundsFileTaskGridGenerator(QStringList(_inputPath + "/Task14and15.osm")).generateTaskGrid());
+      BoundsFileTaskGridGenerator(
+        QStringList(_inputPath + "/orphanedNodes1Test-task-grid.osm")).generateTaskGrid());
 
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
+
+  void orphanedNodes2Test()
+  {
+    // (github 4216) TODO: describe
+    // TODO: try to crop this down more before merging...runs too long and test out too big
+    // (3 min; 18MB); also get rid of warnings
+
+    _testName = "orphanedNodes2Test";
+    _prepInput(
+      _inputPath + "/orphanedNodes2Test-Input1.osm",
+      _inputPath + "/orphanedNodes2Test-Input2.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(false);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsFileTaskGridGenerator(
+        QStringList(_inputPath + "/orphanedNodes2Test-task-grid.osm")).generateTaskGrid());
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
   void github4196Test()
   {
@@ -241,6 +275,7 @@ public:
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
     _prepInput(
@@ -446,7 +481,6 @@ private:
     conf().set(ConfigOptions::getChangesetMaxSizeKey(), 999999);
     conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 0.5);
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
-    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
@@ -544,7 +578,8 @@ private:
 
   void _cleanupReplacementData()
   {
-    LOG_STATUS("Cleaning up the replacement data db at: " << _replacementDataUrl << "...");
+    LOG_STATUS(
+      "Cleaning up the replacement data db at: ..." << _replacementDataUrl.right(25) << "...");
     HootApiDb database;
     database.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     database.deleteMap(database.getMapIdByName(_testName));

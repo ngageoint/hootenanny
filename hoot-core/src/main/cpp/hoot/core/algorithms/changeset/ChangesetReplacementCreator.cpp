@@ -27,12 +27,14 @@
 #include "ChangesetReplacementCreator.h"
 
 // Hoot
-#include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
 #include <hoot/core/algorithms/WayJoinerAdvanced.h>
 #include <hoot/core/algorithms/WayJoinerBasic.h>
 
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
+
+#include <hoot/core/algorithms/changeset/ChangesetCreator.h>
+#include <hoot/core/algorithms/changeset/ExcludeDeleteWayNodeCleaner.h>
 
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 
@@ -559,6 +561,10 @@ void ChangesetReplacementCreator::_create()
   // TODO: move this to inside the geometry pass loop?
   _synchronizeIds(refMaps, conflatedMaps);
 
+  // After maps are cropped for changeset derivation there may be some way nodes which should no
+  // longer be marked as excluded from deletion. Clean those up here.
+  _removeInvalidWayNodeExcludeDelete(_getMapByGeometryType(refMaps, "line"));
+
   // CHANGESET GENERATION
 
   LOG_STATUS("Generating changesets for " << refMaps.size() << " sets of maps...");
@@ -574,11 +580,6 @@ void ChangesetReplacementCreator::_create()
     "Derived replacement changeset: ..." << _output.right(_maxFilePrintLength) << " with " <<
     StringUtils::formatLargeNumber(_numChanges) << " changes in " <<
     StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
-}
-
-Meters ChangesetReplacementCreator::_getSearchRadius(const ConstElementPtr& e) const
-{
-  return e->getCircularError();
 }
 
 OsmMapPtr ChangesetReplacementCreator::_getMapByGeometryType(const QList<OsmMapPtr>& maps,
@@ -1992,26 +1993,6 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
     map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-2");
 }
 
-void ChangesetReplacementCreator::_intraDedupeMap(const QList<OsmMapPtr>& maps)
-{
-  ElementDeduplicator deduper;
-  deduper.setDedupeIntraMap(true);
-  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
-  deduper.setNodeCriterion(pointCrit);
-  deduper.setFavorMoreConnectedWays(true);
-
-  for (int i = 0; i < maps.size(); i++)
-  {
-    OsmMapPtr map = maps.at(i);
-    pointCrit->setOsmMap(map.get());
-    OsmMapWriterFactory::writeDebugMap(
-      map, _changesetId + "-" + map->getName() + "-before-deduping");
-    deduper.dedupe(map);
-    OsmMapWriterFactory::writeDebugMap(
-      map, _changesetId + "-" + map->getName() + "-after-deduping");
-  }
-}
-
 void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
 {
   ElementDeduplicator deduper;
@@ -2124,6 +2105,50 @@ void ChangesetReplacementCreator::_synchronizeIds(
     OsmMapWriterFactory::writeDebugMap(
       replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
   }
+}
+
+void ChangesetReplacementCreator::_removeInvalidWayNodeExcludeDelete(OsmMapPtr map)
+{
+//  int numExcludeDeleteTagsRemoved = 0;
+//  const WayMap& ways = refLineMap->getWays();
+//  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
+//  {
+//    WayPtr way = wayItr->second;
+//    const bool wayHasExcludeDelete =
+//      way->getTags().contains(MetadataTags::HootChangeExcludeDelete());
+
+//    if (!wayHasExcludeDelete)
+//    {
+//      const std::vector<long> wayNodeIds = way->getNodeIds();
+//      for (std::vector<long>::const_iterator wayNodeItr = wayNodeIds.begin();
+//           wayNodeItr != wayNodeIds.end(); ++wayNodeItr)
+//      {
+//        NodePtr wayNode = refLineMap->getNode(*wayNodeItr);
+//        if (wayNode)
+//        {
+//          const bool wayNodeHasExcludeDelete =
+//            wayNode->getTags().contains(MetadataTags::HootChangeExcludeDelete());
+//          if (wayNodeHasExcludeDelete && !wayHasExcludeDelete)
+//          {
+//            wayNode->getTags().remove(MetadataTags::HootChangeExcludeDelete());
+//            numExcludeDeleteTagsRemoved++;
+//          }
+//        }
+//      }
+//    }
+//  }
+//  LOG_VARD(numExcludeDeleteTagsRemoved);
+
+  if (!map)
+  {
+    return;
+  }
+
+  ExcludeDeleteWayNodeCleaner cleaner;
+  cleaner.setOsmMap(map.get());
+  LOG_INFO(cleaner.getInitStatusMessage());
+  map->visitNodesRw(cleaner);
+  LOG_DEBUG(cleaner.getCompletedStatusMessage());
 }
 
 }
