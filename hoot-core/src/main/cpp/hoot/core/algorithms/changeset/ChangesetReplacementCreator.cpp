@@ -2109,36 +2109,6 @@ void ChangesetReplacementCreator::_synchronizeIds(
 
 void ChangesetReplacementCreator::_removeInvalidWayNodeExcludeDelete(OsmMapPtr map)
 {
-//  int numExcludeDeleteTagsRemoved = 0;
-//  const WayMap& ways = refLineMap->getWays();
-//  for (WayMap::const_iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
-//  {
-//    WayPtr way = wayItr->second;
-//    const bool wayHasExcludeDelete =
-//      way->getTags().contains(MetadataTags::HootChangeExcludeDelete());
-
-//    if (!wayHasExcludeDelete)
-//    {
-//      const std::vector<long> wayNodeIds = way->getNodeIds();
-//      for (std::vector<long>::const_iterator wayNodeItr = wayNodeIds.begin();
-//           wayNodeItr != wayNodeIds.end(); ++wayNodeItr)
-//      {
-//        NodePtr wayNode = refLineMap->getNode(*wayNodeItr);
-//        if (wayNode)
-//        {
-//          const bool wayNodeHasExcludeDelete =
-//            wayNode->getTags().contains(MetadataTags::HootChangeExcludeDelete());
-//          if (wayNodeHasExcludeDelete && !wayHasExcludeDelete)
-//          {
-//            wayNode->getTags().remove(MetadataTags::HootChangeExcludeDelete());
-//            numExcludeDeleteTagsRemoved++;
-//          }
-//        }
-//      }
-//    }
-//  }
-//  LOG_VARD(numExcludeDeleteTagsRemoved);
-
   if (!map)
   {
     return;
