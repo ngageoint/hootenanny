@@ -30,9 +30,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/io/HootApiDbWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/MapCropper.h>
@@ -171,7 +171,8 @@ public:
     const QString outDir = rootDir + "/" + _testName;
     QDir().mkpath(outDir);
     _prepInput(
-      rootDir + "/NOME_Data.osm", rootDir + "/OSM_Data.osm", "-115.1017,36.02439,-114.9956,36.0733");
+      rootDir + "/NOME_Data.osm", rootDir + "/OSM_Data.osm",
+      "-115.1017,36.02439,-114.9956,36.0733", outDir);
 
     QStringList gridInputs;
     gridInputs.append(rootDir + "/1/Task38_07Aug2020_VGI_1666/Task38Bounds.osm");
@@ -197,7 +198,7 @@ public:
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.1217,36.2150,-114.9911,36.3234");
+      "-115.1217,36.2150,-114.9911,36.3234", outDir);
 
     ChangesetTaskGridReplacer uut;
     QList<int> skipIds;
@@ -225,7 +226,7 @@ public:
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.1497,36.2027,-114.9903,36.3228");
+      "-115.1497,36.2027,-114.9903,36.3228", outDir);
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
@@ -252,7 +253,7 @@ public:
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.2069,36.1696,-114.9439,36.4081");
+      "-115.2069,36.1696,-114.9439,36.4081", outDir);
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
@@ -270,7 +271,7 @@ public:
 
   void github4216UniformTest()
   {
-    // reproduces orphaned nodes and zero length ways
+    // reproduces zero length ways
 
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -280,7 +281,7 @@ public:
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.1260,36.1525,-115.0246,36.2227");
+      "-115.1260,36.1525,-115.0246,36.2227", outDir);
 
     ChangesetTaskGridReplacer uut;
     //uut.setKillAfterNumChangesetDerivations(2);
@@ -313,7 +314,7 @@ public:
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.3314,36.2825,-115.2527,36.3387");
+      "-115.3314,36.2825,-115.2527,36.33870, outDir");
 
     NodeDensityTaskGridGenerator taskGridGen(
       QStringList(_replacementDataUrl), 1000, "-115.3059,36.2849,-115.2883,36.2991",
@@ -338,7 +339,7 @@ public:
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.3314,36.2825,-115.2527,36.3387");
+      "-115.3314,36.2825,-115.2527,36.3387", outDir);
 
     ChangesetTaskGridReplacer uut;
     //uut.setKillAfterNumChangesetDerivations(2);
@@ -367,7 +368,7 @@ public:
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.3441,36.2012,-115.1942,36.3398");
+      "-115.3441,36.2012,-115.1942,36.3398", outDir);
 
     NodeDensityTaskGridGenerator taskGridGen(
       QStringList(_replacementDataUrl), 10000, "-115.3332,36.2178,-115.1837,36.3400",
@@ -451,22 +452,18 @@ private:
 
   QElapsedTimer _subTaskTimer;
 
-  // for working with a subset of the input data in order to save unnecessary processing time; leave
-  // empty to disable
-  QString _inputCropBounds;
-
   QString _replacementDataUrl;
 
   // original size of the data to be replaced; TODO: remove this?
   int _originalDataSize;
 
   void _prepInput(const QString& toReplace, const QString& replacement,
-                  const QString& cropInputBounds = "")
+                  const QString& cropInputBounds = "", const QString& outDir = "")
   {
     _replacementDataUrl = ServicesDbTestUtils::getDbModifyUrl(_testName).toString();
-    _loadDataToReplaceDb(toReplace, cropInputBounds);
-    // TODO: later will make replacement db load optional and support file as well
-    _loadReplacementDataDb(replacement, cropInputBounds);
+    _loadDataToReplaceDb(toReplace, cropInputBounds, outDir + "/starting-cropped-to-replace.osm");
+    _loadReplacementDataDb(
+      replacement, cropInputBounds, outDir + "/starting-cropped-replacement.osm");
   }
 
   void _initConfig()
@@ -489,7 +486,8 @@ private:
     conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
 
-  void _loadDataToReplaceDb(const QString& input, const QString& cropBounds = "")
+  void _loadDataToReplaceDb(
+    const QString& input, const QString& cropBounds = "", const QString& cropOut = "")
   {
     // make sure the db is empty
     ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
@@ -521,6 +519,15 @@ private:
       LOG_STATUS(
         "Data to replace cropped size: " << StringUtils::formatLargeNumber(map->size()) <<
         "; cropped in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+      if (ConfigOptions().getDebugMapsWrite())
+      {
+        if (cropOut.trimmed().isEmpty())
+        {
+          throw IllegalArgumentException("No crop output file path specified.");
+        }
+        LOG_STATUS("Writing cropped data to: ..." << cropOut.right(25) << "...");
+        OsmMapWriterFactory::write(map, cropOut);
+      }
       _subTaskTimer.restart();
     }
     LOG_STATUS("Loading the data to replace db to: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
@@ -532,7 +539,8 @@ private:
     _subTaskTimer.restart();
   }
 
-  void _loadReplacementDataDb(const QString& input, const QString& cropBounds = "")
+  void _loadReplacementDataDb(
+    const QString& input, const QString& cropBounds = "", const QString& cropOut = "")
   {
     // TODO: Can this be converted over to use the bulk inserter?
 
@@ -555,6 +563,15 @@ private:
       LOG_STATUS(
         "Replacement data cropped size: " << StringUtils::formatLargeNumber(map->size()) <<
         "; cropped in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+      if (ConfigOptions().getDebugMapsWrite())
+      {
+        if (cropOut.trimmed().isEmpty())
+        {
+          throw IllegalArgumentException("No crop output file path specified.");
+        }
+        LOG_STATUS("Writing cropped data to: ..." << cropOut.right(25) << "...");
+        OsmMapWriterFactory::write(map, cropOut);
+      }
       _subTaskTimer.restart();
     }
     LOG_STATUS("Loading the replacement data db to: ..." << _replacementDataUrl.right(25) << "...");

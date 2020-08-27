@@ -315,6 +315,11 @@ private:
     OsmMapPtr& cachedMap);
 
   /*
+   * Removes changeset replacement metadata tags which should be seen in raw input
+   */
+  void _removeMetadataTags(const OsmMapPtr& map);
+
+  /*
    * Adds a custom tag to any element from the input with a missing child. This is primarily useful
    * in repairing relations manually that were passed in without some of their child elements after
    * the replacement changeset is written.
@@ -402,12 +407,6 @@ private:
    */
   void _synchronizeIds(
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
-
-  /*
-   * Removes any instance of the hoot:change:exclude:delete tag on way nodes which is no longer
-   * valid.
-   */
-  void _removeInvalidWayNodeExcludeDelete(OsmMapPtr map);
 
   OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
 };

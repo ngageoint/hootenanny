@@ -31,7 +31,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
-#include <hoot/core/elements/WayUtils.h>
+
 namespace hoot
 {
 
@@ -93,31 +93,6 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
         // may not be necessary).
         if (!map2->containsElement(map1IdenticalElement->getElementId()))
         {
-          // TODO: if both are nodes and don't belong to the same way, then bail?
-//          if (map1IdenticalElement->getElementType() == ElementType::Node &&
-//              map2IdenticalElement->getElementType() == ElementType::Node)
-//          {
-//            const int numWaysContainingMap1Node =
-//              WayUtils::numberOfWaysContainingNode(map1IdenticalElement->getId(), map1);
-//            const int numWaysContainingMap2Node =
-//              WayUtils::numberOfWaysContainingNode(map2IdenticalElement->getId(), map2);
-//            if (numWaysContainingMap1Node != numWaysContainingMap2Node)
-//            {
-//              continue;
-//            }
-
-//            if (WayUtils::nodeContainedByAnyWay(map1IdenticalElement->getId(), map1) &&
-//                WayUtils::nodeContainedByAnyWay(map2IdenticalElement->getId(), map2))
-//            {
-//              // TODO: this won't work across two different maps
-//              if (!WayUtils::nodesAreContainedInTheSameWay(
-//                    map1IdenticalElement->getId(), map2IdenticalElement->getId(), map1))
-//              {
-//                continue;
-//              }
-//            }
-//          }
-
           LOG_TRACE(
             "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
             map1IdenticalElement->getElementId() << "...");

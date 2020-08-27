@@ -49,8 +49,8 @@ namespace hoot
  * Due to how Way::replaceNode is being called, we could end up with some duplicate way nodes, so
  * its best to put RemoveDuplicateWayNodesVisitor in the cleaning chain immediately after this runs.
  *
- * This class works with four pass as long as distance is less than the four pass buffer. The input
- * map can be in either a planar or geographic projection.
+ * This class works with four pass conflation as long as distance is less than the four pass buffer.
+ * The input map can be in either a planar or geographic projection.
  *
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
  * with no nodes.
@@ -77,10 +77,9 @@ public:
    */
   static void removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1);
 
-  virtual void readObject(QDataStream& is) override;
-
   virtual void setBounds(const geos::geom::Envelope& bounds) override { _bounds = bounds; }
 
+  virtual void readObject(QDataStream& is) override;
   virtual void writeObject(QDataStream& os) const override;
 
   virtual QString getDescription() const override { return "Removes duplicate nodes"; }

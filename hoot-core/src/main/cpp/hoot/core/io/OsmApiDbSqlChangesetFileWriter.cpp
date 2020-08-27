@@ -521,6 +521,14 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
     tags.appendValue("type", tmp->getType());
   }
 
+  // These should never be written in a changeset, even when debug tags are enabled, and will cause
+  // problems in ChangesetReplacementCreator if added to source data when read back out.
+  QStringList metadataAlwaysIgnore;
+  metadataAlwaysIgnore.append(MetadataTags::HootHash());
+  metadataAlwaysIgnore.append(MetadataTags::HootChangeExcludeDelete());
+  metadataAlwaysIgnore.append(MetadataTags::HootConnectedWayOutsideBounds());
+  metadataAlwaysIgnore.append(MetadataTags::HootSnapped());
+
   for (Tags::const_iterator it = tags.begin(); it != tags.end(); ++it)
   {
     QString key = it.key();
@@ -528,8 +536,7 @@ void OsmApiDbSqlChangesetFileWriter::_createTags(ConstElementPtr element)
 
     if (key.isEmpty() == false && val.isEmpty() == false)
     {
-      //  always ignore 'hoot:hash'
-      if (key == MetadataTags::HootHash())
+      if (metadataAlwaysIgnore.contains(key))
         continue;
       else if (!_includeDebugTags && key.toLower().startsWith("hoot:") &&
                // There are some instances where we want to explicitly allow some metadata tags.

@@ -34,7 +34,6 @@
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
-#include <hoot/core/algorithms/changeset/ExcludeDeleteWayNodeCleaner.h>
 
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 
@@ -561,10 +560,6 @@ void ChangesetReplacementCreator::_create()
   // TODO: move this to inside the geometry pass loop?
   _synchronizeIds(refMaps, conflatedMaps);
 
-  // After maps are cropped for changeset derivation there may be some way nodes which should no
-  // longer be marked as excluded from deletion. Clean those up here.
-  _removeInvalidWayNodeExcludeDelete(_getMapByGeometryType(refMaps, "line"));
-
   // CHANGESET GENERATION
 
   LOG_STATUS("Generating changesets for " << refMaps.size() << " sets of maps...");
@@ -617,9 +612,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   refMap = _loadRefMap();
   MemoryUsageChecker::getInstance().check();
 
-  // always remove any existing missing child tags
-  RemoveTagsVisitor missingChildTagRemover(QStringList(MetadataTags::HootMissingChild()));
-  refMap->visitRw(missingChildTagRemover);
+  // Drop all C&R specific metadata tags which should not exist yet, just in case they got in the
+  // input somehow.
+  _removeMetadataTags(refMap);
+
   const bool markMissing =
     ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren();
   if (markMissing)
@@ -654,7 +650,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   OsmMapPtr secMap = _loadSecMap();
   MemoryUsageChecker::getInstance().check();
 
-  secMap->visitRw(missingChildTagRemover);
+  _removeMetadataTags(secMap);
+
   if (markMissing)
   {
     _markElementsWithMissingChildren(secMap);
@@ -1393,6 +1390,18 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
       _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
 }
 
+void ChangesetReplacementCreator::_removeMetadataTags(const OsmMapPtr& map)
+{
+  QStringList changesetReplacementMetadataTags;
+  changesetReplacementMetadataTags.append(MetadataTags::HootChangeExcludeDelete());
+  changesetReplacementMetadataTags.append(MetadataTags::HootSnapped());
+  changesetReplacementMetadataTags.append(MetadataTags::HootMissingChild());
+  RemoveTagsVisitor tagRemover(changesetReplacementMetadataTags);
+  LOG_INFO(tagRemover.getInitStatusMessage());
+  map->visitRw(tagRemover);
+  LOG_DEBUG(tagRemover.getCompletedStatusMessage());
+}
+
 void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& map)
 {
   ReportMissingElementsVisitor elementMarker;
@@ -1953,7 +1962,6 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
           new TagCriterion(MetadataTags::HootSnapped(), "snapped_way")))));
   removeVis.setChainCriteria(true);
   removeVis.setRecursive(true);
-  //LOG_STATUS("\t" << removeVis.getInitStatusMessage());
   map->visitRw(removeVis);
   LOG_DEBUG(removeVis.getCompletedStatusMessage());
 
@@ -2105,20 +2113,6 @@ void ChangesetReplacementCreator::_synchronizeIds(
     OsmMapWriterFactory::writeDebugMap(
       replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
   }
-}
-
-void ChangesetReplacementCreator::_removeInvalidWayNodeExcludeDelete(OsmMapPtr map)
-{
-  if (!map)
-  {
-    return;
-  }
-
-  ExcludeDeleteWayNodeCleaner cleaner;
-  cleaner.setOsmMap(map.get());
-  LOG_INFO(cleaner.getInitStatusMessage());
-  map->visitNodesRw(cleaner);
-  LOG_DEBUG(cleaner.getCompletedStatusMessage());
 }
 
 }

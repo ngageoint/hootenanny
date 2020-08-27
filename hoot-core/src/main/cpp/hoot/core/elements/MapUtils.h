@@ -71,6 +71,14 @@ public:
    */
   static void splitMapByStatus(OsmMapPtr& sourceMap, OsmMapPtr& unknown1Map,
                                OsmMapPtr& unknown2Map);
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @todo Should we have something like reader.include.debug.tags instead of this?
+   */
+  static void dropMetadataTags(const OsmMapPtr& map);
 };
 
 }
