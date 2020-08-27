@@ -154,7 +154,7 @@ def addImgAttrs(schema):
             schema[featureName]['columns']['ZI001_SRT'] = {}
             schema[featureName]['columns']['ZI001_SRT'] = {'name':'ZI001_SRT','desc':'Source Information : Source Type',
                                                 'type':'String',
-                                                'func' = 'ZI001_SRT',
+                                                'func':'ZI001_SRT',
                                                 'defValue':'noInformation','length':'30','optional':'R'}
 
         if 'ZI001_SDV' not in schema[featureName]['columns']:
