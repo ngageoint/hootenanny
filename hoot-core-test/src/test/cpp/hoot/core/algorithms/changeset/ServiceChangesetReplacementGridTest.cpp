@@ -58,7 +58,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   // TODO: re-enable
-  //CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
   //CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
@@ -67,7 +67,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(github4174Test);
   //CPPUNIT_TEST(github4174UniformTest);
   //CPPUNIT_TEST(github4170UniformTest);
-  CPPUNIT_TEST(github4216UniformTest);
+  //CPPUNIT_TEST(github4216UniformTest);
 
   //CPPUNIT_TEST(northVegasSmallTest);
   //CPPUNIT_TEST(northVegasSmallUniformTest);
@@ -271,7 +271,7 @@ public:
 
   void github4216UniformTest()
   {
-    // reproduces zero length ways
+    // reproduces orphaned nodes and zero length ways
 
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -483,7 +483,7 @@ private:
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 
   void _loadDataToReplaceDb(
@@ -546,7 +546,8 @@ private:
 
     OsmMapPtr map(new OsmMap());
     LOG_STATUS("Reading the replacement data from: ..." << input.right(25) << "...");
-    OsmMapReaderFactory::read(map, input, false, Status::Unknown2);
+    // TODO
+    OsmMapReaderFactory::read(map, input, false/*true*/, Status::Unknown2);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " replacement elements read in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));

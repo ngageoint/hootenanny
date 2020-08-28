@@ -57,7 +57,9 @@ void RemoveNodeByEid::_removeNodeNoCheck(const OsmMapPtr& map, long nId)
 {
   LOG_TRACE("Removing node: " << nId << "...");
   map->_index->removeNode(map->getNode(_nodeIdToRemove));
+  LOG_TRACE("Erasing index for: " << nId << "...");
   map->_nodes.erase(nId);
+  LOG_TRACE("Erased index for: " << nId << ".");
 }
 
 void RemoveNodeByEid::_removeNode(const OsmMapPtr& map, long nId)
@@ -68,7 +70,7 @@ void RemoveNodeByEid::_removeNode(const OsmMapPtr& map, long nId)
   {
     if (_removeOnlyUnused)
     {
-      LOG_TRACE("Skipping removal of node: " << nId << " owned by way.");
+      LOG_DEBUG("Skipping removal of node: " << nId << " owned by way.");
       return;
     }
     else
@@ -82,8 +84,8 @@ void RemoveNodeByEid::_removeNode(const OsmMapPtr& map, long nId)
 void RemoveNodeByEid::_removeNodeFully(const OsmMapPtr& map, long nId)
 {
   // copy the set because we may modify it later.
-  set<long> rid = map->getIndex().getElementToRelationMap()->
-      getRelationByElement(ElementId::way(nId));
+  set<long> rid =
+    map->getIndex().getElementToRelationMap()->getRelationByElement(ElementId::way(nId));
 
   for (set<long>::const_iterator it = rid.begin(); it != rid.end(); ++it)
   {

@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/ops/ElementIdRemapper.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -218,6 +219,9 @@ private:
   // separately filter the input datasets on.
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
   bool _geometryFiltersSpecified;
+
+  // TODO
+  QMap<QString, std::shared_ptr<ElementIdRemapper>> _secIdMappings;
 
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
@@ -409,6 +413,12 @@ private:
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
 
   OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
+
+  //void _removeInvalidWayNodeExcludeDelete(OsmMapPtr map);
+
+//  void _restoreOriginalIds(
+//    const QList<OsmMapPtr>& replacementMaps,
+//    const QMap<QString, std::shared_ptr<ElementIdRemapper>>& remappings);
 };
 
 }

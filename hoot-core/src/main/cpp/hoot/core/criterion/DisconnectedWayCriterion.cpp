@@ -46,8 +46,9 @@ _map(map)
 
 bool DisconnectedWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (e->getElementType() == ElementType::Way)
+  if (e && e->getElementType() == ElementType::Way)
   {
+    LOG_VART(e->getElementId());
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     return way && way->getNodeCount() > 0 && !WayUtils::hasConnectedWays(way->getId(), _map);
   }

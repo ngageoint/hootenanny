@@ -34,6 +34,8 @@
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
+#include <hoot/core/algorithms/changeset/ChangesetReplacementElementIdSynchronizer.h>
+#include <hoot/core/algorithms/changeset/ExcludeDeleteWayNodeCleaner.h>
 
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 
@@ -62,7 +64,6 @@
 
 #include <hoot/core/elements/ElementDeduplicator.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
-#include <hoot/core/elements/ElementIdSynchronizer.h>
 #include <hoot/core/elements/MapUtils.h>
 
 #include <hoot/core/index/OsmMapIndex.h>
@@ -441,6 +442,7 @@ void ChangesetReplacementCreator::_create()
 
   // INPUT VALIDATION AND SETUP
 
+  _secIdMappings.clear();
   _validateInputs();
   _setGlobalOpts();
   _printJobDescription();
@@ -554,15 +556,21 @@ void ChangesetReplacementCreator::_create()
 //    _dedupeMaps(conflatedMaps);
 //  }
 
+  // TODO
+  //_restoreOriginalIds(conflatedMaps, _secIdMappings);
+
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements. This must be done with the ref/sec maps separated to avoid ID
   // conflicts.
   // TODO: move this to inside the geometry pass loop?
   _synchronizeIds(refMaps, conflatedMaps);
 
+  // TODO: remove?
+  //_removeInvalidWayNodeExcludeDelete(_getMapByGeometryType(refMaps, "line"));
+
   // CHANGESET GENERATION
 
-  LOG_STATUS("Generating changesets for " << refMaps.size() << " sets of maps...");
+  LOG_STATUS("Generating changeset for " << refMaps.size() << " sets of maps...");
 
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
@@ -649,6 +657,17 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // load the data that we're replacing with
   OsmMapPtr secMap = _loadSecMap();
   MemoryUsageChecker::getInstance().check();
+
+  // TODO
+  //std::shared_ptr<ElementIdRemapper> idRemapper(new ElementIdRemapper());
+  // TODO: change to info/debug
+  //LOG_STATUS(
+    //"Recording id mappings for: " << GeometryTypeCriterion::typeToString(geometryType) << "...");
+  //idRemapper->apply(secMap);
+  //LOG_STATUS(
+    //"Recorded " << StringUtils::formatLargeNumber(idRemapper->getIdMappings().size()) <<
+    //" id mappings for: " << GeometryTypeCriterion::typeToString(geometryType) << "...");
+  //_secIdMappings[GeometryTypeCriterion::typeToString(geometryType)] = idRemapper;
 
   _removeMetadataTags(secMap);
 
@@ -945,7 +964,12 @@ void ChangesetReplacementCreator::_setGlobalOpts()
 
   // This needs to be lowered a bit from the default of 7 to make feature de-duping work...a little
   // concerning...why does this need to be done?
-  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6);
+  // TODO: 6 = 77 orphan
+  // 5 = 35
+  // 4 = 35
+  // 3 = 243
+  // 5 w/ way node opt = 20
+  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6/*5*/);
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
@@ -1386,7 +1410,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
 {
   return
     _loadInputMap(
-      "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+      "sec", _input2, false/*true*/, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
       _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
 }
 
@@ -2079,20 +2103,20 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 void ChangesetReplacementCreator::_synchronizeIds(
   const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps)
 {
-//   When replacing data, we always load the replacement data without its original IDs in case there
-//   are overlapping IDs in the reference data. If you were only replacing unmodified data from one
-//   source with updated data from another source with the same IDs (e.g. replacing newer OSM with
-//   older OSM), this wouldn't be necessary, but we're not guaranteed just that scenario occurring.
-//   The downside to loading up a separate set of unique IDs for the secondary data is that
-//   identical elements in the secondary can end up unnecessarily replacing elements in the
-//   reference. This gets mitigated here where we find all identical elements between the data being
-//   replaced and the replacement data and overwrite IDs in the replacement data from those in the
-//   data being replaced to prevent unnecessary changeset modifications from being generated. Its
-//   possible we could do this earlier in the replacement process, however that has proven difficult
-//   to accomplish so far.
+  // When replacing data, we always load the replacement data without its original IDs in case there
+  // are overlapping IDs in the reference data. If you were only replacing unmodified data from one
+  // source with updated data from another source with the same IDs (e.g. replacing newer OSM with
+  // older OSM), this wouldn't be necessary, but we're not guaranteed that will be the only scenario
+  // encountered. The downside to loading up a separate set of unique IDs for the secondary data is
+  // that identical elements in the secondary can end up unnecessarily replacing elements in the
+  // reference. This gets mitigated here where we find all identical elements between the data being
+  // replaced and the replacement data and overwrite IDs in the replacement data from those in the
+  // data being replaced to prevent unnecessary changeset modifications from being generated. Its
+  // possible we could do this earlier in the replacement process, however that has proven difficult
+  // to accomplish so far.
 
   assert(mapsBeingReplaced.size() == replacementMaps.size());
-  ElementIdSynchronizer idSync;
+  /*ChangesetReplacement*/ElementIdSynchronizer idSync;
   for (int i = 0; i < mapsBeingReplaced.size(); i++)
   {
     OsmMapPtr mapBeingReplaced = mapsBeingReplaced.at(i);
@@ -2105,6 +2129,10 @@ void ChangesetReplacementCreator::_synchronizeIds(
 
     idSync.synchronize(mapBeingReplaced, replacementMap);
 
+    // TODO: do a second sync pass here where we allow all way nodes who belong to the same way
+    // (just one?) and have the same coords to merge, despite having different tags (as long as the
+    // types don't explicitly mismatch?)
+
     // get rid of straggling nodes
     // TODO: should we run _cleanup here instead and move it from its earlier call?
     SuperfluousNodeRemover orphanedNodeRemover;
@@ -2114,5 +2142,42 @@ void ChangesetReplacementCreator::_synchronizeIds(
       replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
   }
 }
+
+//void ChangesetReplacementCreator::_restoreOriginalIds(
+//  const QList<OsmMapPtr>& maps, const QMap<QString, std::shared_ptr<ElementIdRemapper>>& remappings)
+//{
+//  for (QMap<QString, std::shared_ptr<ElementIdRemapper>>::const_iterator itr = remappings.begin();
+//       itr != remappings.end(); ++itr)
+//  {
+//    OsmMapPtr map = _getMapByGeometryType(maps, itr.key());
+//    if (map->getName().toLower().contains("ref"))
+//    {
+//      continue;
+//    }
+//    std::shared_ptr<ElementIdRemapper> idRemapper = itr.value();
+//    // TODO: change to info/debug
+//    LOG_STATUS("Restoring id mappings for: " << map->getName() << "...");
+//    idRemapper->restore(map);
+//    LOG_STATUS(
+//      "Restored " << StringUtils::formatLargeNumber(idRemapper->getNumRemappedIds()) <<
+//      " IDs for: " << map->getName() << ".");
+//  }
+//}
+
+//void ChangesetReplacementCreator::_removeInvalidWayNodeExcludeDelete(OsmMapPtr map)
+//{
+//  if (!map)
+//  {
+//    return;
+//  }
+
+//  ExcludeDeleteWayNodeCleaner cleaner;
+//  cleaner.setOsmMap(map.get());
+//  LOG_INFO(cleaner.getInitStatusMessage());
+//  map->visitNodesRw(cleaner);
+//  LOG_DEBUG(cleaner.getCompletedStatusMessage());
+//  OsmMapWriterFactory::writeDebugMap(
+//    map, _changesetId + "-" + map->getName() + "-after-invalid-exclude-delete-removal");
+//}
 
 }

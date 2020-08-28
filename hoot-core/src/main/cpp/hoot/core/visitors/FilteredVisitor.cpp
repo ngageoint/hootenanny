@@ -106,6 +106,11 @@ void FilteredVisitor::setOsmMap(const OsmMap* map)
 
 void FilteredVisitor::visit(const ConstElementPtr& e)
 {
+  LOG_VART(e->getElementId());
+//  if (_criterion != 0)
+//  {
+//    LOG_VART(_criterion->toString());
+//  }
   if (_criterion->isSatisfied(e))
   {
     LOG_TRACE("crit satisfied for: " << e->getElementId());

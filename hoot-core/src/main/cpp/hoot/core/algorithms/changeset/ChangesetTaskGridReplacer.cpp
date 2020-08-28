@@ -187,15 +187,6 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGridGenerator::
     {
       const TaskGridGenerator::TaskGridCell taskGridCell = *taskGridItr;
       _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGrid.size());
-
-      if (_killAfterNumChangesetDerivations > 0 &&
-          _numChangesetsDerived >= _killAfterNumChangesetDerivations)
-      {
-        throw HootException(
-          "Killing replacement after " + QString::number(_numChangesetsDerived) +
-          " changeset derivations...");
-      }
-
       changesetCtr++;
     }
   }
@@ -206,15 +197,6 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGridGenerator::
     {
       const TaskGridGenerator::TaskGridCell taskGridCell = *taskGridItr;
       _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGrid.size());
-
-      if (_killAfterNumChangesetDerivations > 0 &&
-          _numChangesetsDerived >= _killAfterNumChangesetDerivations)
-      {
-        throw HootException(
-          "Killing replacement after " + QString::number(_numChangesetsDerived) +
-          " changeset derivations...");
-      }
-
       changesetCtr++;
     }
   }
@@ -277,6 +259,13 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
+  if (_killAfterNumChangesetDerivations > 0 &&
+      _numChangesetsDerived >= _killAfterNumChangesetDerivations)
+  {
+    throw HootException(
+      "Killing replacement after " + QString::number(_numChangesetsDerived) +
+      " changeset derivations...");
+  }
 
   // VERY SLOW
   if (ConfigOptions().getDebugMapsWrite() && changesetNum < taskGridSize)
@@ -389,6 +378,9 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
     // tag element with potential data quality issues caused by the replacement operations; If this
     // isn't done after the previous cleaning step, you'll get some element NPE's.
     _writeQualityIssueTags(map);
+
+    // TODO: try doing a diff conflate between the raw secondary and the replacement map to find
+    // bad areas?
   }
 
   // write the full map out
@@ -408,26 +400,29 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
 
   std::shared_ptr<SetTagValueVisitor> tagVis;
   std::shared_ptr<FilteredVisitor> filteredVis;
+  std::shared_ptr<ElementCriterion> crit;
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
-  filteredVis.reset(
-    new FilteredVisitor(
-      ElementIdCriterion(ElementType::Node, SuperfluousNodeRemover::collectSuperfluousNodeIds(map)),
-      tagVis));
+  crit.reset(
+    new ElementIdCriterion(
+      ElementType::Node, SuperfluousNodeRemover::collectSuperfluousNodeIds(map)));
+  filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
     " orphaned nodes in output.");
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
-  filteredVis.reset(new FilteredVisitor(DisconnectedWayCriterion(map), tagVis));
+  crit.reset(new DisconnectedWayCriterion(map));
+  filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
     " disconnected ways in output.");
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
-  filteredVis.reset(new FilteredVisitor(EmptyWayCriterion(), tagVis));
+  crit.reset(new EmptyWayCriterion());
+  filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<

@@ -172,6 +172,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QS
 
 void SetTagValueVisitor::visit(const std::shared_ptr<Element>& e)
 {
+  LOG_VART(e->getElementId());
   for (int i = 0; i < _keys.size(); i++)
   {
     _setTag(e, _keys[i], _vals[i]);

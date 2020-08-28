@@ -47,6 +47,7 @@ public:
 
   virtual std::shared_ptr<IdGenerator> clone() const = 0;
 
+  // TOOD: change to createNodeId(const ElementType& elementType)?
   virtual long createNodeId() = 0;
   virtual long createRelationId() = 0;
   virtual long createWayId() = 0;
