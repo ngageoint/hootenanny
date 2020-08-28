@@ -100,9 +100,6 @@ void SpatialIndexer::visit(const ConstElementPtr& e)
   {
     LOG_TRACE("is satisfied: " << e->getElementId());
 
-    _fids.push_back((int)_indexToEid.size());
-    _indexToEid.push_back(e->getElementId());
-
     Box b(2);
     Meters searchRadius = _getSearchRadius(e);
     LOG_VART(searchRadius);
@@ -115,6 +112,8 @@ void SpatialIndexer::visit(const ConstElementPtr& e)
       b.setBounds(0, env->getMinX(), env->getMaxX());
       b.setBounds(1, env->getMinY(), env->getMaxY());
 
+      _fids.push_back((int)_indexToEid.size());
+      _indexToEid.push_back(e->getElementId());
       _boxes.push_back(b);
 
       _numAffected++;

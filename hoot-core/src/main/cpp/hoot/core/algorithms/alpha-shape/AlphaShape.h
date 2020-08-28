@@ -84,7 +84,7 @@ public:
    *
    * @param alpha tuning parameter which determines the makeup of the output shape
    */
-  AlphaShape(double alpha);
+  AlphaShape(double alpha = -1.0);
 
   /**
    * Converts this shape to a GEOS geometry
@@ -123,6 +123,10 @@ private:
 
   // size of the longest face edge
   mutable double _longestFaceEdge;
+
+  //  Size of the problem set in meters in the x, y directions
+  double _sizeX;
+  double _sizeY;
 
   // main data structures used to calculate the shape
   std::shared_ptr<Tgs::DelaunayTriangulation> _pDelauneyTriangles;

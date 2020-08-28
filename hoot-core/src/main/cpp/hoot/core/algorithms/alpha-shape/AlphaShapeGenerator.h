@@ -69,7 +69,6 @@ public:
    */
   std::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
 
-  void setRetryOnTooSmallInitialAlpha(bool retry) { _retryOnTooSmallInitialAlpha = retry; }
   void setManuallyCoverSmallPointClusters(bool cover) { _manuallyCoverSmallPointClusters = cover; }
 
 private:
@@ -80,10 +79,6 @@ private:
   double _buffer;
   // This triggers _coverStragglers (read description).
   bool _manuallyCoverSmallPointClusters;
-  // If the selected alpha value is too small to calculate the alpha shape, a retry can be done to
-  // compute it based on the input data. This could go away if auto-alpha calculation was ever
-  // implemented (#4085).
-  bool _retryOnTooSmallInitialAlpha;
   // The maximum number of alpha values retries to. Right now this is hardcoded to 2 as that's all
   // that has ever been needed.
   bool _maxTries;

@@ -50,6 +50,7 @@ using namespace geos::geom;
 // Standard
 #include <stdlib.h>
 #include <limits>
+#include <queue>
 using namespace std;
 
 // TGS
@@ -146,7 +147,9 @@ private:
 
 AlphaShape::AlphaShape(double alpha)
   : _alpha(alpha),
-    _longestFaceEdge(0.0)
+    _longestFaceEdge(0.0),
+    _sizeX(0.0),
+    _sizeY(0.0)
 {
   LOG_VARD(_alpha);
   _pDelauneyTriangles.reset(new Tgs::DelaunayTriangulation);
@@ -253,6 +256,8 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
     maxY = max(points[i].second, maxY);
   }
 
+  _sizeX = maxX - minX;
+  _sizeY = maxY - minY;
   double size = max(_alpha, max(maxX - minX, maxY - minY));
   double midX = (maxX + minX) / 2.0;
   double midY = (maxY + minY) / 2.0;
@@ -329,26 +334,85 @@ GeometryPtr AlphaShape::toGeometry()
   // create a vector of all faces
   vector<GeometryPtr> faces, temp;
   Envelope e;
-  double preUnionArea = _collectValidFaces(_alpha, faces, e);
+  double preUnionArea = 0.0;
+  double alpha = -1;
 
-  LOG_VARD(e);
-  LOG_DEBUG("Area: " << (long)preUnionArea);
-  LOG_VARD(faces.size());
+  bool calculateAlpha = _alpha < 0.0;
+  std::vector<double> alpha_options;
 
-  // if the result is an empty geometry
-  if (faces.size() == 0)
+  if (calculateAlpha)
   {
-    if (_longestFaceEdge > _alpha)
+    //  Get the list of all possible alpha values (edge lengths) if alpha needs to be calculated
+    std::set<long> alpha_values;
+    size_t faceCount = _pDelauneyTriangles->getFaces().size();
+    //  Whole number scale for deduplication
+    double scale = 1.0;
+    if (_sizeX < 10 || _sizeY < 10)
+      scale = 100.0;
+    else if (_sizeX < 100 || _sizeY < 100)
+      scale = 10.0;
+    //  Iterate all of the edges to get the alpha value candidates
+    for (EdgeIterator it = _pDelauneyTriangles->getEdgeIterator(); it != _pDelauneyTriangles->getEdgeEnd(); ++it)
+    {
+      //  Multiply by scale and convert it to a whole number for deduplication in the set
+      long length = (*it).getLength() * scale;
+      if (length > 0 && length > _alpha)
+        alpha_values.insert(length);
+    }
+    //  Get a list of possible alpha values to test
+    for (std::set<long>::iterator it = alpha_values.begin(); it != alpha_values.end(); ++it)
+      alpha_options.push_back((*it) / scale);
+    //  Iterate the alpha values searching for one that uses at least
+    //  90% of the Delauney triangle faces
+    while (alpha_options.size() > 0 && faceCount * 0.9 >= faces.size())
+    {
+      //  Clear out any previous faces that may exist
+      faces.clear();
+      e.init();
+      //  Get the next alpha to try
+      alpha = alpha_options[0];
+      alpha_options.erase(alpha_options.begin());
+      preUnionArea = _collectValidFaces(alpha, faces, e);
+    }
+    LOG_VARD(e);
+    LOG_DEBUG("Area: " << (long)preUnionArea);
+    LOG_VARD(faces.size());
+
+    // if the result is an empty geometry
+    if (faces.size() == 0)
     {
       throw IllegalArgumentException(
-        "Longest face edge of size: " + QString::number(_longestFaceEdge) +
-        " larger than alpha value of: " + QString::number(_alpha) + ". Try an alpha value of " +
-        QString::number(_longestFaceEdge) + " or larger.");
+        "Unable to find alpha value to create alpha shape.");
     }
-    else
+    //  Choose the alpha value
+    LOG_INFO("No alpha value supplied; generated alpha value: " << alpha);
+    _alpha = alpha;
+  }
+  else
+  {
+    //  Only check two alpha values, the given alpha and the longest face edge
+    alpha_options.push_back(_alpha);
+    alpha_options.push_back(getLongestFaceEdge());
+    //  Iterate both options for the alpha value
+    while (faces.size() < 1 && alpha_options.size() > 0)
     {
-      // don't know how to handle it
-      return GeometryPtr(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+      //  Clear out any previous faces that may exist
+      faces.clear();
+      e.init();
+      //  Get the next alpha to try
+      alpha = alpha_options[0];
+      alpha_options.erase(alpha_options.begin());
+      preUnionArea = _collectValidFaces(alpha, faces, e);
+    }
+    LOG_VARD(e);
+    LOG_DEBUG("Area: " << (long)preUnionArea);
+    LOG_VARD(faces.size());
+
+    // if the result is an empty geometry
+    if (faces.size() == 0)
+    {
+      throw IllegalArgumentException(
+        "Unable to create alpha shape with alpha value of: " + QString::number(_alpha) + ".");
     }
   }
 
