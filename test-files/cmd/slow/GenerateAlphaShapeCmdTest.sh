@@ -13,7 +13,3 @@ hoot diff $CONFIG test-output/cmd/slow/GenerateAlphaShapeCmdTest/output-2.osm te
 
 hoot generate-alpha-shape $CONFIG --alpha 1000 --buffer -500 test-files/DcGisRoads.osm test-output/cmd/slow/GenerateAlphaShapeCmdTest/output-3.osm
 hoot diff $CONFIG test-output/cmd/slow/GenerateAlphaShapeCmdTest/output-3.osm test-files/cmd/slow/GenerateAlphaShapeCmdTest/output-3.osm || diff test-output/cmd/slow/GenerateAlphaShapeCmdTest/output-3.osm test-files/cmd/slow/GenerateAlphaShapeCmdTest/output-3.osm
-
-#hoot generate-alpha-shape $CONFIG --buffer 0 test-files/Congo_MGCP_Roads_Bridges_subset.osm test-output/cmd/slow/GenerateAlphaShapeCmdTest/output-4.osm
-#hoot diff $CONFIG test-output/cmd/slow/GenerateAlphaShapeCmdTest/output-4.osm test-files/cmd/slow/GenerateAlphaShapeCmdTest/output-4.osm || diff test-output/cmd/slow/GenerateAlphaShapeCmdTest/output-4.osm test-files/cmd/slow/GenerateAlphaShapeCmdTest/output-4.osm
-

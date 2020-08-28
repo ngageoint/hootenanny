@@ -76,7 +76,6 @@ public:
 
     AlphaShapeGenerator uut(1000.0, 0.0);
     uut.setManuallyCoverSmallPointClusters(false);
-    uut.setRetryOnTooSmallInitialAlpha(false);
     OsmMapPtr cutShapeMap = uut.generateMap(map);
 
     MapProjector::projectToWgs84(cutShapeMap);
@@ -95,7 +94,6 @@ public:
 
     AlphaShapeGenerator uut(1000.0, 500.0);
     uut.setManuallyCoverSmallPointClusters(false);
-    uut.setRetryOnTooSmallInitialAlpha(false);
     OsmMapPtr cutShapeMap = uut.generateMap(map);
 
     MapProjector::projectToWgs84(cutShapeMap);
@@ -114,7 +112,6 @@ public:
 
     AlphaShapeGenerator uut(1000.0, -500.0);
     uut.setManuallyCoverSmallPointClusters(false);
-    uut.setRetryOnTooSmallInitialAlpha(false);
     OsmMapPtr cutShapeMap = uut.generateMap(map);
 
     MapProjector::projectToWgs84(cutShapeMap);
@@ -134,7 +131,6 @@ public:
 
     AlphaShapeGenerator uut(1000.0, 0.0);
     uut.setManuallyCoverSmallPointClusters(false);
-    uut.setRetryOnTooSmallInitialAlpha(true);
     OsmMapPtr cutShapeMap = uut.generateMap(map);
 
     MapProjector::projectToWgs84(cutShapeMap);
@@ -153,7 +149,6 @@ public:
 
     AlphaShapeGenerator uut(10000.0, 500.0);
     uut.setManuallyCoverSmallPointClusters(true);
-    uut.setRetryOnTooSmallInitialAlpha(false);
     //Tgs::Random::instance()->seed(1);
     OsmMapPtr cutShapeMap = uut.generateMap(map);
 

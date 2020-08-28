@@ -57,6 +57,7 @@ class AlphaShapeTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(AlphaShapeTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST(runRandomTest);
+  CPPUNIT_TEST(runAutoAlphaDonut);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -142,6 +143,38 @@ public:
 
     std::shared_ptr<Geometry> g = uut.toGeometry();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.64, g->getArea(), 0.001);
+  }
+
+  void runAutoAlphaDonut()
+  {
+    vector<pair<double, double>> points;
+
+    createDonut(points, 20, 35, 10, 0, 250);
+
+    AlphaShape uut;
+    uut.insert(points);
+
+    OsmMapPtr map = uut._toOsmMap();
+
+    const WayMap ways = map->getWays();
+    for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+    {
+      const WayPtr& w = it->second;
+      w->setTag("highway", "motorway");
+    }
+
+    for (size_t i = 0; i < points.size(); i++)
+    {
+      NodePtr n(new Node(Status::Invalid, map->createNextNodeId(), points[i].first, points[i].second, -1));
+      map->addNode(n);
+    }
+
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "AutoAlphaDonut.osm");
+
+    std::shared_ptr<Geometry> g = uut.toGeometry();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2476.9, g->getArea(), 0.1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(39.1, uut._alpha, 0.1);
   }
 };
 
