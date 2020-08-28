@@ -84,7 +84,7 @@ public:
    *
    * @param alpha tuning parameter which determines the makeup of the output shape
    */
-  AlphaShape(double alpha);
+  AlphaShape(double alpha = -1.0);
 
   /**
    * Converts this shape to a GEOS geometry

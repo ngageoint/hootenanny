@@ -859,9 +859,11 @@ Face& FaceIterator::operator++()
 }
 
 DelaunayTriangulation::DelaunayTriangulation()
+  : _subdivision(NULL),
+    _x{0.0, 0.0, 0.0},
+    _y{0.0, 0.0, 0.0},
+    _pointCount(0)
 {
-  _pointCount = 0;
-  _subdivision = 0;
 }
 
 DelaunayTriangulation::~DelaunayTriangulation()
