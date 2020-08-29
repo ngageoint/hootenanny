@@ -300,6 +300,25 @@ bool WayUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long node
   return commonNodesBetweenWayGroups.size() != 0;
 }
 
+bool WayUtils::nodesAreContainedInTheExactSameWays(
+  const long nodeId1, const long nodeId2, const ConstOsmMapPtr& map)
+{
+  const std::set<long>& waysContainingNode1 =
+    map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId1);
+  LOG_VART(waysContainingNode1);
+
+  const std::set<long>& waysContainingNode2 =
+    map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId2);
+  LOG_VART(waysContainingNode2);
+
+  return waysContainingNode1 == waysContainingNode2;
+}
+
+int WayUtils::getNumberOfWaysContainingNode(const long nodeId, const ConstOsmMapPtr& map)
+{
+  return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size();
+}
+
 bool WayUtils::nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map)
 {
   return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 0;

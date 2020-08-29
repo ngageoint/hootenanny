@@ -166,6 +166,17 @@ public:
                                             const ConstOsmMapPtr& map);
 
   /**
+   * TODO
+   *
+   * @param nodeId1
+   * @param nodeId2
+   * @param map
+   * @return
+   */
+  static bool nodesAreContainedInTheExactSameWays(
+    const long nodeId1, const long nodeId2, const ConstOsmMapPtr& map);
+
+  /**
    * Determines if a specified node is contained by a way, given a list of way IDs
    *
    * @param nodeId the ID of the node to search for
@@ -184,6 +195,15 @@ public:
    * @return true if any way in the map contains the node; false otherwise
    */
   static bool nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param nodeId
+   * @param map
+   * @return
+   */
+  static int getNumberOfWaysContainingNode(const long nodeId, const ConstOsmMapPtr& map);
 
   /**
    * Determines if a node is contained by more than one way in a map

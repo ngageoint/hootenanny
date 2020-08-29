@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/ops/ElementIdRemapper.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -39,6 +40,7 @@ namespace hoot
 
 class ChangesetCreator;
 class ChainCriterion;
+class Settings;
 
 /**
  * High level class for prepping data for replacement changeset generation (changesets which
@@ -159,6 +161,8 @@ public:
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output);
 
+  int getNumChanges() const { return _numChanges; }
+
   void setFullReplacement(const bool full) { _fullReplacement = full; }
   void setBoundsInterpretation(const BoundsInterpretation& interpretation)
   { _boundsInterpretation = interpretation; }
@@ -216,6 +220,9 @@ private:
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
   bool _geometryFiltersSpecified;
 
+  // TODO
+  QMap<QString, std::shared_ptr<ElementIdRemapper>> _secIdMappings;
+
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
 
@@ -263,6 +270,7 @@ private:
 
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
+  int _numChanges;
 
   void _create();
 
@@ -311,6 +319,11 @@ private:
     OsmMapPtr& cachedMap);
 
   /*
+   * Removes changeset replacement metadata tags which should be seen in raw input
+   */
+  void _removeMetadataTags(const OsmMapPtr& map);
+
+  /*
    * Adds a custom tag to any element from the input with a missing child. This is primarily useful
    * in repairing relations manually that were passed in without some of their child elements after
    * the replacement changeset is written.
@@ -356,7 +369,6 @@ private:
    * Removes duplicates between one map and another, ignoring elemment IDs
    */
   void _dedupeMaps(const QList<OsmMapPtr>& maps);
-  void _intraDedupeMap(const QList<OsmMapPtr>& maps);
 
   /*
    * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
@@ -400,13 +412,13 @@ private:
   void _synchronizeIds(
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
 
-  /*
-   * TODO: remove
-   */
-  //void _repairLinearGaps(OsmMapPtr& mapBeingReplaced, OsmMapPtr& replacementMap);
-  Meters _getSearchRadius(const ConstElementPtr& e) const;
-
   OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
+
+  //void _removeInvalidWayNodeExcludeDelete(OsmMapPtr map);
+
+//  void _restoreOriginalIds(
+//    const QList<OsmMapPtr>& replacementMaps,
+//    const QMap<QString, std::shared_ptr<ElementIdRemapper>>& remappings);
 };
 
 }

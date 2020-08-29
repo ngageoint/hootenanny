@@ -241,7 +241,7 @@ bool AlphaShape::_isTooLong(const double alpha, const Edge& e) const
 
 void AlphaShape::insert(const vector<pair<double, double>>& points)
 {
-  LOG_DEBUG("Inserting " << points.size() << " points...");
+  LOG_DEBUG("Inserting " << StringUtils::formatLargeNumber(points.size()) << " points...");
 
   double minX = numeric_limits<double>::max();
   double maxX = -minX;
@@ -327,7 +327,9 @@ double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPt
 
 GeometryPtr AlphaShape::toGeometry()
 {
-  LOG_DEBUG("Traversing " << _pDelauneyTriangles->getFaces().size() << " faces...");
+  LOG_DEBUG(
+    "Traversing " << StringUtils::formatLargeNumber(_pDelauneyTriangles->getFaces().size()) <<
+    " faces...");
 
   // create a vector of all faces
   vector<GeometryPtr> faces, temp;

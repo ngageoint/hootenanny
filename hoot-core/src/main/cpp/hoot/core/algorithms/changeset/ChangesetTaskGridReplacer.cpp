@@ -38,6 +38,12 @@
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/criterion/DisconnectedWayCriterion.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/criterion/ElementIdCriterion.h>
+#include <hoot/core/criterion/EmptyWayCriterion.h>
 
 namespace hoot
 {
@@ -48,7 +54,8 @@ _reverseTaskGrid(false),
 _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
-_averageChangesetDeriveTime(0.0)
+_averageChangesetDeriveTime(0.0),
+_tagQualityIssues(false)
 {
 }
 
@@ -180,15 +187,6 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGridGenerator::
     {
       const TaskGridGenerator::TaskGridCell taskGridCell = *taskGridItr;
       _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGrid.size());
-
-      if (_killAfterNumChangesetDerivations > 0 &&
-          _numChangesetsDerived >= _killAfterNumChangesetDerivations)
-      {
-        throw HootException(
-          "Killing replacement after " + QString::number(_numChangesetsDerived) +
-          " changeset derivations...");
-      }
-
       changesetCtr++;
     }
   }
@@ -199,15 +197,6 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGridGenerator::
     {
       const TaskGridGenerator::TaskGridCell taskGridCell = *taskGridItr;
       _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGrid.size());
-
-      if (_killAfterNumChangesetDerivations > 0 &&
-          _numChangesetsDerived >= _killAfterNumChangesetDerivations)
-      {
-        throw HootException(
-          "Killing replacement after " + QString::number(_numChangesetsDerived) +
-          " changeset derivations...");
-      }
-
       changesetCtr++;
     }
   }
@@ -217,7 +206,10 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   const TaskGridGenerator::TaskGridCell& taskGridCell, const int changesetNum,
   const int taskGridSize)
 {
-  if (_taskCellSkipIds.contains(taskGridCell.id))
+  // Include IDs override skip IDs. if include IDs is populated at all and this ID isn't in the
+  // list, skip it. Otherwise, if the skip IDs have it, also skip it.
+  if ((!_taskCellIncludeIds.isEmpty() && !_taskCellIncludeIds.contains(taskGridCell.id)) ||
+      _taskCellSkipIds.contains(taskGridCell.id))
   {
     LOG_STATUS("***********Skipping task grid cell: " << taskGridCell.id << "*********");
     _subTaskTimer.restart();
@@ -244,6 +236,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   _changesetCreator->setChangesetId(QString::number(taskGridCell.id));
   _changesetCreator->create(
     _dataToReplaceUrl, _replacementUrl, taskGridCell.bounds, changesetFile.fileName());
+  const int numChanges = _changesetCreator->getNumChanges();
 
   _numChangesetsDerived++;
   _totalChangesetDeriveTime += _subTaskTimer.elapsed() / 1000.0;
@@ -253,18 +246,26 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
 
   LOG_STATUS(
     "Applying changeset: " << changesetNum << " / " <<
-    StringUtils::formatLargeNumber(taskGridSize) << " for task grid cell: " << taskGridCell.id <<
-    ", over bounds: " << GeometryUtils::envelopeFromConfigString(boundsStr) << ", from file: ..." <<
-    changesetFile.fileName().right(25) << "...");
+    StringUtils::formatLargeNumber(taskGridSize) << " with " <<
+    StringUtils::formatLargeNumber(numChanges) << " changes for task grid cell: " <<
+    taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeFromConfigString(boundsStr) <<
+    ", from file: ..." << changesetFile.fileName().right(25) << "...");
 
   _changesetApplier->write(changesetFile);
   _printChangesetStats();
 
   LOG_STATUS(
-    "\tChangeset applied in: " <<
+    "\tChangeset with " << StringUtils::formatLargeNumber(numChanges) << " changes applied in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
+  if (_killAfterNumChangesetDerivations > 0 &&
+      _numChangesetsDerived >= _killAfterNumChangesetDerivations)
+  {
+    throw HootException(
+      "Killing replacement after " + QString::number(_numChangesetsDerived) +
+      " changeset derivations...");
+  }
 
   // VERY SLOW
   if (ConfigOptions().getDebugMapsWrite() && changesetNum < taskGridSize)
@@ -351,26 +352,39 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
 
 void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
 {
-  LOG_STATUS(
-    "Reading the modified data out of: " << _dataToReplaceUrl << " to: ..." <<
-    outputFile.right(25) << "...");
-
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
   // change these, so we can open the files in josm; not sure if these are helping...
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
 
+  LOG_STATUS("Reading the modified data out of: ..." << _dataToReplaceUrl.right(25) << "...");
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
 
   // had to do this cleaning to get the relations to behave
   RemoveMissingElementsVisitor missingElementRemover;
   map->visitRw(missingElementRemover);
+  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
   RemoveInvalidRelationVisitor invalidRelationRemover;
   map->visitRw(invalidRelationRemover);
-  RemoveEmptyRelationsOp().apply(map);
+  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
+  RemoveEmptyRelationsOp emptyRelationRemover;
+  emptyRelationRemover.apply(map);
+  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
 
+  if (_tagQualityIssues)
+  {
+    // tag element with potential data quality issues caused by the replacement operations; If this
+    // isn't done after the previous cleaning step, you'll get some element NPE's.
+    _writeQualityIssueTags(map);
+
+    // TODO: try doing a diff conflate between the raw secondary and the replacement map to find
+    // bad areas?
+  }
+
+  // write the full map out
+  LOG_STATUS("Writing the modified data to: ..." << outputFile.right(25) << "...");
   OsmMapWriterFactory::write(map, outputFile);
 
   LOG_STATUS(
@@ -378,6 +392,41 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
     ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
+}
+
+void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
+{
+  LOG_STATUS("Tagging features with quality issues...");
+
+  std::shared_ptr<SetTagValueVisitor> tagVis;
+  std::shared_ptr<FilteredVisitor> filteredVis;
+  std::shared_ptr<ElementCriterion> crit;
+
+  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
+  crit.reset(
+    new ElementIdCriterion(
+      ElementType::Node, SuperfluousNodeRemover::collectSuperfluousNodeIds(map)));
+  filteredVis.reset(new FilteredVisitor(crit, tagVis));
+  map->visitRo(*filteredVis);
+  LOG_STATUS(
+    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
+    " orphaned nodes in output.");
+
+  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
+  crit.reset(new DisconnectedWayCriterion(map));
+  filteredVis.reset(new FilteredVisitor(crit, tagVis));
+  map->visitRo(*filteredVis);
+  LOG_STATUS(
+    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
+    " disconnected ways in output.");
+
+  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
+  crit.reset(new EmptyWayCriterion());
+  filteredVis.reset(new FilteredVisitor(crit, tagVis));
+  map->visitRo(*filteredVis);
+  LOG_STATUS(
+    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
+    " empty ways in output.");
 }
 
 }

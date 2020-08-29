@@ -71,6 +71,7 @@ public:
   virtual std::string getClassName() const { return className(); }
 
   void setIncludeCircularError(bool include) { _includeCe = include; }
+  void setUseNodeTags(bool use) { _useNodeTags = use; }
   void setWriteHashes(bool write) { _writeHashes = write; }
   void setCollectHashes(bool collect) { _collectHashes = collect; }
 
@@ -91,10 +92,14 @@ private:
   // an optional list of metadata tag keys to factor into the comparison; by default no metadata
   // keys are examined during comparison
   QStringList _nonMetadataIgnoreKeys;
+  // TODO
+  bool _useNodeTags;
+
   // determines whether hashes are written to an element's tags
   bool _writeHashes;
   // determines if hash values should be collected for post-processing purposes
   bool _collectHashes;
+
   // collected hash values mapped to element IDs
   QMap<QString, ElementId> _hashesToElementIds;
   // pairings of all duplicate elements found

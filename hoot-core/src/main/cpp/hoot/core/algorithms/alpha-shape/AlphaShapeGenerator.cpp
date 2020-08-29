@@ -144,7 +144,8 @@ void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry,
   LOG_DEBUG("Covering stragglers...");
 
   // Pretty simple...go through and find any point that wasn't covered by the Alpha Shape and draw
-  // a buffer around it.
+  // a buffer around it. This can get very slow for fairly large linear datasets. May need a new alg
+  // here, if possible, for better performance.
 
   int addedPointCtr = 0;
   const NodeMap& nodes = map->getNodes();

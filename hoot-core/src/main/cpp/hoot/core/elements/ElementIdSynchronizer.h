@@ -36,6 +36,7 @@ namespace hoot
 
 /**
  * This class allows for synchronizing element IDs between to maps that have identical features.
+ * This works across multiple maps, so something like IdSwapOp won't work here.
  */
 class ElementIdSynchronizer
 {
@@ -43,6 +44,7 @@ class ElementIdSynchronizer
 public:
 
   ElementIdSynchronizer();
+  virtual ~ElementIdSynchronizer() = default;
 
   /**
    * For all identical elements between two maps, this updates the identical elements in the second
@@ -53,7 +55,7 @@ public:
    * is not modified.
    * @param map2 map to update element IDs on
    */
-  void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2);
+  virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2);
 
   int getNumNodeIdsSynchronized() const { return _updatedNodeCtr; }
   int getNumWayIdsSynchronized() const { return _updatedWayCtr; }
@@ -61,7 +63,12 @@ public:
   int getNumTotalFeatureIdsSynchronized() const
   { return _updatedNodeCtr + _updatedWayCtr + _updatedRelationCtr; }
 
-private:
+  void setUseNodeTagsForHash(bool use) { _useNodeTagsForHash = use; }
+
+protected:
+
+  // TODO
+  bool _useNodeTagsForHash;
 
   int _updatedNodeCtr;
   int _updatedWayCtr;

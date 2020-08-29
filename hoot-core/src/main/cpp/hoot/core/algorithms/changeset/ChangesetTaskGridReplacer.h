@@ -33,6 +33,7 @@
 
 // Qt
 #include <QElapsedTimer>
+#include <QFile>
 
 namespace hoot
 {
@@ -42,7 +43,9 @@ class OsmApiDbSqlChangesetApplier;
 
 /**
  * This class can replace data in an OSM API database across multiple AOI's via changeset generation
- * and application.
+ * and application. Its primarily meant as a testing harness to support
+ * ServiceChangesetReplacementGridTest. However, in theory, with some tweaks it could be used in a
+ * production environment if desired.
  *
  * Either an auto node density generated, uniform, or file based input task grid may be used to
  * partition the data replacements. The file based task grid supports one or more bounds input
@@ -68,12 +71,14 @@ public:
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
+  void setTaskCellIncludeIds(const QList<int>& ids) { _taskCellIncludeIds = ids; }
   void setTaskCellSkipIds(const QList<int>& ids) { _taskCellSkipIds = ids; }
   void setChangesetsOutputDir(const QString& dir)
   { _changesetsOutputDir = dir; }
   void setKillAfterNumChangesetDerivations(int numDerivations)
   { _killAfterNumChangesetDerivations = numDerivations; }
   void setWriteFinalOutput(QString output) { _finalOutput = output; }
+  void setTagQualityIssues(bool tag) { _tagQualityIssues = tag; }
 
 private:
 
@@ -89,8 +94,10 @@ private:
   // replacement data; must be hootapidb://
   QString _replacementUrl;
 
+  // allows for including the processing of any grid cell with an "id" tag value in this ID list
+  QList<int> _taskCellIncludeIds;
   // allows for skipping the processing of any grid cell with an "id" tag value in this ID list;
-  // applies to both node density and file based grids
+  // overrides _taskCellIncludeIds
   QList<int> _taskCellSkipIds;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues
   bool _reverseTaskGrid;
@@ -112,6 +119,8 @@ private:
 
   // optional location to write the final completely replaced ref output
   QString _finalOutput;
+  // adds tags to features that are suspect as result of the replacement op
+  bool _tagQualityIssues;
 
   void _initConfig();
 
@@ -124,6 +133,8 @@ private:
 
   // writes out all of the ref data; useful for debugging...expensive
   void _getUpdatedData(const QString& outputFile);
+  // tags elements with potential quality issues
+  void _writeQualityIssueTags(OsmMapPtr& map);
 };
 
 }

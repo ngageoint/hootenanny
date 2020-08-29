@@ -35,6 +35,7 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 namespace hoot
 {
@@ -66,6 +67,15 @@ void MapUtils::splitMapByStatus(
   unknown1Map->visitRw(remove2Vis);
   unknown2Map.reset(new OsmMap(sourceMap));
   unknown2Map->visitRw(remove1Vis);
+}
+
+void MapUtils::dropMetadataTags(const OsmMapPtr& map)
+{
+  RemoveTagsVisitor tagRemover(QStringList("hoot:*"));
+  tagRemover.setOsmMap(map.get());
+  LOG_INFO(tagRemover.getInitStatusMessage());
+  map->visitRw(tagRemover);
+  LOG_DEBUG(tagRemover.getCompletedStatusMessage());
 }
 
 }

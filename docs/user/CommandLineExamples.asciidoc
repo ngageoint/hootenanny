@@ -657,6 +657,14 @@ See the User Guide for more details on command usage.
       -D tag.filter.keys="source;error:circular" input.osm output.osm
 -----
 
+===== Remove all tag keys starting with "source" from ways:
+
+-----
+    hoot convert -D convert.ops="hoot::RemoveTagsVisitor" \
+      -D tag.filter.element.criterion="hoot::WayCriterion" \
+      -D tag.filter.keys="source*" input.osm output.osm
+-----
+
 ===== Remove all elements that have the tag "status=proposed":
 
 -----

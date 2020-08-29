@@ -51,6 +51,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousNodeRemover)
 
 SuperfluousNodeRemover::SuperfluousNodeRemover() :
+_removeNodes(true),
 _ignoreInformationTags(false),
 _unallowedOrphanKvps(ConfigOptions().getSuperfluousNodeRemoverUnallowedOrphanKvps()),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
@@ -61,7 +62,8 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;     // _numAffected reflects the actual number of nodes removed
   _numProcessed = 0;    // _numProcessed reflects total elements processed
-  _usedNodes.clear();
+  _usedNodeIds.clear();
+  _superfluousNodeIds.clear();
 
   // Let's collect the IDs of all the nodes we can't remove first.
 
@@ -76,7 +78,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       const RelationData::Entry member = members[i];
       if (member.getElementId().getType() == ElementType::Node)
       {
-        _usedNodes.insert(member.getElementId().getId());
+        _usedNodeIds.insert(member.getElementId().getId());
       }
     }
 
@@ -84,13 +86,13 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
         " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
         " total elements.");
     }
   }
   LOG_DEBUG(
-    "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+    "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
     " nodes from removal that belong to relations after processing " <<
     StringUtils::formatLargeNumber(_numProcessed) << " total elements.");
 
@@ -101,20 +103,20 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     const ConstWayPtr& w = it->second;
     const vector<long>& nodeIds = w->getNodeIds();
     LOG_VART(nodeIds);
-    _usedNodes.insert(nodeIds.begin(), nodeIds.end());
+    _usedNodeIds.insert(nodeIds.begin(), nodeIds.end());
     _numProcessed += nodeIds.size();
 
     _numProcessed++;
     if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
         " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
         " total elements.");
     }
   }
   LOG_DEBUG(
-    "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+    "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
     " nodes from removal that belong to ways after processing " <<
     StringUtils::formatLargeNumber(_numProcessed) << " total elements.");
 
@@ -131,7 +133,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     // Turning circles are always expected to be a road way node. If its an actual bug, it should
     // eventually be fixed, but this logic will clean them up for the time being. The types we allow
     // to be orphaned are configurable in case we ever need to add others.
-    if (_usedNodes.find(n->getId()) == _usedNodes.end() &&
+    if (_usedNodeIds.find(n->getId()) == _usedNodeIds.end() &&
         n->getTags().hasAnyKvp(_unallowedOrphanKvps))
     {
       LOG_TRACE(
@@ -143,7 +145,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       LOG_TRACE(
         "Not marking " << n->getElementId() << " for removal due to having " <<
         n->getTags().getNonDebugCount() << " non-metadata tags...");
-      _usedNodes.insert(n->getId());
+      _usedNodeIds.insert(n->getId());
     }
     else
     {
@@ -154,18 +156,18 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
       PROGRESS_INFO(
-        "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+        "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
         " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
         " total elements.");
     }
   }
   LOG_DEBUG(
-    "Exempted " << StringUtils::formatLargeNumber(_usedNodes.size()) <<
+    "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
     " nodes from removal after processing " << StringUtils::formatLargeNumber(_numProcessed) <<
     " total elements.");
 
-  LOG_VARD(_usedNodes.size());
-  //LOG_VART(_usedNodes);
+  LOG_VARD(_usedNodeIds.size());
+  //LOG_VART(_usedNodeIds);
 
   std::shared_ptr<OsmMap> reprojected;
   const NodeMap* nodesWgs84 = &nodes;
@@ -188,13 +190,21 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     const Node* n = it->second.get();
     LOG_VART(n->getElementId());
     const long nodeId = n->getId();
-    LOG_VART(_usedNodes.find(nodeId) == _usedNodes.end());
-    if (_usedNodes.find(nodeId) == _usedNodes.end())
+    LOG_VART(_usedNodeIds.find(nodeId) == _usedNodeIds.end());
+    if (_usedNodeIds.find(nodeId) == _usedNodeIds.end())
     {
       if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))
       {
-        LOG_TRACE("Removing node: " << n->getElementId() << "...");
-        RemoveNodeByEid::removeNodeNoCheck(map, nodeId);
+        _superfluousNodeIds.insert(nodeId);
+        if (_removeNodes)
+        {
+          LOG_TRACE("Removing superfluous node: " << n->getElementId() << "...");
+          RemoveNodeByEid::removeNodeNoCheck(map, nodeId);
+        }
+        else
+        {
+          LOG_TRACE("Counting superfluous node: " << n->getElementId() << "...");
+        }
         _numAffected++;
       }
       else
@@ -213,7 +223,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     {
       PROGRESS_INFO(
         "Removed " << StringUtils::formatLargeNumber(_numAffected) <<
-        " nodes / " << StringUtils::formatLargeNumber(_usedNodes.size()) << " total nodes.");
+        " nodes / " << StringUtils::formatLargeNumber(_usedNodeIds.size()) << " total nodes.");
     }
     else if (_numProcessed % _taskStatusUpdateInterval == 0)
     {
@@ -236,8 +246,44 @@ long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
   }
   LOG_INFO(nodeRemover.getInitStatusMessage());
   nodeRemover.apply(map);
-  LOG_INFO(nodeRemover.getCompletedStatusMessage());
+  LOG_DEBUG(nodeRemover.getCompletedStatusMessage());
   return nodeRemover.getNumFeaturesAffected();
+}
+
+long SuperfluousNodeRemover::countSuperfluousNodes(
+  std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags, const geos::geom::Envelope& e)
+{
+  SuperfluousNodeRemover nodeCounter;
+  nodeCounter.setIgnoreInformationTags(ignoreInformationTags);
+  nodeCounter.setRemoveNodes(false);
+  if (!e.isNull())
+  {
+    nodeCounter.setBounds(e);
+  }
+  QString msg = nodeCounter.getInitStatusMessage().replace("Removing", "Counting");
+  LOG_STATUS(msg);
+  nodeCounter.apply(map);
+  msg = nodeCounter.getCompletedStatusMessage().replace("Removed", "Counted");
+  LOG_DEBUG(msg);
+  return nodeCounter.getNumFeaturesAffected();
+}
+
+std::set<long> SuperfluousNodeRemover::collectSuperfluousNodeIds(
+  std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags, const geos::geom::Envelope& e)
+{
+  SuperfluousNodeRemover nodeIdCollector;
+  nodeIdCollector.setIgnoreInformationTags(ignoreInformationTags);
+  nodeIdCollector.setRemoveNodes(false);
+  if (!e.isNull())
+  {
+    nodeIdCollector.setBounds(e);
+  }
+  QString msg = nodeIdCollector.getInitStatusMessage().replace("Removing", "Collecting");
+  LOG_STATUS(msg);
+  nodeIdCollector.apply(map);
+  msg = nodeIdCollector.getCompletedStatusMessage().replace("Removed", "Collected");
+  LOG_DEBUG(msg);
+  return nodeIdCollector.getSuperfluousNodeIds();
 }
 
 void SuperfluousNodeRemover::setBounds(const Envelope &bounds)

@@ -186,6 +186,26 @@ public:
   inline static const QString HootMissingChild()        { return "hoot:missing_child"; }
 
   /**
+   * Used by ElementIdSynchronizer to mark elements whose IDs it synched
+   */
+  inline static const QString HootIdSynchronized()      { return "hoot:synced:id"; }
+
+  /**
+   * Used to identify superfluous nodes without removing them for debugging purposes
+   */
+  inline static const QString HootSuperfluous()         { return "hoot:superfluous"; }
+
+  /**
+   * Used to identify disconnected ways for debugging purposes
+   */
+  inline static const QString HootDisconnected()        { return "hoot:disconnected"; }
+
+  /**
+   * Used to identify empty ways for debugging purposes
+   */
+  inline static const QString HootEmptyWay()        { return "hoot:empty:way"; }
+
+  /**
    * Identifies features snapped with UnconnectedWaySnapper
    */
   inline static const QString HootSnapped()             { return "hoot:snapped"; }

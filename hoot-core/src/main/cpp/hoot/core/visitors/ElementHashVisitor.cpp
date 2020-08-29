@@ -43,6 +43,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, ElementHashVisitor)
 
 ElementHashVisitor::ElementHashVisitor() :
 _includeCe(false),
+_useNodeTags(true),
 _writeHashes(true),
 _collectHashes(false)
 {
@@ -58,11 +59,11 @@ void ElementHashVisitor::visit(const ElementPtr& e)
   // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
   {
-    //LOG_VART(e->getElementId());
-    LOG_VART(e);
+    LOG_VART(e->getElementId());
+    //LOG_VART(e);
 
     const QString hash = toHashString(e);
-    LOG_VART(hash);
+    LOG_VARD(hash);
 
     if (_writeHashes)
     {
@@ -101,7 +102,7 @@ QString ElementHashVisitor::toJson(const ConstElementPtr& e) const
   {
     result = _toJson(std::dynamic_pointer_cast<const Relation>(e));
   }
-  LOG_TRACE("json for " << e->getElementId() << ":\n" << result);
+  //LOG_TRACE("json for " << e->getElementId() << ":\n" << result);
   return result;
 }
 
@@ -109,7 +110,16 @@ QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
 {
   QString result = "{\"type\":\"node\",\"tags\":{";
 
-  result += toJson(node->getTags(), node->getRawCircularError());
+  Tags tags;
+  if (_useNodeTags)
+  {
+    tags = node->getTags();
+  }
+  else
+  {
+    tags = Tags();
+  }
+  result += toJson(tags, node->getCircularError());
 
   const int coordinateComparisonSensitivity =
     ConfigOptions().getNodeComparisonCoordinateSensitivity();

@@ -839,6 +839,8 @@ void OsmMap::visitRw(ConstElementVisitor& visitor)
     consumer->setOsmMap(this);
   }
 
+  // TODO: replace duplicated code in here with calls to visitNodesRw, etc.
+
   // make a copy so we can iterate through even if there are changes.
   const NodeMap allNodes = getNodes();
   int numVisited = 0;
@@ -918,6 +920,8 @@ void OsmMap::visitRw(ElementVisitor& visitor)
     consumer->setOsmMap(this);
   }
 
+  // TODO: replace duplicated code in here with calls to visitNodesRw, etc.
+
   // make a copy so we can iterate through even if there are changes.
   const NodeMap allNodes = getNodes();
   int numVisited = 0;
@@ -985,6 +989,60 @@ void OsmMap::visitRw(ElementVisitor& visitor)
       PROGRESS_INFO(
         "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
         StringUtils::formatLargeNumber(allRelations.size()) << " relations.");
+    }
+  }
+}
+
+void OsmMap::visitNodesRw(ElementVisitor& visitor)
+{
+  // make a copy so we can iterate through even if there are changes.
+  const NodeMap allNodes = getNodes();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
+  for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
+  {
+    if (containsNode(it->first))
+    {
+      NodePtr node = std::dynamic_pointer_cast<Node>(it->second);
+      if (node)
+      {
+        visitor.visit(node);
+      }
+    }
+
+    numVisited++;
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allNodes.size()) << " nodes.");
+    }
+  }
+}
+
+void OsmMap::visitNodesRw(ConstElementVisitor& visitor)
+{
+  // make a copy so we can iterate through even if there are changes.
+  const NodeMap allNodes = getNodes();
+  int numVisited = 0;
+  const int taskStatusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
+  for (NodeMap::const_iterator it = allNodes.begin(); it != allNodes.end(); ++it)
+  {
+    if (containsNode(it->first))
+    {
+      ConstNodePtr node = std::dynamic_pointer_cast<const Node>(it->second);
+      if (node)
+      {
+        visitor.visit(node);
+      }
+    }
+
+    numVisited++;
+    if (_enableProgressLogging && numVisited % (taskStatusUpdateInterval * 10) == 0)
+    {
+      PROGRESS_INFO(
+        "\tProcessed " << StringUtils::formatLargeNumber(numVisited) << " / " <<
+        StringUtils::formatLargeNumber(allNodes.size()) << " nodes.");
     }
   }
 }

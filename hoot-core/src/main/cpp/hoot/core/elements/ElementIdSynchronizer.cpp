@@ -36,6 +36,7 @@ namespace hoot
 {
 
 ElementIdSynchronizer::ElementIdSynchronizer() :
+_useNodeTagsForHash(true),
 _updatedNodeCtr(0),
 _updatedWayCtr(0),
 _updatedRelationCtr(0)
@@ -72,33 +73,34 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
        ++itr)
   {
     const QString identicalHash = *itr;
-    LOG_VART(identicalHash);
+    // TODO: change back to trace
+    LOG_VARD(identicalHash);
 
     // Get the element with matching hash from the ref map.
     ConstElementPtr map1IdenticalElement = map1->getElement(map1Hashes[identicalHash]);
     if (map1IdenticalElement)
     {
-      LOG_VART(map1IdenticalElement->getElementId());
+      LOG_VARD(map1IdenticalElement->getElementId());
 
-      // Copy it to be safe.
-      ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
-      LOG_VART(map1IdenticalElementCopy->getElementId());
-      // Get the element with matching hash from the sec map.
-      ElementPtr map2IdenticalElement = map2->getElement(map2Hashes[identicalHash]);
-      if (map2IdenticalElement)
+      if (!map2->containsElement(map1IdenticalElement->getElementId()))
       {
-        LOG_VART(map2IdenticalElement->getElementId());
-
-        // Make sure the map being updated doesn't already have an element with this ID (this check
-        // may not be necessary).
-        if (!map2->containsElement(map1IdenticalElement->getElementId()))
+        // Copy it to be safe.
+        ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
+        LOG_VARD(map1IdenticalElementCopy->getElementId());
+        // Get the element with matching hash from the sec map.
+        ElementPtr map2IdenticalElement = map2->getElement(map2Hashes[identicalHash]);
+        if (map2IdenticalElement)
         {
-          LOG_TRACE(
+          LOG_VARD(map2IdenticalElement->getElementId());
+
+          // Make sure the map being updated doesn't already have an element with this ID (this check
+          // may not be necessary).
+          LOG_DEBUG(
             "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
             map1IdenticalElement->getElementId() << "...");
 
           // Add a custom metadata tag for debugging purposes.
-          map1IdenticalElementCopy->getTags().set("hoot:synced:id", "yes");
+          map1IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");
           // Add the element from the ref map.
           map2->addElement(map1IdenticalElementCopy);
           // Replace the element from the sec map with the newly added element, which removes the
@@ -135,6 +137,7 @@ QMap<QString, ElementId> ElementIdSynchronizer::_calcElementHashes(const OsmMapP
   ElementHashVisitor hashVis;
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);
+  hashVis.setUseNodeTags(_useNodeTagsForHash);
   hashVis.setOsmMap(map.get());
   map->visitRw(hashVis);
   return hashVis.getHashes();

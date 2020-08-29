@@ -44,6 +44,11 @@ _bounds(bounds),
 _gridDimensionSize(gridDimensionSize),
 _output(output)
 {
+  if (_gridDimensionSize < 2)
+  {
+    throw IllegalArgumentException(
+      "Uniform task grid dimension size must be greater than or equal to 2.");
+  }
 }
 
 UniformTaskGridGenerator::UniformTaskGridGenerator(

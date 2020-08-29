@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayGeneralizeVisitor.h"
 
@@ -31,7 +31,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/algorithms/RdpWayGeneralizer.h>
 #include <hoot/core/util/MapProjector.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
 
 namespace hoot
 {
