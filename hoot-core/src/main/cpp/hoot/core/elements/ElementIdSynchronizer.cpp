@@ -96,8 +96,8 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
           // Make sure the map being updated doesn't already have an element with this ID (this check
           // may not be necessary).
           LOG_DEBUG(
-            "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
-            map1IdenticalElement->getElementId() << "...");
+            "Updating map 2 element: " << map2IdenticalElement/*->getElementId()*/ << " to " <<
+            map1IdenticalElementCopy/*->getElementId()*/ << "...");
 
           // Add a custom metadata tag for debugging purposes.
           map1IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");

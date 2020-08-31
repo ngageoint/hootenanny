@@ -45,12 +45,12 @@ ElementIdSynchronizer()
 void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map1,
                                                             const OsmMapPtr& map2)
 {
+  _useNodeTagsForHash = true;
   ElementIdSynchronizer::synchronize(map1, map2);
 
-  // TODO: This fixes a lot of issues with turning circles, but causes issues with several others.
   // TODO: also try laxing the node coord comparison sensitivity just for this run
 
-  QString msg = "Synchronizing IDs for identical elements";
+  QString msg = "Synchronizing IDs for nearly identical way nodes";
   if (!map1->getName().trimmed().isEmpty() && !map2->getName().trimmed().isEmpty())
   {
     msg += " between " + map1->getName() + " and " + map2->getName();
@@ -71,6 +71,8 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   // Obtain the hashes for the elements that are identical between the two maps.
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
+
+  // TODO: better doc
 
   for (QSet<QString>::const_iterator itr = identicalHashes.begin(); itr != identicalHashes.end();
        ++itr)
@@ -96,24 +98,26 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
         QSet<long> containingWayIds2 =
           CollectionUtils::stdSetToQSet(
             WayUtils::getContainingWayIdsByNodeId(map2IdenticalElement->getId(), map2));
-        if (containingWayIds1.intersect(containingWayIds2).size() > 0)
+        if (containingWayIds1.intersect(containingWayIds2).size() > 0 &&
+            !map2->containsElement(map1IdenticalElement->getElementId()))
         {
           // Copy it to be safe.
-          ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
-          LOG_VARD(map1IdenticalElementCopy->getElementId());
+          ElementPtr map2IdenticalElementCopy(map2IdenticalElement->clone());
+          map2IdenticalElementCopy->setId(map1IdenticalElement->getId());
+          LOG_VARD(map2IdenticalElementCopy->getElementId());
           // Make sure the map being updated doesn't already have an element with this ID (this
           // check may not be necessary).
           LOG_DEBUG(
-            "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
-            map1IdenticalElement->getElementId() << "...");
+            "Updating map 2 element: " << map2IdenticalElement/*->getElementId()*/ << " to " <<
+            map2IdenticalElementCopy/*->getElementId()*/ << "...");
 
           // Add a custom metadata tag for debugging purposes.
-          map1IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");
+          map2IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");
           // Add the element from the ref map.
-          map2->addElement(map1IdenticalElementCopy);
+          map2->addElement(map2IdenticalElementCopy);
           // Replace the element from the sec map with the newly added element, which removes the
           // old element.
-          map2->replace(map2IdenticalElement, map1IdenticalElementCopy);
+          map2->replace(map2IdenticalElement, map2IdenticalElementCopy);
           _updatedNodeCtr++;
         }
       }
@@ -121,8 +125,8 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   }
 
   LOG_DEBUG(
-    "Updated IDs on " << getNumTotalFeatureIdsSynchronized() <<
-    " identical elements in second map.");
+    "Updated " << getNumTotalFeatureIdsSynchronized() <<
+    " nearly identical way nodes in second map.");
 }
 
 }

@@ -40,10 +40,10 @@ _inputs(inputs)
 {
 }
 
-TaskGridGenerator::TaskGrid BoundsFileTaskGridGenerator::generateTaskGrid()
+TaskGrid BoundsFileTaskGridGenerator::generateTaskGrid()
 {
   LOG_INFO("Reading " << _inputs.size() << " task grid file(s)...");
-  QList<TaskGridCell> taskGrid;
+  TaskGrid taskGrid;
   QMap<int, geos::geom::Envelope> taskGridTemp;
   for (int i = 0; i < _inputs.size(); i++)
   {
@@ -53,17 +53,17 @@ TaskGridGenerator::TaskGrid BoundsFileTaskGridGenerator::generateTaskGrid()
     for (QMap<int, geos::geom::Envelope>::const_iterator taskGridTempItr = taskGridTemp.begin();
          taskGridTempItr != taskGridTemp.end(); ++taskGridTempItr)
     {
-      TaskGridCell taskGridCell;
+      TaskGrid::TaskGridCell taskGridCell;
       taskGridCell.id = taskGridTempItr.key();
       // We don't know the node count when reading the custom grid file.
       taskGridCell.replacementNodeCount = -1;
       taskGridCell.bounds = taskGridTempItr.value();
-      taskGrid.append(taskGridCell);
+      taskGrid.addCell(taskGridCell);
     }
   }
   LOG_STATUS(
-    "Read " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells from " <<
-    _inputs.size() << " file(s).");
+    "Read " << StringUtils::formatLargeNumber(taskGrid.getCells().size()) <<
+    " task grid cells from " << _inputs.size() << " file(s).");
   return taskGrid;
 }
 

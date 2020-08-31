@@ -27,6 +27,9 @@
 #ifndef TASK_GRID_GENERATOR_H
 #define TASK_GRID_GENERATOR_H
 
+// Hoot
+#include <hoot/core/algorithms/changeset/TaskGrid.h>
+
 // GEOS
 #include <geos/geom/Envelope.h>
 
@@ -43,18 +46,6 @@ class TaskGridGenerator
 {
 
 public:
-
-  /**
-   * Individual component of a task grid
-   */
-  struct TaskGridCell
-  {
-    int id;
-    int replacementNodeCount;
-    geos::geom::Envelope bounds;
-  };
-
-  typedef QList<TaskGridCell> TaskGrid;
 
   /**
    * Generates a task grid

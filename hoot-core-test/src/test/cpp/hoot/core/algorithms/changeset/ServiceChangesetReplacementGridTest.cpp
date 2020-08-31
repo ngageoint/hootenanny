@@ -57,8 +57,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  // TODO: re-enable
   CPPUNIT_TEST(orphanedNodes1Test);
+  // TODO: finish this test
   //CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
@@ -284,7 +284,7 @@ public:
       "-115.1260,36.1525,-115.0246,36.2227", outDir);
 
     ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(2);
+    //uut.setKillAfterNumChangesetDerivations(1);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
@@ -547,7 +547,7 @@ private:
     OsmMapPtr map(new OsmMap());
     LOG_STATUS("Reading the replacement data from: ..." << input.right(25) << "...");
     // TODO
-    OsmMapReaderFactory::read(map, input, false/*true*/, Status::Unknown2);
+    OsmMapReaderFactory::read(map, input, /*false*/true, Status::Unknown2);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " replacement elements read in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));

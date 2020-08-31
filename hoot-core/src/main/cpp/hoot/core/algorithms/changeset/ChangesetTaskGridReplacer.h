@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/algorithms/changeset/TaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/TaskGrid.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -66,8 +66,7 @@ public:
    * @param replacement URL to the replacement data; must be a Hoot API database
    * @param taskGrid the task grid that partitions the individual replacement operations
    */
-  void replace(const QString& toReplace, const QString& replacement,
-               const TaskGridGenerator::TaskGrid& taskGrid);
+  void replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
@@ -101,6 +100,8 @@ private:
   QList<int> _taskCellSkipIds;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues
   bool _reverseTaskGrid;
+  // TODO
+  geos::geom::Envelope _taskGridBounds;
 
   // derives the replacement changesets
   std::shared_ptr<ChangesetReplacementCreator> _changesetCreator;
@@ -124,10 +125,9 @@ private:
 
   void _initConfig();
 
-  void _replaceEntireTaskGrid(const TaskGridGenerator::TaskGrid& taskGrid);
+  void _replaceEntireTaskGrid(const TaskGrid& taskGrid);
   void _replaceTaskGridCell(
-    const TaskGridGenerator::TaskGridCell& taskGridCell, const int changesetNum,
-    const int taskGridSize);
+    const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize);
   void _initChangesetStats();
   void _printChangesetStats();
 

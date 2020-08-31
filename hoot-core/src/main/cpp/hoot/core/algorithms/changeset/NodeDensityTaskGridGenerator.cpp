@@ -33,6 +33,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/HootApiDbReader.h>
+#include <hoot/core/util/GeometryUtils.h>
 
 namespace hoot
 {
@@ -56,7 +57,7 @@ _randomSeed(-1)
   _boundsCalc.setSlop(0.1); // TODO: make this configurable?
 }
 
-TaskGridGenerator::TaskGrid NodeDensityTaskGridGenerator::generateTaskGrid()
+TaskGrid NodeDensityTaskGridGenerator::generateTaskGrid()
 {
   return _calcNodeDensityTaskGrid(_getNodeDensityTaskGridInput());
 }
@@ -122,7 +123,7 @@ OsmMapPtr NodeDensityTaskGridGenerator::_getNodeDensityTaskGridInput()
   return map;
 }
 
-TaskGridGenerator::TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGrid(OsmMapPtr map)
+TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGrid(OsmMapPtr map)
 {
   LOG_STATUS(
     "Calculating task grid cells for replacement data to: ..." << _output.right(25) << "...");
@@ -144,25 +145,25 @@ TaskGridGenerator::TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGr
   map.reset();
 
   // flatten the collection; use a list to maintain order
-  QList<TaskGridCell> taskGrid;
+  TaskGrid taskGrid;
   int cellCtr = 1;
   for (size_t tx = 0; tx < rawTaskGrid.size(); tx++)
   {
     for (size_t ty = 0; ty < rawTaskGrid[tx].size(); ty++)
     {
-      TaskGridCell taskGridCell;
+      TaskGrid::TaskGridCell taskGridCell;
       taskGridCell.id = cellCtr;
       taskGridCell.replacementNodeCount = nodeCounts[tx][ty];
       taskGridCell.bounds = rawTaskGrid[tx][ty];
-      taskGrid.append(taskGridCell);
+      taskGrid.addCell(taskGridCell);
       cellCtr++;
     }
   }
-  assert(_boundsCalc.getTileCount() == taskGrid.size());
+  assert(_boundsCalc.getTileCount() == taskGrid.getCells().size());
 
   LOG_STATUS(
-    "Calculated " << StringUtils::formatLargeNumber(taskGrid.size()) << " task grid cells in: " <<
-    StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << ".");
+    "Calculated " << StringUtils::formatLargeNumber(taskGrid.getCells().size()) <<
+    " task grid cells in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << ".");
   LOG_STATUS(
     "\tMaximum node count in any one tile: " <<
     StringUtils::formatLargeNumber(_boundsCalc.getMaxNodeCountInOneTile()));

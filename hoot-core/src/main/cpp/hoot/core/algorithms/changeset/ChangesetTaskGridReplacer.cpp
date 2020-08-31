@@ -44,6 +44,8 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/criterion/ElementIdCriterion.h>
 #include <hoot/core/criterion/EmptyWayCriterion.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 
 namespace hoot
 {
@@ -60,7 +62,7 @@ _tagQualityIssues(false)
 }
 
 void ChangesetTaskGridReplacer::replace(
-  const QString& toReplace, const QString& replacement, const TaskGridGenerator::TaskGrid& taskGrid)
+  const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid)
 {
   if (!toReplace.toLower().startsWith("osmapidb://"))
   {
@@ -79,6 +81,7 @@ void ChangesetTaskGridReplacer::replace(
   _initChangesetStats();
 
   _initConfig();
+  _taskGridBounds = taskGrid.getBounds();
 
   try
   {
@@ -158,7 +161,7 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
   _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY] = 0;
 }
 
-void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGridGenerator::TaskGrid& taskGrid)
+void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
 {
   // recommended C&R production config
   _changesetCreator.reset(new ChangesetReplacementCreator(true, "", _dataToReplaceUrl));
@@ -179,32 +182,32 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGridGenerator::
   _numChangesetsDerived = 0;
   _totalChangesetDeriveTime = 0.0;
   int changesetCtr = 0;
+  const QList<TaskGrid::TaskGridCell> taskGridCells = taskGrid.getCells();
   // probably a cleaner way to do this reversal handling...
   if (!_reverseTaskGrid)
   {
-    for (TaskGridGenerator::TaskGrid::const_iterator taskGridItr = taskGrid.begin();
-         taskGridItr != taskGrid.end(); ++taskGridItr)
+    for (QList<TaskGrid::TaskGridCell>::const_iterator taskGridCellItr = taskGridCells.begin();
+         taskGridCellItr != taskGridCells.end(); ++taskGridCellItr)
     {
-      const TaskGridGenerator::TaskGridCell taskGridCell = *taskGridItr;
-      _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGrid.size());
+      const TaskGrid::TaskGridCell taskGridCell = *taskGridCellItr;
+      _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGridCells.size());
       changesetCtr++;
     }
   }
   else
   {
-    for (TaskGridGenerator::TaskGrid::const_reverse_iterator taskGridItr = taskGrid.crbegin();
-         taskGridItr != taskGrid.crend(); ++taskGridItr)
+    for (QList<TaskGrid::TaskGridCell>::const_reverse_iterator taskGridCellItr = taskGridCells.crbegin();
+         taskGridCellItr != taskGridCells.crend(); ++taskGridCellItr)
     {
-      const TaskGridGenerator::TaskGridCell taskGridCell = *taskGridItr;
-      _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGrid.size());
+      const TaskGrid::TaskGridCell taskGridCell = *taskGridCellItr;
+      _replaceTaskGridCell(taskGridCell, changesetCtr + 1, taskGridCells.size());
       changesetCtr++;
     }
   }
 }
 
 void ChangesetTaskGridReplacer::_replaceTaskGridCell(
-  const TaskGridGenerator::TaskGridCell& taskGridCell, const int changesetNum,
-  const int taskGridSize)
+  const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize)
 {
   // Include IDs override skip IDs. if include IDs is populated at all and this ID isn't in the
   // list, skip it. Otherwise, if the skip IDs have it, also skip it.
@@ -405,15 +408,23 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
   crit.reset(
     new ElementIdCriterion(
-      ElementType::Node, SuperfluousNodeRemover::collectSuperfluousNodeIds(map)));
+      ElementType::Node,
+      // TODO: explain
+      SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _taskGridBounds)));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
     " orphaned nodes in output.");
 
+  // TODO: explain
+  std::shared_ptr<InBoundsCriterion> inBoundsCrit(new InBoundsCriterion(true));
+  inBoundsCrit->setBounds(_taskGridBounds);
+  inBoundsCrit->setOsmMap(map.get());
+
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
-  crit.reset(new DisconnectedWayCriterion(map));
+  crit.reset(
+    new ChainCriterion(ElementCriterionPtr(new DisconnectedWayCriterion(map)), inBoundsCrit));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
   LOG_STATUS(
@@ -421,7 +432,7 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
     " disconnected ways in output.");
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
-  crit.reset(new EmptyWayCriterion());
+  crit.reset(new ChainCriterion(ElementCriterionPtr(new EmptyWayCriterion()), inBoundsCrit));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
   LOG_STATUS(

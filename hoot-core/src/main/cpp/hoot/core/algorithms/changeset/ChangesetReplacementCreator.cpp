@@ -969,7 +969,7 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   // 4 = 35
   // 3 = 243
   // 5 w/ way node opt = 20
-  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6/*5*/);
+  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), /*6*/5);
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
@@ -2116,7 +2116,7 @@ void ChangesetReplacementCreator::_synchronizeIds(
   // to accomplish so far.
 
   assert(mapsBeingReplaced.size() == replacementMaps.size());
-  /*ChangesetReplacement*/ElementIdSynchronizer idSync;
+  ChangesetReplacementElementIdSynchronizer idSync;
   for (int i = 0; i < mapsBeingReplaced.size(); i++)
   {
     OsmMapPtr mapBeingReplaced = mapsBeingReplaced.at(i);
