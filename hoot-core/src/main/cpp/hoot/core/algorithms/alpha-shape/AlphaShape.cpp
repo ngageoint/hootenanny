@@ -325,6 +325,46 @@ double AlphaShape::_collectValidFaces(const double alpha, std::vector<GeometryPt
   return preUnionArea;
 }
 
+bool AlphaShape::_searchAlpha(double &alpha, std::vector<GeometryPtr> &faces, Envelope &e, double& area, size_t face_count,
+                              const std::vector<double> &alpha_options, size_t min_index, size_t max_index)
+{
+  bool found = false;
+  std::vector<GeometryPtr> temp_faces;
+  Envelope temp_env;
+  if (max_index >= min_index)
+  {
+    size_t mid_index = min_index + (max_index - min_index) / 2;
+    double temp_alpha = alpha_options[mid_index];
+    temp_faces.clear();
+    temp_env.init();
+    double temp_area = _collectValidFaces(temp_alpha, temp_faces, temp_env);
+    bool is_valid = face_count * 0.9 <= temp_faces.size();
+
+    if (is_valid)
+    {
+      //  Save the values found
+      alpha = temp_alpha;
+      faces = temp_faces;
+      e = temp_env;
+      area = temp_area;
+      //  Find the minimal alpha so work the bottom half of the search space
+      found = _searchAlpha(alpha, faces, e, area, face_count, alpha_options, min_index, mid_index - 1);
+      //  Nothing below this alpha value was found, this is the one
+      if (!found)
+        return true;
+    }
+    else
+    {
+      //  Tested index wasn't valid so work the top half of the search space
+      found = _searchAlpha(alpha, faces, e, area, face_count, alpha_options, mid_index + 1, max_index);
+      //  Some alpha value above this index was found
+      if (found)
+        return true;
+    }
+  }
+  return found;
+}
+
 GeometryPtr AlphaShape::toGeometry()
 {
   LOG_DEBUG(
@@ -364,22 +404,14 @@ GeometryPtr AlphaShape::toGeometry()
       alpha_options.push_back((*it) / scale);
     //  Iterate the alpha values searching for one that uses at least
     //  90% of the Delauney triangle faces
-    while (alpha_options.size() > 0 && faceCount * 0.9 >= faces.size())
-    {
-      //  Clear out any previous faces that may exist
-      faces.clear();
-      e.init();
-      //  Get the next alpha to try
-      alpha = alpha_options[0];
-      alpha_options.erase(alpha_options.begin());
-      preUnionArea = _collectValidFaces(alpha, faces, e);
-    }
+    double alpha = -1.0;
+    bool success = _searchAlpha(alpha, faces, e, preUnionArea, faceCount, alpha_options, 0, alpha_options.size() - 1);
     LOG_VARD(e);
     LOG_DEBUG("Area: " << (long)preUnionArea);
     LOG_VARD(faces.size());
 
     // if the result is an empty geometry
-    if (faces.size() == 0)
+    if (faces.size() == 0 || !success)
     {
       throw IllegalArgumentException(
         "Unable to find alpha value to create alpha shape.");
