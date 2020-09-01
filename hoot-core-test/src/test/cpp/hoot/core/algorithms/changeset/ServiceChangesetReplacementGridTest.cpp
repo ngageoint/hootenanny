@@ -546,8 +546,10 @@ private:
 
     OsmMapPtr map(new OsmMap());
     LOG_STATUS("Reading the replacement data from: ..." << input.right(25) << "...");
-    // TODO
-    OsmMapReaderFactory::read(map, input, /*false*/true, Status::Unknown2);
+    // Load in with the replacement source IDs to mimic production behavior.
+    // ChangesetReplacementCreator will throw them out when the data is first loaded in to avoid ID
+    // conflicts.
+    OsmMapReaderFactory::read(map, input, true, Status::Unknown2);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " replacement elements read in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));

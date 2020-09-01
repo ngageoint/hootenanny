@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Represents a subdivided area for performing work on a map
  */
 class TaskGrid
 {
@@ -56,6 +56,11 @@ public:
 
   TaskGrid();
 
+  /**
+   * Adds a task grid cell to this task grid; cell ordering will be maintainied
+   *
+   * @param cell task grid cell to add
+   */
   void addCell(const TaskGridCell& cell) { _cells.append(cell); }
 
   QList<TaskGridCell> getCells() const { return _cells; }

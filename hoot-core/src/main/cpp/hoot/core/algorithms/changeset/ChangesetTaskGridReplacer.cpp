@@ -405,11 +405,14 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   std::shared_ptr<FilteredVisitor> filteredVis;
   std::shared_ptr<ElementCriterion> crit;
 
+  // We're only guaranteeing output data quality for the task grid cells actually replaced. Any
+  // data outside of the replacement grid may end up with quality issues until its replaced. So,
+  // restrict each of these quality checks to be in the replacement AOI.
+
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
   crit.reset(
     new ElementIdCriterion(
       ElementType::Node,
-      // TODO: explain
       SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _taskGridBounds)));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
@@ -417,7 +420,9 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
     " orphaned nodes in output.");
 
-  // TODO: explain
+  // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not so
+  // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
+  // replacement bounds
   std::shared_ptr<InBoundsCriterion> inBoundsCrit(new InBoundsCriterion(true));
   inBoundsCrit->setBounds(_taskGridBounds);
   inBoundsCrit->setOsmMap(map.get());

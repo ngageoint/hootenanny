@@ -100,7 +100,7 @@ private:
   QList<int> _taskCellSkipIds;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues
   bool _reverseTaskGrid;
-  // TODO
+  // the are of data being replaced
   geos::geom::Envelope _taskGridBounds;
 
   // derives the replacement changesets

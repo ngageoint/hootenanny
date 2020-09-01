@@ -45,6 +45,10 @@ ElementIdSynchronizer()
 void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map1,
                                                             const OsmMapPtr& map2)
 {
+  // Run the regular element ID synchronization first. It will find all identical elements between
+  // the two maps and assign the ID of the element from the first map to the matching element from
+  // the second map.
+
   _useNodeTagsForHash = true;
   ElementIdSynchronizer::synchronize(map1, map2);
 
@@ -57,6 +61,14 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   }
   msg += "...";
   LOG_INFO(msg);
+
+  // Now, perform some extra ID synchronization that helps specifically with cut and replace. For
+  // determining identical nodes, we'll loosen the matching tags requirement and just look at way
+  // nodes. We're looking for any way nodes between the two maps that belong to the same way,
+  // assuming matching way IDs across the maps that happened as a result of the previous ID
+  // synchronization. In those instances, we'll copy the ID from the first map element over to the
+  // second map element as was done in the previous synchronization, but we'll make sure the second
+  // element's tags are used.
 
   _useNodeTagsForHash = false;
 
@@ -72,8 +84,6 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
 
-  // TODO: better doc
-
   for (QSet<QString>::const_iterator itr = identicalHashes.begin(); itr != identicalHashes.end();
        ++itr)
   {
@@ -84,20 +94,27 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
     // Get the element with matching hash from the ref map
     ConstElementPtr map1IdenticalElement = map1->getElement(map1Hashes[identicalHash]);
     _wayNodeCrit.setOsmMap(map1.get());
+    // if its a way node, keep going
     if (map1IdenticalElement && _wayNodeCrit.isSatisfied(map1IdenticalElement))
     {
       LOG_VARD(map1IdenticalElement->getElementId());
 
+      // Get the element with matching has from the sec map
       ElementPtr map2IdenticalElement = map2->getElement(map2Hashes[identicalHash]);
       _wayNodeCrit.setOsmMap(map2.get());
+      // if its a way node, keep going
       if (map2IdenticalElement && _wayNodeCrit.isSatisfied(map2IdenticalElement))
       {
+        // find all ways each node belong to
         QSet<long> containingWayIds1 =
           CollectionUtils::stdSetToQSet(
             WayUtils::getContainingWayIdsByNodeId(map1IdenticalElement->getId(), map1));
         QSet<long> containingWayIds2 =
           CollectionUtils::stdSetToQSet(
             WayUtils::getContainingWayIdsByNodeId(map2IdenticalElement->getId(), map2));
+        // If any of them match, we'll proceed to copy the element ID of the first map over to the
+        // second map element and be sure to keep the second map element's tags (nodes matched only
+        // on coordinate, so that will be the same between the two).
         if (containingWayIds1.intersect(containingWayIds2).size() > 0 &&
             !map2->containsElement(map1IdenticalElement->getElementId()))
         {
