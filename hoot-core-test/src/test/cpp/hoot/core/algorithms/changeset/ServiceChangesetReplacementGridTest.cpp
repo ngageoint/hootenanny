@@ -316,7 +316,7 @@ public:
       "-115.1260,36.1525,-115.0246,36.2227", outDir);
 
     ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(1);
+    //uut.setKillAfterNumChangesetDerivations(2);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);

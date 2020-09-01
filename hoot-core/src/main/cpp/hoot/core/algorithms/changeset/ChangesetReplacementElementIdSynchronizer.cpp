@@ -52,8 +52,6 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   _useNodeTagsForHash = true;
   ElementIdSynchronizer::synchronize(map1, map2);
 
-  // TODO: also try laxing the node coord comparison sensitivity just for this run
-
   QString msg = "Synchronizing IDs for nearly identical way nodes";
   if (!map1->getName().trimmed().isEmpty() && !map2->getName().trimmed().isEmpty())
   {
@@ -68,9 +66,15 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   // assuming matching way IDs across the maps that happened as a result of the previous ID
   // synchronization. In those instances, we'll copy the ID from the first map element over to the
   // second map element as was done in the previous synchronization, but we'll make sure the second
-  // element's tags are used.
+  // element's tags are used. We're also going to lax the node coordinat a tag more than in the
+  // previous run.
 
   _useNodeTagsForHash = false;
+  //const int defaultNodeSensitivity =
+    //conf().getInt(ConfigOptions::getNodeComparisonCoordinateSensitivityKey());
+  // down from 12 to 3 orphaned nodes in github4216UniformTest at sensitivity=4; breaks
+  // DeleteOnlyStrictFull at a minimum, though
+  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 4);
 
   // Calc element hashes associated with element IDs.
   const QMap<QString, ElementId> map1Hashes = _calcElementHashes(map1);
@@ -88,8 +92,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
        ++itr)
   {
     const QString identicalHash = *itr;
-    // TODO: change back to trace
-    LOG_VARD(identicalHash);
+    LOG_VART(identicalHash);
 
     // Get the element with matching hash from the ref map
     ConstElementPtr map1IdenticalElement = map1->getElement(map1Hashes[identicalHash]);
@@ -97,7 +100,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
     // if its a way node, keep going
     if (map1IdenticalElement && _wayNodeCrit.isSatisfied(map1IdenticalElement))
     {
-      LOG_VARD(map1IdenticalElement->getElementId());
+      LOG_VART(map1IdenticalElement->getElementId());
 
       // Get the element with matching has from the sec map
       ElementPtr map2IdenticalElement = map2->getElement(map2Hashes[identicalHash]);
@@ -121,10 +124,10 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
           // Copy it to be safe.
           ElementPtr map2IdenticalElementCopy(map2IdenticalElement->clone());
           map2IdenticalElementCopy->setId(map1IdenticalElement->getId());
-          LOG_VARD(map2IdenticalElementCopy->getElementId());
+          LOG_VART(map2IdenticalElementCopy->getElementId());
           // Make sure the map being updated doesn't already have an element with this ID (this
           // check may not be necessary).
-          LOG_DEBUG(
+          LOG_TRACE(
             "Updating map 2 element: " << map2IdenticalElement/*->getElementId()*/ << " to " <<
             map2IdenticalElementCopy/*->getElementId()*/ << "...");
 
@@ -140,6 +143,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
       }
     }
   }
+  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), defaultNodeSensitivity);
 
   LOG_DEBUG(
     "Updated " << getNumTotalFeatureIdsSynchronized() <<
