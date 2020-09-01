@@ -353,6 +353,12 @@ private:
    * @param status Status to update to
    */
   void _updateThreadStatus(int thread_index, ThreadStatus status);
+  /**
+   * @brief _statusMessage
+   * @param info
+   * @param changesetId
+   */
+  void _statusMessage(OsmApiFailureInfoPtr info, long changesetId);
   /** Vector of statuses for each running thread */
   std::vector<ThreadStatus> _threadStatus;
   /** Mutex protecting status vector */

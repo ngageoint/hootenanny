@@ -402,8 +402,8 @@ void OsmApiWriter::_changesetThreadFunc(int index)
       }
       else
       {
-        //  Log the error as a status message
-        LOG_STATUS("Error uploading changeset: " << id << " - " << request->getErrorString() << " (" << request->getHttpStatus() << ")");
+        //  Report the status message for this failure
+        _statusMessage(info, id);
         //  If this is the last changeset, error it all out and finish working
         if (workInfo->getLast())
         {
@@ -419,49 +419,47 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         switch (info->status)
         {
         case HttpResponseCode::HTTP_CONFLICT:   //  Conflict, check for version conflicts and fix, or split and continue
+          if (_changesetClosed(info->response))
           {
-            if (_changesetClosed(info->response))
-            {
-              //  The changeset was closed already so set the ID to -1 and reprocess
-              id = -1;
+            //  The changeset was closed already so set the ID to -1 and reprocess
+            id = -1;
 
-              if ((int)workInfo->size() > _maxChangesetSize / 2)
-              {
-                //  Split the changeset into half so that it is smaller and won't fail
-                _splitChangeset(workInfo);
-              }
-              else
-              {
-                //  Push the changeset back on the queue
-                _pushChangesets(workInfo);
-              }
-              //  Loop back around to work on the next changeset
-              continue;
-            }
-            else if (_fixConflict(request, workInfo, info->response))
+            if ((int)workInfo->size() > _maxChangesetSize / 2)
             {
-              //  If this changeset has version failed enough times, don't attempt to fix it
-              if (!workInfo->canRetryVersion())
-              {
-                //  Fail the entire changeset
-                _changeset.updateFailedChangeset(workInfo, true);
-                //  Let the threads know that the remaining changeset is the "remaining" changeset
-                _threadsCanExit = true;
-                stop_thread = true;
-                _updateThreadStatus(index, ThreadStatus::Failed);
-                _changeset.failChangeset(workInfo);
-                //  Set the error message
-                _errorMessage = "Multiple version failures in a row, please refresh your data";
-              }
-              else
-                _pushChangesets(workInfo);
-              //  Loop back around to work on the next changeset
-              continue;
+              //  Split the changeset into half so that it is smaller and won't fail
+              _splitChangeset(workInfo);
             }
-            //  Fall through here to split the changeset and retry
-            //  This includes when the changeset is too big, i.e.:
-            //    The changeset <id> was closed at <dtg> UTC
+            else
+            {
+              //  Push the changeset back on the queue
+              _pushChangesets(workInfo);
+            }
+            //  Loop back around to work on the next changeset
+            continue;
           }
+          else if (_fixConflict(request, workInfo, info->response))
+          {
+            //  If this changeset has version failed enough times, don't attempt to fix it
+            if (!workInfo->canRetryVersion())
+            {
+              //  Fail the entire changeset
+              _changeset.updateFailedChangeset(workInfo, true);
+              //  Let the threads know that the remaining changeset is the "remaining" changeset
+              _threadsCanExit = true;
+              stop_thread = true;
+              _updateThreadStatus(index, ThreadStatus::Failed);
+              _changeset.failChangeset(workInfo);
+              //  Set the error message
+              _errorMessage = "Multiple version failures in a row, please refresh your data";
+            }
+            else
+              _pushChangesets(workInfo);
+            //  Loop back around to work on the next changeset
+            continue;
+          }
+          //  Fall through here to split the changeset and retry
+          //  This includes when the changeset is too big, i.e.:
+          //    The changeset <id> was closed at <dtg> UTC
         case HttpResponseCode::HTTP_BAD_REQUEST:          //  Placeholder ID is missing or not unique
         case HttpResponseCode::HTTP_NOT_FOUND:            //  Diff contains elements where the given ID could not be found
         case HttpResponseCode::HTTP_PRECONDITION_FAILED:  //  Precondition Failed, Relation with id cannot be saved due to other member
@@ -1198,5 +1196,51 @@ bool OsmApiWriter::_hasFailedThread()
   return false;
 }
 
+void OsmApiWriter::_statusMessage(OsmApiFailureInfoPtr info, long changesetId)
+{
+  //  Log the error as a status message
+  switch (info->status)
+  {
+  /** These error states are understandable and aren't "errors" per-se */
+  case HttpResponseCode::HTTP_CONFLICT:               //  Conflict, check for version conflicts and fix, or split and continue
+    LOG_STATUS("Version conflict in changeset " << changesetId << " upload. Updating element.");
+    break;
+  case HttpResponseCode::HTTP_NOT_FOUND:              //  Diff contains elements where the given ID could not be found
+    LOG_STATUS("Element with given ID not found in changeset " << changesetId << ", moving element to manual changeset.");
+    break;
+  case HttpResponseCode::HTTP_PRECONDITION_FAILED:    //  Precondition Failed, Relation with id cannot be saved due to other member
+    LOG_STATUS("Required precondition not met in changeset " << changesetId << ", moving element to manual changeset.");
+    break;
+  case HttpResponseCode::HTTP_GONE:                   //  Element has already been deleted, split and retry (error body is blank sometimes)
+    LOG_STATUS("Element to be deleted already deleted, removing from changeset " << changesetId);
+    break;
+  case HttpResponseCode::HTTP_BAD_REQUEST:            //  Placeholder ID is missing or not unique
+    LOG_STATUS("Element placehoder ID is missing or not unique in changeset" << changesetId << ", moving element the manual changeset.");
+    break;
+  /** These error states are actual errors and the user should report them */
+  case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:  //  Internal Server Error, could be caused by the database being saturated
+    LOG_STATUS("API server responded with internal server error, API is not stable.  Changeset " << changesetId);
+    break;
+  case HttpResponseCode::HTTP_BAD_GATEWAY:            //  Bad Gateway, there are issues with the gateway, split and retry
+    LOG_STATUS("API server responded with bad gateway error, API is not stable.  Changeset " << changesetId);
+    break;
+  case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:        //  Gateway Timeout, server is taking too long, split and retry
+    LOG_STATUS("API server responded with gateway timeout, API is not stable.  Changeset " << changesetId);
+    break;
+  case HttpResponseCode::HTTP_SERVICE_UNAVAILABLE:
+    LOG_STATUS("API server responded with service unavailable, API is not stable.  Changeset " << changesetId);
+    break;
+  case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED:
+    LOG_STATUS("API server responded with method not allowed error.  Changeset " << changesetId);
+    break;
+  case HttpResponseCode::HTTP_UNAUTHORIZED:
+    LOG_STATUS("User not authorized to apply changesets to API.");
+    break;
+  /** Unknown errors are bad */
+  default:
+    LOG_STATUS("Unknown network error occurred while uploading changeset " << changesetId);
+    break;
+  }
+}
 
 }
