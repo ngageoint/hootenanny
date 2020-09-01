@@ -64,13 +64,13 @@ _output(output)
   _bounds = GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map));
 }
 
-TaskGridGenerator::TaskGrid UniformTaskGridGenerator::generateTaskGrid()
+TaskGrid UniformTaskGridGenerator::generateTaskGrid()
 {
   LOG_INFO(
     "Creating uniform task grid with " << _gridDimensionSize << "x" << _gridDimensionSize <<
     " cells across bounds: " << _bounds << "...");
 
-  QList<TaskGridCell> taskGrid;
+  TaskGrid taskGrid;
 
   const geos::geom::Envelope taskGridEnv = GeometryUtils::envelopeFromConfigString(_bounds);
   const double widthPerCell = taskGridEnv.getWidth() / (double)_gridDimensionSize;
@@ -96,14 +96,14 @@ TaskGridGenerator::TaskGrid UniformTaskGridGenerator::generateTaskGrid()
 
     for (int j = 0; j < rows; j++)
     {
-      TaskGridCell taskGridCell;
+      TaskGrid::TaskGridCell taskGridCell;
       taskGridCell.id = cellCtr;
       // We don't know the individual cell node counts when creating a uniform grid.
       taskGridCell.replacementNodeCount = -1;
       geos::geom::Envelope taskGridCellEnv(cellXLeft, cellXRight, cellYBottom, cellYTop);
       taskGridCell.bounds = taskGridCellEnv;
       boundaries[taskGridCell.id] = taskGridCell.bounds;
-      taskGrid.append(taskGridCell);
+      taskGrid.addCell(taskGridCell);
 
       cellYTop = cellYTop - heightPerCell;
       cellYBottom = cellYBottom - heightPerCell;

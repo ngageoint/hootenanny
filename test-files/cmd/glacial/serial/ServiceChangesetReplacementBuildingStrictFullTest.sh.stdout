@@ -43,19 +43,19 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementBuildingStrictFullTest/ServiceChangesetReplacementBuildingStrictFullTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=42.4866588, max_lat=42.4901059, min_lon=-71.4697517, max_lon=-71.465711, num_changes=1095
-Node(s) Created: 485
+Changeset Details: min_lat=42.4866588, max_lat=42.4901059, min_lon=-71.4697517, max_lon=-71.465711, num_changes=1085
+Node(s) Created: 480
 Node(s) Modified: 0
-Node(s) Deleted: 497
+Node(s) Deleted: 492
 Way(s) Created: 55
 Way(s) Modified: 0
 Way(s) Deleted: 58
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 540
+Total Creations: 535
 Total Modifications: 0
-Total Deletions: 555
+Total Deletions: 550
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementBuildingStrictFullTest-xml-replaced.osm for verification...
 

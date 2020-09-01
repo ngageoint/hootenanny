@@ -73,14 +73,13 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
        ++itr)
   {
     const QString identicalHash = *itr;
-    // TODO: change back to trace
-    LOG_VARD(identicalHash);
+    LOG_VART(identicalHash);
 
     // Get the element with matching hash from the ref map.
     ConstElementPtr map1IdenticalElement = map1->getElement(map1Hashes[identicalHash]);
     if (map1IdenticalElement)
     {
-      LOG_VARD(map1IdenticalElement->getElementId());
+      LOG_VART(map1IdenticalElement->getElementId());
 
       if (!map2->containsElement(map1IdenticalElement->getElementId()))
       {
@@ -91,13 +90,13 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
         ElementPtr map2IdenticalElement = map2->getElement(map2Hashes[identicalHash]);
         if (map2IdenticalElement)
         {
-          LOG_VARD(map2IdenticalElement->getElementId());
+          LOG_VART(map2IdenticalElement->getElementId());
 
           // Make sure the map being updated doesn't already have an element with this ID (this check
           // may not be necessary).
-          LOG_DEBUG(
-            "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
-            map1IdenticalElement->getElementId() << "...");
+          LOG_TRACE(
+            "Updating map 2 element: " << map2IdenticalElement/*->getElementId()*/ << " to " <<
+            map1IdenticalElementCopy/*->getElementId()*/ << "...");
 
           // Add a custom metadata tag for debugging purposes.
           map1IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");

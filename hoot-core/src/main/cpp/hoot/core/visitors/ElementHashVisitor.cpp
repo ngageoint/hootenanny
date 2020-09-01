@@ -63,7 +63,7 @@ void ElementHashVisitor::visit(const ElementPtr& e)
     //LOG_VART(e);
 
     const QString hash = toHashString(e);
-    LOG_VARD(hash);
+    LOG_VART(hash);
 
     if (_writeHashes)
     {
@@ -102,7 +102,7 @@ QString ElementHashVisitor::toJson(const ConstElementPtr& e) const
   {
     result = _toJson(std::dynamic_pointer_cast<const Relation>(e));
   }
-  //LOG_TRACE("json for " << e->getElementId() << ":\n" << result);
+  LOG_TRACE("json for " << e->getElementId() << ":\n" << result);
   return result;
 }
 
@@ -240,7 +240,6 @@ QString ElementHashVisitor::toJson(const Tags& tags, const double ce) const
     first = false;
   }
 
-  //LOG_VART(result);
   return result;
 }
 

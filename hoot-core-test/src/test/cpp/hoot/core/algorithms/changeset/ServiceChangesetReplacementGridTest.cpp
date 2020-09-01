@@ -57,8 +57,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  // TODO: re-enable
   CPPUNIT_TEST(orphanedNodes1Test);
+  // TODO: finish this test
   //CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
@@ -68,6 +68,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(github4174UniformTest);
   //CPPUNIT_TEST(github4170UniformTest);
   //CPPUNIT_TEST(github4216UniformTest);
+  //CPPUNIT_TEST(thirtyEightFortyThreeTest);
 
   //CPPUNIT_TEST(northVegasSmallTest);
   //CPPUNIT_TEST(northVegasSmallUniformTest);
@@ -157,6 +158,37 @@ public:
         QStringList(_inputPath + "/orphanedNodes2Test-task-grid.osm")).generateTaskGrid());
 
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void thirtyEightFortyThreeTest()
+  {
+    _testName = "thirtyEightFortyThreeTest";
+    const QString rootDir = "/home/vagrant/hoot/tmp/43-38";
+    const QString outDir = rootDir + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
+    QDir(outDir).removeRecursively();
+    QDir().mkpath(outDir);
+    _prepInput(
+      rootDir + "/Task38/NOME_cde4a1.osm",
+      rootDir + "/Task38/OSM_cde4a1.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+//    QList<int> taskCellIds;
+//    taskCellIds.append(38);
+//    taskCellIds.append(43);
+//    uut.setTaskCellIncludeIds(taskCellIds);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsFileTaskGridGenerator(
+        QStringList(rootDir + "/38-43-grid.osm")).generateTaskGrid());
+
+    //HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////
@@ -546,8 +578,10 @@ private:
 
     OsmMapPtr map(new OsmMap());
     LOG_STATUS("Reading the replacement data from: ..." << input.right(25) << "...");
-    // TODO
-    OsmMapReaderFactory::read(map, input, false/*true*/, Status::Unknown2);
+    // Load in with the replacement source IDs to mimic production behavior.
+    // ChangesetReplacementCreator will throw them out when the data is first loaded in to avoid ID
+    // conflicts.
+    OsmMapReaderFactory::read(map, input, true, Status::Unknown2);
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " replacement elements read in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));

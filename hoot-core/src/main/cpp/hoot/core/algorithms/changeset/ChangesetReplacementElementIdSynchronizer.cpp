@@ -45,12 +45,14 @@ ElementIdSynchronizer()
 void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map1,
                                                             const OsmMapPtr& map2)
 {
+  // Run the regular element ID synchronization first. It will find all identical elements between
+  // the two maps and assign the ID of the element from the first map to the matching element from
+  // the second map.
+
+  _useNodeTagsForHash = true;
   ElementIdSynchronizer::synchronize(map1, map2);
 
-  // TODO: This fixes a lot of issues with turning circles, but causes issues with several others.
-  // TODO: also try laxing the node coord comparison sensitivity just for this run
-
-  QString msg = "Synchronizing IDs for identical elements";
+  QString msg = "Synchronizing IDs for nearly identical way nodes";
   if (!map1->getName().trimmed().isEmpty() && !map2->getName().trimmed().isEmpty())
   {
     msg += " between " + map1->getName() + " and " + map2->getName();
@@ -58,7 +60,21 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   msg += "...";
   LOG_INFO(msg);
 
+  // Now, perform some extra ID synchronization that helps specifically with cut and replace. For
+  // determining identical nodes, we'll loosen the matching tags requirement and just look at way
+  // nodes. We're looking for any way nodes between the two maps that belong to the same way,
+  // assuming matching way IDs across the maps that happened as a result of the previous ID
+  // synchronization. In those instances, we'll copy the ID from the first map element over to the
+  // second map element as was done in the previous synchronization, but we'll make sure the second
+  // element's tags are used. We're also going to lax the node coordinat a tag more than in the
+  // previous run.
+
   _useNodeTagsForHash = false;
+  //const int defaultNodeSensitivity =
+    //conf().getInt(ConfigOptions::getNodeComparisonCoordinateSensitivityKey());
+  // down from 12 to 3 orphaned nodes in github4216UniformTest at sensitivity=4; breaks
+  // DeleteOnlyStrictFull at a minimum, though
+  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 4);
 
   // Calc element hashes associated with element IDs.
   const QMap<QString, ElementId> map1Hashes = _calcElementHashes(map1);
@@ -76,53 +92,62 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
        ++itr)
   {
     const QString identicalHash = *itr;
-    // TODO: change back to trace
-    LOG_VARD(identicalHash);
+    LOG_VART(identicalHash);
 
     // Get the element with matching hash from the ref map
     ConstElementPtr map1IdenticalElement = map1->getElement(map1Hashes[identicalHash]);
     _wayNodeCrit.setOsmMap(map1.get());
+    // if its a way node, keep going
     if (map1IdenticalElement && _wayNodeCrit.isSatisfied(map1IdenticalElement))
     {
-      LOG_VARD(map1IdenticalElement->getElementId());
+      LOG_VART(map1IdenticalElement->getElementId());
 
+      // Get the element with matching has from the sec map
       ElementPtr map2IdenticalElement = map2->getElement(map2Hashes[identicalHash]);
       _wayNodeCrit.setOsmMap(map2.get());
+      // if its a way node, keep going
       if (map2IdenticalElement && _wayNodeCrit.isSatisfied(map2IdenticalElement))
       {
+        // find all ways each node belong to
         QSet<long> containingWayIds1 =
           CollectionUtils::stdSetToQSet(
             WayUtils::getContainingWayIdsByNodeId(map1IdenticalElement->getId(), map1));
         QSet<long> containingWayIds2 =
           CollectionUtils::stdSetToQSet(
             WayUtils::getContainingWayIdsByNodeId(map2IdenticalElement->getId(), map2));
-        if (containingWayIds1.intersect(containingWayIds2).size() > 0)
+        // If any of them match, we'll proceed to copy the element ID of the first map over to the
+        // second map element and be sure to keep the second map element's tags (nodes matched only
+        // on coordinate, so that will be the same between the two).
+        if (containingWayIds1.intersect(containingWayIds2).size() > 0 &&
+            !map2->containsElement(map1IdenticalElement->getElementId()))
         {
           // Copy it to be safe.
-          ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
-          LOG_VARD(map1IdenticalElementCopy->getElementId());
+          ElementPtr map2IdenticalElementCopy(map2IdenticalElement->clone());
+          map2IdenticalElementCopy->setId(map1IdenticalElement->getId());
+          LOG_VART(map2IdenticalElementCopy->getElementId());
           // Make sure the map being updated doesn't already have an element with this ID (this
           // check may not be necessary).
-          LOG_DEBUG(
-            "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
-            map1IdenticalElement->getElementId() << "...");
+          LOG_TRACE(
+            "Updating map 2 element: " << map2IdenticalElement/*->getElementId()*/ << " to " <<
+            map2IdenticalElementCopy/*->getElementId()*/ << "...");
 
           // Add a custom metadata tag for debugging purposes.
-          map1IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");
+          map2IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");
           // Add the element from the ref map.
-          map2->addElement(map1IdenticalElementCopy);
+          map2->addElement(map2IdenticalElementCopy);
           // Replace the element from the sec map with the newly added element, which removes the
           // old element.
-          map2->replace(map2IdenticalElement, map1IdenticalElementCopy);
+          map2->replace(map2IdenticalElement, map2IdenticalElementCopy);
           _updatedNodeCtr++;
         }
       }
     }
   }
+  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), defaultNodeSensitivity);
 
   LOG_DEBUG(
-    "Updated IDs on " << getNumTotalFeatureIdsSynchronized() <<
-    " identical elements in second map.");
+    "Updated " << getNumTotalFeatureIdsSynchronized() <<
+    " nearly identical way nodes in second map.");
 }
 
 }

@@ -962,14 +962,15 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
 
-  // This needs to be lowered a bit from the default of 7 to make feature de-duping work...a little
-  // concerning...why does this need to be done?
-  // TODO: 6 = 77 orphan
+  // This needs to be lowered a bit to make feature de-duping and/or ID synchronization work. If
+  // this ends up causing problems, then may need to go back to the original setting = 7.
+  // github4216UniformTest:
+  // 6 = 77 orphan
   // 5 = 35
   // 4 = 35
   // 3 = 243
   // 5 w/ way node opt = 20
-  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 6/*5*/);
+  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 5);
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
@@ -2116,7 +2117,7 @@ void ChangesetReplacementCreator::_synchronizeIds(
   // to accomplish so far.
 
   assert(mapsBeingReplaced.size() == replacementMaps.size());
-  /*ChangesetReplacement*/ElementIdSynchronizer idSync;
+  ChangesetReplacementElementIdSynchronizer idSync;
   for (int i = 0; i < mapsBeingReplaced.size(); i++)
   {
     OsmMapPtr mapBeingReplaced = mapsBeingReplaced.at(i);

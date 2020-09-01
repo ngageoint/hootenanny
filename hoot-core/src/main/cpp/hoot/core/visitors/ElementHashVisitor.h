@@ -92,7 +92,7 @@ private:
   // an optional list of metadata tag keys to factor into the comparison; by default no metadata
   // keys are examined during comparison
   QStringList _nonMetadataIgnoreKeys;
-  // TODO
+  // if enabled, node tags will factor into node comparisons
   bool _useNodeTags;
 
   // determines whether hashes are written to an element's tags
