@@ -547,9 +547,6 @@ void ChangesetReplacementCreator::_create()
   // TODO: move this to inside the geometry pass loop?
   _synchronizeIds(refMaps, conflatedMaps);
 
-  // TODO: explain
-  // orphaned nodes w/o: 12
-  //
   //_removeInvalidWayNodesWithExcludeDelete(
     //_getMapByGeometryType(refMaps, "line"), _getMapByGeometryType(conflatedMaps, "line"));
 

@@ -408,9 +408,6 @@ private:
   void _synchronizeIds(
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
 
-  /*
-   * TODO
-   */
 //  void _removeInvalidWayNodesWithExcludeDelete(
 //    const OsmMapPtr& linearRefMap, const ConstOsmMapPtr& linearSecMap);
 

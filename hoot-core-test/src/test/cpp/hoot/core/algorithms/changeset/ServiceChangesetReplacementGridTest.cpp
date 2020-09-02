@@ -159,7 +159,6 @@ public:
         .generateTaskGrid());
 
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
-    //HOOT_FILE_EQUALS(_inputPath + "/" + taskGridFileName, _outputPath + "/" + taskGridFileName);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////

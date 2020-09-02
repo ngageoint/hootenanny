@@ -56,32 +56,31 @@ void ExcludeDeleteWayNodeCleaner::visit(const ElementPtr& e)
   // if its a way node in the ref map and has the exclude delete tag
   if (_wayNodeCrit.isSatisfied(e) && excludeDeleteTagCrit.isSatisfied(e))
   {
-    // TODO: change to trace
-    LOG_VARD(e->getElementId());
+    LOG_VART(e->getElementId());
 
     // find all the ways that contain it the ref map (its own map)
     const std::set<long> containingRefWayIds =
       WayUtils::getContainingWayIdsByNodeId(e->getId(), _map->shared_from_this());
-    LOG_VARD(containingRefWayIds.size());
+    LOG_VART(containingRefWayIds.size());
     bool anyWayHasExcludeDelete = false;
     for (std::set<long>::const_iterator wayIdItr = containingRefWayIds.begin();
          wayIdItr != containingRefWayIds.end(); ++wayIdItr)
     {
       ConstWayPtr way = _map->getWay(*wayIdItr);
-      LOG_VARD(way->getElementId());
+      LOG_VART(way->getElementId());
       if (way && excludeDeleteTagCrit.isSatisfied(way))
       {
         anyWayHasExcludeDelete = true;
         break;
       }
     }
-    LOG_VARD(anyWayHasExcludeDelete);
+    LOG_VART(anyWayHasExcludeDelete);
 
     // If none of the ref containing ways had the exclude delete tag, then the way node shouldn't
     // have it anymore either.
     if (!anyWayHasExcludeDelete)
     {
-      LOG_DEBUG(
+      LOG_TRACE(
         "Removing changeset exclude delete tag from: " << e->getElementId() <<
         " based on ref map evidence...");
       e->getTags().remove(MetadataTags::HootChangeExcludeDelete());
@@ -93,7 +92,7 @@ void ExcludeDeleteWayNodeCleaner::visit(const ElementPtr& e)
     {
       // If not, its orphaned and shouldn't be excluded from deletion. The exclude delete tag will
       // never be on any ways in the comparison map, so no need to check for it.
-      LOG_DEBUG(
+      LOG_TRACE(
         "Removing changeset exclude delete tag from: " << e->getElementId() <<
         " based on sec map evidence...");
       e->getTags().remove(MetadataTags::HootChangeExcludeDelete());
