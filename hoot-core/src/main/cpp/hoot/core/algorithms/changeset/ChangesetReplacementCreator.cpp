@@ -35,7 +35,7 @@
 
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementElementIdSynchronizer.h>
-#include <hoot/core/algorithms/changeset/ExcludeDeleteWayNodeCleaner.h>
+//#include <hoot/core/algorithms/changeset/ExcludeDeleteWayNodeCleaner.h>
 
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 
@@ -513,6 +513,7 @@ void ChangesetReplacementCreator::_create()
         GeometryTypeCriterion::typeToString(itr.key()) << "...");
       // TODO: move set name here to inside _getMapsForGeometryType, so we can see the geometry type
       // in the name??
+      // TODO: is this rename needed?
       refMap->setName(refMap->getName() + "-" + GeometryTypeCriterion::typeToString(itr.key()));
       refMaps.append(refMap);
       conflatedMap->setName(
@@ -537,27 +538,8 @@ void ChangesetReplacementCreator::_create()
 
   // CLEANUP
 
-  // Due to the mixed relations processing explained in _getDefaultGeometryFilters, we may have
-  // some duplicated features that need to be cleaned up before we generate the changesets. This
-  // is kind of a band-aid :-(
-
-  // UPDATE 8/17/20: This de-duplication appears no longer necessary after applying the ID
-  // synchronization just after it. More testing needs to happen before verifying that, though.
-
-  // If we have the maps for only one geometry type, then there isn't a possibility of duplication
-  // created by the replacement operation.
-//  if (refMaps.size() > 1)
-//  {
-//    // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
-//    // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
-//    // de-duping. Mostly worried that not doing so could break the overlapping only replacement
-//    // (non-full) scenario...we'll see...
-//    //_dedupeMaps(refMaps);
-//    _dedupeMaps(conflatedMaps);
-//  }
-
-  // TODO
-  //_restoreOriginalIds(conflatedMaps, _secIdMappings);
+  // UPDATE 8/17/20: Using ElementDeduplicator, as used to be done, appears no longer necessary
+  // after applying the ID synchronization just after it.
 
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements. This must be done with the ref/sec maps separated to avoid ID
@@ -565,8 +547,11 @@ void ChangesetReplacementCreator::_create()
   // TODO: move this to inside the geometry pass loop?
   _synchronizeIds(refMaps, conflatedMaps);
 
-  // TODO: remove?
-  //_removeInvalidWayNodeExcludeDelete(_getMapByGeometryType(refMaps, "line"));
+  // TODO: explain
+  // orphaned nodes w/o: 12
+  //
+  //_removeInvalidWayNodesWithExcludeDelete(
+    //_getMapByGeometryType(refMaps, "line"), _getMapByGeometryType(conflatedMaps, "line"));
 
   // CHANGESET GENERATION
 
@@ -591,7 +576,7 @@ OsmMapPtr ChangesetReplacementCreator::_getMapByGeometryType(const QList<OsmMapP
   for (int i = 0; i < maps.size(); i++)
   {
     OsmMapPtr map = maps.at(i);
-    // TODO
+    // TODO: hackish
     if (map->getName().contains(geometryTypeStr))
     {
       return map;
@@ -962,14 +947,9 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
 
-  // This needs to be lowered a bit to make feature de-duping and/or ID synchronization work. If
-  // this ends up causing problems, then may need to go back to the original setting = 7.
-  // github4216UniformTest:
-  // 6 = 77 orphan
-  // 5 = 35
-  // 4 = 35
-  // 3 = 243
-  // 5 w/ way node opt = 20
+  // This needs to be lowered a bit to make feature de-duping and/or ID synchronization work. At
+  // five decimal places, we're topping out at a little over 1m of difference. If this ends up
+  // causing problems, then may need to go back to the original setting = 7.
   conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 5);
 
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
@@ -1411,7 +1391,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadSecMap()
 {
   return
     _loadInputMap(
-      "sec", _input2, false/*true*/, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+      "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
       _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
 }
 
@@ -1572,7 +1552,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
           "the rectangular bounds area of the dough map to be the map after cutting: " <<
           doughMap->getName() << "...");
         OsmMapPtr cookieCutMap(new OsmMap(doughMap));
-        cookieCutMap->setName("cookie-cut");
+        cookieCutMap->setName("cookie-cut"/*-" + GeometryTypeCriterion::typeToString(geometryType)*/);
         MapCropper cropper(GeometryUtils::envelopeFromConfigString(_replacementBounds));
         cropper.setRemoveSuperflousFeatures(false);
         cropper.setKeepEntireFeaturesCrossingBounds(false);
@@ -1606,7 +1586,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
-  cookieCutMap->setName("cookie-cut");
+  cookieCutMap->setName("cookie-cut"/*-" + GeometryTypeCriterion::typeToString(geometryType)*/);
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   LOG_DEBUG("Preparing to cookie cut: " << cookieCutMap->getName() << "...");
 
@@ -1641,8 +1621,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
       // replaced.
       LOG_DEBUG("Using dough map: " << doughMap->getName() << " as cutter shape map...");
       cutterMapToUse = doughMap;
-      // TODO: riverbank test fails with missing POIs without this and the single point test has
-      // extra POIs in output without this; explain
+      // TODO: see similar note above
       cookieCutterAlphaShapeBuffer = 10.0;
     }
     else
@@ -1688,7 +1667,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   LOG_VART(cookieCutterAlphaShapeBuffer);
   OsmMapPtr cutterShapeOutlineMap;
   AlphaShapeGenerator alphaShapeGenerator(cookieCutterAlpha, cookieCutterAlphaShapeBuffer);
-  // I don't *think* we need to cover the stragglers here...
+  // I don't *think* we need to cover the stragglers here...it can get slow.
   //alphaShapeGenerator.setManuallyCoverSmallPointClusters(false);
   try
   {
@@ -2026,56 +2005,6 @@ void ChangesetReplacementCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPt
     map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-2");
 }
 
-void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
-{
-  ElementDeduplicator deduper;
-  // Intra-map de-duping breaks the roundabouts test when ref maps are de-duped.
-  deduper.setDedupeIntraMap(true);
-  // When nodes are removed (cleaned/conflated only), out of spec, single point, and riverbank tests
-  // fail, so being a little more strict by removing points instead (node + not a way node).
-  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
-  deduper.setNodeCriterion(pointCrit);
-  // This prevents connected ways separated by geometry type from being broken up in the output.
-  deduper.setFavorMoreConnectedWays(true);
-
-  // See notes in _getDefaultGeometryFilters, but basically the point and poly geometry maps may
-  // have duplicates and the line geometry map will not. So dedupe each of the others compared to
-  // the line map.
-
-  OsmMapPtr lineMap;
-  QList<OsmMapPtr> otherMaps;
-  for (int i = 0; i < maps.size(); i++)
-  {
-    OsmMapPtr map = maps.at(i);
-    if (map->getName().contains("line"))
-    {
-      lineMap = map;
-    }
-    else
-    {
-      otherMaps.append(map);
-    }
-  }
-
-  for (int i = 0; i < otherMaps.size(); i++)
-  {
-    OsmMapPtr otherMap = otherMaps.at(i);
-    // set the point's map to be the map we're removing features from
-    pointCrit->setOsmMap(otherMap.get());
-    OsmMapWriterFactory::writeDebugMap(
-      lineMap, _changesetId + "-" + lineMap->getName() + "-before-deduping");
-    OsmMapWriterFactory::writeDebugMap(
-      otherMap, _changesetId + "-" + otherMap->getName() + "-before-deduping");
-    LOG_DEBUG(
-      "De-duping map: " << lineMap->getName() << " and " << otherMap->getName() << "...");
-    deduper.dedupe(lineMap, otherMap);
-    OsmMapWriterFactory::writeDebugMap(
-      lineMap, _changesetId + "-" + lineMap->getName() + "-after-deduping");
-    OsmMapWriterFactory::writeDebugMap(
-      otherMap, _changesetId + "-" + otherMap->getName() + "-after-deduping");
-  }
-}
-
 void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 {
   LOG_INFO("Cleaning up changeset derivation input " << map->getName() << "...");
@@ -2137,6 +2066,7 @@ void ChangesetReplacementCreator::_synchronizeIds(
     // get rid of straggling nodes
     // TODO: should we run _cleanup here instead and move it from its earlier call?
     SuperfluousNodeRemover orphanedNodeRemover;
+    //orphanedNodeRemover.setIgnoreInformationTags(true);
     orphanedNodeRemover.apply(replacementMap);
     LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
     OsmMapWriterFactory::writeDebugMap(
@@ -2144,41 +2074,26 @@ void ChangesetReplacementCreator::_synchronizeIds(
   }
 }
 
-//void ChangesetReplacementCreator::_restoreOriginalIds(
-//  const QList<OsmMapPtr>& maps, const QMap<QString, std::shared_ptr<ElementIdRemapper>>& remappings)
+//void ChangesetReplacementCreator::_removeInvalidWayNodesWithExcludeDelete(
+//  const OsmMapPtr& linearRefMap, const ConstOsmMapPtr& linearSecMap)
 //{
-//  for (QMap<QString, std::shared_ptr<ElementIdRemapper>>::const_iterator itr = remappings.begin();
-//       itr != remappings.end(); ++itr)
+//  if (!linearRefMap || !linearSecMap)
 //  {
-//    OsmMapPtr map = _getMapByGeometryType(maps, itr.key());
-//    if (map->getName().toLower().contains("ref"))
-//    {
-//      continue;
-//    }
-//    std::shared_ptr<ElementIdRemapper> idRemapper = itr.value();
-//    // TODO: change to info/debug
-//    LOG_STATUS("Restoring id mappings for: " << map->getName() << "...");
-//    idRemapper->restore(map);
-//    LOG_STATUS(
-//      "Restored " << StringUtils::formatLargeNumber(idRemapper->getNumRemappedIds()) <<
-//      " IDs for: " << map->getName() << ".");
-//  }
-//}
-
-//void ChangesetReplacementCreator::_removeInvalidWayNodeExcludeDelete(OsmMapPtr map)
-//{
-//  if (!map)
-//  {
+//    LOG_DEBUG("Input map null.");
 //    return;
 //  }
+//  LOG_VARD(linearRefMap->getName());
+//  LOG_VARD(linearSecMap->getName());
 
 //  ExcludeDeleteWayNodeCleaner cleaner;
-//  cleaner.setOsmMap(map.get());
+//  cleaner.setOsmMap(linearRefMap.get());
+//  cleaner.setComparisonMap(linearSecMap);
 //  LOG_INFO(cleaner.getInitStatusMessage());
-//  map->visitNodesRw(cleaner);
+//  linearRefMap->visitNodesRw(cleaner);
 //  LOG_DEBUG(cleaner.getCompletedStatusMessage());
 //  OsmMapWriterFactory::writeDebugMap(
-//    map, _changesetId + "-" + map->getName() + "-after-invalid-exclude-delete-removal");
+//    linearRefMap,
+//    _changesetId + "-" + linearRefMap->getName() + "-after-invalid-exclude-delete-removal");
 //}
 
 }

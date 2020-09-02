@@ -176,19 +176,29 @@ public:
     }
 
     LOG_STATUS(
-      "De-duplicated " << deduper.getMap1DuplicateTotalFeaturesRemoved() << " features from ..." <<
-      input1 << " and wrote them to: ..." << output1.right(25) << ".");
-    LOG_STATUS("\t" << deduper.getMap1DuplicateNodesRemoved() << " nodes");
-    LOG_STATUS("\t" << deduper.getMap1DuplicateWaysRemoved() << " ways");
-    LOG_STATUS("\t" << deduper.getMap1DuplicateRelationsRemoved() << " relations");
+      "De-duplicated " <<
+      StringUtils::formatLargeNumber(deduper.getMap1DuplicateTotalFeaturesRemoved()) <<
+      " features from ..." << input1 << " and wrote them to: ..." << output1.right(25) << ".");
+    LOG_STATUS(
+      "\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateNodesRemoved()) << " nodes");
+    LOG_STATUS(
+      "\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateWaysRemoved()) << " ways");
+    LOG_STATUS(
+      "\t" << StringUtils::formatLargeNumber(deduper.getMap1DuplicateRelationsRemoved()) <<
+      " relations");
     if (!input2.isEmpty())
     {
       LOG_STATUS(
-        "De-duplicated " << deduper.getMap2DuplicateTotalFeaturesRemoved() <<
+        "De-duplicated " <<
+        StringUtils::formatLargeNumber(deduper.getMap2DuplicateTotalFeaturesRemoved()) <<
         " features from ..." << input2 << " and wrote them to: ..." << output2.right(25) << ".");
-      LOG_STATUS("\t" << deduper.getMap2DuplicateNodesRemoved() << " nodes");
-      LOG_STATUS("\t" << deduper.getMap2DuplicateWaysRemoved() << " ways");
-      LOG_STATUS("\t" << deduper.getMap2DuplicateRelationsRemoved() << " relations");
+      LOG_STATUS(
+        "\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateNodesRemoved()) << " nodes");
+      LOG_STATUS(
+        "\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateWaysRemoved()) << " ways");
+      LOG_STATUS(
+        "\t" << StringUtils::formatLargeNumber(deduper.getMap2DuplicateRelationsRemoved()) <<
+        " relations");
     }
     LOG_STATUS(
       "De-duplicated elements in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");

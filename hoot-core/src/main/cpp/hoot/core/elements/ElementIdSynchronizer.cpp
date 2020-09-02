@@ -85,7 +85,7 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
       {
         // Copy it to be safe.
         ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
-        LOG_VARD(map1IdenticalElementCopy->getElementId());
+        LOG_VART(map1IdenticalElementCopy->getElementId());
         // Get the element with matching hash from the sec map.
         ElementPtr map2IdenticalElement = map2->getElement(map2Hashes[identicalHash]);
         if (map2IdenticalElement)

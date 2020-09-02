@@ -63,7 +63,7 @@ void ElementHashVisitor::visit(const ElementPtr& e)
     //LOG_VART(e);
 
     const QString hash = toHashString(e);
-    LOG_VART(hash);
+    LOG_VARD(hash);
 
     if (_writeHashes)
     {

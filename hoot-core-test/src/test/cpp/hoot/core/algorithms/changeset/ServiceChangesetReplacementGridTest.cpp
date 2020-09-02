@@ -160,6 +160,8 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
   void thirtyEightFortyThreeTest()
   {
     _testName = "thirtyEightFortyThreeTest";
@@ -168,20 +170,31 @@ public:
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/Task38/NOME_cde4a1.osm",
-      rootDir + "/Task38/OSM_cde4a1.osm",
-      "");
+
+    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
+
+    // TODO: all of this shouldn't be necessary; should be able to load successive db maps from
+    // multiple inputs (works for osmapidb here but not hootapidb)
+
+    OsmMapPtr map(new OsmMap());
+    OsmMapReaderFactory::read(map, rootDir + "/Task38/NOME_cde4a1.osm", true, Status::Unknown1);
+    OsmMapReaderFactory::read(map, rootDir + "/Task43/NOME_5c4715.osm", true, Status::Unknown1);
+    OsmMapWriterFactory::write(map, outDir + "/NOME.osm");
+
+    map.reset(new OsmMap());
+    OsmMapReaderFactory::read(map, rootDir + "/Task38/OSM_cde4a1.osm", true, Status::Unknown2);
+    OsmMapReaderFactory::read(map, rootDir + "/Task43/OSM_5c4715.osm", true, Status::Unknown2);
+    OsmMapWriterFactory::write(map, outDir + "/OSM.osm");
+
+    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), false);
+
+    _prepInput(outDir + "/NOME.osm", outDir + "/OSM.osm", "");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-//    QList<int> taskCellIds;
-//    taskCellIds.append(38);
-//    taskCellIds.append(43);
-//    uut.setTaskCellIncludeIds(taskCellIds);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -190,8 +203,6 @@ public:
 
     //HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
-
-  ///////////////////////////////////////////////////////////////////////////////////////////
 
   void github4196Test()
   {
@@ -303,7 +314,7 @@ public:
 
   void github4216UniformTest()
   {
-    // reproduces orphaned nodes and zero length ways
+    // reproduces orphaned nodes
 
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -451,10 +462,10 @@ public:
 
   void northVegasLargeUniformTest()
   {
-    // lenient
+    // lenient - 225 orphaned nodes
 
-    // whole northern half of city, 64 changesets, ~33.2M changes, avg derivation: 2.3m,
-    // total time: 2.9h, ~192k changes/min
+    // whole northern half of city, 64 changesets, ~33.5M changes, avg derivation: 2.15m,
+    // total time: 2.69h, ~208k changes/min
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -490,10 +501,13 @@ private:
   int _originalDataSize;
 
   void _prepInput(const QString& toReplace, const QString& replacement,
-                  const QString& cropInputBounds = "", const QString& outDir = "")
+                  const QString& cropInputBounds = "", const QString& outDir = "",
+                  const bool clearToReplaceDb = true)
   {
+    _loadDataToReplaceDb(toReplace, cropInputBounds, outDir + "/starting-cropped-to-replace.osm",
+                         clearToReplaceDb);
+
     _replacementDataUrl = ServicesDbTestUtils::getDbModifyUrl(_testName).toString();
-    _loadDataToReplaceDb(toReplace, cropInputBounds, outDir + "/starting-cropped-to-replace.osm");
     _loadReplacementDataDb(
       replacement, cropInputBounds, outDir + "/starting-cropped-replacement.osm");
   }
@@ -519,16 +533,21 @@ private:
   }
 
   void _loadDataToReplaceDb(
-    const QString& input, const QString& cropBounds = "", const QString& cropOut = "")
+    const QString& input, const QString& cropBounds = "", const QString& cropOut = "",
+    const bool clearDb = true)
   {
-    // make sure the db is empty
-    ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
-    ApiDb::execSqlFile(DATA_TO_REPLACE_URL, "test-files/servicesdb/users.sql");
     OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, DATA_TO_REPLACE_URL, true, Status::Unknown1);
-    if (map->size() != 0)
+
+    // make sure the db is empty
+    if (clearDb)
     {
-      throw HootException("Data to replace db is not empty at start.");
+      ServicesDbTestUtils::deleteDataFromOsmApiTestDatabase();
+      ApiDb::execSqlFile(DATA_TO_REPLACE_URL, "test-files/servicesdb/users.sql");
+      OsmMapReaderFactory::read(map, DATA_TO_REPLACE_URL, true, Status::Unknown1);
+      if (map->size() != 0)
+      {
+        throw HootException("Data to replace db is not empty at start.");
+      }
     }
 
     map.reset(new OsmMap());

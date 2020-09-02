@@ -30,9 +30,9 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
 
 namespace hoot
 {
@@ -51,32 +51,56 @@ void ExcludeDeleteWayNodeCleaner::setOsmMap(OsmMap* map)
 
 void ExcludeDeleteWayNodeCleaner::visit(const ElementPtr& e)
 {
-  // if its a way node
-  if (_wayNodeCrit.isSatisfied(e))
+  TagKeyCriterion excludeDeleteTagCrit(MetadataTags::HootChangeExcludeDelete());
+
+  // if its a way node in the ref map and has the exclude delete tag
+  if (_wayNodeCrit.isSatisfied(e) && excludeDeleteTagCrit.isSatisfied(e))
   {
-    // find all the ways that contain it
-    const std::set<long> containingWayIds =
+    // TODO: change to trace
+    LOG_VARD(e->getElementId());
+
+    // find all the ways that contain it the ref map (its own map)
+    const std::set<long> containingRefWayIds =
       WayUtils::getContainingWayIdsByNodeId(e->getId(), _map->shared_from_this());
+    LOG_VARD(containingRefWayIds.size());
     bool anyWayHasExcludeDelete = false;
-    for (std::set<long>::const_iterator wayIdItr = containingWayIds.begin();
-         wayIdItr != containingWayIds.end(); ++wayIdItr)
+    for (std::set<long>::const_iterator wayIdItr = containingRefWayIds.begin();
+         wayIdItr != containingRefWayIds.end(); ++wayIdItr)
     {
       ConstWayPtr way = _map->getWay(*wayIdItr);
-      if (way && way->getTags().contains(MetadataTags::HootChangeExcludeDelete()))
+      LOG_VARD(way->getElementId());
+      if (way && excludeDeleteTagCrit.isSatisfied(way))
       {
         anyWayHasExcludeDelete = true;
         break;
       }
     }
+    LOG_VARD(anyWayHasExcludeDelete);
 
-    // If none of the containing ways had the exclude delete tag, then the way node shouldn't have
-    // it anymore either.
+    // If none of the ref containing ways had the exclude delete tag, then the way node shouldn't
+    // have it anymore either.
     if (!anyWayHasExcludeDelete)
     {
+      LOG_DEBUG(
+        "Removing changeset exclude delete tag from: " << e->getElementId() <<
+        " based on ref map evidence...");
+      e->getTags().remove(MetadataTags::HootChangeExcludeDelete());
+      _numAffected++;
+    }
+    // Otherwise, see if any ways contain it in the sec map.
+    else if (containingRefWayIds.size() == 0 &&
+             !WayUtils::nodeContainedByAnyWay(e->getId(), _comparisonMap))
+    {
+      // If not, its orphaned and shouldn't be excluded from deletion. The exclude delete tag will
+      // never be on any ways in the comparison map, so no need to check for it.
+      LOG_DEBUG(
+        "Removing changeset exclude delete tag from: " << e->getElementId() <<
+        " based on sec map evidence...");
       e->getTags().remove(MetadataTags::HootChangeExcludeDelete());
       _numAffected++;
     }
   }
+
   _numProcessed++;
 }
 

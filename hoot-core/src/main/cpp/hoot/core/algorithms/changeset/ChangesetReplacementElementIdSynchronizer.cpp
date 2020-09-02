@@ -33,6 +33,7 @@
 #include <hoot/core/visitors/ElementHashVisitor.h>
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 
 namespace hoot
 {
@@ -62,19 +63,25 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
 
   // Now, perform some extra ID synchronization that helps specifically with cut and replace. For
   // determining identical nodes, we'll loosen the matching tags requirement and just look at way
-  // nodes. We're looking for any way nodes between the two maps that belong to the same way,
-  // assuming matching way IDs across the maps that happened as a result of the previous ID
-  // synchronization. In those instances, we'll copy the ID from the first map element over to the
-  // second map element as was done in the previous synchronization, but we'll make sure the second
-  // element's tags are used. We're also going to lax the node coordinat a tag more than in the
-  // previous run.
+  // nodes (_useNodeTagsForHash=false). We're looking for any way nodes between the two maps that
+  // belong to the same way, assuming matching way IDs across the maps that happened as a result of
+  // the previous ID synchronization. In those instances, we'll copy the ID from the first map
+  // element over to the second map element as was done in the previous synchronization, but we'll
+  // make sure the second element's tags are used.
 
   _useNodeTagsForHash = false;
-  //const int defaultNodeSensitivity =
-    //conf().getInt(ConfigOptions::getNodeComparisonCoordinateSensitivityKey());
-  // down from 12 to 3 orphaned nodes in github4216UniformTest at sensitivity=4; breaks
-  // DeleteOnlyStrictFull at a minimum, though
-  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 4);
+
+  // Don't really understand why this needs to be done, but I think it may have to do with
+  // decimal rounding issues when ElementHashVisitor writes node JSON. If we don't drop this
+  // sensitivity by a decimal place, we miss synchronizing some way nodes that a very close t
+  // together...in all cases checked so far, all are much less than a meter apart. As noted in
+  // ChangesetReplacementCreator::_setGlobalOpts, a coord sensitivity of 5 is a max diff of 1.1m,
+  // and going to 4 here takes us to a max of 11.11m. Very strange that it needs to be done when the
+  // nodes in question aren't anywhere near that far apart. There is an additional distance check
+  // explained in the loop below to prevent utter chaos caused by this change.
+  const int defaultNodeSensitivity =
+    conf().getInt(ConfigOptions::getNodeComparisonCoordinateSensitivityKey());
+  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 4);
 
   // Calc element hashes associated with element IDs.
   const QMap<QString, ElementId> map1Hashes = _calcElementHashes(map1);
@@ -121,6 +128,19 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
         if (containingWayIds1.intersect(containingWayIds2).size() > 0 &&
             !map2->containsElement(map1IdenticalElement->getElementId()))
         {
+          // Due our lapsing of the coord comparison sensitivity, we'll actually do a distance check
+          // that only allows distances between nodes being synchronized no greater than what they
+          // would be if we hadn't lowered the sensitiviy.
+          const double distance =
+            EuclideanDistanceExtractor().distance(
+              *map1, *map2, map1IdenticalElement, map2IdenticalElement);
+          LOG_VART(distance);
+          if (distance > 1.11)
+          {
+            // too far apart, don't sync
+            continue;
+          }
+
           // Copy it to be safe.
           ElementPtr map2IdenticalElementCopy(map2IdenticalElement->clone());
           map2IdenticalElementCopy->setId(map1IdenticalElement->getId());
@@ -128,8 +148,8 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
           // Make sure the map being updated doesn't already have an element with this ID (this
           // check may not be necessary).
           LOG_TRACE(
-            "Updating map 2 element: " << map2IdenticalElement/*->getElementId()*/ << " to " <<
-            map2IdenticalElementCopy/*->getElementId()*/ << "...");
+            "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
+            map2IdenticalElementCopy->getElementId() << "...");
 
           // Add a custom metadata tag for debugging purposes.
           map2IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");
@@ -143,7 +163,8 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
       }
     }
   }
-  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), defaultNodeSensitivity);
+  // restore the original sensitivity
+  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), defaultNodeSensitivity);
 
   LOG_DEBUG(
     "Updated " << getNumTotalFeatureIdsSynchronized() <<

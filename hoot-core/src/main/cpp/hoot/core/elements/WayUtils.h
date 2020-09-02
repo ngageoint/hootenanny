@@ -53,18 +53,6 @@ public:
   static QString getWayNodesDetailedString(const ConstWayPtr& way, const ConstOsmMapPtr& map);
 
   /**
-   * Returns the IDs of all ways containing an input node
-   *
-   * @param nodeId ID of the node to return containing ways for
-   * @param map map which owns the input node
-   * @param wayCriterion an optional ElementCriterion to further filter the containing ways
-   * @return a collection of way IDs
-   */
-  static std::set<long> getContainingWayIdsByNodeId(
-    const long nodeId, const ConstOsmMapPtr& map,
-    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
-
-  /**
    * Returns the IDs of ways connected to the way with the specified ID
    *
    * @param wayId ID of the way to search connected ways for
@@ -164,14 +152,25 @@ public:
    */
   static bool nodesAreContainedInTheSameWay(const long nodeId1, const long nodeId2,
                                             const ConstOsmMapPtr& map);
+  /**
+   * Returns the IDs of all ways containing an input node
+   *
+   * @param nodeId ID of the node to return containing ways for
+   * @param map map which owns the input node
+   * @param wayCriterion an optional ElementCriterion to further filter the containing ways
+   * @return a collection of way IDs
+   */
+  static std::set<long> getContainingWayIdsByNodeId(
+    const long nodeId, const ConstOsmMapPtr& map,
+    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
-   * TODO
+   * Determines if two nodes are contained in exactly the same set of ways
    *
-   * @param nodeId1
-   * @param nodeId2
-   * @param map
-   * @return
+   * @param nodeId1 ID of the first node to examine
+   * @param nodeId2 ID of the second node to examine
+   * @param map map containing the nodes with the input node IDs
+   * @return true if both nodes are contained in exactly the same set of ways; false otherwise
    */
   static bool nodesAreContainedInTheExactSameWays(
     const long nodeId1, const long nodeId2, const ConstOsmMapPtr& map);
@@ -197,11 +196,11 @@ public:
   static bool nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Determines how many ways contain a particular node
    *
-   * @param nodeId
-   * @param map
-   * @return
+   * @param nodeId ID of the node to search for
+   * @param map map containing the node
+   * @return the number of ways containing the given node
    */
   static int getNumberOfWaysContainingNode(const long nodeId, const ConstOsmMapPtr& map);
 
