@@ -15,7 +15,7 @@ sudo yum install -y wget curl sudo vim yum-utils epel-release 2>&1 | tee -a Cent
 
 # add the repo for the current Hootenanny release rpm's.
 echo "### Add Hoot repo ###" | tee -a CentOS_install.txt
-sudo RUN yum-config-manager --add-repo $HOOTREPO/release/hoot.repo 2>&1 | tee -a CentOS_install.txt
+sudo yum-config-manager --add-repo $HOOTREPO/release/hoot.repo 2>&1 | tee -a CentOS_install.txt
 
 # configure PGDG repository for PostgreSQL 9.5.
 echo "### Add pgdg repo ###" | tee -a CentOS_install.txt
