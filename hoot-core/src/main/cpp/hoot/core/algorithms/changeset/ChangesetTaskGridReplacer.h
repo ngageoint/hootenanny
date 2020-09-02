@@ -79,6 +79,7 @@ public:
   { _killAfterNumChangesetDerivations = numDerivations; }
   void setWriteFinalOutput(QString output) { _finalOutput = output; }
   void setTagQualityIssues(bool tag) { _tagQualityIssues = tag; }
+  void setCalcDiffWithReplacement(bool calcDiff) { _calcDiffWithReplacement = calcDiff; }
 
 private:
 
@@ -123,6 +124,8 @@ private:
   QString _finalOutput;
   // adds tags to features that are suspect as result of the replacement op
   bool _tagQualityIssues;
+  // TODO
+  bool _calcDiffWithReplacement;
 
   void _initConfig();
 
@@ -133,9 +136,11 @@ private:
   void _printChangesetStats();
 
   // writes out all of the ref data; useful for debugging...expensive
-  void _getUpdatedData(const QString& outputFile);
+  OsmMapPtr _getUpdatedData(const QString& outputFile);
   // tags elements with potential quality issues
   void _writeQualityIssueTags(OsmMapPtr& map);
+  // TODO
+  void _calculateDiffWithReplacement(const ConstOsmMapPtr& replacedMap, const QString& outputFile);
 };
 
 }

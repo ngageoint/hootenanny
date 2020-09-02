@@ -38,6 +38,10 @@ namespace hoot
 
 /**
  * Creates a task grid made up of uniformly distributed, same sized rectangles
+ *
+ * Shamelessly adapted for hoot from:
+ *
+ * https://pcjericks.github.io/py-gdalogr-cookbook/vector_layers.html#create-fishnet-grid
  */
 class UniformTaskGridGenerator : public TaskGridGenerator
 {

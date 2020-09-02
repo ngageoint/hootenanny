@@ -157,7 +157,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     _stats.append(
       SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
-    LOG_STATUS(
+    LOG_INFO(
       "Discarded " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
       " unconflatable elements.");
   }
@@ -232,7 +232,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     MemoryUsageChecker::getInstance().check();
 
     // Now remove input1 elements
-    LOG_STATUS("\tRemoving all reference elements...");
+    LOG_INFO("\tRemoving all reference elements...");
     const int mapSizeBefore = _pMap->size();
     ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
     RemoveElementsVisitor removeRef1Visitor;
@@ -241,7 +241,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     _pMap->visitRw(removeRef1Visitor);
     MemoryUsageChecker::getInstance().check();
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
-    LOG_STATUS(
+    LOG_DEBUG(
       "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
       " reference elements...");
   }

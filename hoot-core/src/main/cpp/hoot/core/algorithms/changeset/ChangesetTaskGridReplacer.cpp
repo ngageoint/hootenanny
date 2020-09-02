@@ -46,6 +46,8 @@
 #include <hoot/core/criterion/EmptyWayCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/conflate/DiffConflator.h>
+#include <hoot/core/visitors/StatusUpdateVisitor.h>
 
 namespace hoot
 {
@@ -57,7 +59,8 @@ _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
 _averageChangesetDeriveTime(0.0),
-_tagQualityIssues(false)
+_tagQualityIssues(false),
+_calcDiffWithReplacement(false)
 {
 }
 
@@ -112,10 +115,6 @@ void ChangesetTaskGridReplacer::replace(
         throw e;
       }
     }
-    if (!_finalOutput.isEmpty())
-    {
-      _getUpdatedData(_finalOutput);
-    }
 
     if (!exceptionOccurred)
     {
@@ -123,6 +122,17 @@ void ChangesetTaskGridReplacer::replace(
         "Task grid cell replacement operation successfully completed in: " <<
         StringUtils::millisecondsToDhms(_opTimer.elapsed()));
     }
+
+    if (!_finalOutput.isEmpty())
+    {
+      OsmMapPtr map = _getUpdatedData(_finalOutput);
+      if (_calcDiffWithReplacement)
+      {
+        // TODO
+        const QString diffOutput = _finalOutput.replace(".osm", "-diff.osm");
+        _calculateDiffWithReplacement(map, diffOutput);
+      }
+    }    
   }
   catch (const HootException& e)
   {
@@ -358,7 +368,7 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
         _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY]));
 }
 
-void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
+OsmMapPtr ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
 {
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
@@ -381,14 +391,18 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   emptyRelationRemover.apply(map);
   LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
 
+  OsmMapPtr mapToReturn;
   if (_tagQualityIssues)
   {
+    // TODO
+    mapToReturn.reset(new OsmMap(map));
     // tag element with potential data quality issues caused by the replacement operations; If this
     // isn't done after the previous cleaning step, you'll get some element NPE's.
     _writeQualityIssueTags(map);
-
-    // TODO: try doing a diff conflate between the raw secondary and the replacement map to find
-    // bad areas?
+  }
+  else
+  {
+    mapToReturn = map;
   }
 
   // write the full map out
@@ -397,9 +411,11 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
 
   LOG_STATUS(
     "Modified data original size: " << StringUtils::formatLargeNumber(_originalDataSize) <<
-    ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read in: " <<
+    ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read out in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
+
+  return mapToReturn;
 }
 
 void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
@@ -448,6 +464,36 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
     " empty ways in output.");
+}
+
+void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(
+  const ConstOsmMapPtr& replacedMap, const QString& outputFile)
+{
+  LOG_STATUS("Preparing the diff input data...");
+  // TODO
+  OsmMapPtr diffMap(new OsmMap(replacedMap));
+  StatusUpdateVisitor statusVis(Status::Unknown2);
+  diffMap->visitRw(statusVis);
+  OsmMapReaderFactory::read(diffMap, _replacementUrl, true, Status::Unknown1);
+
+  LOG_STATUS(
+    "Calculating the diff between replaced data of size: " <<
+    StringUtils::formatLargeNumber(replacedMap->size()) << " and replacement data of size: " <<
+    StringUtils::formatLargeNumber(diffMap->size() - replacedMap->size())  << "...");
+  DiffConflator().apply(diffMap);
+  LOG_STATUS(
+    "Calculated a diff of size: " << diffMap->size() << " in: " <<
+    StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+  _subTaskTimer.restart();
+
+  LOG_STATUS(
+    "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
+    " to: " << outputFile.right(25) << "...");
+  OsmMapWriterFactory::write(diffMap, outputFile);
+  LOG_STATUS(
+    "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
+    " in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+  _subTaskTimer.restart();
 }
 
 }

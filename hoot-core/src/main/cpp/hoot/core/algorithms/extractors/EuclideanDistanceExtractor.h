@@ -56,7 +56,7 @@ public:
     const ConstElementPtr& candidate) const override;
 
   /**
-   * Measure the Euclidean distance between to elements in different maps
+   * Measure the Euclidean distance between two elements in different maps
    *
    * @param map1 map containing the target element
    * @param map2 map containing the candidate element

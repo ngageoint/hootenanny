@@ -547,9 +547,6 @@ void ChangesetReplacementCreator::_create()
   // TODO: move this to inside the geometry pass loop?
   _synchronizeIds(refMaps, conflatedMaps);
 
-  //_removeInvalidWayNodesWithExcludeDelete(
-    //_getMapByGeometryType(refMaps, "line"), _getMapByGeometryType(conflatedMaps, "line"));
-
   // CHANGESET GENERATION
 
   LOG_STATUS("Generating changeset for " << refMaps.size() << " sets of maps...");
@@ -2070,27 +2067,5 @@ void ChangesetReplacementCreator::_synchronizeIds(
       replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
   }
 }
-
-//void ChangesetReplacementCreator::_removeInvalidWayNodesWithExcludeDelete(
-//  const OsmMapPtr& linearRefMap, const ConstOsmMapPtr& linearSecMap)
-//{
-//  if (!linearRefMap || !linearSecMap)
-//  {
-//    LOG_DEBUG("Input map null.");
-//    return;
-//  }
-//  LOG_VARD(linearRefMap->getName());
-//  LOG_VARD(linearSecMap->getName());
-
-//  ExcludeDeleteWayNodeCleaner cleaner;
-//  cleaner.setOsmMap(linearRefMap.get());
-//  cleaner.setComparisonMap(linearSecMap);
-//  LOG_INFO(cleaner.getInitStatusMessage());
-//  linearRefMap->visitNodesRw(cleaner);
-//  LOG_DEBUG(cleaner.getCompletedStatusMessage());
-//  OsmMapWriterFactory::writeDebugMap(
-//    linearRefMap,
-//    _changesetId + "-" + linearRefMap->getName() + "-after-invalid-exclude-delete-removal");
-//}
 
 }
