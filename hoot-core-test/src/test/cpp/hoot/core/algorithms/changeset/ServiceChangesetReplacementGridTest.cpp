@@ -58,8 +58,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   CPPUNIT_TEST(orphanedNodes1Test);
-  // TODO: finish this test
-  //CPPUNIT_TEST(orphanedNodes2Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -93,7 +92,6 @@ public:
   {
     _subTaskTimer.start();
     _initConfig();
-    //_cleanupDataToReplace();
   }
 
   virtual void tearDown()
@@ -134,9 +132,10 @@ public:
 
   void orphanedNodes2Test()
   {
-    // (github 4216) TODO: describe
-    // TODO: try to crop this down more before merging...runs too long and test out too big
-    // (3 min; 18MB); also get rid of warnings
+    // (github 4216) similar to orphanedNodes1Test - There should be no orphaned nodes in the
+    // output. You can check for orphaned node counts with uut.setTagQualityIssues(true).
+
+    DisableLog dl; // to suppress a SpatialIndexer warning that should be looked into at some point
 
     _testName = "orphanedNodes2Test";
     _prepInput(
@@ -151,44 +150,16 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(false);
+    const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
-      BoundsFileTaskGridGenerator(
-        QStringList(_inputPath + "/orphanedNodes2Test-task-grid.osm")).generateTaskGrid());
+      UniformTaskGridGenerator(
+        "-115.0793,36.1832,-115.0610,36.1986", 2, _outputPath + "/" + taskGridFileName)
+        .generateTaskGrid());
 
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
-  }
-
-  void thirtyEightFortyThreeTest()
-  {
-    _testName = "thirtyEightFortyThreeTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/43-38";
-    const QString outDir = rootDir + "/" + _testName;
-    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/Task38/NOME_cde4a1.osm",
-      rootDir + "/Task38/OSM_cde4a1.osm",
-      "");
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-//    QList<int> taskCellIds;
-//    taskCellIds.append(38);
-//    taskCellIds.append(43);
-//    uut.setTaskCellIncludeIds(taskCellIds);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      BoundsFileTaskGridGenerator(
-        QStringList(rootDir + "/38-43-grid.osm")).generateTaskGrid());
-
-    //HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+    //HOOT_FILE_EQUALS(_inputPath + "/" + taskGridFileName, _outputPath + "/" + taskGridFileName);
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////
@@ -345,7 +316,7 @@ public:
 
   void github4216UniformTest()
   {
-    // reproduces orphaned nodes
+    // reproduces orphaned nodes; larger AOI version of orphanedNodes2Test
 
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -363,10 +334,6 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    //QList<int> includeTaskGridCellIds;
-    //includeTaskGridCellIds.append(38);
-    //includeTaskGridCellIds.append(46);
-    //uut.setTaskCellIncludeIds(includeTaskGridCellIds);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
