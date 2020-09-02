@@ -160,6 +160,37 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
+  void thirtyEightFortyThreeTest()
+  {
+    _testName = "thirtyEightFortyThreeTest";
+    const QString rootDir = "/home/vagrant/hoot/tmp/43-38";
+    const QString outDir = rootDir + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
+    QDir(outDir).removeRecursively();
+    QDir().mkpath(outDir);
+    _prepInput(
+      rootDir + "/Task38/NOME_cde4a1.osm",
+      rootDir + "/Task38/OSM_cde4a1.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+//    QList<int> taskCellIds;
+//    taskCellIds.append(38);
+//    taskCellIds.append(43);
+//    uut.setTaskCellIncludeIds(taskCellIds);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsFileTaskGridGenerator(
+        QStringList(rootDir + "/38-43-grid.osm")).generateTaskGrid());
+
+    //HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
   ///////////////////////////////////////////////////////////////////////////////////////////
 
   void thirtyEightFortyThreeTest()
