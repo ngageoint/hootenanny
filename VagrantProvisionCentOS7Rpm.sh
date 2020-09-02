@@ -21,13 +21,13 @@ sudo yum-config-manager --add-repo $HOOTREPO/release/hoot.repo 2>&1 | tee -a Cen
 echo "### Add pgdg repo ###" | tee -a CentOS_install.txt
 sudo yum-config-manager --add-repo $HOOTREPO/pgdg95.repo 2>&1 | tee -a CentOS_install.txt
 
-if [ "${YUMUPDATE:-yes}" = "yes" ]; then
+if [ "${YUMUPDATE:-no}" = "yes" ]; then
     echo "Updating OS..."
     echo "### Yum Upgrade ###" | tee -a CentOS_install.txt
     sudo yum -q -y upgrade 2>&1 | tee -a CentOS_install.txt
 fi
 
-if [ "${COREONLY:-yes}" = "yes" ]; then
+if [ "${COREONLY:-no}" = "yes" ]; then
     # Just the core
     echo "### Installing hootenanny-core ###" | tee -a CentOS_install.txt
     sudo yum install -y hootenanny-core 2>&1 | tee -a CentOS_install.txt

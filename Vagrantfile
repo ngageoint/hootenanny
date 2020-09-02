@@ -161,6 +161,17 @@ Vagrant.configure(2) do |config|
     end
   end
 
+  # Centos7 Hootenanny box from RPM's
+  config.vm.define "hoot_centos7_rpm", autostart: false do |hoot_centos7_rpm|
+    hoot_centos7_rpm.vm.box = "hoot/centos7-minimal"
+    hoot_centos7_rpm.vm.hostname = "hoot-centos7-rpm"
+
+    set_forwarding(hoot_centos7_rpm)
+    mount_shares(hoot_centos7_rpm)
+
+    # NOTE: For commandline only Hootenanny, set COREONLY to "yes"
+    config.vm.provision "hootrpm", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7Rpm.sh", :env => {"YUMUPDATE" => $yumUpdate, "COREONLY" => $coreOnly}
+  end
 
   # Centos7 box - Preprovisioned for compiling hootenanny
   config.vm.define "default", primary: true do |hoot_centos7_prov|
@@ -182,24 +193,12 @@ Vagrant.configure(2) do |config|
     mount_shares(hoot_centos7)
 
     # We do want to add repos and update this box
+    # NOTE: This change applies to every target AFTER this one as well.
     $addRepos = "yes"
     $yumUpdate = "yes"    
     set_provisioners(hoot_centos7)
     aws_provider(hoot_centos7, 'CentOS7', 'minimal')
   end
-
-  # Centos7 Hootenanny box from RPM's
-  config.vm.define "hoot_centos7_rpm", autostart: false do |hoot_centos7_rpm|
-    hoot_centos7_rpm.vm.box = "hoot/centos7-minimal"
-    hoot_centos7_rpm.vm.hostname = "hoot-centos7-rpm"
-
-    set_forwarding(hoot_centos7_rpm)
-    mount_shares(hoot_centos7_rpm)
-
-    # NOTE: For commandline only Hootenanny, set COREONLY to "yes"
-    config.vm.provision "hootrpm", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7Rpm.sh", :env => {"YUMUPDATE" => $yumUpdate, "COREONLY" => $coreOnly}
-  end
-
 
   config.vm.define "dockercentos7.2", autostart: false do |dockcentos72|
     dockcentos72.ssh.insert_key = false
