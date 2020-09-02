@@ -144,6 +144,8 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
           // Copy it to be safe.
           ElementPtr map2IdenticalElementCopy(map2IdenticalElement->clone());
           map2IdenticalElementCopy->setId(map1IdenticalElement->getId());
+          // need to use the ref map version
+          map2IdenticalElementCopy->setVersion(map1IdenticalElement->getVersion());
           LOG_VART(map2IdenticalElementCopy->getElementId());
           // Make sure the map being updated doesn't already have an element with this ID (this
           // check may not be necessary).
