@@ -44,19 +44,6 @@ hoot version
 
 echo "See VAGRANT.md for additional configuration instructions and then run 'vagrant ssh' to log into the Hootenanny virtual machine."
 echo "See $HOOT_HOME/docs on the virtual machine for Hootenanny documentation files."
-echo "Access the web application at http://localhost:8888/hootenanny-id"
-
-
-# install useful and needed packages for working with hootenanny
-# echo "### Installing handy packages repos..."
-# sudo yum -y install \
-#     bzip2 \
-#     git \
-#     git-core \
-#     osmosis \
-#     unzip \
-#     vim \
-#     wget \
-#     zip
+echo "If the webApp is installed, it is at http://localhost:8888/hootenanny-id"
 
 ##########################################
