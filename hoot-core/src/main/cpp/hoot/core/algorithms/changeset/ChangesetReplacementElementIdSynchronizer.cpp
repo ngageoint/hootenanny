@@ -38,11 +38,6 @@
 namespace hoot
 {
 
-ChangesetReplacementElementIdSynchronizer::ChangesetReplacementElementIdSynchronizer() :
-ElementIdSynchronizer()
-{
-}
-
 void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map1,
                                                             const OsmMapPtr& map2)
 {

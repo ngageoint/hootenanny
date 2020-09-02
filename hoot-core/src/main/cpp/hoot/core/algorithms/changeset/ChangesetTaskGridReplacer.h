@@ -58,6 +58,7 @@ class ChangesetTaskGridReplacer
 public:
 
   ChangesetTaskGridReplacer();
+  virtual ~ChangesetTaskGridReplacer() = default;
 
   /**
    * Replaces data

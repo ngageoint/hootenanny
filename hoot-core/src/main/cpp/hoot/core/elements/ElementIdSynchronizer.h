@@ -67,7 +67,7 @@ public:
 
 protected:
 
-  // TODO
+  // see ElementHashVisitor
   bool _useNodeTagsForHash;
 
   int _updatedNodeCtr;
