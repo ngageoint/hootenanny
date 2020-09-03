@@ -13,25 +13,7 @@ fi
 echo HOOT_HOME: $HOOT_HOME
 #################################################
 
-# The URL for the Hoot repo 
-HOOTREPO="https://hoot-repo.s3.amazonaws.com/el7"
-
 export LANG=en_US.UTF-8
-
-
-# echo "Adding additional software repositories..."
-# # add EPEL repo for extra packages
-# echo "### Add epel repo and handy packages ###" | tee CentOS_install.txt
-# sudo yum install -y wget curl sudo vim yum-utils epel-release 2>&1 | tee -a CentOS_install.txt
-
-# # add the repo for the current Hootenanny release rpm's.
-# echo "### Add Hoot repo ###" | tee -a CentOS_install.txt
-# sudo yum-config-manager --add-repo $HOOTREPO/release/hoot.repo 2>&1 | tee -a CentOS_install.txt
-
-# # configure PGDG repository for PostgreSQL 9.5.
-# echo "### Add pgdg repo ###" | tee -a CentOS_install.txt
-# sudo yum-config-manager --add-repo $HOOTREPO/pgdg95.repo 2>&1 | tee -a CentOS_install.txt
-
 
 echo "Adding additional software repositories..."
 echo "### Add epel repo and handy packages ###" | tee CentOS_install.txt
