@@ -48,6 +48,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/visitors/StatusUpdateVisitor.h>
+#include <hoot/core/visitors/RemoveMetadataTagsVisitor.h>
 
 namespace hoot
 {
@@ -473,17 +474,23 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(
   const ConstOsmMapPtr& replacedMap, const QString& outputFile)
 {
   LOG_STATUS("Preparing the diff input data...");
+
   // TODO
   OsmMapPtr diffMap(new OsmMap(replacedMap));
+
   StatusUpdateVisitor statusVis(Status::Unknown2);
   diffMap->visitRw(statusVis);
+  // TODO: don't think the metadata removal is necessary
+  RemoveMetadataTagsVisitor metadataRemover;
+  diffMap->visitRw(metadataRemover);
+
   OsmMapReaderFactory::read(diffMap, _replacementUrl, true, Status::Unknown1);
+  diffMap->visitRw(metadataRemover);
 
   LOG_STATUS(
     "Calculating the diff between replaced data of size: " <<
     StringUtils::formatLargeNumber(replacedMap->size()) << " and replacement data of size: " <<
     StringUtils::formatLargeNumber(diffMap->size() - replacedMap->size())  << "...");
-  // TODO: fix the diff
   DiffConflator().apply(diffMap);
   LOG_STATUS(
     "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
@@ -493,6 +500,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(
   LOG_STATUS(
     "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
     " to: ..." << outputFile.right(25) << "...");
+  conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
   OsmMapWriterFactory::write(diffMap, outputFile);
   LOG_STATUS(
     "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<

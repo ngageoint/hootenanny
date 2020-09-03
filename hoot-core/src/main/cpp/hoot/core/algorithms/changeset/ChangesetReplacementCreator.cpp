@@ -1440,7 +1440,6 @@ void ChangesetReplacementCreator::_filterFeatures(
   // If recursion isn't used here, nasty crashes that are hard to track down occur at times. Not
   // completely convinced recursion should be used here, though.
   elementPruner.setRecursive(true);
-  //LOG_STATUS("\t" << elementPruner.getInitStatusMessage());
   map->visitRw(elementPruner);
   LOG_INFO(elementPruner.getCompletedStatusMessage());
 

@@ -58,7 +58,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   // TODO: re-enable
-  //CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
   //CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
@@ -67,7 +67,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(github4174Test);
   //CPPUNIT_TEST(github4174UniformTest);
   //CPPUNIT_TEST(github4170UniformTest);
-  CPPUNIT_TEST(github4216UniformTest);
+  //CPPUNIT_TEST(github4216UniformTest);
   //CPPUNIT_TEST(thirtyEightFortyThreeTest);
 
   //CPPUNIT_TEST(northVegasSmallTest);
@@ -121,8 +121,8 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
-    uut.setCalcDiffWithReplacement(false);
+    uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(true); // TODO: change these back to false
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -481,6 +481,7 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
