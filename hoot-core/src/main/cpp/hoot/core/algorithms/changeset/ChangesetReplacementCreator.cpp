@@ -1661,7 +1661,7 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
   OsmMapPtr cutterShapeOutlineMap;
   AlphaShapeGenerator alphaShapeGenerator(cookieCutterAlpha, cookieCutterAlphaShapeBuffer);
   // I don't *think* we need to cover the stragglers here...it can get slow.
-  //alphaShapeGenerator.setManuallyCoverSmallPointClusters(false);
+  alphaShapeGenerator.setManuallyCoverSmallPointClusters(false);
   try
   {
     cutterShapeOutlineMap = alphaShapeGenerator.generateMap(cutterMapToUse);
