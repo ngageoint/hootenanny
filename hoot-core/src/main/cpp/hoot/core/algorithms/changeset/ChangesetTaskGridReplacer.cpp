@@ -350,6 +350,11 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
         _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY]) << "\n" <<
     "   Deleted: " <<
       StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY]) << "\n" <<
+    "   Total Changes: " <<
+      StringUtils::formatLargeNumber(
+        _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_CREATE_KEY] +
+        _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_MODIFY_KEY] +
         _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY]));
 }
 

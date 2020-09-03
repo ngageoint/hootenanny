@@ -43,8 +43,30 @@ public:
 
   static std::string className() { return "hoot::EuclideanDistanceExtractor"; }
 
-  virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
-    const std::shared_ptr<const Element>& candidate) const override;
+  /**
+   * Measure the Euclidean distance between to elements in the same map
+   *
+   * @param map map containing the elements
+   * @param target the first element of the pair to measure
+   * @param candidate the second element of the pair to measure
+   * @return the distance between the two elements in meters
+   */
+  virtual double distance(
+    const OsmMap& map, const ConstElementPtr& target,
+    const ConstElementPtr& candidate) const override;
+
+  /**
+   * Measure the Euclidean distance between to elements in different maps
+   *
+   * @param map1 map containing the target element
+   * @param map2 map containing the candidate element
+   * @param target the first element of the pair to measure
+   * @param candidate the second element of the pair to measure
+   * @return the distance between the two elements in meters
+   */
+  double distance(
+    const OsmMap& map1, const OsmMap& map2, const ConstElementPtr& target,
+    const ConstElementPtr& candidate) const;
 
   virtual std::string getClassName() const { return EuclideanDistanceExtractor::className(); }
 

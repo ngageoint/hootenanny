@@ -317,8 +317,8 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
 
-  //if another parsed change previously modified the element with this id, we want to get the
-  //modified version
+  // If another parsed change previously modified the element with this id, we want to get the
+  // modified version.
   const long currentVersion = changeElement->getVersion();
   if (currentVersion < 1)
   {
@@ -366,7 +366,7 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
       _createRelationMembers(std::dynamic_pointer_cast<const Relation>(changeElement));
       break;
     default:
-      //node
+      // node
       break;
   }
 }

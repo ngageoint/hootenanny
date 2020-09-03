@@ -4792,8 +4792,8 @@ available mergers.
 This allows the OverwriteTagMerger to preserve the values of select tags during tag merging. This
 does not apply to name tags or tags marked as type "text" or "metadata" in the schema. Any tag key
 in the option list found in the set of tags used to overwrite will result in corresponding tag
-values in the target feature being appended to each other. e.g. A: { a_id=1, b_id=1} merged with
-B: { b_id=2} results in C: { a_id=1, b_id=1;2 }
+values in the target feature being appended to each other. e.g. A: { a_id=1, b_id=1 } merged with
+B: { b_id=2 } results in C: { a_id=1, b_id=1;2 }
 
 === tag.merger.overwrite.exclude
 
