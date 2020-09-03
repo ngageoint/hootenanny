@@ -577,11 +577,13 @@ void DiffConflator::_calcAndStoreTagChanges()
 
 bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags)
 {
+  // TODO: Should the ignore list be metadata tags + the custom list here?
   QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
   for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
     QString newTagKey = newTagIt.key();
     if (newTagKey != MetadataTags::Ref1() // Make sure not ref1
+        && !OsmSchema::getInstance().isMetaData(newTagIt.key(), newTagIt.value()) // not a metadata tag
         && !ignoreList.contains(newTagKey, Qt::CaseInsensitive) // Not in our ignore list
         && (!oldTags.contains(newTagIt.key()) // It's a new tag
             || oldTags[newTagIt.key()] != newTagIt.value())) // Or it has a different value

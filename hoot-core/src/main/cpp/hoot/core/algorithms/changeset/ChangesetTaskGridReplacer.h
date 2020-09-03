@@ -136,11 +136,11 @@ private:
   void _printChangesetStats();
 
   // writes out all of the ref data; useful for debugging...expensive
-  OsmMapPtr _getUpdatedData(const QString& outputFile);
+  void _getUpdatedData(const QString& outputFile);
   // tags elements with potential quality issues
   void _writeQualityIssueTags(OsmMapPtr& map);
   // TODO
-  void _calculateDiffWithReplacement(const ConstOsmMapPtr& replacedMap, const QString& outputFile);
+  void _calculateDiffWithReplacement(const QString& outputFile);
 };
 
 }
