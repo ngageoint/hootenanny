@@ -668,7 +668,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
       "Changeset input data inputs are not the same size for streaming to output.");
   }
 
-  LOG_INFO("Streaming changeset output to " << output.right(25) << "...");
+  LOG_INFO("Streaming changeset output to ..." << output.right(25) << "...");
 
   QString detailedStats;
   _numCreateChanges = 0;

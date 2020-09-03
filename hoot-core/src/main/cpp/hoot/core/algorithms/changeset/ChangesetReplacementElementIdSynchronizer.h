@@ -43,7 +43,8 @@ class ChangesetReplacementElementIdSynchronizer : public ElementIdSynchronizer
 
 public:
 
-  ChangesetReplacementElementIdSynchronizer();
+  ChangesetReplacementElementIdSynchronizer() = default;
+  virtual ~ChangesetReplacementElementIdSynchronizer() = default;
 
   /**
    * see ElementIdSynchronizer

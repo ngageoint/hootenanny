@@ -38,7 +38,7 @@ namespace hoot
 
 /**
  * Removes hoot:change:exclude:delete from way nodes which should not have it. This is functionality
- * specifically for use by ChangesetReplacementCreator
+ * specifically for use as a cleanup tool by ChangesetReplacementCreator
  */
 class ExcludeDeleteWayNodeCleaner : public ElementOsmMapVisitor
 {
@@ -53,6 +53,8 @@ public:
 
   virtual void setOsmMap(OsmMap* map) override;
 
+  void setComparisonMap(const ConstOsmMapPtr& map) { _comparisonMap = map; }
+
   // return empty here, as it doesn't really need to show up for general use when using the info
   // command
   virtual QString getDescription() const
@@ -66,12 +68,15 @@ public:
   virtual QString getCompletedStatusMessage() const override
   {
     return
-      "Removed " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-      StringUtils::formatLargeNumber(_numProcessed) + " exclude delete tags."; }
+      "Removed " + StringUtils::formatLargeNumber(_numAffected) +
+      " invalid exclude delete tags / " + StringUtils::formatLargeNumber(_numProcessed) +
+      " way nodes with those tags.";
+  }
 
 private:
 
   WayNodeCriterion _wayNodeCrit;
+  ConstOsmMapPtr _comparisonMap;
 };
 
 }

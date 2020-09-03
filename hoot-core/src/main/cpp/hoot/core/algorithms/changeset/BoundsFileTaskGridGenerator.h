@@ -50,7 +50,6 @@ public:
    * @param inputs one or more bounds file inputs
    */
   BoundsFileTaskGridGenerator(const QStringList& inputs);
-
   virtual ~BoundsFileTaskGridGenerator() = default;
 
   /**
