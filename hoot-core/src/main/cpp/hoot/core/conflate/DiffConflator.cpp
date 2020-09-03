@@ -179,7 +179,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
   MemoryUsageChecker::getInstance().check();
-  LOG_STATUS(
+  LOG_DEBUG(
     "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
     " Differential Conflation match conflicts to be removed.");
   double findMatchesTime = timer.getElapsedAndRestart();

@@ -287,8 +287,11 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
       _changesetsOutputDir + "/" + QString::number(taskGridCell.id) + "-replaced-data.osm");
   }
 
-  LOG_STATUS(
-    "Total replacement time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+  if (changesetNum < taskGridSize)
+  {
+    LOG_STATUS(
+      "Total replacement time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+  }
 }
 
 void ChangesetTaskGridReplacer::_printChangesetStats()
@@ -480,15 +483,16 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(
     "Calculating the diff between replaced data of size: " <<
     StringUtils::formatLargeNumber(replacedMap->size()) << " and replacement data of size: " <<
     StringUtils::formatLargeNumber(diffMap->size() - replacedMap->size())  << "...");
+  // TODO: fix the diff
   DiffConflator().apply(diffMap);
   LOG_STATUS(
-    "Calculated a diff of size: " << diffMap->size() << " in: " <<
-    StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+    "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
+    " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
   LOG_STATUS(
     "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " to: " << outputFile.right(25) << "...");
+    " to: ..." << outputFile.right(25) << "...");
   OsmMapWriterFactory::write(diffMap, outputFile);
   LOG_STATUS(
     "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
