@@ -40,7 +40,7 @@ if [ "${COREONLY:-no}" = "yes" ]; then
     echo "### Done ###" | tee -a CentOS_install.txt
 else
     # Core, UI & services
-    echo "### Add Hoot repo ###" | tee -a CentOS_install.txt
+    echo "### Installing Hootenanny-autostart ###" | tee -a CentOS_install.txt
     sudo yum install -y hootenanny-autostart 2>&1 | tee -a CentOS_install.txt
     echo "### Done ###" | tee -a CentOS_install.txt
 fi
