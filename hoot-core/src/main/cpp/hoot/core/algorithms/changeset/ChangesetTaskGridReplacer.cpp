@@ -50,11 +50,8 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/visitors/RemoveMetadataTagsVisitor.h>
 
 namespace hoot
 {
@@ -135,7 +132,8 @@ void ChangesetTaskGridReplacer::replace(
       _getUpdatedData(_finalOutput);
       if (_calcDiffWithReplacement)
       {
-        // TODO
+        // Calculate a diff between the data we just replaced and the original replacement data to
+        // aid in finding any errors during the replacement process.
         const QString diffOutput = _finalOutput.replace(".osm", "-diff.osm");
         _calculateDiffWithOriginalReplacementData(diffOutput);
       }
@@ -469,7 +467,8 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
 
 void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const QString& outputFile)
 {
-  // TODO: explain
+  // We only want to calculate the diff out to the task grid bounds, b/c that's the data that was
+  // actually replaced.
   conf().set(
     ConfigOptions::getConvertBoundingBoxKey(),
     GeometryUtils::envelopeToConfigString(_taskGridBounds));
@@ -477,12 +476,14 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
   //conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
   //conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
   //conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), false);
+  // use lenient bounds
   conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), true);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), false);
   //conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
 
+  // TODO: make a simple diff conflate utility method
   // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
   // config.
   conf().set(

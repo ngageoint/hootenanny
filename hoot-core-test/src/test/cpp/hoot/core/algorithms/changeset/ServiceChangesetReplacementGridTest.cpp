@@ -58,6 +58,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   CPPUNIT_TEST(orphanedNodes1Test);
+  // TODO: having some trouble with repeatability here...will come back to
   //CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
@@ -139,13 +140,6 @@ public:
     DisableLog dl; // to suppress a SpatialIndexer warning that should be looked into at some point
 
     _testName = "orphanedNodes2Test";
-
-    // TODO: remove
-//    const QString debugFilePath = _outputPath + "/" + _testName;
-//    conf().set(ConfigOptions::getDebugMapsFilenameKey(), debugFilePath + "/debug.osm");
-//    QDir(debugFilePath).removeRecursively();
-//    QDir().mkpath(debugFilePath);
-
     _prepInput(
       _inputPath + "/orphanedNodes2Test-Input1.osm",
       _inputPath + "/orphanedNodes2Test-Input2.osm",

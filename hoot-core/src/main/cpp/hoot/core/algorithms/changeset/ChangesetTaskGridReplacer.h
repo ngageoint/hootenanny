@@ -124,7 +124,8 @@ private:
   QString _finalOutput;
   // adds tags to features that are suspect as result of the replacement op
   bool _tagQualityIssues;
-  // TODO
+  // uses diff conflate to calculate the difference between the final replaced data and the original
+  // data used for replacement
   bool _calcDiffWithReplacement;
 
   void _initConfig();
@@ -139,7 +140,7 @@ private:
   void _getUpdatedData(const QString& outputFile);
   // tags elements with potential quality issues
   void _writeQualityIssueTags(OsmMapPtr& map);
-  // TODO
+  // calcs the output diff
   void _calculateDiffWithOriginalReplacementData(const QString& outputFile);
 };
 
