@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Removes metadata tags from elements, as defined by the hoot schema
  */
 class RemoveMetadataTagsVisitor : public RemoveTagsVisitor
 {
@@ -48,9 +48,12 @@ public:
   RemoveMetadataTagsVisitor() = default;
   virtual ~RemoveMetadataTagsVisitor()  = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e) override;
+  /**
+   * @see ElementVisitor
+   */
+  virtual void visit(const ElementPtr& e) override;
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const { return "Removes metadata tags"; }
 
   virtual QString getInitStatusMessage() const
   { return "Removing metadata tags..."; }
