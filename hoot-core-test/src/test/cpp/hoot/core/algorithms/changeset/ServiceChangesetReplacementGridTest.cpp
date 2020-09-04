@@ -59,7 +59,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 
   // TODO: re-enable
   //CPPUNIT_TEST(orphanedNodes1Test);
-  CPPUNIT_TEST(orphanedNodes2Test);
+  //CPPUNIT_TEST(orphanedNodes2Test);
+  CPPUNIT_TEST(orphanedNodes2bTest);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -174,6 +175,47 @@ public:
       _replacementDataUrl,
       UniformTaskGridGenerator(
         "-115.0793,36.1832,-115.0610,36.1986", 2, _outputPath + "/" + taskGridFileName)
+        .generateTaskGrid());
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void orphanedNodes2bTest()
+  {
+    // (github 4216) similar to orphanedNodes1Test - There should be no orphaned nodes in the
+    // output. You can check for orphaned node counts with uut.setTagQualityIssues(true).
+
+    // TODO: re-enable
+    //DisableLog dl; // to suppress a SpatialIndexer warning that should be looked into at some point
+
+    _testName = "orphanedNodes2bTest";
+
+    // TODO: remove?
+    const QString debugFilePath = _outputPath + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), debugFilePath + "/debug.osm");
+    QDir(debugFilePath).removeRecursively();
+    QDir().mkpath(debugFilePath);
+
+    _prepInput(
+      _inputPath + "/orphanedNodes2Test-Input1.osm",
+      _inputPath + "/orphanedNodes2Test-Input2.osm",
+      "-115.0758,36.1821,-115.0675,36.1909",
+      _outputPath);
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(false);
+    uut.setCalcDiffWithReplacement(true); // TODO: change back to false
+    const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.0758,36.1821,-115.0675,36.1909", 2, _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
@@ -546,7 +588,7 @@ private:
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
 
   void _loadDataToReplaceDb(

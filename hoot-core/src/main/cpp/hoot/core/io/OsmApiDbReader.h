@@ -68,7 +68,7 @@ private:
 
   std::shared_ptr<OsmApiDb> _database;
 
-  void _parseAndSetTagsOnElement(const ElementPtr& element);
+  void _parseAndSetTagsOnElement(const ElementId& elementId, const ElementPtr& element);
 };
 
 }

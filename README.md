@@ -48,7 +48,7 @@ You can create your own custom conflation algorithms for additional feature type
 # [Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) Workflows
 
 A conflation workflow defines the manner in which two maps are merged together. Hootenanny has the following workflows:
-* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** **(default)** - _Keep the best of both while favoring one of them_
+* **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** **(default)** - _Keep the best of both maps while favoring the first_
   * Conflate the best geometry and tag parts of map B into map A, favoring map A's data. 
   * Use this type of conflation when you want conflated output based on the best state of both input datasets.
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to existing geometries_

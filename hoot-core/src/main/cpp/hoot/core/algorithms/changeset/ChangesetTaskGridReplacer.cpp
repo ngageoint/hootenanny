@@ -508,17 +508,13 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
   // TODO: explain
 
   OsmMapPtr diffMap(new OsmMap());
-  IoUtils::loadMap(
-    diffMap, _replacementUrl, ConfigOptions().getConflateUseDataSourceIds1(), Status::Unknown1);
-
+  IoUtils::loadMap(diffMap, _replacementUrl, true, Status::Unknown1);
   // had to do this cleaning to get the relations to behave
   RemoveMissingElementsVisitor missingElementRemover;
   diffMap->visitRw(missingElementRemover);
   LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
-
-  const int replacementMapSize = diffMap->size();
   OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input-unknown1");
+  const int replacementMapSize = diffMap->size();
 
   LOG_STATUS(
     "Replacment data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
@@ -527,13 +523,26 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
   const QString replacedDataUrl = _dataToReplaceUrl;
   LOG_STATUS("Loading replaced input data from: ..." << replacedDataUrl.right(25) << "...");
 
+  // TODO: remove
+  OsmMapPtr tempMap(new OsmMap());
+  IoUtils::loadMap(tempMap, replacedDataUrl, false, Status::Unknown2);
+  // had to do this cleaning to get the relations to behave
+  //tempMap->visitRw(missingElementRemover);
+  //LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(tempMap, "task-grid-replacer-diff-input-unknown2");
+
+  //Log::WarningLevel logLevel = Log::getInstance().getLevel();
+  //Log::getInstance().setLevel(Log::Trace);
+
   // don't really understand why IDs need to be preserved in this load step. If they aren't, the
   // features loaded here they lose tags...strange.
-  IoUtils::loadMap(diffMap, replacedDataUrl, true, Status::Unknown2);
+  IoUtils::loadMap(diffMap, replacedDataUrl, false, Status::Unknown2);
+
+  //Log::getInstance().setLevel(logLevel);
 
   // had to do this cleaning to get the relations to behave
-  diffMap->visitRw(missingElementRemover);
-  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+  //diffMap->visitRw(missingElementRemover);
+  //LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
 
   LOG_STATUS(
@@ -559,7 +568,13 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
 //    OsmMapWriterFactory::writeDebugMap(diffMap, "after-pre-ops");
 //  }
 
+  // TODO: remove
+  //Log::WarningLevel logLevel = Log::getInstance().getLevel();
+  //Log::getInstance().setLevel(Log::Trace);
+
   DiffConflator().apply(diffMap);
+
+  //Log::getInstance().setLevel(logLevel);
 
 //  if (ConfigOptions().getConflatePostOps().size() > 0)
 //  {
@@ -578,7 +593,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
   LOG_STATUS(
     "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
     " to: ..." << outputFile.right(25) << "...");
-  //conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
+  conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
   IoUtils::saveMap(diffMap, outputFile);
   LOG_STATUS(
     "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<

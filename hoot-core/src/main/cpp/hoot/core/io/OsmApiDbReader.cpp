@@ -76,22 +76,24 @@ void OsmApiDbReader::open(const QString& urlStr)
   _open = true;
 }
 
-void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementPtr& element)
+void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
+                                               const ElementPtr& element)
 {
-  // We should see if these tags can be read out at the same time the element itself is read out...
+  // TODO: We should see if these tags can be read out at the same time the element itself is read
+  // out...
 
   QStringList tags;
   std::shared_ptr<QSqlQuery> tagItr;
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      tagItr = _database->selectTagsForNode(element->getId());
+      tagItr = _database->selectTagsForNode(elementId.getId());
       break;
     case ElementType::Way:
-      tagItr = _database->selectTagsForWay(element->getId());
+      tagItr = _database->selectTagsForWay(elementId.getId());
       break;
     case ElementType::Relation:
-      tagItr = _database->selectTagsForRelation(element->getId());
+      tagItr = _database->selectTagsForRelation(elementId.getId());
       break;
     default:
       throw HootException("Invalid element type.");
@@ -142,7 +144,9 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
       resultIterator.value(ApiDb::NODES_VERSION).toLongLong(),
       dt.toMSecsSinceEpoch() / 1000));
 
-  _parseAndSetTagsOnElement(node);
+  // Be sure to pass the original way id in here in order to get back its tags, since we already
+  // possibly set a new remapped ID on the way.
+  _parseAndSetTagsOnElement(ElementId(ElementType::Node, rawId), node);
   _updateMetadataOnElement(node);
   //we want the reader's status to always override any existing status
   if (!_keepStatusTag && _status != Status::Invalid)
@@ -175,8 +179,7 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       dt.toMSecsSinceEpoch() / 1000));
 
-  // if performance becomes an issue, try reading these out in batch at the same time
-  // the element results are read
+  // TODO: Try reading these out in batch at the same time the element results are read
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -184,7 +187,8 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
   }
   way->addNodes(nodeIds);
 
-  _parseAndSetTagsOnElement(way);
+  // See related note in _resultToNode.
+  _parseAndSetTagsOnElement(ElementId(ElementType::Way, wayId), way);
   _updateMetadataOnElement(way);
   // we want the reader's status to always override any existing status
   if (!_keepStatusTag && _status != Status::Invalid)
@@ -217,9 +221,9 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       dt.toMSecsSinceEpoch() / 1000));
-  _parseAndSetTagsOnElement(relation);
+  //_parseAndSetTagsOnElement(relation);
 
-  // These could be read out in batch at the same time the element results are read.
+  // TODO: These could be read out in batch at the same time the element results are read.
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {
@@ -227,7 +231,8 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
   }
   relation->setMembers(members);
 
-  _parseAndSetTagsOnElement(relation);
+  // See related note in _resultToNode.
+  _parseAndSetTagsOnElement(ElementId(ElementType::Relation, relationId), relation);
   _updateMetadataOnElement(relation);
   //we want the reader's status to always override any existing status
   if (!_keepStatusTag && _status != Status::Invalid)
