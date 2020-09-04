@@ -59,7 +59,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 
   // TODO: re-enable
   //CPPUNIT_TEST(orphanedNodes1Test);
-  //CPPUNIT_TEST(orphanedNodes2Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -67,7 +67,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(github4174Test);
   //CPPUNIT_TEST(github4174UniformTest);
   //CPPUNIT_TEST(github4170UniformTest);
-  CPPUNIT_TEST(github4216UniformTest);
+  //CPPUNIT_TEST(github4216UniformTest);
   //CPPUNIT_TEST(thirtyEightFortyThreeTest);
 
   //CPPUNIT_TEST(northVegasSmallTest);
@@ -111,6 +111,7 @@ public:
 
     _testName = "orphanedNodes1Test";
 
+    // TODO: remove?
     const QString debugFilePath = _outputPath + "/" + _testName;
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), debugFilePath + "/debug.osm");
     QDir(debugFilePath).removeRecursively();
@@ -143,9 +144,17 @@ public:
     // (github 4216) similar to orphanedNodes1Test - There should be no orphaned nodes in the
     // output. You can check for orphaned node counts with uut.setTagQualityIssues(true).
 
-    DisableLog dl; // to suppress a SpatialIndexer warning that should be looked into at some point
+    // TODO: re-enable
+    //DisableLog dl; // to suppress a SpatialIndexer warning that should be looked into at some point
 
     _testName = "orphanedNodes2Test";
+
+    // TODO: remove?
+    const QString debugFilePath = _outputPath + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), debugFilePath + "/debug.osm");
+    QDir(debugFilePath).removeRecursively();
+    QDir().mkpath(debugFilePath);
+
     _prepInput(
       _inputPath + "/orphanedNodes2Test-Input1.osm",
       _inputPath + "/orphanedNodes2Test-Input2.osm",
@@ -158,7 +167,7 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(false);
-    uut.setCalcDiffWithReplacement(false);
+    uut.setCalcDiffWithReplacement(true); // TODO: change back to false
     const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -537,7 +546,7 @@ private:
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
 
   void _loadDataToReplaceDb(

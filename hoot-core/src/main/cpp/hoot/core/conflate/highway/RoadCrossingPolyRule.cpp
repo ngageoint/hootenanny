@@ -71,7 +71,7 @@ QList<RoadCrossingPolyRule> RoadCrossingPolyRule::readRules(const QString& rules
     throw IllegalArgumentException("Road crossing polygon rules file does not exist.");
   }
 
-  LOG_STATUS("Creating road crossing polygon rules...");
+  LOG_INFO("Creating road crossing polygon rules...");
 
   boost::property_tree::ptree propTree;
   try

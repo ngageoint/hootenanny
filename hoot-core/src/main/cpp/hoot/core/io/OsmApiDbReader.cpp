@@ -78,7 +78,7 @@ void OsmApiDbReader::open(const QString& urlStr)
 
 void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementPtr& element)
 {
-  //We should see if these tags can be read out at the same time the element itself is read out...
+  // We should see if these tags can be read out at the same time the element itself is read out...
 
   QStringList tags;
   std::shared_ptr<QSqlQuery> tagItr;
@@ -186,7 +186,7 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
 
   _parseAndSetTagsOnElement(way);
   _updateMetadataOnElement(way);
-  //we want the reader's status to always override any existing status
+  // we want the reader's status to always override any existing status
   if (!_keepStatusTag && _status != Status::Invalid)
   {
     way->setStatus(_status);

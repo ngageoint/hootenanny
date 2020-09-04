@@ -54,6 +54,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/util/MapProjector.h>
+#include <hoot/core/visitors/RemoveMetadataTagsVisitor.h>
 
 namespace hoot
 {
@@ -443,7 +444,7 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
 
   // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not so
   // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
-  // replacement bounds
+  // replacement bounds.
   std::shared_ptr<InBoundsCriterion> inBoundsCrit(new InBoundsCriterion(true));
   inBoundsCrit->setBounds(_taskGridBounds);
   inBoundsCrit->setOsmMap(map.get());
@@ -471,7 +472,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
   // TODO
   conf().set(
     ConfigOptions::getConvertBoundingBoxKey(),
-    /*GeometryUtils::envelopeToConfigString(_taskGridBounds)*/"");
+    GeometryUtils::envelopeToConfigString(_taskGridBounds)/*""*/);
   // change these, so we can open the files in josm; not sure if these are helping...
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
@@ -481,11 +482,12 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), false);
   conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
+  conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
 
-  ConfigUtils::checkForTagValueTruncationOverride();
-  QStringList allOps = ConfigOptions().getConflatePreOps();
-  allOps += ConfigOptions().getConflatePostOps();
-  ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
+//  ConfigUtils::checkForTagValueTruncationOverride();
+//  QStringList allOps = ConfigOptions().getConflatePreOps();
+//  allOps += ConfigOptions().getConflatePostOps();
+//  ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
 
   QStringList preConflateOps = ConfigOptions().getConflatePreOps();
   const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
@@ -521,12 +523,54 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
   DiffConflator diffGen;
 
   IoUtils::loadMap(
-    diffMap, _replacementUrl, ConfigOptions().getConflateUseDataSourceIds1(), Status::Unknown1);
+    diffMap, _replacementUrl, ConfigOptions().getConflateUseDataSourceIds1()/*true*/, Status::Unknown1);
+  // had to do this cleaning to get the relations to behave
+  RemoveMissingElementsVisitor missingElementRemover;
+  diffMap->visitRw(missingElementRemover);
+  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+  RemoveInvalidRelationVisitor invalidRelationRemover;
+  diffMap->visitRw(invalidRelationRemover);
+  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
+  RemoveEmptyRelationsOp emptyRelationRemover;
+  emptyRelationRemover.apply(diffMap);
+  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
   const int replacementMapSize = diffMap->size();
-  diffGen.storeOriginalMap(diffMap);
-  diffGen.markInputElements(diffMap);
+  LOG_VARS(replacementMapSize);
+  OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input-unknown1");
+  //RemoveMetadataTagsVisitor metadataRemover;
+  //diffMap->visitRw(metadataRemover);
+  // TODO: These two steps may only be needed for diff w/ tags, which we're not doing.
+  //diffGen.storeOriginalMap(diffMap);
+  //diffGen.markInputElements(diffMap);
+
+  const QString replacedDataUrl = _dataToReplaceUrl;
+
+  // TODO: remove
+  OsmMapPtr tempMap(new OsmMap());
   IoUtils::loadMap(
-    diffMap, _dataToReplaceUrl, ConfigOptions().getConflateUseDataSourceIds2(), Status::Unknown2);
+    tempMap, replacedDataUrl, /*ConfigOptions().getConflateUseDataSourceIds2()*/true, Status::Unknown2);
+  // had to do this cleaning to get the relations to behave
+  tempMap->visitRw(missingElementRemover);
+  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+  tempMap->visitRw(invalidRelationRemover);
+  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
+  emptyRelationRemover.apply(tempMap);
+  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
+  LOG_VARS(tempMap->size());
+  OsmMapWriterFactory::writeDebugMap(tempMap, "task-grid-replacer-diff-input-unknown2");
+
+  // don't really understand why IDs need to be preserved in this load step...
+  IoUtils::loadMap(
+    diffMap, replacedDataUrl, /*ConfigOptions().getConflateUseDataSourceIds2()*/true, Status::Unknown2);
+  //diffMap->visitRw(metadataRemover);
+  // had to do this cleaning to get the relations to behave
+  diffMap->visitRw(missingElementRemover);
+  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+  diffMap->visitRw(invalidRelationRemover);
+  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
+  emptyRelationRemover.apply(diffMap);
+  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
+  LOG_VARS(diffMap->size());
   OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
 
   LOG_STATUS("Diff data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
@@ -538,17 +582,6 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
     " and replacement data of size: " << StringUtils::formatLargeNumber(replacementMapSize)  <<
     "...");
 
-  // had to do this cleaning to get the relations to behave
-  RemoveMissingElementsVisitor missingElementRemover;
-  diffMap->visitRw(missingElementRemover);
-  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  RemoveInvalidRelationVisitor invalidRelationRemover;
-  diffMap->visitRw(invalidRelationRemover);
-  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
-  RemoveEmptyRelationsOp emptyRelationRemover;
-  emptyRelationRemover.apply(diffMap);
-  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
-
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
     // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
@@ -558,8 +591,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
       ConfigOptions().getConflateRubberSheetElementCriteria());
 
     // apply any user specified pre-conflate operations
-    NamedOp preOps(ConfigOptions().getConflatePreOps());
-    preOps.apply(diffMap);
+    NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
     OsmMapWriterFactory::writeDebugMap(diffMap, "after-pre-ops");
   }
 
@@ -573,8 +605,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
   if (ConfigOptions().getConflatePostOps().size() > 0)
   {
     // apply any user specified post-conflate operations
-    NamedOp postOps(ConfigOptions().getConflatePostOps());
-    postOps.apply(diffMap);
+    NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
     OsmMapWriterFactory::writeDebugMap(diffMap, "after-post-ops");
   }
 

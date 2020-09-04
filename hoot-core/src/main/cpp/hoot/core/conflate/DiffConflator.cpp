@@ -410,8 +410,8 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
   // Use the copy constructor to copy the entire map.
   _pOriginalMap.reset(new OsmMap(pMap));
 
-  // We're storing this off for potential use later on if any roads get snapped after conflation.
-  // Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
+  // We're storing this part off for potential use later on if any roads get snapped after
+  // conflation. Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
   // TODO: Can we filter this down to whatever feature type the snapping is configured for?
   std::shared_ptr<NotCriterion> crit(
     new NotCriterion(ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref2()))));
