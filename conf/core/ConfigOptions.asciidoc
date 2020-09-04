@@ -1157,12 +1157,10 @@ secondary road endpoint nodes to the nearest reference road.
 
 * Data Type: list
 * Default Value:
-** `uuid`
-** `source:datetime`
-** `license`
-** `source:imagery`
+** ``
 
-List of tags to ignore when performing differential conflation with tags.
+List of tags to ignore when performing differential conflation with tags. Metadata tags are always
+ignored.
 
 === differential.treat.reviews.as.matches
 
