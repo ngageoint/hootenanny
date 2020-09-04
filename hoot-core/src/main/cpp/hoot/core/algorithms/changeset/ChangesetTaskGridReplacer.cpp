@@ -137,7 +137,7 @@ void ChangesetTaskGridReplacer::replace(
       {
         // TODO
         const QString diffOutput = _finalOutput.replace(".osm", "-diff.osm");
-        _calculateDiffWithReplacement(diffOutput);
+        _calculateDiffWithOriginalReplacementData(diffOutput);
       }
     }    
   }
@@ -383,8 +383,8 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
   // change these, so we can open the files in josm; not sure if these are helping...
-  conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
-  conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
+  //conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
+  //conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
 
   LOG_STATUS("Reading the modified data out of: ..." << _dataToReplaceUrl.right(25) << "...");
   OsmMapPtr map(new OsmMap());
@@ -467,87 +467,65 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
     " empty ways in output.");
 }
 
-void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& outputFile)
+void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const QString& outputFile)
 {
   // TODO: explain
   conf().set(
     ConfigOptions::getConvertBoundingBoxKey(),
     GeometryUtils::envelopeToConfigString(_taskGridBounds));
   // change these, so we can open the files in josm; not sure if these are helping...
-  conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
-  conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
-  conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), false);
+  //conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
+  //conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
+  //conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), true);
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), false);
   //conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
 
-  // Not running conflate pre/post ops. Oddly, the diffs are better without them, primarily with
-  // roads, which is a little disturbing and should be explained. The line matching unfortunately
-  // runs slower, presumably b/c intersections are split as a result of disabling pre ops.
-//  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
-//  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
-//  if (preConflateOps.contains(removeRoundaboutsClassName))
-//  {
-//    preConflateOps.removeAll(removeRoundaboutsClassName);
-//    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
-//  }
+  // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
+  // config.
+  conf().set(
+    ConfigOptions::getRubberSheetElementCriteriaKey(),
+    ConfigOptions().getConflateRubberSheetElementCriteria());
+  // don't remove/replace roundabouts during diff conflate
+  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
+  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
+  if (preConflateOps.contains(removeRoundaboutsClassName))
+  {
+    preConflateOps.removeAll(removeRoundaboutsClassName);
+    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
+  }
+  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
+  const QString replaceRoundaboutsClassName =
+    QString::fromStdString(ReplaceRoundabouts::className());
+  if (postConflateOps.contains(replaceRoundaboutsClassName))
+  {
+    postConflateOps.removeAll(replaceRoundaboutsClassName);
+    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
+  }
 
-//  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
-//  const QString replaceRoundaboutsClassName =
-//    QString::fromStdString(ReplaceRoundabouts::className());
-//  if (postConflateOps.contains(replaceRoundaboutsClassName))
-//  {
-//    postConflateOps.removeAll(replaceRoundaboutsClassName);
-//    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
-//  }
-
-  LOG_STATUS("Loading replacment data from: ..." << _replacementUrl.right(25) << "...");
-
-  // TODO: explain
-
+  LOG_STATUS(
+    "Loading replacment data for diff calc from: ..." << _replacementUrl.right(25) << "...");
   OsmMapPtr diffMap(new OsmMap());
   IoUtils::loadMap(diffMap, _replacementUrl, true, Status::Unknown1);
-  // had to do this cleaning to get the relations to behave
-  RemoveMissingElementsVisitor missingElementRemover;
-  diffMap->visitRw(missingElementRemover);
-  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input-unknown1");
   const int replacementMapSize = diffMap->size();
-
   LOG_STATUS(
     "Replacment data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
   const QString replacedDataUrl = _dataToReplaceUrl;
-  LOG_STATUS("Loading replaced input data from: ..." << replacedDataUrl.right(25) << "...");
-
-  // TODO: remove
-  OsmMapPtr tempMap(new OsmMap());
-  IoUtils::loadMap(tempMap, replacedDataUrl, false, Status::Unknown2);
-  // had to do this cleaning to get the relations to behave
-  //tempMap->visitRw(missingElementRemover);
-  //LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(tempMap, "task-grid-replacer-diff-input-unknown2");
-
-  //Log::WarningLevel logLevel = Log::getInstance().getLevel();
-  //Log::getInstance().setLevel(Log::Trace);
-
-  // don't really understand why IDs need to be preserved in this load step. If they aren't, the
-  // features loaded here they lose tags...strange.
+  LOG_STATUS("Loading replaced data for diff calc from: ..." << replacedDataUrl.right(25) << "...");
   IoUtils::loadMap(diffMap, replacedDataUrl, false, Status::Unknown2);
-
-  //Log::getInstance().setLevel(logLevel);
-
-  // had to do this cleaning to get the relations to behave
-  //diffMap->visitRw(missingElementRemover);
-  //LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
-
   LOG_STATUS(
     "Replaced data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
+
+  // had to do this cleaning to get the relations to behave
+  RemoveMissingElementsVisitor missingElementRemover;
+  diffMap->visitRw(missingElementRemover);
+  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
 
   LOG_STATUS(
     "Calculating the diff between replaced data of size: " <<
@@ -555,45 +533,23 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
     " and replacement data of size: " << StringUtils::formatLargeNumber(replacementMapSize)  <<
     "...");
 
-//  if (ConfigOptions().getConflatePreOps().size() > 0)
-//  {
-//    // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
-//    // config.
-//    conf().set(
-//      ConfigOptions::getRubberSheetElementCriteriaKey(),
-//      ConfigOptions().getConflateRubberSheetElementCriteria());
-
-//    // apply any user specified pre-conflate operations
-//    NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
-//    OsmMapWriterFactory::writeDebugMap(diffMap, "after-pre-ops");
-//  }
-
-  // TODO: remove
-  //Log::WarningLevel logLevel = Log::getInstance().getLevel();
-  //Log::getInstance().setLevel(Log::Trace);
-
-  DiffConflator().apply(diffMap);
-
-  //Log::getInstance().setLevel(logLevel);
-
-//  if (ConfigOptions().getConflatePostOps().size() > 0)
-//  {
-//    // apply any user specified post-conflate operations
-//    NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
-//    OsmMapWriterFactory::writeDebugMap(diffMap, "after-post-ops");
-//  }
-
-  MapProjector::projectToWgs84(diffMap);
+  NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
+  DiffConflator diffGen;
+  diffGen.apply(diffMap);
+  NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
 
   LOG_STATUS(
     "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+    " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << "(" <<
+    StringUtils::formatLargeNumber(diffGen.getNumUnconflatableElementsDiscarded()) <<
+    " unconflatable)");
   _subTaskTimer.restart();
 
   LOG_STATUS(
     "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
     " to: ..." << outputFile.right(25) << "...");
-  conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
+  //conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
+  //MapProjector::projectToWgs84(diffMap);
   IoUtils::saveMap(diffMap, outputFile);
   LOG_STATUS(
     "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<

@@ -88,7 +88,8 @@ _matchFactory(MatchFactory::getInstance()),
 _settings(Settings::getInstance()),
 _intraDatasetElementIdsPopulated(false),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_numSnappedWays(0)
+_numSnappedWays(0),
+_numUnconflatableElementsDiscarded(0)
 {
   _reset();
 }
@@ -99,7 +100,8 @@ _matchThreshold(matchThreshold),
 _settings(Settings::getInstance()),
 _intraDatasetElementIdsPopulated(false),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_numSnappedWays(0)
+_numSnappedWays(0),
+_numUnconflatableElementsDiscarded(0)
 {
   _reset();
 }
@@ -138,6 +140,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   _geometryChangesetStats = "";
   _tagChangesetStats = "";
   _unifiedChangesetStats = "";
+  _numUnconflatableElementsDiscarded = 0;
 
   // Store the map, as we might need it for tag diff later.
   _pMap = map;
@@ -157,8 +160,9 @@ void DiffConflator::apply(OsmMapPtr& map)
     _stats.append(
       SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
+    _numUnconflatableElementsDiscarded = mapSizeBefore - _pMap->size();
     LOG_INFO(
-      "Discarded " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
+      "Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
       " unconflatable elements.");
   }
 

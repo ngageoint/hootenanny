@@ -140,7 +140,7 @@ private:
   // tags elements with potential quality issues
   void _writeQualityIssueTags(OsmMapPtr& map);
   // TODO
-  void _calculateDiffWithReplacement(const QString& outputFile);
+  void _calculateDiffWithOriginalReplacementData(const QString& outputFile);
 };
 
 }

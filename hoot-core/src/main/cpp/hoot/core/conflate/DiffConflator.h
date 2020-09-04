@@ -194,6 +194,7 @@ public:
   QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
   QString getTagChangesetStats() const { return _tagChangesetStats; }
   QString getUnifiedChangesetStats() const { return _unifiedChangesetStats; }
+  long getNumUnconflatableElementsDiscarded() const { return _numUnconflatableElementsDiscarded; }
 
 private:
 
@@ -231,6 +232,7 @@ private:
   int _taskStatusUpdateInterval;
 
   long _numSnappedWays;
+  long _numUnconflatableElementsDiscarded;
 
   QString _geometryChangesetStats;
   QString _tagChangesetStats;

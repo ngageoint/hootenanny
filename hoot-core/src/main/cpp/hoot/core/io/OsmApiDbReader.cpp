@@ -221,7 +221,6 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
       resultIterator.value(ApiDb::RELATIONS_CHANGESET).toLongLong(),
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       dt.toMSecsSinceEpoch() / 1000));
-  //_parseAndSetTagsOnElement(relation);
 
   // TODO: These could be read out in batch at the same time the element results are read.
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
