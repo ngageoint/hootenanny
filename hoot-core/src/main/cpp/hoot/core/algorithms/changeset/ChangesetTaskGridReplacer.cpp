@@ -472,7 +472,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
   // TODO
   conf().set(
     ConfigOptions::getConvertBoundingBoxKey(),
-    GeometryUtils::envelopeToConfigString(_taskGridBounds)/*""*/);
+    GeometryUtils::envelopeToConfigString(_taskGridBounds));
   // change these, so we can open the files in josm; not sure if these are helping...
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
@@ -481,36 +481,24 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
   conf().set(
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), false);
-  conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
-  conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
+  //conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
+  //conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
 
-//  ConfigUtils::checkForTagValueTruncationOverride();
-//  QStringList allOps = ConfigOptions().getConflatePreOps();
-//  allOps += ConfigOptions().getConflatePostOps();
-//  ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
-
-  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
-  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
-  if (preConflateOps.contains(removeRoundaboutsClassName))
-  {
-    preConflateOps.removeAll(removeRoundaboutsClassName);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
-  }
-
-  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
-  const QString replaceRoundaboutsClassName =
-    QString::fromStdString(ReplaceRoundabouts::className());
-  if (postConflateOps.contains(replaceRoundaboutsClassName))
-  {
-    postConflateOps.removeAll(replaceRoundaboutsClassName);
-    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
-  }
-
-//  if (ConfigOptions().getConflateRemoveSuperfluousOps())
+//  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
+//  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
+//  if (preConflateOps.contains(removeRoundaboutsClassName))
 //  {
-//    // Let's see if we can remove any ops in the configuration that will have no effect on the
-//    // feature types we're conflating in order to improve runtime performance.
-//    SuperfluousConflateOpRemover::removeSuperfluousOps();
+//    preConflateOps.removeAll(removeRoundaboutsClassName);
+//    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
+//  }
+
+//  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
+//  const QString replaceRoundaboutsClassName =
+//    QString::fromStdString(ReplaceRoundabouts::className());
+//  if (postConflateOps.contains(replaceRoundaboutsClassName))
+//  {
+//    postConflateOps.removeAll(replaceRoundaboutsClassName);
+//    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
 //  }
 
   LOG_STATUS(
@@ -526,50 +514,44 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
     diffMap, _replacementUrl, ConfigOptions().getConflateUseDataSourceIds1()/*true*/, Status::Unknown1);
   // had to do this cleaning to get the relations to behave
   RemoveMissingElementsVisitor missingElementRemover;
-  diffMap->visitRw(missingElementRemover);
-  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  RemoveInvalidRelationVisitor invalidRelationRemover;
-  diffMap->visitRw(invalidRelationRemover);
-  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
-  RemoveEmptyRelationsOp emptyRelationRemover;
-  emptyRelationRemover.apply(diffMap);
-  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
+//  diffMap->visitRw(missingElementRemover);
+//  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+//  RemoveInvalidRelationVisitor invalidRelationRemover;
+//  diffMap->visitRw(invalidRelationRemover);
+//  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
+//  RemoveEmptyRelationsOp emptyRelationRemover;
+//  emptyRelationRemover.apply(diffMap);
+//  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
   const int replacementMapSize = diffMap->size();
   LOG_VARS(replacementMapSize);
   OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input-unknown1");
-  //RemoveMetadataTagsVisitor metadataRemover;
-  //diffMap->visitRw(metadataRemover);
-  // TODO: These two steps may only be needed for diff w/ tags, which we're not doing.
-  //diffGen.storeOriginalMap(diffMap);
-  //diffGen.markInputElements(diffMap);
 
   const QString replacedDataUrl = _dataToReplaceUrl;
 
-  // TODO: remove
-  OsmMapPtr tempMap(new OsmMap());
-  IoUtils::loadMap(
-    tempMap, replacedDataUrl, /*ConfigOptions().getConflateUseDataSourceIds2()*/true, Status::Unknown2);
-  // had to do this cleaning to get the relations to behave
-  tempMap->visitRw(missingElementRemover);
-  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  tempMap->visitRw(invalidRelationRemover);
-  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
-  emptyRelationRemover.apply(tempMap);
-  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
-  LOG_VARS(tempMap->size());
-  OsmMapWriterFactory::writeDebugMap(tempMap, "task-grid-replacer-diff-input-unknown2");
+//  // TODO: remove
+//  OsmMapPtr tempMap(new OsmMap());
+//  IoUtils::loadMap(
+//    tempMap, replacedDataUrl, /*ConfigOptions().getConflateUseDataSourceIds2()*/true, Status::Unknown2);
+//  // had to do this cleaning to get the relations to behave
+//  tempMap->visitRw(missingElementRemover);
+//  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+//  tempMap->visitRw(invalidRelationRemover);
+//  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
+//  emptyRelationRemover.apply(tempMap);
+//  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
+//  LOG_VARS(tempMap->size());
+//  OsmMapWriterFactory::writeDebugMap(tempMap, "task-grid-replacer-diff-input-unknown2");
 
-  // don't really understand why IDs need to be preserved in this load step...
-  IoUtils::loadMap(
-    diffMap, replacedDataUrl, /*ConfigOptions().getConflateUseDataSourceIds2()*/true, Status::Unknown2);
-  //diffMap->visitRw(metadataRemover);
+  // don't really understand why IDs need to be preserved in this load step. If they aren't the
+  // features loaded here lose tags...strange.
+  IoUtils::loadMap(diffMap, replacedDataUrl, true, Status::Unknown2);
   // had to do this cleaning to get the relations to behave
   diffMap->visitRw(missingElementRemover);
   LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  diffMap->visitRw(invalidRelationRemover);
-  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
-  emptyRelationRemover.apply(diffMap);
-  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
+//  diffMap->visitRw(invalidRelationRemover);
+//  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
+//  emptyRelationRemover.apply(diffMap);
+//  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
   LOG_VARS(diffMap->size());
   OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
 
@@ -582,18 +564,18 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
     " and replacement data of size: " << StringUtils::formatLargeNumber(replacementMapSize)  <<
     "...");
 
-  if (ConfigOptions().getConflatePreOps().size() > 0)
-  {
-    // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
-    // config.
-    conf().set(
-      ConfigOptions::getRubberSheetElementCriteriaKey(),
-      ConfigOptions().getConflateRubberSheetElementCriteria());
+//  if (ConfigOptions().getConflatePreOps().size() > 0)
+//  {
+//    // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
+//    // config.
+//    conf().set(
+//      ConfigOptions::getRubberSheetElementCriteriaKey(),
+//      ConfigOptions().getConflateRubberSheetElementCriteria());
 
-    // apply any user specified pre-conflate operations
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
-    OsmMapWriterFactory::writeDebugMap(diffMap, "after-pre-ops");
-  }
+//    // apply any user specified pre-conflate operations
+//    NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
+//    OsmMapWriterFactory::writeDebugMap(diffMap, "after-pre-ops");
+//  }
 
   diffGen.apply(diffMap);
 
@@ -602,12 +584,12 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
     " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
-  if (ConfigOptions().getConflatePostOps().size() > 0)
-  {
-    // apply any user specified post-conflate operations
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
-    OsmMapWriterFactory::writeDebugMap(diffMap, "after-post-ops");
-  }
+//  if (ConfigOptions().getConflatePostOps().size() > 0)
+//  {
+//    // apply any user specified post-conflate operations
+//    NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
+//    OsmMapWriterFactory::writeDebugMap(diffMap, "after-post-ops");
+//  }
 
   MapProjector::projectToWgs84(diffMap);
 
