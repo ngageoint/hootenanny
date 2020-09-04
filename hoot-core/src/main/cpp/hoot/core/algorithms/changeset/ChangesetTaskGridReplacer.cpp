@@ -469,7 +469,7 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
 
 void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& outputFile)
 {
-  // TODO
+  // TODO: explain
   conf().set(
     ConfigOptions::getConvertBoundingBoxKey(),
     GeometryUtils::envelopeToConfigString(_taskGridBounds));
@@ -482,8 +482,10 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
     ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), false);
   //conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
-  //conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
 
+  // Not running conflate pre/post ops. Oddly, the diffs are better without them, primarily with
+  // roads, which is a little disturbing and should be explained. The line matching unfortunately
+  // runs slower, presumably b/c intersections are split as a result of disabling pre ops.
 //  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
 //  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
 //  if (preConflateOps.contains(removeRoundaboutsClassName))
@@ -501,61 +503,41 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
 //    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
 //  }
 
-  LOG_STATUS(
-    "Loading the diff input data from: ..." << _dataToReplaceUrl.right(25) <<
-    " and: ..." << _replacementUrl.right(25) << "...");
+  LOG_STATUS("Loading replacment data from: ..." << _replacementUrl.right(25) << "...");
 
-  // TODO
+  // TODO: explain
+
   OsmMapPtr diffMap(new OsmMap());
-
-  DiffConflator diffGen;
-
   IoUtils::loadMap(
-    diffMap, _replacementUrl, ConfigOptions().getConflateUseDataSourceIds1()/*true*/, Status::Unknown1);
+    diffMap, _replacementUrl, ConfigOptions().getConflateUseDataSourceIds1(), Status::Unknown1);
+
   // had to do this cleaning to get the relations to behave
   RemoveMissingElementsVisitor missingElementRemover;
-//  diffMap->visitRw(missingElementRemover);
-//  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-//  RemoveInvalidRelationVisitor invalidRelationRemover;
-//  diffMap->visitRw(invalidRelationRemover);
-//  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
-//  RemoveEmptyRelationsOp emptyRelationRemover;
-//  emptyRelationRemover.apply(diffMap);
-//  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
+  diffMap->visitRw(missingElementRemover);
+  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
+
   const int replacementMapSize = diffMap->size();
-  LOG_VARS(replacementMapSize);
   OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input-unknown1");
 
+  LOG_STATUS(
+    "Replacment data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+  _subTaskTimer.restart();
+
   const QString replacedDataUrl = _dataToReplaceUrl;
+  LOG_STATUS("Loading replaced input data from: ..." << replacedDataUrl.right(25) << "...");
 
-//  // TODO: remove
-//  OsmMapPtr tempMap(new OsmMap());
-//  IoUtils::loadMap(
-//    tempMap, replacedDataUrl, /*ConfigOptions().getConflateUseDataSourceIds2()*/true, Status::Unknown2);
-//  // had to do this cleaning to get the relations to behave
-//  tempMap->visitRw(missingElementRemover);
-//  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-//  tempMap->visitRw(invalidRelationRemover);
-//  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
-//  emptyRelationRemover.apply(tempMap);
-//  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
-//  LOG_VARS(tempMap->size());
-//  OsmMapWriterFactory::writeDebugMap(tempMap, "task-grid-replacer-diff-input-unknown2");
-
-  // don't really understand why IDs need to be preserved in this load step. If they aren't the
-  // features loaded here lose tags...strange.
+  // don't really understand why IDs need to be preserved in this load step. If they aren't, the
+  // features loaded here they lose tags...strange.
   IoUtils::loadMap(diffMap, replacedDataUrl, true, Status::Unknown2);
+
   // had to do this cleaning to get the relations to behave
   diffMap->visitRw(missingElementRemover);
   LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-//  diffMap->visitRw(invalidRelationRemover);
-//  LOG_STATUS(invalidRelationRemover.getCompletedStatusMessage());
-//  emptyRelationRemover.apply(diffMap);
-//  LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
-  LOG_VARS(diffMap->size());
   OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
 
-  LOG_STATUS("Diff data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+  LOG_STATUS(
+    "Replaced data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
   LOG_STATUS(
@@ -577,12 +559,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
 //    OsmMapWriterFactory::writeDebugMap(diffMap, "after-pre-ops");
 //  }
 
-  diffGen.apply(diffMap);
-
-  LOG_STATUS(
-    "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  _subTaskTimer.restart();
+  DiffConflator().apply(diffMap);
 
 //  if (ConfigOptions().getConflatePostOps().size() > 0)
 //  {
@@ -592,6 +569,11 @@ void ChangesetTaskGridReplacer::_calculateDiffWithReplacement(const QString& out
 //  }
 
   MapProjector::projectToWgs84(diffMap);
+
+  LOG_STATUS(
+    "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
+    " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+  _subTaskTimer.restart();
 
   LOG_STATUS(
     "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<

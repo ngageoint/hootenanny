@@ -312,6 +312,14 @@
             "node"
         ],
         "isA": "highway",
+        "name": "highway=street_lamp",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "node"
+        ],
+        "isA": "highway",
         "name": "highway=turning_circle",
         "objectType": "tag"
     },

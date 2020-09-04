@@ -546,7 +546,7 @@ private:
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 
   void _loadDataToReplaceDb(
