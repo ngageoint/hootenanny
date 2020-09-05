@@ -209,7 +209,6 @@ void OsmMapWriterFactory::writeDebugMap(
   std::shared_ptr<OGRSpatialReference> spatRef, const QString& title, NetworkMatcherPtr matcher)
 {
   OsmMapPtr map(new OsmMap(spatRef));
-  //result->appendSource(inputMap->getSource());
   // add the resulting alpha shape for debugging.
   GeometryConverter(map).convertGeometryToElement(geometry.get(), Status::Invalid, -1);
 

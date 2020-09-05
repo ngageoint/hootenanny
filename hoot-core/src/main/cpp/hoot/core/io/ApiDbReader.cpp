@@ -105,7 +105,6 @@ void ApiDbReader::initializePartial()
   _numRelationsRead = 0;
 }
 
-
 bool ApiDbReader::_hasBounds()
 {
   return _isValidBounds(_bounds) || _isValidBounds(_overrideBounds);

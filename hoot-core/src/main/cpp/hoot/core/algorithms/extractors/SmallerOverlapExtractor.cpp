@@ -63,12 +63,12 @@ double SmallerOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr
 
   ElementConverter ec(map.shared_from_this());
   ec.setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
-  std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
+  std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target, false);
   if (g1->isEmpty())
   {
     return nullValue();
   }
-  std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
+  std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate, false);
   if (g2->isEmpty())
   {
     return nullValue();

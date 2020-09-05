@@ -417,11 +417,12 @@ geos::geom::GeometryTypeId ElementConverter::getGeometryType(
   {
     if (relationType != "")
     {
-      throw IllegalArgumentException("Unknown geometry type: Relation = " + relationType);
+      throw IllegalArgumentException(
+        "Unknown geometry type: relation type = " + relationType + "; relation: " + e->toString());
     }
     else
     {
-      throw IllegalArgumentException("Unknown geometry type.");
+      throw IllegalArgumentException("Unknown geometry type for: " + e->toString());
     }
   }
   else

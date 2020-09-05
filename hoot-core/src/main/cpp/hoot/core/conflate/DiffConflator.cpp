@@ -88,7 +88,8 @@ _matchFactory(MatchFactory::getInstance()),
 _settings(Settings::getInstance()),
 _intraDatasetElementIdsPopulated(false),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_numSnappedWays(0)
+_numSnappedWays(0),
+_numUnconflatableElementsDiscarded(0)
 {
   _reset();
 }
@@ -99,7 +100,8 @@ _matchThreshold(matchThreshold),
 _settings(Settings::getInstance()),
 _intraDatasetElementIdsPopulated(false),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-_numSnappedWays(0)
+_numSnappedWays(0),
+_numUnconflatableElementsDiscarded(0)
 {
   _reset();
 }
@@ -138,6 +140,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   _geometryChangesetStats = "";
   _tagChangesetStats = "";
   _unifiedChangesetStats = "";
+  _numUnconflatableElementsDiscarded = 0;
 
   // Store the map, as we might need it for tag diff later.
   _pMap = map;
@@ -157,8 +160,9 @@ void DiffConflator::apply(OsmMapPtr& map)
     _stats.append(
       SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
-    LOG_STATUS(
-      "Discarded " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
+    _numUnconflatableElementsDiscarded = mapSizeBefore - _pMap->size();
+    LOG_INFO(
+      "Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
       " unconflatable elements.");
   }
 
@@ -179,7 +183,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     _matchFactory.createMatches(_pMap, _matches, _bounds);
   }
   MemoryUsageChecker::getInstance().check();
-  LOG_STATUS(
+  LOG_DEBUG(
     "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
     " Differential Conflation match conflicts to be removed.");
   double findMatchesTime = timer.getElapsedAndRestart();
@@ -232,7 +236,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     MemoryUsageChecker::getInstance().check();
 
     // Now remove input1 elements
-    LOG_STATUS("\tRemoving all reference elements...");
+    LOG_INFO("\tRemoving all reference elements...");
     const int mapSizeBefore = _pMap->size();
     ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
     RemoveElementsVisitor removeRef1Visitor;
@@ -241,7 +245,7 @@ void DiffConflator::apply(OsmMapPtr& map)
     _pMap->visitRw(removeRef1Visitor);
     MemoryUsageChecker::getInstance().check();
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
-    LOG_STATUS(
+    LOG_DEBUG(
       "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
       " reference elements...");
   }
@@ -410,8 +414,8 @@ void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
   // Use the copy constructor to copy the entire map.
   _pOriginalMap.reset(new OsmMap(pMap));
 
-  // We're storing this off for potential use later on if any roads get snapped after conflation.
-  // Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
+  // We're storing this part off for potential use later on if any roads get snapped after
+  // conflation. Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
   // TODO: Can we filter this down to whatever feature type the snapping is configured for?
   std::shared_ptr<NotCriterion> crit(
     new NotCriterion(ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref2()))));
@@ -577,11 +581,14 @@ void DiffConflator::_calcAndStoreTagChanges()
 
 bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags)
 {
-  QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
+  // Always ignore metadata tags and then allow additional tags to be ignored on a case by case
+  // basis.
+  const QStringList ignoreList = ConfigOptions().getDifferentialTagIgnoreList();
   for (Tags::const_iterator newTagIt = newTags.begin(); newTagIt != newTags.end(); ++newTagIt)
   {
     QString newTagKey = newTagIt.key();
     if (newTagKey != MetadataTags::Ref1() // Make sure not ref1
+        && !OsmSchema::getInstance().isMetaData(newTagIt.key(), newTagIt.value()) // not a metadata tag
         && !ignoreList.contains(newTagKey, Qt::CaseInsensitive) // Not in our ignore list
         && (!oldTags.contains(newTagIt.key()) // It's a new tag
             || oldTags[newTagIt.key()] != newTagIt.value())) // Or it has a different value

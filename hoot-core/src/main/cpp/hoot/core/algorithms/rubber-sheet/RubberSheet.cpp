@@ -476,7 +476,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
   {
     QElapsedTimer timer;
     timer.start();
-    LOG_STATUS(
+    LOG_INFO(
       "Running rubber sheet interpolator: (" << (i + 1) << " / " <<
       candidates.size() << "): " << candidates[i] << "...");
 
@@ -513,7 +513,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
     LOG_DEBUG(
       "Max interpolator loop iterations: " << candidate->getMaxOptimizationLoopIterations());
 
-    LOG_STATUS(
+    LOG_INFO(
       "Rubber sheet interpolation complete in " <<
       StringUtils::millisecondsToDhms(timer.elapsed()) << " total for: " << candidates[i] << ".");
   }

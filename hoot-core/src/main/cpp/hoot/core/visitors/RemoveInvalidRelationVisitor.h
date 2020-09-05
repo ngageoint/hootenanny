@@ -59,8 +59,8 @@ public:
   { return "Removing invalid and multiline string relations..."; }
 
   virtual QString getCompletedStatusMessage() const
-  { return "Removed " + QString::number(_numMembersRemoved) + " relation members and " +
-    QString::number(_numAffected) + " relations"; }
+  { return "Removed " + QString::number(_numMembersRemoved) + " relation member(s) and " +
+    QString::number(_numAffected) + " relation(s)"; }
 
   virtual QString getDescription() const
   {

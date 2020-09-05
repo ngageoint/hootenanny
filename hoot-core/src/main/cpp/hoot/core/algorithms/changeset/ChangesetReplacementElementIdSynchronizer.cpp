@@ -125,7 +125,8 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
         {
           // Due our lapsing of the coord comparison sensitivity, we'll actually do a distance check
           // that only allows distances between nodes being synchronized no greater than what they
-          // would be if we hadn't lowered the sensitiviy.
+          // would be if we hadn't lowered the sensitiviy. Moving this as far down in the loop as
+          // possible due to the geometry conversion expense.
           const double distance =
             EuclideanDistanceExtractor().distance(
               *map1, *map2, map1IdenticalElement, map2IdenticalElement);

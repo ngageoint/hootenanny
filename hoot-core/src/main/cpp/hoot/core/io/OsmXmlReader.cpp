@@ -118,7 +118,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setCircularErrorTagKeys(configOptions.getCircularErrorTagKeys());
 }
 
-void OsmXmlReader::_parseTimeStamp(const QXmlAttributes &attributes)
+void OsmXmlReader::_parseTimeStamp(const QXmlAttributes& attributes)
 {
   if ((attributes.value("timestamp") != "") &&
       (attributes.value("timestamp") != "1970-01-01T00:00:00Z") &&

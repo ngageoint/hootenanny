@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBREADER_H
 #define OSMAPIDBREADER_H
@@ -68,7 +68,11 @@ private:
 
   std::shared_ptr<OsmApiDb> _database;
 
-  void _parseAndSetTagsOnElement(const ElementPtr& element);
+  /*
+   * The element ID is passed in separately from the element here, as the element may have been
+   * set with a remapped ID, and we need to use the original ID to retrieve the element's tags.
+   */
+  void _parseAndSetTagsOnElement(const ElementId& elementId, const ElementPtr& element);
 };
 
 }

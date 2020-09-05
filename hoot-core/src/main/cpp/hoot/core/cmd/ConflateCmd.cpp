@@ -88,6 +88,8 @@ HOOT_FACTORY_REGISTER(Command, ConflateCmd)
 
 ConflateCmd::ConflateCmd() :
 _numTotalTasks(0),
+// TODO: We can probably remove this as an option now and do it by default, since it hasn't caused
+// any problems.
 _filterOps(ConfigOptions().getConflateRemoveSuperfluousOps())
 {
 }

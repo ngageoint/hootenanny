@@ -76,6 +76,10 @@ class MatchThreshold;
  * a change is recorded, in which no element geometry is changed, but the tags from the input2
  * element replace the tags from the input1 element. The output from the tag-differencing
  * will always be an osm changeset (*.osc).
+ *
+ * getTagDiff gets the tag differential between the maps. To do this, we look through all of the
+ * matches, and compare tags. A set of newer tags is returned as a changeset (because updating the
+ * tags requires a modify operation).
  */
 class DiffConflator : public OsmMapOperation, public Serializable, public Boundable,
     public Configurable, public ProgressReporter
@@ -136,10 +140,6 @@ public:
   virtual QString getDescription() const
   { return "Conflates two maps into a single map based on the difference between the inputs"; }
 
-  // Gets the tag differential between the maps. To do this, we look through all of the matches,
-  // and compare tags. A set of newer tags is returned as a changeset (because updating the tags
-  // requires a modify operation)
-
   /**
    * @brief getTagDiff - Gets the tag differential that was calculated during the
    * conflation. This will be a list of 'modify' changes that contain tag updates
@@ -194,6 +194,7 @@ public:
   QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
   QString getTagChangesetStats() const { return _tagChangesetStats; }
   QString getUnifiedChangesetStats() const { return _unifiedChangesetStats; }
+  long getNumUnconflatableElementsDiscarded() const { return _numUnconflatableElementsDiscarded; }
 
 private:
 
@@ -231,6 +232,7 @@ private:
   int _taskStatusUpdateInterval;
 
   long _numSnappedWays;
+  long _numUnconflatableElementsDiscarded;
 
   QString _geometryChangesetStats;
   QString _tagChangesetStats;

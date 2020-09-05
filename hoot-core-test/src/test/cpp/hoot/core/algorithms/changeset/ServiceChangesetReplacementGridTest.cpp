@@ -122,6 +122,7 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(false);
+    uut.setCalcDiffWithReplacement(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -151,6 +152,7 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(false);
+    uut.setCalcDiffWithReplacement(false);
     const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -334,6 +336,7 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -346,7 +349,7 @@ public:
   void northVegasSmallTest()
   {
     // 4 sq blocks of the city, 4 changesets, ~9k changes, avg derivation: 4s, total time: ~.5m,
-    // ~18k changes/min
+    // ~18k changes/min - OUT OF DATE
 
     _testName = "northVegasSmallTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -400,7 +403,7 @@ public:
   void northVegasMediumTest()
   {
     // ~1/4 of the northern half of the city, 64 changesets, ~4.02M changes, avg derivation: 9s,
-    // total time: ~12.5m, ~320k changes/min
+    // total time: ~12.5m, ~320k changes/min - OUT OF DATE
 
     _testName = "northVegasMediumTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -430,12 +433,12 @@ public:
     // lenient
 
     // whole northern half of city, 64 changesets, ~26.5M changes, avg derivation: 2.8m,
-    // total time: 3.27h, ~135k changes/min
+    // total time: 3.27h, ~135k changes/min - OUT OF DATE
 
     // hybrid
 
     // whole northern half of city, 64 changesets, ~26.5M changes, avg derivation: 2.5m,
-    // total time: ~3h, ~147k changes/min
+    // total time: ~3h, ~147k changes/min - OUT OF DATE
 
     _testName = "northVegasLargeTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -478,6 +481,7 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,

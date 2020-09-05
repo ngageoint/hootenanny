@@ -64,7 +64,8 @@ public:
 
   // OperationStatusInfo
   virtual QString getInitStatusMessage() const { return "Processing metadata..."; }
-  virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
+  virtual QString getCompletedStatusMessage() const
+  { return "Modified " + QString::number(_numAffected) + " elements"; }
 
   // Configurable
   virtual void setConfiguration(const Settings& conf);

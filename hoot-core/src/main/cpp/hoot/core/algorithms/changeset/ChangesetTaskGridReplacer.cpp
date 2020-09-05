@@ -46,6 +46,12 @@
 #include <hoot/core/criterion/EmptyWayCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/conflate/DiffConflator.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/ops/RemoveRoundabouts.h>
+#include <hoot/core/ops/ReplaceRoundabouts.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/ops/NamedOp.h>
 
 namespace hoot
 {
@@ -57,7 +63,8 @@ _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
 _averageChangesetDeriveTime(0.0),
-_tagQualityIssues(false)
+_tagQualityIssues(false),
+_calcDiffWithReplacement(false)
 {
 }
 
@@ -112,10 +119,6 @@ void ChangesetTaskGridReplacer::replace(
         throw e;
       }
     }
-    if (!_finalOutput.isEmpty())
-    {
-      _getUpdatedData(_finalOutput);
-    }
 
     if (!exceptionOccurred)
     {
@@ -123,6 +126,18 @@ void ChangesetTaskGridReplacer::replace(
         "Task grid cell replacement operation successfully completed in: " <<
         StringUtils::millisecondsToDhms(_opTimer.elapsed()));
     }
+
+    if (!_finalOutput.isEmpty())
+    {
+      _getUpdatedData(_finalOutput);
+      if (_calcDiffWithReplacement)
+      {
+        // Calculate a diff between the data we just replaced and the original replacement data to
+        // aid in finding any errors during the replacement process.
+        const QString diffOutput = _finalOutput.replace(".osm", "-diff.osm");
+        _calculateDiffWithOriginalReplacementData(diffOutput);
+      }
+    }    
   }
   catch (const HootException& e)
   {
@@ -277,8 +292,11 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
       _changesetsOutputDir + "/" + QString::number(taskGridCell.id) + "-replaced-data.osm");
   }
 
-  LOG_STATUS(
-    "Total replacement time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+  if (changesetNum < taskGridSize)
+  {
+    LOG_STATUS(
+      "Total replacement time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()));
+  }
 }
 
 void ChangesetTaskGridReplacer::_printChangesetStats()
@@ -363,8 +381,8 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
   // change these, so we can open the files in josm; not sure if these are helping...
-  conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
-  conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
+  //conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
+  //conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
 
   LOG_STATUS("Reading the modified data out of: ..." << _dataToReplaceUrl.right(25) << "...");
   OsmMapPtr map(new OsmMap());
@@ -386,9 +404,6 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
     // tag element with potential data quality issues caused by the replacement operations; If this
     // isn't done after the previous cleaning step, you'll get some element NPE's.
     _writeQualityIssueTags(map);
-
-    // TODO: try doing a diff conflate between the raw secondary and the replacement map to find
-    // bad areas?
   }
 
   // write the full map out
@@ -397,7 +412,7 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
 
   LOG_STATUS(
     "Modified data original size: " << StringUtils::formatLargeNumber(_originalDataSize) <<
-    ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read in: " <<
+    ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read out in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 }
@@ -427,7 +442,7 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
 
   // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not so
   // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
-  // replacement bounds
+  // replacement bounds.
   std::shared_ptr<InBoundsCriterion> inBoundsCrit(new InBoundsCriterion(true));
   inBoundsCrit->setBounds(_taskGridBounds);
   inBoundsCrit->setOsmMap(map.get());
@@ -448,6 +463,99 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
     " empty ways in output.");
+}
+
+void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const QString& outputFile)
+{
+  // We only want to calculate the diff out to the task grid bounds, b/c that's the data that was
+  // actually replaced.
+  conf().set(
+    ConfigOptions::getConvertBoundingBoxKey(),
+    GeometryUtils::envelopeToConfigString(_taskGridBounds));
+  // change these, so we can open the files in josm; not sure if these are helping...
+  //conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
+  //conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
+  //conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), false);
+  // use lenient bounds
+  conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), true);
+  conf().set(
+    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+  conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), false);
+  //conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
+
+  // TODO: make a simple diff conflate utility method
+  // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
+  // config.
+  conf().set(
+    ConfigOptions::getRubberSheetElementCriteriaKey(),
+    ConfigOptions().getConflateRubberSheetElementCriteria());
+  // don't remove/replace roundabouts during diff conflate
+  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
+  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
+  if (preConflateOps.contains(removeRoundaboutsClassName))
+  {
+    preConflateOps.removeAll(removeRoundaboutsClassName);
+    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
+  }
+  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
+  const QString replaceRoundaboutsClassName =
+    QString::fromStdString(ReplaceRoundabouts::className());
+  if (postConflateOps.contains(replaceRoundaboutsClassName))
+  {
+    postConflateOps.removeAll(replaceRoundaboutsClassName);
+    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
+  }
+
+  LOG_STATUS(
+    "Loading replacment data for diff calc from: ..." << _replacementUrl.right(25) << "...");
+  OsmMapPtr diffMap(new OsmMap());
+  IoUtils::loadMap(diffMap, _replacementUrl, true, Status::Unknown1);
+  const int replacementMapSize = diffMap->size();
+  LOG_STATUS(
+    "Replacment data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+  _subTaskTimer.restart();
+
+  const QString replacedDataUrl = _dataToReplaceUrl;
+  LOG_STATUS("Loading replaced data for diff calc from: ..." << replacedDataUrl.right(25) << "...");
+  IoUtils::loadMap(diffMap, replacedDataUrl, false, Status::Unknown2);
+  LOG_STATUS(
+    "Replaced data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+  _subTaskTimer.restart();
+
+  // had to do this cleaning to get the relations to behave
+  RemoveMissingElementsVisitor missingElementRemover;
+  diffMap->visitRw(missingElementRemover);
+  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
+
+  LOG_STATUS(
+    "Calculating the diff between replaced data of size: " <<
+    StringUtils::formatLargeNumber(diffMap->size() - replacementMapSize) <<
+    " and replacement data of size: " << StringUtils::formatLargeNumber(replacementMapSize)  <<
+    "...");
+
+  NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
+  DiffConflator diffGen;
+  diffGen.apply(diffMap);
+  NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
+
+  LOG_STATUS(
+    "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
+    " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << "(" <<
+    StringUtils::formatLargeNumber(diffGen.getNumUnconflatableElementsDiscarded()) <<
+    " unconflatable)");
+  _subTaskTimer.restart();
+
+  LOG_STATUS(
+    "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
+    " to: ..." << outputFile.right(25) << "...");
+  //conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
+  //MapProjector::projectToWgs84(diffMap);
+  IoUtils::saveMap(diffMap, outputFile);
+  LOG_STATUS(
+    "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
+    " in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+  _subTaskTimer.restart();
 }
 
 }

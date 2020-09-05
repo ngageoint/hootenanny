@@ -408,9 +408,6 @@ private:
   void _synchronizeIds(
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
 
-//  void _removeInvalidWayNodesWithExcludeDelete(
-//    const OsmMapPtr& linearRefMap, const ConstOsmMapPtr& linearSecMap);
-
   OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
 };
 
