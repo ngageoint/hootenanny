@@ -223,8 +223,7 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
   if (score != -1.0 && (score <= 0.0 || score > 1.0))
   {
     throw IllegalArgumentException(
-      "Minimum type match score must be greater than 0 and less than or equal to 1 (-1.0 to " +
-      "disable).");
+      "Minimum type match score must be greater than 0 and less than or equal to 1 (-1 to disable).");
   }
   _minTypeMatchScore = score;
 }
