@@ -208,6 +208,14 @@ public:
    * tag
    */
   static QMap<int, geos::geom::Envelope> readBoundsFileWithIds(const QString& input);
+
+  /**
+   * @brief mergeGeometries Merge a vector of geometries all into one single geometry
+   * @param geometries Vector of geos::geom::Geometry pointers that are to be merged together
+   * @param envelope Bounding envelope used for sorting goemetries by distance
+   * @return Single geometry object that contains all goemetries merged (geos::geom::Geometry::union)
+   */
+  static std::shared_ptr<geos::geom::Geometry> mergeGeometries(std::vector<std::shared_ptr<geos::geom::Geometry>> geometries, const geos::geom::Envelope& envelope);
 };
 
 }

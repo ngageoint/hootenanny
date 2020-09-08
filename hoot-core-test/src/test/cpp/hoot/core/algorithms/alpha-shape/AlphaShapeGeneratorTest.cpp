@@ -162,7 +162,7 @@ public:
 
 //    HOOT_FILE_EQUALS(_inputPath + "AlphaShapeGeneratorManualCoverTest-out.osm",
 //                     _outputPath + "AlphaShapeGeneratorManualCoverTest-out.osm");
-    CPPUNIT_ASSERT_EQUAL((int)cutShapeMap->getElementCount(), 1441);
+    CPPUNIT_ASSERT_EQUAL(1457, (int)cutShapeMap->getElementCount());
   }
 };
 

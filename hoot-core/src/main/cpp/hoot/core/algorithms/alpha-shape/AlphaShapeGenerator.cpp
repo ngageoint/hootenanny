@@ -29,10 +29,11 @@
 
 // Hoot
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
-#include <hoot/core/util/MapProjector.h>
-#include <hoot/core/util/GeometryConverter.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 
 // GEOS
@@ -144,13 +145,13 @@ void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry,
   // Pretty simple...go through and find any point that wasn't covered by the Alpha Shape and draw
   // a buffer around it. This can get very slow for fairly large linear datasets. May need a new alg
   // here, if possible, for better performance.
-
-  int addedPointCtr = 0;
   const NodeMap& nodes = map->getNodes();
+  vector<GeometryPtr> stragglers;
+  int processed = 0;
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     NodePtr node = it->second;
-    std::shared_ptr<geos::geom::Geometry> point(
+    GeometryPtr point(
       GeometryFactory::getDefaultInstance()->createPoint(
         geos::geom::Coordinate(node->getX(), node->getY())));
     if (!geometry->contains(point.get()))
@@ -158,13 +159,23 @@ void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry,
       LOG_TRACE(
         "Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");
       point.reset(point->buffer(_buffer));
-      geometry.reset(geometry->Union(point.get()));
-      addedPointCtr++;
-      LOG_VART(geometry->getArea());
+      stragglers.push_back(point);
     }
+    processed++;
   }
 
-  LOG_DEBUG("Added " << addedPointCtr << " point stragglers to alpha shape.");
+  LOG_VARD(processed);
+
+
+  if (stragglers.size() > 0)
+  {
+    LOG_DEBUG("Adding " << stragglers.size() << " point stragglers to alpha shape.");
+    //  Merge the stragglers geomotries
+    GeometryPtr merged = GeometryUtils::mergeGeometries(stragglers, *geometry->getEnvelopeInternal());
+    //  Join the original geometry with the stragglers geometry
+    geometry.reset(geometry->Union(merged.get()));
+  }
+  LOG_VART(geometry->getArea());
 }
 
 }
