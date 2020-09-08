@@ -760,12 +760,23 @@ See the User Guide for more details on command usage.
 hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.osm
 -----
 
+===== Make a perturbed copy of a map:
+
+-----
+    hoot perty input.osm perturbed.osm
+-----
+
+===== Make a perturbed copy of a map with some adjusted input parameters:
+
+-----
+    hoot perty -D perty.search.distance=20 -D random.way.generalizer.probability=0.7 \
+      input.osm perturbed.osm
+-----
+
 ===== Make a perturbed copy of a map, conflate the original map against the perturbed copy, and score how well the conflation performed:
 
 -----
-    hoot perty -D perty.search.distance=20 -D way.generalize.probability=0.7 input.osm \
-      perturbed.osm
-    hoot perty --score input.osm perturbed.osm
+    hoot perty input.osm /my/output/directory --score
 -----
 
 ===== Display the internal tag schema that Hootenanny uses:
