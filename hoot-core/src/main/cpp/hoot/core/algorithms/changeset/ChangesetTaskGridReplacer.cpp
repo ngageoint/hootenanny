@@ -472,10 +472,6 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
   conf().set(
     ConfigOptions::getConvertBoundingBoxKey(),
     GeometryUtils::envelopeToConfigString(_taskGridBounds));
-  // change these, so we can open the files in josm; not sure if these are helping...
-  //conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
-  //conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
-  //conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), false);
   // use lenient bounds
   conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), true);
   conf().set(
@@ -483,7 +479,6 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
   conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), false);
   //conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
 
-  // TODO: make a simple diff conflate utility method
   // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
   // config.
   conf().set(
@@ -507,7 +502,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
   }
 
   LOG_STATUS(
-    "Loading replacment data for diff calc from: ..." << _replacementUrl.right(25) << "...");
+    "Loading replacement data for diff calc from: ..." << _replacementUrl.right(25) << "...");
   OsmMapPtr diffMap(new OsmMap());
   IoUtils::loadMap(diffMap, _replacementUrl, true, Status::Unknown1);
   const int replacementMapSize = diffMap->size();
@@ -541,7 +536,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
 
   LOG_STATUS(
     "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << "(" <<
+    " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << " (skipped " <<
     StringUtils::formatLargeNumber(diffGen.getNumUnconflatableElementsDiscarded()) <<
     " unconflatable)");
   _subTaskTimer.restart();
@@ -549,8 +544,6 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
   LOG_STATUS(
     "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
     " to: ..." << outputFile.right(25) << "...");
-  //conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
-  //MapProjector::projectToWgs84(diffMap);
   IoUtils::saveMap(diffMap, outputFile);
   LOG_STATUS(
     "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<

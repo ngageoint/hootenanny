@@ -44,6 +44,7 @@
 #include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/criterion/OrCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -76,6 +77,7 @@ _wayToSnapCriterionClassName("hoot::WayCriterion"),
 _wayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion"),
 _snapWayStatuses(QStringList(Status(Status::Unknown2).toString())),
 _snapToWayStatuses(QStringList(Status(Status::Unknown1).toString())),
+_minTypeMatchScore(-1.0),
 _numSnappedToWays(0),
 _numSnappedToWayNodes(0),
 _taskStatusUpdateInterval(1000)
@@ -117,6 +119,8 @@ void UnconnectedWaySnapper::setConfiguration(const Settings& conf)
   setMarkSnappedWays(confOpts.getSnapUnconnectedWaysMarkSnappedWays());
   setReviewSnappedWays(confOpts.getSnapUnconnectedWaysReviewSnappedWays());
   setMarkOnly(confOpts.getSnapUnconnectedWaysMarkOnly());
+
+  setMinTypeMatchScore(confOpts.getSnapUnconnectedWaysMinimumTypeMatchScore());
 
   _conf = conf;
 }
@@ -208,13 +212,23 @@ void UnconnectedWaySnapper::setSnapWayStatuses(const QStringList& statuses)
   StringUtils::removeEmptyStrings(_snapWayStatuses);
 }
 
- void UnconnectedWaySnapper::setSnapToWayStatuses(const QStringList& statuses)
+void UnconnectedWaySnapper::setSnapToWayStatuses(const QStringList& statuses)
 {
   _snapToWayStatuses = statuses;
   StringUtils::removeEmptyStrings(_snapToWayStatuses);
 }
 
-void UnconnectedWaySnapper::apply(OsmMapPtr& map)
+void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
+{
+  if (score <= 0.0 || score > 1.0)
+  {
+    throw IllegalArgumentException(
+      "Minimum type match score must be greater than 0 and less than or equal to 1.");
+  }
+  _minTypeMatchScore = score;
+}
+
+ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
 {
   _map = map;
   _numAffected = 0;
@@ -283,13 +297,20 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
         {
           NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
 
+          // TODO
+          Tags wayTags;
+          if (_minTypeMatchScore != -1.0)
+          {
+            wayTags = wayToSnap->getTags();
+          }
+
           // Try to find the nearest way node satisfying the specifying way node criteria that
           // is within the max reuse distance (if one was specified) and snap the unconnected way
           // node.  The reuse of existing way nodes on way being snapped to is done in order to cut
           // back on the number of new way nodes being added.
           if (_snapToExistingWayNodes)
           {
-            snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode);
+            snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode, wayTags);
           }
 
           if (!snapOccurred)
@@ -297,7 +318,7 @@ void UnconnectedWaySnapper::apply(OsmMapPtr& map)
             // If we weren't able to snap to a nearby way node or the snapping directly to way nodes
             // option was turned off, we're going to try to find a nearby way and snap onto the
             // closest location on it.
-            snapOccurred = _snapUnconnectedNodeToWay(unconnectedEndNode);
+            snapOccurred = _snapUnconnectedNodeToWay(unconnectedEndNode, wayTags);
           }
 
           if (snapOccurred)
@@ -634,7 +655,8 @@ int UnconnectedWaySnapper::_getNodeToSnapWayInsertIndex(const NodePtr& nodeToSna
   return nodeToSnapInsertIndex;
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap)
+bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap,
+                                                          const Tags& wayToSnapTags)
 {
   if (!nodeToSnap)
   {
@@ -653,6 +675,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
       "No nearby way nodes to snap to for " << nodeToSnap->getElementId() <<
       ". Skipping snapping...");
   }
+
+  OsmSchema& schema = OsmSchema::getInstance();
 
   // For each way node neighbor, let's try snapping to the first one that we can.
   for (QList<ElementId>::const_iterator wayNodesToSnapToItr = wayNodesToSnapTo.begin();
@@ -684,6 +708,22 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
           Distance::euclidean(wayNodeToSnapTo->toCoordinate(), nodeToSnap->toCoordinate()) <=
             _maxNodeReuseDistance*/)
       {
+        // TODO
+        if (!wayToSnapTags.isEmpty())
+        {
+          const std::vector<ConstWayPtr> containingWays =
+            WayUtils::getContainingWaysByNodeId(wayNodeToSnapToId, _map);
+          for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
+               containingWaysItr != containingWays.end(); ++containingWaysItr)
+          {
+            if (schema.explicitTypeMismatch(
+                  wayToSnapTags, (*containingWaysItr)->getTags(), _minTypeMatchScore))
+            {
+              continue;
+            }
+          }
+        }
+
         // Snap the input way node to the nearest way node neighbor we found.
         LOG_TRACE(
           "Snapping way node: " << nodeToSnap->getId() << " to way node: " << wayNodeToSnapToId);
@@ -768,7 +808,8 @@ void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped)
     QString::fromStdString(className()), 1.0);
 }
 
-bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap)
+bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
+                                                      const Tags& wayToSnapTags)
 {
   if (!nodeToSnap)
   {
@@ -776,6 +817,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap)
   }
 
   LOG_TRACE("Attempting to snap unconnected node: " << nodeToSnap->getId() << " to a way...");
+
+  OsmSchema& schema = OsmSchema::getInstance();
 
   // get nearby ways
   const QList<ElementId> waysToSnapTo =
@@ -786,6 +829,16 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap)
     // for each neighboring way
     WayPtr wayToSnapTo = _map->getWay((*waysToSnapToItr).getId());
     LOG_VART(wayToSnapTo);
+
+    // TODO
+    if (!wayToSnapTags.isEmpty())
+    {
+      if (schema.explicitTypeMismatch(wayToSnapTags, wayToSnapTo->getTags(), _minTypeMatchScore))
+      {
+        continue;
+      }
+    }
+
     if (_snapUnconnectedNodeToWay(nodeToSnap, wayToSnapTo))
     {
       _snappedWayNodeIds.append(nodeToSnap->getId());

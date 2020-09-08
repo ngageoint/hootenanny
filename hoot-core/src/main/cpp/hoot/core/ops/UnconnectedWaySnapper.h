@@ -87,6 +87,17 @@ public:
   virtual void apply(OsmMapPtr& map);
 
   /**
+   * Finds the closest endpont on 'disconnected' and snaps it to the closest node in 'connectTo'
+   *
+   * @param map Map containing ways
+   * @param disconnected Disconnected way that needs to be connected
+   * @param connectTo Way to connect the disconnected way to
+   * @returns True if the ways were successfully snapped together
+   */
+  static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected,
+                                       const WayPtr& connectTo);
+
+  /**
    * @see OperationStatusInfo
    */
   virtual QString getInitStatusMessage() const
@@ -103,6 +114,8 @@ public:
    */
   virtual QString getDescription() const
   { return "Snaps unconnected ways to the nearest way."; }
+
+  virtual std::string getClassName() const { return className(); }
 
   /**
    * @see Configurable
@@ -126,19 +139,7 @@ public:
   void setMarkSnappedWays(bool mark) { _markSnappedWays = mark; }
   void setReviewSnappedWays(bool review) { _reviewSnappedWays = review; }
   void setMarkOnly(bool markOnly) { _markOnly = markOnly; }
-
-  /**
-   * Finds the closest endpont on 'disconnected' and snaps it to the closest node in 'connectTo'
-   *
-   * @param map Map containing ways
-   * @param disconnected Disconnected way that needs to be connected
-   * @param connectTo Way to connect the disconnected way to
-   * @returns True if the ways were successfully snapped together
-   */
-  static bool snapClosestEndpointToWay(OsmMapPtr map, const WayPtr& disconnected,
-                                       const WayPtr& connectTo);
-
-  virtual std::string getClassName() const { return className(); }
+  void setMinTypeMatchScore(double score);
 
 private:
 
@@ -184,6 +185,9 @@ private:
   // feature indexes used for ways being snapped to
   std::shared_ptr<Tgs::HilbertRTree> _snapToWayIndex;
   std::deque<ElementId> _snapToWayIndexToEid;
+
+  // TODO
+  double _minTypeMatchScore;
 
   // keep track of the way nodes that are snapped
   QList<long> _snappedWayNodeIds;
@@ -260,17 +264,19 @@ private:
    * Attempts to snap an unconnected way end node to another way node
    *
    * @param nodeToSnap the node to attempt to snap
+   * @param wayToSnapTags TODO
    * @return true if the node was snapped; false otherwise
    */
-  bool _snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap);
+  bool _snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap, const Tags& wayToSnapTags = Tags());
 
   /*
    * Attempts to snap an unconnected way end node to another way
    *
    * @param nodeToSnap the node to attempt to snap
+   * @param wayToSnapTags TODO
    * @return true if the node was snapped; false otherwise
    */
-  bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap);
+  bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap, const Tags& wayToSnapTags = Tags());
 
   /*
    * Snap a particular node into a way at its closest intersecting point

@@ -52,6 +52,7 @@ class UnconnectedWaySnapperTest : public HootTestFixture
   CPPUNIT_TEST(runStaticSnapTest);
   CPPUNIT_TEST(runReviewSnappedTest);
   CPPUNIT_TEST(runMarkOnlyTest);
+  CPPUNIT_TEST(runTypeMatchTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -265,6 +266,48 @@ public:
     writer.setIsDebugMap(true);
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
+  }
+
+  void runTypeMatchTest()
+  {
+    const QString testName = "runTypeMatch";
+
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + testName + "In1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(_inputPath + testName + "In2.osm", map);
+
+    UnconnectedWaySnapper uut;
+    uut.setAddCeToSearchDistance(false);
+    uut.setMaxNodeReuseDistance(0.5);
+    uut.setMaxSnapDistance(5.0);
+    uut.setMarkSnappedNodes(true);
+    uut.setMarkSnappedWays(true);
+    uut.setSnapToExistingWayNodes(true);
+    uut.setWayDiscretizationSpacing(1.0);
+    uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
+    uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
+    uut.setWayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion");
+    uut.setWayToSnapCriterionClassName("hoot::WayCriterion");
+    uut.setWayToSnapToCriterionClassName("hoot::WayCriterion");
+    uut.setMarkOnly(false);
+    uut.setReviewSnappedWays(false);
+    // TODO
+    uut.setMinTypeMatchScore(0.8);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmXmlWriter writer;
+    writer.setIsDebugMap(true);
+    writer.write(map, _outputPath + testName +  + "Out.osm");
+
+    CPPUNIT_ASSERT_EQUAL(136L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(123L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(13L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 };

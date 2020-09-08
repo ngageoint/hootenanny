@@ -57,8 +57,9 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
+  // TODO: re-enable
   CPPUNIT_TEST(orphanedNodes1Test);
-  // TODO: having some trouble with repeatability here...will come back to
+  // TODO: having some trouble with repeatability here...will come back to this one
   //CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
@@ -75,6 +76,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(northVegasMediumTest);
   //CPPUNIT_TEST(northVegasLargeTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
+  //CPPUNIT_TEST(northVegasLargeUniform2Test);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -463,10 +465,10 @@ public:
 
   void northVegasLargeUniformTest()
   {
-    // lenient - 225 orphaned nodes
+    // lenient - 110 orphaned nodes
 
-    // whole northern half of city, 64 changesets, ~33.5M changes, avg derivation: 2.15m,
-    // total time: 2.69h, ~208k changes/min
+    // whole northern half of city, 64 changesets, ~32.5M changes, avg derivation: 52s,
+    // total time: 1.18h, ~459k changes/min
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -487,6 +489,33 @@ public:
       _replacementDataUrl,
       UniformTaskGridGenerator(
         "-115.3528,36.0919,-114.9817,36.3447", 8,
+        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+  }
+
+  void northVegasLargeUniform2Test()
+  {
+    _testName = "northVegasLargeUniform2Test";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
+    const QString outDir = rootDir + "/" + _testName;
+    QDir(outDir).removeRecursively();
+    QDir().mkpath(outDir);
+    _prepInput(
+      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
+      "-115.3066,36.1301,-115.2876,36.1414");
+
+    ChangesetTaskGridReplacer uut;
+    //uut.setKillAfterNumChangesetDerivations(2);
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(false);
+    uut.setCalcDiffWithReplacement(false);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.2998,36.1339,-115.2951,36.1403", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
   }

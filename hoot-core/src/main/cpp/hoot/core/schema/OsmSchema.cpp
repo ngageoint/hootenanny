@@ -1848,7 +1848,6 @@ QSet<QString> OsmSchema::getGenericKvps() const
     _genericKvps.insert("poi=yes");
     _genericKvps.insert("building=yes");
     _genericKvps.insert("area=yes");
-    //_genericKvps.insert("type=route");
   }
   return _genericKvps;
 }

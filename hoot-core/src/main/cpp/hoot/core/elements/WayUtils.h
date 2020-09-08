@@ -165,6 +165,18 @@ public:
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
+   * TODO
+   *
+   * @param nodeId
+   * @param map
+   * @param wayCriterion
+   * @return
+   */
+  static std::vector<ConstWayPtr> getContainingWaysByNodeId(
+    const long nodeId, const ConstOsmMapPtr& map,
+    const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
+
+  /**
    * Determines if two nodes are contained in exactly the same set of ways
    *
    * @param nodeId1 ID of the first node to examine

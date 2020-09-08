@@ -49,10 +49,11 @@ void WaySublineCollection::addSubline(const WaySubline& subline)
     {
       if (subline.overlaps(_sublines[i]))
       {
-        throw HootException("A subline string may not contain overlapping sublines.");
+        // throw HootException("A subline string may not contain overlapping sublines.");
 
-        //use this for debugging only
-        /*if (logWarnCount < Log::getWarnMessageLimit())
+        // use this for debugging only
+        // TODO: is this ok?
+        if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("A subline string may not contain overlapping sublines.");
         }
@@ -60,7 +61,7 @@ void WaySublineCollection::addSubline(const WaySubline& subline)
         {
           LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
         }
-        logWarnCount++;*/
+        logWarnCount++;
       }
     }
 
@@ -80,7 +81,6 @@ Meters WaySublineCollection::getLength() const
   {
     result += _sublines[i].getLength();
   }
-
   return result;
 }
 
@@ -92,12 +92,12 @@ WaySublineCollection WaySublineCollection::invert() const
     return result;
   }
 
-  // We are going to sort all the way sublines so we can generate the inverted sublines starting
+  // We are going to sort all the way sublines, so we can generate the inverted sublines starting
   // at the beginning and working on to the end. We'll maintain a simple variable for where the
   // next subline starts and then use a little simple logic to determine when we've found a legit
   // inverted subline and push it on to the result.
 
-  // make a copy so we can sort.
+  // make a copy so we can sort
   vector<WaySubline> sublines = _sublines;
   sort(sublines.begin(), sublines.end(), compareSublines);
 
@@ -124,14 +124,14 @@ WaySublineCollection WaySublineCollection::invert() const
     }
     else
     {
-      // add another subline from the sublineStart to the beginning of the next subline.
+      // add another subline from the sublineStart to the beginning of the next subline
       result.addSubline(WaySubline(sublineStart, sublines[i].getStart()));
       // the next negative subline starts at the end of this positive subline
       sublineStart = sublines[i].getEnd();
     }
   }
 
-  // if we haven't reached the end, then add one more subline for the end of the line.
+  // If we haven't reached the end, then add one more subline for the end of the line.
   if (sublineStart.isLast() == false)
   {
     result.addSubline(WaySubline(sublineStart,
@@ -161,7 +161,6 @@ bool WaySublineCollection::touches(const WaySublineCollection& other) const
       result = _sublines[i].touches(other._sublines[j]);
     }
   }
-
   return result;
 }
 

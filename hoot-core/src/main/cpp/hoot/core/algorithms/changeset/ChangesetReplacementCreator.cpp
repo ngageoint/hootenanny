@@ -637,17 +637,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   OsmMapPtr secMap = _loadSecMap();
   MemoryUsageChecker::getInstance().check();
 
-  // TODO
-  //std::shared_ptr<ElementIdRemapper> idRemapper(new ElementIdRemapper());
-  // TODO: change to info/debug
-  //LOG_STATUS(
-    //"Recording id mappings for: " << GeometryTypeCriterion::typeToString(geometryType) << "...");
-  //idRemapper->apply(secMap);
-  //LOG_STATUS(
-    //"Recorded " << StringUtils::formatLargeNumber(idRemapper->getIdMappings().size()) <<
-    //" id mappings for: " << GeometryTypeCriterion::typeToString(geometryType) << "...");
-  //_secIdMappings[GeometryTypeCriterion::typeToString(geometryType)] = idRemapper;
-
   _removeMetadataTags(secMap);
 
   if (markMissing)
@@ -1882,7 +1871,8 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
     QString::fromStdString(WayNodeCriterion::className()));
   lineSnapper.setWayToSnapCriterionClassName(typeCriterionClassName);
   lineSnapper.setWayToSnapToCriterionClassName(typeCriterionClassName);
-  //LOG_STATUS("\t" << lineSnapper.getInitStatusMessage());
+  // TODO
+  lineSnapper.setMinTypeMatchScore(0.8);
   lineSnapper.apply(map);
   LOG_DEBUG(lineSnapper.getCompletedStatusMessage());
 

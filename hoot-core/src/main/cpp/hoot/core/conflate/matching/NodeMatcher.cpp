@@ -284,11 +284,12 @@ double NodeMatcher::scorePair(long nid1, long nid2)
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
-      LOG_WARN("Greater than seven intersections at one spot? Odd.  Giving it a high angleScore.");
+      LOG_DEBUG(
+        "Greater than seven intersections at one spot? Odd.  Giving it a high angle score.");
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
-      LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
+      LOG_DEBUG(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
     logWarnCount++;
     LOG_VART(nid1);
