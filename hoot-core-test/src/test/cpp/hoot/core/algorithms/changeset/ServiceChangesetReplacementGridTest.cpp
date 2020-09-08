@@ -57,8 +57,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  // TODO: re-enable
-  //CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
   // TODO: having some trouble with repeatability here...will come back to this one
   //CPPUNIT_TEST(orphanedNodes2Test);
 
@@ -75,7 +74,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(northVegasSmallUniformTest);
   //CPPUNIT_TEST(northVegasMediumTest);
   //CPPUNIT_TEST(northVegasLargeTest);
-  CPPUNIT_TEST(northVegasLargeUniformTest);
+  //CPPUNIT_TEST(northVegasLargeUniformTest);
   //CPPUNIT_TEST(northVegasLargeUniform2Test);
 
   CPPUNIT_TEST_SUITE_END();
