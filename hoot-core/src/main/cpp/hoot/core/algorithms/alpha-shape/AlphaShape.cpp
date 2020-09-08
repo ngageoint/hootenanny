@@ -29,10 +29,10 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/GeometryConverter.h>
 #include <hoot/core/util/GeometryUtils.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/StringUtils.h>
 
 // GEOS
@@ -40,8 +40,8 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/MultiPolygon.h>
-#include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Point.h>
+#include <geos/util/IllegalArgumentException.h>
 using namespace geos::geom;
 
 // Qt
@@ -87,63 +87,6 @@ private:
   set<int> _children;
 };
 
-class ComparePolygon
-{
-public:
-
-  ComparePolygon(Envelope e)
-  {
-    _curve.reset(new HilbertCurve(2, 8));
-    _e = e;
-    _size = (1 << 8) - 1;
-  }
-
-  ComparePolygon(const ComparePolygon& other)
-  {
-    _curve = other._curve;
-    _e = other._e;
-    _size = other._size;
-  }
-
-  bool operator()(const GeometryPtr& p1, const GeometryPtr& p2)
-  {
-    const Envelope* e1 = p1->getEnvelopeInternal();
-    const Envelope* e2 = p2->getEnvelopeInternal();
-    double x1 = (e1->getMinX() + e1->getMaxX()) / 2.0;
-    double x2 = (e2->getMinX() + e2->getMaxX()) / 2.0;
-    double y1 = (e1->getMinY() + e1->getMaxY()) / 2.0;
-    double y2 = (e2->getMinY() + e2->getMaxY()) / 2.0;
-
-    int i1[2], i2[2];
-    i1[0] = (int)((x1 - _e.getMinX()) / (_e.getWidth()) * _size);
-    i1[1] = (int)((y1 - _e.getMinY()) / (_e.getHeight()) * _size);
-    i2[0] = (int)((x2 - _e.getMinX()) / (_e.getWidth()) * _size);
-    i2[1] = (int)((y2 - _e.getMinY()) / (_e.getHeight()) * _size);
-
-    bool result;
-    int h1 = _curve->encode(i1);
-    int h2 = _curve->encode(i2);
-    if (h1 == h2)
-    {
-      result = p1 < p2;
-    }
-    else
-    {
-      result = h1 < h2;
-    }
-
-    return result;
-  }
-
-private:
-
-  ComparePolygon();
-  ComparePolygon& operator=(ComparePolygon& other);
-
-  Envelope _e;
-  std::shared_ptr<HilbertCurve> _curve;
-  double _size;
-};
 
 AlphaShape::AlphaShape(double alpha)
   : _alpha(alpha),
@@ -450,81 +393,14 @@ GeometryPtr AlphaShape::toGeometry()
 
   LOG_DEBUG("Joining " << StringUtils::formatLargeNumber(faces.size()) << " faces...");
 
-  // while there is more than one geometry
-  while (faces.size() > 1)
-  {
-    LOG_TRACE("Sorting size: " << faces.size());
-    // Sort polygons using the Hilbert value. This increases the chances that nearby polygons will
-    // be merged early and speed up the union process.
-    ComparePolygon compare(e);
-    sort(faces.begin(), faces.end(), compare);
-
-    LOG_TRACE("Remaining pieces: " << faces.size());
-    temp.resize(0);
-    temp.reserve(faces.size() / 2 + 1);
-    // Merge pairs at a time. This makes the join faster.
-    for (size_t i = 0; i < faces.size() - 1; i += 2)
-    {
-      GeometryPtr g;
-      // Sometimes GEOS gives results that are incorrect. In those cases we try cleaning the
-      // geometries and attempting it again.
-      bool cleanAndRetry = false;
-      try
-      {
-        double area = faces[i]->getArea() + faces[i + 1]->getArea();
-        g.reset(faces[i]->Union(faces[i + 1].get()));
-        if (g->isEmpty() || fabs(g->getArea() - area) > 0.1)
-        {
-          cleanAndRetry = true;
-        }
-      }
-      catch (const geos::util::GEOSException& e)
-      {
-        LOG_TRACE("Topology error. Attempting to fix it: " << e.what());
-        cleanAndRetry = true;
-      }
-
-      if (cleanAndRetry)
-      {
-        faces[i].reset(GeometryUtils::validateGeometry(faces[i].get()));
-        faces[i + 1].reset(GeometryUtils::validateGeometry(faces[i + 1].get()));
-        try
-        {
-          g.reset(faces[i]->Union(faces[i + 1].get()));
-        }
-        // if the cleaning didn't fix the problem
-        catch(const geos::util::GEOSException& e)
-        {
-          // report an error
-          QString error = "Error unioning two geometries. " + QString(e.what()) + "\n" +
-              "geom1: " + QString::fromStdString(faces[i]->toString()) + "\n" +
-              "geom2: " + QString::fromStdString(faces[i + 1]->toString());
-          throw HootException(error);
-        }
-      }
-
-      temp.push_back(g);
-    }
-    // If there are an odd number of entries, just add the last one.
-    if (faces.size() % 2 == 1)
-    {
-      temp.push_back(faces[faces.size() - 1]);
-    }
-
-    faces = temp;
-  }
+  GeometryPtr result = GeometryUtils::mergeGeometries(faces, e);
 
   LOG_DEBUG("Creating output geometry...");
 
-  GeometryPtr result;
-  if (faces.size() == 1)
-  {
-    result = faces[0];
-  }
-  else
-  {
+  if (!result || result->isEmpty())
     result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
-  }
+
+  //  Validate the resulting geometry
   result.reset(GeometryUtils::validateGeometry(result.get()));
 
   // I've never seen this happen when the cleaning step above is used, but a check can't hurt.

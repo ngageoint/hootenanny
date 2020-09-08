@@ -208,6 +208,9 @@ public:
    * tag
    */
   static QMap<int, geos::geom::Envelope> readBoundsFileWithIds(const QString& input);
+
+
+  static std::shared_ptr<geos::geom::Geometry> mergeGeometries(std::vector<std::shared_ptr<geos::geom::Geometry>> geometries, const geos::geom::Envelope& envelope);
 };
 
 }
