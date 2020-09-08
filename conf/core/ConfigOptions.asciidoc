@@ -3320,7 +3320,7 @@ Dynamic variable value initially assigned to a PERTY test dynamic variable when 
 
 A list of one or more numeric PERTY variables to be assigned a start value (specified in
 perty.test.dynamic.variable.start.value) and then incremented once per test run by
-`perty-test` (specified in perty.test.dynamic.variable.increment) to the value of.  The list is
+`perty-test` (specified in perty.test.dynamic.variable.increment) to the value of. The list is
 restricted to Hootenanny PERTY options only (perty.*) of a numeric type.
 
 === perty.test.expected.scores
@@ -3821,22 +3821,22 @@ The way subline matcher to use when determining matching sublines.
 * Data Type: double
 * Default Value: `0.05`
 
-The probability that a feature will be removed.
+The probability that a feature will be removed randomly by RandomElementRemover.
 
 === random.element.renamer.change.probability
 
 * Data Type: double
 * Default Value: `0.05`
 
-The probability of a change to each character in the name. The expected number of changes is
-`perty.name.change.probability` * str.size().
+The probability of a random change to each character in the name. when using RandomElementRenamer.
+The expected number of changes is this option's value * str.size().
 
 === random.element.renamer.probability
 
 * Data Type: double
 * Default Value: `0.05`
 
-The probability that a name will be modified.
+The probability that a name will be modified randomly by RandomElementRenamer.
 
 === random.forest.model.trees
 
@@ -3850,25 +3850,27 @@ The number of trees used to train a random forest conflation model.
 * Data Type: double
 * Default Value: `1.0`
 
-The distance that a feature is moved is based on the circular error of the source point. The
-new point will be put within N(0, sigma^2) * moveMultiplier meters of the source point where
-sigma is the standard deviation associated with the source point.
+The distance that a feature is moved is based on the circular error of the source point when using
+RandomNodeDuplicator. The new point will be put within N(0, sigma^2) * moveMultiplier meters of the
+source point where sigma is the standard deviation associated with the source point.
 
 === random.node.duplicator.probability
 
 * Data Type: double
 * Default Value: `0.10`
 
-The probability of at least one duplicate node being created. See `random.node.duplicator.sigma` to
-determine how many duplicates will be created.
+The probability of at least one duplicate node being randomly created when using
+RandomNodeDuplicator. See `random.node.duplicator.sigma` to determine how many duplicates will be
+created.
 
 === random.node.duplicator.sigma
 
 * Data Type: double
 * Default Value: `1.0`
 
-The number of duplicate nodes is set as `round(abs(N(0, sigma^2))) + 1`. Setting sigma to 0 will
-guarantee that there will always be exactly one duplicate.
+The number of duplicate randomly generated nodes is set as `round(abs(N(0, sigma^2))) + 1` when
+using RandomNodeDuplicator. Setting sigma to 0 will guarantee that there will always be exactly one
+duplicate.
 
 === random.seed
 
@@ -3886,16 +3888,16 @@ pseudo-random results in the output.
 * Default Value:
 ** ``
 
-A list of tag keys which are exempt from the tag removal done by RandomTagModifier. This is useful
-for preventing the removal of custom tags which are needed in the output. By default, all metadata
-and ref tags are exempted.
+A list of tag keys which are exempt from the random tag removal done by RandomTagModifier. This is
+useful for preventing the removal of custom tags which are needed in the output. By default, all
+metadata and ref tags are exempted.
 
 === random.tag.modifier.probability
 
 * Data Type: double
 * Default Value: `0.05`
 
-Set the probability that a tag will be removed.
+The probability that a tag will be randomly removed when using RandomTagModifier.
 
 === random.tag.modifier.substitution.keys
 
@@ -3903,9 +3905,9 @@ Set the probability that a tag will be removed.
 * Default Value:
 ** `highway`
 
-A list of tag keys which, rather than being removed by the RandomTagModifier, will have their
-values replaced instead.  The tag keys in the list match one to one with the replacement values in
-random.tag.modifier.subsitution.values.
+A list of tag keys which, rather than being randomly removed by the RandomTagModifier, will have
+their values replaced instead.  The tag keys in the list match one to one with the replacement
+values in `random.tag.modifier.subsitution.values`.
 
 === random.tag.modifier.substitution.values
 
@@ -3913,38 +3915,41 @@ random.tag.modifier.subsitution.values.
 * Default Value:
 ** `road`
 
-A list of tag values which, should be substituted by RandomTagModifier.  The tag values in the
-list match one to one with the replacement values in random.tag.modifier.subsitution.keys.
+A list of tag values which should be substituted by RandomTagModifier when randomly modifying tags.
+The tag values in the list match one to one with the replacement values in
+`random.tag.modifier.subsitution.keys`.
 
 === random.way.generalizer.epsilon
 
 * Data Type: double
 * Default Value: `1.0`
 
-Distance parameter, in meters, that determines to what degree a way is generalized by
-RandomWayGeneralizer, which isa part of PERTY. Higher values result in more generalization (more
-nodes removed).
+Distance parameter, in meters, that determines to what degree a way is randomly generalized by
+RandomWayGeneralizer. Higher values result in a higher degree of generalization (more nodes
+removed).
 
 === random.way.generalizer.probability
 
 * Data Type: double
 * Default Value: `0.1`
 
-The probability between 0.0 and 1.0 that a way will be generalized by PERTY.
+The probability between 0.0 and 1.0 that a way will be randomly generalized by RandomWayGeneralizer.
 
 === random.way.splitter.min.node.spacing
 
 * Data Type: double
 * Default Value: `1`
 
-The minimum spacing, in meters, that may occur between nodes created by PERTY way splits.
+The minimum spacing, in meters, that may occur between nodes created by RandomWayGeneralizer way
+splits.
 
 === random.way.splitter.probability
 
 * Data Type: double
 * Default Value: `0.1`
 
-The probability between 0.0 and 1.0 that a way will be split into multiple features by PERTY.
+The probability between 0.0 and 1.0 that a way will randomly be split into multiple features by
+RandomWayGeneralizer.
 
 === reader.add.source.datetime
 
