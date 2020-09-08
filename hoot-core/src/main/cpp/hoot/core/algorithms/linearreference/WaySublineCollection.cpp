@@ -49,10 +49,11 @@ void WaySublineCollection::addSubline(const WaySubline& subline)
     {
       if (subline.overlaps(_sublines[i]))
       {
-        // throw HootException("A subline string may not contain overlapping sublines.");
+        // We used to throw here, but found a situation where what otherwise would have been a
+        // perfectly good diff couldn't be generated b/c of this error. So, switched to log warnings
+        // instead with no noticeable negative impact on conflate output.
 
-        // use this for debugging only
-        // TODO: is this ok?
+        // throw HootException("A subline string may not contain overlapping sublines.");
         if (logWarnCount < Log::getWarnMessageLimit())
         {
           LOG_WARN("A subline string may not contain overlapping sublines.");

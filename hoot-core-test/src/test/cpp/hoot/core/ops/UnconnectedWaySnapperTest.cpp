@@ -271,6 +271,9 @@ public:
 
   void runTypeMatchTest()
   {
+    // Specifically, this tests that road_marking=solid_stop_line features don't get snapped to
+    // roads.
+
     const QString testName = "runTypeMatch";
 
     OsmXmlReader reader;
@@ -295,7 +298,9 @@ public:
     uut.setWayToSnapToCriterionClassName("hoot::WayCriterion");
     uut.setMarkOnly(false);
     uut.setReviewSnappedWays(false);
-    // TODO
+    // By default, way type comparison are turned off and only the snap criteria influence what
+    // may be snapped together (score == -1.0). This adds the requirement that the two ways being
+    // snapped together must have at a minimum a type similarity as defined by the schema.
     uut.setMinTypeMatchScore(0.8);
     uut.apply(map);
 

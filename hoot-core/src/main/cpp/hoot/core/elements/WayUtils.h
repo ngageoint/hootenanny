@@ -165,12 +165,12 @@ public:
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
-   * TODO
+   * Returns all ways containing an input node
    *
-   * @param nodeId
-   * @param map
-   * @param wayCriterion
-   * @return
+   * @param nodeId ID of the node to return containing ways for
+   * @param map map which owns the input node
+   * @param wayCriterion an optional ElementCriterion to further filter the containing ways
+   * @return a collection of ways
    */
   static std::vector<ConstWayPtr> getContainingWaysByNodeId(
     const long nodeId, const ConstOsmMapPtr& map,

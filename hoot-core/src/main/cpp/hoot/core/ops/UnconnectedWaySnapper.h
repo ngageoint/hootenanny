@@ -186,7 +186,8 @@ private:
   std::shared_ptr<Tgs::HilbertRTree> _snapToWayIndex;
   std::deque<ElementId> _snapToWayIndexToEid;
 
-  // TODO
+  // this can prevent very differently typed ways from being snapped to each other; valid range
+  // greater than 0 and less than or equal to 1; a value of -1.0 ignores the setting completely
   double _minTypeMatchScore;
 
   // keep track of the way nodes that are snapped
@@ -264,7 +265,8 @@ private:
    * Attempts to snap an unconnected way end node to another way node
    *
    * @param nodeToSnap the node to attempt to snap
-   * @param wayToSnapTags TODO
+   * @param wayToSnapTags optional tags of the way being snapped, which forces a type match
+   * requirement between the two ways being snapped based on the value of _minTypeMatchScore
    * @return true if the node was snapped; false otherwise
    */
   bool _snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap, const Tags& wayToSnapTags = Tags());
@@ -273,7 +275,8 @@ private:
    * Attempts to snap an unconnected way end node to another way
    *
    * @param nodeToSnap the node to attempt to snap
-   * @param wayToSnapTags TODO
+   * @param wayToSnapTags optional tags of the way being snapped, which forces a type match
+   * requirement between the two ways being snapped based on the value of _minTypeMatchScore
    * @return true if the node was snapped; false otherwise
    */
   bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap, const Tags& wayToSnapTags = Tags());

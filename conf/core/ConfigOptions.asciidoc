@@ -4544,7 +4544,9 @@ marked with a custom tag.  Useful for debugging purposes.
 * Data Type: double
 * Default Value: `-1.0`
 
-TODO
+The feature type similarity score at or above which two ways being snapped must score. Valid values
+are between 0.0 and 1.0. A value of -1.0 disables the feature type match requirement completely and
+only the snap criterions will influence the snapping.
 
 === snap.unconnected.ways.review.snapped.ways
 

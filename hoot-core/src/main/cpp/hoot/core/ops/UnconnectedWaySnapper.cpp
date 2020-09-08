@@ -297,7 +297,8 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
         {
           NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
 
-          // TODO
+          // If the min type match score was set, pass in the tags of the way being snapped during
+          // comparison for a stricter snap requirement.
           Tags wayTags;
           if (_minTypeMatchScore != -1.0)
           {
@@ -708,7 +709,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
           Distance::euclidean(wayNodeToSnapTo->toCoordinate(), nodeToSnap->toCoordinate()) <=
             _maxNodeReuseDistance*/)
       {
-        // TODO
+        // If the tags of the way being snapped were passed in, we need to do a type comparison.
+        // If the type similarity falls below the configured score, don't snap the ways together.
         if (!wayToSnapTags.isEmpty())
         {
           const std::vector<ConstWayPtr> containingWays =
@@ -830,7 +832,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
     WayPtr wayToSnapTo = _map->getWay((*waysToSnapToItr).getId());
     LOG_VART(wayToSnapTo);
 
-    // TODO
+    // If the tags of the way being snapped were passed in, we need to do a type comparison.
+    // If the type similarity falls below the configured score, don't snap the ways together.
     if (!wayToSnapTags.isEmpty())
     {
       if (schema.explicitTypeMismatch(wayToSnapTags, wayToSnapTo->getTags(), _minTypeMatchScore))

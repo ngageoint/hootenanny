@@ -1871,7 +1871,8 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
     QString::fromStdString(WayNodeCriterion::className()));
   lineSnapper.setWayToSnapCriterionClassName(typeCriterionClassName);
   lineSnapper.setWayToSnapToCriterionClassName(typeCriterionClassName);
-  // TODO
+  // This prevents features of different types snapping to each other that shouldn't do so.
+  // Arbitrarily picking a score here...may require further tweaking.
   lineSnapper.setMinTypeMatchScore(0.8);
   lineSnapper.apply(map);
   LOG_DEBUG(lineSnapper.getCompletedStatusMessage());
