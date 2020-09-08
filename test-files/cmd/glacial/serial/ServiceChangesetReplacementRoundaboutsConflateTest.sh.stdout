@@ -39,30 +39,30 @@ Writing the secondary dataset from: test-files/cmd/glacial/serial/ServiceChanges
 
 Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/sec-original.osm over: -89.6219483,20.9953,-89.6199,20.9979, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ServiceChangesetReplacementRoundaboutsConflateTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
 
-14:35:24.153 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
-14:35:24.154 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
-14:35:24.155 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
-14:35:26.504 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(1871). Skipping neighbor...
-14:35:26.504 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(897). Skipping neighbor...
-14:35:26.507 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(2024). Skipping neighbor...
-14:35:26.510 WARN   ...re/visitors/SpatialIndexer.cpp( 199) hoot::SpatialIndexer: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+17:39:55.813 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+17:39:55.816 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+17:39:55.816 WARN   ...thms/FindNodesInWayFactory.cpp(  71) Internal Problem: Two nodes were found with the same coordinate.
+17:39:58.223 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(1871). Skipping neighbor...
+17:39:58.224 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(897). Skipping neighbor...
+17:39:58.227 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(2024). Skipping neighbor...
+17:39:58.231 WARN   ...re/visitors/SpatialIndexer.cpp( 199) hoot::SpatialIndexer: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/ServiceChangesetReplacementRoundaboutsConflateTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
 Changeset Details: min_lat=20.5214724, max_lat=21.1611171, min_lon=-90.0160752, max_lon=-89.6114693, num_changes=654
-Node(s) Created: 37
-Node(s) Modified: 10
-Node(s) Deleted: 504
-Way(s) Created: 18
+Node(s) Created: 36
+Node(s) Modified: 11
+Node(s) Deleted: 506
+Way(s) Created: 17
 Way(s) Modified: 24
-Way(s) Deleted: 61
+Way(s) Deleted: 60
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 55
-Total Modifications: 34
-Total Deletions: 565
+Total Creations: 53
+Total Modifications: 35
+Total Deletions: 566
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementRoundaboutsConflateTest-xml-replaced.osm for verification...
 

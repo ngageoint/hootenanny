@@ -143,7 +143,7 @@ QString MapCropper::getInitStatusMessage() const
   {
     msg +=
       "..." + QString::fromStdString(_envelopeG->toString())
-        .right(ConfigOptions().getProgressVarPrintLengthMax());
+        .right(ConfigOptions().getProgressVarPrintLengthMax() * 2);
   }
   msg += "...";
   return msg;

@@ -244,6 +244,9 @@
         "import": "religion.json"
     },
     {
+        "import": "road_marking.json"
+    },
+    {
         "import": "roof.json"
     },
     {

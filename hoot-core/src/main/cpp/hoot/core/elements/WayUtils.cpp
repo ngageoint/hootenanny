@@ -92,6 +92,24 @@ std::set<long> WayUtils::getContainingWayIdsByNodeId(const long nodeId,
   return containingWayIds;
 }
 
+std::vector<ConstWayPtr> WayUtils::getContainingWaysByNodeId(
+  const long nodeId, const ConstOsmMapPtr& map,
+  const ElementCriterionPtr& wayCriterion)
+{
+  std::vector<ConstWayPtr> containingWays;
+  const std::set<long> containingWayIds = getContainingWayIdsByNodeId(nodeId, map, wayCriterion);
+  for (std::set<long>::const_iterator containingWayIdsItr = containingWayIds.begin();
+       containingWayIdsItr != containingWayIds.end(); ++containingWayIdsItr)
+  {
+    ConstWayPtr containingWay = map->getWay(*containingWayIdsItr);
+    if (containingWay)
+    {
+      containingWays.push_back(containingWay);
+    }
+  }
+  return containingWays;
+}
+
 QSet<long> WayUtils::getConnectedWays(const long wayId, const ConstOsmMapPtr& map)
 {
   QSet<long> connectedWayIds;

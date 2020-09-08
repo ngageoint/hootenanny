@@ -1,0 +1,21 @@
+[
+    {
+        "dataType": "enumeration",
+        "geometries": [
+            "linestring"
+        ],
+        "influence": 1,
+        "name": "road_marking",
+        "objectType": "tag"
+    },
+    {
+        "isA": "road_marking",
+        "name": "road_marking=*",
+        "objectType": "tag"
+    },
+    {
+        "isA": "road_marking",
+        "name": "road_marking=solid_stop_line",
+        "objectType": "tag"
+    }
+]
