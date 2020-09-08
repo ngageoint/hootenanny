@@ -52,7 +52,6 @@ class DelaunayTriangulation;
 class DisjointSet;
 class Edge;
 class Face;
-class HilbertCurve;
 }
 
 namespace hoot

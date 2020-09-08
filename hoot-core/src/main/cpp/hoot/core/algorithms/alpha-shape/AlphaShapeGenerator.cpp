@@ -38,7 +38,6 @@
 
 // GEOS
 #include <geos/geom/GeometryFactory.h>
-#include <geos/operation/buffer/BufferOp.h>
 
 using namespace geos::geom;
 using namespace std;
