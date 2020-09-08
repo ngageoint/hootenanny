@@ -32,7 +32,7 @@ The following example perturbs the file "reference-in.osm", given the specified 
 those options), and writes the perturbed data to a file "perturbed-out.osm":
 
 --------------------------------------
-hoot perty -D perty.search.distance=20 -D perty.way.generalize.probability=0.7
+hoot perty -D perty.search.distance=20 -D random.way.generalizer.probability=0.7
   reference-in.osm perturbed-out.osm
 --------------------------------------
 
@@ -42,7 +42,7 @@ to the "outdir" directory:
 
 --------------------------------------
 hoot perty -D perty.systematic.error.x=1 -D perty.systematic.error.y=1 \
- reference-in.osm outdir --score
+ reference-in.osm /my/output/directory --score
 --------------------------------------
 
 The following example will run 10 separate tests with five simulations per test (a total of 50 generated PERTY scores, five per test).
@@ -59,7 +59,7 @@ hoot perty -D perty.test.num.runs=10 -D perty.test.num.simulations=5 \
   -D perty.test.dynamic.variable.start.value=1.0 \
   -D perty.test.dynamic.variable.increment=5.0 \
   -D perty.test.expected.scores=0.9;0.95;0.93;0.952;0.91;0.95;0.9;0.95;0.95;0.95 \
-  -D perty.test.allowed.score.variance=0.05 reference-in.osm output-dir --test
+  -D perty.test.allowed.score.variance=0.05 reference-in.osm /my/output/directory --test
 --------------------------------------
 
 === Perty Tests
