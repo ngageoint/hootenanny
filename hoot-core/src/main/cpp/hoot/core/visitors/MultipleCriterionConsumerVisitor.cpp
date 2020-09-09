@@ -93,14 +93,15 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
         criteriaSatisfied = true;
         LOG_TRACE(
           "One OR'd criterion satisfied in: " << toString() << ". Filter satisfied for: " <<
-          e);
+          e->getElementId());
         break;
       }
     }
     if (!criteriaSatisfied)
     {
       LOG_TRACE(
-        "No OR'd criterion satisfied in: " <<  toString() << ". Filter not satisfied for: " << e);
+        "No OR'd criterion satisfied in: " <<  toString() << ". Filter not satisfied for: " <<
+        e->getElementId());
     }
   }
   else
@@ -116,14 +117,15 @@ bool MultipleCriterionConsumerVisitor::_criteriaSatisfied(const ConstElementPtr&
         criteriaSatisfied = false;
         LOG_TRACE(
           "One chained criterion not satisfied in: " << toString() << ". Filter not satisfied " <<
-          "for: " << e);
+          "for: " << e->getElementId());
         break;
       }
     }
     if (criteriaSatisfied)
     {
       LOG_TRACE(
-        "One chained criteria satisfied in: " << toString() << ". Filter satisfied for: " << e);
+        "One chained criteria satisfied in: " << toString() << ". Filter satisfied for: " <<
+        e->getElementId());
     }
   }
   return criteriaSatisfied;

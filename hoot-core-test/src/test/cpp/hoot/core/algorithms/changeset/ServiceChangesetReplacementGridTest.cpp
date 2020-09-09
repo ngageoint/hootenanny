@@ -57,7 +57,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  CPPUNIT_TEST(orphanedNodes1Test);
+  //CPPUNIT_TEST(orphanedNodes1Test);
   // TODO: having some trouble with repeatability here...will come back to this one
   //CPPUNIT_TEST(orphanedNodes2Test);
 
@@ -67,7 +67,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(github4174Test);
   //CPPUNIT_TEST(github4174UniformTest);
   //CPPUNIT_TEST(github4170UniformTest);
-  //CPPUNIT_TEST(github4216UniformTest);
+  CPPUNIT_TEST(github4216UniformTest);
   //CPPUNIT_TEST(thirtyEightFortyThreeTest);
 
   //CPPUNIT_TEST(northVegasSmallTest);
@@ -124,6 +124,7 @@ public:
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(false);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -338,6 +339,7 @@ public:
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(true);
+    uut.setOutputNonConflatable(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,

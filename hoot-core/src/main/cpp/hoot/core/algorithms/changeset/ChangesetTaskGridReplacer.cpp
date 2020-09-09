@@ -52,6 +52,8 @@
 #include <hoot/core/ops/ReplaceRoundabouts.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/criterion/NonConflatableCriterion.h>
 
 namespace hoot
 {
@@ -64,7 +66,8 @@ _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
 _averageChangesetDeriveTime(0.0),
 _tagQualityIssues(false),
-_calcDiffWithReplacement(false)
+_calcDiffWithReplacement(false),
+_outputNonConflatable(false)
 {
 }
 
@@ -137,7 +140,7 @@ void ChangesetTaskGridReplacer::replace(
         const QString diffOutput = _finalOutput.replace(".osm", "-diff.osm");
         _calculateDiffWithOriginalReplacementData(diffOutput);
       }
-    }    
+    }
   }
   catch (const HootException& e)
   {
@@ -399,6 +402,14 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   emptyRelationRemover.apply(map);
   LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
 
+  if (_outputNonConflatable)
+  {
+    // TODO
+    QString nonConflatableOutput = outputFile;
+    nonConflatableOutput.replace(".osm", "-non-conflatable.osm");
+    _writeNonConflatable(map, nonConflatableOutput);
+  }
+
   if (_tagQualityIssues)
   {
     // tag element with potential data quality issues caused by the replacement operations; If this
@@ -465,6 +476,38 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
     " empty ways in output.");
 }
 
+void ChangesetTaskGridReplacer::_writeNonConflatable(const ConstOsmMapPtr& map,
+                                                     const QString& outputFile)
+{
+  // TODO: remove
+  //Log::WarningLevel logLevel = Log::getInstance().getLevel();
+  //Log::getInstance().setLevel(Log::Trace);
+
+  LOG_STATUS("Writing non-conflatable data to: ..." << outputFile.right(25) << " ...");
+  OsmMapPtr nonConflatableMap(new OsmMap(map));
+  std::shared_ptr<RemoveElementsVisitor> elementRemover(new RemoveElementsVisitor(true));
+  elementRemover->setRecursive(true);
+  std::shared_ptr<ElementCriterion> nonConflatableCrit(
+    new NonConflatableCriterion(nonConflatableMap));
+  elementRemover->addCriterion(nonConflatableCrit);;
+  nonConflatableMap->visitRw(*elementRemover);
+  if (nonConflatableMap->size() > 0)
+  {
+    OsmMapWriterFactory::write(nonConflatableMap, outputFile);
+    LOG_STATUS(
+      "Non-conflatable data of size: " <<
+      StringUtils::formatLargeNumber(nonConflatableMap->size()) << " written in: " <<
+      StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+  }
+  else
+  {
+    LOG_STATUS("No non-conflatable elements present.");
+  }
+  _subTaskTimer.restart();
+
+  //Log::getInstance().setLevel(logLevel);
+}
+
 void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const QString& outputFile)
 {
   // We only want to calculate the diff out to the task grid bounds, b/c that's the data that was
@@ -507,7 +550,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
   IoUtils::loadMap(diffMap, _replacementUrl, true, Status::Unknown1);
   const int replacementMapSize = diffMap->size();
   LOG_STATUS(
-    "Replacment data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+    "Replacement data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
   const QString replacedDataUrl = _dataToReplaceUrl;
@@ -528,12 +571,10 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
     StringUtils::formatLargeNumber(diffMap->size() - replacementMapSize) <<
     " and replacement data of size: " << StringUtils::formatLargeNumber(replacementMapSize)  <<
     "...");
-
   NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
   DiffConflator diffGen;
   diffGen.apply(diffMap);
   NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
-
   LOG_STATUS(
     "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
     " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << " (skipped " <<

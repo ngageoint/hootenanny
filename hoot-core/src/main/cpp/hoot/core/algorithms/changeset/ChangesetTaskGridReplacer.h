@@ -80,6 +80,7 @@ public:
   void setWriteFinalOutput(QString output) { _finalOutput = output; }
   void setTagQualityIssues(bool tag) { _tagQualityIssues = tag; }
   void setCalcDiffWithReplacement(bool calcDiff) { _calcDiffWithReplacement = calcDiff; }
+  void setOutputNonConflatable(bool output) { _outputNonConflatable = output; }
 
 private:
 
@@ -127,6 +128,8 @@ private:
   // uses diff conflate to calculate the difference between the final replaced data and the original
   // data used for replacement
   bool _calcDiffWithReplacement;
+  // TODO
+  bool _outputNonConflatable;
 
   void _initConfig();
 
@@ -140,6 +143,8 @@ private:
   void _getUpdatedData(const QString& outputFile);
   // tags elements with potential quality issues
   void _writeQualityIssueTags(OsmMapPtr& map);
+  // TODO
+  void _writeNonConflatable(const ConstOsmMapPtr& map, const QString& outputFile);
   // calcs the output diff
   void _calculateDiffWithOriginalReplacementData(const QString& outputFile);
 };

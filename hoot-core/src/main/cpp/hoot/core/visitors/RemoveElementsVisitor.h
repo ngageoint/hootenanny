@@ -60,8 +60,6 @@ public:
 
   static void removeWays(const std::shared_ptr<OsmMap>& pMap, const ElementCriterionPtr& pCrit);
 
-  int getCount() { return _count; }
-
   virtual QString getDescription() const { return "Removes elements that satisfy a criterion"; }
 
   virtual QString getInitStatusMessage() const { return "Removing elements..."; }
@@ -69,8 +67,8 @@ public:
   virtual QString getCompletedStatusMessage() const
   {
     return
-      "Removed " + StringUtils::formatLargeNumber(_count) + " / " +
-      StringUtils::formatLargeNumber(_startElementCount) + " elements.";
+      "Removed " + StringUtils::formatLargeNumber(_numAffected) + " / " +
+      StringUtils::formatLargeNumber(_numProcessed) + " elements.";
   }
 
   virtual std::string getClassName() const { return className(); }
@@ -80,7 +78,6 @@ private:
   OsmMap* _map;
 
   bool _recursive;
-  int _count;
   long _startElementCount;
 };
 

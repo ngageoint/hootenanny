@@ -35,7 +35,6 @@
 
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementElementIdSynchronizer.h>
-//#include <hoot/core/algorithms/changeset/ExcludeDeleteWayNodeCleaner.h>
 
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 
