@@ -18,7 +18,8 @@ based on the paper, "Evaluating conflation methods using uncertainty modeling," 
 
 === Optional Defines
 
-perty.* and random.* configuration options can be used with this command.  See the Configuration Options section for details.
+perty.* and random.* configuration options can be used with this command. See the Configuration Options section for details. Use the `info` 
+command to learn more about the available configuration options.
 
 === Usage
 
@@ -76,6 +77,6 @@ size as the number of of test runs.  This effectively disables the score validat
 
 === See Also
 
-* `perty.*` configuration options
+* `perty.*` and `random.*` configuration options
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
 

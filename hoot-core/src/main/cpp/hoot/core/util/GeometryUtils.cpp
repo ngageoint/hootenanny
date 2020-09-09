@@ -34,13 +34,15 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
+#include <geos/util/IllegalArgumentException.h>
 
 // hoot
-#include <hoot/core/util/Units.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/PolygonCompare.h>
+#include <hoot/core/util/Units.h>
 
 // Qt
 #include <QString>
@@ -488,6 +490,71 @@ QString GeometryUtils::geometryTypeIdToString(const geos::geom::GeometryTypeId& 
     default:
       return "unknown";
   }
+}
+
+std::shared_ptr<geos::geom::Geometry> GeometryUtils::mergeGeometries(std::vector<std::shared_ptr<geos::geom::Geometry>> geometries, const geos::geom::Envelope& envelope)
+{
+  std::vector<std::shared_ptr<geos::geom::Geometry>> temp;
+  PolygonCompare compare(envelope);
+  //  Combine the stragglers two at a time
+  while (geometries.size() > 1)
+  {
+    // Sort polygons using the Hilbert value. This increases the chances that nearby polygons will
+    // be merged early and speed up the union process.
+    sort(geometries.begin(), geometries.end(), compare);
+
+    LOG_TRACE("Remaining stragglers: " << geometries.size());
+    temp.resize(0);
+    temp.reserve(geometries.size() / 2 + 1);
+    // Merge pairs at a time. This makes the join faster.
+    for (size_t i = 0; i < geometries.size() - 1; i += 2)
+    {
+      std::shared_ptr<geos::geom::Geometry> g;
+      // Sometimes GEOS gives results that are incorrect. In those cases we try cleaning the
+      // geometries and attempting it again.
+      bool cleanAndRetry = false;
+      try
+      {
+        double area = geometries[i]->getArea() + geometries[i + 1]->getArea();
+        g.reset(geometries[i]->Union(geometries[i + 1].get()));
+        if (g->isEmpty() || fabs(g->getArea() - area) > 0.1)
+          cleanAndRetry = true;
+      }
+      catch (const geos::util::GEOSException& e)
+      {
+        LOG_TRACE("Topology error. Attempting to fix it: " << e.what());
+        cleanAndRetry = true;
+      }
+
+      if (cleanAndRetry)
+      {
+        geometries[i].reset(GeometryUtils::validateGeometry(geometries[i].get()));
+        geometries[i + 1].reset(GeometryUtils::validateGeometry(geometries[i + 1].get()));
+        try
+        {
+          g.reset(geometries[i]->Union(geometries[i + 1].get()));
+        }
+        // if the cleaning didn't fix the problem
+        catch(const geos::util::GEOSException& e)
+        {
+          // report an error
+          QString error = "Error unioning two geometries. " + QString(e.what()) + "\n" +
+              "geom1: " + QString::fromStdString(geometries[i]->toString()) + "\n" +
+              "geom2: " + QString::fromStdString(geometries[i + 1]->toString());
+          throw HootException(error);
+        }
+      }
+
+      temp.push_back(g);
+    }
+    // If there are an odd number of entries, just add the last one.
+    if (geometries.size() % 2 == 1)
+      temp.push_back(geometries[geometries.size() - 1]);
+
+    geometries = temp;
+  }
+  //  Return the
+  return geometries[0];
 }
 
 }

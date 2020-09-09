@@ -1,6 +1,8 @@
 [[Configuration]]
 == Configuration Options
 
+TODO: Some of this is out of date and redundant with other documentation.
+
 Configuration settings can dramatically change the operation of Hootenanny. The configuration
 options can be set in the configuration file (+$HOOT_HOME/conf/hoot.json+), with environment
 variables, or specified from the command line. Several of the configuration options are documented

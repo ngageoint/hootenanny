@@ -80,7 +80,7 @@ The following will allow you to debug a unit test:
 * Select "Run Settings"
 * Select "Run configuration" = hoot-test
 * The "Executable" field should populate to something equal to $HOOT_HOME/bin/HootTest.bin
-* Add to the "Arguments" field: --debug --single <full class name of test class> (e.g. hoot::PertyWayGeneralizeVisitorTest)
+* Add to the "Arguments" field: --debug --single <full class name of test class> (e.g. hoot::WayGeneralizeVisitorTest)
 * Working directory should be: $HOOT_HOME
 * Open the test class source file and click F5
 
