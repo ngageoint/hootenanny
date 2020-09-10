@@ -60,8 +60,6 @@ FilteredVisitor::FilteredVisitor(ElementCriterion* criterion, ElementVisitor* vi
   _criterion(criterion),
   _visitor(visitor)
 {
-  //_criterionDelete.reset(criterion);
-  _visitDelete.reset(visitor);
 }
 
 void FilteredVisitor::addCriterion(const ElementCriterionPtr& e)
@@ -71,7 +69,6 @@ void FilteredVisitor::addCriterion(const ElementCriterionPtr& e)
     throw IllegalArgumentException("FilteredVisitor only takes one criterion.");
   }
   _criterion = e.get();
-  //_criterionDelete = e;
 }
 
 void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
@@ -81,7 +78,6 @@ void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
     throw IllegalArgumentException("FilteredVisitor only takes one visitor.");
   }
   _visitor = v.get();
-  _visitDelete = v;
 }
 
 void FilteredVisitor::setOsmMap(OsmMap* map)
