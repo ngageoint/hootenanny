@@ -38,7 +38,9 @@ namespace hoot
 {
 
 /**
- * Identifies elements that contain a specified namen
+ * Identifies elements that contain a specified name
+ *
+ * TODO: support starting and ending wildcards (see TagAdvancedCriterion)
  */
 class NameCriterion : public ElementCriterion, public Configurable
 {
@@ -47,7 +49,8 @@ public:
   static std::string className() { return "hoot::NameCriterion"; }
 
   NameCriterion();
-  NameCriterion(const QStringList& names, const bool caseSensitive = false);
+  NameCriterion(const QStringList& names, const bool caseSensitive = false,
+                const bool partialMatch = false);
   virtual ~NameCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
@@ -62,6 +65,7 @@ public:
 
   void setNames(const QStringList& names) { _names = names; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
+  void setPartialMatch(bool partialMatch) { _partialMatch = partialMatch; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
@@ -70,6 +74,7 @@ private:
 
   QStringList _names;
   bool _caseSensitive;
+  bool _partialMatch;
 };
 
 }

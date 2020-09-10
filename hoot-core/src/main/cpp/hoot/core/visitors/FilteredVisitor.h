@@ -94,7 +94,7 @@ public:
 private:
 
   const ElementCriterion* _criterion;
-  std::shared_ptr<ElementCriterion> _criterionDelete;
+  //std::shared_ptr<ElementCriterion> _criterionDelete;
   const OsmMap* _map;
   ElementVisitor* _visitor;
   std::shared_ptr<ElementVisitor> _visitDelete;

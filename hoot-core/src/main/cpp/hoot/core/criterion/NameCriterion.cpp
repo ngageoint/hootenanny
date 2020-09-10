@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -36,13 +37,16 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, NameCriterion)
 
 NameCriterion::NameCriterion() :
-_caseSensitive(false)
+_caseSensitive(false),
+_partialMatch(false)
 {
 }
 
-NameCriterion::NameCriterion(const QStringList& names, const bool caseSensitive) :
+NameCriterion::NameCriterion(const QStringList& names, const bool caseSensitive,
+                             const bool partialMatch) :
 _names(names),
-_caseSensitive(caseSensitive)
+_caseSensitive(caseSensitive),
+_partialMatch(partialMatch)
 {
 }
 
@@ -51,6 +55,11 @@ void NameCriterion::setConfiguration(const Settings& conf)
   ConfigOptions confOpts = ConfigOptions(conf);
   _names = confOpts.getNameCriterionNames();
   _caseSensitive = confOpts.getNameCriterionCaseSensitive();
+  _partialMatch = confOpts.getNameCriterionPartialMatch();
+
+  LOG_VARD(_names);
+  LOG_VARD(_caseSensitive);
+  LOG_VARD(_partialMatch);
 }
 
 bool NameCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -58,11 +67,27 @@ bool NameCriterion::isSatisfied(const ConstElementPtr& e) const
   const Qt::CaseSensitivity caseSensitivity =
     _caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
   const QStringList elementNames = e->getTags().getNames();
-  for (int i = 0; i < _names.size(); i++)
+  if (!_partialMatch)
   {
-    if (elementNames.contains(_names.at(i), caseSensitivity))
+    for (int i = 0; i < _names.size(); i++)
     {
-      return true;
+      if (elementNames.contains(_names.at(i), caseSensitivity))
+      {
+        return true;
+      }
+    }
+  }
+  else
+  {
+    for (int i = 0; i < elementNames.size(); i++)
+    {
+      for (int j = 0; j < _names.size(); j++)
+      {
+        if (elementNames.at(i).contains(_names.at(j), caseSensitivity))
+        {
+          return true;
+        }
+      }
     }
   }
   return false;

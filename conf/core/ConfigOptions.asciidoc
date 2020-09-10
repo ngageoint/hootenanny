@@ -2610,26 +2610,10 @@ value is set to 0 a single polygon using the bounds of the source data is being 
 List of tag/value pairs of metatdata tags with default values to be distributed (import) or
 collected (export).
 
-=== name.contains.criterion.case.sensitive
-
-* Data Type: bool
-* Default Value: `true`
-
-If true, NameContainsCriterion will only identify partial names whose case matches exactly with the
-name values in name.contains.criterion.names. If false, the cases of the names do not have to match.
-
-=== name.contains.criterion.names
-
-* Data Type: list
-* Default Value: ``
-
-A list of names to use with NameContainsCriterion. From the command line, delimit multiple entries
-with ';' and surround the entire list in double quotes. E.g. "Subway;Jimmys"
-
 === name.criterion.case.sensitive
 
 * Data Type: bool
-* Default Value: `true`
+* Default Value: `false`
 
 If true, NameCriterion will only identify names whose case matches exactly with the name values in
 name.criterion.names. If false, the cases of the names do not have to match.
@@ -2641,6 +2625,13 @@ name.criterion.names. If false, the cases of the names do not have to match.
 
 A list of names to use with NameCriterion. From the command line, delimit multiple entries with ';'
 and surround the entire list in double quotes. E.g. "Subway;Jimmys"
+
+=== name.criterion.partial.match
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
 
 === network.conflicts.aggression
 
