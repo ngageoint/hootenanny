@@ -67,8 +67,11 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
     // keep it
     _ids.push_back(id);
 
-    _map->getNode(id)->setTag(
-      MetadataTags::HootIntersectionWayCount(), QString::number(hwids.size()));
+    // TODO: This and the commented out minAngle/maxAngle sections below are puzzling...changing the
+    // tag keys changes the number of nodes in the test output for FindIntersectionsOpTest.
+//    _map->getNode(id)->setTag(
+//      MetadataTags::HootIntersectionWayCount(), QString::number(hwids.size()));
+    _map->getNode(id)->setTag("IntersectionWayCount", QString::number(hwids.size()));
 
     vector<Radians> angles = NodeMatcher::calculateAngles(_map, id, hwids, 10);
     vector<double> v;
@@ -92,8 +95,10 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
         maxAngle = a;
       }
     }
-    _map->getNode(id)->setTag(MetadataTags::HootIntersectionMinAngle(), QString::number(minAngle));
-    _map->getNode(id)->setTag(MetadataTags::HootIntersectionMaxAngle(), QString::number(maxAngle));
+    //_map->getNode(id)->setTag(MetadataTags::HootIntersectionMinAngle(), QString::number(minAngle));
+    //_map->getNode(id)->setTag(MetadataTags::HootIntersectionMaxAngle(), QString::number(maxAngle));
+    _map->getNode(id)->setTag("MinAngle", QString::number(minAngle));
+    _map->getNode(id)->setTag("MaxAngle", QString::number(maxAngle));
   }
 }
 
