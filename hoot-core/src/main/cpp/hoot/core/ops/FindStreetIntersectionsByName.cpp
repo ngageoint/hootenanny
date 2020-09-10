@@ -105,8 +105,13 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
          otherWaysItr != intersectingWays.end(); ++otherWaysItr)
     {
       WayPtr otherWay = *otherWaysItr;
-      // if the streets being compared aren't identical
-      if (otherWay && otherWay->getElementId() != way->getElementId())
+
+      // if the streets being compared aren't identical or have the same name (road split into
+      // multiple parts)
+      const Qt::CaseSensitivity caseSensitivity =
+        _nameCrit->getCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+      if (otherWay && otherWay->getElementId() != way->getElementId() &&
+          otherWay->getTags().getName().compare(way->getTags().getName(), caseSensitivity) != 0)
       {
         LOG_VART(otherWay);
         // find all way nodes they share

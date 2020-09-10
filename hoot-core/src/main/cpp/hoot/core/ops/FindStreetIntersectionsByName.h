@@ -43,6 +43,8 @@ class OsmMap;
 /**
  * Allows for finding the intersection of two streets by name and writing the intersection node
  * out to a map. The output nodes are labeled with the names of the intersecting streets found.
+ *
+ * TODO: bug - This will return a match: "Strada Olivero" and "West Strada Olivero"
  */
 class FindStreetIntersectionsByName : public OsmMapOperation, public Configurable
 {

@@ -354,7 +354,7 @@ See the User Guide for more details on command usage.
 Find street intersection locations in a map by street name:
 
 -----
-    hoot convert -D convert.ops="hoot::FindStreetIntersectionByName" \
+    hoot convert -D convert.ops="hoot::FindStreetIntersectionsByName" \
       -D name.criterion.names="streetName1;streetName2" -D name.criterion.case.sensitive=false \
       -D name.criterion.partial.match=false input.osm output.osm
 -----

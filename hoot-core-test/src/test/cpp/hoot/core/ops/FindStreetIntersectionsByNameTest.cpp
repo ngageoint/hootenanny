@@ -47,6 +47,8 @@ class FindStreetIntersectionsByNameTest : public HootTestFixture
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runCaseSensitivityTest);
   CPPUNIT_TEST(runPartialMatchTest);
+  // TODO: add test for two roads with the same name (split road; shouldn't match)
+  // TODO: add test for two roads with same name and different prefixes (shouldn't match)
   CPPUNIT_TEST_SUITE_END();
 
 public:

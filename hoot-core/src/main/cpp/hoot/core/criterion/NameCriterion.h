@@ -65,6 +65,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   QStringList getNames() const { return _names; }
+  bool getCaseSensitive() const { return _caseSensitive; }
 
   void setNames(const QStringList& names) { _names = names; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
