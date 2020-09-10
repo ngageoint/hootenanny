@@ -2631,7 +2631,9 @@ and surround the entire list in double quotes. E.g. "Subway;Jimmys"
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+Determines whether NameCriterion allows partial name matching against the name.criterion.names
+input. Partial matching is very basic, where the input name string must be contained within the
+feature name in order to match.
 
 === network.conflicts.aggression
 

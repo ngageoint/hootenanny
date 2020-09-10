@@ -383,9 +383,6 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
 {
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
-  // change these, so we can open the files in josm; not sure if these are helping...
-  //conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), true);
-  //conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), false);
 
   LOG_STATUS("Reading the modified data out of: ..." << _dataToReplaceUrl.right(25) << "...");
   OsmMapPtr map(new OsmMap());
@@ -404,7 +401,8 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
 
   if (_outputNonConflatable)
   {
-    // TODO
+    // Output any features that hoot doesn't know how to conflate into their own file, for
+    // debugging purposes.
     QString nonConflatableOutput = outputFile;
     nonConflatableOutput.replace(".osm", "-non-conflatable.osm");
     _writeNonConflatable(map, nonConflatableOutput);
@@ -479,10 +477,6 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
 void ChangesetTaskGridReplacer::_writeNonConflatable(const ConstOsmMapPtr& map,
                                                      const QString& outputFile)
 {
-  // TODO: remove
-  //Log::WarningLevel logLevel = Log::getInstance().getLevel();
-  //Log::getInstance().setLevel(Log::Trace);
-
   LOG_STATUS("Writing non-conflatable data to: ..." << outputFile.right(25) << " ...");
   OsmMapPtr nonConflatableMap(new OsmMap(map));
   std::shared_ptr<RemoveElementsVisitor> elementRemover(new RemoveElementsVisitor(true));
@@ -504,8 +498,6 @@ void ChangesetTaskGridReplacer::_writeNonConflatable(const ConstOsmMapPtr& map,
     LOG_STATUS("No non-conflatable elements present.");
   }
   _subTaskTimer.restart();
-
-  //Log::getInstance().setLevel(logLevel);
 }
 
 void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const QString& outputFile)

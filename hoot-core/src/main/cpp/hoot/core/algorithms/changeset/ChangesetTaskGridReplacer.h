@@ -128,7 +128,7 @@ private:
   // uses diff conflate to calculate the difference between the final replaced data and the original
   // data used for replacement
   bool _calcDiffWithReplacement;
-  // TODO
+  // write non-conflatable elements to a separate file
   bool _outputNonConflatable;
 
   void _initConfig();
@@ -143,7 +143,8 @@ private:
   void _getUpdatedData(const QString& outputFile);
   // tags elements with potential quality issues
   void _writeQualityIssueTags(OsmMapPtr& map);
-  // TODO
+  // writes out elements that can't be conflated and therefore, won't show up in a diff between
+  // replaced and replacement data; useful for debugging
   void _writeNonConflatable(const ConstOsmMapPtr& map, const QString& outputFile);
   // calcs the output diff
   void _calculateDiffWithOriginalReplacementData(const QString& outputFile);

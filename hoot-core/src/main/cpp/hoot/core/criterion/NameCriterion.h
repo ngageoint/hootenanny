@@ -40,7 +40,8 @@ namespace hoot
 /**
  * Identifies elements that contain a specified name
  *
- * TODO: support starting and ending wildcards (see TagAdvancedCriterion)
+ * This is currently using very simple partial matching enabled by string containment. It could be
+ * upgraded to use wildcard matching, if needed (see TagAdvancedCriterion).
  */
 class NameCriterion : public ElementCriterion, public Configurable
 {
@@ -63,6 +64,8 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  QStringList getNames() const { return _names; }
+
   void setNames(const QStringList& names) { _names = names; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
   void setPartialMatch(bool partialMatch) { _partialMatch = partialMatch; }
@@ -73,7 +76,9 @@ public:
 private:
 
   QStringList _names;
+  // if enabled, names must match case
   bool _caseSensitive;
+  // if enabled, the input string can match if it is contained within the feature name
   bool _partialMatch;
 };
 

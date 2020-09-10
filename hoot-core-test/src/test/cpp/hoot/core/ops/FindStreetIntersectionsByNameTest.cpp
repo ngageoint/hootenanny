@@ -58,10 +58,10 @@ public:
   {
   }
 
-  // TODO: explanations
-
   void runBasicTest()
   {
+    // basic test with default config; one intersection node should be found
+
     FindStreetIntersectionsByName uut;
     OsmMapPtr map(new OsmMap());
     Settings conf;
@@ -87,6 +87,8 @@ public:
     Settings conf;
 
     {
+      // case sensitivity is turned on and no intersection node match should be found
+
       OsmMapReaderFactory::read(map, false, Status::Unknown1, "test-files/DcTigerRoads.osm");
       cachedMap.reset(new OsmMap(map));
 
@@ -104,6 +106,8 @@ public:
     }
 
     {
+      // case sensitivity is turned off and one intersection node match should be found
+
       map.reset(new OsmMap(cachedMap));
 
       conf.set("name.criterion.names", "I ST NW;19th St NW");
@@ -128,6 +132,8 @@ public:
     Settings conf;
 
     {
+      // partial matching is turned off and no intersection node match should be found
+
       OsmMapReaderFactory::read(map, false, Status::Unknown1, "test-files/DcTigerRoads.osm");
       cachedMap.reset(new OsmMap(map));
 
@@ -144,6 +150,8 @@ public:
     }
 
     {
+      // partial matching is turned on and one intersection node match should be found
+
       map.reset(new OsmMap(cachedMap));
 
       conf.set("name.criterion.names", "I St;19th St");

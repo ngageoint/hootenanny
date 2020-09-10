@@ -33,9 +33,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/NameCriterion.h>
 #include <hoot/core/info/OperationStatusInfo.h>
-
-// GEOS
-#include <geos/geom/Coordinate.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -43,7 +41,8 @@ namespace hoot
 class OsmMap;
 
 /**
- * TODO
+ * Allows for finding the intersection of two streets by name and writing the intersection node
+ * out to a map. The output nodes are labeled with the names of the intersecting streets found.
  */
 class FindStreetIntersectionsByName : public OsmMapOperation, public Configurable
 {
@@ -61,20 +60,30 @@ public:
    */
   virtual void setConfiguration(const Settings& conf);
 
+  /**
+   * @see ApiEntityInfo
+   */
   virtual QString getDescription() const override
-  { return "TODO"; }
+  { return "Locates street intersections by street name"; }
 
   virtual std::string getClassName() const { return className(); }
 
   /**
    * @see OperationStatusInfo
    */
-  virtual QString getInitStatusMessage() const { return "TODO"; }
+  virtual QString getInitStatusMessage() const { return "Locating street intersections..."; }
 
   /**
    * @see OperationStatusInfo
    */
-  virtual QString getCompletedStatusMessage() const { return "TODO"; }
+  virtual QString getCompletedStatusMessage() const
+  {
+    return
+      "Located " + StringUtils::formatLargeNumber(_numAffected) +
+      " street intersections for inputs: " + _nameCrit->getNames()[0] + " and " +
+      _nameCrit->getNames()[1] + " out of " + StringUtils::formatLargeNumber(_numProcessed) +
+      " streets.";
+  }
 
 private:
 

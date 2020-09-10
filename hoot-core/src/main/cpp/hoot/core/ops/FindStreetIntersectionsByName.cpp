@@ -49,7 +49,9 @@ void FindStreetIntersectionsByName::setConfiguration(const Settings& conf)
   const QStringList streetNames = opts.getNameCriterionNames();
   if (streetNames.size() != 2)
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException(
+      QString("The name.criterion.names configuration option for FindStreetIntersectionsByName") +
+      QString("must consist of exactly two names."));
   }
   _nameCrit.reset(new NameCriterion());
   _nameCrit->setConfiguration(conf);
@@ -63,9 +65,8 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
       "Must call setConfiguration on FindStreetIntersectionsByName before running.");
   }
 
-  // TODO: comment
-
   LOG_VARD(map->size());
+  // Use the total number of roads in the map as the total feature being processed.
   _numProcessed =
     (int)FilteredVisitor::getStat(
       std::shared_ptr<HighwayCriterion>(new HighwayCriterion(map)),
@@ -74,9 +75,9 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
   LOG_VARD(_numProcessed);
   _numAffected = 0;
 
+  // Reduce the map down to just the streets that match the two input street names.
   ElementCriterionPtr crit(
     new ChainCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion(map)), _nameCrit));
-
   CopyMapSubsetOp mapCopier(map, crit);
   OsmMapPtr matchingRoadsMap(new OsmMap());
   mapCopier.apply(matchingRoadsMap);
@@ -86,6 +87,7 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
   // make a copy so we can iterate through even if there are changes
   const WayMap ways = matchingRoadsMap->getWays();
   LOG_VARD(ways.size());
+  // go through all the name matched streets
   for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
   {
     WayPtr way = waysItr->second;
@@ -95,6 +97,7 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
     }
     LOG_VART(way);
 
+    // find all streets that intersect the current one
     const std::vector<WayPtr> intersectingWays =
       WayUtils::getIntersectingWays(way->getId(), matchingRoadsMap);
     LOG_VART(intersectingWays.size());
@@ -102,9 +105,11 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
          otherWaysItr != intersectingWays.end(); ++otherWaysItr)
     {
       WayPtr otherWay = *otherWaysItr;
+      // if the streets being compared aren't identical
       if (otherWay && otherWay->getElementId() != way->getElementId())
       {
         LOG_VART(otherWay);
+        // find all way nodes they share
         const QSet<long> intersectingWayNodeIds = way->sharedNodeIds(*otherWay);
         LOG_VART(intersectingWayNodeIds.size());
         for (QSet<long>::const_iterator wayNodeIdsItr = intersectingWayNodeIds.begin();
@@ -114,6 +119,7 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
           if (wayNode)
           {
             LOG_VART(wayNode);
+            // add the node to the output map
             NodePtr intersectionNode(new Node(*wayNode));
             intersectionNode->getTags().set(
               MetadataTags::HootIntersectionStreet1(), way->getTags().getName());
