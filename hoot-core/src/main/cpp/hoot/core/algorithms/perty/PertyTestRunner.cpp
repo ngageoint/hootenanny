@@ -109,7 +109,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
   {
     for (int j = 0; j < _dynamicVariables.size(); j++)
     {
-      //this code does nothing if there are no dynamic variables present
+      // this code does nothing if there are no dynamic variables present
       _settings.set(_dynamicVariables[j], QString::number(dynamicVariableValue));
     }
     _matchScorer->setConfiguration(_settings);
@@ -120,7 +120,8 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
     for (int j = 0; j < _numTestSimulations; j++)
     {
       LOG_INFO(
-        "Running test run #" << QString::number(i + 1) << ", simulation #" << QString::number(j + 1));
+        "Running test run #" << QString::number(i + 1) << ", simulation #" <<
+        QString::number(j + 1));
       if (_dynamicVariables.size() > 0)
       {
         LOG_INFO(" with dynamic variables: " << _dynamicVariables << " having value: " <<
@@ -174,8 +175,8 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
     {
       LOG_INFO(testRunResultStr);
     }
-    //write after each test result iteration vs. after they're all finished in case an error occurs
-    //during a test, in which we'd lose output for all previous tests
+    // write after each test result iteration vs. after they're all finished in case an error occurs
+    // during a test, in which we'd lose output for all previous tests
     if (resultsFile.open(QFile::Append | QFile::Text))
     {
       QTextStream out(&resultsFile);
