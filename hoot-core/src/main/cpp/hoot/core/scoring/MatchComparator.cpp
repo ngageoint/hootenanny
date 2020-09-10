@@ -251,15 +251,19 @@ double MatchComparator::getPertyScore() const
      # of members in the intersection set between _actual and _expected) / # of _expected members
     */
   LOG_VARD(_actual.size());
-  LOG_VARD(_actual);
+  LOG_VART(_actual);
   LOG_VARD(_expected.size());
-  LOG_VARD(_expected);
-  assert(_expected.size() > 0);
+  LOG_VART(_expected);
+  if(_expected.size() <= 0)
+  {
+    throw HootException(
+      "Expected matches size equal to zero. Are there any matches in the conflated data?");
+  }
   set<UuidPair> intersection;
   set_intersection(_actual.begin(), _actual.end(), _expected.begin(), _expected.end(),
     insert_iterator<std::set<UuidPair>>(intersection, intersection.begin()));
   LOG_VARD(intersection.size());
-  LOG_VARD(intersection);
+  LOG_VART(intersection);
   const double pertyScore = (double)intersection.size() / (double)_expected.size();
   LOG_VARD(pertyScore);
   return pertyScore;
@@ -416,6 +420,7 @@ void MatchComparator::_createMatches(const set<QString>& uuids1, const set<QStri
       groups.joinT(*u1, *u2);
     }
   }
+  LOG_VART(matches.size());
 }
 
 void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOsmMapPtr& conflated)
@@ -541,6 +546,7 @@ void MatchComparator::_findActualMatches(const ConstOsmMapPtr& in, const ConstOs
     // create a match between all the combinations of ref1 uuid to ref2 uuid
     _createMatches(u1, u2, _actual, _actualMatchGroups);
   }
+  LOG_VARD(_actual.size());
 }
 
 void MatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
@@ -548,16 +554,18 @@ void MatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
   // extract all of the REF2 values in in2
   GetRefUuidVisitor ref1(MetadataTags::Ref1());
   in->visitRo(ref1);
+  LOG_VARD(ref1.getRefToUuid().size());
 
   GetRefUuidVisitor ref2(MetadataTags::Ref2());
   in->visitRo(ref2);
+  LOG_VARD(ref2.getRefToUuid().size());
 
-  GetRefUuidVisitor review("REVIEW");
+  GetRefUuidVisitor review(MetadataTags::Review());
   in->visitRo(review);
 
   // go through all the ref1 uuids
   for (GetRefUuidVisitor::RefToUuid::const_iterator it = ref1.getRefToUuid().begin();
-    it != ref1.getRefToUuid().end(); ++it)
+         it != ref1.getRefToUuid().end(); ++it)
   {
     // match the ref1 to ref2 uuids
     GetRefUuidVisitor::RefToUuid::const_iterator jt = ref2.getRefToUuid().find(it->first);
@@ -579,6 +587,7 @@ void MatchComparator::_findExpectedMatches(const ConstOsmMapPtr& in)
       _createMatches(ref1Uuids, reviewUuids, _expected, _expectedReviewGroups);
     }
   }
+  LOG_VARD(_expected.size());
 }
 
 
@@ -613,11 +622,11 @@ int MatchComparator::getTotalCount() const
       result += _confusion[i][j];
     }
   }
-
   return result;
 }
 
-bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2, const ConstOsmMapPtr& conflated)
+bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2,
+                                     const ConstOsmMapPtr& conflated)
 {
   QList<ElementId> eid1s = _actualUuidToEid.values(uuid1);
   QList<ElementId> eid2s = _actualUuidToEid.values(uuid2);
@@ -631,8 +640,8 @@ bool MatchComparator::_isNeedsReview(const QString& uuid1, const QString& uuid2,
       ElementId eid2 = eid2s.at(eid2Index);
       if (eid1.isNull() || eid2.isNull())
       {
-        //So far this message is ok, change from LOG_INFO to LOG_DEBUG.
-        //More information please see issue 167. https://github.com/ngageoint/hootenanny/issues/167
+        // So far this message is ok, change from LOG_INFO to LOG_DEBUG.
+        // More information please see issue 167. https://github.com/ngageoint/hootenanny/issues/167
         LOG_DEBUG("No actual element exists.");
         return false;
       }

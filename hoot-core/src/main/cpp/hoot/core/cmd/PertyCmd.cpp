@@ -117,19 +117,19 @@ public:
       QList<std::shared_ptr<const PertyTestRunResult>> results =
       PertyTestRunner().runTest(args[0], args[1]);
 
-      LOG_INFO("\n\nPERTY Test Results");
-      LOG_INFO("\n\nNumber of Test Runs: " << results.size());
+      LOG_STATUS("\n\nPERTY Test Results");
+      LOG_STATUS("\n\nNumber of Test Runs: " << results.size());
       bool anyTestFailed = false;
       bool anyTestRunPassedWithScoreOutsideOfAllowedVarianceAndHigherThanExpected = false;
       for (QList<std::shared_ptr<const PertyTestRunResult>>::const_iterator it = results.begin();
            it != results.end(); ++it)
       {
         std::shared_ptr<const PertyTestRunResult> result = *it;
-        LOG_INFO(result->toString());
+        LOG_STATUS(result->toString());
         anyTestFailed = !result->testPassed();
-        //Just checking here for test run scores that were higher than expected but allowed to pass.
-        //still want to log a warning about it so that the expected scores can eventually be updated
-        //in regressions tests
+        // Just checking here for test run scores that were higher than expected but allowed to
+        // pass. still want to log a warning about it so that the expected scores can eventually be
+        // updated in regressions tests
         if (!result->getFailOnBetterScore() && result->testPassed() &&
             (result->getScoreVariance() > result->getAllowedScoreVariance()))
         {

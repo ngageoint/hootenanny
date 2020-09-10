@@ -197,6 +197,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
 
   OsmMapPtr combinedMap(referenceMap);
   IoUtils::loadMap(combinedMap, perturbedMapInputPath, false, Status::Unknown2);
+  OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-before-prepped-map");
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
   if (Log::getInstance().getLevel() <= Log::Debug)
@@ -207,7 +208,9 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
     LOG_VARD(numTotalTags);
   }
 
-  MatchScoringMapPreparer().prepMap(combinedMap, true);
+  // Not sure there is ever any reason to set score.matches.remove.nodes=true here, but leaving it '
+  // configurable for now.
+  MatchScoringMapPreparer().prepMap(combinedMap, ConfigOptions().getScoreMatchesRemoveNodes());
   OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-after-prepped-map");
   LOG_VARD(combinedMap->getNodes().size());
   LOG_VARD(combinedMap->getWays().size());
@@ -224,7 +227,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
     // move Unknown2 toward Unknown1
     conf().set(RubberSheet::refKey(), true);
     std::shared_ptr<RubberSheet> rubberSheetOp(new RubberSheet());
-    rubberSheetOp->setConfiguration(/*conf()*/_settings);
+    rubberSheetOp->setConfiguration(_settings);
     rubberSheetOp->apply(combinedMap);
     OsmMapWriterFactory::writeDebugMap(combinedMap, "perty-after-rubber-sheet");
 
@@ -252,7 +255,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   OsmMapPtr conflationCopy(new OsmMap(combinedDataToConflate));
 
   // TODO: We're not applying pre/post conflate ops here, since they tank scores. Should we be? We
-  // are cleaning each input map with MapCleaner beforehand, though.
+  // are, however, cleaning each input map with MapCleaner beforehand.
 
   //NamedOp preOps(ConfigOptions().getConflatePreOps());
   //preOps.apply(conflationCopy);
