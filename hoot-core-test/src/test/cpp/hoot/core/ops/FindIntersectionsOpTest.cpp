@@ -67,7 +67,7 @@ public:
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "Toy_intersections.osm");
-    HOOT_FILE_EQUALS( _inputPath + "ToyTestA_intersections.osm",
+    HOOT_FILE_EQUALS(_inputPath + "ToyTestA_intersections.osm",
                      _outputPath + "Toy_intersections.osm");
   }
 
@@ -85,7 +85,7 @@ public:
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "RailIntersections-Output.osm");
-    HOOT_FILE_EQUALS( _inputPath + "RailIntersections-Expected.osm",
+    HOOT_FILE_EQUALS(_inputPath + "RailIntersections-Expected.osm",
                      _outputPath + "RailIntersections-Output.osm");
   }
 
