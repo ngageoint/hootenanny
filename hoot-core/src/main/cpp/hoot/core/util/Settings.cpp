@@ -575,7 +575,7 @@ void Settings::parseCommonArguments(QStringList& args)
   hootTestCmdsIgnore.append("--exclude");
 
   const QString optionInputFormatErrorMsg =
-    "define must take the form key=value (or key+=value, key++=value, or key-=value).";
+    "Define with -D must take the form key=value, key+=value, key++=value, or key-=value";
 
   while (args.size() > 0 && foundOne)
   {
@@ -633,7 +633,7 @@ void Settings::parseCommonArguments(QStringList& args)
     {
       if (args.size() < 2)
       {
-        throw HootException(optionInputFormatErrorMsg);
+        throw HootException(optionInputFormatErrorMsg + ": " + args.join(";"));
       }
 
       QString kv = args[1];
@@ -708,7 +708,7 @@ void Settings::parseCommonArguments(QStringList& args)
 
       if (kvl.size() != 2)
       {
-        throw IllegalArgumentException(optionInputFormatErrorMsg);
+        throw IllegalArgumentException(optionInputFormatErrorMsg + ": " + kvl.join(";"));
       }
 
       const QString optionName = kvl[0];

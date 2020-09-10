@@ -1,0 +1,1144 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6">
+  <node id="30578394" lat="48.6790774" lon="9.215967" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Tiefgarage Schlössle"/>
+    <tag k="address" v="Obere Bachstraße 25"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="addr:housenumber" v="25"/>
+    <tag k="addr:street" v="Obere Bachstraße"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="25"/>
+    <tag k="charge" v="3,5€-24h; 18:00-08:00 1€/14h; 8:00-18:00 0,5€/2h"/>
+    <tag k="fee" v="yes"/>
+    <tag k="maxheight" v="2.00"/>
+    <tag k="maxstay" v="24h"/>
+    <tag k="name" v="Tiefgarage Schlössle"/>
+    <tag k="parking" v="underground"/>
+    <tag k="ref" v="P6"/>
+    <tag k="website" v="https://www.filderstadtwerke.de/de/Privatkunden/Parken/Parkhaus-Schl%C3%B6ssle"/>
+  </node>
+  <node id="2088371948" lat="48.6898678" lon="9.175881" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="underground"/>
+  </node>
+  <node id="1976870338" lat="48.7029938" lon="9.2120183" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+  </node>
+  <node id="1434234664" lat="48.6906955" lon="9.193773" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="APCOA Valet-Park-Service"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="contact:website" v="https://www.apcoa.de/parkprodukte/valet-parkservice/"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="APCOA Valet-Park-Service"/>
+    <tag k="opening_hours" v="24/7"/>
+    <tag k="operator" v="APCOA Parking Deutschland GmbH"/>
+    <tag k="parking" v="valet"/>
+    <tag k="supervised" v="yes"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="limited"/>
+  </node>
+  <node id="1083021083" lat="48.6853667" lon="9.2172989" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Parkplatz Real"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="customers"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="no"/>
+    <tag k="name" v="Parkplatz Real"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1011279482" lat="48.6890449" lon="9.1863928" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P0"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="maxheight" v="none"/>
+    <tag k="name" v="P0"/>
+    <tag k="note" v="Neu, auf Stuttgart Luftbild (2011) nicht aktuell wiedergegeben"/>
+    <tag k="operator" v="APCOA Parking Deutschland GmbH"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P0"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="limited"/>
+  </node>
+  <node id="208866101" lat="48.6911437" lon="9.1933915" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P7"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="addr:city" v="Stuttgart"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity:charging" v="8"/>
+    <tag k="fee" v="yes"/>
+    <tag k="layer" v="-1"/>
+    <tag k="name" v="P7"/>
+    <tag k="opening_hours" v="24/7"/>
+    <tag k="operator" v="APCOA Parking Deutschland GmbH"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P7"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="limited"/>
+  </node>
+  <node id="543846639" lat="48.6952142" lon="9.1935356" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Bosch-Parkhaus"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="2100"/>
+    <tag k="capacity:disabled" v="20"/>
+    <tag k="capacity:note" v="P20 und P21 zusammen ca. 4200"/>
+    <tag k="fee" v="yes"/>
+    <tag k="layer" v="1"/>
+    <tag k="name" v="Bosch-Parkhaus"/>
+    <tag k="operator" v="APCOA Parking Deutschland GmbH"/>
+    <tag k="parking" v="multi-storey"/>
+    <tag k="ref" v="P20"/>
+    <tag k="start_date" v="2007"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="limited"/>
+  </node>
+  <node id="690686166" lat="48.6948833" lon="9.194316" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Bosch-Parkhaus"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="2100"/>
+    <tag k="capacity:disabled" v="23"/>
+    <tag k="capacity:note" v="P20 und P21 zusammen ca. 4200"/>
+    <tag k="fee" v="yes"/>
+    <tag k="layer" v="1"/>
+    <tag k="name" v="Bosch-Parkhaus"/>
+    <tag k="operator" v="APCOA Parking Deutschland GmbH"/>
+    <tag k="parking" v="multi-storey"/>
+    <tag k="ref" v="P21"/>
+    <tag k="start_date" v="2007"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="576020159" lat="48.6927845" lon="9.1807218" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P26"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="maxheight" v="none"/>
+    <tag k="name" v="P26"/>
+    <tag k="operator" v="APCOA Parking Deutschland GmbH"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P26"/>
+    <tag k="surface" v="asphalt"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="921420643" lat="48.6918639" lon="9.1708506" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P+R Parkhaus Echterdingen"/>
+    <tag k="address" v="In den Gärtlesäckern 45"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="addr:city" v="Leinfelden-Echterdingen"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="45"/>
+    <tag k="addr:postcode" v="70771"/>
+    <tag k="addr:street" v="In den Gärtlesäckern"/>
+    <tag k="addr:suburb" v="Echterdingen"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="building" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="P+R Parkhaus Echterdingen"/>
+    <tag k="note" v="name laut Schild am Eingang"/>
+    <tag k="operator" v="Stadtwerke Leinfelden-Echterdingen"/>
+    <tag k="parking" v="multi-storey"/>
+    <tag k="wheelchair" v="limited"/>
+  </node>
+  <node id="1165303897" lat="48.6787078" lon="9.191878" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Parkplatz Cafe del Sol"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="permissive"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="name" v="Parkplatz Cafe del Sol"/>
+    <tag k="parking" v="surface"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="887750041" lat="48.6966965" lon="9.1854666" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="lit" v="yes"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P31 Aussteller"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="1010953501" lat="48.6948719" lon="9.1826578" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P30 Aussteller"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="1423561005" lat="48.69582" lon="9.1830401" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Reisemobilstellplätze Messe Stuttgart"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="39"/>
+    <tag k="caravans" v="yes"/>
+    <tag k="drinking_water" v="yes"/>
+    <tag k="fee" v="yes"/>
+    <tag k="motorcar" v="no"/>
+    <tag k="motorcycle" v="no"/>
+    <tag k="name" v="Reisemobilstellplätze Messe Stuttgart"/>
+    <tag k="parking" v="surface"/>
+    <tag k="power_supply" v="yes"/>
+    <tag k="ref" v="P28 Caravan"/>
+    <tag k="sanitary_dump_station" v="yes"/>
+    <tag k="tents" v="no"/>
+    <tag k="tourism" v="caravan_site"/>
+    <tag k="waste_basket" v="yes"/>
+    <tag k="website" v="https://www.messe-stuttgart.de/besucher/anreise-und-unterkunft/unterkunft/camping-caravan/"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="943870983" lat="48.6977404" lon="9.2163989" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Netto"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="customers"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="name" v="Netto"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1136419747" lat="48.6916642" lon="9.1946661" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P6"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="addr:city" v="Stuttgart"/>
+    <tag k="addr:postcode" v="70629"/>
+    <tag k="addr:street" v="Flughafenstraße"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="building" v="parking"/>
+    <tag k="building:levels" v="8"/>
+    <tag k="capacity" v="798"/>
+    <tag k="capacity:disabled" v="3"/>
+    <tag k="fee" v="yes"/>
+    <tag k="maxheight" v="2.1"/>
+    <tag k="name" v="P6"/>
+    <tag k="opening_hours" v="24/7"/>
+    <tag k="operator" v="APCOA PARKING"/>
+    <tag k="operator:type" v="business"/>
+    <tag k="parking" v="multi-storey"/>
+    <tag k="payment:cash" v="yes"/>
+    <tag k="payment:mastercard" v="yes"/>
+    <tag k="payment:visa" v="yes"/>
+    <tag k="phone" v="+49 (711) 305 70 305"/>
+    <tag k="ref" v="P6"/>
+    <tag k="supervised" v="yes"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="1881561036" lat="48.6912464" lon="9.1918581" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P5"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="P5"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P5"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="limited"/>
+  </node>
+  <node id="1785507932" lat="48.6902183" lon="9.1893087" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P4"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="building" v="parking"/>
+    <tag k="building:levels" v="4"/>
+    <tag k="capacity:charging" v="yes"/>
+    <tag k="fee" v="yes"/>
+    <tag k="maxheight" v="2.1"/>
+    <tag k="name" v="P4"/>
+    <tag k="opening_hours" v="24/7"/>
+    <tag k="operator" v="APCOA Parking Deutschland GmbH"/>
+    <tag k="parking" v="multi-storey"/>
+    <tag k="ref" v="P4"/>
+    <tag k="roof:material" v="concrete"/>
+    <tag k="roof:shape" v="flat"/>
+    <tag k="source" v="yahoo"/>
+  </node>
+  <node id="1084502906" lat="48.6900256" lon="9.1866771" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P2"/>
+    <tag k="address" v="Flughafenstraße 22-24"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="addr:city" v="Stuttgart"/>
+    <tag k="addr:country" v="DE"/>
+    <tag k="addr:housenumber" v="22-24"/>
+    <tag k="addr:postcode" v="70629"/>
+    <tag k="addr:street" v="Flughafenstraße"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="maxheight" v="2.1"/>
+    <tag k="name" v="P2"/>
+    <tag k="opening_hours" v="24/7"/>
+    <tag k="operator" v="APCOA Parking Deutschland GmbH"/>
+    <tag k="parking" v="multi-storey"/>
+    <tag k="ref" v="P2"/>
+  </node>
+  <node id="1613095350" lat="48.6925774" lon="9.2016856" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P11"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="building" v="yes"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="P11"/>
+    <tag k="opening_hours" v="24/7"/>
+    <tag k="parking" v="multi-storey"/>
+    <tag k="ref" v="P11"/>
+    <tag k="start_date" v="2001"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="587153993" lat="48.6925927" lon="9.2005466" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P8"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="building" v="yes"/>
+    <tag k="fee" v="yes"/>
+    <tag k="maxheight" v="2.1"/>
+    <tag k="name" v="P8"/>
+    <tag k="opening_hours" v="24/7"/>
+    <tag k="parking" v="multi-storey"/>
+    <tag k="ref" v="P8"/>
+    <tag k="source" v="yahoo"/>
+    <tag k="start_date" v="2001"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="757004314" lat="48.6928653" lon="9.194102" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="permissive"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="no"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1279271200" lat="48.6927144" lon="9.1939724" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="permissive"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="parking" v="surface"/>
+    <tag k="source" v="yahoo"/>
+  </node>
+  <node id="52908367" lat="48.6855791" lon="9.2162464" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="no"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1527953000" lat="48.6787294" lon="9.1927959" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="permissive"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="operator" v="Burger King"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="18242360" lat="48.6909692" lon="9.1738101" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Friedhofsparkplatz"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="no"/>
+    <tag k="maxstay" v="2 hour"/>
+    <tag k="name" v="Friedhofsparkplatz"/>
+    <tag k="operator" v="Stadt Leinfelden-Echterdingen"/>
+    <tag k="park_ride" v="no"/>
+    <tag k="parking" v="surface"/>
+    <tag k="supervised" v="no"/>
+  </node>
+  <node id="1276261147" lat="48.6812276" lon="9.1718685" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1971764991" lat="48.686581" lon="9.177015" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="996796369" lat="48.688348" lon="9.1722446" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="135640095" lat="48.6865358" lon="9.1766202" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1430439149" lat="48.6933296" lon="9.1968272" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="customers"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="359922172" lat="48.6927303" lon="9.2011579" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1632682988" lat="48.6923015" lon="9.1995286" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P9"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="P9"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P9"/>
+  </node>
+  <node id="1153447573" lat="48.6898731" lon="9.1911797" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P3"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="P3"/>
+    <tag k="operator" v="APCOA Parking Deutschland GmbH"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P3"/>
+  </node>
+  <node id="132577100" lat="48.6926725" lon="9.2028171" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="231756373" lat="48.6816386" lon="9.1988568" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1786294176" lat="48.6799768" lon="9.209016" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="13"/>
+    <tag k="fee" v="no"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="793331940" lat="48.7001399" lon="9.2132955" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="522553046" lat="48.6779855" lon="9.2168491" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Erdi Biomakt"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="customers"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="no"/>
+    <tag k="name" v="Erdi Biomakt"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="275266973" lat="48.6827301" lon="9.2158751" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1069716895" lat="48.6844937" lon="9.2147485" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="customers"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity:disabled" v="yes"/>
+    <tag k="covered" v="yes"/>
+    <tag k="fee" v="no"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1521083627" lat="48.6870799" lon="9.1788757" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1770642014" lat="48.6903221" lon="9.1986493" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="945591847" lat="48.6883194" lon="9.1891902" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="328827614" lat="48.6894717" lon="9.1881762" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="109228794" lat="48.6922753" lon="9.2057518" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="561959774" lat="48.6901362" lon="9.197738" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="2110756088" lat="48.6910109" lon="9.185849" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P25"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="P25"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P25"/>
+  </node>
+  <node id="580871917" lat="48.6885799" lon="9.1904902" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="823723302" lat="48.6873344" lon="9.1896829" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1714078840" lat="48.6924425" lon="9.2142118" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1732502545" lat="48.6932513" lon="9.1816377" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="no"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="bus" v="yes"/>
+    <tag k="parking" v="surface"/>
+    <tag k="tourist_bus" v="yes"/>
+  </node>
+  <node id="1051876890" lat="48.6919694" lon="9.2155579" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1199262943" lat="48.6808422" lon="9.2042475" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="8"/>
+  </node>
+  <node id="2009221452" lat="48.6808855" lon="9.2040761" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+  </node>
+  <node id="257513673" lat="48.6808041" lon="9.2044446" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+  </node>
+  <node id="590845366" lat="48.6809803" lon="9.2043276" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+  </node>
+  <node id="1052195003" lat="48.6809794" lon="9.2041365" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+  </node>
+  <node id="1541049864" lat="48.7015242" lon="9.209696" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="5"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="511707818" lat="48.701428" lon="9.2150083" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="25536233" lat="48.7011913" lon="9.2135389" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="116405378" lat="48.6773385" lon="9.2042107" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="164974746" lat="48.6953559" lon="9.1910896" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="69"/>
+    <tag k="parking" v="surface"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="limited"/>
+  </node>
+  <node id="396283472" lat="48.6954729" lon="9.1904123" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="24"/>
+    <tag k="parking" v="surface"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="limited"/>
+  </node>
+  <node id="989892772" lat="48.6963145" lon="9.18832" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P31 Aussteller"/>
+    <tag k="surface" v="unpaved"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="1020520290" lat="48.6956423" lon="9.1856179" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P31 Aussteller"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="530653666" lat="48.693964" lon="9.193672" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Besucherparkplatz Verwaltung"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="name" v="Besucherparkplatz Verwaltung"/>
+    <tag k="wheelchair" v="yes"/>
+  </node>
+  <node id="2125238280" lat="48.6920707" lon="9.1710757" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="park_ride" v="yes"/>
+    <tag k="parking" v="surface"/>
+    <tag k="surface" v="paved"/>
+  </node>
+  <node id="1092004553" lat="48.6790114" lon="9.1906869" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="50"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1658699134" lat="48.6783789" lon="9.1950692" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1961176822" lat="48.6858084" lon="9.1782145" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1859374258" lat="48.684044" lon="9.2103456" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="442987331" lat="48.6832117" lon="9.2106649" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="building" v="yes"/>
+    <tag k="parking" v="multi-storey"/>
+  </node>
+  <node id="366873404" lat="48.6918824" lon="9.1971425" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P14"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="building" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="P14"/>
+    <tag k="opening_hours" v="24/7"/>
+    <tag k="parking" v="multi-storey"/>
+    <tag k="ref" v="P14"/>
+    <tag k="roof:shape" v="flat"/>
+  </node>
+  <node id="1217467887" lat="48.7022715" lon="9.2152942" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="7"/>
+    <tag k="fee" v="no"/>
+    <tag k="maxstay" v="2h"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="945288723" lat="48.6774554" lon="9.2167152" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Stadtverwaltung"/>
+    <tag k="address" v="Aicher Straße 9"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="addr:housenumber" v="9"/>
+    <tag k="addr:street" v="Aicher Straße"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="11"/>
+    <tag k="fee" v="no"/>
+    <tag k="maxstay:conditional" v="2h @ (Mo-Fr 08:00-18:00; Sa 08:00-13:00)"/>
+    <tag k="name" v="Stadtverwaltung"/>
+    <tag k="opening_hours" v="24/7"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P3"/>
+  </node>
+  <node id="428566321" lat="48.6860741" lon="9.1781591" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="9"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="2087258327" lat="48.6862501" lon="9.1773309" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="3"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1016550616" lat="48.686225" lon="9.1774906" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="4"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1006094903" lat="48.6862962" lon="9.1770679" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="4"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="2030538903" lat="48.6867726" lon="9.1764332" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1293680848" lat="48.6872649" lon="9.1731673" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="3"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1261153343" lat="48.6871421" lon="9.1731305" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="6"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1309176095" lat="48.6778077" lon="9.2114053" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+  </node>
+  <node id="198099809" lat="48.6954702" lon="9.1715203" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+  </node>
+  <node id="645482568" lat="48.693247" lon="9.1744062" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="807752428" lat="48.6937559" lon="9.1743166" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1026055550" lat="48.6926482" lon="9.1742568" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1073763441" lat="48.6921785" lon="9.1742085" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="752316209" lat="48.6919226" lon="9.1734938" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="914356853" lat="48.6919876" lon="9.1729559" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1229161065" lat="48.693422" lon="9.1744317" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="195228908" lat="48.6930166" lon="9.1743486" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="471579726" lat="48.7023494" lon="9.2144817" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="maxstay" v="60"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1442726378" lat="48.6941986" lon="9.1931347" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="Bus Messe"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="15"/>
+    <tag k="capacity:tourist_bus" v="15"/>
+    <tag k="motorcar" v="no"/>
+    <tag k="name" v="Bus Messe"/>
+    <tag k="tourist_bus" v="yes"/>
+  </node>
+  <node id="16503286" lat="48.6827284" lon="9.2032383" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="yes"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="building" v="yes"/>
+    <tag k="building:levels" v="5"/>
+    <tag k="fee" v="yes"/>
+    <tag k="layer" v="1"/>
+    <tag k="lit" v="yes"/>
+    <tag k="maxheight" v="2.1"/>
+    <tag k="operator" v="APCOA"/>
+    <tag k="parking" v="multi-storey"/>
+    <tag k="source" v="survey; Yahoo; Maps4BW"/>
+  </node>
+  <node id="484589713" lat="48.7012345" lon="9.2097368" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="customers"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="operator" v="Netto"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1574598287" lat="48.6775497" lon="9.1980673" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="2056031695" lat="48.6931585" lon="9.1814281" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="no"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="bus" v="yes"/>
+    <tag k="parking" v="surface"/>
+    <tag k="tourist_bus" v="yes"/>
+  </node>
+  <node id="606508809" lat="48.6825685" lon="9.2129879" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+  </node>
+  <node id="718187988" lat="48.6974247" lon="9.2169732" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="XL-P"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="access" v="private"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="XL-P"/>
+    <tag k="parking" v="surface"/>
+    <tag k="website" v="https://www.xl-p.com"/>
+  </node>
+  <node id="615438348" lat="48.6822346" lon="9.1986696" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="978508707" lat="48.6818099" lon="9.2024524" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="710708543" lat="48.6819136" lon="9.2023706" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1965237677" lat="48.6821609" lon="9.2021355" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="664792509" lat="48.6811272" lon="9.2000182" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="188523822" lat="48.6836392" lon="9.2084209" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1170727939" lat="48.6831708" lon="9.2097375" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="690339675" lat="48.682806" lon="9.2098684" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1896828359" lat="48.6821119" lon="9.2061398" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="536122141" lat="48.6818948" lon="9.2057859" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="6"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1709804316" lat="48.6818373" lon="9.2058995" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="10"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1630678941" lat="48.6817528" lon="9.2053594" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="capacity" v="5"/>
+    <tag k="parking" v="surface"/>
+  </node>
+  <node id="1792550665" lat="48.6916743" lon="9.1823649" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+  </node>
+  <node id="1359953204" lat="48.6840565" lon="9.2143913" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v=""/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+  </node>
+  <node id="2014838114" lat="48.6925794" lon="9.1978228" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P12"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="P12"/>
+  </node>
+  <node id="136936250" lat="48.6917813" lon="9.1901432" version="1" timestamp="2020-09-02T15:06:09Z" uid="0" user="foo" changeset="0">
+    <tag k="name" v="P15"/>
+    <tag k="address" v=""/>
+    <tag k="amenity" v="parking"/>
+    <tag k="amenity" v="parking"/>
+    <tag k="fee" v="yes"/>
+    <tag k="name" v="P15"/>
+    <tag k="parking" v="surface"/>
+    <tag k="ref" v="P15"/>
+    <tag k="toilets:wheelchair" v="no"/>
+    <tag k="type" v="multipolygon"/>
+    <tag k="wheelchair" v="limited"/>
+  </node>
+</osm>

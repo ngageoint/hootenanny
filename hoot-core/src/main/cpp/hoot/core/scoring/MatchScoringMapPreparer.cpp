@@ -74,8 +74,8 @@ MatchScoringMapPreparer::MatchScoringMapPreparer()
 
 void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
 {
-  // if an element has a uuid, but no REF1/REF2 tag then create a REF tag with the uuid. The
-  // 1/2 is determined by the unknown status.
+  // If an element has a uuid, but no REF1/REF2 tag then create a REF tag with the uuid. Whether its
+  // REF1 or REF2 is determined by the unknown status.
   ConvertUuidToRefVisitor convertUuidToRef;
   map->visitRw(convertUuidToRef);
 

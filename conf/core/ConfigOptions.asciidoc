@@ -1177,7 +1177,7 @@ and will pass through to the differential output.
 * Default Value: `45.0`
 
 Maximum angle different in degrees that two line features can have and still be considered as
-going in the same direction by DirectionFinder::isSimilarDirection2.  Used by Attribute Conflation
+going in the same direction by DirectionFinder::isSimilarDirection2. Used by Attribute Conflation
 only.
 
 === distance.node.criterion.center
