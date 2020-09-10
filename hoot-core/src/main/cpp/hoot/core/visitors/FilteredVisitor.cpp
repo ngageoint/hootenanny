@@ -60,8 +60,6 @@ FilteredVisitor::FilteredVisitor(ElementCriterion* criterion, ElementVisitor* vi
   _criterion(criterion),
   _visitor(visitor)
 {
-  _criterionDelete.reset(criterion);
-  _visitDelete.reset(visitor);
 }
 
 void FilteredVisitor::addCriterion(const ElementCriterionPtr& e)
@@ -71,7 +69,6 @@ void FilteredVisitor::addCriterion(const ElementCriterionPtr& e)
     throw IllegalArgumentException("FilteredVisitor only takes one criterion.");
   }
   _criterion = e.get();
-  _criterionDelete = e;
 }
 
 void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
@@ -81,7 +78,6 @@ void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
     throw IllegalArgumentException("FilteredVisitor only takes one visitor.");
   }
   _visitor = v.get();
-  _visitDelete = v;
 }
 
 void FilteredVisitor::setOsmMap(OsmMap* map)
@@ -107,13 +103,9 @@ void FilteredVisitor::setOsmMap(const OsmMap* map)
 void FilteredVisitor::visit(const ConstElementPtr& e)
 {
   LOG_VART(e->getElementId());
-//  if (_criterion != 0)
-//  {
-//    LOG_VART(_criterion->toString());
-//  }
   if (_criterion->isSatisfied(e))
   {
-    LOG_TRACE("crit satisfied for: " << e->getElementId());
+    LOG_TRACE("crit: " << _criterion->toString() << " satisfied for: " << e->getElementId());
     // This is bad. Making this change was the result of a cascading set of const correctness
     // changes necessary in order to be able to call ElementVisitor from js files and not just
     // ConstElementVisitor (#2831). We may need some re-design.
@@ -121,7 +113,7 @@ void FilteredVisitor::visit(const ConstElementPtr& e)
   }
   else
   {
-    LOG_TRACE("crit not satisfied for: " << e->getElementId());
+    LOG_TRACE("crit: " << _criterion->toString() << " not satisfied for: " << e->getElementId());
   }
 }
 

@@ -235,6 +235,15 @@ public:
   static std::set<long> getIntersectingWayIds(const long wayId, const OsmMapPtr& map);
 
   /**
+   * Determines the ways intersecting an input way
+   *
+   * @param wayId the ID of the way to find intersecting ways for
+   * @param map the map containing the input and potentially intersecting ways
+   * @return a collection of ways
+   */
+  static std::vector<WayPtr> getIntersectingWays(const long wayId, const OsmMapPtr& map);
+
+  /**
    * Determines if any way intersects with another having a specified tag
    *
    * @param wayId ID of the way to search intersecting ways for

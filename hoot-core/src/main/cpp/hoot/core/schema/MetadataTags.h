@@ -242,6 +242,15 @@ public:
    */
   inline static const QString TrainingReview()          { return "REVIEW"; }
 
+  // used by FindIntersectionsVisitor
+  inline static const QString HootIntersectionWayCount() { return "hoot:intersection:way_count"; }
+  inline static const QString HootIntersectionMinAngle() { return "hoot:intersection:min_angle"; }
+  inline static const QString HootIntersectionMaxAngle() { return "hoot:intersection:max_angle"; }
+
+  // used by FindStreetIntersectionsByName
+  inline static const QString HootIntersectionStreet1() { return "hoot:intersection:street1"; }
+  inline static const QString HootIntersectionStreet2() { return "hoot:intersection:street2"; }
+
 private:
 
   MetadataTags() { }

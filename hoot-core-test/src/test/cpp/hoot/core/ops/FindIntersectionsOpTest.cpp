@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -67,7 +67,7 @@ public:
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "Toy_intersections.osm");
-    HOOT_FILE_EQUALS( _inputPath + "ToyTestA_intersections.osm",
+    HOOT_FILE_EQUALS(_inputPath + "ToyTestA_intersections.osm",
                      _outputPath + "Toy_intersections.osm");
   }
 
@@ -85,7 +85,7 @@ public:
     MapProjector::projectToWgs84(map);
     OsmXmlWriter writer;
     writer.write(map, _outputPath + "RailIntersections-Output.osm");
-    HOOT_FILE_EQUALS( _inputPath + "RailIntersections-Expected.osm",
+    HOOT_FILE_EQUALS(_inputPath + "RailIntersections-Expected.osm",
                      _outputPath + "RailIntersections-Output.osm");
   }
 

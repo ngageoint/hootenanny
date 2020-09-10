@@ -13,7 +13,7 @@ based on the paper, "Evaluating conflation methods using uncertainty modeling," 
               a permuted copy of the reference data, conflate the referenced data with the permuted data, and then write the reference
               data, permuted data, and conflated data to output files.
 * +--test+  - (optional) This option causes the command to generate a series of PERTY scores for the same set of conflation inputs
-              and averagesthem together (to account for randomness), which yields a single PERTY score.  Must be specified after
+              and averages them together (to account for randomness), which yields a single PERTY score.  Must be specified after
               configuration options.  Not valid in combination with the --score option.  Any number of conflation jobs may be run per test.
 
 === Optional Defines

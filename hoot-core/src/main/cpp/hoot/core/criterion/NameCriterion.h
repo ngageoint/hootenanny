@@ -38,7 +38,10 @@ namespace hoot
 {
 
 /**
- * Identifies elements that contain a specified namen
+ * Identifies elements that contain a specified name
+ *
+ * This is currently using very simple partial matching enabled by string containment. It could be
+ * upgraded to use wildcard matching, if needed (see TagAdvancedCriterion).
  */
 class NameCriterion : public ElementCriterion, public Configurable
 {
@@ -47,7 +50,8 @@ public:
   static std::string className() { return "hoot::NameCriterion"; }
 
   NameCriterion();
-  NameCriterion(const QStringList& names, const bool caseSensitive = false);
+  NameCriterion(const QStringList& names, const bool caseSensitive = false,
+                const bool partialMatch = false);
   virtual ~NameCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
@@ -60,8 +64,12 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
+  QStringList getNames() const { return _names; }
+  bool getCaseSensitive() const { return _caseSensitive; }
+
   void setNames(const QStringList& names) { _names = names; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
+  void setPartialMatch(bool partialMatch) { _partialMatch = partialMatch; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
@@ -69,7 +77,10 @@ public:
 private:
 
   QStringList _names;
+  // if enabled, names must match case
   bool _caseSensitive;
+  // if enabled, the input string can match if it is contained within the feature name
+  bool _partialMatch;
 };
 
 }

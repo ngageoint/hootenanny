@@ -351,6 +351,25 @@ See the User Guide for more details on command usage.
       --maxNodesPerCell 1000 --bounds "-71.4698,42.4866,-71.4657,42.4902" --node-density
 -----
 
+Find street intersection locations in a map by street name:
+
+-----
+    hoot convert -D convert.ops="hoot::FindStreetIntersectionsByName" \
+      -D name.criterion.names="streetName1;streetName2" -D name.criterion.case.sensitive=false \
+      -D name.criterion.partial.match=false input.osm output.osm
+-----
+
+===== Run a series of random map perturbations and score how well all of them conflate against a source map:
+
+-----
+    hoot perty -D perty.test.num.runs=10 -D perty.test.num.simulations=5 \
+      -D perty.test.dynamic.variables=perty.systematic.error.x;perty.systematic.error.y \
+      -D perty.test.dynamic.variable.start.value=1.0 \
+      -D perty.test.dynamic.variable.increment=5.0 \
+      -D perty.test.expected.scores=0.9;0.95;0.93;0.952;0.91;0.95;0.9;0.95;0.95;0.95 \
+      -D perty.test.allowed.score.variance=0.05 reference-in.osm /my/output/directory --test
+-----
+
 ==== Comparison
 
 ===== Calculate the difference between two maps:
@@ -927,8 +946,8 @@ hoot task-grid test-files/MyInputFile.osm MyOutputFile.geojson --maxNodesPerCell
 ===== Count all features whose name contains "subway":
 
 -----
-    hoot count -D name.contains.criterion.names="subway" -D name.contains.criterion.case.sensitive=false \
-      input.osm hoot::NameContainsCriterion
+    hoot count -D name.criterion.names="subway" -D name.criterion.case.sensitive=false \
+      input.osm hoot::NameCriterion
 -----
 
 ===== Calculate the area of all features in a map:

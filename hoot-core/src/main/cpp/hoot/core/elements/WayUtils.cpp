@@ -379,6 +379,27 @@ std::set<long> WayUtils::getIntersectingWayIds(const long wayId, const OsmMapPtr
   return intersectingWayIds;
 }
 
+std::vector<WayPtr> WayUtils::getIntersectingWays(const long wayId, const OsmMapPtr& map)
+{
+  std::vector<WayPtr> intersectingWays;
+  ConstWayPtr way = map->getWay(wayId);
+  if (way)
+  {
+    std::vector<long> nearbyWayIds = map->getIndex().findWays(way->getEnvelopeInternal(map));
+    for (std::vector<long>::const_iterator it = nearbyWayIds.begin(); it != nearbyWayIds.end();
+         ++it)
+    {
+      const long otherWayId = *it;
+      WayPtr otherWay = map->getWay(otherWayId);
+      if (otherWay && way->hasSharedNode(*otherWay))
+      {
+        intersectingWays.push_back(otherWay);
+      }
+    }
+  }
+  return intersectingWays;
+}
+
 bool WayUtils::wayIntersectsWithWayHavingKvp(
   const long wayId, const QString& kvp, const OsmMapPtr& map)
 {

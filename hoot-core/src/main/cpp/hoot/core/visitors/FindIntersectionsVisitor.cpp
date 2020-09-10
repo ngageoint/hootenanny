@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FindIntersectionsVisitor.h"
 
@@ -56,7 +56,6 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
   for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
   {
     WayPtr w = _map->getWay(*it);
-
     if (_criterion->isSatisfied(w))
     {
       hwids.insert(*it);
@@ -67,10 +66,14 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
   {
     // keep it
     _ids.push_back(id);
+
+    // TODO: This and the commented out minAngle/maxAngle sections below are puzzling...changing the
+    // tag keys changes the number of nodes in the test output for FindIntersectionsOpTest.
+//    _map->getNode(id)->setTag(
+//      MetadataTags::HootIntersectionWayCount(), QString::number(hwids.size()));
     _map->getNode(id)->setTag("IntersectionWayCount", QString::number(hwids.size()));
 
     vector<Radians> angles = NodeMatcher::calculateAngles(_map, id, hwids, 10);
-
     vector<double> v;
     for (uint i = 0; i < angles.size(); i++)
     {
@@ -80,7 +83,6 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
 
     double minAngle = 360.;
     double maxAngle = 0.;
-
     for (uint i = 0; i < v.size(); i++)
     {
       double a = (i == 0) ? (v[i] + 360 - v[v.size()-1]) : v[i] - v[i-1];
@@ -93,7 +95,8 @@ void FindIntersectionsVisitor::visit(const ConstElementPtr& e)
         maxAngle = a;
       }
     }
-
+    //_map->getNode(id)->setTag(MetadataTags::HootIntersectionMinAngle(), QString::number(minAngle));
+    //_map->getNode(id)->setTag(MetadataTags::HootIntersectionMaxAngle(), QString::number(maxAngle));
     _map->getNode(id)->setTag("MinAngle", QString::number(minAngle));
     _map->getNode(id)->setTag("MaxAngle", QString::number(maxAngle));
   }

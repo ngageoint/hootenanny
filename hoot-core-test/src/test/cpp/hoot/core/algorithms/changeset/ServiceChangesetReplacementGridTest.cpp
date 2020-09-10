@@ -124,6 +124,7 @@ public:
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(false);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -338,6 +339,7 @@ public:
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(true);
+    uut.setOutputNonConflatable(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -50,8 +50,17 @@ public:
     uut.setNames(QStringList("Old Town Tavern"));
     CPPUNIT_ASSERT(uut.isSatisfied(node));
 
+    uut.setNames(QStringList("Old Town"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    uut.setNames(QStringList("Old Tavern"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
     uut.setNames(QStringList("OLD TOWN TAVERN"));
     CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    uut.setNames(QStringList("OLD TOWN"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
 
     uut.setNames(QStringList("blah"));
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
@@ -59,6 +68,27 @@ public:
     uut.setCaseSensitive(true);
 
     uut.setNames(QStringList("OLD TOWN TAVERN"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    uut.setNames(QStringList("OLD TOWN"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    uut.setCaseSensitive(false);
+    uut.setPartialMatch(true);
+
+    uut.setNames(QStringList("Old Town"));
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    uut.setNames(QStringList("OLD TOWN"));
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    uut.setNames(QStringList("Town Tavern"));
+    CPPUNIT_ASSERT(uut.isSatisfied(node));
+
+    uut.setNames(QStringList("Old Tavern"));
+    CPPUNIT_ASSERT(!uut.isSatisfied(node));
+
+    uut.setNames(QStringList("blah"));
     CPPUNIT_ASSERT(!uut.isSatisfied(node));
   }
 };

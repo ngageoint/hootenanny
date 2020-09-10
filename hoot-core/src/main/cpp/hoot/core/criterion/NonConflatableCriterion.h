@@ -75,6 +75,7 @@ public:
   void setGeometryTypeFilter(const GeometryTypeCriterion::GeometryType& filter)
   { _geometryTypeFilter = filter; }
   void setIgnoreGenericConflators(bool ignore) { _ignoreGenericConflators = ignore; }
+  void setIgnoreChildren(bool ignore) { _ignoreChildren = ignore; }
 
 private:
 
