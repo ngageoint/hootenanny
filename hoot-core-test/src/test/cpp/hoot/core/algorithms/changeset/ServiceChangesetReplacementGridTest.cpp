@@ -57,25 +57,16 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  CPPUNIT_TEST(orphanedNodes1Test);
+  //CPPUNIT_TEST(orphanedNodes1Test);
   // TODO: having some trouble with repeatability here...will come back to this one
   //CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
-  //CPPUNIT_TEST(github4196Test);
-  //CPPUNIT_TEST(github4174Test);
-  //CPPUNIT_TEST(github4174UniformTest);
-  //CPPUNIT_TEST(github4170UniformTest);
   //CPPUNIT_TEST(github4216UniformTest);
-  //CPPUNIT_TEST(thirtyEightFortyThreeTest);
-
-  //CPPUNIT_TEST(northVegasSmallTest);
-  //CPPUNIT_TEST(northVegasSmallUniformTest);
-  //CPPUNIT_TEST(northVegasMediumTest);
   //CPPUNIT_TEST(northVegasLargeTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
-  //CPPUNIT_TEST(northVegasLargeUniform2Test);
+  CPPUNIT_TEST(github4226aTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -168,156 +159,6 @@ public:
 
   ///////////////////////////////////////////////////////////////////////////////////////////
 
-  void thirtyEightFortyThreeTest()
-  {
-    _testName = "thirtyEightFortyThreeTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/43-38";
-    const QString outDir = rootDir + "/" + _testName;
-    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-
-    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);
-
-    // TODO: all of this shouldn't be necessary; should be able to load successive db maps from
-    // multiple inputs (works for osmapidb here but not hootapidb)
-
-    OsmMapPtr map(new OsmMap());
-    OsmMapReaderFactory::read(map, rootDir + "/Task38/NOME_cde4a1.osm", true, Status::Unknown1);
-    OsmMapReaderFactory::read(map, rootDir + "/Task43/NOME_5c4715.osm", true, Status::Unknown1);
-    OsmMapWriterFactory::write(map, outDir + "/NOME.osm");
-
-    map.reset(new OsmMap());
-    OsmMapReaderFactory::read(map, rootDir + "/Task38/OSM_cde4a1.osm", true, Status::Unknown2);
-    OsmMapReaderFactory::read(map, rootDir + "/Task43/OSM_5c4715.osm", true, Status::Unknown2);
-    OsmMapWriterFactory::write(map, outDir + "/OSM.osm");
-
-    conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), false);
-
-    _prepInput(outDir + "/NOME.osm", outDir + "/OSM.osm", "");
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      BoundsFileTaskGridGenerator(
-        QStringList(rootDir + "/38-43-grid.osm")).generateTaskGrid());
-
-    //HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
-  }
-
-  void github4196Test()
-  {
-    // (VGI 1666) wasn't able to reproduce the deletion of way "Perry Ellis Drive" with this;
-    // possibly the issue was fixed by VGI 1622
-
-    _testName = "vgi1666Test";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4196";
-    const QString outDir = rootDir + "/" + _testName;
-    QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/NOME_Data.osm", rootDir + "/OSM_Data.osm",
-      "-115.1017,36.02439,-114.9956,36.0733", outDir);
-
-    QStringList gridInputs;
-    gridInputs.append(rootDir + "/1/Task38_07Aug2020_VGI_1666/Task38Bounds.osm");
-    gridInputs.append(rootDir + "/1/Task43_VGI_1666/Task43Extend.osm");
-    BoundsFileTaskGridGenerator taskGridGen(gridInputs);
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
-  }
-
-  void github4174Test()
-  {
-    // This test reproduces the issue.
-
-    _testName = "github4174Test";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
-    const QString outDir = rootDir + "/" + _testName;
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.1217,36.2150,-114.9911,36.3234", outDir);
-
-    ChangesetTaskGridReplacer uut;
-    QList<int> skipIds;
-    skipIds.append(52);
-    uut.setTaskCellSkipIds(skipIds);
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-     _replacementDataUrl,
-     BoundsFileTaskGridGenerator(QStringList(rootDir + "/combined-data/Task52_53_boundaries.osm"))
-       .generateTaskGrid());
-  }
-
-  void github4174UniformTest()
-  {
-    // This test illustrates that if you run the adjacent cells, the problem goes away.
-
-    _testName = "github4174UniformTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
-    const QString outDir = rootDir + "/" + _testName;
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.1497,36.2027,-114.9903,36.3228", outDir);
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.1365,36.2084,-115.0049,36.3151", 3,
-        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
-  }
-
-  void github4170UniformTest()
-  {
-    // This test illustrates that if you run the adjacent cells, the problem goes away.
-
-    _testName = "github4170UniformTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
-    const QString outDir = rootDir + "/" + _testName;
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.2069,36.1696,-114.9439,36.4081", outDir);
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.1365,36.2084,-115.0049,36.3151", 3,
-        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
-  }
-
   void github4216UniformTest()
   {
     // reproduces orphaned nodes; larger AOI version of orphanedNodes2Test
@@ -347,88 +188,6 @@ public:
         "-115.1208,36.1550,-115.0280,36.2182", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
-  }
-
-  void northVegasSmallTest()
-  {
-    // 4 sq blocks of the city, 4 changesets, ~9k changes, avg derivation: 4s, total time: ~.5m,
-    // ~18k changes/min - OUT OF DATE
-
-    _testName = "northVegasSmallTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
-    const QString outDir = rootDir + "/" + _testName;
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.3314,36.2825,-115.2527,36.33870, outDir");
-
-    NodeDensityTaskGridGenerator taskGridGen(
-      QStringList(_replacementDataUrl), 1000, "-115.3059,36.2849,-115.2883,36.2991",
-      outDir + "/" + _testName + "-" + "taskGridBounds.osm");
-    taskGridGen.setReadInputFullThenCrop(true);
-
-    ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
-  }
-
-  void northVegasSmallUniformTest()
-  {
-    _testName = "northVegasSmallUniformTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
-    const QString outDir = rootDir + "/" + _testName;
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.3314,36.2825,-115.2527,36.3387", outDir);
-
-    ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.3059,36.2849,-115.2883,36.2991", 4,
-        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
-  }
-
-  void northVegasMediumTest()
-  {
-    // ~1/4 of the northern half of the city, 64 changesets, ~4.02M changes, avg derivation: 9s,
-    // total time: ~12.5m, ~320k changes/min - OUT OF DATE
-
-    _testName = "northVegasMediumTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
-    const QString outDir = rootDir + "/" + _testName;
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.3441,36.2012,-115.1942,36.3398", outDir);
-
-    NodeDensityTaskGridGenerator taskGridGen(
-      QStringList(_replacementDataUrl), 10000, "-115.3332,36.2178,-115.1837,36.3400",
-      outDir + "/" + _testName + "-" + "taskGridBounds.osm");
-    taskGridGen.setReadInputFullThenCrop(true);
-
-    ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
   }
 
   void northVegasLargeTest()
@@ -494,29 +253,30 @@ public:
         .generateTaskGrid());
   }
 
-  void northVegasLargeUniform2Test()
+  void github4226aTest()
   {
-    _testName = "northVegasLargeUniform2Test";
+    _testName = "github4226aTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.3066,36.1301,-115.2876,36.1414");
+      "-115.3046,36.2891,-115.2882,36.3093", outDir);
 
     ChangesetTaskGridReplacer uut;
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
-    uut.setCalcDiffWithReplacement(false);
+    uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
       UniformTaskGridGenerator(
-        "-115.2998,36.1339,-115.2951,36.1403", 2,
+        "-115.2990,36.2943,-115.2945,36.3004", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
   }
@@ -561,7 +321,7 @@ private:
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
 
   void _loadDataToReplaceDb(

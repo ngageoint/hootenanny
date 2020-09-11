@@ -342,7 +342,7 @@ public:
   /**
    * Returns true if the tags have the specified kvp
    *
-   * @param kvp kvp to search for
+   * @param kvp kvp to search for; value wildcards are supported using '*'
    * @return true if tags contain the kvp; false otherwise
    */
   bool hasKvp(const QString& kvp) const;
@@ -350,7 +350,7 @@ public:
   /**
    * Returns true if the tags have any key=value in the input list
    *
-   * @param kvps kvps to search for
+   * @param kvps kvps to search for; value wildcards are supported using '*'
    * @return true if tags contain at least one kvp; false otherwise
    */
   bool hasAnyKvp(const QStringList& kvps) const;
@@ -358,7 +358,7 @@ public:
   /**
    * Returns the first matching key/value pair (kvp) from the input list
    *
-   * @param kvps list of kvp string to match
+   * @param kvps list of kvp string to match; value wildcards are supported using '*'
    * @return a kvp or an empty string if no matching kvp is found
    */
   QString getFirstKvp(const QStringList& kvps) const;

@@ -280,7 +280,10 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
       LOG_VART(wayToSnap->getElementId());
     }
     // ensure the way has the status we require for snapping
-    if (wayToSnap && wayToSnapCrit->isSatisfied(wayToSnap))
+    if (wayToSnap && wayToSnapCrit->isSatisfied(wayToSnap) &&
+        // This allows for type exclusion. It may make more sense to pass these exclude types in
+        // as part of the snapping criterion, but will go with this for now.
+        !wayToSnap->getTags().hasAnyKvp(_typeExcludeKvps))
     {
       // find unconnected endpoints on the way, if the way satisfies the specified crit
       const std::set<long> unconnectedEndNodeIds =
@@ -297,13 +300,8 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
         {
           NodePtr unconnectedEndNode = _map->getNode(unconnectedEndNodeId);
 
-          // If the min type match score was set, pass in the tags of the way being snapped during
-          // comparison for a stricter snap requirement.
-          Tags wayTags;
-          if (_minTypeMatchScore != -1.0)
-          {
-            wayTags = wayToSnap->getTags();
-          }
+          // For way snapping, pass in the tags of the way being snapped during comparison. They
+          // will be needed if a minimum type score or a feature type exclude list was specified.
 
           // Try to find the nearest way node satisfying the specifying way node criteria that
           // is within the max reuse distance (if one was specified) and snap the unconnected way
@@ -311,7 +309,7 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
           // back on the number of new way nodes being added.
           if (_snapToExistingWayNodes)
           {
-            snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode, wayTags);
+            snapOccurred = _snapUnconnectedNodeToWayNode(unconnectedEndNode, wayToSnap->getTags());
           }
 
           if (!snapOccurred)
@@ -319,7 +317,7 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
             // If we weren't able to snap to a nearby way node or the snapping directly to way nodes
             // option was turned off, we're going to try to find a nearby way and snap onto the
             // closest location on it.
-            snapOccurred = _snapUnconnectedNodeToWay(unconnectedEndNode, wayTags);
+            snapOccurred = _snapUnconnectedNodeToWay(unconnectedEndNode, wayToSnap->getTags());
           }
 
           if (snapOccurred)
@@ -709,15 +707,15 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
           Distance::euclidean(wayNodeToSnapTo->toCoordinate(), nodeToSnap->toCoordinate()) <=
             _maxNodeReuseDistance*/)
       {
-        // If the tags of the way being snapped were passed in, we need to do a type comparison.
-        // If the type similarity falls below the configured score, don't snap the ways together.
-        if (!wayToSnapTags.isEmpty())
+        // If a minimum type match score was specified, we need to do a type comparison. If the
+        // type similarity falls below the configured score, don't snap the ways together.
+        if (_minTypeMatchScore != -1.0)
         {
           const std::vector<ConstWayPtr> containingWays =
             WayUtils::getContainingWaysByNodeId(wayNodeToSnapToId, _map);
           for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
                containingWaysItr != containingWays.end(); ++containingWaysItr)
-          {
+          {   
             if (schema.explicitTypeMismatch(
                   wayToSnapTags, (*containingWaysItr)->getTags(), _minTypeMatchScore))
             {

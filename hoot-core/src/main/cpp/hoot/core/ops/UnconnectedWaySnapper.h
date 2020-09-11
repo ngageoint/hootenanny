@@ -140,6 +140,7 @@ public:
   void setReviewSnappedWays(bool review) { _reviewSnappedWays = review; }
   void setMarkOnly(bool markOnly) { _markOnly = markOnly; }
   void setMinTypeMatchScore(double score);
+  void setTypeExcludeKvps(const QStringList& kvps) { _typeExcludeKvps = kvps; }
 
 private:
 
@@ -189,6 +190,9 @@ private:
   // this can prevent very differently typed ways from being snapped to each other; valid range
   // greater than 0 and less than or equal to 1; a value of -1.0 ignores the setting completely
   double _minTypeMatchScore;
+
+  // TODO
+  QStringList _typeExcludeKvps;
 
   // keep track of the way nodes that are snapped
   QList<long> _snappedWayNodeIds;
@@ -269,7 +273,7 @@ private:
    * requirement between the two ways being snapped based on the value of _minTypeMatchScore
    * @return true if the node was snapped; false otherwise
    */
-  bool _snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap, const Tags& wayToSnapTags = Tags());
+  bool _snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap, const Tags& wayToSnapTags);
 
   /*
    * Attempts to snap an unconnected way end node to another way
@@ -279,7 +283,7 @@ private:
    * requirement between the two ways being snapped based on the value of _minTypeMatchScore
    * @return true if the node was snapped; false otherwise
    */
-  bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap, const Tags& wayToSnapTags = Tags());
+  bool _snapUnconnectedNodeToWay(const NodePtr& nodeToSnap, const Tags& wayToSnapTags);
 
   /*
    * Snap a particular node into a way at its closest intersecting point
