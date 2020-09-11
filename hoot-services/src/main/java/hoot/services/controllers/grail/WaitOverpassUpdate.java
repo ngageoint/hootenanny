@@ -29,11 +29,13 @@ package hoot.services.controllers.grail;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -67,8 +69,9 @@ class WaitOverpassUpdate extends GrailCommand {
 
     @Override
     public CommandResult execute() {
+        LocalDateTime startTime = LocalDateTime.now();
         CommandResult commandResultStart = new CommandResult();
-        commandResultStart.setStart(LocalDateTime.now());
+        commandResultStart.setStart(startTime);
         commandResultStart.setCommand("Overpass sync wait");
         commandResultStart.setJobId(jobId);
         commandResultStart.setStdout("Starting wait on overpass sync...\n");
@@ -76,16 +79,22 @@ class WaitOverpassUpdate extends GrailCommand {
         commandResultStart.setPercentProgress(100);
         commandResultStart.setCaller(caller.getName());
         commandResultStart.setExitCode(CommandResult.SUCCESS);
-        commandResultStart.setFinish(LocalDateTime.now());
+        commandResultStart.setFinish(startTime);
         DbUtils.upsertCommandStatus(commandResultStart);
         DbUtils.completeCommandStatus(commandResultStart);
 
         if (GrailResource.isPrivateOverpassActive()) {
             long timeSpent = 0;
             String url = null;
+            boolean foundChangesetId = false;
 
             String lastId = DbUtils.getLastPushedId(jobId);
-            String time = LocalDateTime.now().minusMinutes(5).toString(); // get 5 minutes before in case the update happened before this command was run
+            if (lastId == null) {
+                String msg = "No changeset id found. Timed out job may have been deleted.";
+                throw new WebApplicationException(new NotFoundException(), Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
+            }
+
+            String time = startTime.minusMinutes(5).toString(); // get 5 minutes before in case the update happened before this command was run
             String query = "[out:csv(::changeset)][bbox:{{bbox}}];"
                     + "("
                     + "node(newer:\"" + time + "\");"
@@ -111,7 +120,6 @@ class WaitOverpassUpdate extends GrailCommand {
 
                     br = new BufferedReader(new InputStreamReader(responseStream));
                     String line;
-                    boolean foundChangesetId = false;
                     while ((line = br.readLine()) != null) {
                         if (line.contains(lastId)) {
                             foundChangesetId = true;
@@ -131,28 +139,62 @@ class WaitOverpassUpdate extends GrailCommand {
                 String msg = "Waiting for overpass update failed due to interrupted exception. [" + url + "]" + exc.getMessage();
                 throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
 
-            }
-            catch (Exception exc) {
-                String msg = "Failure to pull data from overpass during WaitOverpassUpdate. [" + url + "]" + exc.getMessage();
+            } catch (Exception exc) {
+                String msg = "Failure to poll data from overpass during WaitOverpassUpdate. [" + url + "]" + exc.getMessage();
                 throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
+            }
+
+            // tag timeout if not found
+            if (!foundChangesetId) {
+                DbUtils.tagTimeoutTask(jobId);
+                String msg = "Overpass sync wait time exceeded";
+                throw new WebApplicationException(new NotFoundException(), Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
+            } else if (this.params.getApplyTags()) {
+                DbUtils.removeTimeoutTag(jobId);
             }
 
             logger.info("Database sync complete...");
         }
 
+        LocalDateTime finishTime = LocalDateTime.now();
+        String timeWaited = secondsToTimeString(Duration.between(startTime, finishTime).getSeconds());
         CommandResult commandResultFinish = new CommandResult();
-        commandResultFinish.setStart(LocalDateTime.now());
+        commandResultFinish.setStart(finishTime);
         commandResultFinish.setCommand("Overpass sync wait complete");
         commandResultFinish.setJobId(jobId);
-        commandResultFinish.setStdout("Finished wait on overpass sync...\n");
+        commandResultFinish.setStdout("Finished wait on overpass sync after " + timeWaited + "\n");
         commandResultFinish.setStderr("");
         commandResultFinish.setPercentProgress(100);
         commandResultFinish.setCaller(caller.getName());
         commandResultFinish.setExitCode(CommandResult.SUCCESS);
-        commandResultFinish.setFinish(LocalDateTime.now());
+        commandResultFinish.setFinish(finishTime);
         DbUtils.upsertCommandStatus(commandResultFinish);
         DbUtils.completeCommandStatus(commandResultFinish);
 
         return commandResultFinish;
     }
+
+    static String secondsToTimeString(long totalSeconds) {
+        long seconds = (totalSeconds % 60);
+        long minutes = (totalSeconds % 3600) / 60;
+        long hours = (totalSeconds % 86400) / 3600;
+        long days = (totalSeconds % (86400 * 30)) / 86400;
+
+        String timeString = "";
+        if (days > 0) {
+            timeString += days + " days ";
+        }
+        if (hours > 0) {
+            timeString += hours + " hours ";
+        }
+        if (minutes > 0) {
+            timeString += minutes + " minutes ";
+        }
+        if (seconds > 0) {
+            timeString += seconds + " seconds";
+        }
+
+        return timeString.trim();
+    }
+
 }

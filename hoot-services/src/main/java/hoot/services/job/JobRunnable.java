@@ -35,6 +35,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import hoot.services.ApplicationContextUtils;
 import hoot.services.command.Command;
 import hoot.services.command.CommandResult;
@@ -99,7 +102,8 @@ class JobRunnable implements Runnable {
 
             jobStatusManager.setCompleted(job.getJobId(), "FULLY PROCESSED");
 
-            if(job.getJobType().equals(JobType.UPLOAD_CHANGESET)){
+            ArrayList<JobType> uploadJobs = new ArrayList<>(Arrays.asList(JobType.UPLOAD_CHANGESET, JobType.BULK_ADD, JobType.BULK_DIFFERENTIAL, JobType.BULK_REPLACE));
+            if(uploadJobs.contains(job.getJobType())){
                 String parentId = job.getTags().get("parentId");
                 DbUtils.setStale(parentId);
                 DbUtils.checkConflicted(job.getJobId(), parentId);

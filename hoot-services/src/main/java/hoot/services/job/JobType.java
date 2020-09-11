@@ -43,7 +43,8 @@ public enum JobType {
     UPLOAD_CHANGESET,
     BULK_ADD,
     BULK_REPLACE,
-    BULK_DIFFERENTIAL;
+    BULK_DIFFERENTIAL,
+    SYNC_WAIT;
 
     public static JobType fromInteger(int value) {
         if ((value >= 0) && (value < JobType.values().length)) {

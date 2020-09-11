@@ -61,7 +61,6 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.xerces.impl.xpath.regex.Match;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -829,6 +828,85 @@ NOT EXISTS
         return -1;
     }
 
+    public static String getJobIdByTask(String taskInfo) {
+        String jobId = createQuery()
+                .select(jobStatus.jobId)
+                .from(jobStatus)
+                .where(Expressions.booleanTemplate("tags->'taskInfo' like '%" + taskInfo + "%'"))
+                .fetchFirst();
+
+        return jobId;
+    }
+
+    public static List<Long> getTimeoutTasks() {
+        List<String> list = createQuery()
+            .select(Expressions.stringTemplate("tags->'taskInfo'"))
+            .from(jobStatus)
+            .where(Expressions.booleanTemplate("exist(tags,'timeout')"))
+            .fetch();
+
+        String patternString = "taskingManager:([0-9]*)_([0-9]*)";
+        Pattern pattern = Pattern.compile(patternString);
+        List<Long> taskList = new ArrayList<>();
+        for (String taskTag: list) {
+            Matcher matcher = pattern.matcher(taskTag);
+            boolean found = matcher.find();
+            long taskId = -1;
+            if (found) {
+                taskId = Long.parseLong(matcher.group(2));
+            }
+
+            taskList.add(taskId);
+        }
+
+        return taskList;
+    }
+
+    public static Map<String, String> getJobStatusTags(String jobId) {
+        Object jobTags = createQuery().select(jobStatus.tags)
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchOne();
+
+        return PostgresUtils.postgresObjToHStore(jobTags);
+    }
+
+    public static void tagTimeoutTask(String jobId) {
+        Map<String, String> tags = getJobStatusTags(jobId);
+        tags.put("timeout", "true");
+
+        SQLQueryFactory query = createQuery();
+        query.update(jobStatus)
+            .where(jobStatus.jobId.eq(jobId))
+            .set(jobStatus.tags, tags)
+            .execute();
+
+        try {
+            query.getConnection().commit();
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public static void removeTimeoutTag(String jobId) {
+        Map<String, String> tags = getJobStatusTags(jobId);
+        tags.remove("timeout");
+
+        SQLQueryFactory query = createQuery();
+        query.update(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .set(jobStatus.tags, tags)
+                .execute();
+
+        try {
+            query.getConnection().commit();
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     // Sets the specified job to a status detail of stale and recurses up to the parent jobs to do the same
     public static void setStale(String jobId) {
         // Find the job
@@ -1060,18 +1138,26 @@ NOT EXISTS
     }
 
     public static String getLastPushedId(String jobId) {
-        String stdOutWithId = createQuery()
-                .select(commandStatus.stdout)
-                .from(commandStatus)
-                .where(commandStatus.stdout.like("%Last changeset pushed ID:%").and(commandStatus.jobId.eq(jobId)))
-                .fetchFirst();
+        String id = null;
 
-        String patternString = "Last changeset pushed ID: ([0-9]*)";
+        if (jobId != null) {
+            String stdOutWithId = createQuery()
+                    .select(commandStatus.stdout)
+                    .from(commandStatus)
+                    .where(commandStatus.stdout.like("%Last changeset pushed ID:%").and(commandStatus.jobId.eq(jobId)))
+                    .fetchFirst();
 
-        Pattern pattern = Pattern.compile(patternString);
-        Matcher matcher = pattern.matcher(stdOutWithId);
-        boolean found = matcher.find();
+            String patternString = "Last changeset pushed ID: ([0-9]*)";
 
-        return found ? matcher.group(1) : "";
+            Pattern pattern = Pattern.compile(patternString);
+            Matcher matcher = pattern.matcher(stdOutWithId);
+            boolean found = matcher.find();
+
+            if (found) {
+                id = matcher.group(1);
+            }
+        }
+
+        return id;
     }
 }
