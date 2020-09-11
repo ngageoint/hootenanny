@@ -57,7 +57,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  //CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
   // TODO: having some trouble with repeatability here...will come back to this one
   //CPPUNIT_TEST(orphanedNodes2Test);
 
@@ -66,7 +66,6 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   //CPPUNIT_TEST(github4216UniformTest);
   //CPPUNIT_TEST(northVegasLargeTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
-  CPPUNIT_TEST(github4226aTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -253,34 +252,6 @@ public:
         .generateTaskGrid());
   }
 
-  void github4226aTest()
-  {
-    _testName = "github4226aTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
-    const QString outDir = rootDir + "/" + _testName;
-    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.3046,36.2891,-115.2882,36.3093", outDir);
-
-    ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.2990,36.2943,-115.2945,36.3004", 2,
-        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
-  }
-
 private:
 
   QString _testName;
@@ -321,7 +292,7 @@ private:
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 
   void _loadDataToReplaceDb(
