@@ -672,7 +672,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // cut the secondary data out of the reference data
   OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap, geometryType);
   const int cookieCutSize = cookieCutRefMap->size();
+  LOG_VARD(cookieCutSize);
   const int dataRemoved = refMapSize - cookieCutSize;
+  LOG_VARD(dataRemoved);
 
   if (!bothMapsEmpty)
   {
@@ -694,6 +696,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // together if needed.
   _combineMaps(cookieCutRefMap, secMap, false, _changesetId + "-combined-before-conflation");
   secMap.reset();
+  LOG_VARD(cookieCutRefMap->size());
 
   // CONFLATE / CLEAN
 
@@ -725,6 +728,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     }
   }
 
+  LOG_VARD(refMap->size());
+  LOG_VARD(conflatedMap->size());
   if (refMap->size() == 0 && conflatedMap->size() == 0)
   {
     LOG_STATUS("Both maps empty, so skipping changeset derivation...");
@@ -1480,7 +1485,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
       "Nothing to cut from dough map, so returning the empty dough map as the map after " <<
       "cutting: " << doughMap->getName() << "...");
     OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
-    return doughMap;
+    // copy here to avoid changing the ref map passed in as the dough map input
+    return OsmMapPtr(new OsmMap(doughMap));
   }
   else if (cutterMapInputSize == 0)
   {
@@ -1507,7 +1513,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
           "Nothing in cutter map. Full replacement not enabled, so returning the entire dough " <<
           "map as the map after cutting: " << doughMap->getName() << "...");
         OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
-        return doughMap;
+        // copy here to avoid changing the ref map passed in as the dough map input
+        return OsmMapPtr(new OsmMap(doughMap));
       }
     }
     else
@@ -1556,7 +1563,8 @@ OsmMapPtr ChangesetReplacementCreator::_getCookieCutMap(
           "Nothing in cutter map for linear features. Full replacement not enabled, so returning the "
           "entire dough map as the map after cutting: " << doughMap->getName() << "...");
         OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
-        return doughMap;
+        // copy here to avoid changing the ref map passed in as the dough map input
+        return OsmMapPtr(new OsmMap(doughMap));
       }
     }
   }
