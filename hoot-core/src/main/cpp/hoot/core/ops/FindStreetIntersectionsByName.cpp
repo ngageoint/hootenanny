@@ -75,17 +75,24 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
   LOG_VARD(_numProcessed);
   _numAffected = 0;
 
-  // Reduce the map down to just the streets that match the two input street names.
-  ElementCriterionPtr crit(
-    new ChainCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion(map)), _nameCrit));
-  CopyMapSubsetOp mapCopier(map, crit);
-  OsmMapPtr matchingRoadsMap(new OsmMap());
-  mapCopier.apply(matchingRoadsMap);
-  LOG_VARD(matchingRoadsMap->size());
+  // Reduce the map down to just the streets that match the two input street names. Load the streets
+  // found for each input into separate maps and give them statuses, so we don't get matches between
+  // streets both with similar names as the first or second input (e.g. input="Fremont;Olive" and
+  // we get back a partial match for "Strada Olivero" and "West Strada Olivero").
+  const QStringList streetNames = _nameCrit->getNames();
+  OsmMapPtr matchingRoads1Map = _filterRoadsByStreetName(streetNames[0], Status::Unknown1, map);
+  OsmMapPtr matchingRoads2Map = _filterRoadsByStreetName(streetNames[1], Status::Unknown2, map);
+
+  // Now, combine the maps back together to search over and use the assigned statuses to prevent
+  // incorrect matches.
+  OsmMapPtr combinedMatchingRoadsMap(new OsmMap(matchingRoads1Map));
+  combinedMatchingRoadsMap->append(matchingRoads2Map);
+  matchingRoads1Map.reset();
+  matchingRoads2Map.reset();
 
   OsmMapPtr intersectingWayNodesMap(new OsmMap());
   // make a copy so we can iterate through even if there are changes
-  const WayMap ways = matchingRoadsMap->getWays();
+  const WayMap ways = combinedMatchingRoadsMap->getWays();
   LOG_VARD(ways.size());
   // go through all the name matched streets
   for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
@@ -99,7 +106,7 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
 
     // find all streets that intersect the current one
     const std::vector<WayPtr> intersectingWays =
-      WayUtils::getIntersectingWays(way->getId(), matchingRoadsMap);
+      WayUtils::getIntersectingWays(way->getId(), combinedMatchingRoadsMap);
     LOG_VART(intersectingWays.size());
     for (std::vector<WayPtr>::const_iterator otherWaysItr = intersectingWays.begin();
          otherWaysItr != intersectingWays.end(); ++otherWaysItr)
@@ -111,6 +118,7 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
       const Qt::CaseSensitivity caseSensitivity =
         _nameCrit->getCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
       if (otherWay && otherWay->getElementId() != way->getElementId() &&
+          otherWay->getStatus() != way->getStatus() &&
           otherWay->getTags().getName().compare(way->getTags().getName(), caseSensitivity) != 0)
       {
         LOG_VART(otherWay);
@@ -120,11 +128,11 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
         for (QSet<long>::const_iterator wayNodeIdsItr = intersectingWayNodeIds.begin();
              wayNodeIdsItr != intersectingWayNodeIds.end(); ++wayNodeIdsItr)
         {
-          NodePtr wayNode = matchingRoadsMap->getNode(*wayNodeIdsItr);
+          NodePtr wayNode = combinedMatchingRoadsMap->getNode(*wayNodeIdsItr);
           if (wayNode)
           {
             LOG_VART(wayNode);
-            // add the node to the output map
+            // add the intersection node to the output map
             NodePtr intersectionNode(new Node(*wayNode));
             intersectionNode->getTags().set(
               MetadataTags::HootIntersectionStreet1(), way->getTags().getName());
@@ -138,6 +146,22 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
     }
   }
   map = intersectingWayNodesMap;
+}
+
+OsmMapPtr FindStreetIntersectionsByName::_filterRoadsByStreetName(
+  const QString& name, const Status& status, const ConstOsmMapPtr& map)
+{
+  const QStringList streetNames(name);
+  _nameCrit->setNames(streetNames);
+  ElementCriterionPtr crit(
+    new ChainCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion(map)), _nameCrit));
+  CopyMapSubsetOp mapCopier(map, crit);
+  OsmMapPtr matchingRoadsMap(new OsmMap());
+  mapCopier.apply(matchingRoadsMap);
+  StatusUpdateVisitor statusUpdater(status);
+  matchingRoadsMap->visitWaysRw(statusUpdater);
+  LOG_VARD(matchingRoadsMap->size());
+  return matchingRoadsMap;
 }
 
 }

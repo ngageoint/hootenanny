@@ -666,6 +666,14 @@ signal that the feature may need manual cleanup.
 If enabled and conflation is also enabled during changeset replacement derivation, conflate review
 relations will be written.
 
+=== changeset.replacement.snap.exclude.types
+
+* Data Type: list
+* Default Value:
+** `road_marking=solid_stop_line`
+
+TODO
+
 === changeset.source
 
 * Data Type: string

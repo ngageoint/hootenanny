@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="36.1291" minlon="-115.2502" maxlat="36.1313" maxlon="-115.2482"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1313000000000031" lon="-115.2481999999999971"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1313000000000031" lon="-115.2502000000000066"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1294971817310540" lon="-115.2502000000000066"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1295292159439541" lon="-115.2481999999999971"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1294267271575151" lon="-115.2502000000000066"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1294589319697010" lon="-115.2481999999999971"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1293248012736967" lon="-115.2481999999999971"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1292915591974548" lon="-115.2502000000000066"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1298846402556322" lon="-115.2502000000000066"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1311775809147875" lon="-115.2502000000000066"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1312138194753274" lon="-115.2481999999999971"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1291000000000011" lon="-115.2494184848390830"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1291000000000011" lon="-115.2493304042869653"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1313000000000031" lon="-115.2497253722466866"/>
+    <node visible="true" id="137330894" timestamp="2009-12-23T00:44:53Z" version="2" changeset="3431276" user="woodpeck_fixbot" uid="147510" lat="36.1301289999999966" lon="-115.2491210000000024"/>
+    <node visible="true" id="137330897" timestamp="2020-02-18T08:06:44Z" version="4" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1301320000000032" lon="-115.2497482999999932"/>
+    <node visible="true" id="137330912" timestamp="2013-02-24T12:37:50Z" version="3" changeset="15147508" user="nm7s9" uid="12434" lat="36.1299145999999993" lon="-115.2490528999999952">
+        <tag k="highway" v="turning_circle"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="137330915" timestamp="2019-03-14T06:29:35Z" version="4" changeset="68125311" user="TheDutchMan13" uid="1330847" lat="36.1306793999999982" lon="-115.2491394000000042">
+        <tag k="highway" v="turning_circle"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="137480810" timestamp="2009-11-20T22:25:41Z" version="3" changeset="3172090" user="woodpeck_fixbot" uid="147510" lat="36.1311859999999996" lon="-115.2497259999999955"/>
+    <node visible="true" id="137539601" timestamp="2020-02-18T08:06:44Z" version="4" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1298911000000018" lon="-115.2497493000000048"/>
+    <node visible="true" id="137711973" timestamp="2020-02-18T08:06:44Z" version="7" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1294364999999971" lon="-115.2497517000000045"/>
+    <node visible="true" id="2171153135" timestamp="2013-02-24T12:37:48Z" version="1" changeset="15147508" user="nm7s9" uid="12434" lat="36.1300231999999966" lon="-115.2491179999999957"/>
+    <node visible="true" id="3730520669" timestamp="2020-02-18T08:06:44Z" version="3" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1293083999999993" lon="-115.2493781000000013"/>
+    <node visible="true" id="4584117501" timestamp="2017-01-01T17:31:27Z" version="1" changeset="44826950" user="Tom_Holland" uid="574654" lat="36.1295124999999970" lon="-115.2495277999999956"/>
+    <node visible="true" id="5723222414" timestamp="2018-06-27T13:37:52Z" version="1" changeset="60218792" user="andygol" uid="94578" lat="36.1293341000000012" lon="-115.2493762000000004"/>
+    <node visible="true" id="5723222415" timestamp="2018-06-27T13:37:52Z" version="1" changeset="60218792" user="andygol" uid="94578" lat="36.1293726999999976" lon="-115.2493352999999985"/>
+    <node visible="true" id="5723222416" timestamp="2020-02-18T08:06:44Z" version="2" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1293743000000021" lon="-115.2491401999999994"/>
+    <node visible="true" id="5723222417" timestamp="2020-02-18T08:06:44Z" version="2" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1294444999999982" lon="-115.2489326999999975"/>
+    <node visible="true" id="5723222418" timestamp="2020-02-18T08:06:44Z" version="2" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1292996000000031" lon="-115.2497513999999939"/>
+    <node visible="true" id="7222029371" timestamp="2020-02-18T08:06:44Z" version="1" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1293605999999983" lon="-115.2493635000000012"/>
+    <node visible="true" id="7222029372" timestamp="2020-02-18T08:06:44Z" version="1" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1295473999999999" lon="-115.2497510999999975">
+        <tag k="highway" v="stop"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="direction" v="backward"/>
+    </node>
+    <node visible="true" id="7222029374" timestamp="2020-02-18T08:06:44Z" version="1" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1292230000000032" lon="-115.2493326999999965">
+        <tag k="highway" v="stop"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="direction" v="forward"/>
+    </node>
+    <node visible="true" id="7222029375" timestamp="2020-02-18T08:06:44Z" version="1" changeset="81157689" user="TheDutchMan13" uid="1330847" lat="36.1292321000000030" lon="-115.2494180000000057"/>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11"/>
+        <nd ref="4584117501"/>
+        <nd ref="-12"/>
+        <nd ref="-13"/>
+        <nd ref="-14"/>
+        <nd ref="-11"/>
+        <tag k="landuse" v="residential"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-05-31T17:34:49Z"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="5723222417"/>
+        <nd ref="137711973"/>
+        <nd ref="-10"/>
+        <tag k="tiger:name_type" v="Rd"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="tiger:name_base" v="Desert Inn"/>
+        <tag k="name" v="West Desert Inn Road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name_1" v="West Desert Inn Drive"/>
+        <tag k="tiger:name_direction_prefix_1" v="W"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name_2" v="Desert Inn Drive"/>
+        <tag k="tiger:name_direction_prefix" v="W"/>
+        <tag k="tiger:name_base_1" v="Desert Inn"/>
+        <tag k="tiger:name_base_2" v="Desert Inn"/>
+        <tag k="tiger:name_type_1" v="Dr"/>
+        <tag k="source:datetime" v="2020-02-18T08:06:44Z"/>
+        <tag k="tiger:name_type_2" v="Dr"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="5723222418"/>
+        <nd ref="3730520669"/>
+        <nd ref="-8"/>
+        <tag k="tiger:name_type" v="Rd"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="tiger:name_base" v="Desert Inn"/>
+        <tag k="name" v="West Desert Inn Road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="name_1" v="West Desert Inn Drive"/>
+        <tag k="tiger:name_direction_prefix_1" v="W"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="name_2" v="Desert Inn Drive"/>
+        <tag k="tiger:name_direction_prefix" v="W"/>
+        <tag k="tiger:name_base_1" v="Desert Inn"/>
+        <tag k="tiger:name_base_2" v="Desert Inn"/>
+        <tag k="tiger:name_type_1" v="Dr"/>
+        <tag k="source:datetime" v="2020-02-18T08:06:44Z"/>
+        <tag k="tiger:name_type_2" v="Dr"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="137539601"/>
+        <nd ref="-6"/>
+        <tag k="oneway" v="no"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_base" v="Birkland"/>
+        <tag k="name" v="West Birkland Court"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ct"/>
+        <tag k="source:datetime" v="2019-03-14T06:29:43Z"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="137480810"/>
+        <nd ref="-5"/>
+        <tag k="oneway" v="no"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_base" v="Darby"/>
+        <tag k="name" v="Darby Avenue"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="source:datetime" v="2020-06-17T03:01:37Z"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="3730520669"/>
+        <nd ref="7222029375"/>
+        <nd ref="-3"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing;Tiger 2015"/>
+        <tag k="name" v="Sky Lantern Way"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lanes" v="1"/>
+        <tag k="maxspeed" v="25 mph"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2020-02-18T08:06:44Z"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-2"/>
+        <nd ref="7222029374"/>
+        <nd ref="3730520669"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source" v="Bing;Tiger 2015"/>
+        <tag k="name" v="Sky Lantern Way"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lanes" v="1"/>
+        <tag k="maxspeed" v="25 mph"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2020-02-18T08:06:44Z"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="5723222418"/>
+        <nd ref="137711973"/>
+        <nd ref="7222029372"/>
+        <nd ref="137539601"/>
+        <nd ref="137330897"/>
+        <nd ref="137480810"/>
+        <nd ref="-1"/>
+        <tag k="oneway" v="no"/>
+        <tag k="name" v="Belcastro Street"/>
+        <tag k="highway" v="residential"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="source:datetime" v="2020-02-18T08:06:44Z"/>
+    </way>
+    <way visible="true" id="14297302" timestamp="2019-03-14T06:29:43Z" version="3" changeset="68125311" user="TheDutchMan13" uid="1330847">
+        <nd ref="137330894"/>
+        <nd ref="137330897"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_base" v="Strada Olivero"/>
+        <tag k="name" v="West Strada Olivero"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-03-14T06:29:43Z"/>
+    </way>
+    <way visible="true" id="14297303" timestamp="2017-06-01T17:08:32Z" version="3" changeset="49171267" user="TheDutchMan13" uid="1330847">
+        <nd ref="137330912"/>
+        <nd ref="2171153135"/>
+        <nd ref="137330894"/>
+        <nd ref="137330915"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_base" v="Strada Olivero"/>
+        <tag k="name" v="Strada Olivero"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2017-06-01T17:08:32Z"/>
+    </way>
+    <way visible="true" id="602610649" timestamp="2020-02-18T08:06:44Z" version="2" changeset="81157689" user="TheDutchMan13" uid="1330847">
+        <nd ref="5723222417"/>
+        <nd ref="5723222416"/>
+        <nd ref="5723222415"/>
+        <nd ref="7222029371"/>
+        <nd ref="5723222414"/>
+        <nd ref="3730520669"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="highway" v="secondary_link"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2020-02-18T08:06:44Z"/>
+    </way>
+    <relation visible="true" id="9058880" timestamp="2020-06-12T14:41:59Z" version="6" changeset="86572572" user="cvo_lyft" uid="10313602">
+        <member type="way" ref="-7" role="forward"/>
+        <member type="way" ref="-6" role="forward"/>
+        <tag k="name" v="Desert Inn Road"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2020-06-12T14:41:59Z"/>
+        <tag k="route" v="road"/>
+        <tag k="type" v="route"/>
+    </relation>
+</osm>

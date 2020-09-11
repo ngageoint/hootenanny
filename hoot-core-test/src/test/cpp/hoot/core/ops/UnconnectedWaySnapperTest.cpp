@@ -53,6 +53,7 @@ class UnconnectedWaySnapperTest : public HootTestFixture
   CPPUNIT_TEST(runReviewSnappedTest);
   CPPUNIT_TEST(runMarkOnlyTest);
   CPPUNIT_TEST(runTypeMatchTest);
+  CPPUNIT_TEST(runTypeExcludeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -313,6 +314,53 @@ public:
     CPPUNIT_ASSERT_EQUAL(136L, uut.getNumFeaturesAffected());
     CPPUNIT_ASSERT_EQUAL(123L, uut.getNumSnappedToWayNodes());
     CPPUNIT_ASSERT_EQUAL(13L, uut.getNumSnappedToWays());
+    HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
+  }
+
+  void runTypeExcludeTest()
+  {
+    // Specifically, this tests that road_marking=solid_stop_line features don't get snapped to
+    // anything.
+
+    const QString testName = "runTypeExcludeTest";
+
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read(_inputPath + "runTypeMatchIn1.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read(_inputPath + "runTypeMatchIn2.osm", map);
+
+    UnconnectedWaySnapper uut;
+    uut.setAddCeToSearchDistance(false);
+    uut.setMaxNodeReuseDistance(0.5);
+    // Lengthen the snap distance to the min that would make some of the stop lines snap to each
+    // other.
+    uut.setMaxSnapDistance(15.0);
+    uut.setMarkSnappedNodes(true);
+    uut.setMarkSnappedWays(true);
+    uut.setSnapToExistingWayNodes(true);
+    uut.setWayDiscretizationSpacing(1.0);
+    uut.setSnapToWayStatuses(QStringList(Status(Status::Unknown1).toString()));
+    uut.setSnapWayStatuses(QStringList(Status(Status::Unknown2).toString()));
+    uut.setWayNodeToSnapToCriterionClassName("hoot::WayNodeCriterion");
+    uut.setWayToSnapCriterionClassName("hoot::WayCriterion");
+    uut.setWayToSnapToCriterionClassName("hoot::WayCriterion");
+    uut.setMarkOnly(false);
+    uut.setReviewSnappedWays(false);
+    // Ensure that road_marking=solid_stop_line's can't be snapped at all.
+    uut.setTypeExcludeKvps(QStringList("road_marking=solid_stop_line"));
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmXmlWriter writer;
+    writer.setIsDebugMap(true);
+    writer.write(map, _outputPath + testName +  + "Out.osm");
+
+    CPPUNIT_ASSERT_EQUAL(162L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(123L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(39L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 };

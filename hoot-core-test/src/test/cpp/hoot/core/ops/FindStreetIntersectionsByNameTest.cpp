@@ -47,8 +47,7 @@ class FindStreetIntersectionsByNameTest : public HootTestFixture
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST(runCaseSensitivityTest);
   CPPUNIT_TEST(runPartialMatchTest);
-  // TODO: add test for two roads with the same name (split road; shouldn't match)
-  // TODO: add test for two roads with same name and different prefixes (shouldn't match)
+  CPPUNIT_TEST(runSingleInputDupeRoadMatchesTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -169,6 +168,31 @@ public:
     }
   }
 
+  void runSingleInputDupeRoadMatchesTest()
+  {
+    // Two roads with similar names matching either the first or second input street shouldn't have
+    // intersection matches returned. Only intersections between a single street matching the first
+    // input and a single street matching the second input should be returned.
+
+    FindStreetIntersectionsByName uut;
+    OsmMapPtr map(new OsmMap());
+    Settings conf;
+
+    OsmMapReaderFactory::read(
+      map, true, Status::Unknown1, _inputPath + "runSingleInputDupeRoadMatchesTest.osm");
+
+    conf.set("name.criterion.names", "Olive;Fremont");
+    conf.set("name.criterion.case.sensitive", false);
+    conf.set("name.criterion.partial.match", true);
+    uut.setConfiguration(conf);
+
+    uut.apply(map);
+
+    OsmMapWriterFactory::write(map, _outputPath + "runSingleInputDupeRoadMatchesTestOut.osm");
+    HOOT_FILE_EQUALS(
+      _inputPath + "runSingleInputDupeRoadMatchesTestOut.osm",
+      _outputPath + "runSingleInputDupeRoadMatchesTestOut.osm");
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(FindStreetIntersectionsByNameTest, "quick");

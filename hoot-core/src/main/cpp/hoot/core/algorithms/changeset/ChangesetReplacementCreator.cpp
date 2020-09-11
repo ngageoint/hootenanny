@@ -1873,6 +1873,9 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
   // This prevents features of different types snapping to each other that shouldn't do so.
   // Arbitrarily picking a score here...may require further tweaking.
   lineSnapper.setMinTypeMatchScore(0.8);
+  // Here, we're excluding things unlikely to ever need to be snapped to each other. Arguably, this
+  // list could be made part of UnconnectedWaySnapper's config instead.
+  lineSnapper.setTypeExcludeKvps(ConfigOptions().getChangesetReplacementSnapExcludeTypes());
   lineSnapper.apply(map);
   LOG_DEBUG(lineSnapper.getCompletedStatusMessage());
 
