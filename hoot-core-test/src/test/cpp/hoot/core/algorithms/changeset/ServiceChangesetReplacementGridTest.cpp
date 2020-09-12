@@ -58,14 +58,17 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   CPPUNIT_TEST(orphanedNodes1Test);
-  // TODO: having some trouble with repeatability here...will come back to this one
+  // TODO: having some trouble with repeatability here after an initial test is run...will come back
+  // to these soon
   //CPPUNIT_TEST(orphanedNodes2Test);
+  //CPPUNIT_TEST(droppedNodes1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
   //CPPUNIT_TEST(github4216UniformTest);
   //CPPUNIT_TEST(northVegasLargeTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
+  //CPPUNIT_TEST(tmpTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -94,7 +97,7 @@ public:
 
   void orphanedNodes1Test()
   {
-    // (VGI 1622) This tests that orphaned nodes are not left behind after two adjoining, successive
+    // VGI 1622 - This tests that orphaned nodes are not left behind after two adjoining, successive
     // grid cell replacements with some data overlapping due to using the lenient bounds
     // interpretation. The road "Hot Springs Drive" should remain snapped to connecting roads and no
     // orphaned nodes should be hidden underneath it. Other roads to check in the are include
@@ -126,10 +129,8 @@ public:
 
   void orphanedNodes2Test()
   {
-    // (github 4216) similar to orphanedNodes1Test - There should be no orphaned nodes in the
+    // github 4216; similar to orphanedNodes1Test - There should be no orphaned nodes in the
     // output. You can check for orphaned node counts with uut.setTagQualityIssues(true).
-
-    DisableLog dl; // to suppress a SpatialIndexer warning that should be looked into at some point
 
     _testName = "orphanedNodes2Test";
     _prepInput(
@@ -146,11 +147,48 @@ public:
     uut.setTagQualityIssues(false);
     uut.setCalcDiffWithReplacement(false);
     const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
+
+    // to suppress a SpatialIndexer warning that should be looked into at some point
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    Log::getInstance().setLevel(Log::Error);
+
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
       UniformTaskGridGenerator(
         "-115.0793,36.1832,-115.0610,36.1986", 2, _outputPath + "/" + taskGridFileName)
+        .generateTaskGrid());
+
+    Log::getInstance().setLevel(logLevel);
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void droppedNodes1Test()
+  {
+    // part of github 4228 - None of the highway=street_lamp features near Edmundo Escobedo Sr.
+    // Middle School (Westmost building) should get dropped in the output.
+
+    _testName = "droppedNodes1Test";
+    _prepInput(
+      _inputPath + "/droppedNodes1Test-Input1.osm",
+      _inputPath + "/droppedNodes1Test-Input2.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(false);
+    uut.setCalcDiffWithReplacement(false);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.3274,36.2640,-115.3106,36.2874", 2,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
@@ -227,7 +265,7 @@ public:
     // lenient - 110 orphaned nodes
 
     // whole northern half of city, 64 changesets, ~32.5M changes, avg derivation: 52s,
-    // total time: 1.18h, ~459k changes/min
+    // total time: 1.18h, ~459k changes/min; diff between replacement: ~11k
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -248,6 +286,34 @@ public:
       _replacementDataUrl,
       UniformTaskGridGenerator(
         "-115.3528,36.0919,-114.9817,36.3447", 8,
+        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+  }
+
+  void tmpTest()
+  {
+    _testName = "tmpTest";
+    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
+    const QString outDir = rootDir + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
+    QDir(outDir).removeRecursively();
+    QDir().mkpath(outDir);
+    _prepInput(
+      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
+      "-115.3287,36.2618,-115.3090,36.2887", outDir);
+
+    ChangesetTaskGridReplacer uut;
+    uut.setKillAfterNumChangesetDerivations(1);
+    uut.setChangesetsOutputDir(outDir);
+    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(true);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.3274,36.2640,-115.3106,36.2874", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
   }

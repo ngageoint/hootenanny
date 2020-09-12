@@ -496,7 +496,8 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
     LOG_VARD(map->size());
 
-    // This will remove any relations that were already empty or became empty after the previous step.
+    // This will remove any relations that were already empty or became empty after the previous
+    // step.
     LOG_VARD(map->size());
     RemoveEmptyRelationsOp emptyRelationRemover;
     LOG_INFO("\t" << emptyRelationRemover.getInitStatusMessage());
