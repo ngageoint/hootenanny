@@ -57,7 +57,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  CPPUNIT_TEST(orphanedNodes1Test);
+  //CPPUNIT_TEST(orphanedNodes1Test);
   // TODO: having some trouble with repeatability here after an initial test is run...will come back
   // to these soon
   //CPPUNIT_TEST(orphanedNodes2Test);
@@ -67,7 +67,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 
   //CPPUNIT_TEST(github4216UniformTest);
   //CPPUNIT_TEST(northVegasLargeTest);
-  //CPPUNIT_TEST(northVegasLargeUniformTest);
+  CPPUNIT_TEST(northVegasLargeUniformTest);
   //CPPUNIT_TEST(tmpTest);
 
   CPPUNIT_TEST_SUITE_END();
@@ -264,8 +264,8 @@ public:
   {
     // lenient - 110 orphaned nodes
 
-    // whole northern half of city, 64 changesets, ~32.5M changes, avg derivation: 52s,
-    // total time: 1.18h, ~459k changes/min; diff between replacement: ~11k
+    // whole northern half of city, 64 changesets, ~32.5M changes, avg derivation: 48s,
+    // total time: 1h6m, ~492k changes/min; 70 orphaned nodes; diff between replacement: ~11.5k
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
