@@ -85,8 +85,11 @@ Vagrant.configure(2) do |config|
       aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 64 }]
 
       aws.tags = {
-        'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "jenkins-hootenanny-#{os.downcase}"),
+        'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "gvtest-jenkins-hootenanny-#{os.downcase}"),
         'URL'  => ENV.fetch('AWS_INSTANCE_URL_TAG', 'https://github.com/ngageoint/hootenanny'),
+        'env' => ENV.fetch('HOOT_AWS_ENV_TAG', 'testing'),
+        'use' => ENV.fetch('HOOT_AWS_USE_TAG', 'Jenkins'),
+        'group' => ENV.fetch('HOOT_AWS_GROUP_TAG', 'devops')
       }
 
       if ENV.key?('JOB_NAME')
