@@ -45,8 +45,9 @@ namespace hoot
 {
 
 /*
- * There may be some newer stats in here that are unaccounted for. However, we may have enough
- * coverage for them in the command tests.
+ * TODO: Maintenance of this class is a nightmare, especially as new conflatable feature types are
+ * added, and I think we have good enough coverage for stats in the command tests. Should probably
+ * entertain removing everything but runStatsNumTest.
  */
 class CalculateStatsOpTest : public HootTestFixture
 {
@@ -85,7 +86,7 @@ public:
 
     // This is here to prevent inadvertent removal of stats and to make sure any new stats get added
     // to this test.
-    CPPUNIT_ASSERT_EQUAL(208, calcStatsOp->getStats().size());
+    CPPUNIT_ASSERT_EQUAL(260, calcStatsOp->getStats().size());
 
     // This lets you know if the total stat calls made don't match what was predicted by
     // _initStatCalc.
@@ -168,7 +169,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated POIs"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("POIs Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("POI Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched POIs"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Total Unmatched POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of POIs Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -183,7 +184,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Conflated Roads"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Roads Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Road Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Unmatched Roads"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Total Unmatched Roads"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       1119.92, calcStatsOp->getSingleStat("Meters of Road Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -198,7 +199,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Conflated Buildings"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Buildings Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Building Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Unmatched Buildings"));
+    CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Total Unmatched Buildings"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       14100.9,
       calcStatsOp->getSingleStat("Meters Squared of Buildings Processed by Conflation"), 1e-1);
@@ -214,7 +215,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Waterways"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterways Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterway Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Waterways"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Unmatched Waterways"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Meters of Waterway Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -229,7 +230,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Power Lines"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Lines Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Line Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Power Lines"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Unmatched Power Lines"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Meters of Power Line Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -246,7 +247,7 @@ public:
       0.0, calcStatsOp->getSingleStat("Polygon Conflatable POIs Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(
       0.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Unmatched Polygon Conflatable POIs"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Total Unmatched Polygon Conflatable POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -260,7 +261,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(5.0, calcStatsOp->getSingleStat("Conflated Polygons"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygons Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Polygon Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Unmatched Polygons"));
+    CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Total Unmatched Polygons"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       14810.8,
       calcStatsOp->getSingleStat("Meters Squared of Polygons Processed by Conflation"), 1e-1);
@@ -276,7 +277,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Areas"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Areas Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Area Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Unmatched Areas"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Total Unmatched Areas"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Meters Squared of Areas Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -429,7 +430,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated POIs"));
     CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("POIs Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("POI Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched POIs"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Total Unmatched POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of POIs Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -443,7 +444,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(7.0, calcStatsOp->getSingleStat("Conflated Roads"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Roads Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Road Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Unmatched Roads"));
+    CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Total Unmatched Roads"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       1119.92, calcStatsOp->getSingleStat("Meters of Road Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -458,7 +459,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Conflated Buildings"));
     CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Buildings Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Building Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Unmatched Buildings"));
+    CPPUNIT_ASSERT_EQUAL(8.0, calcStatsOp->getSingleStat("Total Unmatched Buildings"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       13693.3,
       calcStatsOp->getSingleStat("Meters Squared of Buildings Processed by Conflation"), 1e-1);
@@ -474,7 +475,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Conflated Waterways"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterways Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Waterway Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Waterways"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Unmatched Waterways"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Meters of Waterway Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -490,7 +491,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Power Lines Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(
       0.0, calcStatsOp->getSingleStat("Power Line Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Unmatched Power Lines"));
+    CPPUNIT_ASSERT_EQUAL(0.0, calcStatsOp->getSingleStat("Total Unmatched Power Lines"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Meters of Power Line Processed by Conflation"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -507,7 +508,7 @@ public:
       1.0, calcStatsOp->getSingleStat("Polygon Conflatable POIs Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(
       1.0, calcStatsOp->getSingleStat("Polygon Conflatable POI Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Unmatched Polygon Conflatable POIs"));
+    CPPUNIT_ASSERT_EQUAL(6.0, calcStatsOp->getSingleStat("Total Unmatched Polygon Conflatable POIs"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       0.0, calcStatsOp->getSingleStat("Percentage of Polygon Conflatable POIs Conflated"), 1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -521,7 +522,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(4.0, calcStatsOp->getSingleStat("Conflated Polygons"));
     CPPUNIT_ASSERT_EQUAL(2.0, calcStatsOp->getSingleStat("Polygons Marked for Review"));
     CPPUNIT_ASSERT_EQUAL(1.0, calcStatsOp->getSingleStat("Polygon Reviews to be Made"));
-    CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Unmatched Polygons"));
+    CPPUNIT_ASSERT_EQUAL(9.0, calcStatsOp->getSingleStat("Total Unmatched Polygons"));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       13693.36,
       calcStatsOp->getSingleStat("Meters Squared of Polygons Processed by Conflation"), 1e-1);
@@ -626,6 +627,5 @@ private:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "slow");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(hoot::CalculateStatsOpTest, "current");
 
 }
