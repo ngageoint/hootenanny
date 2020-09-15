@@ -170,7 +170,6 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   // of the features or the conflation workflow chosen.
   Tags finalBuildingTags = finalBuilding->getTags();
   LOG_VART(finalBuildingTags);
- // Tags poiBuildingMergedTags;
   if (poiTags1.size() > 0)
   {
     // If this is a ref POI, we'll keep its tags and replace the building tags.
@@ -204,8 +203,9 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
       // clear the tags just in case it is part of a way
       if (map->containsElement(p.first))
       {
-        // TODO: not completely confident in this yet
         ElementPtr element = map->getElement(p.first);
+        // We're going to get counts for the merged POIs based on their source map, as well as the
+        // total merged POI count.
         if (element->getStatus() == Status::Unknown1)
         {
           poisMergedFromMap1++;
