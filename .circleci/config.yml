@@ -51,7 +51,7 @@ jobs:
   lint:
     working_directory: '/usr/local/src'
     machine:
-      - image: ubuntu-1604:202007-01
+      image: ubuntu-1604:202007-01
     steps:
       - checkout
       - run:
