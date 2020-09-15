@@ -423,7 +423,6 @@ bool ChangesetSplitDeleteTestServer::respond(HttpConnection::HttpConnectionPtr& 
   {
     //  Read the HTTP request body to figure out which response to send back
     std::string body = read_request_body(headers, connection);
-    LOG_INFO(body);
     if (body.find("way id=\"1\"") != std::string::npos && body.find("node id=\"1\"") != std::string::npos)
       response.reset(new HttpResponse(HttpResponseCode::HTTP_GONE, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_FAILED_RESPONSE));
     else if (body.find("node id=\"1\"") != std::string::npos)
