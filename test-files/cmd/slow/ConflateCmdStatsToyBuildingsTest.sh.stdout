@@ -1,10 +1,10 @@
-21:50:18.349 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
-21:50:18.352 INFO   .../hoot/core/io/OsmXmlReader.cpp( 870) Read 0 elements from input.        21:50:18.352 INFO   .../hoot/core/io/OsmXmlReader.cpp( 870) Read 0 elements from input.        21:50:18.355 INFO   .../hoot/core/io/OsmXmlReader.cpp( 473) 	Reporting missing elements...
-21:50:18.356 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 103 elements from input in: 00:00.
-21:50:18.356 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
-21:50:18.357 INFO   .../hoot/core/io/OsmXmlReader.cpp( 870) Read 0 elements from input.        21:50:18.357 INFO   .../hoot/core/io/OsmXmlReader.cpp( 870) Read 0 elements from input.        21:50:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 473) 	Reporting missing elements...
-21:50:18.360 STATUS ...ore/io/OsmMapReaderFactory.cpp( 203) Read 103 elements from input in: 00:00.
-21:50:18.361 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
+17:20:38.247 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
+17:20:38.249 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        17:20:38.249 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        17:20:38.253 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+17:20:38.253 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 103 elements from input in: 00:00.
+17:20:38.253 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...md/slow/ConflateCmdStatsTest/toy-buildings-out.osm...
+17:20:38.254 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        17:20:38.254 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        17:20:38.257 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+17:20:38.257 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 103 elements from input in: 00:00.
+17:20:38.259 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	70	41	90	
 Ways	10	8	12	
@@ -59,127 +59,182 @@ Percentage of Total Features Marked for Review	0	0	0
 Total Reviews to be Made	0	0	0	
 Total Unmatched Features	10	8	9	
 Percentage of Total Features Unmatched	100	100	69.23076923076923	
+Total Unmatched Features From Map 1	10	0	6	
+Percentage of Total Features Unmatched From Map 1	100	0	46.15384615384615	
+Total Unmatched Features From Map 2	0	8	3	
+Percentage of Total Features Unmatched From Map 2	0	100	23.07692307692308	
 POIs	0	0	0	
 Conflatable POIs	0	0	0	
 Conflated POIs	0	0	0	
 POIs Marked for Review	0	0	0	
 POI Reviews to be Made	0	0	0	
-Unmatched POIs	0	0	0	
+Total Unmatched POIs	0	0	0	
+Unmatched POIs From Map 1	0	0	0	
+Unmatched POIs From Map 2	0	0	0	
 Percentage of POIs Conflated	0	0	0	
 Percentage of POIs Marked for Review	0	0	0	
+Percentage of Unmatched POIs From Map 1	0	0	0	
+Percentage of Unmatched POIs From Map 2	0	0	0	
 Percentage of Unmatched POIs	0	0	0	
 Roads	0	0	0	
 Conflatable Roads	0	0	0	
 Conflated Roads	0	0	0	
 Roads Marked for Review	0	0	0	
 Road Reviews to be Made	0	0	0	
-Unmatched Roads	0	0	0	
+Total Unmatched Roads	0	0	0	
+Unmatched Roads From Map 1	0	0	0	
+Unmatched Roads From Map 2	0	0	0	
 Percentage of Roads Conflated	0	0	0	
 Percentage of Roads Marked for Review	0	0	0	
+Percentage of Unmatched Roads From Map 1	0	0	0	
+Percentage of Unmatched Roads From Map 2	0	0	0	
 Percentage of Unmatched Roads	0	0	0	
 Buildings	10	8	11	
 Conflatable Buildings	10	8	0	
 Conflated Buildings	0	0	4	
 Buildings Marked for Review	0	0	0	
 Building Reviews to be Made	0	0	0	
-Unmatched Buildings	10	8	7	
+Total Unmatched Buildings	10	8	7	
+Unmatched Buildings From Map 1	10	0	6	
+Unmatched Buildings From Map 2	0	8	1	
 Percentage of Buildings Conflated	0	0	36.36363636363637	
 Percentage of Buildings Marked for Review	0	0	0	
+Percentage of Unmatched Buildings From Map 1	100	0	54.54545454545454	
+Percentage of Unmatched Buildings From Map 2	0	100	9.090909090909092	
 Percentage of Unmatched Buildings	100	100	63.63636363636363	
 Waterways	0	0	0	
 Conflatable Waterways	0	0	0	
 Conflated Waterways	0	0	0	
 Waterways Marked for Review	0	0	0	
 Waterway Reviews to be Made	0	0	0	
-Unmatched Waterways	0	0	0	
+Total Unmatched Waterways	0	0	0	
+Unmatched Waterways From Map 1	0	0	0	
+Unmatched Waterways From Map 2	0	0	0	
 Meters of Waterway Processed by Conflation	0	0	0	
 Percentage of Waterways Conflated	0	0	0	
 Percentage of Waterways Marked for Review	0	0	0	
+Percentage of Unmatched Waterways From Map 1	0	0	0	
+Percentage of Unmatched Waterways From Map 2	0	0	0	
 Percentage of Unmatched Waterways	0	0	0	
 Polygon Conflatable POIs	0	0	0	
 Conflatable Polygon Conflatable POIs	0	0	0	
 Conflated Polygon Conflatable POIs	0	0	0	
 Polygon Conflatable POIs Marked for Review	0	0	0	
 Polygon Conflatable POI Reviews to be Made	0	0	0	
-Unmatched Polygon Conflatable POIs	0	0	0	
+Total Unmatched Polygon Conflatable POIs	0	0	0	
+Unmatched Polygon Conflatable POIs From Map 1	0	0	0	
+Unmatched Polygon Conflatable POIs From Map 2	0	0	0	
 Percentage of Polygon Conflatable POIs Conflated	0	0	0	
 Percentage of Polygon Conflatable POIs Marked for Review	0	0	0	
+Percentage of Unmatched Polygon Conflatable POIs From Map 1	0	0	0	
+Percentage of Unmatched Polygon Conflatable POIs From Map 2	0	0	0	
 Percentage of Unmatched Polygon Conflatable POIs	0	0	0	
 Polygons	10	8	13	
 Conflatable Polygons	0	0	0	
 Conflated Polygons	0	0	4	
 Polygons Marked for Review	0	0	0	
 Polygon Reviews to be Made	0	0	0	
-Unmatched Polygons	10	8	9	
+Total Unmatched Polygons	10	8	9	
+Unmatched Polygons From Map 1	10	0	6	
+Unmatched Polygons From Map 2	0	8	3	
 Percentage of Polygons Conflated	0	0	30.76923076923077	
 Percentage of Polygons Marked for Review	0	0	0	
+Percentage of Unmatched Polygons From Map 1	100	0	46.15384615384615	
+Percentage of Unmatched Polygons From Map 2	0	100	23.07692307692308	
 Percentage of Unmatched Polygons	100	100	69.23076923076923	
 Areas	0	0	0	
 Conflatable Areas	0	0	0	
 Conflated Areas	0	0	0	
 Areas Marked for Review	0	0	0	
 Area Reviews to be Made	0	0	0	
-Unmatched Areas	0	0	0	
+Total Unmatched Areas	0	0	0	
+Unmatched Areas From Map 1	0	0	0	
+Unmatched Areas From Map 2	0	0	0	
 Meters Squared of Areas Processed by Conflation	0	0	0	
 Percentage of Areas Conflated	0	0	0	
 Percentage of Areas Marked for Review	0	0	0	
+Percentage of Unmatched Areas From Map 1	0	0	0	
+Percentage of Unmatched Areas From Map 2	0	0	0	
 Percentage of Unmatched Areas	0	0	0	
 Railways	0	0	0	
 Conflatable Railways	0	0	0	
 Conflated Railways	0	0	0	
 Railways Marked for Review	0	0	0	
 Railway Reviews to be Made	0	0	0	
-Unmatched Railways	0	0	0	
+Total Unmatched Railways	0	0	0	
+Unmatched Railways From Map 1	0	0	0	
+Unmatched Railways From Map 2	0	0	0	
 Meters of Railway Processed by Conflation	0	0	0	
 Percentage of Railways Conflated	0	0	0	
 Percentage of Railways Marked for Review	0	0	0	
+Percentage of Unmatched Railways From Map 1	0	0	0	
+Percentage of Unmatched Railways From Map 2	0	0	0	
 Percentage of Unmatched Railways	0	0	0	
 Power Lines	0	0	0	
 Conflatable Power Lines	0	0	0	
 Conflated Power Lines	0	0	0	
 Power Lines Marked for Review	0	0	0	
 Power Line Reviews to be Made	0	0	0	
-Unmatched Power Lines	0	0	0	
+Total Unmatched Power Lines	0	0	0	
+Unmatched Power Lines From Map 1	0	0	0	
+Unmatched Power Lines From Map 2	0	0	0	
 Meters of Power Line Processed by Conflation	0	0	0	
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
+Percentage of Unmatched Power Lines From Map 1	0	0	0	
+Percentage of Unmatched Power Lines From Map 2	0	0	0	
 Percentage of Unmatched Power Lines	0	0	0	
 Points	0	0	0	
 Conflatable Points	0	0	0	
 Conflated Points	0	0	0	
 Points Marked for Review	0	0	0	
 Point Reviews to be Made	0	0	0	
-Unmatched Points	0	0	0	
+Total Unmatched Points	0	0	0	
+Unmatched Points From Map 1	0	0	0	
+Unmatched Points From Map 2	0	0	0	
 Percentage of Points Conflated	0	0	0	
 Percentage of Points Marked for Review	0	0	0	
+Percentage of Unmatched Points From Map 1	0	0	0	
+Percentage of Unmatched Points From Map 2	0	0	0	
 Percentage of Unmatched Points	0	0	0	
 Lines	0	0	0	
 Conflatable Lines	0	0	0	
 Conflated Lines	0	0	0	
 Lines Marked for Review	0	0	0	
 Line Reviews to be Made	0	0	0	
-Unmatched Lines	0	0	0	
+Total Unmatched Lines	0	0	0	
+Unmatched Lines From Map 1	0	0	0	
+Unmatched Lines From Map 2	0	0	0	
 Meters of Line Processed by Conflation	0	0	0	
 Percentage of Lines Conflated	0	0	0	
 Percentage of Lines Marked for Review	0	0	0	
+Percentage of Unmatched Lines From Map 1	0	0	0	
+Percentage of Unmatched Lines From Map 2	0	0	0	
 Percentage of Unmatched Lines	0	0	0	
 Collection Relations	0	0	1	
 Conflatable Collection Relations	0	0	0	
 Conflated Collection Relations	0	0	1	
 Collection Relations Marked for Review	0	0	0	
 Collection Relation Reviews to be Made	0	0	0	
-Unmatched Collection Relations	0	0	0	
+Total Unmatched Collection Relations	0	0	0	
+Unmatched Collection Relations From Map 1	0	0	0	
+Unmatched Collection Relations From Map 2	0	0	0	
 Meters Squared of Collection Relations Processed by Conflation	0	0	708.9552391105683	
 Percentage of Collection Relations Conflated	0	0	100	
 Percentage of Collection Relations Marked for Review	0	0	0	
+Percentage of Unmatched Collection Relations From Map 1	0	0	0	
+Percentage of Unmatched Collection Relations From Map 2	0	0	0	
 Percentage of Unmatched Collection Relations	0	0	0	
 Translated Populated Tags	70	55	86	
 Difference Between Total Features in Output and Total Features in Inputs			-5	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-27.77777777777778	
-Calculate Stats for Input 1 Time (sec)				7.859045028686523
-Calculate Stats for Input 2 Time (sec)				0.6379351615905762
-Apply Pre-Conflate Ops Time (sec)				0.005518913269042969
-Apply Post-Conflate Ops Time (sec)				0.003650903701782227
-Calculate Stats for Output Time (sec)				0.5866830348968506
+Percentage of Map 1 Matched With Map 2			40	
+Percentage of Map 1 Not Matched With Map 2			60	
+Percentage of Map 2 Not Matched With Map 1			37.5	
+Calculate Stats for Input 1 Time (sec)				7.691828012466431
+Calculate Stats for Input 2 Time (sec)				0.5913200378417969
+Apply Pre-Conflate Ops Time (sec)				0.006392002105712891
+Apply Post-Conflate Ops Time (sec)				0.00358891487121582
+Calculate Stats for Output Time (sec)				0.7117259502410889
 
-21:50:17.968 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:09 for reference map: ...st-files/ToyBuildingsTestA.osm and secondary map: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm
+17:20:37.815 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:09 for reference map: ...st-files/ToyBuildingsTestA.osm and secondary map: ...st-files/ToyBuildingsTestB.osm and written to output: ...tatsTest/toy-buildings-out.osm

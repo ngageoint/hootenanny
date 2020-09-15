@@ -4,5 +4,5 @@
 {"type":"node","id":-3,"lat":20,"lon":20},
 {"type":"node","id":-2,"lat":0,"lon":20},
 {"type":"node","id":-1,"lat":0,"lon":0},
-{"type":"way","id":-1,"nodes":[-1,-2,-3,-4,-5],"tags":{"hoot:poipolygon:poismerged":"1","amenity":"bar","area":"yes","name":"foo","alt_name":"bar","note":"w1","error:circular":"5"}}]
+{"type":"way","id":-1,"nodes":[-1,-2,-3,-4,-5],"tags":{"hoot:poipolygon:poismerged":"1","amenity":"bar","hoot:poipolygon:poismerged:1":"0","area":"yes","hoot:poipolygon:poismerged:2":"1","name":"foo","alt_name":"bar","note":"w1","error:circular":"5"}}]
 }

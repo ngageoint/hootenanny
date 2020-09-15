@@ -32,6 +32,8 @@
         <member type="way" ref="-377365" role="outer"/>
         <member type="way" ref="-377379" role="outer"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="note" v="POI"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>

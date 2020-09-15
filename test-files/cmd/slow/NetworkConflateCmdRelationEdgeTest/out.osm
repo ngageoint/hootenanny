@@ -3502,6 +3502,8 @@
         <nd ref="5379038093"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="amenity" v="school"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="name" v="Lycée d'enseignement général de Ndande"/>
         <tag k="building" v="school"/>
         <tag k="source:datetime" v="2018-02-01T20:14:15Z"/>

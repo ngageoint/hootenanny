@@ -46,6 +46,8 @@
         <tag k="hoot:poipolygon:poismerged" v="2"/>
         <tag k="hoot:status" v="3"/>
         <tag k="amenity" v="theatre"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="2"/>
         <tag k="name" v="poi2"/>
         <tag k="alt_types" v="amenity=community_centre"/>
         <tag k="alt_name" v="poi1;poly1"/>

@@ -2,11 +2,11 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="12.3456782" minlon="23.4567891" maxlat="12.3456782" maxlon="23.4567891"/>
     <node visible="true" id="-9090" timestamp="1970-01-01T00:00:00Z" version="1" lat="12.3456782000000000" lon="23.4567891000000017">
-        <tag k="poi" v="yes"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="alt_name" v="Test post office"/>
-        <tag k="name" v="Test post office - More Complete"/>
         <tag k="amenity" v="post_office"/>
+        <tag k="name" v="Test post office - More Complete"/>
+        <tag k="alt_name" v="Test post office"/>
+        <tag k="poi" v="yes"/>
         <tag k="error:circular" v="2"/>
     </node>
 </osm>
