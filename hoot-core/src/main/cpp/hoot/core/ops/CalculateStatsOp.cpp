@@ -1043,6 +1043,8 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   _addStat(
     QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated);
 
+
+
   _numGenerateFeatureStatCalls += 6;
 }
 
