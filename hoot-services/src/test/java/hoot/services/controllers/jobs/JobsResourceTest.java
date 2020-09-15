@@ -67,6 +67,8 @@ import hoot.services.models.db.Users;
 @Transactional
 public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     public final String prefix = "test-JobsResourceTest-";
+    final int jobTypeCount = JobType.values().length;
+    final int totalJobs = jobTypeCount * 4;
 
     @Before
     public void before() throws Exception {
@@ -76,13 +78,13 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         final long now = System.currentTimeMillis();
         final String jobIdPrefix = prefix + now + "-";
 
-        for(int i = 0; i < 50; i++) {
+        for (int i = 0; i < totalJobs; i++) {
 
             JobStatus jobStatus = new JobStatus();
             jobStatus.setJobId(jobIdPrefix + i);
-            jobStatus.setJobType(i % JobType.values().length);
+            jobStatus.setJobType(i % jobTypeCount);
             jobStatus.setUserId(Users.TEST_USER.getId());
-            if (i % 10 == 0) {
+            if (i % jobTypeCount == 0) {
                 jobStatus.setStatus(RUNNING.ordinal());
                 jobStatus.setStatusDetail("RUNNING");
                 jobStatus.setPercentComplete(50);
@@ -92,12 +94,12 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
                 jobStatus.setStatus(COMPLETE.ordinal());
                 jobStatus.setStatusDetail("FINISHED SUCCESSFULLY");
                 jobStatus.setPercentComplete(100);
-                //make 5 history jobs owned by someone else
-                if (i % 9 == 0) jobStatus.setUserId(-13L);
-                //make 3 history jobs cancelled
-                if (i % 13 == 0) jobStatus.setStatus(CANCELLED.ordinal());
-                //make 3 history jobs failed
-                if (i % 14 == 0) jobStatus.setStatus(FAILED.ordinal());
+                //make 4 history jobs owned by someone else
+                if (i % jobTypeCount == 9) jobStatus.setUserId(-13L);
+                //make 4 history jobs failed
+                if (i % jobTypeCount == 11) jobStatus.setStatus(FAILED.ordinal());
+                //make 4 history jobs cancelled
+                if (i % jobTypeCount == 13) jobStatus.setStatus(CANCELLED.ordinal());
             }
 
             Timestamp ts = new Timestamp(now + i);
@@ -125,7 +127,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
         Assert.assertEquals(25, jobs.size()); //default limit
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         JobStatusResponse previous = null;
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
@@ -140,15 +142,15 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     @Category(UnitTest.class)
     public void testHistoryLimit() throws Exception {
         Response response = target("/history")
-                .queryParam("limit", 50)
+                .queryParam("limit", totalJobs)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         String actualResult = response.readEntity(String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(40, jobs.size());
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals((totalJobs-8), jobs.size());
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         JobStatusResponse previous = null;
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
@@ -163,7 +165,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     @Category(UnitTest.class)
     public void testHistoryLimitOffset() throws Exception {
         Response response = target("/history")
-                .queryParam("limit", 50)
+                .queryParam("limit", totalJobs)
                 .queryParam("offset", 25)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
@@ -171,8 +173,8 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(15, jobs.size());
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals(23, jobs.size());
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         JobStatusResponse previous = null;
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
@@ -194,8 +196,8 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(15, jobs.size());
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals(23, jobs.size());
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         JobStatusResponse previous = null;
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
@@ -218,7 +220,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
         Assert.assertEquals(25, jobs.size());
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         JobStatusResponse previous = null;
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
@@ -241,7 +243,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
         Assert.assertEquals(25, jobs.size());
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         JobStatusResponse previous = null;
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
@@ -264,7 +266,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
         Assert.assertEquals(25, jobs.size());
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         JobStatusResponse previous = null;
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
@@ -280,20 +282,20 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     public void testHistorySortTypeAscWithLimit() throws Exception {
         Response response = target("/history")
                 .queryParam("sort", "+type")
-                .queryParam("limit", 50)
+                .queryParam("limit", totalJobs)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         String actualResult = response.readEntity(String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(40, jobs.size());
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals((totalJobs-8), jobs.size());
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
         }
-        Assert.assertEquals(JobType.IMPORT.toString(), jobs.get(0).getJobType());
-        Assert.assertEquals(JobType.BULK_DIFFERENTIAL.toString(), jobs.get(jobs.size() - 1).getJobType());
+        Assert.assertEquals(JobType.EXPORT.toString(), jobs.get(0).getJobType());
+        Assert.assertEquals(JobType.values()[JobType.values().length-1].toString(), jobs.get(jobs.size() - 1).getJobType());
     }
 
     @Test
@@ -301,20 +303,20 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     public void testHistorySortTypeDescWithLimit() throws Exception {
         Response response = target("/history")
                 .queryParam("sort", "-type")
-                .queryParam("limit", 50)
+                .queryParam("limit", totalJobs)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         String actualResult = response.readEntity(String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(40, jobs.size());
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals((totalJobs-8), jobs.size());
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
         }
-        Assert.assertEquals(JobType.BULK_DIFFERENTIAL.toString(), jobs.get(0).getJobType());
-        Assert.assertEquals(JobType.IMPORT.toString(), jobs.get(jobs.size() - 1).getJobType());
+        Assert.assertEquals(JobType.values()[JobType.values().length-1].toString(), jobs.get(0).getJobType());
+        Assert.assertEquals(JobType.EXPORT.toString(), jobs.get(jobs.size() - 1).getJobType());
     }
 
     @Test
@@ -322,15 +324,15 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     public void testHistorySortStatusAscWithLimit() throws Exception {
         Response response = target("/history")
                 .queryParam("sort", "+status")
-                .queryParam("limit", 50)
+                .queryParam("limit", totalJobs)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         String actualResult = response.readEntity(String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(40, jobs.size());
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals((totalJobs-8), jobs.size());
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
         }
@@ -344,15 +346,15 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     public void testHistorySortStatusDescWithLimit() throws Exception {
         Response response = target("/history")
                 .queryParam("sort", "-status")
-                .queryParam("limit", 50)
+                .queryParam("limit", totalJobs)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         String actualResult = response.readEntity(String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(40, jobs.size());
-        Assert.assertEquals(40L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals((totalJobs-8), jobs.size());
+        Assert.assertEquals((totalJobs-8), history.getTotal().longValue()); //non-running total owned by test user
         for (JobStatusResponse j : jobs) {
             Assert.assertFalse(("running").equalsIgnoreCase(j.getStatus()));
         }
@@ -366,7 +368,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     public void testHistoryFilterType() throws Exception {
         Response response = target("/history")
                 .queryParam("jobType", "conflate")
-                .queryParam("limit", 50)
+                .queryParam("limit", totalJobs)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         String actualResult = response.readEntity(String.class);
@@ -385,15 +387,15 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     public void testHistoryFilterStatus() throws Exception {
         Response response = target("/history")
                 .queryParam("status", "cancelled")
-                .queryParam("limit", 50)
+                .queryParam("limit", totalJobs)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         String actualResult = response.readEntity(String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(3, jobs.size());
-        Assert.assertEquals(3L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals(4, jobs.size());
+        Assert.assertEquals(4L, history.getTotal().longValue()); //non-running total owned by test user
         for (JobStatusResponse j : jobs) {
             Assert.assertTrue(("cancelled").equalsIgnoreCase(j.getStatus()));
         }
@@ -405,15 +407,15 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         Response response = target("/history")
                 .queryParam("jobType", "export,conflate,clip")
                 .queryParam("status", "complete")
-                .queryParam("limit", 50)
+                .queryParam("limit", totalJobs)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         String actualResult = response.readEntity(String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         JobHistory history = objectMapper.readValue(actualResult, new TypeReference<JobHistory>(){});
         List<JobStatusResponse> jobs = history.getJobs();
-        Assert.assertEquals(7, jobs.size());
-        Assert.assertEquals(7L, history.getTotal().longValue()); //non-running total owned by test user
+        Assert.assertEquals(12, jobs.size());
+        Assert.assertEquals(12L, history.getTotal().longValue()); //non-running total owned by test user
         List<String> expectedJobTypes = new ArrayList<>();
         expectedJobTypes.add("export");
         expectedJobTypes.add("conflate");
@@ -429,7 +431,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
     public void testHistoryFilterStatusBad() throws Exception {
         Response response = target("/history")
                 .queryParam("status", "foo")
-                .queryParam("limit", 50)
+                .queryParam("limit", totalJobs)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         Assert.assertEquals(400, response.getStatus());
@@ -454,7 +456,7 @@ public class JobsResourceTest extends HootServicesJerseyTestAbstract {
         String actualResult = response.readEntity(String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         List<JobStatusResponse> jobs = objectMapper.readValue(actualResult, new TypeReference<List<JobStatusResponse>>(){});
-        Assert.assertEquals(5, jobs.size());
+        Assert.assertEquals(4, jobs.size());
         for (JobStatusResponse j : jobs) {
             Assert.assertNull(j.getStatus());
             Assert.assertNotNull(j.getPercentComplete());
