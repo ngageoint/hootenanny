@@ -347,15 +347,17 @@ public class GrailResource {
                 jobType = JobType.BULK_DIFFERENTIAL;
             }
 
+            if (!deriveType.equals("Adds only")) {
+                // Wait to detect overpass 'Last changeset pushed ID'
+                GrailParams waitParams = new GrailParams(reqParams);
+                workflow.add(grailCommandFactory.build(jobId, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
+            }
+
             // Clean up pulled files
             ArrayList<File> deleteFiles = new ArrayList<>();
             deleteFiles.add(workDir);
             InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
             workflow.add(cleanFolders);
-
-            // Wait to detect overpass 'Last changeset pushed ID'
-            GrailParams waitParams = new GrailParams(reqParams);
-            workflow.add(grailCommandFactory.build(jobId, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
@@ -367,6 +369,50 @@ public class GrailResource {
         if (reqParams.getInput2() != null) jobStatusTags.put("input2", reqParams.getInput2());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), jobType, jobStatusTags));
+
+        JSONObject jobInfo = new JSONObject();
+        jobInfo.put("jobid", jobId);
+
+        return Response.ok(jobInfo.toJSONString()).build();
+    }
+
+    @GET
+    @Path("/gettimeouttasks")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTimeoutTasks(@Context HttpServletRequest request,
+            @QueryParam("projectId") String projectId) {
+        Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
+
+        List<Long> tasks = DbUtils.getTimeoutTasks();
+
+        return Response.ok(tasks).build();
+    }
+
+    /**
+     *
+     * @return
+     */
+    @GET
+    @Path("/overpasssynccheck")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response overpassSyncCheck(@Context HttpServletRequest request,
+            @QueryParam("projectTaskInfo") @DefaultValue("false") String projectTaskInfo) {
+        Users user = Users.fromRequest(request);
+        advancedUserCheck(user);
+
+        String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
+        String id = DbUtils.getJobIdByTask(projectTaskInfo);
+
+        // Wait to detect overpass 'Last changeset pushed ID'
+        GrailParams waitParams = new GrailParams();
+        waitParams.setUser(user);
+        waitParams.setApplyTags(true); // flag to remove tag is timeout passes this time around
+
+        List<Command> workflow = new LinkedList<>();
+        workflow.add(grailCommandFactory.build(id, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
+
+        jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.SYNC_WAIT));
 
         JSONObject jobInfo = new JSONObject();
         jobInfo.put("jobid", jobId);
