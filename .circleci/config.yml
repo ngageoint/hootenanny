@@ -49,7 +49,7 @@ jobs:
           name: 'Check Copyright Headers'
           command: ./scripts/copyright/UpdateAllCopyrightHeaders.sh
   lint:
-    working_directory: '/usr/local/src'
+    working_directory: '/usr/local/src/hootenanny'
     machine:
       image: ubuntu-1604:202007-01
     steps:
@@ -57,7 +57,7 @@ jobs:
       - run:
           name: 'Lint Python Runtime Errors'
           command: |
-            ./scripts/ci/python_lint.sh -a /usr/local/src -p "--select=E9" 
+            ./scripts/ci/python_lint.sh -a /usr/local/src/hootenanny -p "--select=E9" 
             if [ $( cat lint.log | wc -l ) -gt 0 ]; then cat lint.log && exit 1; fi
 
 workflows:
