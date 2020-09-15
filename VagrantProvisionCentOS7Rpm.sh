@@ -20,8 +20,19 @@ echo "### Add epel repo and handy packages ###" | tee CentOS_install.txt
 sudo yum install -y wget curl vim epel-release 2>&1 | tee -a CentOS_install.txt
 
 # add the repo for the current Hootenanny release rpm's.
-echo "### Add Hoot repo ###" | tee -a CentOS_install.txt
+echo "### Add Hoot deps repo ###" | tee -a CentOS_install.txt
 sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
+
+echo "### Add Hoot release repo ###" | tee -a CentOS_install.txt
+sudo bash -c 'cat >> /etc/yum.repos.d/hoot_release.repo <<EOF
+[hoot-release]
+name = Hootenanny Release
+baseurl = https://s3.amazonaws.com/hoot-repo/el7/release
+enable = 1
+gpgcheck = 1
+repo_gpgcheck = 1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Hoot
+EOF'
 
 # configure PGDG repository for PostgreSQL 9.5.
 echo "### Add pgdg repo ###" | tee -a CentOS_install.txt
