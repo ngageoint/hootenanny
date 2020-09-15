@@ -381,9 +381,57 @@ bool ElementGoneTestServer::respond(HttpConnection::HttpConnectionPtr& connectio
     //  Read the HTTP request body to figure out which response to send back
     std::string body = read_request_body(headers, connection);
     if (body.find("node id=\"40\"") != std::string::npos)
-      response.reset(new HttpResponse(HttpResponseCode::HTTP_GONE, OsmApiSampleRequestResponse::SAMPLE_ELEMENT_GONE_RESPONSE_1));
+      response.reset(new HttpResponse(HttpResponseCode::HTTP_GONE, OsmApiSampleRequestResponse::SAMPLE_ELEMENT_GONE_RESPONSE));
     else
       response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_1_RESPONSE));
+  }
+  else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
+  {
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK));
+    continue_processing = false;
+  }
+  else
+  {
+    //  Error out here
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
+    continue_processing = false;
+  }
+  //  Write out the response
+  write_response(connection, response->to_string());
+  //  Return true if we should continue listening and processing requests
+  return continue_processing && !get_interupt();
+}
+
+
+bool ChangesetSplitDeleteTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
+{
+  //  Stop processing by setting this to false
+  bool continue_processing = true;
+  //  Read the HTTP request headers
+  std::string headers = read_request_headers(connection);
+  //  Determine the response message's HTTP header
+  HttpResponsePtr response;
+  if (headers.find(OsmApiEndpoints::API_PATH_CAPABILITIES) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CAPABILITIES_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_PERMISSIONS) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_PERMISSIONS_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CGIMAP_RESPONSE));
+  else if (headers.find(OsmApiEndpoints::API_PATH_CREATE_CHANGESET) != std::string::npos)
+    response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, "1"));
+  else if (headers.find("POST") != std::string::npos)
+  {
+    //  Read the HTTP request body to figure out which response to send back
+    std::string body = read_request_body(headers, connection);
+    LOG_INFO(body);
+    if (body.find("way id=\"1\"") != std::string::npos && body.find("node id=\"1\"") != std::string::npos)
+      response.reset(new HttpResponse(HttpResponseCode::HTTP_GONE, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_FAILED_RESPONSE));
+    else if (body.find("node id=\"1\"") != std::string::npos)
+      response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_1));
+    else if (body.find("node id=\"") == std::string::npos)
+      response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_2));
+    else
+      response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_3));
   }
   else if (headers.find(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(1).toStdString()) != std::string::npos)
   {
@@ -578,8 +626,76 @@ const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_GET_RE
     "  <tag k='building' v='yes'/>\n"
     " </way>\n"
     "</osm>";
-const char* OsmApiSampleRequestResponse::SAMPLE_ELEMENT_GONE_RESPONSE_1 =
+const char* OsmApiSampleRequestResponse::SAMPLE_ELEMENT_GONE_RESPONSE =
     "The node with the id 40 has already been deleted";
-const char* OsmApiSampleRequestResponse::SAMPLE_ELEMENT_GONE_RESPONSE_2 =
-    "";
+const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_DELETE =
+    "<?xml version='1.0' encoding='UTF-8'?>\n"
+    "<osmChange version='0.6' generator='hootenanny'>\n"
+    " <modify>\n"
+    "  <way id='1' version='1' timestamp=''>\n"
+    "   <nd ref='11'/>\n"
+    "   <nd ref='12'/>\n"
+    "   <tag k='name' v='Some road'/>\n"
+    "  </way>\n"
+    "  <way id='2' version='1' timestamp=''>\n"
+    "   <nd ref='12'/>\n"
+    "   <nd ref='13'/>\n"
+    "   <tag k='name' v='Some road'/>\n"
+    "  </way>\n"
+    "  <way id='3' version='1' timestamp=''>\n"
+    "   <nd ref='13'/>\n"
+    "   <nd ref='14'/>\n"
+    "   <tag k='name' v='Some road'/>\n"
+    "  </way>\n"
+    "  <way id='4' version='1' timestamp=''>\n"
+    "   <nd ref='14'/>\n"
+    "   <nd ref='15'/>\n"
+    "   <tag k='name' v='Some road'/>\n"
+    "  </way>\n"
+    " </modify>\n"
+    " <delete>\n"
+    "  <node id='1' visible='true' version='1' changeset='1' lat='38.9500315' lon='-77.4224954'/>\n"
+    "  <node id='2' visible='true' version='1' changeset='1' lat='38.9600315' lon='-77.4224954'/>\n"
+    "  <node id='3' visible='true' version='1' changeset='1' lat='38.9700315' lon='-77.4224954'/>\n"
+    "  <node id='4' visible='true' version='1' changeset='1' lat='38.9600315' lon='-77.4324954'/>\n"
+    "  <node id='5' visible='true' version='1' changeset='1' lat='38.9600315' lon='-77.4124954'/>\n"
+    "  <way id='5' version='1' timestamp=''>\n"
+    "   <nd ref='1'/>\n"
+    "   <nd ref='2'/>\n"
+    "   <nd ref='3'/>\n"
+    "   <tag k='name' v='Road 1'/>\n"
+    "  </way>\n"
+    "  <way id='6' version='1' timestamp=''>\n"
+    "   <nd ref='4'/>\n"
+    "   <nd ref='2'/>\n"
+    "   <nd ref='5'/>\n"
+    "   <tag k='name' v='Road 2'/>\n"
+    "  </way>\n"
+    " </delete>\n"
+    "</osmChange>";
+const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_FAILED_RESPONSE =
+    "Precondition failed";
+const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_1 =
+    "<?xml version='1.0' encoding='UTF-8'?>\n"
+    "<diffResult generator='OpenStreetMap Server' version='0.6'>\n"
+    "  <way old_id='5'/>\n"
+    "  <node old_id='1'/>\n"
+    "  <node old_id='3'/>\n"
+    "</diffResult>";
+const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_2 =
+    "<?xml version='1.0' encoding='UTF-8'?>\n"
+    "<diffResult generator='OpenStreetMap Server' version='0.6'>\n"
+    "  <way old_id='1' new_id='1' new_version='2'/>\n"
+    "  <way old_id='2' new_id='2' new_version='2'/>\n"
+    "  <way old_id='3' new_id='3' new_version='2'/>\n"
+    "  <way old_id='4' new_id='4' new_version='2'/>\n"
+    "  <way old_id='6'/>\n"
+    "</diffResult>";
+const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_3 =
+    "<?xml version='1.0' encoding='UTF-8'?>\n"
+    "<diffResult generator='OpenStreetMap Server' version='0.6'>\n"
+    "  <node old_id='2'/>\n"
+    "  <node old_id='4'/>\n"
+    "  <node old_id='5'/>\n"
+    "</diffResult>";
 }

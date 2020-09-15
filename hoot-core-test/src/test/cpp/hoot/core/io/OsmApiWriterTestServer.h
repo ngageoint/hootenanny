@@ -217,6 +217,28 @@ protected:
   bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 };
 
+class ChangesetSplitDeleteTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  ChangesetSplitDeleteTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that responds to a series of OSM API requests
+   *  to simulate a failed delete and then keep the changeset split deletes
+   *  together.
+   *  Requests, in order:
+   *   - Capabilities
+   *   - Permissions
+   *   - Changeset Create
+   *   - Changeset Upload Gone Failure - responds with HTTP 410
+   *   - Changeset Upload - responds with HTTP 200
+   *   - Changeset Upload - responds with HTTP 200
+   *   - Changeset Close
+   */
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+};
+
 class OsmApiSampleRequestResponse
 {
 public:
@@ -251,8 +273,14 @@ public:
   /** Sample Element GET response body for version conflict resolution */
   static const char* SAMPLE_CHANGESET_VERSION_FAILURE_GET_RESPONSE;
   /** Sample Element response bodies for a GONE response sequence to '/api/0.6/changeset/1/upload' */
-  static const char* SAMPLE_ELEMENT_GONE_RESPONSE_1;
-  static const char* SAMPLE_ELEMENT_GONE_RESPONSE_2;
+  static const char* SAMPLE_ELEMENT_GONE_RESPONSE;
+  /** Sample Changeset upload request for delete split test */
+  static const char* SAMPLE_CHANGESET_SPLIT_DELETE;
+  /** Sample Changeset upload responses for delete split test */
+  static const char* SAMPLE_CHANGESET_SPLIT_FAILED_RESPONSE;
+  static const char* SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_1;
+  static const char* SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_2;
+  static const char* SAMPLE_CHANGESET_SPLIT_SUCCESS_RESPONSE_3;
 };
 
 }
