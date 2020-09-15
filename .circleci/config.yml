@@ -72,3 +72,4 @@ workflows:
           requires:
             - archive-create
       - copyright
+      - lint
