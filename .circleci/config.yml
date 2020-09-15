@@ -48,6 +48,20 @@ jobs:
       - run:
           name: 'Check Copyright Headers'
           command: ./scripts/copyright/UpdateAllCopyrightHeaders.sh
+  lint:
+    working_directory: '/rpmbuild/hootenanny'
+    docker:
+      - image: hootenanny/rpmbuild-generic@sha256:5c563f129e7802029cf6ecc1f3cd50668c53fcca532895fce615de9f4337c951
+        user: rpmbuild
+        environment:
+          HOOT_HOME: '/rpmbuild/hootenanny'
+    steps:
+      - checkout
+      - run:
+          name: 'Lint Python Runtime Errors'
+          command: |
+            ./scripts/ci/python_lint.sh -a /rpmbuild/hootenanny -p "--select=E9" 
+            if [ $( cat lint.log | wc -l ) -gt 0 ]; then cat lint.log && exit 1; fi
 
 workflows:
   version: 2
