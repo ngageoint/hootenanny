@@ -237,6 +237,20 @@ public:
   void failChangeset(const ChangesetInfoPtr& changeset);
 
   const OsmApiMatchFailure& getFailureCheck() const { return _failureCheck; }
+  /**
+   * @brief getCleanupElements Get the last elements that need to be cleaned up
+   * @return ChangesetInfo list of elements for cleaning
+   */
+  ChangesetInfoPtr getCleanupElements();
+  /**
+   * @brief clearCleanupElements Empty the clean-up list
+   */
+  void clearCleanupElements();
+  /**
+   * @brief getCleanupCount Get the number of elements that need clean-up
+   * @return Element count
+   */
+  int getCleanupCount() { return _cleanupCount; }
 
 private:
   /**
@@ -442,6 +456,7 @@ private:
    */
   QString getRemainingFilename();
 
+  ChangesetInfoPtr fixOrphanedNodesSplit(const ChangesetInfoPtr& changeset, const ChangesetInfoPtr& split);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   ChangesetElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
@@ -480,6 +495,12 @@ private:
   std::mutex _errorMutex;
   /** OSM API error matching object */
   OsmApiMatchFailure _failureCheck;
+  /** Mutex for cleanup changeset info */
+  std::mutex _cleanupMutex;
+  /** Changeset information for cleanup at the end to reduce orphaned deletes */
+  ChangesetInfoPtr _cleanup;
+  /** Count of elements in the cleanup work */
+  int _cleanupCount;
 };
 
 /** Atomic subset of IDs that are sent to the OSM API, header only class */
@@ -517,6 +538,13 @@ public:
    * @brief clear Clear out this entire changeset subset
    */
   void clear();
+  /**
+   * @brief contains Check if this subset contains an element described by the type and ID
+   * @param element_type Describes the 'id' argument as a node, way, or relation
+   * @param id Element ID that is being searched for
+   * @return true if it is found in any changeset type
+   */
+  bool contains(ElementType::Type element_type, long id);
   /**
    * @brief contains Check if this subset contains an element described by types and ID
    * @param element_type Describes the 'id' argument as a node, way, or relation
@@ -567,6 +595,8 @@ public:
   /** Set/get _isError member */
   void setError() { _isError = true; }
   bool getError() { return _isError; }
+  /** Append another changeset info object to this one */
+  void append(const std::shared_ptr<ChangesetInfo>& info);
 
 private:
   /** 3x3 array of containers for elements in this subset */

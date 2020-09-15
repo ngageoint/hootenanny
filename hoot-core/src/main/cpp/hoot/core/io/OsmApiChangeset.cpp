@@ -55,7 +55,8 @@ XmlChangeset::XmlChangeset()
     _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _sentCount(0),
     _processedCount(0),
-    _failedCount(0)
+    _failedCount(0),
+    _cleanupCount(0)
 {
 }
 
@@ -67,7 +68,8 @@ XmlChangeset::XmlChangeset(const QString& changeset)
     _maxChangesetSize(ConfigOptions().getChangesetMaxSize()),
     _sentCount(0),
     _processedCount(0),
-    _failedCount(0)
+    _failedCount(0),
+    _cleanupCount(0)
 {
   loadChangeset(changeset);
 }
@@ -79,7 +81,8 @@ XmlChangeset::XmlChangeset(const QList<QString>& changesets)
     _maxPushSize(ConfigOptions().getChangesetApidbSizeMax()),
     _sentCount(0),
     _processedCount(0),
-    _failedCount(0)
+    _failedCount(0),
+    _cleanupCount(0)
 {
   for (QList<QString>::const_iterator it = changesets.begin(); it != changesets.end(); ++it)
     loadChangeset(*it);
@@ -595,12 +598,12 @@ bool XmlChangeset::addNode(const ChangesetInfoPtr& changeset, ChangesetType type
       //  Deleting nodes can't happen until the ways and relations that have the node are deleted
       if (_nodeIdsToRelations.find(node->id()) != _nodeIdsToRelations.end())
       {
-        std::set<long> relationIds = _nodeIdsToRelations[node->id()];
+        set<long> relationIds = _nodeIdsToRelations[node->id()];
         sendable = addParentRelations(changeset, relationIds);
       }
       if (_nodeIdsToWays.find(node->id()) != _nodeIdsToWays.end())
       {
-        std::set<long> wayIds = _nodeIdsToWays[node->id()];
+        set<long> wayIds = _nodeIdsToWays[node->id()];
         sendable = addParentWays(changeset, wayIds);
       }
       if (sendable)
@@ -640,8 +643,34 @@ bool XmlChangeset::moveNode(const ChangesetInfoPtr& source, const ChangesetInfoP
   return true;
 }
 
-bool XmlChangeset::canMoveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& /*destination*/, ChangesetType /*type*/, ChangesetNode* /*node*/)
+bool XmlChangeset::canMoveNode(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetNode* node)
 {
+  //  Deleting a node can only happen when all ways and relations referencing this node are in this changeset
+  if (type == ChangesetType::TypeDelete)
+  {
+    //  Iterate all relations for this node
+    if (_nodeIdsToRelations.find(node->id()) != _nodeIdsToRelations.end())
+    {
+      set<long> relationIds = _nodeIdsToRelations[node->id()];
+      for (set<long>::const_iterator it = relationIds.begin(); it != relationIds.end(); ++it)
+      {
+        if (!destination->contains(ElementType::Relation, *it))
+          return false;
+      }
+    }
+    //  Iterate all ways for this node
+    if (_nodeIdsToWays.find(node->id()) != _nodeIdsToWays.end())
+    {
+      set<long> wayIds = _nodeIdsToWays[node->id()];
+      for (set<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
+      {
+        if (!destination->contains(ElementType::Way, *it))
+          return false;
+      }
+    }
+    //  All parent ways and relations are in the destination, so this node can move
+  }
+  //  Creating or Modifying a node can always move
   return source->size() != 1;
 }
 
@@ -688,7 +717,7 @@ bool XmlChangeset::addWay(const ChangesetInfoPtr& changeset, ChangesetType type,
     {
       if (_wayIdsToRelations.find(way->id()) != _wayIdsToRelations.end())
       {
-        std::set<long> relationIds = _wayIdsToRelations[way->id()];
+        set<long> relationIds = _wayIdsToRelations[way->id()];
         sendable = addParentRelations(changeset, relationIds);
       }
     }
@@ -703,10 +732,10 @@ bool XmlChangeset::addWay(const ChangesetInfoPtr& changeset, ChangesetType type,
   return false;
 }
 
-bool XmlChangeset::addParentWays(const ChangesetInfoPtr& changeset, const std::set<long>& way_ids)
+bool XmlChangeset::addParentWays(const ChangesetInfoPtr& changeset, const set<long>& way_ids)
 {
   bool sendable = true;
-  for (std::set<long>::iterator it = way_ids.begin(); it != way_ids.end(); ++it)
+  for (set<long>::iterator it = way_ids.begin(); it != way_ids.end(); ++it)
   {
     long wayId = *it;
     //  The relation is either a modify or a delete, add it to the changeset
@@ -779,12 +808,12 @@ bool XmlChangeset::moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPt
           //  Don't move this node if it isn't free and clear when failing (and also an add)
           if (failing && _nodes[TypeCreate].find(id) != _nodes[TypeCreate].end())
           {
-            std::set<long> wayIds = _nodeIdsToWays[id];
+            set<long> wayIds = _nodeIdsToWays[id];
             //  Nodes that intersect multiple ways need further checking
             if (wayIds.size() > 1)
             {
               //  Iterate all of the parent ways looking for a valid (non-error) way
-              for (std::set<long>::iterator it = wayIds.begin(); it != wayIds.end(); ++it)
+              for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); ++it)
               {
                 //  Ignore this way (hasn't been errored out yet) and look for a valid way
                 if (*it != way->id() && way->getStatus() != ChangesetElement::ElementStatus::Failed)
@@ -805,11 +834,22 @@ bool XmlChangeset::moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPt
   return true;
 }
 
-bool XmlChangeset::canMoveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& /*destination*/, ChangesetType type, ChangesetWay* way)
+bool XmlChangeset::canMoveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way)
 {
-  //  Deleting a way will only contain the way itself
+  //  Deleting a way will only work if the parent relation is there too
   if (type == ChangesetType::TypeDelete)
-    return source->size() == 1;
+  {
+    if (_wayIdsToRelations.find(way->id()) != _wayIdsToRelations.end())
+    {
+      set<long> relations = _wayIdsToRelations[way->id()];
+      for (set<long>::iterator it = relations.begin(); it != relations.end(); ++it)
+      {
+        if (!destination->contains(ElementType::Way, *it))
+          return false;
+      }
+    }
+    return source->size() != 1;
+  }
   //  Get the count of nodes and way that make up this "change"
   ElementCountSet elements(ElementType::Max);
   size_t count = getObjectCount(source, way, elements);
@@ -889,7 +929,7 @@ bool XmlChangeset::addRelation(const ChangesetInfoPtr& changeset, ChangesetType 
     {
       if (_relationIdsToRelations.find(relation->id()) != _relationIdsToRelations.end())
       {
-        std::set<long> relationIds = _relationIdsToRelations[relation->id()];
+        set<long> relationIds = _relationIdsToRelations[relation->id()];
         sendable = addParentRelations(changeset, relationIds);
       }
     }
@@ -904,10 +944,10 @@ bool XmlChangeset::addRelation(const ChangesetInfoPtr& changeset, ChangesetType 
   return false;
 }
 
-bool XmlChangeset::addParentRelations(const ChangesetInfoPtr& changeset, const std::set<long>& relation_ids)
+bool XmlChangeset::addParentRelations(const ChangesetInfoPtr& changeset, const set<long>& relation_ids)
 {
   bool sendable = true;
-  for (std::set<long>::iterator it = relation_ids.begin(); it != relation_ids.end(); ++it)
+  for (set<long>::iterator it = relation_ids.begin(); it != relation_ids.end(); ++it)
   {
     long relationId = *it;
     //  The relation is either a modify or a delete, add it to the changeset
@@ -969,7 +1009,7 @@ bool XmlChangeset::moveRelation(const ChangesetInfoPtr& source, const ChangesetI
   //  Don't worry about the contents of a delete operation
   if (type != ChangesetType::TypeDelete)
   {
-    //  Iterate all of the nodes that exist in the changeset and move them
+    //  Iterate all of the members that exist in the changeset and move them
     for (int i = 0; i < relation->getMemberCount(); ++i)
     {
       ChangesetRelationMember& member = relation->getMember(i);
@@ -1012,11 +1052,22 @@ bool XmlChangeset::moveRelation(const ChangesetInfoPtr& source, const ChangesetI
   return true;
 }
 
-bool XmlChangeset::canMoveRelation(const ChangesetInfoPtr& source, const ChangesetInfoPtr& /*destination*/, ChangesetType type, ChangesetRelation* relation)
+bool XmlChangeset::canMoveRelation(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation)
 {
-  //  Deleting a relation will only contain the relation itself
+  //  Deleting a relation requires any parent relation
   if (type == ChangesetType::TypeDelete)
+  {
+    if (_relationIdsToRelations.find(relation->id()) != _relationIdsToRelations.end())
+    {
+      set<long> relations = _relationIdsToRelations[relation->id()];
+      for (set<long>::iterator it = relations.begin(); it != relations.end(); ++it)
+      {
+        if (!destination->contains(ElementType::Relation, *it))
+          return false;
+      }
+    }
     return source->size() == 1;
+  }
   //  Get the count of nodes, ways, and relations that make up this "change"
   ElementCountSet elements(ElementType::Max);
   size_t count = getObjectCount(source, relation, elements);
@@ -1584,7 +1635,10 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
       moveOrRemoveRelation(changeset, split, (ChangesetType)current_type, relation);
       //  If the split is big enough, end the operation
       if (split->size() >= splitSize)
-        return split;
+      {
+        //  Remove any nodes that were orphaned by the split
+        return fixOrphanedNodesSplit(changeset, split);
+      }
     }
   }
   //  Then move to ways
@@ -1599,7 +1653,10 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
       moveOrRemoveWay(changeset, split, (ChangesetType)current_type, way);
       //  If the split is big enough, end the operation
       if (split->size() >= splitSize)
-        return split;
+      {
+        //  Remove any nodes that were orphaned by the split
+        return fixOrphanedNodesSplit(changeset, split);
+      }
     }
   }
   //  Finally nodes
@@ -1614,11 +1671,14 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
       moveOrRemoveNode(changeset, split, (ChangesetType)current_type, node);
       //  If the split is big enough, end the operation
       if (split->size() >= splitSize)
-        return split;
+      {
+        //  Remove any nodes that were orphaned by the split
+        return fixOrphanedNodesSplit(changeset, split);
+      }
     }
   }
-  //  Return the second changeset to be added to the queue
-  return split;
+  //  Remove any nodes that were orphaned by the split
+  return fixOrphanedNodesSplit(changeset, split);
 }
 
 void XmlChangeset::updateFailedChangeset(const ChangesetInfoPtr& changeset, bool forceFailure)
@@ -1703,6 +1763,9 @@ QString XmlChangeset::getFailedChangesetString()
         changeset->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
     }
   }
+  //  Add any of the clean-up elements that weren't cleaned up
+  if (getCleanupCount() > 0)
+    changeset->append(_cleanup);
   //  Return the changeset string using changeset ID 0 to indicate it was a failure
   return getChangesetString(changeset, 0);
 }
@@ -1923,15 +1986,15 @@ void XmlChangeset::failNode(long id, bool beforeSend)
     //  Fail parent ways
     if (_nodeIdsToWays.find(id) != _nodeIdsToWays.end())
     {
-      const std::set<long>& parents = _nodeIdsToWays[id];
-      for (std::set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
+      const set<long>& parents = _nodeIdsToWays[id];
+      for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
         failWay(*it, beforeSend);
     }
     //  Fail parent relations
     if (_nodeIdsToRelations.find(id) != _nodeIdsToRelations.end())
     {
-      const std::set<long>& parents = _nodeIdsToRelations[id];
-      for (std::set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
+      const set<long>& parents = _nodeIdsToRelations[id];
+      for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
         failRelation(*it, beforeSend);
     }
   }
@@ -1956,8 +2019,8 @@ void XmlChangeset::failWay(long id, bool beforeSend)
   if (_ways[TypeCreate].find(id) != _ways[TypeCreate].end() &&
       _wayIdsToRelations.find(id) != _wayIdsToRelations.end())
   {
-    const std::set<long>& parents = _wayIdsToRelations[id];
-    for (std::set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
+    const set<long>& parents = _wayIdsToRelations[id];
+    for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
       failRelation(*it, beforeSend);
   }
 }
@@ -1981,8 +2044,8 @@ void XmlChangeset::failRelation(long id, bool beforeSend)
   if (_relations[TypeCreate].find(id) != _relations[TypeCreate].end() &&
       _relationIdsToRelations.find(id) != _relationIdsToRelations.end())
   {
-    const std::set<long>& parents = _relationIdsToRelations[id];
-    for (std::set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
+    const set<long>& parents = _relationIdsToRelations[id];
+    for (set<long>::const_iterator it = parents.begin(); it != parents.end(); ++it)
       failRelation(*it, beforeSend);
   }
   LOG_TRACE("Failed relation (" << id << ")");
@@ -2260,6 +2323,71 @@ QString XmlChangeset::getRemainingFilename()
   return pathname;
 }
 
+ChangesetInfoPtr XmlChangeset::fixOrphanedNodesSplit(const ChangesetInfoPtr& changeset, const ChangesetInfoPtr& split)
+{
+  set<long> nodes;
+  //  Iterate all of the nodes in the remaining changeset looking for deleted shared nodes
+  for (ChangesetInfo::iterator it = changeset->begin(ElementType::Node, ChangesetType::TypeDelete);
+       it != changeset->end(ElementType::Node, ChangesetType::TypeDelete); ++it)
+  {
+    //  Remove any node found in a relation in the split changeset
+    if (_nodeIdsToRelations.find(*it) != _nodeIdsToRelations.end())
+    {
+      set<long> relations = _nodeIdsToRelations[*it];
+      for (set<long>::iterator r = relations.begin(); r != relations.end(); ++r)
+      {
+        if (split->contains(ElementType::Relation, *r))
+          nodes.insert(*it);
+      }
+    }
+    //  Remove any node found in a way in the split changeset
+    if (_nodeIdsToWays.find(*it) != _nodeIdsToWays.end())
+    {
+      set<long> ways = _nodeIdsToWays[*it];
+      for (set<long>::iterator w = ways.begin(); w != ways.end(); ++w)
+      {
+        if (split->contains(ElementType::Way, *w))
+          nodes.insert(*it);
+      }
+    }
+  }
+  //  Remove any of the nodes from the changeset so that they are blocked for upload later
+  ChangesetInfoPtr orphanedNodes(new ChangesetInfo());
+  for (set<long>::iterator n = nodes.begin(); n != nodes.end(); ++n)
+  {
+    ChangesetElement* node = _allNodes[*n].get();
+    if (node)
+    {
+      changeset->remove(ElementType::Node, ChangesetType::TypeDelete, *n);
+      orphanedNodes->add(ElementType::Node, ChangesetType::TypeDelete, *n);
+    }
+  }
+  //  Add the orphaned nodes to the
+  std::lock_guard<std::mutex> lock(_cleanupMutex);
+  _cleanupCount += orphanedNodes->size();
+  if (!_cleanup)
+    _cleanup = orphanedNodes;
+  else
+    _cleanup->append(orphanedNodes);
+  //  Return the split
+  return split;
+}
+
+ChangesetInfoPtr XmlChangeset::getCleanupElements()
+{
+  //  Lock the mutex and return the cleanup changeset
+  std::lock_guard<std::mutex> lock(_cleanupMutex);
+  return _cleanup;
+}
+
+void XmlChangeset::clearCleanupElements()
+{
+  std::lock_guard<std::mutex> lock(_cleanupMutex);
+  _cleanupCount = 0;
+  _cleanup.reset();
+}
+
+
 ChangesetInfo::ChangesetInfo()
   : _attemptedResolveChangesetIssues(false),
     _numFailureRetries(0),
@@ -2298,6 +2426,13 @@ void ChangesetInfo::clear()
       _changeset[i][j].clear();
   }
   _numFailureRetries = 0;
+}
+
+bool ChangesetInfo::contains(ElementType::Type element_type, long id)
+{
+  return _changeset[element_type][ChangesetType::TypeCreate].find(id) != end(element_type, ChangesetType::TypeCreate) ||
+         _changeset[element_type][ChangesetType::TypeModify].find(id) != end(element_type, ChangesetType::TypeModify) ||
+         _changeset[element_type][ChangesetType::TypeDelete].find(id) != end(element_type, ChangesetType::TypeDelete);
 }
 
 bool ChangesetInfo::contains(ElementType::Type element_type, ChangesetType changeset_type, long id)
@@ -2365,6 +2500,18 @@ void ChangesetInfo::retryVersion()
 {
   //  Increment the version retry count
   _numVersionRetries++;
+}
+
+void ChangesetInfo::append(const std::shared_ptr<ChangesetInfo>& info)
+{
+  if (!info)
+    return;
+  //  Iterate all of the types and modes appending 'info' to this object
+  for (int i = 0; i < (int)ElementType::Unknown; ++i)
+  {
+    for (int j = 0; j < ChangesetType::TypeMax; ++j)
+      _changeset[i][j].insert(info->_changeset[i][j].begin(), info->_changeset[i][j].end());
+  }
 }
 
 

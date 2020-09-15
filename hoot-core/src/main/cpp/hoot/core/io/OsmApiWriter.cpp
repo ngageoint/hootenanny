@@ -538,22 +538,37 @@ void OsmApiWriter::_changesetThreadFunc(int index)
       }
       else if (!_changeset.isDone() && queueSize == 0)
       {
-        //  This is a bad state where the producer thread says all elements are sent and
-        //  waits for all threads to join but the changeset isn't "done".
-        //  Set the status to idle and start idle timer
-        _threadStatusMutex.lock();
-        if (_threadStatus[index] != ThreadStatus::Idle)
+        if (_threadsAreIdle() &&
+            _changeset.getCleanupCount() > 0 &&
+            _changeset.getTotalElementCount() <= (_changeset.getProcessedCount() + _changeset.getFailedCount() + _changeset.getCleanupCount()))
         {
-          _threadStatus[index] = ThreadStatus::Idle;
-          _threadIdle[index].reset();
+          //  At this point all work is done and the threads can exit, if there is anything in the changeset cleanup, do it here
+          ChangesetInfoPtr cleanup = _changeset.getCleanupElements();
+          if (index == 0 && cleanup)
+          {
+            _changeset.clearCleanupElements();
+            _pushChangesets(cleanup);
+          }
         }
-        else if (id > 0 && _threadIdle[index].getElapsed() > 10 * 1000)
+        else
         {
-          //  Close the current changeset so all data is "committed"
-          _closeChangeset(request, id);
-          id = -1;
+          //  This is a bad state where the producer thread says all elements are sent and
+          //  waits for all threads to join but the changeset isn't "done".
+          //  Set the status to idle and start idle timer
+          _threadStatusMutex.lock();
+          if (_threadStatus[index] != ThreadStatus::Idle)
+          {
+            _threadStatus[index] = ThreadStatus::Idle;
+            _threadIdle[index].reset();
+          }
+          else if (id > 0 && _threadIdle[index].getElapsed() > 10 * 1000)
+          {
+            //  Close the current changeset so all data is "committed"
+            _closeChangeset(request, id);
+            id = -1;
+          }
+          _threadStatusMutex.unlock();
         }
-        _threadStatusMutex.unlock();
       }
       else
       {
