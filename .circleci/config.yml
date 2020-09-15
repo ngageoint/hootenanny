@@ -49,12 +49,9 @@ jobs:
           name: 'Check Copyright Headers'
           command: ./scripts/copyright/UpdateAllCopyrightHeaders.sh
   lint:
-    working_directory: '/rpmbuild/hootenanny'
+    working_directory: '/usr/local/src'
     docker:
-      - image: hootenanny/rpmbuild-generic@sha256:5c563f129e7802029cf6ecc1f3cd50668c53fcca532895fce615de9f4337c951
-        user: rpmbuild
-        environment:
-          HOOT_HOME: '/rpmbuild/hootenanny'
+      - image: ubuntu-1604:202007-01
     steps:
       - checkout
       - run:
