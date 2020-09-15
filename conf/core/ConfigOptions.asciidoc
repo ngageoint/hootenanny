@@ -672,7 +672,8 @@ relations will be written.
 * Default Value:
 ** `road_marking=solid_stop_line`
 
-TODO
+Feature types that should never be snapped by `ChangesetReplacementCreator` when using
+`UnconnectedWaySnapper`.
 
 === changeset.source
 
