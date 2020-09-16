@@ -1,10 +1,10 @@
-17:22:05.407 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...d/slow/ConflateCmdStatsTest/all-data-types-out.osm...
-17:22:05.409 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        17:22:05.409 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        17:22:05.415 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
-17:22:05.415 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 168 elements from input in: 00:00.
-17:22:05.415 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...d/slow/ConflateCmdStatsTest/all-data-types-out.osm...
-17:22:05.416 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        17:22:05.416 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        17:22:05.422 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
-17:22:05.422 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 168 elements from input in: 00:00.
-17:22:05.424 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
+13:37:59.899 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...d/slow/ConflateCmdStatsTest/all-data-types-out.osm...
+13:37:59.902 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:37:59.902 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:37:59.910 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+13:37:59.910 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 168 elements from input in: 00:00.
+13:37:59.911 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...d/slow/ConflateCmdStatsTest/all-data-types-out.osm...
+13:37:59.911 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:37:59.911 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:37:59.918 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+13:37:59.918 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 168 elements from input in: 00:00.
+13:37:59.922 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
 Nodes	117	116	142	
 Ways	14	12	17	
@@ -89,6 +89,9 @@ Road Reviews to be Made	0	0	0
 Total Unmatched Roads	4	4	1	
 Unmatched Roads From Map 1	4	0	1	
 Unmatched Roads From Map 2	0	4	0	
+Meters of Conflated Roads	0	0	1193.108944807581	
+Meters of Unmatched Roads From Map 1	1268.391861799127	0	75.28252687423461	
+Meters of Unmatched Roads From Map 2	0	1199.557889580971	0	
 Percentage of Roads Conflated	0	0	80	
 Percentage of Roads Marked for Review	0	0	0	
 Percentage of Unmatched Roads From Map 1	100	0	20	
@@ -102,6 +105,10 @@ Building Reviews to be Made	0	0	0
 Total Unmatched Buildings	10	8	7	
 Unmatched Buildings From Map 1	10	0	6	
 Unmatched Buildings From Map 2	0	8	1	
+Total Square Meters of Buildings	1591.156077723015	1511.545824911995	1820.00377951693	
+Square Meters of Conflated Buildings	0	0	14062.63084635656	
+Square Meters of Unmatched Buildings From Map 1	20531.68806590776	0	6523.67781344101	
+Square Meters of Unmatched Buildings From Map 2	0	18518.60094379754	4706.598225769356	
 Percentage of Buildings Conflated	0	0	36.36363636363637	
 Percentage of Buildings Marked for Review	0	0	0	
 Percentage of Unmatched Buildings From Map 1	100	0	54.54545454545454	
@@ -115,7 +122,10 @@ Waterway Reviews to be Made	0	0	0
 Total Unmatched Waterways	0	0	0	
 Unmatched Waterways From Map 1	0	0	0	
 Unmatched Waterways From Map 2	0	0	0	
-Meters of Waterway Processed by Conflation	0	0	0	
+Total Meters of Waterways	0	0	0	
+Meters of Conflated Waterways	0	0	0	
+Meters of Unmatched Waterways From Map 1	0	0	0	
+Meters of Unmatched Waterways From Map 2	0	0	0	
 Percentage of Waterways Conflated	0	0	0	
 Percentage of Waterways Marked for Review	0	0	0	
 Percentage of Unmatched Waterways From Map 1	0	0	0	
@@ -142,6 +152,10 @@ Polygon Reviews to be Made	0	0	0
 Total Unmatched Polygons	10	8	9	
 Unmatched Polygons From Map 1	10	0	6	
 Unmatched Polygons From Map 2	0	8	3	
+Total Square Meters of Polygons	1591.156077723015	1511.545824911995	1981.103909148392	
+Square Meters of Conflated Polygons	0	0	14062.63084635656	
+Square Meters of Unmatched Polygons From Map 1	20531.68806590776	0	6523.67781344101	
+Square Meters of Unmatched Polygons From Map 2	0	18518.60094379754	5416.440139908786	
 Percentage of Polygons Conflated	0	0	30.76923076923077	
 Percentage of Polygons Marked for Review	0	0	0	
 Percentage of Unmatched Polygons From Map 1	100	0	46.15384615384615	
@@ -155,7 +169,10 @@ Area Reviews to be Made	0	0	0
 Total Unmatched Areas	0	0	0	
 Unmatched Areas From Map 1	0	0	0	
 Unmatched Areas From Map 2	0	0	0	
-Meters Squared of Areas Processed by Conflation	0	0	0	
+Total Square Meters of Areas	0	0	0	
+Square Meters of Conflated Areas	0	0	0	
+Square Meters of Unmatched Areas From Map 1	0	0	0	
+Square Meters of Unmatched Areas From Map 2	0	0	0	
 Percentage of Areas Conflated	0	0	0	
 Percentage of Areas Marked for Review	0	0	0	
 Percentage of Unmatched Areas From Map 1	0	0	0	
@@ -169,7 +186,10 @@ Railway Reviews to be Made	0	0	0
 Total Unmatched Railways	0	0	0	
 Unmatched Railways From Map 1	0	0	0	
 Unmatched Railways From Map 2	0	0	0	
-Meters of Railway Processed by Conflation	0	0	0	
+Total Meters of Railways	0	0	0	
+Meters of Conflated Railways	0	0	0	
+Meters of Unmatched Railways From Map 1	0	0	0	
+Meters of Unmatched Railways From Map 2	0	0	0	
 Percentage of Railways Conflated	0	0	0	
 Percentage of Railways Marked for Review	0	0	0	
 Percentage of Unmatched Railways From Map 1	0	0	0	
@@ -183,7 +203,10 @@ Power Line Reviews to be Made	0	0	0
 Total Unmatched Power Lines	0	0	0	
 Unmatched Power Lines From Map 1	0	0	0	
 Unmatched Power Lines From Map 2	0	0	0	
-Meters of Power Line Processed by Conflation	0	0	0	
+Total Meters of Power Lines	0	0	0	
+Meters of Conflated Power Lines	0	0	0	
+Meters of Unmatched Power Lines From Map 1	0	0	0	
+Meters of Unmatched Power Lines From Map 2	0	0	0	
 Percentage of Power Lines Conflated	0	0	0	
 Percentage of Power Lines Marked for Review	0	0	0	
 Percentage of Unmatched Power Lines From Map 1	0	0	0	
@@ -210,7 +233,10 @@ Line Reviews to be Made	0	0	0
 Total Unmatched Lines	4	4	1	
 Unmatched Lines From Map 1	4	0	1	
 Unmatched Lines From Map 2	0	4	0	
-Meters of Line Processed by Conflation	0	0	1193.108944807581	
+Total Meters of Lines	1268.391861799127	1199.557889580971	1268.391471681816	
+Meters of Conflated Lines	0	0	1193.108944807581	
+Meters of Unmatched Lines From Map 1	1268.391861799127	0	75.28252687423461	
+Meters of Unmatched Lines From Map 2	0	1199.557889580971	0	
 Percentage of Lines Conflated	0	0	80	
 Percentage of Lines Marked for Review	0	0	0	
 Percentage of Unmatched Lines From Map 1	100	0	20	
@@ -224,7 +250,10 @@ Collection Relation Reviews to be Made	0	0	0
 Total Unmatched Collection Relations	0	0	0	
 Unmatched Collection Relations From Map 1	0	0	0	
 Unmatched Collection Relations From Map 2	0	0	0	
-Meters Squared of Collection Relations Processed by Conflation	0	0	709.8419141394307	
+Total Square Meters of Collection Relations	0	0	0	
+Square Meters of Conflated Collection Relations	0	0	709.8419141394307	
+Square Meters of Unmatched Collection Relations From Map 1	0	0	0	
+Square Meters of Unmatched Collection Relations From Map 2	0	0	0	
 Percentage of Collection Relations Conflated	0	0	100	
 Percentage of Collection Relations Marked for Review	0	0	0	
 Percentage of Unmatched Collection Relations From Map 1	0	0	0	
@@ -234,13 +263,25 @@ Translated Populated Tags	169	143	231
 Features Conflatable by: hoot::ScriptMatchCreator,Area.js			0	
 Difference Between Total Features in Output and Total Features in Inputs			-13	
 Percentage Difference Between Total Features in Output and Total Features in Inputs			-27.65957446808511	
-Percentage of Map 1 Matched With Map 2			52	
-Percentage of Map 1 Not Matched With Map 2			52	
-Percentage of Map 2 Not Matched With Map 1			36.36363636363637	
-Calculate Stats for Input 1 Time (sec)				7.865356922149658
-Calculate Stats for Input 2 Time (sec)				0.8458170890808105
-Apply Pre-Conflate Ops Time (sec)				0.01359200477600098
-Apply Post-Conflate Ops Time (sec)				0.008090972900390625
-Calculate Stats for Output Time (sec)				1.199697971343994
+Percentage of Number of Total Map 1 Features Matched With Map 2 Features			52	
+Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features			52	
+Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features			36.36363636363637	
+Percentage of Length of Map 1 Roads Matched With Map 2 Roads			94.06469567813517	
+Percentage of Length of Map 1 Roads Not Matched With Map 2 Roads			5.935273565020475	
+Percentage of Length of Map 2 Roads Not Matched With Map 1 Roads			0	
+Percentage of Area of Map 1 Buildings Matched With Map 2 Buildings			883.79958718321	
+Percentage of Area of Map 1 Buildings Not Matched With Map 2 Buildings			409.9960968490633	
+Percentage of Area of Map 2 Buildings Not Matched With Map 1 Buildings			311.3764828164162	
+Percentage of Area of Map 1 Polygons Matched With Map 2 Polygons			883.79958718321	
+Percentage of Area of Map 1 Polygons Not Matched With Map 2 Polygons			409.9960968490633	
+Percentage of Area of Map 2 Polygons Not Matched With Map 1 Polygons			358.337805618572	
+Percentage of Length of Map 1 Lines Matched With Map 2 Lines			94.06469567813517	
+Percentage of Length of Map 1 Lines Not Matched With Map 2 Lines			5.935273565020475	
+Percentage of Length of Map 2 Lines Not Matched With Map 1 Lines			0	
+Calculate Stats for Input 1 Time (sec)				8.195574998855591
+Calculate Stats for Input 2 Time (sec)				0.9099619388580322
+Apply Pre-Conflate Ops Time (sec)				0.01499009132385254
+Apply Post-Conflate Ops Time (sec)				0.00744318962097168
+Calculate Stats for Output Time (sec)				1.263417959213257
 
-17:22:04.911 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:12 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm
+13:37:59.289 STATUS ...pp/hoot/core/util/Progress.cpp(  85) Conflate (100%): Conflation job completed in 00:13 for reference map: ...late/unified/AllDataTypesA.osm and secondary map: ...late/unified/AllDataTypesB.osm and written to output: ...atsTest/all-data-types-out.osm

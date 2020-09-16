@@ -84,17 +84,17 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       33.3,
       uut1.getSingleStat(
-        "Percentage of Total Map 1 Features Matched With Map 2 Features", statsToUpdate),
+        "Percentage of Number of Total Map 1 Features Matched With Map 2 Features", statsToUpdate),
       1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       16.7,
       uut1.getSingleStat(
-        "Percentage of Total Map 1 Features Not Matched With Map 2 Features", statsToUpdate),
+        "Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features", statsToUpdate),
       1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       75.0,
       uut1.getSingleStat(
-        "Percentage of Total Map 2 Features Not Matched With Map 1 Features", statsToUpdate),
+        "Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features", statsToUpdate),
       1e-1);
 
     // TODO: add length/area stats?
