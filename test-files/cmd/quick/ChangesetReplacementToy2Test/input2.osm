@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="36.041825" minlon="-115.037341" maxlat="36.046622" maxlon="-115.034847"/>
+    <node visible="true" id="137272177" timestamp="2020-09-16T15:38:14Z" version="2" changeset="14439" lat="36.0455189999999988" lon="-115.0351359999999943"/>
+    <node visible="true" id="137296080" timestamp="2020-09-16T15:38:14Z" version="5" changeset="14439" lat="36.0441108999999997" lon="-115.0373409999999978">
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="turning_circle"/>
+    </node>
+    <node visible="true" id="137296083" timestamp="2020-09-16T15:38:14Z" version="3" changeset="14439" lat="36.0440900999999982" lon="-115.0366001999999952"/>
+    <node visible="true" id="137296086" timestamp="2020-09-16T15:38:14Z" version="2" changeset="14439" lat="36.0440940000000012" lon="-115.0358760000000018"/>
+    <node visible="true" id="137448260" timestamp="2020-09-16T15:38:14Z" version="2" changeset="14439" lat="36.0466219999999993" lon="-115.0348469999999992"/>
+    <node visible="true" id="137624936" timestamp="2020-09-16T15:38:14Z" version="2" changeset="14439" lat="36.0418250000000029" lon="-115.0358569999999929"/>
+    <node visible="true" id="137633797" timestamp="2020-09-16T15:38:14Z" version="2" changeset="14439" lat="36.0431340000000020" lon="-115.0358630000000062"/>
+    <node visible="true" id="137633799" timestamp="2020-09-16T15:38:14Z" version="2" changeset="14439" lat="36.0442099999999996" lon="-115.0358760000000018"/>
+    <node visible="true" id="137633801" timestamp="2020-09-16T15:38:14Z" version="2" changeset="14439" lat="36.0444329999999979" lon="-115.0358140000000020"/>
+    <node visible="true" id="137633803" timestamp="2020-09-16T15:38:14Z" version="2" changeset="14439" lat="36.0446460000000002" lon="-115.0357110000000063"/>
+    <node visible="true" id="137633805" timestamp="2020-09-16T15:38:14Z" version="2" changeset="14439" lat="36.0451690000000013" lon="-115.0353230000000053"/>
+    <node visible="true" id="137633808" timestamp="2020-09-16T15:38:14Z" version="2" changeset="14439" lat="36.0458670000000012" lon="-115.0350130000000064"/>
+    <node visible="true" id="5419271234" timestamp="2020-09-16T15:38:14Z" version="1" changeset="14439" lat="36.0440928000000014" lon="-115.0371482999999984"/>
+    <node visible="true" id="5419271235" timestamp="2020-09-16T15:38:14Z" version="1" changeset="14439" lat="36.0440814000000032" lon="-115.0372493999999932"/>
+    <node visible="true" id="5419271238" timestamp="2020-09-16T15:38:14Z" version="1" changeset="14439" lat="36.0440810999999997" lon="-115.0371976999999930"/>
+    <node visible="true" id="5419271239" timestamp="2020-09-16T15:38:14Z" version="1" changeset="14439" lat="36.0440885000000009" lon="-115.0373038999999977"/>
+    <node visible="true" id="5419271498" timestamp="2020-09-16T15:38:14Z" version="1" changeset="14439" lat="36.0445589999999996" lon="-115.0357530999999938"/>
+    <node visible="true" id="5419272270" timestamp="2020-09-16T15:38:14Z" version="1" changeset="14439" lat="36.0446991000000025" lon="-115.0356716000000006"/>
+    <way visible="true" id="14295488" timestamp="2020-09-16T15:38:14Z" version="3" changeset="14439">
+        <nd ref="137296080"/>
+        <nd ref="5419271239"/>
+        <nd ref="5419271235"/>
+        <nd ref="5419271238"/>
+        <nd ref="5419271234"/>
+        <nd ref="137296083"/>
+        <nd ref="137296086"/>
+        <tag k="name" v="Lilac Echo Avenue"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="source:datetime" v="2018-02-18T01:07:42Z"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_base" v="Lilac Echo"/>
+    </way>
+    <way visible="true" id="14316380" timestamp="2020-09-16T15:38:14Z" version="4" changeset="14439">
+        <nd ref="137624936"/>
+        <nd ref="137633797"/>
+        <nd ref="137296086"/>
+        <nd ref="137633799"/>
+        <nd ref="137633801"/>
+        <nd ref="5419271498"/>
+        <nd ref="137633803"/>
+        <nd ref="5419272270"/>
+        <nd ref="137633805"/>
+        <nd ref="137272177"/>
+        <nd ref="137633808"/>
+        <nd ref="137448260"/>
+        <tag k="name" v="Bailey Island Drive"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="source:datetime" v="2018-02-18T01:07:42Z"/>
+        <tag k="tiger:name_type" v="Dr"/>
+        <tag k="highway" v="residential"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_base" v="Bailey Island"/>
+    </way>
+</osm>
