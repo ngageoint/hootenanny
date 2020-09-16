@@ -35,15 +35,15 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Hoot
 EOF'
 
 
-# Now check if we should switch to the "night;y" RPM's
+# Now check if we should switch to the "nightly" RPM's
 # NOTE: The nightly RPM's are not signed
 if [ "${NIGHTLY:-no}" = "yes" ]; then
     echo "### Swap the release repo for the nightly one ###" | tee -a CentOS_install.txt
-yum-config-manager \
- --setopt=hoot-release.baseurl=https://hoot-repo.s3.amazonaws.com/el7/master \
- --setopt=hoot-release.gpgcheck=0 \
- --setopt=hoot-release.repo_gpgcheck=0 \
- --save
+    sudo yum-config-manager \
+     --setopt=hoot-release.baseurl=https://hoot-repo.s3.amazonaws.com/el7/master \
+     --setopt=hoot-release.gpgcheck=0 \
+     --setopt=hoot-release.repo_gpgcheck=0 \
+     --save
 fi
 
 # configure PGDG repository for PostgreSQL 9.5.
