@@ -23,8 +23,8 @@ sudo yum install -y wget curl vim epel-release 2>&1 | tee -a CentOS_install.txt
 echo "### Add Hoot deps repo ###" | tee -a CentOS_install.txt
 sudo $HOOT_HOME/scripts/yum/hoot-repo.sh
 
-echo "### Add Hoot release repo ###" | tee -a CentOS_install.txt
-sudo bash -c 'cat >> /etc/yum.repos.d/hoot_release.repo <<EOF
+echo "### Add the Hoot release repo ###" | tee -a CentOS_install.txt
+sudo bash -c 'cat >> /etc/yum.repos.d/hoot_rpm.repo <<EOF
 [hoot-release]
 name = Hootenanny Release
 baseurl = https://s3.amazonaws.com/hoot-repo/el7/release
@@ -33,6 +33,15 @@ gpgcheck = 1
 repo_gpgcheck = 1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Hoot
 EOF'
+
+
+# Now check if we should switch to the "night;y" RPM's
+# NOTE: The nightly RPM's are not signed
+if [ "${NIGHTLY:-no}" = "yes" ]; then
+    echo "### Swap the release repo for the nightly one ###" | tee -a CentOS_install.txt
+    sudo sed -i 's/release/master/g' /etc/yum.repos.d/hoot_rpm.repo
+    sudo sed -i 's/check = 1/check = 0/g' /etc/yum.repos.d/hoot_rpm.repo
+fi
 
 # configure PGDG repository for PostgreSQL 9.5.
 echo "### Add pgdg repo ###" | tee -a CentOS_install.txt
