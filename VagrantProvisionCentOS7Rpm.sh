@@ -17,7 +17,7 @@ export LANG=en_US.UTF-8
 
 echo "Adding additional software repositories..."
 echo "### Add epel repo and handy packages ###" | tee CentOS_install.txt
-sudo yum install -y wget curl vim epel-release 2>&1 | tee -a CentOS_install.txt
+sudo yum install -y wget curl vim epel-release yum-utils 2>&1 | tee -a CentOS_install.txt
 
 # add the repo for the current Hootenanny release rpm's.
 echo "### Add Hoot deps repo ###" | tee -a CentOS_install.txt
@@ -39,8 +39,11 @@ EOF'
 # NOTE: The nightly RPM's are not signed
 if [ "${NIGHTLY:-no}" = "yes" ]; then
     echo "### Swap the release repo for the nightly one ###" | tee -a CentOS_install.txt
-    sudo sed -i 's/release/master/g' /etc/yum.repos.d/hoot_rpm.repo
-    sudo sed -i 's/check = 1/check = 0/g' /etc/yum.repos.d/hoot_rpm.repo
+yum-config-manager \
+ --setopt=hoot-release.baseurl=https://hoot-repo.s3.amazonaws.com/el7/master \
+ --setopt=hoot-release.gpgcheck=0 \
+ --setopt=hoot-release.repo_gpgcheck=0 \
+ --save
 fi
 
 # configure PGDG repository for PostgreSQL 9.5.
