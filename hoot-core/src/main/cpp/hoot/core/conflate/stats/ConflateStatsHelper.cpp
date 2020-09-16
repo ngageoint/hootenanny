@@ -30,6 +30,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/info/SingleStat.h>
+#include <hoot/core/info/CreatorDescription.h>
 
 // std
 #include <math.h>
@@ -79,44 +80,147 @@ void ConflateStatsHelper::updateStats(QList<SingleStat>& statsToUpdate, long ins
         "Percentage Difference Between Total Features in Output and Total Features in Inputs",
         (differenceBetweenTotalInputFeaturesAndTotalOutputFeatures / numInputFeaturesTotal) * 100.0));
 
-    // Some extra stats requested for comparing conflated output when map 1 is known to be ground
-    // truth. Although not added to the statistic labels themselves, if map 1 is ground truth then
-    // you may assume:
-    //
-    // "Percentage of Map 1 Matched With Map 2" = percentage of true positive matches
-    // "Percentage of Map 1 Not Matched With Map 2" = percentage of false negative mismatches
-    // "Percentage of Map 2 Not Matched With Map 1" = percentage of false positive mismatches
-
-    const double numMap1Features = getSingleStat("Total Features", _input1Stats);
-    const double numMap1UnconflatedFeatures =
-      getSingleStat("Total Unmatched Features From Map 1", _outputStats);
-    const double numMap2Features = getSingleStat("Total Features", _input2Stats);
-    const double numMap2UnconflatedFeatures =
-      getSingleStat("Total Unmatched Features From Map 2", _outputStats);
-    const double numConflatedFeatures = getSingleStat("Total Conflated Features", _outputStats);
-
-    LOG_VARD(numMap1Features);
-    LOG_VARD(numMap1UnconflatedFeatures);
-    LOG_VARD(numMap2Features);
-    LOG_VARD(numMap2UnconflatedFeatures);
-    LOG_VARD(numConflatedFeatures);
-
-    statsToUpdate.insert(
-      insertIndex++,
-      SingleStat(
-        "Percentage of Map 1 Matched With Map 2",
-        (numConflatedFeatures / numMap1Features) * 100.0));
-    statsToUpdate.insert(
-      insertIndex++,
-      SingleStat(
-        "Percentage of Map 1 Not Matched With Map 2",
-        (numMap1UnconflatedFeatures / numMap1Features) * 100.0));
-    statsToUpdate.insert(
-      insertIndex++,
-      SingleStat(
-        "Percentage of Map 2 Not Matched With Map 1",
-        (numMap2UnconflatedFeatures / numMap2Features) * 100.0));
+    // Not passing insertIndex by ref, but if any stat methods are added after this one it will need
+    // to be.
+    _addRefAsGroundTruthStats(statsToUpdate, insertIndex);
   }
+}
+
+void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUpdate,
+                                                    long insertIndex)
+{
+  // Some extra stats requested for comparing conflated output when map 1 is known to be ground
+  // truth. Although not added to the statistic labels themselves, if map 1 is ground truth then
+  // you may assume:
+  //
+  // "Percentage of Map 1 Matched With Map 2" = percentage of true positive matches
+  // "Percentage of Map 1 Not Matched With Map 2" = percentage of false negative mismatches
+  // "Percentage of Map 2 Not Matched With Map 1" = percentage of false positive mismatches
+  //
+  // The same thing applies to the size related stats that follow them.
+
+  const double numMap1Features = getSingleStat("Total Features", _input1Stats);
+  const double numMap1UnconflatedFeatures =
+    getSingleStat("Total Unmatched Features From Map 1", _outputStats);
+  const double numMap2Features = getSingleStat("Total Features", _input2Stats);
+  const double numMap2UnconflatedFeatures =
+    getSingleStat("Total Unmatched Features From Map 2", _outputStats);
+  const double numConflatedFeatures = getSingleStat("Total Conflated Features", _outputStats);
+  statsToUpdate.insert(
+    insertIndex++,
+    SingleStat(
+      "Percentage of Number of Total Map 1 Features Matched With Map 2 Features",
+      (numConflatedFeatures / numMap1Features) * 100.0));
+  statsToUpdate.insert(
+    insertIndex++,
+    SingleStat(
+      "Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features",
+      (numMap1UnconflatedFeatures / numMap1Features) * 100.0));
+  statsToUpdate.insert(
+    insertIndex++,
+    SingleStat(
+      "Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features",
+      (numMap2UnconflatedFeatures / numMap2Features) * 100.0));
+
+  for (CreatorDescription::BaseFeatureType it = CreatorDescription::POI;
+       it < CreatorDescription::Unknown;
+       it = CreatorDescription::BaseFeatureType(it + 1))
+  {
+    const QString featureType = CreatorDescription::baseFeatureTypeToString(it);
+
+    // These stats will only exist for feature types whose size are determined by the corresponding
+    // measurement type, as set in CalculateStatsOp.
+
+    // TODO: There may be a way to combine the following two code blocks into a single one.
+    if (hasSingleStat("Total Meters of " + featureType + "s", _input1Stats) &&
+        hasSingleStat("Total Meters of " + featureType + "s", _input2Stats) &&
+        hasSingleStat("Meters of Conflated " + featureType + "s", _outputStats) &&
+        hasSingleStat("Meters of Unmatched " + featureType + "s From Map 1", _outputStats) &&
+        hasSingleStat("Meters of Unmatched " + featureType + "s From Map 2", _outputStats))
+    {
+      const double map1TotalLength =
+        getSingleStat("Total Meters of " + featureType + "s", _input1Stats);
+      const double map2TotalLength =
+        getSingleStat("Total Meters of " + featureType + "s", _input2Stats);
+      if (map1TotalLength > 0.0 && map2TotalLength > 0.0)
+      {
+        const double map1LengthUnconflated =
+          getSingleStat("Meters of Unmatched " + featureType + "s From Map 1", _outputStats);
+        const double map2LengthUnconflated =
+          getSingleStat("Meters of Unmatched " + featureType + "s From Map 2", _outputStats);
+        const double conflatedLength =
+          getSingleStat("Meters of Conflated " + featureType + "s", _outputStats);
+        statsToUpdate.insert(
+          insertIndex++,
+          SingleStat(
+            "Percentage of Length of Map 1 " + featureType + "s Matched With Map 2 " + featureType +
+              "s",
+            (conflatedLength / map1TotalLength) * 100.0));
+        statsToUpdate.insert(
+          insertIndex++,
+          SingleStat(
+            "Percentage of Length of Map 1 " + featureType  + "s Not Matched With Map 2 " +
+              featureType + "s",
+            (map1LengthUnconflated / map1TotalLength) * 100.0));
+        statsToUpdate.insert(
+          insertIndex++,
+          SingleStat(
+            "Percentage of Length of Map 2 " + featureType  + "s Not Matched With Map 1 " +
+              featureType + "s",
+            (map2LengthUnconflated / map2TotalLength) * 100.0));
+      }
+    }
+    else if (hasSingleStat("Total Square Meters of " + featureType + "s", _input1Stats) &&
+        hasSingleStat("Total Square Meters of " + featureType + "s", _input2Stats) &&
+        hasSingleStat("Square Meters of Conflated " + featureType + "s", _outputStats) &&
+        hasSingleStat("Square Meters of Unmatched " + featureType + "s From Map 1", _outputStats) &&
+        hasSingleStat("Square Meters of Unmatched " + featureType + "s From Map 2", _outputStats))
+    {
+      const double map1TotalArea =
+        getSingleStat("Total Square Meters of " + featureType + "s", _input1Stats);
+      const double map2TotalArea =
+        getSingleStat("Total Square Meters of " + featureType + "s", _input2Stats);
+      if (map1TotalArea > 0.0 && map2TotalArea > 0.0)
+      {
+        const double map1AreaUnconflated =
+          getSingleStat("Square Meters of Unmatched " + featureType + "s From Map 1", _outputStats);
+        const double map2AreaUnconflated =
+          getSingleStat("Square Meters of Unmatched " + featureType + "s From Map 2", _outputStats);
+        const double conflatedArea =
+          getSingleStat("Square Meters of Conflated " + featureType + "s", _outputStats);
+        statsToUpdate.insert(
+          insertIndex++,
+          SingleStat(
+            "Percentage of Area of Map 1 " + featureType + "s Matched With Map 2 " + featureType +
+              "s",
+            (conflatedArea / map1TotalArea) * 100.0));
+        statsToUpdate.insert(
+          insertIndex++,
+          SingleStat(
+            "Percentage of Area of Map 1 " + featureType  + "s Not Matched With Map 2 " +
+              featureType + "s",
+            (map1AreaUnconflated / map1TotalArea) * 100.0));
+        statsToUpdate.insert(
+          insertIndex++,
+          SingleStat(
+            "Percentage of Area of Map 2 " + featureType  + "s Not Matched With Map 1 " +
+              featureType + "s",
+            (map2AreaUnconflated / map2TotalArea) * 100.0));
+      }
+    }
+  }
+}
+
+bool ConflateStatsHelper::hasSingleStat(const QString& statName, const QList<SingleStat> stats)
+{
+  for (int i = 0; i < stats.size(); i++)
+  {
+    if (stats[i].name == statName)
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 double ConflateStatsHelper::getSingleStat(const QString& statName, const QList<SingleStat> stats)
