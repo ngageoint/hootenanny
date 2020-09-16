@@ -9,15 +9,15 @@ LOG_FILE="lint.log"
 DOCKER_CONTAINER=""
 POPTIONS=""
 
-# public dockerhub image created by a member of the sherlock team
+# public dockerhub image created by a member of the hoot team
 runLintContainer()
 {
         echo "Running lint container..."
         docker run -i -d \
-               --name sherlock_lint \
+               --name hoot_lint \
                zappedbyvoltz/pycodestyle &> /dev/null
         sleep 1
-        DOCKER_CONTAINER_ID=`docker ps -f "name=sherlock_lint" -q`
+        DOCKER_CONTAINER_ID=`docker ps -f "name=hoot_lint" -q`
         if [ -z "${DOCKER_CONTAINER_ID}" ]; then
             echo "Failed to start Docker container."
             exit 1
@@ -30,8 +30,8 @@ runLintContainer()
 cleanRunningContainer()
 {
     echo "Cleaning container..."
-    docker container stop sherlock_lint &> /dev/null
-    docker container rm sherlock_lint &> /dev/null
+    docker container stop hoot_lint &> /dev/null
+    docker container rm hoot_lint &> /dev/null
 }
 
 # want to start with a clean container, so that if the user runs this script more than
@@ -39,9 +39,9 @@ cleanRunningContainer()
 LintContainerCheck()
 {
     CLEAN=$1
-    if [[ ! -z $( docker ps -a -f "name=sherlock_lint" -q ) && ${CLEAN} == 1 ]]; then
+    if [[ ! -z $( docker ps -a -f "name=hoot_lint" -q ) && ${CLEAN} == 1 ]]; then
         cleanRunningContainer
-    elif [[ ! -z $( docker ps -a -f "name=sherlock_lint" -q ) && ${CLEAN} == 0 ]]; then
+    elif [[ ! -z $( docker ps -a -f "name=hoot_lint" -q ) && ${CLEAN} == 0 ]]; then
         cleanRunningContainer
         runLintContainer
     else
