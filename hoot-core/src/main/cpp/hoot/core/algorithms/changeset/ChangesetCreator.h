@@ -116,6 +116,7 @@ public:
   { return _numCreateChanges + _numModifyChanges + _numDeleteChanges; }
 
   void setIncludeReviews(bool include) { _includeReviews = include; }
+  void setClean(bool clean) { _clean = clean; }
 
 private:
 
@@ -135,6 +136,9 @@ private:
   // If true, we are generating a changeset that will be made up of everything in the single input
   // provided.
   bool _singleInput;
+
+  // TODO
+  bool _clean;
 
   int _numCreateChanges;
   int _numModifyChanges;

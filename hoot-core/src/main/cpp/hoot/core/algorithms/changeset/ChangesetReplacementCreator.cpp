@@ -554,6 +554,8 @@ void ChangesetReplacementCreator::_create()
   // secondary features within the bounds and write it out.
   _changesetCreator->setIncludeReviews(
     _conflationEnabled && ConfigOptions().getChangesetReplacementPassConflateReviews());
+  // TODO
+  _changesetCreator->setClean(true);
   _changesetCreator->create(refMaps, conflatedMaps, _output);
   _numChanges = _changesetCreator->getNumTotalChanges();
 

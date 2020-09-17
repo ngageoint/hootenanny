@@ -26,14 +26,154 @@
  */
 #include "ChangesetCleaner.h"
 
+// Hoot
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
 
+ChangesetCleaner::ChangesetCleaner(const QList<ChangesetProviderPtr>& changesetProviders) :
+_changesetProviders(changesetProviders),
+_numDeleteChangesRemoved(0)
+{
+  if (_changesetProviders.isEmpty())
+  {
+    throw IllegalArgumentException("TODO");
+  }
+  _clean();
+}
 
+void ChangesetCleaner::_clean()
+{
+  for (QList<ChangesetProviderPtr>::const_iterator itr =
+       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
+  {
+    ChangesetProviderPtr changesetProvider = *itr;
+    while (changesetProvider->hasMoreChanges())
+    {
+      const Change change = changesetProvider->readNextChange();
+      const ElementId id = change.getElement()->getElementId();
+      if (_changesById.contains(id))
+      {
+        const Change existingChange = _changesById[id];
+        if (existingChange.getType() != Change::Delete && change.getType() == Change::Delete)
+        {
+          _numDeleteChangesRemoved++;
+          continue;
+        }
+        else
+        {
+          _changesById[id] = change;
+          _changes.push_back(change);
+        }
+      }
+      else
+      {
+        _changesById[id] = change;
+        _changes.push_back(change);
+      }
+    }
+  }
+  _changeItr = _changes.begin();
+}
+
+ChangesetCleaner::~ChangesetCleaner()
+{
+  close();
+}
+
+std::shared_ptr<OGRSpatialReference> ChangesetCleaner::getProjection() const
+{
+  return _changesetProviders.front()->getProjection();
+}
+
+void ChangesetCleaner::close()
+{
+//  for (QList<ChangesetProviderPtr>::iterator itr =
+//       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
+//  {
+//    (*itr)->close();
+//  }
+}
+
+bool ChangesetCleaner::hasMoreChanges()
+{
+  return _changeItr != _changes.end();
+}
+
+Change ChangesetCleaner::readNextChange()
+{
+  Change change = *_changeItr;
+  ++_changeItr;
+  return change;
+}
+
+int ChangesetCleaner::getNumFromElementsParsed() const
+{
+  int total = 0;
+  for (QList<ChangesetProviderPtr>::const_iterator itr =
+       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
+  {
+    total += (*itr)->getNumFromElementsParsed();
+  }
+  return total;
+}
+
+int ChangesetCleaner::getNumToElementsParsed() const
+{
+  int total = 0;
+  for (QList<ChangesetProviderPtr>::const_iterator itr =
+       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
+  {
+    total += (*itr)->getNumToElementsParsed();
+  }
+  return total;
+}
+
+int ChangesetCleaner::getNumCreateChanges() const
+{
+  int total = 0;
+  for (QList<ChangesetProviderPtr>::const_iterator itr =
+       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
+  {
+    total += (*itr)->getNumCreateChanges();
+  }
+  return total;
+}
+
+int ChangesetCleaner::getNumModifyChanges() const
+{
+  int total = 0;
+  for (QList<ChangesetProviderPtr>::const_iterator itr =
+       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
+  {
+    total += (*itr)->getNumModifyChanges();
+  }
+  return total;
+}
+
+int ChangesetCleaner::getNumDeleteChanges() const
+{
+  int total = 0;
+  for (QList<ChangesetProviderPtr>::const_iterator itr =
+       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
+  {
+    total += (*itr)->getNumDeleteChanges();
+  }
+  total -= _numDeleteChangesRemoved;
+  return total;
+}
+
+int ChangesetCleaner::getNumChanges() const
+{
+  int total = 0;
+  for (QList<ChangesetProviderPtr>::const_iterator itr =
+       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
+  {
+    ChangesetProviderPtr changesetProvider = *itr;
+    total += changesetProvider->getNumCreateChanges();
+  }
+  return total;
+}
 
 }

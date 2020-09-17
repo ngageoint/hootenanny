@@ -27,8 +27,8 @@
 #ifndef CHANGESET_CLEANER_H
 #define CHANGESET_CLEANER_H
 
+// Hoot
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
-#include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot
 {
@@ -41,52 +41,79 @@ class ChangesetCleaner : public ChangesetProvider
 
 public:
 
-  ChangesetCleaner(ChangesetProviderPtr from, ElementInputStreamPtr to) {}
+  /**
+   * TODO
+   *
+   * @param changesetProviders
+   */
+  ChangesetCleaner(const QList<ChangesetProviderPtr>& changesetProviders);
+
+  virtual ~ChangesetCleaner();
 
   /**
    * @see ChangeSetProvider
    */
   virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
-  virtual ~ChangesetDeriver();
+  /**
+   * @see ChangeSetProvider
+   */
+  virtual void close() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual void close(){}
+  virtual bool hasMoreChanges() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual bool hasMoreChanges(){ return false; }
+  virtual Change readNextChange() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange() override{ return Change(); }
+  virtual int getNumFromElementsParsed() const override;
 
-//  long getNumFromElementsParsed() const { return _numFromElementsParsed; }
-//  long getNumToElementsParsed() const { return _numToElementsParsed; }
+  /**
+   * @see ChangeSetProvider
+   */
+  virtual int getNumToElementsParsed() const override;
 
-//  int getNumCreateChanges() const { return _changesByType[Change::ChangeType::Create]; }
-//  int getNumModifyChanges() const { return _changesByType[Change::ChangeType::Modify]; }
-//  int getNumDeleteChanges() const { return _changesByType[Change::ChangeType::Delete]; }
-//  int getNumChanges() const
-//  { return getNumCreateChanges() + getNumModifyChanges() + getNumDeleteChanges(); }
+  /**
+   * @see ChangeSetProvider
+   */
+  virtual int getNumCreateChanges() const override;
+
+  /**
+   * @see ChangeSetProvider
+   */
+  virtual int getNumModifyChanges() const override;
+
+  /**
+   * @see ChangeSetProvider
+   */
+  virtual int getNumDeleteChanges() const override;
+
+  /**
+   * @see ChangeSetProvider
+   */
+  virtual int getNumChanges() const override;
 
 private:
 
-  //Change _nextChange();
+  // TODO
+  QList<ChangesetProviderPtr> _changesetProviders;
+  // TODO
+  std::vector<Change>::const_iterator _changeItr;
+  // TODO
+  QMap<ElementId, Change> _changesById;
+  // TODO
+  std::vector<Change> _changes;
+  // TODO
+  int _numDeleteChangesRemoved;
 
-  ChangesetProviderPtr _from;
-  ElementInputStreamPtr _to;
-  Change _next;
-  ElementPtr _fromE, _toE;
-
-//  long _numFromElementsParsed;
-//  long _numToElementsParsed;
-
-  QMap<Change::ChangeType, int> _changesByType;
+  void _clean();
 };
 
 }

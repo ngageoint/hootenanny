@@ -76,6 +76,15 @@ public:
    */
   virtual Change readNextChange() = 0;
 
+  // TODO: add doc
+
+  virtual int getNumFromElementsParsed() const { return 0; }
+  virtual int getNumToElementsParsed() const { return 0; }
+
+  virtual int getNumCreateChanges() const { return 0; }
+  virtual int getNumModifyChanges() const { return 0; }
+  virtual int getNumDeleteChanges() const { return 0; }
+  virtual int getNumChanges() const { return 0; }
 };
 
 typedef std::shared_ptr<ChangesetProvider> ChangesetProviderPtr;
