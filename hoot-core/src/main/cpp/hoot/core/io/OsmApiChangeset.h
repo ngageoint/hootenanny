@@ -455,8 +455,21 @@ private:
    * @return _errorPathname with "error" replaced by "remaining"
    */
   QString getRemainingFilename();
-
+  /**
+   * @brief fixOrphanedNodesSplit
+   * @param changeset
+   * @param split
+   * @return
+   */
   ChangesetInfoPtr fixOrphanedNodesSplit(const ChangesetInfoPtr& changeset, const ChangesetInfoPtr& split);
+  /**
+   * @brief insertElement
+   * @param element
+   * @param type
+   * @param elementMap
+   * @param all
+   */
+  void insertElement(const ChangesetElementPtr& element, ChangesetType type, ChangesetTypeMap& elementMap, ChangesetElementMap& all);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   ChangesetElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */
