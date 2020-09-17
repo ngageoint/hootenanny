@@ -1032,7 +1032,9 @@
         <tag k="is_in:country_code" v="SO"/>
         <tag k="transient" v="no"/>
         <tag k="hgis:accuracy" v="high"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="source" v="Wikimapia"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
     </way>
     <way visible="true" id="-366632" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1136,7 +1138,9 @@
         <tag k="is_in:country_code" v="SO"/>
         <tag k="transient" v="no"/>
         <tag k="hgis:accuracy" v="high"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="source" v="Wikimapia"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
     </way>
     <way visible="true" id="-277393" timestamp="2019-12-18T17:54:51Z" version="1">
@@ -1239,7 +1243,9 @@
         <tag k="is_in:country_code" v="SO"/>
         <tag k="transient" v="no"/>
         <tag k="hgis:accuracy" v="high"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="source" v="Wikimapia"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
     </way>
     <way visible="true" id="-276936" timestamp="2019-12-18T17:54:51Z" version="1">
@@ -1272,7 +1278,9 @@
         <tag k="is_in:country_code" v="SO"/>
         <tag k="transient" v="no"/>
         <tag k="hgis:accuracy" v="high"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="source" v="Wikimapia"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
     </way>
     <way visible="true" id="-276935" timestamp="2019-12-18T17:54:51Z" version="1">
@@ -1313,7 +1321,9 @@
         <tag k="is_in:country_code" v="SO"/>
         <tag k="transient" v="no"/>
         <tag k="hgis:accuracy" v="high"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="source" v="Wikimapia"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
     </way>
     <way visible="true" id="-276933" timestamp="2019-12-18T17:54:51Z" version="1">
@@ -1382,7 +1392,9 @@
         <tag k="is_in:country_code" v="SO"/>
         <tag k="transient" v="no"/>
         <tag k="hgis:accuracy" v="high"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="source" v="Wikimapia"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
     </way>
     <way visible="true" id="-276929" timestamp="2019-12-18T17:54:51Z" version="1">
@@ -1439,7 +1451,9 @@
         <tag k="is_in:country_code" v="SO"/>
         <tag k="transient" v="no"/>
         <tag k="hgis:accuracy" v="high"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="source" v="Wikimapia"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
     </way>
     <way visible="true" id="-276926" timestamp="2019-12-18T17:54:51Z" version="1">
@@ -1502,7 +1516,9 @@
         <tag k="is_in:country_code" v="SO"/>
         <tag k="transient" v="no"/>
         <tag k="hgis:accuracy" v="high"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="source" v="Wikimapia"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="source:imagery:datetime" v="2017-04-17T16:48:44Z"/>
     </way>
     <way visible="true" id="-276923" timestamp="2019-12-18T17:54:51Z" version="1">

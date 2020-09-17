@@ -33,6 +33,25 @@ else
   puts "## Allocating #{$vbRam} RAM to the VM"
 end
 
+# This is only for RPM installs!
+# For commandline only Hootenanny, set COREONLY to "yes". The default is a full install - core, services, UI etc
+# E.g. COREONLY="yes" vagrant up hoot_centos7_rpm
+$coreOnly = ENV['COREONLY']
+if $coreOnly.nil?
+  $coreOnly = "no"
+else
+  puts "## Installing commandline Hootenanny"
+end
+
+# Decide if we install the release version or the nightly development version
+$nightly = ENV['NIGHTLY']
+if $nightly.nil?
+  $nightly = "no"
+else
+  puts "## Installing from the nightly RPMs"
+end
+
+
 # By default, don't try to add software repos or run "yum upgrade" in the VM's
 # Not sure if this need to be able to be triggered from the commandline
 $addRepos = "no"
@@ -136,7 +155,7 @@ Vagrant.configure(2) do |config|
 
   def set_provisioners(config)
     config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh", :env => {"ADDREPOS" => $addRepos, "YUMUPDATE" => $yumUpdate}
-    config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"   
+    config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
     config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
     config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
     config.vm.provision "valgrind", type: "shell", :privileged => false, :path => "scripts/valgrind/valgrind_install.sh"
@@ -150,6 +169,17 @@ Vagrant.configure(2) do |config|
     end
   end
 
+  # Centos7 Hootenanny box from RPM's
+  config.vm.define "hoot_centos7_rpm", autostart: false do |hoot_centos7_rpm|
+    hoot_centos7_rpm.vm.box = "hoot/centos7-minimal"
+    hoot_centos7_rpm.vm.hostname = "hoot-centos7-rpm"
+
+    set_forwarding(hoot_centos7_rpm)
+    mount_shares(hoot_centos7_rpm)
+
+    # NOTE: For commandline only Hootenanny, set COREONLY to "yes"
+    config.vm.provision "hootrpm", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7Rpm.sh", :env => {"YUMUPDATE" => $yumUpdate, "COREONLY" => $coreOnly, "NIGHTLY" => $nightly}
+  end
 
   # Centos7 box - Preprovisioned for compiling hootenanny
   config.vm.define "default", primary: true do |hoot_centos7_prov|
@@ -171,32 +201,11 @@ Vagrant.configure(2) do |config|
     mount_shares(hoot_centos7)
 
     # We do want to add repos and update this box
+    # NOTE: This change applies to every target AFTER this one as well.
     $addRepos = "yes"
-    $yumUpdate = "yes"    
+    $yumUpdate = "yes"
     set_provisioners(hoot_centos7)
     aws_provider(hoot_centos7, 'CentOS7', 'minimal')
-  end
-
-  # Centos7 - Hoot core ONLY. No UI
-  config.vm.define "hoot_centos7_core", autostart: false do |hoot_centos7_core|
-    hoot_centos7_core.vm.box = "bento/centos-7.2"
-    hoot_centos7_core.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/centos-7.2"
-
-    # Stop the default vagrant rsyncing
-    config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
-
-    # Use the plugin to install bindfs and make a dummy mount
-    hoot_centos7_core.bindfs.bind_folder "/tmp", "/home/vagrant/bindfstmp", perms: nil
-
-    # Create an empty directory
-    config.vm.synced_folder ".", "/vagrant/home/.workspace-nfs", type: "rsync", disabled: true
-
-    hoot_centos7_core.vm.network "private_network", ip: "192.168.33.10"
-    hoot_centos7_core.nfs.map_uid = Process.uid
-    hoot_centos7_core.nfs.map_gid = Process.gid
-    hoot_centos7_core.vm.synced_folder ".", "/home/vagrant/.hoot-nfs", type: "nfs", :linux__nfs_options => ['rw','no_subtree_check','all_squash','async']
-    hoot_centos7_core.bindfs.bind_folder "/home/vagrant/.hoot-nfs", "/home/vagrant/hoot", perms: nil
-    hoot_centos7_core.vm.provision "hoot", type: "shell", :privileged => false, :path => "scripts/util/Centos7_only_core.sh"
   end
 
   config.vm.define "dockercentos7.2", autostart: false do |dockcentos72|

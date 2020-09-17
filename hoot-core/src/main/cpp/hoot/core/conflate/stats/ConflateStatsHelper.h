@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLATE_STATS_HELPER_H
 #define CONFLATE_STATS_HELPER_H
@@ -31,7 +31,6 @@
 #include <QList>
 #include <QString>
 
-
 namespace hoot
 {
 
@@ -39,6 +38,8 @@ class SingleStat;
 
 /**
  * Used to calculate conflation stats that require the conflation input *and* output data
+ *
+ * TODO: rename this class to something more relevant
  */
 class ConflateStatsHelper
 {
@@ -69,8 +70,20 @@ public:
    *
    * @param statName the name of the stat to retrieve
    * @param stats the list of stats to retrieve the stat from
+   * @return the stat's value
    */
   static double getSingleStat(const QString& statName, const QList<SingleStat> stats);
+
+  /**
+   * Determines if a named stat exists in a a set of stats
+   *
+   * O(n)
+   *
+   * @param statName the name of the stat to retrieve
+   * @param stats the list of stats to retrieve the stat from
+   * @return true if the stat exists; false otherwise
+   */
+  static bool hasSingleStat(const QString& statName, const QList<SingleStat> stats);
 
 private:
 
@@ -78,6 +91,11 @@ private:
   QList<SingleStat> _input2Stats;
   QList<SingleStat> _outputStats;
 
+  /*
+   * These are useful stats if the reference map (map 1) is being treated as ground truth.
+   * Eventually, may want to add the option to turn this on/off.
+   */
+  void _addRefAsGroundTruthStats(QList<SingleStat>& statsToUpdate, long insertIndex);
 };
 
 }

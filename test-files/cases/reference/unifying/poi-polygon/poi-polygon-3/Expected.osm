@@ -22,6 +22,8 @@
         <nd ref="-24964"/>
         <tag k="hoot:poipolygon:poismerged" v="2"/>
         <tag k="amenity" v="place_of_worship"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="uuid" v="c;a;d"/>
         <tag k="building" v="mosque"/>
         <tag k="error:circular" v="15"/>

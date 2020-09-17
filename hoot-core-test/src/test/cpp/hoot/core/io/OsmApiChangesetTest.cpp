@@ -44,6 +44,7 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runXmlChangesetSplitWayTest);
   CPPUNIT_TEST(runXmlChangesetErrorFixTest);
   CPPUNIT_TEST(runXmlChangesetSplitDeleteTest);
+  CPPUNIT_TEST(runXmlChangesetModifyAndDeleteTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -258,6 +259,39 @@ public:
     CPPUNIT_ASSERT_EQUAL(0L, changeset.getTotalCreateCount());
     CPPUNIT_ASSERT_EQUAL(0L, changeset.getTotalModifyCount());
     CPPUNIT_ASSERT_EQUAL(24L, changeset.getTotalDeleteCount());
+  }
+
+  void runXmlChangesetModifyAndDeleteTest()
+  {
+    //  This test loads a changeset that contains both a modify and delete of the same element
+    //  this isn't valid so the changeset shouldn't contain the delete
+    XmlChangeset changeset;
+    changeset.loadChangeset(_inputPath + "ModifyAndDelete.osc");
+    //  Check the element counts in the changeset
+    CPPUNIT_ASSERT_EQUAL(0UL, changeset._nodes[ChangesetType::TypeCreate].size());
+    CPPUNIT_ASSERT_EQUAL(1UL, changeset._nodes[ChangesetType::TypeModify].size());
+    CPPUNIT_ASSERT_EQUAL(0UL, changeset._nodes[ChangesetType::TypeDelete].size());
+    CPPUNIT_ASSERT_EQUAL(0UL, changeset._ways[ChangesetType::TypeCreate].size());
+    CPPUNIT_ASSERT_EQUAL(1UL, changeset._ways[ChangesetType::TypeModify].size());
+    CPPUNIT_ASSERT_EQUAL(0UL, changeset._ways[ChangesetType::TypeDelete].size());
+    CPPUNIT_ASSERT_EQUAL(0UL, changeset._relations[ChangesetType::TypeCreate].size());
+    CPPUNIT_ASSERT_EQUAL(1UL, changeset._relations[ChangesetType::TypeModify].size());
+    CPPUNIT_ASSERT_EQUAL(0UL, changeset._relations[ChangesetType::TypeDelete].size());
+    //  Instead of calculating the changeset, use all elements
+    ChangesetInfoPtr info(new ChangesetInfo());
+    for (ChangesetType type = ChangesetType::TypeCreate; type != ChangesetType::TypeMax; type = static_cast<ChangesetType>(type + 1))
+    {
+      for (ChangesetElementMap::iterator it = changeset._nodes[type].begin(); it != changeset._nodes[type].end(); ++it)
+        info->add(ElementType::Type::Node, type, it->first);
+      for (ChangesetElementMap::iterator it = changeset._ways[type].begin(); it != changeset._ways[type].end(); ++it)
+        info->add(ElementType::Type::Way, type, it->first);
+      for (ChangesetElementMap::iterator it = changeset._relations[type].begin(); it != changeset._relations[type].end(); ++it)
+        info->add(ElementType::Type::Relation, type, it->first);
+    }
+    //  Compare the changeset XML
+    QString change = changeset.getChangesetString(info, 1);
+    QString expected = FileUtils::readFully(_inputPath + "ModifyAndDelete-Expected.osc");
+    HOOT_STR_EQUALS(expected, change);
   }
 };
 

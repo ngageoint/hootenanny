@@ -103,7 +103,9 @@
         <nd ref="-20289"/>
         <tag k="building:levels" v="4"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="addr:street" v="Rhode Island Street"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="name" v="350 Rhode Island North Building"/>
         <tag k="address" v="350 Rhode Island St"/>
         <tag k="addr:postcode" v="94103"/>

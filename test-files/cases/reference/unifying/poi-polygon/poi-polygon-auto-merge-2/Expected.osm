@@ -21,6 +21,8 @@
         <nd ref="-85797"/>
         <tag k="hoot:poipolygon:poismerged" v="2"/>
         <tag k="amenity" v="arts_centre"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="2"/>
         <tag k="name" v="poly1"/>
         <tag k="alt_types" v="amenity=theatre;amenity=community_centre"/>
         <tag k="alt_name" v="poi1;poi2"/>
