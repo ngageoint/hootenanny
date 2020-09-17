@@ -120,6 +120,8 @@ public:
   /**
    * If the input is a directory then the underlying files are read in turn, otherwise readFile
    * is called directly on the file.
+   *
+   * @todo this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
    */
   void read(const QString& path, const OsmMapPtr& map);
 
