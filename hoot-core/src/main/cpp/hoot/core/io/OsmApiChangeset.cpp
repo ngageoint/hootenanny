@@ -266,21 +266,14 @@ void XmlChangeset::loadElements(QXmlStreamReader& reader, ChangesetType changese
     //  End element for create/modify/delete
     else if (type == QXmlStreamReader::EndElement)
     {
+      //  Nodes/Ways/Relations cannot be both modified and deleted in the same changeset
+      //  Fix that here
       if (name == "node")
-      {
-        _nodes[changeset_type][element->id()] = element;
-        _allNodes[element->id()] = element;
-      }
+        insertElement(element, changeset_type, _nodes, _allNodes);
       else if (name == "way")
-      {
-        _ways[changeset_type][element->id()] = element;
-        _allWays[element->id()] = element;
-      }
+        insertElement(element, changeset_type, _ways, _allWays);
       else if (name == "relation")
-      {
-        _relations[changeset_type][element->id()] = element;
-        _allRelations[element->id()] = element;
-      }
+        insertElement(element, changeset_type, _relations, _allRelations);
       else if (name == "create" || name == "modify" || name == "delete")
         return;
     }
@@ -2387,6 +2380,27 @@ void XmlChangeset::clearCleanupElements()
   _cleanup.reset();
 }
 
+void XmlChangeset::insertElement(const ChangesetElementPtr& element, ChangesetType type, ChangesetTypeMap& elementMap, ChangesetElementMap& all)
+{
+  if (type == ChangesetType::TypeDelete && elementMap[ChangesetType::TypeModify].find(element->id()) != elementMap[ChangesetType::TypeModify].end())
+  {
+    //  Ignore the delete because the modify already exists
+  }
+  else if (type == ChangesetType::TypeModify && elementMap[ChangesetType::TypeDelete].find(element->id()) != elementMap[ChangesetType::TypeDelete].end())
+  {
+    //  Remove the delete element
+    elementMap[ChangesetType::TypeDelete].erase(element->id());
+    //  Add the modify element
+    elementMap[type][element->id()] = element;
+    all[element->id()] = element;
+  }
+  else
+  {
+    //  Add the element to the changeset
+    elementMap[type][element->id()] = element;
+    all[element->id()] = element;
+  }
+}
 
 ChangesetInfo::ChangesetInfo()
   : _attemptedResolveChangesetIssues(false),

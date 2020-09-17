@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+    <modify>
+        <node id="1" version="1" lat="38.8549321261880536" lon="-104.8979050333482093" timestamp=""/>
+        <way id="2" version="1" timestamp="">
+            <nd ref="10"/>
+            <nd ref="11"/>
+            <nd ref="12"/>
+            <tag k="note" v="1"/>
+            <tag k="highway" v="road"/>
+        </way>
+    </modify>
+    <delete>
+        <node id="1" version="1" lat="38.8549321261880536" lon="-104.8979050333482093" timestamp=""/>
+        <way id="2" version="1" timestamp="">
+            <nd ref="10"/>
+            <nd ref="11"/>
+            <nd ref="12"/>
+            <tag k="note" v="1"/>
+            <tag k="highway" v="road"/>
+        </way>
+        <relation id="3" version="1" timestamp="">
+            <member type="way" ref="4" role=""/>
+            <member type="way" ref="5" role=""/>
+            <tag k="name" v="Test Highway"/>
+            <tag k="highway" v="secondary"/>
+            <tag k="type" v="multilinestring"/>
+        </relation>
+    </delete>
+    <modify>
+        <relation id="3" version="1" timestamp="">
+            <member type="way" ref="4" role=""/>
+            <member type="way" ref="5" role=""/>
+            <tag k="name" v="Test Highway"/>
+            <tag k="highway" v="secondary"/>
+            <tag k="type" v="multilinestring"/>
+        </relation>
+    </modify>
+</osmChange>
