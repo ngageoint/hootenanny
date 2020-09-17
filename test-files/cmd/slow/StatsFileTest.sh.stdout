@@ -234,7 +234,11 @@ Maximum Relation ID	-9.223372036854776e+18
 13:43:16.537 STATUS .../core/ops/CalculateStatsOp.cpp( 765) Calculating statistic: Translated Waterways Count (198/198) ...
 13:43:16.537 STATUS ...cpp/hoot/core/cmd/StatsCmd.cpp( 126) Statistics calculated for map 1 of 2: unified/AllDataTypesA.osm in 00:08
 13:43:16.537 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...test-files/conflate/unified/AllDataTypesB.osm...
-13:43:16.539 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:43:16.539 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:43:16.539 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:43:16.539 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:43:16.541 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+13:43:16.539 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        
+13:43:16.539 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        
+13:43:16.539 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        
+13:43:16.539 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        
+13:43:16.541 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
 13:43:16.541 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 128 elements from input in: 00:00.
 13:43:16.568 STATUS ...cpp/hoot/core/cmd/StatsCmd.cpp( 117) Calculating statistics for map 2 of 2: unified/AllDataTypesB.osm...
 13:43:16.569 STATUS .../core/ops/CalculateStatsOp.cpp( 318) Performing 198 map statistic calculations...
@@ -845,7 +849,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched POIs":
+    "Unmatched POIs":
     [
         "11",
         "10"
@@ -910,7 +914,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Roads":
+    "Unmatched Roads":
     [
         "4",
         "4"
@@ -995,7 +999,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Buildings":
+    "Unmatched Buildings":
     [
         "10",
         "8"
@@ -1080,7 +1084,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Waterways":
+    "Unmatched Waterways":
     [
         "0",
         "0"
@@ -1165,7 +1169,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Polygon Conflatable POIs":
+    "Unmatched Polygon Conflatable POIs":
     [
         "10",
         "8"
@@ -1230,7 +1234,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Polygons":
+    "Unmatched Polygons":
     [
         "10",
         "8"
@@ -1315,7 +1319,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Areas":
+    "Unmatched Areas":
     [
         "0",
         "0"
@@ -1400,7 +1404,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Railways":
+    "Unmatched Railways":
     [
         "0",
         "0"
@@ -1485,7 +1489,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Power Lines":
+    "Unmatched Power Lines":
     [
         "0",
         "0"
@@ -1570,7 +1574,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Points":
+    "Unmatched Points":
     [
         "11",
         "10"
@@ -1635,7 +1639,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Lines":
+    "Unmatched Lines":
     [
         "4",
         "4"
@@ -1720,7 +1724,7 @@ Maximum Relation ID	-9.223372036854776e+18
         "0",
         "0"
     ],
-    "Total Unmatched Collection Relations":
+    "Unmatched Collection Relations":
     [
         "0",
         "0"

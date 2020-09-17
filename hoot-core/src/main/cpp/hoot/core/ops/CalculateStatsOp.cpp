@@ -969,7 +969,7 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
     unconflatedFeatureCountMap2 -= poisMergedIntoPolysFromMap2;
     LOG_VARD(unconflatedFeatureCountMap2);
   }
-  _addStat(QString("Total Unmatched %1s").arg(description), totalUnconflatedFeatureCount);
+  _addStat(QString("Unmatched %1s").arg(description), totalUnconflatedFeatureCount);
   _addStat(QString("Unmatched %1s From Map 1").arg(description), unconflatedFeatureCountMap1);
   _addStat(QString("Unmatched %1s From Map 2").arg(description), unconflatedFeatureCountMap2);
 

@@ -1,8 +1,12 @@
 13:35:49.732 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
-13:35:49.734 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:35:49.734 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:35:49.749 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+13:35:49.734 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        
+13:35:49.734 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        
+13:35:49.749 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
 13:35:49.749 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 451 elements from input in: 00:00.
 13:35:49.750 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...d/slow/ConflateCmdStatsTest/generic-rivers-out.osm...
-13:35:49.750 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:35:49.750 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        13:35:49.764 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+13:35:49.750 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        
+13:35:49.750 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        
+13:35:49.764 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
 13:35:49.765 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 451 elements from input in: 00:00.
 13:35:49.769 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
 stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)
@@ -68,7 +72,7 @@ Conflatable POIs	0	0	0
 Conflated POIs	0	0	0	
 POIs Marked for Review	0	0	0	
 POI Reviews to be Made	0	0	0	
-Total Unmatched POIs	0	0	0	
+Unmatched POIs	0	0	0	
 Unmatched POIs From Map 1	0	0	0	
 Unmatched POIs From Map 2	0	0	0	
 Percentage of POIs Conflated	0	0	0	
@@ -81,7 +85,7 @@ Conflatable Roads	0	0	0
 Conflated Roads	0	0	0	
 Roads Marked for Review	0	0	0	
 Road Reviews to be Made	0	0	0	
-Total Unmatched Roads	0	0	0	
+Unmatched Roads	0	0	0	
 Unmatched Roads From Map 1	0	0	0	
 Unmatched Roads From Map 2	0	0	0	
 Meters of Conflated Roads	0	0	0	
@@ -97,7 +101,7 @@ Conflatable Buildings	0	0	0
 Conflated Buildings	0	0	0	
 Buildings Marked for Review	0	0	0	
 Building Reviews to be Made	0	0	0	
-Total Unmatched Buildings	0	0	0	
+Unmatched Buildings	0	0	0	
 Unmatched Buildings From Map 1	0	0	0	
 Unmatched Buildings From Map 2	0	0	0	
 Total Square Meters of Buildings	0	0	0	
@@ -114,7 +118,7 @@ Conflatable Waterways	14	15	0
 Conflated Waterways	0	0	11	
 Waterways Marked for Review	0	0	0	
 Waterway Reviews to be Made	0	0	0	
-Total Unmatched Waterways	14	15	27	
+Unmatched Waterways	14	15	27	
 Unmatched Waterways From Map 1	14	0	6	
 Unmatched Waterways From Map 2	0	15	21	
 Total Meters of Waterways	26027.07173885541	25763.06593050528	36232.79457283515	
@@ -131,7 +135,7 @@ Conflatable Polygon Conflatable POIs	0	0	0
 Conflated Polygon Conflatable POIs	0	0	0	
 Polygon Conflatable POIs Marked for Review	0	0	0	
 Polygon Conflatable POI Reviews to be Made	0	0	0	
-Total Unmatched Polygon Conflatable POIs	0	0	0	
+Unmatched Polygon Conflatable POIs	0	0	0	
 Unmatched Polygon Conflatable POIs From Map 1	0	0	0	
 Unmatched Polygon Conflatable POIs From Map 2	0	0	0	
 Percentage of Polygon Conflatable POIs Conflated	0	0	0	
@@ -144,7 +148,7 @@ Conflatable Polygons	0	0	0
 Conflated Polygons	0	0	0	
 Polygons Marked for Review	0	0	0	
 Polygon Reviews to be Made	0	0	0	
-Total Unmatched Polygons	0	0	0	
+Unmatched Polygons	0	0	0	
 Unmatched Polygons From Map 1	0	0	0	
 Unmatched Polygons From Map 2	0	0	0	
 Total Square Meters of Polygons	0	0	0	
@@ -161,7 +165,7 @@ Conflatable Areas	0	0	0
 Conflated Areas	0	0	0	
 Areas Marked for Review	0	0	0	
 Area Reviews to be Made	0	0	0	
-Total Unmatched Areas	0	0	0	
+Unmatched Areas	0	0	0	
 Unmatched Areas From Map 1	0	0	0	
 Unmatched Areas From Map 2	0	0	0	
 Total Square Meters of Areas	0	0	0	
@@ -178,7 +182,7 @@ Conflatable Railways	0	0	0
 Conflated Railways	0	0	0	
 Railways Marked for Review	0	0	0	
 Railway Reviews to be Made	0	0	0	
-Total Unmatched Railways	0	0	0	
+Unmatched Railways	0	0	0	
 Unmatched Railways From Map 1	0	0	0	
 Unmatched Railways From Map 2	0	0	0	
 Total Meters of Railways	0	0	0	
@@ -195,7 +199,7 @@ Conflatable Power Lines	0	0	0
 Conflated Power Lines	0	0	0	
 Power Lines Marked for Review	0	0	0	
 Power Line Reviews to be Made	0	0	0	
-Total Unmatched Power Lines	0	0	0	
+Unmatched Power Lines	0	0	0	
 Unmatched Power Lines From Map 1	0	0	0	
 Unmatched Power Lines From Map 2	0	0	0	
 Total Meters of Power Lines	0	0	0	
@@ -212,7 +216,7 @@ Conflatable Points	0	0	0
 Conflated Points	0	0	0	
 Points Marked for Review	0	0	0	
 Point Reviews to be Made	0	0	0	
-Total Unmatched Points	0	0	0	
+Unmatched Points	0	0	0	
 Unmatched Points From Map 1	0	0	0	
 Unmatched Points From Map 2	0	0	0	
 Percentage of Points Conflated	0	0	0	
@@ -225,7 +229,7 @@ Conflatable Lines	0	0	0
 Conflated Lines	0	0	11	
 Lines Marked for Review	0	0	0	
 Line Reviews to be Made	0	0	0	
-Total Unmatched Lines	14	15	29	
+Unmatched Lines	14	15	29	
 Unmatched Lines From Map 1	14	0	6	
 Unmatched Lines From Map 2	0	15	23	
 Total Meters of Lines	26027.07173885541	25763.06593050528	36810.18721907818	
@@ -242,7 +246,7 @@ Conflatable Collection Relations	0	0	0
 Conflated Collection Relations	0	0	0	
 Collection Relations Marked for Review	0	0	0	
 Collection Relation Reviews to be Made	0	0	0	
-Total Unmatched Collection Relations	0	0	2	
+Unmatched Collection Relations	0	0	2	
 Unmatched Collection Relations From Map 1	0	0	0	
 Unmatched Collection Relations From Map 2	0	0	2	
 Total Square Meters of Collection Relations	0	0	0	
