@@ -33,8 +33,8 @@ namespace hoot
 {
 
 /**
- * This is essentially a changeset provider container, allowing multiple
- * changeset providers to be chained together
+ * This is essentially a changeset provider container, allowing multiple changeset providers to be
+ * chained together
  */
 class MultipleChangesetProvider : public ChangesetProvider
 {
@@ -68,6 +68,7 @@ public:
   size_t getNumChangesets();
 
 private:
+
   std::shared_ptr<OGRSpatialReference> _projection;
   std::list<ChangesetProviderPtr> _changesets;
 };

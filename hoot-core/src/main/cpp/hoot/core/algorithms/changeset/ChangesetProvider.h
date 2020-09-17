@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESETPROVIDER_H
 #define CHANGESETPROVIDER_H
@@ -76,6 +76,50 @@ public:
    */
   virtual Change readNextChange() = 0;
 
+  // Keeping these optional for now, as their implementation may be a little difficult and not
+  // also really needed yet on some of the inheriting members.
+
+  /**
+   * Returns the number of element parsed from the starting state used to generate changes
+   *
+   * @return a number of elements
+   */
+  virtual int getNumFromElementsParsed() const { return 0; }
+
+  /**
+   * Returns the number of element parsed from the ending state used to generate changes
+   *
+   * @return a number of elements
+   */
+  virtual int getNumToElementsParsed() const { return 0; }
+
+  /**
+   * Returns the number of create changes in the changeset
+   *
+   * @return a number of changes
+   */
+  virtual int getNumCreateChanges() const { return 0; }
+
+  /**
+   * Returns the number of modify changes in the changeset
+   *
+   * @return a number of changes
+   */
+  virtual int getNumModifyChanges() const { return 0; }
+
+  /**
+   * Returns the number of delete changes in the changeset
+   *
+   * @return a number of changes
+   */
+  virtual int getNumDeleteChanges() const { return 0; }
+
+  /**
+   * Returns the total number of changes in the changeset
+   *
+   * @return a number of changes
+   */
+  virtual int getNumChanges() const { return 0; }
 };
 
 typedef std::shared_ptr<ChangesetProvider> ChangesetProviderPtr;

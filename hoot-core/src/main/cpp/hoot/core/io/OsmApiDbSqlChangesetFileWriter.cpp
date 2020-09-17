@@ -222,8 +222,8 @@ void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
 
-  // we only grab and assign a new id if we have a new element with a negative id, since we'll be
-  // writing this directly to the database and negative ids aren't allowed
+  // We only grab and assign a new id if we have a new element with a negative id, since we'll be
+  // writing this directly to the database and negative ids aren't allowed.
   LOG_TRACE("ID before: " << changeElement->getElementId());
   long id;
   if (changeElement->getId() < 0)
