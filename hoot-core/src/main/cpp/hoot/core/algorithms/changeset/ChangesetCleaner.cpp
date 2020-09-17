@@ -38,7 +38,7 @@ _numDeleteChangesRemoved(0)
 {
   if (_changesetProviders.isEmpty())
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("No changeset providers were sent to ChangesetCleaner.");
   }
   _clean();
 }
