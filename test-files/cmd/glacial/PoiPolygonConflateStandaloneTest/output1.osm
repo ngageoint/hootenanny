@@ -7490,6 +7490,8 @@
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="wheelchair" v="yes"/>
         <tag k="amenity" v="community_centre"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Harvey Milk Recreational Arts Center"/>
         <tag k="address" v="50 Scott St"/>
@@ -8316,22 +8318,24 @@
         <nd ref="-4482"/>
         <nd ref="-4483"/>
         <nd ref="-4484"/>
+        <tag k="surface" v="asphalt"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
-        <tag k="wheelchair" v="limited"/>
+        <tag k="lit" v="yes"/>
         <tag k="addr:state" v="CA"/>
+        <tag k="error:circular" v="15"/>
         <tag k="name" v="Mission Dolores Park Tennis Courts"/>
         <tag k="address" v="19th &amp; Dolores St"/>
-        <tag k="addr:postcode" v="94110"/>
-        <tag k="lit" v="yes"/>
-        <tag k="sport" v="tennis"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="leisure" v="pitch"/>
-        <tag k="surface" v="asphalt"/>
         <tag k="quantity" v="5"/>
-        <tag k="phone" v="(415) 203-1299"/>
         <tag k="REF1" v="00a3e6"/>
         <tag k="REF2" v="00a3e6"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:postcode" v="94110"/>
+        <tag k="phone" v="(415) 203-1299"/>
+        <tag k="wheelchair" v="limited"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
+        <tag k="sport" v="tennis"/>
+        <tag k="leisure" v="pitch"/>
     </way>
     <way visible="true" id="-731" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4480"/>
@@ -8341,6 +8345,8 @@
         <nd ref="-4480"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="wheelchair" v="limited"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Mission Dolores Basketball Courts"/>
         <tag k="address" v="19th &amp; Dolores St"/>
@@ -8378,6 +8384,8 @@
         <nd ref="-4472"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="amenity" v="school"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="name" v="Mission High School"/>
         <tag k="operator" v="San Francisco Unified School District"/>
         <tag k="REF1" v="00a3f8"/>
@@ -8457,6 +8465,8 @@
         <nd ref="-4437"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="amenity" v="parking"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="name" v="Hoff Street Garage"/>
         <tag k="alt_name" v="16TH &amp; HOFF ST. PARKING GARAGE"/>
         <tag k="REF1" v="00435f"/>
@@ -8709,8 +8719,10 @@
         <nd ref="-4199"/>
         <nd ref="-4202"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="addr:street" v="Bryant Street"/>
         <tag k="area" v="yes"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="addr:state" v="CA"/>
         <tag k="name" v="Sports Basement"/>
         <tag k="shop" v="bicycle"/>
@@ -9000,7 +9012,9 @@
         <nd ref="-4042"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="wheelchair" v="yes"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="area" v="yes"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="addr:state" v="CA"/>
         <tag k="emergency" v="Duboce Park NERT staging area"/>
         <tag k="name" v="Duboce Park Basketball Courts"/>
@@ -9153,8 +9167,10 @@
         <nd ref="-3865"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="amenity" v="restaurant"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="addr:street" v="Market St;Market/Noe"/>
         <tag k="website" v="http://cafeflore.com"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="name" v="Cafe Flore"/>
         <tag k="internet_access" v="wlan"/>
         <tag k="phone" v="+1-415-621-8579"/>
@@ -9172,7 +9188,9 @@
         <tag k="building:levels" v="1"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="amenity" v="bank"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="addr:street" v="15th"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="atm" v="yes"/>
         <tag k="name" v="Chase"/>
         <tag k="addr:postcode" v="94114"/>
@@ -9297,6 +9315,8 @@
         <tag k="baby_hatch" v="yes"/>
         <tag k="addr:postcode" v="94114"/>
         <tag k="building:material" v="concrete;steel;stucco;brick"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
     </way>
     <way visible="true" id="-663" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3848"/>
@@ -9564,7 +9584,9 @@
         <tag k="building:levels" v="3"/>
         <tag k="source" v="survey"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="addr:street" v="Noe Street"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="note" v="below street level"/>
         <tag k="building" v="terrace"/>
         <tag k="building:material" v="wood"/>
@@ -10699,8 +10721,10 @@
         <nd ref="-3303"/>
         <tag k="source" v="Bing"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="addr:street" v="Valencia Street"/>
         <tag k="website" v="http://www.missionbicycle.com"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="opening_hours" v="Mo-Su 11:00-19:00"/>
         <tag k="name" v="Mission Bicycle Company"/>
         <tag k="shop" v="bicycle"/>
@@ -10718,7 +10742,9 @@
         <nd ref="-3304"/>
         <tag k="source" v="Bing"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="addr:street" v="Valencia Street"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="name" v="Betabrand"/>
         <tag k="shop" v="clothes"/>
         <tag k="building" v="yes"/>
@@ -12208,8 +12234,10 @@
         <tag k="source" v="Bing"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="amenity" v="restaurant"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="addr:street" v="Church Street"/>
         <tag k="website" v="chilepies.com"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="opening_hours" v="Su-Sa 12:00-22:00"/>
         <tag k="name" v="Chile Pies"/>
         <tag k="shop" v="bakery"/>
@@ -12401,22 +12429,24 @@
         <nd ref="-4240"/>
         <nd ref="-4241"/>
         <nd ref="-2682"/>
-        <tag k="gnis:county_name" v="San Francisco"/>
-        <tag k="hoot:poipolygon:poismerged" v="1"/>
-        <tag k="amenity" v="police"/>
-        <tag k="wheelchair" v="yes"/>
         <tag k="addr:street" v="Valencia Street"/>
-        <tag k="addr:state" v="CA"/>
-        <tag k="name" v="Mission Police Station"/>
-        <tag k="ele" v="14"/>
         <tag k="alt_name" v="MISSION POLICE STATION"/>
-        <tag k="building" v="yes"/>
-        <tag k="addr:city" v="San Francisco"/>
-        <tag k="REF1" v="007037"/>
+        <tag k="amenity" v="police"/>
+        <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="addr:housenumber" v="630"/>
-        <tag k="REF2" v="007037"/>
-        <tag k="gnis:feature_id" v="2107373"/>
+        <tag k="addr:state" v="CA"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Mission Police Station"/>
+        <tag k="gnis:county_name" v="San Francisco"/>
+        <tag k="REF1" v="007037"/>
+        <tag k="REF2" v="007037"/>
+        <tag k="ele" v="14"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="building" v="yes"/>
+        <tag k="gnis:feature_id" v="2107373"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
     </way>
     <way visible="true" id="-452" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2659"/>
@@ -12616,8 +12646,10 @@
         <tag k="wikipedia" v="en:Rainbow Grocery Cooperative"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="wheelchair" v="yes"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="website" v="http://www.rainbow.coop/"/>
         <tag k="addr:street" v="Folsom Street"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="opening_hours" v="9am-9pm"/>
         <tag k="name" v="Rainbow Grocery Coop"/>
         <tag k="shop" v="supermarket"/>
@@ -12789,8 +12821,10 @@
         <tag k="building:levels" v="4"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="amenity" v="restaurant"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="website" v="http://www.ardoisesf.com/"/>
         <tag k="addr:street" v="Noe St"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="name" v="L'ardoise Bistro"/>
         <tag k="cuisine" v="french"/>
         <tag k="building" v="retail"/>
@@ -13625,7 +13659,9 @@
         <nd ref="-2082"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="amenity" v="fast_food"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="addr:street" v="South Van Ness Avenue"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="name" v="Whiz Burgers"/>
         <tag k="addr:postcode" v="94110"/>
         <tag k="cuisine" v="burger"/>
@@ -13965,8 +14001,10 @@
         <nd ref="-2399"/>
         <nd ref="-2400"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
         <tag k="website" v="http://www.wholefoodsmarket.com/stores/2001marketstreet;http://2001marketsf.com"/>
         <tag k="addr:street" v="Market Street"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="name" v="Whole Foods Market"/>
         <tag k="addr:postcode" v="94114"/>
         <tag k="shop" v="supermarket"/>
@@ -18346,6 +18384,8 @@
         <nd ref="-12"/>
         <nd ref="-16"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
         <tag k="name" v="Pet Food Express"/>
         <tag k="shop" v="pet"/>
         <tag k="building" v="yes"/>

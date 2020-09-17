@@ -95,7 +95,12 @@ public:
 
   inline static const QString HootPertied()             { return "hoot:pertied"; }
 
+  // used by PoiPolygonMerger to keep track of the number of POIs merged into a polygon during
+  // POI/Polygon Conflation
   inline static const QString HootPoiPolygonPoisMerged(){ return "hoot:poipolygon:poismerged"; }
+  inline static const QString HootPoiPolygonPoisMerged1(){ return "hoot:poipolygon:poismerged:1"; }
+  inline static const QString HootPoiPolygonPoisMerged2(){ return "hoot:poipolygon:poismerged:2"; }
+
   inline static const QString HootMergeTarget()         { return "hoot:merge:target"; }
 
   inline static const QString HootReviewTagPrefix()     { return "hoot:review:"; }

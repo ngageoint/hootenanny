@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -56,6 +56,9 @@ public:
     inputStats2.append(SingleStat("Total Features", 4.0));
     QList<SingleStat> outputStats;
     outputStats.append(SingleStat("Total Features", 12.0));
+    outputStats.append(SingleStat("Total Conflated Features", 2.0));
+    outputStats.append(SingleStat("Total Unmatched Features From Map 1", 1.0));
+    outputStats.append(SingleStat("Total Unmatched Features From Map 2", 3.0));
     QList<SingleStat> statsToUpdate;
     statsToUpdate.append(SingleStat("Some Stat", 0.0));
 
@@ -64,17 +67,37 @@ public:
 
     CPPUNIT_ASSERT_EQUAL(1, inputStats1.size());
     CPPUNIT_ASSERT_EQUAL(1, inputStats2.size());
-    CPPUNIT_ASSERT_EQUAL(1, outputStats.size());
-    CPPUNIT_ASSERT_EQUAL(3, statsToUpdate.size());
+    CPPUNIT_ASSERT_EQUAL(4, outputStats.size());
+    CPPUNIT_ASSERT_EQUAL(6, statsToUpdate.size());
     CPPUNIT_ASSERT_EQUAL(QString("Some Stat").toStdString(), statsToUpdate.at(0).name.toStdString());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       2.0,
-      uut1.getSingleStat("Difference Between Total Features in Output and Total Features in Inputs", statsToUpdate),
+      uut1.getSingleStat(
+        "Difference Between Total Features in Output and Total Features in Inputs", statsToUpdate),
       1e-1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
       20.0,
-      uut1.getSingleStat("Percentage Difference Between Total Features in Output and Total Features in Inputs", statsToUpdate),
+      uut1.getSingleStat(
+        "Percentage Difference Between Total Features in Output and Total Features in Inputs",
+        statsToUpdate),
       1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      33.3,
+      uut1.getSingleStat(
+        "Percentage of Number of Total Map 1 Features Matched With Map 2 Features", statsToUpdate),
+      1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      16.7,
+      uut1.getSingleStat(
+        "Percentage of Number of Total Map 1 Features Not Matched With Map 2 Features", statsToUpdate),
+      1e-1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+      75.0,
+      uut1.getSingleStat(
+        "Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features", statsToUpdate),
+      1e-1);
+
+    // TODO: add length/area stats?
 
     statsToUpdate.clear();
     statsToUpdate.append(SingleStat("Some Stat 1", 0.0));
@@ -82,14 +105,15 @@ public:
     ConflateStatsHelper uut2(inputStats1, inputStats2, outputStats);
     uut2.updateStats(statsToUpdate, 1);
 
-    CPPUNIT_ASSERT_EQUAL(4, statsToUpdate.size());
-    CPPUNIT_ASSERT_EQUAL(QString("Some Stat 1").toStdString(), statsToUpdate.at(0).name.toStdString());
-    CPPUNIT_ASSERT_EQUAL(QString("Some Stat 2").toStdString(), statsToUpdate.at(3).name.toStdString());
+    CPPUNIT_ASSERT_EQUAL(7, statsToUpdate.size());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Some Stat 1").toStdString(), statsToUpdate.at(0).name.toStdString());
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Some Stat 2").toStdString(), statsToUpdate.at(6).name.toStdString());
   }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateStatsHelperTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ConflateStatsHelperTest, "current");
 
 }
 

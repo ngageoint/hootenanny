@@ -13,15 +13,16 @@
         <nd ref="-222252"/>
         <nd ref="-222264"/>
         <nd ref="-222258"/>
+        <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-279268" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-222330" role="outer"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="name" v="building 2"/>
         <tag k="alt_name" v="building 1"/>
         <tag k="building" v="yes"/>
-        <tag k="name" v="building 2"/>
         <tag k="building:part" v="yes"/>
-        <tag k="type" v="multipolygon"/>
         <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
 </osm>

@@ -12,6 +12,8 @@
         <nd ref="-25974"/>
         <nd ref="-25971"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="note" v="building;POI"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>

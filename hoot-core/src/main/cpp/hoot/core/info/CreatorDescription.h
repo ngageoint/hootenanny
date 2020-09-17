@@ -49,8 +49,8 @@ class CreatorDescription
 {
 public:
 
-  // This is how we map various match creators to the feature
-  // they operate on. Helpful when generating stats later.
+  // This is how we map various match creators to the feature they operate on. Helpful when
+  // generating stats later.
   enum BaseFeatureType
   {
     POI = 0,
@@ -91,7 +91,8 @@ public:
 
   static BaseFeatureType stringToBaseFeatureType(QString s);
 
-  /* These two functions, getFeatureCalcType & getElementCriterion could be pushed down into the
+  /*
+   * These two functions, getFeatureCalcType & getElementCriterion could be pushed down into the
    * classes that are derived from MatchCreator, and that would seem logical and clean - BUT
    * ScriptMatchCreator becomes problematic, as those match creators are generated at runtime.
    * So you'd have to hard code the mappings between featureTypes and FeatureCalcTypes and the

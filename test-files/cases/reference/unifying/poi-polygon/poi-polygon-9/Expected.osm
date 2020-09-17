@@ -214,6 +214,8 @@
         <nd ref="-2861729"/>
         <nd ref="-2861735"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="name" v="Buena Vista Park Tennis Courts"/>
         <tag k="uuid" v="a;c"/>
         <tag k="sport" v="tennis"/>

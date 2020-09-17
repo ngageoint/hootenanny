@@ -65,7 +65,9 @@
         <nd ref="-61609"/>
         <nd ref="795"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="addr:street" v="S BLACKSTONE PKWY"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="addr:postcode" v="80016"/>
         <tag k="building" v="Residential"/>
         <tag k="addr:city" v="AURORA"/>
@@ -89,7 +91,9 @@
         <nd ref="701"/>
         <nd ref="712"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="addr:street" v="S BLACKSTONE PKWY"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="addr:postcode" v="80016"/>
         <tag k="building" v="Residential"/>
         <tag k="addr:city" v="AURORA"/>
@@ -121,7 +125,9 @@
         <nd ref="748"/>
         <nd ref="766"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="addr:street" v="S BLACKSTONE PKWY"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="addr:postcode" v="80016"/>
         <tag k="building" v="Residential"/>
         <tag k="addr:city" v="AURORA"/>
