@@ -170,7 +170,6 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   // of the features or the conflation workflow chosen.
   Tags finalBuildingTags = finalBuilding->getTags();
   LOG_VART(finalBuildingTags);
- // Tags poiBuildingMergedTags;
   if (poiTags1.size() > 0)
   {
     // If this is a ref POI, we'll keep its tags and replace the building tags.
@@ -183,7 +182,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   if (poiTags2.size() > 0)
   {
     LOG_TRACE("Merging POI tags with building tags for POI status Unknown2...");
-    // If this is a sec POI, we'll keep the buildings tags and replace its tags.
+    // If this is a sec POI, we'll keep the building's tags and replace its tags.
     finalBuildingTags =
       _getTagMerger()->mergeTags(finalBuildingTags, poiTags2, finalBuilding->getElementType());
     LOG_VART(finalBuildingTags);
@@ -192,6 +191,8 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
   // Do some book keeping to remove the POIs and mark them as replaced.
   long poisMerged = 0;
+  long poisMergedFromMap1 = 0;
+  long poisMergedFromMap2 = 0;
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
@@ -202,7 +203,18 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
       // clear the tags just in case it is part of a way
       if (map->containsElement(p.first))
       {
-        map->getElement(p.first)->getTags().clear();
+        ElementPtr element = map->getElement(p.first);
+        // We're going to get counts for the merged POIs based on their source map, as well as the
+        // total merged POI count.
+        if (element->getStatus() == Status::Unknown1)
+        {
+          poisMergedFromMap1++;
+        }
+        else if (element->getStatus() == Status::Unknown2)
+        {
+          poisMergedFromMap2++;
+        }
+        element->getTags().clear();
         RecursiveElementRemover(p.first).apply(map);
       }
       poisMerged++;
@@ -214,7 +226,16 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
       // clear the tags just in case it is part of a way
       if (map->containsElement(p.second))
       {
-        map->getElement(p.second)->getTags().clear();
+        ElementPtr element = map->getElement(p.second);
+        if (element->getStatus() == Status::Unknown1)
+        {
+          poisMergedFromMap1++;
+        }
+        else if (element->getStatus() == Status::Unknown2)
+        {
+          poisMergedFromMap2++;
+        }
+        element->getTags().clear();
         RecursiveElementRemover(p.second).apply(map);
       }
       poisMerged++;
@@ -231,8 +252,20 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     {
       poisMerged += finalBuildingTags[MetadataTags::HootPoiPolygonPoisMerged()].toLong();
     }
+    if (finalBuildingTags.contains(MetadataTags::HootPoiPolygonPoisMerged1()))
+    {
+      poisMergedFromMap1 += finalBuildingTags[MetadataTags::HootPoiPolygonPoisMerged1()].toLong();
+    }
+    if (finalBuildingTags.contains(MetadataTags::HootPoiPolygonPoisMerged2()))
+    {
+      poisMergedFromMap2 += finalBuildingTags[MetadataTags::HootPoiPolygonPoisMerged2()].toLong();
+    }
     LOG_VART(poisMerged);
     finalBuildingTags.set(MetadataTags::HootPoiPolygonPoisMerged(), QString::number(poisMerged));
+    finalBuildingTags.set(
+      MetadataTags::HootPoiPolygonPoisMerged1(), QString::number(poisMergedFromMap1));
+    finalBuildingTags.set(
+      MetadataTags::HootPoiPolygonPoisMerged2(), QString::number(poisMergedFromMap2));
     finalBuilding->setStatus(Status::Conflated);
     ConfigOptions conf;
     if (conf.getWriterIncludeDebugTags() && conf.getWriterIncludeMatchedByTag())

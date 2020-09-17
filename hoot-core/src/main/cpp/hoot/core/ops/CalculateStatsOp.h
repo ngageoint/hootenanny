@@ -185,7 +185,8 @@ private:
                              const float conflatableCount,
                              const CreatorDescription::FeatureCalcType& type,
                              ElementCriterionPtr criterion,
-                             const long poisMergedIntoPolys);
+                             const long poisMergedIntoPolys, const long poisMergedIntoPolysFromMap1,
+                             const long poisMergedIntoPolysFromMap2);
 
   ConstElementVisitorPtr _getElementVisitorForFeatureType(
     const CreatorDescription::BaseFeatureType& featureType);
