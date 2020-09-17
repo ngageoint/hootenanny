@@ -233,9 +233,10 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElemen
   long id = n->getId();
   if (_change.getType() == Change::Create)
   {
-    //rails port expects negative ids for new elements; we're starting at -1 to match the convention
-    //of iD editor, but that's not absolutely necessary to write the changeset to rails port
-    id = _newElementIdCtrs[ElementType::Node] * -1; //assuming no id's = 0
+    // rails port expects negative ids for new elements; we're starting at -1 to match the
+    // convention of iD editor, but that's not absolutely necessary to write the changeset to rails
+    // port
+    id = _newElementIdCtrs[ElementType::Node] * -1; // assuming no id's = 0
     LOG_TRACE(
       "Converting new element with id: " << n->getElementId() << " to id: " <<
       ElementId(ElementType::Node, id));
