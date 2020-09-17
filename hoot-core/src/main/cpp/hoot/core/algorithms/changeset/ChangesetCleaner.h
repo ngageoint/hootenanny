@@ -52,7 +52,7 @@ class ChangesetCleaner : public ChangesetProvider
 public:
 
   /**
-   * Constructor
+   * Constructor - cleans the changeset summed together from the input providers
    *
    * @param changesetProviders a collection of changeset providers
    */
