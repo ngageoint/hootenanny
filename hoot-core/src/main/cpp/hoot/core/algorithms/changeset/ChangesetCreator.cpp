@@ -687,7 +687,8 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
 
   if (_clean)
   {
-    // TODO: explain
+    // This was added primarily for use by ChangesetReplacementCreator. Eventually, it may be able
+    // to be removed.
     std::shared_ptr<ChangesetCleaner> cleaner(new ChangesetCleaner(changesetProviders));
     changesetProviders.clear();
     changesetProviders.append(cleaner);

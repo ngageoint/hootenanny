@@ -56,6 +56,8 @@ void ChangesetCleaner::_clean()
       if (_changesById.contains(id))
       {
         const Change existingChange = _changesById[id];
+
+        // We already have a modify or create change for this element, so ignore the delete change.
         if (existingChange.getType() != Change::Delete && change.getType() == Change::Delete)
         {
           _numDeleteChangesRemoved++;
@@ -63,6 +65,7 @@ void ChangesetCleaner::_clean()
         }
         else
         {
+          // If the existing change is a delete, then we'll overwrite it with a create or modify.
           _changesById[id] = change;
           _changes.push_back(change);
         }
@@ -85,15 +88,6 @@ ChangesetCleaner::~ChangesetCleaner()
 std::shared_ptr<OGRSpatialReference> ChangesetCleaner::getProjection() const
 {
   return _changesetProviders.front()->getProjection();
-}
-
-void ChangesetCleaner::close()
-{
-//  for (QList<ChangesetProviderPtr>::iterator itr =
-//       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
-//  {
-//    (*itr)->close();
-//  }
 }
 
 bool ChangesetCleaner::hasMoreChanges()

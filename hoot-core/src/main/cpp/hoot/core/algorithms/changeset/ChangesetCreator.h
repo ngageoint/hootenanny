@@ -137,7 +137,7 @@ private:
   // provided.
   bool _singleInput;
 
-  // TODO
+  // enables an optional cleaning post operation for the generated changesets
   bool _clean;
 
   int _numCreateChanges;

@@ -34,7 +34,17 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Removes mistakes from changesets. This is meant to be used when algorithms create erroneous
+ * changesets and the cause isn't immediately discernible. Whenever possible, the changeset
+ * generation itself should be fixed. The cleaning operation is memory bound.
+ *
+ * Current cleaning ops:
+ *
+ * 1) If there is a delete change and either a create or modify change assigned to the same element,
+ * the delete change is discarded.
+ *
+ * The cleaning may be able to be extended to not allow duplicate changes for any element, but want
+ * to wait to do that until the problem is actually seen in the wild.
  */
 class ChangesetCleaner : public ChangesetProvider
 {
@@ -42,9 +52,9 @@ class ChangesetCleaner : public ChangesetProvider
 public:
 
   /**
-   * TODO
+   * Constructor
    *
-   * @param changesetProviders
+   * @param changesetProviders a collection of changeset providers
    */
   ChangesetCleaner(const QList<ChangesetProviderPtr>& changesetProviders);
 
@@ -58,7 +68,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual void close() override;
+  virtual void close() override {}
 
   /**
    * @see ChangeSetProvider
@@ -102,15 +112,15 @@ public:
 
 private:
 
-  // TODO
+  // providers of the changes being cleaned
   QList<ChangesetProviderPtr> _changesetProviders;
-  // TODO
+  // iterator for the cleaned changes
   std::vector<Change>::const_iterator _changeItr;
-  // TODO
+  // maps changes by element ID of the element involved in the change
   QMap<ElementId, Change> _changesById;
-  // TODO
+  // cleaned changes
   std::vector<Change> _changes;
-  // TODO
+  // number of delete changes removed from the changes coming from the providers
   int _numDeleteChangesRemoved;
 
   void _clean();

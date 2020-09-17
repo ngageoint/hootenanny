@@ -554,7 +554,10 @@ void ChangesetReplacementCreator::_create()
   // secondary features within the bounds and write it out.
   _changesetCreator->setIncludeReviews(
     _conflationEnabled && ConfigOptions().getChangesetReplacementPassConflateReviews());
-  // TODO
+  // We have some instances where modify and delete changes are being generated for the same
+  // element, which causes error during changeset application. Eventually, we may be able to
+  // eliminate their causes, but for now we'll activate changeset cleaning to get rid of the delete
+  // statements. Unfortunately, this will make the changeset writing memory bound.
   _changesetCreator->setClean(true);
   _changesetCreator->create(refMaps, conflatedMaps, _output);
   _numChanges = _changesetCreator->getNumTotalChanges();
