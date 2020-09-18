@@ -5,11 +5,6 @@
 pipeline {
     agent { label 'master' }
 
-    environment {
-        SYS_URL = 'UNKOWN'
-        SYS_VER = 'UNKOWN'
-    }
-
     triggers {
         // Set nightly trigger
         cron((BRANCH_NAME == "master") ? "H H(17-20) * * 0" : "")
@@ -22,6 +17,17 @@ pipeline {
         booleanParam(name: 'Build', defaultValue: true)
         booleanParam(name: 'Valgrind_tests', defaultValue: true)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
+        string(name: 'HOOT_AWS_ENV_TAG', defaultValue: 'testing')
+        string(name: 'HOOT_AWS_USE_TAG', defaultValue: 'jenkins')
+        string(name: 'HOOT_AWS_GROUP_TAG', defaultValue: 'devops')
+    }
+
+    environment {
+        SYS_URL = 'UNKOWN'
+        SYS_VER = 'UNKOWN'
+        HOOT_AWS_ENV_TAG="${params.HOOT_AWS_ENV_TAG}"
+        HOOT_AWS_USE_TAG="${params.HOOT_AWS_USE_TAG}"
+        HOOT_AWS_GROUP_TAG="${params.HOOT_AWS_GROUP_TAG}"
     }
 
     options { disableConcurrentBuilds() }
