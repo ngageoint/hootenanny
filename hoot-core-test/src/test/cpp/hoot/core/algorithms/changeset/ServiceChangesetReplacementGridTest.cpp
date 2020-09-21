@@ -58,12 +58,12 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   // TODO: re-enable
-  CPPUNIT_TEST(orphanedNodes1Test);
+  //CPPUNIT_TEST(orphanedNodes1Test);
   // TODO: having some trouble with repeatability here after an initial test is run...will come back
   // to these soon
   //CPPUNIT_TEST(orphanedNodes2Test);
   //CPPUNIT_TEST(droppedNodes1Test);
-  //CPPUNIT_TEST(pointPolyRelationMember1Test);
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -196,14 +196,14 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
-  void pointPolyRelationMember1Test()
+  void droppedPointPolyRelationMembers1Test()
   {
-    // part of github 4228 - TODO: finish
+    // part of github 4228 - TODO: add description
 
-    _testName = "pointPolyRelationMember1Test";
+    _testName = "droppedPointPolyRelationMembers1Test";
     _prepInput(
-      _inputPath + "/pointPolyRelationMember1Test-Input1.osm",
-      _inputPath + "/pointPolyRelationMember1Test-Input2.osm",
+      _inputPath + "/droppedPointPolyRelationMembers1Test-Input1.osm",
+      _inputPath + "/droppedPointPolyRelationMembers1Test-Input2.osm",
       "");
 
     ChangesetTaskGridReplacer uut;
@@ -218,10 +218,12 @@ public:
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
       UniformTaskGridGenerator(
-        "-115.3274,36.2640,-115.3106,36.2874", 2,
+        //"-115.2828,36.1960,-115.2583,36.2199", 1,
+        "-115.3064,36.1867,-115.2136,36.2498", 2,
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
+    // TODO: fix output
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
