@@ -64,7 +64,7 @@ pipeline {
                 sh '''
                     git fetch --tags
                     git submodule update --init
-                    cp -R ../software.ubuntu1404 software
+                    ( [ -d ../software.ubuntu1404 ] && cp -R ../software.ubuntu1404 software ) || true
                     rm -rf ./test-files/ui/screenshot_*.png
                 '''
             }
