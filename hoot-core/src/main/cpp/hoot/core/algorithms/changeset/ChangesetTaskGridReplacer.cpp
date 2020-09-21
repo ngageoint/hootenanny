@@ -54,6 +54,7 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/core/ops/DuplicateElementMarker.h>
 
 namespace hoot
 {
@@ -388,7 +389,7 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
 
-  // had to do this cleaning to get the relations to behave
+  // had to do this cleaning to get the relations to behave and be viewable in JOSM
   RemoveMissingElementsVisitor missingElementRemover;
   map->visitRw(missingElementRemover);
   LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
@@ -434,9 +435,10 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   std::shared_ptr<FilteredVisitor> filteredVis;
   std::shared_ptr<ElementCriterion> crit;
 
-  // We're only guaranteeing output data quality for the task grid cells actually replaced. Any
-  // data outside of the replacement grid may end up with quality issues until its replaced. So,
-  // restrict each of these quality checks to be in the replacement AOI.
+  // We're only guaranteeing output data quality for the data in the task grid cells actually
+  // replaced. Any data outside of the replacement grid may end up with quality issues that can't be
+  // fixed until its replaced. So, restrict each of these quality checks to be in the replacement
+  // AOI.
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
   crit.reset(
@@ -472,6 +474,11 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
     " empty ways in output.");
+
+  const int numDupes = DuplicateElementMarker::markDuplicates(map, 8);
+  LOG_STATUS(
+    "Tagged " << StringUtils::formatLargeNumber(numDupes) <<
+    " duplicate feature pairs in output.");
 }
 
 void ChangesetTaskGridReplacer::_writeNonConflatable(const ConstOsmMapPtr& map,

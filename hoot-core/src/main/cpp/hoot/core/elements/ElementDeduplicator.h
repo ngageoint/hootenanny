@@ -73,6 +73,20 @@ public:
    */
   void dedupe(OsmMapPtr map1, OsmMapPtr map2);
 
+  /**
+   * Uses ElementHashVisitor to assign unique hashes to elements and also retrieves the element
+   * IDs of any duplicates found
+   *
+   * @param map TODO
+   * @param hashes
+   * @param duplicates
+   */
+  static void calculateDuplicateElements(
+    OsmMapPtr map, QMap<QString, ElementId>& hashes,
+    QSet<std::pair<ElementId, ElementId>>& duplicates,
+    const int coordinateComparisonSensitivity =
+      ConfigOptions().getNodeComparisonCoordinateSensitivity());
+
   int getMap1DuplicateNodesRemoved() const { return _map1DuplicateNodesRemoved; }
   int getMap1DuplicateWaysRemoved() const { return _map1DuplicateWaysRemoved; }
   int getMap1DuplicateRelationsRemoved() const { return _map1DuplicateRelationsRemoved; }
@@ -122,14 +136,6 @@ private:
   int _map2DuplicateRelationsRemoved;
 
   void _validateInputs();
-
-  /*
-   * Uses ElementHashVisitor to assign unique hashes to elements and also retrieves the element
-   * IDs of any duplicates found
-   */
-  void _calcElementHashes(
-    OsmMapPtr map, QMap<QString, ElementId>& hashes,
-    QSet<std::pair<ElementId, ElementId>>& duplicates);
 
   /*
    * Converts pairs of duplicated features' element IDs to a collection of element IDs sorted by

@@ -127,13 +127,13 @@ QString TagInfo::_getInfo(const QString& input)
       {
         std::shared_ptr<Element> e = iterator->next();
 
-        //        // Interesting problem: If there are no elements in the file, e == 0
-        //        // Need to look at the ElementIterator.cpp file to fix this.
-        //        if (e == 0)
-        //        {
-        //          LOG_WARN("No features in: " + input + " " + layer);
-        //          break;
-        //        }
+//        // Interesting problem: If there are no elements in the file, e == 0
+//        // Need to look at the ElementIterator.cpp file to fix this.
+//        if (e == 0)
+//        {
+//          LOG_WARN("No features in: " + input + " " + layer);
+//          break;
+//        }
 
         _parseElement(e, result);
 

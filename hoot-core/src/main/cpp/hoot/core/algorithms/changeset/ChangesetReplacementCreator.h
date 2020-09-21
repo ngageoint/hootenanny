@@ -70,6 +70,8 @@ class Change;
  *  - changeset derivation
  *  - cleanup
  * @todo need to test missing way node refs
+ * @todo prevent changesets from being generated with both modify and delete statements for the same
+ * element (should any element have multiple changes in the same changeset?)
  */
 class ChangesetReplacementCreator
 {

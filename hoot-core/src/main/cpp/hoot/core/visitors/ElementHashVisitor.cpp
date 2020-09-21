@@ -42,7 +42,9 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, ElementHashVisitor)
 
 ElementHashVisitor::ElementHashVisitor() :
+_coordinateComparisonSensitivity(ConfigOptions().getNodeComparisonCoordinateSensitivity()),
 _includeCe(false),
+_nonMetadataIgnoreKeys(ConfigOptions().getElementHashVisitorNonMetadataIgnoreKeys()),
 _useNodeTags(true),
 _writeHashes(true),
 _collectHashes(false)
@@ -51,7 +53,7 @@ _collectHashes(false)
   {
     throw IllegalArgumentException("ElementHashVisitor must either write or collect hashes.");
   }
-  _nonMetadataIgnoreKeys = ConfigOptions().getElementHashVisitorNonMetadataIgnoreKeys();
+  LOG_VARD(_coordinateComparisonSensitivity);
 }
 
 void ElementHashVisitor::visit(const ElementPtr& e)
@@ -121,12 +123,10 @@ QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
   }
   result += toJson(tags, node->getCircularError());
 
-  const int coordinateComparisonSensitivity =
-    ConfigOptions().getNodeComparisonCoordinateSensitivity();
   result += "},\"x\":";
-  result += QString::number(node->getX(), 'f', coordinateComparisonSensitivity);
+  result += QString::number(node->getX(), 'f', _coordinateComparisonSensitivity);
   result += ",\"y\":";
-  result += QString::number(node->getY(), 'f', coordinateComparisonSensitivity);
+  result += QString::number(node->getY(), 'f', _coordinateComparisonSensitivity);
   result += "}";
 
   return result;

@@ -63,10 +63,10 @@ public:
       {
         _to->addElement(ee);
       }
-      // if this is not a node then we need to worry about dependencies.
+      // If this is not a node, then we need to worry about dependencies.
       else
       {
-        // add all of this element's children to the map (we're exempting eid).
+        // Add all of this element's children to the map (we're exempting eid).
         AddAllVisitor v(_from, _to, eid);
         _from->getElement(eid)->visitRo(*_from, v);
         // finally, add this element to the map.
@@ -90,6 +90,7 @@ private:
   OsmMapPtr _to;
   ElementId _exempt;
   std::set<ElementId> _elementsAdded;
+  // TODO: add recursive option defaulted to trye
 };
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :

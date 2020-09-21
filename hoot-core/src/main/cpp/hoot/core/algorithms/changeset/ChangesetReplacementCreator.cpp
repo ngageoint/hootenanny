@@ -36,8 +36,6 @@
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementElementIdSynchronizer.h>
 
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
-
 #include <hoot/core/conflate/CookieCutter.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
@@ -535,6 +533,9 @@ void ChangesetReplacementCreator::_create()
     throw HootException("Replacement changeset derivation internal map count mismatch error.");
   }
 
+  // TODO: combine all ref/sec maps back together
+  // TODO: add relations back into both
+
   // CLEANUP
 
   // UPDATE 8/17/20: Using ElementDeduplicator, as used to be done, appears no longer necessary
@@ -618,6 +619,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     _markElementsWithMissingChildren(refMap);
   }
 
+  // TODO: remove ref relations and move to temporary storage
+
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.
   const QMap<ElementId, long> refIdToVersionMappings = _getIdToVersionMappings(refMap);
@@ -647,6 +650,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   {
     _markElementsWithMissingChildren(secMap);
   }
+
+  // TODO: remove sec relations and move to temporary storage
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
@@ -1121,8 +1126,9 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   // bug occur yet, but I believe it can...not sure how to prevent it yet.
   //
   // Furthermore, if a feature belongs to two relations with different geometry types, it may be
-  // duplicated in the output. This is why we run a de-duplication routine just before changeset
-  // derivation...kind of a band-aid unfortunately :-(
+  // duplicated in the output. We used to run a de-duplication routine just before changeset
+  // derivation...kind of a band-aid unfortunately...but fortunately we aren't currently doing that
+  // anymore :-|
 
   // The maps will get set on the crits here that need them by the RemoveElementsVisitor later on,
   // right before its needed.
@@ -1137,14 +1143,14 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   ElementCriterionPtr lineCrit(new LinearCriterion());
   std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit(
     new RelationWithLinearMembersCriterion());
-  relationLinearCrit->setAllowMixedChildren(true);
+  relationLinearCrit->setAllowMixedChildren(/*true*/false);
   OrCriterionPtr lineOr(new OrCriterion(lineCrit, relationLinearCrit));
   featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineOr;
 
   // Poly crit has been converted over to encapsulate RelationWithGeometryMembersCriterion, while
   // the other types have not yet (#4151).
   std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
-  polyCrit->setAllowMixedChildren(false);
+  polyCrit->setAllowMixedChildren(false/*true*/);
   featureFilters[GeometryTypeCriterion::GeometryType::Polygon] = polyCrit;
 
   return featureFilters;
@@ -1759,6 +1765,8 @@ void ChangesetReplacementCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& ma
 void ChangesetReplacementCreator::_combineMaps(
   OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes, const QString& debugFileName)
 {
+  // TODO: move this to MapUtils
+
   LOG_VART(map1.get());
   LOG_VART(map2.get());
 
@@ -2037,14 +2045,14 @@ void ChangesetReplacementCreator::_synchronizeIds(
   // When replacing data, we always load the replacement data without its original IDs in case there
   // are overlapping IDs in the reference data. If you were only replacing unmodified data from one
   // source with updated data from another source with the same IDs (e.g. replacing newer OSM with
-  // older OSM), this wouldn't be necessary, but we're not guaranteed that will be the only scenario
-  // encountered. The downside to loading up a separate set of unique IDs for the secondary data is
-  // that identical elements in the secondary can end up unnecessarily replacing elements in the
-  // reference. This gets mitigated here where we find all identical elements between the data being
-  // replaced and the replacement data and overwrite IDs in the replacement data from those in the
-  // data being replaced to prevent unnecessary changeset modifications from being generated. Its
-  // possible we could do this earlier in the replacement process, however that has proven difficult
-  // to accomplish so far.
+  // older OSM), this separation wouldn't be necessary, but we're not guaranteed that will be the
+  // only scenario encountered. The downside to loading up a separate set of unique IDs for the
+  // secondary data is that identical elements in the secondary can end up unnecessarily replacing
+  // elements in the reference. This gets mitigated here where we find all identical elements
+  // between the data being replaced and the replacement data and overwrite IDs in the replacement
+  // data with the IDs of matching elements from the data being replaced to prevent unnecessary
+  // changeset modifications from being generated. Its possible we could do this earlier in the
+  // replacement process, however that has proven difficult to accomplish so far.
 
   assert(mapsBeingReplaced.size() == replacementMaps.size());
   ChangesetReplacementElementIdSynchronizer idSync;
