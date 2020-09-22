@@ -42,6 +42,8 @@ class ChangesetCreator;
 class ChainCriterion;
 class Settings;
 class Change;
+class ElementDeduplicator;
+class ConstOsmMapConsumer;
 
 /**
  * High level class for prepping data for replacement changeset generation (changesets which
@@ -192,11 +194,15 @@ private:
   QString _input1;
   // cached data being replaced
   OsmMapPtr _input1Map;
+  // TODO
+  QMap<QString, OsmMapPtr> _input1Relations;
 
   // path to the input with data used for replacement; overrides use of _input2Map
   QString _input2;
   // cached replacement data
   OsmMapPtr _input2Map;
+  // TODO
+  QMap<QString, OsmMapPtr> _input2Relations;
 
   // path to the changeset output file
   QString _output;
@@ -313,8 +319,8 @@ private:
   void _setGlobalOpts();
   void _parseConfigOpts(const GeometryTypeCriterion::GeometryType& geometryType);
 
-  OsmMapPtr _loadRefMap();
-  OsmMapPtr _loadSecMap();
+  OsmMapPtr _loadRefMap(const GeometryTypeCriterion::GeometryType& geometryType);
+  OsmMapPtr _loadSecMap(const GeometryTypeCriterion::GeometryType& geometryType);
   OsmMapPtr _loadInputMap(
     const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
     const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
@@ -332,6 +338,17 @@ private:
    * the replacement changeset is written.
    */
   void _markElementsWithMissingChildren(OsmMapPtr& map);
+
+  /*
+   * TODO
+   */
+  void _removeRelations(OsmMapPtr& map, const QString& mapName,
+                        QMap<QString, OsmMapPtr>& relationsMap);
+
+  /*
+   * TODO
+   */
+  void _restoreRelations(OsmMapPtr& map, QMap<QString, OsmMapPtr>& relationsMap);
 
   /*
    * Keeps track of the changeset versions for features
@@ -411,6 +428,13 @@ private:
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
 
   OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
+
+  /*
+   * Removes duplicates between one map and another, ignoring elemment IDs
+   */
+  void _dedupeMaps(const QList<OsmMapPtr>& maps);
+  void _dedupeMapPair(OsmMapPtr map1, OsmMapPtr map2, ElementDeduplicator& deduper,
+                      std::shared_ptr<ConstOsmMapConsumer> deduperNodeCrit);
 };
 
 }

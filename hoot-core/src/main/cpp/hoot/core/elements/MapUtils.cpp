@@ -40,11 +40,13 @@
 namespace hoot
 {
 
-OsmMapPtr MapUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter)
+OsmMapPtr MapUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter,
+                                 const bool copyChildren)
 {
-  CopyMapSubsetOp wayCopier(map, filter);
+  CopyMapSubsetOp mapCopier(map, filter);
+  mapCopier.setCopyChildren(copyChildren);
   OsmMapPtr output(new OsmMap());
-  wayCopier.apply(output);
+  mapCopier.apply(output);
   return output;
 }
 

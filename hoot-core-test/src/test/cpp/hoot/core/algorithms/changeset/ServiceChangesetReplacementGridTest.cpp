@@ -58,12 +58,12 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   // TODO: re-enable
-  //CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
   // TODO: having some trouble with repeatability here after an initial test is run...will come back
   // to these soon
   //CPPUNIT_TEST(orphanedNodes2Test);
   //CPPUNIT_TEST(droppedNodes1Test);
-  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  //CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -205,6 +205,7 @@ public:
       _inputPath + "/droppedPointPolyRelationMembers1Test-Input1.osm",
       _inputPath + "/droppedPointPolyRelationMembers1Test-Input2.osm",
       "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -218,7 +219,6 @@ public:
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
       UniformTaskGridGenerator(
-        //"-115.2828,36.1960,-115.2583,36.2199", 1,
         "-115.3064,36.1867,-115.2136,36.2498", 2,
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
@@ -405,7 +405,7 @@ private:
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
 
   void _loadDataToReplaceDb(

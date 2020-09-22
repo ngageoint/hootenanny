@@ -66,6 +66,8 @@ public:
 
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 
+  void setCopyChildren(bool copy) { _copyChildren = copy; }
+
   virtual std::string getClassName() const { return className(); }
 
 private:
@@ -73,6 +75,8 @@ private:
   std::set<ElementId> _eids;
   ConstOsmMapPtr _from;
   ElementCriterionPtr _crit;
+  // TODO
+  bool _copyChildren;
   std::set<ElementId> _eidsCopied;
 };
 

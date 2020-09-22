@@ -62,6 +62,7 @@ namespace hoot
 ChangesetTaskGridReplacer::ChangesetTaskGridReplacer() :
 _originalDataSize(0),
 _reverseTaskGrid(false),
+_currentTaskGridCellId(-1),
 _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
@@ -93,6 +94,7 @@ void ChangesetTaskGridReplacer::replace(
 
   _initConfig();
   _taskGridBounds = taskGrid.getBounds();
+  _currentTaskGridCellId = -1;
 
   try
   {
@@ -146,8 +148,11 @@ void ChangesetTaskGridReplacer::replace(
   catch (const HootException& e)
   {
     LOG_ERROR(
-      "Entire task grid cell replacement operation partially completed with error at: " <<
-      StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
+      "Entire task grid cell replacement operation partially completed with error while " <<
+      " replacing task grid cell number: " << _currentTaskGridCellId << ", " <<
+      _numChangesetsDerived << " / " << taskGrid.size() <<
+      " cells replaced, time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()) <<
+      "; Error: " << e.getWhat());
   }
 
   LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
@@ -228,6 +233,8 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
 void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize)
 {
+  _currentTaskGridCellId = taskGridCell.id;
+
   // Include IDs override skip IDs. if include IDs is populated at all and this ID isn't in the
   // list, skip it. Otherwise, if the skip IDs have it, also skip it.
   if ((!_taskCellIncludeIds.isEmpty() && !_taskCellIncludeIds.contains(taskGridCell.id)) ||

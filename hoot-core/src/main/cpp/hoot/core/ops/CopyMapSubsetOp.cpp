@@ -40,9 +40,11 @@ class AddAllVisitor : public ConstElementVisitor
 {
 public:
 
-  AddAllVisitor(ConstOsmMapPtr from, OsmMapPtr to, ElementId exempt = ElementId()) :
+  AddAllVisitor(ConstOsmMapPtr from, OsmMapPtr to, bool copyChildren = true,
+                ElementId exempt = ElementId()) :
     _from(from),
     _to(to),
+    _copyChildren(copyChildren),
     _exempt(exempt)
   {
   }
@@ -59,7 +61,7 @@ public:
       ElementPtr ee(_from->getElement(eid)->clone());
 
       // if it is a node, just copy it, we don't need to worry about dependencies.
-      if (ee->getElementType() == ElementType::Node)
+      if (ee->getElementType() == ElementType::Node || !_copyChildren)
       {
         _to->addElement(ee);
       }
@@ -67,7 +69,7 @@ public:
       else
       {
         // Add all of this element's children to the map (we're exempting eid).
-        AddAllVisitor v(_from, _to, eid);
+        AddAllVisitor v(_from, _to, true, eid);
         _from->getElement(eid)->visitRo(*_from, v);
         // finally, add this element to the map.
         _to->addElement(ee);
@@ -88,19 +90,21 @@ private:
 
   ConstOsmMapPtr _from;
   OsmMapPtr _to;
+  bool _copyChildren;
   ElementId _exempt;
   std::set<ElementId> _elementsAdded;
-  // TODO: add recursive option defaulted to trye
 };
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :
 _eids(eids),
-_from(from)
+_from(from),
+_copyChildren(true)
 {
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const vector<long>& wayIds) :
-_from(from)
+_from(from),
+_copyChildren(true)
 {
   for (vector<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
   {
@@ -112,13 +116,15 @@ _from(from)
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid) :
-_from(from)
+_from(from),
+_copyChildren(true)
 {
   _eids.insert(eid);
 }
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid1, ElementId eid2) :
-_from(from)
+_from(from),
+_copyChildren(true)
 {
   _eids.insert(eid1);
   _eids.insert(eid2);
@@ -126,7 +132,8 @@ _from(from)
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit) :
 _from(from),
-_crit(crit)
+_crit(crit),
+_copyChildren(true)
 {
   std::shared_ptr<UniqueElementIdVisitor> getIdVis(new UniqueElementIdVisitor());
   FilteredVisitor idVis(_crit, getIdVis);
@@ -139,7 +146,7 @@ _crit(crit)
 void CopyMapSubsetOp::apply(OsmMapPtr& map)
 {
   map->setProjection(_from->getProjection());
-  AddAllVisitor v(_from, map);
+  AddAllVisitor v(_from, map, _copyChildren);
 
   for (set<ElementId>::const_iterator it = _eids.begin(); it != _eids.end(); ++it)
   {

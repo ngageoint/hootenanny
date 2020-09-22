@@ -49,9 +49,11 @@ public:
    *
    * @param map map to copy elements from
    * @param filter filter to apply to the map
+   * @param copyChildren TODO
    * @return a copied subset map
    */
-  static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter);
+  static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter,
+                                const bool copyChildren = true);
 
   /**
    * Determines if a map contains only nodes that are not way nodes
