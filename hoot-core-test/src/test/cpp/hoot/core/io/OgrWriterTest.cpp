@@ -130,6 +130,7 @@ public:
     uut.setSchemaTranslationScript(_inputPath + "SampleTranslation.js");
     uut.open(_outputPath + "OgrWriterShpTest.shp");
     uut.write(createTestMap());
+    uut.close();
     QStringList nameFilter;
     nameFilter << "*.shp";
 
@@ -145,6 +146,7 @@ public:
     uut.setSchemaTranslationScript(_inputPath + "SampleTranslation.js");
     uut.open(_outputPath + "OgrWriterTest.gdb");
     uut.write(createTestMap());
+    uut.close();
 
     FileUtils::makeDir("tmp");
     OsmMapWriterFactory::write(createTestMap(), "tmp/TestMap.osm");
@@ -174,6 +176,7 @@ public:
     uut.setSchemaTranslationScript(_inputPath + "SampleTranslation.js");
     uut.open(_outputPath + "OgrWriterRelationTest.gdb");
     uut.write(map);
+    uut.close();
 
     // make sure it created a bunch of files. We aren't testing for correct output.
     CPPUNIT_ASSERT(QDir(_outputPath + "OgrWriterRelationTest.gdb").entryList().size() > 10);
