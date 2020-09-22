@@ -195,14 +195,14 @@ private:
   // cached data being replaced
   OsmMapPtr _input1Map;
   // TODO
-  QMap<QString, OsmMapPtr> _input1Relations;
+  //QList<OsmMapPtr> _input1Relations;
 
   // path to the input with data used for replacement; overrides use of _input2Map
   QString _input2;
   // cached replacement data
   OsmMapPtr _input2Map;
   // TODO
-  QMap<QString, OsmMapPtr> _input2Relations;
+  //QList<OsmMapPtr> _input2Relations;
 
   // path to the changeset output file
   QString _output;
@@ -342,13 +342,12 @@ private:
   /*
    * TODO
    */
-  void _removeRelations(OsmMapPtr& map, const QString& mapName,
-                        QMap<QString, OsmMapPtr>& relationsMap);
+  OsmMapPtr _removeRelations(OsmMapPtr& map);
 
   /*
    * TODO
    */
-  void _restoreRelations(OsmMapPtr& map, QMap<QString, OsmMapPtr>& relationsMap);
+  void _restoreRelations(OsmMapPtr& map, OsmMapPtr& relationsMap);
 
   /*
    * Keeps track of the changeset versions for features

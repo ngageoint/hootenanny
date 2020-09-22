@@ -140,8 +140,6 @@ _numChanges(0)
 
   _input1Map.reset();
   _input2Map.reset();
-  _input1Relations.clear();
-  _input2Relations.clear();
 }
 
 void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterClassNames)
@@ -422,10 +420,8 @@ void ChangesetReplacementCreator::create(
 {
   _input1 = input1;
   _input1Map.reset();
-  _input1Relations.clear();
   _input2 = input2;
   _input2Map.reset();
-  _input2Relations.clear();
   _output = output;
   //_replacementBounds = bounds;
   // TODO: It makes more sense to store the bounds and then just convert it to a string as needed.
@@ -632,9 +628,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 
   // TODO
-  _removeRelations(refMap, refMap->getName(), _input1Relations);
-  LOG_VARD(_input1Relations.size());
-  LOG_VARD(_input1Relations.keys());
+  OsmMapPtr refRelationsMap = _removeRelations(refMap);
+  LOG_VARD(refRelationsMap->size());
 
 
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
@@ -668,9 +663,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 
   // TODO
-  _removeRelations(secMap, secMap->getName(), _input2Relations);
-  LOG_VARD(_input2Relations.size());
-  LOG_VARD(_input2Relations.keys());
+  OsmMapPtr secRelationsMap = _removeRelations(secMap);
+  LOG_VARD(secRelationsMap->size());
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
@@ -890,8 +884,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 
   // restore the relations previously removed
-  _restoreRelations(refMap, _input1Relations);
-  _restoreRelations(conflatedMap, _input2Relations);
+  _restoreRelations(refMap, refRelationsMap);
+  refRelationsMap.reset();
+  _restoreRelations(conflatedMap, secRelationsMap);
+  secRelationsMap.reset();
 
   // clean up any mistakes introduced
   _cleanup(refMap);
@@ -2122,18 +2118,19 @@ void ChangesetReplacementCreator::_synchronizeIds(
   }
 }
 
-void ChangesetReplacementCreator::_removeRelations(OsmMapPtr& map, const QString& mapName,
-                                                   QMap<QString, OsmMapPtr>& relationsMap)
+OsmMapPtr ChangesetReplacementCreator::_removeRelations(OsmMapPtr& map)
 {
-  LOG_DEBUG("Removing relations from " << mapName << "...");
+  LOG_DEBUG("Removing relations from " << map->getName() << "...");
 
   ElementCriterionPtr relationCrit(new RelationCriterion());
   const int mapSizeBefore = map->size();
 
   // copy all relations for later use
-  relationsMap[mapName] = MapUtils::getMapSubset(map, relationCrit, false);
+  OsmMapPtr relationsMap = MapUtils::getMapSubset(map, relationCrit, false);
+  relationsMap->setName(map->getName() + "-relations");
   OsmMapWriterFactory::writeDebugMap(
-    relationsMap[mapName], _changesetId + "-" + mapName + "-separated-relations");
+    relationsMap, _changesetId + "-" + map->getName() + "-separated-relations");
+  LOG_DEBUG("Stored " << relationsMap->size() << " relations.");
 
   // remove the relations from the map
   RemoveElementsVisitor relationRemover;
@@ -2143,29 +2140,21 @@ void ChangesetReplacementCreator::_removeRelations(OsmMapPtr& map, const QString
   relationRemover.setRecursive(false);
   map->visitRw(relationRemover);
   OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + mapName + "-after-relations-removed");
+    map, _changesetId + "-" + map->getName() + "-after-relations-removed");
 
   LOG_DEBUG("Removed " << mapSizeBefore - map->size() << " relations.");
+  return relationsMap;
 }
 
-void ChangesetReplacementCreator::_restoreRelations(
-  OsmMapPtr& map, QMap<QString, OsmMapPtr>& relationsMap)
+void ChangesetReplacementCreator::_restoreRelations(OsmMapPtr& map, OsmMapPtr& relationsMap)
 {
-  QString mapName = map->getName();
-  if (mapName.contains("conflated"))
-  {
-    mapName = mapName.replace("conflated", "sec");
-  }
-
-  LOG_DEBUG("Restoring relations to " << mapName << "...");
+  LOG_DEBUG(
+    "Restoring relations from: " << relationsMap->getName() << " to " << map->getName() << "...");
   //const int mapSizeBefore = map->size();
 
-  LOG_VARD(relationsMap.keys());
-  LOG_VARD(relationsMap.contains(mapName));
-  OsmMapPtr relationsOsmMap = relationsMap[mapName];
-  if (relationsOsmMap)
+  if (relationsMap)
   {
-    const RelationMap& relations = relationsOsmMap->getRelations();
+    const RelationMap& relations = relationsMap->getRelations();
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
       bool anyMemberExistsInTargetMap = false;
@@ -2184,36 +2173,38 @@ void ChangesetReplacementCreator::_restoreRelations(
           LOG_DEBUG(
             "Removing relation member: " << member.getElementId() << " from stored relation: " <<
             relation->getElementId() << "...");
-          //LOG_VARD(member);
-          //LOG_VARD(relation);
+          LOG_VARD(relation->getTags().getName());
+          LOG_VARD(relation->getType());;
           relation->removeElement(member.getElementId());
         }
       }
       if (anyMemberExistsInTargetMap)
       {
         LOG_DEBUG(
-          "Restoring relation: " << relation->getElementId() <<  " to " << mapName << "...");
-        //LOG_VARD(relation);
+          "Restoring relation: " << relation->getElementId() <<  " to " << map->getName() << "...");
+        LOG_VARD(relation->getTags().getName());
+        LOG_VARD(relation->getType());
         map->addRelation(relation);
       }
       else
       {
         LOG_DEBUG(
-          "Not restoring relation: " << relation->getElementId() << " to " << mapName << ".");
-        //LOG_VARD(relation);
+          "Not restoring relation: " << relation->getElementId() << " to " << map->getName() <<
+          ".");
+        LOG_VARD(relation->getTags().getName());
+        LOG_VARD(relation->getType());
       }
     }
     OsmMapWriterFactory::writeDebugMap(
-      map, _changesetId + "-" + mapName + "-after-relations-restored");
+      map, _changesetId + "-" + map->getName() + "-after-relations-restored");
     LOG_DEBUG(
       "Restored " << /*map->size() - mapSizeBefore*/map->getRelationCount() << " relation(s) to " <<
-      mapName << ".");
+      map->getName() << ".");
   }
   else
   {
-    LOG_DEBUG("No relations to restore for " << mapName << ".");
+    LOG_DEBUG("No relations to restore for " << map->getName() << ".");
   }
-  //relationsOsmMap.reset();
 }
 
 void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
