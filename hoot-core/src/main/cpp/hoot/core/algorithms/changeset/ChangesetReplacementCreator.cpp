@@ -1149,7 +1149,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   // anymore :-|
 
   // The maps will get set on the crits here that need them by the RemoveElementsVisitor later on,
-  // right before its needed.
+  // right before they are needed.
 
   ElementCriterionPtr pointCrit(new PointCriterion());
   std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
@@ -1456,7 +1456,7 @@ void ChangesetReplacementCreator::_filterFeatures(
   OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
   const QString& debugFileName)
 {
-  // TODO: move to utils class?
+  // TODO: move to a utils class?
 
   LOG_STATUS(
     "Filtering " << StringUtils::formatLargeNumber(map->size()) << " features for: " <<
@@ -1469,8 +1469,8 @@ void ChangesetReplacementCreator::_filterFeatures(
   elementPruner.addCriterion(featureFilter);
   elementPruner.setConfiguration(config);
   elementPruner.setOsmMap(map.get());
-  // If recursion isn't used here, nasty crashes that are hard to track down occur at times. Not
-  // completely convinced recursion should be used here, though.
+  // If recursion isn't used here, nasty crashes occur that are hard to track down occur at times.
+  // Not completely convinced recursion should be used here, though.
   elementPruner.setRecursive(true/*false*/);
   map->visitRw(elementPruner);
   LOG_INFO(elementPruner.getCompletedStatusMessage());
@@ -2217,7 +2217,7 @@ void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
 
   _dedupeMapPair(lineMap, polyMap, deduper, pointCrit);
   _dedupeMapPair(lineMap, pointMap, deduper, pointCrit);
-  _dedupeMapPair(polyMap, pointMap, deduper, pointCrit);
+  //_dedupeMapPair(polyMap, pointMap, deduper, pointCrit);
   //_dedupeMapPair(pointMap, polyMap, deduper, pointCrit);
 }
 
