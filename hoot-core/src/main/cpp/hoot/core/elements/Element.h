@@ -174,8 +174,11 @@ public:
    * computations.
    *
    * "this" is guaranteed to be visited last.
+   *
+   * TODO: update
    */
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor) const = 0;
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
+                       const bool recursive = true) const = 0;
 
   /**
    * Applies a read write visitor to this element and all child elements. The visitor will be called
@@ -192,8 +195,11 @@ public:
    * computations.
    *
    * "this" is guaranteed to be visited last.
+   *
+   * TODO: update
    */
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor) = 0;
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
+                       const bool recursive = true) = 0;
 
 protected:
 

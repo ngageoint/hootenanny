@@ -47,36 +47,52 @@ public:
     _copyChildren(copyChildren),
     _exempt(exempt)
   {
+    LOG_VARD(_copyChildren);
   }
   virtual ~AddAllVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {
     ElementId eid = e->getElementId();
+    LOG_VARD(eid);
 
-    // if the element is not exempt and it isn't already in the map
+    // TODO: update comments
+
+    // If the element is not exempt and it isn't already in the map,
     if (eid != _exempt && _to->containsElement(eid) == false)
     {
-      // create a copy of the element
+      // create a copy of the element.
       ElementPtr ee(_from->getElement(eid)->clone());
+      LOG_VARD(ee->getElementId());
 
-      // if it is a node, just copy it, we don't need to worry about dependencies.
-      if (ee->getElementType() == ElementType::Node || !_copyChildren)
+      // If it is a node, just copy it, as we don't need to worry about dependencies.
+      if (ee->getElementType() == ElementType::Node)
       {
+        LOG_DEBUG("Adding " << ee->getElementId() << "...");
         _to->addElement(ee);
       }
-      // If this is not a node, then we need to worry about dependencies.
+      // If it is not a node, then we need to worry about dependencies.
       else
       {
-        // Add all of this element's children to the map (we're exempting eid).
-        AddAllVisitor v(_from, _to, true, eid);
-        _from->getElement(eid)->visitRo(*_from, v);
-        // finally, add this element to the map.
+        if (_copyChildren)
+        {
+          // Add all of this element's children to the map (we're exempting eid).
+          LOG_DEBUG("Adding children of " << ee->getElementId() << "...");
+          AddAllVisitor v(_from, _to, true, eid);
+          _from->getElement(eid)->visitRo(*_from, v);
+          //  Add all of the elements affected.
+          _elementsAdded.insert(v._elementsAdded.begin(), v._elementsAdded.end());
+        }
+        // Finally, add this element to the map.
+        LOG_DEBUG("Adding " << ee->getElementId() << "...");
         _to->addElement(ee);
-        //  Add all of the elements affected
-        _elementsAdded.insert(v._elementsAdded.begin(), v._elementsAdded.end());
+//        if (_copyChildren)
+//        {
+//          //  Add all of the elements affected.
+//          _elementsAdded.insert(v._elementsAdded.begin(), v._elementsAdded.end());
+//        }
       }
-      //  Add this element to the list
+      //  Add this element to the list.
       _elementsAdded.insert(eid);
     }
   }
@@ -146,17 +162,20 @@ _copyChildren(true)
 void CopyMapSubsetOp::apply(OsmMapPtr& map)
 {
   map->setProjection(_from->getProjection());
+  LOG_VARD(_copyChildren);
   AddAllVisitor v(_from, map, _copyChildren);
 
+  LOG_VARD(_eids.size());
   for (set<ElementId>::const_iterator it = _eids.begin(); it != _eids.end(); ++it)
   {
     if (_from->containsElement(*it) == false)
     {
       throw IllegalArgumentException("Unable to find element: " + hoot::toString(*it));
     }
-    _from->getElement(*it)->visitRo(*_from, v);
+    _from->getElement(*it)->visitRo(*_from, v, _copyChildren);
   }
   std::set<ElementId> eids = v.getElementsAdded();
+  LOG_VARD(eids.size());
   _eidsCopied.insert(eids.begin(), eids.end());
 }
 

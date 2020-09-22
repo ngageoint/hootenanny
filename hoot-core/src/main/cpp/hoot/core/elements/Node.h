@@ -124,8 +124,10 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor) const;
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor);
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
+                       const bool recursive = false) const;
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
+                       const bool recursive = false);
 
   /**
    * Determines if the coordinates from this node match with that of another given a configurable

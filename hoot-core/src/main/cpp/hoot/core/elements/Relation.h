@@ -193,8 +193,10 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
+                       const bool recursive = true) const;
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter,
+                       const bool recursive = true);
 
 private:
 
@@ -208,9 +210,9 @@ private:
   void _makeWritable();
 
   void _visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-    QList<long>& visitedRelations) const;
+    QList<long>& visitedRelations, const bool recursive = true) const;
   void _visitRw(ElementProvider& map, ConstElementVisitor& filter,
-    QList<long> &visitedRelations);
+    QList<long>& visitedRelations, const bool recursive = true);
 };
 
 template<typename IT>

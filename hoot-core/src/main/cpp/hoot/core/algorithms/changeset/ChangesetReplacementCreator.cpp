@@ -632,7 +632,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 
   // TODO
-  //_removeRelations(refMap, refMap->getName(), _input1Relations);
+  _removeRelations(refMap, refMap->getName(), _input1Relations);
+  LOG_VARD(_input1Relations.size());
+  LOG_VARD(_input1Relations.keys());
+
 
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.
@@ -665,7 +668,9 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 
   // TODO
-  //_removeRelations(secMap, secMap->getName(), _input2Relations);
+  _removeRelations(secMap, secMap->getName(), _input2Relations);
+  LOG_VARD(_input2Relations.size());
+  LOG_VARD(_input2Relations.keys());
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
@@ -885,8 +890,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 
   // restore the relations previously removed
-  //_restoreRelations(refMap, _input1Relations);
-  //_restoreRelations(conflatedMap, _input2Relations);
+  _restoreRelations(refMap, _input1Relations);
+  _restoreRelations(conflatedMap, _input2Relations);
 
   // clean up any mistakes introduced
   _cleanup(refMap);
@@ -1152,20 +1157,20 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   // right before they are needed.
 
   ElementCriterionPtr pointCrit(new PointCriterion());
-  std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
-    new RelationWithPointMembersCriterion());
-  relationPointCrit->setAllowMixedChildren(false/*true*/);
-  OrCriterionPtr pointOr(new OrCriterion(pointCrit, relationPointCrit));
-  featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointOr;
-  //featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointCrit;
+//  std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
+//    new RelationWithPointMembersCriterion());
+//  relationPointCrit->setAllowMixedChildren(false/*true*/);
+//  OrCriterionPtr pointOr(new OrCriterion(pointCrit, relationPointCrit));
+//  featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointOr;
+  featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointCrit;
 
   ElementCriterionPtr lineCrit(new LinearCriterion());
-  std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit(
-    new RelationWithLinearMembersCriterion());
-  relationLinearCrit->setAllowMixedChildren(true/*false*/);
-  OrCriterionPtr lineOr(new OrCriterion(lineCrit, relationLinearCrit));
-  featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineOr;
-  //featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineCrit;
+//  std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit(
+//    new RelationWithLinearMembersCriterion());
+//  relationLinearCrit->setAllowMixedChildren(true/*false*/);
+//  OrCriterionPtr lineOr(new OrCriterion(lineCrit, relationLinearCrit));
+//  featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineOr;
+  featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineCrit;
 
   // Poly crit has been converted over to encapsulate RelationWithGeometryMembersCriterion, while
   // the other types have not yet (#4151).
@@ -1431,11 +1436,9 @@ void ChangesetReplacementCreator::_removeMetadataTags(const OsmMapPtr& map)
 
 void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& map)
 {
-  // TODO: move to ReportMissingElementsVisitor?
-
   ReportMissingElementsVisitor elementMarker;
-  // Originally, this was going to add reviews rather than tagging elements, but there was an ID
-  // provenance problem when using reviews.
+  // Originally, this was going to add reviews for this rather than tagging elements, but there was
+  // an ID provenance problem when using reviews.
   elementMarker.setMarkRelationsForReview(false);
   elementMarker.setMarkWaysForReview(false);
   elementMarker.setRelationKvp(MetadataTags::HootMissingChild() + "=yes");
@@ -1443,10 +1446,8 @@ void ChangesetReplacementCreator::_markElementsWithMissingChildren(OsmMapPtr& ma
   LOG_INFO("Marking elements with missing child elements...");
   map->visitRelationsRw(elementMarker);
   LOG_DEBUG(
-    "Marked " << elementMarker.getNumWaysTagged() << " ways with missing child elements.");
-  LOG_DEBUG(
-    "Marked " << elementMarker.getNumRelationsTagged() <<
-    " relations with missing child elements.");
+    "Marked " << elementMarker.getNumWaysTagged() << " ways and " <<
+    elementMarker.getNumRelationsTagged() << " relations with missing child elements.");
 
   OsmMapWriterFactory::writeDebugMap(
     map, _changesetId + "-" + map->getName() + "-after-missing-marked");
@@ -2156,13 +2157,12 @@ void ChangesetReplacementCreator::_restoreRelations(
     mapName = mapName.replace("conflated", "sec");
   }
 
-  LOG_DEBUG("Restoring relations to " << map->getName() << "...");
-  const int mapSizeBefore = map->size();
+  LOG_DEBUG("Restoring relations to " << mapName << "...");
+  //const int mapSizeBefore = map->size();
 
   LOG_VARD(relationsMap.keys());
   LOG_VARD(relationsMap.contains(mapName));
   OsmMapPtr relationsOsmMap = relationsMap[mapName];
-  LOG_VARD(relationsOsmMap.get());
   if (relationsOsmMap)
   {
     const RelationMap& relations = relationsOsmMap->getRelations();
@@ -2177,22 +2177,43 @@ void ChangesetReplacementCreator::_restoreRelations(
         if (map->containsElement(member.getElementId()))
         {
           anyMemberExistsInTargetMap = true;
-          break;
+        }
+        else
+        {
+          // TODO: change back to trace
+          LOG_DEBUG(
+            "Removing relation member: " << member.getElementId() << " from stored relation: " <<
+            relation->getElementId() << "...");
+          //LOG_VARD(member);
+          //LOG_VARD(relation);
+          relation->removeElement(member.getElementId());
         }
       }
       if (anyMemberExistsInTargetMap)
       {
+        LOG_DEBUG(
+          "Restoring relation: " << relation->getElementId() <<  " to " << mapName << "...");
+        //LOG_VARD(relation);
         map->addRelation(relation);
+      }
+      else
+      {
+        LOG_DEBUG(
+          "Not restoring relation: " << relation->getElementId() << " to " << mapName << ".");
+        //LOG_VARD(relation);
       }
     }
     OsmMapWriterFactory::writeDebugMap(
       map, _changesetId + "-" + mapName + "-after-relations-restored");
-    LOG_DEBUG("Restored " << map->size() - mapSizeBefore << " relations.");
+    LOG_DEBUG(
+      "Restored " << /*map->size() - mapSizeBefore*/map->getRelationCount() << " relation(s) to " <<
+      mapName << ".");
   }
   else
   {
     LOG_DEBUG("No relations to restore for " << mapName << ".");
   }
+  //relationsOsmMap.reset();
 }
 
 void ChangesetReplacementCreator::_dedupeMaps(const QList<OsmMapPtr>& maps)
