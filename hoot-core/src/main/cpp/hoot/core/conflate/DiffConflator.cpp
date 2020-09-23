@@ -773,6 +773,7 @@ void DiffConflator::writeChangeset(
 void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats)
 {
   // Differential specific stats - get some numbers for our output
+  // TODO: This should be more generic and handle all feature types.
 
   ElementCriterionPtr pPoiCrit(new PoiCriterion());
   CriterionCountVisitor poiCounter;

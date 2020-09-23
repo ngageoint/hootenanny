@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="hootenanny">
+    <create>
+        <node id="-1" version="0" lat="36.0440883675979293" lon="-115.0373038999999977"/>
+        <node id="-2" version="0" lat="36.0440809675979210" lon="-115.0371976999999930"/>
+        <node id="-3" version="0" lat="36.0440812675978393" lon="-115.0372493999999932"/>
+        <node id="-4" version="0" lat="36.0440926675979512" lon="-115.0371482999999984"/>
+        <node id="-5" version="0" lat="36.0421198675826915" lon="-115.0365670000000051">
+            <tag k="noexit" v="yes"/>
+        </node>
+        <node id="-6" version="0" lat="36.0430928675901683" lon="-115.0365884999999935"/>
+        <node id="-7" version="0" lat="36.0440899675979196" lon="-115.0366002000000094"/>
+        <node id="-8" version="0" lat="36.0441128132601349" lon="-115.0373297339083507">
+            <tag k="highway" v="turning_circle"/>
+        </node>
+    </create>
+    <modify>
+        <node id="374910" version="1" lat="36.0440991354718392" lon="-115.0373152793685847"/>
+    </modify>
+    <delete>
+        <node id="374912" version="1" lat="36.0440119911731855" lon="-115.0365719999999925"/>
+    </delete>
+    <delete>
+        <node id="507860" version="1" lat="36.0430929911726636" lon="-115.0365670000000051"/>
+        <node id="507861" version="1" lat="36.0421199911721573" lon="-115.0365670000000051"/>
+    </delete>
+    <create>
+        <way id="-1" version="0">
+            <nd ref="501720"/>
+            <nd ref="510740"/>
+            <nd ref="-6"/>
+            <tag k="tiger:tlid" v="201929809:201929813"/>
+            <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+            <tag k="highway" v="residential"/>
+            <tag k="name" v="Anorak Avenue"/>
+            <tag k="tiger:separated" v="no"/>
+            <tag k="tiger:name_type" v="Ave"/>
+            <tag k="source:datetime" v="2010-03-27T21:27:08Z"/>
+            <tag k="tiger:cfcc" v="A41"/>
+            <tag k="tiger:county" v="Clark, NV"/>
+            <tag k="tiger:name_base" v="Anorak"/>
+            <tag k="tiger:reviewed" v="no"/>
+        </way>
+        <way id="-2" version="0">
+            <nd ref="-7"/>
+            <nd ref="-6"/>
+            <nd ref="404517"/>
+            <nd ref="-5"/>
+            <tag k="highway" v="residential"/>
+            <tag k="name" v="Teller Street"/>
+            <tag k="tiger:name_type" v="St"/>
+            <tag k="source:datetime" v="2017-06-01T01:28:09Z"/>
+            <tag k="tiger:cfcc" v="A41"/>
+            <tag k="tiger:county" v="Clark, NV"/>
+            <tag k="tiger:name_base" v="Teller"/>
+            <tag k="tiger:reviewed" v="no"/>
+        </way>
+        <way id="-3" version="0">
+            <nd ref="-8"/>
+            <nd ref="374910"/>
+            <nd ref="-1"/>
+            <nd ref="-3"/>
+            <nd ref="-2"/>
+            <nd ref="-4"/>
+            <nd ref="-7"/>
+            <nd ref="374914"/>
+            <tag k="highway" v="residential"/>
+            <tag k="name" v="Lilac Echo Avenue"/>
+            <tag k="tiger:name_type" v="Ave"/>
+            <tag k="source:datetime" v="2018-02-18T01:07:42Z"/>
+            <tag k="tiger:cfcc" v="A41"/>
+            <tag k="tiger:county" v="Clark, NV"/>
+            <tag k="tiger:name_base" v="Lilac Echo"/>
+            <tag k="tiger:reviewed" v="no"/>
+        </way>
+    </create>
+    <modify>
+        <way id="-9" version="1">
+            <nd ref="374910"/>
+            <nd ref="-8"/>
+            <nd ref="429555"/>
+            <nd ref="429556"/>
+            <nd ref="429557"/>
+            <nd ref="429558"/>
+            <nd ref="429559"/>
+            <nd ref="-9"/>
+            <tag k="tiger:zip_right" v="89014"/>
+            <tag k="name" v="Marks Street"/>
+            <tag k="tiger:cfcc" v="A41"/>
+            <tag k="tiger:zip_right_1" v="89074"/>
+            <tag k="tiger:separated" v="no"/>
+            <tag k="source:datetime" v="2012-07-18T15:56:23.000Z"/>
+            <tag k="tiger:zip_left" v="89014"/>
+            <tag k="tiger:name_type" v="St"/>
+            <tag k="tiger:county" v="Clark, NV"/>
+            <tag k="tiger:reviewed" v="no"/>
+            <tag k="tiger:zip_left_1" v="89074"/>
+            <tag k="tiger:name_base" v="Marks"/>
+            <tag k="tiger:tlid" v="201929523"/>
+            <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+            <tag k="highway" v="residential"/>
+        </way>
+    </modify>
+    <delete>
+        <way id="15920" version="1">
+            <nd ref="374910"/>
+            <nd ref="374912"/>
+            <nd ref="374914"/>
+            <tag k="tiger:tlid" v="201967837:201967838"/>
+            <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+            <tag k="highway" v="residential"/>
+            <tag k="name" v="Lilac Echo Avenue"/>
+            <tag k="tiger:separated" v="no"/>
+            <tag k="tiger:name_type" v="Ave"/>
+            <tag k="source:datetime" v="2010-03-27T23:04:53.000Z"/>
+            <tag k="tiger:county" v="Clark, NV"/>
+            <tag k="tiger:cfcc" v="A41"/>
+            <tag k="tiger:reviewed" v="no"/>
+            <tag k="tiger:name_base" v="Lilac Echo"/>
+        </way>
+    </delete>
+    <delete>
+        <way id="31706" version="1">
+            <nd ref="374912"/>
+            <nd ref="507860"/>
+            <nd ref="404517"/>
+            <nd ref="507861"/>
+            <tag k="tiger:tlid" v="201963363:201963364:201985868"/>
+            <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+            <tag k="highway" v="residential"/>
+            <tag k="name" v="Teller Street"/>
+            <tag k="tiger:zip_left" v="89074"/>
+            <tag k="tiger:separated" v="no"/>
+            <tag k="tiger:name_type" v="St"/>
+            <tag k="source:datetime" v="2010-03-27T21:22:29.000Z"/>
+            <tag k="tiger:zip_right" v="89074"/>
+            <tag k="tiger:county" v="Clark, NV"/>
+            <tag k="tiger:cfcc" v="A41"/>
+            <tag k="tiger:reviewed" v="no"/>
+            <tag k="tiger:name_base" v="Teller"/>
+        </way>
+    </delete>
+    <delete>
+        <way id="35140" version="1">
+            <nd ref="501720"/>
+            <nd ref="510740"/>
+            <nd ref="507860"/>
+            <tag k="tiger:tlid" v="201929809:201929813"/>
+            <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+            <tag k="highway" v="residential"/>
+            <tag k="name" v="Anorak Avenue"/>
+            <tag k="tiger:separated" v="no"/>
+            <tag k="tiger:name_type" v="Ave"/>
+            <tag k="source:datetime" v="2010-03-27T21:27:08.000Z"/>
+            <tag k="tiger:county" v="Clark, NV"/>
+            <tag k="tiger:cfcc" v="A41"/>
+            <tag k="tiger:reviewed" v="no"/>
+            <tag k="tiger:name_base" v="Anorak"/>
+        </way>
+        <node id="374914" version="1" lat="36.0440940000000012" lon="-115.0358760000000018"/>
+        <node id="429555" version="1" lat="36.0449709999999968" lon="-115.0374489999999952"/>
+        <node id="429556" version="1" lat="36.0454280000000011" lon="-115.0375800000000055"/>
+        <node id="429557" version="1" lat="36.0458870000000005" lon="-115.0377289999999988"/>
+        <node id="429558" version="1" lat="36.0463820000000013" lon="-115.0378070000000008"/>
+        <node id="429559" version="1" lat="36.0466780000000000" lon="-115.0378089999999958"/>
+        <way id="71897" version="1">
+            <nd ref="374910"/>
+            <nd ref="374912"/>
+            <nd ref="374914"/>
+            <nd ref="510742"/>
+            <nd ref="510743"/>
+            <nd ref="510744"/>
+            <nd ref="368231"/>
+            <nd ref="510745"/>
+            <nd ref="482109"/>
+            <nd ref="482108"/>
+            <nd ref="455153"/>
+            <nd ref="482107"/>
+            <nd ref="482106"/>
+            <nd ref="429559"/>
+            <nd ref="429558"/>
+            <nd ref="429557"/>
+            <nd ref="429556"/>
+            <nd ref="429555"/>
+            <nd ref="374910"/>
+            <tag k="created_by" v="Merkaartor 0.11"/>
+            <tag k="amenity" v="school"/>
+            <tag k="source:datetime" v="2008-10-13T05:55:07.000Z"/>
+        </way>
+    </delete>
+</osmChange>

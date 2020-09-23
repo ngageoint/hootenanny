@@ -11,21 +11,23 @@
         <nd ref="-18109"/>
         <nd ref="-18110"/>
         <nd ref="-18107"/>
-        <tag k="source:name" v="IDP/City Graphic"/>
         <tag k="building:levels" v="2"/>
-        <tag k="hoot:poipolygon:poismerged" v="2"/>
         <tag k="amenity" v="police"/>
-        <tag k="roof:shape" v="flat"/>
+        <tag k="condition" v="functional"/>
+        <tag k="source:name" v="IDP/City Graphic"/>
+        <tag k="hoot:poipolygon:poismerged" v="2"/>
         <tag k="security:non_ic_dissem_ctl" v="limited_distribution"/>
         <tag k="security:classification" v="unclassified"/>
-        <tag k="source:res_owner" v="USA"/>
-        <tag k="building" v="yes"/>
-        <tag k="operational_status" v="operational"/>
-        <tag k="REF1" v="00011f"/>
-        <tag k="attribution" v="usNationalGeoIntelAgency"/>
-        <tag k="REF2" v="00011f"/>
-        <tag k="height" v="9"/>
-        <tag k="condition" v="functional"/>
         <tag k="error:circular" v="15"/>
+        <tag k="height" v="9"/>
+        <tag k="REF1" v="00011f"/>
+        <tag k="source:res_owner" v="USA"/>
+        <tag k="REF2" v="00011f"/>
+        <tag k="operational_status" v="operational"/>
+        <tag k="building" v="yes"/>
+        <tag k="attribution" v="usNationalGeoIntelAgency"/>
+        <tag k="roof:shape" v="flat"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
     </way>
 </osm>

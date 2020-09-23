@@ -2,12 +2,14 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="0" minlon="0" maxlat="0" maxlon="0"/>
     <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
-        <tag k="note" v="poi1;building1"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="building" v="yes"/>
         <tag k="amenity" v="prison"/>
-        <tag k="type" v="multipolygon"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="0"/>
+        <tag k="note" v="poi1;building1"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
 </osm>

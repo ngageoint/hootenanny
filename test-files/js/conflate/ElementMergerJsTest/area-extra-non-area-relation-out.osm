@@ -412,6 +412,7 @@
         <nd ref="-221306"/>
         <nd ref="-221308"/>
         <nd ref="-221276"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1991" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -791,24 +792,26 @@
         <nd ref="-221272"/>
         <nd ref="-221274"/>
         <nd ref="-220526"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-1991" role="outer"/>
         <member type="way" ref="-1992" role="inner"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="empty"/>
-        <tag k="type" v="multipolygon"/>
         <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
     <relation visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-1991" role="outer"/>
         <member type="way" ref="-1992" role="inner"/>
-        <tag k="natural" v="wood"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="alt_name" v="park"/>
-        <tag k="name" v="Mt. Davidson Park"/>
         <tag k="area" v="yes"/>
-        <tag k="type" v="multipolygon"/>
+        <tag k="name" v="Mt. Davidson Park"/>
+        <tag k="alt_name" v="park"/>
+        <tag k="natural" v="wood"/>
         <tag k="error:circular" v="15"/>
+        <tag k="type" v="multipolygon"/>
     </relation>
 </osm>

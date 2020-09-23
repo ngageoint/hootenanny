@@ -41,6 +41,8 @@
         <nd ref="-461560"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="name" v="Pier 35"/>
         <tag k="uuid" v="{f5cb9318-6902-464a-86fb-54bf5779bbb4};{4a6e0f71-9db8-49f1-8238-04dcd019aeea}"/>
         <tag k="alt_name" v="PIER 35"/>

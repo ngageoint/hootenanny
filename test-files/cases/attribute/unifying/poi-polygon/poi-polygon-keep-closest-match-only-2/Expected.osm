@@ -2506,6 +2506,8 @@
         <nd ref="-19927008"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="name" v="EriTel Corporation Office"/>
         <tag k="hoot:id" v="-19926795"/>
         <tag k="building" v="office"/>
@@ -2570,7 +2572,9 @@
         <nd ref="-19926980"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="addr:street" v="175-4 Street Asmara Eritrea"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="name" v="Bristol Pension"/>
         <tag k="tourism" v="hotel"/>
         <tag k="hoot:id" v="-19926790"/>

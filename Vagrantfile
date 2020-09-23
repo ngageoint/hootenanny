@@ -38,9 +38,17 @@ end
 # E.g. COREONLY="yes" vagrant up hoot_centos7_rpm
 $coreOnly = ENV['COREONLY']
 if $coreOnly.nil?
-  $coreOnly = "yes"
+  $coreOnly = "no"
 else
   puts "## Installing commandline Hootenanny"
+end
+
+# Decide if we install the release version or the nightly development version
+$nightly = ENV['NIGHTLY']
+if $nightly.nil?
+  $nightly = "no"
+else
+  puts "## Installing from the nightly RPMs"
 end
 
 
@@ -98,6 +106,9 @@ Vagrant.configure(2) do |config|
       aws.tags = {
         'Name' => ENV.fetch('AWS_INSTANCE_NAME_TAG', "jenkins-hootenanny-#{os.downcase}"),
         'URL'  => ENV.fetch('AWS_INSTANCE_URL_TAG', 'https://github.com/ngageoint/hootenanny'),
+        'env' => ENV.fetch('HOOT_AWS_ENV_TAG', 'testing'),
+        'use' => ENV.fetch('HOOT_AWS_USE_TAG', 'Jenkins'),
+        'group' => ENV.fetch('HOOT_AWS_GROUP_TAG', 'devops')
       }
 
       if ENV.key?('JOB_NAME')
@@ -147,7 +158,7 @@ Vagrant.configure(2) do |config|
 
   def set_provisioners(config)
     config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh", :env => {"ADDREPOS" => $addRepos, "YUMUPDATE" => $yumUpdate}
-    config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"   
+    config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
     config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
     config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
     config.vm.provision "valgrind", type: "shell", :privileged => false, :path => "scripts/valgrind/valgrind_install.sh"
@@ -170,7 +181,7 @@ Vagrant.configure(2) do |config|
     mount_shares(hoot_centos7_rpm)
 
     # NOTE: For commandline only Hootenanny, set COREONLY to "yes"
-    config.vm.provision "hootrpm", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7Rpm.sh", :env => {"YUMUPDATE" => $yumUpdate, "COREONLY" => $coreOnly}
+    config.vm.provision "hootrpm", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7Rpm.sh", :env => {"YUMUPDATE" => $yumUpdate, "COREONLY" => $coreOnly, "NIGHTLY" => $nightly}
   end
 
   # Centos7 box - Preprovisioned for compiling hootenanny
@@ -195,7 +206,7 @@ Vagrant.configure(2) do |config|
     # We do want to add repos and update this box
     # NOTE: This change applies to every target AFTER this one as well.
     $addRepos = "yes"
-    $yumUpdate = "yes"    
+    $yumUpdate = "yes"
     set_provisioners(hoot_centos7)
     aws_provider(hoot_centos7, 'CentOS7', 'minimal')
   end

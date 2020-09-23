@@ -48,6 +48,17 @@ jobs:
       - run:
           name: 'Check Copyright Headers'
           command: ./scripts/copyright/UpdateAllCopyrightHeaders.sh
+  lint:
+    working_directory: '/tmp/hootenanny'
+    machine:
+      image: ubuntu-1604:202007-01
+    steps:
+      - checkout
+      - run:
+          name: 'Lint Python Runtime Errors'
+          command: |
+            ./scripts/ci/python_lint.sh -a /tmp/hootenanny -p "--select=E9" 
+            if [ $( cat lint.log | wc -l ) -gt 0 ]; then cat lint.log && exit 1; fi
 
 workflows:
   version: 2
@@ -58,3 +69,4 @@ workflows:
           requires:
             - archive-create
       - copyright
+      - lint

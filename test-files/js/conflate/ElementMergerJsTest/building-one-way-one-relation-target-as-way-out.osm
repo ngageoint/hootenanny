@@ -12,9 +12,10 @@
         <nd ref="-222258"/>
         <nd ref="-222264"/>
         <tag k="hoot:status" v="3"/>
+        <tag k="name" v="building 1"/>
         <tag k="alt_name" v="building 2"/>
         <tag k="building" v="yes"/>
-        <tag k="name" v="building 1"/>
         <tag k="building:part" v="yes"/>
+        <tag k="error:circular" v="15"/>
     </way>
 </osm>

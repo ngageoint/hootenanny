@@ -223,9 +223,9 @@ void CalculateStatsOp::_initStatCalc()
   // Basically, we're trying to count the total calls to _applyVisitor here, which results in a
   // pass over the data. Technically the number of stats is larger, since each _applyVisitor call
   // may fuel multiple stats. However, for status reporting purposes we're more concerned with the
-  // processing time incurred by _applyVisitor, and the status is easier to update doing it this way.
-  // Admittedly, the way the stat total count is being calculated here is a very brittle way to do
-  // it but haven't come up with a better way yet. This also could eventually be tied in with
+  // processing time incurred by _applyVisitor, and the status is easier to update doing it this
+  // way. Admittedly, the way the stat total count is being calculated here is a very brittle way to
+  // do it but haven't come up with a better way yet. This also could eventually be tied in with
   // progress reporting.
 
   const int numQuickStatCalcs = _quickStatData.size();
@@ -241,7 +241,7 @@ void CalculateStatsOp::_initStatCalc()
     numSlowStatCalcs = _slowStatData.size();
 
     // the number of calls to _applyVisitor outside of a loop and always called
-    numSlowStatCalcs += 9;
+    numSlowStatCalcs += 11;
 
     if (ConfigOptions().getStatsTranslateScript() != "")
     {
@@ -274,13 +274,13 @@ void CalculateStatsOp::_initStatCalc()
         if (calcType == CreatorDescription::CalcTypeArea ||
             calcType == CreatorDescription::CalcTypeLength)
         {
-          numSizeCalcs++;
+          numSizeCalcs += 4;
         }
       }
     }
     LOG_VARD(numCallsToGenerateFeatureStats);
     // _generateFeatureStats calls _applyVisitor multiple times for each feature type
-    numSlowStatCalcs += (5 * numCallsToGenerateFeatureStats);
+    numSlowStatCalcs += (7 * numCallsToGenerateFeatureStats);
     // these _applyVisitor calls are made in _generateFeatureStats but are conditional on feature
     // type, so computing the total separately
     numSlowStatCalcs += numSizeCalcs;
@@ -366,6 +366,14 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
       _getApplyVisitor(
         new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged())),
         "POIs Merged Into Polygons");
+    const double poisMergedIntoPolysFromMap1 =
+      _getApplyVisitor(
+        new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged1())),
+        "Map 1 POIs Merged Into Polygons");
+    const double poisMergedIntoPolysFromMap2 =
+      _getApplyVisitor(
+        new SumNumericTagsVisitor(QStringList(MetadataTags::HootPoiPolygonPoisMerged2())),
+        "Map 2 POIs Merged Into Polygons");
     //we need to add any pois that may have been merged into polygons by poi/poly into the total
     //conflated feature count
     conflatedFeatureCount += poisMergedIntoPolys;
@@ -460,7 +468,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _addStat("POIs Conflatable by: " + matchCreatorName, conflatablePoiPolyPoiCount);
         _conflatableFeatureCounts[CreatorDescription::PoiPolygonPOI] += conflatablePoiPolyPoiCount;
       }
-      _addStat("Features Conflatable by: " + matchCreatorName, conflatableFeatureCountForFeatureType);
+      _addStat(
+        "Features Conflatable by: " + matchCreatorName, conflatableFeatureCountForFeatureType);
       _conflatableFeatureCounts[featureType] += conflatableFeatureCountForFeatureType;
     }
 
@@ -471,13 +480,27 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
     _addStat("Percentage of Total Features Marked for Review",
              ((double)numFeaturesMarkedForReview / (double)featureCount) * 100.0);
     _addStat("Total Reviews to be Made", numReviewsToBeMade);
-    const double unconflatedFeatureCount =
+    const double unconflatedFeatureCountFromMap1 =
+      _applyVisitor(
+        new StatusCriterion(Status::Unknown1), new FeatureCountVisitor(),
+        "Unconflated Feature Count Map 1");
+    const double unconflatedFeatureCountFromMap2 =
+      _applyVisitor(
+        new StatusCriterion(Status::Unknown2), new FeatureCountVisitor(),
+        "Unconflated Feature Count Map 2");
+    const double totalUnconflatedFeatureCount =
       _applyVisitor(
         new NotCriterion(new StatusCriterion(Status::Conflated)), new FeatureCountVisitor(),
         "Unconflated Feature Count");
-    _addStat("Total Unmatched Features", unconflatedFeatureCount);
+    _addStat("Total Unmatched Features", totalUnconflatedFeatureCount);
     _addStat("Percentage of Total Features Unmatched",
-             ((double)unconflatedFeatureCount / (double)featureCount) * 100.0);
+             ((double)totalUnconflatedFeatureCount / (double)featureCount) * 100.0);
+    _addStat("Total Unmatched Features From Map 1", unconflatedFeatureCountFromMap1);
+    _addStat("Percentage of Total Features Unmatched From Map 1",
+             ((double)unconflatedFeatureCountFromMap1 / (double)featureCount) * 100.0);
+    _addStat("Total Unmatched Features From Map 2", unconflatedFeatureCountFromMap2);
+    _addStat("Percentage of Total Features Unmatched From Map 2",
+             ((double)unconflatedFeatureCountFromMap2 / (double)featureCount) * 100.0);
 
     for (QMap<CreatorDescription::BaseFeatureType, double>::const_iterator it =
            _conflatableFeatureCounts.begin(); it != _conflatableFeatureCounts.end(); ++it)
@@ -488,7 +511,8 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
         _generateFeatureStats(it.key(), it.value(),
                               CreatorDescription::getFeatureCalcType(it.key()),
                               CreatorDescription::getElementCriterion(it.key(), map),
-                              poisMergedIntoPolys);
+                              poisMergedIntoPolys, poisMergedIntoPolysFromMap1,
+                              poisMergedIntoPolysFromMap2);
       }
     }
 
@@ -567,12 +591,12 @@ void CalculateStatsOp::apply(const OsmMapPtr& map)
 
 void CalculateStatsOp::_addStat(const QString& name, double value)
 {
-  _stats.append(SingleStat(name,value));
+  _stats.append(SingleStat(name, value));
 }
 
 void CalculateStatsOp::_addStat(const char* name, double value)
 {
-  _stats.append(SingleStat(QString(name),value));
+  _stats.append(SingleStat(QString(name), value));
 }
 
 void CalculateStatsOp::_interpretStatData(shared_ptr<const OsmMap>& constMap, StatData& d)
@@ -851,11 +875,14 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
                                              const float conflatableCount,
                                              const CreatorDescription::FeatureCalcType& type,
                                              ElementCriterionPtr criterion,
-                                             const long poisMergedIntoPolys)
+                                             const long poisMergedIntoPolys,
+                                             const long poisMergedIntoPolysFromMap1,
+                                             const long poisMergedIntoPolysFromMap2)
 {
   LOG_VARD(poisMergedIntoPolys);
   const QString description = CreatorDescription::baseFeatureTypeToString(featureType);
   LOG_VARD(description);
+  LOG_VARD(type);
 
   ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(criterion.get());
   if (mapConsumer != 0)
@@ -904,47 +931,110 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
       "Reviews To Be Made Count: " + description);
   _addStat(QString("%1 Reviews to be Made").arg(description), numFeatureReviewsToBeMade);
 
-  double unconflatedFeatureCount =
+  double unconflatedFeatureCountMap1 =
+    _applyVisitor(
+      FilteredVisitor(
+        ChainCriterion(
+          new StatusCriterion(Status::Unknown1),
+          criterion->clone()),
+      _getElementVisitorForFeatureType(featureType)),
+      "Unconflated Feature Count Map 1: " + description);
+  LOG_VARD(unconflatedFeatureCountMap1);
+  double unconflatedFeatureCountMap2 =
+    _applyVisitor(
+      FilteredVisitor(
+        ChainCriterion(
+          new StatusCriterion(Status::Unknown2),
+          criterion->clone()),
+      _getElementVisitorForFeatureType(featureType)),
+      "Unconflated Feature Count Map 2: " + description);
+  LOG_VARD(unconflatedFeatureCountMap2);
+  double totalUnconflatedFeatureCount =
     _applyVisitor(
       FilteredVisitor(
         ChainCriterion(
           new NotCriterion(new StatusCriterion(Status::Conflated)),
           criterion->clone()),
-      _getElementVisitorForFeatureType(featureType)), "Unconflated Feature Count: " + description);
-  LOG_VARD(unconflatedFeatureCount);
+      _getElementVisitorForFeatureType(featureType)),
+      "Total Unconflated Feature Count: " + description);
+  LOG_VARD(totalUnconflatedFeatureCount);
   if (featureType == CreatorDescription::PoiPolygonPOI)
   {
     //we need to subtract any pois that may have been merged into polygons by poi/poly from the
     //unconflated feature count for this feature type
-    unconflatedFeatureCount -= poisMergedIntoPolys;
-    LOG_VARD(unconflatedFeatureCount);
+    totalUnconflatedFeatureCount -= poisMergedIntoPolys;
+    LOG_VARD(totalUnconflatedFeatureCount);
+    unconflatedFeatureCountMap1 -= poisMergedIntoPolysFromMap1;
+    LOG_VARD(unconflatedFeatureCountMap1);
+    unconflatedFeatureCountMap2 -= poisMergedIntoPolysFromMap2;
+    LOG_VARD(unconflatedFeatureCountMap2);
   }
-  _addStat(QString("Unmatched %1s").arg(description), unconflatedFeatureCount);
+  _addStat(QString("Unmatched %1s").arg(description), totalUnconflatedFeatureCount);
+  _addStat(QString("Unmatched %1s From Map 1").arg(description), unconflatedFeatureCountMap1);
+  _addStat(QString("Unmatched %1s From Map 2").arg(description), unconflatedFeatureCountMap2);
 
   if (type == CreatorDescription::CalcTypeLength)
   {
-    _addStat(QString("Meters of %1 Processed by Conflation").arg(description),
+    _addStat(QString("Total Meters of %1s").arg(description),
       _applyVisitor(
-        FilteredVisitor(ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
-        criterion->clone()), ConstElementVisitorPtr(new LengthOfWaysVisitor())),
-        "Meters Processed: " + description));
+        FilteredVisitor(
+          criterion->clone(),
+          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+        "Total Meters: " + description));
+    _addStat(QString("Meters of Conflated %1s").arg(description),
+      _applyVisitor(
+        FilteredVisitor(
+          ChainCriterion(
+            ElementCriterionPtr(new StatusCriterion(Status::Conflated)), criterion->clone()),
+          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+        "Meters Conflated: " + description));
+    _addStat(QString("Meters of Unmatched %1s From Map 1").arg(description),
+      _applyVisitor(
+        FilteredVisitor(
+          ChainCriterion(
+            ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), criterion->clone()),
+          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+        "Meters Unmatched Map 1: " + description));
+    _addStat(QString("Meters of Unmatched %1s From Map 2").arg(description),
+      _applyVisitor(
+        FilteredVisitor(
+          ChainCriterion(
+            ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), criterion->clone()),
+          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+        "Meters Unmatched Map 2: " + description));
     _numGenerateFeatureStatCalls++;
   }
   else if (type == CreatorDescription::CalcTypeArea)
   {
-    _addStat(QString("Meters Squared of %1s Processed by Conflation").arg(description),
+    _addStat(QString("Total Square Meters of %1s").arg(description),
       _applyVisitor(
         FilteredVisitor(
-          ChainCriterion(ElementCriterionPtr(new StatusCriterion(Status::Conflated)),
-          criterion->clone()), ConstElementVisitorPtr(new CalculateAreaVisitor())),
-        "Area Processed: " + description));
+          criterion->clone(),
+          ConstElementVisitorPtr(new LengthOfWaysVisitor())),
+        "Total Square Meters: " + description));
+    _addStat(QString("Square Meters of Conflated %1s").arg(description),
+      _applyVisitor(
+        FilteredVisitor(
+          ChainCriterion(
+            ElementCriterionPtr(new StatusCriterion(Status::Conflated)), criterion->clone()),
+          ConstElementVisitorPtr(new CalculateAreaVisitor())),
+        "Area Conflated: " + description));
+    _addStat(QString("Square Meters of Unmatched %1s From Map 1").arg(description),
+      _applyVisitor(
+        FilteredVisitor(
+          ChainCriterion(
+            ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), criterion->clone()),
+          ConstElementVisitorPtr(new CalculateAreaVisitor())),
+        "Area Unmatched Map 1: " + description));
+    _addStat(QString("Square Meters of Unmatched %1s From Map 2").arg(description),
+      _applyVisitor(
+        FilteredVisitor(
+          ChainCriterion(
+            ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), criterion->clone()),
+          ConstElementVisitorPtr(new CalculateAreaVisitor())),
+        "Area Unmatched Map 2: " + description));
     _numGenerateFeatureStatCalls++;
   }
-//  else
-//  {
-//    _addStat(QString("Amount %1 Processed by Conflation").arg(description), -1);
-//    _numGenerateFeatureStatCalls++;
-//  }
 
   double percentageOfTotalFeaturesConflated = 0.0;
   if (totalFeatures > 0.0)
@@ -963,15 +1053,37 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   }
   _addStat(QString("Percentage of %1s Marked for Review").arg(description),
            percentageOfTotalFeaturesMarkedForReview);
+  double percentageOfMap1FeaturesUnconflated = 0.0;
+  if (totalFeatures > 0.0)
+  {
+    percentageOfMap1FeaturesUnconflated =
+      ((double)unconflatedFeatureCountMap1 / (double)totalFeatures) * 100.0;
+  }
+  LOG_VARD(percentageOfMap1FeaturesUnconflated);
+  _addStat(
+    QString("Percentage of Unmatched %1s From Map 1").arg(description),
+    percentageOfMap1FeaturesUnconflated);
+  double percentageOfMap2FeaturesUnconflated = 0.0;
+  if (totalFeatures > 0.0)
+  {
+    percentageOfMap2FeaturesUnconflated =
+      ((double)unconflatedFeatureCountMap2 / (double)totalFeatures) * 100.0;
+  }
+  LOG_VARD(percentageOfMap2FeaturesUnconflated);
+  _addStat(
+    QString("Percentage of Unmatched %1s From Map 2").arg(description),
+    percentageOfMap2FeaturesUnconflated);
   double percentageOfTotalFeaturesUnconflated = 0.0;
   if (totalFeatures > 0.0)
   {
     percentageOfTotalFeaturesUnconflated =
-      ((double)unconflatedFeatureCount / (double)totalFeatures) * 100.0;
+      ((double)totalUnconflatedFeatureCount / (double)totalFeatures) * 100.0;
   }
   LOG_VARD(percentageOfTotalFeaturesUnconflated);
   _addStat(
     QString("Percentage of Unmatched %1s").arg(description), percentageOfTotalFeaturesUnconflated);
+
+
 
   _numGenerateFeatureStatCalls += 6;
 }

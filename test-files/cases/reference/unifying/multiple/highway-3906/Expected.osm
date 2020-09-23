@@ -2018,6 +2018,8 @@
         <nd ref="-834"/>
         <nd ref="-813"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
+        <tag k="hoot:poipolygon:poismerged:1" v="0"/>
+        <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="man_made" v="water_tower"/>
         <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>

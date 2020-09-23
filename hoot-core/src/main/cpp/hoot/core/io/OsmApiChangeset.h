@@ -455,8 +455,22 @@ private:
    * @return _errorPathname with "error" replaced by "remaining"
    */
   QString getRemainingFilename();
-
+  /**
+   * @brief fixOrphanedNodesSplit When a changeset info object is split it may produce orphaned nodes, this
+   *   function splits them out to the `_cleanup` object
+   * @param changeset Changeset info with one half of the data and any potential orphaned nodes
+   * @param split Changeset info with the other half of the data split off
+   * @return Split object to push back on queue
+   */
   ChangesetInfoPtr fixOrphanedNodesSplit(const ChangesetInfoPtr& changeset, const ChangesetInfoPtr& split);
+  /**
+   * @brief insertElement Insert an element into the changeset in a generic function
+   * @param element Element to insert
+   * @param type Changeset type (create/modify/delete)
+   * @param elementMap List of elements for the changeset types (_nodes/_ways/_relations)
+   * @param all List of all elements in the changeset (_allNodes/_allWays/_allRelations)
+   */
+  void insertElement(const ChangesetElementPtr& element, ChangesetType type, ChangesetTypeMap& elementMap, ChangesetElementMap& all);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   ChangesetElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */

@@ -27,6 +27,7 @@
 #ifndef CHANGESETDERIVER_H
 #define CHANGESETDERIVER_H
 
+// Hoot
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/ElementComparer.h>
@@ -35,8 +36,8 @@ namespace hoot
 {
 
 /**
- * Calculates the changeset difference between a source and target map.  This logic is based on
- * the same logic used in Osmosis.
+ * Calculates the changeset difference between a source and target map. This logic is based on
+ * similar logic to that used in Osmosis: https://wiki.openstreetmap.org/wiki/Osmosis.
  */
 class ChangesetDeriver : public ChangesetProvider
 {
@@ -67,13 +68,16 @@ public:
    */
   virtual Change readNextChange() override;
 
-  long getNumFromElementsParsed() const { return _numFromElementsParsed; }
-  long getNumToElementsParsed() const { return _numToElementsParsed; }
+  virtual int getNumFromElementsParsed() const override { return _numFromElementsParsed; }
+  virtual int getNumToElementsParsed() const override { return _numToElementsParsed; }
 
-  int getNumCreateChanges() const { return _changesByType[Change::ChangeType::Create]; }
-  int getNumModifyChanges() const { return _changesByType[Change::ChangeType::Modify]; }
-  int getNumDeleteChanges() const { return _changesByType[Change::ChangeType::Delete]; }
-  int getNumChanges() const
+  virtual int getNumCreateChanges() const override
+  { return _changesByType[Change::ChangeType::Create]; }
+  virtual int getNumModifyChanges() const override
+  { return _changesByType[Change::ChangeType::Modify]; }
+  virtual int getNumDeleteChanges() const override
+  { return _changesByType[Change::ChangeType::Delete]; }
+  virtual int getNumChanges() const override
   { return getNumCreateChanges() + getNumModifyChanges() + getNumDeleteChanges(); }
 
   void setAllowDeletingReferenceFeatures(bool allow) { _allowDeletingReferenceFeatures = allow; }

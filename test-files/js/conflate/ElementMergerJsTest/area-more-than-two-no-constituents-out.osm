@@ -2,13 +2,13 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="0" minlon="0" maxlat="0" maxlon="0"/>
     <way visible="true" id="-92234" timestamp="1970-01-01T00:00:00Z" version="1">
-        <tag k="website" v="http://sfrecpark.org/destination/margaret-s-hayward-playground/"/>
-        <tag k="leisure" v="park"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="alt_name" v="Margaret S.Hayward Playground;baseball field"/>
-        <tag k="name" v="Margaret S. Hayward Playground"/>
         <tag k="area" v="yes"/>
+        <tag k="website" v="http://sfrecpark.org/destination/margaret-s-hayward-playground/"/>
+        <tag k="name" v="Margaret S. Hayward Playground"/>
+        <tag k="alt_name" v="Margaret S.Hayward Playground;baseball field"/>
         <tag k="sport" v="baseball"/>
+        <tag k="leisure" v="park"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>
