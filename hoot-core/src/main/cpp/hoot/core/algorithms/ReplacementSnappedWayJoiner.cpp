@@ -140,6 +140,7 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
       }
       LOG_VART(newWay->getVersion());
       LOG_VART(newWay->getStatus());
+      _joinedWayIdMappings[way->getId()] = newWay->getId();
       _map->replace(way, newWay);
       pidsUsed.insert(pid);
     }

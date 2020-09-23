@@ -350,6 +350,12 @@ private:
   void _restoreRelations(OsmMapPtr& map, OsmMapPtr& relationsMap);
 
   /*
+   * TODO
+   */
+  void _syncJoinedMemberWays(
+    const QList<OsmMapPtr>& relationMaps, const QHash<long, long>& joinedWayIdMappings);
+
+  /*
    * Keeps track of the changeset versions for features
    */
   QMap<ElementId, long> _getIdToVersionMappings(const OsmMapPtr& map) const;
@@ -390,10 +396,24 @@ private:
    */
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
-  void _conflate(OsmMapPtr& map);
+  /*
+   * TODO
+   */
+  void _conflate(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps);
+
+  /*
+   * TODO
+   */
   void _removeConflateReviews(OsmMapPtr& map);
+
+  /*
+   * TODO
+   */
   void _clean(OsmMapPtr& map);
 
+  /*
+   * TODO
+   */
   void _snapUnconnectedWays(
     OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
     const QString& typeCriterionClassName, const bool markSnappedWays,
@@ -417,6 +437,9 @@ private:
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList());
 
+  /*
+   * TODO
+   */
   void _cleanup(OsmMapPtr& map);
 
   /*
@@ -426,14 +449,17 @@ private:
   void _synchronizeIds(
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
 
+  /*
+   * TODO
+   */
   OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
 
   /*
    * Removes duplicates between one map and another, ignoring elemment IDs
    */
-  void _dedupeMaps(const QList<OsmMapPtr>& maps);
-  void _dedupeMapPair(OsmMapPtr map1, OsmMapPtr map2, ElementDeduplicator& deduper,
-                      std::shared_ptr<ConstOsmMapConsumer> deduperNodeCrit);
+//  void _dedupeMaps(const QList<OsmMapPtr>& maps);
+//  void _dedupeMapPair(OsmMapPtr map1, OsmMapPtr map2, ElementDeduplicator& deduper,
+//                      std::shared_ptr<ConstOsmMapConsumer> deduperNodeCrit);
 };
 
 }

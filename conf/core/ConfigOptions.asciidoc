@@ -5135,10 +5135,12 @@ remove them.
 
 The way joiner implementation used by the `WayJoinerOp` to repair way splits after a conflation job.
 
-This operation can take on the following options:
-* `hoot::ReplacementSnappedWayJoiner`
-* `hoot::WayJoinerAdvanced`
-* `hoot::WayJoinerBasic`
+This option can use the following implementations:
+* `hoot::WayJoinerBasic`              - default implementation
+* `hoot::WayJoinerAdvanced`           - has some additional features compared to the default
+                                        implementation; currently used by Attribute Conflation and
+                                        conflation done during Cut and Replace
+* `hoot::ReplacementSnappedWayJoiner` - has way joining feature specific to Cut and Replace
 
 === way.joiner.advanced.strict.name.match
 

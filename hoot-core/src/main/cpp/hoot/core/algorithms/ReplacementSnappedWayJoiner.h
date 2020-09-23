@@ -44,7 +44,16 @@ public:
 
   static std::string className() { return "hoot::ReplacementSnappedWayJoiner"; }
 
+  /**
+   * TODO
+   */
   ReplacementSnappedWayJoiner();
+
+  /**
+   * TODO
+   *
+   * @param refIdToVersionMappings
+   */
   ReplacementSnappedWayJoiner(const QMap<ElementId, long>& refIdToVersionMappings);
   virtual ~ReplacementSnappedWayJoiner() = default;
 

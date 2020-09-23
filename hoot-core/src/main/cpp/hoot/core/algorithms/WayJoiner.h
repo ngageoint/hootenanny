@@ -61,7 +61,23 @@ public:
 
   virtual int getNumJoined() const { return _numJoined; }
 
+  QHash<long, long> getJoinedWayIdMappings() const { return _joinedWayIdMappings; }
+
 protected:
+
+  /** Debugging flag to leave parent IDs intact for output */
+  bool _leavePid;
+  /** Pointer to the map to work on */
+  OsmMapPtr _map;
+
+  // TODO
+  QHash<long, long> _joinedWayIdMappings;
+
+  int _numJoined;
+  int _numProcessed;
+  int _totalWays;
+
+  int _taskStatusUpdateInterval;
 
   /**
    * @brief joinParentChild Simplest joining algorithm that joins a way with a parent id to that
@@ -95,17 +111,6 @@ protected:
    * @return true if the two ways were joined; false otherwise
    */
   virtual bool _joinWays(const WayPtr& parent, const WayPtr& child);
-
-  /** Debugging flag to leave parent IDs intact for output */
-  bool _leavePid;
-  /** Pointer to the map to work on */
-  OsmMapPtr _map;
-
-  int _numJoined;
-  int _numProcessed;
-  int _totalWays;
-
-  int _taskStatusUpdateInterval;
 
 private:
 
