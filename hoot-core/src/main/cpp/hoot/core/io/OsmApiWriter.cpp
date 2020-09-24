@@ -392,7 +392,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         else if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
         {
           //  Close the changeset
-          _closeChangeset(request, id);
+          _closeChangeset(request, id, changesetSize);
           //  Signal for a new changeset id
           id = -1;
         }
@@ -564,7 +564,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           else if (id > 0 && _threadIdle[index].getElapsed() > 10 * 1000)
           {
             //  Close the current changeset so all data is "committed"
-            _closeChangeset(request, id);
+            _closeChangeset(request, id, changesetSize);
             id = -1;
           }
           _threadStatusMutex.unlock();
@@ -581,7 +581,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
   }
   //  Close the changeset if one is still open
   if (id != -1)
-    _closeChangeset(request, id);
+    _closeChangeset(request, id, changesetSize);
   //  Update the thread to complete if it didn't fail
   ThreadStatus status = _getThreadStatus(index);
   if (status != ThreadStatus::Failed && status != ThreadStatus::Unknown)
@@ -824,7 +824,7 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
-void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
+void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id, long changesetSize)
 {
   try
   {
@@ -844,8 +844,9 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id)
       //  Changeset closed successfully
       _changesetCountMutex.lock();
       _changesetCount++;
-      //  Keep track of the last changeset ID closed inside the mutex
-      _lastChangesetId = id;
+      //  Keep track of the last changeset ID closed inside the mutex, for non-empty changesets
+      if (changesetSize > 0)
+        _lastChangesetId = id;
       _changesetCountMutex.unlock();
       break;
     default:

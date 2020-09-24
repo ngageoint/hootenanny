@@ -179,8 +179,9 @@ private:
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
    * @param request - Network request object initialized with OSM API URL
    * @param id - ID of the changeset to close
+   * @param size - Size of the changeset to close, empty changesets don't update last changeset ID
    */
-  void _closeChangeset(HootNetworkRequestPtr request, long id);
+  void _closeChangeset(HootNetworkRequestPtr request, long id, long size);
   /**
    * @brief _uploadChangeset Upload a changeset to the OSM API
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Diff_upload:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fupload
