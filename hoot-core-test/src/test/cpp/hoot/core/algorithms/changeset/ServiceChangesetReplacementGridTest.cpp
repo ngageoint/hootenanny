@@ -57,11 +57,12 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
+  // TODO: re-enable
   CPPUNIT_TEST(orphanedNodes1Test);
   // TODO: having some trouble with repeatability here after an initial test is run...will come back
   // to these soon
-  //CPPUNIT_TEST(orphanedNodes2Test);
-  //CPPUNIT_TEST(droppedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
+  CPPUNIT_TEST(droppedNodes1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
