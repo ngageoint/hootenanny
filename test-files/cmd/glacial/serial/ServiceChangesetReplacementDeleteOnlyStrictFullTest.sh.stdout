@@ -18,8 +18,7 @@ retainment filter options:
 source formats:  xml
 way snap tolerance:  45.0
 existing way node tolerance:  45.0
-disable conflation:  --disable-conflation
-disable cleaning: 
+enable conflation: 
 clean ref database beforehand:  true
 extra params: 
 
@@ -59,3 +58,5 @@ Total Deletions: 1,908
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementDeleteOnlyStrictFullTest-xml-replaced.osm for verification...
 
+21:14:51.720 WARN   ...core/scoring/MapComparator.cpp( 380) Number of nodes does not match (1: 1212; 2: 1150)
+21:14:51.721 WARN   ...core/scoring/MapComparator.cpp( 346) 	Nodes in map 1 and not in map 2 (limit 5): [788, 789, 790, 791, 792]

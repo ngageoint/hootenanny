@@ -192,10 +192,6 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
   _changesetCreator->setFullReplacement(true);
   _changesetCreator->setBoundsInterpretation(
     ChangesetReplacementCreator::BoundsInterpretation::Lenient/*Hybrid*/);
-  _changesetCreator->setWaySnappingEnabled(true);
-  _changesetCreator->setConflationEnabled(false/*true*/);
-  _changesetCreator->setCleaningEnabled(false/*true*/);
-  _changesetCreator->setTagOobConnectedWays(true);
 
   _changesetApplier.reset(new OsmApiDbSqlChangesetApplier(_dataToReplaceUrl));
 

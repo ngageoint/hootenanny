@@ -39,10 +39,6 @@ IDs in the secondary data are not retained and those elements treated as complet
                                    use of +--hybrid-bounds+. With this option specified, no features overlapping the specified bounds will be 
                                    completely replaced, but they may be modified. With this option omitted, features overlapping the bounds 
                                    may be completely replaced. See the  "Bounds Handling" section for more detail.
-* +--hybrid-bounds+              - Determines how strict the interpretation of the specified bounds is during feature replacement. Precludes 
-                                   use of +--strict-bounds+. This option uses the strict bounds interpretation for linear and point features 
-                                   and the lenient bounds interpretation for polygon features. See the "Bounds Handling" section for more 
-                                   detail.
 * +--geometry-filters+           - Optional criteria used to control the geometry type of the features that are replaced. When this option is
                                    omitted, features of all geometry types are replaced by features of a like geometry type. See the 
                                    "Geometry Filtering" section for more detail.
@@ -59,14 +55,8 @@ IDs in the secondary data are not retained and those elements treated as complet
                                    "Retainment Filtering" section for more detail.
 * +--retainment-filter-options+  - Optional configuration options for the filters specified in +--retainment-filters+. See the 
                                    "Retainment Filtering" section for more detail.
-* +--disable-way-snapping+       - Disables the snapping of unconnected ways at the seams between the data used for replacement and the data 
-                                   being replaced. See the "Unconnected Way Snapping" section for more detail.
-* +--disable-conflation+         - Disables the conflation of new secondary features with unremoved reference features. See the "Conflation" 
-                                   section for more detail.
-* +--disable-cleaning+           - Disables cleaning of data. Cleaning must be run before conflation, so this option is ignored unless 
-                                   +--disable-conflation+ is also enabled. See the "Conflation" section for more detail.
-* +--disable-oob-way-handling+   - Determines whether Hootenanny automatically handles protecting out of bounds immediately connected reference 
-                                   ways from deletion in the changeset output. See the ""Bounds Handling" section for more detail.
+* +--conflate+                   - Enables the conflation of new secondary features with unremoved reference features near the edge of the 
+                                   replacement boundary. See the "Conflation" section for more detail.
 * +--stats+                      - Displays changeset statistics and may be optionally followed by an output JSON file name to write the 
                                    statistics to.
 * +--write-bounds+               - If the +convert.bounding.box+ configuration option is specified, outputs a file containing the specified 
@@ -75,7 +65,7 @@ IDs in the secondary data are not retained and those elements treated as complet
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds | --hybrid-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--disable-way-snapping] [--disable-conflation] [--disable-cleaning] [--disable-oob-way-handling] [--stats filename] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds | --hybrid-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--conflate] [--stats filename] [--write-bounds]
 --------------------------------------
 
 === Examples
@@ -95,7 +85,7 @@ The high level workflow for the command looks like the following:
   entire specified bounds. If performing overlapping only replacement, the shape cut out is the shape of the secondary data used for replacement.
 * Combine the cut out reference data back with the replacement data from the secondary map
 * Conflate the reference and secondary data (optional)
-* Snap replacement linear features that are disconnected at the specified bounds seam back to the reference data (optional)
+* Snap replacement linear features that are disconnected at the specified bounds seam back to the reference data
 * Derive a difference changeset between the new map with replacement data added and the original reference map with removed data
 
 === Input Data
@@ -125,9 +115,9 @@ features in the reference layer being replaced.
 Full replacement works well with points and polygons (e.g. POIs and buildings) when you absolutely do not want any of the original reference 
 data left in an AOI. If there are large gaps across the AOI between the reference and secondary data, you may want to omit +--full-replacement+ 
 to do an overlapping only replacement, thus enabling continuity of the data across the AOI but also risking duplication of features if they
-cannot be conflated. Full replacement may not work well with linear features (i.e. roads) under certain circumstances when combined with 
-+--strict-bounds+ and/or conflation is enabled, as the output may end up leaving large enough gaps between the original and replacement data 
-that the two cannot easily be joined back together with way snapping.
+cannot be conflated later on. Full replacement may not work well with linear features (i.e. roads) under certain circumstances when combined 
+with +--strict-bounds+ and/or conflation is enabled, as the output may end up leaving large enough gaps between the original and replacement 
+data that the two cannot easily be joined back together with way snapping.
 
 === Bounds Handling
 
@@ -152,11 +142,10 @@ deletion in the output changeset. This is only necessary when the +--strict-boun
 tag them with the tag, hoot:change:exclude:delete=yes. This can either be done automatically by Hootenanny as part of this command's execution
 or can be done before the call to this command. 
 
-With the +--disable-oob-way-handling+ option omitted, and the +--strict-bounds+ option omitted, Hootenanny will automatically add the 
-+hoot:change:exclude:delete=yes+ tag to such reference ways for XML, JSON, OSM API database, and Hootenanny API database inputs only. To do 
-so the reference input must be sufficiently larger than the replacement bounds. If this option is specified and the +--strict-bounds+ option 
-is omitted, Hootenanny will not automatically tag such ways, and the caller of this command is responsible for tagging such reference ways 
-with the hoot:change:exclude:delete=yes+ tag. 
+With the +--strict-bounds+ option omitted, Hootenanny will automatically add the +hoot:change:exclude:delete=yes+ tag to such reference ways 
+for XML, JSON, OSM API database, and Hootenanny API database inputs only. To do so the reference input must be sufficiently larger than the 
+replacement bounds. If this option is specified and the +--strict-bounds+ option is omitted, Hootenanny will not automatically tag such ways, 
+and the caller of this command is responsible for tagging such reference ways with the hoot:change:exclude:delete=yes+ tag. 
 
 === Filtering
 
@@ -213,23 +202,20 @@ cause all features in the reference layer to be replaced, thus overriding any sp
 
 === Conflation
 
-Conflation is optional and can be used to combine overlapping data between the two inputs when +--full-replacement+ is omitted or to clean up 
-features at the specified bounds seam where the secondary data replaces the references data when +--full-replacement+ is specified. To disable 
-conflation use the +--disable-conflation+ option. 
+Conflation is optional and can be used to combine overlapping data between the two inputs when the +--full-replacement+ option is omitted or 
+to clean up features at the specified bounds seam where the secondary data replaces the references data when the +--full-replacement+ option 
+is specified. Conflation generally is not needed during replacement but has proven to be most useful when using the strict replacement bounds 
+interpretation. To enable conflation add the +--conflate+ option. 
 
 Both reference and secondary map inputs are processed separately for each geometry type they contain (point/line/polygon), therefore cross 
 geometry conflation algorithms, such as POI to Polygon conflation, will have no effect on the conflated output. Cross geometry conflation 
 algorithms must be run on the map data outside of the usage of this command. 
 
-Hootenanny always runs cleaning operations on input data before conflating them in order to get the best conflated output result. If you opt
-not to run conflation with +--disable-conflation+, you may also opt out of the cleaning operations by using the +--disable-cleaning+ option. If
-conflation is enabled by omitting +--disable-conflation+ cleaning may not be disabled and +--disable-cleaning+ is ignored.
-
 === Unconnected Way Snapping
 
 Unconnected way snapping is used to repair cut ways at the replacement boundary seams when the +--full-replacement+ option is enabled. The
 input data must be of a slightly larger area than the replacement AOI in order for there to be any ways to snap back to. This is primarily 
-useful with roads but can be made to work with any linear data. The +--disable-way-snapping+ can be specified to disable way snapping.
+useful with roads but can be made to work with any linear data.
 
 Alternatively, marking snappable ways as needing review instead of snapping them can be performed to provide more control over the changeset 
 output. See the "Snap Unconnected Ways" section of the User Documentation for more detail.

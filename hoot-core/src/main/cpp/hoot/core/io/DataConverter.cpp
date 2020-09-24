@@ -502,6 +502,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
     writer->setSchemaTranslationScript(_translation);
     writer->open(output);
     writer->write(map);
+    writer->close();
     currentStep++;
 
     LOG_INFO(
