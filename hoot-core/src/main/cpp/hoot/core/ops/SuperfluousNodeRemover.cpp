@@ -52,10 +52,32 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousNodeRemover)
 
 SuperfluousNodeRemover::SuperfluousNodeRemover() :
 _removeNodes(true),
+_numExplicitlyExcluded(0),
 _ignoreInformationTags(false),
-_unallowedOrphanKvps(ConfigOptions().getSuperfluousNodeRemoverUnallowedOrphanKvps()),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_taskStatusUpdateInterval(1000)
 {
+  setConfiguration(conf());
+}
+
+void SuperfluousNodeRemover::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts(conf);
+
+  _unallowedOrphanKvps = opts.getSuperfluousNodeRemoverUnallowedOrphanKvps();
+  _taskStatusUpdateInterval = opts.getTaskStatusUpdateInterval();
+
+  const QSet<QString> excludeIdsStrs = opts.getSuperfluousNodeRemoverExcludeIds().toSet();
+  for (QSet<QString>::const_iterator it = excludeIdsStrs.begin(); it != excludeIdsStrs.end(); ++it)
+  {
+    bool ok = false;
+    _excludeIds.insert((*it).toLong(&ok));
+    if (!ok)
+    {
+      throw IllegalArgumentException(
+        QString("Invalid element exclude ID passed to ") + QString::fromStdString(className()));
+    }
+  }
+  LOG_VARD(_excludeIds.size());
 }
 
 void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
@@ -64,6 +86,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   _numProcessed = 0;    // _numProcessed reflects total elements processed
   _usedNodeIds.clear();
   _superfluousNodeIds.clear();
+  _numExplicitlyExcluded = 0;
 
   // Let's collect the IDs of all the nodes we can't remove first.
 
@@ -128,16 +151,23 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     LOG_VART(n->getElementId());
     LOG_VART(n->getTags().getNonDebugCount());
 
+    if (_excludeIds.contains(n->getId()))
+    {
+      LOG_TRACE(
+        "Not marking " << n->getElementId() << " for removal, as its explicitly excluded...");
+      _usedNodeIds.insert(n->getId());
+      _numExplicitlyExcluded++;
+    }
     // There original reason behind adding this is that there a potential bug in
     // HighwaySnapMerger::_snapEnds that will leave turning circle nodes orphaned from roads.
     // Turning circles are always expected to be a road way node. If its an actual bug, it should
     // eventually be fixed, but this logic will clean them up for the time being. The types we allow
     // to be orphaned are configurable in case we ever need to add others.
-    if (_usedNodeIds.find(n->getId()) == _usedNodeIds.end() &&
-        n->getTags().hasAnyKvp(_unallowedOrphanKvps))
+    else if (_usedNodeIds.find(n->getId()) == _usedNodeIds.end() &&
+             n->getTags().hasAnyKvp(_unallowedOrphanKvps))
     {
       LOG_TRACE(
-        "Skipping " << n->getElementId() << " with unallowed orphan kvp: " <<
+        "Marking " << n->getElementId() << " for removal with unallowed orphan kvp: " <<
         n->getTags().getFirstKvp(_unallowedOrphanKvps) << "...");
     }
     else if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
@@ -232,6 +262,8 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         " nodes / " << StringUtils::formatLargeNumber(nodesWgs84->size()) << " total nodes.");
     }
   }
+
+  LOG_VARD(_numExplicitlyExcluded);
 }
 
 long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,

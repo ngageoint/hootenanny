@@ -189,6 +189,15 @@ public:
    */
   static QString geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId);
 
+  //LOG_VART(GeometryUtils::geometryTypeIdToString(g->getGeometryTypeId()));
+  /**
+   * TODO
+   *
+   * @param geometry
+   * @return
+   */
+  static QString geometryTypeIdToString(const std::shared_ptr<geos::geom::Geometry>& geometry);
+
   /**
    * Reads a file containing one or more rectangular AOIs
    *
@@ -215,7 +224,9 @@ public:
    * @param envelope Bounding envelope used for sorting goemetries by distance
    * @return Single geometry object that contains all goemetries merged (geos::geom::Geometry::union)
    */
-  static std::shared_ptr<geos::geom::Geometry> mergeGeometries(std::vector<std::shared_ptr<geos::geom::Geometry>> geometries, const geos::geom::Envelope& envelope);
+  static std::shared_ptr<geos::geom::Geometry> mergeGeometries(
+    std::vector<std::shared_ptr<geos::geom::Geometry>> geometries,
+    const geos::geom::Envelope& envelope);
 };
 
 }

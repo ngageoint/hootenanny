@@ -194,15 +194,11 @@ private:
   QString _input1;
   // cached data being replaced
   OsmMapPtr _input1Map;
-  // TODO
-  //QList<OsmMapPtr> _input1Relations;
 
   // path to the input with data used for replacement; overrides use of _input2Map
   QString _input2;
   // cached replacement data
   OsmMapPtr _input2Map;
-  // TODO
-  //QList<OsmMapPtr> _input2Relations;
 
   // path to the changeset output file
   QString _output;

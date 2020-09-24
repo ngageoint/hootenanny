@@ -4685,6 +4685,13 @@ Adds the specified status to elements.  Valid values are: 'Conflated', 'Invalid'
 
 Flat file containing street types and their abbreviations.
 
+=== superfluous.node.remover.exclude.ids
+
+* Data Type: list
+* Default Value: ``
+
+TODO
+
 === superfluous.node.remover.unallowed.orphan.kvps
 
 * Data Type: list
@@ -4702,6 +4709,13 @@ remove these if they are not part of a way or relation. Generally, only add to t
 features that conflation is unable to merge correctly. Fixing their handling during conflation is
 preferred to adding them to this list. Keep the list alphabetized by key, then value (we may want to
 eventually move it to its own config file).
+
+=== superfluous.way.remover.exclude.ids
+
+* Data Type: list
+* Default Value: ``
+
+TODO
 
 === tag.ancestor.differencer.name
 

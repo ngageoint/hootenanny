@@ -31,9 +31,10 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/util/Configurable.h>
 
-// Standard
-#include <set>
+// Qt
+#include <QSet>
 
 namespace hoot
 {
@@ -46,7 +47,7 @@ class OsmMap;
  *
  * @todo what about one node ways?
  */
-class SuperfluousWayRemover : public OsmMapOperation
+class SuperfluousWayRemover : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -70,6 +71,11 @@ public:
    */
   void removeWays();
 
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
+
   virtual QString getInitStatusMessage() const { return "Removing superfluous ways..."; }
 
   virtual QString getCompletedStatusMessage() const
@@ -88,6 +94,11 @@ public:
 private:
 
   std::shared_ptr<OsmMap> _inputMap;
+
+  // TODO
+  QSet<long> _excludeIds;
+  // TODO
+  int _numExplicitlyExcluded;
 };
 
 }

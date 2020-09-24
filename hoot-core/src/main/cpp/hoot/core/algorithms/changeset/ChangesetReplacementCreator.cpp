@@ -40,6 +40,7 @@
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 
+#include <hoot/core/criterion/ChildElementCriterion.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementIdCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
@@ -97,6 +98,7 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
+#include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
@@ -720,12 +722,14 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // for relations here, which has since been removed from the codebase.
 
   // Combine the cookie cut ref map back with the secondary map, so we can conflate the two
-  // together if needed.
+  // together if needed. TODO: update
   _combineMaps(cookieCutRefMap, secMap, false, _changesetId + "-combined-before-conflation");
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
 
   // CONFLATE / CLEAN
+
+  // TODO: update
 
   // conflate the cookie cut ref map with the sec map if conflation is enabled
 
@@ -750,7 +754,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     // if we don't. May need further investigation.
     else if (_cleaningEnabled)
     {
-      _clean(conflatedMap);
+      _clean(conflatedMap, relationMaps);
       conflatedMap->setName("cleaned-" + GeometryTypeCriterion::typeToString(geometryType));
     }
   }
@@ -770,6 +774,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 
   // SNAP
+
+  // TODO: only snapping near the replacement bounds may help prevent some bad snaps in the output
 
   if (_currentChangeDerivationPassIsLinear && _waySnappingEnabled)
   {
@@ -817,10 +823,12 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   // Crop the original ref and conflated maps appropriately for changeset derivation.
   _cropMapForChangesetDerivation(
     refMap, _boundsOpts.changesetRefKeepEntireCrossingBounds,
-    _boundsOpts.changesetRefKeepOnlyInsideBounds, _changesetId + "-ref-cropped-for-changeset");
+    _boundsOpts.changesetRefKeepOnlyInsideBounds, _changesetId +
+    "-ref-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
   _cropMapForChangesetDerivation(
     conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
-    _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId + "-sec-cropped-for-changeset");
+    _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId +
+    "-sec-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
 
   if (_boundsInterpretation == BoundsInterpretation::Lenient &&
       _currentChangeDerivationPassIsLinear)
@@ -1851,6 +1859,13 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const QList<OsmMapPt
     SuperfluousConflateOpRemover::removeSuperfluousOps();
   }
 
+  const QStringList nodeRelationMemberIds =
+    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Node);
+  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), nodeRelationMemberIds);
+  const QStringList wayRelationMemberIds =
+    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Way);
+  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), wayRelationMemberIds);
+
   LOG_STATUS("Applying pre-conflate operations...");
   NamedOp preOps(ConfigOptions().getConflatePreOps());
   preOps.apply(map);
@@ -1863,6 +1878,9 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const QList<OsmMapPt
   LOG_STATUS("Applying post-conflate operations...");
   NamedOp postOps(ConfigOptions().getConflatePostOps());
   postOps.apply(map);
+
+  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), QStringList());
+  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), QStringList());
 
   // TODO
   std::shared_ptr<WayJoinerOp> wayJoinerOp =
@@ -1877,6 +1895,56 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const QList<OsmMapPt
   LOG_VART(MapProjector::toWkt(map->getProjection()));
   OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-conflated");
   LOG_DEBUG("Conflated map size: " << map->size());
+}
+
+QStringList ChangesetReplacementCreator::_getRelationMemberElementIdsForConfig(
+  const QList<OsmMapPtr>& relationMaps, const ElementType::Type& elementType) const
+{
+  LOG_DEBUG("Getting relation member IDs...");
+
+  QSet<QString> uniqueIdStrs;
+  for (QList<OsmMapPtr>::const_iterator relationMapItr = relationMaps.begin();
+       relationMapItr != relationMaps.end(); ++relationMapItr)
+  {
+    OsmMapPtr relationsMap = *relationMapItr;
+
+    // This won't work b/c the child elements aren't actually in the map, just the relations are.
+//    ElementCriterionPtr crit(
+//      new ChainCriterion(
+//        ElementCriterionPtr(new ChildElementCriterion(relationsMap)),
+//        ElementCriterionPtr(new ElementTypeCriterion(elementType))));
+//    std::shared_ptr<UniqueElementIdVisitor> idVis(new UniqueElementIdVisitor());
+//    FilteredVisitor filteredVis(crit, idVis);
+//    relationsMap->visitRo(filteredVis);
+//    const std::set<ElementId>& ids = idVis->getElementSet();
+//    for (std::set<ElementId>::const_iterator idItr = ids.begin(); idItr != ids.end(); ++idItr)
+//    {
+//      uniqueIdStrs.insert(QString::number((*idItr).getId()));
+//    }
+
+    const RelationMap& relations = relationsMap->getRelations();
+    for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+    {
+      RelationPtr relation = it->second;
+      // TODO: change to trace
+      LOG_VARD(relation->getElementId());
+
+      const std::vector<RelationData::Entry>& members = relation->getMembers();
+      for (size_t i = 0; i < members.size(); i++)
+      {
+        const RelationData::Entry member = members[i];
+        LOG_VARD(member.getElementId());
+        if (member.getElementId().getType() == elementType)
+        {
+          const QString idStr = QString::number(member.getElementId().getId());
+          LOG_DEBUG("Adding ID: " << idStr << "...");
+          uniqueIdStrs.insert(idStr);
+        }
+      }
+    }
+  }
+  LOG_VARD(uniqueIdStrs.size());
+  return uniqueIdStrs.toList();
 }
 
 void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
@@ -1904,15 +1972,25 @@ void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
     map, _changesetId + "-" + map->getName() + "-conflate-reviews-removed");
 }
 
-void ChangesetReplacementCreator::_clean(OsmMapPtr& map)
+void ChangesetReplacementCreator::_clean(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps)
 {
   map->setName("cleaned");
   LOG_STATUS(
     "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
 
+  const QStringList nodeRelationMemberIds =
+    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Node);
+  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), nodeRelationMemberIds);
+  const QStringList wayRelationMemberIds =
+    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Way);
+  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), wayRelationMemberIds);
+
   // TODO: since we're never conflating when we call clean, should we remove cleaning ops like
   // IntersectionSplitter?
   MapCleaner().apply(map);
+
+  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), QStringList());
+  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), QStringList());
 
   MapProjector::projectToWgs84(map);  // cleaning works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -2080,7 +2158,7 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
   orphanedNodeRemover.apply(map);
   LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
 
-  //TODO: need this?
+//  //TODO: need this?
 //  RemoveInvalidRelationVisitor invalidRelationsRemover;
 //  map->visitRw(invalidRelationsRemover);
 //  LOG_DEBUG(invalidRelationsRemover.getCompletedStatusMessage());

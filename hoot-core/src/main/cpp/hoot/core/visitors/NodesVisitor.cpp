@@ -33,8 +33,7 @@ void NodesVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
-    _n.append(n);
+    _n.append(std::dynamic_pointer_cast<const Node>(e));
   }
 }
 
