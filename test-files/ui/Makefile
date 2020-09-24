@@ -140,8 +140,8 @@ load-data: clean
 		\
 		VALUES ( \
 		'ff47f751-c831-41ee-800f-5ef8b9371ee3', \
-		1568933324000, \
-		1568933325000, \
+		extract(epoch from now()), \
+		extract(epoch from now()), \
 		31536000, \
 		'', \
 		-1541432234)"
