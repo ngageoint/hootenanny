@@ -1947,57 +1947,6 @@ QStringList ChangesetReplacementCreator::_getRelationMemberElementIdsForConfig(
   return uniqueIdStrs.toList();
 }
 
-void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
-{
-  LOG_INFO("Removing reviews added during conflation from " << map->getName() << "...");
-
-  RemoveElementsVisitor removeVis;
-  removeVis.addCriterion(ElementCriterionPtr(new RelationCriterion("review")));
-  removeVis.addCriterion(
-    ElementCriterionPtr(
-      new NotCriterion(
-        std::shared_ptr<TagCriterion>(
-          new TagCriterion(
-            MetadataTags::HootReviewType(),
-            QString::fromStdString(ReportMissingElementsVisitor::className()))))));
-  removeVis.setChainCriteria(true);
-  removeVis.setRecursive(false);
-  //LOG_STATUS("\t" << removeVis.getInitStatusMessage());
-  map->visitRw(removeVis);
-  LOG_DEBUG(removeVis.getCompletedStatusMessage());
-
-  MemoryUsageChecker::getInstance().check();
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-conflate-reviews-removed");
-}
-
-void ChangesetReplacementCreator::_clean(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps)
-{
-  map->setName("cleaned");
-  LOG_STATUS(
-    "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
-
-  const QStringList nodeRelationMemberIds =
-    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Node);
-  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), nodeRelationMemberIds);
-  const QStringList wayRelationMemberIds =
-    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Way);
-  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), wayRelationMemberIds);
-
-  // TODO: since we're never conflating when we call clean, should we remove cleaning ops like
-  // IntersectionSplitter?
-  MapCleaner().apply(map);
-
-  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), QStringList());
-  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), QStringList());
-
-  MapProjector::projectToWgs84(map);  // cleaning works in planar
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-cleaned");
-  LOG_DEBUG("Cleaned map size: " << map->size());
-}
-
 void ChangesetReplacementCreator::_snapUnconnectedWays(
   OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
   const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
@@ -2174,6 +2123,57 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 
   // get out of orthographic
   MapProjector::projectToWgs84(map);
+}
+
+void ChangesetReplacementCreator::_clean(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps)
+{
+  map->setName("cleaned");
+  LOG_STATUS(
+    "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
+
+  const QStringList nodeRelationMemberIds =
+    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Node);
+  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), nodeRelationMemberIds);
+  const QStringList wayRelationMemberIds =
+    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Way);
+  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), wayRelationMemberIds);
+
+  // TODO: since we're never conflating when we call clean, should we remove cleaning ops like
+  // IntersectionSplitter?
+  MapCleaner().apply(map);
+
+  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), QStringList());
+  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), QStringList());
+
+  MapProjector::projectToWgs84(map);  // cleaning works in planar
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-cleaned");
+  LOG_DEBUG("Cleaned map size: " << map->size());
+}
+
+void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
+{
+  LOG_INFO("Removing reviews added during conflation from " << map->getName() << "...");
+
+  RemoveElementsVisitor removeVis;
+  removeVis.addCriterion(ElementCriterionPtr(new RelationCriterion("review")));
+  removeVis.addCriterion(
+    ElementCriterionPtr(
+      new NotCriterion(
+        std::shared_ptr<TagCriterion>(
+          new TagCriterion(
+            MetadataTags::HootReviewType(),
+            QString::fromStdString(ReportMissingElementsVisitor::className()))))));
+  removeVis.setChainCriteria(true);
+  removeVis.setRecursive(false);
+  //LOG_STATUS("\t" << removeVis.getInitStatusMessage());
+  map->visitRw(removeVis);
+  LOG_DEBUG(removeVis.getCompletedStatusMessage());
+
+  MemoryUsageChecker::getInstance().check();
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-conflate-reviews-removed");
 }
 
 void ChangesetReplacementCreator::_synchronizeIds(

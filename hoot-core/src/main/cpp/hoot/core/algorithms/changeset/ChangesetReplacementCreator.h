@@ -375,6 +375,27 @@ private:
   OsmMapPtr _getImmediatelyConnectedOutOfBoundsWays(const ConstOsmMapPtr& map) const;
 
   /*
+   * TODO
+   */
+  QStringList _getRelationMemberElementIdsForConfig(
+    const QList<OsmMapPtr>& relationMaps, const ElementType::Type& elementType) const;
+
+  /*
+   * TODO
+   */
+  void _conflate(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps);
+
+  /*
+   * TODO
+   */
+  void _removeConflateReviews(OsmMapPtr& map);
+
+  /*
+   * TODO
+   */
+  void _clean(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps);
+
+  /*
    * Excludes all features within the specified bounds from deletion during changeset derivation
    */
   void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map);
@@ -391,21 +412,6 @@ private:
    * MetadataTags::HootSnapped()=snapped_way tags
    */
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
-
-  /*
-   * TODO
-   */
-  void _conflate(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps);
-
-  /*
-   * TODO
-   */
-  void _removeConflateReviews(OsmMapPtr& map);
-
-  /*
-   * TODO
-   */
-  void _clean(OsmMapPtr& map);
 
   /*
    * TODO
