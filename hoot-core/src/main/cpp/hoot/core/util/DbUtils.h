@@ -86,6 +86,14 @@ public:
    */
   static QString getPostgresDbVersion(const QSqlDatabase& database);
 
+  /**
+   * TODO
+   *
+   * @param url
+   * @return
+   */
+  static bool isDbUrl(const QString& url);
+
 private:
 
   static void _modifyTableConstraints(const QSqlDatabase& database, const QString& tableName,

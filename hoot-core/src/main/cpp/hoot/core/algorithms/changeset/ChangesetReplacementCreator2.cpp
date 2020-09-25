@@ -187,7 +187,8 @@ void ChangesetReplacementCreator2::_processMaps(
 
   // Combine the cookie cut ref map back with the secondary map, so we can conflate the two
   // together if needed. TODO: update
-  _combineMaps(cookieCutRefMap, secMap, false, _changesetId + "-combined-before-conflation");
+  MapUtils::combineMaps(cookieCutRefMap, secMap, false);
+  OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
 
@@ -307,9 +308,9 @@ void ChangesetReplacementCreator2::_processMaps(
     }
 
     // combine the conflated map with the immediately connected out of bounds ways
-    _combineMaps(
-      conflatedMap, immediatelyConnectedOutOfBoundsWays, true,
-      _changesetId + "-conflated-connected-combined");
+    MapUtils::combineMaps(conflatedMap, immediatelyConnectedOutOfBoundsWays, true);
+    OsmMapWriterFactory::writeDebugMap(
+      conflatedMap, _changesetId + "-conflated-connected-combined");
 
     // Snap the connected ways to other ways in the conflated map. Mark the ways that were
     // snapped, as we'll need that info in the next step.
@@ -326,9 +327,9 @@ void ChangesetReplacementCreator2::_processMaps(
 
     // Copy the connected ways back into the ref map as well, so the changeset will derive
     // properly.
-    _combineMaps(
-      refMap, immediatelyConnectedOutOfBoundsWays, true,
-      _changesetId + "-ref-connected-combined");
+    MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
+    OsmMapWriterFactory::writeDebugMap(
+      conflatedMap, _changesetId + "-ref-connected-combined");
 
     immediatelyConnectedOutOfBoundsWays.reset();
   }

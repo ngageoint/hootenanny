@@ -190,4 +190,9 @@ QString DbUtils::getPostgresDbVersion(const QSqlDatabase& database)
   return version;
 }
 
+bool DbUtils::isDbUrl(const QString& url)
+{
+  return url.toLower().startsWith("osmapidb://") || url.toLower().startsWith("hootapidb://");
+}
+
 }

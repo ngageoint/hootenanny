@@ -40,9 +40,7 @@
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 
-#include <hoot/core/criterion/ChildElementCriterion.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
-#include <hoot/core/criterion/ElementIdCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
@@ -91,6 +89,7 @@
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/MapProjector.h>
@@ -106,7 +105,6 @@
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/visitors/UniqueElementIdVisitor.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>
@@ -678,8 +676,9 @@ void ChangesetReplacementCreator1::_processMaps(
   // for relations here, which has since been removed from the codebase.
 
   // Combine the cookie cut ref map back with the secondary map, so we can conflate the two
-  // together if needed. TODO: update
-  _combineMaps(cookieCutRefMap, secMap, false, _changesetId + "-combined-before-conflation");
+  // together if needed.
+  MapUtils::combineMaps(cookieCutRefMap, secMap, false);
+  OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
 
@@ -797,9 +796,9 @@ void ChangesetReplacementCreator1::_processMaps(
     }
 
     // combine the conflated map with the immediately connected out of bounds ways
-    _combineMaps(
-      conflatedMap, immediatelyConnectedOutOfBoundsWays, true,
-      _changesetId + "-conflated-connected-combined");
+    MapUtils::combineMaps(conflatedMap, immediatelyConnectedOutOfBoundsWays, true);
+    OsmMapWriterFactory::writeDebugMap(
+      conflatedMap, _changesetId + "-conflated-connected-combined");
 
     // Snap the connected ways to other ways in the conflated map. Mark the ways that were
     // snapped, as we'll need that info in the next step.
@@ -816,9 +815,9 @@ void ChangesetReplacementCreator1::_processMaps(
 
     // Copy the connected ways back into the ref map as well, so the changeset will derive
     // properly.
-    _combineMaps(
-      refMap, immediatelyConnectedOutOfBoundsWays, true,
-      _changesetId + "-ref-connected-combined");
+    MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
+    OsmMapWriterFactory::writeDebugMap(
+      conflatedMap, _changesetId + "-ref-connected-combined");
 
     immediatelyConnectedOutOfBoundsWays.reset();
   }
@@ -1119,12 +1118,6 @@ bool ChangesetReplacementCreator1::_roadFilterExists() const
   return false;
 }
 
-bool ChangesetReplacementCreator1::_isDbUrl(const QString& url) const
-{
-  // TODO: move to DbUtils
-  return url.toLower().startsWith("osmapidb://") || url.toLower().startsWith("hootapidb://");
-}
-
 QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   ChangesetReplacementCreator1::_getCombinedFilters(
     std::shared_ptr<ChainCriterion> nonGeometryFilter)
@@ -1274,7 +1267,7 @@ OsmMapPtr ChangesetReplacementCreator1::_loadInputMap(
   }
 
   OsmMapPtr map;
-  if (_isDbUrl(inputUrl))
+  if (DbUtils::isDbUrl(inputUrl))
   {
     // Caching inputs only helps with file based inputs and isn't really possible for db inputs due
     // to the potential size, so skip caching if the source is a db. Our db query crops
@@ -1729,13 +1722,10 @@ void ChangesetReplacementCreator1::_clean(OsmMapPtr& map)
 QMap<ElementId, long> ChangesetReplacementCreator1::_getIdToVersionMappings(
   const OsmMapPtr& map) const
 {
-  // TODO: move to ElementIdToVersionMapper as static method
-
   LOG_INFO("Mapping element IDs to element versions for: " << map->getName() << "...");
 
   ElementIdToVersionMapper idToVersionMapper;
   idToVersionMapper.apply(map);
-  MemoryUsageChecker::getInstance().check();
   LOG_DEBUG(idToVersionMapper.getCompletedStatusMessage());
   const QMap<ElementId, long> idToVersionMappings = idToVersionMapper.getMappings();
   LOG_VART(idToVersionMappings.size());
@@ -1776,38 +1766,10 @@ void ChangesetReplacementCreator1::_addChangesetDeleteExclusionTags(OsmMapPtr& m
     map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-1");
 }
 
-void ChangesetReplacementCreator1::_combineMaps(
-  OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes, const QString& debugFileName)
-{
-  // TODO: move this to MapUtils
-
-  LOG_VART(map1.get());
-  LOG_VART(map2.get());
-
-  MapProjector::projectToWgs84(map1);
-  MapProjector::projectToWgs84(map2);   // not exactly sure yet why this needs to be done
-
-  if (map2->size() == 0)
-  {
-    LOG_DEBUG("Combined map size: " << map1->size());
-    return;
-  }
-
-  LOG_INFO("Combining maps: " << map1->getName() << " and " << map2->getName() << "...");
-  map1->append(map2, throwOutDupes);
-  LOG_VART(MapProjector::toWkt(map1->getProjection()));
-  LOG_DEBUG("Combined map size: " << map1->size());
-
-  MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(map1, debugFileName);
-}
-
 void ChangesetReplacementCreator1::_snapUnconnectedWays(
   OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
   const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
 {
-  // TODO: move to UnconnectedWaySnapper as static?
-
   LOG_DEBUG(
     "Snapping ways for map: " << map->getName() << ", with filter type: " <<
     typeCriterionClassName << ", snap way statuses: " << snapWayStatuses <<
@@ -2028,7 +1990,6 @@ void ChangesetReplacementCreator1::_synchronizeIds(
 
     // get rid of straggling nodes
     // TODO: should we run _cleanup here instead and move it from its earlier call?
-    // TODO: make a static call here
     SuperfluousNodeRemover orphanedNodeRemover;
     orphanedNodeRemover.apply(replacementMap);
     LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());

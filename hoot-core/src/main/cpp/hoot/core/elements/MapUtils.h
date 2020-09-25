@@ -81,6 +81,16 @@ public:
    * @todo Should we have something like reader.include.debug.tags instead of this?
    */
   static void dropMetadataTags(const OsmMapPtr& map);
+
+  /**
+   * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
+   * as an element in the first map
+   *
+   * @param map1
+   * @param map2
+   * @param throwOutDupes
+   */
+  static void combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes);
 };
 
 }

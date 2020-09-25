@@ -254,13 +254,6 @@ protected:
                              const GeometryTypeCriterion::GeometryType& geometryType);
 
   /*
-   * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
-   * as an element in the first map
-   */
-  void _combineMaps(
-    OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes, const QString& debugFileName);
-
-  /*
    * TODO
    */
   void _removeConflateReviews(OsmMapPtr& map);
@@ -372,8 +365,6 @@ private:
   void _printJobDescription() const;
 
   bool _roadFilterExists() const;
-
-  bool _isDbUrl(const QString& url) const;
 
   void _setInputFilter(
     std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
