@@ -174,10 +174,7 @@ public:
   void setRetainmentFilters(const QStringList& filterClassNames);
   void setChainRetainmentFilters(const bool chain) { _chainRetainmentFilters = chain; }
   void setRetainmentFilterOptions(const QStringList& optionKvps);
-  void setWaySnappingEnabled(const bool enabled) { _waySnappingEnabled = enabled; }
   void setConflationEnabled(const bool enabled) { _conflationEnabled = enabled; }
-  void setCleaningEnabled(const bool enabled) { _cleaningEnabled = enabled; }
-  void setTagOobConnectedWays(const bool addTag) { _tagOobConnectedWays = addTag; }
   void setChangesetId(const QString& id) { _changesetId = id; }
 
 private:
@@ -249,19 +246,8 @@ private:
   // Configuration options to pass to the filters in _retainmentFilter.
   Settings _retainmentFilterOptions;
 
-  // turn on/off post conflate way snapping
-  bool _waySnappingEnabled;
-
   // turn on/off conflation of cookie cut data being replaced with replacement data
   bool _conflationEnabled;
-
-  // turn on/off cleaning of input data; cannot be disabled if conflation is enabled
-  bool _cleaningEnabled;
-
-  // Tagging out of bounds connected ways allows for preventing deletion of ways outside of the
-  // replacement bounds when lenient bounds interpretation is enabled. If false, the tags should
-  // added manually before performing the replacement.
-  bool _tagOobConnectedWays;
 
   // controls cropping
   BoundsOptions _boundsOpts;
@@ -360,6 +346,21 @@ private:
   void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map);
 
   /*
+   * TODO
+   */
+  void _conflate(OsmMapPtr& map);
+
+  /*
+   * TODO
+   */
+  void _removeConflateReviews(OsmMapPtr& map);
+
+  /*
+   * TODO
+   */
+  void _clean(OsmMapPtr& map);
+
+  /*
    * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
    * as an element in the first map
    */
@@ -371,10 +372,6 @@ private:
    * MetadataTags::HootSnapped()=snapped_way tags
    */
   void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
-
-  void _conflate(OsmMapPtr& map);
-  void _removeConflateReviews(OsmMapPtr& map);
-  void _clean(OsmMapPtr& map);
 
   void _snapUnconnectedWays(
     OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,

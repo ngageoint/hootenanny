@@ -30,10 +30,9 @@ set -e
 # 15 - file formats - what types of outputs do we want to generate?; semicolon delimited list: db, xml, and/or json
 # 16 - way snap tolerance (m) - how far can we snap ways to other ways?; leave empty to specify 0.0m 
 # 17 - way snap node tolerance (m) - how far can we snap way nodes directly to other way nodes?; leave empty to specify 0.0m 
-# 18 - disable conflation; true or false; conflates by default
-# 19 - disable cleaning; true or false; cleans by default; cleaning can't be disabled if conflation is enabled
-# 20 - clean ref database before use; true or false; allows for consecutive runs against the same ref database
-# 21 - extra params; anything extra params or config options you want to pass in for a custom config; applied to all commands
+# 18 - enable conflation; true or false
+# 19 - clean ref database before use; true or false; allows for consecutive runs against the same ref database
+# 20 - extra params; anything extra params or config options you want to pass in for a custom config; applied to all commands
 
 # TODO: 
 # - consolidate the three replacement workflows into a single function
@@ -177,29 +176,21 @@ else
 fi
 echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE 
 
-DISABLE_CONFLATION=${18}
-if [ "$DISABLE_CONFLATION" == "true" ]; then
-  DISABLE_CONFLATION="--disable-conflation"
+ENABLE_CONFLATION=${18}
+if [ "$ENABLE_CONFLATION" == "true" ]; then
+  ENABLE_CONFLATION="--conflate"
 else
-  DISABLE_CONFLATION=""
+  ENABLE_CONFLATION=""
 fi
-echo "disable conflation: " $DISABLE_CONFLATION
+echo "enable conflation: " $ENABLE_CONFLATION
 
-DISABLE_CLEANING=${19}
-if [ "$DISABLE_CLEANING" == "true" ]; then
-  DISABLE_CLEANING="--disable-cleaning"
-else
-  DISABLE_CLEANING=""
-fi
-echo "disable cleaning: " $DISABLE_CLEANING
-
-CLEAN_REF_DATABASE_BEFOREHAND=${20}
+CLEAN_REF_DATABASE_BEFOREHAND=${19}
 if [ "$CLEAN_REF_DATABASE_BEFOREHAND" == "" ]; then
   CLEAN_REF_DATABASE_BEFOREHAND="true"
 fi
 echo "clean ref database beforehand: " $CLEAN_REF_DATABASE_BEFOREHAND
 
-EXTRA_PARAMS=${21}
+EXTRA_PARAMS=${20}
 echo "extra params: " $EXTRA_PARAMS
 
 # SET UP TEST FILES
@@ -287,7 +278,7 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo ""
   echo "Deriving a changeset between the osm api db and the hoot api db layers over: $REPLACEMENT_AOI, to file: $CHANGESET_DB that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION $DISABLE_CLEANING
+  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
 
   # CHANGESET APPLICATION
 
@@ -366,7 +357,7 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_XML that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION $DISABLE_CLEANING
+  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
 
   # CHANGESET APPLICATION
 
@@ -434,7 +425,7 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_JSON that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $DISABLE_CONFLATION $DISABLE_CLEANING
+  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
 
   # CHANGESET APPLICATION
 
