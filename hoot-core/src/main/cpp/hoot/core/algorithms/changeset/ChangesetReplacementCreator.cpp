@@ -731,7 +731,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     else
     {
       _clean(conflatedMap, relationMaps);
-      conflatedMap->setName("cleaned-" + GeometryTypeCriterion::typeToString(geometryType));
+      conflatedMap->setName("cleaned-" + GeometryTypeCriterion::typeToString(geometryType));r
     }
   }
 

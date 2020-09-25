@@ -387,6 +387,21 @@ private:
   void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map);
 
   /*
+   * TODO
+   */
+  void _conflate(OsmMapPtr& map);
+
+  /*
+   * TODO
+   */
+  void _removeConflateReviews(OsmMapPtr& map);
+
+  /*
+   * TODO
+   */
+  void _clean(OsmMapPtr& map);
+
+  /*
    * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
    * as an element in the first map
    */
