@@ -44,6 +44,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1159,5 +1160,15 @@ NOT EXISTS
         }
 
         return id;
+    }
+
+    public static LocalDateTime getJobStartDate(String jobId) {
+        Timestamp startTime = createQuery()
+                .select(commandStatus.start.min())
+                .from(commandStatus)
+                .where(commandStatus.jobId.eq(jobId))
+                .fetchFirst();
+
+        return startTime.toLocalDateTime();
     }
 }

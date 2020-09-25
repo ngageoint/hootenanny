@@ -94,7 +94,8 @@ class WaitOverpassUpdate extends GrailCommand {
                 throw new WebApplicationException(new NotFoundException(), Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
             }
 
-            String time = startTime.minusMinutes(5).toString(); // get 5 minutes before in case the update happened before this command was run
+            LocalDateTime jobStartTime = DbUtils.getJobStartDate(jobId); // check if changeset id exists in overpass since the time the job was initially run
+            String time = jobStartTime.minusMinutes(2).toString(); // get 2 minutes before just for a little leeway
             String query = "[out:csv(::changeset)][bbox:{{bbox}}];"
                     + "("
                     + "node(newer:\"" + time + "\");"
