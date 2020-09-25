@@ -2038,13 +2038,13 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
   orphanedNodeRemover.apply(map);
   LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
 
-//  //TODO: need this?
-//  RemoveInvalidRelationVisitor invalidRelationsRemover;
-//  map->visitRw(invalidRelationsRemover);
-//  LOG_DEBUG(invalidRelationsRemover.getCompletedStatusMessage());
-//  RemoveInvalidMultilineStringMembersVisitor invalidMlsRelationsRemover;
-//  map->visitRw(invalidMlsRelationsRemover);
-//  LOG_DEBUG(invalidMlsRelationsRemover.getCompletedStatusMessage());
+  // TODO
+  RemoveInvalidRelationVisitor invalidRelationsRemover;
+  map->visitRw(invalidRelationsRemover);
+  LOG_DEBUG(invalidRelationsRemover.getCompletedStatusMessage());
+  RemoveInvalidMultilineStringMembersVisitor invalidMlsRelationsRemover;
+  map->visitRw(invalidMlsRelationsRemover);
+  LOG_DEBUG(invalidMlsRelationsRemover.getCompletedStatusMessage());
 
   // This will remove any relations that were already empty or became empty after we removed
   // duplicated members.
