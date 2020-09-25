@@ -150,8 +150,8 @@ class WaitOverpassUpdate extends GrailCommand {
                 DbUtils.tagTimeoutTask(jobId);
                 String msg = "Overpass sync wait time exceeded.";
                 throw new WebApplicationException(new NotFoundException(), Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
-            } else if (this.params.getApplyTags()) {
-                DbUtils.removeTimeoutTag(jobId);
+            } else if (this.params.getTaskInfo() != null) {
+                DbUtils.removeTimeoutTag(this.params.getTaskInfo());
             }
 
             logger.info("Database sync complete...");
