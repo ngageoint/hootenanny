@@ -604,6 +604,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     _markElementsWithMissingChildren(refMap);
   }
 
+  // TODO: If removing/restoring relations can't work, another idea is to leave the relations in
+  // but remove children that aren't of the correct geometry type without removing their relation
+  // member refs.
+
   // TODO
   OsmMapPtr refRelationsMap = _removeRelations(refMap);
   LOG_VARD(refRelationsMap->size());
@@ -1775,11 +1779,11 @@ void ChangesetReplacementCreator::_combineMaps(
   OsmMapWriterFactory::writeDebugMap(map1, debugFileName);
 }
 
-void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const QList<OsmMapPtr>& /*relationMaps*/)
+void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps)
 {
   // TODO: move some of this to a ConflateUtils class?
 
-  map->setName("conflated");
+  //map->setName("conflated");
 
   conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), true);
   if (_boundsInterpretation != BoundsInterpretation::Lenient)
@@ -1823,7 +1827,7 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const QList<OsmMapPt
   conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), QStringList());
   conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), QStringList());
 
-   TODO
+  // TODO
   std::shared_ptr<WayJoinerOp> wayJoinerOp =
     std::dynamic_pointer_cast<WayJoinerOp>(
       postOps.getAppliedOperation(QString::fromStdString(WayJoinerOp::className())));
@@ -2052,9 +2056,9 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
   MapProjector::projectToWgs84(map);
 }
 
-void ChangesetReplacementCreator::_clean(OsmMapPtr& map, const QList<OsmMapPtr>& /*relationMaps*/)
+void ChangesetReplacementCreator::_clean(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps)
 {
-  map->setName("cleaned");
+  //map->setName("cleaned");
   LOG_STATUS(
     "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
 
