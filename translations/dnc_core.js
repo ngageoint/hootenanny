@@ -56,7 +56,16 @@ dnc = {
 
     // Now add an o2s[A,L,P] feature to the dnc.rawSchema
     // We can drop features but this is a nice way to see what we would drop
-    dnc.rawSchema = translate.addEmptyFeature(dnc.rawSchema);
+    if (config.getOgrOutputFormat() == 'shp')
+    {
+      // Add tag1, tag2, tag3 and tag4
+      dnc.rawSchema = translate.addEmptyFeature(dnc.rawSchema);
+    }
+    else
+    {
+      // Just add tag1
+      dnc.rawSchema = translate.addSingleO2sFeature(dnc.rawSchema);
+    }
 
     // Add the empty Review layers
     dnc.rawSchema = translate.addReviewFeature(dnc.rawSchema);
@@ -735,7 +744,7 @@ dnc = {
         tags.condition = 'construction';
         delete tags[i];
         continue;
-      }    
+      }
     } // End Cleanup loop
 
     // Lifecycle tags
@@ -751,11 +760,11 @@ dnc = {
           if (tags.construction)
           {
             tags[typ] = tags.construction;
-            delete tags.construction;           
+            delete tags.construction;
           }
           else
           {
-            tags[typ] = cycleList[typ]; 
+            tags[typ] = cycleList[typ];
           }
           tags.condition = 'construction';
           break;
@@ -1376,7 +1385,7 @@ dnc = {
     {
       dnc.configOut = {};
       dnc.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-      dnc.configOut.OgrSplitO2s = config.getOgrSplitO2s();
+      dnc.configOut.OgrFormat = config.getOgrOutputFormat();
       dnc.configOut.OgrThrowError = config.getOgrThrowError();
       dnc.configOut.OgrAddUuid = config.getOgrAddUuid();
 
@@ -1615,25 +1624,21 @@ dnc = {
       // Shapefiles can't handle fields > 254 chars
       // If the tags are > 254 char, split into pieces. Not pretty but stops errors
       // A nicer thing would be to arrange the tags until they fit neatly
-      if (str.length < 255 || dnc.configOut.OgrSplitO2s == 'false')
+      if (dnc.configOut.OgrFormat == 'shp')
       {
-        // return {attrs:{tag1:str}, tableName: tableName};
-        attrs = {tag1:str};
-      }
-      else
-      {
-        // Not good. Will fix with the rewrite of the tag splitting code
-        if (str.length > 1012)
-        {
-          hoot.logTrace('o2s tags truncated to fit in available space.');
-          str = str.substring(0,1012);
-        }
+        // Throw a warning that text will get truncated.
+        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
 
-        // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
+        // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
+        // which means that it returns an empty string.
         attrs = {tag1:str.substring(0,253),
           tag2:str.substring(253,506),
           tag3:str.substring(506,759),
           tag4:str.substring(759,1012)};
+      }
+      else
+      {
+        attrs = {tag1:str};
       }
 
       returnData.push({attrs: attrs, tableName: tableName});

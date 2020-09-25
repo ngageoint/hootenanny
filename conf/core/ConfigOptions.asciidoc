@@ -3070,16 +3070,8 @@ to be simplified. For example : watrcrsl_hydro instead of 'watrcrsl@hydro(*)_lin
 * Default Value: ``
 
 This is used to pass the output format (file extension: shp, gdb etc) to translation scripts to enable output format specific translations.
-E.g. Setting this to 'shp' would be telling the translation script to shorten attribute names to 10 characters and keep text
-attributes below the 255 character maximum length.
-
-=== ogr.split.o2s
-
-* Data Type: bool
-* Default Value: `false`
-
-If the list of o2s tags is > 255 char, split it into into 254 char long pieces. If this is false,
-it will be exported as one big string.
+E.g. Setting this to 'shp' would be telling the translation script to shorten attribute names to 10 characters, keep text
+attributes below the 255 character maximum length and split tags in o2s_X files into 254 char chunks.
 
 === ogr.strict.checking
 

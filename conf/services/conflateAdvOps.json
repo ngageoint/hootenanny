@@ -426,14 +426,6 @@
                 "hoot_key":"ogr.esri.fcsubtype"
             },
             {
-                "id":"ogr_split_o2s",
-                "elem_type":"checkbox",
-                "description":"If the list of o2s tags is > 255 char, split it into into 254 char long pieces. If this is false, it will be exported as one big string.",
-                "name":"OGR Split O2S",
-                "defaultvalue":"false",
-                "hoot_key":"ogr.split.o2s"
-            },
-            {
                 "id":"ogr_thematic_structure",
                 "elem_type":"checkbox",
                 "description":"Export data in Thematic Groups (TransportationGroundCrv, StructurePnt etc) instead of one FCODE per file/layer (ROAD_L, BUILDING_P etc).",

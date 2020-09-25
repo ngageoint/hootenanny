@@ -1281,7 +1281,18 @@ translate = {
   }, // End addReviewFeature
 
 
-  // addEmptyFeature - Add o2s features to a schema
+  // addSingleO2sFeature - Add o2s features to a schema
+  addSingleO2sFeature: function(schema)
+  {
+    // 8K of text should be enough
+    schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'}] });
+    schema.push({ name:'o2s_L',desc:'o2s',geom:'Line',columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'}] });
+    schema.push({ name:'o2s_P',desc:'o2s',geom:'Point',columns:[ {name:'tag1',desc:'Tag List',type:'String',length:'8192'}] });
+
+    return schema;
+  }, // End addSingleO2sFeature
+
+  // addEmptyFeature - Add split o2s features to a schema
   addEmptyFeature: function(schema)
   {
     schema.push({ name:'o2s_A',desc:'o2s',geom:'Area',
@@ -1470,7 +1481,7 @@ translate = {
 
 
   // Converting country codes to names to URN's
-  // possible From/To values: 
+  // possible From/To values:
   //  n = name
   //  sN = shortName
   //  fN = fullName
@@ -1797,7 +1808,7 @@ translate = {
         if (value in translate.countryTable[i]['lN'])
         {
           output = translate.countryTable[i][to];
-          break;            
+          break;
         }
       }
     }
@@ -2104,14 +2115,14 @@ translate = {
   },
 
 
-  // Search the Alpha3 "B" (bibliographic) and "T" (terminology) and the Alpha 2 values 
+  // Search the Alpha3 "B" (bibliographic) and "T" (terminology) and the Alpha 2 values
   // If these fail, try looking at the landuage Name IF the length of the value is > 3 char
   findLanguage2Code: function(value) {
     if (!value || value == '') return '';
 
     var output = '';
     for (var i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
-      if (translate.languageCodes[i]['a3b'] == value || 
+      if (translate.languageCodes[i]['a3b'] == value ||
           translate.languageCodes[i]['a3t'] == value)
       {
         output = translate.languageCodes[i]['a2'];
@@ -2132,14 +2143,14 @@ translate = {
   },
 
 
-  // Search the Alpha3 "B" (bibliographic) or "T" (terminology) as well as 
+  // Search the Alpha3 "B" (bibliographic) or "T" (terminology) as well as
   // the Alpha 2 values.
   findLanguageName: function(value) {
     if (!value || value == '') return '';
 
     var output = '';
     for (var i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
-      if (translate.languageCodes[i]['a3b'] == value || 
+      if (translate.languageCodes[i]['a3b'] == value ||
           translate.languageCodes[i]['a3t'] == value ||
           translate.languageCodes[i]['a2'] == value)
       {

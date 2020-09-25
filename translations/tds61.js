@@ -84,7 +84,16 @@ tds61 = {
 
       // Now add an o2s[A,L,P] feature to the tds61.rawSchema
       // We can drop features but this is a nice way to see what we would drop
-      tds61.rawSchema = translate.addEmptyFeature(tds61.rawSchema);
+      if (config.getOgrOutputFormat() == 'shp')
+      {
+        // Add tag1, tag2, tag3 and tag4
+        tds61.rawSchema = translate.addEmptyFeature(tds61.rawSchema);
+      }
+      else
+      {
+        // Just add tag1
+        tds61.rawSchema = translate.addSingleO2sFeature(tds61.rawSchema);
+      }
 
       // Add the empty Review layers
       tds61.rawSchema = translate.addReviewFeature(tds61.rawSchema);
@@ -219,7 +228,16 @@ tds61 = {
     // We can drop features but this is a nice way to see what we would drop
     // NOTE: We add these feature AFTER adding the ESRI Feature Dataset so that they
     // DON'T get put under the Feature Dataset in the output.
-    newSchema = translate.addEmptyFeature(newSchema);
+    if (config.getOgrOutputFormat() == 'shp')
+    {
+      // Add tag1, tag2, tag3 and tag4
+      newSchema = translate.addEmptyFeature(newSchema);
+    }
+    else
+    {
+      // Just add tag1
+      newSchema = translate.addSingleO2sFeature(newSchema);
+    }
 
     // Add the empty Review layers
     newSchema = translate.addReviewFeature(newSchema);
@@ -706,7 +724,7 @@ tds61 = {
     } // End closureList
 
     // Tag retired
-    if (tags.controlling_authority) 
+    if (tags.controlling_authority)
     {
       tags.operator = tags.controlling_authority;
       delete tags.controlling_authority;
@@ -1257,7 +1275,7 @@ tds61 = {
         tags.condition = 'construction';
         delete tags[i];
         continue;
-      }    
+      }
     } // End Cleanup loop
 
     // Fix Bunkers. Putting this first to skip the building=* rules
@@ -1295,11 +1313,11 @@ tds61 = {
           if (tags.construction)
           {
             tags[typ] = tags.construction;
-            delete tags.construction;           
+            delete tags.construction;
           }
           else
           {
-            tags[typ] = cycleList[typ]; 
+            tags[typ] = cycleList[typ];
           }
           tags.condition = 'construction';
           break;
@@ -2516,7 +2534,7 @@ tds61 = {
       tds61.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
       tds61.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
       tds61.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-      tds61.configOut.OgrSplitO2s = config.getOgrSplitO2s();
+      tds61.configOut.OgrFormat = config.getOgrOutputFormat();
       tds61.configOut.OgrThematicStructure = config.getOgrThematicStructure();
       tds61.configOut.OgrThrowError = config.getOgrThrowError();
       tds61.configOut.OgrAddUuid = config.getOgrAddUuid();
@@ -2744,25 +2762,21 @@ tds61 = {
       // Shapefiles can't handle fields > 254 chars
       // If the tags are > 254 char, split into pieces. Not pretty but stops errors
       // A nicer thing would be to arrange the tags until they fit neatly
-      if (str.length < 255 || tds61.configOut.OgrSplitO2s == 'false')
+      if (tds61.configOut.OgrFormat == 'shp')
       {
-        // return {attrs:{tag1:str}, tableName: tableName};
-        attrs = {tag1:str};
-      }
-      else
-      {
-        // Not good. Will fix with the rewrite of the tag splitting code
-        if (str.length > 1012)
-        {
-          hoot.logTrace('o2s tags truncated to fit in available space.');
-          str = str.substring(0,1012);
-        }
+        // Throw a warning that text will get truncated.
+        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
 
-        // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: tableName};
+        // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
+        // which means that it returns an empty string.
         attrs = {tag1:str.substring(0,253),
           tag2:str.substring(253,506),
           tag3:str.substring(506,759),
           tag4:str.substring(759,1012)};
+      }
+      else
+      {
+        attrs = {tag1:str};
       }
 
       returnData.push({attrs: attrs, tableName: tableName});
