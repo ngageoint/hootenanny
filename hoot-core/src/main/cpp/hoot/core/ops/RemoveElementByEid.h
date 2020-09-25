@@ -72,6 +72,15 @@ public:
    */
   RemoveElementByEid(ElementId eId, bool doCheck = true);
 
+  /**
+   * TODO
+   *
+   * @param eId
+   * @param doCheck
+   * @param removeNodeFully
+   */
+  RemoveElementByEid(ElementId eId, bool doCheck, bool removeNodeFully);
+
   virtual ~RemoveElementByEid() = default;
 
   /**

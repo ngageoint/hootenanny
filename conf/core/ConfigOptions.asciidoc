@@ -645,7 +645,7 @@ delete statements for reference features falling outside of `convert.bounding.bo
 === changeset.replacement.implementation
 
 * Data Type: string
-* Default Value: `hoot::ChangesetReplacementCreator`
+* Default Value: `hoot::ChangesetReplacementCreator1`
 
 Used for testing only.
 

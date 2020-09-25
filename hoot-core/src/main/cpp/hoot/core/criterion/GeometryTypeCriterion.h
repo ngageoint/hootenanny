@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -89,6 +90,16 @@ public:
    * @return a geometry type
    */
   static GeometryType typeFromString(const QString& geometryTypeStr);
+
+  /**
+   * TODO
+   *
+   * @param geometryType
+   * @param map
+   * @return
+   */
+  static ElementCriterionPtr getBaseGeometryCriterion(const GeometryType& geometryType,
+                                                      const ConstOsmMapPtr& map);
 };
 
 typedef std::shared_ptr<GeometryTypeCriterion> GeometryTypeCriterionPtr;

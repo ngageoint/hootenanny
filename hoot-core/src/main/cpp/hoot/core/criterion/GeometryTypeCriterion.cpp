@@ -28,6 +28,9 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 namespace hoot
 {
@@ -94,6 +97,22 @@ GeometryTypeCriterion::GeometryType GeometryTypeCriterion::typeFromString(
   else
   {
     return GeometryType::Unknown;
+  }
+}
+
+ElementCriterionPtr GeometryTypeCriterion::getBaseGeometryCriterion(
+  const GeometryType& geometryType, const ConstOsmMapPtr& map)
+{
+  switch (geometryType)
+  {
+    case GeometryType::Point:
+      return ElementCriterionPtr(new PointCriterion(map));
+    case GeometryType::Line:
+      return ElementCriterionPtr(new LinearCriterion());
+    case GeometryType::Polygon:
+      return ElementCriterionPtr(new PolygonCriterion(map));
+    default:
+      return ElementCriterionPtr();
   }
 }
 

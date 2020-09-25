@@ -33,6 +33,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
@@ -188,10 +189,13 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
 void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
 {
   // recommended C&R production config
-  _changesetCreator.reset(new ChangesetReplacementCreator(true, "", _dataToReplaceUrl));
+  _changesetCreator.reset(
+    Factory::getInstance().constructObject<ChangesetReplacementCreator>(
+      ConfigOptions().getChangesetReplacementImplementation()));
   _changesetCreator->setFullReplacement(true);
   _changesetCreator->setBoundsInterpretation(
-    ChangesetReplacementCreator::BoundsInterpretation::Lenient/*Hybrid*/);
+    ChangesetReplacementCreator::BoundsInterpretation::Lenient);
+  _changesetCreator->setChangesetOptions(true, "", _dataToReplaceUrl);
 
   _changesetApplier.reset(new OsmApiDbSqlChangesetApplier(_dataToReplaceUrl));
 

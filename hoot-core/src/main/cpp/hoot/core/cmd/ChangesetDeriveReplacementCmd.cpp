@@ -65,9 +65,6 @@ public:
   virtual int runSimple(QStringList& args) override
   {
     LOG_VARD(args);
-
-    // If needed for testing, can manually load separate implementations with
-    // ConfigOptions().getChangesetReplacementImplementation().
     run(args);
 
     return 0;
@@ -237,19 +234,22 @@ public:
       osmApiDbUrl = args[4].trimmed();
     }
 
-    ChangesetReplacementCreator changesetCreator(printStats, outputStatsFile, osmApiDbUrl);
-    changesetCreator.setFullReplacement(fullReplacement);
-    changesetCreator.setBoundsInterpretation(boundsHandling);
-    changesetCreator.setGeometryFilters(geometryFilters);
+    std::shared_ptr<ChangesetReplacementCreator> changesetCreator(
+      Factory::getInstance().constructObject<ChangesetReplacementCreator>(
+        ConfigOptions().getChangesetReplacementImplementation()));
+    changesetCreator->setFullReplacement(fullReplacement);
+    changesetCreator->setBoundsInterpretation(boundsHandling);
+    changesetCreator->setGeometryFilters(geometryFilters);
     // chain param must be set before the filters themselves
-    changesetCreator.setChainReplacementFilters(chainReplacementFilters);
-    changesetCreator.setReplacementFilters(replacementFilters);
-    changesetCreator.setReplacementFilterOptions(replacementFilterOptions);
-    changesetCreator.setChainRetainmentFilters(chainRetainmentFilters);
-    changesetCreator.setRetainmentFilters(retainmentFilters);
-    changesetCreator.setRetainmentFilterOptions(retainmentFilterOptions);
-    changesetCreator.setConflationEnabled(enableConflation);
-    changesetCreator.create(input1, input2, bounds, output);
+    changesetCreator->setChainReplacementFilters(chainReplacementFilters);
+    changesetCreator->setReplacementFilters(replacementFilters);
+    changesetCreator->setReplacementFilterOptions(replacementFilterOptions);
+    changesetCreator->setChainRetainmentFilters(chainRetainmentFilters);
+    changesetCreator->setRetainmentFilters(retainmentFilters);
+    changesetCreator->setRetainmentFilterOptions(retainmentFilterOptions);
+    changesetCreator->setConflationEnabled(enableConflation);
+    changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
+    changesetCreator->create(input1, input2, bounds, output);
   }
 
   void processStatsParams(QStringList& args, bool& printStats, QString& outputStatsFile)
