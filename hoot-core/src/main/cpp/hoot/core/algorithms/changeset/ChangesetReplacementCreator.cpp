@@ -605,8 +605,8 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 
   // TODO
-  OsmMapPtr refRelationsMap = _removeRelations(refMap);
-  LOG_VARD(refRelationsMap->size());
+  //OsmMapPtr refRelationsMap = _removeRelations(refMap);
+  //LOG_VARD(refRelationsMap->size());
 
   // Keep a mapping of the original ref element ids to versions, as we'll need the original
   // versions later.
@@ -639,12 +639,12 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 
   // TODO
-  OsmMapPtr secRelationsMap = _removeRelations(secMap);
-  LOG_VARD(secRelationsMap->size());
+  //OsmMapPtr secRelationsMap = _removeRelations(secMap);
+  //LOG_VARD(secRelationsMap->size());
 
   QList<OsmMapPtr> relationMaps;
-  relationMaps.append(refRelationsMap);
-  relationMaps.append(secRelationsMap);
+//  relationMaps.append(refRelationsMap);
+//  relationMaps.append(secRelationsMap);
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
@@ -702,8 +702,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   LOG_VARD(cookieCutRefMap->size());
 
   // CONFLATE / CLEAN
-
-  // TODO: update
 
   // conflate the cookie cut ref map with the sec map if conflation is enabled
 
@@ -763,7 +761,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     wayJoiner.join(conflatedMap);
     LOG_VART(MapProjector::toWkt(conflatedMap->getProjection()));
     // TODO
-    _syncJoinedMemberWays(relationMaps, wayJoiner.getJoinedWayIdMappings());
+    //_syncJoinedMemberWays(relationMaps, wayJoiner.getJoinedWayIdMappings());
   }
 
   // PRE-CHANGESET DERIVATION DATA PREP
@@ -853,10 +851,10 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
   }
 
   // restore the relations previously removed
-  _restoreRelations(refMap, refRelationsMap);
-  refRelationsMap.reset();
-  _restoreRelations(conflatedMap, secRelationsMap);
-  secRelationsMap.reset();
+//  _restoreRelations(refMap, refRelationsMap);
+//  refRelationsMap.reset();
+//  _restoreRelations(conflatedMap, secRelationsMap);
+//  secRelationsMap.reset();
 
   // clean up any mistakes introduced
   _cleanup(refMap);
@@ -1417,8 +1415,6 @@ void ChangesetReplacementCreator::_filterFeatures(
   OsmMapPtr& map, const ElementCriterionPtr& featureFilter, const Settings& config,
   const QString& debugFileName)
 {
-  // TODO: move to a utils class?
-
   LOG_STATUS(
     "Filtering " << StringUtils::formatLargeNumber(map->size()) << " features for: " <<
     map->getName() << " with filter: " << featureFilter->toString() << "...");
@@ -1779,7 +1775,7 @@ void ChangesetReplacementCreator::_combineMaps(
   OsmMapWriterFactory::writeDebugMap(map1, debugFileName);
 }
 
-void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps)
+void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const QList<OsmMapPtr>& /*relationMaps*/)
 {
   // TODO: move some of this to a ConflateUtils class?
 
@@ -1804,12 +1800,12 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const QList<OsmMapPt
     SuperfluousConflateOpRemover::removeSuperfluousOps();
   }
 
-  const QStringList nodeRelationMemberIds =
-    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Node);
-  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), nodeRelationMemberIds);
-  const QStringList wayRelationMemberIds =
-    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Way);
-  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), wayRelationMemberIds);
+//  const QStringList nodeRelationMemberIds =
+//    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Node);
+//  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), nodeRelationMemberIds);
+//  const QStringList wayRelationMemberIds =
+//    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Way);
+//  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), wayRelationMemberIds);
 
   LOG_STATUS("Applying pre-conflate operations...");
   NamedOp preOps(ConfigOptions().getConflatePreOps());
@@ -1824,17 +1820,17 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map, const QList<OsmMapPt
   NamedOp postOps(ConfigOptions().getConflatePostOps());
   postOps.apply(map);
 
-  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), QStringList());
-  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), QStringList());
+//  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), QStringList());
+//  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), QStringList());
 
   // TODO
-  std::shared_ptr<WayJoinerOp> wayJoinerOp =
-    std::dynamic_pointer_cast<WayJoinerOp>(
-      postOps.getAppliedOperation(QString::fromStdString(WayJoinerOp::className())));
-  if (wayJoinerOp)
-  {
-    _syncJoinedMemberWays(relationMaps, wayJoinerOp->getWayJoiner()->getJoinedWayIdMappings());
-  }
+//  std::shared_ptr<WayJoinerOp> wayJoinerOp =
+//    std::dynamic_pointer_cast<WayJoinerOp>(
+//      postOps.getAppliedOperation(QString::fromStdString(WayJoinerOp::className())));
+//  if (wayJoinerOp)
+//  {
+//    _syncJoinedMemberWays(relationMaps, wayJoinerOp->getWayJoiner()->getJoinedWayIdMappings());
+//  }
 
   MapProjector::projectToWgs84(map);  // conflation works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
@@ -2070,25 +2066,25 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
   MapProjector::projectToWgs84(map);
 }
 
-void ChangesetReplacementCreator::_clean(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps)
+void ChangesetReplacementCreator::_clean(OsmMapPtr& map, const QList<OsmMapPtr>& /*relationMaps*/)
 {
   map->setName("cleaned");
   LOG_STATUS(
     "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
 
-  const QStringList nodeRelationMemberIds =
-    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Node);
-  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), nodeRelationMemberIds);
-  const QStringList wayRelationMemberIds =
-    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Way);
-  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), wayRelationMemberIds);
+//  const QStringList nodeRelationMemberIds =
+//    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Node);
+//  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), nodeRelationMemberIds);
+//  const QStringList wayRelationMemberIds =
+//    _getRelationMemberElementIdsForConfig(relationMaps, ElementType::Way);
+//  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), wayRelationMemberIds);
 
   // TODO: since we're never conflating when we call clean, should we remove cleaning ops like
   // IntersectionSplitter?
   MapCleaner().apply(map);
 
-  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), QStringList());
-  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), QStringList());
+//  conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), QStringList());
+//  conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), QStringList());
 
   MapProjector::projectToWgs84(map);  // cleaning works in planar
   LOG_VART(MapProjector::toWkt(map->getProjection()));
