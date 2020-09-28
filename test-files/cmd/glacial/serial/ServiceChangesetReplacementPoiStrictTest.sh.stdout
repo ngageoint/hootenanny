@@ -18,8 +18,7 @@ retainment filter options:
 source formats:  db;xml;json
 way snap tolerance:  5.0
 existing way node tolerance:  0.5
-disable conflation: 
-disable cleaning: 
+enable conflation: 
 clean ref database beforehand:  true
 extra params: 
 
@@ -40,9 +39,9 @@ Deriving a changeset between the osm api db and the hoot api db layers over: -12
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiStrictTest/ServiceChangesetReplacementPoiStrictTest-changeset-db.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=37.7629491, max_lat=37.7640966, min_lon=-122.4319154, max_lon=-122.4304989, num_changes=5
-Node(s) Created: 3
-Node(s) Modified: 1
+Changeset Details: min_lat=37.7629491, max_lat=37.7640604, min_lon=-122.4318816, max_lon=-122.4304989, num_changes=5
+Node(s) Created: 4
+Node(s) Modified: 0
 Node(s) Deleted: 1
 Way(s) Created: 0
 Way(s) Modified: 0
@@ -50,8 +49,8 @@ Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 3
-Total Modifications: 1
+Total Creations: 4
+Total Modifications: 0
 Total Deletions: 1
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementPoiStrictTest-db-replaced.osm for verification...
@@ -77,9 +76,9 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiStrictTest/ServiceChangesetReplacementPoiStrictTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=37.7629491, max_lat=37.7640966, min_lon=-122.4319154, max_lon=-122.4304989, num_changes=5
-Node(s) Created: 3
-Node(s) Modified: 1
+Changeset Details: min_lat=37.7629491, max_lat=37.7640604, min_lon=-122.4318816, max_lon=-122.4304989, num_changes=5
+Node(s) Created: 4
+Node(s) Modified: 0
 Node(s) Deleted: 1
 Way(s) Created: 0
 Way(s) Modified: 0
@@ -87,8 +86,8 @@ Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 3
-Total Modifications: 1
+Total Creations: 4
+Total Modifications: 0
 Total Deletions: 1
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementPoiStrictTest-xml-replaced.osm for verification...
@@ -114,9 +113,9 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiStrictTest/ServiceChangesetReplacementPoiStrictTest-changeset-json.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=37.7629491, max_lat=37.7640966, min_lon=-122.4319154, max_lon=-122.4304989, num_changes=5
-Node(s) Created: 3
-Node(s) Modified: 1
+Changeset Details: min_lat=37.7629491, max_lat=37.7640604, min_lon=-122.4318816, max_lon=-122.4304989, num_changes=5
+Node(s) Created: 4
+Node(s) Modified: 0
 Node(s) Deleted: 1
 Way(s) Created: 0
 Way(s) Modified: 0
@@ -124,8 +123,8 @@ Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 3
-Total Modifications: 1
+Total Creations: 4
+Total Modifications: 0
 Total Deletions: 1
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementPoiStrictTest-json-replaced.osm for verification...

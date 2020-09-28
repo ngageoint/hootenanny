@@ -173,46 +173,36 @@ public:
     QString outputStatsFile;
     processStatsParams(args, printStats, outputStatsFile);
 
-    bool enableWaySnapping = true;
     if (args.contains("--disable-way-snapping"))
     {
-      enableWaySnapping = false;
+      LOG_WARN("--disable-way-snapping no longer supported by " << getName());
       args.removeAll("--disable-way-snapping");
     }
-    LOG_VARD(enableWaySnapping);
 
-    bool enableConflation = true;
-    if (args.contains("--disable-conflation"))
+    bool enableConflation = false;
+    if (args.contains("--conflate"))
     {
-      enableConflation = false;
-      args.removeAll("--disable-conflation");
+      enableConflation = true;
+      args.removeAll("--conflate");
     }
     LOG_VARD(enableConflation);
+    if (args.contains("--disable-conflation"))
+    {
+      LOG_WARN("--disable-conflation no longer supported by " << getName());
+      args.removeAll("--disable-conflation");
+    }
 
-    bool enableCleaning = true;
     if (args.contains("--disable-cleaning"))
     {
-      if (!enableConflation)
-      {
-        enableCleaning = false;
-      }
-      else
-      {
-        LOG_WARN(
-          "Cleaning cannot be disabled unless conflation is disabled for changeset replacement " <<
-          "derivation.");
-      }
+      LOG_WARN("--disable-cleaning no longer supported by " << getName());
       args.removeAll("--disable-cleaning");
     }
-    LOG_VARD(enableCleaning);
 
-    bool tagOobConnectedWays = true;
     if (args.contains("--disable-oob-way-handling"))
     {
-      tagOobConnectedWays = false;
+      LOG_WARN("--disable-oob-way-handling no longer supported by " << getName());
       args.removeAll("--disable-oob-way-handling");
     }
-    LOG_VARD(tagOobConnectedWays);
 
     QString boundsStr = "";
     if (args.size() >= 3)
@@ -258,10 +248,7 @@ public:
     changesetCreator.setChainRetainmentFilters(chainRetainmentFilters);
     changesetCreator.setRetainmentFilters(retainmentFilters);
     changesetCreator.setRetainmentFilterOptions(retainmentFilterOptions);
-    changesetCreator.setWaySnappingEnabled(enableWaySnapping);
     changesetCreator.setConflationEnabled(enableConflation);
-    changesetCreator.setCleaningEnabled(enableCleaning);
-    changesetCreator.setTagOobConnectedWays(tagOobConnectedWays);
     changesetCreator.create(input1, input2, bounds, output);
   }
 

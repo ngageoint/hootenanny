@@ -18,8 +18,7 @@ retainment filter options:
 source formats:  xml
 way snap tolerance:  5.0
 existing way node tolerance:  5.0
-disable conflation: 
-disable cleaning: 
+enable conflation: 
 clean ref database beforehand:  true
 extra params: 
 
@@ -43,17 +42,17 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementSecFilteredToEmpty2Test/ServiceChangesetReplacementSecFilteredToEmpty2Test-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=1.0945669, max_lat=1.3752185, min_lon=29.0211999, max_lon=29.1533179, num_changes=3974
+Changeset Details: min_lat=1.0945669, max_lat=1.3752185, min_lon=29.0211999, max_lon=29.1533179, num_changes=3976
 Node(s) Created: 1,979
 Node(s) Modified: 0
 Node(s) Deleted: 1,433
-Way(s) Created: 278
+Way(s) Created: 280
 Way(s) Modified: 0
 Way(s) Deleted: 281
 Relation(s) Created: 2
 Relation(s) Modified: 0
 Relation(s) Deleted: 1
-Total Creations: 2,259
+Total Creations: 2,261
 Total Modifications: 0
 Total Deletions: 1,715
 
