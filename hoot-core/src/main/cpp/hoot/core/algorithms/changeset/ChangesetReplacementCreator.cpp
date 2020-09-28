@@ -83,7 +83,6 @@
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
 #include <hoot/core/ops/WayJoinerOp.h>
 
@@ -105,7 +104,6 @@
 #include <hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
-#include <hoot/core/visitors/ReportMissingElementsVisitor.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
@@ -128,10 +126,7 @@ _boundsInterpretation(BoundsInterpretation::Lenient),
 _geometryFiltersSpecified(false),
 _chainReplacementFilters(false),
 _chainRetainmentFilters(false),
-_waySnappingEnabled(true),
-_conflationEnabled(true),
-_cleaningEnabled(true),
-_tagOobConnectedWays(false),
+_conflationEnabled(false),
 _currentChangeDerivationPassIsLinear(false),
 _numChanges(0)
 {
@@ -362,24 +357,6 @@ void ChangesetReplacementCreator::_printJobDescription() const
     conflationStr += "not ";
   }
   conflationStr += "enabled";
-  QString cleaningStr = "is ";
-  if (!_cleaningEnabled)
-  {
-    cleaningStr += "not ";
-  }
-  cleaningStr += "enabled";
-  QString waySnappingStr = "is ";
-  if (!_waySnappingEnabled)
-  {
-    waySnappingStr += "not ";
-  }
-  waySnappingStr += "enabled";
-  QString oobWayHandlingStr = "is ";
-  if (!_tagOobConnectedWays)
-  {
-    oobWayHandlingStr += "not ";
-  }
-  oobWayHandlingStr += "enabled";
   QString cropDbInputOnReadStr = "is ";
   if (!ConfigOptions().getApidbReaderReadFullThenCropOnBounded())
   {
@@ -402,9 +379,6 @@ void ChangesetReplacementCreator::_printJobDescription() const
   str += "\nReplacement filter: " + replacementFiltersStr;
   str += "\nRetainment filter: " + retainmentFiltersStr;
   str += "\nConflation: " + conflationStr;
-  str += "\nCleaning: " + cleaningStr;
-  str += "\nWay snapping: " + waySnappingStr;
-  str += "\nOut of bounds way handling: " + oobWayHandlingStr;
   str += "\nCropping database inputs after read: " + cropDbInputOnReadStr;
   LOG_INFO(str);
 }
@@ -624,7 +598,7 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
 
   _currentChangeDerivationPassIsLinear = !linearFilterClassNames.isEmpty();
   LOG_VART(_currentChangeDerivationPassIsLinear);
-  if (_tagOobConnectedWays && _currentChangeDerivationPassIsLinear)
+  if (_currentChangeDerivationPassIsLinear)
   {
     // If we have a lenient bounds requirement and linear features, we need to exclude all ways
     // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
@@ -716,7 +690,6 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     {
       // conflation cleans beforehand
       _conflate(conflatedMap);
-      conflatedMap->setName("conflated");
 
       if (!ConfigOptions().getChangesetReplacementPassConflateReviews())
       {
@@ -726,30 +699,15 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     }
     // This is a little misleading to only clean when the sec map has elements, however a test fails
     // if we don't. May need further investigation.
-    else if (_cleaningEnabled)
+    else
     {
       _clean(conflatedMap);
-      conflatedMap->setName("cleaned");
     }
-  }
-
-  LOG_VARD(refMap->size());
-  LOG_VARD(conflatedMap->size());
-  if (refMap->size() == 0 && conflatedMap->size() == 0)
-  {
-    LOG_STATUS("Both maps empty, so skipping changeset derivation...");
-  }
-  else
-  {
-    LOG_STATUS(
-      "Preparing changeset derivation maps of sizes: " <<
-      StringUtils::formatLargeNumber(refMap->size()) << " and " <<
-      StringUtils::formatLargeNumber(conflatedMap->size()) << "...");
   }
 
   // SNAP
 
-  if (_currentChangeDerivationPassIsLinear && _waySnappingEnabled)
+  if (_currentChangeDerivationPassIsLinear)
   {
     // Snap secondary features back to reference features if dealing with linear features where
     // ref features may have been cut along the bounds. We're being lenient here by snapping
@@ -816,16 +774,13 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
     snapToWayStatuses.append("Input2");
     LOG_VARD(linearFilterClassNames);
 
-    if (_waySnappingEnabled)
+    // Snap anything that can be snapped per feature type.
+    LOG_INFO("Snapping unconnected ways to each other in replacement map...");
+    for (int i = 0; i < linearFilterClassNames.size(); i++)
     {
-      // Snap anything that can be snapped per feature type.
-      LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-      for (int i = 0; i < linearFilterClassNames.size(); i++)
-      {
-        _snapUnconnectedWays(
-          conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
-         _changesetId + "-conflated-snapped-sec-to-ref-2");
-      }
+      _snapUnconnectedWays(
+        conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
+       _changesetId + "-conflated-snapped-sec-to-ref-2");
     }
 
     // combine the conflated map with the immediately connected out of bounds ways
@@ -833,17 +788,14 @@ void ChangesetReplacementCreator::_getMapsForGeometryType(
       conflatedMap, immediatelyConnectedOutOfBoundsWays, true,
       _changesetId + "-conflated-connected-combined");
 
-    if (_waySnappingEnabled)
+    // Snap the connected ways to other ways in the conflated map. Mark the ways that were
+    // snapped, as we'll need that info in the next step.
+    LOG_INFO("Snapping unconnected ways to each other in replacement map...");
+    for (int i = 0; i < linearFilterClassNames.size(); i++)
     {
-      // Snap the connected ways to other ways in the conflated map. Mark the ways that were
-      // snapped, as we'll need that info in the next step.
-      LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-      for (int i = 0; i < linearFilterClassNames.size(); i++)
-      {
-        _snapUnconnectedWays(
-          conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i),
-          true, _changesetId + "-conflated-snapped-immediately-connected-out-of-bounds");
-      }
+      _snapUnconnectedWays(
+        conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i),
+        true, _changesetId + "-conflated-snapped-immediately-connected-out-of-bounds");
     }
 
     // remove any ways that weren't snapped
@@ -932,9 +884,7 @@ void ChangesetReplacementCreator::_setGlobalOpts()
 
   // For this being enabled to have any effect,
   // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
-  conf().set(
-    ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(),
-    _tagOobConnectedWays);
+  conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
@@ -996,13 +946,6 @@ void ChangesetReplacementCreator::_setGlobalOpts()
 void ChangesetReplacementCreator::_parseConfigOpts(
   const GeometryTypeCriterion::GeometryType& geometryType)
 {
-  if (!_cleaningEnabled && _conflationEnabled)
-  {
-    throw IllegalArgumentException(
-      "If conflation is enabled during changeset replacement derivation, cleaning cannot be "
-      "disabled.");
-  }
-
   // These settings have been are customized for each geometry type and bounds handling preference.
 
   if (geometryType == GeometryTypeCriterion::GeometryType::Point)
@@ -1038,23 +981,23 @@ void ChangesetReplacementCreator::_parseConfigOpts(
       _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
       _boundsOpts.loadSecKeepEntireCrossingBounds = false;
       _boundsOpts.changesetAllowDeletingRefOutsideBounds = false;
-
-      // Conflate way joining needs to happen later in the post ops for strict linear replacements.
-      // Changing the default ordering of the post ops to accommodate this had detrimental effects
-      // on other conflation. The best location seems to be at the end just before tag truncation.
-      // Would like to get rid of this...isn't a foolproof fix by any means if the conflate post
-      // ops end up getting re-ordered for some reason.
-
-      LOG_VART(conf().getList(ConfigOptions::getConflatePostOpsKey()));
-      QStringList conflatePostOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-      conflatePostOps.removeAll(QString::fromStdString(WayJoinerOp::className()));
-      const int indexOfTagTruncater =
-        conflatePostOps.indexOf(QString::fromStdString(ApiTagTruncateVisitor::className()));
-      conflatePostOps.insert(
-        indexOfTagTruncater - 1, QString::fromStdString(WayJoinerOp::className()));
-      conf().set(ConfigOptions::getConflatePostOpsKey(), conflatePostOps);
-      LOG_VARD(conf().getList(ConfigOptions::getConflatePostOpsKey()));
     }
+
+    // Conflate way joining needs to happen later in the post ops for strict linear replacements.
+    // Changing the default ordering of the post ops to accommodate this had detrimental effects
+    // on other conflation. The best location seems to be at the end just before tag truncation.
+    // Would like to get rid of this...isn't a foolproof fix by any means if the conflate post
+    // ops end up getting re-ordered for some reason.
+
+    LOG_VART(conf().getList(ConfigOptions::getConflatePostOpsKey()));
+    QStringList conflatePostOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
+    conflatePostOps.removeAll(QString::fromStdString(WayJoinerOp::className()));
+    const int indexOfTagTruncater =
+      conflatePostOps.indexOf(QString::fromStdString(ApiTagTruncateVisitor::className()));
+    conflatePostOps.insert(
+      indexOfTagTruncater - 1, QString::fromStdString(WayJoinerOp::className()));
+    conf().set(ConfigOptions::getConflatePostOpsKey(), conflatePostOps);
+    LOG_VARD(conf().getList(ConfigOptions::getConflatePostOpsKey()));
   }
   else if (geometryType == GeometryTypeCriterion::GeometryType::Polygon)
   {
@@ -1822,47 +1765,6 @@ void ChangesetReplacementCreator::_conflate(OsmMapPtr& map)
   LOG_DEBUG("Conflated map size: " << map->size());
 }
 
-void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
-{
-  LOG_INFO("Removing reviews added during conflation from " << map->getName() << "...");
-
-  RemoveElementsVisitor removeVis;
-  removeVis.addCriterion(ElementCriterionPtr(new RelationCriterion("review")));
-  removeVis.addCriterion(
-    ElementCriterionPtr(
-      new NotCriterion(
-        std::shared_ptr<TagCriterion>(
-          new TagCriterion(
-            MetadataTags::HootReviewType(),
-            QString::fromStdString(ReportMissingElementsVisitor::className()))))));
-  removeVis.setChainCriteria(true);
-  removeVis.setRecursive(false);
-  //LOG_STATUS("\t" << removeVis.getInitStatusMessage());
-  map->visitRw(removeVis);
-  LOG_DEBUG(removeVis.getCompletedStatusMessage());
-
-  MemoryUsageChecker::getInstance().check();
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-conflate-reviews-removed");
-}
-
-void ChangesetReplacementCreator::_clean(OsmMapPtr& map)
-{
-  map->setName("cleaned");
-  LOG_STATUS(
-    "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
-
-  // TODO: since we're never conflating when we call clean, should we remove cleaning ops like
-  // IntersectionSplitter?
-  MapCleaner().apply(map);
-
-  MapProjector::projectToWgs84(map);  // cleaning works in planar
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-cleaned");
-  LOG_DEBUG("Cleaned map size: " << map->size());
-}
-
 void ChangesetReplacementCreator::_snapUnconnectedWays(
   OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
   const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
@@ -2029,6 +1931,47 @@ void ChangesetReplacementCreator::_cleanup(OsmMapPtr& map)
 
   // get out of orthographic
   MapProjector::projectToWgs84(map);
+}
+
+void ChangesetReplacementCreator::_clean(OsmMapPtr& map)
+{
+  map->setName("cleaned");
+  LOG_STATUS(
+    "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
+
+  // TODO: since we're never conflating when we call clean, should we remove cleaning ops like
+  // IntersectionSplitter?
+  MapCleaner().apply(map);
+
+  MapProjector::projectToWgs84(map);  // cleaning works in planar
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-cleaned");
+  LOG_DEBUG("Cleaned map size: " << map->size());
+}
+
+void ChangesetReplacementCreator::_removeConflateReviews(OsmMapPtr& map)
+{
+  LOG_INFO("Removing reviews added during conflation from " << map->getName() << "...");
+
+  RemoveElementsVisitor removeVis;
+  removeVis.addCriterion(ElementCriterionPtr(new RelationCriterion("review")));
+  removeVis.addCriterion(
+    ElementCriterionPtr(
+      new NotCriterion(
+        std::shared_ptr<TagCriterion>(
+          new TagCriterion(
+            MetadataTags::HootReviewType(),
+            QString::fromStdString(ReportMissingElementsVisitor::className()))))));
+  removeVis.setChainCriteria(true);
+  removeVis.setRecursive(false);
+  //LOG_STATUS("\t" << removeVis.getInitStatusMessage());
+  map->visitRw(removeVis);
+  LOG_DEBUG(removeVis.getCompletedStatusMessage());
+
+  MemoryUsageChecker::getInstance().check();
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-conflate-reviews-removed");
 }
 
 void ChangesetReplacementCreator::_synchronizeIds(

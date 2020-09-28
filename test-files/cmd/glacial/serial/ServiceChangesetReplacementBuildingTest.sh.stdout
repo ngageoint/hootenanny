@@ -18,8 +18,7 @@ retainment filter options:
 source formats:  db;xml;json
 way snap tolerance:  5.0
 existing way node tolerance:  0.5
-disable conflation: 
-disable cleaning: 
+enable conflation: 
 clean ref database beforehand:  true
 extra params: 
 
