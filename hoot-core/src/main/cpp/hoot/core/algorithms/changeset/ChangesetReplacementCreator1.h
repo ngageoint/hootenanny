@@ -168,6 +168,9 @@ public:
   virtual void setChangesetOptions(
     const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl);
 
+  virtual QString toString() const override
+    { return QString::fromStdString(className()).remove("hoot::"); }
+
 protected:
 
   // determines how strict the handling of the bounds is during replacement
@@ -295,6 +298,11 @@ protected:
    */
   virtual void _cleanup(OsmMapPtr& map);
 
+  /*
+   * TODO
+   */
+  virtual void _clean(OsmMapPtr& map);
+
 private:
 
   friend class ChangesetReplacementCreatorTest;
@@ -386,11 +394,6 @@ private:
   void _conflate(OsmMapPtr& map);
 
   /*
-   * TODO
-   */
-  void _clean(OsmMapPtr& map);
-
-  /*
    * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
    * being replaced with the IDs from the maps being replaced.
    */
@@ -401,6 +404,8 @@ private:
    * TODO
    */
   OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
+
+  void _intraDedupeMap(OsmMapPtr& map);
 };
 
 }

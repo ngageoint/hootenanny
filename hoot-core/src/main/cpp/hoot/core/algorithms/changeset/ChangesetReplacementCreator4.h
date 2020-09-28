@@ -45,7 +45,10 @@ public:
 
   static std::string className() { return "hoot::ChangesetReplacementCreator4"; }
 
-  ChangesetReplacementCreator4() = default;
+  ChangesetReplacementCreator4();
+
+  virtual QString toString() const override
+    { return QString::fromStdString(className()).remove("hoot::"); }
 
 protected:
 
@@ -59,10 +62,12 @@ protected:
   /*
    * TODO
    */
-  virtual void _filterFeatures(
-    OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
-    const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
-    const QString& debugFileName) override;
+//  virtual void _filterFeatures(
+//    OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
+//    const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
+//    const QString& debugFileName) override;
+
+  //virtual void _clean(OsmMapPtr& map) override;
 };
 
 }

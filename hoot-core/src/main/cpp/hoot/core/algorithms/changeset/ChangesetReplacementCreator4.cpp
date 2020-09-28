@@ -45,9 +45,16 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ChangesetReplacementCreator, ChangesetReplacementCreator4)
 
+ChangesetReplacementCreator4::ChangesetReplacementCreator4() :
+ChangesetReplacementCreator1()
+{
+}
+
 QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   ChangesetReplacementCreator4::_getDefaultGeometryFilters() const
 {
+  LOG_VART(toString());
+
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> featureFilters;
 
   ElementCriterionPtr pointCrit(new PointCriterion());
@@ -73,58 +80,64 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   return featureFilters;
 }
 
-void ChangesetReplacementCreator4::_filterFeatures(
-  OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
-  const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
-  const QString& debugFileName)
-{
-  LOG_STATUS(
-    "Filtering " << StringUtils::formatLargeNumber(map->size()) << " features for: " <<
-    map->getName() << " with filter: " << featureFilter->toString() << "...");
+//void ChangesetReplacementCreator4::_filterFeatures(
+//  OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
+//  const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
+//  const QString& debugFileName)
+//{
+//  LOG_VART(toString());
 
-  // Negate the input filter, since we're removing everything but what passes the input filter.
-  RemoveElementsVisitor elementPruner(true);
-  // The criteria must be added before the config or map is set. We may want to change
-  // MultipleCriterionConsumerVisitor and RemoveElementsVisitor to make this behavior less brittle.
-  elementPruner.addCriterion(featureFilter);
-  elementPruner.setConfiguration(config);
-  elementPruner.setOsmMap(map.get());
-  // If recursion isn't used here, nasty crashes occur that are hard to track down occur at times.
-  // Not completely convinced recursion should be used here, though.
-  elementPruner.setRecursive(true);
-  map->visitRw(elementPruner);
-  LOG_INFO(elementPruner.getCompletedStatusMessage());
+//  LOG_STATUS(
+//    "Filtering " << StringUtils::formatLargeNumber(map->size()) << " features for: " <<
+//    map->getName() << " with filter: " << featureFilter->toString() << "...");
 
-  // TODO
-  LOG_VARD(geometryType);
-  ElementCriterionPtr geometryCrit =
-    GeometryTypeCriterion::getBaseGeometryCriterion(geometryType, map);
-  const RelationMap& relations = map->getRelations();
-  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
-  {
-    RelationPtr relation = it->second;
-    // TODO: change back to trace
-    LOG_VARD(relation->getElementId());
-    LOG_VARD(relation->getTags().getName());
-    LOG_VARD(relation->getType());
+//  // Negate the input filter, since we're removing everything but what passes the input filter.
+//  RemoveElementsVisitor elementPruner(true);
+//  // The criteria must be added before the config or map is set. We may want to change
+//  // MultipleCriterionConsumerVisitor and RemoveElementsVisitor to make this behavior less brittle.
+//  elementPruner.addCriterion(featureFilter);
+//  elementPruner.setConfiguration(config);
+//  elementPruner.setOsmMap(map.get());
+//  // If recursion isn't used here, nasty crashes occur that are hard to track down occur at times.
+//  // Not completely convinced recursion should be used here, though.
+//  elementPruner.setRecursive(true);
+//  map->visitRw(elementPruner);
+//  LOG_INFO(elementPruner.getCompletedStatusMessage());
 
-    const std::vector<RelationData::Entry>& members = relation->getMembers();
-    LOG_VARD(members.size());
-    for (size_t i = 0; i < members.size(); i++)
-    {
-      const RelationData::Entry member = members[i];
-      ConstElementPtr memberElement = map->getElement(member.getElementId());
-      if (memberElement && !geometryCrit->isSatisfied(memberElement))
-      {
-        // remove the member element but not the member ref
-        RemoveElementByEid elementRemover(member.getElementId(), false, false);
-        elementRemover.apply(map);
-      }
-    }
-  }
+//  // TODO: explain
+//  LOG_VARD(geometryType);
+//  ElementCriterionPtr geometryCrit =
+//    GeometryTypeCriterion::getBaseGeometryCriterion(geometryType, map);
+//  const RelationMap& relations = map->getRelations();
+//  for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
+//  {
+//    RelationPtr relation = it->second;
+//    // TODO: change back to trace
+//    LOG_VARD(relation->getElementId());
+//    LOG_VARD(relation->getTags().getName());
+//    LOG_VARD(relation->getType());
 
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
-}
+//    const std::vector<RelationData::Entry>& members = relation->getMembers();
+//    LOG_VARD(members.size());
+//    for (size_t i = 0; i < members.size(); i++)
+//    {
+//      const RelationData::Entry member = members[i];
+//      ConstElementPtr memberElement = map->getElement(member.getElementId());
+//      if (memberElement && !geometryCrit->isSatisfied(memberElement))
+//      {
+//        // remove the member element but not the member ref
+//        RemoveElementByEid elementRemover(member.getElementId(), false, false);
+//        elementRemover.apply(map);
+//      }
+//    }
+//  }
+
+//  LOG_VART(MapProjector::toWkt(map->getProjection()));
+//  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
+//}
+
+//void ChangesetReplacementCreator4::_clean(OsmMapPtr& /*map*/)
+//{
+//}
 
 }

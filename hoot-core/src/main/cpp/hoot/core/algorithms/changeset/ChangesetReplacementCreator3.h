@@ -44,7 +44,10 @@ public:
 
   static std::string className() { return "hoot::ChangesetReplacementCreator3"; }
 
-  ChangesetReplacementCreator3() = default;
+  ChangesetReplacementCreator3();
+
+  virtual QString toString() const override
+    { return QString::fromStdString(className()).remove("hoot::"); }
 
 protected:
 
@@ -57,6 +60,9 @@ protected:
     const ElementCriterionPtr& secFeatureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList()) override;
+
+//  virtual QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
+//    _getDefaultGeometryFilters() const override;
 };
 
 }

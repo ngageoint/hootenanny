@@ -33,10 +33,54 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapUtils.h>
+#include <hoot/core/criterion/OrCriterion.h>
+#include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
+#include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
+#include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 namespace hoot
 {
+
 HOOT_FACTORY_REGISTER(ChangesetReplacementCreator, ChangesetReplacementCreator3)
+
+ChangesetReplacementCreator3::ChangesetReplacementCreator3() :
+ChangesetReplacementCreator2()
+{
+}
+
+//QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
+//  ChangesetReplacementCreator3::_getDefaultGeometryFilters() const
+//{
+//  // TODO: remove
+//  LOG_VARD(toString());
+
+//  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> featureFilters;
+
+//  ElementCriterionPtr pointCrit(new PointCriterion());
+//  std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
+//    new RelationWithPointMembersCriterion());
+//  relationPointCrit->setAllowMixedChildren(true);
+//  OrCriterionPtr pointOr(new OrCriterion(pointCrit, relationPointCrit));
+//  featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointOr;
+
+//  ElementCriterionPtr lineCrit(new LinearCriterion());
+//  std::shared_ptr<RelationWithLinearMembersCriterion> relationLinearCrit(
+//    new RelationWithLinearMembersCriterion());
+//  relationLinearCrit->setAllowMixedChildren(true);
+//  OrCriterionPtr lineOr(new OrCriterion(lineCrit, relationLinearCrit));
+//  featureFilters[GeometryTypeCriterion::GeometryType::Line] = lineOr;
+
+//  // Poly crit has been converted over to encapsulate RelationWithGeometryMembersCriterion, while
+//  // the other types have not yet (#4151).
+//  std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
+//  polyCrit->setAllowMixedChildren(true);
+//  featureFilters[GeometryTypeCriterion::GeometryType::Polygon] = polyCrit;
+
+//  return featureFilters;
+//}
 
 void ChangesetReplacementCreator3::_processMaps(
   OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const ElementCriterionPtr& refFeatureFilter,
@@ -44,6 +88,8 @@ void ChangesetReplacementCreator3::_processMaps(
   const GeometryTypeCriterion::GeometryType& geometryType,
   const QStringList& linearFilterClassNames)
 {
+  LOG_VARD(toString());
+
   LOG_VARD(linearFilterClassNames);
   LOG_VARD(refFeatureFilter->toString());
   LOG_VARD(secFeatureFilter->toString());
@@ -72,10 +118,6 @@ void ChangesetReplacementCreator3::_processMaps(
     // require manual cleanup after the resulting changeset is applied.
     _markElementsWithMissingChildren(refMap);
   }
-
-  // TODO: If removing/restoring relations can't work, another idea is to leave the relations in
-  // but remove children that aren't of the correct geometry type without removing their relation
-  // member refs.
 
   // TODO
   OsmMapPtr refRelationsMap = _removeRelations(refMap);
@@ -126,7 +168,6 @@ void ChangesetReplacementCreator3::_processMaps(
   _filterFeatures(
     secMap, secFeatureFilter, geometryType, secFilterSettings,
     "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
-
 
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a

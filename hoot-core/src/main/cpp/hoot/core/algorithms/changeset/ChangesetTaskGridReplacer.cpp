@@ -196,6 +196,7 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
   _changesetCreator->setBoundsInterpretation(
     ChangesetReplacementCreator::BoundsInterpretation::Lenient);
   _changesetCreator->setChangesetOptions(true, "", _dataToReplaceUrl);
+  LOG_VARD(_changesetCreator->toString());
 
   _changesetApplier.reset(new OsmApiDbSqlChangesetApplier(_dataToReplaceUrl));
 

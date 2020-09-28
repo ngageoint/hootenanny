@@ -89,6 +89,8 @@ public:
   virtual void setChangesetId(const QString& id) = 0;
   virtual void setChangesetOptions(
     const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl) = 0;
+
+  virtual QString toString() const  = 0;
 };
 
 }

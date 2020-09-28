@@ -55,12 +55,19 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ChangesetReplacementCreator, ChangesetReplacementCreator2)
 
+ChangesetReplacementCreator2::ChangesetReplacementCreator2() :
+ChangesetReplacementCreator1()
+{
+}
+
 void ChangesetReplacementCreator2::_processMaps(
   OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const ElementCriterionPtr& refFeatureFilter,
   const ElementCriterionPtr& secFeatureFilter,
   const GeometryTypeCriterion::GeometryType& geometryType,
   const QStringList& linearFilterClassNames)
 {
+  LOG_VARD(toString());
+
   LOG_VARD(linearFilterClassNames);
   LOG_VARD(refFeatureFilter->toString());
   LOG_VARD(secFeatureFilter->toString());
@@ -89,10 +96,6 @@ void ChangesetReplacementCreator2::_processMaps(
     // require manual cleanup after the resulting changeset is applied.
     _markElementsWithMissingChildren(refMap);
   }
-
-  // TODO: If removing/restoring relations can't work, another idea is to leave the relations in
-  // but remove children that aren't of the correct geometry type without removing their relation
-  // member refs.
 
   // TODO
   OsmMapPtr refRelationsMap = _removeRelations(refMap);
@@ -625,7 +628,6 @@ void ChangesetReplacementCreator2::_restoreRelations(OsmMapPtr& map, OsmMapPtr& 
 {
   LOG_DEBUG(
     "Restoring relations from: " << relationsMap->getName() << " to " << map->getName() << "...");
-  //const int mapSizeBefore = map->size();
 
   OsmMapWriterFactory::writeDebugMap(
     map, _changesetId + "-" + map->getName() + "-before-relations-restored");
@@ -672,9 +674,7 @@ void ChangesetReplacementCreator2::_restoreRelations(OsmMapPtr& map, OsmMapPtr& 
   }
   OsmMapWriterFactory::writeDebugMap(
     map, _changesetId + "-" + map->getName() + "-after-relations-restored");
-  LOG_DEBUG(
-    "Restored " << /*map->size() - mapSizeBefore*/map->getRelationCount() << " relation(s) to " <<
-    map->getName() << ".");
+  LOG_DEBUG("Restored " << map->getRelationCount() << " relation(s) to " << map->getName() << ".");
 }
 
 }

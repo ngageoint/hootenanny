@@ -99,6 +99,7 @@
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/RemoveDuplicateAreasVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
 #include <hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
@@ -129,7 +130,6 @@ _chainReplacementFilters(false),
 _chainRetainmentFilters(false),
 _numChanges(0)
 {
-  setGeometryFilters(QStringList());
 }
 
 void ChangesetReplacementCreator1::setChangesetOptions(
@@ -518,6 +518,24 @@ void ChangesetReplacementCreator1::create(
 //    _dedupeMaps(conflatedMaps);
 //  }
 
+//  OsmMapPtr combinedRefMap = refMaps.at(0);
+//  OsmMapPtr mapToAppend = refMaps.at(1);
+//  MapUtils::combineMaps(combinedRefMap, mapToAppend, true);
+//  mapToAppend = refMaps.at(2);
+//  MapUtils::combineMaps(combinedRefMap, mapToAppend, true);
+//  refMaps.clear();
+//  refMaps.append(combinedRefMap);
+//  _intraDedupeMap(combinedRefMap);
+
+//  OsmMapPtr combinedSecMap = conflatedMaps.at(0);
+//  mapToAppend = conflatedMaps.at(1);
+//  MapUtils::combineMaps(combinedSecMap, mapToAppend, true);
+//  mapToAppend = conflatedMaps.at(2);
+//  MapUtils::combineMaps(combinedSecMap, mapToAppend, true);
+//  conflatedMaps.clear();
+//  conflatedMaps.append(combinedSecMap);
+//  _intraDedupeMap(combinedSecMap);
+
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements. This must be done with the ref/sec maps separated to avoid ID
   // conflicts.
@@ -546,6 +564,21 @@ void ChangesetReplacementCreator1::create(
     StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 
+void ChangesetReplacementCreator1::_intraDedupeMap(OsmMapPtr& map)
+{
+  ElementDeduplicator deduper;
+  deduper.setDedupeIntraMap(true);
+  std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
+  deduper.setNodeCriterion(pointCrit);
+  deduper.setFavorMoreConnectedWays(true);
+  pointCrit->setOsmMap(map.get());
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-before-deduping");
+  deduper.dedupe(map);
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-after-deduping");
+}
+
 OsmMapPtr ChangesetReplacementCreator1::_getMapByGeometryType(const QList<OsmMapPtr>& maps,
                                                              const QString& geometryTypeStr)
 {
@@ -567,6 +600,8 @@ void ChangesetReplacementCreator1::_processMaps(
   const GeometryTypeCriterion::GeometryType& geometryType,
   const QStringList& linearFilterClassNames)
 {
+  LOG_VARD(toString());
+
   LOG_VARD(linearFilterClassNames);
   LOG_VARD(refFeatureFilter->toString());
   LOG_VARD(secFeatureFilter->toString());
@@ -945,6 +980,9 @@ void ChangesetReplacementCreator1::_setGlobalOpts()
       ConfigOptions::getMapCleanerTransformsKey(),
       QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
   }
+/*  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getMapCleanerTransformsKey(),
+    QString::fromStdString(RemoveDuplicateAreasVisitor::className()))*/;
 
   // These don't change between scenarios (or at least we haven't needed to change them yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
@@ -1086,7 +1124,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   ElementCriterionPtr pointCrit(new PointCriterion());
   std::shared_ptr<RelationWithPointMembersCriterion> relationPointCrit(
     new RelationWithPointMembersCriterion());
-  relationPointCrit->setAllowMixedChildren(false);
+  relationPointCrit->setAllowMixedChildren(/*false*/true);
   OrCriterionPtr pointOr(new OrCriterion(pointCrit, relationPointCrit));
   featureFilters[GeometryTypeCriterion::GeometryType::Point] = pointOr;
 
@@ -1100,7 +1138,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   // Poly crit has been converted over to encapsulate RelationWithGeometryMembersCriterion, while
   // the other types have not yet (#4151).
   std::shared_ptr<PolygonCriterion> polyCrit(new PolygonCriterion());
-  polyCrit->setAllowMixedChildren(false);
+  polyCrit->setAllowMixedChildren(/*false*/true);
   featureFilters[GeometryTypeCriterion::GeometryType::Polygon] = polyCrit;
 
   return featureFilters;

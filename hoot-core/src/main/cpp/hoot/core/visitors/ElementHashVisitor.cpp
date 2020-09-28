@@ -53,7 +53,7 @@ _collectHashes(false)
   {
     throw IllegalArgumentException("ElementHashVisitor must either write or collect hashes.");
   }
-  LOG_VARD(_coordinateComparisonSensitivity);
+  LOG_VART(_coordinateComparisonSensitivity);
 }
 
 void ElementHashVisitor::visit(const ElementPtr& e)

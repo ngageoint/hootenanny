@@ -44,7 +44,10 @@ public:
 
   static std::string className() { return "hoot::ChangesetReplacementCreator2"; }
 
-  ChangesetReplacementCreator2() = default;
+  ChangesetReplacementCreator2();
+
+  virtual QString toString() const override
+    { return QString::fromStdString(className()).remove("hoot::"); }
 
 protected:
 
