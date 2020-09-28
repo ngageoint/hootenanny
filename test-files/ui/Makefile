@@ -141,7 +141,7 @@ load-data: clean
 		VALUES ( \
 		'ff47f751-c831-41ee-800f-5ef8b9371ee3', \
 		cast(extract(epoch from (now())) as bigint), \
-		cast(extract(epoch from (now() + INTERVAL '1 day')) as bigint), \
+		cast(extract(epoch from (now() + INTERVAL '1 second')) as bigint), \
 		31536000, \
 		'', \
 		-1541432234)"
