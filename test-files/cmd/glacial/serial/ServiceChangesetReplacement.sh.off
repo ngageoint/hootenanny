@@ -230,7 +230,7 @@ if [ "$CROP_OPTS" == "" ]; then
 fi
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999 $EXTRA_PARAMS"
 PERTY_OPTS="-D random.seed=1 -D perty.systematic.error.x=15 -D perty.systematic.error.y=15 $EXTRA_PARAMS -D perty.ops= "
-CHANGESET_DERIVE_OPTS="-D changeset.replacement.implementation=hoot::ChangesetReplacementCreator1 -D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE $EXTRA_PARAMS "
+CHANGESET_DERIVE_OPTS="-D changeset.replacement.implementation=hoot::ChangesetReplacementCreator5 -D changeset.user.id=1 -D bounds.output.file=$OUT_DIR/$TEST_NAME-bounds.osm -D snap.unconnected.ways.existing.way.node.tolerance=$EXISTING_WAY_NODE_TOLERANCE -D snap.unconnected.ways.snap.tolerance=$WAY_SNAP_TOLERANCE $EXTRA_PARAMS "
 CUSTOM_TAG_KEY="note"
 CUSTOM_TAG_VAL="Source"
 

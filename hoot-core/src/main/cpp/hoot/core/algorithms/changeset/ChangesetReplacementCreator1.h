@@ -173,6 +173,24 @@ public:
 
 protected:
 
+  // TODO: rename these input vars for clarity
+
+  // path to the input with data being replaced; overrides use of _input1Map
+  QString _input1;
+  // cached data being replaced
+  OsmMapPtr _input1Map;
+
+  // path to the input with data used for replacement; overrides use of _input2Map
+  QString _input2;
+  // cached replacement data
+  OsmMapPtr _input2Map;
+
+  // path to the changeset output file
+  QString _output;
+
+  // the AOI over which the replacement is being performed
+  QString _replacementBounds;
+
   // determines how strict the handling of the bounds is during replacement
   BoundsInterpretation _boundsInterpretation;
 
@@ -191,7 +209,85 @@ protected:
   // determines if the current changeset map generation pass contains only linear features
   bool _currentChangeDerivationPassIsLinear;
 
+  friend class ChangesetReplacementCreatorTest;
+
+  // used to keep log messages with urls in them shorter
+  int _maxFilePrintLength;
+
+  // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
+  // alpha shape of the sec data gets replaced.
+  bool _fullReplacement;
+
+  // A set of geometry type filters, organized by core geometry type (point, line, poly) to
+  // separately filter the input datasets on.
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
+  bool _geometryFiltersSpecified;
+
+  // TODO
+  QMap<QString, std::shared_ptr<ElementIdRemapper>> _secIdMappings;
+
+  // A list of linear geometry criterion classes to apply way snapping to.
+  QStringList _linearFilterClassNames;
+
+  // One or more non-geometry criteria to be combined with the geometry type filters for the
+  // secondary input. Allows for further restriction of the secondary data that makes it to output.
+  std::shared_ptr<ChainCriterion> _replacementFilter;
+
+  // If true the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
+  // together.
+  bool _chainReplacementFilters;
+
+  // One or more non-geometry criteria to be combined with the geometry type filters for the
+  // reference input. Allows for further restriction of the ref data that gets replaced.
+  std::shared_ptr<ChainCriterion> _retainmentFilter;
+
+  // If true the filters specified in _retainmentFilter are AND'd together. Otherwise, they're OR'd
+  // together.
+  bool _chainRetainmentFilters;
+
+  // Configuration options to pass to the filters in _retainmentFilter.
+  Settings _retainmentFilterOptions;
+
+  // handles changeset generation and output
+  std::shared_ptr<ChangesetCreator> _changesetCreator;
+  int _numChanges;
+
+  QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
+
+  bool _roadFilterExists() const;
+
+  void _setInputFilter(
+    std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
+    const bool chainFilters);
+
+  void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
+
+  /*
+   * TODO
+   */
+  void _conflate(OsmMapPtr& map);
+
+  /*
+   * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
+   * being replaced with the IDs from the maps being replaced.
+   */
+  void _synchronizeIds(
+    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
+
+  /*
+   * TODO
+   */
+  OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
+
+  void _intraDedupeMap(OsmMapPtr& map);
+
+  virtual void _setGlobalOpts();
+
   void _parseConfigOpts(const GeometryTypeCriterion::GeometryType& geometryType);
+
+  void _validateInputs();
+
+  void _printJobDescription() const;
 
   /*
    * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
@@ -199,6 +295,12 @@ protected:
    */
   virtual QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     _getDefaultGeometryFilters() const;
+
+  /*
+   * Combines filters in _geometryTypeFilters with _replacementFilter.
+   */
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
+    std::shared_ptr<ChainCriterion> nonGeometryFilter);
 
   OsmMapPtr _loadRefMap(const GeometryTypeCriterion::GeometryType& geometryType);
   OsmMapPtr _loadSecMap(const GeometryTypeCriterion::GeometryType& geometryType);
@@ -302,110 +404,6 @@ protected:
    * TODO
    */
   virtual void _clean(OsmMapPtr& map);
-
-private:
-
-  friend class ChangesetReplacementCreatorTest;
-
-  // TODO: rename these input vars for clarity
-
-  // path to the input with data being replaced; overrides use of _input1Map
-  QString _input1;
-  // cached data being replaced
-  OsmMapPtr _input1Map;
-
-  // path to the input with data used for replacement; overrides use of _input2Map
-  QString _input2;
-  // cached replacement data
-  OsmMapPtr _input2Map;
-
-  // path to the changeset output file
-  QString _output;
-
-  // the AOI over which the replacement is being performed
-  QString _replacementBounds;
-
-  // used to keep log messages with urls in them shorter
-  int _maxFilePrintLength;
-
-  // If true, all the ref data gets replaced. If false, only the ref data that intersects with the
-  // alpha shape of the sec data gets replaced.
-  bool _fullReplacement;
-
-  // A set of geometry type filters, organized by core geometry type (point, line, poly) to
-  // separately filter the input datasets on.
-  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
-  bool _geometryFiltersSpecified;
-
-  // TODO
-  QMap<QString, std::shared_ptr<ElementIdRemapper>> _secIdMappings;
-
-  // A list of linear geometry criterion classes to apply way snapping to.
-  QStringList _linearFilterClassNames;
-
-  // One or more non-geometry criteria to be combined with the geometry type filters for the
-  // secondary input. Allows for further restriction of the secondary data that makes it to output.
-  std::shared_ptr<ChainCriterion> _replacementFilter;
-
-  // If true the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
-  // together.
-  bool _chainReplacementFilters;
-
-  // One or more non-geometry criteria to be combined with the geometry type filters for the
-  // reference input. Allows for further restriction of the ref data that gets replaced.
-  std::shared_ptr<ChainCriterion> _retainmentFilter;
-
-  // If true the filters specified in _retainmentFilter are AND'd together. Otherwise, they're OR'd
-  // together.
-  bool _chainRetainmentFilters;
-
-  // Configuration options to pass to the filters in _retainmentFilter.
-  Settings _retainmentFilterOptions;
-
-  // handles changeset generation and output
-  std::shared_ptr<ChangesetCreator> _changesetCreator;
-  int _numChanges;
-
-  QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
-
-  void _validateInputs();
-
-  void _printJobDescription() const;
-
-  bool _roadFilterExists() const;
-
-  void _setInputFilter(
-    std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
-    const bool chainFilters);
-
-  void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
-
-  /*
-   * Combines filters in _geometryTypeFilters with _replacementFilter.
-   */
-  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
-    std::shared_ptr<ChainCriterion> nonGeometryFilter);
-
-  void _setGlobalOpts();
-
-  /*
-   * TODO
-   */
-  void _conflate(OsmMapPtr& map);
-
-  /*
-   * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
-   * being replaced with the IDs from the maps being replaced.
-   */
-  void _synchronizeIds(
-    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
-
-  /*
-   * TODO
-   */
-  OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
-
-  void _intraDedupeMap(OsmMapPtr& map);
 };
 
 }
