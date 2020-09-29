@@ -70,12 +70,8 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
     public ExternalCommandRunnerImpl() {}
 
     public String obfuscateConsoleLog(String in) {
-        //strip out time in the logging metadata
-        //e.g. 15:21:06.248
-        String out = in.replaceAll("\\s*\\d+:\\d+:\\d+\\.\\d+\\s+", "");
-
         //strip out the path to the cpp code
-        out = out.replaceAll("([\\w.]+\\/).+?\\(\\s+\\d+\\)\\s*", "");
+        String out = in.replaceAll("([\\w.]+\\/).+?\\(\\s+\\d+\\)\\s*", "");
 
         //strip out leading newlines
         out = out.replaceFirst("^\\n", "");
