@@ -178,8 +178,8 @@ void ChangesetReplacementCreator1::setGeometryFilters(const QStringList& filterC
       if (filter->getGeometryType() == GeometryTypeCriterion::GeometryType::Line)
       {
         _linearFilterClassNames.append(filterClassName);
-      } 
-    } 
+      }
+    }
   }
 
   // have to call this method to keep filtering from erroring...shouldn't have to...should just init
@@ -547,7 +547,7 @@ void ChangesetReplacementCreator1::create(
 }
 
 OsmMapPtr ChangesetReplacementCreator1::_getMapByGeometryType(const QList<OsmMapPtr>& maps,
-                                                             const QString& geometryTypeStr)
+                                                              const QString& geometryTypeStr)
 {
   for (int i = 0; i < maps.size(); i++)
   {
@@ -755,7 +755,6 @@ void ChangesetReplacementCreator1::_processMaps(
     // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
     // crop in preparation for changeset derivation. If we don't introduce them back during
     // changeset derivation, they may not end up being snapped back to the replacement data.
-
     immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
   }
 
@@ -1290,8 +1289,7 @@ OsmMapPtr ChangesetReplacementCreator1::_loadInputMap(
       const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
       conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
 
-      LOG_STATUS(
-        "Loading reference map from: ..." << inputUrl.right(_maxFilePrintLength) << "...");
+      LOG_STATUS("Loading map from: ..." << inputUrl.right(_maxFilePrintLength) << "...");
       cachedMap.reset(new OsmMap());
       cachedMap->setName(mapName);
       IoUtils::loadMap(cachedMap, inputUrl, useFileIds, status);
@@ -1300,7 +1298,7 @@ OsmMapPtr ChangesetReplacementCreator1::_loadInputMap(
       conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
     }
     LOG_STATUS(
-      "Copying reference map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<
+      "Copying map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<
       " from: " << cachedMap->getName() << "...");
     map.reset(new OsmMap(cachedMap));
     IoUtils::cropToBounds(
@@ -1324,7 +1322,7 @@ OsmMapPtr ChangesetReplacementCreator1::_loadInputMap(
 
 OsmMapPtr ChangesetReplacementCreator1::_loadRefMap(
   const GeometryTypeCriterion::GeometryType& geometryType)
-{ 
+{
   // We only care about the zero version warning for the ref data.
   return
     _loadInputMap(

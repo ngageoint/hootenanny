@@ -60,9 +60,6 @@ protected:
     const ElementCriterionPtr& secFeatureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType,
     const QStringList& linearFilterClassNames = QStringList()) override;
-
-//  virtual QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-//    _getDefaultGeometryFilters() const override;
 };
 
 }
