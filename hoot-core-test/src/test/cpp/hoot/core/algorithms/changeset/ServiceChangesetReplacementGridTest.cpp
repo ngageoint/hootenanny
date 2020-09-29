@@ -406,12 +406,12 @@ private:
     conf().set(
       ConfigOptions::getChangesetReplacementImplementationKey(),
       "hoot::ChangesetReplacementCreator5");
-    //conf().set(
-      //ConfigOptions::getLogClassFilterKey(),
-      //"");
+//    conf().set(
+//      ConfigOptions::getLogClassFilterKey(),
+//      "ElementDeduplicator");
 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+    //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
 
   void _loadDataToReplaceDb(

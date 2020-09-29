@@ -259,8 +259,8 @@ void ChangesetReplacementCreator5::create(
 //    _dedupeMaps(conflatedMaps);
 //  }
 
-  _combineGeometryTypeMaps(refMaps);
-  _combineGeometryTypeMaps(conflatedMaps);
+  _combineProcessedMaps(refMaps, true);
+  _combineProcessedMaps(conflatedMaps, true);
 
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements. This must be done with the ref/sec maps separated to avoid ID
@@ -290,7 +290,8 @@ void ChangesetReplacementCreator5::create(
     StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 
-void ChangesetReplacementCreator5::_combineGeometryTypeMaps(QList<OsmMapPtr>& maps)
+void ChangesetReplacementCreator5::_combineProcessedMaps(
+  QList<OsmMapPtr>& maps, const bool deduplicate)
 {
   OsmMapPtr combinedMap;
   for (int i = 0; i < maps.size(); i++)
@@ -304,13 +305,20 @@ void ChangesetReplacementCreator5::_combineGeometryTypeMaps(QList<OsmMapPtr>& ma
       }
       else
       {
+        OsmMapWriterFactory::writeDebugMap(
+          combinedMap, _changesetId + "-" + combinedMap->getName() + "-before-combining");
         MapUtils::combineMaps(combinedMap, map, true);
+        OsmMapWriterFactory::writeDebugMap(
+          combinedMap, _changesetId + "-" + combinedMap->getName() + "-after-combining");
+        if (deduplicate)
+        {
+          _intraDedupeMap(combinedMap);
+        }
       }
     }
   }
   if (combinedMap)
   {
-    _intraDedupeMap(combinedMap);
     maps.clear();
     maps.append(combinedMap);
   }
@@ -365,9 +373,9 @@ void ChangesetReplacementCreator5::_intraDedupeMap(OsmMapPtr& map)
   ElementDeduplicator deduper;
   deduper.setDedupeIntraMap(true);
   std::shared_ptr<PointCriterion> pointCrit(new PointCriterion());
+  pointCrit->setOsmMap(map.get());
   deduper.setNodeCriterion(pointCrit);
   deduper.setFavorMoreConnectedWays(true);
-  pointCrit->setOsmMap(map.get());
   OsmMapWriterFactory::writeDebugMap(
     map, _changesetId + "-" + map->getName() + "-before-deduping");
   deduper.dedupe(map);

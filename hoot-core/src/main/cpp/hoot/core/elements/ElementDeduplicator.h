@@ -78,8 +78,8 @@ public:
    * IDs of any duplicates found
    *
    * @param map TODO
-   * @param hashes
-   * @param duplicates
+   * @param hashes TODO
+   * @param duplicates TODO
    */
   static void calculateDuplicateElements(
     OsmMapPtr map, QMap<QString, ElementId>& hashes,

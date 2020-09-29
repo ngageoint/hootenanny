@@ -63,7 +63,7 @@ protected:
 private:
 
   void _intraDedupeMap(OsmMapPtr& map);
-  void _combineGeometryTypeMaps(QList<OsmMapPtr>& maps);
+  void _combineProcessedMaps(QList<OsmMapPtr>& maps, const bool deduplicate);
 };
 
 }
