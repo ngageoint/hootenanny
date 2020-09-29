@@ -407,7 +407,7 @@ public class GrailResource {
         // Wait to detect overpass 'Last changeset pushed ID'
         GrailParams waitParams = new GrailParams();
         waitParams.setUser(user);
-        waitParams.setApplyTags(true); // flag to remove tag is timeout passes this time around
+        waitParams.setTaskInfo(projectTaskInfo);
 
         List<Command> workflow = new LinkedList<>();
         workflow.add(grailCommandFactory.build(id, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));

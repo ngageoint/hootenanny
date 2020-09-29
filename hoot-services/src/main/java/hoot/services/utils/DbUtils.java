@@ -28,6 +28,7 @@ package hoot.services.utils;
 
 
 import static hoot.services.HootProperties.CHANGESETS_FOLDER;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
@@ -833,7 +834,8 @@ NOT EXISTS
         String jobId = createQuery()
                 .select(jobStatus.jobId)
                 .from(jobStatus)
-                .where(Expressions.booleanTemplate("tags->'taskInfo' like '%" + taskInfo + "%'"))
+                .where(Expressions.booleanTemplate("tags->'taskInfo' like 'taskingManager:" + taskInfo + "'"))
+                .orderBy(jobStatus.start.desc())
                 .fetchFirst();
 
         return jobId;
@@ -890,15 +892,12 @@ NOT EXISTS
         }
     }
 
-    public static void removeTimeoutTag(String jobId) {
-        Map<String, String> tags = getJobStatusTags(jobId);
-        tags.remove("timeout");
-
+    public static void removeTimeoutTag(String taskInfo) {
         SQLQueryFactory query = createQuery();
         query.update(jobStatus)
-                .where(jobStatus.jobId.eq(jobId))
-                .set(jobStatus.tags, tags)
-                .execute();
+            .where(Expressions.booleanTemplate("tags->'taskInfo' like 'taskingManager:" + taskInfo + "'"))
+            .set(Arrays.asList(jobStatus.tags), Arrays.asList(Expressions.stringTemplate("delete(tags, 'timeout')")))
+            .execute();
 
         try {
             query.getConnection().commit();
