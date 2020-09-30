@@ -36,7 +36,7 @@ pipeline {
         SYS_VER = 'UNKOWN'
         BUILD_VERBOSE = 'no'
         BUILD_DEBUG = 'no'
-        HOOT_USE_SPOT_INSTANCE=${params.use_spot_instance}
+        HOOT_USE_SPOT_INSTANCE="${params.use_spot_instance}"
         HOOT_AWS_ENV_TAG="${params.HOOT_AWS_ENV_TAG}"
         HOOT_AWS_USE_TAG="${params.HOOT_AWS_USE_TAG}"
         HOOT_AWS_GROUP_TAG="${params.HOOT_AWS_GROUP_TAG}"
