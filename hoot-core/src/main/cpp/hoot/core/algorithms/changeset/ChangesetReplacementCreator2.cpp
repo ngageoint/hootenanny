@@ -660,12 +660,12 @@ void ChangesetReplacementCreator2::_restoreRelations(OsmMapPtr& map, OsmMapPtr& 
     }
     if (anyMemberExistsInTargetMap)
     {
-      LOG_VART("Restoring: " << relation->getElementId() <<  " to " << map->getName() << "...");
+      LOG_TRACE("Restoring: " << relation->getElementId() <<  " to " << map->getName() << "...");
       map->addRelation(relation);
     }
     else
     {
-      LOG_VART(
+      LOG_TRACE(
         "Not restoring: " << relation->getElementId() << " to " << map->getName() <<
         ", as none of its members exist in the target map.");
     }

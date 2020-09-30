@@ -1389,7 +1389,7 @@ void ChangesetReplacementCreator1::_filterFeatures(
   elementPruner.setConfiguration(config);
   elementPruner.setOsmMap(map.get());
   // If recursion isn't used here, nasty crashes occur that are hard to track down occur at times.
-  // Not completely convinced recursion should be used here, though.
+  // Not completely convinced recursion should be used here for relations, though.
   elementPruner.setRecursive(true);
   map->visitRw(elementPruner);
   LOG_INFO(elementPruner.getCompletedStatusMessage());
