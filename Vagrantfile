@@ -81,6 +81,10 @@ end
 $use_spot_instance = ENV['HOOT_USE_SPOT_INSTANCE']
 if $use_spot_instance.nil?
     $use_spot_instance = true
+    $spot_instance_max_price = ENV['HOOT_SPOT_INSTANCE_MAX_PRICE']
+    if $spot_instance_max_price.nil?
+      $spot_instance_max_price = "0.384"
+    end
 end
 
 Vagrant.configure(2) do |config|
@@ -99,7 +103,7 @@ Vagrant.configure(2) do |config|
               if $use_spot_instance == 'true'
                 region.spot_instance = true
                 # price of on-demand m5.2xlarge instance is 0.384
-                region.spot_max_price = "0.384"
+                region.spot_max_price = $spot_instance_max_price
               end
           end
       end

@@ -25,6 +25,7 @@ pipeline {
         booleanParam(name: 'Sonar', defaultValue: false)
         booleanParam(name: 'Halt_on_failure', defaultValue: true)
         booleanParam(name: 'use_spot_instance', defaultValue: true, description: 'Make EC2 instance on-demand or a spot instance')
+        string(name: 'spot_instance_max_price', defaultValue: '0.384', description: 'The max price to use on an EC2 spot instance')
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
         string(name: 'HOOT_AWS_ENV_TAG', defaultValue: 'testing')
         string(name: 'HOOT_AWS_USE_TAG', defaultValue: 'jenkins')
@@ -37,6 +38,7 @@ pipeline {
         BUILD_VERBOSE = 'no'
         BUILD_DEBUG = 'no'
         HOOT_USE_SPOT_INSTANCE="${params.use_spot_instance}"
+        HOOT_SPOT_INSTANCE_MAX_PRICE="${params.spot_instance_max_price}"
         HOOT_AWS_ENV_TAG="${params.HOOT_AWS_ENV_TAG}"
         HOOT_AWS_USE_TAG="${params.HOOT_AWS_USE_TAG}"
         HOOT_AWS_GROUP_TAG="${params.HOOT_AWS_GROUP_TAG}"
