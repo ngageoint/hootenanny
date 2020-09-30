@@ -34,7 +34,7 @@ namespace hoot
 {
 
 /**
- * Single geometry pass version of ChangesetReplacementCreator1
+ * Single geometry pass version of ChangesetReplacementCreator1 w/o replacement/retainment filtering
  */
 class ChangesetReplacementCreator7 : public ChangesetReplacementCreator1
 {
@@ -60,10 +60,20 @@ public:
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) override;
 
+  virtual void setGeometryFilters(const QStringList& filterClassNames) override;
+  virtual void setReplacementFilters(const QStringList& /*filterClassNames*/) override {}
+  virtual void setChainReplacementFilters(const bool /*chain*/) override {}
+  virtual void setReplacementFilterOptions(const QStringList& /*optionKvps*/) override {}
+  virtual void setRetainmentFilters(const QStringList& /*filterClassNames*/) override {}
+  virtual void setChainRetainmentFilters(const bool /*chain*/) override {}
+  virtual void setRetainmentFilterOptions(const QStringList& /*optionKvps*/) override {}
+
   virtual QString toString() const override
     { return QString::fromStdString(className()).remove("hoot::"); }
 
 protected:
+
+  ElementCriterionPtr _geometryTypeFilter;
 
   virtual void _setGlobalOpts();
 };

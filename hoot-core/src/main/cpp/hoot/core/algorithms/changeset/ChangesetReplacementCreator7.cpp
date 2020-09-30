@@ -123,6 +123,66 @@ ChangesetReplacementCreator1()
 {
 }
 
+void ChangesetReplacementCreator7::setGeometryFilters(const QStringList& filterClassNames)
+{
+  LOG_VART(filterClassNames);
+  if (!filterClassNames.isEmpty())
+  {
+    _geometryFiltersSpecified = true;
+    //_geometryTypeFilters.clear();
+    _geometryTypeFilter.reset();
+    _linearFilterClassNames.clear();
+
+    for (int i = 0; i < filterClassNames.size(); i++)
+    {
+      const QString filterClassName = filterClassNames.at(i);
+      LOG_VART(filterClassName);
+
+      // Fail if the filter doesn't map to a geometry type.
+      std::shared_ptr<GeometryTypeCriterion> filter =
+        std::dynamic_pointer_cast<GeometryTypeCriterion>(
+          std::shared_ptr<ElementCriterion>(
+            Factory::getInstance().constructObject<ElementCriterion>(filterClassName)));
+      if (!filter)
+      {
+        throw IllegalArgumentException(
+          "Invalid feature geometry type filter: " + filterClassName +
+          ". Filter must be a GeometryTypeCriterion.");
+      }
+
+      if (!_geometryTypeFilter)
+      {
+        _geometryTypeFilter = filter;
+      }
+      else
+      {
+        _geometryTypeFilter = OrCriterionPtr(new OrCriterion(_geometryTypeFilter, filter));
+      }
+
+      if (filter->getGeometryType() == GeometryTypeCriterion::GeometryType::Line)
+      {
+        _linearFilterClassNames.append(filterClassName);
+      }
+    }
+  }
+
+  // have to call this method to keep filtering from erroring...shouldn't have to...should just init
+  // itself internally when no geometry filters are specified
+  //LOG_VART(_geometryTypeFilters.size());
+  //if (_geometryTypeFilters.isEmpty())
+  if (!_geometryTypeFilter)
+  {
+    _geometryFiltersSpecified = false;
+    //_geometryTypeFilters = _getDefaultGeometryFilters();
+    _linearFilterClassNames =
+      ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
+        GeometryTypeCriterion::GeometryType::Line);
+  }
+
+  LOG_VARD(_geometryTypeFilters.size());
+  LOG_VART(_linearFilterClassNames);
+}
+
 void ChangesetReplacementCreator7::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
@@ -220,9 +280,12 @@ void ChangesetReplacementCreator7::create(
 
   // Prune the ref dataset down to just the geometry types specified by the filter, so we don't end
   // up modifying anything else.
-//  _filterFeatures(
-//    refMap, refFeatureFilter, geometryType, conf(),
-//    _changesetId + "-ref-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
+  if (_geometryTypeFilter)
+  {
+    _filterFeatures(
+      refMap, _geometryTypeFilter, GeometryTypeCriterion::Unknown, conf(),
+      _changesetId + "-ref-after-pruning");
+  }
 
   // load the data that we're replacing with
   OsmMapPtr secMap =
@@ -240,11 +303,14 @@ void ChangesetReplacementCreator7::create(
 
 //  // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
 //  // up modifying anything else.
-//  const Settings secFilterSettings =
-//    _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
-//  _filterFeatures(
-//    secMap, secFeatureFilter, geometryType, secFilterSettings,
-//    "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
+  if (_geometryTypeFilter)
+  {
+    const Settings secFilterSettings =
+      _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
+    _filterFeatures(
+      secMap, _geometryTypeFilter, GeometryTypeCriterion::Unknown, secFilterSettings,
+      _changesetId + "-sec-after-pruning");
+  }
 
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
@@ -358,15 +424,15 @@ void ChangesetReplacementCreator7::create(
   // PRE-CHANGESET DERIVATION DATA PREP
 
   OsmMapPtr immediatelyConnectedOutOfBoundsWays;
-  //if (_boundsInterpretation == BoundsInterpretation::Lenient &&
-      //_currentChangeDerivationPassIsLinear)
-  //{
+  if (_boundsInterpretation == BoundsInterpretation::Lenient /*&&
+      _currentChangeDerivationPassIsLinear*/)
+  {
     // If we're conflating linear features with the lenient bounds requirement, copy the
     // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
     // crop in preparation for changeset derivation. If we don't introduce them back during
     // changeset derivation, they may not end up being snapped back to the replacement data.
     immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
-  //}
+  }
 
   // Crop the original ref and conflated maps appropriately for changeset derivation.
   _cropMapForChangesetDerivation(
@@ -376,9 +442,9 @@ void ChangesetReplacementCreator7::create(
     conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId + "-sec-cropped-for-changeset");
 
-  //if (_boundsInterpretation == BoundsInterpretation::Lenient &&
-      //_currentChangeDerivationPassIsLinear)
-  //{
+  if (_boundsInterpretation == BoundsInterpretation::Lenient/* &&
+      _currentChangeDerivationPassIsLinear*/)
+  {
     // The non-strict bounds interpretation way replacement workflow benefits from a second
     // set of snapping runs right before changeset derivation due to there being ways connected to
     // replacement ways that fall completely outside of the replacement bounds. However, joining
@@ -431,7 +497,7 @@ void ChangesetReplacementCreator7::create(
       conflatedMap, _changesetId + "-ref-connected-combined");
 
     immediatelyConnectedOutOfBoundsWays.reset();
-  //}
+  }
   if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
   {
     // If we're not allowing the changeset deriver to generate delete statements for reference
@@ -580,9 +646,19 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
   _boundsOpts.changesetSecKeepEntireCrossingBounds = true;
   _boundsOpts.changesetSecKeepOnlyInsideBounds = false;
   _boundsOpts.inBoundsStrict = false;
-  _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = true;
-  _boundsOpts.loadSecKeepEntireCrossingBounds = true;
-  _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
+
+  if (_boundsInterpretation == BoundsInterpretation::Lenient)
+  {
+    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = true;
+    _boundsOpts.loadSecKeepEntireCrossingBounds = true;
+    _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
+  }
+  else
+  {
+    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+    _boundsOpts.loadSecKeepEntireCrossingBounds = false;
+    _boundsOpts.changesetAllowDeletingRefOutsideBounds = false;
+  }
 
   // Conflate way joining needs to happen later in the post ops for strict linear replacements.
   // Changing the default ordering of the post ops to accommodate this had detrimental effects
