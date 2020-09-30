@@ -76,16 +76,32 @@ if $mergePort.nil?
   $mergePort = 8096
 end
 
-Vagrant.configure(2) do |config|
+# set environment variable HOOT_USE_SPOT_INSTANCE to false if 
+# on-demand ec2 instance is to be used in aws
+$use_spot_instance = ENV['HOOT_USE_SPOT_INSTANCE']
+if $use_spot_instance.nil?
+    $use_spot_instance = true
+end
 
+Vagrant.configure(2) do |config|
+  
   def aws_provider(config, os, vbox)
     # AWS Provider.  Set enviornment variables for values below to use
     config.vm.provider :aws do |aws, override|
       override.nfs.functional = false
       if vbox == "hoot"
-          aws.region_config ENV['AWS_DEFAULT_REGION'], :ami => ENV['AWS_HOOT_AMI_ID']
-      elsif vbox == "minimal"
-          aws.region_config ENV['AWS_DEFAULT_REGION'], :ami => ENV['AWS_MINIMAL_AMI_ID']
+          aws.region_config ENV['AWS_DEFAULT_REGION'] do |region|
+              if vbox == "hoot"
+                region.ami = ENV['AWS_HOOT_AMI_ID']
+              elsif vbox == "minimal"
+                region.ami = ENV['AWS_MINIMAL_AMI_ID']
+              end
+              if $use_spot_instance == true
+                region.spot_instance = true
+                # price of on-demand m5.2xlarge instance is 0.384
+                region.spot_max_price = "0.384"
+              end
+          end
       end
       aws.subnet_id = ENV['AWS_SUBNET_ID']
       if ENV.key?('AWS_KEYPAIR_NAME')
