@@ -189,12 +189,11 @@ public:
    */
   static QString geometryTypeIdToString(const geos::geom::GeometryTypeId& geometryTypeId);
 
-  //LOG_VART(GeometryUtils::geometryTypeIdToString(g->getGeometryTypeId()));
   /**
-   * TODO
+   * Returns a string representation for a GEOS geometry
    *
-   * @param geometry
-   * @return
+   * @param geometry the geometry to convert
+   * @return a string
    */
   static QString geometryTypeIdToString(const std::shared_ptr<geos::geom::Geometry>& geometry);
 

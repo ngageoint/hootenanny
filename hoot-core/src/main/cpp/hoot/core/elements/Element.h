@@ -175,7 +175,9 @@ public:
    *
    * "this" is guaranteed to be visited last.
    *
-   * TODO: update
+   * @param map the map to visit
+   * @param visitor the visitor to visit with
+   * @param recursive if true, child elements are visited
    */
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
                        const bool recursive = true) const = 0;
@@ -195,8 +197,27 @@ public:
    * computations.
    *
    * "this" is guaranteed to be visited last.
+   */
+
+  /**
+   * Applies a read write visitor to this element and all child elements. The visitor will be called
+   * at least once for each element in the tree. For instance if the Element is a Way it may be
+   * called twice for a Node if that node appears twice in the way.
    *
-   * TODO: update
+   * The visitor may change the element that is currently being visited or any of its children. The
+   * filter should not change any other element. Changing elements while visiting may impact which
+   * children are visited. The visiting occurs in a depth first fashion.
+   *
+   * Due to the read/write fashion this is slower than the read-only equivalent.
+   *
+   * Children that do not appear in the map will not be visited. This may happen during distributed
+   * computations.
+   *
+   * "this" is guaranteed to be visited last.
+   *
+   * @param map the map to visit
+   * @param visitor the visitor to visit with
+   * @param recursive if true, child elements are visited
    */
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
                        const bool recursive = true) = 0;

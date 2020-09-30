@@ -58,16 +58,6 @@ protected:
    */
   virtual QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     _getDefaultGeometryFilters() const override;
-
-  /*
-   * TODO
-   */
-//  virtual void _filterFeatures(
-//    OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
-//    const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
-//    const QString& debugFileName) override;
-
-  //virtual void _clean(OsmMapPtr& map) override;
 };
 
 }

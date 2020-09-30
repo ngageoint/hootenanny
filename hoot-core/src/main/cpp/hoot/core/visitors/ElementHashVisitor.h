@@ -89,7 +89,7 @@ protected:
 
 private:
 
-  // TODO
+  // node comparison decimal place sensitivity
   int _coordinateComparisonSensitivity;
   // determines if element circular error will be used in computation of the hash
   bool _includeCe;

@@ -141,9 +141,9 @@ protected:
 
   // turning this off is useful for debugging the existence of orphaned nodes
   bool _removeNodes;
-  // TODO
+  // nodes with these IDs will never be removed
   QSet<long> _excludeIds;
-  // TODO
+  // the number of nodes that explicitly weren't removed due to configuration
   int _numExplicitlyExcluded;
 
   // the non-superfluous nodes

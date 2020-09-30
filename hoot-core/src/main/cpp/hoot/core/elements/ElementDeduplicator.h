@@ -77,9 +77,9 @@ public:
    * Uses ElementHashVisitor to assign unique hashes to elements and also retrieves the element
    * IDs of any duplicates found
    *
-   * @param map TODO
-   * @param hashes TODO
-   * @param duplicates TODO
+   * @param map the map owning the elements to assign hashes to
+   * @param hashes a collection of hashes to update
+   * @param duplicates a collection of duplicate elements found
    */
   static void calculateDuplicateElements(
     OsmMapPtr map, QMap<QString, ElementId>& hashes,

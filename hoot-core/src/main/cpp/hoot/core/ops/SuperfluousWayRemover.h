@@ -95,9 +95,9 @@ private:
 
   std::shared_ptr<OsmMap> _inputMap;
 
-  // TODO
+  // ways with these IDs will never be removed
   QSet<long> _excludeIds;
-  // TODO
+  // the number of ways that explicitly weren't removed due to configuration
   int _numExplicitlyExcluded;
 };
 

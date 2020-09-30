@@ -56,8 +56,6 @@ public:
     ElementId eid = e->getElementId();
     LOG_VARD(eid);
 
-    // TODO: update comments
-
     // If the element is not exempt and it isn't already in the map,
     if (eid != _exempt && _to->containsElement(eid) == false)
     {
@@ -74,6 +72,7 @@ public:
       // If it is not a node, then we need to worry about dependencies.
       else
       {
+        // only copy this element's children if we are configured to do so
         if (_copyChildren)
         {
           // Add all of this element's children to the map (we're exempting eid).
@@ -86,11 +85,6 @@ public:
         // Finally, add this element to the map.
         LOG_DEBUG("Adding " << ee->getElementId() << "...");
         _to->addElement(ee);
-//        if (_copyChildren)
-//        {
-//          //  Add all of the elements affected.
-//          _elementsAdded.insert(v._elementsAdded.begin(), v._elementsAdded.end());
-//        }
       }
       //  Add this element to the list.
       _elementsAdded.insert(eid);

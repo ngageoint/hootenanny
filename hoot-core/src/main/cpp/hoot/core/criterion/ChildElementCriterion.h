@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Identifies way nodes and relation members
  */
 class ChildElementCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
@@ -57,7 +57,7 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new ChildElementCriterion(_map)); }
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getDescription() const { return "Identifies way nodes and relation members"; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }

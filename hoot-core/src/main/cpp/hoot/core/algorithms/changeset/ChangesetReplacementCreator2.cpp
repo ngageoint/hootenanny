@@ -97,7 +97,7 @@ void ChangesetReplacementCreator2::_processMaps(
     _markElementsWithMissingChildren(refMap);
   }
 
-  // TODO
+  // temporarily remove relations from the map
   OsmMapPtr refRelationsMap = _removeRelations(refMap);
   LOG_VARD(refRelationsMap->size());
 
@@ -131,7 +131,7 @@ void ChangesetReplacementCreator2::_processMaps(
     _markElementsWithMissingChildren(secMap);
   }
 
-  // TODO
+  // temporarily remove relations from the map
   OsmMapPtr secRelationsMap = _removeRelations(secMap);
   LOG_VARD(secRelationsMap->size());
 
@@ -189,7 +189,7 @@ void ChangesetReplacementCreator2::_processMaps(
   // for relations here, which has since been removed from the codebase.
 
   // Combine the cookie cut ref map back with the secondary map, so we can conflate the two
-  // together if needed. TODO: update
+  // together if needed.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
   OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
   secMap.reset();
@@ -254,7 +254,7 @@ void ChangesetReplacementCreator2::_processMaps(
     ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
     wayJoiner.join(conflatedMap);
     LOG_VART(MapProjector::toWkt(conflatedMap->getProjection()));
-    // TODO
+    // keep track of any relation member IDs changed during way joining
     _syncJoinedMemberWays(relationMaps, wayJoiner.getJoinedWayIdMappings());
   }
 
@@ -442,7 +442,7 @@ void ChangesetReplacementCreator2::_conflate(OsmMapPtr& map, const QList<OsmMapP
   conf().set(ConfigOptions::getSuperfluousNodeRemoverExcludeIdsKey(), QStringList());
   conf().set(ConfigOptions::getSuperfluousWayRemoverExcludeIdsKey(), QStringList());
 
-  // TODO
+  // keep track of any relation member IDs changed during way joining
   std::shared_ptr<WayJoinerOp> wayJoinerOp =
     std::dynamic_pointer_cast<WayJoinerOp>(
       postOps.getAppliedOperation(QString::fromStdString(WayJoinerOp::className())));
@@ -472,8 +472,7 @@ QStringList ChangesetReplacementCreator2::_getRelationMemberElementIdsForConfig(
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
       RelationPtr relation = it->second;
-      // TODO: change to trace
-      LOG_VARD(relation->getElementId());
+      LOG_VART(relation->getElementId());
 
       const std::vector<RelationData::Entry>& members = relation->getMembers();
       for (size_t i = 0; i < members.size(); i++)
@@ -483,7 +482,7 @@ QStringList ChangesetReplacementCreator2::_getRelationMemberElementIdsForConfig(
         if (member.getElementId().getType() == elementType)
         {
           const QString idStr = QString::number(member.getElementId().getId());
-          LOG_DEBUG("Adding ID: " << idStr << "...");
+          LOG_TRACE("Adding ID: " << idStr << "...");
           uniqueIdStrs.insert(idStr);
         }
       }
@@ -534,7 +533,7 @@ void ChangesetReplacementCreator2::_cleanup(OsmMapPtr& map)
   orphanedNodeRemover.apply(map);
   LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
 
-  // TODO
+  // more relation cleanup
   RemoveInvalidRelationVisitor invalidRelationsRemover;
   map->visitRw(invalidRelationsRemover);
   LOG_DEBUG(invalidRelationsRemover.getCompletedStatusMessage());
@@ -639,12 +638,11 @@ void ChangesetReplacementCreator2::_restoreRelations(OsmMapPtr& map, OsmMapPtr& 
   {
     bool anyMemberExistsInTargetMap = false;
     RelationPtr relation = it->second;
-    // TODO: change back to trace
-    LOG_VARD(relation->getElementId());
-    LOG_VARD(relation->getTags().getName());
-    LOG_VARD(relation->getType());
+    LOG_VART(relation->getElementId());
+    LOG_VART(relation->getTags().getName());
+    LOG_VART(relation->getType());
     const std::vector<RelationData::Entry>& members = relation->getMembers();
-    LOG_VARD(members.size());
+    LOG_VART(members.size());
     for (size_t i = 0; i < members.size(); i++)
     {
       const RelationData::Entry member = members[i];
@@ -654,7 +652,7 @@ void ChangesetReplacementCreator2::_restoreRelations(OsmMapPtr& map, OsmMapPtr& 
       }
       else
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Removing member: " << member.getElementId() << " from stored relation: " <<
           relation->getElementId() << ", as it does not exist in the target map...");
         relation->removeElement(member.getElementId());
@@ -662,12 +660,12 @@ void ChangesetReplacementCreator2::_restoreRelations(OsmMapPtr& map, OsmMapPtr& 
     }
     if (anyMemberExistsInTargetMap)
     {
-      LOG_DEBUG("Restoring: " << relation->getElementId() <<  " to " << map->getName() << "...");
+      LOG_VART("Restoring: " << relation->getElementId() <<  " to " << map->getName() << "...");
       map->addRelation(relation);
     }
     else
     {
-      LOG_DEBUG(
+      LOG_VART(
         "Not restoring: " << relation->getElementId() << " to " << map->getName() <<
         ", as none of its members exist in the target map.");
     }

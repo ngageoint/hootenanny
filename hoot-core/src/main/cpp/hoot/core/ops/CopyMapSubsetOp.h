@@ -75,7 +75,7 @@ private:
   std::set<ElementId> _eids;
   ConstOsmMapPtr _from;
   ElementCriterionPtr _crit;
-  // TODO
+  // determines whether child elements are copied (way nodes and relation members)
   bool _copyChildren;
   std::set<ElementId> _eidsCopied;
 };

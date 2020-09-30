@@ -4690,7 +4690,7 @@ Flat file containing street types and their abbreviations.
 * Data Type: list
 * Default Value: ``
 
-TODO
+A list of node IDs that `SuperfluousNodeRemover` will skip removing, even if they are superfluous.
 
 === superfluous.node.remover.unallowed.orphan.kvps
 
@@ -4715,7 +4715,7 @@ eventually move it to its own config file).
 * Data Type: list
 * Default Value: ``
 
-TODO
+A list of way IDs that `SuperfluousWayRemover` will skip removing, even if they are superfluous.
 
 === tag.ancestor.differencer.name
 

@@ -88,7 +88,7 @@ void ChangesetReplacementCreator3::_processMaps(
     _markElementsWithMissingChildren(refMap);
   }
 
-  // TODO
+  // remove the relations temporarily from the map
   OsmMapPtr refRelationsMap = _removeRelations(refMap);
   LOG_VARD(refRelationsMap->size());
 
@@ -122,7 +122,7 @@ void ChangesetReplacementCreator3::_processMaps(
     _markElementsWithMissingChildren(secMap);
   }
 
-  // TODO
+  // remove the relations temporarily from the map
   OsmMapPtr secRelationsMap = _removeRelations(secMap);
   LOG_VARD(secRelationsMap->size());
 
@@ -186,7 +186,7 @@ void ChangesetReplacementCreator3::_processMaps(
   // for relations here, which has since been removed from the codebase.
 
   // Combine the cookie cut ref map back with the secondary map, so we can conflate the two
-  // together if needed. TODO: update
+  // together if needed.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
   OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
   secMap.reset();
@@ -251,7 +251,7 @@ void ChangesetReplacementCreator3::_processMaps(
     ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
     wayJoiner.join(conflatedMap);
     LOG_VART(MapProjector::toWkt(conflatedMap->getProjection()));
-    // TODO
+    // keep track of relation member IDs that change during way joining
     _syncJoinedMemberWays(relationMaps, wayJoiner.getJoinedWayIdMappings());
   }
 

@@ -87,10 +87,10 @@ public:
   static QString getPostgresDbVersion(const QSqlDatabase& database);
 
   /**
-   * TODO
+   * Identifies database URLs as used in Hootenanny
    *
-   * @param url
-   * @return
+   * @param url the string to examine
+   * @return true if the input string is a database URL; false otherwise
    */
   static bool isDbUrl(const QString& url);
 

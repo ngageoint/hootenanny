@@ -70,7 +70,7 @@ protected:
   /** Pointer to the map to work on */
   OsmMapPtr _map;
 
-  // TODO
+  // mapping of joined ways ids; ID before joining mapped to ID after joining
   QHash<long, long> _joinedWayIdMappings;
 
   int _numJoined;

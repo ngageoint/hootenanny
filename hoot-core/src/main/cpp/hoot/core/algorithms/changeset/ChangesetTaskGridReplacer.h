@@ -110,7 +110,7 @@ private:
   std::shared_ptr<ChangesetReplacementCreator> _changesetCreator;
   // all changeset files generated are stored here
   QString _changesetsOutputDir;
-  // TODO
+  // the ID of the task grid cell currently being processed
   int _currentTaskGridCellId;
   // allows for ending a large replacement early; useful for debugging; set to -1 to disable
   int _killAfterNumChangesetDerivations;

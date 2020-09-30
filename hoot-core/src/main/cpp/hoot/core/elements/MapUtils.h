@@ -49,7 +49,7 @@ public:
    *
    * @param map map to copy elements from
    * @param filter filter to apply to the map
-   * @param copyChildren TODO
+   * @param copyChildren if true, child elements are copied
    * @return a copied subset map
    */
   static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter,

@@ -124,8 +124,15 @@ public:
 
   QString toString() const;
 
+  /**
+   * @see Element
+   */
   virtual void visitRo(const ElementProvider& map, ConstElementVisitor& visitor,
                        const bool recursive = false) const;
+
+  /**
+   * @see Element
+   */
   virtual void visitRw(ElementProvider& map, ConstElementVisitor& visitor,
                        const bool recursive = false);
 

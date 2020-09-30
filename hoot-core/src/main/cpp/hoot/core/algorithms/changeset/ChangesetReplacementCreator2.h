@@ -71,33 +71,34 @@ protected:
   virtual void _cleanup(OsmMapPtr& map) override;
 
   /*
-   * TODO
+   * Removes relations from a map non-recursively
+   */
+  OsmMapPtr _removeRelations(OsmMapPtr& map);
+
+  /*
+   * Restores removed relations to a map and removes any members that no longer exist in the map
    */
   virtual void _restoreRelations(OsmMapPtr& map, OsmMapPtr& relationsMap);
 
   /*
-   * TODO
+   * Records unique member IDs of the specified element type for externally stored relations
    */
   QStringList _getRelationMemberElementIdsForConfig(
     const QList<OsmMapPtr>& relationMaps, const ElementType::Type& elementType) const;
 
   /*
-   * TODO
+   * Conflates a map and updates any relation member ID changes
    */
   void _conflate(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps);
 
   /*
-   * TODO
+   * Cleans a map and updates any relation member ID changes
    */
   void _clean(OsmMapPtr& map, const QList<OsmMapPtr>& relationMaps);
 
   /*
-   * TODO
-   */
-  OsmMapPtr _removeRelations(OsmMapPtr& map);
-
-  /*
-   * TODO
+   * Updates relation member IDs on externally store relations with elemnt IDs that change during
+   * way joining
    */
   void _syncJoinedMemberWays(
     const QList<OsmMapPtr>& relationMaps, const QHash<long, long>& joinedWayIdMappings);

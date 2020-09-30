@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Identifies exact duplicate elements
  */
 class DuplicateElementMarker : public OsmMapOperation
 {
@@ -53,11 +53,11 @@ public:
   void apply(OsmMapPtr& map);
 
   /**
-   * TODO
+   * Marks elements within a map that are exact duplicates of each other
    *
-   * @param map
-   * @param coordinateComparisonSensitivity
-   * @return
+   * @param map the map owning the elements
+   * @param coordinateComparisonSensitivity node coordinate decimal place comparison sensitivity
+   * @return the number of duplicates found
    */
   static int markDuplicates(
     OsmMapPtr& map,
@@ -82,7 +82,7 @@ public:
 
 private:
 
-  // TODO
+  // node coord comparison sensitivty
   int _coordinateComparisonSensitivity;
 
   QString _getUuidVal(const QString& newUuid, const ConstElementPtr& element);

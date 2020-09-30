@@ -92,11 +92,11 @@ public:
   static GeometryType typeFromString(const QString& geometryTypeStr);
 
   /**
-   * TODO
+   * Returns the most generic geometry type criterion for a given geometry type
    *
-   * @param geometryType
-   * @param map
-   * @return
+   * @param geometryType the geometry type to return the criterion for
+   * @param map the map need to initialize the criterion
+   * @return an element criterion
    */
   static ElementCriterionPtr getBaseGeometryCriterion(const GeometryType& geometryType,
                                                       const ConstOsmMapPtr& map);
