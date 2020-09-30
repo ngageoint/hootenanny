@@ -1435,6 +1435,7 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
      hybrid bounds acts like strict for linear features and lenient for polygon features.
    */
 
+  QString mapName;
   // If the passed in dough map is empty, there's nothing to be cut out. So, just return the empty
   // ref map.
   if (doughMapInputSize == 0)
@@ -1498,7 +1499,12 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
           "the rectangular bounds area of the dough map to be the map after cutting: " <<
           doughMap->getName() << "...");
         OsmMapPtr cookieCutMap(new OsmMap(doughMap));
-        cookieCutMap->setName("cookie-cut-" + GeometryTypeCriterion::typeToString(geometryType));
+        mapName = "cookie-cut";
+        if (geometryType != GeometryTypeCriterion::Unknown)
+        {
+          mapName += "-" + GeometryTypeCriterion::typeToString(geometryType);
+        }
+        cookieCutMap->setName(mapName);
         MapCropper cropper(GeometryUtils::envelopeFromConfigString(_replacementBounds));
         cropper.setRemoveSuperflousFeatures(false);
         cropper.setKeepEntireFeaturesCrossingBounds(false);
@@ -1533,7 +1539,12 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
-  cookieCutMap->setName("cookie-cut-" + GeometryTypeCriterion::typeToString(geometryType));
+  mapName = "cookie-cut";
+  if (geometryType != GeometryTypeCriterion::Unknown)
+  {
+    mapName += "-" + GeometryTypeCriterion::typeToString(geometryType);
+  }
+  cookieCutMap->setName(mapName);
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   LOG_DEBUG("Preparing to cookie cut: " << cookieCutMap->getName() << "...");
 
@@ -1617,7 +1628,7 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
   // Covering stragglers here can be very slow for linear features. So far, have only needed it for
   // point passes, which don't seem to be slow.
   alphaShapeGenerator.setManuallyCoverSmallPointClusters(
-    geometryType == GeometryTypeCriterion::Point);
+    geometryType == GeometryTypeCriterion::Point || geometryType == GeometryTypeCriterion::Unknown);
   try
   {
     cutterShapeOutlineMap = alphaShapeGenerator.generateMap(cutterMapToUse);
@@ -1626,10 +1637,15 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
   {
     if (e.getWhat().contains("Alpha Shape area is zero"))
     {
-      LOG_ERROR(
-        "No cut shape generated from secondary data when processing geometry type: " <<
-        GeometryTypeCriterion::typeToString(geometryType) << ". Is your secondary data empty " <<
-        "or have you filtered it to be empty? error: " << e.getWhat());
+      QString errorMsg = "No cut shape generated from secondary data";
+      if (geometryType != GeometryTypeCriterion::Unknown)
+      {
+        errorMsg +=
+          " when processing geometry type: " + GeometryTypeCriterion::typeToString(geometryType);
+      }
+      errorMsg +=
+        ". Is your secondary data empty or have you filtered it to be empty? error: " + e.getWhat();
+      LOG_ERROR(errorMsg);
     }
     throw;
   }
@@ -1962,6 +1978,18 @@ void ChangesetReplacementCreator1::_removeConflateReviews(OsmMapPtr& map)
 void ChangesetReplacementCreator1::_synchronizeIds(
   const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps)
 {
+  assert(mapsBeingReplaced.size() == replacementMaps.size());
+  for (int i = 0; i < mapsBeingReplaced.size(); i++)
+  {
+    OsmMapPtr mapBeingReplaced = mapsBeingReplaced.at(i);
+    OsmMapPtr replacementMap = replacementMaps.at(i);
+    _synchronizeIds(mapBeingReplaced, replacementMap);
+  }
+}
+
+void ChangesetReplacementCreator1::_synchronizeIds(
+  OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap)
+{
   // When replacing data, we always load the replacement data without its original IDs in case there
   // are overlapping IDs in the reference data. If you were only replacing unmodified data from one
   // source with updated data from another source with the same IDs (e.g. replacing newer OSM with
@@ -1976,26 +2004,21 @@ void ChangesetReplacementCreator1::_synchronizeIds(
 
   assert(mapsBeingReplaced.size() == replacementMaps.size());
   ChangesetReplacementElementIdSynchronizer idSync;
-  for (int i = 0; i < mapsBeingReplaced.size(); i++)
-  {
-    OsmMapPtr mapBeingReplaced = mapsBeingReplaced.at(i);
-    OsmMapPtr replacementMap = replacementMaps.at(i);
-    OsmMapWriterFactory::writeDebugMap(
-      mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() +
-      "-source-before-id-sync");
-    OsmMapWriterFactory::writeDebugMap(
-      replacementMap, _changesetId + "-" + replacementMap->getName() + "-target-before-id-sync");
+  OsmMapWriterFactory::writeDebugMap(
+    mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() +
+    "-source-before-id-sync");
+  OsmMapWriterFactory::writeDebugMap(
+    replacementMap, _changesetId + "-" + replacementMap->getName() + "-target-before-id-sync");
 
-    idSync.synchronize(mapBeingReplaced, replacementMap);
+  idSync.synchronize(mapBeingReplaced, replacementMap);
 
-    // get rid of straggling nodes
-    // TODO: should we run _cleanup here instead and move it from its earlier call?
-    SuperfluousNodeRemover orphanedNodeRemover;
-    orphanedNodeRemover.apply(replacementMap);
-    LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
-    OsmMapWriterFactory::writeDebugMap(
-      replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
-  }
+  // get rid of straggling nodes
+  // TODO: should we run _cleanup here instead and move it from its earlier call?
+  SuperfluousNodeRemover orphanedNodeRemover;
+  orphanedNodeRemover.apply(replacementMap);
+  LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(
+    replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
 }
 
 }

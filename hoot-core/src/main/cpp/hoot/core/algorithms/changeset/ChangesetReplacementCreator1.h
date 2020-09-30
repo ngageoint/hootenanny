@@ -273,6 +273,7 @@ protected:
    */
   void _synchronizeIds(
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
+  void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap);
 
   /*
    * TODO

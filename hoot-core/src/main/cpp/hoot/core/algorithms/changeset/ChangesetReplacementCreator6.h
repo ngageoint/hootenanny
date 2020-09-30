@@ -148,12 +148,6 @@ protected:
 
   void _cleanup(OsmMapPtr& map);
 
-  /*
-   * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
-   * being replaced with the IDs from the maps being replaced.
-   */
-  void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap);
-
   void _dedupeMaps(OsmMapPtr& refMap, OsmMapPtr& secMap);
   void _intraDedupeMap(OsmMapPtr& map);
 };

@@ -570,40 +570,6 @@ void ChangesetReplacementCreator6::_cut(
   OsmMapWriterFactory::writeDebugMap(mapToReplace, _changesetId + "-cut");
 }
 
-void ChangesetReplacementCreator6::_synchronizeIds(
-  OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap)
-{
-  // When replacing data, we always load the replacement data without its original IDs in case there
-  // are overlapping IDs in the reference data. If you were only replacing unmodified data from one
-  // source with updated data from another source with the same IDs (e.g. replacing newer OSM with
-  // older OSM), this separation wouldn't be necessary, but we're not guaranteed that will be the
-  // only scenario encountered. The downside to loading up a separate set of unique IDs for the
-  // secondary data is that identical elements in the secondary can end up unnecessarily replacing
-  // elements in the reference. This gets mitigated here where we find all identical elements
-  // between the data being replaced and the replacement data and overwrite IDs in the replacement
-  // data with the IDs of matching elements from the data being replaced to prevent unnecessary
-  // changeset modifications from being generated. Its possible we could do this earlier in the
-  // replacement process, however that has proven difficult to accomplish so far.
-
-  assert(mapsBeingReplaced.size() == replacementMaps.size());
-  ChangesetReplacementElementIdSynchronizer idSync;
-  OsmMapWriterFactory::writeDebugMap(
-    mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() +
-    "-source-before-id-sync");
-  OsmMapWriterFactory::writeDebugMap(
-    replacementMap, _changesetId + "-" + replacementMap->getName() + "-target-before-id-sync");
-
-  idSync.synchronize(mapBeingReplaced, replacementMap);
-
-  // get rid of straggling nodes
-  // TODO: should we run _cleanup here instead and move it from its earlier call?
-  SuperfluousNodeRemover orphanedNodeRemover;
-  orphanedNodeRemover.apply(replacementMap);
-  LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(
-    replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
-}
-
 void ChangesetReplacementCreator6::_cleanup(OsmMapPtr& map)
 {
   LOG_INFO("Cleaning up changeset derivation input " << map->getName() << "...");
