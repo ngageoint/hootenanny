@@ -142,7 +142,7 @@ protected:
   void _cut(
     OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
     const bool keepOnlyFeaturesInsideBounds);
-  void _cut2(
+  void _cut(
     OsmMapPtr mapToReplace, OsmMapPtr replacementMap,
     const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds);
 

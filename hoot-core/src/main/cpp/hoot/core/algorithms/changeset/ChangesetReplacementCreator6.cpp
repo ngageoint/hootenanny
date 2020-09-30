@@ -208,6 +208,10 @@ void ChangesetReplacementCreator6::_setGlobalOpts()
       QStringList(MetadataTags::HootMissingChild()));
   }
 
+  conf().set(
+    ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),
+    true);
+
   // turn on for testing only
   //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 }
@@ -353,7 +357,7 @@ void ChangesetReplacementCreator6::create(
       true, // keepEntireFeaturesCrossingBounds
       false,  // keepOnlyFeaturesInsideBounds
       true, // keepImmediatelyConnectedWaysOutsideBounds
-      true);
+      true); // warnOnZeroVersions
   OsmMapPtr secMap =
     _loadInputMap(
       "sec",
@@ -362,8 +366,8 @@ void ChangesetReplacementCreator6::create(
       Status::Unknown2,
       true, // keepEntireFeaturesCrossingBounds
       false,  // keepOnlyFeaturesInsideBounds
-      true, // keepImmediatelyConnectedWaysOutsideBounds
-      false);
+      false, // keepImmediatelyConnectedWaysOutsideBounds
+      false); // warnOnZeroVersions
 
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
@@ -399,11 +403,11 @@ void ChangesetReplacementCreator6::create(
 
   OsmMapPtr cutMap(refMap);
   cutMap->setName("cut");
-  _cut2(
+  _cut(
     cutMap,
     secMap,
-    true, // setKeepEntireFeaturesCrossingBounds
-    false); // setKeepOnlyFeaturesInsideBounds
+    true, // keepEntireFeaturesCrossingBounds // this to false result in a delete version=0 error
+    false); // keepOnlyFeaturesInsideBounds
   MapProjector::projectToWgs84(cutMap);
   MapProjector::projectToWgs84(secMap);
 
@@ -528,7 +532,7 @@ void ChangesetReplacementCreator6::_cut(
   OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-cut");
 }
 
-void ChangesetReplacementCreator6::_cut2(
+void ChangesetReplacementCreator6::_cut(
   OsmMapPtr mapToReplace, OsmMapPtr replacementMap,
   const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds)
 {
