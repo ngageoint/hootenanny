@@ -76,16 +76,6 @@ if $mergePort.nil?
   $mergePort = 8096
 end
 
-# set environment variable HOOT_USE_SPOT_INSTANCE to false if 
-# on-demand ec2 instance is to be used in aws
-$use_spot_instance = ENV['HOOT_USE_SPOT_INSTANCE']
-if $use_spot_instance.nil?
-    $use_spot_instance = true
-    $spot_instance_max_price = ENV['HOOT_SPOT_INSTANCE_MAX_PRICE']
-    if $spot_instance_max_price.nil?
-      $spot_instance_max_price = "0.384"
-    end
-end
 
 Vagrant.configure(2) do |config|
   
@@ -100,11 +90,11 @@ Vagrant.configure(2) do |config|
               elsif vbox == "minimal"
                 region.ami = ENV['AWS_MINIMAL_AMI_ID']
               end
-              if $use_spot_instance == 'true'
-                region.spot_instance = true
-                # price of on-demand m5.2xlarge instance is 0.384
-                region.spot_max_price = $spot_instance_max_price
-              end
+              # set environment variable HOOT_USE_SPOT_INSTANCE to false if 
+              # on-demand ec2 instance is to be used in aws
+              region.spot_instance = ENV.fetch('HOOT_USE_SPOT_INSTANCE', true)
+              # price of on-demand m5.2xlarge instance is 0.384
+              region.spot_max_price = ENV.fetch('HOOT_SPOT_INSTANCE_MAX_PRICE', '0.384')
           end
       end
       aws.subnet_id = ENV['AWS_SUBNET_ID']
