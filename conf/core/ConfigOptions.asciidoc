@@ -645,7 +645,7 @@ delete statements for reference features falling outside of `convert.bounding.bo
 === changeset.replacement.implementation
 
 * Data Type: string
-* Default Value: `hoot::ChangesetReplacementCreator`
+* Default Value: `hoot::ChangesetReplacementCreator1`
 
 Used for testing only.
 
@@ -4685,6 +4685,13 @@ Adds the specified status to elements.  Valid values are: 'Conflated', 'Invalid'
 
 Flat file containing street types and their abbreviations.
 
+=== superfluous.node.remover.exclude.ids
+
+* Data Type: list
+* Default Value: ``
+
+A list of node IDs that `SuperfluousNodeRemover` will skip removing, even if they are superfluous.
+
 === superfluous.node.remover.unallowed.orphan.kvps
 
 * Data Type: list
@@ -4702,6 +4709,13 @@ remove these if they are not part of a way or relation. Generally, only add to t
 features that conflation is unable to merge correctly. Fixing their handling during conflation is
 preferred to adding them to this list. Keep the list alphabetized by key, then value (we may want to
 eventually move it to its own config file).
+
+=== superfluous.way.remover.exclude.ids
+
+* Data Type: list
+* Default Value: ``
+
+A list of way IDs that `SuperfluousWayRemover` will skip removing, even if they are superfluous.
 
 === tag.ancestor.differencer.name
 
@@ -5135,10 +5149,12 @@ remove them.
 
 The way joiner implementation used by the `WayJoinerOp` to repair way splits after a conflation job.
 
-This operation can take on the following options:
-* `hoot::ReplacementSnappedWayJoiner`
-* `hoot::WayJoinerAdvanced`
-* `hoot::WayJoinerBasic`
+This option can use the following implementations:
+* `hoot::WayJoinerBasic`              - default implementation
+* `hoot::WayJoinerAdvanced`           - has some additional features compared to the default
+                                        implementation; currently used by Attribute Conflation and
+                                        conflation done during Cut and Replace
+* `hoot::ReplacementSnappedWayJoiner` - has way joining feature specific to Cut and Replace
 
 === way.joiner.advanced.strict.name.match
 

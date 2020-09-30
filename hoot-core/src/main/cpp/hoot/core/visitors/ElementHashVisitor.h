@@ -70,6 +70,8 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  void setCoordinateComparisonSensitivity(int sensitivity)
+  { _coordinateComparisonSensitivity = sensitivity; LOG_VARD(_coordinateComparisonSensitivity); }
   void setIncludeCircularError(bool include) { _includeCe = include; }
   void setUseNodeTags(bool use) { _useNodeTags = use; }
   void setWriteHashes(bool write) { _writeHashes = write; }
@@ -87,6 +89,8 @@ protected:
 
 private:
 
+  // node comparison decimal place sensitivity
+  int _coordinateComparisonSensitivity;
   // determines if element circular error will be used in computation of the hash
   bool _includeCe;
   // an optional list of metadata tag keys to factor into the comparison; by default no metadata

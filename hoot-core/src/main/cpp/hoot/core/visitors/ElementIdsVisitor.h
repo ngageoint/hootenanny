@@ -39,6 +39,7 @@ namespace hoot
  *
  * @todo Some of the utility methods may be redundant with related methods in WayUtils and TagUtils.
  * Regardless, they should all be moved to other util classes that then call into this class.
+ * @todo I think these methods should be returning set<long> instead of a vector.
  */
 class ElementIdsVisitor : public ConstElementVisitor
 {

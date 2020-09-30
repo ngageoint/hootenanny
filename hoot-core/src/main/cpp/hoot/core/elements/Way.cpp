@@ -158,23 +158,27 @@ bool Way::containsNodeId(long nid) const
   return false;
 }
 
-void Way::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
+void Way::visitRo(const ElementProvider& map, ConstElementVisitor& filter,
+                  const bool recursive) const
 {
   filter.visit(map.getWay(getId()));
-  const std::vector<long>& nids = getNodeIds();
 
-  for (size_t i = 0; i < nids.size(); i++)
+  if (recursive)
   {
-    if (map.containsNode(nids[i]))
+    const std::vector<long>& nids = getNodeIds();
+    for (size_t i = 0; i < nids.size(); i++)
     {
-      filter.visit(map.getNode(nids[i]));
+      if (map.containsNode(nids[i]))
+      {
+        filter.visit(map.getNode(nids[i]));
+      }
     }
   }
 }
 
-void Way::visitRw(ElementProvider& map, ConstElementVisitor& filter)
+void Way::visitRw(ElementProvider& map, ConstElementVisitor& filter, const bool recursive)
 {
-  visitRo(map, filter);
+  visitRo(map, filter, recursive);
 }
 
 const Envelope& Way::getApproximateEnvelope(const std::shared_ptr<const ElementProvider>& ep) const

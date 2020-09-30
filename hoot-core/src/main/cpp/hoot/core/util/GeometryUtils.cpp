@@ -492,6 +492,11 @@ QString GeometryUtils::geometryTypeIdToString(const geos::geom::GeometryTypeId& 
   }
 }
 
+QString GeometryUtils::geometryTypeIdToString(const std::shared_ptr<geos::geom::Geometry>& geometry)
+{
+  return geometryTypeIdToString(geometry->getGeometryTypeId());
+}
+
 std::shared_ptr<geos::geom::Geometry> GeometryUtils::mergeGeometries(std::vector<std::shared_ptr<geos::geom::Geometry>> geometries, const geos::geom::Envelope& envelope)
 {
   std::vector<std::shared_ptr<geos::geom::Geometry>> temp;

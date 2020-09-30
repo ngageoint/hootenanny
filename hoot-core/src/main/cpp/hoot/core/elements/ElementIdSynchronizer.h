@@ -74,7 +74,10 @@ protected:
   int _updatedWayCtr;
   int _updatedRelationCtr;
 
-  QMap<QString, ElementId> _calcElementHashes(const OsmMapPtr& map);
+  QMap<QString, ElementId> _calcElementHashes(
+    const OsmMapPtr& map,
+      const int coordinateComparisonSensitivity =
+        ConfigOptions().getNodeComparisonCoordinateSensitivity());
 };
 
 }

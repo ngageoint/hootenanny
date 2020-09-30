@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
+#include <hoot/core/algorithms/changeset/ChangesetReplacementCreator1.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/criterion/TagCriterion.h>
@@ -67,7 +67,7 @@ public:
   void runInvalidGeometryFilterTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator changesetCreator;
+    ChangesetReplacementCreator1 changesetCreator;
     try
     {
       changesetCreator.setGeometryFilters(QStringList("hoot::TagCriterion"));
@@ -82,7 +82,7 @@ public:
   void runInvalidReplacementFilterTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator changesetCreator;
+    ChangesetReplacementCreator1 changesetCreator;
 
     try
     {
@@ -108,7 +108,7 @@ public:
   void runInvalidRetainmentFilterTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator changesetCreator;
+    ChangesetReplacementCreator1 changesetCreator;
 
     try
     {
@@ -134,7 +134,7 @@ public:
   void runNonBoundableReaderTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator changesetCreator;
+    ChangesetReplacementCreator1 changesetCreator;
     try
     {
       changesetCreator.create(
@@ -153,7 +153,7 @@ public:
   void runGeoJsonTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator changesetCreator;
+    ChangesetReplacementCreator1 changesetCreator;
     try
     {
       changesetCreator.create("test1.geojson", "test2.osm", geos::geom::Envelope(), "out.osm");
@@ -170,7 +170,7 @@ public:
   void runInvalidFilterConfigOptsTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator changesetCreator;
+    ChangesetReplacementCreator1 changesetCreator;
 
     // the filter can be any non-geometry crit here
     changesetCreator.setReplacementFilters(
@@ -202,7 +202,7 @@ public:
   void runConvertOpsTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator changesetCreator;
+    ChangesetReplacementCreator1 changesetCreator;
     // the convert ops added here can contain any op
     conf().set(
       ConfigOptions::getConvertOpsKey(),
@@ -223,7 +223,7 @@ public:
   void runFullReplacmentWithRetainmentFilterTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator changesetCreator;
+    ChangesetReplacementCreator1 changesetCreator;
     changesetCreator.setFullReplacement(true);
     // the filter can be any non-geometry crit here
     changesetCreator.setRetainmentFilters(

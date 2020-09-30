@@ -81,7 +81,9 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
   // we get back a partial match for "Strada Olivero" and "West Strada Olivero").
   const QStringList streetNames = _nameCrit->getNames();
   OsmMapPtr matchingRoads1Map = _filterRoadsByStreetName(streetNames[0], Status::Unknown1, map);
+  LOG_VARD(matchingRoads1Map->size());
   OsmMapPtr matchingRoads2Map = _filterRoadsByStreetName(streetNames[1], Status::Unknown2, map);
+  LOG_VARD(matchingRoads2Map->size());
 
   // Now, combine the maps back together to search over and use the assigned statuses to prevent
   // incorrect matches.
@@ -160,7 +162,6 @@ OsmMapPtr FindStreetIntersectionsByName::_filterRoadsByStreetName(
   mapCopier.apply(matchingRoadsMap);
   StatusUpdateVisitor statusUpdater(status);
   matchingRoadsMap->visitWaysRw(statusUpdater);
-  LOG_VARD(matchingRoadsMap->size());
   return matchingRoadsMap;
 }
 

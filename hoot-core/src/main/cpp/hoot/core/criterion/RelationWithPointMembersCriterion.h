@@ -44,7 +44,7 @@ public:
 
   static std::string className() { return "hoot::RelationWithPointMembersCriterion"; }
 
-  RelationWithPointMembersCriterion() = default;
+  RelationWithPointMembersCriterion();
   RelationWithPointMembersCriterion(ConstOsmMapPtr map);
   virtual ~RelationWithPointMembersCriterion() = default;
 

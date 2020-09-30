@@ -58,10 +58,11 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   CPPUNIT_TEST(orphanedNodes1Test);
-  // TODO: having some trouble with repeatability here after an initial test is run...will come back
-  // to these soon
+  // TODO: having some trouble with repeatability here after an initial test is run; think it has
+  // to do with abuse of the config inside the task grid replacer...will come back to these soon
   //CPPUNIT_TEST(orphanedNodes2Test);
   //CPPUNIT_TEST(droppedNodes1Test);
+  //CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -174,6 +175,7 @@ public:
       _inputPath + "/droppedNodes1Test-Input1.osm",
       _inputPath + "/droppedNodes1Test-Input2.osm",
       "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -188,6 +190,36 @@ public:
       _replacementDataUrl,
       UniformTaskGridGenerator(
         "-115.3274,36.2640,-115.3106,36.2874", 2,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void droppedPointPolyRelationMembers1Test()
+  {
+    // part of github 4228 - TODO: add description
+
+    _testName = "droppedPointPolyRelationMembers1Test";
+    _prepInput(
+      _inputPath + "/droppedPointPolyRelationMembers1Test-Input1.osm",
+      _inputPath + "/droppedPointPolyRelationMembers1Test-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(false);
+    uut.setCalcDiffWithReplacement(false);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.3064,36.1867,-115.2136,36.2498", 2,
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
@@ -216,7 +248,7 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(true);
+    uut.setCalcDiffWithReplacement(false); // TOOD: change back to true
     uut.setOutputNonConflatable(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -262,17 +294,24 @@ public:
 
   void northVegasLargeUniformTest()
   {
-    // lenient - 110 orphaned nodes
+    // lenient
 
-    // whole northern half of city, 64 changesets, ~32.5M changes, avg derivation: 52s,
-    // total time: 1.18h, ~459k changes/min; diff between replacement: ~11k
+    // whole northern half of city, 64 changesets, ~32.5M changes, avg derivation: 44s,
+    // total time: ~1h2m, ~524k changes/min; 70 orphaned nodes; diff between replacement: ~11.5k
+
+    // whole northern half of city, 64 changesets, ~33.2M changes, avg derivation: 51s,
+    // total time: ~1h10m, ~524k changes/min; 624 orphaned nodes; ~12.2k duplicate feature pairs;
+    // diff between replacement: ~11.5k
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
-    _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
+    _prepInput(
+      rootDir + "/combined-data/NOMEData.osm",
+      rootDir + "/combined-data/OSMData.osm",
+      "");
 
     ChangesetTaskGridReplacer uut;
     //uut.setKillAfterNumChangesetDerivations(2);
@@ -281,6 +320,9 @@ public:
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(true);
+//    QList<int> includeIds;
+//    includeIds.append(26);
+    //uut.setTaskCellIncludeIds(includeIds);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -300,20 +342,24 @@ public:
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.3287,36.2618,-115.3090,36.2887", outDir);
+      "-115.3100,36.1841,-115.2115,36.2531", outDir);
 
     ChangesetTaskGridReplacer uut;
-    uut.setKillAfterNumChangesetDerivations(1);
+    //uut.setKillAfterNumChangesetDerivations(1);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(true);
+    uut.setTagQualityIssues(false);
+    uut.setCalcDiffWithReplacement(false);
+    QList<int> includeIds;
+    includeIds.append(1);
+    includeIds.append(2);
+    uut.setTaskCellIncludeIds(includeIds);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
       UniformTaskGridGenerator(
-        "-115.3274,36.2640,-115.3106,36.2874", 2,
+        "-115.3064,36.1866,-115.2136,36.2499", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
   }
@@ -356,6 +402,12 @@ private:
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
+//    conf().set(
+//      ConfigOptions::getChangesetReplacementImplementationKey(),
+//      "hoot::ChangesetReplacementCreator1");
+//    conf().set(
+//      ConfigOptions::getLogClassFilterKey(),
+//      "ElementDeduplicator");
 
     // leave enabled for debugging only
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);

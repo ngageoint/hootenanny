@@ -130,13 +130,15 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
     " identical elements in second map.");
 }
 
-QMap<QString, ElementId> ElementIdSynchronizer::_calcElementHashes(const OsmMapPtr& map)
+QMap<QString, ElementId> ElementIdSynchronizer::_calcElementHashes(
+  const OsmMapPtr& map, const int coordinateComparisonSensitivity)
 {
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
   ElementHashVisitor hashVis;
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);
   hashVis.setUseNodeTags(_useNodeTagsForHash);
+  hashVis.setCoordinateComparisonSensitivity(coordinateComparisonSensitivity);
   hashVis.setOsmMap(map.get());
   map->visitRw(hashVis);
   return hashVis.getHashes();

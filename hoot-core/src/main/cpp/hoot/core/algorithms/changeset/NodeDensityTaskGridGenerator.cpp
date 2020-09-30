@@ -159,10 +159,10 @@ TaskGrid NodeDensityTaskGridGenerator::_calcNodeDensityTaskGrid(OsmMapPtr map)
       cellCtr++;
     }
   }
-  assert(_boundsCalc.getTileCount() == taskGrid.getCells().size());
+  assert(_boundsCalc.getTileCount() == taskGrid.size());
 
   LOG_STATUS(
-    "Calculated " << StringUtils::formatLargeNumber(taskGrid.getCells().size()) <<
+    "Calculated " << StringUtils::formatLargeNumber(taskGrid.size()) <<
     " task grid cells in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << ".");
   LOG_STATUS(
     "\tMaximum node count in any one tile: " <<

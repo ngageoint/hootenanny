@@ -65,6 +65,7 @@ public:
 
   QList<TaskGridCell> getCells() const { return _cells; }
   geos::geom::Envelope getBounds() const;
+  int size() const { return _cells.size(); }
 
 private:
 
