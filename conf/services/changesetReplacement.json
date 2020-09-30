@@ -1,5 +1,5 @@
 {
     "strictBounds": "--strict-bounds",
     "fullReplacement": "--full-replacement",
-    "conflate": "--conflate",
+    "conflate": "--conflate"
 }
