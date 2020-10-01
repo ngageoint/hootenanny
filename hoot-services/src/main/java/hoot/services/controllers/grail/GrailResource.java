@@ -403,11 +403,13 @@ public class GrailResource {
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         String id = DbUtils.getJobIdByTask(projectTaskInfo);
+        String bbox = DbUtils.getJobBbox(id);
 
         // Wait to detect overpass 'Last changeset pushed ID'
         GrailParams waitParams = new GrailParams();
         waitParams.setUser(user);
         waitParams.setTaskInfo(projectTaskInfo);
+        waitParams.setBounds(bbox);
 
         List<Command> workflow = new LinkedList<>();
         workflow.add(grailCommandFactory.build(id, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
