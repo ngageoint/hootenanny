@@ -59,18 +59,15 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 
   // TODO: re-enable
   CPPUNIT_TEST(orphanedNodes1Test);
-  // TODO: having some trouble with repeatability here after an initial test is run; think it has
-  // to do with abuse of the config inside the task grid replacer...will come back to these soon
-  //CPPUNIT_TEST(orphanedNodes2Test);
-  //CPPUNIT_TEST(droppedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
+  CPPUNIT_TEST(droppedNodes1Test);
+  // TODO: fixing this as part of 4226
   //CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
   //CPPUNIT_TEST(github4216UniformTest);
-  //CPPUNIT_TEST(northVegasLargeTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
-  //CPPUNIT_TEST(tmpTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -87,6 +84,7 @@ public:
 
   virtual void setUp()
   {
+    HootTestFixture::setUp();
     _subTaskTimer.start();
     _initConfig();
   }
@@ -95,6 +93,7 @@ public:
   {
     _cleanupDataToReplace();
     _cleanupReplacementData();
+    //TestUtils::resetEnvironment();
   }
 
   void orphanedNodes1Test()
@@ -260,39 +259,6 @@ public:
         .generateTaskGrid());
   }
 
-  void northVegasLargeTest()
-  {
-    // lenient
-
-    // whole northern half of city, 64 changesets, ~26.5M changes, avg derivation: 2.8m,
-    // total time: 3.27h, ~135k changes/min - OUT OF DATE
-
-    // hybrid
-
-    // whole northern half of city, 64 changesets, ~26.5M changes, avg derivation: 2.5m,
-    // total time: ~3h, ~147k changes/min - OUT OF DATE
-
-    _testName = "northVegasLargeTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
-    const QString outDir = rootDir + "/" + _testName;
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-    _prepInput(rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm", "");
-
-    NodeDensityTaskGridGenerator taskGridGen(
-      QStringList(_replacementDataUrl), 100000, "-115.3528,36.0919,-114.9817,36.3447",
-      outDir + "/" + _testName + "-" + "taskGridBounds.osm");
-    taskGridGen.setReadInputFullThenCrop(true);
-
-    ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(2);
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGridGen.generateTaskGrid());
-  }
-
   void northVegasLargeUniformTest()
   {
     // lenient
@@ -329,38 +295,6 @@ public:
       _replacementDataUrl,
       UniformTaskGridGenerator(
         "-115.3528,36.0919,-114.9817,36.3447", 8,
-        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
-  }
-
-  void tmpTest()
-  {
-    _testName = "tmpTest";
-    const QString rootDir = "/home/vagrant/hoot/tmp/4158";
-    const QString outDir = rootDir + "/" + _testName;
-    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
-    QDir(outDir).removeRecursively();
-    QDir().mkpath(outDir);
-    _prepInput(
-      rootDir + "/combined-data/NOMEData.osm", rootDir + "/combined-data/OSMData.osm",
-      "-115.3100,36.1841,-115.2115,36.2531", outDir);
-
-    ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(1);
-    uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
-    uut.setCalcDiffWithReplacement(false);
-    QList<int> includeIds;
-    includeIds.append(1);
-    includeIds.append(2);
-    uut.setTaskCellIncludeIds(includeIds);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.3064,36.1866,-115.2136,36.2499", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
   }
