@@ -31,6 +31,8 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 
 namespace hoot
 {
@@ -92,11 +94,33 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
         {
           LOG_VART(map2IdenticalElement->getElementId());
 
+          // TODO: explain
+          bool element1IsWayNode = false;
+          _wayNodeCrit.setOsmMap(map1.get());
+          element1IsWayNode = _wayNodeCrit.isSatisfied(map1IdenticalElement);
+          bool element2IsWayNode = false;
+          _wayNodeCrit.setOsmMap(map2.get());
+          element2IsWayNode = _wayNodeCrit.isSatisfied(map2IdenticalElement);
+          if (element1IsWayNode && element2IsWayNode)
+          {
+            // find all ways each node belong to
+            QSet<long> containingWayIds1 =
+              CollectionUtils::stdSetToQSet(
+                WayUtils::getContainingWayIdsByNodeId(map1IdenticalElement->getId(), map1));
+            QSet<long> containingWayIds2 =
+              CollectionUtils::stdSetToQSet(
+                WayUtils::getContainingWayIdsByNodeId(map2IdenticalElement->getId(), map2));
+            if (containingWayIds1.intersect(containingWayIds2).size() == 0)
+            {
+              continue;
+            }
+          }
+
           // Make sure the map being updated doesn't already have an element with this ID (this check
           // may not be necessary).
           LOG_TRACE(
-            "Updating map 2 element: " << map2IdenticalElement/*->getElementId()*/ << " to " <<
-            map1IdenticalElementCopy/*->getElementId()*/ << "...");
+            "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
+            map1IdenticalElementCopy->getElementId() << "...");
 
           // Add a custom metadata tag for debugging purposes.
           map1IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");

@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
@@ -69,6 +70,8 @@ protected:
 
   // see ElementHashVisitor
   bool _useNodeTagsForHash;
+
+  WayNodeCriterion _wayNodeCrit;
 
   int _updatedNodeCtr;
   int _updatedWayCtr;
