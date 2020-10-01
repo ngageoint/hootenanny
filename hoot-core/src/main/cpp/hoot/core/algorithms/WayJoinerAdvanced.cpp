@@ -190,11 +190,6 @@ void WayJoinerAdvanced::_joinAtNode()
           "Adding " << way->getElementId() << " with split parent id: " << _getPid(way) << "...");
         ids.insert(way->getId());
       }
-//      else
-//      {
-//        LOG_TRACE("No split parent ID on " << way->getElementId());
-//        //LOG_TRACE(way);
-//      }
     }
     LOG_VART(ids.size());
 
@@ -612,6 +607,8 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
       (wayWithIdToKeep->getStatus() == Status::Unknown2 &&
        wayWithIdToLose->getStatus() == Status::Unknown1))
     wayWithIdToKeep->setStatus(Status::Conflated);
+
+  _joinedWayIdMappings[wayWithIdToLose->getId()] = wayWithIdToKeep->getId();
 
   //  Update any relations that contain the child to use the parent and remove the child.
   ReplaceElementOp(wayWithIdToLose->getElementId(), wayWithIdToKeep->getElementId()).apply(_map);

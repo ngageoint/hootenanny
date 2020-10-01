@@ -72,6 +72,15 @@ public:
    */
   RemoveElementByEid(ElementId eId, bool doCheck = true);
 
+  /**
+   * Constructor
+   *
+   * @param eId ID of element to remove
+   * @param doCheck check to see if element belongs to another element
+   * @param removeNodeFully ensures nodes are removed from all ways and relations in the map
+   */
+  RemoveElementByEid(ElementId eId, bool doCheck, bool removeNodeFully);
+
   virtual ~RemoveElementByEid() = default;
 
   /**

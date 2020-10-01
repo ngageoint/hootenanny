@@ -44,7 +44,7 @@ public:
 
   static std::string className() { return "hoot::RelationWithLinearMembersCriterion"; }
 
-  RelationWithLinearMembersCriterion() = default;
+  RelationWithLinearMembersCriterion();
   RelationWithLinearMembersCriterion(ConstOsmMapPtr map);
   virtual ~RelationWithLinearMembersCriterion() = default;
 

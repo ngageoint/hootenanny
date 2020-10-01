@@ -36,15 +36,18 @@
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
+#include <hoot/core/util/MapProjector.h>
 
 namespace hoot
 {
 
-OsmMapPtr MapUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter)
+OsmMapPtr MapUtils::getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter,
+                                 const bool copyChildren)
 {
-  CopyMapSubsetOp wayCopier(map, filter);
+  CopyMapSubsetOp mapCopier(map, filter);
+  mapCopier.setCopyChildren(copyChildren);
   OsmMapPtr output(new OsmMap());
-  wayCopier.apply(output);
+  mapCopier.apply(output);
   return output;
 }
 
@@ -77,5 +80,26 @@ void MapUtils::dropMetadataTags(const OsmMapPtr& map)
   map->visitRw(tagRemover);
   LOG_DEBUG(tagRemover.getCompletedStatusMessage());
 }
+
+void MapUtils::combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes)
+{
+  LOG_VART(map1.get());
+  LOG_VART(map2.get());
+
+  MapProjector::projectToWgs84(map1);
+  MapProjector::projectToWgs84(map2);   // not exactly sure yet why this needs to be done
+
+  if (map2->size() == 0)
+  {
+    LOG_DEBUG("Combined map size: " << map1->size());
+    return;
+  }
+
+  LOG_INFO("Combining maps: " << map1->getName() << " and " << map2->getName() << "...");
+  map1->append(map2, throwOutDupes);
+  LOG_VART(MapProjector::toWkt(map1->getProjection()));
+  LOG_DEBUG("Combined map size: " << map1->size());
+}
+
 
 }

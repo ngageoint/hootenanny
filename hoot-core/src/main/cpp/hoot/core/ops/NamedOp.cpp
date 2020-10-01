@@ -129,6 +129,8 @@ void NamedOp::apply(OsmMapPtr& map)
       }
 
       op->apply(map);
+
+      _appliedOps[QString::fromStdString(op->getClassName())] = op;
     }
     else if (f.hasBase<ElementVisitor>(s.toStdString()))
     {
@@ -162,6 +164,8 @@ void NamedOp::apply(OsmMapPtr& map)
       }
 
       map->visitRw(*vis);
+
+      _appliedVis[QString::fromStdString(vis->getClassName())] = vis;
     }
     else
     {
