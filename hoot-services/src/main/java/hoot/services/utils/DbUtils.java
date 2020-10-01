@@ -841,6 +841,16 @@ NOT EXISTS
         return jobId;
     }
 
+    public static String getJobBbox(String jobId) {
+        String foundId = createQuery()
+            .select(Expressions.stringTemplate("tags->'bbox'"))
+            .from(jobStatus)
+            .where(jobStatus.jobId.eq(jobId))
+            .fetchFirst();
+
+        return foundId;
+    }
+
     public static List<Long> getTimeoutTasks() {
         List<String> list = createQuery()
             .select(Expressions.stringTemplate("tags->'taskInfo'"))
