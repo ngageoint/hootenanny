@@ -324,7 +324,7 @@
         "objectType": "tag"
     },
     {
-        "isA": "highway=footway",
+        "isA": "highway=path",
         "name": "highway=steps",
         "objectType": "tag"
     },

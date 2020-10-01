@@ -68,7 +68,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
 
   // Don't really understand why this needs to be done, but I think it may have to do with
   // decimal rounding issues when ElementHashVisitor writes node JSON. If we don't drop this
-  // sensitivity by a decimal place, we miss synchronizing some way nodes that a very close t
+  // sensitivity by a decimal place, we miss synchronizing some way nodes that are very close
   // together...in all cases checked so far, all are much less than a meter apart. As noted in
   // ChangesetReplacementCreator::_setGlobalOpts, a coord sensitivity of 5 is a max diff of 1.1m,
   // and going to 4 here takes us to a max of 11.11m. Very strange that it needs to be done when the

@@ -191,7 +191,7 @@ private:
   // greater than 0 and less than or equal to 1; a value of -1.0 ignores the setting completely
   double _minTypeMatchScore;
 
-  // TODO
+  // TODO:
   QStringList _typeExcludeKvps;
 
   // keep track of the way nodes that are snapped

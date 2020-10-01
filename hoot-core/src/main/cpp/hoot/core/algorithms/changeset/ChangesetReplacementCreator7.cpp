@@ -209,15 +209,6 @@ void ChangesetReplacementCreator7::create(
   _setGlobalOpts();
   _printJobDescription();
 
-//  // If a retainment filter was specified, we'll AND it together with each geometry type filter to
-//  // further restrict what reference data gets replaced in the final changeset.
-//  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
-//    _getCombinedFilters(_retainmentFilter);
-//  // If a replacement filter was specified, we'll AND it together with each geometry type filter to
-//    // further restrict what secondary replacement data goes into the final changeset.
-//  const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
-//    _getCombinedFilters(_replacementFilter);
-
   // DIFF CALCULATION
 
   LOG_INFO("******************************************");
@@ -227,17 +218,7 @@ void ChangesetReplacementCreator7::create(
   // This is a bit of a misnomer after recent changes, as this map may have only been cleaned by
   // this point and not actually conflated with anything.
   OsmMapPtr conflatedMap;
-//  QStringList linearFilterClassNames;
-//  if (itr.key() == GeometryTypeCriterion::GeometryType::Line)
-//  {
-//    linearFilterClassNames = _linearFilterClassNames;
-//  }
   _currentChangeDerivationPassIsLinear = true;
-
-//    ElementCriterionPtr refFilter = itr.value();
-//    ElementCriterionPtr secFilter = secFilters[itr.key()];
-
-//    _processMaps(refMap, conflatedMap, refFilter, secFilter, itr.key(), linearFilterClassNames);
 
   LOG_VARD(toString());
 
@@ -270,14 +251,9 @@ void ChangesetReplacementCreator7::create(
   // versions later.
   const QMap<ElementId, long> refIdToVersionMappings = _getIdToVersionMappings(refMap);
 
-//  _currentChangeDerivationPassIsLinear = !linearFilterClassNames.isEmpty();
-//  LOG_VART(_currentChangeDerivationPassIsLinear);
-//  if (_currentChangeDerivationPassIsLinear)
-//  {
-    // If we have a lenient bounds requirement and linear features, we need to exclude all ways
-    // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
-    _addChangesetDeleteExclusionTags(refMap);
-  //}
+  // If we have a lenient bounds requirement and linear features, we need to exclude all ways
+  // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
+  _addChangesetDeleteExclusionTags(refMap);
 
   // Prune the ref dataset down to just the geometry types specified by the filter, so we don't end
   // up modifying anything else.
@@ -302,8 +278,8 @@ void ChangesetReplacementCreator7::create(
     _markElementsWithMissingChildren(secMap);
   }
 
-//  // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
-//  // up modifying anything else.
+  // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
+  // up modifying anything else.
   if (_geometryTypeFilter)
   {
     const Settings secFilterSettings =
@@ -370,30 +346,31 @@ void ChangesetReplacementCreator7::create(
   conflatedMap = cookieCutRefMap;
   if (secMapSize > 0)
   {
-    if (_conflationEnabled)
-    {
-      // conflation cleans beforehand
-      _conflate(conflatedMap);
-      conflatedMap->setName("conflated");
+//    if (_conflationEnabled)
+//    {
+//      // conflation cleans beforehand
+//      _conflate(conflatedMap);
+//      conflatedMap->setName("conflated");
 
-      if (!ConfigOptions().getChangesetReplacementPassConflateReviews())
-      {
-        // remove all conflate reviews
-        _removeConflateReviews(conflatedMap);
-      }
-    }
-    // This is a little misleading to only clean when the sec map has elements, however a test fails
-    // if we don't. May need further investigation.
-    else
-    {
+//      if (!ConfigOptions().getChangesetReplacementPassConflateReviews())
+//      {
+//        // remove all conflate reviews
+//        _removeConflateReviews(conflatedMap);
+//      }
+//    }
+//    // This is a little misleading to only clean when the sec map has elements, however a test fails
+//    // if we don't. May need further investigation.
+//    else
+//    {
       _clean(conflatedMap);
       conflatedMap->setName("cleaned");
-    }
+    //}
   }
 
   // SNAP
 
-  // TODO: only snapping near the replacement bounds may help prevent some bad snaps in the output
+  // TODO: maybe only snapping near the replacement bounds may help prevent some bad snaps in the
+  // output
 
   //if (_currentChangeDerivationPassIsLinear)
   //{
@@ -408,6 +385,8 @@ void ChangesetReplacementCreator7::create(
     snapWayStatuses.append("Conflated");
     QStringList snapToWayStatuses("Input1");
     snapToWayStatuses.append("Conflated");
+    // TODO: Now that we're more strict on what can be snapped type-wise, we may not need to
+    // break these snaps out per feature type.
     for (int i = 0; i < _linearFilterClassNames.size(); i++)
     {
       _snapUnconnectedWays(
@@ -499,6 +478,7 @@ void ChangesetReplacementCreator7::create(
 
     immediatelyConnectedOutOfBoundsWays.reset();
   }
+
   if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
   {
     // If we're not allowing the changeset deriver to generate delete statements for reference
@@ -558,7 +538,7 @@ void ChangesetReplacementCreator7::create(
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
   _changesetCreator->setIncludeReviews(
-    _conflationEnabled && ConfigOptions().getChangesetReplacementPassConflateReviews());
+    /*_conflationEnabled && ConfigOptions().getChangesetReplacementPassConflateReviews()*/false);
   // We have some instances where modify and delete changes are being generated for the same
   // element, which causes error during changeset application. Eventually, we should eliminate their
   // causes, but for now we'll activate changeset cleaning to get rid of the delete statements.
@@ -625,12 +605,12 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
   // output after the change and another slightly worse. See more details in #4101, which is closed,
   // but if we can figure out what's going on at some point maybe this situation can be handled
   // properly.
-  if (_conflationEnabled)
-  {
-    ConfigUtils::removeListOpEntry(
-      ConfigOptions::getMapCleanerTransformsKey(),
-      QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
-  }
+//  if (_conflationEnabled)
+//  {
+//    ConfigUtils::removeListOpEntry(
+//      ConfigOptions::getMapCleanerTransformsKey(),
+//      QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
+//  }
 
   // These don't change between scenarios (or at least we haven't needed to change them yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
@@ -648,18 +628,18 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
   _boundsOpts.changesetSecKeepOnlyInsideBounds = false;
   _boundsOpts.inBoundsStrict = false;
 
-  if (_boundsInterpretation == BoundsInterpretation::Lenient)
-  {
+  //if (_boundsInterpretation == BoundsInterpretation::Lenient)
+  //{
     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = true;
     _boundsOpts.loadSecKeepEntireCrossingBounds = true;
     _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
-  }
-  else
-  {
-    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
-    _boundsOpts.loadSecKeepEntireCrossingBounds = false;
-    _boundsOpts.changesetAllowDeletingRefOutsideBounds = false;
-  }
+  //}
+//  else
+//  {
+//    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
+//    _boundsOpts.loadSecKeepEntireCrossingBounds = false;
+//    _boundsOpts.changesetAllowDeletingRefOutsideBounds = false;
+//  }
 
   // Conflate way joining needs to happen later in the post ops for strict linear replacements.
   // Changing the default ordering of the post ops to accommodate this had detrimental effects
@@ -667,15 +647,15 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
   // Would like to get rid of this...isn't a foolproof fix by any means if the conflate post
   // ops end up getting re-ordered for some reason.
 
-  LOG_VART(conf().getList(ConfigOptions::getConflatePostOpsKey()));
-  QStringList conflatePostOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-  conflatePostOps.removeAll(QString::fromStdString(WayJoinerOp::className()));
-  const int indexOfTagTruncater =
-    conflatePostOps.indexOf(QString::fromStdString(ApiTagTruncateVisitor::className()));
-  conflatePostOps.insert(
-    indexOfTagTruncater - 1, QString::fromStdString(WayJoinerOp::className()));
-  conf().set(ConfigOptions::getConflatePostOpsKey(), conflatePostOps);
-  LOG_VARD(conf().getList(ConfigOptions::getConflatePostOpsKey()));
+//  LOG_VART(conf().getList(ConfigOptions::getConflatePostOpsKey()));
+//  QStringList conflatePostOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
+//  conflatePostOps.removeAll(QString::fromStdString(WayJoinerOp::className()));
+//  const int indexOfTagTruncater =
+//    conflatePostOps.indexOf(QString::fromStdString(ApiTagTruncateVisitor::className()));
+//  conflatePostOps.insert(
+//    indexOfTagTruncater - 1, QString::fromStdString(WayJoinerOp::className()));
+//  conf().set(ConfigOptions::getConflatePostOpsKey(), conflatePostOps);
+//  LOG_VARD(conf().getList(ConfigOptions::getConflatePostOpsKey()));
 
   conf().set(
     ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),

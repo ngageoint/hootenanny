@@ -671,6 +671,7 @@ relations will be written.
 * Data Type: list
 * Default Value:
 ** `road_marking=solid_stop_line`
+** `highway=steps`
 
 Feature types that should never be snapped by `ChangesetReplacementCreator` when using
 `UnconnectedWaySnapper`.
