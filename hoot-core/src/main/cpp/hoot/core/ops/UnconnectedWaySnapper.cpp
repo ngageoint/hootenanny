@@ -723,8 +723,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
             if (schema.explicitTypeMismatch(
                   wayToSnapTags, containingWay->getTags(), _minTypeMatchScore))
             {
-              // TODO: change back to trace
-              LOG_DEBUG(
+              LOG_TRACE(
                 "Explicit type mismatch between containing way " << containingWay->getElementId() <<
                 " with type: " << schema.getFirstType(containingWay->getTags(), true) <<
                 " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
@@ -732,7 +731,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
             }
             else
             {
-              LOG_DEBUG(
+              LOG_TRACE(
                 "Type match between containing way " << containingWay->getElementId() <<
                 " with type: " << schema.getFirstType(containingWay->getTags(), true) <<
                 " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
@@ -861,7 +860,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
     {
       if (schema.explicitTypeMismatch(wayToSnapTags, wayToSnapTo->getTags(), _minTypeMatchScore))
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Explicit type mismatch between way to snap to " << wayToSnapTo->getElementId() <<
           " with type: " << schema.getFirstType(wayToSnapTo->getTags(), true) <<
           " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
@@ -870,7 +869,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
       }
       else
       {
-        LOG_DEBUG(
+        LOG_TRACE(
           "Type match between way to snap to " << wayToSnapTo->getElementId() <<
           " with type: " << schema.getFirstType(wayToSnapTo->getTags(), true) <<
           " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
