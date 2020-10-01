@@ -48,18 +48,22 @@ class DeriveChangesetCommand extends GrailCommand {
             options.add("changeset.allow.deleting.reference.features=false");
         }
 
+        if (params.getBounds() != null) {
+            //Add TASK_BBOX as a convert.bounding.box
+            options.add("convert.bounding.box=" + params.getBounds());
+        }
+
         List<String> hootOptions = toHootOptions(options);
 
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("INPUT1", params.getInput1());
         substitutionMap.put("INPUT2", params.getInput2());
-        substitutionMap.put("BOUNDS", params.getBounds());
         substitutionMap.put("OSC_FILE", params.getOutput());
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
 
-        String command = "hoot.bin changeset-derive --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${BOUNDS} ${OSC_FILE} --stats ${STATS_FILE}";
+        String command = "hoot.bin changeset-derive --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OSC_FILE} --stats ${STATS_FILE}";
 
         super.configureCommand(command, substitutionMap, caller);
     }

@@ -72,10 +72,6 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
         options.add("reader.add.source.datetime=false");
         options.add("writer.include.circular.error.tags=false");
         options.add("convert.bounding.box.remove.missing.elements=false");
-        if (params.getBounds() != null) {
-            //Add TASK_BBOX as a convert.bounding.box
-            options.add("convert.bounding.box=" + params.getBounds());
-        }
 
         List<String> hootOptions = toHootOptions(options);
 
@@ -93,13 +89,14 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
         Map<String, Object> substitutionMap = new HashMap<>();
         substitutionMap.put("INPUT1", params.getInput1());
         substitutionMap.put("INPUT2", params.getInput2());
+        substitutionMap.put("BOUNDS", params.getBounds());
         substitutionMap.put("OSC_FILE", params.getOutput());
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
         substitutionMap.put("ADV_OPTIONS", advancedOptions);
         substitutionMap.put("STATS_FILE", new File(params.getWorkDir(), "stats.json").getPath());
 
-        String command = "hoot.bin changeset-derive-replacement --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${OSC_FILE} ${ADV_OPTIONS} --stats ${STATS_FILE}";
+        String command = "hoot.bin changeset-derive-replacement --${DEBUG_LEVEL} -C DeriveChangeset.conf ${HOOT_OPTIONS} ${INPUT1} ${INPUT2} ${BOUNDS} ${OSC_FILE} ${ADV_OPTIONS} --stats ${STATS_FILE}";
 
         super.configureCommand(command, substitutionMap, caller);
     }
