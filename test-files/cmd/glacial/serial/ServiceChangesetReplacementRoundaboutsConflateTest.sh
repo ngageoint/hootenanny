@@ -10,4 +10,4 @@ set -e
 # tedious (de-duplicate commmand isn't removing all the dupes). In the meantime, however, the replacement AOI was shrunk to just cover one of 
 # the roundabouts where the dropped feature problem doesn't occur.
 
-test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off "ServiceChangesetReplacementRoundaboutsConflateTest" "test-files/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/Input1.osm" "test-files/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/Input2.osm" "-89.6219483,20.9953,-89.6199,20.9979" "-180,-90,180,90" "true" "lenient" "" "" "false" "" "" "false" "" "xml" "5.0" "0.5" "true" "true"
+test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off "ServiceChangesetReplacementRoundaboutsConflateTest" "test-files/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/Input1.osm" "test-files/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsConflateTest/Input2.osm" "-89.6219483,20.9953,-89.6199,20.9979" "-180,-90,180,90" "true" "lenient" "" "" "false" "" "" "false" "" "xml" "5.0" "0.5" "false" "true"

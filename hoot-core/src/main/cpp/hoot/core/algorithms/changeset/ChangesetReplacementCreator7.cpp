@@ -178,6 +178,7 @@ void ChangesetReplacementCreator7::setGeometryFilters(const QStringList& filterC
       ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
         GeometryTypeCriterion::GeometryType::Line);
   }
+  _linearFilterClassNames.removeAll(QString::fromStdString(LinearCriterion::className()));
 
   LOG_VARD(_geometryTypeFilters.size());
   LOG_VART(_linearFilterClassNames);

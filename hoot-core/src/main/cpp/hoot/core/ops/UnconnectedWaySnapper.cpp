@@ -699,7 +699,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
       LOG_VART(wayNodeToSnapTo->getId());
 
       // Compare all the ways that a contain the neighbor and all the ways that contain our input
-      // node.  If there's overlap, then we pass b/c we don't want to try to snap the input way
+      // node. If there's overlap, then we pass b/c we don't want to try to snap the input way
       // node to a way its already on.
       if (!WayUtils::nodesAreContainedInTheSameWay(wayNodeToSnapToId, nodeToSnap->getId(), _map) /*&&
           // I don't think this distance check is necessary...leaving here disabled for the time
@@ -713,14 +713,39 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         {
           const std::vector<ConstWayPtr> containingWays =
             WayUtils::getContainingWaysByNodeId(wayNodeToSnapToId, _map);
+          LOG_VART(containingWays.size());
+          bool typeMatchFound = false;
           for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
                containingWaysItr != containingWays.end(); ++containingWaysItr)
           {   
+            ConstWayPtr containingWay = *containingWaysItr;
+            LOG_VART(containingWay->getElementId());
             if (schema.explicitTypeMismatch(
-                  wayToSnapTags, (*containingWaysItr)->getTags(), _minTypeMatchScore))
+                  wayToSnapTags, containingWay->getTags(), _minTypeMatchScore))
             {
-              continue;
+              // TODO: change back to trace
+              LOG_DEBUG(
+                "Explicit type mismatch between containing way " << containingWay->getElementId() <<
+                " with type: " << schema.getFirstType(containingWay->getTags(), true) <<
+                " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
+                " for minimum match score: " << _minTypeMatchScore << ". Skipping snap.");
             }
+            else
+            {
+              LOG_DEBUG(
+                "Type match between containing way " << containingWay->getElementId() <<
+                " with type: " << schema.getFirstType(containingWay->getTags(), true) <<
+                " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
+                " for minimum match score: " << _minTypeMatchScore << ". Proceeding with snap.");
+              typeMatchFound = true;
+              break;
+            }
+          }
+
+          LOG_VART(typeMatchFound);
+          if (!typeMatchFound)
+          {
+            continue;
           }
         }
 
@@ -836,7 +861,20 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
     {
       if (schema.explicitTypeMismatch(wayToSnapTags, wayToSnapTo->getTags(), _minTypeMatchScore))
       {
+        LOG_DEBUG(
+          "Explicit type mismatch between way to snap to " << wayToSnapTo->getElementId() <<
+          " with type: " << schema.getFirstType(wayToSnapTo->getTags(), true) <<
+          " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
+          " for minimum match score: " << _minTypeMatchScore << ". Snapping skipped.");
         continue;
+      }
+      else
+      {
+        LOG_DEBUG(
+          "Type match between way to snap to " << wayToSnapTo->getElementId() <<
+          " with type: " << schema.getFirstType(wayToSnapTo->getTags(), true) <<
+          " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
+          " for minimum match score: " << _minTypeMatchScore << ". Proceeding with snap...");
       }
     }
 

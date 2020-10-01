@@ -335,9 +335,9 @@ private:
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
-//    conf().set(
-//      ConfigOptions::getChangesetReplacementImplementationKey(),
-//      "hoot::ChangesetReplacementCreator1");
+    conf().set(
+      ConfigOptions::getChangesetReplacementImplementationKey(),
+      "hoot::ChangesetReplacementCreator7");
 //    conf().set(
 //      ConfigOptions::getLogClassFilterKey(),
 //      "ElementDeduplicator");
