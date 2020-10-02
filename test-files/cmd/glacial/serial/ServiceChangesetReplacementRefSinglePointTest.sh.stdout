@@ -6,7 +6,7 @@ REF_CONVERT_OPS:  hoot::SetTagValueVisitor
 SEC_CONVERT_OPS:  hoot::SetTagValueVisitor
 replacement aoi:  52.938359,32.727214,53.769359,32.853214
 full replacement:  --full-replacement
-bounds interpretation:  --strict-bounds
+bounds interpretation: 
 geometry filters: 
 tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
 replacement filters: 
@@ -42,19 +42,19 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRefSinglePointTest/ServiceChangesetReplacementRefSinglePointTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=32.7272, max_lat=32.8616392, min_lon=52.9383981, max_lon=53.2669396, num_changes=3158
-Node(s) Created: 2,251
-Node(s) Modified: 7
-Node(s) Deleted: 255
-Way(s) Created: 548
-Way(s) Modified: 26
-Way(s) Deleted: 71
+Changeset Details: min_lat=32.7129603, max_lat=32.8616392, min_lon=52.9358321, max_lon=53.273086, num_changes=3056
+Node(s) Created: 2,169
+Node(s) Modified: 0
+Node(s) Deleted: 297
+Way(s) Created: 493
+Way(s) Modified: 0
+Way(s) Deleted: 97
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 2,799
-Total Modifications: 33
-Total Deletions: 326
+Total Creations: 2,662
+Total Modifications: 0
+Total Deletions: 394
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementRefSinglePointTest-xml-replaced.osm for verification...
 

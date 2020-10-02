@@ -69,6 +69,10 @@ _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
 _averageChangesetDeriveTime(0.0),
 _tagQualityIssues(false),
+_orphanedNodes(0),
+_disconnectedWays(0),
+_emptyWays(0),
+_duplicateElements(0),
 _calcDiffWithReplacement(false),
 _outputNonConflatable(false)
 {
@@ -455,9 +459,9 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
       SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _taskGridBounds)));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
+  _orphanedNodes = tagVis->getNumFeaturesAffected();
   LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
-    " orphaned nodes in output.");
+    "Tagged " << StringUtils::formatLargeNumber(_orphanedNodes) << " orphaned nodes in output.");
 
   // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not so
   // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
@@ -471,21 +475,21 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
     new ChainCriterion(ElementCriterionPtr(new DisconnectedWayCriterion(map)), inBoundsCrit));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
+  _disconnectedWays = tagVis->getNumFeaturesAffected();
   LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
+    "Tagged " << StringUtils::formatLargeNumber(_disconnectedWays) <<
     " disconnected ways in output.");
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
   crit.reset(new ChainCriterion(ElementCriterionPtr(new EmptyWayCriterion()), inBoundsCrit));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
-    " empty ways in output.");
+  _emptyWays = tagVis->getNumFeaturesAffected();
+  LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
 
-  const int numDupes = DuplicateElementMarker::markDuplicates(map, 8);
+  _duplicateElements = DuplicateElementMarker::markDuplicates(map, 8);
   LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(numDupes) <<
+    "Tagged " << StringUtils::formatLargeNumber(_duplicateElements) <<
     " duplicate feature pairs in output.");
 }
 

@@ -129,7 +129,7 @@ public:
   void orphanedNodes2Test()
   {
     // github 4216; similar to orphanedNodes1Test - There should be no orphaned nodes in the
-    // output. You can check for orphaned node counts with uut.setTagQualityIssues(true).
+    // output.
 
     _testName = "orphanedNodes2Test";
     _prepInput(
@@ -143,7 +143,7 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
     const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
 
@@ -160,6 +160,7 @@ public:
 
     Log::getInstance().setLevel(logLevel);
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -196,7 +197,9 @@ public:
 
   void droppedPointPolyRelationMembers1Test()
   {
-    // part of github 4228 - TODO: add description
+    // part of github 4228 - The POI, Desert Shores, belongs in a relation with a landuse poly.
+    // Neither should be dropped from the output due to being in a relation with members of mixed
+    // geometry types.
 
     _testName = "droppedPointPolyRelationMembers1Test";
     _prepInput(

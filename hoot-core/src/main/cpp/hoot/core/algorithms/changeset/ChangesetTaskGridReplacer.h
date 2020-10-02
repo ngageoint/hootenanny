@@ -69,6 +69,11 @@ public:
    */
   void replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
 
+  int getNumOrphanedNodesInOutput() const { return _orphanedNodes; }
+  int getNumDisconnectedWaysInOutput() const { return _disconnectedWays; }
+  int getNumEmptyWaysInOutput() const { return _emptyWays; }
+  int getNumDuplicateElementsInOutput() const { return _duplicateElements; }
+
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
   void setTaskCellIncludeIds(const QList<int>& ids) { _taskCellIncludeIds = ids; }
@@ -127,6 +132,14 @@ private:
   QString _finalOutput;
   // adds tags to features that are suspect as result of the replacement op
   bool _tagQualityIssues;
+  // TODO
+  int _orphanedNodes;
+  // TODO
+  int _disconnectedWays;
+  // TODO
+  int _emptyWays;
+  // TODO
+  int _duplicateElements;
   // uses diff conflate to calculate the difference between the final replaced data and the original
   // data used for replacement
   bool _calcDiffWithReplacement;
