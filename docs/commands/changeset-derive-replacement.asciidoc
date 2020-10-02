@@ -25,7 +25,8 @@ IDs in the secondary data are not retained and those elements treated as complet
 * +input1+                       - Map input with features to replace; may be any supported input format that also supports bounded reading 
                                    (e.g. OSM file). See the "Input Data and "Bounds Handling" sections for more detail.
 * +input2+                       - Map input with the features to be used for replacement; may be any supported input format that also supports 
-                                   bounded reading (e.g. OSM file). See the "Input Data and "Bounds Handling" sections for more detail.
+                                   bounded reading (e.g. OSM file); leave empty to cut data out of input1 while adding no replacement data. 
+                                   See the "Input Data and "Bounds Handling" sections for more detail.
 * +bounds+                       - Boundary over which to do the feature replacement of the form: minx,miny,maxx,maxy; 
                                    e.g. "-71.4698,42.4866,-71.4657,42.4902" See the ""Bounds Handling" section for more detail.
 * +output+                       - Changeset output location; must be a changeset .osc or .osc.sql file.

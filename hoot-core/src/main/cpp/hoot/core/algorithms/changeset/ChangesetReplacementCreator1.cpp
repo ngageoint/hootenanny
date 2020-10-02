@@ -135,6 +135,9 @@ _numChanges(0)
 void ChangesetReplacementCreator1::setChangesetOptions(
   const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl)
 {
+  LOG_VARD(printStats);
+  LOG_VARD(statsOutputFile);
+  LOG_VARD(osmApiDbUrl);
   _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
 }
 
@@ -393,6 +396,11 @@ void ChangesetReplacementCreator1::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
+  LOG_VARD(input1);
+  LOG_VARD(input2);
+  LOG_VARD(GeometryUtils::envelopeToConfigString(bounds));
+  LOG_VARD(output);
+
   QElapsedTimer timer;
   timer.start();
 
@@ -848,18 +856,22 @@ void ChangesetReplacementCreator1::_validateInputs()
     throw IllegalArgumentException(
       "Reader for " + _input1 + " must implement Boundable for replacement changeset derivation.");
     }
-  boundable = std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input2));
-  if (!boundable)
+  if (!_input2.isEmpty())
   {
-    throw IllegalArgumentException(
-      "Reader for " + _input2 + " must implement Boundable for replacement changeset derivation.");
+    boundable = std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input2));
+    if (!boundable)
+    {
+      throw IllegalArgumentException(
+        "Reader for " + _input2 + " must implement Boundable for replacement changeset derivation.");
+    }
   }
 
   // Fail for GeoJSON - GeoJSON coming from Overpass does not have way nodes, so their versions
   // are lost when new way nodes are added to existing ways. For that reason, we can't support it
   // (or at least not sure how to yet).
   OsmGeoJsonReader geoJsonReader;
-  if (geoJsonReader.isSupported(_input1) || geoJsonReader.isSupported(_input2))
+  if (geoJsonReader.isSupported(_input1) ||
+      (!_input2.isEmpty() && geoJsonReader.isSupported(_input2)))
   {
     throw IllegalArgumentException(
       "GeoJSON inputs are not supported by replacement changeset derivation.");
@@ -1334,11 +1346,19 @@ OsmMapPtr ChangesetReplacementCreator1::_loadRefMap(
 OsmMapPtr ChangesetReplacementCreator1::_loadSecMap(
   const GeometryTypeCriterion::GeometryType& geometryType)
 {
-  return
-    _loadInputMap(
-      "sec-" + GeometryTypeCriterion::typeToString(geometryType), _input2, false, Status::Unknown2,
-      _boundsOpts.loadSecKeepEntireCrossingBounds, _boundsOpts.loadSecKeepOnlyInsideBounds, false,
-      true, _input2Map);
+  if (!_input2.isEmpty())
+  {
+    return
+      _loadInputMap(
+        "sec-" + GeometryTypeCriterion::typeToString(geometryType), _input2, false, Status::Unknown2,
+        _boundsOpts.loadSecKeepEntireCrossingBounds, _boundsOpts.loadSecKeepOnlyInsideBounds, false,
+        true, _input2Map);
+  }
+  else
+  {
+    // return an empty map for the cut only workflow
+    return OsmMapPtr(new OsmMap());
+  }
 }
 
 void ChangesetReplacementCreator1::_removeMetadataTags(const OsmMapPtr& map)

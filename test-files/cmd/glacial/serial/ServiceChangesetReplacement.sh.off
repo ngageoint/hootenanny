@@ -13,12 +13,13 @@ set -e
 # Input Parameters (see changeset-derive-replacement command doc for more detail):
 # 1  - test name
 # 2  - ref input file path
-# 3  - sec input file path
+# 3  - sec input file path - (use "test-files/Empty.osm" for cut only; that's hackish, but we already use the existing of an empty second 
+#                            input to determine whether generate the second input via perturbation)
 # 4  - replacement aoi - what section is being replaced; e.g. "-71.4698,42.4866,-71.4657,42.4902"
 # 5  - crop aoi - an initial aoi to crop both datasets down to in order to save processing time; use a global bounds to bypass cropping: 
 #                 "-180,-90,180,90"
-# 6  - full replacement (not just overlapping features); true or false
-# 7  - bounds interpretation - how are bounds overlapping features handled?; "lenient", "strict", or "hybrid"   
+# 6  - full replacement (not just overlapping features); true or false - NO LONGER SUPPORTED (IGNORED)
+# 7  - bounds interpretation - how are bounds overlapping features handled?; "lenient", "strict", or "hybrid" - NO LONGER SUPPORTED (IGNORED)  
 # 8  - geometry filters - what types of geometries are being replaced?; delimited ElementCriterion class name list; leave empty to bypass
 # 9  - replacement filters - what types of features are we removing?; delimited ElementCriterion class name list; leave empty to bypass
 # 10 - chain replacement filters together (logical AND)?; true or false
@@ -67,7 +68,7 @@ if [ "$SOURCE_FILE_2" == "" ]; then
     REF_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp"
     SEC_CONVERT_OPS="hoot::MapCropper;hoot::SetTagValueVisitor"
   fi
-  PERTURBING_REF="true"
+  PERTURBING_REF="true" 
 else
   if [ "$CROP_OPTS" == "" ]; then
     REF_CONVERT_OPS="hoot::SetTagValueVisitor"
@@ -278,7 +279,14 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
   echo ""
   echo "Deriving a changeset between the osm api db and the hoot api db layers over: $REPLACEMENT_AOI, to file: $CHANGESET_DB that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
+  if [ "$SOURCE_FILE_2" == "test-files/Empty.osm" ]; then
+    # cut only
+    hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION 
+  else
+    # cut and replace
+    hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-db.osm $REF_DB_INPUT $SEC_DB_INPUT $REPLACEMENT_AOI $CHANGESET_DB $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
+  fi
+
 
   # CHANGESET APPLICATION
 
@@ -357,8 +365,12 @@ if [[ $SOURCE_FORMATS == *"xml"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_XML that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
-
+  if [ "$SOURCE_FILE_2" == "test-files/Empty.osm" ]; then
+    hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
+  else
+    hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
+  fi
+  
   # CHANGESET APPLICATION
 
   echo ""
@@ -425,7 +437,11 @@ if [[ $SOURCE_FORMATS == *"json"* ]]; then
   echo ""
   echo "Deriving a changeset between $REF_JSON_INPUT and $SEC_JSON_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_JSON that replaces features in the reference dataset with those from a secondary dataset..."
   echo ""
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
+  if [ "$SOURCE_FILE_2" == "test-files/Empty.osm" ]; then
+    hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
+  else
+    hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-json.osm $REF_JSON_INPUT $SEC_JSON_INPUT $REPLACEMENT_AOI $CHANGESET_JSON $REF_DB_INPUT $FULL_REPLACEMENT $BOUNDS_INTEPRETATION $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds $ENABLE_CONFLATION
+  fi
 
   # CHANGESET APPLICATION
 
