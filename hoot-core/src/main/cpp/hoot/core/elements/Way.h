@@ -221,8 +221,17 @@ public:
 
   QString toString() const;
 
-  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter) const;
-  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter);
+  /**
+   * @see Element
+   */
+  virtual void visitRo(const ElementProvider& map, ConstElementVisitor& filter,
+                       const bool recursive = true) const;
+
+  /**
+   * @see Element
+   */
+  virtual void visitRw(ElementProvider& map, ConstElementVisitor& filter,
+                       const bool recursive = true);
 
   /**
    * Functions for getting/setting/resetting the parent ID, i.e. the ID of the way

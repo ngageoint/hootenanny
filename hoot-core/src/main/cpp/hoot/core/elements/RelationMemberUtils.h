@@ -146,22 +146,23 @@ public:
     const ConstRelationPtr& relation, const ElementCriterion& criterion, const ConstOsmMapPtr& map);
 
   /**
+   * Determines if an element is a member of a relation that satisfies a specified criterion
    *
-   *
-   * @param map
-   * @param childId
-   * @param criterion
-   * @return
+   * @param map map owning the relation and element possessing the input ID
+   * @param childId ID of the element child
+   * @param criterion criteria which the relation must satisfy
+   * @return true if the element is a member of any relation satisfying the specified criterion;
+   * false otherwise
    */
   static bool isMemberOfRelationSatisfyingCriterion(
     const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion);
 
   /**
+   * Retrieves all relations containing a child element
    *
-   *
-   * @param map
-   * @param childId
-   * @return
+   * @param map map the child element belongs to
+   * @param childId ID of the child element
+   * @return a collection of relations
    */
   static std::vector<ConstRelationPtr> getContainingRelations(
     const ConstOsmMapPtr& map, const ElementId& childId);

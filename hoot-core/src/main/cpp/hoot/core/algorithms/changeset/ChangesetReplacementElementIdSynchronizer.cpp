@@ -74,15 +74,15 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   // and going to 4 here takes us to a max of 11.11m. Very strange that it needs to be done when the
   // nodes in question aren't anywhere near that far apart. There is an additional distance check
   // explained in the loop below to prevent utter chaos caused by this change.
-  const int defaultNodeSensitivity =
-    conf().getInt(ConfigOptions::getNodeComparisonCoordinateSensitivityKey());
-  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 4);
+  //const int defaultNodeSensitivity =
+    //conf().getInt(ConfigOptions::getNodeComparisonCoordinateSensitivityKey());
+  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 4);
 
   // Calc element hashes associated with element IDs.
-  const QMap<QString, ElementId> map1Hashes = _calcElementHashes(map1);
+  const QMap<QString, ElementId> map1Hashes = _calcElementHashes(map1, 4);
   LOG_VARD(map1Hashes.size());
   QSet<QString> map1HashesSet = map1Hashes.keys().toSet();
-  const QMap<QString, ElementId> map2Hashes = _calcElementHashes(map2);
+  const QMap<QString, ElementId> map2Hashes = _calcElementHashes(map2, 4);
   LOG_VARD(map2Hashes.size());
   QSet<QString> map2HashesSet = map2Hashes.keys().toSet();
 
@@ -162,7 +162,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
     }
   }
   // restore the original sensitivity
-  conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), defaultNodeSensitivity);
+  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), defaultNodeSensitivity);
 
   LOG_DEBUG(
     "Updated " << getNumTotalFeatureIdsSynchronized() <<

@@ -208,7 +208,12 @@ public:
   /**
    * Used to identify empty ways for debugging purposes
    */
-  inline static const QString HootEmptyWay()        { return "hoot:empty:way"; }
+  inline static const QString HootEmptyWay()            { return "hoot:empty:way"; }
+
+  /**
+   * Used to identify superfluous nodes without removing them for debugging purposes
+   */
+  inline static const QString HootDuplicate()           { return "hoot:duplicate"; }
 
   /**
    * Identifies features snapped with UnconnectedWaySnapper

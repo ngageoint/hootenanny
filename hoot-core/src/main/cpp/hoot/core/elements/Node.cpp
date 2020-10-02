@@ -120,12 +120,13 @@ QString Node::toString() const
   return QString::fromUtf8(ss.str().data());
 }
 
-void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
+void Node::visitRo(const ElementProvider& map, ConstElementVisitor& filter,
+                   const bool /*recursive*/) const
 {
   filter.visit(map.getNode(getId()));
 }
 
-void Node::visitRw(ElementProvider& map, ConstElementVisitor& filter)
+void Node::visitRw(ElementProvider& map, ConstElementVisitor& filter, const bool /*recursive*/)
 {
   filter.visit(std::dynamic_pointer_cast<const Node>(map.getNode(getId())));
 }

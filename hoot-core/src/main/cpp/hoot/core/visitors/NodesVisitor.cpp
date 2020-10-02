@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NodesVisitor.h"
 
@@ -33,8 +33,7 @@ void NodesVisitor::visit(const std::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Node)
   {
-    ConstNodePtr n = std::dynamic_pointer_cast<const Node>(e);
-    _n.append(n);
+    _n.append(std::dynamic_pointer_cast<const Node>(e));
   }
 }
 

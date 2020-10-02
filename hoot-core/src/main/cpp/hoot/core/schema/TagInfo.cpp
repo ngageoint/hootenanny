@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TagInfo.h"
@@ -127,13 +127,13 @@ QString TagInfo::_getInfo(const QString& input)
       {
         std::shared_ptr<Element> e = iterator->next();
 
-        //        // Interesting problem: If there are no elements in the file, e == 0
-        //        // Need to look at the ElementIterator.cpp file to fix this.
-        //        if (e == 0)
-        //        {
-        //          LOG_WARN("No features in: " + input + " " + layer);
-        //          break;
-        //        }
+//        // Interesting problem: If there are no elements in the file, e == 0
+//        // Need to look at the ElementIterator.cpp file to fix this.
+//        if (e == 0)
+//        {
+//          LOG_WARN("No features in: " + input + " " + layer);
+//          break;
+//        }
 
         _parseElement(e, result);
 

@@ -332,15 +332,16 @@ QString Relation::toString() const
   return QString::fromUtf8(ss.str().data());
 }
 
-void Relation::visitRo(const ElementProvider& map, ConstElementVisitor& filter) const
+void Relation::visitRo(const ElementProvider& map, ConstElementVisitor& filter,
+                       const bool recursive) const
 {
   QList<long> visitedRelations;
-  _visitRo(map, filter, visitedRelations);
+  _visitRo(map, filter, visitedRelations, recursive);
   assert(visitedRelations.size() == 0);
 }
 
 void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
-  QList<long> &visitedRelations) const
+  QList<long>& visitedRelations, const bool recursive) const
 {
   if (visitedRelations.contains(getId()))
   {
@@ -362,44 +363,46 @@ void Relation::_visitRo(const ElementProvider& map, ConstElementVisitor& filter,
 
   filter.visit(map.getRelation(getId()));
 
-  const vector<RelationData::Entry>& members = getMembers();
-
-  for (size_t i = 0; i < members.size(); i++)
+  if (recursive)
   {
-    const RelationData::Entry& m = members[i];
-    LOG_VART(m.getElementId());
-    LOG_VART(map.containsElement(m.getElementId()));
-    if (map.containsElement(m.getElementId()))
+    const vector<RelationData::Entry>& members = getMembers();
+    for (size_t i = 0; i < members.size(); i++)
     {
-      if (m.getElementId().getType() == ElementType::Node)
+      const RelationData::Entry& m = members[i];
+      LOG_VART(m.getElementId());
+      LOG_VART(map.containsElement(m.getElementId()));
+      if (map.containsElement(m.getElementId()))
       {
-        map.getNode(m.getElementId().getId())->visitRo(map, filter);
-      }
-      else if (m.getElementId().getType() == ElementType::Way)
-      {
-        map.getWay(m.getElementId().getId())->visitRo(map, filter);
-      }
-      else if (m.getElementId().getType() == ElementType::Relation)
-      {
-        map.getRelation(m.getElementId().getId())->_visitRo(map, filter, visitedRelations);
-      }
-      else
-      {
-        assert(false);
+        if (m.getElementId().getType() == ElementType::Node)
+        {
+          map.getNode(m.getElementId().getId())->visitRo(map, filter);
+        }
+        else if (m.getElementId().getType() == ElementType::Way)
+        {
+          map.getWay(m.getElementId().getId())->visitRo(map, filter);
+        }
+        else if (m.getElementId().getType() == ElementType::Relation)
+        {
+          map.getRelation(m.getElementId().getId())->_visitRo(map, filter, visitedRelations);
+        }
+        else
+        {
+          assert(false);
+        }
       }
     }
   }
 }
 
-void Relation::visitRw(ElementProvider& map, ConstElementVisitor& filter)
+void Relation::visitRw(ElementProvider& map, ConstElementVisitor& filter, const bool recursive)
 {
   QList<long> visitedRelations;
-  _visitRw(map, filter, visitedRelations);
+  _visitRw(map, filter, visitedRelations, recursive);
   assert(visitedRelations.size() == 0);
 }
 
 void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
-  QList<long> &visitedRelations)
+  QList<long>& visitedRelations, const bool recursive)
 {
   if (visitedRelations.contains(getId()))
   {
@@ -419,31 +422,33 @@ void Relation::_visitRw(ElementProvider& map, ConstElementVisitor& filter,
 
   filter.visit(std::dynamic_pointer_cast<const Relation>(map.getRelation(getId())));
 
-  const vector<RelationData::Entry>& members = getMembers();
-
-  for (size_t i = 0; i < members.size(); i++)
+  if (recursive)
   {
-    const RelationData::Entry& m = members[i];
-    if (map.containsElement(m.getElementId()))
+    const vector<RelationData::Entry>& members = getMembers();
+    for (size_t i = 0; i < members.size(); i++)
     {
-      if (m.getElementId().getType() == ElementType::Node &&
-        map.containsNode(m.getElementId().getId()))
+      const RelationData::Entry& m = members[i];
+      if (map.containsElement(m.getElementId()))
       {
-        map.getNode(m.getElementId().getId())->visitRw(map, filter);
-      }
-      else if (m.getElementId().getType() == ElementType::Way &&
-        map.containsWay(m.getElementId().getId()))
-      {
-        map.getWay(m.getElementId().getId())->visitRw(map, filter);
-      }
-      else if (m.getElementId().getType() == ElementType::Relation &&
-        map.containsRelation(m.getElementId().getId()))
-      {
-        map.getRelation(m.getElementId().getId())->_visitRw(map, filter, visitedRelations);
-      }
-      else
-      {
-        assert(false);
+        if (m.getElementId().getType() == ElementType::Node &&
+            map.containsNode(m.getElementId().getId()))
+        {
+          map.getNode(m.getElementId().getId())->visitRw(map, filter);
+        }
+        else if (m.getElementId().getType() == ElementType::Way &&
+                 map.containsWay(m.getElementId().getId()))
+        {
+          map.getWay(m.getElementId().getId())->visitRw(map, filter);
+        }
+        else if (m.getElementId().getType() == ElementType::Relation &&
+                 map.containsRelation(m.getElementId().getId()))
+        {
+          map.getRelation(m.getElementId().getId())->_visitRw(map, filter, visitedRelations);
+        }
+        else
+        {
+          assert(false);
+        }
       }
     }
   }

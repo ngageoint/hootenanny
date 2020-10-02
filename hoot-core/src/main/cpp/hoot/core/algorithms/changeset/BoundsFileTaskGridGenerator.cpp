@@ -62,7 +62,7 @@ TaskGrid BoundsFileTaskGridGenerator::generateTaskGrid()
     }
   }
   LOG_STATUS(
-    "Read " << StringUtils::formatLargeNumber(taskGrid.getCells().size()) <<
+    "Read " << StringUtils::formatLargeNumber(taskGrid.size()) <<
     " task grid cells from " << _inputs.size() << " file(s).");
   return taskGrid;
 }

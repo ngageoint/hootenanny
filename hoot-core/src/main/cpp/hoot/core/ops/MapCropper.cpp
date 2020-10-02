@@ -525,6 +525,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   std::shared_ptr<Way> way = map->getWay(wid);
   std::shared_ptr<Geometry> fg =
     ElementConverter(map, _logWarningsForMissingElements).convertToGeometry(way);
+  LOG_VART(GeometryUtils::geometryTypeIdToString(fg));
 
   // perform the intersection with the geometry
   std::shared_ptr<Geometry> g;
@@ -544,21 +545,25 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
     else
       g.reset(fg->intersection(_envelopeG.get()));
   }
+  LOG_VART(GeometryUtils::geometryTypeIdToString(g));
 
   std::shared_ptr<FindNodesInWayFactory> nodeFactory(new FindNodesInWayFactory(way));
   GeometryConverter gc(map);
   gc.setNodeFactory(nodeFactory);
-  std::shared_ptr<Element> e =
-    gc.convertGeometryToElement(g.get(), way->getStatus(), way->getCircularError());
+  ElementPtr e = gc.convertGeometryToElement(g.get(), way->getStatus(), way->getCircularError());
   LOG_VART(e.get());
   if (!e)
   {
+    LOG_TRACE(
+      way->getElementId() <<
+      " converted geometry can't be converted to an element. Skipping cropping...");
     return;
   }
 
   // If the cropped version of the way ends up being cropped down to a single node, throw it out.
   if (e->getElementType() == ElementType::Node)
   {
+    LOG_TRACE(way->getElementId() << " converted geometry is a single node. Skipping cropping...");
     return;
   }
 
@@ -594,6 +599,14 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
         {
           WayPtr memberWay = map->getWay(element.getElementId().getId());
           memberWay->setPid(way->getId());
+          // It seems like it would be nice to retain the way tags here. The output looks better
+          // b/c you can see the original features that were cropped rendered correctly in JOSM.
+          // However, if tags are added here the multilinestring relations can't be removed by
+          // RemoveInvalidMultilineStringMembersVisitor b/c it expects all the members to have no
+          // information tags. Then you end up with extra relations in the output. It may be worth
+          // considering a way to reconcile these two things, as it would be nice to get the better
+          // feature rendering for the cropped features.
+          //memberWay->setTags(way->getTags());
         }
       }
     }

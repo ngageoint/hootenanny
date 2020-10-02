@@ -73,7 +73,7 @@ void ElementDeduplicator::dedupe(OsmMapPtr map)
   // calculate our unique hashes per element and get a list of duplicate pairs within the map
   QMap<QString, ElementId> mapHashes;
   QSet<std::pair<ElementId, ElementId>> duplicates;
-  _calcElementHashes(map, mapHashes, duplicates);
+  calculateDuplicateElements(map, mapHashes, duplicates);
   QSet<QString> mapHashesSet = mapHashes.keys().toSet();
   LOG_VARD(mapHashesSet.size());
 
@@ -136,13 +136,13 @@ void ElementDeduplicator::dedupe(OsmMapPtr map1, OsmMapPtr map2)
 
   QMap<QString, ElementId> map1Hashes;
   QSet<std::pair<ElementId, ElementId>> duplicates1;
-  _calcElementHashes(map1, map1Hashes, duplicates1);
+  calculateDuplicateElements(map1, map1Hashes, duplicates1);
   QSet<QString> map1HashesSet = map1Hashes.keys().toSet();
   LOG_VARD(map1HashesSet.size());
 
   QMap<QString, ElementId> map2Hashes;
   QSet<std::pair<ElementId, ElementId>> duplicates2;
-  _calcElementHashes(map2, map2Hashes, duplicates2);
+  calculateDuplicateElements(map2, map2Hashes, duplicates2);
   QSet<QString> map2HashesSet = map2Hashes.keys().toSet();
   LOG_VARD(map2HashesSet.size());
 
@@ -223,16 +223,18 @@ void ElementDeduplicator::_validateInputs()
   }
 }
 
-void ElementDeduplicator::_calcElementHashes(
+void ElementDeduplicator::calculateDuplicateElements(
   OsmMapPtr map, QMap<QString, ElementId>& hashes,
-  QSet<std::pair<ElementId, ElementId>>& duplicates)
+  QSet<std::pair<ElementId, ElementId>>& duplicates, const int coordinateComparisonSensitivity)
 {
+  LOG_VARD(coordinateComparisonSensitivity);
   ElementHashVisitor hashVis;
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);
+  hashVis.setCoordinateComparisonSensitivity(coordinateComparisonSensitivity);
+  hashVis.setOsmMap(map.get());
 
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
-  hashVis.setOsmMap(map.get());
   map->visitRw(hashVis);
   hashes = hashVis.getHashes();
   LOG_VARD(hashes.size());

@@ -59,6 +59,7 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 
 void WayJoiner::join(const OsmMapPtr& map)
 {
+  _joinedWayIdMappings.clear();
   _map = map;
 
   //  Join back any ways with parent ids
@@ -374,6 +375,7 @@ bool WayJoiner::_joinWays(const WayPtr& parent, const WayPtr& child)
   //  Keep the conflated status in the parent if the child being merged is conflated
   if (parent->getStatus() == Status::Conflated || child->getStatus() == Status::Conflated)
     parent->setStatus(Status::Conflated);
+  _joinedWayIdMappings[child->getId()] = parent->getId();
   //  Update any relations that contain the child to use the parent
   ReplaceElementOp(child->getElementId(), parent->getElementId()).apply(_map);
   child->getTags().clear();

@@ -73,6 +73,30 @@ public:
     setResetType(ResetAll);
   }
 
+  void runSimpleTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.read("test-files/DcGisRoads.osm", map);
+    reader.setDefaultStatus(Status::Unknown2);
+    reader.read("test-files/DcTigerRoads.osm", map);
+
+    MapCropper(Envelope(-77.0554,-77.0441,38.8833,38.8933)).apply(map);
+
+    MapCleaner().apply(map);
+    RubberSheet uut;
+    uut.setReference(false);
+    uut.apply(map);
+
+    MapProjector::projectToWgs84(map);
+
+    OsmXmlWriter writer;
+    writer.write(map, _outputPath + "RubberSheetSimple.osm");
+
+    HOOT_FILE_EQUALS(_inputPath + "RubberSheetSimple.osm", _outputPath + "RubberSheetSimple.osm");
+  }
+
   void runIoTest()
   {
     QByteArray arr1;
@@ -139,30 +163,6 @@ public:
       HOOT_FILE_EQUALS( _inputPath + "RubberSheetIo.osm",
                        _outputPath + "RubberSheetIo.osm");
     }
-  }
-
-  void runSimpleTest()
-  {
-    OsmXmlReader reader;
-    OsmMapPtr map(new OsmMap());
-    reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/DcGisRoads.osm", map);
-    reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/DcTigerRoads.osm", map);
-
-    MapCropper(Envelope(-77.0554,-77.0441,38.8833,38.8933)).apply(map);
-
-    MapCleaner().apply(map);
-    RubberSheet uut;
-    uut.setReference(false);
-    uut.apply(map);
-
-    MapProjector::projectToWgs84(map);
-
-    OsmXmlWriter writer;
-    writer.write(map, _outputPath + "RubberSheetSimple.osm");
-
-    HOOT_FILE_EQUALS(_inputPath + "RubberSheetSimple.osm", _outputPath + "RubberSheetSimple.osm");
   }
 
   void runCalculateTiePointDistancesTest()
