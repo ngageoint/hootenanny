@@ -234,6 +234,8 @@ public:
       osmApiDbUrl = args[4].trimmed();
     }
 
+    // TODO: adjust this for cut only - changeset.replacement.cut.only.implementation
+
     std::shared_ptr<ChangesetReplacementCreator> changesetCreator(
       Factory::getInstance().constructObject<ChangesetReplacementCreator>(
         ConfigOptions().getChangesetReplacementImplementation()));

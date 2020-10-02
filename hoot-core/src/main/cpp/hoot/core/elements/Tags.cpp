@@ -600,8 +600,10 @@ bool Tags::hasSameNonMetadataTags(const Tags& other) const
 {
   Tags otherCopy = other;
   otherCopy.removeMetadata();
+  otherCopy.removeEmpty();
   Tags thisCopy = *this;
   thisCopy.removeMetadata();
+  thisCopy.removeEmpty();
   return otherCopy == thisCopy;
 }
 

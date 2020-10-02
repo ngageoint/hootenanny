@@ -121,6 +121,8 @@ HOOT_FACTORY_REGISTER(ChangesetReplacementCreator, ChangesetReplacementCreator7)
 ChangesetReplacementCreator7::ChangesetReplacementCreator7() :
 ChangesetReplacementCreator1()
 {
+  _currentChangeDerivationPassIsLinear = true;
+  _boundsInterpretation = BoundsInterpretation::Lenient;
 }
 
 void ChangesetReplacementCreator7::setGeometryFilters(const QStringList& filterClassNames)
@@ -218,7 +220,6 @@ void ChangesetReplacementCreator7::create(
   // This is a bit of a misnomer after recent changes, as this map may have only been cleaned by
   // this point and not actually conflated with anything.
   OsmMapPtr conflatedMap;
-  _currentChangeDerivationPassIsLinear = true;
 
   LOG_VARD(toString());
 
@@ -372,47 +373,39 @@ void ChangesetReplacementCreator7::create(
   // TODO: maybe only snapping near the replacement bounds may help prevent some bad snaps in the
   // output
 
-  //if (_currentChangeDerivationPassIsLinear)
-  //{
-    // Snap secondary features back to reference features if dealing with linear features where
-    // ref features may have been cut along the bounds. We're being lenient here by snapping
-    // secondary to reference *and* allowing conflated data to be snapped to either dataset. We only
-    // want to snap ways of like types together, so we'll loop through each applicable linear type
-    // and snap them separately.
+  // Snap secondary features back to reference features if dealing with linear features where
+  // ref features may have been cut along the bounds. We're being lenient here by snapping
+  // secondary to reference *and* allowing conflated data to be snapped to either dataset. We only
+  // want to snap ways of like types together, so we'll loop through each applicable linear type
+  // and snap them separately.
 
-    LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-    QStringList snapWayStatuses("Input2");
-    snapWayStatuses.append("Conflated");
-    QStringList snapToWayStatuses("Input1");
-    snapToWayStatuses.append("Conflated");
-    // TODO: Now that we're more strict on what can be snapped type-wise, we may not need to
-    // break these snaps out per feature type.
-    for (int i = 0; i < _linearFilterClassNames.size(); i++)
-    {
-      _snapUnconnectedWays(
-        conflatedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
-        _changesetId + "-conflated-snapped-sec-to-ref-1");
-    }
+  LOG_INFO("Snapping unconnected ways to each other in replacement map...");
+  QStringList snapWayStatuses("Input2");
+  snapWayStatuses.append("Conflated");
+  QStringList snapToWayStatuses("Input1");
+  snapToWayStatuses.append("Conflated");
+  // TODO: Now that we're more strict on what can be snapped type-wise, we may not need to
+  // break these snaps out per feature type.
+  for (int i = 0; i < _linearFilterClassNames.size(); i++)
+  {
+    _snapUnconnectedWays(
+      conflatedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
+      _changesetId + "-conflated-snapped-sec-to-ref-1");
+  }
 
-    // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
-    // data in the resulting changeset and generate modify statements instead.
-    ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
-    wayJoiner.join(conflatedMap);
-    LOG_VART(MapProjector::toWkt(conflatedMap->getProjection()));
-  //}
+  // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
+  // data in the resulting changeset and generate modify statements instead.
+  ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
+  wayJoiner.join(conflatedMap);
+  LOG_VART(MapProjector::toWkt(conflatedMap->getProjection()));
 
   // PRE-CHANGESET DERIVATION DATA PREP
 
-  OsmMapPtr immediatelyConnectedOutOfBoundsWays;
-  if (_boundsInterpretation == BoundsInterpretation::Lenient /*&&
-      _currentChangeDerivationPassIsLinear*/)
-  {
-    // If we're conflating linear features with the lenient bounds requirement, copy the
-    // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
-    // crop in preparation for changeset derivation. If we don't introduce them back during
-    // changeset derivation, they may not end up being snapped back to the replacement data.
-    immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
-  }
+  // If we're conflating linear features with the lenient bounds requirement, copy the
+  // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
+  // crop in preparation for changeset derivation. If we don't introduce them back during
+  // changeset derivation, they may not end up being snapped back to the replacement data.
+  OsmMapPtr immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
 
   // Crop the original ref and conflated maps appropriately for changeset derivation.
   _cropMapForChangesetDerivation(
@@ -422,62 +415,58 @@ void ChangesetReplacementCreator7::create(
     conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId + "-sec-cropped-for-changeset");
 
-  if (_boundsInterpretation == BoundsInterpretation::Lenient/* &&
-      _currentChangeDerivationPassIsLinear*/)
+  // The non-strict bounds interpretation way replacement workflow benefits from a second
+  // set of snapping runs right before changeset derivation due to there being ways connected to
+  // replacement ways that fall completely outside of the replacement bounds. However, joining
+  // after this snapping caused changeset errors with some datasets and hasn't seem to be needed
+  // so far...so skipping it. Note that we're being as lenient as possible with the snapping
+  // here, allowing basically anything to join to anything else, which *could* end up causing
+  // problems...we'll go with it for now.
+
+  snapWayStatuses.clear();
+  snapWayStatuses.append("Input2");
+  snapWayStatuses.append("Conflated");
+  snapWayStatuses.append("Input1");
+  snapToWayStatuses.clear();
+  snapToWayStatuses.append("Input1");
+  snapToWayStatuses.append("Conflated");
+  snapToWayStatuses.append("Input2");
+  LOG_VARD(_linearFilterClassNames);
+
+  // Snap anything that can be snapped per feature type.
+  LOG_INFO("Snapping unconnected ways to each other in replacement map...");
+  for (int i = 0; i < _linearFilterClassNames.size(); i++)
   {
-    // The non-strict bounds interpretation way replacement workflow benefits from a second
-    // set of snapping runs right before changeset derivation due to there being ways connected to
-    // replacement ways that fall completely outside of the replacement bounds. However, joining
-    // after this snapping caused changeset errors with some datasets and hasn't seem to be needed
-    // so far...so skipping it. Note that we're being as lenient as possible with the snapping
-    // here, allowing basically anything to join to anything else, which *could* end up causing
-    // problems...we'll go with it for now.
-
-    snapWayStatuses.clear();
-    snapWayStatuses.append("Input2");
-    snapWayStatuses.append("Conflated");
-    snapWayStatuses.append("Input1");
-    snapToWayStatuses.clear();
-    snapToWayStatuses.append("Input1");
-    snapToWayStatuses.append("Conflated");
-    snapToWayStatuses.append("Input2");
-    LOG_VARD(_linearFilterClassNames);
-
-    // Snap anything that can be snapped per feature type.
-    LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-    for (int i = 0; i < _linearFilterClassNames.size(); i++)
-    {
-      _snapUnconnectedWays(
-        conflatedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
-       _changesetId + "-conflated-snapped-sec-to-ref-2");
-    }
-
-    // combine the conflated map with the immediately connected out of bounds ways
-    MapUtils::combineMaps(conflatedMap, immediatelyConnectedOutOfBoundsWays, true);
-    OsmMapWriterFactory::writeDebugMap(
-      conflatedMap, _changesetId + "-conflated-connected-combined");
-
-    // Snap the connected ways to other ways in the conflated map. Mark the ways that were
-    // snapped, as we'll need that info in the next step.
-    LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-    for (int i = 0; i < _linearFilterClassNames.size(); i++)
-    {
-      _snapUnconnectedWays(
-        conflatedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i),
-        true, _changesetId + "-conflated-snapped-immediately-connected-out-of-bounds");
-    }
-
-    // remove any ways that weren't snapped
-    _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(conflatedMap);
-
-    // Copy the connected ways back into the ref map as well, so the changeset will derive
-    // properly.
-    MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
-    OsmMapWriterFactory::writeDebugMap(
-      conflatedMap, _changesetId + "-ref-connected-combined");
-
-    immediatelyConnectedOutOfBoundsWays.reset();
+    _snapUnconnectedWays(
+      conflatedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
+      _changesetId + "-conflated-snapped-sec-to-ref-2");
   }
+
+  // combine the conflated map with the immediately connected out of bounds ways
+  MapUtils::combineMaps(conflatedMap, immediatelyConnectedOutOfBoundsWays, true);
+  OsmMapWriterFactory::writeDebugMap(
+    conflatedMap, _changesetId + "-conflated-connected-combined");
+
+  // Snap the connected ways to other ways in the conflated map. Mark the ways that were
+  // snapped, as we'll need that info in the next step.
+  LOG_INFO("Snapping unconnected ways to each other in replacement map...");
+  for (int i = 0; i < _linearFilterClassNames.size(); i++)
+  {
+    _snapUnconnectedWays(
+      conflatedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i),
+      true, _changesetId + "-conflated-snapped-immediately-connected-out-of-bounds");
+  }
+
+  // remove any ways that weren't snapped
+  _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(conflatedMap);
+
+  // Copy the connected ways back into the ref map as well, so the changeset will derive
+  // properly.
+  MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
+  OsmMapWriterFactory::writeDebugMap(
+    conflatedMap, _changesetId + "-ref-connected-combined");
+
+  immediatelyConnectedOutOfBoundsWays.reset();
 
   if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
   {

@@ -181,12 +181,16 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               }
               LOG_VART(replace);
 
-              LOG_VART(tagDiff.diff(map, n1, n2) != 0.0);
+              LOG_VART(tagDiff.diff(map, n1, n2));
               if (replace && tagDiff.diff(map, n1, n2) != 0.0)
               {
+                LOG_TRACE(
+                  "Skipping merge for " << n1->getElementId() << " and " << n2->getElementId() <<
+                  " due to tag diff.");
                 replace = false;
               }
 
+              LOG_VART(replace);
               if (replace)
               {
                 LOG_TRACE(
