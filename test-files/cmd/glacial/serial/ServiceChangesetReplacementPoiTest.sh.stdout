@@ -1,4 +1,4 @@
-test name:  ServiceChangesetReplacementPoiFullTest
+test name:  ServiceChangesetReplacementPoiTest
 source file 1:  test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm
 crop aoi:  -122.43384,37.76069,-122.42742,37.76869
 source file 2:  test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm
@@ -30,16 +30,16 @@ Cropping the reference dataset from: test-files/cmd/glacial/PoiPolygonConflateSt
 (1 row)
 
 
-Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiFullTest/ref-original.osm (contains features to be replaced)...
+Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiTest/ref-original.osm (contains features to be replaced)...
 
 
-Cropping the secondary dataset from: test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm to: -122.43384,37.76069,-122.42742,37.76869, then writing it to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiFullTest/sec-original.osm (contains features to replace with)...
+Cropping the secondary dataset from: test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm to: -122.43384,37.76069,-122.42742,37.76869, then writing it to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiTest/sec-original.osm (contains features to replace with)...
 
 
-Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiFullTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiFullTest/sec-original.osm over: -122.43204,37.7628,-122.4303457,37.76437, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiFullTest/ServiceChangesetReplacementPoiFullTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
+Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiTest/sec-original.osm over: -122.43204,37.7628,-122.4303457,37.76437, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiTest/ServiceChangesetReplacementPoiTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
 
 
-Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiFullTest/ServiceChangesetReplacementPoiFullTest-changeset-xml.osc.sql to the reference data in the osm api db...
+Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementPoiTest/ServiceChangesetReplacementPoiTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
 Changeset Details: min_lat=37.7629491, max_lat=37.7643072, min_lon=-122.4319154, max_lon=-122.4304989, num_changes=10
@@ -56,5 +56,5 @@ Total Creations: 4
 Total Modifications: 0
 Total Deletions: 6
 
-Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementPoiFullTest-xml-replaced.osm for verification...
+Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementPoiTest-xml-replaced.osm for verification...
 

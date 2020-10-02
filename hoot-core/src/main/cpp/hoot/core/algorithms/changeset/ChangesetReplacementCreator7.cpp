@@ -347,25 +347,8 @@ void ChangesetReplacementCreator7::create(
   conflatedMap = cookieCutRefMap;
   if (secMapSize > 0)
   {
-//    if (_conflationEnabled)
-//    {
-//      // conflation cleans beforehand
-//      _conflate(conflatedMap);
-//      conflatedMap->setName("conflated");
-
-//      if (!ConfigOptions().getChangesetReplacementPassConflateReviews())
-//      {
-//        // remove all conflate reviews
-//        _removeConflateReviews(conflatedMap);
-//      }
-//    }
-//    // This is a little misleading to only clean when the sec map has elements, however a test fails
-//    // if we don't. May need further investigation.
-//    else
-//    {
-      _clean(conflatedMap);
-      conflatedMap->setName("cleaned");
-    //}
+    _clean(conflatedMap);
+    conflatedMap->setName("cleaned");
   }
 
   // SNAP
