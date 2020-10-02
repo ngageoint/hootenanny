@@ -91,7 +91,6 @@ public:
   {
     _cleanupDataToReplace();
     _cleanupReplacementData();
-    //TestUtils::resetEnvironment();
   }
 
   void orphanedNodes1Test()
