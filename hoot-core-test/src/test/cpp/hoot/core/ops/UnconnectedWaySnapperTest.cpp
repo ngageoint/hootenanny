@@ -311,8 +311,8 @@ public:
     writer.setIsDebugMap(true);
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
-    CPPUNIT_ASSERT_EQUAL(136L, uut.getNumFeaturesAffected());
-    CPPUNIT_ASSERT_EQUAL(123L, uut.getNumSnappedToWayNodes());
+    CPPUNIT_ASSERT_EQUAL(131L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(118L, uut.getNumSnappedToWayNodes());
     CPPUNIT_ASSERT_EQUAL(13L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
