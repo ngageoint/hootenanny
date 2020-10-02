@@ -279,6 +279,8 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
     {
       LOG_VART(wayToSnap->getElementId());
     }
+    LOG_VART(wayToSnapCrit->isSatisfied(wayToSnap));
+    LOG_VART(wayToSnap->getTags().hasAnyKvp(_typeExcludeKvps));
     // ensure the way has the status we require for snapping
     if (wayToSnap && wayToSnapCrit->isSatisfied(wayToSnap) &&
         // This allows for type exclusion. It may make more sense to pass these exclude types in
