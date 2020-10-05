@@ -352,9 +352,6 @@ void ChangesetReplacementCreator7::create(
 
   // SNAP
 
-  // TODO: maybe only snapping near the replacement bounds may help prevent some bad snaps in the
-  // output
-
   // Snap secondary features back to reference features if dealing with linear features where
   // ref features may have been cut along the bounds. We're being lenient here by snapping
   // secondary to reference *and* allowing conflated data to be snapped to either dataset. We only
@@ -506,10 +503,6 @@ void ChangesetReplacementCreator7::create(
 
   LOG_STATUS("Generating changeset...");
 
-  // Derive a changeset between the ref and conflated maps that replaces ref features with
-  // secondary features within the bounds and write it out.
-  _changesetCreator->setIncludeReviews(
-    /*_conflationEnabled && ConfigOptions().getChangesetReplacementPassConflateReviews()*/false);
   // We have some instances where modify and delete changes are being generated for the same
   // element, which causes error during changeset application. Eventually, we should eliminate their
   // causes, but for now we'll activate changeset cleaning to get rid of the delete statements.

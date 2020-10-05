@@ -723,8 +723,6 @@ void ChangesetReplacementCreator1::_processMaps(
 
   // SNAP
 
-  // TODO: only snapping near the replacement bounds may help prevent some bad snaps in the output
-
   if (_currentChangeDerivationPassIsLinear)
   {
     // Snap secondary features back to reference features if dealing with linear features where
