@@ -5,8 +5,6 @@ source file 2:  test-files/Empty.osm
 REF_CONVERT_OPS:  hoot::SetTagValueVisitor
 SEC_CONVERT_OPS:  hoot::SetTagValueVisitor
 replacement aoi:  29.031372,1.345701,29.036865,1.351193
-full replacement:  --full-replacement
-bounds interpretation:  --strict-bounds
 geometry filters: 
 tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
 replacement filters: 
@@ -18,8 +16,6 @@ retainment filter options:
 source formats:  xml
 way snap tolerance:  45.0
 existing way node tolerance:  45.0
-enable conflation: 
-clean ref database beforehand:  true
 extra params: 
 
 Writing the reference dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementSecFilteredToEmptyTest/input1.osm to an osm api db (contains features to be replaced)...
@@ -58,5 +54,5 @@ Total Deletions: 1,908
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementDeleteOnlyTest-xml-replaced.osm for verification...
 
-22:06:15.372 WARN   ...core/scoring/MapComparator.cpp( 380) Number of nodes does not match (1: 1212; 2: 1150)
-22:06:15.373 WARN   ...core/scoring/MapComparator.cpp( 346) 	Nodes in map 1 and not in map 2 (limit 5): [788, 789, 790, 791, 792]
+14:13:09.638 WARN   ...core/scoring/MapComparator.cpp( 380) Number of nodes does not match (1: 1212; 2: 1150)
+14:13:09.639 WARN   ...core/scoring/MapComparator.cpp( 346) 	Nodes in map 1 and not in map 2 (limit 5): [788, 789, 790, 791, 792]

@@ -82,7 +82,7 @@ public:
 
   virtual void setUp()
   {
-    HootTestFixture::setUp();
+    HootTestFixture::setUp(); // Be sure the parent cleans out the config before each test.
     _subTaskTimer.start();
     _initConfig();
   }

@@ -5,8 +5,6 @@ source file 2:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
 REF_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp
 SEC_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
 replacement aoi:  -71.4698,42.4866,-71.4657,42.4902
-full replacement:  --full-replacement
-bounds interpretation: 
 geometry filters:  --geometry-filters hoot::BuildingCriterion
 tag element criteria:  hoot::BuildingCriterion
 replacement filters: 
@@ -18,8 +16,6 @@ retainment filter options:
 source formats:  xml
 way snap tolerance:  5.0
 existing way node tolerance:  0.5
-enable conflation: 
-clean ref database beforehand:  true
 extra params: 
 
 Cropping the reference dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an osm api db (contains features to be replaced)...
