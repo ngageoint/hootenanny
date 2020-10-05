@@ -94,7 +94,9 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
         {
           LOG_VART(map2IdenticalElement->getElementId());
 
-          // This breaks out of spec relations test output.
+          // TODO: The idea of this is to not allow id sync between any two way nodes that have no
+          // parent ways in common. Seems like it should work fine, but it causes several dropped
+          // features in the output of the out of spec relations test.
 //          bool element1IsWayNode = false;
 //          _wayNodeCrit.setOsmMap(map1.get());
 //          element1IsWayNode = _wayNodeCrit.isSatisfied(map1IdenticalElement);
