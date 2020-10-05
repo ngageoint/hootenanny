@@ -74,12 +74,12 @@ public:
   {
     // process optional params
 
+    // TODO: eventually this check can go away
     if (args.contains("--full-replacement"))
     {
-      // TODO: enable this after test script has been cleaned up
-//      LOG_WARN(
-//        "All replacements are now done as full, so --full-replacement need no longer be " <<
-//        "specified to " << getName());
+      LOG_WARN(
+        "All replacements are now done fully over the replacement bounds, so the " <<
+        "--full-replacement option need no longer be specified to " << getName());
       args.removeAll("--full-replacement");
     }
 
@@ -149,12 +149,12 @@ public:
     }
     LOG_VARD(retainmentFilterOptions);
 
+    // TODO: eventually this check can go away
     if (args.contains("--strict-bounds"))
     {
-      // TODO: enable this after test script has been cleaned up
-//      LOG_WARN(
-//        "Bounds handling is now determined by the replacement workflow selected, so " <<
-//        "--full-replacement need no longer be specified to " << getName());
+      LOG_WARN(
+        "Bounds handling is now determined automatically by the replacement workflow selected, " <<
+        "so the --full-replacement option need no longer be specified to " << getName());
       args.removeAll("--strict-bounds");
     }
 
@@ -168,32 +168,31 @@ public:
       args.removeAll("--disable-way-snapping");
     }
 
-    bool enableConflation = false;
+    // TODO: eventually this check can go away
     if (args.contains("--conflate"))
     {
-      enableConflation = true;
+      LOG_WARN("--conflate option is no longer supported by  " << getName() << ".");
       args.removeAll("--conflate");
     }
-    LOG_VARD(enableConflation);
     if (args.contains("--disable-conflation"))
     {
-      LOG_WARN(
-        "--disable-conflation no longer supported by " << getName() <<
-        ". Conflation disabled by default. Use --conflate to enable.");
+      LOG_WARN("The --disable-conflation option is no longer supported by " << getName() << ".");
       args.removeAll("--disable-conflation");
     }
 
+    // TODO: eventually this check can go away
     if (args.contains("--disable-cleaning"))
     {
       LOG_WARN(
-        "Cleaning now done on an as-needed basis, so --disable-cleaning no longer supported by " <<
-        getName());
+        "Cleaning now done on an as-needed basis, so the --disable-cleaning option is no " <<
+        "longer supported by " << getName());
       args.removeAll("--disable-cleaning");
     }
 
+    // TODO: eventually this check can go away
     if (args.contains("--disable-oob-way-handling"))
     {
-      LOG_WARN("--disable-oob-way-handling no longer supported by " << getName());
+      LOG_WARN("The --disable-oob-way-handling option is no longer supported by " << getName());
       args.removeAll("--disable-oob-way-handling");
     }
 
@@ -309,7 +308,7 @@ public:
     changesetCreator->setChainRetainmentFilters(chainRetainmentFilters);
     changesetCreator->setRetainmentFilters(retainmentFilters);
     changesetCreator->setRetainmentFilterOptions(retainmentFilterOptions);
-    changesetCreator->setConflationEnabled(enableConflation);
+    changesetCreator->setConflationEnabled(false);
     changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
     changesetCreator->create(input1, input2, bounds, output);
   }

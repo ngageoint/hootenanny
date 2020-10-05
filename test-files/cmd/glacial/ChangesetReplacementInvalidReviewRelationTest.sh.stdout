@@ -1,4 +1,32 @@
-21:00:58.325 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(7280523626). Skipping neighbor...
-21:00:58.890 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(7280872841). Skipping neighbor...
-21:00:58.890 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(7280872885). Skipping neighbor...
-21:00:58.891 WARN   ...re/visitors/SpatialIndexer.cpp( 199) hoot::SpatialIndexer: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+15:23:50.664 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(7280523626). Skipping neighbor...
+15:23:51.099 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(7280872841). Skipping neighbor...
+15:23:51.100 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(7280872885). Skipping neighbor...
+15:23:51.123 WARN   ...re/visitors/SpatialIndexer.cpp( 199) hoot::SpatialIndexer: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+5c5
+<             "Node": "797"
+---
+>             "Node": "757"
+8c8
+<             "Relation": "89"
+---
+>             "Relation": "93"
+11c11
+<             "Way": "198"
+---
+>             "Way": "206"
+20c20
+<             "Relation": "60"
+---
+>             "Relation": "64"
+23c23
+<             "Way": "60"
+---
+>             "Way": "70"
+32c32
+<             "Relation": "4"
+---
+>             "Relation": "0"
+35c35
+<             "Way": "77"
+---
+>             "Way": "67"
