@@ -841,6 +841,16 @@ NOT EXISTS
         return jobId;
     }
 
+    public static String getJobBbox(String jobId) {
+        String foundId = createQuery()
+            .select(Expressions.stringTemplate("tags->'bbox'"))
+            .from(jobStatus)
+            .where(jobStatus.jobId.eq(jobId))
+            .fetchFirst();
+
+        return foundId;
+    }
+
     public static List<Long> getTimeoutTasks() {
         List<String> list = createQuery()
             .select(Expressions.stringTemplate("tags->'taskInfo'"))
@@ -909,30 +919,32 @@ NOT EXISTS
 
     // Sets the specified job to a status detail of stale and recurses up to the parent jobs to do the same
     public static void setStale(String jobId) {
-        // Find the job
-        JobStatus job = createQuery()
+        if (jobId != null) {
+            // Find the job
+            JobStatus job = createQuery()
                 .select(jobStatus)
                 .from(jobStatus)
                 .where(jobStatus.jobId.eq(jobId))
                 .fetchFirst();
 
-        if(job != null) {
-            createQuery()
-                .update(jobStatus)
-                .where(jobStatus.jobId.eq(jobId))
-                .set(jobStatus.statusDetail, "STALE")
-                .execute();
+            if(job != null) {
+                createQuery()
+                    .update(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId))
+                    .set(jobStatus.statusDetail, "STALE")
+                    .execute();
 
-            Map<String, String> tags = PostgresUtils.postgresObjToHStore(job.getTags());
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(job.getTags());
 
-            String parentId = tags.get("parentId");
-            if (parentId != null) {
-                ArrayList<String> parentIds = new ArrayList<>(Arrays.asList(parentId.split(",")));
+                String parentId = tags.get("parentId");
+                if (parentId != null) {
+                    ArrayList<String> parentIds = new ArrayList<>(Arrays.asList(parentId.split(",")));
 
-                // If it has parent(s), make the parent(s) stale too
-                for(String id : parentIds) {
-                    if (id != null) {
-                        setStale(id);
+                    // If it has parent(s), make the parent(s) stale too
+                    for(String id : parentIds) {
+                        if (id != null) {
+                            setStale(id);
+                        }
                     }
                 }
             }
@@ -1142,10 +1154,12 @@ NOT EXISTS
 
         if (jobId != null) {
             String stdOutWithId = createQuery()
-                    .select(commandStatus.stdout)
-                    .from(commandStatus)
-                    .where(commandStatus.stdout.like("%Last changeset pushed ID:%").and(commandStatus.jobId.eq(jobId)))
-                    .fetchFirst();
+                .select(commandStatus.stdout)
+                .from(commandStatus)
+                .where(commandStatus.stdout.like("%Last changeset pushed ID:%").and(commandStatus.jobId.eq(jobId)))
+                .fetchFirst();
+
+            if (stdOutWithId == null) return null;
 
             String patternString = "Last changeset pushed ID: ([0-9]*)";
 

@@ -90,7 +90,7 @@ class WaitOverpassUpdate extends GrailCommand {
 
             String lastId = DbUtils.getLastPushedId(jobId);
             if (lastId == null) {
-                String msg = "No changeset id found. Timed out job may have been deleted.";
+                String msg = "No changeset id found. No changeset was pushed or timed out job may have been deleted.";
                 throw new WebApplicationException(new NotFoundException(), Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
             }
 
