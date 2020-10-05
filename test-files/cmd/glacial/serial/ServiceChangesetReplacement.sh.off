@@ -33,7 +33,6 @@ set -e
 
 # TODO: 
 # - consolidate the three replacement workflows into a single function
-# - add a disable way snapping option?
 
 # PROCESS INPUTS
 
