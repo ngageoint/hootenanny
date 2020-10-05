@@ -498,8 +498,8 @@ void ChangesetReplacementCreator7::create(
   // CLEANUP
 
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
-  // create/delete statements. This must be done with the ref/sec maps separated to avoid ID
-  // conflicts.
+  // create/delete statements. It also prevents ways from becoming incorrectly disconnected from
+  // each other. This must be done with the ref/sec maps separated to avoid ID conflicts.
   _synchronizeIds(refMap, conflatedMap);
 
   // CHANGESET GENERATION
@@ -567,29 +567,9 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
       QStringList(MetadataTags::HootMissingChild()));
   }
 
-  // Came across a very odd bug in #4101, where if RemoveInvalidMultilineStringMembersVisitor ran
-  // as part of the pre-conflate map cleaning during replacement with conflation enabled, the match
-  // conflict resolution would slow down to a crawl. When it was removed from the cleaning ops, the
-  // conflate operation ran very quickly. So as a not so great workaround (aka hack), removing that
-  // pre-op here when running conflation. It still will run post conflate, though. This change had
-  // a very minor affect on changeset replacement test output where one test got slightly better
-  // output after the change and another slightly worse. See more details in #4101, which is closed,
-  // but if we can figure out what's going on at some point maybe this situation can be handled
-  // properly.
-//  if (_conflationEnabled)
-//  {
-//    ConfigUtils::removeListOpEntry(
-//      ConfigOptions::getMapCleanerTransformsKey(),
-//      QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
-//  }
-
-  // These don't change between scenarios (or at least we haven't needed to change them yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
   _boundsOpts.cookieCutKeepOnlyInsideBounds = false;
   _boundsOpts.changesetRefKeepOnlyInsideBounds = false;
-
-  // turn on for testing only
-  //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 
   _boundsOpts.loadRefKeepEntireCrossingBounds = true;
   _boundsOpts.loadSecKeepOnlyInsideBounds = false;
@@ -599,34 +579,9 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
   _boundsOpts.changesetSecKeepOnlyInsideBounds = false;
   _boundsOpts.inBoundsStrict = false;
 
-  //if (_boundsInterpretation == BoundsInterpretation::Lenient)
-  //{
-    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = true;
-    _boundsOpts.loadSecKeepEntireCrossingBounds = true;
-    _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
-  //}
-//  else
-//  {
-//    _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = false;
-//    _boundsOpts.loadSecKeepEntireCrossingBounds = false;
-//    _boundsOpts.changesetAllowDeletingRefOutsideBounds = false;
-//  }
-
-  // Conflate way joining needs to happen later in the post ops for strict linear replacements.
-  // Changing the default ordering of the post ops to accommodate this had detrimental effects
-  // on other conflation. The best location seems to be at the end just before tag truncation.
-  // Would like to get rid of this...isn't a foolproof fix by any means if the conflate post
-  // ops end up getting re-ordered for some reason.
-
-//  LOG_VART(conf().getList(ConfigOptions::getConflatePostOpsKey()));
-//  QStringList conflatePostOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-//  conflatePostOps.removeAll(QString::fromStdString(WayJoinerOp::className()));
-//  const int indexOfTagTruncater =
-//    conflatePostOps.indexOf(QString::fromStdString(ApiTagTruncateVisitor::className()));
-//  conflatePostOps.insert(
-//    indexOfTagTruncater - 1, QString::fromStdString(WayJoinerOp::className()));
-//  conf().set(ConfigOptions::getConflatePostOpsKey(), conflatePostOps);
-//  LOG_VARD(conf().getList(ConfigOptions::getConflatePostOpsKey()));
+  _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds = true;
+  _boundsOpts.loadSecKeepEntireCrossingBounds = true;
+  _boundsOpts.changesetAllowDeletingRefOutsideBounds = true;
 
   conf().set(
     ConfigOptions::getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBoundsKey(),

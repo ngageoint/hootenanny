@@ -962,9 +962,6 @@ void ChangesetReplacementCreator1::_setGlobalOpts()
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
   _boundsOpts.cookieCutKeepOnlyInsideBounds = false;
   _boundsOpts.changesetRefKeepOnlyInsideBounds = false;
-
-  // turn on for testing only
-  //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 }
 
 void ChangesetReplacementCreator1::_parseConfigOpts(
