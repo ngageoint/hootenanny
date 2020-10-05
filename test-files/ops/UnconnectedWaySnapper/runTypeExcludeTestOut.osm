@@ -5386,10 +5386,9 @@
         <tag k="hoot:id" v="-973"/>
         <tag k="hoot:snapped" v="snapped_to_way"/>
     </node>
-    <node visible="true" id="-972" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1414003001102060" lon="-115.2934067478528561">
+    <node visible="true" id="-972" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2934105818622186">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-972"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
     </node>
     <node visible="true" id="-971" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1332576703113801" lon="-115.2876000000000545">
         <tag k="hoot:status" v="2"/>
@@ -19941,7 +19940,6 @@
         <nd ref="-1022"/>
         <nd ref="-2186"/>
         <nd ref="-1937"/>
-        <nd ref="-972"/>
         <nd ref="-1031"/>
         <nd ref="-12"/>
         <tag k="hoot:status" v="1"/>

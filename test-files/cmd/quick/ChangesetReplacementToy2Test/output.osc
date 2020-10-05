@@ -14,9 +14,6 @@
             <tag k="highway" v="turning_circle"/>
         </node>
     </create>
-    <modify>
-        <node id="374910" version="1" lat="36.0440991463941529" lon="-115.0373152763627616"/>
-    </modify>
     <delete>
         <node id="374912" version="1" lat="36.0440119911731855" lon="-115.0365719999999925"/>
     </delete>
@@ -57,7 +54,6 @@
         </way>
         <way id="-3" version="0">
             <nd ref="-8"/>
-            <nd ref="374910"/>
             <nd ref="-1"/>
             <nd ref="-3"/>
             <nd ref="-2"/>
@@ -74,33 +70,6 @@
             <tag k="tiger:reviewed" v="no"/>
         </way>
     </create>
-    <modify>
-        <way id="-9" version="1">
-            <nd ref="374910"/>
-            <nd ref="-8"/>
-            <nd ref="429555"/>
-            <nd ref="429556"/>
-            <nd ref="429557"/>
-            <nd ref="429558"/>
-            <nd ref="429559"/>
-            <nd ref="-9"/>
-            <tag k="tiger:zip_right" v="89014"/>
-            <tag k="name" v="Marks Street"/>
-            <tag k="tiger:cfcc" v="A41"/>
-            <tag k="tiger:zip_right_1" v="89074"/>
-            <tag k="tiger:separated" v="no"/>
-            <tag k="source:datetime" v="2012-07-18T15:56:23.000Z"/>
-            <tag k="tiger:zip_left" v="89014"/>
-            <tag k="tiger:name_type" v="St"/>
-            <tag k="tiger:county" v="Clark, NV"/>
-            <tag k="tiger:reviewed" v="no"/>
-            <tag k="tiger:zip_left_1" v="89074"/>
-            <tag k="tiger:name_base" v="Marks"/>
-            <tag k="tiger:tlid" v="201929523"/>
-            <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-            <tag k="highway" v="residential"/>
-        </way>
-    </modify>
     <delete>
         <way id="15920" version="1">
             <nd ref="374910"/>

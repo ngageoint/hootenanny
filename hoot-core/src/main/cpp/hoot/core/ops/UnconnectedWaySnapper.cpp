@@ -879,6 +879,24 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
       }
     }
 
+    // If the node to snap belongs to a way that has any way nodes in common with the way being
+    // snapped to, then skip the snap. These generally manifest themselves as roads with forks,
+    // which we don't want being snapped to each other. See the two unnamed highway=service roads in
+    // the Southeast corner and East of the road, "Jay Sarno Way" in
+    // ServiceChangesetReplacementOutOfSpecMixedRelationsTest as an example. This may need more
+    // testing beyond what we already have.
+    const bool nodeToSnapContainedByWaySharingNodesWithWayToSnapTo =
+      WayUtils::nodeContainedByWaySharingNodesWithAnotherWay(
+        nodeToSnap->getId(), wayToSnapTo->getId(), _map);
+    if (nodeToSnapContainedByWaySharingNodesWithWayToSnapTo)
+    {
+      LOG_TRACE(
+        "Node to snap: " << nodeToSnap->getElementId() << " belongs to way sharing nodes with the"
+        " way to snap to: " << wayToSnapTo->getElementId() << ". Skipping snap for " <<
+        nodeToSnap->getElementId() << "...")
+      continue;
+    }
+
     if (_snapUnconnectedNodeToWay(nodeToSnap, wayToSnapTo))
     {
       _snappedWayNodeIds.append(nodeToSnap->getId());

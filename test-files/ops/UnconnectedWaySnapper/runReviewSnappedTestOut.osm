@@ -293,7 +293,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-251"/>
     </node>
-    <node visible="true" id="-250" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3724770019602541" lon="38.9103485325476726">
+    <node visible="true" id="-250" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3724868983298446" lon="38.9103402106768996">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-250"/>
     </node>
@@ -2575,7 +2575,6 @@
         <nd ref="-51"/>
         <nd ref="-154"/>
         <nd ref="-325"/>
-        <nd ref="-250"/>
         <nd ref="-5"/>
         <tag k="source" v="bing"/>
         <tag k="hoot:status" v="1"/>
@@ -2631,17 +2630,6 @@
         <tag k="source:datetime" v="2015-12-01T23:23:45.000Z"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <relation visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-85" role="reviewee"/>
-        <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:id" v="-43"/>
-        <tag k="hoot:review:note" v="Potentially snappable unconnected way"/>
-        <tag k="hoot:review:members" v="1"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="1"/>
-        <tag k="type" v="review"/>
-    </relation>
     <relation visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-85" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
@@ -2654,7 +2642,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-87" role="reviewee"/>
+        <member type="way" ref="-85" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-41"/>
@@ -2665,7 +2653,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-88" role="reviewee"/>
+        <member type="way" ref="-87" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-40"/>
@@ -2687,7 +2675,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-89" role="reviewee"/>
+        <member type="way" ref="-88" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-38"/>
@@ -2698,7 +2686,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-91" role="reviewee"/>
+        <member type="way" ref="-89" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-37"/>
@@ -2709,7 +2697,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-93" role="reviewee"/>
+        <member type="way" ref="-91" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-36"/>
@@ -2720,7 +2708,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-94" role="reviewee"/>
+        <member type="way" ref="-93" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-35"/>
@@ -2731,7 +2719,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-97" role="reviewee"/>
+        <member type="way" ref="-94" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-34"/>
@@ -2742,7 +2730,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-100" role="reviewee"/>
+        <member type="way" ref="-97" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-33"/>
@@ -2764,7 +2752,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-102" role="reviewee"/>
+        <member type="way" ref="-100" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-31"/>
@@ -2775,7 +2763,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-104" role="reviewee"/>
+        <member type="way" ref="-102" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-30"/>
@@ -2786,7 +2774,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-107" role="reviewee"/>
+        <member type="way" ref="-104" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-29"/>
@@ -2797,7 +2785,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-108" role="reviewee"/>
+        <member type="way" ref="-107" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-28"/>
@@ -2808,7 +2796,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-109" role="reviewee"/>
+        <member type="way" ref="-108" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-27"/>
@@ -2819,7 +2807,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-111" role="reviewee"/>
+        <member type="way" ref="-109" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-26"/>
@@ -2830,7 +2818,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-113" role="reviewee"/>
+        <member type="way" ref="-111" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-25"/>
@@ -2841,7 +2829,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-114" role="reviewee"/>
+        <member type="way" ref="-113" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-24"/>
@@ -2852,7 +2840,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-115" role="reviewee"/>
+        <member type="way" ref="-114" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-23"/>
@@ -2863,7 +2851,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-116" role="reviewee"/>
+        <member type="way" ref="-115" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-22"/>
@@ -2874,7 +2862,7 @@
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-119" role="reviewee"/>
+        <member type="way" ref="-116" role="reviewee"/>
         <tag k="hoot:review:type" v="hoot::UnconnectedWaySnapper"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-21"/>
