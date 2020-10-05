@@ -132,13 +132,13 @@ private:
   QString _finalOutput;
   // adds tags to features that are suspect as result of the replacement op
   bool _tagQualityIssues;
-  // TODO
+  // the number of orphaned nodes found in the final output if _tagQualityIssues=true
   int _orphanedNodes;
-  // TODO
+  // the number of disconnected ways found in the final output if _tagQualityIssues=true
   int _disconnectedWays;
-  // TODO
+  // the number of empty ways found in the final output if _tagQualityIssues=true
   int _emptyWays;
-  // TODO
+  // the number of duplicated elements found in the final output if _tagQualityIssues=true
   int _duplicateElements;
   // uses diff conflate to calculate the difference between the final replaced data and the original
   // data used for replacement

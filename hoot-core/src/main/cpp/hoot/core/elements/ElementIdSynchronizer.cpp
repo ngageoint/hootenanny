@@ -94,7 +94,7 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
         {
           LOG_VART(map2IdenticalElement->getElementId());
 
-          // TODO: explain
+          // This breaks out of spec relations test output.
 //          bool element1IsWayNode = false;
 //          _wayNodeCrit.setOsmMap(map1.get());
 //          element1IsWayNode = _wayNodeCrit.isSatisfied(map1IdenticalElement);

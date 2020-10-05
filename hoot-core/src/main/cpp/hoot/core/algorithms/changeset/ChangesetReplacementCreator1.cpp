@@ -417,7 +417,6 @@ void ChangesetReplacementCreator1::create(
   // when I store the bounds or try to increase the precision of the bounds string, I'm getting a
   // lot of test output issues...needs to be looked into.
   _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
-  _secIdMappings.clear();
   _validateInputs();
   _setGlobalOpts();
   _printJobDescription();
