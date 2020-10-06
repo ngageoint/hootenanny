@@ -179,6 +179,10 @@ public:
     // part of github 4228 - None of the highway=street_lamp features near Edmundo Escobedo Sr.
     // Middle School (Westmost building) should get dropped in the output.
 
+    // This is needed to suppress some ElementConverter warnings messages that should eventually be
+    // looked into.
+    DisableLog dl;
+
     _testName = "droppedNodes1Test";
     _prepInput(
       _inputPath + "/droppedNodes1Test-Input1.osm",

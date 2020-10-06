@@ -34,7 +34,12 @@ namespace hoot
 {
 
 /**
- * Single geometry pass version of ChangesetReplacementCreator1 w/o replacement/retainment filtering
+ * Single geometry pass version of ChangesetReplacementCreator1, which solves the bug in handling
+ * relations with children of mixed geometry types. This drops support for overlapping only
+ * replacement and strict bounds handling, as they are not useful for replacements within a task
+ * grid. This temporarily drops support for the additional filters (they were broken anyway), and
+ * they will be restored as part of #4267. Eventually this class will be refactored and renamed.
+ * ChangesetReplacementCreator1 must be used for cut only replacements.
  */
 class ChangesetReplacementCreator7 : public ChangesetReplacementCreator1
 {

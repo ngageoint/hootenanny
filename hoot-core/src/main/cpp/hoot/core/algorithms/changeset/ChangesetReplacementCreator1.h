@@ -61,7 +61,11 @@ class ConstOsmMapConsumer;
  * potential manual repairing of those relations after the changeset is written, and after that the
  * tag can then be removed. This is also a configurable feature, which can be turned off.
  *
- * NOTE: This implementation has issues with relations having children of mixed geometry types.
+ * UPDATE 10/6/20: This implementation has an Achille's heel regarding relations having children of
+ * mixed geometry types, due to it processing features with different geometry types in separate
+ * loops. ChangesetReplacementCreator7 is now the preferred implementation to use when replacing
+ * data within a task grid. This is kept intact for the time being to support cut only operations
+ * and eventually will be refactored.
  *
  * @todo implement progress
  * @todo break this up into separate classes by function:
