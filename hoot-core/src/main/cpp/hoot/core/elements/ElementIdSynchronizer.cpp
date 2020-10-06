@@ -99,12 +99,11 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
         {
           LOG_VART(map2IdenticalElement->getElementId());
 
-          // Don't allow id sync between any two way nodes that have no matching parent ways
-          // in common across the two maps. Seems like it should work fine, but it causes several
-          // dropped features in the output of the out of spec relations test.
-          // TODO: This doesn't work b/c the map index doesn't seem to get updated after element ID
-          // updates...not sure why. Its also brittle b/c the geometry of the way could be slightly
-          // different between maps 1 and 2.
+          // The original idea here was to not allow id sync between any two way nodes that have no
+          // matching parent ways in common across the two maps. Unfortunately, this causes dropped
+          // features to occur in output. It seems to happen because the map index isn't being
+          // updated automatically after element ID updates...not sure why. Futhermore, this is also
+          // brittle b/c the geometry of ways between the two maps could be slightly different.
 //          if (_areWayNodesWithoutAWayInCommon(map1IdenticalElement, map2IdenticalElement))
 //          {
 //            LOG_TRACE(
@@ -113,7 +112,9 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
 //              " are both way nodes that have no ways in common. Skipping ID sync...");
 //            continue;
 //          }
-          // TODO
+          // Here, we're verifying that two way nodes don't belong to ways of very dissimilar types
+          // before syncing their IDs. This still may prove to be too brittle and not a good long
+          // term solution...not sure yet.
           if (_areWayNodesInWaysOfMismatchedType(map1IdenticalElement, map2IdenticalElement))
           {
             LOG_TRACE(
@@ -198,7 +199,9 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
     {
       LOG_VART(way1->getElementId());
 
-      // TODO
+      // If either of our containig ways is a administrative boundary, we're going to bail on the
+      // type comparison, since many different types of ways could be part of an admin boundary.
+      // This may not end up being the best way to deal with this.
       if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
           _map1, way1->getElementId(), adminBoundsCrit))
       {
@@ -219,8 +222,11 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
             return false;
           }
 
-          // TODO
+          // We keep our type comparison score low here to reflect that fact that you don't need
+          // strict type matches to allow for snapping (the ID sync allows for snapping to occur in
+          // some cases). This score may need some tweaking.
           if (schema.explicitTypeMismatch(way1->getTags(), way2->getTags(), 0.3))
+          // This doesn't work. Don't know if it could be a better long term solution or not.
           //if (schema.typeMismatch(way1->getTags(), way2->getTags(), 0.3))
           {
             LOG_TRACE(

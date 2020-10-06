@@ -76,7 +76,7 @@ protected:
 
   WayNodeCriterion _wayNodeCrit;
 
-  // TODO
+  // see ElementHashVisitor
   QMap<QString, ElementId> _map1HashesToElementIds;
   QMap<ElementId, QString> _map1ElementIdsToHashes;
   QMap<QString, ElementId> _map2HashesToElementIds;
@@ -87,7 +87,7 @@ protected:
   int _updatedRelationCtr;
 
   /*
-   * TODO
+   * Calculates the element unique hashes used for comparison
    */
   void _calcElementHashes(
     const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
@@ -96,12 +96,14 @@ protected:
         ConfigOptions().getNodeComparisonCoordinateSensitivity());
 
   /*
-   * TODO
+   * Determines if two elements (one from each input map) are way nodes which don't have a way
+   * parent in common.
    */
   bool _areWayNodesWithoutAWayInCommon(ElementPtr element1, ElementPtr element2);
 
   /*
-   * TODO
+   * Determines if two elements (one from each input map) belong to ways with types different enough
+   * to prevent ID synchronization from occurring..
    */
   bool _areWayNodesInWaysOfMismatchedType(ElementPtr element1, ElementPtr element2);
 };
