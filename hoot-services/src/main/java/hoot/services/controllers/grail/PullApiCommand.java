@@ -107,7 +107,8 @@ public class PullApiCommand implements InternalCommand {
             double maxBboxArea = params.getMaxBBoxSize();
 
             if (bboxArea > maxBboxArea) {
-                throw new IllegalArgumentException("The bounding box area (" + bboxArea + ") is too large. It must be less than " + maxBboxArea + " degrees");
+                String errorMsg = "The bounding box area (" + bboxArea + ") is too large. It must be less than " + maxBboxArea + " degrees";
+                throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(errorMsg).build());
             }
 
             InputStream responseStream = null;
