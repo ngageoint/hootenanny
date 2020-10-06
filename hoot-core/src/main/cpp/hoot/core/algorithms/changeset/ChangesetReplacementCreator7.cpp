@@ -496,7 +496,8 @@ void ChangesetReplacementCreator7::create(
 
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements. It also prevents ways from becoming incorrectly disconnected from
-  // each other. This must be done with the ref/sec maps separated to avoid ID conflicts.
+  // each other in the output. This must be done with the ref/sec maps separated to avoid ID
+  // conflicts.
   _synchronizeIds(refMap, conflatedMap);
 
   // CHANGESET GENERATION

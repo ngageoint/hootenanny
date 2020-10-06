@@ -236,7 +236,7 @@ void ElementDeduplicator::calculateDuplicateElements(
 
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
   map->visitRw(hashVis);
-  hashes = hashVis.getHashes();
+  hashes = hashVis.getHashesToElementIds();
   LOG_VARD(hashes.size());
   duplicates = hashVis.getDuplicates();
   LOG_VARD(duplicates.size());

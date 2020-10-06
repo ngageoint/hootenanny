@@ -52,6 +52,9 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
  * cells. By removing the processes of input data retrieval and changeset application via API from
  * the test workflow, bugs can more easily be narrowed down to just those caused by
  * ChangesetReplacementGenerator (most of the time).
+ *
+ * Its worth noting that both the orphaned node and duplicate elements counts may be a little
+ * dubious at this point.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
@@ -113,7 +116,7 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
     uut.replace(
@@ -122,6 +125,10 @@ public:
       BoundsFileTaskGridGenerator(
         QStringList(_inputPath + "/orphanedNodes1Test-task-grid.osm")).generateTaskGrid());
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(28, uut.getNumDuplicateElementsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -144,6 +151,7 @@ public:
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
 
     // to suppress a SpatialIndexer warning that should be looked into at some point
@@ -160,6 +168,9 @@ public:
     Log::getInstance().setLevel(logLevel);
 
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(5, uut.getNumDuplicateElementsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -181,8 +192,9 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -191,6 +203,10 @@ public:
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumDuplicateElementsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -213,8 +229,9 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -223,6 +240,10 @@ public:
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumDuplicateElementsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 

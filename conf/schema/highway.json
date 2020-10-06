@@ -50,6 +50,18 @@
         ]
     },
     {
+        "#": "This likely has similar problems to highway=construction.",
+        "isA": "highway=road",
+        "name": "highway=proposed",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "highway=road",
+                "weight": 0.3
+            }
+        ]
+    },
+    {
         "# preferred": {
             "foot": "designated",
             "highway": "path"
@@ -326,7 +338,13 @@
     {
         "isA": "highway=path",
         "name": "highway=steps",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "highway=footway",
+                "weight": 0.3
+            }
+        ]
     },
     {
         "isA": "highway=road",

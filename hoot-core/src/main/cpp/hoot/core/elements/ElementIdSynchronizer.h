@@ -71,16 +71,39 @@ protected:
   // see ElementHashVisitor
   bool _useNodeTagsForHash;
 
+  OsmMapPtr _map1;
+  OsmMapPtr _map2;
+
   WayNodeCriterion _wayNodeCrit;
+
+  // TODO
+  QMap<QString, ElementId> _map1HashesToElementIds;
+  QMap<ElementId, QString> _map1ElementIdsToHashes;
+  QMap<QString, ElementId> _map2HashesToElementIds;
+  QMap<ElementId, QString> _map2ElementIdsToHashes;
 
   int _updatedNodeCtr;
   int _updatedWayCtr;
   int _updatedRelationCtr;
 
-  QMap<QString, ElementId> _calcElementHashes(
-    const OsmMapPtr& map,
+  /*
+   * TODO
+   */
+  void _calcElementHashes(
+    const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
+    QMap<ElementId, QString>& elementIdsToHashes,
       const int coordinateComparisonSensitivity =
         ConfigOptions().getNodeComparisonCoordinateSensitivity());
+
+  /*
+   * TODO
+   */
+  bool _areWayNodesWithoutAWayInCommon(ElementPtr element1, ElementPtr element2);
+
+  /*
+   * TODO
+   */
+  bool _areWayNodesInWaysOfMismatchedType(ElementPtr element1, ElementPtr element2);
 };
 
 }

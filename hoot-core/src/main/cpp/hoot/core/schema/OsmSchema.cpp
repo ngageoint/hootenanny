@@ -1918,6 +1918,32 @@ bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
   return featuresHaveExplicitTypeMismatch;
 }
 
+bool OsmSchema::typeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore)
+{
+  // TODO: We may need to take category into account here as well.
+
+  LOG_VART(tags1);
+  LOG_VART(tags2);
+
+  bool featuresHaveTypeMismatch = false;
+
+  const double typeScore = scoreTypes(tags1, tags2, true);
+  if (typeScore < minTypeScore)
+  {
+    featuresHaveTypeMismatch = true;
+    LOG_TRACE(
+      "type mismatch: " << getFirstType(tags1, false) << " and " << getFirstType(tags2, false));
+  }
+  else
+  {
+    LOG_TRACE(
+      "type match: " << getFirstType(tags1, false) << " and " << getFirstType(tags2, false));
+  }
+
+  LOG_VART(featuresHaveTypeMismatch);
+  return featuresHaveTypeMismatch;
+}
+
 bool OsmSchema::hasType(const Tags& tags)
 {
   for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)

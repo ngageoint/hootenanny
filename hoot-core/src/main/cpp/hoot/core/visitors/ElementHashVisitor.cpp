@@ -56,6 +56,12 @@ _collectHashes(false)
   LOG_VART(_coordinateComparisonSensitivity);
 }
 
+void ElementHashVisitor::clearHashes()
+{
+  _hashesToElementIds.clear();
+  _elementIdsToHashes.clear();
+}
+
 void ElementHashVisitor::visit(const ElementPtr& e)
 {
   // don't calculate hashes on review relations
@@ -85,6 +91,7 @@ void ElementHashVisitor::visit(const ElementPtr& e)
         LOG_TRACE("Collecting hash: " << hash << " for " << e->getElementId() << "...");
         _hashesToElementIds[hash] = e->getElementId();
       }
+      _elementIdsToHashes[e->getElementId()] = hash;
     }
   }
 }

@@ -77,9 +77,10 @@ public:
   void setWriteHashes(bool write) { _writeHashes = write; }
   void setCollectHashes(bool collect) { _collectHashes = collect; }
 
-  QMap<QString, ElementId> getHashes() const { return _hashesToElementIds; }
+  QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }
+  QMap<ElementId, QString> getElementIdsToHashes() const { return _elementIdsToHashes; }
   QSet<std::pair<ElementId, ElementId>> getDuplicates() const { return _duplicates; }
-  void clearHashes() { _hashesToElementIds.clear(); }
+  void clearHashes();
 
 protected:
 
@@ -105,7 +106,9 @@ private:
   bool _collectHashes;
 
   // collected hash values mapped to element IDs
-  QMap<QString, ElementId> _hashesToElementIds;
+  QMap<QString, ElementId> _hashesToElementIds; // TODO: make this QHash?
+  // collected element IDs mapped to hash values
+  QMap<ElementId, QString> _elementIdsToHashes;
   // pairings of all duplicate elements found
   QSet<std::pair<ElementId, ElementId>> _duplicates;
 };
