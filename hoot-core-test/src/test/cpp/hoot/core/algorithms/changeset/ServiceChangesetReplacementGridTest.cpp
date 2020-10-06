@@ -54,7 +54,7 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
  * ChangesetReplacementGenerator (most of the time).
  *
  * Its worth noting that both the orphaned node and duplicate elements counts may be a little
- * dubious at this point.
+ * dubious at this point, but at least they give us a baseline.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {

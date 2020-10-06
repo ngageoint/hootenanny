@@ -34,27 +34,27 @@ Writing the secondary dataset from: test-files/cmd/glacial/serial/ServiceChanges
 
 Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsTest/ref-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsTest/sec-original.osm over: -89.6219483,20.9953,-89.6199,20.9979, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsTest/ServiceChangesetReplacementRoundaboutsTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
 
-18:30:43.056 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(1871). Skipping neighbor...
-18:30:43.060 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(2024). Skipping neighbor...
-18:30:43.062 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(897). Skipping neighbor...
-18:30:43.063 WARN   ...re/visitors/SpatialIndexer.cpp( 199) hoot::SpatialIndexer: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+16:26:35.448 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(1871). Skipping neighbor...
+16:26:35.452 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(2024). Skipping neighbor...
+16:26:35.454 WARN   ...re/visitors/SpatialIndexer.cpp( 195) Map does not contain neighbor node: Node(897). Skipping neighbor...
+16:26:35.455 WARN   ...re/visitors/SpatialIndexer.cpp( 199) hoot::SpatialIndexer: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
 
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoundaboutsTest/ServiceChangesetReplacementRoundaboutsTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=20.5214724, max_lat=21.1611171, min_lon=-90.0160752, max_lon=-89.6114693, num_changes=678
-Node(s) Created: 35
+Changeset Details: min_lat=20.5214724, max_lat=21.1611171, min_lon=-90.0160752, max_lon=-89.6114693, num_changes=682
+Node(s) Created: 37
 Node(s) Modified: 5
-Node(s) Deleted: 515
+Node(s) Deleted: 517
 Way(s) Created: 16
 Way(s) Modified: 48
 Way(s) Deleted: 59
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 51
+Total Creations: 53
 Total Modifications: 53
-Total Deletions: 574
+Total Deletions: 576
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementRoundaboutsTest-xml-replaced.osm for verification...
 

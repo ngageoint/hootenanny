@@ -113,16 +113,15 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
 //              " are both way nodes that have no ways in common. Skipping ID sync...");
 //            continue;
 //          }
-          //
-          // TODO: re-enable
-//          if (_areWayNodesInWaysOfMismatchedType(map1IdenticalElement, map2IdenticalElement))
-//          {
-//            LOG_TRACE(
-//              map1IdenticalElement->getElementId() << " and " <<
-//              map2IdenticalElement->getElementId() <<
-//              " are both way nodes that are in ways without matching types. Skipping ID sync...");
-//            continue;
-//          }
+          // TODO
+          if (_areWayNodesInWaysOfMismatchedType(map1IdenticalElement, map2IdenticalElement))
+          {
+            LOG_TRACE(
+              map1IdenticalElement->getElementId() << " and " <<
+              map2IdenticalElement->getElementId() <<
+              " are both way nodes that are in ways without matching types. Skipping ID sync...");
+            continue;
+          }
 
           // Make sure the map being updated doesn't already have an element with this ID (this
           // check may not be necessary).
