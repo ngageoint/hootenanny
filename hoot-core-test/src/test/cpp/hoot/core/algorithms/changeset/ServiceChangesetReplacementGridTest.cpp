@@ -179,10 +179,6 @@ public:
     // part of github 4228 - None of the highway=street_lamp features near Edmundo Escobedo Sr.
     // Middle School (Westmost building) should get dropped in the output.
 
-    // This is needed to suppress some ElementConverter warnings messages that should eventually be
-    // looked into.
-    DisableLog dl;
-
     _testName = "droppedNodes1Test";
     _prepInput(
       _inputPath + "/droppedNodes1Test-Input1.osm",
@@ -219,6 +215,10 @@ public:
     // part of github 4228 - The POI, Desert Shores, belongs in a relation with a landuse poly.
     // Neither should be dropped from the output due to being in a relation with members of mixed
     // geometry types.
+
+    // This is needed to suppress some ElementConverter warnings messages that should eventually be
+    // looked into.
+    DisableLog dl;
 
     _testName = "droppedPointPolyRelationMembers1Test";
     _prepInput(
