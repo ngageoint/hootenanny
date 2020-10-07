@@ -956,6 +956,11 @@ void ChangesetReplacementCreator1::_setGlobalOpts()
       QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
   }
 
+  // TODO
+//  conf().set(
+//    ConfigOptions::getMapCleanerTransformsKey(),
+//    conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));
+
   // These don't change between scenarios (or at least we haven't needed to change them yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
   _boundsOpts.cookieCutKeepOnlyInsideBounds = false;

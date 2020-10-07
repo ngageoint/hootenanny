@@ -337,9 +337,11 @@ void ChangesetReplacementCreator7::create(
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
 
-  // CONFLATE / CLEAN
+  // CLEAN
 
-  // conflate the cookie cut ref map with the sec map if conflation is enabled
+  // It seems unnecessary to need to clean the data before replacing it. However, without the
+  // cleaning the output can become mangled in strange ways. At some point, we need to put some time
+  // into reducing the cleaning ops down to only what's needed.
 
   // TODO: rename var since this map isn't necessary conflated; also rename everything in terms of
   // "toReplace" and "replacement"
@@ -537,14 +539,6 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
   // causing problems, then may need to go back to the original setting = 7.
   conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 5);
 
-  // We're not going to remove missing elements, as we want to have as minimal of an impact on
-  // the resulting changeset as possible.
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePreOpsKey(),
-    QString::fromStdString(RemoveMissingElementsVisitor::className()));
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(),
-    QString::fromStdString(RemoveMissingElementsVisitor::className()));
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
   conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
@@ -560,6 +554,11 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
       ConfigOptions::getChangesetMetadataAllowedTagKeysKey(),
       QStringList(MetadataTags::HootMissingChild()));
   }
+
+  // TODO
+//  conf().set(
+//    ConfigOptions::getMapCleanerTransformsKey(),
+//    conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));
 
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
   _boundsOpts.cookieCutKeepOnlyInsideBounds = false;
