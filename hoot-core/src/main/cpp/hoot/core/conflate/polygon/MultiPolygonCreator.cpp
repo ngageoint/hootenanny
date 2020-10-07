@@ -56,15 +56,15 @@ namespace hoot
 
 int MultiPolygonCreator::logWarnCount = 0;
 
-MultiPolygonCreator::MultiPolygonCreator(const ConstElementProviderPtr& provider,
-  const ConstRelationPtr& r) :
-  _provider(provider),
-  _r(r)
+MultiPolygonCreator::MultiPolygonCreator(
+  const ConstElementProviderPtr& provider, const ConstRelationPtr& r) :
+_provider(provider),
+_r(r)
 {
 }
 
-Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
-  vector<LinearRing*> &inners) const
+Geometry* MultiPolygonCreator::_addHoles(
+  vector<LinearRing*>& outers, vector<LinearRing*>& inners) const
 {
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();
 
@@ -160,8 +160,8 @@ Geometry* MultiPolygonCreator::_addHoles(vector<LinearRing*> &outers,
   return gf.createMultiPolygon(polygons);
 }
 
-void MultiPolygonCreator::_addWayToSequence(ConstWayPtr w, CoordinateSequence& cs, bool reversed)
-  const
+void MultiPolygonCreator::_addWayToSequence(
+  ConstWayPtr w, CoordinateSequence& cs, bool reversed) const
 {
   size_t start = 0;
   size_t increment = 1;
@@ -229,7 +229,7 @@ std::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
   return result;
 }
 
-QString MultiPolygonCreator::_findRelationship(LinearRing *ring1, LinearRing *ring2) const
+QString MultiPolygonCreator::_findRelationship(LinearRing* ring1, LinearRing* ring2) const
 {
   QString result = "";
 
@@ -279,7 +279,7 @@ void MultiPolygonCreator::_classifyRings(std::vector<LinearRing*>& noRole,
   }
 
   // A list of things we haven't found yet.
-  deque<LinearRing *> notFound;
+  deque<LinearRing*> notFound;
 
   for (size_t i = 0; i < noRole.size(); ++i)
   {
@@ -324,7 +324,8 @@ void MultiPolygonCreator::_classifyRings(std::vector<LinearRing*>& noRole,
         }
       }
 
-      // No inners or we still didn't find anything so push it onto the list of things to check later
+      // No inners or we still didn't find anything so push it onto the list of things to check
+      // later.
       if (status == "")
       {
         notFound.push_back(noRole[i]);
@@ -394,7 +395,6 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing*>&
     if (e.getElementId().getType() == ElementType::Way && e.role == role)
     {
       const ConstWayPtr& w = _provider->getWay(e.getElementId().getId());
-
       if (!w)
       {
         continue;
@@ -438,8 +438,8 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing*>&
   }
 }
 
-void MultiPolygonCreator::_createRingsFromPartials(const vector<ConstWayPtr>& partials,
-  vector<LinearRing*>& rings) const
+void MultiPolygonCreator::_createRingsFromPartials(
+  const vector<ConstWayPtr>& partials, vector<LinearRing*>& rings) const
 {
   Tgs::DisjointSetMap<ConstWayPtr> ringSets;
 
@@ -447,9 +447,17 @@ void MultiPolygonCreator::_createRingsFromPartials(const vector<ConstWayPtr>& pa
   for (size_t i = 0; i < partials.size(); i++)
   {
     ConstWayPtr wi = partials[i];
+    if (!wi)
+    {
+      continue;
+    }
     for (size_t j = i; j < partials.size(); j++)
     {
       ConstWayPtr wj = partials[j];
+      if (!wj)
+      {
+        continue;
+      }
 
       if (wi->getNodeId(0) == wj->getNodeId(0) ||
           wi->getNodeId(0) == wj->getLastNodeId() ||
@@ -469,8 +477,8 @@ void MultiPolygonCreator::_createRingsFromPartials(const vector<ConstWayPtr>& pa
   }
 }
 
-void MultiPolygonCreator::_createSingleRing(const vector<ConstWayPtr>& partials,
-  vector<LinearRing*>& rings) const
+void MultiPolygonCreator::_createSingleRing(
+  const vector<ConstWayPtr>& partials, vector<LinearRing*>& rings) const
 {
   deque<ConstWayPtr> orderedWays = _orderWaysForRing(partials);
   CoordinateSequence* cs =
@@ -523,9 +531,6 @@ bool MultiPolygonCreator::_isValidInner(LinearRing* innerRing) const
   return true;
 }
 
-/**
- * Put the ways into the right order so they can just be added one after another into a ring.
- */
 deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayPtr>& partials) const
 {
   deque<ConstWayPtr> result;
@@ -541,6 +546,10 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
   for (size_t i = 1; i < partials.size(); i++)
   {
     ConstWayPtr w = partials[i];
+    if (!w)
+    {
+      continue;
+    }
 
     // if the ways are start to start or end to end
     if (w->getNodeId(0) == firstId || w->getLastNodeId() == lastId)
@@ -639,19 +648,28 @@ LinearRing* MultiPolygonCreator::_toLinearRing(const ConstWayPtr& w) const
   for (; i < ids.size(); i++)
   {
     ConstNodePtr n = _provider->getNode(ids[i]);
-    cs->setAt(n->toCoordinate(), i);
+    if (n)
+    {
+      cs->setAt(n->toCoordinate(), i);
+    }
   }
 
   // a linestring cannot contain 1 point. Do this to keep it valid.
   if (ids.size() == 1)
   {
     ConstNodePtr n = _provider->getNode(ids[0]);
-    cs->setAt(n->toCoordinate(), i++);
+    if (n)
+    {
+      cs->setAt(n->toCoordinate(), i++);
+    }
   }
   else if (ids[0] != ids[ids.size() - 1])
   {
     ConstNodePtr n = _provider->getNode(ids[0]);
-    cs->setAt(n->toCoordinate(), i++);
+    if (n)
+    {
+      cs->setAt(n->toCoordinate(), i++);
+    }
   }
 
   return GeometryFactory::getDefaultInstance()->createLinearRing(cs);

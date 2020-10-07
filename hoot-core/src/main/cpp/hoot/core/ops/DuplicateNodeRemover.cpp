@@ -114,6 +114,10 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const NodePtr& n = it->second;
+    if (!n)
+    {
+      continue;
+    }
     // We don't need to check for existence of the nodes parent here, b/c if it ends up being a dupe
     // we'll replace it with another node instead of removing it from the map.
     cph.addPoint(n->getX(), n->getY(), n->getId());

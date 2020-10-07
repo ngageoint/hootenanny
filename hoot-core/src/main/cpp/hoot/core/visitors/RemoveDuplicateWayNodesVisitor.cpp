@@ -51,6 +51,11 @@ void RemoveDuplicateWayNodesVisitor::removeDuplicates(const WayPtr& way)
 
 void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
 {
+  if (!e)
+  {
+    return;
+  }
+
   if (e->getElementType() == ElementType::Way)
   {
     WayPtr way = std::dynamic_pointer_cast<Way>(e);

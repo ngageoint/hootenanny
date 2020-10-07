@@ -242,8 +242,8 @@ void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& o
   create(map1Inputs, map2Inputs, output);
 }
 
-void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
-                              const QList<OsmMapPtr>& map2Inputs, const QString& output)
+void ChangesetCreator::create(
+  const QList<OsmMapPtr>& map1Inputs, const QList<OsmMapPtr>& map2Inputs, const QString& output)
 {
   if (map1Inputs.size() != map2Inputs.size())
   {

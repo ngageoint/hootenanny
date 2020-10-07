@@ -63,14 +63,10 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   // create two groups for the ways
   vector<std::shared_ptr<Way>> g1, g2;
 
-  // TODO: change back to trace
   LOG_VART(intersectingNode);
   LOG_VART(wayIds);
 
   // put the first valid way in the first group
-//  g1.push_back(_result->getWay(*wayIds.begin()));
-//  std::shared_ptr<Way> first = g1[0];
-//  LOG_VART(first.get());
   set<long>::const_iterator it = wayIds.begin();
   std::shared_ptr<Way> first;
   while (!first && it != wayIds.end())

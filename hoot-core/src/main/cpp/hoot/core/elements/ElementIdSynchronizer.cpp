@@ -36,6 +36,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -158,7 +159,7 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
   }
 
   LOG_DEBUG(
-    "Updated IDs on " << getNumTotalFeatureIdsSynchronized() <<
+    "Updated IDs on " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
     " identical elements in second map.");
 }
 

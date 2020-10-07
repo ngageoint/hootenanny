@@ -55,8 +55,7 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
  * ChangesetReplacementGenerator (most of the time).
  *
  * Its worth noting that both the orphaned node and duplicate elements counts may be a little
- * dubious at this point, but at least they give us a baseline for now until their accuracy can be
- * improved.
+ * dubious at this point, but at least they give us a baseline until their accuracy can be improved.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
@@ -323,20 +322,21 @@ public:
 //    includeIds.append(24);
 //    uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.3528,36.0919,-114.9817,36.3447", 8,
-        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
+      // currently broken: 32/64 at generating changeset
 //    uut.replace(
 //      DATA_TO_REPLACE_URL,
 //      _replacementDataUrl,
 //      UniformTaskGridGenerator(
-//        "-115.3067,36.1234,-115.2136,36.1867", 2,
+//        "-115.3528,36.0919,-114.9817,36.3447", 8,
 //        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-//        .generateTaskGrid()); // reproduced during task 3 / 4
+//        .generateTaskGrid());
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.2600,36.0918,-115.1672,36.1550", 2,
+        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
 
 /*    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());

@@ -46,8 +46,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, MultiLineStringVisitor)
 
 MultiLineStringVisitor::MultiLineStringVisitor() :
-  _provider(),
-  _ls(0)
+_provider(),
+_ls(0)
 {
 }
 
@@ -65,6 +65,11 @@ MultiLineString* MultiLineStringVisitor::createMultiLineString()
 
 void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 {
+  if (!e)
+  {
+    return;
+  }
+
   if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
@@ -74,6 +79,11 @@ void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 
 void MultiLineStringVisitor::visit(const ConstWayPtr& w)
 {
+  if (!w)
+  {
+    return;
+  }
+
   if (w->getNodeCount() >= 2)
   {
     if (_ls == 0)

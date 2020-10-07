@@ -71,6 +71,10 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     const WayPtr& w = it->second;
+    if (!w)
+    {
+      continue;
+    }
     LOG_VART(w);
 
     // If we have a name that is not an alt name, let's record it here so we can preserve it

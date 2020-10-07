@@ -113,7 +113,7 @@ std::shared_ptr<OsmMap> HighwayImpliedDividedMarker::markDivided()
   {
     std::shared_ptr<Way> w = _result->getWay(wayIds[i]);
     // if the way has a divided road on both ends
-    if (_dividerSandwich(w))
+    if (w && _dividerSandwich(w))
     {
       // mark this tunnel/bridge as divided.
       w->setTag("divider", "yes");

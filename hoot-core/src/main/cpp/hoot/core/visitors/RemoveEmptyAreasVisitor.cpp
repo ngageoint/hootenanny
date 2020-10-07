@@ -52,32 +52,26 @@ _requireAreaForPolygonConversion(true)
 void RemoveEmptyAreasVisitor::setConfiguration(const Settings& conf)
 {
   _requireAreaForPolygonConversion = ConfigOptions(conf).getConvertRequireAreaForPolygon();
-  LOG_VARD(_requireAreaForPolygonConversion);
-}
-
-void RemoveEmptyAreasVisitor::visit(const ConstElementPtr& e)
-{
-  // no need to visit nodes
-  if (e->getElementType() != ElementType::Node)
-  {
-    std::shared_ptr<Element> ee = _map->getElement(e->getElementId());
-    visit(ee);
-  }
+  LOG_VART(_requireAreaForPolygonConversion);
 }
 
 void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
 {
-  if (!_ec.get())
+  if (!e || e->getElementType() == ElementType::Node)
   {
-    _ec.reset(new ElementConverter(_map->shared_from_this()));
-    LOG_VARD(_requireAreaForPolygonConversion);
-    // TODO: This is directly related to the relation change commented out below. If this logic
-    // isn't needed, then we can remove implementation of the Configurable interface.
-    _ec->setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
+    return;
   }
 
   LOG_VART(e->getElementId());
   //LOG_VART(e);
+
+  if (!_ec.get())
+  {
+    _ec.reset(new ElementConverter(_map->shared_from_this()));
+    // TODO: This is directly related to the relation change commented out below. If this logic
+    // isn't needed, then we can remove implementation of the Configurable interface.
+    _ec->setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
+  }
 
   LOG_VART(AreaCriterion().isSatisfied(e));
   if (AreaCriterion().isSatisfied(e))
@@ -90,7 +84,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
       LOG_VART(g->getArea());
     }
     bool removeArea = false;
-    if (g.get() && g->getArea() == 0.0)
+    if (g && g->getArea() == 0.0)
     {
       if (e->getElementType() == ElementType::Relation)
       {
@@ -102,7 +96,8 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
         {
           const RelationData::Entry& member = members[i];
           // not going down more than one relation level here, but that may eventually need to be
-          // done; Also, should we also require that each child way also satisfy AreaCriterion?
+          // done; Should we also require that each child way also satisfy AreaCriterion?
+          LOG_VART(member.getElementId());
           if (member.getElementId().getType() == ElementType::Way)
           {
             ConstWayPtr memberWay =
