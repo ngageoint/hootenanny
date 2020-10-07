@@ -55,7 +55,8 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
  * ChangesetReplacementGenerator (most of the time).
  *
  * Its worth noting that both the orphaned node and duplicate elements counts may be a little
- * dubious at this point, but at least they give us a baseline.
+ * dubious at this point, but at least they give us a baseline for now until their accuracy can be
+ * improved.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
@@ -256,7 +257,7 @@ public:
 
   void github4216UniformTest()
   {
-    // reproduces orphaned nodes; larger AOI version of orphanedNodes2Test
+    // larger AOI version of orphanedNodes2Test; good intermediately sized test dataset
 
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -289,17 +290,12 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(30, uut.getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(39, uut.getNumDuplicateElementPairsInOutput());
   }
 
   void northVegasLargeUniformTest()
   {
-    // lenient
-
-    // whole northern half of city, 64 changesets, ~32.5M changes, avg derivation: 44s,
-    // total time: ~1h2m, ~524k changes/min; 70 orphaned nodes; diff between replacement: ~11.5k
-
-    // whole northern half of city, 64 changesets, ~33.2M changes, avg derivation: 51s,
+    // whole northern half of city - 64 changesets, ~33.2M changes, avg derivation: 51s,
     // total time: ~1h10m, ~524k changes/min; 624 orphaned nodes; ~12.2k duplicate feature pairs;
     // diff between replacement: ~11.5k
 
