@@ -49,7 +49,7 @@ public:
 
   virtual QString getName() const override { return "task-grid"; }
 
-  virtual QString getDescription() const override { return "Creates a task grid"; }
+  virtual QString getDescription() const override { return "Creates a task grid covering a map"; }
 
   virtual int runSimple(QStringList& args) override
   {
