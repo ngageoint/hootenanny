@@ -34,6 +34,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
@@ -60,6 +61,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
+  // TODO: re-enable
   CPPUNIT_TEST(orphanedNodes1Test);
   CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(droppedNodes1Test);
@@ -128,7 +130,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(28, uut.getNumDuplicateElementsInOutput());
+    CPPUNIT_ASSERT_EQUAL(28, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -170,7 +172,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(5, uut.getNumDuplicateElementsInOutput());
+    CPPUNIT_ASSERT_EQUAL(5, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -206,7 +208,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(1, uut.getNumDuplicateElementsInOutput());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -247,7 +249,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(6, uut.getNumDuplicateElementsInOutput());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -256,6 +258,10 @@ public:
   void github4216UniformTest()
   {
     // reproduces orphaned nodes; larger AOI version of orphanedNodes2Test
+
+    // TOOD: hack; remove
+//    ConfigUtils::removeListOpEntry(
+//      ConfigOptions::getMapCleanerTransformsKey(), "hoot::UnlikelyIntersectionRemover");
 
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -273,7 +279,7 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false); // TOOD: change back to true
+    uut.setCalcDiffWithReplacement(true);
     uut.setOutputNonConflatable(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -282,6 +288,13 @@ public:
         "-115.1208,36.1550,-115.0280,36.2182", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
+
+    // TODO: after separating quality issue tagging from replacement, call these directly after
+    // the replacement and before the diff calc
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(30, uut.getNumDuplicateElementPairsInOutput());
   }
 
   void northVegasLargeUniformTest()
@@ -312,6 +325,7 @@ public:
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(true);
+    uut.setOutputNonConflatable(true);
 //    QList<int> includeIds;
 //    includeIds.append(26);
     //uut.setTaskCellIncludeIds(includeIds);
@@ -322,6 +336,11 @@ public:
         "-115.3528,36.0919,-114.9817,36.3447", 8,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
   }
 
 private:

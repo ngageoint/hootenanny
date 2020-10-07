@@ -285,6 +285,13 @@ WayLocation WayLocation::move(Meters distance) const
     }
 
     ConstNodePtr n = _map->getNode(_way->getNodeId(result.getSegmentIndex() + 1));
+    LOG_VART(n.get());
+    if (!n)
+    {
+      // Missing nodes can occur in workflows where missing child refs are allowed, like Cut and
+      // Replace. This seems to be the best way to handle it so far.
+      return result;
+    }
     Coordinate next = n->toCoordinate();
 
     double delta = last.distance(next);
@@ -293,8 +300,13 @@ WayLocation WayLocation::move(Meters distance) const
     if (distance - delta < 0)
     {
       // figure out what distance we need to move along the segment.
-      Coordinate lastSegment = _map->getNode(_way->getNodeId(result.getSegmentIndex()))->
-          toCoordinate();
+      ConstNodePtr lastSegmentNode = _map->getNode(_way->getNodeId(result.getSegmentIndex()));
+      LOG_VART(lastSegmentNode.get());
+      if (!lastSegmentNode)
+      {
+        return result;
+      }
+      Coordinate lastSegment = lastSegmentNode->toCoordinate();
       double segmentLength = lastSegment.distance(next);
       result._segmentFraction += (distance / segmentLength);
 
@@ -318,7 +330,7 @@ WayLocation WayLocation::move(Meters distance) const
     }
   }
 
-  // This odd statement avoid us subtracting irrelevantly small distances.
+  // This odd statement helps us avoid subtracting irrelevantly small distances.
   while (1 + distance < 1)
   {
     // if we're at the end of the way
@@ -329,13 +341,25 @@ WayLocation WayLocation::move(Meters distance) const
 
     if (result._segmentFraction > 0)
     {
-      Coordinate next = _map->getNode(_way->getNodeId(result.getSegmentIndex()))->toCoordinate();
+      ConstNodePtr nextNode = _map->getNode(_way->getNodeId(result.getSegmentIndex()));
+      LOG_VART(nextNode.get());
+      if (!nextNode)
+      {
+        return result;
+      }
+      Coordinate next = nextNode->toCoordinate();
 
       Meters delta = last.distance(next);
       if (distance + delta > 0)
       {
         // figure out what distance we need to move along the segment.
-        Coordinate last = _map->getNode(_way->getNodeId(result._segmentIndex + 1))->toCoordinate();
+        ConstNodePtr lastNode = _map->getNode(_way->getNodeId(result._segmentIndex + 1));
+        LOG_VART(lastNode.get());
+        if (!lastNode)
+        {
+          return result;
+        }
+        Coordinate last = lastNode->toCoordinate();
         double segmentLength = last.distance(next);
         result._segmentFraction += (distance / segmentLength);
 
@@ -358,14 +382,25 @@ WayLocation WayLocation::move(Meters distance) const
     }
     else
     {
-      Coordinate next = _map->getNode(_way->getNodeId(result.getSegmentIndex() - 1))->
-          toCoordinate();
+      ConstNodePtr nextNode = _map->getNode(_way->getNodeId(result.getSegmentIndex() - 1));
+      LOG_VART(nextNode.get());
+      if (!nextNode)
+      {
+        return result;
+      }
+      Coordinate next = nextNode->toCoordinate();
 
       Meters delta = last.distance(next);
       if (distance + delta > 0)
       {
         // figure out what distance we need to move along the segment.
-        Coordinate last = _map->getNode(_way->getNodeId(result.getSegmentIndex()))->toCoordinate();
+        ConstNodePtr lastNode = _map->getNode(_way->getNodeId(result.getSegmentIndex()));
+        LOG_VART(lastNode.get());
+        if (!lastNode)
+        {
+          return result;
+        }
+        Coordinate last = lastNode->toCoordinate();
         double segmentLength = last.distance(next);
         result._segmentFraction = 1.0 + (distance / segmentLength);
         // if we're suffering from a floating point issue.

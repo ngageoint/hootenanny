@@ -35,7 +35,6 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/NodeToWayMap.h>
-
 // Standard
 #include <iostream>
 
@@ -75,28 +74,31 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); ++it)
   {
     std::shared_ptr<Way> w = _result->getWay(*it);
-    double p = _pIntersection(intersectingNode, first, w);
+    if (w)
+    {
+      double p = _pIntersection(intersectingNode, first, w);
 
-    // if this is a likely intersection with the first way
-    if (p > 0.5)
-    {
-      // put it in the first group
-      g1.push_back(w);
-    }
-    // if this is an unlikely intersection with the first way
-    else
-    {
-      // put it in the second group
-      g2.push_back(w);
+      // If this is a likely intersection with the first way,
+      if (p > 0.5)
+      {
+        // put it in the first group.
+        g1.push_back(w);
+      }
+      // If this is an unlikely intersection with the first way,
+      else
+      {
+        // put it in the second group.
+        g2.push_back(w);
+      }
     }
   }
 
-  // if all ways are in the first group, we're done.
+  // If all ways are in the first group, we're done.
   if (g2.size() == 0)
   {
     // pass
   }
-  // otherwise split the intersection into two groups.
+  // Otherwise, split the intersection into two groups.
   else
   {
     _numAffected = g2.size();
@@ -109,7 +111,7 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode,
                                                    const std::shared_ptr<Way>& w1,
                                                    const std::shared_ptr<Way>& w2)
 {
-  // pressume it is a valid intersection
+  // presume it is a valid intersection
   double p = 1.0;
 
   LOG_VART(intersectingNode);
@@ -132,12 +134,11 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode,
       LOG_VART(p);
     }
     // if one is a motorway and the other isn't
-    if ((w1->getTags()["highway"] == "motorway") !=
-        (w2->getTags()["highway"] == "motorway"))
+    if ((w1->getTags()["highway"] == "motorway") != (w2->getTags()["highway"] == "motorway"))
     {
       // if one is a motorway and the other is a motorway_link
       if (w1->getTags()["highway"].startsWith("motorway") !=
-        w2->getTags()["highway"].startsWith("motorway"))
+          w2->getTags()["highway"].startsWith("motorway"))
       {
         p *= .4;
         LOG_VART(p);
@@ -168,7 +169,7 @@ double UnlikelyIntersectionRemover::_pIntersection(long intersectingNode,
     {
       // if one is a motorway and the other is a motorway_link
       if (w1->getTags()["highway"].startsWith("motorway") !=
-        w2->getTags()["highway"].startsWith("motorway"))
+          w2->getTags()["highway"].startsWith("motorway"))
       {
         p *= .4;
         LOG_VART(p);
@@ -193,6 +194,7 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
   LOG_VART(g2.size());
 
   NodePtr oldNode = _result->getNode(intersectingNode);
+  LOG_VART(oldNode.get());
   LOG_VART(oldNode->getElementId());
   // create a copy of the intersecting node
   NodePtr newNode(

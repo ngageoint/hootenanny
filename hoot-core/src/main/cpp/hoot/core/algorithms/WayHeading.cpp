@@ -41,7 +41,6 @@ namespace hoot
 Radians WayHeading::calculateHeading(const WayLocation& loc, Meters delta)
 {
   Coordinate v = calculateVector(loc, delta);
-
   return atan2(v.y, v.x);
 }
 
@@ -86,7 +85,6 @@ Radians WayHeading::deltaMagnitude(Radians r1, Radians r2)
   {
     delta = fabs(delta - M_PI * 2);
   }
-
   return delta;
 }
 

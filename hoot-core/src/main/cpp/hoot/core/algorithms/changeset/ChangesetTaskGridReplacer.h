@@ -72,7 +72,7 @@ public:
   int getNumOrphanedNodesInOutput() const { return _orphanedNodes; }
   int getNumDisconnectedWaysInOutput() const { return _disconnectedWays; }
   int getNumEmptyWaysInOutput() const { return _emptyWays; }
-  int getNumDuplicateElementsInOutput() const { return _duplicateElements; }
+  int getNumDuplicateElementPairsInOutput() const { return _duplicateElementPairs; }
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
@@ -139,7 +139,7 @@ private:
   // the number of empty ways found in the final output if _tagQualityIssues=true
   int _emptyWays;
   // the number of duplicated elements found in the final output if _tagQualityIssues=true
-  int _duplicateElements;
+  int _duplicateElementPairs;
   // uses diff conflate to calculate the difference between the final replaced data and the original
   // data used for replacement
   bool _calcDiffWithReplacement;

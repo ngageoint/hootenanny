@@ -72,7 +72,7 @@ _tagQualityIssues(false),
 _orphanedNodes(0),
 _disconnectedWays(0),
 _emptyWays(0),
-_duplicateElements(0),
+_duplicateElementPairs(0),
 _calcDiffWithReplacement(false),
 _outputNonConflatable(false)
 {
@@ -141,6 +141,7 @@ void ChangesetTaskGridReplacer::replace(
     if (!_finalOutput.isEmpty())
     {
       _getUpdatedData(_finalOutput);
+      // TODO: move this outside of the replace method
       if (_calcDiffWithReplacement)
       {
         // Calculate a diff between the data we just replaced and the original replacement data to
@@ -412,6 +413,7 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   emptyRelationRemover.apply(map);
   LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
 
+  // TODO: move this outside of this method and the replace method
   if (_outputNonConflatable)
   {
     // Output any features that hoot doesn't know how to conflate into their own file, for
@@ -421,6 +423,7 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
     _writeNonConflatable(map, nonConflatableOutput);
   }
 
+  // TODO: move this outside of this method and the replace method
   if (_tagQualityIssues)
   {
     // tag element with potential data quality issues caused by the replacement operations; If this
@@ -487,9 +490,9 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   _emptyWays = tagVis->getNumFeaturesAffected();
   LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
 
-  _duplicateElements = DuplicateElementMarker::markDuplicates(map, 8);
+  _duplicateElementPairs = DuplicateElementMarker::markDuplicates(map, 8);
   LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_duplicateElements) <<
+    "Tagged " << StringUtils::formatLargeNumber(_duplicateElementPairs) <<
     " duplicate feature pairs in output.");
 }
 
