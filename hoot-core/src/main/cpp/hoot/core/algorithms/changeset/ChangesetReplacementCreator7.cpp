@@ -555,7 +555,8 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
       QStringList(MetadataTags::HootMissingChild()));
   }
 
-  // TODO
+  // We run a custom set of cleaning ops for changeset replacement.
+  // TODO: This needs more testing before enabling.
 //  conf().set(
 //    ConfigOptions::getMapCleanerTransformsKey(),
 //    conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));

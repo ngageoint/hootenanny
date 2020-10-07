@@ -956,7 +956,8 @@ void ChangesetReplacementCreator1::_setGlobalOpts()
       QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
   }
 
-  // TODO
+  // We run a custom set of cleaning ops for changeset replacement.
+  // TODO: This needs more testing before enabling.
 //  conf().set(
 //    ConfigOptions::getMapCleanerTransformsKey(),
 //    conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));

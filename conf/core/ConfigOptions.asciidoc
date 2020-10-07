@@ -674,7 +674,7 @@ cutting and replacing data.
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 ** `hoot::RemoveEmptyRelationsOp`
 
-The map operations used by replacement changeset generation.
+The map operations used by replacement changeset generation. TODO: not currently in use
 
 === changeset.replacement.mark.elements.with.missing.children
 
