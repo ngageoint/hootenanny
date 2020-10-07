@@ -1648,7 +1648,7 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
   // Covering stragglers here can be very slow for linear features. So far, have only needed it for
   // point passes, which don't seem to be slow.
   alphaShapeGenerator.setManuallyCoverSmallPointClusters(
-    geometryType == GeometryTypeCriterion::Point || geometryType == GeometryTypeCriterion::Unknown);
+    geometryType == GeometryTypeCriterion::Point);
   try
   {
     cutterShapeOutlineMap = alphaShapeGenerator.generateMap(cutterMapToUse);
