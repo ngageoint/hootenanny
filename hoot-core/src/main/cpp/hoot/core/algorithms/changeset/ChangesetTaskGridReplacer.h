@@ -154,6 +154,8 @@ private:
   void _initChangesetStats();
   void _printChangesetStats();
 
+  // TODO: move the quality issue tagging and diff gen out to a separate class
+
   // writes out all of the ref data; useful for debugging...expensive
   void _getUpdatedData(const QString& outputFile);
   // tags elements with potential quality issues

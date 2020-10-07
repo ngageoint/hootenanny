@@ -57,7 +57,7 @@ WayLocation::WayLocation()
 }
 
 WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance) :
-  _map(map)
+_map(map)
 {
   double d = 0.0;
 
@@ -80,7 +80,6 @@ WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance) :
   else
   {
     ConstNodePtr lastNode = _map->getNode(way->getNodeId(0));
-    LOG_VART(lastNode);
     Coordinate last = lastNode->toCoordinate();
 
     _segmentIndex = way->getNodeCount() - 1;
@@ -88,8 +87,7 @@ WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance) :
 
     for (size_t i = 1; i < way->getNodeCount(); i++)
     {
-      ConstNodePtr n = _map->getNode(_way->getNodeId(i));
-      LOG_VART(n.get());
+      ConstNodePtr n = _map->getNode(_way->getNodeId(i));;
       Coordinate next = n->toCoordinate();
       double delta = next.distance(last);
       last = next;
@@ -114,9 +112,9 @@ WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, double distance) :
   assert((size_t)_segmentIndex <= _way->getNodeCount() - 1);
 }
 
-WayLocation::WayLocation(ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex,
-  double segmentFraction) :
-  _map(map)
+WayLocation::WayLocation(
+  ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction) :
+_map(map)
 {
   _way = way;
   _segmentIndex = segmentIndex;
@@ -154,24 +152,34 @@ Meters WayLocation::calculateDistanceFromEnd() const
 
 Meters WayLocation::calculateDistanceOnWay() const
 {
-  //LOG_TRACE("Calculating distance on way...");
-
   Meters result = 0.0;
-  Coordinate last = _map->getNode(_way->getNodeId(0))->toCoordinate();
+
+  ConstNodePtr firstNode = _map->getNode(_way->getNodeId(0));
+  if (!firstNode)
+  {
+    return result;
+  }
+  Coordinate last = firstNode->toCoordinate();
   for (int i = 1; i < (int)_way->getNodeCount() && i <= _segmentIndex; i++)
   {
     ConstNodePtr n = _map->getNode(_way->getNodeId(i));
-    Coordinate next = n->toCoordinate();
-    result += next.distance(last);
-    last = next;
+    if (n)
+    {
+      Coordinate next = n->toCoordinate();
+      result += next.distance(last);
+      last = next;
+    }
   }
 
   if (_segmentIndex < (int)_way->getNodeCount() - 1)
   {
     ConstNodePtr n = _map->getNode(_way->getNodeId(_segmentIndex + 1));
-    Coordinate next = n->toCoordinate();
-    Meters d = next.distance(last);
-    result += d * _segmentFraction;
+    if (n)
+    {
+      Coordinate next = n->toCoordinate();
+      Meters d = next.distance(last);
+      result += d * _segmentFraction;
+    }
   }
 
   return result;
@@ -226,6 +234,10 @@ WayLocation WayLocation::createAtEndOfWay(const ConstOsmMapPtr& map, const Const
 const Coordinate WayLocation::getCoordinate() const
 {
   ConstNodePtr p0 = _map->getNode(_way->getNodeId(_segmentIndex));
+  if (!p0)
+  {
+    return Coordinate();
+  }
   if (_segmentFraction <= 0.0)
   {
     return p0->toCoordinate();
@@ -233,6 +245,10 @@ const Coordinate WayLocation::getCoordinate() const
   else
   {
     ConstNodePtr p1 = _map->getNode(_way->getNodeId(_segmentIndex + 1));
+    if (!p1)
+    {
+      return Coordinate();
+    }
     return pointAlongSegmentByFraction(p0->toCoordinate(), p1->toCoordinate(), _segmentFraction);
   }
 }
@@ -272,10 +288,17 @@ bool WayLocation::isLast(double epsilon) const
 
 WayLocation WayLocation::move(Meters distance) const
 {
+  LOG_TRACE("Moving way location: " << (*this).toString() << " by " << distance << " meters...");
+
   WayLocation result(*this);
   Coordinate last = result.getCoordinate();
+  if (last.isNull())
+  {
+    return result;
+  }
+  LOG_VART(last.toString());
 
-  // This odd statement avoid us adding irrelevantly small distances.
+  // This odd statement helps us avoid adding irrelevantly small distances.
   while (1 + distance > 1)
   {
     // if we're at the end of the way
@@ -285,6 +308,7 @@ WayLocation WayLocation::move(Meters distance) const
     }
 
     ConstNodePtr n = _map->getNode(_way->getNodeId(result.getSegmentIndex() + 1));
+    // TODO: change back to trace
     LOG_VART(n.get());
     if (!n)
     {
@@ -310,7 +334,7 @@ WayLocation WayLocation::move(Meters distance) const
       double segmentLength = lastSegment.distance(next);
       result._segmentFraction += (distance / segmentLength);
 
-      // this can happen due to floating point errors when the new location is very close to a
+      // This can happen due to floating point errors when the new location is very close to a
       // node.
       if (result._segmentFraction >= 1.0)
       {

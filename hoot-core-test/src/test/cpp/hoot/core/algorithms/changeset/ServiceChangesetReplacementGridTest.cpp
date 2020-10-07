@@ -296,8 +296,8 @@ public:
   void northVegasLargeUniformTest()
   {
     // whole northern half of city - 64 changesets, ~33.2M changes, avg derivation: 51s,
-    // total time: ~1h10m, ~524k changes/min; 624 orphaned nodes; ~12.2k duplicate feature pairs;
-    // diff between replacement: ~11.5k
+    // total time: ~1h10m, ~524k changes/min, 624 orphaned nodes; ? disconnected ways, ? empty ways,
+    // ~12.2k duplicate feature pairs, diff between replacement: ~11.5k
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -310,7 +310,6 @@ public:
       "");
 
     ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(2);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
@@ -318,8 +317,12 @@ public:
     uut.setCalcDiffWithReplacement(true);
     uut.setOutputNonConflatable(true);
 //    QList<int> includeIds;
-//    includeIds.append(26);
-    //uut.setTaskCellIncludeIds(includeIds);
+//    includeIds.append(21);
+//    includeIds.append(22);
+//    includeIds.append(23);
+//    includeIds.append(24);
+//    uut.setTaskCellIncludeIds(includeIds);
+    //uut.setKillAfterNumChangesetDerivations(2);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -327,11 +330,18 @@ public:
         "-115.3528,36.0919,-114.9817,36.3447", 8,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
+//    uut.replace(
+//      DATA_TO_REPLACE_URL,
+//      _replacementDataUrl,
+//      UniformTaskGridGenerator(
+//        "-115.3067,36.1234,-115.2136,36.1867", 2,
+//        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+//        .generateTaskGrid()); // reproduced during task 3 / 4
 
 /*    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput())*/;
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());*/
   }
 
 private:

@@ -47,26 +47,26 @@ public:
     _copyChildren(copyChildren),
     _exempt(exempt)
   {
-    LOG_VARD(_copyChildren);
+    LOG_VART(_copyChildren);
   }
   virtual ~AddAllVisitor() = default;
 
   virtual void visit(const ConstElementPtr& e)
   {
     ElementId eid = e->getElementId();
-    LOG_VARD(eid);
+    LOG_VART(eid);
 
     // If the element is not exempt and it isn't already in the map,
     if (eid != _exempt && _to->containsElement(eid) == false)
     {
       // create a copy of the element.
       ElementPtr ee(_from->getElement(eid)->clone());
-      LOG_VARD(ee->getElementId());
+      LOG_VART(ee->getElementId());
 
       // If it is a node, just copy it, as we don't need to worry about dependencies.
       if (ee->getElementType() == ElementType::Node)
       {
-        LOG_DEBUG("Adding " << ee->getElementId() << "...");
+        LOG_TRACE("Adding " << ee->getElementId() << "...");
         _to->addElement(ee);
       }
       // If it is not a node, then we need to worry about dependencies.
@@ -76,14 +76,14 @@ public:
         if (_copyChildren)
         {
           // Add all of this element's children to the map (we're exempting eid).
-          LOG_DEBUG("Adding children of " << ee->getElementId() << "...");
+          LOG_TRACE("Adding children of " << ee->getElementId() << "...");
           AddAllVisitor v(_from, _to, true, eid);
           _from->getElement(eid)->visitRo(*_from, v);
           //  Add all of the elements affected.
           _elementsAdded.insert(v._elementsAdded.begin(), v._elementsAdded.end());
         }
         // Finally, add this element to the map.
-        LOG_DEBUG("Adding " << ee->getElementId() << "...");
+        LOG_TRACE("Adding " << ee->getElementId() << "...");
         _to->addElement(ee);
       }
       //  Add this element to the list.
@@ -149,7 +149,7 @@ _copyChildren(true)
   FilteredVisitor idVis(_crit, getIdVis);
   _from->visitRo(idVis);
   _eids = getIdVis->getElementSet();
-  LOG_VARD(_eids.size());
+  LOG_VART(_eids.size());
   LOG_VART(_eids);
 }
 

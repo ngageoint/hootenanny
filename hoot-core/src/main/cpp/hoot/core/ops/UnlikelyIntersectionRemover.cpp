@@ -63,21 +63,39 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   // create two groups for the ways
   vector<std::shared_ptr<Way>> g1, g2;
 
+  // TODO: change back to trace
   LOG_VART(intersectingNode);
   LOG_VART(wayIds);
 
-  // put the first way in the first group
-  g1.push_back(_result->getWay(*wayIds.begin()));
+  // put the first valid way in the first group
+//  g1.push_back(_result->getWay(*wayIds.begin()));
+//  std::shared_ptr<Way> first = g1[0];
+//  LOG_VART(first.get());
+  set<long>::const_iterator it = wayIds.begin();
+  std::shared_ptr<Way> first;
+  while (!first && it != wayIds.end())
+  {
+    WayPtr way = _result->getWay(*it);
+    if (way)
+    {
+      g1.push_back(way);
+      first = g1[0];
+    }
+    ++it;
+  }
+  if (!first)
+  {
+    return;
+  }
 
-  std::shared_ptr<Way> first = g1[0];
   // go through all the other ways
-  for (set<long>::iterator it = wayIds.begin(); it != wayIds.end(); ++it)
+  for (set<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
+  // while (it != wayIds.end())
   {
     std::shared_ptr<Way> w = _result->getWay(*it);
-    if (w)
+    if (w && w->getElementId() != first->getElementId())
     {
-      double p = _pIntersection(intersectingNode, first, w);
-
+      const double p = _pIntersection(intersectingNode, first, w);
       // If this is a likely intersection with the first way,
       if (p > 0.5)
       {
@@ -91,6 +109,8 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
         g2.push_back(w);
       }
     }
+
+    //++it;
   }
 
   // If all ways are in the first group, we're done.
@@ -195,6 +215,10 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
 
   NodePtr oldNode = _result->getNode(intersectingNode);
   LOG_VART(oldNode.get());
+  if (!oldNode)
+  {
+    return;
+  }
   LOG_VART(oldNode->getElementId());
   // create a copy of the intersecting node
   NodePtr newNode(
