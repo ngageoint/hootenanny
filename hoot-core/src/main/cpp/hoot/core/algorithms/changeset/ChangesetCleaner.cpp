@@ -54,30 +54,26 @@ void ChangesetCleaner::_clean()
     while (changesetProvider->hasMoreChanges())
     {
       const Change change = changesetProvider->readNextChange();
-      // TODO: cleanup
-      if (change.getElement() /*&& change.getPreviousElement()*/)
+      if (change.getElement())
       {
         const ElementId id = change.getElement()->getElementId();
         if (_changesById.contains(id))
         {
           const Change existingChange = _changesById[id];
-          //if (existingChange.getElement() && existingChange.getPreviousElement())
-          //{
-            // We already have a modify or create change for this element, so ignore the delete
-            // change.
-            if (existingChange.getType() != Change::Delete && change.getType() == Change::Delete)
-            {
-              _numDeleteChangesRemoved++;
-              continue;
-            }
-            else
-            {
-              // If the existing change is a delete, then we'll overwrite it with a create or
-              // modify.
-              _changesById[id] = change;
-              _changes.push_back(change);
-            }
-          //}
+          // We already have a modify or create change for this element, so ignore the delete
+          // change.
+          if (existingChange.getType() != Change::Delete && change.getType() == Change::Delete)
+          {
+            _numDeleteChangesRemoved++;
+            continue;
+          }
+          else
+          {
+            // If the existing change is a delete, then we'll overwrite it with a create or
+            // modify.
+            _changesById[id] = change;
+            _changes.push_back(change);
+          }
         }
         else
         {
