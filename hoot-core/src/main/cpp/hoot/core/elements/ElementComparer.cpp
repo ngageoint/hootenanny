@@ -44,6 +44,11 @@ _ignoreVersion(false)
 
 QString ElementComparer::toHashString(const ConstElementPtr& e) const
 {
+  if (!e)
+  {
+    return "";
+  }
+
   ElementHashVisitor hashVis;
   hashVis.setOsmMap(_map.get());
   // TODO: This doesn't seem right, but its been working this way for awhile now...remove later?
@@ -53,8 +58,10 @@ QString ElementComparer::toHashString(const ConstElementPtr& e) const
 
 bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
 {
-  //LOG_VART(e1->getElementId());
-  //LOG_VART(e2->getElementId());
+  if (!e1 || !e2)
+  {
+    return false;
+  }
 
   // different types?
   if (e1->getElementType() != e2->getElementType())
@@ -82,6 +89,9 @@ bool ElementComparer::isSame(ElementPtr e1, ElementPtr e2) const
     throw IllegalArgumentException(
       "If ignoring element IDs in ElementComparer a map must be passed in.");
   }
+
+  LOG_VART(e1->getElementId());
+  LOG_VART(e2->getElementId());
 
   switch (e1->getElementType().getEnum())
   {
@@ -111,6 +121,8 @@ void ElementComparer::_setHash(ElementPtr element) const
 
 bool ElementComparer::_compareNode(ElementPtr re, ElementPtr e) const
 {
+  LOG_TRACE("Comparing nodes...");
+
   _setHash(re);
   _setHash(e);
 
@@ -125,6 +137,8 @@ bool ElementComparer::_compareNode(ElementPtr re, ElementPtr e) const
 
 bool ElementComparer::_compareWay(ElementPtr re, ElementPtr e) const
 {
+  LOG_TRACE("Comparing ways...");
+
   ConstWayPtr rw = std::dynamic_pointer_cast<const Way>(re);
   ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
 
@@ -176,6 +190,8 @@ bool ElementComparer::_compareWay(ElementPtr re, ElementPtr e) const
 
 bool ElementComparer::_compareRelation(ElementPtr re, ElementPtr e) const
 {
+  LOG_TRACE("Comparing relations...");
+
   ConstRelationPtr rr = std::dynamic_pointer_cast<const Relation>(re);
   ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
 

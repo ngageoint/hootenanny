@@ -506,6 +506,11 @@ void ChangesetReplacementCreator7::create(
 
   LOG_STATUS("Generating changeset...");
 
+  // Since we're not removing missing elements, it may be possible we have null elements passed to
+  // changeset generation. This is a little concerning, b/c that would seem to affect the accuracy
+  // of the generated changeset since ChangesetDeriver relies on whether an element is null or not
+  // as part of its logic. However, haven't found any bugs related to this yet.
+
   // We have some instances where modify and delete changes are being generated for the same
   // element, which causes error during changeset application. Eventually, we should eliminate their
   // causes, but for now we'll activate changeset cleaning to get rid of the delete statements.

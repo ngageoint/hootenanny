@@ -58,7 +58,7 @@ public:
    */
   ChangesetCleaner(const QList<ChangesetProviderPtr>& changesetProviders);
 
-  virtual ~ChangesetCleaner() = default;
+  virtual ~ChangesetCleaner();
 
   /**
    * @see ChangeSetProvider
@@ -68,7 +68,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual void close() override {}
+  virtual void close() override;
 
   /**
    * @see ChangeSetProvider

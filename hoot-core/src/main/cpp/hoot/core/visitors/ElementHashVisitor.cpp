@@ -64,6 +64,11 @@ void ElementHashVisitor::clearHashes()
 
 void ElementHashVisitor::visit(const ElementPtr& e)
 {
+  if (!e)
+  {
+    return;
+  }
+
   // don't calculate hashes on review relations
   if (ReviewMarker::isReview(e) == false)
   {

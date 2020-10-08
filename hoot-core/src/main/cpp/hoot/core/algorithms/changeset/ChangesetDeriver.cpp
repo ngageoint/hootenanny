@@ -43,8 +43,8 @@ _numToElementsParsed(0),
 _allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferenceFeatures()),
 _metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
 {
-  LOG_VARD(_from.get());
-  LOG_VARD(_to.get());
+  LOG_VART(_from.get());
+  LOG_VART(_to.get());
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
@@ -59,7 +59,7 @@ _metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
   _changesByType[Change::ChangeType::Modify] = 0;
   _changesByType[Change::ChangeType::Delete] = 0;
 
-  LOG_VARD(_allowDeletingReferenceFeatures);
+  LOG_VART(_allowDeletingReferenceFeatures);
 }
 
 ChangesetDeriver::~ChangesetDeriver()
@@ -80,11 +80,11 @@ void ChangesetDeriver::close()
 
 bool ChangesetDeriver::hasMoreChanges()
 {
-  if (_next.getElement().get() == 0)
+  if (!_next.getElement().get())
   {
     _next = _nextChange();
   }
-  return _next.getElement().get() != 0;
+  return _next.getElement().get();
 }
 
 Change ChangesetDeriver::_nextChange()
@@ -100,7 +100,7 @@ Change ChangesetDeriver::_nextChange()
   LOG_VART(_toE.get());
   LOG_VART(_to->hasMoreElements());
 
-  if (!_fromE.get() && _from->hasMoreElements())
+  if (!_fromE && _from->hasMoreElements())
   {
     LOG_TRACE("'from' element null and 'from' has more elements; reading next 'from' element...");
     if (Log::getInstance().getLevel() <= Log::Trace && !_from->hasMoreElements())
@@ -110,9 +110,8 @@ Change ChangesetDeriver::_nextChange()
     _fromE = _from->readNextElement();
     _numFromElementsParsed++;
     LOG_TRACE("Read next 'from' element: " << _fromE->getElementId());
-    LOG_VART(_fromE);
   }
-  if (!_toE.get() && _to->hasMoreElements())
+  if (!_toE && _to->hasMoreElements())
   {
     LOG_TRACE("'to' element null and 'to' has more elements; reading next 'to' element...");
     if (Log::getInstance().getLevel() <= Log::Trace && !_to->hasMoreElements())
@@ -122,16 +121,14 @@ Change ChangesetDeriver::_nextChange()
     _toE = _to->readNextElement();
     _numToElementsParsed++;
     LOG_TRACE("Read next 'to' element: " << _toE->getElementId());
-    LOG_VART(_toE);
   }
 
-  // if we've run out of "from" elements, create all the remaining elements in "to"
-  if (!_fromE.get() && _toE.get())
+  // If we've run out of "from" elements, create all the remaining elements in "to".
+  if (!_fromE && _toE)
   {
     LOG_TRACE(
       "run out of from elements; 'from' element null; 'to' element not null: " <<
       _toE->getElementId() << "; creating 'to' element...");
-    LOG_VART(_toE);
 
     if (Log::getInstance().getLevel() <= Log::Trace && !_to->hasMoreElements())
     {
@@ -152,19 +149,16 @@ Change ChangesetDeriver::_nextChange()
     {
       _numToElementsParsed++;
       LOG_TRACE("Next 'to' element: " << _toE->getElementId());
-      LOG_VART(_toE);
     }
   }
-  // if we've run out of "to" elements, delete all the remaining elements in "from"
-  else if (_fromE.get() && !_toE.get())
+  // If we've run out of "to" elements, delete all the remaining elements in "from".
+  else if (_fromE && !_toE)
   { 
     if (Log::getInstance().getLevel() <= Log::Trace && !_from->hasMoreElements())
     {
       LOG_TRACE("Last from element: " << _fromE->getElementId());
     }
 
-    LOG_VART(_fromE->getVersion());
-    LOG_VART(_fromE->getStatus());
     if (_allowDeletingReferenceFeatures &&
         !_fromE->getTags().contains(MetadataTags::HootChangeExcludeDelete()))
     {
@@ -172,7 +166,6 @@ Change ChangesetDeriver::_nextChange()
         "run out of 'to' elements; to' element null; 'from' element not null: " <<
         _fromE->getElementId() << "; deleting 'from' element...");
       result = Change(Change::Delete, _fromE);
-      LOG_VART(_fromE);
     }
     else
     {
@@ -196,13 +189,12 @@ Change ChangesetDeriver::_nextChange()
     {
       _numFromElementsParsed++;
       LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
-      LOG_VART(_fromE);
     }
   }
   else
   {
-    // while the elements are exactly the same, there is nothing to do.
-    while (_fromE.get() && _toE.get() && _fromE->getElementId() == _toE->getElementId() &&
+    // While the elements are exactly the same, there is nothing to do.
+    while (_fromE && _toE && _fromE->getElementId() == _toE->getElementId() &&
            _elementComparer.isSame(_fromE, _toE) &&
            // ElementComparer always ignores metadata tags during comparison. So, if there is a
            // specific metadata tag in the target element that isn't in the original element and we
@@ -213,18 +205,14 @@ Change ChangesetDeriver::_nextChange()
       LOG_TRACE(
         "skipping identical elements - 'from' element: " << _fromE->getElementId() <<
         " and 'to' element: " << _toE->getElementId() << "...");
-      LOG_VART(_fromE);
-      LOG_VART(_toE);
 
       if (Log::getInstance().getLevel() <= Log::Trace && !_from->hasMoreElements())
       {
         LOG_TRACE("Last from element: " << _fromE->getElementId());
-        LOG_VART(_fromE);
       }
       if (Log::getInstance().getLevel() <= Log::Trace && !_to->hasMoreElements())
       {
         LOG_TRACE("Last to element: " << _toE->getElementId());
-        LOG_VART(_toE);
       }
 
       if (_to->hasMoreElements())
@@ -239,7 +227,6 @@ Change ChangesetDeriver::_nextChange()
       { 
         _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
-        LOG_VART(_toE);
       }
 
       if (_from->hasMoreElements())
@@ -254,17 +241,16 @@ Change ChangesetDeriver::_nextChange()
       {
         _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
-        LOG_VART(_fromE);
       }
     }
 
-    if (!_fromE.get() && !_toE.get())
+    if (!_fromE && !_toE)
     {
       // pass
       LOG_TRACE("both are null elements; skipping...");
     }
-    // if we've run out of "from" elements, create all the remaining elements in "to"
-    else if (!_fromE.get() && _toE.get())
+    // If we've run out of "from" elements, create all the remaining elements in "to".
+    else if (!_fromE && _toE)
     {
       LOG_TRACE(
         "run out of from elements; 'from' element null; 'to' element not null: " <<
@@ -273,7 +259,6 @@ Change ChangesetDeriver::_nextChange()
       if (Log::getInstance().getLevel() <= Log::Trace && !_to->hasMoreElements())
       {
         LOG_TRACE("Last to element: " << _toE->getElementId());
-        LOG_VART(_toE);
       }
 
       result = Change(Change::Create, _toE);
@@ -290,18 +275,16 @@ Change ChangesetDeriver::_nextChange()
       {
         _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
-        LOG_VART(_toE);
       }
     }
-    // if we've run out of "to" elements, delete all the remaining elements in "from"
-    else if (_fromE.get() && !_toE.get())
+    // If we've run out of "to" elements, delete all the remaining elements in "from".
+    else if (_fromE && !_toE)
     {
       if (Log::getInstance().getLevel() <= Log::Trace && !_from->hasMoreElements())
       {
         LOG_TRACE("Last from element: " << _fromE->getElementId());
       }
 
-      LOG_VART(_fromE);
       if (_allowDeletingReferenceFeatures &&
           !_fromE->getTags().contains(MetadataTags::HootChangeExcludeDelete()))
       {
@@ -332,7 +315,6 @@ Change ChangesetDeriver::_nextChange()
       {
         _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
-        LOG_VART(_fromE);
       }
     }
     else if (_fromE->getElementId() == _toE->getElementId())
@@ -340,18 +322,14 @@ Change ChangesetDeriver::_nextChange()
       LOG_TRACE(
         "'from' element id: " << _fromE->getElementId() << " equals 'to' element id: " <<
         _toE->getElementId() << " modifying 'to' element: ");
-      LOG_VART(_fromE);
-      LOG_VART(_toE);
 
       if (Log::getInstance().getLevel() <= Log::Trace && !_from->hasMoreElements())
       {
         LOG_TRACE("Last from element: " << _fromE->getElementId());
-        LOG_VART(_fromE);
       }
       if (Log::getInstance().getLevel() <= Log::Trace && !_to->hasMoreElements())
       {
         LOG_TRACE("Last to element: " << _toE->getElementId());
-        LOG_VART(_toE);
       }
 
       result = Change(Change::Modify, _toE, _fromE);
@@ -368,12 +346,11 @@ Change ChangesetDeriver::_nextChange()
       {
         _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
-        LOG_VART(_toE);
       }
 
       if (_from->hasMoreElements())
       {
-        _fromE = _from->readNextElement(); //this line probably needs more testing
+        _fromE = _from->readNextElement();
       }
       else
       {
@@ -383,14 +360,10 @@ Change ChangesetDeriver::_nextChange()
       {
         _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
-        LOG_VART(_fromE);
       }
     }
     else if (_fromE->getElementId() < _toE->getElementId())
     {
-      LOG_VART(_fromE);
-      LOG_VART(_toE);
-      LOG_VART(_allowDeletingReferenceFeatures);
       if ((_allowDeletingReferenceFeatures ||
           // this assumes the 'from' dataset was loaded as unknown1
           // TODO: Don't understand the use case for this and its been around for awhile now...need
@@ -428,7 +401,6 @@ Change ChangesetDeriver::_nextChange()
       {
         _numFromElementsParsed++;
         LOG_TRACE("Next 'from' element: " << _fromE->getElementId());
-        LOG_VART(_fromE);
       }
     }
     else
@@ -436,13 +408,10 @@ Change ChangesetDeriver::_nextChange()
       LOG_TRACE(
         "'from' element id: " << _fromE->getElementId() << " greater than 'to' element id: " <<
         _toE->getElementId() << "; creating 'to' element...");
-      LOG_VART(_fromE);
-      LOG_VART(_toE);
 
       if (Log::getInstance().getLevel() <= Log::Trace && !_to->hasMoreElements())
       {
         LOG_TRACE("Last to element: " << _toE->getElementId());
-        LOG_VART(_toE);
       }
 
       result = Change(Change::Create, _toE);
@@ -459,11 +428,11 @@ Change ChangesetDeriver::_nextChange()
       {
         _numToElementsParsed++;
         LOG_TRACE("Next 'to' element: " << _toE->getElementId());
-        LOG_VART(_toE);
       }
     }
   }
 
+  LOG_VART(result);
   return result;
 }
 

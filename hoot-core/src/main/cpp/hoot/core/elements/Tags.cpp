@@ -599,11 +599,11 @@ bool Tags::operator==(const Tags& other) const
 bool Tags::hasSameNonMetadataTags(const Tags& other) const
 {
   Tags otherCopy = other;
-  //otherCopy.removeMetadata();
-  otherCopy.removeEmpty();
+  otherCopy.removeMetadata();
+  //otherCopy.removeEmpty();
   Tags thisCopy = *this;
-  //thisCopy.removeMetadata();
-  thisCopy.removeEmpty();
+  thisCopy.removeMetadata();
+  //thisCopy.removeEmpty();
   return otherCopy == thisCopy;
 }
 

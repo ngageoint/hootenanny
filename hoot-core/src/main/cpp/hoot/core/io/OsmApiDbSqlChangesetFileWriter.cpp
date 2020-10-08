@@ -101,8 +101,8 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
       "...");
 
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
-    LOG_VARD(changesetProvider.get());
-    LOG_VARD(changesetProvider->hasMoreChanges());
+    LOG_VART(changesetProvider.get());
+    LOG_VART(changesetProvider->hasMoreChanges());
     while (changesetProvider->hasMoreChanges())
     {
       LOG_TRACE("Reading next SQL change...");
@@ -183,6 +183,7 @@ void OsmApiDbSqlChangesetFileWriter::_createChangeSet()
     throw HootException("Invalid changeset user ID: " + QString::number(_changesetUserId));
   }
 
+  LOG_DEBUG("Getting changeset ID...");
   _changesetId = _db.getNextId(ApiDb::getChangesetsTableName());
   LOG_DEBUG("Creating changeset with ID: " << _changesetId);
   _outputSql.write(

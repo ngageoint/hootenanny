@@ -43,6 +43,11 @@ _numDeleteChangesRemoved(0)
   _clean();
 }
 
+ChangesetCleaner::~ChangesetCleaner()
+{
+  close();
+}
+
 void ChangesetCleaner::_clean()
 {
   LOG_DEBUG("Deriving and cleaning " << _changesetProviders.size() << " changeset(s)...");
@@ -56,10 +61,12 @@ void ChangesetCleaner::_clean()
       const Change change = changesetProvider->readNextChange();
       if (change.getElement())
       {
+        LOG_VART(change);
         const ElementId id = change.getElement()->getElementId();
         if (_changesById.contains(id))
         {
           const Change existingChange = _changesById[id];
+          LOG_VART(existingChange);
           // We already have a modify or create change for this element, so ignore the delete
           // change.
           if (existingChange.getType() != Change::Delete && change.getType() == Change::Delete)
@@ -83,8 +90,15 @@ void ChangesetCleaner::_clean()
       }
     }
   }
+  LOG_VARD(_changesById.size());
   LOG_VARD(_changes.size());
   _changeItr = _changes.begin();
+}
+
+void ChangesetCleaner::close()
+{
+  _changesById.clear();
+  _changes.clear();
 }
 
 std::shared_ptr<OGRSpatialReference> ChangesetCleaner::getProjection() const
@@ -99,8 +113,8 @@ bool ChangesetCleaner::hasMoreChanges()
 
 Change ChangesetCleaner::readNextChange()
 {
-  Change change = *_changeItr;
-  ++_changeItr;
+  Change change = *_changeItr;;
+  ++_changeItr;;
   return change;
 }
 

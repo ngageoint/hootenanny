@@ -77,8 +77,12 @@ bool Change::operator==(const Change& other) const
 
 QString Change::toString() const
 {
-  return
-    "Change type: " + changeTypeToString(_type) + ", ID: " + _element->getElementId().toString();
+  QString str =  "Change type: " + changeTypeToString(_type);
+  if (_element)
+  {
+    str += ", ID: " + _element->getElementId().toString();
+  }
+  return str;
 }
 
 }

@@ -101,7 +101,7 @@ void NamedOp::apply(OsmMapPtr& map)
     LOG_DEBUG(
       "\tElement count before operation " << s << ": " <<
       StringUtils::formatLargeNumber(map->getElementCount()));
-    LOG_DEBUG("Projection before " << s << ": " << MapProjector::toWkt(map->getProjection()));
+    LOG_TRACE("Projection before " << s << ": " << MapProjector::toWkt(map->getProjection()));
 
     // We could benefit from passing progress into some of the ops to get more granular feedback.
 
