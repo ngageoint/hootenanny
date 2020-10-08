@@ -88,26 +88,6 @@
             <tag k="tiger:name_base" v="Lilac Echo"/>
         </way>
     </delete>
-    <modify>
-        <way id="19253" version="1">
-            <nd ref="404517"/>
-            <nd ref="368743"/>
-            <nd ref="404518"/>
-            <tag k="tiger:tlid" v="201963366:201967836"/>
-            <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-            <tag k="highway" v="residential"/>
-            <tag k="name" v="Simms Avenue"/>
-            <tag k="tiger:zip_left" v="89074"/>
-            <tag k="tiger:separated" v="no"/>
-            <tag k="tiger:name_type" v="Ave"/>
-            <tag k="source:datetime" v="2010-03-27T23:13:31.000Z"/>
-            <tag k="tiger:zip_right" v="89074"/>
-            <tag k="tiger:county" v="Clark, NV"/>
-            <tag k="tiger:cfcc" v="A41"/>
-            <tag k="tiger:reviewed" v="no"/>
-            <tag k="tiger:name_base" v="Simms"/>
-        </way>
-    </modify>
     <delete>
         <way id="31706" version="1">
             <nd ref="374912"/>

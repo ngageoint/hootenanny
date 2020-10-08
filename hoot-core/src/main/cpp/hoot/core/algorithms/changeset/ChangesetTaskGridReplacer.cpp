@@ -290,7 +290,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   _printChangesetStats();
 
   LOG_STATUS(
-    "\tChangeset with " << StringUtils::formatLargeNumber(numChanges) << " changes applied in: " <<
+    "Changeset with " << StringUtils::formatLargeNumber(numChanges) << " changes applied in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
