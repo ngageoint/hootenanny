@@ -187,7 +187,7 @@ void NamedOp::apply(OsmMapPtr& map)
     opCount++;
     OsmMapWriterFactory::writeDebugMap(map, "after-" + s.replace("hoot::", ""));
 
-    LOG_DEBUG("Projection after " << s << ": " << MapProjector::toWkt(map->getProjection()));
+    LOG_TRACE("Projection after " << s << ": " << MapProjector::toWkt(map->getProjection()));
   }
 }
 

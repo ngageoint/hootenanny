@@ -34,6 +34,7 @@
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -160,7 +161,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   }
 
   LOG_DEBUG(
-    "Updated " << getNumTotalFeatureIdsSynchronized() <<
+    "Updated " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
     " nearly identical way nodes in second map.");
 }
 

@@ -43,8 +43,8 @@ _numToElementsParsed(0),
 _allowDeletingReferenceFeatures(ConfigOptions().getChangesetAllowDeletingReferenceFeatures()),
 _metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
 {
-  LOG_VART(_from.get());
-  LOG_VART(_to.get());
+  LOG_VARD(_from.get());
+  LOG_VARD(_to.get());
   if (_from->getProjection()->IsGeographic() == false ||
       _to->getProjection()->IsGeographic() == false)
   {
@@ -59,7 +59,7 @@ _metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
   _changesByType[Change::ChangeType::Modify] = 0;
   _changesByType[Change::ChangeType::Delete] = 0;
 
-  LOG_VART(_allowDeletingReferenceFeatures);
+  LOG_VARD(_allowDeletingReferenceFeatures);
 }
 
 ChangesetDeriver::~ChangesetDeriver()

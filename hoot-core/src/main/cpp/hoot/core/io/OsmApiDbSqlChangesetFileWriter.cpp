@@ -101,11 +101,17 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
       "...");
 
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
+    LOG_VARD(changesetProvider.get());
     LOG_VARD(changesetProvider->hasMoreChanges());
     while (changesetProvider->hasMoreChanges())
     {
       LOG_TRACE("Reading next SQL change...");
       Change change = changesetProvider->readNextChange();
+
+      if (!change.getElement())
+      {
+        continue;
+      }
 
       // See related note in OsmXmlChangesetFileWriter::write.
       if (_parsedChangeIds.contains(change.getElement()->getElementId()))
@@ -178,7 +184,7 @@ void OsmApiDbSqlChangesetFileWriter::_createChangeSet()
   }
 
   _changesetId = _db.getNextId(ApiDb::getChangesetsTableName());
-  LOG_DEBUG("Creating changeset: " << _changesetId);
+  LOG_DEBUG("Creating changeset with ID: " << _changesetId);
   _outputSql.write(
     QString("INSERT INTO %1 (id, user_id, created_at, closed_at) VALUES "
             "(%2, %3, %4, %4);\n")

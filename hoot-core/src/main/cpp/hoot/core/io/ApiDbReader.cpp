@@ -297,7 +297,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     LOG_VART(ElementId(ElementType::Way, wayId));
     wayIds.insert(QString::number(wayId));
   }
-  LOG_VARD(wayIds.size());
+  LOG_VART(wayIds.size());
 
   if (wayIds.size() > 0)
   {
@@ -305,16 +305,16 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     // of the requested bounds but are directly connected to a way that is being returned by the
     // query.
     QSet<QString> connectedWayIds;
-    LOG_VARD(_keepImmediatelyConnectedWaysOutsideBounds);
+    LOG_VART(_keepImmediatelyConnectedWaysOutsideBounds);
     if (_keepImmediatelyConnectedWaysOutsideBounds)
     {
       LOG_DEBUG("Retrieving way IDs immediately connected to the current ways...");
       connectedWayIds = _getDatabase()->selectConnectedWayIds(wayIds);
       LOG_VART(connectedWayIds);
-      LOG_VARD(connectedWayIds.size());
+      LOG_VART(connectedWayIds.size());
       wayIds.unite(connectedWayIds);
       LOG_VART(wayIds);
-      LOG_VARD(wayIds.size());
+      LOG_VART(wayIds.size());
     }
 
     LOG_DEBUG("Retrieving ways by way ID...");
@@ -322,7 +322,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
       _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
     const bool tagConnectedWays =
       ConfigOptions().getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWays();
-    LOG_VARD(tagConnectedWays);
+    LOG_VART(tagConnectedWays);
     while (wayItr->next())
     {
       WayPtr way = _resultToWay(*wayItr, *map);
@@ -348,10 +348,10 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     }
 
     // subtract nodeIds from additionalNodeIds, so no dupes get added
-    LOG_VARD(nodeIds.size());
-    LOG_VARD(additionalNodeIds.size());
+    LOG_VART(nodeIds.size());
+    LOG_VART(additionalNodeIds.size());
     additionalNodeIds = additionalNodeIds.subtract(nodeIds);
-    LOG_VARD(additionalNodeIds.size());
+    LOG_VART(additionalNodeIds.size());
 
     if (additionalNodeIds.size() > 0)
     {
@@ -407,7 +407,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     LOG_VART(ElementId(ElementType::Node, nodeId));
     nodeIds.insert(QString::number(nodeId));
   }
-  LOG_VARD(nodeIds.size());
+  LOG_VART(nodeIds.size());
 
   if (!_returnNodesOnly)
   {
@@ -418,8 +418,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
       _readWaysByNodeIds(
         map, nodeIds, wayIds, additionalWayNodeIds, boundedNodeCount, boundedWayCount);
       nodeIds.unite(additionalWayNodeIds);
-      LOG_VARD(nodeIds.size());
-      LOG_VARD(wayIds.size());
+      LOG_VART(nodeIds.size());
+      LOG_VART(wayIds.size());
 
       LOG_DEBUG("Retrieving relation IDs referenced by the selected ways and nodes...");
       QSet<QString> relationIds;
@@ -442,7 +442,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           relationIds.insert(QString::number(relationId));
         }
       }
-      LOG_VARD(relationIds.size());
+      LOG_VART(relationIds.size());
 
       //  Iterate all relations (and sub-relations) that are "within" the bounds
       QSet<QString> completedRelationIds;
@@ -533,10 +533,10 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           }
 
           //subtract nodeIds from additionalWayNodeIds, so no dupes get added
-          LOG_VARD(nodeIds.size());
-          LOG_VARD(additionalNodeIds.size());
+          LOG_VART(nodeIds.size());
+          LOG_VART(additionalNodeIds.size());
           additionalNodeIds = additionalNodeIds.subtract(nodeIds);
-          LOG_VARD(additionalNodeIds.size());
+          LOG_VART(additionalNodeIds.size());
 
           if (additionalNodeIds.size() > 0)
           {
@@ -564,9 +564,9 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   LOG_DEBUG(
     "Bounded query read " << (boundedNodeCount + boundedWayCount + boundedRelationCount) <<
     " total elements.");
-  LOG_VARD(boundedNodeCount);
-  LOG_VARD(boundedWayCount);
-  LOG_VARD(boundedRelationCount);
+  LOG_VART(boundedNodeCount);
+  LOG_VART(boundedWayCount);
+  LOG_VART(boundedRelationCount);
 
   // The default behavior of the db bounded read is to return the entirety of features found
   // within the bounds, even if sections of those features exist outside the bounds. Only run the
@@ -583,7 +583,6 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
     IoUtils::cropToBounds(map, _bounds);
   }
 
-  LOG_DEBUG("Current map:");
   LOG_VARD(map->getNodes().size());
   LOG_VARD(map->getWays().size());
   LOG_VARD(map->getRelations().size());
@@ -692,13 +691,13 @@ bool ApiDbReader::hasMoreElements()
     }
 
     _maxNodeId = _getDatabase()->maxId(ElementType::Node);
-    LOG_VARD(_maxNodeId);
+    LOG_VART(_maxNodeId);
     if (!_returnNodesOnly)
     {
       _maxWayId = _getDatabase()->maxId(ElementType::Way);
-      LOG_VARD(_maxWayId);
+      LOG_VART(_maxWayId);
       _maxRelationId = _getDatabase()->maxId(ElementType::Relation);
-      LOG_VARD(_maxRelationId);
+      LOG_VART(_maxRelationId);
     }
 
     LOG_DEBUG("Queries took " << Tgs::Time::getTime() - start << " seconds.");

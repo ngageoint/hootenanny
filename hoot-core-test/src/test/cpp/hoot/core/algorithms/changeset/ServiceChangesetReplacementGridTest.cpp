@@ -322,19 +322,12 @@ public:
 //    includeIds.append(24);
 //    uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
-      // currently broken: 32/64 at generating changeset
-//    uut.replace(
-//      DATA_TO_REPLACE_URL,
-//      _replacementDataUrl,
-//      UniformTaskGridGenerator(
-//        "-115.3528,36.0919,-114.9817,36.3447", 8,
-//        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-//        .generateTaskGrid());
+    // currently broken: 32/64 during changeset generation
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
       UniformTaskGridGenerator(
-        "-115.2600,36.0918,-115.1672,36.1550", 2,
+        "-115.3528,36.0919,-114.9817,36.3447", 8,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 

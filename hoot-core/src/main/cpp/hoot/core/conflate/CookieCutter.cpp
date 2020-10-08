@@ -57,11 +57,11 @@ _removeMissingElements(removeMissingElements)
 void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
 {
   LOG_VARD(cutterShapeOutlineMap->getNodes().size());
-  LOG_VARD(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(cutterShapeOutlineMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(
     cutterShapeOutlineMap, "cookie-cutter-cutter-shape-outline-map");
   LOG_VARD(doughMap->getNodes().size());
-  LOG_VARD(MapProjector::toWkt(doughMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(doughMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(doughMap, "cookie-cutter-dough-map");
 
   OGREnvelope env = CalculateMapBoundsVisitor::getBounds(cutterShapeOutlineMap);
@@ -105,7 +105,7 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
 
   OsmMapPtr cookieCutMap = doughMap;
   LOG_VARD(cookieCutMap->getNodes().size());
-  LOG_VARD(MapProjector::toWkt(cookieCutMap->getProjection()));
+  LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(cookieCutMap, "cookie-cutter-cookie-cut-map");
 }
 
