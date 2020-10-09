@@ -95,6 +95,10 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ConstRelationPtr relation = it->second;
+    if (!relation)
+    {
+      continue;
+    }
     const vector<RelationData::Entry>& members = relation->getMembers();
     for (size_t i = 0; i < members.size(); i++)
     {
@@ -124,6 +128,10 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
+    if (!w)
+    {
+      continue;
+    }
     const vector<long>& nodeIds = w->getNodeIds();
     LOG_VART(nodeIds);
     _usedNodeIds.insert(nodeIds.begin(), nodeIds.end());
@@ -148,6 +156,10 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const Node* n = it->second.get();
+    if (!n)
+    {
+      continue;
+    }
     LOG_VART(n->getElementId());
     LOG_VART(n->getTags().getNonDebugCount());
 

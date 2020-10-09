@@ -68,7 +68,7 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual void close() override {}
+  virtual void close() override;
 
   /**
    * @see ChangeSetProvider

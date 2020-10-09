@@ -5,8 +5,6 @@ source file 2:  test-files/cmd/glacial/serial/ServiceChangesetReplacementDifferi
 REF_CONVERT_OPS:  hoot::SetTagValueVisitor
 SEC_CONVERT_OPS:  hoot::SetTagValueVisitor
 replacement aoi:  11.361053,8.507705,11.363033,8.509146
-full replacement:  --full-replacement
-bounds interpretation: 
 geometry filters: 
 tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
 replacement filters: 
@@ -18,8 +16,6 @@ retainment filter options:
 source formats:  xml
 way snap tolerance:  5.0
 existing way node tolerance:  5.0
-enable conflation: 
-clean ref database beforehand:  true
 extra params: 
 
 Writing the reference dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementDifferingTypesTest/input1.osm to an osm api db (contains features to be replaced)...

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DuplicateNameRemover.h"
@@ -71,6 +71,10 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     const WayPtr& w = it->second;
+    if (!w)
+    {
+      continue;
+    }
     LOG_VART(w);
 
     // If we have a name that is not an alt name, let's record it here so we can preserve it

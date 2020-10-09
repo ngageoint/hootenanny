@@ -63,12 +63,12 @@ public:
 
   virtual void visit(const std::shared_ptr<Element>& e) override;
 
-  virtual QString getInitStatusMessage() const { return "Removing duplicate areas..."; }
+  virtual QString getInitStatusMessage() const override { return "Removing duplicate areas..."; }
 
-  virtual QString getCompletedStatusMessage() const
+  virtual QString getCompletedStatusMessage() const override
   { return "Removed " + QString::number(_numAffected) + " duplicate areas"; }
 
-  virtual QString getDescription() const { return "Removes duplicate areas"; }
+  virtual QString getDescription() const override { return "Removes duplicate areas"; }
 
   /**
    * @see FilteredByGeometryTypeCriteria

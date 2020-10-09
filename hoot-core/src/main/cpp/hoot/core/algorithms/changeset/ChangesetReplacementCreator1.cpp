@@ -135,6 +135,9 @@ _numChanges(0)
 void ChangesetReplacementCreator1::setChangesetOptions(
   const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl)
 {
+  LOG_VARD(printStats);
+  LOG_VARD(statsOutputFile);
+  LOG_VARD(osmApiDbUrl);
   _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
 }
 
@@ -393,6 +396,11 @@ void ChangesetReplacementCreator1::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
+  LOG_VARD(input1);
+  LOG_VARD(input2);
+  LOG_VARD(GeometryUtils::envelopeToConfigString(bounds));
+  LOG_VARD(output);
+
   QElapsedTimer timer;
   timer.start();
 
@@ -409,7 +417,6 @@ void ChangesetReplacementCreator1::create(
   // when I store the bounds or try to increase the precision of the bounds string, I'm getting a
   // lot of test output issues...needs to be looked into.
   _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
-  _secIdMappings.clear();
   _validateInputs();
   _setGlobalOpts();
   _printJobDescription();
@@ -634,7 +641,7 @@ void ChangesetReplacementCreator1::_processMaps(
     _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
   _filterFeatures(
     secMap, secFeatureFilter, geometryType, secFilterSettings,
-    "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
+    _changesetId + "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
 
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
@@ -715,8 +722,6 @@ void ChangesetReplacementCreator1::_processMaps(
   }
 
   // SNAP
-
-  // TODO: only snapping near the replacement bounds may help prevent some bad snaps in the output
 
   if (_currentChangeDerivationPassIsLinear)
   {
@@ -848,18 +853,22 @@ void ChangesetReplacementCreator1::_validateInputs()
     throw IllegalArgumentException(
       "Reader for " + _input1 + " must implement Boundable for replacement changeset derivation.");
     }
-  boundable = std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input2));
-  if (!boundable)
+  if (!_input2.isEmpty())
   {
-    throw IllegalArgumentException(
-      "Reader for " + _input2 + " must implement Boundable for replacement changeset derivation.");
+    boundable = std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input2));
+    if (!boundable)
+    {
+      throw IllegalArgumentException(
+        "Reader for " + _input2 + " must implement Boundable for replacement changeset derivation.");
+    }
   }
 
   // Fail for GeoJSON - GeoJSON coming from Overpass does not have way nodes, so their versions
   // are lost when new way nodes are added to existing ways. For that reason, we can't support it
   // (or at least not sure how to yet).
   OsmGeoJsonReader geoJsonReader;
-  if (geoJsonReader.isSupported(_input1) || geoJsonReader.isSupported(_input2))
+  if (geoJsonReader.isSupported(_input1) ||
+      (!_input2.isEmpty() && geoJsonReader.isSupported(_input2)))
   {
     throw IllegalArgumentException(
       "GeoJSON inputs are not supported by replacement changeset derivation.");
@@ -947,13 +956,16 @@ void ChangesetReplacementCreator1::_setGlobalOpts()
       QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
   }
 
+  // We run a custom set of cleaning ops for changeset replacement.
+  // TODO: This needs more testing before enabling.
+//  conf().set(
+//    ConfigOptions::getMapCleanerTransformsKey(),
+//    conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));
+
   // These don't change between scenarios (or at least we haven't needed to change them yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
   _boundsOpts.cookieCutKeepOnlyInsideBounds = false;
   _boundsOpts.changesetRefKeepOnlyInsideBounds = false;
-
-  // turn on for testing only
-  //conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
 }
 
 void ChangesetReplacementCreator1::_parseConfigOpts(
@@ -1334,11 +1346,19 @@ OsmMapPtr ChangesetReplacementCreator1::_loadRefMap(
 OsmMapPtr ChangesetReplacementCreator1::_loadSecMap(
   const GeometryTypeCriterion::GeometryType& geometryType)
 {
-  return
-    _loadInputMap(
-      "sec-" + GeometryTypeCriterion::typeToString(geometryType), _input2, false, Status::Unknown2,
-      _boundsOpts.loadSecKeepEntireCrossingBounds, _boundsOpts.loadSecKeepOnlyInsideBounds, false,
-      true, _input2Map);
+  if (!_input2.isEmpty())
+  {
+    return
+      _loadInputMap(
+        "sec-" + GeometryTypeCriterion::typeToString(geometryType), _input2, false, Status::Unknown2,
+        _boundsOpts.loadSecKeepEntireCrossingBounds, _boundsOpts.loadSecKeepOnlyInsideBounds, false,
+        true, _input2Map);
+  }
+  else
+  {
+    // return an empty map for the cut only workflow
+    return OsmMapPtr(new OsmMap());
+  }
 }
 
 void ChangesetReplacementCreator1::_removeMetadataTags(const OsmMapPtr& map)
@@ -1435,6 +1455,7 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
      hybrid bounds acts like strict for linear features and lenient for polygon features.
    */
 
+  QString mapName;
   // If the passed in dough map is empty, there's nothing to be cut out. So, just return the empty
   // ref map.
   if (doughMapInputSize == 0)
@@ -1498,7 +1519,12 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
           "the rectangular bounds area of the dough map to be the map after cutting: " <<
           doughMap->getName() << "...");
         OsmMapPtr cookieCutMap(new OsmMap(doughMap));
-        cookieCutMap->setName("cookie-cut-" + GeometryTypeCriterion::typeToString(geometryType));
+        mapName = "cookie-cut";
+        if (geometryType != GeometryTypeCriterion::Unknown)
+        {
+          mapName += "-" + GeometryTypeCriterion::typeToString(geometryType);
+        }
+        cookieCutMap->setName(mapName);
         MapCropper cropper(GeometryUtils::envelopeFromConfigString(_replacementBounds));
         cropper.setRemoveSuperflousFeatures(false);
         cropper.setKeepEntireFeaturesCrossingBounds(false);
@@ -1533,7 +1559,12 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
   LOG_VART(MapProjector::toWkt(cutterMap->getProjection()));
 
   OsmMapPtr cookieCutMap(new OsmMap(doughMap));
-  cookieCutMap->setName("cookie-cut-" + GeometryTypeCriterion::typeToString(geometryType));
+  mapName = "cookie-cut";
+  if (geometryType != GeometryTypeCriterion::Unknown)
+  {
+    mapName += "-" + GeometryTypeCriterion::typeToString(geometryType);
+  }
+  cookieCutMap->setName(mapName);
   LOG_VART(MapProjector::toWkt(cookieCutMap->getProjection()));
   LOG_DEBUG("Preparing to cookie cut: " << cookieCutMap->getName() << "...");
 
@@ -1626,10 +1657,15 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
   {
     if (e.getWhat().contains("Alpha Shape area is zero"))
     {
-      LOG_ERROR(
-        "No cut shape generated from secondary data when processing geometry type: " <<
-        GeometryTypeCriterion::typeToString(geometryType) << ". Is your secondary data empty " <<
-        "or have you filtered it to be empty? error: " << e.getWhat());
+      QString errorMsg = "No cut shape generated from secondary data";
+      if (geometryType != GeometryTypeCriterion::Unknown)
+      {
+        errorMsg +=
+          " when processing geometry type: " + GeometryTypeCriterion::typeToString(geometryType);
+      }
+      errorMsg +=
+        ". Is your secondary data empty or have you filtered it to be empty? error: " + e.getWhat();
+      LOG_ERROR(errorMsg);
     }
     throw;
   }
@@ -1962,6 +1998,18 @@ void ChangesetReplacementCreator1::_removeConflateReviews(OsmMapPtr& map)
 void ChangesetReplacementCreator1::_synchronizeIds(
   const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps)
 {
+  assert(mapsBeingReplaced.size() == replacementMaps.size());
+  for (int i = 0; i < mapsBeingReplaced.size(); i++)
+  {
+    OsmMapPtr mapBeingReplaced = mapsBeingReplaced.at(i);
+    OsmMapPtr replacementMap = replacementMaps.at(i);
+    _synchronizeIds(mapBeingReplaced, replacementMap);
+  }
+}
+
+void ChangesetReplacementCreator1::_synchronizeIds(
+  OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap)
+{
   // When replacing data, we always load the replacement data without its original IDs in case there
   // are overlapping IDs in the reference data. If you were only replacing unmodified data from one
   // source with updated data from another source with the same IDs (e.g. replacing newer OSM with
@@ -1976,26 +2024,21 @@ void ChangesetReplacementCreator1::_synchronizeIds(
 
   assert(mapsBeingReplaced.size() == replacementMaps.size());
   ChangesetReplacementElementIdSynchronizer idSync;
-  for (int i = 0; i < mapsBeingReplaced.size(); i++)
-  {
-    OsmMapPtr mapBeingReplaced = mapsBeingReplaced.at(i);
-    OsmMapPtr replacementMap = replacementMaps.at(i);
-    OsmMapWriterFactory::writeDebugMap(
-      mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() +
-      "-source-before-id-sync");
-    OsmMapWriterFactory::writeDebugMap(
-      replacementMap, _changesetId + "-" + replacementMap->getName() + "-target-before-id-sync");
+  OsmMapWriterFactory::writeDebugMap(
+    mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() +
+    "-source-before-id-sync");
+  OsmMapWriterFactory::writeDebugMap(
+    replacementMap, _changesetId + "-" + replacementMap->getName() + "-target-before-id-sync");
 
-    idSync.synchronize(mapBeingReplaced, replacementMap);
+  idSync.synchronize(mapBeingReplaced, replacementMap);
 
-    // get rid of straggling nodes
-    // TODO: should we run _cleanup here instead and move it from its earlier call?
-    SuperfluousNodeRemover orphanedNodeRemover;
-    orphanedNodeRemover.apply(replacementMap);
-    LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
-    OsmMapWriterFactory::writeDebugMap(
-      replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
-  }
+  // get rid of straggling nodes
+  // TODO: should we run _cleanup here instead and move it from its earlier call?
+  SuperfluousNodeRemover orphanedNodeRemover;
+  orphanedNodeRemover.apply(replacementMap);
+  LOG_DEBUG(orphanedNodeRemover.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(
+    replacementMap, _changesetId + "-" + replacementMap->getName() + "-after-id-sync");
 }
 
 }

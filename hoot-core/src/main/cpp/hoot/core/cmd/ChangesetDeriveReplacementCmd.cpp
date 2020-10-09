@@ -74,13 +74,14 @@ public:
   {
     // process optional params
 
-    bool fullReplacement = false;
+    // TODO: eventually this check can go away
     if (args.contains("--full-replacement"))
     {
-      fullReplacement = true;
+      LOG_WARN(
+        "All replacements are now done fully over the replacement bounds, so the " <<
+        "--full-replacement option need no longer be specified to " << getName());
       args.removeAll("--full-replacement");
     }
-    LOG_VARD(fullReplacement);
 
     QStringList geometryFilters;
     if (args.contains("--geometry-filters"))
@@ -148,22 +149,13 @@ public:
     }
     LOG_VARD(retainmentFilterOptions);
 
-    if (args.contains("--strict-bounds") && args.contains("--hybrid-bounds"))
-    {
-      throw IllegalArgumentException(
-        "Only one of '--strict-bounds' and '--hybrid-bounds' may be specified.");
-    }
-    ChangesetReplacementCreator::BoundsInterpretation boundsHandling =
-      ChangesetReplacementCreator::BoundsInterpretation::Lenient;
+    // TODO: eventually this check can go away
     if (args.contains("--strict-bounds"))
     {
-      boundsHandling = ChangesetReplacementCreator::BoundsInterpretation::Strict;
+      LOG_WARN(
+        "Bounds handling is now determined automatically by the replacement workflow selected, " <<
+        "so the --full-replacement option need no longer be specified to " << getName());
       args.removeAll("--strict-bounds");
-    }
-    else if (args.contains("--hybrid-bounds"))
-    {
-      boundsHandling = ChangesetReplacementCreator::BoundsInterpretation::Hybrid;
-      args.removeAll("--hybrid-bounds");
     }
 
     bool printStats = false;
@@ -176,69 +168,138 @@ public:
       args.removeAll("--disable-way-snapping");
     }
 
-    bool enableConflation = false;
+    // TODO: eventually this check can go away
     if (args.contains("--conflate"))
     {
-      enableConflation = true;
+      LOG_WARN("--conflate option is no longer supported by  " << getName() << ".");
       args.removeAll("--conflate");
     }
-    LOG_VARD(enableConflation);
     if (args.contains("--disable-conflation"))
     {
-      LOG_WARN("--disable-conflation no longer supported by " << getName());
+      LOG_WARN("The --disable-conflation option is no longer supported by " << getName() << ".");
       args.removeAll("--disable-conflation");
     }
 
+    // TODO: eventually this check can go away
     if (args.contains("--disable-cleaning"))
     {
-      LOG_WARN("--disable-cleaning no longer supported by " << getName());
+      LOG_WARN(
+        "Cleaning now done on an as-needed basis, so the --disable-cleaning option is no " <<
+        "longer supported by " << getName());
       args.removeAll("--disable-cleaning");
     }
 
+    // TODO: eventually this check can go away
     if (args.contains("--disable-oob-way-handling"))
     {
-      LOG_WARN("--disable-oob-way-handling no longer supported by " << getName());
+      LOG_WARN("The --disable-oob-way-handling option is no longer supported by " << getName());
       args.removeAll("--disable-oob-way-handling");
     }
 
-    QString boundsStr = "";
-    if (args.size() >= 3)
+    // command workflow identification and input param error checking
+
+    LOG_VARD(args);
+    bool cutOnly = false;
+    int input1Index = 0;
+    int input2Index = 1;
+    int boundsIndex = 2;
+    int outputIndex = 3;
+    int osmApiDbUrlIndex = 4;
+    LOG_VARD(args[2]);
+    if (!GeometryUtils::isEnvelopeConfigString(args[2].trimmed()))
     {
-      boundsStr = args[2].trimmed();
-      conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
-      BoundedCommand::runSimple(args);
+      input2Index = -1;
+      boundsIndex = 1;
+      outputIndex = 2;
+      osmApiDbUrlIndex = 3;
+      cutOnly = true;
+    }
+    LOG_VARD(cutOnly);
+    LOG_VARD(input1Index);
+    LOG_VARD(input2Index);
+    LOG_VARD(boundsIndex);
+    LOG_VARD(outputIndex);
+    LOG_VARD(osmApiDbUrlIndex);
+
+    // do this here to get the --write-bounds param removed from args before the param error
+    // checking and non-optional param parsing
+    const QString boundsStr = args[boundsIndex].trimmed();
+    conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
+    BoundedCommand::runSimple(args);
+
+    LOG_VARD(args);
+    if (!cutOnly)
+    {
+      if (args.size() != 4 && args.size() != 5)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw HootException(
+          QString("%1 with two input maps takes four or five parameters.").arg(getName()));
+      }
+    }
+    else
+    {
+      if (args.size() != 3 && args.size() != 4)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw HootException(
+          QString("%1 with one input map takes three or four parameters.").arg(getName()));
+      }
     }
 
-    // param error checking
-    checkParameterCount(args.size());
-
     // process non-optional params
-    const QString input1 = args[0].trimmed();
+
+    const QString input1 = args[input1Index].trimmed();
     LOG_VARD(input1);
-    const QString input2 = args[1].trimmed();
-    LOG_VARD(input2);
+    QString input2;
+    if (!cutOnly)
+    {
+      input2 = args[input2Index].trimmed();
+      LOG_VARD(input1);
+    }
     const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
     LOG_VARD(bounds);
-    const QString output = args[3].trimmed();
+    const QString output = args[outputIndex].trimmed();
     LOG_VARD(output);
-
     QString osmApiDbUrl;
-    if (output.endsWith(".osc.sql"))
+    LOG_VARD(output.toLower().endsWith(".osc.sql"));
+    if (output.toLower().endsWith(".osc.sql"))
     {
-      if (args.size() != 5)
+      if (!cutOnly && args.size() != 5)
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(
-          QString("%1 with SQL output takes five parameters.").arg(getName()));
+          QString("%1 with two map inputs and a SQL output takes five parameters.").arg(getName()));
       }
-      osmApiDbUrl = args[4].trimmed();
+      else if (cutOnly && args.size() != 4)
+      {
+        std::cout << getHelp() << std::endl << std::endl;
+        throw IllegalArgumentException(
+          QString("%1 with one map input and a SQL output takes four parameters.").arg(getName()));
+      }
+      osmApiDbUrl = args[osmApiDbUrlIndex].trimmed();
     }
+    LOG_VARD(osmApiDbUrl);
 
+    // generate the changeset
+
+    QString implementation = ConfigOptions().getChangesetReplacementImplementation();
+    if (cutOnly)
+    {
+      implementation = ConfigOptions().getChangesetReplacementCutOnlyImplementation();
+    }
+    LOG_VARD(implementation);
     std::shared_ptr<ChangesetReplacementCreator> changesetCreator(
-      Factory::getInstance().constructObject<ChangesetReplacementCreator>(
-        ConfigOptions().getChangesetReplacementImplementation()));
-    changesetCreator->setFullReplacement(fullReplacement);
-    changesetCreator->setBoundsInterpretation(boundsHandling);
+      Factory::getInstance().constructObject<ChangesetReplacementCreator>(implementation));
+    changesetCreator->setFullReplacement(true);
+    ChangesetReplacementCreator::BoundsInterpretation boundInterpretation =
+      ChangesetReplacementCreator::BoundsInterpretation::Lenient;
+    if (cutOnly)
+    {
+      boundInterpretation = ChangesetReplacementCreator::BoundsInterpretation::Strict;
+    }
+    LOG_VARD(boundInterpretation);
+    changesetCreator->setBoundsInterpretation(boundInterpretation);
     changesetCreator->setGeometryFilters(geometryFilters);
     // chain param must be set before the filters themselves
     changesetCreator->setChainReplacementFilters(chainReplacementFilters);
@@ -247,7 +308,7 @@ public:
     changesetCreator->setChainRetainmentFilters(chainRetainmentFilters);
     changesetCreator->setRetainmentFilters(retainmentFilters);
     changesetCreator->setRetainmentFilterOptions(retainmentFilterOptions);
-    changesetCreator->setConflationEnabled(enableConflation);
+    changesetCreator->setConflationEnabled(false);
     changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
     changesetCreator->create(input1, input2, bounds, output);
   }
@@ -277,15 +338,6 @@ public:
     }
     LOG_VARD(printStats);
     LOG_VARD(outputStatsFile);
-  }
-
-  void checkParameterCount(int count)
-  {
-    if (count != 4 && count != 5)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes four or five parameters.").arg(getName()));
-    }
   }
 };
 

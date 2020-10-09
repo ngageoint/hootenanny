@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIPOLYGONCREATOR_H
 #define MULTIPOLYGONCREATOR_H
@@ -42,21 +42,20 @@ namespace hoot
 {
 
 /**
- * A work in progress. Only basic functionality exists. See #2115 for details.
+ * A work in progress. Only basic functionality exists. See Redmine #2115 for details.
  *
  * This will happily try to convert any relation into a multipolygon regardless of tags. It is the
  * caller's job to determine if this is appropriate or not.
  *
  * A best effort is made to detect bad polygons and throw an appropriate error, but there are
- * guaranteed to be outliers that will not be caught by Hoot and you may receive an invalid
- * geometry as a result. If there are no outer members then a valid empty geometry will be
- * returned.
+ * guaranteed to be outliers that will not be caught. You may receive an invalid geometry as a
+ * result. If there are no outer members, then a valid empty geometry will be returned.
  *
- * Hoot's interpretation of some ambiguous situations.
- * 1. If three or more ways of a single type meet at a end/start point then it is an error.
- * 2. A hole can only be a hole in one outer ring. If the hole is inside multiple outer rings
- *    it will put placed in the smallest outer ring that contains the hole.
- * 3. If multiple outer ways overlap it is an error.
+ * Interpretation of some ambiguous situations:
+ * 1. If three or more ways of a single type meet at a end/start point, then it is an error.
+ * 2. A hole can only be a hole in one outer ring. If the hole is inside multiple outer rings,
+ *    it will placed in the smallest outer ring that contains the hole.
+ * 3. If multiple outer ways overlap, it is an error.
  *
  * See the OSM wiki [1] for a detailed description of what constitutes a valid multipolygon and
  * how to compose complex objects.
@@ -95,24 +94,25 @@ private:
 
   void _createRings(const QString &role, std::vector<geos::geom::LinearRing *> &rings) const;
 
-  void _createRingsFromPartials(const std::vector<ConstWayPtr>& partials, std::vector<geos::geom::LinearRing *> &rings)
-    const;
+  void _createRingsFromPartials(
+    const std::vector<ConstWayPtr>& partials, std::vector<geos::geom::LinearRing *> &rings) const;
 
-  /**
+  /*
    * Given a vector of unsorted partial ways, create a ring. If the partials do not create a
    * complete ring, log a warning and just connect the ends.
    */
-  void _createSingleRing(const std::vector<ConstWayPtr>& partials, std::vector<geos::geom::LinearRing *> &rings) const;
+  void _createSingleRing(const std::vector<ConstWayPtr>& partials,
+                         std::vector<geos::geom::LinearRing *> &rings) const;
 
-  /**
-   * Given a set of rings that are not either an inner or an outer, figure out what they are and add them
-   * to the appropriate ring set.
+  /*
+   * Given a set of rings that are not either an inner or an outer, figure out what they are and
+   * add them to the appropriate ring set.
    */
   void _classifyRings(std::vector<geos::geom::LinearRing *> &noRole,
                       std::vector<geos::geom::LinearRing *> &inners,
                       std::vector<geos::geom::LinearRing *> &outers) const;
 
-  /**
+  /*
    * Given two Linear Rings, determine the realtionship between the two.
    * Inner, Outer or "" for neither
    */
@@ -120,6 +120,9 @@ private:
 
   bool _isValidInner(geos::geom::LinearRing* innerRing) const;
 
+  /*
+   * Put the ways into the right order so they can just be added one after another into a ring.
+   */
   std::deque<ConstWayPtr> _orderWaysForRing(const std::vector<ConstWayPtr>& partials) const;
 
   geos::geom::LinearRing* _toLinearRing(const ConstWayPtr& w) const;

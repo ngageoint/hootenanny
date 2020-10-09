@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiLineStringVisitor.h"
 
@@ -46,8 +46,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementVisitor, MultiLineStringVisitor)
 
 MultiLineStringVisitor::MultiLineStringVisitor() :
-  _provider(),
-  _ls(0)
+_provider(),
+_ls(0)
 {
 }
 
@@ -65,6 +65,11 @@ MultiLineString* MultiLineStringVisitor::createMultiLineString()
 
 void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 {
+  if (!e)
+  {
+    return;
+  }
+
   if (e->getElementType() == ElementType::Way)
   {
     ConstWayPtr w = std::dynamic_pointer_cast<const Way>(e);
@@ -74,6 +79,11 @@ void MultiLineStringVisitor::visit(const ConstElementPtr& e)
 
 void MultiLineStringVisitor::visit(const ConstWayPtr& w)
 {
+  if (!w)
+  {
+    return;
+  }
+
   if (w->getNodeCount() >= 2)
   {
     if (_ls == 0)

@@ -34,6 +34,7 @@
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {
@@ -68,23 +69,20 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
 
   // Don't really understand why this needs to be done, but I think it may have to do with
   // decimal rounding issues when ElementHashVisitor writes node JSON. If we don't drop this
-  // sensitivity by a decimal place, we miss synchronizing some way nodes that a very close t
+  // sensitivity by a decimal place, we miss synchronizing some way nodes that are very close
   // together...in all cases checked so far, all are much less than a meter apart. As noted in
   // ChangesetReplacementCreator::_setGlobalOpts, a coord sensitivity of 5 is a max diff of 1.1m,
   // and going to 4 here takes us to a max of 11.11m. Very strange that it needs to be done when the
   // nodes in question aren't anywhere near that far apart. There is an additional distance check
   // explained in the loop below to prevent utter chaos caused by this change.
-  //const int defaultNodeSensitivity =
-    //conf().getInt(ConfigOptions::getNodeComparisonCoordinateSensitivityKey());
-  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 4);
 
   // Calc element hashes associated with element IDs.
-  const QMap<QString, ElementId> map1Hashes = _calcElementHashes(map1, 4);
-  LOG_VARD(map1Hashes.size());
-  QSet<QString> map1HashesSet = map1Hashes.keys().toSet();
-  const QMap<QString, ElementId> map2Hashes = _calcElementHashes(map2, 4);
-  LOG_VARD(map2Hashes.size());
-  QSet<QString> map2HashesSet = map2Hashes.keys().toSet();
+  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes, 4);
+  LOG_VARD(_map1HashesToElementIds.size());
+  QSet<QString> map1HashesSet = _map1HashesToElementIds.keys().toSet();
+  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes, 4);
+  LOG_VARD(_map2HashesToElementIds.size());
+  QSet<QString> map2HashesSet = _map2HashesToElementIds.keys().toSet();
 
   // Obtain the hashes for the elements that are identical between the two maps.
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
@@ -97,7 +95,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
     LOG_VART(identicalHash);
 
     // Get the element with matching hash from the ref map
-    ConstElementPtr map1IdenticalElement = map1->getElement(map1Hashes[identicalHash]);
+    ElementPtr map1IdenticalElement = map1->getElement(_map1HashesToElementIds[identicalHash]);
     _wayNodeCrit.setOsmMap(map1.get());
     // if its a way node, keep going
     if (map1IdenticalElement && _wayNodeCrit.isSatisfied(map1IdenticalElement))
@@ -105,7 +103,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
       LOG_VART(map1IdenticalElement->getElementId());
 
       // Get the element with matching has from the sec map
-      ElementPtr map2IdenticalElement = map2->getElement(map2Hashes[identicalHash]);
+      ElementPtr map2IdenticalElement = map2->getElement(_map2HashesToElementIds[identicalHash]);
       _wayNodeCrit.setOsmMap(map2.get());
       // if its a way node, keep going
       if (map2IdenticalElement && _wayNodeCrit.isSatisfied(map2IdenticalElement))
@@ -123,10 +121,10 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
         if (containingWayIds1.intersect(containingWayIds2).size() > 0 &&
             !map2->containsElement(map1IdenticalElement->getElementId()))
         {
-          // Due our lapsing of the coord comparison sensitivity, we'll actually do a distance check
-          // that only allows distances between nodes being synchronized no greater than what they
-          // would be if we hadn't lowered the sensitiviy. Moving this as far down in the loop as
-          // possible due to the geometry conversion expense.
+          // Due to our lapsing of the coord comparison sensitivity, we'll actually do a distance
+          // check that only allows distances between nodes being synchronized no greater than what
+          // they would be if we hadn't lowered the sensitiviy. Moving this as far down in the loop
+          // as possible due to the geometry conversion expense.
           const double distance =
             EuclideanDistanceExtractor().distance(
               *map1, *map2, map1IdenticalElement, map2IdenticalElement);
@@ -161,11 +159,9 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
       }
     }
   }
-  // restore the original sensitivity
-  //conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), defaultNodeSensitivity);
 
   LOG_DEBUG(
-    "Updated " << getNumTotalFeatureIdsSynchronized() <<
+    "Updated " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
     " nearly identical way nodes in second map.");
 }
 

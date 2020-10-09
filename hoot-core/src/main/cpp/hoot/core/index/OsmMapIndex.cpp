@@ -170,14 +170,17 @@ void OsmMapIndex::_buildWayTree() const
 
     std::shared_ptr<LineString> ls =
       ElementConverter(_map.shared_from_this()).convertToLineString(w);
-    const Envelope* e = ls->getEnvelopeInternal();
+    if (ls)
+    {
+      const Envelope* e = ls->getEnvelopeInternal();
 
-    Meters a = w->getCircularError();
-    b.setBounds(0, e->getMinX() - a, e->getMaxX() + a);
-    b.setBounds(1, e->getMinY() - a, e->getMaxY() + a);
+      Meters a = w->getCircularError();
+      b.setBounds(0, e->getMinX() - a, e->getMaxX() + a);
+      b.setBounds(1, e->getMinY() - a, e->getMaxY() + a);
 
-    boxes.push_back(b);
-    ids.push_back(_createTreeWid(w->getId()));
+      boxes.push_back(b);
+      ids.push_back(_createTreeWid(w->getId()));
+    }
 
     if (count % 1000 == 0)
     {

@@ -63,7 +63,8 @@ void OgrUtilities::loadDriverInfo()
   _drivers.push_back(OgrDriverInfo(".kml",      "LIBKML",         true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".kmz",      "LIBKML",         true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".dxf",      "DXF",            true,     true,   GDAL_OF_VECTOR));
-  //  Order is important here for the two FileGDB drivers, grab the first for read ops and the second for write
+  // Order is important here for the two FileGDB drivers, grab the first for read ops and the second
+  // for write
   _drivers.push_back(OgrDriverInfo(".gdb",      "OpenFileGDB",    true,     false,  GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".gdb",      "FileGDB",        true,     true,   GDAL_OF_VECTOR));
   _drivers.push_back(OgrDriverInfo(".gpkg",     "GPKG",           true,     true,   GDAL_OF_ALL));
@@ -127,8 +128,8 @@ OgrDriverInfo OgrUtilities::getDriverInfo(const QString& url, bool readonly)
 {
   for (vector<OgrDriverInfo>::iterator it = _drivers.begin(); it != _drivers.end(); ++it)
   {
-    if (((it->_is_ext && url.endsWith(it->_indicator)) || (!it->_is_ext && url.startsWith(it->_indicator))) &&
-        (readonly || it->_is_rw))
+    if (((it->_is_ext && url.endsWith(it->_indicator)) ||
+         (!it->_is_ext && url.startsWith(it->_indicator))) && (readonly || it->_is_rw))
     {
       return *it;
     }

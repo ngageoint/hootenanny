@@ -44,6 +44,10 @@ void RelationCircularRefRemover::apply(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr relation = it->second;
+    if (!relation)
+    {
+      continue;
+    }
     const long relationId = relation->getId();
     LOG_VART(relationId);
     const std::vector<RelationData::Entry>& members = relation->getMembers();

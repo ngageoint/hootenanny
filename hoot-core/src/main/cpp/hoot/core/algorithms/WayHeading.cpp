@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayHeading.h"
@@ -41,7 +41,6 @@ namespace hoot
 Radians WayHeading::calculateHeading(const WayLocation& loc, Meters delta)
 {
   Coordinate v = calculateVector(loc, delta);
-
   return atan2(v.y, v.x);
 }
 
@@ -86,7 +85,6 @@ Radians WayHeading::deltaMagnitude(Radians r1, Radians r2)
   {
     delta = fabs(delta - M_PI * 2);
   }
-
   return delta;
 }
 

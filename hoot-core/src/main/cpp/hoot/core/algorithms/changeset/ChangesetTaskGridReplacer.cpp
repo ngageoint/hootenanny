@@ -69,6 +69,10 @@ _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
 _averageChangesetDeriveTime(0.0),
 _tagQualityIssues(false),
+_orphanedNodes(0),
+_disconnectedWays(0),
+_emptyWays(0),
+_duplicateElementPairs(0),
 _calcDiffWithReplacement(false),
 _outputNonConflatable(false)
 {
@@ -137,6 +141,7 @@ void ChangesetTaskGridReplacer::replace(
     if (!_finalOutput.isEmpty())
     {
       _getUpdatedData(_finalOutput);
+      // TODO: move this outside of the replace method
       if (_calcDiffWithReplacement)
       {
         // Calculate a diff between the data we just replaced and the original replacement data to
@@ -285,7 +290,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   _printChangesetStats();
 
   LOG_STATUS(
-    "\tChangeset with " << StringUtils::formatLargeNumber(numChanges) << " changes applied in: " <<
+    "Changeset with " << StringUtils::formatLargeNumber(numChanges) << " changes applied in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
@@ -408,6 +413,7 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   emptyRelationRemover.apply(map);
   LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
 
+  // TODO: move this outside of this method and the replace method
   if (_outputNonConflatable)
   {
     // Output any features that hoot doesn't know how to conflate into their own file, for
@@ -417,6 +423,7 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
     _writeNonConflatable(map, nonConflatableOutput);
   }
 
+  // TODO: move this outside of this method and the replace method
   if (_tagQualityIssues)
   {
     // tag element with potential data quality issues caused by the replacement operations; If this
@@ -455,9 +462,9 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
       SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _taskGridBounds)));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
+  _orphanedNodes = tagVis->getNumFeaturesAffected();
   LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
-    " orphaned nodes in output.");
+    "Tagged " << StringUtils::formatLargeNumber(_orphanedNodes) << " orphaned nodes in output.");
 
   // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not so
   // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
@@ -471,21 +478,21 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
     new ChainCriterion(ElementCriterionPtr(new DisconnectedWayCriterion(map)), inBoundsCrit));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
+  _disconnectedWays = tagVis->getNumFeaturesAffected();
   LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
+    "Tagged " << StringUtils::formatLargeNumber(_disconnectedWays) <<
     " disconnected ways in output.");
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
   crit.reset(new ChainCriterion(ElementCriterionPtr(new EmptyWayCriterion()), inBoundsCrit));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
-    " empty ways in output.");
+  _emptyWays = tagVis->getNumFeaturesAffected();
+  LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
 
-  const int numDupes = DuplicateElementMarker::markDuplicates(map, 8);
+  _duplicateElementPairs = DuplicateElementMarker::markDuplicates(map, 8);
   LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(numDupes) <<
+    "Tagged " << StringUtils::formatLargeNumber(_duplicateElementPairs) <<
     " duplicate feature pairs in output.");
 }
 

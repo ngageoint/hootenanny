@@ -357,8 +357,8 @@ vector<RelationData::Entry> OsmApiDb::selectMembersForRelation(long relationId)
     throw HootException("Error selecting members for relation: " + QString::number(relationId) +
       " Error: " + _selectMembersForRelation->lastError().text());
   }
-  LOG_VARD(_selectMembersForRelation->executedQuery());
-  LOG_VARD(_selectMembersForRelation->numRowsAffected());
+  LOG_VART(_selectMembersForRelation->executedQuery());
+  LOG_VART(_selectMembersForRelation->numRowsAffected());
 
   while (_selectMembersForRelation->next())
   {

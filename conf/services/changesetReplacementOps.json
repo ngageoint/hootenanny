@@ -9,22 +9,6 @@
       "type": "bool",
       "id": "strictBounds",
       "label": "Use strict bounds handling"
-    },
-    {
-      "description": "All reference features within the specified bounds will be removed.",
-      "default": "false",
-      "input": "checkbox",
-      "type": "bool",
-      "id": "fullReplacement",
-      "label": "Full replacement"
-    },
-    {
-      "description": "Enables the conflation of data cut out during replacement and the replacement data.",
-      "default": "false",
-      "input": "checkbox",
-      "type": "bool",
-      "id": "conflate",
-      "label": "Conflate"
     }
   ]
 }

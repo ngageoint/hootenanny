@@ -11,6 +11,12 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["node", "area", "linestring"],
+        "isA": "man_made",
+        "name": "man_made=monitoring_station",
+        "objectType": "tag"
+    },
+    {
         "geometries": ["linestring"],
         "isA": "man_made",
         "name": "man_made=excavating_machine",

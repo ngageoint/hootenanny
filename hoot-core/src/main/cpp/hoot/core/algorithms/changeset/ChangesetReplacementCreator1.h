@@ -61,7 +61,11 @@ class ConstOsmMapConsumer;
  * potential manual repairing of those relations after the changeset is written, and after that the
  * tag can then be removed. This is also a configurable feature, which can be turned off.
  *
- * NOTE: This implementation has issues with relations having children of mixed geometry types.
+ * UPDATE 10/6/20: This implementation has an Achille's heel regarding relations having children of
+ * mixed geometry types, due to it processing features with different geometry types in separate
+ * loops. ChangesetReplacementCreator7 is now the preferred implementation to use when replacing
+ * data within a task grid. This is kept intact for the time being to support cut only operations
+ * and eventually will be refactored.
  *
  * @todo implement progress
  * @todo break this up into separate classes by function:
@@ -223,9 +227,6 @@ protected:
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _geometryTypeFilters;
   bool _geometryFiltersSpecified;
 
-  // TODO
-  QMap<QString, std::shared_ptr<ElementIdRemapper>> _secIdMappings;
-
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
 
@@ -263,7 +264,7 @@ protected:
   void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
 
   /*
-   * TODO
+   * Conflates data within the input map
    */
   void _conflate(OsmMapPtr& map);
 
@@ -273,10 +274,8 @@ protected:
    */
   void _synchronizeIds(
     const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
+  void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap);
 
-  /*
-   * TODO
-   */
   OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
 
   void _intraDedupeMap(OsmMapPtr& map);
@@ -311,7 +310,8 @@ protected:
     OsmMapPtr& cachedMap);
 
   /*
-   * TODO
+   * Filters features down to just those that should be replaced in the ref dataset or used to
+   * replace from the sec dataset.
    */
   virtual void _filterFeatures(
     OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
@@ -359,7 +359,7 @@ protected:
                              const GeometryTypeCriterion::GeometryType& geometryType);
 
   /*
-   * TODO
+   * Removes all reviews from the map
    */
   void _removeConflateReviews(OsmMapPtr& map);
 
@@ -377,7 +377,14 @@ protected:
     const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName);
 
   /*
-   * TODO
+   * Snaps unnconnected ways with a map to each other
+   *
+   * @param map the map to snap ways within
+   * @param snapWayStatuses the statuses the ways being snapped must have
+   * @param snapToWayStatuses the statuses the ways being snapped to must have
+   * @param typeCriterionClassName optional filter criteria that snapped/snapped to ways must have
+   * @param markSnappedWays if true, snapped ways are marked with a custom metadata tag
+   * @param debugFileName name prefix for any debug map files generated during snapping
    */
   void _snapUnconnectedWays(
     OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
@@ -396,12 +403,14 @@ protected:
   void _excludeFeaturesFromChangesetDeletion(OsmMapPtr& map);
 
   /*
-   * TODO
+   * Final data cleanup after the changeset replacement maps have been generated to fix any errors
+   * introduced.
    */
   virtual void _cleanup(OsmMapPtr& map);
 
   /*
-   * TODO
+   * Runs the default hoot cleaning on the data. This helps solve a lot of problems with output, but
+   * its likely a subset of the cleaning ops could be run instead to be more efficient.
    */
   virtual void _clean(OsmMapPtr& map);
 };

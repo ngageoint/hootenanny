@@ -34,6 +34,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
@@ -52,6 +53,9 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
  * cells. By removing the processes of input data retrieval and changeset application via API from
  * the test workflow, bugs can more easily be narrowed down to just those caused by
  * ChangesetReplacementGenerator (most of the time).
+ *
+ * Its worth noting that both the orphaned node and duplicate elements counts may be a little
+ * dubious at this point, but at least they give us a baseline until their accuracy can be improved.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
@@ -60,8 +64,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(orphanedNodes1Test);
   CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(droppedNodes1Test);
-  // TODO: fixing this as part of 4226
-  //CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -83,7 +86,7 @@ public:
 
   virtual void setUp()
   {
-    HootTestFixture::setUp();
+    HootTestFixture::setUp(); // Be sure the parent cleans out the config before each test.
     _subTaskTimer.start();
     _initConfig();
   }
@@ -92,7 +95,6 @@ public:
   {
     _cleanupDataToReplace();
     _cleanupReplacementData();
-    //TestUtils::resetEnvironment();
   }
 
   void orphanedNodes1Test()
@@ -115,7 +117,7 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
     uut.replace(
@@ -124,13 +126,17 @@ public:
       BoundsFileTaskGridGenerator(
         QStringList(_inputPath + "/orphanedNodes1Test-task-grid.osm")).generateTaskGrid());
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(28, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
   void orphanedNodes2Test()
   {
     // github 4216; similar to orphanedNodes1Test - There should be no orphaned nodes in the
-    // output. You can check for orphaned node counts with uut.setTagQualityIssues(true).
+    // output.
 
     _testName = "orphanedNodes2Test";
     _prepInput(
@@ -144,8 +150,9 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
 
     // to suppress a SpatialIndexer warning that should be looked into at some point
@@ -161,6 +168,10 @@ public:
 
     Log::getInstance().setLevel(logLevel);
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(5, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -182,8 +193,9 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -192,12 +204,22 @@ public:
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
   void droppedPointPolyRelationMembers1Test()
   {
-    // part of github 4228 - TODO: add description
+    // part of github 4228 - The POI, Desert Shores, belongs in a relation with a landuse poly.
+    // Neither should be dropped from the output due to being in a relation with members of mixed
+    // geometry types.
+
+    // This is needed to suppress some ElementConverter warnings messages that should eventually be
+    // looked into.
+    DisableLog dl;
 
     _testName = "droppedPointPolyRelationMembers1Test";
     _prepInput(
@@ -212,8 +234,9 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -222,6 +245,10 @@ public:
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -229,7 +256,7 @@ public:
 
   void github4216UniformTest()
   {
-    // reproduces orphaned nodes; larger AOI version of orphanedNodes2Test
+    // larger AOI version of orphanedNodes2Test; good intermediately sized test dataset
 
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -247,7 +274,7 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false); // TOOD: change back to true
+    uut.setCalcDiffWithReplacement(true);
     uut.setOutputNonConflatable(true);
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -256,18 +283,20 @@ public:
         "-115.1208,36.1550,-115.0280,36.2182", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
+
+    // TODO: after separating quality issue tagging from replacement, call these directly after
+    // the replacement and before the diff calc
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(39, uut.getNumDuplicateElementPairsInOutput());
   }
 
   void northVegasLargeUniformTest()
   {
-    // lenient
-
-    // whole northern half of city, 64 changesets, ~32.5M changes, avg derivation: 44s,
-    // total time: ~1h2m, ~524k changes/min; 70 orphaned nodes; diff between replacement: ~11.5k
-
-    // whole northern half of city, 64 changesets, ~33.2M changes, avg derivation: 51s,
-    // total time: ~1h10m, ~524k changes/min; 624 orphaned nodes; ~12.2k duplicate feature pairs;
-    // diff between replacement: ~11.5k
+    // whole northern half of city - 64 changesets, ~33.2M changes, avg derivation: 51s,
+    // total time: ~1h10m, ~524k changes/min, 624 orphaned nodes; ? disconnected ways, ? empty ways,
+    // ~12.2k duplicate feature pairs, diff between replacement: ~11.5k
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -280,15 +309,20 @@ public:
       "");
 
     ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(2);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(true);
+    uut.setOutputNonConflatable(true);
 //    QList<int> includeIds;
-//    includeIds.append(26);
-    //uut.setTaskCellIncludeIds(includeIds);
+//    includeIds.append(21);
+//    includeIds.append(22);
+//    includeIds.append(23);
+//    includeIds.append(24);
+//    uut.setTaskCellIncludeIds(includeIds);
+    //uut.setKillAfterNumChangesetDerivations(2);
+    // currently broken: 32/64 during changeset generation
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -296,6 +330,11 @@ public:
         "-115.3528,36.0919,-114.9817,36.3447", 8,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
+
+/*    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());*/
   }
 
 private:
@@ -338,7 +377,7 @@ private:
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
 //    conf().set(
 //      ConfigOptions::getChangesetReplacementImplementationKey(),
-//      "hoot::ChangesetReplacementCreator1");
+//      "hoot::ChangesetReplacementCreator7");
 //    conf().set(
 //      ConfigOptions::getLogClassFilterKey(),
 //      "ElementDeduplicator");

@@ -145,7 +145,7 @@ void ChangesetReplacementCreator2::_processMaps(
     _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
   _filterFeatures(
     secMap, secFeatureFilter, geometryType, secFilterSettings,
-    "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
+    _changesetId + "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
 
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a

@@ -1,18 +1,14 @@
 [[changeset-derive-replacement]]
 == changeset-derive-replacement
 
-TODO: add pics for: workflow, full vs overlapping only replacement, bounds handling, and filtering
-
 === Description
 
 The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two OSM datasets within a 
 specified bounds, where the data from the second specified input dataset (secondary layer) replaces data in the first specified dataset 
 (reference layer). 
 
-The command can be configured to completely replace all reference data within a specified bounds or to only replace reference data in areas 
-where the reference and secondary data overlap, so as to fill in gaps in the reference data. Additional filtering may be applied to the 
-secondary input to control which types of features from it are used for replacement. Likewise, additional filtering may be applied to the 
-reference input to prevent certain types of features from being replaced.
+Additional filtering may be applied to the secondary input to control which types of features from it are used for replacement. Likewise, 
+additional filtering may be applied to the reference input to prevent certain types of features from being replaced.
  
 The feature replacement algorithm used by this command allows for avoiding unnecessary clipping of features when such modification are 
 undesirable and also stitching up seams in the data when features must be clipped. The output changeset file can be applied directly to an 
@@ -25,20 +21,13 @@ IDs in the secondary data are not retained and those elements treated as complet
 * +input1+                       - Map input with features to replace; may be any supported input format that also supports bounded reading 
                                    (e.g. OSM file). See the "Input Data and "Bounds Handling" sections for more detail.
 * +input2+                       - Map input with the features to be used for replacement; may be any supported input format that also supports 
-                                   bounded reading (e.g. OSM file). See the "Input Data and "Bounds Handling" sections for more detail.
+                                   bounded reading (e.g. OSM file); leave empty to cut data out of input1 while adding no replacement data. 
+                                   See the "Input Data and "Bounds Handling" sections for more detail.
 * +bounds+                       - Boundary over which to do the feature replacement of the form: minx,miny,maxx,maxy; 
                                    e.g. "-71.4698,42.4866,-71.4657,42.4902" See the ""Bounds Handling" section for more detail.
 * +output+                       - Changeset output location; must be a changeset .osc or .osc.sql file.
 * +osmApiDatabaseUrl+            - Target OSM API database where the derived changeset is to be applied, used to maintain element ID continuity. 
                                    Required only if the changeset output format is .osc.sql. 
-* +--full-replacement+           - Determines how much of the reference data is replaced. With this option specified, all reference features are 
-                                   replaced. With this option omitted, only reference features that overlap with secondary features are 
-                                   replaced. This option is incompatible with the +--retainment-filters+ option. See the 
-                                   "Full vs Overlapping Only Replacement" section for more detail.
-* +--strict-bounds+              - Determines how strict the interpretation of the specified bounds is during feature replacement. Precludes 
-                                   use of +--hybrid-bounds+. With this option specified, no features overlapping the specified bounds will be 
-                                   completely replaced, but they may be modified. With this option omitted, features overlapping the bounds 
-                                   may be completely replaced. See the  "Bounds Handling" section for more detail.
 * +--geometry-filters+           - Optional criteria used to control the geometry type of the features that are replaced. When this option is
                                    omitted, features of all geometry types are replaced by features of a like geometry type. See the 
                                    "Geometry Filtering" section for more detail.
@@ -49,14 +38,11 @@ IDs in the secondary data are not retained and those elements treated as complet
 * +--replacement-filter-options+ - Optional configuration options for the filters specified in +--replacement-filters+. See the 
                                    "Replacement Filtering" section for more detail.
 * +--retainment-filters+         - Optional filtering criteria beyond what is specified in +--geometry-filters+ for determining which features 
-                                   are exempt from replacement. This option is incompatible with the +--full-replacement+ option. See the 
-                                   "Retainment Filtering" section for more detail.
+                                   are exempt from replacement. See the "Retainment Filtering" section for more detail.
 * +--chain-retainment-filters+   - Determines how the criteria specified in +--retainment-filters+ are logically applied. See the 
                                    "Retainment Filtering" section for more detail.
 * +--retainment-filter-options+  - Optional configuration options for the filters specified in +--retainment-filters+. See the 
                                    "Retainment Filtering" section for more detail.
-* +--conflate+                   - Enables the conflation of new secondary features with unremoved reference features near the edge of the 
-                                   replacement boundary. See the "Conflation" section for more detail.
 * +--stats+                      - Displays changeset statistics and may be optionally followed by an output JSON file name to write the 
                                    statistics to.
 * +--write-bounds+               - If the +convert.bounding.box+ configuration option is specified, outputs a file containing the specified 
@@ -65,7 +51,7 @@ IDs in the secondary data are not retained and those elements treated as complet
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--full-replacement] [--strict-bounds | --hybrid-bounds] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--conflate] [--stats filename] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--stats filename] [--write-bounds]
 --------------------------------------
 
 === Examples
@@ -84,7 +70,6 @@ The high level workflow for the command looks like the following:
 * Cut data out of the reference map for each feature geometry type being replaced. If performing full replacement, the shape cut out covers the 
   entire specified bounds. If performing overlapping only replacement, the shape cut out is the shape of the secondary data used for replacement.
 * Combine the cut out reference data back with the replacement data from the secondary map
-* Conflate the reference and secondary data (optional)
 * Snap replacement linear features that are disconnected at the specified bounds seam back to the reference data
 * Derive a difference changeset between the new map with replacement data added and the original reference map with removed data
 
@@ -103,34 +88,12 @@ so if they are already present in the reference file input data.
 
 GeoJSON output from the Overpass API is not supported as an input to this command, since it does not contain way nodes.
 
-=== Full vs Overlapping Only Replacement
-
-If the +--full-replacement+ option is omitted, reference features inside the specified bounds will only be replaced in the areas where they
-intersect with secondary features. If the +--full-replacement+ option is specified, all reference features within the specified bounds will be 
-removed.
-
-+--full-replacement+ is incompatible with the +--retainment-filters+ option, as +--full-replacement+ being specified will always result in all
-features in the reference layer being replaced.
-
-Full replacement works well with points and polygons (e.g. POIs and buildings) when you absolutely do not want any of the original reference 
-data left in an AOI. If there are large gaps across the AOI between the reference and secondary data, you may want to omit +--full-replacement+ 
-to do an overlapping only replacement, thus enabling continuity of the data across the AOI but also risking duplication of features if they
-cannot be conflated later on. Full replacement may not work well with linear features (i.e. roads) under certain circumstances when combined 
-with +--strict-bounds+ and/or conflation is enabled, as the output may end up leaving large enough gaps between the original and replacement 
-data that the two cannot easily be joined back together with way snapping.
-
 === Bounds Handling
 
-With the +--strict-bounds+ option specified:
+The handling of the specified replacement bounds is done in a lenient fashion. This makes replacement of gridded task cells possible without
+corrupting reference data. The behavior affects the different feature geometry types thusly:
 
-* Only point and polygon features completely inside the specified bounds are replaced. Polygon features are never split.
-* Only sections of linear features within the specified bounds are modified, and they may be cut where they cross the bounds and optionally 
-  joined back up with reference data via way snapping (see "Snap Unconnected Ways" section in the User Documentation).
-
-With the +--strict-bounds+ option omitted:
-
-* Point features: N/A as boundary relationships are only handled in a strict fashion. If +--strict-bounds+ is specified it will be ignored for
-point features.
+* Point features: N/A as boundary relationships are only handled in a strict fashion.
 * Linear features either inside or overlapping the specified bounds are completely replaced.
 * Polygon features either inside or overlapping the specified bounds are completely replaced. Polygon features are never split but may be 
   conflated at the specified boundary if conflation is enabled.
@@ -138,14 +101,13 @@ point features.
 ==== Out of Bounds Connected Ways
 
 When performing replacement, a method is required to protect the reference linear features that fall outside of the replacement bounds from
-deletion in the output changeset. This is only necessary when the +--strict-bounds+ option is omitted. The method to protect the ways is to 
-tag them with the tag, hoot:change:exclude:delete=yes. This can either be done automatically by Hootenanny as part of this command's execution
-or can be done before the call to this command. 
+deletion in the output changeset. The method to protect the ways is to tag them with the tag, hoot:change:exclude:delete=yes. This can either 
+be done automatically by Hootenanny as part of this command's execution or can be done before the call to this command. 
 
-With the +--strict-bounds+ option omitted, Hootenanny will automatically add the +hoot:change:exclude:delete=yes+ tag to such reference ways 
-for XML, JSON, OSM API database, and Hootenanny API database inputs only. To do so the reference input must be sufficiently larger than the 
-replacement bounds. If this option is specified and the +--strict-bounds+ option is omitted, Hootenanny will not automatically tag such ways, 
-and the caller of this command is responsible for tagging such reference ways with the hoot:change:exclude:delete=yes+ tag. 
+Hootenanny will automatically add the +hoot:change:exclude:delete=yes+ tag to such reference ways for XML, JSON, OSM API database, and 
+Hootenanny API database inputs only. To do so the reference input must be sufficiently larger than the replacement bounds. If this option is 
+specified, Hootenanny will not automatically tag such ways, and the caller of this command is responsible for tagging such reference ways with 
+the hoot:change:exclude:delete=yes+ tag. 
 
 === Filtering
 
@@ -197,25 +159,11 @@ https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExample
 chaining behaves. Configuration options may also be passed in to retainment filtering, using +--replacement-filter-options+, in a 
 similar fashion to how they are passed in during replacement filtering.
 
-The +--retainment-filters+ option is incompatible with the +--full-replacement+ option, as +--full-replacement+ being specified will always 
-cause all features in the reference layer to be replaced, thus overriding any specified filtering.
-
-=== Conflation
-
-Conflation is optional and can be used to combine overlapping data between the two inputs when the +--full-replacement+ option is omitted or 
-to clean up features at the specified bounds seam where the secondary data replaces the references data when the +--full-replacement+ option 
-is specified. Conflation generally is not needed during replacement but has proven to be most useful when using the strict replacement bounds 
-interpretation. To enable conflation add the +--conflate+ option. 
-
-Both reference and secondary map inputs are processed separately for each geometry type they contain (point/line/polygon), therefore cross 
-geometry conflation algorithms, such as POI to Polygon conflation, will have no effect on the conflated output. Cross geometry conflation 
-algorithms must be run on the map data outside of the usage of this command. 
-
 === Unconnected Way Snapping
 
-Unconnected way snapping is used to repair cut ways at the replacement boundary seams when the +--full-replacement+ option is enabled. The
-input data must be of a slightly larger area than the replacement AOI in order for there to be any ways to snap back to. This is primarily 
-useful with roads but can be made to work with any linear data.
+Unconnected way snapping is used to repair cut ways at the replacement boundary seams . The input data must be of a slightly larger area 
+than the replacement AOI in order for there to be any ways to snap back to. This is primarily useful with roads but can be made to work with 
+any linear data.
 
 Alternatively, marking snappable ways as needing review instead of snapping them can be performed to provide more control over the changeset 
 output. See the "Snap Unconnected Ways" section of the User Documentation for more detail.

@@ -57,8 +57,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   {
     return
-      "\tRemoved " + StringUtils::formatLargeNumber(_numAffected) + " invalid relations / " +
-      StringUtils::formatLargeNumber(_map->getRelationCount()) + " total relations."; }
+      "Removed " + StringUtils::formatLargeNumber(_numAffected) + " invalid relations / " +
+      StringUtils::formatLargeNumber(_map->getRelationCount()) + " total relations.";
+  }
 
   virtual QString getDescription() const
   { return "Removes invalid multiline string relation members"; }
