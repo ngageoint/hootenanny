@@ -52,7 +52,7 @@ _requireAreaForPolygonConversion(true)
 void RemoveEmptyAreasVisitor::setConfiguration(const Settings& conf)
 {
   _requireAreaForPolygonConversion = ConfigOptions(conf).getConvertRequireAreaForPolygon();
-  LOG_VART(_requireAreaForPolygonConversion);
+  LOG_VARD(_requireAreaForPolygonConversion);
 }
 
 void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
@@ -63,7 +63,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
   }
 
   LOG_VART(e->getElementId());
-  //LOG_VART(e);
+  //LOG_VARD(e);
 
   if (!_ec.get())
   {
@@ -105,6 +105,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
             if (memberWay)
             {
               std::shared_ptr<Geometry> wayGeom = _ec->convertToGeometry(memberWay);
+              LOG_VART(wayGeom->toString());
               if (wayGeom && wayGeom->getArea() > 0.0)
               {
                 LOG_TRACE(memberWay->getElementId() << " has positive area.");

@@ -105,7 +105,6 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
 std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
   const std::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
 {
-  // TODO: change back to trace
   LOG_VART(e->getElementId());
   switch (e->getElementType().getEnum())
   {
