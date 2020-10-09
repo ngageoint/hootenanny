@@ -590,13 +590,6 @@ public:
    */
   size_t size(ElementType::Type elementType, ChangesetType changesetType);
   /**
-   * @brief size Total number of ElementType::Type elements (node/way/relation) of all changeset types within
-   *  this subset
-   * @param elementType Describes the type (node/way/relation) to count
-   * @return count based on the type
-   */
-  size_t size(ElementType::Type elementType);
-  /**
    * @brief size Total number of elements in the subset
    * @return total count
    */

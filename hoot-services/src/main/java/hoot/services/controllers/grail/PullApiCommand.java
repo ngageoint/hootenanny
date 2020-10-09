@@ -98,17 +98,6 @@ public class PullApiCommand implements InternalCommand {
         String url = "";
         try {
             BoundingBox boundingBox = new BoundingBox(params.getBounds());
-            // buffer the reference data bounding box to include neighboring data that may be snapped to
-            // Disable this for now as pulling a buffered extent does not guarantee that connected ways will be present in the output
-            // boundingBox.adjust(Double.parseDouble(CHANGESET_DERIVE_BUFFER));
-
-            double bboxArea = boundingBox.getArea();
-
-            double maxBboxArea = params.getMaxBBoxSize();
-
-            if (bboxArea > maxBboxArea) {
-                throw new IllegalArgumentException("The bounding box area (" + bboxArea + ") is too large. It must be less than " + maxBboxArea + " degrees");
-            }
 
             InputStream responseStream = null;
             // Checks to see the set pull url is for the private overpass url
@@ -126,6 +115,14 @@ public class PullApiCommand implements InternalCommand {
                     }
                 }
             } else {
+                double bboxArea = boundingBox.getArea();
+                double maxBboxArea = params.getMaxBBoxSize();
+
+                if (bboxArea > maxBboxArea) {
+                    String errorMsg = "The bounding box area (" + bboxArea + ") is too large for OSM API. It must be less than " + maxBboxArea + " degrees";
+                    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(errorMsg).build());
+                }
+
                 url = replaceSensitiveData(params.getPullUrl()) + "?bbox=" + boundingBox.toServicesString();
             }
 

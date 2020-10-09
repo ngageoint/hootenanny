@@ -859,9 +859,6 @@ bool XmlChangeset::addRelations(const ChangesetInfoPtr& changeset, ChangesetType
     //  Add relations up until the max changeset
     if (changeset->size() < (size_t)_maxPushSize)
       added |= addRelation(changeset, type, dynamic_cast<ChangesetRelation*>(it->second.get()));
-    //  Don't allow too many relations
-    if (changeset->size(ElementType::Relation) >= 2)
-      return added;
   }
   //  Return true if something was added
   return added;
@@ -2470,15 +2467,6 @@ ChangesetInfo::iterator ChangesetInfo::end(ElementType::Type element_type, Chang
 size_t ChangesetInfo::size(ElementType::Type elementType, ChangesetType changesetType)
 {
   return _changeset[elementType][changesetType].size();
-}
-
-size_t ChangesetInfo::size(ElementType::Type elementType)
-{
-  size_t s = 0;
-  //  Sum up all counts for each changeset type
-  for (int j = 0; j < ChangesetType::TypeMax; ++j)
-    s += _changeset[elementType][j].size();
-  return s;
 }
 
 size_t ChangesetInfo::size()
