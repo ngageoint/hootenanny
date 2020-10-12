@@ -58,7 +58,6 @@
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
-#include <hoot/core/elements/ElementDeduplicator.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/elements/MapUtils.h>
 

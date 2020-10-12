@@ -45,9 +45,6 @@ _coordinateComparisonSensitivity(ConfigOptions().getNodeComparisonCoordinateSens
 
 void DuplicateElementMarker::apply(OsmMapPtr& map)
 {
-  // TODO: This needs to make sure way nodes don't belong to ways of different types and get marked
-  // as dupes, like ElementIdSynchronizer does.
-
   _numAffected = 0;
 
   QMap<QString, ElementId> hashes;

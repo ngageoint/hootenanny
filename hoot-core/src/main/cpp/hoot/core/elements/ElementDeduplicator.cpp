@@ -33,6 +33,10 @@
 #include <hoot/core/visitors/ElementHashVisitor.h>
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 
 namespace hoot
 {
@@ -240,6 +244,119 @@ void ElementDeduplicator::calculateDuplicateElements(
   LOG_VARD(hashes.size());
   duplicates = hashVis.getDuplicates();
   LOG_VARD(duplicates.size());
+  // Here, we're verifying that two way nodes don't belong to ways of very dissimilar types
+  // before declaring them duplicates.
+  duplicates = _filterOutNonDupeWayNodes(duplicates, map);
+  LOG_VARD(duplicates.size());
+}
+
+QSet<std::pair<ElementId, ElementId>> ElementDeduplicator::_filterOutNonDupeWayNodes(
+  const QSet<std::pair<ElementId, ElementId>>& dupes, OsmMapPtr map)
+{
+  QSet<std::pair<ElementId, ElementId>> filteredDupes;
+  for (QSet<std::pair<ElementId, ElementId>>::const_iterator dupesItr = dupes.begin();
+       dupesItr != dupes.end(); ++dupesItr)
+  {
+    std::pair<ElementId, ElementId> dupePair = *dupesItr;
+    ElementPtr element1 = map->getElement(dupePair.first);
+    ElementPtr element2 = map->getElement(dupePair.second);
+    if (element1 && element2 && !_areWayNodesInWaysOfMismatchedType(element1, element2, map))
+    {
+      filteredDupes.insert(dupePair);
+    }
+    else if (element1 && element2)
+    {
+      LOG_TRACE(
+        element1->getElementId() << " and " <<
+        element2->getElementId() <<
+        " are both way nodes that are in ways without matching types. Not marking as duplicates...");
+    }
+    else
+    {
+      LOG_TRACE(
+        "Either " << dupePair.first << " or " << dupePair.second <<
+        " not found in map. Not marking as duplicates...");
+    }
+  }
+  return filteredDupes;
+}
+
+bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
+  ElementPtr element1, ElementPtr element2, OsmMapPtr map)
+{
+  LOG_VART(element1->getElementId());
+  LOG_VART(element2->getElementId());
+
+  WayNodeCriterion wayNodeCrit;
+  wayNodeCrit.setOsmMap(map.get());
+  LOG_VART(wayNodeCrit.isSatisfied(element1));
+  const bool element1IdWayNode = wayNodeCrit.isSatisfied(element1);
+  LOG_VART(wayNodeCrit.isSatisfied(element2));
+  const bool element2IdWayNode = wayNodeCrit.isSatisfied(element2);
+  // If they are both way nodes,
+  if (!element1IdWayNode ||!element2IdWayNode)
+  {
+    return false;
+  }
+
+  // get the ways that contain each.
+  const std::vector<ConstWayPtr> containingWays1 =
+    WayUtils::getContainingWaysByNodeId(element1->getId(), map);
+  LOG_VART(containingWays1.size());
+  const std::vector<ConstWayPtr> containingWays2 =
+    WayUtils::getContainingWaysByNodeId(element2->getId(), map);
+  LOG_VART(containingWays2.size())
+
+  // See if any of the ways between the two have a matching type.
+  OsmSchema& schema = OsmSchema::getInstance();
+  TagCriterion adminBoundsCrit("boundary", "administrative");
+  for (std::vector<ConstWayPtr>::const_iterator containingWays1Itr = containingWays1.begin();
+       containingWays1Itr != containingWays1.end(); ++containingWays1Itr)
+  {
+    ConstWayPtr way1 = *containingWays1Itr;
+    if (way1)
+    {
+      LOG_VART(way1->getElementId());
+
+      // If either of our containing ways is a administrative boundary, we're going to bail on the
+      // type comparison, since many different types of ways could be part of an admin boundary.
+      // This may not end up being the best way to deal with this.
+      if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
+            map, way1->getElementId(), adminBoundsCrit))
+      {
+        return false;
+      }
+
+      for (std::vector<ConstWayPtr>::const_iterator containingWays2Itr = containingWays2.begin();
+           containingWays2Itr != containingWays2.end(); ++containingWays2Itr)
+      {
+        ConstWayPtr way2 = *containingWays2Itr;;
+        if (way2)
+        {
+          LOG_VART(way2->getElementId());
+
+          if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
+                map, way2->getElementId(), adminBoundsCrit))
+          {
+            return false;
+          }
+
+          // We keep our type comparison score low here to reflect that fact that you don't need
+          // strict type matches to allow for snapping (the ID sync allows for snapping to occur in
+          // some cases). This score may need some tweaking. TODO: update
+          if (schema.explicitTypeMismatch(way1->getTags(), way2->getTags(), 1.0))
+          {
+            LOG_TRACE(
+              "Found mismatching way parent type for way nodes " << element1->getElementId() <<
+              " and " << element2->getElementId() << ".");
+            return true;
+          }
+        }
+      }
+    }
+  }
+
+  return false;
 }
 
 void ElementDeduplicator::_removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map)

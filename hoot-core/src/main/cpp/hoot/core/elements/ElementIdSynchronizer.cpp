@@ -200,11 +200,11 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
     {
       LOG_VART(way1->getElementId());
 
-      // If either of our containig ways is a administrative boundary, we're going to bail on the
+      // If either of our containing ways is a administrative boundary, we're going to bail on the
       // type comparison, since many different types of ways could be part of an admin boundary.
       // This may not end up being the best way to deal with this.
       if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-          _map1, way1->getElementId(), adminBoundsCrit))
+            _map1, way1->getElementId(), adminBoundsCrit))
       {
         return false;
       }
@@ -218,7 +218,7 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
           LOG_VART(way2->getElementId());
 
           if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-              _map2, way2->getElementId(), adminBoundsCrit))
+                _map2, way2->getElementId(), adminBoundsCrit))
           {
             return false;
           }

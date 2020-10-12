@@ -75,7 +75,7 @@ public:
 
   /**
    * Uses ElementHashVisitor to assign unique hashes to elements and also retrieves the element
-   * IDs of any duplicates found
+   * IDs of any duplicates found within a single map.
    *
    * @param map the map owning the elements to assign hashes to
    * @param hashes a collection of hashes to update
@@ -175,6 +175,16 @@ private:
   void _removeWaysCheckMap(
     const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,
     const QMap<ElementId, QString>& elementIdsToRemoveFromMap);
+
+  /*
+   * Determines if two elements (one from each input map) belong to ways with types different enough
+   * to prevent ID synchronization from occurring..
+   */
+  static bool _areWayNodesInWaysOfMismatchedType(
+    ElementPtr element1, ElementPtr element2, OsmMapPtr map);
+
+  static QSet<std::pair<ElementId, ElementId>>_filterOutNonDupeWayNodes(
+    const QSet<std::pair<ElementId, ElementId>>& dupes, OsmMapPtr map);
 };
 
 }
