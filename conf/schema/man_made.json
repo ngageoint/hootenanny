@@ -17,6 +17,14 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "multiuse"
+        ],
+        "isA": "man_made",
+        "name": "man_made=observatory",
+        "objectType": "tag"
+    },
+    {
         "geometries": ["linestring"],
         "isA": "man_made",
         "name": "man_made=excavating_machine",

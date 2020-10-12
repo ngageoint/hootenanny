@@ -1,0 +1,21 @@
+[
+    {
+        "dataType": "enumeration",
+        "influence": 1,
+        "name": "golf",
+        "objectType": "tag"
+    },
+    {
+        "isA": "golf",
+        "name": "golf=*",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "linestring"
+        ],
+        "isA": "golf",
+        "name": "golf=cartpath",
+        "objectType": "tag"
+    }
+]
