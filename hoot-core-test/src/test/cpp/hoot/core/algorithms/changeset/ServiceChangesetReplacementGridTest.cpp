@@ -61,7 +61,6 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  // TODO: re-enable
   CPPUNIT_TEST(orphanedNodes1Test);
   CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(droppedNodes1Test);
@@ -290,11 +289,7 @@ public:
 //    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
 //    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
 //    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-//    CPPUNIT_ASSERT_EQUAL(25, uut.getNumDuplicateElementPairsInOutput());
-    LOG_VARS(uut.getNumOrphanedNodesInOutput());
-    LOG_VARS(uut.getNumDisconnectedWaysInOutput());
-    LOG_VARS(uut.getNumEmptyWaysInOutput());
-    LOG_VARS(uut.getNumDuplicateElementPairsInOutput());
+//    CPPUNIT_ASSERT_EQUAL(28, uut.getNumDuplicateElementPairsInOutput());
   }
 
   void northVegasLargeUniformTest()
@@ -317,8 +312,8 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false);
-    uut.setOutputNonConflatable(false);
+    uut.setCalcDiffWithReplacement(true);
+    uut.setOutputNonConflatable(true);
 //    QList<int> includeIds;
 //    includeIds.append(21);
 //    includeIds.append(22);
@@ -339,11 +334,7 @@ public:
     //CPPUNIT_ASSERT_EQUAL(26, uut.getNumOrphanedNodesInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    //CPPUNIT_ASSERT_EQUAL(1601, uut.getNumDuplicateElementPairsInOutput());
-    LOG_VARS(uut.getNumOrphanedNodesInOutput());
-    LOG_VARS(uut.getNumDisconnectedWaysInOutput());
-    LOG_VARS(uut.getNumEmptyWaysInOutput());
-    LOG_VARS(uut.getNumDuplicateElementPairsInOutput());
+    //CPPUNIT_ASSERT_EQUAL(513, uut.getNumDuplicateElementPairsInOutput());
   }
 
 private:
@@ -383,14 +374,7 @@ private:
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
-    conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
-//    conf().set(
-//      ConfigOptions::getChangesetReplacementImplementationKey(),
-//      "hoot::ChangesetReplacementCreator7");
-//    conf().set(
-//      ConfigOptions::getLogClassFilterKey(),
-//      "ElementDeduplicator");
-
+    conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false); 
     // leave enabled for debugging only
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }

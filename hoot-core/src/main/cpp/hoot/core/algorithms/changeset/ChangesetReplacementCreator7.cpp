@@ -338,9 +338,10 @@ void ChangesetReplacementCreator7::create(
 
   // CLEAN
 
-  // It seems unnecessary to need to clean the data before replacing it. However, without the
-  // cleaning the output can become mangled in strange ways. At some point, we need to put some time
-  // into reducing the cleaning ops down to only what's needed.
+  // It seems unnecessary to need to clean the data before replacing it. However without th
+  // cleaning, the output can become mangled in strange ways. The cleaning ops have been reduced
+  // down to only those needed, but its probably worth to determine exactly whey the remaining ops
+  // are needed at some point.
 
   // TODO: rename var since this map isn't necessary conflated; also rename everything in terms of
   // "toReplace" and "replacement"
@@ -560,10 +561,9 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
   }
 
   // We run a custom set of cleaning ops for changeset replacement.
-  // TODO: This needs more testing before enabling.
-//  conf().set(
-//    ConfigOptions::getMapCleanerTransformsKey(),
-//    conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));
+  conf().set(
+    ConfigOptions::getMapCleanerTransformsKey(),
+    conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));
 
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
   _boundsOpts.cookieCutKeepOnlyInsideBounds = false;

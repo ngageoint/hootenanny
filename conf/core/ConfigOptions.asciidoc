@@ -664,17 +664,11 @@ cutting and replacing data.
 * Default Value:
 ** `hoot::ReprojectToPlanarOp`
 ** `hoot::DuplicateNodeRemover`
-** `hoot::RemoveDuplicateWayNodesVisitor`
-** `hoot::OneWayRoadStandardizer`
-** `hoot::DuplicateWayRemover`
 ** `hoot::UnlikelyIntersectionRemover`
-** `hoot::SmallHighwayMerger`
-** `hoot::RemoveEmptyAreasVisitor`
-** `hoot::RemoveDuplicateRelationMembersVisitor`
+** `hoot::DualHighwaySplitter`
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
-** `hoot::RemoveEmptyRelationsOp`
 
-The map operations used by replacement changeset generation. TODO: not currently in use
+The map operations used by replacement changeset generation.
 
 === changeset.replacement.mark.elements.with.missing.children
 
@@ -2376,7 +2370,7 @@ option. A setting of -1 is useful for tests where you do not have granular enoug
 * Default Value: `true`
 
 If true, warnings are logged any time an input map is loaded for conflation that does not contain
-any feature with a  type recognizable by the Hootenanny schema. This is generally only turned off
+any feature with a type recognizable by the Hootenanny schema. This is generally only turned off
 when running tests.
 
 === log.warnings.for.empty.input.maps
