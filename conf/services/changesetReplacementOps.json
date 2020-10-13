@@ -2,13 +2,6 @@
   "name": "ChangesetReplacement",
   "label": "ChangesetReplacement",
   "members": [
-    {
-      "description": "No feature outside or overlapping the bounds will be modified. Reference line features may be split at the specified bounds.",
-      "default": "false",
-      "input": "checkbox",
-      "type": "bool",
-      "id": "strictBounds",
-      "label": "Use strict bounds handling"
-    }
+
   ]
 }

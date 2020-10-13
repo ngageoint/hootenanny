@@ -171,7 +171,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(5, uut.getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -274,8 +274,8 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(true);
-    uut.setOutputNonConflatable(true);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -286,17 +286,16 @@ public:
 
     // TODO: after separating quality issue tagging from replacement, call these directly after
     // the replacement and before the diff calc
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(39, uut.getNumDuplicateElementPairsInOutput());
+//    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+//    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+//    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+//    CPPUNIT_ASSERT_EQUAL(28, uut.getNumDuplicateElementPairsInOutput());
   }
 
   void northVegasLargeUniformTest()
   {
-    // whole northern half of city - 64 changesets, ~33.2M changes, avg derivation: 51s,
-    // total time: ~1h10m, ~524k changes/min, 624 orphaned nodes; ? disconnected ways, ? empty ways,
-    // ~12.2k duplicate feature pairs, diff between replacement: ~11.5k
+    // whole northern half of city - 64 changesets, ~33.0M changes, avg derivation: 38s,
+    // total time: ~56m, ~589k changes/min, diff between replacement: ~9.9k (1hr28m)
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -331,10 +330,11 @@ public:
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
-/*    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());*/
+    // TODO: add changes and other stats here?
+    //CPPUNIT_ASSERT_EQUAL(26, uut.getNumOrphanedNodesInOutput());
+    //CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    //CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    //CPPUNIT_ASSERT_EQUAL(513, uut.getNumDuplicateElementPairsInOutput());
   }
 
 private:
@@ -374,14 +374,7 @@ private:
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
-    conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
-//    conf().set(
-//      ConfigOptions::getChangesetReplacementImplementationKey(),
-//      "hoot::ChangesetReplacementCreator7");
-//    conf().set(
-//      ConfigOptions::getLogClassFilterKey(),
-//      "ElementDeduplicator");
-
+    conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false); 
     // leave enabled for debugging only
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }

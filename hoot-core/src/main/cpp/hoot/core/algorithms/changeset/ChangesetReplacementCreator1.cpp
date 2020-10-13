@@ -58,7 +58,6 @@
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
 
-#include <hoot/core/elements/ElementDeduplicator.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/elements/MapUtils.h>
 
@@ -957,10 +956,9 @@ void ChangesetReplacementCreator1::_setGlobalOpts()
   }
 
   // We run a custom set of cleaning ops for changeset replacement.
-  // TODO: This needs more testing before enabling.
-//  conf().set(
-//    ConfigOptions::getMapCleanerTransformsKey(),
-//    conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));
+  conf().set(
+    ConfigOptions::getMapCleanerTransformsKey(),
+    conf().getList(ConfigOptions::getChangesetReplacementMapCleanerTransformsKey()));
 
   // These don't change between scenarios (or at least we haven't needed to change them yet).
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
