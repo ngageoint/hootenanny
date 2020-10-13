@@ -284,6 +284,8 @@ QSet<std::pair<ElementId, ElementId>> ElementDeduplicator::_filterOutNonDupeWayN
 bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
   ElementPtr element1, ElementPtr element2, OsmMapPtr map)
 {
+  // This method is similar to ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType.
+
   LOG_VART(element1->getElementId());
   LOG_VART(element2->getElementId());
 
@@ -341,9 +343,9 @@ bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
             return false;
           }
 
-          // We keep our type comparison score low here to reflect that fact that you don't need
-          // strict type matches to allow for snapping (the ID sync allows for snapping to occur in
-          // some cases). This score may need some tweaking. TODO: update
+          // Here we check the types. TODO: The use of 1.0 score for exact match differs from the
+          // lower value used in ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType. That
+          // logic needs to be rationalized or pass the score in externally.
           if (schema.explicitTypeMismatch(way1->getTags(), way2->getTags(), 1.0))
           {
             LOG_TRACE(

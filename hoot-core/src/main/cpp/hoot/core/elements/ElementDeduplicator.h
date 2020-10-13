@@ -177,8 +177,7 @@ private:
     const QMap<ElementId, QString>& elementIdsToRemoveFromMap);
 
   /*
-   * Determines if two elements (one from each input map) belong to ways with types different enough
-   * to prevent ID synchronization from occurring..
+   * Determines if two elements belong to ways with different types.
    */
   static bool _areWayNodesInWaysOfMismatchedType(
     ElementPtr element1, ElementPtr element2, OsmMapPtr map);

@@ -166,6 +166,8 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
 bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
   ElementPtr element1, ElementPtr element2)
 {
+  // This method is similar to ElementDeduplicator::_areWayNodesInWaysOfMismatchedType.
+
   LOG_VART(element1->getElementId());
   LOG_VART(element2->getElementId());
 
