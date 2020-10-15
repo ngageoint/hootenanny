@@ -294,8 +294,8 @@ public:
 
   void northVegasLargeUniformTest()
   {
-    // whole northern half of city - 64 changesets, ~33.0M changes, avg derivation: 38s,
-    // total time: ~56m, ~589k changes/min, diff between replacement: ~9.9k (1hr28m)
+    // whole northern half of city - 64 changesets, ~33.1M changes, avg derivation: 39s,
+    // total time: ~57m, ~581k changes/min, diff between replacement: ~5.9k (1hr33m)
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";

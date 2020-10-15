@@ -1191,8 +1191,8 @@ secondary road endpoint nodes to the nearest reference road.
 * Default Value:
 ** ``
 
-List of tags to ignore when performing differential conflation with tags. Metadata tags are always
-ignored.
+List of non-metadata tags to ignore when performing differential conflation with tags. Metadata tags
+are always ignored.
 
 === differential.treat.reviews.as.matches
 

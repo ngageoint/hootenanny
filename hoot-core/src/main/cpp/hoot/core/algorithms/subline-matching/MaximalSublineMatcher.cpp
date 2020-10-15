@@ -65,6 +65,7 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr& map
   ms.setMaxRecursionComplexity(_maxRecursionComplexity);
 
   vector<WaySublineMatch> matches = ms.findAllMatches(map, way1, way2, score);
+  LOG_VART(ms.getBestMatchesRecursionCount());
   return WaySublineMatchString(matches);
 }
 

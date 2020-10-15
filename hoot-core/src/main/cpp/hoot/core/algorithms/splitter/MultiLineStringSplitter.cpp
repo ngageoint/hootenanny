@@ -77,6 +77,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   GeometryConverter::NodeFactory* nf) const
 {
   assert(reverse.size() == string.getSublines().size());
+  LOG_VART(string.getSublines().size());
   // if there were no matches then the result will be null
   ElementPtr result;
   vector<WayPtr> matches;
@@ -92,7 +93,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   for (size_t i = 0; i < string.getSublines().size(); i++)
   {
     const WaySubline& subline = string.getSublines()[i];
-    LOG_VART(subline);
+    //LOG_VART(subline);
     WayPtr w = subline.toWay(map, nf);
     w->setPid(subline.getElementId().getId());
     LOG_VART(w->getElementId());
@@ -107,6 +108,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
       map->addElement(w);
     }
   }
+  LOG_VART(matches.size());
 
   // if there was one match then just return the way.
   if (matches.size() == 1)
@@ -122,7 +124,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
     for (size_t i = 0; i < matches.size(); i++)
     {
       LOG_TRACE(
-        "multilinestring: adding multiple match to relation with ID: " << r->getId() <<
+        "multilinestring: adding multiple matches to relation with ID: " << r->getId() <<
         " member: " << matches[i]->getElementId());
       LOG_VART(matches[i]);
       r->addElement("", matches[i]);

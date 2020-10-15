@@ -128,7 +128,7 @@ private:
   int _taskStatusUpdateInterval;
   Progress _progress;
 
-  void _addReviewTags(const OsmMapPtr &map, const std::vector<ConstMatchPtr> &matches);
+  void _addReviewAndScoreTags(const OsmMapPtr &map, const std::vector<ConstMatchPtr> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
 
   /**

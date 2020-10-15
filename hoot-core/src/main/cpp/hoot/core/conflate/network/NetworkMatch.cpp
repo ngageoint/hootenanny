@@ -153,12 +153,10 @@ bool NetworkMatch::isConflicting(
   for (set<pair<ElementId, ElementId>>::const_iterator it = s.begin(); it != s.end(); ++it)
   {
     const pair<ElementId, ElementId>& ip = *it;
-
     for (set<pair<ElementId, ElementId>>::const_iterator jt = _pairs.begin(); jt != _pairs.end();
          ++jt)
     {
       const pair<ElementId, ElementId>& jp = *jt;
-
       if (ip.first == jp.first  || ip.first == jp.second ||
           ip.second == jp.first || ip.second == jp.second)
       {
@@ -173,9 +171,11 @@ bool NetworkMatch::isConflicting(
 
 QString NetworkMatch::toString() const
 {
-  LOG_VART(_threshold->toString());
-  return QString("Network Match (%1) pairs: %2 score:%3").arg(getMatchName()).
-    arg(hoot::toString(_pairs)).arg(getScore());
+  return
+    QString("Network Match (%1) pairs: %2 score:%3")
+      .arg(getMatchName())
+      .arg(hoot::toString(_pairs))
+      .arg(getScore());
 }
 
 bool NetworkMatch::isVerySimilarTo(const NetworkMatch* other) const

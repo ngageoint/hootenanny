@@ -64,6 +64,8 @@ public:
   virtual QString getDescription() const
   { return "Matches lines based on the longest matching subline found"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   Radians _maxAngle;
