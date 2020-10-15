@@ -49,7 +49,7 @@ public:
   virtual QString getName() const override { return "build-model"; }
 
   virtual QString getDescription() const override
-  { return "Builds a random forest model to be used in conflation"; }
+  { return "Builds a random forest model to be used by conflation"; }
 
   virtual int runSimple(QStringList& args) override
   {

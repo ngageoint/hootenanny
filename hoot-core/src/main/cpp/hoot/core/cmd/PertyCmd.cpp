@@ -57,7 +57,7 @@ public:
 
   virtual QString getName() const override { return "perty"; }
 
-  virtual QString getDescription() const override { return "Perturbs a map using PERTY"; }
+  virtual QString getDescription() const override { return "Perturbs a map"; }
 
   virtual int runSimple(QStringList& args) override
   {

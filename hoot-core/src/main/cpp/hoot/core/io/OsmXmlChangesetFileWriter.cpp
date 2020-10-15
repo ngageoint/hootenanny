@@ -131,6 +131,11 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       _change = changesetProvider->readNextChange();
       LOG_VART(_change.toString());
 
+      if (!_change.getElement())
+      {
+        continue;
+      }
+
       // When multiple changeset providers are passed in, sometimes multiple changes for the same
       // element may exist as a result of combining their results together, so we're skipping those
       // dupes here. Formerly, we only checked for exact duplicate statements and now we're more
@@ -233,9 +238,10 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElemen
   long id = n->getId();
   if (_change.getType() == Change::Create)
   {
-    //rails port expects negative ids for new elements; we're starting at -1 to match the convention
-    //of iD editor, but that's not absolutely necessary to write the changeset to rails port
-    id = _newElementIdCtrs[ElementType::Node] * -1; //assuming no id's = 0
+    // rails port expects negative ids for new elements; we're starting at -1 to match the
+    // convention of iD editor, but that's not absolutely necessary to write the changeset to rails
+    // port
+    id = _newElementIdCtrs[ElementType::Node] * -1; // assuming no id's = 0
     LOG_TRACE(
       "Converting new element with id: " << n->getElementId() << " to id: " <<
       ElementId(ElementType::Node, id));

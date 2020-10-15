@@ -253,6 +253,18 @@ public:
    */
   static bool wayIntersectsWithWayHavingKvp(const long wayId, const QString& kvp,
                                             const OsmMapPtr& map);
+
+  /**
+   * This determines if a node belongs to a way that shares any nodes with another way.
+   *
+   * @param nodeId ID of the node to examine
+   * @param wayId ID of the way to examine
+   * @param map map owning the input elements
+   * @return true if the node with ID nodeId belongs to a way that has any way nodes in common with
+   * the way having ID wayId; false otherwise
+   */
+  static bool nodeContainedByWaySharingNodesWithAnotherWay(
+    const long nodeId, const long wayId, const OsmMapPtr& map);
 };
 
 }

@@ -33,6 +33,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
@@ -54,6 +55,7 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/core/ops/DuplicateElementMarker.h>
 
 namespace hoot
 {
@@ -61,11 +63,16 @@ namespace hoot
 ChangesetTaskGridReplacer::ChangesetTaskGridReplacer() :
 _originalDataSize(0),
 _reverseTaskGrid(false),
+_currentTaskGridCellId(-1),
 _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
 _averageChangesetDeriveTime(0.0),
 _tagQualityIssues(false),
+_orphanedNodes(0),
+_disconnectedWays(0),
+_emptyWays(0),
+_duplicateElementPairs(0),
 _calcDiffWithReplacement(false),
 _outputNonConflatable(false)
 {
@@ -92,6 +99,7 @@ void ChangesetTaskGridReplacer::replace(
 
   _initConfig();
   _taskGridBounds = taskGrid.getBounds();
+  _currentTaskGridCellId = -1;
 
   try
   {
@@ -133,6 +141,7 @@ void ChangesetTaskGridReplacer::replace(
     if (!_finalOutput.isEmpty())
     {
       _getUpdatedData(_finalOutput);
+      // TODO: move this outside of the replace method
       if (_calcDiffWithReplacement)
       {
         // Calculate a diff between the data we just replaced and the original replacement data to
@@ -145,8 +154,11 @@ void ChangesetTaskGridReplacer::replace(
   catch (const HootException& e)
   {
     LOG_ERROR(
-      "Entire task grid cell replacement operation partially completed with error at: " <<
-      StringUtils::millisecondsToDhms(_opTimer.elapsed()) << "; Error: " << e.getWhat());
+      "Entire task grid cell replacement operation partially completed with error while " <<
+      " replacing task grid cell number: " << _currentTaskGridCellId << ", " <<
+      _numChangesetsDerived << " / " << taskGrid.size() <<
+      " cells replaced, time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()) <<
+      "; Error: " << e.getWhat());
   }
 
   LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
@@ -182,14 +194,14 @@ void ChangesetTaskGridReplacer::_initChangesetStats()
 void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
 {
   // recommended C&R production config
-  _changesetCreator.reset(new ChangesetReplacementCreator(true, "", _dataToReplaceUrl));
+  _changesetCreator.reset(
+    Factory::getInstance().constructObject<ChangesetReplacementCreator>(
+      ConfigOptions().getChangesetReplacementImplementation()));
   _changesetCreator->setFullReplacement(true);
   _changesetCreator->setBoundsInterpretation(
-    ChangesetReplacementCreator::BoundsInterpretation::Lenient/*Hybrid*/);
-  _changesetCreator->setWaySnappingEnabled(true);
-  _changesetCreator->setConflationEnabled(false/*true*/);
-  _changesetCreator->setCleaningEnabled(false/*true*/);
-  _changesetCreator->setTagOobConnectedWays(true);
+    ChangesetReplacementCreator::BoundsInterpretation::Lenient);
+  _changesetCreator->setChangesetOptions(true, "", _dataToReplaceUrl);
+  LOG_VARD(_changesetCreator->toString());
 
   _changesetApplier.reset(new OsmApiDbSqlChangesetApplier(_dataToReplaceUrl));
 
@@ -227,6 +239,8 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
 void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize)
 {
+  _currentTaskGridCellId = taskGridCell.id;
+
   // Include IDs override skip IDs. if include IDs is populated at all and this ID isn't in the
   // list, skip it. Otherwise, if the skip IDs have it, also skip it.
   if ((!_taskCellIncludeIds.isEmpty() && !_taskCellIncludeIds.contains(taskGridCell.id)) ||
@@ -276,7 +290,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   _printChangesetStats();
 
   LOG_STATUS(
-    "\tChangeset with " << StringUtils::formatLargeNumber(numChanges) << " changes applied in: " <<
+    "Changeset with " << StringUtils::formatLargeNumber(numChanges) << " changes applied in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 
@@ -388,7 +402,7 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   OsmMapPtr map(new OsmMap());
   OsmMapReaderFactory::read(map, _dataToReplaceUrl, true, Status::Unknown1);
 
-  // had to do this cleaning to get the relations to behave
+  // had to do this cleaning to get the relations to behave and be viewable in JOSM
   RemoveMissingElementsVisitor missingElementRemover;
   map->visitRw(missingElementRemover);
   LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
@@ -399,6 +413,7 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   emptyRelationRemover.apply(map);
   LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
 
+  // TODO: move this outside of this method and the replace method
   if (_outputNonConflatable)
   {
     // Output any features that hoot doesn't know how to conflate into their own file, for
@@ -408,6 +423,7 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
     _writeNonConflatable(map, nonConflatableOutput);
   }
 
+  // TODO: move this outside of this method and the replace method
   if (_tagQualityIssues)
   {
     // tag element with potential data quality issues caused by the replacement operations; If this
@@ -434,9 +450,10 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   std::shared_ptr<FilteredVisitor> filteredVis;
   std::shared_ptr<ElementCriterion> crit;
 
-  // We're only guaranteeing output data quality for the task grid cells actually replaced. Any
-  // data outside of the replacement grid may end up with quality issues until its replaced. So,
-  // restrict each of these quality checks to be in the replacement AOI.
+  // We're only guaranteeing output data quality for the data in the task grid cells actually
+  // replaced. Any data outside of the replacement grid may end up with quality issues that can't be
+  // fixed until its replaced. So, restrict each of these quality checks to be in the replacement
+  // AOI.
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
   crit.reset(
@@ -445,9 +462,9 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
       SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _taskGridBounds)));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
+  _orphanedNodes = tagVis->getNumFeaturesAffected();
   LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
-    " orphaned nodes in output.");
+    "Tagged " << StringUtils::formatLargeNumber(_orphanedNodes) << " orphaned nodes in output.");
 
   // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not so
   // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
@@ -461,17 +478,22 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
     new ChainCriterion(ElementCriterionPtr(new DisconnectedWayCriterion(map)), inBoundsCrit));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
+  _disconnectedWays = tagVis->getNumFeaturesAffected();
   LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
+    "Tagged " << StringUtils::formatLargeNumber(_disconnectedWays) <<
     " disconnected ways in output.");
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
   crit.reset(new ChainCriterion(ElementCriterionPtr(new EmptyWayCriterion()), inBoundsCrit));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
+  _emptyWays = tagVis->getNumFeaturesAffected();
+  LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
+
+  _duplicateElementPairs = DuplicateElementMarker::markDuplicates(map, 8);
   LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(tagVis->getNumFeaturesAffected()) <<
-    " empty ways in output.");
+    "Tagged " << StringUtils::formatLargeNumber(_duplicateElementPairs) <<
+    " duplicate feature pairs in output.");
 }
 
 void ChangesetTaskGridReplacer::_writeNonConflatable(const ConstOsmMapPtr& map,

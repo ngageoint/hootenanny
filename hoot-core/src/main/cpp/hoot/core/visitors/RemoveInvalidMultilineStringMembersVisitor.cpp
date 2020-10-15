@@ -47,6 +47,11 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 
 void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
 {
+  if (!e)
+  {
+    return;
+  }
+
   // Only look for relations
   if (e->getElementType() == ElementType::Relation)
   {

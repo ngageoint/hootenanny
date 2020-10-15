@@ -41,7 +41,6 @@
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/polygon/MultiPolygonCreator.h>
 
 // Qt
 #include <QString>
@@ -163,19 +162,21 @@ WayPtr GeometryConverter::convertLineStringToWay(const LineString* ls,
   return way;
 }
 
-std::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(const MultiLineString* mls,
-  const OsmMapPtr& map, Status s, double circularError)
+std::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(
+  const MultiLineString* mls, const OsmMapPtr& map, Status s, double circularError)
 {
   LOG_TRACE("Converting multiline string to element...");
 
   if (mls->getNumGeometries() > 1)
   {
-    RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
-      MetadataTags::RelationMultilineString()));
+    RelationPtr r(
+      new Relation(
+        s, map->createNextRelationId(), circularError, MetadataTags::RelationMultilineString()));
     for (size_t i = 0; i < mls->getNumGeometries(); i++)
     {
-      WayPtr w = convertLineStringToWay(
-        dynamic_cast<const LineString*>(mls->getGeometryN(i)), map, s, circularError);
+      WayPtr w =
+        convertLineStringToWay(
+          dynamic_cast<const LineString*>(mls->getGeometryN(i)), map, s, circularError);
       r->addElement("", w);
     }
     map->addRelation(r);

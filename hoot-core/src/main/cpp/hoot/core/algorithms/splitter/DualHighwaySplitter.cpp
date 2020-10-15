@@ -417,7 +417,7 @@ void DualHighwaySplitter::_splitWay(long wid)
 {
   _working = _map->getWay(wid);
 
-  if (ElementConverter(_result).convertToLineString(_working)->getLength() <= 0.0)
+  if (!_working || ElementConverter(_result).convertToLineString(_working)->getLength() <= 0.0)
   {
     return;
   }

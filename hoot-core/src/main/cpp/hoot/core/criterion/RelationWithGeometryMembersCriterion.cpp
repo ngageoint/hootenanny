@@ -88,10 +88,26 @@ bool RelationWithGeometryMembersCriterion::isSatisfied(const ConstElementPtr& e)
     if (_allowMixedChildren)
     {
       result = RelationMemberUtils::containsMemberWithCriterion(relation, *_crit, _map);
+      if (result)
+      {
+        LOG_TRACE("Contains member with criterion.");
+      }
+      else
+      {
+        LOG_TRACE("Does not contain a member with criterion.");
+      }
     }
     else
     {
       result = RelationMemberUtils::containsOnlyMembersWithCriterion(relation, *_crit, _map);
+      if (result)
+      {
+        LOG_TRACE("Contains only members with criterion.");
+      }
+      else
+      {
+        LOG_TRACE("Does not contain only members with criterion.");
+      }
     }
   }
   LOG_VART(result);

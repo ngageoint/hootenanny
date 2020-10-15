@@ -451,6 +451,18 @@ public:
   bool explicitTypeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore);
 
   /**
+   * Determines if two sets of tags have an explicit type mismatch. Empty tags and generic types
+   * are not ignored during the comparison
+   *
+   * @param tags1 the first set of tags to compare
+   * @param tags2 the second set of tags to compare
+   * @param minTypeScore the minimum similarity score at or above which the two sets of tags must
+   * score in to be considered a match
+   * @return true if the tags mismatch; false otherwise
+   */
+  bool typeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore);
+
+  /**
    * Determines if a key/value pair represents a generic feature type
    *
    * @param kvp the key/value pair to examine

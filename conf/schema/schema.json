@@ -126,6 +126,9 @@
         "import": "gauge.json"
     },
     {
+        "import": "golf.json"
+    },
+    {
         "import": "height.json"
     },
     {

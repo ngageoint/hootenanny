@@ -109,7 +109,8 @@ OgrWriter::OgrWriter():
   _wgs84.SetWellKnownGeogCS("WGS84");
 }
 
-void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, const std::shared_ptr<Geometry>& g)
+void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f,
+                            const std::shared_ptr<Geometry>& g)
 {
   OGRFeature* poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
 
@@ -152,7 +153,9 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN("Truncating the " << it.key() << " attribute (" << vba.length() << " characters) to the output field width (" << fieldWidth << " characters).");
+          LOG_WARN(
+            "Truncating the " << it.key() << " attribute (" << vba.length() <<
+            " characters) to the output field width (" << fieldWidth << " characters).");
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {
@@ -190,8 +193,8 @@ void OgrWriter::_addFeature(OGRLayer* layer, const std::shared_ptr<Feature>& f, 
   OGRFeature::DestroyFeature(poFeature);
 }
 
-void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f, const Geometry* g,
-                                   OGRFeature* poFeature)
+void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Feature>& f,
+                                   const Geometry* g, OGRFeature* poFeature)
 {
   std::string wkt = g->toString();
   char* t = (char*)wkt.data();
@@ -200,24 +203,29 @@ void OgrWriter::_addFeatureToLayer(OGRLayer* layer, const std::shared_ptr<Featur
   if (errCode != OGRERR_NONE)
   {
     throw HootException(
-      QString("Error parsing WKT (%1).  OGR Error Code: (%2)").arg(QString::fromStdString(wkt)).arg(QString::number(errCode)));
+      QString("Error parsing WKT (%1).  OGR Error Code: (%2)")
+        .arg(QString::fromStdString(wkt))
+        .arg(QString::number(errCode)));
   }
 
   errCode = poFeature->SetGeometryDirectly(geom);
   if (errCode != OGRERR_NONE)
   {
     throw HootException(
-      QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)").arg(QString::number(errCode)).arg(QString::fromStdString(g->toString())));
+      QString("Error setting geometry - OGR Error Code: (%1)  Geometry: (%2)")
+        .arg(QString::number(errCode)).arg(QString::fromStdString(g->toString())));
   }
 
-  //Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same feature object for sequential insertions
+  // Unsetting the FID with SetFID(-1) before calling CreateFeature() to avoid reusing the same
+  // feature object for sequential insertions
   poFeature->SetFID(-1);
 
   errCode = layer->CreateFeature(poFeature);
   if (errCode != OGRERR_NONE)
   {
     throw HootException(
-      QString("Error creating feature - OGR Error Code: (%1) \nFeature causing error: (%2)").arg(QString::number(errCode)).arg(f->toString()));
+      QString("Error creating feature - OGR Error Code: (%1) \nFeature causing error: (%2)")
+        .arg(QString::number(errCode)).arg(f->toString()));
   }
 }
 
@@ -357,7 +365,8 @@ void OgrWriter::_createLayer(const std::shared_ptr<const Layer>& layer)
       if (errCode != OGRERR_NONE)
       {
         throw HootException(
-          QString("Error creating field (%1)  OGR Error Code: (%2).").arg(f->getName()).arg(QString::number(errCode)));
+          QString("Error creating field (%1)  OGR Error Code: (%2).")
+            .arg(f->getName()).arg(QString::number(errCode)));
       }
     }
   } // End layer does not exist

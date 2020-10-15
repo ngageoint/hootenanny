@@ -38,9 +38,13 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Configurable.h>
 
 // Standard
 #include <set>
+
+// Qt
+#include <QSet>
 
 namespace hoot
 {
@@ -58,7 +62,8 @@ class OsmMap;
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
  * with no nodes.
  */
-class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable
+class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable,
+  public Configurable
 {
 public:
 
@@ -109,6 +114,11 @@ public:
     std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
     const geos::geom::Envelope& e = geos::geom::Envelope());
 
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
+
   virtual void readObject(QDataStream& is);
   virtual void writeObject(QDataStream& os) const;
 
@@ -131,6 +141,10 @@ protected:
 
   // turning this off is useful for debugging the existence of orphaned nodes
   bool _removeNodes;
+  // nodes with these IDs will never be removed
+  QSet<long> _excludeIds;
+  // the number of nodes that explicitly weren't removed due to configuration
+  int _numExplicitlyExcluded;
 
   // the non-superfluous nodes
   std::set<long> _usedNodeIds;

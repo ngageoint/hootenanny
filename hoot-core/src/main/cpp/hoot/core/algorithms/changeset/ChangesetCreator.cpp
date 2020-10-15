@@ -49,6 +49,7 @@
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
+#include <hoot/core/algorithms/changeset/ChangesetCleaner.h>
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/util/FileUtils.h>
@@ -74,6 +75,7 @@ _includeReviews(false),
 _printDetailedStats(printDetailedStats),
 _statsOutputFile(statsOutputFile),
 _singleInput(false),
+_clean(false),
 _numCreateChanges(0),
 _numModifyChanges(0),
 _numDeleteChanges(0)
@@ -240,8 +242,8 @@ void ChangesetCreator::create(OsmMapPtr& map1, OsmMapPtr& map2, const QString& o
   create(map1Inputs, map2Inputs, output);
 }
 
-void ChangesetCreator::create(const QList<OsmMapPtr>& map1Inputs,
-                              const QList<OsmMapPtr>& map2Inputs, const QString& output)
+void ChangesetCreator::create(
+  const QList<OsmMapPtr>& map1Inputs, const QList<OsmMapPtr>& map2Inputs, const QString& output)
 {
   if (map1Inputs.size() != map2Inputs.size())
   {
@@ -662,6 +664,8 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
                                               const QList<ElementInputStreamPtr>& inputs2,
                                               const QString& output)
 {
+  LOG_VARD(inputs1.size());
+  LOG_VARD(inputs2.size());
   if (inputs1.size() != inputs2.size())
   {
     throw IllegalArgumentException(
@@ -681,10 +685,21 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     changesetProviders.append(
       ChangesetDeriverPtr(new ChangesetDeriver(inputs1.at(i), inputs2.at(i))));
   }
+  LOG_VARD(changesetProviders.size());
+  assert(inputs1.size() == changesetProviders.size());
+
+  if (_clean)
+  {
+    // This was added primarily for use by ChangesetReplacementCreator implementations. Eventually,
+    // it may be able to be removed if its changeset writing bugs can be fixed.
+    std::shared_ptr<ChangesetCleaner> cleaner(new ChangesetCleaner(changesetProviders));
+    changesetProviders.clear();
+    changesetProviders.append(cleaner);
+  }
+  LOG_VARD(changesetProviders.size());
 
   std::shared_ptr<OsmChangesetFileWriter> writer =
-    OsmChangesetFileWriterFactory::getInstance()
-      .createWriter(output, _osmApiDbUrl);
+    OsmChangesetFileWriterFactory::getInstance().createWriter(output, _osmApiDbUrl);
   writer->write(output, changesetProviders);
   if (_printDetailedStats)
   {
@@ -711,31 +726,34 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     }
   }
 
-  assert(inputs1.size() == changesetProviders.size());
-  for (int i = 0; i < inputs1.size(); i++)
+  LOG_DEBUG("Collecting changeset stats...");
+  for (int i = 0; i < changesetProviders.size(); i++)
   {
-    ChangesetDeriverPtr changesetDeriver =
-      std::dynamic_pointer_cast<ChangesetDeriver>(changesetProviders.at(i));
-    LOG_DEBUG("Derived changeset: " << i + 1 << " / " << inputs1.size() << ": ");
+    ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
+    LOG_DEBUG("Derived changeset: " << i + 1 << " / " << changesetProviders.size() << ": ");
 
-    _numCreateChanges += changesetDeriver->getNumCreateChanges();
-    _numModifyChanges += changesetDeriver->getNumModifyChanges();
-    _numDeleteChanges += changesetDeriver->getNumDeleteChanges();
+    _numCreateChanges += changesetProvider->getNumCreateChanges();
+    _numModifyChanges += changesetProvider->getNumModifyChanges();
+    _numDeleteChanges += changesetProvider->getNumDeleteChanges();
 
-    LOG_VART(changesetDeriver->getNumFromElementsParsed());
-    LOG_VART(changesetDeriver->getNumToElementsParsed());
-    if (changesetDeriver->getNumChanges() == 0)
+    LOG_VART(changesetProvider->getNumFromElementsParsed());
+    LOG_VART(changesetProvider->getNumToElementsParsed());
+    if (changesetProvider->getNumChanges() == 0)
     {
-      LOG_DEBUG("No changes written to changeset.");
+      LOG_TRACE("No changes written to changeset.");
     }
     else
     {
-      LOG_VARD(changesetDeriver->getNumCreateChanges());
-      LOG_VARD(changesetDeriver->getNumModifyChanges());
-      LOG_VARD(changesetDeriver->getNumDeleteChanges());
+      LOG_VART(changesetProvider->getNumCreateChanges());
+      LOG_VART(changesetProvider->getNumModifyChanges());
+      LOG_VART(changesetProvider->getNumDeleteChanges());
     }
+  }
 
-    // close the output stream
+  LOG_DEBUG("Closing changeset streams...");
+  for (int i = 0; i < inputs1.size(); i++)
+  {
+    // close the output streams
     ElementInputStreamPtr input1 = inputs1.at(i);
     std::shared_ptr<PartialOsmMapReader> partialReader1 =
       std::dynamic_pointer_cast<PartialOsmMapReader>(input1);
@@ -763,6 +781,7 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
     }
     else
     {
+      LOG_DEBUG("Writing changeset stats to: ..." << _statsOutputFile.right(25) << "...");
       FileUtils::writeFully(_statsOutputFile, detailedStats);
     }
   }

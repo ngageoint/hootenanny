@@ -114,6 +114,10 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     const NodePtr& n = it->second;
+    if (!n)
+    {
+      continue;
+    }
     // We don't need to check for existence of the nodes parent here, b/c if it ends up being a dupe
     // we'll replace it with another node instead of removing it from the map.
     cph.addPoint(n->getX(), n->getY(), n->getId());
@@ -181,12 +185,16 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               }
               LOG_VART(replace);
 
-              LOG_VART(tagDiff.diff(map, n1, n2) != 0.0);
+              LOG_VART(tagDiff.diff(map, n1, n2));
               if (replace && tagDiff.diff(map, n1, n2) != 0.0)
               {
+                LOG_TRACE(
+                  "Skipping merge for " << n1->getElementId() << " and " << n2->getElementId() <<
+                  " due to tag diff.");
                 replace = false;
               }
 
+              LOG_VART(replace);
               if (replace)
               {
                 LOG_TRACE(

@@ -73,6 +73,20 @@ public:
    */
   void dedupe(OsmMapPtr map1, OsmMapPtr map2);
 
+  /**
+   * Uses ElementHashVisitor to assign unique hashes to elements and also retrieves the element
+   * IDs of any duplicates found within a single map.
+   *
+   * @param map the map owning the elements to assign hashes to
+   * @param hashes a collection of hashes to update
+   * @param duplicates a collection of duplicate elements found
+   */
+  static void calculateDuplicateElements(
+    OsmMapPtr map, QMap<QString, ElementId>& hashes,
+    QSet<std::pair<ElementId, ElementId>>& duplicates,
+    const int coordinateComparisonSensitivity =
+      ConfigOptions().getNodeComparisonCoordinateSensitivity());
+
   int getMap1DuplicateNodesRemoved() const { return _map1DuplicateNodesRemoved; }
   int getMap1DuplicateWaysRemoved() const { return _map1DuplicateWaysRemoved; }
   int getMap1DuplicateRelationsRemoved() const { return _map1DuplicateRelationsRemoved; }
@@ -124,14 +138,6 @@ private:
   void _validateInputs();
 
   /*
-   * Uses ElementHashVisitor to assign unique hashes to elements and also retrieves the element
-   * IDs of any duplicates found
-   */
-  void _calcElementHashes(
-    OsmMapPtr map, QMap<QString, ElementId>& hashes,
-    QSet<std::pair<ElementId, ElementId>>& duplicates);
-
-  /*
    * Converts pairs of duplicated features' element IDs to a collection of element IDs sorted by
    * element type for removal purposes; the second element is arbitarily selected for removal
    */
@@ -169,6 +175,15 @@ private:
   void _removeWaysCheckMap(
     const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,
     const QMap<ElementId, QString>& elementIdsToRemoveFromMap);
+
+  /*
+   * Determines if two elements belong to ways with different types.
+   */
+  static bool _areWayNodesInWaysOfMismatchedType(
+    ElementPtr element1, ElementPtr element2, OsmMapPtr map);
+
+  static QSet<std::pair<ElementId, ElementId>>_filterOutNonDupeWayNodes(
+    const QSet<std::pair<ElementId, ElementId>>& dupes, OsmMapPtr map);
 };
 
 }

@@ -5,8 +5,6 @@ source file 2:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
 REF_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp
 SEC_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
 replacement aoi:  -71.4698,42.4866,-71.4657,42.4902
-full replacement: 
-bounds interpretation: 
 geometry filters:  --geometry-filters hoot::BuildingCriterion;hoot::HighwayCriterion
 tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion
 replacement filters: 
@@ -18,9 +16,6 @@ retainment filter options:
 source formats:  xml
 way snap tolerance:  20.0
 existing way node tolerance:  20.0
-disable conflation: 
-disable cleaning: 
-clean ref database beforehand:  true
 extra params: 
 
 Cropping the reference dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an osm api db (contains features to be replaced)...
@@ -43,19 +38,19 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementMultipleGeometryFiltersTest/ServiceChangesetReplacementMultipleGeometryFiltersTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.4606041, num_changes=1515
-Node(s) Created: 697
-Node(s) Modified: 2
-Node(s) Deleted: 673
+Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.460611, num_changes=1575
+Node(s) Created: 701
+Node(s) Modified: 1
+Node(s) Deleted: 725
 Way(s) Created: 71
 Way(s) Modified: 2
-Way(s) Deleted: 70
+Way(s) Deleted: 75
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 768
-Total Modifications: 4
-Total Deletions: 743
+Total Creations: 772
+Total Modifications: 3
+Total Deletions: 800
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementMultipleGeometryFiltersTest-xml-replaced.osm for verification...
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DBUTILS_H
@@ -85,6 +85,14 @@ public:
    * @return a database version string
    */
   static QString getPostgresDbVersion(const QSqlDatabase& database);
+
+  /**
+   * Identifies database URLs as used in Hootenanny
+   *
+   * @param url the string to examine
+   * @return true if the input string is a database URL; false otherwise
+   */
+  static bool isDbUrl(const QString& url);
 
 private:
 

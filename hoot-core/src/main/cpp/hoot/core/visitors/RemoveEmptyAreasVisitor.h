@@ -49,8 +49,6 @@ public:
   RemoveEmptyAreasVisitor();
   virtual ~RemoveEmptyAreasVisitor() = default;
 
-  virtual void visit(const ConstElementPtr& e);
-
   virtual void visit(const std::shared_ptr<Element>& e);
 
   virtual QString getInitStatusMessage() const { return "Removing empty areas..."; }

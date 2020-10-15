@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
@@ -70,11 +71,41 @@ protected:
   // see ElementHashVisitor
   bool _useNodeTagsForHash;
 
+  OsmMapPtr _map1;
+  OsmMapPtr _map2;
+
+  WayNodeCriterion _wayNodeCrit;
+
+  // see ElementHashVisitor
+  QMap<QString, ElementId> _map1HashesToElementIds;
+  QMap<ElementId, QString> _map1ElementIdsToHashes;
+  QMap<QString, ElementId> _map2HashesToElementIds;
+  QMap<ElementId, QString> _map2ElementIdsToHashes;
+
   int _updatedNodeCtr;
   int _updatedWayCtr;
   int _updatedRelationCtr;
 
-  QMap<QString, ElementId> _calcElementHashes(const OsmMapPtr& map);
+  /*
+   * Calculates the element unique hashes used for comparison
+   */
+  void _calcElementHashes(
+    const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
+    QMap<ElementId, QString>& elementIdsToHashes,
+      const int coordinateComparisonSensitivity =
+        ConfigOptions().getNodeComparisonCoordinateSensitivity());
+
+  /*
+   * Determines if two elements (one from each input map) are way nodes which don't have a way
+   * parent in common.
+   */
+  bool _areWayNodesWithoutAWayInCommon(ElementPtr element1, ElementPtr element2);
+
+  /*
+   * Determines if two elements (one from each input map) belong to ways with types different enough
+   * to prevent ID synchronization from occurring..
+   */
+  bool _areWayNodesInWaysOfMismatchedType(ElementPtr element1, ElementPtr element2);
 };
 
 }

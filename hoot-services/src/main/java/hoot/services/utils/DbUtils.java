@@ -28,6 +28,7 @@ package hoot.services.utils;
 
 
 import static hoot.services.HootProperties.CHANGESETS_FOLDER;
+import static hoot.services.models.db.QCurrentRelations.currentRelations;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
@@ -44,6 +45,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -832,10 +834,21 @@ NOT EXISTS
         String jobId = createQuery()
                 .select(jobStatus.jobId)
                 .from(jobStatus)
-                .where(Expressions.booleanTemplate("tags->'taskInfo' like '%" + taskInfo + "%'"))
+                .where(Expressions.booleanTemplate("tags->'taskInfo' like 'taskingManager:" + taskInfo + "'"))
+                .orderBy(jobStatus.start.desc())
                 .fetchFirst();
 
         return jobId;
+    }
+
+    public static String getJobBbox(String jobId) {
+        String foundId = createQuery()
+            .select(Expressions.stringTemplate("tags->'bbox'"))
+            .from(jobStatus)
+            .where(jobStatus.jobId.eq(jobId))
+            .fetchFirst();
+
+        return foundId;
     }
 
     public static List<Long> getTimeoutTasks() {
@@ -889,15 +902,12 @@ NOT EXISTS
         }
     }
 
-    public static void removeTimeoutTag(String jobId) {
-        Map<String, String> tags = getJobStatusTags(jobId);
-        tags.remove("timeout");
-
+    public static void removeTimeoutTag(String taskInfo) {
         SQLQueryFactory query = createQuery();
         query.update(jobStatus)
-                .where(jobStatus.jobId.eq(jobId))
-                .set(jobStatus.tags, tags)
-                .execute();
+            .where(Expressions.booleanTemplate("tags->'taskInfo' like 'taskingManager:" + taskInfo + "'"))
+            .set(Arrays.asList(jobStatus.tags), Arrays.asList(Expressions.stringTemplate("delete(tags, 'timeout')")))
+            .execute();
 
         try {
             query.getConnection().commit();
@@ -909,30 +919,32 @@ NOT EXISTS
 
     // Sets the specified job to a status detail of stale and recurses up to the parent jobs to do the same
     public static void setStale(String jobId) {
-        // Find the job
-        JobStatus job = createQuery()
+        if (jobId != null) {
+            // Find the job
+            JobStatus job = createQuery()
                 .select(jobStatus)
                 .from(jobStatus)
                 .where(jobStatus.jobId.eq(jobId))
                 .fetchFirst();
 
-        if(job != null) {
-            createQuery()
-                .update(jobStatus)
-                .where(jobStatus.jobId.eq(jobId))
-                .set(jobStatus.statusDetail, "STALE")
-                .execute();
+            if(job != null) {
+                createQuery()
+                    .update(jobStatus)
+                    .where(jobStatus.jobId.eq(jobId))
+                    .set(jobStatus.statusDetail, "STALE")
+                    .execute();
 
-            Map<String, String> tags = PostgresUtils.postgresObjToHStore(job.getTags());
+                Map<String, String> tags = PostgresUtils.postgresObjToHStore(job.getTags());
 
-            String parentId = tags.get("parentId");
-            if (parentId != null) {
-                ArrayList<String> parentIds = new ArrayList<>(Arrays.asList(parentId.split(",")));
+                String parentId = tags.get("parentId");
+                if (parentId != null) {
+                    ArrayList<String> parentIds = new ArrayList<>(Arrays.asList(parentId.split(",")));
 
-                // If it has parent(s), make the parent(s) stale too
-                for(String id : parentIds) {
-                    if (id != null) {
-                        setStale(id);
+                    // If it has parent(s), make the parent(s) stale too
+                    for(String id : parentIds) {
+                        if (id != null) {
+                            setStale(id);
+                        }
                     }
                 }
             }
@@ -1142,10 +1154,12 @@ NOT EXISTS
 
         if (jobId != null) {
             String stdOutWithId = createQuery()
-                    .select(commandStatus.stdout)
-                    .from(commandStatus)
-                    .where(commandStatus.stdout.like("%Last changeset pushed ID:%").and(commandStatus.jobId.eq(jobId)))
-                    .fetchFirst();
+                .select(commandStatus.stdout)
+                .from(commandStatus)
+                .where(commandStatus.stdout.like("%Last changeset pushed ID:%").and(commandStatus.jobId.eq(jobId)))
+                .fetchFirst();
+
+            if (stdOutWithId == null) return null;
 
             String patternString = "Last changeset pushed ID: ([0-9]*)";
 
@@ -1159,5 +1173,15 @@ NOT EXISTS
         }
 
         return id;
+    }
+
+    public static LocalDateTime getJobStartDate(String jobId) {
+        Timestamp startTime = createQuery()
+                .select(commandStatus.start.min())
+                .from(commandStatus)
+                .where(commandStatus.jobId.eq(jobId))
+                .fetchFirst();
+
+        return startTime.toLocalDateTime();
     }
 }

@@ -72,6 +72,8 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  std::shared_ptr<WayJoiner> getWayJoiner() const { return _wayJoiner; }
+
 private:
 
   std::shared_ptr<WayJoiner> _wayJoiner;

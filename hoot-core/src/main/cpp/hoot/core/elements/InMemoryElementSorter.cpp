@@ -62,17 +62,17 @@ InMemoryElementSorter::InMemoryElementSorter(ConstOsmMapPtr source) :
     _source = source;
 
     for (NodeMap::const_iterator it = _source->getNodes().begin();
-      it != _source->getNodes().end(); ++it)
+         it != _source->getNodes().end(); ++it)
     {
       _nodeIds.push_back(it->first);
     }
     for (WayMap::const_iterator it = _source->getWays().begin();
-      it != _source->getWays().end(); ++it)
+         it != _source->getWays().end(); ++it)
     {
       _wayIds.push_back(it->first);
     }
     for (RelationMap::const_iterator it = _source->getRelations().begin();
-      it != _source->getRelations().end(); ++it)
+         it != _source->getRelations().end(); ++it)
     {
       _relationIds.push_back(it->first);
     }
@@ -90,7 +90,8 @@ std::shared_ptr<OGRSpatialReference> InMemoryElementSorter::getProjection() cons
 
 bool InMemoryElementSorter::hasMoreElements()
 {
-  return _nodeIndex != _nodeIds.size() ||
+  return
+    _nodeIndex != _nodeIds.size() ||
     _wayIndex != _wayIds.size() ||
     _relationIndex != _relationIds.size();
 }

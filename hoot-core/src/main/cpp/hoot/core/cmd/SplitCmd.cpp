@@ -50,8 +50,7 @@ public:
 
   virtual QString getName() const override { return "split"; }
 
-  virtual QString getDescription() const override
-  { return "Split a map geospatially into tiled maps"; }
+  virtual QString getDescription() const override { return "Splits a map into tiles"; }
 
   virtual int runSimple(QStringList& args) override
   {

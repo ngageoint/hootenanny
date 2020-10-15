@@ -5,8 +5,6 @@ source file 2:  test-files/cmd/glacial/serial/ServiceChangesetReplacementOutOfSp
 REF_CONVERT_OPS:  hoot::SetTagValueVisitor
 SEC_CONVERT_OPS:  hoot::SetTagValueVisitor
 replacement aoi:  -115.184767,36.031262,-115.048556,36.14796
-full replacement:  --full-replacement
-bounds interpretation:  --strict-bounds
 geometry filters: 
 tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
 replacement filters: 
@@ -18,9 +16,6 @@ retainment filter options:
 source formats:  xml
 way snap tolerance:  5.0
 existing way node tolerance:  0.5
-disable conflation:  --disable-conflation
-disable cleaning: 
-clean ref database beforehand:  true
 extra params: 
 
 Writing the reference dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/input1.osm to an osm api db (contains features to be replaced)...
@@ -43,19 +38,19 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/ServiceChangesetReplacementOutOfSpecMixedRelationsTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=36.1172999, max_lat=36.1203, min_lon=-115.1796999, max_lon=-115.1722999, num_changes=798
-Node(s) Created: 342
+Changeset Details: min_lat=36.1172999, max_lat=36.1203, min_lon=-115.1796999, max_lon=-115.1722999, num_changes=1051
+Node(s) Created: 459
 Node(s) Modified: 0
-Node(s) Deleted: 152
-Way(s) Created: 159
+Node(s) Deleted: 273
+Way(s) Created: 167
 Way(s) Modified: 0
-Way(s) Deleted: 111
+Way(s) Deleted: 118
 Relation(s) Created: 25
 Relation(s) Modified: 0
 Relation(s) Deleted: 9
-Total Creations: 526
+Total Creations: 651
 Total Modifications: 0
-Total Deletions: 272
+Total Deletions: 400
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementOutOfSpecMixedRelationsTest-xml-replaced.osm for verification...
 

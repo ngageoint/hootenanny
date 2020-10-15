@@ -52,6 +52,16 @@ _removeOnlyUnusedNodes(false)
   LOG_VART(_doCheck);
 }
 
+RemoveElementByEid::RemoveElementByEid(ElementId eId, bool doCheck, bool removeNodeFully) :
+_eIdToRemove(eId),
+_doCheck(doCheck),
+_removeNodeFully(removeNodeFully),
+_removeOnlyUnusedNodes(false)
+{
+  LOG_VART(_eIdToRemove);
+  LOG_VART(_doCheck);
+}
+
 void RemoveElementByEid::apply(OsmMapPtr& map)
 {
   if (ElementType::Node == _eIdToRemove.getType().getEnum())

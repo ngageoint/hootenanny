@@ -14,11 +14,6 @@ set -e
 # Also, make sure it is still connected to all the shop polys it should be.
 #
 # Output issues: 
-# 1. Drag the top left or right corners of "Victoria's Secret' down a bit and see the duplicated info nodes with the tag, "Map of the 
-# Shopping Centre". Generally, way nodes don't get info tag so not a critical problem.
-# 2. There's an empty relation in the output after disabling removal of missing elements.
-#
-# TODO: update the missing child ref portion of the test to handle ways
-# TODO: add a non-full replacement test for the missing child ref portion of the test
+# 1. There is a poorly snapped untyped way belonging to a multilinestring relation between "LVB Burger" and "Rhumber".
 
-test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off "ServiceChangesetReplacementOutOfSpecMixedRelationsTest" "test-files/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/input1.osm" "test-files/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/input2.osm" "-115.184767,36.031262,-115.048556,36.14796" "-180,-90,180,90" "true" "strict" "" "" "false" "" "" "false" "" "xml" "5.0" "0.5" "true" "false" "true"
+test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off "ServiceChangesetReplacementOutOfSpecMixedRelationsTest" "test-files/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/input1.osm" "test-files/cmd/glacial/serial/ServiceChangesetReplacementOutOfSpecMixedRelationsTest/input2.osm" "-115.184767,36.031262,-115.048556,36.14796" "-180,-90,180,90" "" "" "false" "" "" "false" "" "xml" "5.0" "0.5"

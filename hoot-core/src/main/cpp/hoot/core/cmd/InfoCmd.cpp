@@ -57,7 +57,7 @@ public:
   virtual QString getName() const override { return "info"; }
 
   virtual QString getDescription() const override
-  { return "Displays information about Hootenanny capabilities"; }
+  { return "Displays information about capabilities"; }
 
   virtual int runSimple(QStringList& args) override
   {

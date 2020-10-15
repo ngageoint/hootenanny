@@ -31,6 +31,7 @@
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QRegExp>
@@ -70,8 +71,8 @@ public:
   virtual QString getCompletedStatusMessage() const
   {
     return
-      "Removed " + QString::number(_numTagsRemoved) + " tags from " +
-      QString::number(_numAffected) + " different elements";
+      "Removed " + StringUtils::formatLargeNumber(_numTagsRemoved) + " tags from " +
+      StringUtils::formatLargeNumber(_numAffected) + " different elements";
   }
 
   virtual std::string getClassName() const { return className(); }

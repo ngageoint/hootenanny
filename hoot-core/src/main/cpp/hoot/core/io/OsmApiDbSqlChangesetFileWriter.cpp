@@ -101,11 +101,17 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
       "...");
 
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
-    LOG_VARD(changesetProvider->hasMoreChanges());
+    LOG_VART(changesetProvider.get());
+    LOG_VART(changesetProvider->hasMoreChanges());
     while (changesetProvider->hasMoreChanges())
     {
       LOG_TRACE("Reading next SQL change...");
       Change change = changesetProvider->readNextChange();
+
+      if (!change.getElement())
+      {
+        continue;
+      }
 
       // See related note in OsmXmlChangesetFileWriter::write.
       if (_parsedChangeIds.contains(change.getElement()->getElementId()))
@@ -177,8 +183,9 @@ void OsmApiDbSqlChangesetFileWriter::_createChangeSet()
     throw HootException("Invalid changeset user ID: " + QString::number(_changesetUserId));
   }
 
+  LOG_DEBUG("Getting changeset ID...");
   _changesetId = _db.getNextId(ApiDb::getChangesetsTableName());
-  LOG_DEBUG("Creating changeset: " << _changesetId);
+  LOG_DEBUG("Creating changeset with ID: " << _changesetId);
   _outputSql.write(
     QString("INSERT INTO %1 (id, user_id, created_at, closed_at) VALUES "
             "(%2, %3, %4, %4);\n")
@@ -222,8 +229,8 @@ void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
 
-  // we only grab and assign a new id if we have a new element with a negative id, since we'll be
-  // writing this directly to the database and negative ids aren't allowed
+  // We only grab and assign a new id if we have a new element with a negative id, since we'll be
+  // writing this directly to the database and negative ids aren't allowed.
   LOG_TRACE("ID before: " << changeElement->getElementId());
   long id;
   if (changeElement->getId() < 0)

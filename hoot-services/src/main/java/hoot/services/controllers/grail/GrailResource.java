@@ -397,17 +397,28 @@ public class GrailResource {
     @Path("/overpasssynccheck")
     @Produces(MediaType.APPLICATION_JSON)
     public Response overpassSyncCheck(@Context HttpServletRequest request,
-            @QueryParam("projectTaskInfo") @DefaultValue("false") String projectTaskInfo) {
+            @QueryParam("projectTaskInfo") @DefaultValue("") String projectTaskInfo) {
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
         String jobId = "grail_" + UUID.randomUUID().toString().replace("-", "");
         String id = DbUtils.getJobIdByTask(projectTaskInfo);
+        if (id == null) {
+            String errorMsg = "Error during overpass sync check! Error retrieving taskInfo for the task.";
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(errorMsg).build());
+        }
+
+        String bbox = DbUtils.getJobBbox(id);
+        if (bbox == null) {
+            String errorMsg = "Error during overpass sync check! Error retrieving bbox for the task";
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(errorMsg).build());
+        }
 
         // Wait to detect overpass 'Last changeset pushed ID'
         GrailParams waitParams = new GrailParams();
         waitParams.setUser(user);
-        waitParams.setApplyTags(true); // flag to remove tag is timeout passes this time around
+        waitParams.setTaskInfo(projectTaskInfo);
+        waitParams.setBounds(bbox);
 
         List<Command> workflow = new LinkedList<>();
         workflow.add(grailCommandFactory.build(id, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));

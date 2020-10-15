@@ -612,6 +612,12 @@ Find street intersection locations in a map by street name:
       input.osm output.osm
 -----
 
+===== Mark exact duplicate features within a map:
+
+-----
+    hoot convert -D convert.ops="hoot::DuplicateElementMarker" input.osm output.osm
+-----
+
 ===== Remove all duplicate ways from a map:
 
 -----
@@ -874,13 +880,13 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
     hoot convert -D convert.ops="hoot::WayGeneralizeVisitor" -D way.generalizer.epsilon=5.0 input.osm output.osm
 -----
 
-===== Remove intra-map duplicates within a single map but skip removing nodes:
+===== Remove intra-map exact duplicates within a single map but skip removing nodes:
 
 -----
     hoot de-duplicate input.osm output.osm --skip-nodes
 -----
 
-===== Remove intra-map duplicates within a single map with a node filter:
+===== Remove intra-map exact duplicates within a single map with a node filter:
 
 -----
     hoot de-duplicate input.osm output.osm --node-filter "hoot::PoiCriterion"

@@ -1140,7 +1140,6 @@ void OsmPbfReader::parse(istream* strm, const OsmMapPtr& map)
   }
 }
 
-// TODO: this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
 void OsmPbfReader::read(const QString& path, const OsmMapPtr& map)
 {
   map->appendSource(path);
@@ -1401,7 +1400,8 @@ void OsmPbfReader::close()
 
   if (_needToCloseInput == true)
   {
-    // Deleting fstream objects invokes the istream destructor, who in turn calls istream::close as part of its contract
+    // Deleting fstream objects invokes the istream destructor, who in turn calls istream::close as
+    // part of its contract
     delete _in;
     _needToCloseInput = false;
   }

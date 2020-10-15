@@ -416,4 +416,30 @@ bool WayUtils::wayIntersectsWithWayHavingKvp(
   return false;
 }
 
+bool WayUtils::nodeContainedByWaySharingNodesWithAnotherWay(
+  const long nodeId, const long wayId, const OsmMapPtr& map)
+{
+  ConstWayPtr way = map->getWay(wayId);
+  if (!way)
+  {
+    return false;
+  }
+
+  const std::vector<ConstWayPtr> waysContainingNode =
+    getContainingWaysByNodeId(nodeId, map);
+  for (std::vector<ConstWayPtr>::const_iterator containingWayItr = waysContainingNode.begin();
+       containingWayItr != waysContainingNode.end(); ++containingWayItr)
+  {
+    ConstWayPtr containingWay = *containingWayItr;
+    if (containingWay)
+    {
+      if (containingWay->hasSharedNode(*way))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 }

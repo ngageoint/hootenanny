@@ -43,8 +43,28 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousWayRemover)
 
 SuperfluousWayRemover::SuperfluousWayRemover(const std::shared_ptr<OsmMap>& map) :
-_inputMap(map)
+_inputMap(map),
+_numExplicitlyExcluded(0)
 {
+  setConfiguration(conf());
+}
+
+void SuperfluousWayRemover::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts(conf);
+
+  const QSet<QString> excludeIdsStrs = opts.getSuperfluousWayRemoverExcludeIds().toSet();
+  for (QSet<QString>::const_iterator it = excludeIdsStrs.begin(); it != excludeIdsStrs.end(); ++it)
+  {
+    bool ok = false;
+    _excludeIds.insert((*it).toLong(&ok));
+    if (!ok)
+    {
+      throw IllegalArgumentException(
+        QString("Invalid element exclude ID passed to ") + QString::fromStdString(className()));
+    }
+  }
+  LOG_VARD(_excludeIds.size());
 }
 
 long SuperfluousWayRemover::removeWays(const std::shared_ptr<OsmMap>& map)
@@ -59,6 +79,7 @@ long SuperfluousWayRemover::removeWays(const std::shared_ptr<OsmMap>& map)
 void SuperfluousWayRemover::removeWays()
 {
   _numAffected = 0;
+  _numExplicitlyExcluded = 0;
   std::shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
   LOG_VART(e2r->size());
 
@@ -67,8 +88,18 @@ void SuperfluousWayRemover::removeWays()
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
-    //LOG_VART(w->getElementId());
-    LOG_VART(w);
+    if (!w)
+    {
+      continue;
+    }
+    LOG_VART(w->getElementId());
+    //LOG_VART(w);
+
+    if (_excludeIds.contains(w->getId()))
+    {
+      _numExplicitlyExcluded++;
+      continue;
+    }
 
     bool same = true;
     const vector<long>& nodeIds = w->getNodeIds();

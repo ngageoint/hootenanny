@@ -39,6 +39,8 @@
 namespace hoot
 {
 
+class ElementVisitor;
+
 /**
  * Applies a list of named operations to the given map. The named operations must implement either
  * OsmMapOperation or ConstElementVisitor and must be registered with the factory.
@@ -64,11 +66,18 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  std::shared_ptr<OsmMapOperation> getAppliedOperation(const QString& className)
+  { return _appliedOps[className]; }
+  std::shared_ptr<ElementVisitor> getAppliedVisitor(const QString& className)
+  { return _appliedVis[className]; }
+
 private:
 
   const Settings* _conf;
   QStringList _namedOps;
   Progress _progress;
+  QMap<QString, std::shared_ptr<OsmMapOperation>> _appliedOps;
+  QMap<QString, std::shared_ptr<ElementVisitor>> _appliedVis;
 
   /*
    * If an op is made of a list of other ops, then this will substitute those ops in from the list.

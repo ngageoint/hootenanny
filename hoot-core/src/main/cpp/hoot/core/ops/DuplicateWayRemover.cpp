@@ -79,6 +79,10 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     const WayPtr& w = it->second;
+    if (!w)
+    {
+      continue;
+    }
     vector<long> newNodes;
     const vector<long>& nodes = w->getNodeIds();
     for (size_t i = 0; i < nodes.size(); i++)
@@ -96,12 +100,16 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
   {
     long key = it->first;
     const WayPtr& w = it->second;
-    // if the way isn't in the map anymore (deleted as part of this process) or the way is an
-    // area type (different treatment).
+    if (!w)
+    {
+      continue;
+    }
+    // If the way isn't in the map anymore (deleted as part of this process) or the way is an
+    // area type (different treatment),
     if (_map->containsWay(key) == false || !LinearCriterion().isSatisfied(w))
       continue;
 
-    // create a map of all the ways that share nodes with this way and the number of nodes shared
+    // create a map of all the ways that share nodes with this way and the number of nodes shared.
     std::map<long, int> nodesSharedCount;
     const vector<long>& nodes = w->getNodeIds();
     for (size_t i = 0; i < nodes.size(); i++)
@@ -115,12 +123,12 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     }
 
     for (std::map<long, int>::iterator wit = nodesSharedCount.begin();
-      wit != nodesSharedCount.end(); ++wit)
+         wit != nodesSharedCount.end(); ++wit)
     {
-      // if a way shares 2 or more nodes
+      // If a way shares 2 or more nodes,
       if (wit->second >= 2 && _map->containsWay(wit->first) && _map->containsWay(w->getId()))
       {
-        // remove duplicates between the ways
+        // remove duplicates between the ways.
         WayPtr w2 = _map->getWay(wit->first);
 
         // if this is a candidate for de-duping
@@ -134,8 +142,8 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
           if (_strictTagMatching)
           {
             nonNameTagsIdentical =
-              TagComparator::getInstance().nonNameTagsExactlyMatch(w->getTags(), w2->getTags(),
-                                                                   ConfigOptions().getDuplicateNameCaseSensitive());
+              TagComparator::getInstance().nonNameTagsExactlyMatch(
+                w->getTags(), w2->getTags(), ConfigOptions().getDuplicateNameCaseSensitive());
           }
 
           if (nonNameTagsIdentical || !_strictTagMatching)

@@ -49,9 +49,11 @@ public:
    *
    * @param map map to copy elements from
    * @param filter filter to apply to the map
+   * @param copyChildren if true, child elements are copied
    * @return a copied subset map
    */
-  static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter);
+  static OsmMapPtr getMapSubset(const ConstOsmMapPtr& map, const ElementCriterionPtr& filter,
+                                const bool copyChildren = true);
 
   /**
    * Determines if a map contains only nodes that are not way nodes
@@ -79,6 +81,16 @@ public:
    * @todo Should we have something like reader.include.debug.tags instead of this?
    */
   static void dropMetadataTags(const OsmMapPtr& map);
+
+  /**
+   * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
+   * as an element in the first map
+   *
+   * @param map1
+   * @param map2
+   * @param throwOutDupes
+   */
+  static void combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes);
 };
 
 }

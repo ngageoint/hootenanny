@@ -61,9 +61,7 @@ bool MultipleChangesetProvider::hasMoreChanges()
 
 Change MultipleChangesetProvider::readNextChange()
 {
-  Change nextChange = _changesets.front()->readNextChange();
-
-  return nextChange;
+  return _changesets.front()->readNextChange();
 }
 
 void MultipleChangesetProvider::addChangesetProvider(ChangesetProviderPtr newChangeset)
@@ -76,4 +74,4 @@ size_t MultipleChangesetProvider::getNumChangesets()
   return _changesets.size();
 }
 
-} // namespace hoot
+}

@@ -42,6 +42,11 @@ HOOT_FACTORY_REGISTER(ElementVisitor, RemoveDuplicateRelationMembersVisitor)
 
 void RemoveDuplicateRelationMembersVisitor::visit(const ElementPtr& e)
 {
+  if (!e)
+  {
+    return;
+  }
+
   if (e->getElementType() == ElementType::Relation)
   {
     RelationPtr relation = std::dynamic_pointer_cast<Relation>(e);
