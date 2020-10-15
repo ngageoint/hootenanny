@@ -164,6 +164,8 @@ public:
   double findMaximalSubline(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
     std::vector<WayLocation>& wl1, std::vector<WayLocation>& wl2);
 
+  int getBestMatchesRecursionCount() const { return _findBestMatchesRecursionCount; }
+
   void setMaxRecursionComplexity(int maxRecursions) { _maxRecursionComplexity = maxRecursions; }
 
 private:
