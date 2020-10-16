@@ -66,16 +66,20 @@ public:
 
     RiverMaximalSublineSettingOptimizer uut;
 
+    // This should return a scaled recursion value based on the set river length min/max.
     uut.setMaxIterationsScalingValue(450);
     uut.setMaxRiverLengthScalingValue(500000.0);
     uut.setMinIterationsScalingValue(5);
     uut.setMinRiverLengthScalingValue(15000.0);
     CPPUNIT_ASSERT_EQUAL(403, uut.getFindBestMatchesMaxRecursions(map));
 
+    // This should return the recursion value that indicates MaximalSubline will automatically
+    // determine the upper limit (-1).
     uut.setMinRiverLengthScalingValue(DBL_MAX);
     uut.setMaxRiverLengthScalingValue(500000.0);
     CPPUNIT_ASSERT_EQUAL(-1, uut.getFindBestMatchesMaxRecursions(map));
 
+    // This should return the min possible recursion value.
     uut.setMinRiverLengthScalingValue(15000.0);
     uut.setMaxRiverLengthScalingValue(0.0);
     CPPUNIT_ASSERT_EQUAL(5, uut.getFindBestMatchesMaxRecursions(map));
