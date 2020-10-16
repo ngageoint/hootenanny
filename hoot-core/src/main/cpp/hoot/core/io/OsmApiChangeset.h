@@ -43,6 +43,7 @@
 #include <vector>
 
 //  Hoot
+#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/io/OsmApiMatchFailure.h>
 #include <hoot/core/util/DefaultIdGenerator.h>
@@ -61,6 +62,18 @@ typedef std::map<long, std::set<long>> NodeIdToRelationIdMap;
 typedef std::map<long, std::set<long>> WayIdToRelationIdMap;
 typedef std::map<long, std::set<long>> RelationIdToRelationIdMap;
 typedef std::vector<std::set<long>> ElementCountSet;
+
+/** Last element pushed in a ChangesetInfo object */
+struct LastElementInfo
+{
+  LastElementInfo()
+    : _id(), _version(-1), _type(ChangesetType::TypeMax) { }
+  LastElementInfo(ElementId id, long version, ChangesetType type)
+    : _id(id), _version(version), _type(type) { }
+  ElementId _id;
+  long _version;
+  ChangesetType _type;
+};
 
 /** XML Changeset data object */
 class XmlChangeset
@@ -251,6 +264,11 @@ public:
    * @return Element count
    */
   int getCleanupCount() { return _cleanupCount; }
+  /**
+   * @brief updateLastElement Set the last element structure metadata (updated ID and version)
+   * @param last Last element information, in/out
+   */
+  void updateLastElement(LastElementInfo& last);
 
 private:
   /**
@@ -590,6 +608,13 @@ public:
    */
   size_t size(ElementType::Type elementType, ChangesetType changesetType);
   /**
+   * @brief size Total number of elements of a specified changeset type (create/modify/delete) within
+   *  this subset
+   * @param changesetType Describes the type (create/modify/delete) to count
+   * @return count based on changeset type
+   */
+  size_t size(ChangesetType changesetType);
+  /**
    * @brief size Total number of elements in the subset
    * @return total count
    */
@@ -603,14 +628,16 @@ public:
   /** Set/get _versionRetries member */
   bool canRetryVersion();
   void retryVersion();
-  /** Set/get _last member for final error checking */
-  void setLast() { _last = true; }
-  bool getLast() { return _last; }
+  /** Set/get _finished member for final error checking */
+  void setFinished() { _finished = true; }
+  bool getFinished() { return _finished; }
   /** Set/get _isError member */
   void setError() { _isError = true; }
   bool getError() { return _isError; }
   /** Append another changeset info object to this one */
   void append(const std::shared_ptr<ChangesetInfo>& info);
+  /** Return the information of the last element in this changeset */
+  LastElementInfo getLastElement();
 
 private:
   /** 3x3 array of containers for elements in this subset */
@@ -624,13 +651,22 @@ private:
   int _numVersionRetries;
   const int MAX_VERSION_RETRIES = 25;
   /** Flag set when this is the last changeset because of error */
-  bool _last;
+  bool _finished;
   /** When `true` this entire changeset consists of elements that cannot be pushed without an error.
    *  For example: A way cannot be added because it references a node that doesn't exists, this changeset
    *  would contain the new way and any new nodes that shouldn't be added by themselves.
    */
   bool _isError;
 };
+
+/**
+ * A handy output stream method to enable output of LastElementInfo objects
+ */
+inline std::ostream& operator<<(std::ostream& o, const LastElementInfo& element)
+{
+  o << "Type(" << toString(element._type) << ") " << element._id.toString().toStdString() << " Version(" << element._version << ")";
+  return o;
+}
 
 }
 

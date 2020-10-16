@@ -143,7 +143,9 @@ public:
         "Changeset(s) applied to: " + printableUrl.left(maxFilePrintLength) + "...");
 
       //  Output the last changeset ID in a status message
-      LOG_STATUS("Last changeset pushed ID: " << writer.getLastChangesetId());
+      LastElementInfo last = writer.getLastElementInfo();
+      if (!last._id.isNull())
+        LOG_STATUS("Last element pushed: " << last);
 
       //  Write out the failed changeset if there is one
       if (writer.containsFailed())

@@ -43,6 +43,18 @@ bool id_sort_order(long lhs, long rhs)
   else                          return lhs < rhs; //  Negative numbers come before positive
 }
 
+/** Function to convert ChangesetType to a string */
+std::string toString(ChangesetType type)
+{
+  switch(type)
+  {
+  case ChangesetType::TypeCreate:   return "create";
+  case ChangesetType::TypeModify:   return "modify";
+  case ChangesetType::TypeDelete:   return "delete";
+  default:                          return "Invalid Changeset Type";
+  }
+}
+
 /**  Global regular expression for truncating tag keys/values at max tag length */
 QRegularExpression truncateTags("&[^;]+$", QRegularExpression::UseUnicodePropertiesOption);
 
