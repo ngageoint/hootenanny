@@ -63,6 +63,8 @@ enum ChangesetType : int
   TypeDelete,
   TypeMax
 };
+/** Function to convert ChangesetType to a string */
+std::string toString(ChangesetType type);
 
 /** Changeset element abstraction for simplified nodes, ways, and relations */
 class ChangesetElement
