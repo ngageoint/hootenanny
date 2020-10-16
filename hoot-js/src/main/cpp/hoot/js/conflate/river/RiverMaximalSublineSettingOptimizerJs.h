@@ -34,17 +34,18 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Wrapper around RiverMaximalSublineSettingOptimizer for JS usage
  */
 class RiverMaximalSublineSettingOptimizerJs : public node::ObjectWrap
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
+
   /**
-   * TODO
+   * Wraps RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions for JS usage
    *
-   * @param args
+   * @param args single input arg containing an OsmMapJs object
    */
   static void getFindBestMatchesMaxRecursions(const v8::FunctionCallbackInfo<v8::Value>& args);
 

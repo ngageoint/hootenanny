@@ -34,9 +34,6 @@
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/elements/OsmMapJs.h>
 
-// Qt
-#include <QString>
-
 using namespace v8;
 
 namespace hoot
