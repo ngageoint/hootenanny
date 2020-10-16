@@ -166,7 +166,7 @@ public:
 
   int getBestMatchesRecursionCount() const { return _findBestMatchesRecursionCount; }
 
-  void setMaxRecursionComplexity(int maxRecursions) { _maxRecursionComplexity = maxRecursions; }
+  void setMaxRecursions(int maxRecursions) { _maxRecursions = maxRecursions; }
 
 private:
 
@@ -178,8 +178,10 @@ private:
 
   // places a limit on the number of recursive matching calls that can be made and throws an
   // exception once that limit has been reached; only used in select places in the code
-  int _maxRecursionComplexity;
+  int _maxRecursions;
   int _findBestMatchesRecursionCount;
+  // hard stop at this value
+  static const int MAX_RECURSIONS_UPPER_LIMIT = 1e6;
 
   struct SublineScore
   {

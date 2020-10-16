@@ -2540,14 +2540,14 @@ The Linux utility RLIMIT_AS is used for limiting virtual memory. This is analago
 less RAM will be utilized than the value specified. Typically this is most useful when limiting
 RAM usage of applications in a shared server environment.
 
-=== maximal.subline.max.recursive.complexity
+=== maximal.subline.max.recursions
 
 * Data Type: int
 * Default Value: `-1`
 
 Maximum recursive calls allowed in MaximalSubline as it looks for line matches. Too low of a number
 may degrade Unifying algorithm line matching conflate performance. Too high of a number may result
-in runaway line matching processing times. -1 indicates no limit.
+in runaway line matching processing times. -1 indicates an internally determined limit.
 
 === maximal.subline.spacing
 
@@ -5096,12 +5096,13 @@ The distance around a point on a waterway to look when calculating the heading. 
 
 Sets that maximum angle that is still considered a waterway match. Units in degrees.
 
-=== waterway.maximal.subline.max.recursive.complexity
+=== waterway.maximal.subline.auto.optimize
 
-* Data Type: int
-* Default Value: `50`
+* Data Type: bool
+* Default Value: `true`
 
-River specific version of maximal.subline.max.recursive.complexity.
+Enabling this allows River Conflation to optimize the manner it uses maximal subline matching for
+runtime performance.
 
 === waterway.name.threshold
 

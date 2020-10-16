@@ -306,7 +306,9 @@ void ChangesetReplacementCreator7::create(
 
   // CUT
 
-  // cut the shape of the secondary data out of the reference data
+  // cut the shape of the secondary data out of the reference data; pass in an unknown geometry
+  // type since we're replacing all types and that also prevents alpha shapes from trying to cover
+  // stragglers, which can be expensive
   OsmMapPtr cookieCutRefMap =
     _getCookieCutMap(refMap, secMap, GeometryTypeCriterion::GeometryType::Unknown);
   const int cookieCutSize = cookieCutRefMap->size();

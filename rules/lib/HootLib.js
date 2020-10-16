@@ -547,3 +547,11 @@ function getPoiSearchRadii()
 {
   return hoot.PoiSearchRadius.getSearchRadii();
 }
+
+/*
+ * TODO
+ */
+function getRiverMaxSublineRecursions(map)
+{
+  return hoot.RiverMaximalSublineSettingOptimizer.getFindBestMatchesMaxRecursions(map);
+}

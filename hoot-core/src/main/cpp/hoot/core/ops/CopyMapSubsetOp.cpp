@@ -156,10 +156,10 @@ _copyChildren(true)
 void CopyMapSubsetOp::apply(OsmMapPtr& map)
 {
   map->setProjection(_from->getProjection());
-  LOG_VARD(_copyChildren);
+  LOG_VART(_copyChildren);
   AddAllVisitor v(_from, map, _copyChildren);
 
-  LOG_VARD(_eids.size());
+  LOG_VART(_eids.size());
   for (set<ElementId>::const_iterator it = _eids.begin(); it != _eids.end(); ++it)
   {
     if (_from->containsElement(*it) == false)
@@ -169,7 +169,7 @@ void CopyMapSubsetOp::apply(OsmMapPtr& map)
     _from->getElement(*it)->visitRo(*_from, v, _copyChildren);
   }
   std::set<ElementId> eids = v.getElementsAdded();
-  LOG_VARD(eids.size());
+  LOG_VART(eids.size());
   _eidsCopied.insert(eids.begin(), eids.end());
 }
 

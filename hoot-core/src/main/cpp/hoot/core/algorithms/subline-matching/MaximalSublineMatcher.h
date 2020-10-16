@@ -59,7 +59,7 @@ public:
   virtual void setMinSplitSize(Meters minSplitSize) override { _minSplitSize = minSplitSize; }
   virtual void setHeadingDelta(Meters /*headingDelta*/) override {}
 
-  void setMaxRecursionComplexity(int maxRecursions) { _maxRecursionComplexity = maxRecursions; }
+  void setMaxRecursions(int maxRecursions) { _maxRecursions = maxRecursions; }
 
   virtual QString getDescription() const
   { return "Matches lines based on the longest matching subline found"; }
@@ -71,8 +71,8 @@ private:
   Radians _maxAngle;
   Meters _minSplitSize;
 
-  // See MaximalSubline::__maxRecursionComplexity
-  int _maxRecursionComplexity;
+  // See MaximalSubline::__maxRecursions
+  int _maxRecursions;
 };
 
 }
