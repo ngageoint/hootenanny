@@ -72,9 +72,9 @@ public:
   virtual std::string getClassName() const = 0;
 
   /**
-   * TODO
+   * Returns the class name of the underlying subline matcher
    *
-   * @return
+   * @return class name string
    */
   virtual std::string getSublineMatcherName() const = 0;
 };

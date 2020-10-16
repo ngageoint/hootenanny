@@ -549,7 +549,8 @@ function getPoiSearchRadii()
 }
 
 /*
- * TODO
+ * Returns the maximum amount of match method recursions that should be allowed for river 
+ * conflation based on the input data
  */
 function getRiverMaxSublineRecursions(map)
 {

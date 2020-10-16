@@ -67,7 +67,11 @@ exports.calculateSearchRadius = function(map)
     hoot.debug("Using specified search radius for waterway conflation: " + exports.searchRadius);
   }
 
-  // TODO
+  // We need to configure the maximal subline matcher to not have runaway recursion when 
+  // matching sublines. This is done based on the total length of all rivers in the input data.
+  // This isn't the best place to put this, but there's nowhere convenient in the C++ to do it, 
+  // and this is the only exported method that takes in a map and runs before the matching, 
+  // so it will do.
   var maxRecursions = getRiverMaxSublineRecursions(map);
   sublineMatcher =
     new hoot.MaximalSublineStringMatcher(
