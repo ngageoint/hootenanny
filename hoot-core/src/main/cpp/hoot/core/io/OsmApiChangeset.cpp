@@ -1837,6 +1837,34 @@ void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id
   }
 }
 
+void XmlChangeset::updateLastElement(LastElementInfo& last)
+{
+  //  Update the ID if it is negative
+  ElementType::Type type = last._id.getType().getEnum();
+  long id  = last._id.getId();
+  if (id < 0)
+  {
+    if (_idMap.containsId(type, id))
+      last._id = ElementId(type, _idMap.getId(type, id));
+  }
+  //  Get the current version
+  switch(type)
+  {
+  case ElementType::Node:
+    last._version = _allNodes[id]->getVersion();
+    break;
+  case ElementType::Way:
+    last._version = _allWays[id]->getVersion();
+    break;
+  case ElementType::Relation:
+    last._version = _allRelations[id]->getVersion();
+    break;
+  default:
+    LOG_WARN("Unknown element type found updating last element.");
+    break;
+  }
+}
+
 bool XmlChangeset::fixElement(ChangesetTypeMap& map, long id, long version, QMap<QString, QString> tags)
 {
   bool success = false;
@@ -2083,7 +2111,7 @@ bool XmlChangeset::calculateRemainingChangeset(ChangesetInfoPtr& changeset)
     changeset.reset(new ChangesetInfo());
   changeset->clear();
   //  This is the last changeset of the bunch because of the error state
-  changeset->setLast();
+  changeset->setFinished();
   //  Loop through all remaining elements
   for (ChangesetType type = ChangesetType::TypeCreate; type != ChangesetType::TypeMax; type = static_cast<ChangesetType>(type + 1))
   {
@@ -2406,7 +2434,7 @@ ChangesetInfo::ChangesetInfo()
   : _attemptedResolveChangesetIssues(false),
     _numFailureRetries(0),
     _numVersionRetries(0),
-    _last(false),
+    _finished(false),
     _isError(false)
 {
 }
@@ -2469,6 +2497,16 @@ size_t ChangesetInfo::size(ElementType::Type elementType, ChangesetType changese
   return _changeset[elementType][changesetType].size();
 }
 
+size_t ChangesetInfo::size(ChangesetType changesetType)
+{
+  size_t s = 0;
+  //  Iterate element types
+  for (int i = 0; i < (int)ElementType::Unknown; ++i)
+    s += _changeset[i][changesetType].size();
+  return s;
+}
+
+
 size_t ChangesetInfo::size()
 {
   size_t s = 0;
@@ -2528,5 +2566,24 @@ void ChangesetInfo::append(const std::shared_ptr<ChangesetInfo>& info)
   }
 }
 
+LastElementInfo ChangesetInfo::getLastElement()
+{
+  LastElementInfo last;
+  //  Iterate backwards to get the last element
+  for (int i = (int)ElementType::Relation; i >= (int)ElementType::Node; --i)
+  {
+    for (int j = ChangesetType::TypeDelete; j >= ChangesetType::TypeCreate; --j)
+    {
+      if (_changeset[i][j].size() > 0)
+      {
+        long id = (*_changeset[i][j].begin());
+        last._id = ElementId((ElementType::Type)i, id);
+        last._type = (ChangesetType)j;
+        return last;
+      }
+    }
+  }
+  return last;
+}
 
 }

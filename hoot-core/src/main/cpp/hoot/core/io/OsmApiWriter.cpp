@@ -70,7 +70,6 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
     _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
     _changesetCount(0),
-    _lastChangesetId(0),
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
     _apiId(0),
@@ -100,7 +99,6 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _accessToken(ConfigOptions().getHootOsmAuthAccessToken()),
     _secretToken(ConfigOptions().getHootOsmAuthAccessTokenSecret()),
     _changesetCount(0),
-    _lastChangesetId(0),
     _debugOutput(ConfigOptions().getChangesetApidbWriterDebugOutput()),
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
     _apiId(0),
@@ -290,6 +288,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
   HootNetworkRequestPtr request = createNetworkRequest(true);
   long id = -1;
   long changesetSize = 0;
+  LastElementInfo last;
   bool stop_thread = false;
   int changeset_failures = 0;
   //  Before working, wait for the signal
@@ -318,6 +317,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
       {
         id = _createChangeset(request, _description, _source, _hashtags, create_changeset_status);
         changesetSize = 0;
+        last = LastElementInfo();
       }
       //  An ID of less than 1 isn't valid, try to fix it
       if (id < 1)
@@ -391,8 +391,9 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         //  otherwise keep it open and go again
         else if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
         {
+          last = _extractLastElement(workInfo);
           //  Close the changeset
-          _closeChangeset(request, id, changesetSize);
+          _closeChangeset(request, id, last);
           //  Signal for a new changeset id
           id = -1;
         }
@@ -405,7 +406,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         //  Report the status message for this failure
         _statusMessage(info, id);
         //  If this is the last changeset, error it all out and finish working
-        if (workInfo->getLast())
+        if (workInfo->getFinished())
         {
           //  Fail the entire changeset
           _changeset.updateFailedChangeset(workInfo, true);
@@ -564,7 +565,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
           else if (id > 0 && _threadIdle[index].getElapsed() > 10 * 1000)
           {
             //  Close the current changeset so all data is "committed"
-            _closeChangeset(request, id, changesetSize);
+            _closeChangeset(request, id, last);
             id = -1;
           }
           _threadStatusMutex.unlock();
@@ -581,7 +582,7 @@ void OsmApiWriter::_changesetThreadFunc(int index)
   }
   //  Close the changeset if one is still open
   if (id != -1)
-    _closeChangeset(request, id, changesetSize);
+    _closeChangeset(request, id, last);
   //  Update the thread to complete if it didn't fail
   ThreadStatus status = _getThreadStatus(index);
   if (status != ThreadStatus::Failed && status != ThreadStatus::Unknown)
@@ -824,12 +825,12 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
-void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id, long changesetSize)
+void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset_id, const LastElementInfo& last)
 {
   try
   {
     QUrl changeset = _url;
-    changeset.setPath(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(id));
+    changeset.setPath(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(changeset_id));
     request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     switch (request->getHttpStatus())
@@ -844,9 +845,9 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long id, long 
       //  Changeset closed successfully
       _changesetCountMutex.lock();
       _changesetCount++;
-      //  Keep track of the last changeset ID closed inside the mutex, for non-empty changesets
-      if (changesetSize > 0)
-        _lastChangesetId = id;
+      //  Keep track of the last element information
+      if (!last._id.isNull())
+        _lastElement = last;
       _changesetCountMutex.unlock();
       break;
     default:
@@ -1231,7 +1232,7 @@ void OsmApiWriter::_statusMessage(OsmApiFailureInfoPtr info, long changesetId)
     LOG_STATUS("Element to be deleted already deleted, removing from changeset " << changesetId);
     break;
   case HttpResponseCode::HTTP_BAD_REQUEST:            //  Placeholder ID is missing or not unique
-    LOG_STATUS("Element placehoder ID is missing or not unique in changeset" << changesetId << ", moving element the manual changeset.");
+    LOG_STATUS("Element placehoder ID is missing or not unique in changeset " << changesetId << ", moving element the manual changeset.");
     break;
   /** These error states are actual errors and the user should report them */
   case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:  //  Internal Server Error, could be caused by the database being saturated
@@ -1257,6 +1258,15 @@ void OsmApiWriter::_statusMessage(OsmApiFailureInfoPtr info, long changesetId)
     LOG_STATUS("Unknown network error occurred while uploading changeset " << changesetId);
     break;
   }
+}
+
+LastElementInfo OsmApiWriter::_extractLastElement(const ChangesetInfoPtr& workInfo)
+{
+  //  Get the last element uploaded
+  LastElementInfo last = workInfo->getLastElement();
+  //  Update the structure with positive ID for create and version of element
+  _changeset.updateLastElement(last);
+  return last;
 }
 
 }
