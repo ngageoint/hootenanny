@@ -162,7 +162,7 @@ function geometryMismatch(map, e1, e2)
   hoot.trace(sublines);
   if (sublines && sublines == "RecursiveComplexityException")
   {
-    // If receive the specfic string above from the matching routine, we know our subline matcher
+    // If we receive the specfic string above from the matching routine, we know our subline matcher
     // hit the cap on the number of recursive calls we allow for it 
     // (see waterway.maximal.subline.max.recursive.complexity above; A little kludgy, but not sure 
     // how to handle hoot exceptions in a js script at this point). So, now we'll try a backup matcher

@@ -46,6 +46,9 @@ nodes and polygons or a school polygon which encloses school buildings on the ca
  */
 exports.isMatchCandidate = function(map, e)
 {
+  hoot.trace("e: " + e.getElementId());
+  hoot.trace("isNonBuildingArea: " + isNonBuildingArea(map, e));
+
   return isNonBuildingArea(map, e);
 };
 
@@ -200,7 +203,8 @@ exports.matchScore = function(map, e1, e2)
       smallerOverlap = smallerOverlapExtractor.extract(map, e1, e2);
       hoot.trace("smallerOverlap: " + smallerOverlap);
     }
-    if (smallerOverlap > 0.835)
+    var overlapReviewThreshold = parseFloat(hoot.get("area.overlap.review.threshold"));
+    if (smallerOverlap >= overlapReviewThreshold)
     {
       hoot.trace("review");
       result = { match: 0.0, miss: 0.0, review: 1.0 };
