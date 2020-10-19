@@ -61,15 +61,16 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  CPPUNIT_TEST(orphanedNodes1Test);
+  // TODO: re-enable
+/*  CPPUNIT_TEST(orphanedNodes1Test);
   CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(droppedNodes1Test);
-  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test)*/;
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
   //CPPUNIT_TEST(github4216UniformTest);
-  //CPPUNIT_TEST(northVegasLargeUniformTest);
+  CPPUNIT_TEST(northVegasLargeUniformTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -300,33 +301,41 @@ public:
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
+//    _prepInput(
+//      rootDir + "/combined-data/NOMEData.osm",
+//      rootDir + "/combined-data/OSMData.osm",
+//      "");
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm",
       rootDir + "/combined-data/OSMData.osm",
-      "");
+      "-115.2615,36.2805,-115.2128,36.3144", outDir);
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(true);
-    uut.setOutputNonConflatable(true);
-//    QList<int> includeIds;
-//    includeIds.append(21);
-//    includeIds.append(22);
-//    includeIds.append(23);
-//    includeIds.append(24);
-//    uut.setTaskCellIncludeIds(includeIds);
+    uut.setTagQualityIssues(false); // TODO: change back to true
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
+    //QList<int> includeIds;
+    //includeIds.append(18);
+    //uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
-    // currently broken: 32/64 during changeset generation
+//    uut.replace(
+//      DATA_TO_REPLACE_URL,
+//      _replacementDataUrl,
+//      UniformTaskGridGenerator(
+//        "-115.3528,36.0919,-114.9817,36.3447", 8,
+//        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+//        .generateTaskGrid());
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
       UniformTaskGridGenerator(
-        "-115.3528,36.0919,-114.9817,36.3447", 8,
+        "-115.2600,36.2815,-115.2136,36.3130", 1,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
@@ -376,7 +385,7 @@ private:
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false); 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
   }
 
   void _loadDataToReplaceDb(

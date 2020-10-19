@@ -810,6 +810,12 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
     hoot schema
 -----
 
+===== Obtain a similarity score for two type tags based on the internal schema:
+
+-----
+    hoot type-similarity amenity=school landuse=residential
+-----
+
 ===== Split a map into multiple maps corresponding to irregular shaped tiles produced above:
 
 -----

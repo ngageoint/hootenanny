@@ -340,6 +340,14 @@ public:
   QString toString() const;
 
   /**
+   * Determines if a string is a valid tag key/value pair
+   *
+   * @param str the string to examine
+   * @return true if the input string is a valid kvp; false otherwise
+   */
+  static bool isValidKvp(const QString& str);
+
+  /**
    * Returns true if the tags have the specified kvp
    *
    * @param kvp kvp to search for; value wildcards are supported using '*'
