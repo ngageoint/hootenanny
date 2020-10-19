@@ -62,15 +62,16 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   // TODO: re-enable
-/*  CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
   CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(droppedNodes1Test);
-  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test)*/;
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(badPolyIdSyncTest);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
   //CPPUNIT_TEST(github4216UniformTest);
-  CPPUNIT_TEST(northVegasLargeUniformTest);
+  //CPPUNIT_TEST(northVegasLargeUniformTest);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -253,6 +254,42 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
+  void badPolyIdSyncTest()
+  {
+    // part of github 4297 - The landuse=residential poly surrounding Flanagan Drive should not be
+    // corrupted in the output.
+
+    _testName = "badPolyIdSyncTest";
+    _prepInput(
+      _inputPath + "/badPolyIdSyncTest-Input1.osm",
+      _inputPath + "/badPolyIdSyncTest-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.2434,36.3022,-115.2317,36.3136", 1,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
   ///////////////////////////////////////////////////////////////////////////////////////////
 
   void github4216UniformTest()
@@ -304,18 +341,10 @@ public:
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
-//    _prepInput(
-//      rootDir + "/combined-data/NOMEData.osm",
-//      rootDir + "/combined-data/OSMData.osm",
-//      "");
-//    _prepInput(
-//      rootDir + "/combined-data/NOMEData.osm",
-//      rootDir + "/combined-data/OSMData.osm",
-//      "-115.2615,36.2805,-115.2128,36.3144", outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm",
       rootDir + "/combined-data/OSMData.osm",
-      "-115.2459,36.3002,-115.2282,36.3157", outDir);
+      "");
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
@@ -328,25 +357,11 @@ public:
     //includeIds.append(18);
     //uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
-//    uut.replace(
-//      DATA_TO_REPLACE_URL,
-//      _replacementDataUrl,
-//      UniformTaskGridGenerator(
-//        "-115.3528,36.0919,-114.9817,36.3447", 8,
-//        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-//        .generateTaskGrid());
-//    uut.replace(
-//      DATA_TO_REPLACE_URL,
-//      _replacementDataUrl,
-//      UniformTaskGridGenerator(
-//        "-115.2600,36.2815,-115.2136,36.3130", 1,
-//        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-//        .generateTaskGrid());
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
       UniformTaskGridGenerator(
-        "-115.2434,36.3022,-115.2317,36.3136", 1,
+        "-115.3528,36.0919,-114.9817,36.3447", 8,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 

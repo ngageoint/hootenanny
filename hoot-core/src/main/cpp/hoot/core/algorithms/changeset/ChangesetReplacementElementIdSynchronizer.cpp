@@ -50,9 +50,9 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   ElementIdSynchronizer::synchronize(map1, map2);
 
   QString msg = "Synchronizing IDs for nearly identical way nodes";
-  if (!map1->getName().trimmed().isEmpty() && !map2->getName().trimmed().isEmpty())
+  if (!_map1->getName().trimmed().isEmpty() && !_map2->getName().trimmed().isEmpty())
   {
-    msg += " between " + map1->getName() + " and " + map2->getName();
+    msg += " between " + _map1->getName() + " and " + _map2->getName();
   }
   msg += "...";
   LOG_INFO(msg);

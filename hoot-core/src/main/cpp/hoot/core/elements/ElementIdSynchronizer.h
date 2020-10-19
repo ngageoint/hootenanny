@@ -94,11 +94,6 @@ protected:
       const int coordinateComparisonSensitivity =
         ConfigOptions().getNodeComparisonCoordinateSensitivity());
 
- /*
-  * TODO
-  */
-  virtual void _syncElementIds(const QSet<QString>& identicalHashes);
-
   /*
    * Determines if two elements (one from each input map) are way nodes which don't have a way
    * parent in common.
@@ -110,6 +105,10 @@ protected:
    * to prevent ID synchronization from occurring..
    */
   bool _areWayNodesInWaysOfMismatchedType(ElementPtr element1, ElementPtr element2);
+
+private:
+
+  void _syncElementIds(const QSet<QString>& identicalHashes);
 };
 
 }
