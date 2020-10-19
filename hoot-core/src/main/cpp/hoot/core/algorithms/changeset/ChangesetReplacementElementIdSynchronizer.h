@@ -51,6 +51,10 @@ public:
    */
   virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2) override;
 
+protected:
+
+  virtual void _syncElementIds(const QSet<QString>& identicalHashes) override;
+
 private:
 
   WayNodeCriterion _wayNodeCrit;

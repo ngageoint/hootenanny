@@ -2020,6 +2020,8 @@ void ChangesetReplacementCreator1::_synchronizeIds(
   // changeset modifications from being generated. Its possible we could do this earlier in the
   // replacement process, however that has proven difficult to accomplish so far.
 
+  LOG_STATUS("Synchronizing element IDs between maps...");
+
   ChangesetReplacementElementIdSynchronizer idSync;
   OsmMapWriterFactory::writeDebugMap(
     mapBeingReplaced, _changesetId + "-" + mapBeingReplaced->getName() +

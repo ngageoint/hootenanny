@@ -95,6 +95,17 @@ protected:
       const int coordinateComparisonSensitivity =
         ConfigOptions().getNodeComparisonCoordinateSensitivity());
 
+ /*
+  * TODO
+  */
+  virtual void _syncElementIds(const QSet<QString>& identicalHashes);
+
+  /*
+   * TODO
+   */
+  QSet<QString> _getHashesByElementType(
+    const QMap<ElementId, QString>& hashesByElementId, const ElementType& elementType) const;
+
   /*
    * Determines if two elements (one from each input map) are way nodes which don't have a way
    * parent in common.

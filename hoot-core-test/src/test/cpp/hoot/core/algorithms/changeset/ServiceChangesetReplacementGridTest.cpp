@@ -308,10 +308,14 @@ public:
 //      rootDir + "/combined-data/NOMEData.osm",
 //      rootDir + "/combined-data/OSMData.osm",
 //      "");
+//    _prepInput(
+//      rootDir + "/combined-data/NOMEData.osm",
+//      rootDir + "/combined-data/OSMData.osm",
+//      "-115.2615,36.2805,-115.2128,36.3144", outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm",
       rootDir + "/combined-data/OSMData.osm",
-      "-115.2615,36.2805,-115.2128,36.3144", outDir);
+      "-115.2459,36.3002,-115.2282,36.3157", outDir);
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
@@ -331,11 +335,18 @@ public:
 //        "-115.3528,36.0919,-114.9817,36.3447", 8,
 //        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
 //        .generateTaskGrid());
+//    uut.replace(
+//      DATA_TO_REPLACE_URL,
+//      _replacementDataUrl,
+//      UniformTaskGridGenerator(
+//        "-115.2600,36.2815,-115.2136,36.3130", 1,
+//        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+//        .generateTaskGrid());
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
       UniformTaskGridGenerator(
-        "-115.2600,36.2815,-115.2136,36.3130", 1,
+        "-115.2434,36.3022,-115.2317,36.3136", 1,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
@@ -385,7 +396,7 @@ private:
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false); 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 
   void _loadDataToReplaceDb(
