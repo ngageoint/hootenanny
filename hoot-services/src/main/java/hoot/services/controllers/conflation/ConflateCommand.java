@@ -201,8 +201,8 @@ class ConflateCommand extends ExternalCommand {
                 List<String> matchCreators;
                 List<String> mergerCreators;
 
-                // SPECIAL CASE: if network order networkAlgorithm.conf
-                if ("Network".equals(conflationType)) {
+                // SPECIAL CASE: if network, use order networkAlgorithm.conf
+                if ("Network".equals(conflationType) || "Network".equals(conflationAlgorithm)) {
                     JSONParser parser = new JSONParser();
                     try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, NETWORK_CONFLATION_PATH))) {
                         JSONObject networkConfigJson = (JSONObject) parser.parse(fileReader);
@@ -213,7 +213,7 @@ class ConflateCommand extends ExternalCommand {
                         throw new RuntimeException("Error reading NetworkAlgorithm.conf file", ioe);
                     }
                 } else {
-                    // These 2 lists are in the proper order so we will us this to sort our matchers and mergers list
+                    // These 2 lists are in the proper order so we will use this to sort our matchers and mergers list
                     matchCreators = new ArrayList<>(Arrays.asList(configOptions.get("MatchCreators").get("default").split(";")));
                     mergerCreators = new ArrayList<>(Arrays.asList(configOptions.get("MergerCreators").get("default").split(";")));
                 }
@@ -226,7 +226,7 @@ class ConflateCommand extends ExternalCommand {
                     String current = matchCreators.get(i);
 
                     // Special case for network
-                    if (current.equals("hoot::NetworkMatchCreator") && matchers.contains("hoot::HighwayMatchCreator")) {
+                    if (current.equals("hoot::NetworkMatchCreator") && (matchers.contains("hoot::HighwayMatchCreator") || matchers.contains("hoot::NetworkMatchCreator"))) {
                         sortedMatchers.add("hoot::NetworkMatchCreator");
                         sortedMergers.add("hoot::NetworkMergerCreator");
                     }
