@@ -41,6 +41,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth.consumer.OAuthConsumerSupport;
 import org.springframework.security.oauth.consumer.OAuthConsumerToken;
 import org.springframework.security.oauth.consumer.OAuthRequestFailedException;
@@ -102,8 +106,13 @@ public class OAuth1Resource {
         OAuthSecurityContext context = OAuthSecurityContextHolder.getContext();
         context.getAccessTokens().put(r.getId(), accessToken);
 
-        String response = oauthRestTemplate
-                .getForObject(HootProperties.OAUTH_PROVIDERURL + HootProperties.OAUTH_PATHS_USER, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/xml");
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> responseEntity = oauthRestTemplate.exchange(
+                HootProperties.OAUTH_PROVIDERURL + HootProperties.OAUTH_PATHS_USER, HttpMethod.GET, entity, String.class);
+        String response = responseEntity.getBody();
         Users user;
         try {
             user = userManager.upsert(response, accessToken, sess.getId());
