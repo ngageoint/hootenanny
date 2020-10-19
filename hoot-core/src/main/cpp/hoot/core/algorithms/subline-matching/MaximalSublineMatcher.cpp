@@ -42,7 +42,7 @@ HOOT_FACTORY_REGISTER(SublineMatcher, MaximalSublineMatcher)
 MaximalSublineMatcher::MaximalSublineMatcher() :
 _maxAngle(-1.0),
 _minSplitSize(-1.0),
-_maxRecursionComplexity(-1)
+_maxRecursions(-1)
 {
 }
 
@@ -61,10 +61,12 @@ WaySublineMatchString MaximalSublineMatcher::findMatch(const ConstOsmMapPtr& map
   // This should use _minSplitSize rather than mrd, but that causes some tests to fail. We should
   // look into the problem and solve it. See redmine #6159.
   MaximalSubline ms(threshold, mrd);
-  // See MaximalSubline::__maxRecursionComplexity
-  ms.setMaxRecursionComplexity(_maxRecursionComplexity);
+  // See MaximalSubline::_maxRecursions
+  LOG_VART(_maxRecursions);
+  ms.setMaxRecursions(_maxRecursions);
 
   vector<WaySublineMatch> matches = ms.findAllMatches(map, way1, way2, score);
+  LOG_VART(ms.getBestMatchesRecursionCount());
   return WaySublineMatchString(matches);
 }
 
@@ -73,7 +75,7 @@ void MaximalSublineMatcher::setConfiguration(const Settings &conf)
   ConfigOptions co(conf);
   _maxAngle = toRadians(co.getWayMatcherMaxAngle());
   _minSplitSize = co.getWayMergerMinSplitSize();
-  _maxRecursionComplexity = co.getMaximalSublineMaxRecursiveComplexity();
+  _maxRecursions = co.getMaximalSublineMaxRecursions();
 }
 
 }

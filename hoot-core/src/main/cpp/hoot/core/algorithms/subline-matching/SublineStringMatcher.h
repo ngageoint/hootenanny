@@ -63,6 +63,20 @@ public:
   virtual void setMaxRelevantAngle(Radians r) = 0;
   virtual void setMinSplitSize(Meters minSplitSize) = 0;
   virtual void setHeadingDelta(Meters headingDelta) = 0;
+
+  /**
+   * Returns the matcher's class name
+   *
+   * @return class name string
+   */
+  virtual std::string getClassName() const = 0;
+
+  /**
+   * Returns the class name of the underlying subline matcher
+   *
+   * @return class name string
+   */
+  virtual std::string getSublineMatcherName() const = 0;
 };
 
 typedef std::shared_ptr<SublineStringMatcher> SublineStringMatcherPtr;

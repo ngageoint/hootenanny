@@ -25,23 +25,18 @@ exports.matchCandidateCriterion = "hoot::LinearWaterwayCriterion";
 
 // used during subline matching
 var sublineMatcherName = hoot.get("waterway.subline.matcher");
-
-var sublineMatcher = // default subline matcher
-  new hoot.MaximalSublineStringMatcher(
-    { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
-      "way.subline.matcher": sublineMatcherName,
-      "maximal.subline.max.recursive.complexity": hoot.get("waterway.maximal.subline.max.recursive.complexity") });
+var sublineMatcher; // default subline matcher; gets set up in calculateSearchRadius function
 var frechetSublineMatcher = // we'll switch over to this one if the default matcher runs too slowly
   new hoot.MaximalSublineStringMatcher(
     { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
       "way.subline.matcher": "hoot::FrechetSublineMatcher" }); 
+
 var sampledAngleHistogramExtractor =
   new hoot.SampledAngleHistogramExtractor(
     { "way.angle.sample.distance" : hoot.get("waterway.angle.sample.distance"),
       "way.matcher.heading.delta" : hoot.get("waterway.matcher.heading.delta"),
       "angle.histogram.extractor.process.relations" : "false" });
 var weightedShapeDistanceExtractor = new hoot.WeightedShapeDistanceExtractor();
-
 var nameExtractor = new hoot.NameExtractor(
   new hoot.MaxWordSetDistance(
     { "token.separator": "[\\s-,';]+" },
@@ -71,6 +66,18 @@ exports.calculateSearchRadius = function(map)
     exports.searchRadius = parseFloat(hoot.get("search.radius.waterway"));
     hoot.debug("Using specified search radius for waterway conflation: " + exports.searchRadius);
   }
+
+  // We need to configure the maximal subline matcher to not have runaway recursion when 
+  // matching sublines. This is done based on the total length of all rivers in the input data.
+  // This isn't the best place to put this, but there's nowhere convenient in the C++ to do it, 
+  // and this is the only exported method that takes in a map and runs before the matching, 
+  // so it will do.
+  var maxRecursions = getRiverMaxSublineRecursions(map);
+  sublineMatcher =
+    new hoot.MaximalSublineStringMatcher(
+      { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
+        "way.subline.matcher": sublineMatcherName,
+        "maximal.subline.max.recursions": maxRecursions });
 }
 
 /**

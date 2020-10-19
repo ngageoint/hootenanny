@@ -73,8 +73,8 @@ void MaximalSublineStringMatcher::setConfiguration(const Settings& s)
     std::dynamic_pointer_cast<MaximalSublineMatcher>(_sublineMatcher);
   if (maximalSublineMatcher)
   {
-    // See MaximalSubline::__maxRecursionComplexity
-    maximalSublineMatcher->setMaxRecursionComplexity(co.getMaximalSublineMaxRecursiveComplexity());
+    // See MaximalSubline::__maxRecursions
+    maximalSublineMatcher->setMaxRecursions(co.getMaximalSublineMaxRecursions());
   }
 }
 

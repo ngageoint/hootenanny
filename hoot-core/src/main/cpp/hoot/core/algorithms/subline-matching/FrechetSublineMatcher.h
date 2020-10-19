@@ -62,6 +62,8 @@ public:
   virtual QString getDescription() const
   { return "Matches lines based on the Frechet Distance algorithm"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   Radians _maxAngle;
