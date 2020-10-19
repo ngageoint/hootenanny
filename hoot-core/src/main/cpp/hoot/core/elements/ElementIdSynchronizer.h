@@ -36,8 +36,7 @@ namespace hoot
 {
 
 /**
- * This class allows for synchronizing element IDs between to maps that have identical features.
- * This works across multiple maps, so something like IdSwapOp won't work here.
+ * This class allows for synchronizing element IDs between two maps that have identical features.
  */
 class ElementIdSynchronizer
 {
@@ -99,12 +98,6 @@ protected:
   * TODO
   */
   virtual void _syncElementIds(const QSet<QString>& identicalHashes);
-
-  /*
-   * TODO
-   */
-  QSet<QString> _getHashesByElementType(
-    const QMap<ElementId, QString>& hashesByElementId, const ElementType& elementType) const;
 
   /*
    * Determines if two elements (one from each input map) are way nodes which don't have a way

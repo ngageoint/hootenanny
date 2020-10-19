@@ -85,20 +85,11 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   QSet<QString> map2HashesSet = _map2HashesToElementIds.keys().toSet();
 
   // Obtain the hashes for the elements that are identical between the two maps.
-
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
 
-//  QSet<QString> map1NodeHashesSet =
-//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Node);
-//  QSet<QString> map2NodeHashesSet =
-//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Node);
-//  const QSet<QString> identicalNodeHashes =
-//    map1NodeHashesSet.intersect(map2NodeHashesSet);
-//  LOG_VARD(identicalNodeHashes.size());
-
+  // overwrite map2 IDs with the IDs from map1 for the features that are identical
   _syncElementIds(identicalHashes);
-  //_syncElementIds(identicalNodeHashes);
 
   LOG_DEBUG(
     "Updated " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
@@ -112,8 +103,7 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
        ++itr)
   {
     const QString identicalHash = *itr;
-    // TODO: change back to trace
-    LOG_VARD(identicalHash);
+    LOG_VART(identicalHash);
 
     // Get the element with matching hash from the ref map
     ElementPtr map1IdenticalElement = _map1->getElement(_map1HashesToElementIds[identicalHash]);
@@ -121,7 +111,7 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
     // if its a way node, keep going
     if (map1IdenticalElement && _wayNodeCrit.isSatisfied(map1IdenticalElement))
     {
-      LOG_VARD(map1IdenticalElement->getElementId());
+      LOG_VART(map1IdenticalElement->getElementId());
 
       // Get the element with matching has from the sec map
       ElementPtr map2IdenticalElement = _map2->getElement(_map2HashesToElementIds[identicalHash]);
@@ -149,7 +139,7 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
           const double distance =
             EuclideanDistanceExtractor().distance(
               *_map1, *_map2, map1IdenticalElement, map2IdenticalElement);
-          LOG_VARD(distance);
+          LOG_VART(distance);
           if (distance > 1.11)
           {
             // too far apart, don't sync
@@ -161,10 +151,10 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
           map2IdenticalElementCopy->setId(map1IdenticalElement->getId());
           // need to use the ref map version
           map2IdenticalElementCopy->setVersion(map1IdenticalElement->getVersion());
-          LOG_VARD(map2IdenticalElementCopy->getElementId());
+          LOG_VART(map2IdenticalElementCopy->getElementId());
           // Make sure the map being updated doesn't already have an element with this ID (this
           // check may not be necessary).
-          LOG_DEBUG(
+          LOG_TRACE(
             "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
             map2IdenticalElementCopy->getElementId() << "...");
 

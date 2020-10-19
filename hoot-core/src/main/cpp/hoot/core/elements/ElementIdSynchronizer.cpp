@@ -59,7 +59,7 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
   _map2 = map2;
 
   QString msg = "Synchronizing IDs for identical elements";
-  if (!map1->getName().trimmed().isEmpty() && !_map2->getName().trimmed().isEmpty())
+  if (!_map1->getName().trimmed().isEmpty() && !_map2->getName().trimmed().isEmpty())
   {
     msg += " between " + _map1->getName() + " and " + _map2->getName();
   }
@@ -75,60 +75,15 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
   QSet<QString> map2HashesSet = _map2HashesToElementIds.keys().toSet();
 
   // Obtain the hashes for the elements that are identical between the two maps.
-
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
 
-//  QSet<QString> map1RelationHashesSet =
-//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Relation);
-//  QSet<QString> map2RelationHashesSet =
-//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Relation);
-//  const QSet<QString> identicalRelationHashes =
-//    map1RelationHashesSet.intersect(map2RelationHashesSet);
-//  LOG_VARD(identicalRelationHashes.size());
-
-//  QSet<QString> map1WayHashesSet =
-//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Way);
-//  QSet<QString> map2WayHashesSet =
-//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Way);
-//  const QSet<QString> identicalWayHashes =
-//    map1WayHashesSet.intersect(map2WayHashesSet);
-//  LOG_VARD(identicalWayHashes.size());
-
-//  QSet<QString> map1NodeHashesSet =
-//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Node);
-//  QSet<QString> map2NodeHashesSet =
-//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Node);
-//  const QSet<QString> identicalNodeHashes =
-//    map1NodeHashesSet.intersect(map2NodeHashesSet);
-//  LOG_VARD(identicalNodeHashes.size());
-
+  // overwrite map2 IDs with the IDs from map1 for the features that are identical
   _syncElementIds(identicalHashes);
-//  _syncElementIds(identicalRelationHashes);
-//  _syncElementIds(identicalWayHashes);
-//  _syncElementIds(identicalNodeHashes);
-//  _syncElementIds(identicalNodeHashes);
-//  _syncElementIds(identicalWayHashes);
-//  _syncElementIds(identicalRelationHashes);
 
   LOG_DEBUG(
     "Updated IDs on " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
     " identical elements in second map.");
-}
-
-QSet<QString> ElementIdSynchronizer::_getHashesByElementType(
-  const QMap<ElementId, QString>& hashesByElementId, const ElementType& elementType) const
-{
-  QSet<QString> filteredHashes;
-  for (QMap<ElementId, QString>::const_iterator itr = hashesByElementId.begin();
-       itr != hashesByElementId.end(); ++itr)
-  {
-    if (itr.key().getType() == elementType)
-    {
-      filteredHashes.insert(itr.value());
-    }
-  }
-  return filteredHashes;
 }
 
 void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes)
@@ -137,25 +92,24 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
        ++itr)
   {
     const QString identicalHash = *itr;
-    // TODO: change back to trace
-    LOG_VARD(identicalHash);
+    LOG_VART(identicalHash);
 
     // Get the element with matching hash from the ref map.
     ElementPtr map1IdenticalElement = _map1->getElement(_map1HashesToElementIds[identicalHash]);
     if (map1IdenticalElement)
     {
-      LOG_VARD(map1IdenticalElement->getElementId());
+      LOG_VART(map1IdenticalElement->getElementId());
 
       if (!_map2->containsElement(map1IdenticalElement->getElementId()))
       {
         // Copy it to be safe.
         ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
-        LOG_VARD(map1IdenticalElementCopy->getElementId());
+        LOG_VART(map1IdenticalElementCopy->getElementId());
         // Get the element with matching hash from the sec map.
         ElementPtr map2IdenticalElement = _map2->getElement(_map2HashesToElementIds[identicalHash]);
         if (map2IdenticalElement)
         {
-          LOG_VARD(map2IdenticalElement->getElementId());
+          LOG_VART(map2IdenticalElement->getElementId());
 
           // The original idea here was to not allow id sync between any two way nodes that have no
           // matching parent ways in common across the two maps. Unfortunately, this causes dropped
@@ -164,7 +118,7 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           // brittle b/c the geometry of ways between the two maps could be slightly different.
 //          if (_areWayNodesWithoutAWayInCommon(map1IdenticalElement, map2IdenticalElement))
 //          {
-//            LOG_DEBUG(
+//            LOG_TRACE(
 //              map1IdenticalElement->getElementId() << " and " <<
 //              map2IdenticalElement->getElementId() <<
 //              " are both way nodes that have no ways in common. Skipping ID sync...");
@@ -175,7 +129,7 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           // term solution...not sure yet.
           if (_areWayNodesInWaysOfMismatchedType(map1IdenticalElement, map2IdenticalElement))
           {
-            LOG_DEBUG(
+            LOG_TRACE(
               map1IdenticalElement->getElementId() << " and " <<
               map2IdenticalElement->getElementId() <<
               " are both way nodes that are in ways without matching types. Skipping ID sync...");
@@ -184,7 +138,7 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
 
           // Make sure the map being updated doesn't already have an element with this ID (this
           // check may not be necessary).
-          LOG_DEBUG(
+          LOG_TRACE(
             "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
             map1IdenticalElementCopy->getElementId() << "...");
 
@@ -212,11 +166,10 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           }
 
           // expensive; leave disabled by default
-          // TODO: disable
-          OsmMapWriterFactory::writeDebugMap(
-            _map2,
-            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
-            map1IdenticalElementCopy->getElementId().toString());
+//          OsmMapWriterFactory::writeDebugMap(
+//            _map2,
+//            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
+//            map1IdenticalElementCopy->getElementId().toString());
         }
       }
     }
@@ -228,14 +181,14 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
 {
   // This method is similar to ElementDeduplicator::_areWayNodesInWaysOfMismatchedType.
 
-  LOG_VARD(element1->getElementId());
-  LOG_VARD(element2->getElementId());
+  LOG_VART(element1->getElementId());
+  LOG_VART(element2->getElementId());
 
   _wayNodeCrit.setOsmMap(_map1.get());
-  LOG_VARD(_wayNodeCrit.isSatisfied(element1));
+  LOG_VART(_wayNodeCrit.isSatisfied(element1));
   const bool element1IdWayNode = _wayNodeCrit.isSatisfied(element1);
   _wayNodeCrit.setOsmMap(_map2.get());
-  LOG_VARD(_wayNodeCrit.isSatisfied(element2));
+  LOG_VART(_wayNodeCrit.isSatisfied(element2));
   const bool element2IdWayNode = _wayNodeCrit.isSatisfied(element2);
   // If they are both way nodes,
   if (!element1IdWayNode ||!element2IdWayNode)
@@ -246,10 +199,10 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
   // get the ways that contain each.
   const std::vector<ConstWayPtr> containingWays1 =
     WayUtils::getContainingWaysByNodeId(element1->getId(), _map1);
-  LOG_VARD(containingWays1.size());
+  LOG_VART(containingWays1.size());
   const std::vector<ConstWayPtr> containingWays2 =
     WayUtils::getContainingWaysByNodeId(element2->getId(), _map2);
-  LOG_VARD(containingWays2.size())
+  LOG_VART(containingWays2.size())
 
   // See if any of the ways between the two have a matching type.
   OsmSchema& schema = OsmSchema::getInstance();
@@ -260,7 +213,7 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
     ConstWayPtr way1 = *containingWays1Itr;
     if (way1)
     {
-      LOG_VARD(way1->getElementId());
+      LOG_VART(way1->getElementId());
 
       // If either of our containing ways is a administrative boundary, we're going to bail on the
       // type comparison, since many different types of ways could be part of an admin boundary.
@@ -277,7 +230,7 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
         ConstWayPtr way2 = *containingWays2Itr;;
         if (way2)
         {
-          LOG_VARD(way2->getElementId());
+          LOG_VART(way2->getElementId());
 
           if (RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
                 _map2, way2->getElementId(), adminBoundsCrit))
@@ -292,7 +245,7 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
           // This doesn't work. Don't know if it could be a better long term solution or not.
           //if (schema.typeMismatch(way1->getTags(), way2->getTags(), 0.3))
           {
-            LOG_DEBUG(
+            LOG_TRACE(
               "Found mismatching way parent type for way nodes " << element1->getElementId() <<
               " and " << element2->getElementId() << ".");
             return true;
@@ -308,14 +261,14 @@ bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
 bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
   ElementPtr element1, ElementPtr element2)
 {
-  LOG_VARD(element1->getElementId());
-  LOG_VARD(element2->getElementId());
+  LOG_VART(element1->getElementId());
+  LOG_VART(element2->getElementId());
 
   _wayNodeCrit.setOsmMap(_map1.get());
-  LOG_VARD(_wayNodeCrit.isSatisfied(element1));
+  LOG_VART(_wayNodeCrit.isSatisfied(element1));
   const bool element1IdWayNode = _wayNodeCrit.isSatisfied(element1);
   _wayNodeCrit.setOsmMap(_map2.get());
-  LOG_VARD(_wayNodeCrit.isSatisfied(element2));
+  LOG_VART(_wayNodeCrit.isSatisfied(element2));
   const bool element2IdWayNode = _wayNodeCrit.isSatisfied(element2);
   // If they are both way nodes,
   if (!element1IdWayNode ||!element2IdWayNode)
@@ -327,18 +280,18 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
   const QSet<long> containingWayIds1 =
     CollectionUtils::stdSetToQSet(
       WayUtils::getContainingWayIdsByNodeId(element1->getId(), _map1));
-  LOG_VARD(containingWayIds1);
+  LOG_VART(containingWayIds1);
   const QSet<long> containingWayIds2 =
     CollectionUtils::stdSetToQSet(
       WayUtils::getContainingWayIdsByNodeId(element2->getId(), _map2));
-  LOG_VARD(containingWayIds2);
+  LOG_VART(containingWayIds2);
 
   for (QSet<long>::const_iterator containingWays1Itr = containingWayIds1.begin();
        containingWays1Itr != containingWayIds1.end(); ++containingWays1Itr)
   {
     const QString way1Hash =
       _map1ElementIdsToHashes[ElementId(ElementType::Way, *containingWays1Itr)];
-    LOG_VARD(way1Hash);
+    LOG_VART(way1Hash);
     if (!way1Hash.trimmed().isEmpty())
     {
       for (QSet<long>::const_iterator containingWays2Itr = containingWayIds2.begin();
@@ -346,13 +299,13 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
       {
         const QString way2Hash =
           _map2ElementIdsToHashes[ElementId(ElementType::Way, *containingWays2Itr)];
-        LOG_VARD(way2Hash);
+        LOG_VART(way2Hash);
         if (!way2Hash.trimmed().isEmpty())
         {
           // If any of the ways between the two are identical, then they share a parent way.
           if (way1Hash == way2Hash)
           {
-            LOG_DEBUG(
+            LOG_TRACE(
               "Found common way node for " << element1->getElementId() << " and " <<
               element2->getElementId() << ".");
             return false;
