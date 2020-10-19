@@ -75,15 +75,61 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
   QSet<QString> map2HashesSet = _map2HashesToElementIds.keys().toSet();
 
   // Obtain the hashes for the elements that are identical between the two maps.
+
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
 
+//  QSet<QString> map1RelationHashesSet =
+//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Relation);
+//  QSet<QString> map2RelationHashesSet =
+//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Relation);
+//  const QSet<QString> identicalRelationHashes =
+//    map1RelationHashesSet.intersect(map2RelationHashesSet);
+//  LOG_VARD(identicalRelationHashes.size());
+
+//  QSet<QString> map1WayHashesSet =
+//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Way);
+//  QSet<QString> map2WayHashesSet =
+//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Way);
+//  const QSet<QString> identicalWayHashes =
+//    map1WayHashesSet.intersect(map2WayHashesSet);
+//  LOG_VARD(identicalWayHashes.size());
+
+//  QSet<QString> map1NodeHashesSet =
+//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Node);
+//  QSet<QString> map2NodeHashesSet =
+//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Node);
+//  const QSet<QString> identicalNodeHashes =
+//    map1NodeHashesSet.intersect(map2NodeHashesSet);
+//  LOG_VARD(identicalNodeHashes.size());
+
   // overwrite map2 IDs with the IDs from map1 for the features that are identical
   _syncElementIds(identicalHashes);
+//  _syncElementIds(identicalRelationHashes);
+//  _syncElementIds(identicalWayHashes);
+//  _syncElementIds(identicalNodeHashes);
+//  _syncElementIds(identicalNodeHashes);
+//  _syncElementIds(identicalWayHashes);
+//  _syncElementIds(identicalRelationHashes);
 
   LOG_DEBUG(
     "Updated IDs on " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
     " identical elements in second map.");
+}
+
+QSet<QString> ElementIdSynchronizer::_getHashesByElementType(
+  const QMap<ElementId, QString>& hashesByElementId, const ElementType& elementType) const
+{
+  QSet<QString> filteredHashes;
+  for (QMap<ElementId, QString>::const_iterator itr = hashesByElementId.begin();
+       itr != hashesByElementId.end(); ++itr)
+  {
+    if (itr.key().getType() == elementType)
+    {
+      filteredHashes.insert(itr.value());
+    }
+  }
+  return filteredHashes;
 }
 
 void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes)

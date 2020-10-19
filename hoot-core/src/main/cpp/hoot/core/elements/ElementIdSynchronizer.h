@@ -106,6 +106,9 @@ protected:
    */
   bool _areWayNodesInWaysOfMismatchedType(ElementPtr element1, ElementPtr element2);
 
+  QSet<QString> _getHashesByElementType(
+    const QMap<ElementId, QString>& hashesByElementId, const ElementType& elementType) const;
+
 private:
 
   void _syncElementIds(const QSet<QString>& identicalHashes);
