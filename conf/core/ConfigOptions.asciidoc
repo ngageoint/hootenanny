@@ -289,6 +289,14 @@ input as part of the query. This is more inefficient for memory consumption but 
 overall for significantly large datasets, as the cropped database query performs slowly at larger
 input sizes.
 
+=== area.overlap.review.threshold
+
+* Data Type: double
+* Default Value: `0.835`
+
+Areas that do not match and have a percentage overlap at or above this value will be marked for
+review.
+
 === area.tag.threshold
 
 * Data Type: double
@@ -318,7 +326,7 @@ option may result in some false positive road joining.
 * Data Type: bool
 * Default Value: `true`
 
-If true, allows Attribute Conflation to modify the geometry of a reference road layer to accomodate
+If true, allows Attribute Conflation to modify the geometry of a reference road layer to accommodate
 bridge features.  If false, any bridge features represented in the secondary dataset, but not in the
 reference dataset will be lost.
 

@@ -40,10 +40,10 @@ class Element;
 /**
  * Based on the JCS OverlapExtractor.
  *
- * This extractor uses the building with more overlap to calculate the percentage overlap. For
- * instance if you have a small building contained within a larger building the result will be 1.
+ * This extractor uses the feature with more overlap to calculate the percentage overlap. For
+ * instance if you have a small feature contained within a larger feature, the result will be 1.0.
  *
- * If either building has an area of zero then a zero is returned.
+ * If either feature has an area of zero, then zero is returned.
  *
  * @author RoadMatcher
  * @copyright GPL
