@@ -83,6 +83,34 @@ bool Tags::isValidKvp(const QString& str)
   return true;
 }
 
+QString Tags::kvpToKey(const QString& kvp)
+{
+  if (!kvp.contains("="))
+  {
+    return "";
+  }
+  const QStringList kvpParts = kvp.split("=");
+  if (kvpParts.size() != 2)
+  {
+    return "";
+  }
+  return kvpParts[0].trimmed();
+}
+
+QString Tags::kvpToVal(const QString& kvp)
+{
+  if (!kvp.contains("="))
+  {
+    return "";
+  }
+  const QStringList kvpParts = kvp.split("=");
+  if (kvpParts.size() != 2)
+  {
+    return "";
+  }
+  return kvpParts[1].trimmed();
+}
+
 void Tags::add(const Tags& t)
 {
   for (Tags::const_iterator it = t.constBegin(); it != t.constEnd(); ++it)

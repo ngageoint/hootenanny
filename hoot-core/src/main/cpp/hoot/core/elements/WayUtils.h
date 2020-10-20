@@ -177,6 +177,26 @@ public:
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
+   * TODO
+   *
+   * @param nodeId
+   * @param map
+   * @return
+   */
+  static std::set<QString> getContainingWaysUniqueTypesByNodeId(
+    const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param nodeId
+   * @param map
+   * @return
+   */
+  static std::set<QString> getContainingWaysUniqueTypeKeysByNodeId(
+    const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
    * Determines if two nodes are contained in exactly the same set of ways
    *
    * @param nodeId1 ID of the first node to examine

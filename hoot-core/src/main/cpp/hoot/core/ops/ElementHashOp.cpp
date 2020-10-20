@@ -89,30 +89,23 @@ void ElementHashOp::apply(const OsmMapPtr& map)
     }
     else
     {
-      const std::set<long> containingWayIds =
-        WayUtils::getContainingWayIdsByNodeId(node->getId(), map);
-      if (containingWayIds.size() > 0)
+      LOG_VART(node->getElementId());
+
+      const std::set<QString> containingWaysUniqueTypeKeys =
+        WayUtils::getContainingWaysUniqueTypeKeysByNodeId(node->getId(), map);
+      LOG_VART(containingWaysUniqueTypeKeys);
+      if (containingWaysUniqueTypeKeys.size() > 0)
       {
         QString nodeJson = _hashVis.toJson(node);
         nodeJson.chop(1); // chop off the ending brace that's already there
         // add in an array of the already calc'd hashes for each parent way
-        nodeJson += ", \"ways\":[";
-        bool wayHashWritten = false;
-        for (std::set<long>::const_iterator itr = containingWayIds.begin();
-             itr != containingWayIds.end(); ++itr)
+        nodeJson += ", \"parentWayTypes\":[";
+        for (std::set<QString>::const_iterator itr = containingWaysUniqueTypeKeys.begin();
+             itr != containingWaysUniqueTypeKeys.end(); ++itr)
         {
-          const QString wayHash =
-            _hashVis.getElementIdsToHashes()[ElementId(ElementType::Way, *itr)];
-          if (!wayHash.isEmpty())
-          {
-            nodeJson += wayHash + ",";
-            wayHashWritten = true;
-          }
+          nodeJson += *itr + ",";
         }
-        if (wayHashWritten)
-        {
-          nodeJson.chop(1); // remove the trailing comma
-        }
+        nodeJson.chop(1); // remove the trailing comma
         nodeJson += "]}"; // close up the array
 
         QCryptographicHash hash(QCryptographicHash::Sha1);

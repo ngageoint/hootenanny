@@ -38,6 +38,7 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // GEOS
 #include <geos/geom/Coordinate.h>
@@ -108,6 +109,38 @@ std::vector<ConstWayPtr> WayUtils::getContainingWaysByNodeId(
     }
   }
   return containingWays;
+}
+
+std::set<QString> WayUtils::getContainingWaysUniqueTypesByNodeId(
+  const long nodeId, const ConstOsmMapPtr& map)
+{
+  std::set<QString> uniqueTypes;
+  std::vector<ConstWayPtr> containingWays = getContainingWaysByNodeId(nodeId, map);
+  std::sort(containingWays.begin(), containingWays.end());
+  OsmSchema& schema = OsmSchema::getInstance();
+  for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
+       containingWaysItr != containingWays.end(); ++containingWaysItr)
+  {
+    const QString mostSpecificType = schema.mostSpecificType((*containingWaysItr)->getTags());
+    if (!mostSpecificType.isEmpty())
+    {
+      uniqueTypes.insert(mostSpecificType);
+    }
+  }
+  return uniqueTypes;
+}
+
+std::set<QString> WayUtils::getContainingWaysUniqueTypeKeysByNodeId(
+  const long nodeId, const ConstOsmMapPtr& map)
+{
+  std::set<QString> uniqueTypeKeys;
+  const std::set<QString> uniqueTypes = getContainingWaysUniqueTypesByNodeId(nodeId, map);
+  for (std::set<QString>::const_iterator uniqueTypesItr = uniqueTypes.begin();
+       uniqueTypesItr != uniqueTypes.end(); ++uniqueTypesItr)
+  {
+    uniqueTypeKeys.insert(Tags::kvpToKey(*uniqueTypesItr));
+  }
+  return uniqueTypeKeys;
 }
 
 QSet<long> WayUtils::getConnectedWays(const long wayId, const ConstOsmMapPtr& map)

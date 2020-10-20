@@ -118,7 +118,7 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
     const QString identicalHash = *itr;
     LOG_VART(identicalHash);
 
-    // Get the element with matching hash from the ref map
+    // Get the element with matching hash from the ref map.
     ElementPtr map1IdenticalElement = _map1->getElement(_map1HashesToElementIds[identicalHash]);
     _wayNodeCrit.setOsmMap(_map1.get());
     // if its a way node, keep going
@@ -126,7 +126,7 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
     {
       LOG_VART(map1IdenticalElement->getElementId());
 
-      // Get the element with matching has from the sec map
+      // Get the element with matching hash from the sec map.
       ElementPtr map2IdenticalElement = _map2->getElement(_map2HashesToElementIds[identicalHash]);
       _wayNodeCrit.setOsmMap(_map2.get());
       // if its a way node, keep going

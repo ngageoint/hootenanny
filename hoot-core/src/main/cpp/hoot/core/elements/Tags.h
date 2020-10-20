@@ -348,6 +348,22 @@ public:
   static bool isValidKvp(const QString& str);
 
   /**
+   * TODO
+   *
+   * @param kvp
+   * @return
+   */
+  static QString kvpToKey(const QString& kvp);
+
+  /**
+   * TODO
+   *
+   * @param kvp
+   * @return
+   */
+  static QString kvpToVal(const QString& kvp);
+
+  /**
    * Returns true if the tags have the specified kvp
    *
    * @param kvp kvp to search for; value wildcards are supported using '*'
