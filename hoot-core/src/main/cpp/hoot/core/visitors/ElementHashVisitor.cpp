@@ -47,8 +47,7 @@ _includeCe(false),
 _nonMetadataIgnoreKeys(ConfigOptions().getElementHashVisitorNonMetadataIgnoreKeys()),
 _useNodeTags(true),
 _writeHashes(true),
-_collectHashes(false)//,
-//_addParentToWayNodes(false)
+_collectHashes(false)
 {
   if (!_writeHashes && !_collectHashes)
   {
@@ -79,28 +78,33 @@ void ElementHashVisitor::visit(const ElementPtr& e)
     const QString hash = toHashString(e);
     LOG_VART(hash);
 
-    if (_writeHashes)
+    insertHash(e, hash);
+  }
+}
+
+void ElementHashVisitor::insertHash(const ElementPtr& e, const QString& hash)
+{
+  if (_writeHashes)
+  {
+    LOG_TRACE("Writing hash: " << hash << " to " << e->getElementId() << "...");
+    e->getTags()[MetadataTags::HootHash()] = hash;
+  }
+  if (_collectHashes)
+  {
+    if (_hashesToElementIds.contains(hash))
     {
-      LOG_TRACE("Writing hash: " << hash << " to " << e->getElementId() << "...");
-      e->getTags()[MetadataTags::HootHash()] = hash;
+      LOG_TRACE(
+        "Marking duplicate hash: " << hash << " for " << e->getElementId() <<
+        "; hash already used by " << _hashesToElementIds[hash] << "...");
+      _duplicates.insert(
+        std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
     }
-    if (_collectHashes)
+    else
     {
-      if (_hashesToElementIds.contains(hash))
-      {
-        LOG_TRACE(
-          "Marking duplicate hash: " << hash << " for " << e->getElementId() <<
-          "; hash already used by " << _hashesToElementIds[hash] << "...");
-        _duplicates.insert(
-          std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
-      }
-      else
-      {
-        LOG_TRACE("Collecting hash: " << hash << " for " << e->getElementId() << "...");
-        _hashesToElementIds[hash] = e->getElementId();
-      }
-      _elementIdsToHashes[e->getElementId()] = hash;
+      LOG_TRACE("Collecting hash: " << hash << " for " << e->getElementId() << "...");
+      _hashesToElementIds[hash] = e->getElementId();
     }
+    _elementIdsToHashes[e->getElementId()] = hash;
   }
 }
 
@@ -125,8 +129,6 @@ QString ElementHashVisitor::toJson(const ConstElementPtr& e) const
 
 QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
 {
-  // {"type":"node","tags":{},"x":-115.23553,"y":36.30886}
-
   QString result = "{\"type\":\"node\",\"tags\":{";
 
   Tags tags;
@@ -144,15 +146,6 @@ QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
   result += QString::number(node->getX(), 'f', _coordinateComparisonSensitivity);
   result += ",\"y\":";
   result += QString::number(node->getY(), 'f', _coordinateComparisonSensitivity);
-  //if (_addParentToWayNodes)
-  //{
-//    const long firstOwningWayId = _wayNodeCrit.getFirstOwningWayId(node);
-//    if (firstOwningWayId != 0)
-//    {
-//      result += ",\"parent_id\": \"Way(" + firstOwningWayId + ")\"";
-//    }
-
-  //}
   result += "}";
 
   return result;

@@ -38,6 +38,7 @@
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/ElementHashOp.h>
 
 namespace hoot
 {
@@ -373,13 +374,22 @@ void ElementIdSynchronizer::_calcElementHashes(
   QMap<ElementId, QString>& elementIdsToHashes, const int coordinateComparisonSensitivity)
 {
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
+
   ElementHashVisitor hashVis;
+  // Unfortunately, using the hash op here fixes on id sync problem but causes many id syncs not
+  // to occur which leads to disconnected ways.
+  //ElementHashOp hashVis;
+
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);
   hashVis.setUseNodeTags(_useNodeTagsForHash);
   hashVis.setCoordinateComparisonSensitivity(coordinateComparisonSensitivity);
+
   hashVis.setOsmMap(map.get());
   map->visitRw(hashVis);
+  //hashVis.setAddParentToWayNodes(true);
+  //hashVis.apply(map);
+
   hashesToElementIds = hashVis.getHashesToElementIds();
   elementIdsToHashes = hashVis.getElementIdsToHashes();
 }

@@ -62,10 +62,10 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   // TODO: re-enable
-//  CPPUNIT_TEST(orphanedNodes1Test);
-//  CPPUNIT_TEST(orphanedNodes2Test);
-//  CPPUNIT_TEST(droppedNodes1Test);
-//  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
+  CPPUNIT_TEST(droppedNodes1Test);
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
   CPPUNIT_TEST(badPolyIdSyncTest);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
@@ -411,7 +411,7 @@ private:
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false); 
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), true);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 
   void _loadDataToReplaceDb(

@@ -58,6 +58,14 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
+  /**
+   * TODO
+   *
+   * @param e
+   * @param hash
+   */
+  void insertHash(const ElementPtr& e, const QString& hash);
+
   QString toJson(const ConstElementPtr& e) const;
   virtual QString toJson(const Tags& tags, const double ce = -1.0) const;
 
@@ -82,7 +90,6 @@ public:
   void setUseNodeTags(bool use) { _useNodeTags = use; }
   void setWriteHashes(bool write) { _writeHashes = write; }
   void setCollectHashes(bool collect) { _collectHashes = collect; }
-  //void setAddParentToWayNodes(bool add) { _addParentToWayNodes = add; }
 
 protected:
 
@@ -101,8 +108,6 @@ private:
   QStringList _nonMetadataIgnoreKeys;
   // if enabled, node tags will factor into node comparisons
   bool _useNodeTags;
-  // TODO
-  //bool _addParentToWayNodes;
 
   // determines whether hashes are written to an element's tags
   bool _writeHashes;
