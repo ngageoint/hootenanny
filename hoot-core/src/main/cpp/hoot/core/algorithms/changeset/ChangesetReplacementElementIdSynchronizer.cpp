@@ -35,6 +35,7 @@
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
 {
@@ -98,7 +99,9 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
 //  LOG_VARD(identicalNodeHashes.size());
 
   // overwrite map2 IDs with the IDs from map1 for the features that are identical
+
   _syncElementIds(identicalHashes);
+
   //_syncElementIds(identicalNodeHashes);
 
   LOG_DEBUG(
@@ -176,6 +179,13 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
           // old element.
           _map2->replace(map2IdenticalElement, map2IdenticalElementCopy);
           _updatedNodeCtr++;
+
+          // expensive; leave disabled by default
+          // TODO: disable
+          OsmMapWriterFactory::writeDebugMap(
+            _map2,
+            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
+            map2IdenticalElementCopy->getElementId().toString());
         }
       }
     }

@@ -104,7 +104,9 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
 //  LOG_VARD(identicalNodeHashes.size());
 
   // overwrite map2 IDs with the IDs from map1 for the features that are identical
+
   _syncElementIds(identicalHashes);
+
 //  _syncElementIds(identicalRelationHashes);
 //  _syncElementIds(identicalWayHashes);
 //  _syncElementIds(identicalNodeHashes);
@@ -157,19 +159,6 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
         {
           LOG_VART(map2IdenticalElement->getElementId());
 
-          // The original idea here was to not allow id sync between any two way nodes that have no
-          // matching parent ways in common across the two maps. Unfortunately, this causes dropped
-          // features to occur in output. It seems to happen because the map index isn't being
-          // updated automatically after element ID updates...not sure why. Futhermore, this is also
-          // brittle b/c the geometry of ways between the two maps could be slightly different.
-//          if (_areWayNodesWithoutAWayInCommon(map1IdenticalElement, map2IdenticalElement))
-//          {
-//            LOG_TRACE(
-//              map1IdenticalElement->getElementId() << " and " <<
-//              map2IdenticalElement->getElementId() <<
-//              " are both way nodes that have no ways in common. Skipping ID sync...");
-//            continue;
-//          }
           // Here, we're verifying that two way nodes don't belong to ways of very dissimilar types
           // before syncing their IDs. This still may prove to be too brittle and not a good long
           // term solution...not sure yet.
@@ -181,6 +170,20 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
               " are both way nodes that are in ways without matching types. Skipping ID sync...");
             continue;
           }
+
+          // The original idea here was to not allow id sync between any two way nodes that have no
+          // matching parent ways in common across the two maps. Unfortunately, this causes dropped
+          // features to occur in output. It seems to happen because the map index isn't being
+          // updated automatically after element ID updates...not sure why. Furthermore, this is
+          // also brittle b/c the geometry of ways between the two maps could be slightly different.
+//          if (_areWayNodesWithoutAWayInCommon(map1IdenticalElement, map2IdenticalElement))
+//          {
+//            LOG_TRACE(
+//              map1IdenticalElement->getElementId() << " and " <<
+//              map2IdenticalElement->getElementId() <<
+//              " are both way nodes that have no ways in common. Skipping ID sync...");
+//            continue;
+//          }
 
           // Make sure the map being updated doesn't already have an element with this ID (this
           // check may not be necessary).
@@ -212,10 +215,11 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           }
 
           // expensive; leave disabled by default
-//          OsmMapWriterFactory::writeDebugMap(
-//            _map2,
-//            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
-//            map1IdenticalElementCopy->getElementId().toString());
+          // TODO: disable
+          OsmMapWriterFactory::writeDebugMap(
+            _map2,
+            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
+            map1IdenticalElementCopy->getElementId().toString());
         }
       }
     }

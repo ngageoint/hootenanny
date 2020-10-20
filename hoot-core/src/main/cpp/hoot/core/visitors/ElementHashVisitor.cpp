@@ -47,7 +47,8 @@ _includeCe(false),
 _nonMetadataIgnoreKeys(ConfigOptions().getElementHashVisitorNonMetadataIgnoreKeys()),
 _useNodeTags(true),
 _writeHashes(true),
-_collectHashes(false)
+_collectHashes(false)//,
+//_addParentToWayNodes(false)
 {
   if (!_writeHashes && !_collectHashes)
   {
@@ -87,7 +88,9 @@ void ElementHashVisitor::visit(const ElementPtr& e)
     {
       if (_hashesToElementIds.contains(hash))
       {
-        LOG_TRACE("Marking duplicate hash: " << hash << " for " << e->getElementId() << "...");
+        LOG_TRACE(
+          "Marking duplicate hash: " << hash << " for " << e->getElementId() <<
+          "; hash already used by " << _hashesToElementIds[hash] << "...");
         _duplicates.insert(
           std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
       }
@@ -122,6 +125,8 @@ QString ElementHashVisitor::toJson(const ConstElementPtr& e) const
 
 QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
 {
+  // {"type":"node","tags":{},"x":-115.23553,"y":36.30886}
+
   QString result = "{\"type\":\"node\",\"tags\":{";
 
   Tags tags;
@@ -139,6 +144,15 @@ QString ElementHashVisitor::_toJson(const ConstNodePtr& node) const
   result += QString::number(node->getX(), 'f', _coordinateComparisonSensitivity);
   result += ",\"y\":";
   result += QString::number(node->getY(), 'f', _coordinateComparisonSensitivity);
+  //if (_addParentToWayNodes)
+  //{
+//    const long firstOwningWayId = _wayNodeCrit.getFirstOwningWayId(node);
+//    if (firstOwningWayId != 0)
+//    {
+//      result += ",\"parent_id\": \"Way(" + firstOwningWayId + ")\"";
+//    }
+
+  //}
   result += "}";
 
   return result;
@@ -227,7 +241,6 @@ QString ElementHashVisitor::toJson(const Tags& tags, const double ce) const
       infoTags[key] = v;
     }
   }
-  //LOG_VART(infoTags.keys());
 
   if (_includeCe && ce != -1.0)
   {

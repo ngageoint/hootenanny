@@ -56,7 +56,7 @@ public:
   ElementHashVisitor();
   virtual ~ElementHashVisitor() = default;
 
-  virtual void visit(const ElementPtr &e);
+  virtual void visit(const ElementPtr& e);
 
   QString toJson(const ConstElementPtr& e) const;
   virtual QString toJson(const Tags& tags, const double ce = -1.0) const;
@@ -66,21 +66,23 @@ public:
   QString toHashString(const ConstElementPtr& e) const;
   QString toHashString(const Tags& tags, const double ce = -1.0) const;
 
+  void clearHashes();
+
   virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 
   virtual std::string getClassName() const { return className(); }
 
+  QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }
+  QMap<ElementId, QString> getElementIdsToHashes() const { return _elementIdsToHashes; }
+  QSet<std::pair<ElementId, ElementId>> getDuplicates() const { return _duplicates; }
+
   void setCoordinateComparisonSensitivity(int sensitivity)
-  { _coordinateComparisonSensitivity = sensitivity; LOG_VARD(_coordinateComparisonSensitivity); }
+  { _coordinateComparisonSensitivity = sensitivity; }
   void setIncludeCircularError(bool include) { _includeCe = include; }
   void setUseNodeTags(bool use) { _useNodeTags = use; }
   void setWriteHashes(bool write) { _writeHashes = write; }
   void setCollectHashes(bool collect) { _collectHashes = collect; }
-
-  QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }
-  QMap<ElementId, QString> getElementIdsToHashes() const { return _elementIdsToHashes; }
-  QSet<std::pair<ElementId, ElementId>> getDuplicates() const { return _duplicates; }
-  void clearHashes();
+  //void setAddParentToWayNodes(bool add) { _addParentToWayNodes = add; }
 
 protected:
 
@@ -99,6 +101,8 @@ private:
   QStringList _nonMetadataIgnoreKeys;
   // if enabled, node tags will factor into node comparisons
   bool _useNodeTags;
+  // TODO
+  //bool _addParentToWayNodes;
 
   // determines whether hashes are written to an element's tags
   bool _writeHashes;
