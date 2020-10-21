@@ -89,7 +89,6 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
 
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
-
 //  QSet<QString> map1NodeHashesSet =
 //    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Node);
 //  QSet<QString> map2NodeHashesSet =
@@ -101,7 +100,6 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   // overwrite map2 IDs with the IDs from map1 for the features that are identical
 
   _syncElementIds(identicalHashes);
-
   //_syncElementIds(identicalNodeHashes);
 
   LOG_DEBUG(

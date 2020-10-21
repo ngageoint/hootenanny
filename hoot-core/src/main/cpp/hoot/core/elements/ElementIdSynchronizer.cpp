@@ -105,15 +105,11 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
 //  LOG_VARD(identicalNodeHashes.size());
 
   // overwrite map2 IDs with the IDs from map1 for the features that are identical
-
   _syncElementIds(identicalHashes);
 
 //  _syncElementIds(identicalRelationHashes);
 //  _syncElementIds(identicalWayHashes);
-//  _syncElementIds(identicalNodeHashes);
-//  _syncElementIds(identicalNodeHashes);
-//  _syncElementIds(identicalWayHashes);
-//  _syncElementIds(identicalRelationHashes);
+//  _syncElementIds(identicalNodeHashes);;
 
   LOG_DEBUG(
     "Updated IDs on " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
@@ -376,8 +372,7 @@ void ElementIdSynchronizer::_calcElementHashes(
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
 
   //ElementHashVisitor hashVis;
-  // Unfortunately, using the hash op here fixes on id sync problem but causes many id syncs not
-  // to occur which leads to disconnected ways.
+  // TODO: explain
   ElementHashOp hashVis;
 
   hashVis.setWriteHashes(false);
