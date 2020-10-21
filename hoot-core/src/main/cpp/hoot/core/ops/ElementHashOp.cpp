@@ -32,6 +32,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QCryptographicHash>
@@ -91,22 +92,24 @@ void ElementHashOp::apply(const OsmMapPtr& map)
     {
       LOG_VART(node->getElementId());
 
-      const std::set<QString> containingWaysUniqueTypeKeys =
-        WayUtils::getContainingWaysUniqueTypeKeysByNodeId(node->getId(), map);
-      LOG_VART(containingWaysUniqueTypeKeys);
-      if (containingWaysUniqueTypeKeys.size() > 0)
+      const std::set<QString> containingWaysTypeKeys =
+        WayUtils::getContainingWaysMostSpecificTypeKeysByNodeId(node->getId(), map);
+      LOG_VART(containingWaysTypeKeys);
+      if (containingWaysTypeKeys.size() > 0)
       {
         QString nodeJson = _hashVis.toJson(node);
         nodeJson.chop(1); // chop off the ending brace that's already there
         // add in an array of the already calc'd hashes for each parent way
         nodeJson += ", \"parentWayTypes\":[";
-        for (std::set<QString>::const_iterator itr = containingWaysUniqueTypeKeys.begin();
-             itr != containingWaysUniqueTypeKeys.end(); ++itr)
+        for (std::set<QString>::const_iterator itr = containingWaysTypeKeys.begin();
+             itr != containingWaysTypeKeys.end(); ++itr)
         {
-          nodeJson += *itr + ",";
+          const QString tagKey = *itr;
+          nodeJson += tagKey + ",";
         }
         nodeJson.chop(1); // remove the trailing comma
         nodeJson += "]}"; // close up the array
+        LOG_VART(nodeJson);
 
         QCryptographicHash hash(QCryptographicHash::Sha1);
         hash.addData(nodeJson.toLatin1().constData());

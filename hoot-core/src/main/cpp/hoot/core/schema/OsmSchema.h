@@ -47,12 +47,12 @@ class Tags;
 
 enum EdgeType
 {
-  CanHave,  //not used
+  //CanHave,  //not used
   IsA,
   SimilarTo,
-  ParentOf, //not used
-  AssociatedWith,
-  CompoundComponent //not used
+  //ParentOf, //not used
+  AssociatedWith//,
+  //CompoundComponent //not used
 };
 
 struct OsmSchemaCategory
@@ -66,7 +66,9 @@ struct OsmSchemaCategory
     Use =             0x08,
     Name =            0x10,
     PseudoName =      0x20,
-    Multiuse =        0x40//,
+    Multiuse =        0x40,
+    // TODO: explain
+    Combination =     0x80//,
     //All = Poi | Building | Transportation | Use | Name | PseudoName | Multiuse
   };
 
@@ -80,6 +82,7 @@ struct OsmSchemaCategory
   static OsmSchemaCategory name() { return OsmSchemaCategory(Name); }
   static OsmSchemaCategory pseudoName() { return OsmSchemaCategory(PseudoName); }
   static OsmSchemaCategory multiUse() { return OsmSchemaCategory(Multiuse); }
+  static OsmSchemaCategory combination() { return OsmSchemaCategory(Combination); }
 
   bool operator==(const OsmSchemaCategory& t) const { return t._type == _type; }
   bool operator!=(const OsmSchemaCategory& t) const { return t._type != _type; }
@@ -115,6 +118,10 @@ struct OsmSchemaCategory
     else if (s == "multiuse")
     {
       return Multiuse;
+    }
+    else if (s == "combination")
+    {
+      return Combination;
     }
     else if (s == "")
     {
@@ -179,6 +186,10 @@ struct OsmSchemaCategory
     if (_type & Multiuse)
     {
       result << "multiuse";
+    }
+    if (_type & Combination)
+    {
+      result << "combination";
     }
 
     return result;
@@ -359,6 +370,17 @@ public:
    * Returns true if the specified kvp is part of the specified category.
    */
   bool hasCategory(const QString& kvp, const QString& category) const;
+
+  /**
+   * Returns true if at least one tag in the set of specified tags is part of the specified
+   * category.
+   */
+  bool hasCategory(const Tags& t, const OsmSchemaCategory& category) const;
+
+  /**
+   * Returns true if the specified kvp is part of the specified category.
+   */
+  bool hasCategory(const QString& kvp, const OsmSchemaCategory& category) const;
 
   /**
    * Determines if the key is part of any category in the schema

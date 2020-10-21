@@ -545,6 +545,8 @@ public:
 
   void mostSpecificTypeTest()
   {
+    // TODO: add test for combo type
+
     OsmSchema& uut = OsmSchema::getInstance();
     Tags tags;
 

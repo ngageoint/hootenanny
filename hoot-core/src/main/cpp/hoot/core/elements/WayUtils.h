@@ -183,7 +183,7 @@ public:
    * @param map
    * @return
    */
-  static std::set<QString> getContainingWaysUniqueTypesByNodeId(
+  static std::set<QString> getContainingWaysMostSpecificTypesByNodeId(
     const long nodeId, const ConstOsmMapPtr& map);
 
   /**
@@ -193,7 +193,7 @@ public:
    * @param map
    * @return
    */
-  static std::set<QString> getContainingWaysUniqueTypeKeysByNodeId(
+  static std::set<QString> getContainingWaysMostSpecificTypeKeysByNodeId(
     const long nodeId, const ConstOsmMapPtr& map);
 
   /**

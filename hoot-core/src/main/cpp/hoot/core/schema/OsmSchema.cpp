@@ -1439,7 +1439,6 @@ QSet<QString> OsmSchema::getAllTagKeys()
   if (_allTagKeysCache.isEmpty())
   {
     _allTagKeysCache = d->getAllTagKeys();
-    //LOG_VART(_allTagKeysCache);
   }
   return _allTagKeysCache;
 }
@@ -1690,6 +1689,16 @@ bool OsmSchema::hasCategory(const QString& kvp, const QString& category) const
 {
   const SchemaVertex& tv = getTagVertex(kvp);
   return tv.categories.contains(category);
+}
+
+bool OsmSchema::hasCategory(const Tags& t, const OsmSchemaCategory& category) const
+{
+  return hasCategory(t, category.toString());
+}
+
+bool OsmSchema::hasCategory(const QString& kvp, const OsmSchemaCategory& category) const
+{
+  return hasCategory(kvp, category.toString());
 }
 
 bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp)
@@ -1963,6 +1972,7 @@ bool OsmSchema::hasType(const Tags& tags)
 QString OsmSchema::mostSpecificType(const Tags& tags)
 {
   QString mostSpecificType;
+  bool currentMostSpecificTypeIsCombo = false;
   for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
   {
     const QString key = tagsItr.key();
@@ -1971,9 +1981,18 @@ QString OsmSchema::mostSpecificType(const Tags& tags)
     LOG_VART(kvp);
     LOG_VART(isTypeKey(tagsItr.key()));
 
-    if (isTypeKey(key) && (mostSpecificType.isEmpty() || !isAncestor(kvp, mostSpecificType)))
+    if (isTypeKey(key))
     {
-      mostSpecificType = kvp;
+      const bool kvpIsCombo = hasCategory(kvp, OsmSchemaCategory::combination());
+      // TODO: This doesn't correctly handle a road with highway=* and surface=*. Depending on the
+      // tag ordering, will return the surface tag.
+      // TODO: explain
+      if ((!kvpIsCombo || currentMostSpecificTypeIsCombo) &&
+          (mostSpecificType.isEmpty() || !isAncestor(kvp, mostSpecificType)))
+      {
+        mostSpecificType = kvp;
+        currentMostSpecificTypeIsCombo = kvpIsCombo;
+      }
     }
   }
   return mostSpecificType;

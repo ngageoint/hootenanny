@@ -111,7 +111,7 @@ std::vector<ConstWayPtr> WayUtils::getContainingWaysByNodeId(
   return containingWays;
 }
 
-std::set<QString> WayUtils::getContainingWaysUniqueTypesByNodeId(
+std::set<QString> WayUtils::getContainingWaysMostSpecificTypesByNodeId(
   const long nodeId, const ConstOsmMapPtr& map)
 {
   std::set<QString> uniqueTypes;
@@ -130,11 +130,11 @@ std::set<QString> WayUtils::getContainingWaysUniqueTypesByNodeId(
   return uniqueTypes;
 }
 
-std::set<QString> WayUtils::getContainingWaysUniqueTypeKeysByNodeId(
+std::set<QString> WayUtils::getContainingWaysMostSpecificTypeKeysByNodeId(
   const long nodeId, const ConstOsmMapPtr& map)
 {
   std::set<QString> uniqueTypeKeys;
-  const std::set<QString> uniqueTypes = getContainingWaysUniqueTypesByNodeId(nodeId, map);
+  const std::set<QString> uniqueTypes = getContainingWaysMostSpecificTypesByNodeId(nodeId, map);
   for (std::set<QString>::const_iterator uniqueTypesItr = uniqueTypes.begin();
        uniqueTypesItr != uniqueTypes.end(); ++uniqueTypesItr)
   {
