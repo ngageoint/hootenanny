@@ -490,10 +490,15 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   _emptyWays = tagVis->getNumFeaturesAffected();
   LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
 
-  _duplicateElementPairs = DuplicateElementMarker::markDuplicates(map, 8);
+  DuplicateElementMarker dupeMarker;
+  dupeMarker.setCoordinateComparisonSensitivity(8);
+  dupeMarker.apply(map);
+  _duplicateElementPairs = dupeMarker.getNumFeaturesAffected();
   LOG_STATUS(
     "Tagged " << StringUtils::formatLargeNumber(_duplicateElementPairs) <<
     " duplicate feature pairs in output.");
+  LOG_STATUS(
+    "Containing way types for duplicate way nodes: " << dupeMarker.getContainingWayTypes());
 }
 
 void ChangesetTaskGridReplacer::_writeNonConflatable(const ConstOsmMapPtr& map,

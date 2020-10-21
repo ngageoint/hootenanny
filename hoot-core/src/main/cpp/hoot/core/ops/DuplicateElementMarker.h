@@ -57,6 +57,7 @@ public:
    *
    * @param map the map owning the elements
    * @param coordinateComparisonSensitivity node coordinate decimal place comparison sensitivity
+   * @param containingWayTypes TODO
    * @return the number of duplicates found
    */
   static int markDuplicates(
@@ -77,6 +78,8 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
+  std::set<QString> getContainingWayTypes() const { return _containingWayTypes; }
+
   void setCoordinateComparisonSensitivity(int sensitivity)
   { _coordinateComparisonSensitivity = sensitivity; }
 
@@ -84,6 +87,8 @@ private:
 
   // node coord comparison sensitivty
   int _coordinateComparisonSensitivity;
+  // collects the most specific type of any way owning a way node marked as a duplicate
+  std::set<QString> _containingWayTypes;
 
   QString _getUuidVal(const QString& newUuid, const ConstElementPtr& element);
 };

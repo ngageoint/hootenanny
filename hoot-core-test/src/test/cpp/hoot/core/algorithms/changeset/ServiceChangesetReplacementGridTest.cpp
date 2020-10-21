@@ -61,17 +61,16 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  // TODO: re-enable these
-//  CPPUNIT_TEST(orphanedNodes1Test);
-//  CPPUNIT_TEST(orphanedNodes2Test);
-//  CPPUNIT_TEST(droppedNodes1Test);
-//  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
-//  CPPUNIT_TEST(badPolyIdSyncTest);
+  CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
+  CPPUNIT_TEST(droppedNodes1Test);
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(badPolyIdSyncTest);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
   //CPPUNIT_TEST(github4216UniformTest);
-  CPPUNIT_TEST(northVegasLargeUniformTest);
+  //CPPUNIT_TEST(northVegasLargeUniformTest);
 
   CPPUNIT_TEST_SUITE_END();
 

@@ -32,6 +32,8 @@
 #include <hoot/core/elements/ElementDeduplicator.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/UuidHelper.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
@@ -55,6 +57,7 @@ void DuplicateElementMarker::apply(OsmMapPtr& map)
   // don't care about the hashes
   hashes.clear();
 
+  WayNodeCriterion wayNodeCrit(map);
   for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = duplicates.begin();
        itr != duplicates.end(); ++itr)
   {
@@ -63,10 +66,23 @@ void DuplicateElementMarker::apply(OsmMapPtr& map)
     ElementPtr dupe2 = map->getElement(dupes.second);
     if (dupe1 && dupe2 && dupe1->getElementId() != dupe2->getElementId())
     {
-      QString uuid = UuidHelper::createUuid().toString();
+      const QString uuid = UuidHelper::createUuid().toString();
       dupe1->setTag(MetadataTags::HootDuplicate(), _getUuidVal(uuid, dupe1));
       dupe2->setTag(MetadataTags::HootDuplicate(), _getUuidVal(uuid, dupe2));
       _numAffected++;
+
+      if (wayNodeCrit.isSatisfied(dupe1))
+      {
+        const std::set<QString> containingWayTypesTemp =
+          WayUtils::getContainingWaysMostSpecificTypesByNodeId(dupe1->getId(), map);
+        _containingWayTypes.insert(containingWayTypesTemp.begin(), containingWayTypesTemp.end());
+      }
+      if (wayNodeCrit.isSatisfied(dupe2))
+      {
+        const std::set<QString> containingWayTypesTemp =
+          WayUtils::getContainingWaysMostSpecificTypesByNodeId(dupe2->getId(), map);
+        _containingWayTypes.insert(containingWayTypesTemp.begin(), containingWayTypesTemp.end());
+      }
     }
   }
 
