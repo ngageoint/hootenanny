@@ -59,12 +59,13 @@ public:
   virtual void visit(const ElementPtr& e);
 
   /**
-   * TODO
+   * Inserts a hash tag into an element and/or records the hash mapping with the element for later
+   * use.
    *
-   * @param e
-   * @param hash
+   * @param element element whose hash to record
+   * @param hash a unique hash value for the element
    */
-  void insertHash(const ElementPtr& e, const QString& hash);
+  void insertHash(const ElementPtr& element, const QString& hash);
 
   QString toJson(const ConstElementPtr& e) const;
   virtual QString toJson(const Tags& tags, const double ce = -1.0) const;

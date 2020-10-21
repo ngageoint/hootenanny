@@ -36,7 +36,10 @@ namespace hoot
 {
 
 /**
- * TODO
+ * This is an alternative implementation of element hashing to ElementHashVisitor that attempts to
+ * better determine the difference between way nodes. In particular, even when two way nodes are
+ * very close together, it can determine if they actually belong to different ways.
+ * _addParentToWayNodes must be enabled for this to occur.
  */
 class ElementHashOp : public ConstOsmMapOperation
 {
@@ -69,7 +72,8 @@ public:
 
 private:
 
-  // TODO
+  // If enabled, parent way types are added to way node hashes to better identify way node
+  // differences.
   bool _addParentToWayNodes;
 
   ElementHashVisitor _hashVis;

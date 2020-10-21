@@ -1981,13 +1981,15 @@ QString OsmSchema::mostSpecificType(const Tags& tags)
     LOG_VART(kvp);
     LOG_VART(isTypeKey(tagsItr.key()));
 
-    if (isTypeKey(key))
+    if (isTypeKey(key)) // Is this type in the schema at all?
     {
       const bool kvpIsCombo = hasCategory(kvp, OsmSchemaCategory::combination());
-      // TODO: This doesn't correctly handle a road with highway=* and surface=*. Depending on the
-      // tag ordering, will return the surface tag.
-      // TODO: explain
+      // If this tag is considered a "combo" tag, or one that must be used in combination with some
+      // other type tag to uniquely identify a type, we considering it a less specific type than a
+      // non-combo tag. So, if we already have a non-combo tag for our most specific type, then skip
+      // this if its a combot tag.
       if ((!kvpIsCombo || currentMostSpecificTypeIsCombo) &&
+          // Ensure that this tag isn't more generic (ancestor) than the current specific type tag.
           (mostSpecificType.isEmpty() || !isAncestor(kvp, mostSpecificType)))
       {
         mostSpecificType = kvp;

@@ -51,6 +51,10 @@ void ElementHashOp::apply(const OsmMapPtr& map)
 {
   _hashVis.setOsmMap(map.get());
 
+  // Process parent element types before nodes, so that we have all the correct way information
+  // available by the time we get to node processing. Note, this class doesn't take into account
+  // relation membership for comparison purposes (yet?).
+
   const RelationMap relations = map->getRelations();
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
@@ -86,12 +90,18 @@ void ElementHashOp::apply(const OsmMapPtr& map)
 
     if (!_addParentToWayNodes)
     {
+      // If parent way info isn't set to be added to way nodes, proceed with ElementHashVisitor's
+      // implementation.
       _hashVis.visit(node);
     }
     else
     {
+      // Otherwise, we'll dig a little deeper to find differences between way nodes.
+
       LOG_VART(node->getElementId());
 
+      // Get a unique set of the most specific type for each way that contains this node. We use
+      // types here, b/c way IDs won't work across maps, which is required by C&R element ID sync.
       const std::set<QString> containingWaysTypeKeys =
         WayUtils::getContainingWaysMostSpecificTypeKeysByNodeId(node->getId(), map);
       LOG_VART(containingWaysTypeKeys);
@@ -99,7 +109,8 @@ void ElementHashOp::apply(const OsmMapPtr& map)
       {
         QString nodeJson = _hashVis.toJson(node);
         nodeJson.chop(1); // chop off the ending brace that's already there
-        // add in an array of the already calc'd hashes for each parent way
+        // Add in the types to a field to enable distinguishing this way nodes from others that may
+        // have a nearly identical location but belong to completely different ways.
         nodeJson += ", \"parentWayTypes\":[";
         for (std::set<QString>::const_iterator itr = containingWaysTypeKeys.begin();
              itr != containingWaysTypeKeys.end(); ++itr)

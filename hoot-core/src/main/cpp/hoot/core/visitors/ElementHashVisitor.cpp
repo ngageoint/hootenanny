@@ -81,29 +81,29 @@ void ElementHashVisitor::visit(const ElementPtr& e)
   }
 }
 
-void ElementHashVisitor::insertHash(const ElementPtr& e, const QString& hash)
+void ElementHashVisitor::insertHash(const ElementPtr& element, const QString& hash)
 {
   if (_writeHashes)
   {
-    LOG_TRACE("Writing hash: " << hash << " to " << e->getElementId() << "...");
-    e->getTags()[MetadataTags::HootHash()] = hash;
+    LOG_TRACE("Writing hash: " << hash << " to " << element->getElementId() << "...");
+    element->getTags()[MetadataTags::HootHash()] = hash;
   }
   if (_collectHashes)
   {
     if (_hashesToElementIds.contains(hash))
     {
       LOG_TRACE(
-        "Marking duplicate hash: " << hash << " for " << e->getElementId() <<
+        "Marking duplicate hash: " << hash << " for " << element->getElementId() <<
         "; hash already used by " << _hashesToElementIds[hash] << "...");
       _duplicates.insert(
-        std::pair<ElementId, ElementId>(_hashesToElementIds[hash], e->getElementId()));
+        std::pair<ElementId, ElementId>(_hashesToElementIds[hash], element->getElementId()));
     }
     else
     {
-      LOG_TRACE("Collecting hash: " << hash << " for " << e->getElementId() << "...");
-      _hashesToElementIds[hash] = e->getElementId();
+      LOG_TRACE("Collecting hash: " << hash << " for " << element->getElementId() << "...");
+      _hashesToElementIds[hash] = element->getElementId();
     }
-    _elementIdsToHashes[e->getElementId()] = hash;
+    _elementIdsToHashes[element->getElementId()] = hash;
   }
 }
 

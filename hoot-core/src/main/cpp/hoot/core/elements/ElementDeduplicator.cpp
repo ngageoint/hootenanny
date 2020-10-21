@@ -232,7 +232,8 @@ void ElementDeduplicator::calculateDuplicateElements(
   QSet<std::pair<ElementId, ElementId>>& duplicates, const int coordinateComparisonSensitivity)
 {
   LOG_VARD(coordinateComparisonSensitivity);
-  // TODO: This should probably use ElementHashOp instead.
+  // TODO: After recent changes to ElementIdSynchronizer, this should probably use ElementHashOp
+  // instead.
   ElementHashVisitor hashVis;
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);

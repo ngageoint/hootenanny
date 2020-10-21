@@ -177,21 +177,23 @@ public:
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
-   * TODO
+   * Returns the most specific feature types, as identified by the schema, for all ways containing
+   * the specified node
    *
-   * @param nodeId
-   * @param map
-   * @return
+   * @param nodeId ID of the node to return containing way types for
+   * @param map map which owns the input node
+   * @return a unique collection of type key/value pair strings
    */
   static std::set<QString> getContainingWaysMostSpecificTypesByNodeId(
     const long nodeId, const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Returns the most specific feature type key, as identified by the schema, for all ways
+   * containing the specified node
    *
-   * @param nodeId
-   * @param map
-   * @return
+   * @param nodeId ID of the node to return containing way type keys for
+   * @param map map which owns the input node
+   * @return a unique collection of type key strings
    */
   static std::set<QString> getContainingWaysMostSpecificTypeKeysByNodeId(
     const long nodeId, const ConstOsmMapPtr& map);

@@ -45,14 +45,16 @@ namespace hoot
 
 class Tags;
 
+// There are some unused and now disabled types here that the original design intention of which is
+// unclear.
 enum EdgeType
 {
-  //CanHave,  //not used
+  //CanHave,  // not used
   IsA,
   SimilarTo,
-  //ParentOf, //not used
+  //ParentOf, // not used
   AssociatedWith//,
-  //CompoundComponent //not used
+  //CompoundComponent // not used
 };
 
 struct OsmSchemaCategory
@@ -66,8 +68,13 @@ struct OsmSchemaCategory
     Use =             0x08,
     Name =            0x10,
     PseudoName =      0x20,
+    // use for the feature may have multiple purposes
     Multiuse =        0x40,
-    // TODO: explain
+    // This tag must be combined with another tag to get the type of the feature. e.g.
+    // surface=asphalt must be combined with highway=*, amenity=parking, etc. to know the type of a
+    // feature with it as a tag. TODO: This probably makes more sense as an EdgeType rather than a
+    // category (maybe CompoundComponent?), but have been unable to come up with a simple design
+    // where it could be used in that way yet.
     Combination =     0x80//,
     //All = Poi | Building | Transportation | Use | Name | PseudoName | Multiuse
   };
@@ -521,7 +528,6 @@ public:
    *
    * @param tags the tags to search
    * @return a single key/value pair string
-   * @todo handle multiple types without inheritance
    */
   QString mostSpecificType(const Tags& tags);
 

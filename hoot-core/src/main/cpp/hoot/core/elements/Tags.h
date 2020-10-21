@@ -348,18 +348,18 @@ public:
   static bool isValidKvp(const QString& str);
 
   /**
-   * TODO
+   * Extracts a tag key from a tag key/value pair
    *
-   * @param kvp
-   * @return
+   * @param kvp string to extract from
+   * @return a tag key string
    */
   static QString kvpToKey(const QString& kvp);
 
   /**
-   * TODO
+   * Extracts a tag value from a tag key/value pair
    *
-   * @param kvp
-   * @return
+   * @param kvp string to extract from
+   * @return a tag value string
    */
   static QString kvpToVal(const QString& kvp);
 
