@@ -99,9 +99,6 @@ exportSizeThreshold=400000000
 # HTTP remote request timeout (10 min)
 httpTimeout=600000
 
-# Max feature count for grail operations
-grailMaxFeatureCount=1000000
-
 # Label we assign for the rails and overpass pull data
 grailRailsLabel=Reference
 grailOverpassLabel=Secondary
