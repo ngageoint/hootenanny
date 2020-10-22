@@ -136,7 +136,6 @@ void ChangesetReplacementCreator::create(
   _input2 = input2;
   _input2Map.reset();
   _output = output;
-  //_replacementBounds = bounds;
   // TODO: It makes more sense to store the bounds and then just convert it to a string as needed.
   // The default string stores six decimal places, which should be fine for a bounds. Strangely,
   // when I store the bounds or try to increase the precision of the bounds string, I'm getting a
@@ -150,78 +149,11 @@ void ChangesetReplacementCreator::create(
   LOG_STATUS("Generating diff maps for changeset derivation with ID: " << _changesetId << "...");
   LOG_VARD(toString());
 
-  OsmMapPtr refMap;
-  // This is a bit of a misnomer after recent changes, as this map will have only been cleaned by
-  // this point and not actually conflated with anything.
-  OsmMapPtr conflatedMap;
-
   // LOAD AND FILTER
 
-  // load the data to replace
-  refMap =
-    _loadInputMap(
-      "ref", _input1, true, Status::Unknown1, _boundsOpts.loadRefKeepEntireCrossingBounds,
-      _boundsOpts.loadRefKeepOnlyInsideBounds,
-      _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds, true, _input1Map);
-  MemoryUsageChecker::getInstance().check();
-
-  // Drop all C&R specific metadata tags which should not exist yet, just in case they got in the
-  // input somehow.
-  _removeMetadataTags(refMap);
-
-  const bool markMissing =
-    ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren();
-  if (markMissing)
-  {
-    // Find any elements with missing children and tag them with a custom tag, as its possible we'll
-    // break them during this process. There's really nothing that can be done about that, since we
-    // don't have access to the missing children elements. Any elements with missing children may
-    // require manual cleanup after the resulting changeset is applied.
-    _markElementsWithMissingChildren(refMap);
-  }
-
-  // Keep a mapping of the original ref element ids to versions, as we'll need the original
-  // versions later.
-  const QMap<ElementId, long> refIdToVersionMappings = _getIdToVersionMappings(refMap);
-
-  // If we have a lenient bounds requirement and linear features, we need to exclude all ways
-  // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
-  _addChangesetDeleteExclusionTags(refMap);
-
-  // Prune the ref dataset down to just the geometry types specified by the filter, so we don't end
-  // up modifying anything else.
-  if (_geometryTypeFilter)
-  {
-    _filterFeatures(
-      refMap, _geometryTypeFilter, GeometryTypeCriterion::Unknown, conf(),
-      _changesetId + "-ref-after-pruning");
-  }
-
-  // load the data that we're replacing with; We don't keep source IDs here to avoid conflict with
-  // the reference data. Data from the two maps will have to be combined during snapping.
-  OsmMapPtr secMap =
-    _loadInputMap(
-      "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
-      _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
-  MemoryUsageChecker::getInstance().check();
-
-  _removeMetadataTags(secMap);
-
-  if (markMissing)
-  {
-    _markElementsWithMissingChildren(secMap);
-  }
-
-  // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
-  // up modifying anything else.
-  if (_geometryTypeFilter)
-  {
-    const Settings secFilterSettings =
-      _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
-    _filterFeatures(
-      secMap, _geometryTypeFilter, GeometryTypeCriterion::Unknown, secFilterSettings,
-      _changesetId + "-sec-after-pruning");
-  }
+  QMap<ElementId, long> refIdToVersionMappings; // This is needed during snapping.
+  OsmMapPtr refMap = _loadAndFilterRefMap(refIdToVersionMappings);
+  OsmMapPtr secMap = _loadAndFilterSecMap();
 
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
@@ -247,7 +179,6 @@ void ChangesetReplacementCreator::create(
   LOG_VARD(cookieCutSize);
   const int dataRemoved = refMapSize - cookieCutSize;
   LOG_VARD(dataRemoved);
-
 
   // sec map size may have changed after call to _getCookieCutMap
   LOG_STATUS(
@@ -294,9 +225,7 @@ void ChangesetReplacementCreator::create(
   OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
-  // TODO: rename var since this map isn't necessary conflated; also rename everything in terms of
-  // "toReplace" and "replacement"
-  conflatedMap = cookieCutRefMap;
+  OsmMapPtr combinedMap = cookieCutRefMap; // rename to reflect the state of the dataset
 
   // Snap secondary features back to reference features if dealing with linear features where
   // ref features may have been cut along the bounds. We're being lenient here by snapping
@@ -314,15 +243,15 @@ void ChangesetReplacementCreator::create(
   for (int i = 0; i < _linearFilterClassNames.size(); i++)
   {
     _snapUnconnectedWays(
-      conflatedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
+      combinedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
       _changesetId + "-conflated-snapped-sec-to-ref-1");
   }
 
   // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
   // data in the resulting changeset and generate modify statements instead.
   ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
-  wayJoiner.join(conflatedMap);
-  LOG_VART(MapProjector::toWkt(conflatedMap->getProjection()));
+  wayJoiner.join(combinedMap);
+  LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
 
   // PRE-CHANGESET DERIVATION PREP
 
@@ -337,7 +266,7 @@ void ChangesetReplacementCreator::create(
     refMap, _boundsOpts.changesetRefKeepEntireCrossingBounds,
     _boundsOpts.changesetRefKeepOnlyInsideBounds, _changesetId + "-ref-cropped-for-changeset");
   _cropMapForChangesetDerivation(
-    conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
+    combinedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId + "-sec-cropped-for-changeset");
 
   // SNAP PART 2
@@ -365,14 +294,14 @@ void ChangesetReplacementCreator::create(
   for (int i = 0; i < _linearFilterClassNames.size(); i++)
   {
     _snapUnconnectedWays(
-      conflatedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
+      combinedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
       _changesetId + "-conflated-snapped-sec-to-ref-2");
   }
 
   // combine the conflated map with the immediately connected out of bounds ways
-  MapUtils::combineMaps(conflatedMap, immediatelyConnectedOutOfBoundsWays, true);
+  MapUtils::combineMaps(combinedMap, immediatelyConnectedOutOfBoundsWays, true);
   OsmMapWriterFactory::writeDebugMap(
-    conflatedMap, _changesetId + "-conflated-connected-combined");
+    combinedMap, _changesetId + "-conflated-connected-combined");
 
   // Snap the connected ways to other ways in the conflated map. Mark the ways that were
   // snapped, as we'll need that info in the next step.
@@ -380,12 +309,12 @@ void ChangesetReplacementCreator::create(
   for (int i = 0; i < _linearFilterClassNames.size(); i++)
   {
     _snapUnconnectedWays(
-      conflatedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i),
+      combinedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i),
       true, _changesetId + "-conflated-snapped-immediately-connected-out-of-bounds");
   }
 
   // remove any ways that weren't snapped
-  _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(conflatedMap);
+  _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(combinedMap);
 
   // Copy the connected ways back into the ref map as well, so the changeset will derive
   // properly.
@@ -402,26 +331,26 @@ void ChangesetReplacementCreator::create(
     _excludeFeaturesFromChangesetDeletion(refMap);
   }
 
-  //secIdRemapper.restore(conflatedMap);
+  //secIdRemapper.restore(combinedMap);
 
   // CLEANUP
 
   // clean up any mistakes introduced
   _cleanup(refMap);
-  _cleanup(conflatedMap);
+  _cleanup(combinedMap);
 
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements. It also prevents ways from becoming incorrectly disconnected from
   // each other in the output. This must be done with the ref/sec maps separated to avoid ID
   // conflicts.
-  _synchronizeIds(refMap, conflatedMap);
+  _synchronizeIds(refMap, combinedMap);
 
   // CHANGESET GENERATION
 
   LOG_STATUS(
     "Generating changeset for ref map of size: " <<
     StringUtils::formatLargeNumber(refMap->size()) << " and sec map of size: " <<
-    StringUtils::formatLargeNumber(conflatedMap->size()) << "...");
+    StringUtils::formatLargeNumber(combinedMap->size()) << "...");
 
   // Since we're not removing missing elements, it may be possible we have null elements passed to
   // changeset generation. This is a little concerning, b/c that would seem to affect the accuracy
@@ -433,7 +362,7 @@ void ChangesetReplacementCreator::create(
   // causes, but for now we'll activate changeset cleaning to get rid of the delete statements.
   // Unfortunately, this will make the changeset writing memory bound.
   _changesetCreator->setClean(true);
-  _changesetCreator->create(refMap, conflatedMap, _output);
+  _changesetCreator->create(refMap, combinedMap, _output);
   _numChanges = _changesetCreator->getNumTotalChanges();
 
   LOG_STATUS(
@@ -514,6 +443,81 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   LOG_VART(_boundsOpts.changesetSecKeepOnlyInsideBounds);
   LOG_VART(_boundsOpts.changesetAllowDeletingRefOutsideBounds);
   LOG_VART(_boundsOpts.inBoundsStrict);
+}
+
+OsmMapPtr ChangesetReplacementCreator::_loadAndFilterRefMap(
+  QMap<ElementId, long>& refIdToVersionMappings)
+{
+  // load the data to replace
+  OsmMapPtr refMap =
+    _loadInputMap(
+     "ref", _input1, true, Status::Unknown1, _boundsOpts.loadRefKeepEntireCrossingBounds,
+     _boundsOpts.loadRefKeepOnlyInsideBounds,
+     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds, true, _input1Map);
+  MemoryUsageChecker::getInstance().check();
+
+  // Drop all C&R specific metadata tags which should not exist yet, just in case they got in the
+  // input somehow.
+  _removeMetadataTags(refMap);
+
+  if (ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren())
+  {
+    // Find any elements with missing children and tag them with a custom tag, as its possible we'll
+    // break them during this process. There's really nothing that can be done about that, since we
+    // don't have access to the missing children elements. Any elements with missing children may
+    // require manual cleanup after the resulting changeset is applied.
+    _markElementsWithMissingChildren(refMap);
+  }
+
+  // Keep a mapping of the original ref element ids to versions, as we'll need the original
+  // versions later.
+  refIdToVersionMappings = _getIdToVersionMappings(refMap);
+
+  // If we have a lenient bounds requirement and linear features, we need to exclude all ways
+  // outside of the bounds but immediately connected to a way crossing the bounds from deletion.
+  _addChangesetDeleteExclusionTags(refMap);
+
+  // Prune the ref dataset down to just the geometry types specified by the filter, so we don't end
+  // up modifying anything else.
+  if (_geometryTypeFilter)
+  {
+    _filterFeatures(
+      refMap, _geometryTypeFilter, GeometryTypeCriterion::Unknown, conf(),
+      _changesetId + "-ref-after-pruning");
+  }
+
+  return refMap;
+}
+
+OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
+{
+  // load the data that we're replacing with; We don't keep source IDs here to avoid conflict with
+  // the reference data. Data from the two maps will have to be combined during snapping.
+  OsmMapPtr secMap =
+    _loadInputMap(
+      "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+      _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
+  MemoryUsageChecker::getInstance().check();
+
+  _removeMetadataTags(secMap);
+
+  if (ConfigOptions().getChangesetReplacementMarkElementsWithMissingChildren())
+  {
+    _markElementsWithMissingChildren(secMap);
+  }
+
+  // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
+  // up modifying anything else.
+  if (_geometryTypeFilter)
+  {
+    const Settings secFilterSettings =
+      _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
+    _filterFeatures(
+      secMap, _geometryTypeFilter, GeometryTypeCriterion::Unknown, secFilterSettings,
+      _changesetId + "-sec-after-pruning");
+  }
+
+  return secMap;
 }
 
 }

@@ -72,6 +72,8 @@ class ConstOsmMapConsumer;
  *  - snapping?
  *  - changeset derivation
  *  - cleanup
+ * @todo rename all references to conflated data since maps aren't conflated anymore; also rename
+ * all datasets in terms of "toReplace" and "replacement"
  */
 class ChangesetCutOnlyCreator : public ChangesetReplacement
 {

@@ -82,6 +82,11 @@ protected:
   ElementCriterionPtr _geometryTypeFilter;
 
   virtual void _setGlobalOpts();
+
+private:
+
+  OsmMapPtr _loadAndFilterRefMap(QMap<ElementId, long>& refIdToVersionMappings);
+  OsmMapPtr _loadAndFilterSecMap();
 };
 
 }
