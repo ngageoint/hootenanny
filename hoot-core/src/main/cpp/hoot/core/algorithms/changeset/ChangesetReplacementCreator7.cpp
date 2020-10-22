@@ -28,87 +28,24 @@
 
 // Hoot
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
-#include <hoot/core/algorithms/WayJoinerAdvanced.h>
-#include <hoot/core/algorithms/WayJoinerBasic.h>
-
-#include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
-#include <hoot/core/algorithms/changeset/ChangesetReplacementElementIdSynchronizer.h>
-
-#include <hoot/core/conflate/CookieCutter.h>
-#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
-#include <hoot/core/conflate/UnifyingConflator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
-#include <hoot/core/criterion/ElementTypeCriterion.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
-#include <hoot/core/criterion/PointCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
-#include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
-#include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
-//#include <hoot/core/criterion/RoundaboutCriterion.h>
-#include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 
-#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/elements/MapUtils.h>
 
-#include <hoot/core/index/OsmMapIndex.h>
-
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/io/OsmGeoJsonReader.h>
-#include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/ops/ElementIdToVersionMapper.h>
-#include <hoot/core/ops/ElementIdRemapper.h>
-#include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/ops/PointsToPolysConverter.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/ops/RecursiveSetTagValueOp.h>
-#include <hoot/core/ops/RemoveElementByEid.h>
-#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/ops/UnconnectedWaySnapper.h>
-#include <hoot/core/ops/WayJoinerOp.h>
+//#include <hoot/core/ops/ElementIdRemapper.h>
 
-#include <hoot/core/schema/OsmSchema.h>
-
-#include <hoot/core/util/Boundable.h>
-#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-
-#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
-#include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/visitors/RemoveDuplicateAreasVisitor.h>
-#include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
-#include <hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h>
-#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
-#include <hoot/core/visitors/RemoveTagsVisitor.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/core/visitors/SpatialIndexer.h>
-
-// tgs
-#include <tgs/RStarTree/MemoryPageStore.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -261,7 +198,8 @@ void ChangesetReplacementCreator7::create(
       _changesetId + "-ref-after-pruning");
   }
 
-  // load the data that we're replacing with
+  // load the data that we're replacing with; We don't keep source IDs here to avoid conflict with
+  // the reference data. Data from the two maps will have to be combined during snapping.
   OsmMapPtr secMap =
     _loadInputMap(
       "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
@@ -347,7 +285,14 @@ void ChangesetReplacementCreator7::create(
 
   // SNAP PART 1
 
-  //ElementIdRemapper
+  // Had an idea here to try to load source IDs for sec data, remap sec IDs to be unique just before
+  // the ref and sec have to be combined, and then restore the original sec IDs after the snapping
+  // is complete. The idea was to reduce the need for ID synchronization, which doesn't work
+  // perfectly yet (of course, if you're replacing with data from a different data source the ID
+  // sync would happen regardless...just not needed for OSM to OSM replacement). Unfortunately, this
+  // leads to all kinds of duplicate ID errors when the resulting changesets are applied.
+  //ElementIdRemapper secIdRemapper;
+  //secIdRemapper.apply(secMap);
 
   // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
@@ -450,8 +395,7 @@ void ChangesetReplacementCreator7::create(
   // Copy the connected ways back into the ref map as well, so the changeset will derive
   // properly.
   MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
-  OsmMapWriterFactory::writeDebugMap(
-    conflatedMap, _changesetId + "-ref-connected-combined");
+  OsmMapWriterFactory::writeDebugMap(refMap, _changesetId + "-ref-connected-combined");
 
   immediatelyConnectedOutOfBoundsWays.reset();
 
@@ -462,6 +406,8 @@ void ChangesetReplacementCreator7::create(
     // tag that will cause the deriver to skip deleting them.
     _excludeFeaturesFromChangesetDeletion(refMap);
   }
+
+  //secIdRemapper.restore(conflatedMap);
 
   // CLEANUP
 
