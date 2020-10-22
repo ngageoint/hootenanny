@@ -46,13 +46,24 @@ namespace hoot
 
 ElementIdSynchronizer::ElementIdSynchronizer() :
 _useNodeTagsForHash(true),
+_coordinateComparisonSensitivity(ConfigOptions().getNodeComparisonCoordinateSensitivity()),
 _updatedNodeCtr(0),
 _updatedWayCtr(0),
 _updatedRelationCtr(0)
 {
 }
 
-void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2)
+void ElementIdSynchronizer::clear()
+{
+  _map1HashesToElementIds.clear();
+  _map1ElementIdsToHashes.clear();
+  _map2HashesToElementIds.clear();
+  _map2ElementIdsToHashes.clear();
+  _syncedElementIds.clear();
+}
+
+void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
+                                        const ElementType& elementType)
 {
   _updatedNodeCtr = 0;
   _updatedWayCtr = 0;
@@ -69,64 +80,29 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
   LOG_INFO(msg);
 
   // Calc element hashes associated with element IDs.
-  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes, _map1Dupes);
+  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes);
   LOG_VARD(_map1HashesToElementIds.size());
-  QSet<QString> map1HashesSet = _map1HashesToElementIds.keys().toSet();
-  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes, _map2Dupes);
+  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes);
   LOG_VARD(_map2HashesToElementIds.size());
-  QSet<QString> map2HashesSet = _map2HashesToElementIds.keys().toSet();
 
   // Obtain the hashes for the elements that are identical between the two maps.
+  QSet<QString> map1HashesSet;
+  QSet<QString> map2HashesSet;
+  if (elementType == ElementType::Unknown)
+  {
+    map1HashesSet = _map1HashesToElementIds.keys().toSet();
+    map2HashesSet = _map2HashesToElementIds.keys().toSet();
+  }
+  else
+  {
+    map1HashesSet = _getHashesByElementType(_map1ElementIdsToHashes, elementType);
+    map2HashesSet = _getHashesByElementType(_map2ElementIdsToHashes, elementType);
+  }
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
-//  QSet<QString> map1RelationHashesSet =
-//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Relation);
-//  QSet<QString> map2RelationHashesSet =
-//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Relation);
-//  const QSet<QString> identicalRelationHashes =
-//    map1RelationHashesSet.intersect(map2RelationHashesSet);
-//  LOG_VARD(identicalRelationHashes.size());
 
-//  QSet<QString> map1WayHashesSet =
-//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Way);
-//  QSet<QString> map2WayHashesSet =
-//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Way);
-//  const QSet<QString> identicalWayHashes =
-//    map1WayHashesSet.intersect(map2WayHashesSet);
-//  LOG_VARD(identicalWayHashes.size());
-
-//  QSet<QString> map1NodeHashesSet =
-//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Node);
-//  QSet<QString> map2NodeHashesSet =
-//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Node);
-//  const QSet<QString> identicalNodeHashes =
-//    map1NodeHashesSet.intersect(map2NodeHashesSet);
-//  LOG_VARD(identicalNodeHashes.size());
-
-//  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = _map2Dupes.begin();
-//       itr != _map2Dupes.end(); ++itr)
-//  {
-//    ConstElementPtr keptElement = _map2->getElement(itr->first);
-//    ConstElementPtr dupeElement = _map2->getElement(itr->second);
-//    if (keptElement && dupeElement)
-//    {
-//      if (_areWayNodesWithoutAWayInCommon(keptElement, dupeElement))
-//      {
-//        const double distance =
-//          EuclideanDistanceExtractor().distance(*_map1, *_map2, keptElement, dupeElement);
-//        if (distance > 0.38)
-//        {
-
-//        }
-//      }
-//    }
-//  }
-
-  // overwrite map2 IDs with the IDs from map1 for the features that are identical
+  // Overwrite map2 IDs with the IDs from map1 for the features that are identical.
   _syncElementIds(identicalHashes);
-//  _syncElementIds(identicalRelationHashes);
-//  _syncElementIds(identicalWayHashes);
-//  _syncElementIds(identicalNodeHashes);
 
   LOG_DEBUG(
     "Updated IDs on " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
@@ -162,7 +138,10 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
     {
       LOG_VART(map1IdenticalElement->getElementId());
 
-      if (!_map2->containsElement(map1IdenticalElement->getElementId()))
+      // Make sure the map being updated doesn't already have an element with this ID and that
+      // we haven't already synced an element to this ID.
+      if (!_map2->containsElement(map1IdenticalElement->getElementId()) &&
+          !_syncedElementIds.contains(map1IdenticalElement->getElementId()))
       {
         // Copy it to be safe.
         ElementPtr map1IdenticalElementCopy(map1IdenticalElement->clone());
@@ -200,8 +179,6 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
 //            continue;
 //          }
 
-          // Make sure the map being updated doesn't already have an element with this ID (this
-          // check may not be necessary).
           LOG_TRACE(
             "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
             map1IdenticalElementCopy->getElementId() << "...");
@@ -213,6 +190,7 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           // Replace the element from the sec map with the newly added element, which removes the
           // old element.
           _map2->replace(map2IdenticalElement, map1IdenticalElementCopy);
+          _syncedElementIds.insert(map1IdenticalElementCopy->getElementId());
 
           switch (map1IdenticalElementCopy->getElementType().getEnum())
           {
@@ -384,19 +362,19 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
 
 void ElementIdSynchronizer::_calcElementHashes(
   const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
-  QMap<ElementId, QString>& elementIdsToHashes, QSet<std::pair<ElementId, ElementId>>& dupes,
-  const int coordinateComparisonSensitivity)
+  QMap<ElementId, QString>& elementIdsToHashes)
 {
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
 
   ElementHashVisitor hashVis;
-  // This has been added as an optoin to use, since its capable of comparing way nodes better.
+  // This exists as an option to use, since its capable of comparing way nodes better. However, it
+  // ends up preventing some id syncs against real world data.
   //ElementHashOp hashVis;
 
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);
   hashVis.setUseNodeTags(_useNodeTagsForHash);
-  hashVis.setCoordinateComparisonSensitivity(coordinateComparisonSensitivity);
+  hashVis.setCoordinateComparisonSensitivity(_coordinateComparisonSensitivity);
 
   hashVis.setOsmMap(map.get());
   map->visitRw(hashVis);
@@ -405,7 +383,6 @@ void ElementIdSynchronizer::_calcElementHashes(
 
   hashesToElementIds = hashVis.getHashesToElementIds();
   elementIdsToHashes = hashVis.getElementIdsToHashes();
-  dupes = hashVis.getDuplicates();
 }
 
 }

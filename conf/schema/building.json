@@ -173,6 +173,20 @@
         "objectType": "tag"
     },
     {
+        "isA": "building",
+        "name": "building=house",
+        "objectType": "tag"
+    },
+    {
+        "isA": "building",
+        "name": "building=museum",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tourism=museum",
+            "weight": 0.8
+        }
+    },
+    {
         "categories": [
             "multiuse"
         ],

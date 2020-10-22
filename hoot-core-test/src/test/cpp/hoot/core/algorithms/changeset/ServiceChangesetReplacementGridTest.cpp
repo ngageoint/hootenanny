@@ -65,8 +65,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(droppedNodes1Test);
   CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
-  // TODO: re-enable this after fix currently in progress as part of #4297
-  //CPPUNIT_TEST(badPolyIdSync1Test);
+  CPPUNIT_TEST(badPolyIdSync1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -209,7 +208,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(1, uut.getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -332,8 +331,8 @@ public:
 
   void northVegasLargeUniformTest()
   {
-    // whole northern half of city - 64 changesets, ~33.1M changes, avg derivation: 39s,
-    // total time: ~57m, ~581k changes/min, diff between replacement: ~5.9k (1hr33m)
+    // whole northern half of city - 64 changesets, ~33.0M changes, avg derivation: 40s,
+    // total time: 58:10, ~567k changes/min, diff between replacement: ~?k (?hr?m)
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -369,7 +368,7 @@ public:
     //CPPUNIT_ASSERT_EQUAL(26, uut.getNumOrphanedNodesInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    //CPPUNIT_ASSERT_EQUAL(513, uut.getNumDuplicateElementPairsInOutput());
+    //CPPUNIT_ASSERT_EQUAL(480, uut.getNumDuplicateElementPairsInOutput());
   }
 
 private:

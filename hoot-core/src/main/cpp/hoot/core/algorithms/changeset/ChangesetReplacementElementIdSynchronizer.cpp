@@ -40,14 +40,25 @@
 namespace hoot
 {
 
-void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map1,
-                                                            const OsmMapPtr& map2)
+void ChangesetReplacementElementIdSynchronizer::synchronize(
+  const OsmMapPtr& map1, const OsmMapPtr& map2, const ElementType& /*elementType*/)
 {
-  // Run the regular element ID synchronization first. It will find all identical elements between
-  // the two maps and assign the ID of the element from the first map to the matching element from
-  // the second map.
+  // This is convoluted, but we're going to run the ID synchronization in multiple stages. Its
+  // possible eventually that it could be run in a single stage if improvements are made to
+  // ElementHashVisitor (also see ElementHashOp). Since we don't allow any single element ID to
+  // synchronize more than once, this allows for syncing the IDs at different levels of node
+  // coordinate precision granularity.
 
+  // First run at a higher precision than what we're configured for with by default for C&R. This
+  // will prevent some bad syncs, like for way nodes in completely different unconnected ways.
   _useNodeTagsForHash = true;
+  _coordinateComparisonSensitivity = ConfigOptions().getNodeComparisonCoordinateSensitivity() + 2;
+  ElementIdSynchronizer::synchronize(map1, map2, ElementType::Node);
+
+  // Now, let's run at the C&R configured coord sensitivity. Its been lowered primarily to allow the
+  // syncing of road nodes which are slightly offset from each other between the input datasets.
+  _useNodeTagsForHash = true;
+  _coordinateComparisonSensitivity = ConfigOptions().getNodeComparisonCoordinateSensitivity();
   ElementIdSynchronizer::synchronize(map1, map2);
 
   QString msg = "Synchronizing IDs for nearly identical way nodes";
@@ -58,47 +69,39 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   msg += "...";
   LOG_INFO(msg);
 
-  // Now, perform some extra ID synchronization that helps specifically with cut and replace. For
-  // determining identical nodes, we'll loosen the matching tags requirement and just look at way
-  // nodes (_useNodeTagsForHash=false). We're looking for any way nodes between the two maps that
-  // belong to the same way, assuming matching way IDs across the maps that happened as a result of
-  // the previous ID synchronization. In those instances, we'll copy the ID from the first map
-  // element over to the second map element as was done in the previous synchronization, but we'll
-  // make sure the second element's tags are used.
+  // Finally, we'll loosen the matching tags requirement and just look at way nodes
+  // (_useNodeTagsForHash=false). We're looking for any way nodes between the two maps that belong
+  // to the same way, assuming matching way IDs across the maps that happened as a result of the
+  // previous ID synchronization. In those instances, we'll copy the ID from the first map element
+  // over to the second map element as was done in the previous synchronization, but we'll make sure
+  // the second element's tags are used.
 
-  _useNodeTagsForHash = false;
-
-  // Don't really understand why this needs to be done, but I think it may have to do with
-  // decimal rounding issues when ElementHashVisitor writes node JSON. If we don't drop this
-  // sensitivity by a decimal place, we miss synchronizing some way nodes that are very close
-  // together...in all cases checked so far, all are much less than a meter apart. As noted in
-  // ChangesetReplacementCreator::_setGlobalOpts, a coord sensitivity of 5 is a max diff of 1.1m,
-  // and going to 4 here takes us to a max of 11.11m. Very strange that it needs to be done when the
-  // nodes in question aren't anywhere near that far apart. There is an additional distance check
-  // explained in the loop below to prevent utter chaos caused by this change.
+  // Don't really understand yet why the comparison sensitivity needs to be reduced so much for
+  // this. It may have to do with decimal rounding issues when ElementHashVisitor writes node JSON.
+  // If we don't drop this sensitivity by a decimal place compared to the C&R default, we miss
+  // synchronizing some way nodes that are very close together...in all cases checked so far, all
+  // are much less than a meter apart. As noted in ChangesetReplacementCreator::_setGlobalOpts, a
+  // coord sensitivity of 5 is a max diff of 1.1m, and going to 4 here takes us to a max of 11.11m.
+  // Very strange that it needs to be done when the nodes in question aren't anywhere near that far
+  // apart. There is an additional distance check explained in the loop below to prevent utter chaos
+  // caused by this change.
 
   // Calc element hashes associated with element IDs.
-  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes, _map1Dupes, 4);
+  _useNodeTagsForHash = false;
+  _coordinateComparisonSensitivity = ConfigOptions().getNodeComparisonCoordinateSensitivity() - 1;
+  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes);
   LOG_VARD(_map1HashesToElementIds.size());
   QSet<QString> map1HashesSet = _map1HashesToElementIds.keys().toSet();
-  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes, _map2Dupes, 4);
+  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes);
   LOG_VARD(_map2HashesToElementIds.size());
   QSet<QString> map2HashesSet = _map2HashesToElementIds.keys().toSet();
 
   // Obtain the hashes for the elements that are identical between the two maps.
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
-//  QSet<QString> map1NodeHashesSet =
-//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Node);
-//  QSet<QString> map2NodeHashesSet =
-//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Node);
-//  const QSet<QString> identicalNodeHashes =
-//    map1NodeHashesSet.intersect(map2NodeHashesSet);
-//  LOG_VARD(identicalNodeHashes.size());
 
-  // overwrite map2 IDs with the IDs from map1 for the features that are identical
+  // Overwrite map2 IDs with the IDs from map1 for the features that are identical.
   _syncElementIds(identicalHashes);
-  //_syncElementIds(identicalNodeHashes);
 
   LOG_DEBUG(
     "Updated " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
@@ -117,8 +120,9 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
     // Get the element with matching hash from the ref map.
     ElementPtr map1IdenticalElement = _map1->getElement(_map1HashesToElementIds[identicalHash]);
     _wayNodeCrit.setOsmMap(_map1.get());
-    // if its a way node, keep going
-    if (map1IdenticalElement && _wayNodeCrit.isSatisfied(map1IdenticalElement))
+    // If its a way node and we haven't already synced this ID, keep going...
+    if (map1IdenticalElement && !_syncedElementIds.contains(map1IdenticalElement->getElementId()) &&
+        _wayNodeCrit.isSatisfied(map1IdenticalElement))
     {
       LOG_VART(map1IdenticalElement->getElementId());
 
@@ -161,8 +165,7 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
           // need to use the ref map version
           map2IdenticalElementCopy->setVersion(map1IdenticalElement->getVersion());
           LOG_VART(map2IdenticalElementCopy->getElementId());
-          // Make sure the map being updated doesn't already have an element with this ID (this
-          // check may not be necessary).
+
           LOG_TRACE(
             "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<
             map2IdenticalElementCopy->getElementId() << "...");
@@ -174,6 +177,7 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
           // Replace the element from the sec map with the newly added element, which removes the
           // old element.
           _map2->replace(map2IdenticalElement, map2IdenticalElementCopy);
+          _syncedElementIds.insert(map2IdenticalElementCopy->getElementId());
           _updatedNodeCtr++;
 
           // expensive; leave disabled by default

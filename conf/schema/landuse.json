@@ -61,6 +61,12 @@
     },
     {
         "geometries": [ "area" ],
+        "isA": "landuse",
+        "name": "landuse=grass",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [ "area" ],
         "categories": [
             "multiuse"
         ],
