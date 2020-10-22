@@ -383,7 +383,6 @@ void ElementIdSynchronizer::_calcElementHashes(
 
   hashesToElementIds = hashVis.getHashesToElementIds();
   elementIdsToHashes = hashVis.getElementIdsToHashes();
-  dupes = hashVis.getDuplicates();
 }
 
 }
