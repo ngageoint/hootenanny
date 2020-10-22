@@ -60,6 +60,8 @@ ChangesetReplacementCreator1()
 {
   _currentChangeDerivationPassIsLinear = true;
   _boundsInterpretation = BoundsInterpretation::Lenient;
+
+  _setGlobalOpts();
 }
 
 void ChangesetReplacementCreator7::setGeometryFilters(const QStringList& filterClassNames)
@@ -143,8 +145,8 @@ void ChangesetReplacementCreator7::create(
   // when I store the bounds or try to increase the precision of the bounds string, I'm getting a
   // lot of test output issues...needs to be looked into.
   _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
+  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
   _validateInputs();
-  _setGlobalOpts();
   _printJobDescription();
 
   LOG_INFO("******************************************");
@@ -152,7 +154,7 @@ void ChangesetReplacementCreator7::create(
   LOG_VARD(toString());
 
   OsmMapPtr refMap;
-  // This is a bit of a misnomer after recent changes, as this map may have only been cleaned by
+  // This is a bit of a misnomer after recent changes, as this map will have only been cleaned by
   // this point and not actually conflated with anything.
   OsmMapPtr conflatedMap;
 
@@ -231,11 +233,9 @@ void ChangesetReplacementCreator7::create(
   const int secMapSize = secMap->size();
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
-  bool bothMapsEmpty = false;
   if (refMapSize == 0 && secMapSize == 0)
   {
     LOG_STATUS("Both maps empty, so skipping data removal...");
-    bothMapsEmpty = true;
     return;
   }
 
@@ -251,13 +251,11 @@ void ChangesetReplacementCreator7::create(
   const int dataRemoved = refMapSize - cookieCutSize;
   LOG_VARD(dataRemoved);
 
-  if (!bothMapsEmpty)
-  {
-    // sec map size may have changed after call to _getCookieCutMap
-    LOG_STATUS(
-      "Replacing " << StringUtils::formatLargeNumber(dataRemoved) << " feature(s) with " <<
-      StringUtils::formatLargeNumber(secMap->size()) << " feature(s)...");
-  }
+
+  // sec map size may have changed after call to _getCookieCutMap
+  LOG_STATUS(
+    "Replacing " << StringUtils::formatLargeNumber(dataRemoved) << " feature(s) with " <<
+    StringUtils::formatLargeNumber(secMap->size()) << " feature(s)...");
 
   // At one point it was necessary to re-number the relations in the sec map, as they could have ID
   // overlap with those in the cookie cut ref map at this point. It seemed that this was due to the
@@ -452,7 +450,6 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
 
   // For this being enabled to have any effect,
   // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
@@ -461,9 +458,9 @@ void ChangesetReplacementCreator7::_setGlobalOpts()
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
 
-  // This needs to be lowered a bit to make feature de-duping and/or ID synchronization work. At
-  // five decimal places, we're topping out at a little over 1m of difference. If this ends up
-  // causing problems, then may need to go back to the original setting = 7.
+  // This needs to be lowered a bit to make feature de-duping and/or ID synchronization work.
+  // Otherwise, we'll miss several potential ID syncs. At five decimal places, we're topping out at
+  // a little over 1m of difference. The original setting of 7 is a little too precise.
   conf().set(ConfigOptions::getNodeComparisonCoordinateSensitivityKey(), 5);
 
   // Having to set multiple different settings to prevent missing elements from being dropped here
