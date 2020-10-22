@@ -1697,8 +1697,6 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
 
 void ChangesetReplacementCreator1::_conflate(OsmMapPtr& map)
 {
-  //map->setName("conflated");
-
   conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), true);
   if (_boundsInterpretation != BoundsInterpretation::Lenient)
   {
@@ -1739,7 +1737,6 @@ void ChangesetReplacementCreator1::_conflate(OsmMapPtr& map)
 
 void ChangesetReplacementCreator1::_clean(OsmMapPtr& map)
 {
-  //map->setName("cleaned");
   LOG_STATUS(
     "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
 

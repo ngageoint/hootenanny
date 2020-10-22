@@ -134,6 +134,4 @@ void ElementHashOp::apply(const OsmMapPtr& map)
   }
 }
 
-
-
 }

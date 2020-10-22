@@ -70,6 +70,7 @@
 
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
+#include <hoot/core/ops/ElementIdRemapper.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/ops/NamedOp.h>
@@ -192,7 +193,7 @@ void ChangesetReplacementCreator7::create(
   QElapsedTimer timer;
   timer.start();
 
-  // INPUT VALIDATION AND SETUP
+  // VALIDATION
 
   _input1 = input1;
   _input1Map.reset();
@@ -209,19 +210,16 @@ void ChangesetReplacementCreator7::create(
   _setGlobalOpts();
   _printJobDescription();
 
-  // DIFF CALCULATION
-
   LOG_INFO("******************************************");
   LOG_STATUS("Generating diff maps for changeset derivation with ID: " << _changesetId << "...");
+  LOG_VARD(toString());
 
   OsmMapPtr refMap;
   // This is a bit of a misnomer after recent changes, as this map may have only been cleaned by
   // this point and not actually conflated with anything.
   OsmMapPtr conflatedMap;
 
-  LOG_VARD(toString());
-
-  // DATA LOAD AND INITIAL PREP
+  // LOAD AND FILTER
 
   // load the data to replace
   refMap =
@@ -295,13 +293,12 @@ void ChangesetReplacementCreator7::create(
   const int secMapSize = secMap->size();
   LOG_VARD(refMapSize);
   LOG_VARD(secMapSize);
-
-  //const QString geometryTypeStr = GeometryTypeCriterion::typeToString(geometryType);
   bool bothMapsEmpty = false;
   if (refMapSize == 0 && secMapSize == 0)
   {
     LOG_STATUS("Both maps empty, so skipping data removal...");
     bothMapsEmpty = true;
+    return;
   }
 
   // CUT
@@ -329,34 +326,37 @@ void ChangesetReplacementCreator7::create(
   // fact that relations in the two maps had been added independently of each other during cropping.
   // However, after some refactoring this doesn't seem to be the case anymore. If we run into this
   // situation again, we can go back in the history to resurrect the use of the ElementIdRemapper
-  // for relations here, which has since been removed from the codebase.
+  // for relations here.
+
+  // CLEAN
+
+  // It seems unnecessary to need to clean the data after replacement. However, without the
+  // cleaning, the output can become mangled in strange ways. The cleaning ops have been reduced
+  // down to only those needed, but its probably worth to determine exactly why the remaining ops
+  // are actually needed at some point. This cleaning *probably* still needs to occur after cutting,
+  // though, as it seems to get rid of some of the artifacts produced by that process.
+
+  if (secMap->size() > 0)
+  {
+    _clean(secMap);
+  }
+  if (cookieCutRefMap->size() > 0)
+  {
+    _clean(cookieCutRefMap);
+  }
+
+  // SNAP PART 1
+
+  //ElementIdRemapper
 
   // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
   OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
-
-  // CLEAN
-
-  // It seems unnecessary to need to clean the data before replacing it. However without the
-  // cleaning, the output can become mangled in strange ways. The cleaning ops have been reduced
-  // down to only those needed, but its probably worth to determine exactly why the remaining ops
-  // are actually needed at some point.
-
   // TODO: rename var since this map isn't necessary conflated; also rename everything in terms of
   // "toReplace" and "replacement"
   conflatedMap = cookieCutRefMap;
-  if (secMapSize > 0)
-  {
-    // Alternatively, the maps could be cleaned separately before being combined together. The
-    // cleaning *probably* still needs to occur after cutting, though, as it seems to get rid of
-    // some of the artifacts produced by that process.
-    _clean(conflatedMap);
-    conflatedMap->setName("cleaned");
-  }
-
-  // SNAP
 
   // Snap secondary features back to reference features if dealing with linear features where
   // ref features may have been cut along the bounds. We're being lenient here by snapping
@@ -384,7 +384,7 @@ void ChangesetReplacementCreator7::create(
   wayJoiner.join(conflatedMap);
   LOG_VART(MapProjector::toWkt(conflatedMap->getProjection()));
 
-  // PRE-CHANGESET DERIVATION DATA PREP
+  // PRE-CHANGESET DERIVATION PREP
 
   // If we're conflating linear features with the lenient bounds requirement, copy the
   // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
@@ -399,6 +399,8 @@ void ChangesetReplacementCreator7::create(
   _cropMapForChangesetDerivation(
     conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId + "-sec-cropped-for-changeset");
+
+  // SNAP PART 2
 
   // The non-strict bounds interpretation way replacement workflow benefits from a second
   // set of snapping runs right before changeset derivation due to there being ways connected to
@@ -461,44 +463,11 @@ void ChangesetReplacementCreator7::create(
     _excludeFeaturesFromChangesetDeletion(refMap);
   }
 
+  // CLEANUP
+
   // clean up any mistakes introduced
   _cleanup(refMap);
   _cleanup(conflatedMap);
-
-  LOG_VART(refMap->getElementCount());
-  LOG_VART(conflatedMap->getElementCount());
-
-  if (!refMap)
-  {
-    LOG_DEBUG("ref map null");
-  }
-  else
-  {
-    LOG_VARD(refMap->size());
-  }
-  if (!conflatedMap)
-  {
-    LOG_DEBUG("conflated map null");
-  }
-  else
-  {
-    LOG_VARD(conflatedMap->size());
-  }
-  if (refMap && conflatedMap)
-  {
-    LOG_DEBUG(
-      "Adding ref map of size: " << StringUtils::formatLargeNumber(refMap->size()) <<
-      " and conflated map of size: " << StringUtils::formatLargeNumber(conflatedMap->size()) <<
-      " to changeset derivation queue...");;
-  }
-
-  if (!refMap && !conflatedMap)
-  {
-    LOG_WARN("No features remain after filtering, so no changeset will be generated.");
-    return;
-  }
-
-  // CLEANUP
 
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements. It also prevents ways from becoming incorrectly disconnected from
@@ -508,7 +477,10 @@ void ChangesetReplacementCreator7::create(
 
   // CHANGESET GENERATION
 
-  LOG_STATUS("Generating changeset...");
+  LOG_STATUS(
+    "Generating changeset for ref map of size: " <<
+    StringUtils::formatLargeNumber(refMap->size()) << " and sec map of size: " <<
+    StringUtils::formatLargeNumber(conflatedMap->size()) << "...");
 
   // Since we're not removing missing elements, it may be possible we have null elements passed to
   // changeset generation. This is a little concerning, b/c that would seem to affect the accuracy

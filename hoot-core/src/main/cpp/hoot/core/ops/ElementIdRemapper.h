@@ -36,7 +36,8 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Allows for assigning a completely new unique set of IDs to a map, which can later be restored
+ * back to their original values
  */
 class ElementIdRemapper : public OsmMapOperation
 {
@@ -53,9 +54,9 @@ public:
   virtual void apply(OsmMapPtr& map);
 
   /**
-   * TODO
+   * Restores all IDs in the map back to their original values
    *
-   * @param map
+   * @param map map to modify
    */
   void restore(OsmMapPtr& map);
 
@@ -70,15 +71,15 @@ public:
   }
 
   virtual QString getDescription() const
-  { return "Remaps element IDs and records the original IDs"; }
+  { return "Remaps element IDs and restores original IDs"; }
 
   QMap<ElementId, ElementId> getIdMappings() const { return _originalToRemappedElementIds; }
-  int getNumRemappedIds() const { return _remappedIds; }
+  int getNumRestoredIds() const { return _restoredIds; }
 
 private:
 
   QMap<ElementId, ElementId> _originalToRemappedElementIds;
-  int _remappedIds;
+  int _restoredIds;
 };
 
 }

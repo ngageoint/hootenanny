@@ -103,12 +103,6 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
 //    map1NodeHashesSet.intersect(map2NodeHashesSet);
 //  LOG_VARD(identicalNodeHashes.size());
 
-  // overwrite map2 IDs with the IDs from map1 for the features that are identical
-  _syncElementIds(identicalHashes);
-//  _syncElementIds(identicalRelationHashes);
-//  _syncElementIds(identicalWayHashes);
-//  _syncElementIds(identicalNodeHashes);
-
 //  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = _map2Dupes.begin();
 //       itr != _map2Dupes.end(); ++itr)
 //  {
@@ -127,6 +121,12 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
 //      }
 //    }
 //  }
+
+  // overwrite map2 IDs with the IDs from map1 for the features that are identical
+  _syncElementIds(identicalHashes);
+//  _syncElementIds(identicalRelationHashes);
+//  _syncElementIds(identicalWayHashes);
+//  _syncElementIds(identicalNodeHashes);
 
   LOG_DEBUG(
     "Updated IDs on " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
