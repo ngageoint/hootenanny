@@ -78,15 +78,14 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   // explained in the loop below to prevent utter chaos caused by this change.
 
   // Calc element hashes associated with element IDs.
-  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes, 4);
+  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes, _map1Dupes, 4);
   LOG_VARD(_map1HashesToElementIds.size());
   QSet<QString> map1HashesSet = _map1HashesToElementIds.keys().toSet();
-  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes, 4);
+  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes, _map2Dupes, 4);
   LOG_VARD(_map2HashesToElementIds.size());
   QSet<QString> map2HashesSet = _map2HashesToElementIds.keys().toSet();
 
   // Obtain the hashes for the elements that are identical between the two maps.
-
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
 //  QSet<QString> map1NodeHashesSet =
@@ -98,7 +97,6 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
 //  LOG_VARD(identicalNodeHashes.size());
 
   // overwrite map2 IDs with the IDs from map1 for the features that are identical
-
   _syncElementIds(identicalHashes);
   //_syncElementIds(identicalNodeHashes);
 
@@ -179,10 +177,11 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
           _updatedNodeCtr++;
 
           // expensive; leave disabled by default
-//          OsmMapWriterFactory::writeDebugMap(
-//            _map2,
-//            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
-//            map2IdenticalElementCopy->getElementId().toString());
+          // TODO: disable
+          OsmMapWriterFactory::writeDebugMap(
+            _map2,
+            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
+            map2IdenticalElementCopy->getElementId().toString());
         }
       }
     }

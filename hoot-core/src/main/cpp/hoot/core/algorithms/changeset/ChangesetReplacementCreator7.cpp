@@ -329,8 +329,7 @@ void ChangesetReplacementCreator7::create(
   // situation again, we can go back in the history to resurrect the use of the ElementIdRemapper
   // for relations here, which has since been removed from the codebase.
 
-  // Combine the cookie cut ref map back with the secondary map, so we can conflate the two
-  // together if needed.
+  // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
   OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
   secMap.reset();
@@ -338,16 +337,19 @@ void ChangesetReplacementCreator7::create(
 
   // CLEAN
 
-  // It seems unnecessary to need to clean the data before replacing it. However without th
+  // It seems unnecessary to need to clean the data before replacing it. However without the
   // cleaning, the output can become mangled in strange ways. The cleaning ops have been reduced
-  // down to only those needed, but its probably worth to determine exactly whey the remaining ops
-  // are needed at some point.
+  // down to only those needed, but its probably worth to determine exactly why the remaining ops
+  // are actually needed at some point.
 
   // TODO: rename var since this map isn't necessary conflated; also rename everything in terms of
   // "toReplace" and "replacement"
   conflatedMap = cookieCutRefMap;
   if (secMapSize > 0)
   {
+    // Alternatively, the maps could be cleaned separately before being combined together. The
+    // cleaning *probably* still needs to occur after cutting, though, as it seems to get rid of
+    // some of the artifacts produced by that process.
     _clean(conflatedMap);
     conflatedMap->setName("cleaned");
   }

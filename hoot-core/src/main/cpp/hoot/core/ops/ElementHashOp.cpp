@@ -124,10 +124,7 @@ void ElementHashOp::apply(const OsmMapPtr& map)
 
         QCryptographicHash hash(QCryptographicHash::Sha1);
         hash.addData(nodeJson.toLatin1().constData());
-        QByteArray bytes = hash.result();
-        const QString hashString = "sha1sum:" + QString::fromUtf8(bytes.toHex());
-
-        _hashVis.insertHash(node, hashString);
+        _hashVis.insertHash(node, "sha1sum:" + QString::fromUtf8(hash.result().toHex()));
       }
       else
       {

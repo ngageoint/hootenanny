@@ -78,8 +78,10 @@ protected:
   // see ElementHashVisitor
   QMap<QString, ElementId> _map1HashesToElementIds;
   QMap<ElementId, QString> _map1ElementIdsToHashes;
+  QSet<std::pair<ElementId, ElementId>> _map1Dupes;
   QMap<QString, ElementId> _map2HashesToElementIds;
   QMap<ElementId, QString> _map2ElementIdsToHashes;
+  QSet<std::pair<ElementId, ElementId>> _map2Dupes;
 
   int _updatedNodeCtr;
   int _updatedWayCtr;
@@ -90,7 +92,7 @@ protected:
    */
   void _calcElementHashes(
     const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
-    QMap<ElementId, QString>& elementIdsToHashes,
+    QMap<ElementId, QString>& elementIdsToHashes, QSet<std::pair<ElementId, ElementId>>& dupes,
       const int coordinateComparisonSensitivity =
         ConfigOptions().getNodeComparisonCoordinateSensitivity());
 
