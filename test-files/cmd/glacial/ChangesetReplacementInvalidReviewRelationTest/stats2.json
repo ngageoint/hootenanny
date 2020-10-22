@@ -8,19 +8,19 @@
             "Relation": "93"
         },
         {
-            "Way": "210"
+            "Way": "211"
         }
     ],
     "Delete":
     [
         {
-            "Node": "4051"
+            "Node": "4048"
         },
         {
             "Relation": "64"
         },
         {
-            "Way": "74"
+            "Way": "73"
         }
     ],
     "Modify":

@@ -40,7 +40,8 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, ElementHashOp)
+// This isn't ready for primetime yet.
+//HOOT_FACTORY_REGISTER(OsmMapOperation, ElementHashOp)
 
 ElementHashOp::ElementHashOp() :
 _addParentToWayNodes(false)

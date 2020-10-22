@@ -40,8 +40,8 @@ namespace hoot
  * better determine the difference between way nodes. In particular, even when two way nodes are
  * very close together, it can determine if they actually belong to different ways.
  * _addParentToWayNodes must be enabled for this to occur. Its possible this implementation could
- * replace ElementHashVisitor at some point, but much more testing of it needs to occur before that
- * could happen.
+ * replace ElementHashVisitor at some point, but right now it doesn't work well against some data
+ * and much more testing of it needs to occur before that could happen.
  */
 class ElementHashOp : public ConstOsmMapOperation
 {

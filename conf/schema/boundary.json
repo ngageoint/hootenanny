@@ -1,6 +1,7 @@
 [
     {
         "dataType": "enumeration",
+        "#": "TODO: Remove this geometry?.",
         "geometries": [
             "linestring"
         ],
@@ -9,8 +10,20 @@
         "objectType": "tag"
     },
     {
+        "#": "TODO: Think this should be an area geometry instead.",
+        "geometries": [
+            "linestring"
+        ],
         "isA": "boundary",
         "name": "boundary=administrative",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "area"
+        ],
+        "isA": "boundary",
+        "name": "boundary=protected_area",
         "objectType": "tag"
     }
 ]
