@@ -22,42 +22,32 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_CREATOR_H
 #define CHANGESET_REPLACEMENT_CREATOR_H
 
-//GEOS
-#include <geos/geom/Envelope.h>
-
-// Qt
-#include <QString>
+// Hoot
+#include <hoot/core/algorithms/changeset/ChangesetCutOnlyCreator.h>
 
 namespace hoot
 {
 
 /**
- * TODO
+ * Single geometry pass version of ChangesetCutOnlyCreator, which solves the bug in handling
+ * relations with children of mixed geometry types. This drops support for overlapping only
+ * replacement and strict bounds handling, as they are not useful for replacements within a task
+ * grid. This temporarily drops support for the additional filters (they were broken anyway), and
+ * they will be restored as part of #4267. Eventually this class will be refactored and renamed.
  */
-class ChangesetReplacementCreator
+class ChangesetReplacementCreator : public ChangesetCutOnlyCreator
 {
 
 public:
 
   static std::string className() { return "hoot::ChangesetReplacementCreator"; }
 
-  /**
-   * The manner in which replacement boundary conditions are handled. See the
-   * changeset-derive-replacement CLI doc for more detail.
-   *
-   * @todo Hybrid may go away
-   */
-  enum BoundsInterpretation
-  {
-    Strict = 0, // only features completely inside or lines crossing that get cut at the boundary
-    Lenient,    // features inside and overlapping
-    Hybrid      // points inside, polys inside and overlapping, lines cut at the boundary
-  };
+  ChangesetReplacementCreator();
 
   /**
    * Creates a changeset that replaces features in the first input with features from the second
@@ -72,25 +62,26 @@ public:
    */
   virtual void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
-    const QString& output) = 0;
+    const QString& output) override;
 
-  virtual int getNumChanges() const = 0;
+  // Currently, this only supports geometry filters (additional filters are broken right now
+  // anyway: #4267).
+  virtual void setGeometryFilters(const QStringList& filterClassNames) override;
+  virtual void setReplacementFilters(const QStringList& /*filterClassNames*/) override {}
+  virtual void setChainReplacementFilters(const bool /*chain*/) override {}
+  virtual void setReplacementFilterOptions(const QStringList& /*optionKvps*/) override {}
+  virtual void setRetainmentFilters(const QStringList& /*filterClassNames*/) override {}
+  virtual void setChainRetainmentFilters(const bool /*chain*/) override {}
+  virtual void setRetainmentFilterOptions(const QStringList& /*optionKvps*/) override {}
 
-  virtual void setFullReplacement(const bool full) = 0;
-  virtual void setBoundsInterpretation(const BoundsInterpretation& interpretation) = 0;
-  virtual void setGeometryFilters(const QStringList& filterClassNames) = 0;
-  virtual void setReplacementFilters(const QStringList& filterClassNames) = 0;
-  virtual void setChainReplacementFilters(const bool chain)  = 0;
-  virtual void setReplacementFilterOptions(const QStringList& optionKvps) = 0;
-  virtual void setRetainmentFilters(const QStringList& filterClassNames) = 0;
-  virtual void setChainRetainmentFilters(const bool chain) = 0;
-  virtual void setRetainmentFilterOptions(const QStringList& optionKvps) = 0;
-  virtual void setConflationEnabled(const bool enabled) = 0;
-  virtual void setChangesetId(const QString& id) = 0;
-  virtual void setChangesetOptions(
-    const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl) = 0;
+  virtual QString toString() const override
+    { return QString::fromStdString(className()).remove("hoot::"); }
 
-  virtual QString toString() const  = 0;
+protected:
+
+  ElementCriterionPtr _geometryTypeFilter;
+
+  virtual void _setGlobalOpts();
 };
 
 }

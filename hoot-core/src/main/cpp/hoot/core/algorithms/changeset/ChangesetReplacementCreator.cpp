@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ChangesetReplacementCreator7.h"
+#include "ChangesetReplacementCreator.h"
 
 // Hoot
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
@@ -53,24 +53,24 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ChangesetReplacementCreator, ChangesetReplacementCreator7)
+HOOT_FACTORY_REGISTER(ChangesetReplacement, ChangesetReplacementCreator)
 
-ChangesetReplacementCreator7::ChangesetReplacementCreator7() :
-ChangesetReplacementCreator1()
+ChangesetReplacementCreator::ChangesetReplacementCreator() :
+ChangesetCutOnlyCreator()
 {
   _currentChangeDerivationPassIsLinear = true;
   _boundsInterpretation = BoundsInterpretation::Lenient;
+  _fullReplacement = true;
 
   _setGlobalOpts();
 }
 
-void ChangesetReplacementCreator7::setGeometryFilters(const QStringList& filterClassNames)
+void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterClassNames)
 {
   LOG_VART(filterClassNames);
   if (!filterClassNames.isEmpty())
   {
     _geometryFiltersSpecified = true;
-    //_geometryTypeFilters.clear();
     _geometryTypeFilter.reset();
     _linearFilterClassNames.clear();
 
@@ -108,13 +108,10 @@ void ChangesetReplacementCreator7::setGeometryFilters(const QStringList& filterC
   }
 
   // have to call this method to keep filtering from erroring...shouldn't have to...should just init
-  // itself internally when no geometry filters are specified
-  //LOG_VART(_geometryTypeFilters.size());
-  //if (_geometryTypeFilters.isEmpty())
+  // itself internally when no geometry filters are specified)
   if (!_geometryTypeFilter)
   {
     _geometryFiltersSpecified = false;
-    //_geometryTypeFilters = _getDefaultGeometryFilters();
     _linearFilterClassNames =
       ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
         GeometryTypeCriterion::GeometryType::Line);
@@ -125,7 +122,7 @@ void ChangesetReplacementCreator7::setGeometryFilters(const QStringList& filterC
   LOG_VART(_linearFilterClassNames);
 }
 
-void ChangesetReplacementCreator7::create(
+void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
@@ -445,7 +442,7 @@ void ChangesetReplacementCreator7::create(
     StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 
-void ChangesetReplacementCreator7::_setGlobalOpts()
+void ChangesetReplacementCreator::_setGlobalOpts()
 {
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);

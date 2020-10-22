@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ChangesetReplacementCreator1.h"
+#include "ChangesetCutOnlyCreator.h"
 
 // Hoot
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
@@ -115,9 +115,9 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ChangesetReplacementCreator, ChangesetReplacementCreator1)
+HOOT_FACTORY_REGISTER(ChangesetReplacement, ChangesetCutOnlyCreator)
 
-ChangesetReplacementCreator1::ChangesetReplacementCreator1() :
+ChangesetCutOnlyCreator::ChangesetCutOnlyCreator() :
 _boundsInterpretation(BoundsInterpretation::Lenient),
 _conflationEnabled(false),
 _changesetId("1"),
@@ -131,7 +131,7 @@ _numChanges(0)
 {
 }
 
-void ChangesetReplacementCreator1::setChangesetOptions(
+void ChangesetCutOnlyCreator::setChangesetOptions(
   const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl)
 {
   LOG_VARD(printStats);
@@ -140,7 +140,7 @@ void ChangesetReplacementCreator1::setChangesetOptions(
   _changesetCreator.reset(new ChangesetCreator(printStats, statsOutputFile, osmApiDbUrl));
 }
 
-void ChangesetReplacementCreator1::setGeometryFilters(const QStringList& filterClassNames)
+void ChangesetCutOnlyCreator::setGeometryFilters(const QStringList& filterClassNames)
 {
   LOG_VART(filterClassNames);
   if (!filterClassNames.isEmpty())
@@ -200,7 +200,7 @@ void ChangesetReplacementCreator1::setGeometryFilters(const QStringList& filterC
   LOG_VART(_linearFilterClassNames);
 }
 
-void ChangesetReplacementCreator1::_setInputFilter(
+void ChangesetCutOnlyCreator::_setInputFilter(
   std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
   const bool chainFilters)
 {
@@ -260,7 +260,7 @@ void ChangesetReplacementCreator1::_setInputFilter(
   }
 }
 
-void ChangesetReplacementCreator1::setReplacementFilters(const QStringList& filterClassNames)
+void ChangesetCutOnlyCreator::setReplacementFilters(const QStringList& filterClassNames)
 {
   LOG_VART(filterClassNames.size());
   if (filterClassNames.size() > 0)
@@ -270,7 +270,7 @@ void ChangesetReplacementCreator1::setReplacementFilters(const QStringList& filt
   }
 }
 
-void ChangesetReplacementCreator1::setRetainmentFilters(const QStringList& filterClassNames)
+void ChangesetCutOnlyCreator::setRetainmentFilters(const QStringList& filterClassNames)
 {
   LOG_VARD(filterClassNames.size());
   if (filterClassNames.size() > 0)
@@ -280,8 +280,8 @@ void ChangesetReplacementCreator1::setRetainmentFilters(const QStringList& filte
   }
 }
 
-void ChangesetReplacementCreator1::_setInputFilterOptions(Settings& opts,
-                                                         const QStringList& optionKvps)
+void ChangesetCutOnlyCreator::_setInputFilterOptions(Settings& opts,
+                                                     const QStringList& optionKvps)
 {
   LOG_VART(optionKvps.size());
   opts = conf();
@@ -305,13 +305,13 @@ void ChangesetReplacementCreator1::_setInputFilterOptions(Settings& opts,
   LOG_DEBUG("Opts size after adding custom opts: " << optsSizeAfter);
 }
 
-void ChangesetReplacementCreator1::setReplacementFilterOptions(const QStringList& optionKvps)
+void ChangesetCutOnlyCreator::setReplacementFilterOptions(const QStringList& optionKvps)
 {
   LOG_DEBUG("Creating replacement filter options...");
   _setInputFilterOptions(_replacementFilterOptions, optionKvps);
 }
 
-QString ChangesetReplacementCreator1::_boundsInterpretationToString(
+QString ChangesetCutOnlyCreator::_boundsInterpretationToString(
   const BoundsInterpretation& boundsInterpretation) const
 {
   switch (boundsInterpretation)
@@ -330,7 +330,7 @@ QString ChangesetReplacementCreator1::_boundsInterpretationToString(
   }
 }
 
-void ChangesetReplacementCreator1::_printJobDescription() const
+void ChangesetCutOnlyCreator::_printJobDescription() const
 {
   QString boundsStr = "Bounds calculation is " +
     _boundsInterpretationToString(_boundsInterpretation);
@@ -385,13 +385,13 @@ void ChangesetReplacementCreator1::_printJobDescription() const
   LOG_INFO(str);
 }
 
-void ChangesetReplacementCreator1::setRetainmentFilterOptions(const QStringList& optionKvps)
+void ChangesetCutOnlyCreator::setRetainmentFilterOptions(const QStringList& optionKvps)
 {
   LOG_DEBUG("Creating retainment filter options...");
   _setInputFilterOptions(_retainmentFilterOptions, optionKvps);
 }
 
-void ChangesetReplacementCreator1::create(
+void ChangesetCutOnlyCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
@@ -552,8 +552,8 @@ void ChangesetReplacementCreator1::create(
     StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 
-OsmMapPtr ChangesetReplacementCreator1::_getMapByGeometryType(const QList<OsmMapPtr>& maps,
-                                                              const QString& geometryTypeStr)
+OsmMapPtr ChangesetCutOnlyCreator::_getMapByGeometryType(const QList<OsmMapPtr>& maps,
+                                                         const QString& geometryTypeStr)
 {
   for (int i = 0; i < maps.size(); i++)
   {
@@ -567,7 +567,7 @@ OsmMapPtr ChangesetReplacementCreator1::_getMapByGeometryType(const QList<OsmMap
   return OsmMapPtr();
 }
 
-void ChangesetReplacementCreator1::_processMaps(
+void ChangesetCutOnlyCreator::_processMaps(
   OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const ElementCriterionPtr& refFeatureFilter,
   const ElementCriterionPtr& secFeatureFilter,
   const GeometryTypeCriterion::GeometryType& geometryType,
@@ -842,7 +842,7 @@ void ChangesetReplacementCreator1::_processMaps(
   LOG_VART(conflatedMap->getElementCount());
 }
 
-void ChangesetReplacementCreator1::_validateInputs()
+void ChangesetCutOnlyCreator::_validateInputs()
 {
   // Fail if the reader that supports either input doesn't implement Boundable.
   std::shared_ptr<Boundable> boundable =
@@ -896,7 +896,7 @@ void ChangesetReplacementCreator1::_validateInputs()
   }
 }
 
-void ChangesetReplacementCreator1::_setGlobalOpts()
+void ChangesetCutOnlyCreator::_setGlobalOpts()
 {
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
@@ -966,7 +966,7 @@ void ChangesetReplacementCreator1::_setGlobalOpts()
   _boundsOpts.changesetRefKeepOnlyInsideBounds = false;
 }
 
-void ChangesetReplacementCreator1::_parseConfigOpts(
+void ChangesetCutOnlyCreator::_parseConfigOpts(
   const GeometryTypeCriterion::GeometryType& geometryType)
 {
   // These settings have been are customized for each geometry type and bounds handling preference.
@@ -1074,7 +1074,7 @@ void ChangesetReplacementCreator1::_parseConfigOpts(
 }
 
 QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-  ChangesetReplacementCreator1::_getDefaultGeometryFilters() const
+  ChangesetCutOnlyCreator::_getDefaultGeometryFilters() const
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> featureFilters;
 
@@ -1117,7 +1117,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   return featureFilters;
 }
 
-bool ChangesetReplacementCreator1::_roadFilterExists() const
+bool ChangesetCutOnlyCreator::_roadFilterExists() const
 {
   ElementCriterionPtr lineFilter = _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line];
   if (lineFilter)
@@ -1130,7 +1130,7 @@ bool ChangesetReplacementCreator1::_roadFilterExists() const
 }
 
 QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-  ChangesetReplacementCreator1::_getCombinedFilters(
+  ChangesetCutOnlyCreator::_getCombinedFilters(
     std::shared_ptr<ChainCriterion> nonGeometryFilter)
 {
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> combinedFilters;
@@ -1251,7 +1251,7 @@ QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
   return combinedFilters;
 }
 
-OsmMapPtr ChangesetReplacementCreator1::_loadInputMap(
+OsmMapPtr ChangesetCutOnlyCreator::_loadInputMap(
   const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
   const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
   const bool keepImmediatelyConnectedWaysOutsideBounds, const bool warnOnZeroVersions,
@@ -1330,7 +1330,7 @@ OsmMapPtr ChangesetReplacementCreator1::_loadInputMap(
   return map;
 }
 
-OsmMapPtr ChangesetReplacementCreator1::_loadRefMap(
+OsmMapPtr ChangesetCutOnlyCreator::_loadRefMap(
   const GeometryTypeCriterion::GeometryType& geometryType)
 {
   // We only care about the zero version warning for the ref data.
@@ -1341,7 +1341,7 @@ OsmMapPtr ChangesetReplacementCreator1::_loadRefMap(
       _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds, true, _input1Map);
 }
 
-OsmMapPtr ChangesetReplacementCreator1::_loadSecMap(
+OsmMapPtr ChangesetCutOnlyCreator::_loadSecMap(
   const GeometryTypeCriterion::GeometryType& geometryType)
 {
   if (!_input2.isEmpty())
@@ -1359,7 +1359,7 @@ OsmMapPtr ChangesetReplacementCreator1::_loadSecMap(
   }
 }
 
-void ChangesetReplacementCreator1::_removeMetadataTags(const OsmMapPtr& map)
+void ChangesetCutOnlyCreator::_removeMetadataTags(const OsmMapPtr& map)
 {
   QStringList changesetReplacementMetadataTags;
   changesetReplacementMetadataTags.append(MetadataTags::HootChangeExcludeDelete());
@@ -1371,7 +1371,7 @@ void ChangesetReplacementCreator1::_removeMetadataTags(const OsmMapPtr& map)
   LOG_DEBUG(tagRemover.getCompletedStatusMessage());
 }
 
-void ChangesetReplacementCreator1::_markElementsWithMissingChildren(OsmMapPtr& map)
+void ChangesetCutOnlyCreator::_markElementsWithMissingChildren(OsmMapPtr& map)
 {
   ReportMissingElementsVisitor elementMarker;
   // Originally, this was going to add reviews for this rather than tagging elements, but there was
@@ -1390,7 +1390,7 @@ void ChangesetReplacementCreator1::_markElementsWithMissingChildren(OsmMapPtr& m
     map, _changesetId + "-" + map->getName() + "-after-missing-marked");
 }
 
-void ChangesetReplacementCreator1::_filterFeatures(
+void ChangesetCutOnlyCreator::_filterFeatures(
   OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
   const GeometryTypeCriterion::GeometryType& /*geometryType*/, const Settings& config,
   const QString& debugFileName)
@@ -1416,7 +1416,7 @@ void ChangesetReplacementCreator1::_filterFeatures(
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
 
-OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
+OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
   OsmMapPtr doughMap, OsmMapPtr cutterMap, const GeometryTypeCriterion::GeometryType& geometryType)
 {
   // This logic has become extremely complicated over time to handle all the different cut
@@ -1695,7 +1695,7 @@ OsmMapPtr ChangesetReplacementCreator1::_getCookieCutMap(
   return cookieCutMap;
 }
 
-void ChangesetReplacementCreator1::_conflate(OsmMapPtr& map)
+void ChangesetCutOnlyCreator::_conflate(OsmMapPtr& map)
 {
   conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), true);
   if (_boundsInterpretation != BoundsInterpretation::Lenient)
@@ -1735,7 +1735,7 @@ void ChangesetReplacementCreator1::_conflate(OsmMapPtr& map)
   LOG_DEBUG("Conflated map size: " << map->size());
 }
 
-void ChangesetReplacementCreator1::_clean(OsmMapPtr& map)
+void ChangesetCutOnlyCreator::_clean(OsmMapPtr& map)
 {
   LOG_STATUS(
     "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
@@ -1750,8 +1750,7 @@ void ChangesetReplacementCreator1::_clean(OsmMapPtr& map)
   LOG_DEBUG("Cleaned map size: " << map->size());
 }
 
-QMap<ElementId, long> ChangesetReplacementCreator1::_getIdToVersionMappings(
-  const OsmMapPtr& map) const
+QMap<ElementId, long> ChangesetCutOnlyCreator::_getIdToVersionMappings(const OsmMapPtr& map) const
 {
   LOG_INFO("Mapping element IDs to element versions for: " << map->getName() << "...");
 
@@ -1763,7 +1762,7 @@ QMap<ElementId, long> ChangesetReplacementCreator1::_getIdToVersionMappings(
   return idToVersionMappings;
 }
 
-void ChangesetReplacementCreator1::_addChangesetDeleteExclusionTags(OsmMapPtr& map)
+void ChangesetCutOnlyCreator::_addChangesetDeleteExclusionTags(OsmMapPtr& map)
 {
   LOG_INFO(
     "Setting connected way features outside of bounds to be excluded from deletion for: " <<
@@ -1797,7 +1796,7 @@ void ChangesetReplacementCreator1::_addChangesetDeleteExclusionTags(OsmMapPtr& m
     map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-1");
 }
 
-void ChangesetReplacementCreator1::_snapUnconnectedWays(
+void ChangesetCutOnlyCreator::_snapUnconnectedWays(
   OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
   const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
 {
@@ -1832,7 +1831,7 @@ void ChangesetReplacementCreator1::_snapUnconnectedWays(
   OsmMapWriterFactory::writeDebugMap(map, debugFileName);
 }
 
-OsmMapPtr ChangesetReplacementCreator1::_getImmediatelyConnectedOutOfBoundsWays(
+OsmMapPtr ChangesetCutOnlyCreator::_getImmediatelyConnectedOutOfBoundsWays(
   const ConstOsmMapPtr& map) const
 {
   const QString outputMapName = "connected-ways";
@@ -1853,7 +1852,7 @@ OsmMapPtr ChangesetReplacementCreator1::_getImmediatelyConnectedOutOfBoundsWays(
   return connectedWays;
 }
 
-void ChangesetReplacementCreator1::_cropMapForChangesetDerivation(
+void ChangesetCutOnlyCreator::_cropMapForChangesetDerivation(
   OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
   const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName)
 {
@@ -1883,8 +1882,7 @@ void ChangesetReplacementCreator1::_cropMapForChangesetDerivation(
   LOG_DEBUG("Cropped map: " << map->getName() << " size: " << map->size());
 }
 
-void ChangesetReplacementCreator1::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(
-  OsmMapPtr& map)
+void ChangesetCutOnlyCreator::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map)
 {
   LOG_INFO(
     "Removing any immediately connected ways that were not previously snapped in: " <<
@@ -1910,7 +1908,7 @@ void ChangesetReplacementCreator1::_removeUnsnappedImmediatelyConnectedOutOfBoun
     map, _changesetId + "-" + map->getName() + "-unsnapped-removed");
 }
 
-void ChangesetReplacementCreator1::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& map)
+void ChangesetCutOnlyCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& map)
 {
   if (map->size() == 0)
   {
@@ -1940,7 +1938,7 @@ void ChangesetReplacementCreator1::_excludeFeaturesFromChangesetDeletion(OsmMapP
     map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-2");
 }
 
-void ChangesetReplacementCreator1::_cleanup(OsmMapPtr& map)
+void ChangesetCutOnlyCreator::_cleanup(OsmMapPtr& map)
 {
   LOG_INFO("Cleaning up changeset derivation input " << map->getName() << "...");
 
@@ -1965,7 +1963,7 @@ void ChangesetReplacementCreator1::_cleanup(OsmMapPtr& map)
   MapProjector::projectToWgs84(map);
 }
 
-void ChangesetReplacementCreator1::_removeConflateReviews(OsmMapPtr& map)
+void ChangesetCutOnlyCreator::_removeConflateReviews(OsmMapPtr& map)
 {
   LOG_INFO("Removing reviews added during conflation from " << map->getName() << "...");
 
@@ -1990,7 +1988,7 @@ void ChangesetReplacementCreator1::_removeConflateReviews(OsmMapPtr& map)
     map, _changesetId + "-" + map->getName() + "-conflate-reviews-removed");
 }
 
-void ChangesetReplacementCreator1::_synchronizeIds(
+void ChangesetCutOnlyCreator::_synchronizeIds(
   const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps)
 {
   assert(mapsBeingReplaced.size() == replacementMaps.size());
@@ -2002,7 +2000,7 @@ void ChangesetReplacementCreator1::_synchronizeIds(
   }
 }
 
-void ChangesetReplacementCreator1::_synchronizeIds(
+void ChangesetCutOnlyCreator::_synchronizeIds(
   OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap)
 {
   // When replacing data, we always load the replacement data without its original IDs in case there
