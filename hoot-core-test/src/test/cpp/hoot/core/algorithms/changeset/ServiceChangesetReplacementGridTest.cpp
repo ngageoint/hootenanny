@@ -65,8 +65,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(droppedNodes1Test);
   CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
-  // TODO: re-enable this after fix currently in progress
-  //CPPUNIT_TEST(badPolyIdSyncTest);
+  // TODO: re-enable this after fix currently in progress as part of #4297
+  //CPPUNIT_TEST(badPolyIdSync1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -109,8 +109,8 @@ public:
 
     _testName = "orphanedNodes1Test";
     _prepInput(
-      _inputPath + "/orphanedNodes1Test-Input1.osm",
-      _inputPath + "/orphanedNodes1Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
 
     ChangesetTaskGridReplacer uut;
@@ -142,8 +142,8 @@ public:
 
     _testName = "orphanedNodes2Test";
     _prepInput(
-      _inputPath + "/orphanedNodes2Test-Input1.osm",
-      _inputPath + "/orphanedNodes2Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
 
     ChangesetTaskGridReplacer uut;
@@ -184,8 +184,8 @@ public:
 
     _testName = "droppedNodes1Test";
     _prepInput(
-      _inputPath + "/droppedNodes1Test-Input1.osm",
-      _inputPath + "/droppedNodes1Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
 
@@ -225,8 +225,8 @@ public:
 
     _testName = "droppedPointPolyRelationMembers1Test";
     _prepInput(
-      _inputPath + "/droppedPointPolyRelationMembers1Test-Input1.osm",
-      _inputPath + "/droppedPointPolyRelationMembers1Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
 
@@ -254,15 +254,15 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
-  void badPolyIdSyncTest()
+  void badPolyIdSync1Test()
   {
     // part of github 4297 - The landuse=residential poly surrounding Flanagan Drive should not be
     // corrupted in the output.
 
-    _testName = "badPolyIdSyncTest";
+    _testName = "badPolyIdSync1Test";
     _prepInput(
-      _inputPath + "/badPolyIdSyncTest-Input1.osm",
-      _inputPath + "/badPolyIdSyncTest-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
 
