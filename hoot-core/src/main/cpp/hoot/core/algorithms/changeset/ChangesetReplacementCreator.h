@@ -87,6 +87,12 @@ private:
 
   OsmMapPtr _loadAndFilterRefMap(QMap<ElementId, long>& refIdToVersionMappings);
   OsmMapPtr _loadAndFilterSecMap();
+
+  void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap);
+  void _snapUnconnectedPostChangesetMapCropping(
+    OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays);
+
+  void _generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap);
 };
 
 }

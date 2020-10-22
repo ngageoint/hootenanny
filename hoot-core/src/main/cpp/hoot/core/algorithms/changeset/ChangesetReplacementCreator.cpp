@@ -154,7 +154,6 @@ void ChangesetReplacementCreator::create(
   QMap<ElementId, long> refIdToVersionMappings; // This is needed during snapping.
   OsmMapPtr refMap = _loadAndFilterRefMap(refIdToVersionMappings);
   OsmMapPtr secMap = _loadAndFilterSecMap();
-
   const int refMapSize = refMap->size();
   // If the secondary dataset is empty here and the ref dataset isn't, then we'll end up with a
   // changeset with only delete statements if the option to allow deleting reference features is
@@ -209,7 +208,7 @@ void ChangesetReplacementCreator::create(
     _clean(cookieCutRefMap);
   }
 
-  // SNAP PART 1
+  // SNAP BEFORE CHANGESET DERIVATION CROPPING
 
   // Had an idea here to try to load source IDs for sec data, remap sec IDs to be unique just before
   // the ref and sec have to be combined, and then restore the original sec IDs after the snapping
@@ -232,20 +231,7 @@ void ChangesetReplacementCreator::create(
   // secondary to reference *and* allowing conflated data to be snapped to either dataset. We only
   // want to snap ways of like types together, so we'll loop through each applicable linear type
   // and snap them separately.
-
-  LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-  QStringList snapWayStatuses("Input2");
-  snapWayStatuses.append("Conflated");
-  QStringList snapToWayStatuses("Input1");
-  snapToWayStatuses.append("Conflated");
-  // TODO: Now that we're more strict on what can be snapped type-wise, we may not need to
-  // break these snaps out per feature type.
-  for (int i = 0; i < _linearFilterClassNames.size(); i++)
-  {
-    _snapUnconnectedWays(
-      combinedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
-      _changesetId + "-conflated-snapped-sec-to-ref-1");
-  }
+  _snapUnconnectedPreChangesetMapCropping(combinedMap);
 
   // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
   // data in the resulting changeset and generate modify statements instead.
@@ -253,7 +239,7 @@ void ChangesetReplacementCreator::create(
   wayJoiner.join(combinedMap);
   LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
 
-  // PRE-CHANGESET DERIVATION PREP
+  // PRE-CHANGESET DERIVATION CROP
 
   // If we're conflating linear features with the lenient bounds requirement, copy the
   // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
@@ -269,7 +255,7 @@ void ChangesetReplacementCreator::create(
     combinedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId + "-sec-cropped-for-changeset");
 
-  // SNAP PART 2
+  // SNAP AFTER CHANGESET DERIVATION CROPPING
 
   // The non-strict bounds interpretation way replacement workflow benefits from a second
   // set of snapping runs right before changeset derivation due to there being ways connected to
@@ -278,49 +264,8 @@ void ChangesetReplacementCreator::create(
   // so far...so skipping it. Note that we're being as lenient as possible with the snapping
   // here, allowing basically anything to join to anything else, which *could* end up causing
   // problems...we'll go with it for now.
-
-  snapWayStatuses.clear();
-  snapWayStatuses.append("Input2");
-  snapWayStatuses.append("Conflated");
-  snapWayStatuses.append("Input1");
-  snapToWayStatuses.clear();
-  snapToWayStatuses.append("Input1");
-  snapToWayStatuses.append("Conflated");
-  snapToWayStatuses.append("Input2");
-  LOG_VARD(_linearFilterClassNames);
-
-  // Snap anything that can be snapped per feature type.
-  LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-  for (int i = 0; i < _linearFilterClassNames.size(); i++)
-  {
-    _snapUnconnectedWays(
-      combinedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
-      _changesetId + "-conflated-snapped-sec-to-ref-2");
-  }
-
-  // combine the conflated map with the immediately connected out of bounds ways
-  MapUtils::combineMaps(combinedMap, immediatelyConnectedOutOfBoundsWays, true);
-  OsmMapWriterFactory::writeDebugMap(
-    combinedMap, _changesetId + "-conflated-connected-combined");
-
-  // Snap the connected ways to other ways in the conflated map. Mark the ways that were
-  // snapped, as we'll need that info in the next step.
-  LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-  for (int i = 0; i < _linearFilterClassNames.size(); i++)
-  {
-    _snapUnconnectedWays(
-      combinedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i),
-      true, _changesetId + "-conflated-snapped-immediately-connected-out-of-bounds");
-  }
-
-  // remove any ways that weren't snapped
-  _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(combinedMap);
-
-  // Copy the connected ways back into the ref map as well, so the changeset will derive
-  // properly.
-  MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
-  OsmMapWriterFactory::writeDebugMap(refMap, _changesetId + "-ref-connected-combined");
-
+  _snapUnconnectedPostChangesetMapCropping(
+    refMap, combinedMap, immediatelyConnectedOutOfBoundsWays);
   immediatelyConnectedOutOfBoundsWays.reset();
 
   if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
@@ -347,23 +292,7 @@ void ChangesetReplacementCreator::create(
 
   // CHANGESET GENERATION
 
-  LOG_STATUS(
-    "Generating changeset for ref map of size: " <<
-    StringUtils::formatLargeNumber(refMap->size()) << " and sec map of size: " <<
-    StringUtils::formatLargeNumber(combinedMap->size()) << "...");
-
-  // Since we're not removing missing elements, it may be possible we have null elements passed to
-  // changeset generation. This is a little concerning, b/c that would seem to affect the accuracy
-  // of the generated changeset since ChangesetDeriver relies on whether an element is null or not
-  // as part of its logic. However, haven't found any bugs related to this yet.
-
-  // We have some instances where modify and delete changes are being generated for the same
-  // element, which causes error during changeset application. Eventually, we should eliminate their
-  // causes, but for now we'll activate changeset cleaning to get rid of the delete statements.
-  // Unfortunately, this will make the changeset writing memory bound.
-  _changesetCreator->setClean(true);
-  _changesetCreator->create(refMap, combinedMap, _output);
-  _numChanges = _changesetCreator->getNumTotalChanges();
+  _generateChangeset(refMap, combinedMap);
 
   LOG_STATUS(
     "Derived replacement changeset: ..." << _output.right(_maxFilePrintLength) << " with " <<
@@ -518,6 +447,90 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
   }
 
   return secMap;
+}
+
+void ChangesetReplacementCreator::_snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap)
+{
+  LOG_INFO("Snapping unconnected ways to each other in replacement map...");
+
+  QStringList snapWayStatuses("Input2");
+  snapWayStatuses.append("Conflated");
+  QStringList snapToWayStatuses("Input1");
+  snapToWayStatuses.append("Conflated");
+  // TODO: Now that we're more strict on what can be snapped type-wise, we may not need to
+  // break these snaps out per feature type.
+  for (int i = 0; i < _linearFilterClassNames.size(); i++)
+  {
+    _snapUnconnectedWays(
+      combinedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
+      _changesetId + "-conflated-snapped-sec-to-ref-1");
+  }
+}
+
+void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
+  OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays)
+{
+  QStringList snapWayStatuses;
+  snapWayStatuses.append("Input2");
+  snapWayStatuses.append("Conflated");
+  snapWayStatuses.append("Input1");
+  QStringList snapToWayStatuses;
+  snapToWayStatuses.append("Input1");
+  snapToWayStatuses.append("Conflated");
+  snapToWayStatuses.append("Input2");
+  LOG_VARD(_linearFilterClassNames);
+
+  // Snap anything that can be snapped per feature type.
+  LOG_INFO("Snapping unconnected ways to each other in replacement map...");
+  for (int i = 0; i < _linearFilterClassNames.size(); i++)
+  {
+    _snapUnconnectedWays(
+      combinedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i), false,
+      _changesetId + "-conflated-snapped-sec-to-ref-2");
+  }
+
+  // combine the conflated map with the immediately connected out of bounds ways
+  MapUtils::combineMaps(combinedMap, immediatelyConnectedOutOfBoundsWays, true);
+  OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-conflated-connected-combined");
+
+  // Snap the connected ways to other ways in the conflated map. Mark the ways that were
+  // snapped, as we'll need that info in the next step.
+  LOG_INFO("Snapping unconnected ways to each other in replacement map...");
+  for (int i = 0; i < _linearFilterClassNames.size(); i++)
+  {
+    _snapUnconnectedWays(
+      combinedMap, snapWayStatuses, snapToWayStatuses, _linearFilterClassNames.at(i),
+      true, _changesetId + "-conflated-snapped-immediately-connected-out-of-bounds");
+  }
+
+  // remove any ways that weren't snapped
+  _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(combinedMap);
+
+  // Copy the connected ways back into the ref map as well, so the changeset will derive
+  // properly.
+  MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
+  OsmMapWriterFactory::writeDebugMap(refMap, _changesetId + "-ref-connected-combined");
+}
+
+void ChangesetReplacementCreator::_generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap)
+{
+  LOG_STATUS(
+    "Generating changeset for ref map of size: " <<
+    StringUtils::formatLargeNumber(refMap->size()) << " and sec map of size: " <<
+    StringUtils::formatLargeNumber(combinedMap->size()) << "...");
+
+  // Since we're not removing missing elements, it may be possible we have null elements passed to
+  // changeset generation. This is a little concerning, b/c that would seem to affect the accuracy
+  // of the generated changeset since ChangesetDeriver relies on whether an element is null or not
+  // as part of its logic. However, haven't found any bugs related to this yet.
+
+  // We have some instances where modify and delete changes are being generated for the same
+  // element, which causes error during changeset application. Eventually, we should eliminate their
+  // causes, but for now we'll activate changeset cleaning to get rid of the delete statements.
+  // Unfortunately, this will make the changeset writing memory bound.
+  _changesetCreator->setClean(true);
+  _changesetCreator->create(refMap, combinedMap, _output);
+  _numChanges = _changesetCreator->getNumTotalChanges();
 }
 
 }
