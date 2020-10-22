@@ -35,6 +35,7 @@
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 namespace hoot
 {
@@ -50,9 +51,9 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   ElementIdSynchronizer::synchronize(map1, map2);
 
   QString msg = "Synchronizing IDs for nearly identical way nodes";
-  if (!map1->getName().trimmed().isEmpty() && !map2->getName().trimmed().isEmpty())
+  if (!_map1->getName().trimmed().isEmpty() && !_map2->getName().trimmed().isEmpty())
   {
-    msg += " between " + map1->getName() + " and " + map2->getName();
+    msg += " between " + _map1->getName() + " and " + _map2->getName();
   }
   msg += "...";
   LOG_INFO(msg);
@@ -77,49 +78,68 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
   // explained in the loop below to prevent utter chaos caused by this change.
 
   // Calc element hashes associated with element IDs.
-  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes, 4);
+  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes, _map1Dupes, 4);
   LOG_VARD(_map1HashesToElementIds.size());
   QSet<QString> map1HashesSet = _map1HashesToElementIds.keys().toSet();
-  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes, 4);
+  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes, _map2Dupes, 4);
   LOG_VARD(_map2HashesToElementIds.size());
   QSet<QString> map2HashesSet = _map2HashesToElementIds.keys().toSet();
 
   // Obtain the hashes for the elements that are identical between the two maps.
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
+//  QSet<QString> map1NodeHashesSet =
+//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Node);
+//  QSet<QString> map2NodeHashesSet =
+//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Node);
+//  const QSet<QString> identicalNodeHashes =
+//    map1NodeHashesSet.intersect(map2NodeHashesSet);
+//  LOG_VARD(identicalNodeHashes.size());
 
+  // overwrite map2 IDs with the IDs from map1 for the features that are identical
+  _syncElementIds(identicalHashes);
+  //_syncElementIds(identicalNodeHashes);
+
+  LOG_DEBUG(
+    "Updated " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
+    " nearly identical way nodes in second map.");
+}
+
+void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
+  const QSet<QString>& identicalHashes)
+{
   for (QSet<QString>::const_iterator itr = identicalHashes.begin(); itr != identicalHashes.end();
        ++itr)
   {
     const QString identicalHash = *itr;
     LOG_VART(identicalHash);
 
-    // Get the element with matching hash from the ref map
-    ElementPtr map1IdenticalElement = map1->getElement(_map1HashesToElementIds[identicalHash]);
-    _wayNodeCrit.setOsmMap(map1.get());
+    // Get the element with matching hash from the ref map.
+    ElementPtr map1IdenticalElement = _map1->getElement(_map1HashesToElementIds[identicalHash]);
+    _wayNodeCrit.setOsmMap(_map1.get());
     // if its a way node, keep going
     if (map1IdenticalElement && _wayNodeCrit.isSatisfied(map1IdenticalElement))
     {
       LOG_VART(map1IdenticalElement->getElementId());
 
-      // Get the element with matching has from the sec map
-      ElementPtr map2IdenticalElement = map2->getElement(_map2HashesToElementIds[identicalHash]);
-      _wayNodeCrit.setOsmMap(map2.get());
+      // Get the element with matching hash from the sec map.
+      ElementPtr map2IdenticalElement = _map2->getElement(_map2HashesToElementIds[identicalHash]);
+      _wayNodeCrit.setOsmMap(_map2.get());
       // if its a way node, keep going
       if (map2IdenticalElement && _wayNodeCrit.isSatisfied(map2IdenticalElement))
       {
         // find all ways each node belong to
         QSet<long> containingWayIds1 =
           CollectionUtils::stdSetToQSet(
-            WayUtils::getContainingWayIdsByNodeId(map1IdenticalElement->getId(), map1));
+            WayUtils::getContainingWayIdsByNodeId(map1IdenticalElement->getId(), _map1));
         QSet<long> containingWayIds2 =
           CollectionUtils::stdSetToQSet(
-            WayUtils::getContainingWayIdsByNodeId(map2IdenticalElement->getId(), map2));
+            WayUtils::getContainingWayIdsByNodeId(map2IdenticalElement->getId(), _map2));
         // If any of them match, we'll proceed to copy the element ID of the first map over to the
         // second map element and be sure to keep the second map element's tags (nodes matched only
         // on coordinate, so that will be the same between the two).
         if (containingWayIds1.intersect(containingWayIds2).size() > 0 &&
-            !map2->containsElement(map1IdenticalElement->getElementId()))
+            !_map2->containsElement(map1IdenticalElement->getElementId()))
         {
           // Due to our lapsing of the coord comparison sensitivity, we'll actually do a distance
           // check that only allows distances between nodes being synchronized no greater than what
@@ -127,7 +147,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
           // as possible due to the geometry conversion expense.
           const double distance =
             EuclideanDistanceExtractor().distance(
-              *map1, *map2, map1IdenticalElement, map2IdenticalElement);
+              *_map1, *_map2, map1IdenticalElement, map2IdenticalElement);
           LOG_VART(distance);
           if (distance > 1.11)
           {
@@ -150,19 +170,21 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(const OsmMapPtr& map
           // Add a custom metadata tag for debugging purposes.
           map2IdenticalElementCopy->getTags().set(MetadataTags::HootIdSynchronized(), "yes");
           // Add the element from the ref map.
-          map2->addElement(map2IdenticalElementCopy);
+          _map2->addElement(map2IdenticalElementCopy);
           // Replace the element from the sec map with the newly added element, which removes the
           // old element.
-          map2->replace(map2IdenticalElement, map2IdenticalElementCopy);
+          _map2->replace(map2IdenticalElement, map2IdenticalElementCopy);
           _updatedNodeCtr++;
+
+          // expensive; leave disabled by default
+//          OsmMapWriterFactory::writeDebugMap(
+//            _map2,
+//            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
+//            map2IdenticalElementCopy->getElementId().toString());
         }
       }
     }
   }
-
-  LOG_DEBUG(
-    "Updated " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
-    " nearly identical way nodes in second map.");
 }
 
 }

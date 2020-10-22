@@ -653,17 +653,17 @@ delete statements for reference features falling outside of `convert.bounding.bo
 === changeset.replacement.cut.only.implementation
 
 * Data Type: string
-* Default Value: `hoot::ChangesetReplacementCreator1`
+* Default Value: `hoot::ChangesetCutOnlyCreator`
 
-The `ChangesetReplacementCreator` implementation used for changeset replacement derivation when
+The `ChangesetReplacement` implementation used for changeset replacement derivation when
 only cutting data.
 
 === changeset.replacement.implementation
 
 * Data Type: string
-* Default Value: `hoot::ChangesetReplacementCreator7`
+* Default Value: `hoot::ChangesetReplacementCreator`
 
-The `ChangesetReplacementCreator` implementation used for changeset replacement derivation when
+The `ChangesetReplacement` implementation used for changeset replacement derivation when
 cutting and replacing data.
 
 === changeset.replacement.map.cleaner.transforms

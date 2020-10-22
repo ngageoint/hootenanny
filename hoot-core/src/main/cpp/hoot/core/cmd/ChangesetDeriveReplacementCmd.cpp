@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BoundedCommand.h>
-#include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
+#include <hoot/core/algorithms/changeset/ChangesetReplacement.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -289,14 +289,14 @@ public:
       implementation = ConfigOptions().getChangesetReplacementCutOnlyImplementation();
     }
     LOG_VARD(implementation);
-    std::shared_ptr<ChangesetReplacementCreator> changesetCreator(
-      Factory::getInstance().constructObject<ChangesetReplacementCreator>(implementation));
+    std::shared_ptr<ChangesetReplacement> changesetCreator(
+      Factory::getInstance().constructObject<ChangesetReplacement>(implementation));
     changesetCreator->setFullReplacement(true);
-    ChangesetReplacementCreator::BoundsInterpretation boundInterpretation =
-      ChangesetReplacementCreator::BoundsInterpretation::Lenient;
+    ChangesetReplacement::BoundsInterpretation boundInterpretation =
+      ChangesetReplacement::BoundsInterpretation::Lenient;
     if (cutOnly)
     {
-      boundInterpretation = ChangesetReplacementCreator::BoundsInterpretation::Strict;
+      boundInterpretation = ChangesetReplacement::BoundsInterpretation::Strict;
     }
     LOG_VARD(boundInterpretation);
     changesetCreator->setBoundsInterpretation(boundInterpretation);

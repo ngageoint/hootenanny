@@ -1,7 +1,8 @@
 [
     {
         "categories": [
-            "use"
+            "use",
+            "combination"
         ],
         "dataType": "enumeration",
         "geometries": [
@@ -14,17 +15,11 @@
         "objectType": "tag"
     },
     {
-        "categories": [
-            "use"
-        ],
         "isA": "use",
         "name": "use=*",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "use"
-        ],
         "isA": "use",
         "name": "use=healthcare",
         "objectType": "tag"

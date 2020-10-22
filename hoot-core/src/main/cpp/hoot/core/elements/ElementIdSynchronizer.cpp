@@ -37,6 +37,9 @@
 #include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/ElementHashOp.h>
+#include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 
 namespace hoot
 {
@@ -58,7 +61,7 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
   _map2 = map2;
 
   QString msg = "Synchronizing IDs for identical elements";
-  if (!map1->getName().trimmed().isEmpty() && !_map2->getName().trimmed().isEmpty())
+  if (!_map1->getName().trimmed().isEmpty() && !_map2->getName().trimmed().isEmpty())
   {
     msg += " between " + _map1->getName() + " and " + _map2->getName();
   }
@@ -66,17 +69,87 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
   LOG_INFO(msg);
 
   // Calc element hashes associated with element IDs.
-  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes);
+  _calcElementHashes(_map1, _map1HashesToElementIds, _map1ElementIdsToHashes, _map1Dupes);
   LOG_VARD(_map1HashesToElementIds.size());
   QSet<QString> map1HashesSet = _map1HashesToElementIds.keys().toSet();
-  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes);
+  _calcElementHashes(_map2, _map2HashesToElementIds, _map2ElementIdsToHashes, _map2Dupes);
   LOG_VARD(_map2HashesToElementIds.size());
   QSet<QString> map2HashesSet = _map2HashesToElementIds.keys().toSet();
 
   // Obtain the hashes for the elements that are identical between the two maps.
   const QSet<QString> identicalHashes = map1HashesSet.intersect(map2HashesSet);
   LOG_VARD(identicalHashes.size());
+//  QSet<QString> map1RelationHashesSet =
+//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Relation);
+//  QSet<QString> map2RelationHashesSet =
+//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Relation);
+//  const QSet<QString> identicalRelationHashes =
+//    map1RelationHashesSet.intersect(map2RelationHashesSet);
+//  LOG_VARD(identicalRelationHashes.size());
 
+//  QSet<QString> map1WayHashesSet =
+//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Way);
+//  QSet<QString> map2WayHashesSet =
+//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Way);
+//  const QSet<QString> identicalWayHashes =
+//    map1WayHashesSet.intersect(map2WayHashesSet);
+//  LOG_VARD(identicalWayHashes.size());
+
+//  QSet<QString> map1NodeHashesSet =
+//    _getHashesByElementType(_map1ElementIdsToHashes, ElementType::Node);
+//  QSet<QString> map2NodeHashesSet =
+//    _getHashesByElementType(_map2ElementIdsToHashes, ElementType::Node);
+//  const QSet<QString> identicalNodeHashes =
+//    map1NodeHashesSet.intersect(map2NodeHashesSet);
+//  LOG_VARD(identicalNodeHashes.size());
+
+//  for (QSet<std::pair<ElementId, ElementId>>::const_iterator itr = _map2Dupes.begin();
+//       itr != _map2Dupes.end(); ++itr)
+//  {
+//    ConstElementPtr keptElement = _map2->getElement(itr->first);
+//    ConstElementPtr dupeElement = _map2->getElement(itr->second);
+//    if (keptElement && dupeElement)
+//    {
+//      if (_areWayNodesWithoutAWayInCommon(keptElement, dupeElement))
+//      {
+//        const double distance =
+//          EuclideanDistanceExtractor().distance(*_map1, *_map2, keptElement, dupeElement);
+//        if (distance > 0.38)
+//        {
+
+//        }
+//      }
+//    }
+//  }
+
+  // overwrite map2 IDs with the IDs from map1 for the features that are identical
+  _syncElementIds(identicalHashes);
+//  _syncElementIds(identicalRelationHashes);
+//  _syncElementIds(identicalWayHashes);
+//  _syncElementIds(identicalNodeHashes);
+
+  LOG_DEBUG(
+    "Updated IDs on " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
+    " identical elements in second map.");
+}
+
+QSet<QString> ElementIdSynchronizer::_getHashesByElementType(
+  const QMap<ElementId, QString>& hashesByElementId, const ElementType& elementType) const
+{
+  QSet<QString> filteredHashes;
+  for (QMap<ElementId, QString>::const_iterator itr = hashesByElementId.begin();
+       itr != hashesByElementId.end(); ++itr)
+  {
+    if (itr.key().getType() == elementType)
+    {
+      filteredHashes.insert(itr.value());
+    }
+  }
+  return filteredHashes;
+}
+
+void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes)
+{
   for (QSet<QString>::const_iterator itr = identicalHashes.begin(); itr != identicalHashes.end();
        ++itr)
   {
@@ -100,22 +173,10 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
         {
           LOG_VART(map2IdenticalElement->getElementId());
 
-          // The original idea here was to not allow id sync between any two way nodes that have no
-          // matching parent ways in common across the two maps. Unfortunately, this causes dropped
-          // features to occur in output. It seems to happen because the map index isn't being
-          // updated automatically after element ID updates...not sure why. Futhermore, this is also
-          // brittle b/c the geometry of ways between the two maps could be slightly different.
-//          if (_areWayNodesWithoutAWayInCommon(map1IdenticalElement, map2IdenticalElement))
-//          {
-//            LOG_TRACE(
-//              map1IdenticalElement->getElementId() << " and " <<
-//              map2IdenticalElement->getElementId() <<
-//              " are both way nodes that have no ways in common. Skipping ID sync...");
-//            continue;
-//          }
           // Here, we're verifying that two way nodes don't belong to ways of very dissimilar types
           // before syncing their IDs. This still may prove to be too brittle and not a good long
           // term solution...not sure yet.
+          // TODO: Will this be needed anymore if we switch over to ElementHashOp?
           if (_areWayNodesInWaysOfMismatchedType(map1IdenticalElement, map2IdenticalElement))
           {
             LOG_TRACE(
@@ -124,6 +185,20 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
               " are both way nodes that are in ways without matching types. Skipping ID sync...");
             continue;
           }
+
+          // The original idea here was to not allow id sync between any two way nodes that have no
+          // matching parent ways in common across the two maps. Unfortunately, this causes dropped
+          // features to occur in output. It seems to happen because the map index isn't being
+          // updated automatically after element ID updates...not sure why. Furthermore, this is
+          // also brittle b/c the geometry of ways between the two maps could be slightly different.
+//          if (_areWayNodesWithoutAWayInCommon(map1IdenticalElement, map2IdenticalElement))
+//          {
+//            LOG_TRACE(
+//              map1IdenticalElement->getElementId() << " and " <<
+//              map2IdenticalElement->getElementId() <<
+//              " are both way nodes that have no ways in common. Skipping ID sync...");
+//            continue;
+//          }
 
           // Make sure the map being updated doesn't already have an element with this ID (this
           // check may not be necessary).
@@ -153,14 +228,16 @@ void ElementIdSynchronizer::synchronize(const OsmMapPtr& map1, const OsmMapPtr& 
             default:
               throw IllegalArgumentException("Invalid element type.");
           }
+
+          // expensive; leave disabled by default
+//          OsmMapWriterFactory::writeDebugMap(
+//            _map2,
+//            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
+//            map1IdenticalElementCopy->getElementId().toString());
         }
       }
     }
   }
-
-  LOG_DEBUG(
-    "Updated IDs on " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
-    " identical elements in second map.");
 }
 
 bool ElementIdSynchronizer::_areWayNodesInWaysOfMismatchedType(
@@ -307,18 +384,28 @@ bool ElementIdSynchronizer::_areWayNodesWithoutAWayInCommon(
 
 void ElementIdSynchronizer::_calcElementHashes(
   const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
-  QMap<ElementId, QString>& elementIdsToHashes, const int coordinateComparisonSensitivity)
+  QMap<ElementId, QString>& elementIdsToHashes, QSet<std::pair<ElementId, ElementId>>& dupes,
+  const int coordinateComparisonSensitivity)
 {
   LOG_DEBUG("Calculating " << map->getName() << " element hashes...");
+
   ElementHashVisitor hashVis;
+  // This has been added as an optoin to use, since its capable of comparing way nodes better.
+  //ElementHashOp hashVis;
+
   hashVis.setWriteHashes(false);
   hashVis.setCollectHashes(true);
   hashVis.setUseNodeTags(_useNodeTagsForHash);
   hashVis.setCoordinateComparisonSensitivity(coordinateComparisonSensitivity);
+
   hashVis.setOsmMap(map.get());
   map->visitRw(hashVis);
+  //hashVis.setAddParentToWayNodes(true);
+  //hashVis.apply(map);
+
   hashesToElementIds = hashVis.getHashesToElementIds();
   elementIdsToHashes = hashVis.getElementIdsToHashes();
+  dupes = hashVis.getDuplicates();
 }
 
 }

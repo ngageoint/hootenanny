@@ -65,6 +65,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(droppedNodes1Test);
   CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  // TODO: re-enable this after fix currently in progress as part of #4297
+  //CPPUNIT_TEST(badPolyIdSync1Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -107,8 +109,8 @@ public:
 
     _testName = "orphanedNodes1Test";
     _prepInput(
-      _inputPath + "/orphanedNodes1Test-Input1.osm",
-      _inputPath + "/orphanedNodes1Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
 
     ChangesetTaskGridReplacer uut;
@@ -140,8 +142,8 @@ public:
 
     _testName = "orphanedNodes2Test";
     _prepInput(
-      _inputPath + "/orphanedNodes2Test-Input1.osm",
-      _inputPath + "/orphanedNodes2Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
 
     ChangesetTaskGridReplacer uut;
@@ -182,8 +184,8 @@ public:
 
     _testName = "droppedNodes1Test";
     _prepInput(
-      _inputPath + "/droppedNodes1Test-Input1.osm",
-      _inputPath + "/droppedNodes1Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
 
@@ -223,8 +225,8 @@ public:
 
     _testName = "droppedPointPolyRelationMembers1Test";
     _prepInput(
-      _inputPath + "/droppedPointPolyRelationMembers1Test-Input1.osm",
-      _inputPath + "/droppedPointPolyRelationMembers1Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
 
@@ -249,6 +251,42 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(6, uut.getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void badPolyIdSync1Test()
+  {
+    // part of github 4297 - The landuse=residential poly surrounding Flanagan Drive should not be
+    // corrupted in the output.
+
+    _testName = "badPolyIdSync1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.2434,36.3022,-115.2317,36.3136", 1,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -300,6 +338,7 @@ public:
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
     _prepInput(
@@ -314,14 +353,10 @@ public:
     uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(true);
     uut.setOutputNonConflatable(true);
-//    QList<int> includeIds;
-//    includeIds.append(21);
-//    includeIds.append(22);
-//    includeIds.append(23);
-//    includeIds.append(24);
-//    uut.setTaskCellIncludeIds(includeIds);
+    //QList<int> includeIds;
+    //includeIds.append(18);
+    //uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
-    // currently broken: 32/64 during changeset generation
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,

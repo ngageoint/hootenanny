@@ -24,14 +24,14 @@
  *
  * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef CHANGESET_REPLACEMENT_CREATOR_1_H
-#define CHANGESET_REPLACEMENT_CREATOR_1_H
+#ifndef CHANGESET_CUT_ONLY_CREATOR_H
+#define CHANGESET_CUT_ONLY_CREATOR_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/ops/ElementIdRemapper.h>
-#include <hoot/core/algorithms/changeset/ChangesetReplacementCreator.h>
+#include <hoot/core/algorithms/changeset/ChangesetReplacement.h>
 
 namespace hoot
 {
@@ -60,11 +60,9 @@ class ConstOsmMapConsumer;
  * potential manual repairing of those relations after the changeset is written, and after that the
  * tag can then be removed. This is also a configurable feature, which can be turned off.
  *
- * UPDATE 10/6/20: This implementation has an Achille's heel regarding relations having children of
- * mixed geometry types, due to it processing features with different geometry types in separate
- * loops. ChangesetReplacementCreator7 is now the preferred implementation to use when replacing
- * data within a task grid. This is kept intact for the time being to support cut only operations
- * and eventually will be refactored.
+ * UPDATE 10/22/20: This has been refactored to be the cut only version of C&R. The replacement
+ * version inherits from this. @todo This needs to be refactored into an abstract base class which
+ * the cut only and replacement versions inherit from.
  *
  * @todo implement progress
  * @todo break this up into separate classes by function:
@@ -74,9 +72,10 @@ class ConstOsmMapConsumer;
  *  - snapping?
  *  - changeset derivation
  *  - cleanup
- * @todo need to test missing way node refs
+ * @todo rename all references to conflated data since maps aren't conflated anymore; also rename
+ * all datasets in terms of "toReplace" and "replacement"
  */
-class ChangesetReplacementCreator1 : public ChangesetReplacementCreator
+class ChangesetCutOnlyCreator : public ChangesetReplacement
 {
 
   /**
@@ -127,9 +126,9 @@ class ChangesetReplacementCreator1 : public ChangesetReplacementCreator
 
 public:
 
-  static std::string className() { return "hoot::ChangesetReplacementCreator1"; }
+  static std::string className() { return "hoot::ChangesetCutOnlyCreator"; }
 
-  ChangesetReplacementCreator1();
+  ChangesetCutOnlyCreator();
 
   /**
    * Creates a changeset that replaces features in the first input with features from the second
@@ -416,4 +415,4 @@ protected:
 
 }
 
-#endif // CHANGESET_REPLACEMENT_CREATOR_1_H
+#endif // CHANGESET_CUT_ONLY_CREATOR_H

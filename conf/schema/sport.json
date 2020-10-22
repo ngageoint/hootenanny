@@ -2,7 +2,8 @@
     {
         "categories": [
             "use",
-            "poi"
+            "poi",
+            "combination"
         ],
         "dataType": "enumeration",
         "geometries": [
@@ -110,14 +111,6 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
-        "categories": [
-            "use",
-            "poi"
-        ],
         "isA": "sport",
         "name": "sport=basketball",
         "objectType": "tag"
@@ -512,14 +505,6 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
-        "categories": [
-            "use",
-            "poi"
-        ],
         "isA": "sport",
         "name": "sport=golf",
         "objectType": "tag"
@@ -1139,14 +1124,6 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
-        "categories": [
-            "use",
-            "poi"
-        ],
         "isA": "sport",
         "name": "sport=swimming",
         "objectType": "tag"
@@ -1187,14 +1164,6 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
-        "categories": [
-            "use",
-            "poi"
-        ],
         "isA": "sport",
         "name": "sport=tennis",
         "objectType": "tag"

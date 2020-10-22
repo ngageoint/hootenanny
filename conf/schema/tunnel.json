@@ -6,7 +6,8 @@
     },
     {
         "categories": [
-            "poi"
+            "poi",
+            "combination"
         ],
         "geometries": [
             "linestring",
@@ -14,6 +15,74 @@
         ],
         "isA": "bridge_tunnel=unknown",
         "name": "tunnel=yes",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tunnel=no",
+            "weight": 0.5
+        }
+    },
+    {
+        "categories": [
+            "poi",
+            "combination"
+        ],
+        "geometries": [
+            "linestring",
+            "relation"
+        ],
+        "isA": "bridge_tunnel=unknown",
+        "name": "tunnel=culvert",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tunnel=no",
+            "weight": 0.5
+        }
+    },
+    {
+        "categories": [
+            "poi",
+            "combination"
+        ],
+        "geometries": [
+            "linestring",
+            "relation"
+        ],
+        "isA": "bridge_tunnel=unknown",
+        "name": "tunnel=flooded",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tunnel=no",
+            "weight": 0.5
+        }
+    },
+    {
+        "categories": [
+            "poi",
+            "combination"
+        ],
+        "geometries": [
+            "linestring",
+            "relation"
+        ],
+        "isA": "bridge_tunnel=unknown",
+        "name": "tunnel=avalance_protector",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tunnel=no",
+            "weight": 0.5
+        }
+    },
+    {
+        "categories": [
+            "poi",
+            "combination"
+        ],
+        "geometries": [
+            "linestring",
+            "relation"
+        ],
+        "isA": "bridge_tunnel=unknown",
+        "name": "tunnel=building_passage",
         "objectType": "tag",
         "similarTo": {
             "name": "tunnel=no",

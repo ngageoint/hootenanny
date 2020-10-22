@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-class ChangesetReplacementCreator;
+class ChangesetReplacement;
 class OsmApiDbSqlChangesetApplier;
 
 /**
@@ -112,7 +112,7 @@ private:
   geos::geom::Envelope _taskGridBounds;
 
   // derives the replacement changesets
-  std::shared_ptr<ChangesetReplacementCreator> _changesetCreator;
+  std::shared_ptr<ChangesetReplacement> _changesetCreator;
   // all changeset files generated are stored here
   QString _changesetsOutputDir;
   // the ID of the task grid cell currently being processed

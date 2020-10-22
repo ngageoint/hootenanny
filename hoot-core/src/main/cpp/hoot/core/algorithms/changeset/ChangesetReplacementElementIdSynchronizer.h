@@ -53,7 +53,7 @@ public:
 
 private:
 
-  WayNodeCriterion _wayNodeCrit;
+  void _syncElementIds(const QSet<QString>& identicalHashes);
 };
 
 }

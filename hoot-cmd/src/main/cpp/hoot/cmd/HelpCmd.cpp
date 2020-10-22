@@ -53,6 +53,7 @@ public:
     // admittedly may need some testing against real world data before they're ready for the prime
     // time. This makes the command list display a little cleaner and less confusing.
     _forceToRndList.append("build-model");
+    _forceToRndList.append("de-duplicate");
     _forceToRndList.append("login");
     _forceToRndList.append("logout");
     _forceToRndList.append("node-density-plot");
@@ -61,6 +62,7 @@ public:
     _forceToRndList.append("score-matches");
     _forceToRndList.append("score-matches-diff");
     _forceToRndList.append("sync-element-ids");
+    _forceToRndList.append("type-similarity");
     _forceToRndList.append("type-tagger-rules");
     _forceToRndList.append("write-name-counts");
   }

@@ -36,8 +36,7 @@ namespace hoot
 {
 
 /**
- * This class allows for synchronizing element IDs between to maps that have identical features.
- * This works across multiple maps, so something like IdSwapOp won't work here.
+ * This class allows for synchronizing element IDs between two maps that have identical features.
  */
 class ElementIdSynchronizer
 {
@@ -79,8 +78,10 @@ protected:
   // see ElementHashVisitor
   QMap<QString, ElementId> _map1HashesToElementIds;
   QMap<ElementId, QString> _map1ElementIdsToHashes;
+  QSet<std::pair<ElementId, ElementId>> _map1Dupes;
   QMap<QString, ElementId> _map2HashesToElementIds;
   QMap<ElementId, QString> _map2ElementIdsToHashes;
+  QSet<std::pair<ElementId, ElementId>> _map2Dupes;
 
   int _updatedNodeCtr;
   int _updatedWayCtr;
@@ -91,7 +92,7 @@ protected:
    */
   void _calcElementHashes(
     const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
-    QMap<ElementId, QString>& elementIdsToHashes,
+    QMap<ElementId, QString>& elementIdsToHashes, QSet<std::pair<ElementId, ElementId>>& dupes,
       const int coordinateComparisonSensitivity =
         ConfigOptions().getNodeComparisonCoordinateSensitivity());
 
@@ -106,6 +107,13 @@ protected:
    * to prevent ID synchronization from occurring..
    */
   bool _areWayNodesInWaysOfMismatchedType(ElementPtr element1, ElementPtr element2);
+
+  QSet<QString> _getHashesByElementType(
+    const QMap<ElementId, QString>& hashesByElementId, const ElementType& elementType) const;
+
+private:
+
+  void _syncElementIds(const QSet<QString>& identicalHashes);
 };
 
 }

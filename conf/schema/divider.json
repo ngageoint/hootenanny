@@ -1,5 +1,8 @@
 [
     {
+        "categories": [
+            "combination"
+        ],
         "dataType": "enumeration",
         "geometries": [
             "linestring"
@@ -9,7 +12,7 @@
         "objectType": "tag"
     },
     {
-        "description": "This key indicates that the single linestring represents a dual carrageway. During conflation, Hootenanny will split this linestring into two linestrings.",
+        "description": "This key indicates that the single linestring represents a dual carriageway. During conflation, Hootenanny will split this linestring into two linestrings.",
         "isA": "divider",
         "name": "divider=*",
         "objectType": "tag"

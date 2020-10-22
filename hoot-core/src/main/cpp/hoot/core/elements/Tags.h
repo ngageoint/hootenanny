@@ -340,6 +340,30 @@ public:
   QString toString() const;
 
   /**
+   * Determines if a string is a valid tag key/value pair
+   *
+   * @param str the string to examine
+   * @return true if the input string is a valid kvp; false otherwise
+   */
+  static bool isValidKvp(const QString& str);
+
+  /**
+   * Extracts a tag key from a tag key/value pair
+   *
+   * @param kvp string to extract from
+   * @return a tag key string
+   */
+  static QString kvpToKey(const QString& kvp);
+
+  /**
+   * Extracts a tag value from a tag key/value pair
+   *
+   * @param kvp string to extract from
+   * @return a tag value string
+   */
+  static QString kvpToVal(const QString& kvp);
+
+  /**
    * Returns true if the tags have the specified kvp
    *
    * @param kvp kvp to search for; value wildcards are supported using '*'
