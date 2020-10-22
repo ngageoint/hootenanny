@@ -350,8 +350,8 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false);
-    uut.setOutputNonConflatable(false);
+    uut.setCalcDiffWithReplacement(true);
+    uut.setOutputNonConflatable(true);
     //QList<int> includeIds;
     //includeIds.append(18);
     //uut.setTaskCellIncludeIds(includeIds);

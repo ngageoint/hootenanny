@@ -88,8 +88,10 @@ protected:
   // see ElementHashVisitor
   QMap<QString, ElementId> _map1HashesToElementIds;
   QMap<ElementId, QString> _map1ElementIdsToHashes;
+  QSet<std::pair<ElementId, ElementId>> _map1Dupes;
   QMap<QString, ElementId> _map2HashesToElementIds;
   QMap<ElementId, QString> _map2ElementIdsToHashes;
+  QSet<std::pair<ElementId, ElementId>> _map2Dupes;
 
   QSet<ElementId> _syncedElementIds;
 
