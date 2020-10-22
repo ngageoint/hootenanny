@@ -176,7 +176,7 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           // Here, we're verifying that two way nodes don't belong to ways of very dissimilar types
           // before syncing their IDs. This still may prove to be too brittle and not a good long
           // term solution...not sure yet.
-          // TODO: Is this needed anymore after switching over to ElementHashOp?
+          // TODO: Will this be needed anymore if we switch over to ElementHashOp?
           if (_areWayNodesInWaysOfMismatchedType(map1IdenticalElement, map2IdenticalElement))
           {
             LOG_TRACE(
@@ -230,11 +230,10 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           }
 
           // expensive; leave disabled by default
-          // TODO: disable
-          OsmMapWriterFactory::writeDebugMap(
-            _map2,
-            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
-            map1IdenticalElementCopy->getElementId().toString());
+//          OsmMapWriterFactory::writeDebugMap(
+//            _map2,
+//            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
+//            map1IdenticalElementCopy->getElementId().toString());
         }
       }
     }

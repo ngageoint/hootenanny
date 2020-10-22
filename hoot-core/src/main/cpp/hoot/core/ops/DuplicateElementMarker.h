@@ -57,7 +57,6 @@ public:
    *
    * @param map the map owning the elements
    * @param coordinateComparisonSensitivity node coordinate decimal place comparison sensitivity
-   * @param containingWayTypes TODO
    * @return the number of duplicates found
    */
   static int markDuplicates(
