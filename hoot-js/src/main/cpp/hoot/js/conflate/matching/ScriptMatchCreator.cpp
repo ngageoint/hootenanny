@@ -78,6 +78,8 @@ const QString ScriptMatchCreator::POINT_POLYGON_SCRIPT_NAME = "PointPolygon.js";
 
 /**
  * Searches the specified map for any match potentials.
+ *
+ * @todo move this to its own class file
  */
 class ScriptMatchVisitor : public ConstElementVisitor
 {
@@ -678,7 +680,6 @@ private:
 
   QHash<ElementId, bool> _matchCandidateCache;
   QHash<ElementId, double> _searchRadiusCache;
-  //QMap<QString, ElementCriterionPtr> _matchCandidateCriterionCache;
 
   // Used for finding neighbors
   std::shared_ptr<HilbertRTree> _index;
@@ -715,7 +716,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   _script.reset(new PluginContext());
   Context::Scope context_scope(_script->getContext(current));
   _script->loadScript(_scriptPath, "plugin");
-  //bit of a hack...see MatchCreator.h...need to refactor
+  // bit of a hack...see MatchCreator.h...need to refactor
   _description = QString::fromStdString(className()) + "," + args[0];
   _cachedScriptVisitor.reset();
   _scriptInfo = _getScriptDescription(_scriptPath);
@@ -804,6 +805,7 @@ void ScriptMatchCreator::createMatches(
   v.calculateSearchRadius();
 
   QFileInfo scriptFileInfo(_scriptPath);
+
   // This doesn't work with _candidateDistanceSigma, but right now its set to 1.0 in every script
   // and has no effect on the search radius.
   QString searchRadiusStr;
@@ -821,6 +823,7 @@ void ScriptMatchCreator::createMatches(
     searchRadiusStr =
       "within a search radius of " + QString::number(searchRadius, 'g', 2) + " meters";
   }
+
   LOG_INFO(
     "Looking for matches with: " << scriptFileInfo.fileName() << " " << searchRadiusStr << "...");
   LOG_VARD(*threshold);
@@ -830,7 +833,9 @@ void ScriptMatchCreator::createMatches(
   _candidateDistanceSigmaCache[_scriptPath] = v.getCandidateDistanceSigma();
 
   LOG_VARD(GeometryTypeCriterion::typeToString(_scriptInfo.geometryType));
-  if (scriptFileInfo.fileName().toLower().contains("relation")) // TODO: hack
+  // kind of hack; not sure of a better way to do determine if we're doing collection relation
+  // conflation
+  if (scriptFileInfo.fileName().toLower().contains("relation"))
   {
     map->visitRelationsRo(v);
   }

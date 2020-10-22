@@ -40,7 +40,6 @@ class ChangesetCreator;
 class ChainCriterion;
 class Settings;
 class Change;
-class ElementDeduplicator;
 class ConstOsmMapConsumer;
 
 /**

@@ -270,7 +270,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     _markNeedsReview(result, e1, e2, e.getWhat(), HighwayMatch::getHighwayMatchName());
     return true;
   }
-  LOG_VART(match);
+  //LOG_VART(match);
 
   if (!match.isValid())
   {
@@ -281,7 +281,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     return true;
   }
 
-  LOG_VART(match.toString());
+  LOG_VART(match);
   ElementPtr e1Match;
   ElementPtr e2Match;
   ElementPtr scraps1;
@@ -863,15 +863,23 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
   const vector<bool>& reverse, vector<pair<ElementId, ElementId>>& replaced,
   const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const
 {
-  LOG_VART(splitee->getElementId());
+  LOG_TRACE("Splitting " << splitee->getElementId() << "...");
+  LOG_VART(s);
 
   MultiLineStringSplitter(_markAddedMultilineStringRelations).split(map, s, reverse, match, scrap);
 
+  // The subline string split should always result in a match section.
+  assert(match);
   LOG_VART(match->getElementId());
+  if (scrap)
+  {
+    LOG_VART(scrap->getElementId());
+  }
 
   vector<ConstWayPtr> waysV = WaysVisitor::extractWays(map, splitee);
   set<ConstWayPtr, WayPtrCompare> ways;
   ways.insert(waysV.begin(), waysV.end());
+  LOG_TRACE("Extracted ways: " << ways);
 
   // Remove all the ways that are part of the subline. This leaves us with a list of ways that
   // aren't going to be modified.
@@ -879,9 +887,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
   {
     ways.erase(s.getSublines()[i].getWay());
   }
-
-  // The subline string split should always result in a match section.
-  assert(match);
+  LOG_TRACE("Non-modifiable extracted ways: " << ways);
 
   // if there are ways that aren't part of the way subline string
   if (ways.size() > 0)
@@ -994,7 +1000,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
     bool multiLineStringAdded = false;
     if (_markAddedMultilineStringRelations &&
         (match->getTags().contains(MetadataTags::HootMultilineString()) ||
-        scrap->getTags().contains(MetadataTags::HootMultilineString())))
+         scrap->getTags().contains(MetadataTags::HootMultilineString())))
     {
       multiLineStringAdded = true;
     }

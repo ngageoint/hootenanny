@@ -59,8 +59,9 @@ WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(
   if (e1->getElementType() != ElementType::Node && e2->getElementType() != ElementType::Node)
   {
     LOG_TRACE(
-      "Matching river sublines for merging: " << e1->getElementId() << ", " <<
-       e2->getElementId() << "...");
+      "Matching elements for merging: " << e1->getElementId() << ", " <<
+      e2->getElementId() << " with " << _sublineMatcher->getClassName() << " and " <<
+      _sublineMatcher->getSublineMatcherName() << "...");
     try
     {
       match = _sublineMatcher->findMatch(map, e1, e2);
@@ -73,7 +74,9 @@ WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(
       // _sublineMatcher2 was configured to be Frechet).
       LOG_TRACE(
         "Encountered max recursive complexity. Re-matching river sublines for merging: " <<
-        e1->getElementId() << ", " <<  e2->getElementId() << "...");
+        e1->getElementId() << ", " <<  e2->getElementId() << " with " <<
+        _sublineMatcher2->getClassName() << " and " << _sublineMatcher2->getSublineMatcherName() <<
+        "...");
       match = _sublineMatcher2->findMatch(map, e1, e2);
     }
   }

@@ -39,6 +39,8 @@ class OsmMap;
 /**
  * Sums the length of all the ways. The map projection is used so to get meters the map must be
  * first projected into meters.
+ *
+ * TODO: update this to take in a criterion
  */
 class LengthOfWaysVisitor : public ElementConstOsmMapVisitor, public NumericStatistic
 {

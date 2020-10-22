@@ -141,7 +141,6 @@ public final class HootProperties {
     public static final String PRIVATE_OVERPASS_URL;
     public static final String PRIVATE_OVERPASS_CERT_PATH;
     public static final String PRIVATE_OVERPASS_CERT_PHRASE;
-    public static final String MAX_OVERPASS_FEATURE_COUNT;
 
     public static final String GRAIL_RAILS_LABEL;
     public static final String GRAIL_OVERPASS_LABEL;
@@ -237,7 +236,6 @@ public final class HootProperties {
         INGEST_SIZE_THRESHOLD = getProperty("ingestSizeThreshold");
         EXPORT_SIZE_THRESHOLD = getProperty("exportSizeThreshold");
         HTTP_TIMEOUT = getProperty("httpTimeout");
-        MAX_OVERPASS_FEATURE_COUNT = getProperty("grailMaxFeatureCount");
         GRAIL_RAILS_LABEL =  getProperty("grailRailsLabel");
         GRAIL_OVERPASS_LABEL = getProperty("grailOverpassLabel");
         GRAIL_OVERPASS_QUERY = getProperty("grailOverpassQueryPath");

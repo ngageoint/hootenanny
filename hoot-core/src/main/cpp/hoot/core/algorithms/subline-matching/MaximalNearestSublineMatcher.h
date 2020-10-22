@@ -53,6 +53,8 @@ public:
   virtual QString getDescription() const
   { return "Matches lines based on the maximal nearest subline found"; }
 
+  virtual std::string getClassName() const { return className(); }
+
 private:
 
   Meters _minSplitSize;

@@ -33,7 +33,6 @@ import static hoot.services.HootProperties.GRAIL_OVERPASS_STATS_QUERY;
 import static hoot.services.HootProperties.GRAIL_RAILS_LABEL;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
-import static hoot.services.HootProperties.MAX_OVERPASS_FEATURE_COUNT;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_CERT_PATH;
 import static hoot.services.HootProperties.PRIVATE_OVERPASS_URL;
 import static hoot.services.HootProperties.PUBLIC_OVERPASS_URL;
@@ -746,7 +745,6 @@ public class GrailResource {
         String overpassLabel = GRAIL_OVERPASS_LABEL;
 
         JSONObject jobInfo = new JSONObject();
-        jobInfo.put("maxFeatureCount", MAX_OVERPASS_FEATURE_COUNT);
         jobInfo.put("railsLabel", railsLabel);
         jobInfo.put("overpassLabel", overpassLabel);
 

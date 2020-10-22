@@ -42,6 +42,7 @@
         "matcher": "hoot::ScriptMatchCreator,Area.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
+            "area.overlap.review.threshold": "Overlap review threshold; 0.0 to 1.0",
             "search.radius.area": "Search radius (m); -1 for default",
             "area.tag.threshold": "Tag match threshold; 0.0 to 1.0"
         }
@@ -157,6 +158,7 @@
         "merger": "hoot::ScriptMergerCreator",
         "members": {
             "waterway.name.threshold": "Name match threshold; 0.0 to 1.0",
+            "waterway.maximal.subline.auto.optimize": "Automatically optimize runtime performance",
             "search.radius.waterway": "Search radius (m); -1 for default"
         }
     },

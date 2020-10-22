@@ -547,3 +547,12 @@ function getPoiSearchRadii()
 {
   return hoot.PoiSearchRadius.getSearchRadii();
 }
+
+/*
+ * Returns the maximum amount of match method recursions that should be allowed for river 
+ * conflation based on the input data
+ */
+function getRiverMaxSublineRecursions(map)
+{
+  return hoot.RiverMaximalSublineSettingOptimizer.getFindBestMatchesMaxRecursions(map);
+}
