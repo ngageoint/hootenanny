@@ -66,8 +66,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(droppedNodes1Test);
   CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
   CPPUNIT_TEST(badPolyIdSync1Test);
-  // TODO: fix
-  //CPPUNIT_TEST(badPolyIdSync2Test);
+  CPPUNIT_TEST(badPolyIdSync2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -258,7 +257,8 @@ public:
   void badPolyIdSync1Test()
   {
     // part of github 4297 - The landuse=residential poly surrounding Flanagan Drive should not be
-    // corrupted in the output.
+    // corrupted in the output. Before this fix, skipped element ID synchronizations were causing
+    // the upper right node to drop out and mangle the poly.
 
     _testName = "badPolyIdSync1Test";
     _prepInput(
@@ -294,7 +294,8 @@ public:
   void badPolyIdSync2Test()
   {
     // part of github 4297 - The longer surface parking poly in the output should match that in the
-    // replacement data
+    // replacement data. Before this fix, skipped element ID synchronizations were causing the lower
+    // right section to be truncated.
 
     _testName = "badPolyIdSync2Test";
     _prepInput(
@@ -392,6 +393,7 @@ public:
     uut.setOutputNonConflatable(false);
 //    QList<int> includeIds;
 //    includeIds.append(12);
+//    includeIds.append(13);
 //    uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.replace(
@@ -402,7 +404,6 @@ public:
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
-    // TODO: add changes and other stats here?
     //CPPUNIT_ASSERT_EQUAL(26, uut.getNumOrphanedNodesInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());

@@ -183,10 +183,10 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
           _updatedNodeCtr++;
 
           // expensive; leave disabled by default
-          OsmMapWriterFactory::writeDebugMap(
-            _map2,
-            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
-            map2IdenticalElementCopy->getElementId().toString());
+//          OsmMapWriterFactory::writeDebugMap(
+//            _map2,
+//            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
+//            map2IdenticalElementCopy->getElementId().toString());
         }
       }
     }
