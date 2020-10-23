@@ -155,8 +155,14 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           // Here, we're verifying that two way nodes don't belong to ways of very dissimilar types
           // before syncing their IDs. This still may prove to be too brittle and not a good long
           // term solution...not sure yet.
-          // TODO: Will this be needed anymore if we switch over to ElementHashOp?
-          if (_areWayNodesInWaysOfMismatchedType(map1IdenticalElement, map2IdenticalElement))
+          LOG_VART(
+            EuclideanDistanceExtractor().distance(
+              *_map1, *_map2, map1IdenticalElement, map2IdenticalElement));
+          // TODO: The distance check here was meant to help fix badPolyIdSync2Test, but it breaks
+          // the out of spec test.
+          if (/*EuclideanDistanceExtractor().distance(
+                *_map1, *_map2, map1IdenticalElement, map2IdenticalElement) > 0.9 &&*/
+              _areWayNodesInWaysOfMismatchedType(map1IdenticalElement, map2IdenticalElement))
           {
             LOG_TRACE(
               map1IdenticalElement->getElementId() << " and " <<
@@ -208,10 +214,10 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
           }
 
           // expensive; leave disabled by default
-//          OsmMapWriterFactory::writeDebugMap(
-//            _map2,
-//            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
-//            map1IdenticalElementCopy->getElementId().toString());
+          OsmMapWriterFactory::writeDebugMap(
+            _map2,
+            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
+            map1IdenticalElementCopy->getElementId().toString());
         }
       }
     }

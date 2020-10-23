@@ -68,6 +68,7 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(
   }
   msg += "...";
   LOG_INFO(msg);
+  const int numTotalIdsSyncedBefore = getNumTotalFeatureIdsSynchronized();
 
   // Finally, we'll loosen the matching tags requirement and just look at way nodes
   // (_useNodeTagsForHash=false). We're looking for any way nodes between the two maps that belong
@@ -104,7 +105,8 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(
   _syncElementIds(identicalHashes);
 
   LOG_DEBUG(
-    "Updated " << StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized()) <<
+    "Updated " <<
+    StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized() - numTotalIdsSyncedBefore) <<
     " nearly identical way nodes in second map.");
 }
 
@@ -181,10 +183,10 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
           _updatedNodeCtr++;
 
           // expensive; leave disabled by default
-//          OsmMapWriterFactory::writeDebugMap(
-//            _map2,
-//            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
-//            map2IdenticalElementCopy->getElementId().toString());
+          OsmMapWriterFactory::writeDebugMap(
+            _map2,
+            "after-id-sync-" + map2IdenticalElement->getElementId().toString() + "-to-" +
+            map2IdenticalElementCopy->getElementId().toString());
         }
       }
     }

@@ -66,6 +66,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(droppedNodes1Test);
   CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
   CPPUNIT_TEST(badPolyIdSync1Test);
+  // TODO: fix
+  //CPPUNIT_TEST(badPolyIdSync2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -289,6 +291,42 @@ public:
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
+  void badPolyIdSync2Test()
+  {
+    // part of github 4297 - The longer surface parking poly in the output should match that in the
+    // replacement data
+
+    _testName = "badPolyIdSync2Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.2822,36.2226,-115.2779,36.2261", 1,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
   ///////////////////////////////////////////////////////////////////////////////////////////
 
   void github4216UniformTest()
@@ -350,11 +388,11 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(true);
-    uut.setOutputNonConflatable(true);
-    //QList<int> includeIds;
-    //includeIds.append(18);
-    //uut.setTaskCellIncludeIds(includeIds);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
+//    QList<int> includeIds;
+//    includeIds.append(12);
+//    uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.replace(
       DATA_TO_REPLACE_URL,
