@@ -2016,6 +2016,8 @@ void ChangesetCutOnlyCreator::_synchronizeIds(
   // replacement process, however that has proven difficult to accomplish so far.
 
   LOG_STATUS("Synchronizing element IDs between maps...");
+  LOG_VART(MapProjector::toWkt(mapBeingReplaced->getProjection()));
+  LOG_VART(MapProjector::toWkt(replacementMap->getProjection()));
 
   ChangesetReplacementElementIdSynchronizer idSync;
   OsmMapWriterFactory::writeDebugMap(

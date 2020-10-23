@@ -39,7 +39,6 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/ElementHashOp.h>
-#include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 
 namespace hoot
 {
@@ -152,32 +151,20 @@ void ElementIdSynchronizer::_syncElementIds(const QSet<QString>& identicalHashes
         {
           LOG_VART(map2IdenticalElement->getElementId());
 
-          // Here, we're verifying that two way nodes don't belong to ways of very dissimilar types
-          // before syncing their IDs. This still may prove to be too brittle and not a good long
-          // term solution...not sure yet.
-          // TODO: Will this be needed anymore if we switch over to ElementHashOp?
-          if (_areWayNodesInWaysOfMismatchedType(map1IdenticalElement, map2IdenticalElement))
+          // Here, we're verifying both that two way nodes don't belong to ways of very dissimilar
+          // types and that they share at least one way in common before syncing their IDs. Using
+          // either one of these checks separately causes issue with the output. This is probably
+          // too brittle and not a good long term solution...a work in progress.
+          if (_areWayNodesWithoutAWayInCommon(map1IdenticalElement, map2IdenticalElement) &&
+              _areWayNodesInWaysOfMismatchedType(map1IdenticalElement, map2IdenticalElement))
           {
             LOG_TRACE(
               map1IdenticalElement->getElementId() << " and " <<
               map2IdenticalElement->getElementId() <<
-              " are both way nodes that are in ways without matching types. Skipping ID sync...");
+              " are both way nodes that are in ways without matching types and have no way " <<
+              "in common. Skipping ID sync...");
             continue;
           }
-
-          // The original idea here was to not allow id sync between any two way nodes that have no
-          // matching parent ways in common across the two maps. Unfortunately, this causes dropped
-          // features to occur in output. It seems to happen because the map index isn't being
-          // updated automatically after element ID updates...not sure why. Furthermore, this is
-          // also brittle b/c the geometry of ways between the two maps could be slightly different.
-//          if (_areWayNodesWithoutAWayInCommon(map1IdenticalElement, map2IdenticalElement))
-//          {
-//            LOG_TRACE(
-//              map1IdenticalElement->getElementId() << " and " <<
-//              map2IdenticalElement->getElementId() <<
-//              " are both way nodes that have no ways in common. Skipping ID sync...");
-//            continue;
-//          }
 
           LOG_TRACE(
             "Updating map 2 element: " << map2IdenticalElement->getElementId() << " to " <<

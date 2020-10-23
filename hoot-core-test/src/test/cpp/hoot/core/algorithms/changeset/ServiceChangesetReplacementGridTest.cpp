@@ -66,6 +66,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(droppedNodes1Test);
   CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
   CPPUNIT_TEST(badPolyIdSync1Test);
+  CPPUNIT_TEST(badPolyIdSync2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -256,7 +257,8 @@ public:
   void badPolyIdSync1Test()
   {
     // part of github 4297 - The landuse=residential poly surrounding Flanagan Drive should not be
-    // corrupted in the output.
+    // corrupted in the output. Before this fix, skipped element ID synchronizations were causing
+    // the upper right node to drop out and mangle the poly.
 
     _testName = "badPolyIdSync1Test";
     _prepInput(
@@ -279,6 +281,43 @@ public:
       _replacementDataUrl,
       UniformTaskGridGenerator(
         "-115.2434,36.3022,-115.2317,36.3136", 1,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void badPolyIdSync2Test()
+  {
+    // part of github 4297 - The longer surface parking poly in the output should match that in the
+    // replacement data. Before this fix, skipped element ID synchronizations were causing the lower
+    // right section to be truncated.
+
+    _testName = "badPolyIdSync2Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.2822,36.2226,-115.2779,36.2261", 1,
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
@@ -350,11 +389,12 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(true);
-    uut.setOutputNonConflatable(true);
-    //QList<int> includeIds;
-    //includeIds.append(18);
-    //uut.setTaskCellIncludeIds(includeIds);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
+//    QList<int> includeIds;
+//    includeIds.append(12);
+//    includeIds.append(13);
+//    uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -364,7 +404,6 @@ public:
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
-    // TODO: add changes and other stats here?
     //CPPUNIT_ASSERT_EQUAL(26, uut.getNumOrphanedNodesInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());

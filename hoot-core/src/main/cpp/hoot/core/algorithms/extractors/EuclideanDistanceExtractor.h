@@ -44,7 +44,7 @@ public:
   static std::string className() { return "hoot::EuclideanDistanceExtractor"; }
 
   /**
-   * Measure the Euclidean distance between to elements in the same map
+   * Measure the Euclidean distance in meters between two elements in the same map
    *
    * @param map map containing the elements
    * @param target the first element of the pair to measure
@@ -56,7 +56,7 @@ public:
     const ConstElementPtr& candidate) const override;
 
   /**
-   * Measure the Euclidean distance between two elements in different maps
+   * Measure the Euclidean distance in meters between two elements in different maps
    *
    * @param map1 map containing the target element
    * @param map2 map containing the candidate element
