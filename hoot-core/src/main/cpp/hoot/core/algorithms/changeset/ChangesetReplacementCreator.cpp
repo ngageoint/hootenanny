@@ -238,6 +238,7 @@ void ChangesetReplacementCreator::create(
   ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
   wayJoiner.join(combinedMap);
   LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-after-way-joining");
 
   // PRE-CHANGESET DERIVATION CROP
 
@@ -296,7 +297,9 @@ void ChangesetReplacementCreator::create(
 
   LOG_STATUS(
     "Derived replacement changeset: ..." << _output.right(_maxFilePrintLength) << " with " <<
-    StringUtils::formatLargeNumber(_numChanges) << " changes in " <<
+    StringUtils::formatLargeNumber(_numChanges) << " changes for " <<
+    StringUtils::formatLargeNumber(refMapSize) << " features to replace and " <<
+    StringUtils::formatLargeNumber(secMapSize)  << " replacement features in " <<
     StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 

@@ -60,6 +60,7 @@
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Standard
 #include <limits>
@@ -479,7 +480,9 @@ void MapCropper::apply(OsmMapPtr& map)
   if (_removeSuperfluousFeatures)
   {
     numSuperfluousWaysRemoved = SuperfluousWayRemover::removeWays(map);
+    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-superfluous-way-removal");
     numSuperfluousNodesRemoved = SuperfluousNodeRemover::removeNodes(map);
+    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-superfluous-node-removal");
   }
 
   // Most of the time we want to remove missing refs in order for the output to be clean. In some
@@ -495,6 +498,7 @@ void MapCropper::apply(OsmMapPtr& map)
     map->visitRw(missingElementsRemover);
     LOG_DEBUG("\t" << missingElementsRemover.getCompletedStatusMessage());
     LOG_VARD(map->size());
+    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-missing-elements-removal");
 
     // This will remove any relations that were already empty or became empty after the previous
     // step.
@@ -503,6 +507,7 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_INFO("\t" << emptyRelationRemover.getInitStatusMessage());
     emptyRelationRemover.apply(map);
     LOG_DEBUG("\t" << emptyRelationRemover.getCompletedStatusMessage());
+    OsmMapWriterFactory::writeDebugMap(map, "cropper-after-empty-relations-removal");
   }
 
   LOG_VARD(_numAffected);

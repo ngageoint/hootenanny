@@ -1864,6 +1864,8 @@ void ChangesetCutOnlyCreator::_cropMapForChangesetDerivation(
 
   LOG_INFO("Cropping map: " << map->getName() << " for changeset derivation...");
   LOG_VART(MapProjector::toWkt(map->getProjection()));
+  LOG_VARD(keepEntireFeaturesCrossingBounds);
+  LOG_VARD(keepOnlyFeaturesInsideBounds);
 
   MapCropper cropper(GeometryUtils::envelopeFromConfigString(_replacementBounds));
   cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);
@@ -1871,8 +1873,6 @@ void ChangesetCutOnlyCreator::_cropMapForChangesetDerivation(
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
   cropper.setRemoveMissingElements(false);
-  // TODO: should removing superfluous features be suppressed here?
-  //cropper.setRemoveSuperflousFeatures(false);
   cropper.apply(map);
   LOG_DEBUG(cropper.getCompletedStatusMessage());
 
