@@ -384,6 +384,12 @@ public:
       rootDir + "/combined-data/NOMEData.osm",
       rootDir + "/combined-data/OSMData.osm",
       "");
+    // for cell subset debugging
+//    _prepInput(
+//      rootDir + "/combined-data/NOMEData.osm",
+//      rootDir + "/combined-data/OSMData.osm",
+//      "-115.0317,36.2456,-114.9747,36.2870",
+//      outDir);
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
@@ -392,8 +398,9 @@ public:
     uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
+    // for cell subset debugging
 //    QList<int> includeIds;
-//    includeIds.append(43);
+//    includeIds.append(59);
 //    uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.replace(
@@ -403,6 +410,14 @@ public:
         "-115.3528,36.0919,-114.9817,36.3447", 8,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
+    // for cell subset debugging
+//    uut.replace(
+//      DATA_TO_REPLACE_URL,
+//      _replacementDataUrl,
+//      UniformTaskGridGenerator(
+//        "-115.0280,36.2499,-114.9817,36.2817", 1,
+//        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+//        .generateTaskGrid());
 
     //CPPUNIT_ASSERT_EQUAL(26, uut.getNumOrphanedNodesInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
