@@ -370,8 +370,9 @@ public:
 
   void northVegasLargeUniformTest()
   {
-    // whole northern half of city - 64 changesets, ~33.0M changes, avg derivation: 40s,
-    // total time: 58:10, ~567k changes/min, diff between replacement: ~?k (?hr?m)
+    // whole northern half of city - 64 changesets, ~33.0M changes, avg derivation: 47s,
+    // total time: 1hr7min, ~492k changes/min, diff between replacement: 6.4k (1hr28m), 772
+    // unconflatable
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -392,8 +393,7 @@ public:
     uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
 //    QList<int> includeIds;
-//    includeIds.append(12);
-//    includeIds.append(13);
+//    includeIds.append(43);
 //    uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.replace(
@@ -407,7 +407,7 @@ public:
     //CPPUNIT_ASSERT_EQUAL(26, uut.getNumOrphanedNodesInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    //CPPUNIT_ASSERT_EQUAL(480, uut.getNumDuplicateElementPairsInOutput());
+    //CPPUNIT_ASSERT_EQUAL(506, uut.getNumDuplicateElementPairsInOutput());
   }
 
 private:
@@ -501,6 +501,10 @@ private:
       }
       _subTaskTimer.restart();
     }
+
+    // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
+    // for this data.
+
     LOG_STATUS("Loading the data to replace db to: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
     OsmMapWriterFactory::write(map, DATA_TO_REPLACE_URL);
     _originalDataSize = (int)map->size();
@@ -548,6 +552,10 @@ private:
       }
       _subTaskTimer.restart();
     }
+
+    // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
+    // for this data.
+
     LOG_STATUS("Loading the replacement data db to: ..." << _replacementDataUrl.right(25) << "...");
     OsmMapWriterFactory::write(map, _replacementDataUrl);
     LOG_STATUS(
