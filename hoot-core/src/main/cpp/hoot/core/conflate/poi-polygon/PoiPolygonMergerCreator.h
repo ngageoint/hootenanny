@@ -54,7 +54,8 @@ public:
    * appended. If there is more than one match and at least one is a PoiPolygonMatch then a
    * MarkForReviewMerger is created.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
+  virtual bool createMergers(const MatchSet& matches,
+                             std::vector<MergerPtr>& mergers) const override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 

@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
+#include <hoot/core/conflate/matching/MatchGraph.h>
 
 // Qt
 #include <QString>
@@ -66,8 +67,17 @@ public:
    *
    * The caller assumes ownership of the new Mergers in the result.
    */
-  void createMergers(const hoot::OsmMapPtr &map, const MatchSet& matches,
-    std::vector<MergerPtr>& result) const;
+  void createMergers(const OsmMapPtr& map, const MatchSet& matches,
+                     std::vector<MergerPtr>& result) const;
+
+  /**
+   * TODO
+   *
+   * @param matchSets
+   * @param result
+   */
+  void markInterMatcherOverlappingMatchesAsReviews(
+    MatchSetVector& matchSets, std::vector<MergerPtr>& result);
 
   /**
    * @brief Returns a description of all available match creators.

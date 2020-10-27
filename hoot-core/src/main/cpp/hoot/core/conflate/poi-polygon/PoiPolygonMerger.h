@@ -104,6 +104,8 @@ private:
   // this is the tag merger that is used throughout poi/poly merging
   std::shared_ptr<TagMerger> _tagMerger;
 
+  bool _writeDebugMaps;
+
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
                             std::vector<ElementId>& buildings2,
                             std::vector<std::pair<ElementId, ElementId>>& replaced);

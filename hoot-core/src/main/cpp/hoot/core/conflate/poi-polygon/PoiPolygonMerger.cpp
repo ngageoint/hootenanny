@@ -56,14 +56,18 @@ int PoiPolygonMerger::logWarnCount = 0;
 PoiPolygonMerger::PoiPolygonMerger() :
 MergerBase(),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
-_tagMergerClass("")
+_tagMergerClass(""),
+// TODO: change back to false
+_writeDebugMaps(true)
 {
 }
 
 PoiPolygonMerger::PoiPolygonMerger(const set<pair<ElementId, ElementId>>& pairs) :
 _pairs(pairs),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
-_tagMergerClass("")
+_tagMergerClass(""),
+// TODO: change back to false
+_writeDebugMaps(true)
 {
   assert(_pairs.size() >= 1);
 }
@@ -128,9 +132,15 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   // that since they're in a single group they all represent the same entity.
   Tags poiTags1 = _mergePoiTags(map, Status::Unknown1);
   // This debug map writing is very expensive, so just turn it on when debugging small datasets.
-  //OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-tags-merge-1");
+  if (_writeDebugMaps)
+  {
+    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-tags-merge-1");
+  }
   Tags poiTags2 = _mergePoiTags(map, Status::Unknown2);
-  //OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-tags-merge-2");
+  if (_writeDebugMaps)
+  {
+    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-tags-merge-2");
+  }
 
   // Get all the building parts for each status
   vector<ElementId> buildings1 = _getBuildingParts(map, Status::Unknown1);
@@ -140,7 +150,10 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   // merge process.
   ElementId finalBuildingEid = _mergeBuildings(map, buildings1, buildings2, replaced);
   LOG_VART(finalBuildingEid);
-  //OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-merge");
+  if (_writeDebugMaps)
+  {
+    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-merge");
+  }
 
   ElementPtr finalBuilding = map->getElement(finalBuildingEid);
   if (!finalBuilding.get())
@@ -177,7 +190,10 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     finalBuildingTags =
       _getTagMerger()->mergeTags(poiTags1, finalBuildingTags, finalBuilding->getElementType());
     LOG_VART(finalBuildingTags);
-    //OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-1");
+    if (_writeDebugMaps)
+    {
+      OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-1");
+    }
   }
   if (poiTags2.size() > 0)
   {
@@ -186,7 +202,10 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     finalBuildingTags =
       _getTagMerger()->mergeTags(finalBuildingTags, poiTags2, finalBuilding->getElementType());
     LOG_VART(finalBuildingTags);
-    //OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-2");
+    if (_writeDebugMaps)
+    {
+      OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-2");
+    }
   }
 
   // Do some book keeping to remove the POIs and mark them as replaced.
@@ -242,7 +261,10 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     }
   }
   LOG_VART(poisMerged);
-  OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-removal");
+  if (_writeDebugMaps)
+  {
+    OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-poi-removal");
+  }
 
   if (poisMerged > 0)
   {

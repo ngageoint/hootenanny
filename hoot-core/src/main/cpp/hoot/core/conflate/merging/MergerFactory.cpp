@@ -34,6 +34,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 
 using namespace std;
 
@@ -58,8 +59,93 @@ void MergerFactory::reset()
   _creators.clear();
 }
 
-void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
-  vector<MergerPtr>& result) const
+// TODO: add test for this?
+void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
+  MatchSetVector& matchSets, std::vector<MergerPtr>& mergers)
+{
+  LOG_DEBUG(
+    "Marking overlapping matches across matchers as reviews for " <<
+    StringUtils::formatLargeNumber(matchSets.size()) << " match sets...");
+
+  // Get a mapping of all element IDs to the match type they belong to. The same element may belong
+  // to matches of multiple types.
+  QMultiHash<ElementId, QString> elementIdsToMatchTypes;
+  for (MatchSetVector::const_iterator matchSetsItr = matchSets.begin();
+       matchSetsItr != matchSets.end(); ++matchSetsItr)
+  {
+    MatchSet matchSet = *matchSetsItr;
+    for (MatchSet::const_iterator matchSetItr = matchSet.begin(); matchSetItr != matchSet.end();
+         ++matchSetItr)
+    {
+      ConstMatchPtr match = *matchSetItr;
+      const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
+             matchPairs.begin();
+           matchPairItr != matchPairs.end(); ++matchPairItr)
+      {
+        const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
+        elementIdsToMatchTypes.insert(elementPair.first, match->getMatchName());
+        elementIdsToMatchTypes.insert(elementPair.second, match->getMatchName());
+      }
+    }
+  }
+
+  // Find all elements involved in matches of more than one type.
+  QSet<ElementId> elementIdsInvolvedInOverlappingMatch;
+  const QList<ElementId> elementIds = elementIdsToMatchTypes.keys();
+  for (QList<ElementId>::const_iterator elementIdsItr = elementIds.begin();
+       elementIdsItr != elementIds.end();  ++elementIdsItr)
+  {
+    const ElementId elementId = *elementIdsItr;
+    if (elementIdsToMatchTypes.values(elementId).size() > 1)
+    {
+      elementIdsInvolvedInOverlappingMatch.insert(elementId);
+    }
+  }
+
+  // For all elements found to be in overlapping matches, add a review merger for the associated
+  // match pair, and exclude the match set that match pair is in from the output match set so the
+  // match set doesn't get processed more than once.
+  MatchSetVector filteredMatchSets;
+  for (MatchSetVector::const_iterator matchSetsItr = matchSets.begin();
+       matchSetsItr != matchSets.end(); ++matchSetsItr)
+  {
+    MatchSet filteredMatchSet;
+    MatchSet matchSet = *matchSetsItr;
+    for (MatchSet::const_iterator matchSetItr = matchSet.begin(); matchSetItr != matchSet.end();
+         ++matchSetItr)
+    {
+      ConstMatchPtr match = *matchSetItr;
+      const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
+             matchPairs.begin();
+           matchPairItr != matchPairs.end(); ++matchPairItr)
+      {
+        const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
+        if (elementIdsInvolvedInOverlappingMatch.contains(elementPair.first) ||
+            elementIdsInvolvedInOverlappingMatch.contains(elementPair.second))
+        {
+          mergers.push_back(
+            MergerPtr(
+              new MarkForReviewMerger(
+                matchPairs, "Inter-matcher overlapping matches", match->getMatchName(), 1.0)));
+        }
+        else
+        {
+          filteredMatchSet.insert(match);
+        }
+      }
+      if (filteredMatchSet.size() != 0)
+      {
+        filteredMatchSets.push_back(matchSet);
+      }
+    }
+  }
+  matchSets = filteredMatchSets;
+}
+
+void MergerFactory::createMergers(
+  const OsmMapPtr& map, const MatchSet& matches, vector<MergerPtr>& result) const
 {
   LOG_TRACE(
     "Creating merger group for " <<
@@ -141,8 +227,6 @@ bool MergerFactory::isConflicting(
   const ConstOsmMapPtr& map, const ConstMatchPtr& m1, const ConstMatchPtr& m2,
   const QHash<QString, ConstMatchPtr>& matches) const
 {
-  //LOG_VART(_creators.size());
-
   // if any creator considers a match conflicting then it is a conflict
   for (size_t i = 0; i < _creators.size(); i++)
   {

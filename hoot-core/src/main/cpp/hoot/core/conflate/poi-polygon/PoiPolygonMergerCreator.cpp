@@ -61,7 +61,8 @@ MatchPtr PoiPolygonMergerCreator::_createMatch(const ConstOsmMapPtr& map, Elemen
   return MatchFactory::getInstance().createMatch(map, eid1, eid2);
 }
 
-bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
+bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
+                                            vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
@@ -108,11 +109,11 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
       ConstMatchPtr m = *it;
       LOG_VART(m->toString());
 
-      //All of the other merger creators check the type of the match and do nothing if it isn't
-      //the correct type (in this case a PoiPolygon match).  Adding that logic in here can cause
-      //problems where some matches are passed up completely by all mergers, which results in an
-      //exception.  If this merger is meant to be catch all for pois/polygons, then this is ok.  If
-      //not, then some rework may need to be done here.
+      // All of the other merger creators check the type of the match and do nothing if it isn't
+      // the correct type (in this case a PoiPolygon match).  Adding that logic in here can cause
+      // problems where some matches are passed up completely by all mergers, which results in an
+      // exception.  If this merger is meant to be catch all for pois/polygons, then this is ok.  If
+      // not, then some rework may need to be done here.
       set<pair<ElementId, ElementId>> s = m->getMatchPairs();
       eids.insert(s.begin(), s.end());
     }
@@ -221,12 +222,12 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
     }
     LOG_VART(o2);
 
-    //We only want the auto-merge to occur here in the situation where two pois are matching
-    //against the same poly. We do not want auto-merges occurring in the situation where the
-    //same poi is being reviewed against multiple polys, so those end up as reviews.
+    // We only want the auto-merge to occur here in the situation where two pois are matching
+    // against the same poly. We do not want auto-merges occurring in the situation where the
+    // same poi is being reviewed against multiple polys, so those end up as reviews.
 
-    //not passing the tag ignore list here, since it would have already be used when calling
-    //these methods from PoiPolygonMatch
+    // not passing the tag ignore list here, since it would have already be used when calling
+    // these methods from PoiPolygonMatch
     if (_autoMergeManyPoiToOnePolyMatches &&
         _poiCrit.isSatisfied(map->getElement(o1)) &&
         _poiCrit.isSatisfied(map->getElement(o2)) &&
@@ -236,7 +237,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
       return false;
     }
 
-    // create POI/Polygon matches and check to see if it is a miss
+    // Create POI/Polygon matches and check to see if it is a miss.
     std::shared_ptr<Match> ma(_createMatch(map, o1, o2));
 
     // return conflict only if it is a miss, a review is ok.
@@ -247,7 +248,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
       result = true;
     }
   }
-  // if you don't dereference the m1/m2 pointers it always returns Match as the typeid. Odd.
+  // If you don't dereference the m1/m2 pointers it always returns Match as the typeid. Odd.
   else if (typeid(*m1) == typeid(*m2))
   {
     result = m1->isConflicting(m2, map);

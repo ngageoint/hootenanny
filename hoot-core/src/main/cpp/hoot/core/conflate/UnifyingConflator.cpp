@@ -181,9 +181,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // find all the matches in this map
   if (_matchThreshold.get())
   {
-    //ScoreMatches logic seems to be the only one that needs to pass in the match threshold now when
-    //the optimize param is activated.  Otherwise, we get the match threshold information from the
-    //config.
+    // Match scoring logic seems to be the only one that needs to pass in the match threshold now
+    // when the optimize param is activated.  Otherwise, we get the match threshold information from
+    // the config.
     _matchFactory.createMatches(map, _matches, _bounds, _matchThreshold);
   }
   else
@@ -284,7 +284,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization");
 
   {
-    // search the matches for groups (subgraphs) of matches. In other words, groups where all the
+    // Search the matches for groups (subgraphs) of matches. In other words, groups where all the
     // matches are interrelated by element id
     MatchGraph mg;
     mg.addMatches(_matches.begin(), _matches.end());
@@ -299,8 +299,14 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Merging feature matches...");
 
-  // Would it help to sort the matches so the biggest or best ones get merged first?
-  // convert all the match sets into mergers - #2912
+  // If there are matches with overlapping element IDs across matchers, then we need to mark them
+  // as reviews before having each MergerCreator create Mergers. Currently, this applies to any
+  // type of match that can overlap with POI/Polygon Conflation, so: BuildingMatch, ScriptMatches
+  // from POI Conflation, ScriptMatches from Area Conflation, and PoiPolygonMatch.
+  //_mergerFactory->markInterMatcherOverlappingMatchesAsReviews(matchSets, _mergers);
+
+  // TODO: Would it help to sort the matches so the biggest or best ones get merged first? - #2912
+
   LOG_DEBUG(
     "Converting " << StringUtils::formatLargeNumber(matchSets.size()) <<
     " match sets to mergers...");
@@ -361,11 +367,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     LOG_VART(merger->getImpactedElementIds());
 
     // WARNING: Enabling this could result in a lot of files being generated.
-    if (i % 30 == 0)
-    {
+    // TODO: comment out
+    //if (i % 30 == 0)
+    //{
       OsmMapWriterFactory::writeDebugMap(
         map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
-    }
+    //}
   }
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
@@ -518,7 +525,8 @@ void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches)
   }
 }
 
-void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter)
+void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches,
+                                      const MatchType& typeFilter)
 {
   for (size_t i = 0; i < matches.size(); i++)
   {
