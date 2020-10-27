@@ -1,0 +1,638 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <bounds minlat='37.765' minlon='-122.421' maxlat='37.7671' maxlon='-122.4175' origin='hootenanny' />
+  <node id='-46680535' visible='true' version='1' lat='37.76691099099' lon='-122.421' />
+  <node id='-46680537' visible='true' version='1' lat='37.76702886218' lon='-122.421' />
+  <node id='-46680557' visible='true' version='1' lat='37.7652724' lon='-122.419384'>
+    <tag k='REF1' v='003e33' />
+    <tag k='created_by' v='Potlatch 0.10f' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='16th St. Mission BART' />
+    <tag k='operator' v='BART' />
+    <tag k='railway' v='subway_entrance' />
+  </node>
+  <node id='-46680563' visible='true' version='1' lat='37.7664816' lon='-122.4190033'>
+    <tag k='REF1' v='000904' />
+    <tag k='amenity' v='school' />
+    <tag k='ele' v='8' />
+    <tag k='error:circular' v='15' />
+    <tag k='gnis:county_id' v='075' />
+    <tag k='gnis:created' v='06/14/2000' />
+    <tag k='gnis:feature_id' v='228151' />
+    <tag k='gnis:state_id' v='06' />
+    <tag k='name' v='Marshall Elementary School' />
+  </node>
+  <node id='-46680565' visible='true' version='1' lat='37.7654163' lon='-122.4195183'>
+    <tag k='REF1' v='000747' />
+    <tag k='addr:housenumber' v='1979' />
+    <tag k='addr:street' v='Mission Street' />
+    <tag k='amenity' v='pharmacy' />
+    <tag k='dispensing' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Walgreens' />
+    <tag k='shop' v='convenience' />
+  </node>
+  <node id='-46680569' visible='true' version='1' lat='37.766392' lon='-122.4198732'>
+    <tag k='REF1' v='0000c7' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='operator' v='Muni' />
+    <tag k='route_ref' v='14;49' />
+    <tag k='shelter' v='no' />
+    <tag k='source' v='survey' />
+    <tag k='ticker' v='no' />
+  </node>
+  <node id='-46680571' visible='true' version='1' lat='37.765301' lon='-122.4195354'>
+    <tag k='REF1' v='0000db' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='operator' v='Muni' />
+    <tag k='route_ref' v='14;14L;49' />
+    <tag k='shelter' v='yes' />
+    <tag k='source' v='survey' />
+    <tag k='ticker' v='yes' />
+  </node>
+  <node id='-46680573' visible='true' version='1' lat='37.7651503' lon='-122.419384'>
+    <tag k='REF1' v='0000fe' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='operator' v='Muni' />
+    <tag k='route_ref' v='22;53' />
+    <tag k='shelter' v='no' />
+    <tag k='source' v='survey' />
+    <tag k='ticker' v='no' />
+  </node>
+  <node id='-46680575' visible='true' version='1' lat='37.765234' lon='-122.419109'>
+    <tag k='REF1' v='000505' />
+    <tag k='addr:housenumber' v='2978' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='16th Street' />
+    <tag k='amenity' v='fast_food' />
+    <tag k='cuisine' v='burger' />
+    <tag k='drive_in' v='no' />
+    <tag k='drive_through' v='no' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Burger King' />
+    <tag k='phone' v='+1 (415) 863-5066' />
+    <tag k='ref' v='6287' />
+    <tag k='wheelchair' v='yes' />
+  </node>
+  <node id='-46680579' visible='true' version='1' lat='37.7651666' lon='-122.4192494' />
+  <node id='-46680581' visible='true' version='1' lat='37.7654051' lon='-122.4192724' />
+  <node id='-46680583' visible='true' version='1' lat='37.7653862' lon='-122.4195857' />
+  <node id='-46680585' visible='true' version='1' lat='37.7651477' lon='-122.4195627' />
+  <node id='-46680587' visible='true' version='1' lat='37.765148' lon='-122.4202373' />
+  <node id='-46680589' visible='true' version='1' lat='37.7651597' lon='-122.4200384' />
+  <node id='-46680591' visible='true' version='1' lat='37.7651722' lon='-122.4198266' />
+  <node id='-46680593' visible='true' version='1' lat='37.7652542' lon='-122.4200473' />
+  <node id='-46680595' visible='true' version='1' lat='37.7652589' lon='-122.4199673' />
+  <node id='-46680597' visible='true' version='1' lat='37.7652614' lon='-122.4202479' />
+  <node id='-46680599' visible='true' version='1' lat='37.7652731' lon='-122.4200491' />
+  <node id='-46680601' visible='true' version='1' lat='37.7652772' lon='-122.4200493' />
+  <node id='-46680603' visible='true' version='1' lat='37.7652819' lon='-122.4199695' />
+  <node id='-46680605' visible='true' version='1' lat='37.7653241' lon='-122.4200537' />
+  <node id='-46680607' visible='true' version='1' lat='37.7653246' lon='-122.4200437' />
+  <node id='-46680609' visible='true' version='1' lat='37.7653365' lon='-122.419842' />
+  <node id='-46680611' visible='true' version='1' lat='37.7655951' lon='-122.4200692' />
+  <node id='-46680613' visible='true' version='1' lat='37.7656002' lon='-122.4203375' />
+  <node id='-46680615' visible='true' version='1' lat='37.7656069' lon='-122.4198675' />
+  <node id='-46680617' visible='true' version='1' lat='37.7656173' lon='-122.4200257' />
+  <node id='-46680619' visible='true' version='1' lat='37.7656178' lon='-122.4200808' />
+  <node id='-46680621' visible='true' version='1' lat='37.765623' lon='-122.4199182' />
+  <node id='-46680623' visible='true' version='1' lat='37.7656664' lon='-122.4205086' />
+  <node id='-46680625' visible='true' version='1' lat='37.765674' lon='-122.4203979' />
+  <node id='-46680627' visible='true' version='1' lat='37.7656807' lon='-122.4203463' />
+  <node id='-46680629' visible='true' version='1' lat='37.7656983' lon='-122.4200896' />
+  <node id='-46680631' visible='true' version='1' lat='37.7658215' lon='-122.420043' />
+  <node id='-46680633' visible='true' version='1' lat='37.7658272' lon='-122.4199355' />
+  <node id='-46680635' visible='true' version='1' lat='37.7658685' lon='-122.4205308' />
+  <node id='-46680637' visible='true' version='1' lat='37.7658761' lon='-122.4204201' />
+  <node id='-46680639' visible='true' version='1' lat='37.7659135' lon='-122.4200511' />
+  <node id='-46680641' visible='true' version='1' lat='37.7659205' lon='-122.4199468' />
+  <node id='-46680643' visible='true' version='1' lat='37.7659209' lon='-122.420518' />
+  <node id='-46680645' visible='true' version='1' lat='37.765926' lon='-122.4204385' />
+  <node id='-46680647' visible='true' version='1' lat='37.7660139' lon='-122.4203773' />
+  <node id='-46680649' visible='true' version='1' lat='37.7660289' lon='-122.4201241' />
+  <node id='-46680651' visible='true' version='1' lat='37.766086' lon='-122.4205348' />
+  <node id='-46680653' visible='true' version='1' lat='37.7660911' lon='-122.4204554' />
+  <node id='-46680655' visible='true' version='1' lat='37.7660982' lon='-122.4203853' />
+  <node id='-46680657' visible='true' version='1' lat='37.7661133' lon='-122.4201321' />
+  <node id='-46680659' visible='true' version='1' lat='37.7661154' lon='-122.4200727' />
+  <node id='-46680661' visible='true' version='1' lat='37.7661224' lon='-122.4199684' />
+  <node id='-46680665' visible='true' version='1' lat='37.7651939' lon='-122.419252' />
+  <node id='-46680667' visible='true' version='1' lat='37.765227' lon='-122.4187031' />
+  <node id='-46680669' visible='true' version='1' lat='37.7652461' lon='-122.4185031' />
+  <node id='-46680671' visible='true' version='1' lat='37.7652795' lon='-122.4179828' />
+  <node id='-46680673' visible='true' version='1' lat='37.7653411' lon='-122.4181668' />
+  <node id='-46680675' visible='true' version='1' lat='37.7653424' lon='-122.4181469' />
+  <node id='-46680677' visible='true' version='1' lat='37.7653525' lon='-122.4180095' />
+  <node id='-46680679' visible='true' version='1' lat='37.7653537' lon='-122.4179904' />
+  <node id='-46680681' visible='true' version='1' lat='37.7653874' lon='-122.4195653' />
+  <node id='-46680683' visible='true' version='1' lat='37.7654562' lon='-122.4192773' />
+  <node id='-46680685' visible='true' version='1' lat='37.7654736' lon='-122.4185265' />
+  <node id='-46680687' visible='true' version='1' lat='37.7654893' lon='-122.4187284' />
+  <node id='-46680689' visible='true' version='1' lat='37.7654957' lon='-122.4181827' />
+  <node id='-46680691' visible='true' version='1' lat='37.7655125' lon='-122.41894' />
+  <node id='-46680693' visible='true' version='1' lat='37.7655155' lon='-122.4181647' />
+  <node id='-46680695' visible='true' version='1' lat='37.7655243' lon='-122.4180271' />
+  <node id='-46680697' visible='true' version='1' lat='37.765525' lon='-122.4187318' />
+  <node id='-46680699' visible='true' version='1' lat='37.7655724' lon='-122.4193293' />
+  <node id='-46680701' visible='true' version='1' lat='37.7655749' lon='-122.4192888' />
+  <node id='-46680703' visible='true' version='1' lat='37.7655954' lon='-122.418948' />
+  <node id='-46680705' visible='true' version='1' lat='37.7658384' lon='-122.4196179' />
+  <node id='-46680707' visible='true' version='1' lat='37.7658556' lon='-122.4193566' />
+  <node id='-46680709' visible='true' version='1' lat='37.7659108' lon='-122.4193604' />
+  <node id='-46680711' visible='true' version='1' lat='37.7659414' lon='-122.418772' />
+  <node id='-46680713' visible='true' version='1' lat='37.7666043' lon='-122.4189571' />
+  <node id='-46680715' visible='true' version='1' lat='37.7666418' lon='-122.418961' />
+  <node id='-46680717' visible='true' version='1' lat='37.7663323' lon='-122.4188281' />
+  <node id='-46680719' visible='true' version='1' lat='37.7666228' lon='-122.4192549' />
+  <node id='-46680721' visible='true' version='1' lat='37.7663068' lon='-122.4192222' />
+  <node id='-46680723' visible='true' version='1' lat='37.7666108' lon='-122.418857' />
+  <node id='-46680725' visible='true' version='1' lat='37.7650804' lon='-122.4196568'>
+    <tag k='REF1' v='003907' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='16th Street Mission' />
+    <tag k='operator' v='BART' />
+    <tag k='public_transport' v='station' />
+    <tag k='railway' v='station' />
+    <tag k='train' v='yes' />
+  </node>
+  <node id='-46680727' visible='true' version='1' lat='37.7657504' lon='-122.4185518' />
+  <node id='-46680729' visible='true' version='1' lat='37.7658129' lon='-122.4185587' />
+  <node id='-46680731' visible='true' version='1' lat='37.765825' lon='-122.4183823' />
+  <node id='-46680733' visible='true' version='1' lat='37.7657625' lon='-122.4183754' />
+  <node id='-46680735' visible='true' version='1' lat='37.766997' lon='-122.4197602' />
+  <node id='-46680737' visible='true' version='1' lat='37.7668034' lon='-122.4197417' />
+  <node id='-46680739' visible='true' version='1' lat='37.7668242' lon='-122.4193619' />
+  <node id='-46680741' visible='true' version='1' lat='37.7668878' lon='-122.4193619' />
+  <node id='-46680743' visible='true' version='1' lat='37.7668793' lon='-122.4194048' />
+  <node id='-46680745' visible='true' version='1' lat='37.7670108' lon='-122.4194155' />
+  <node id='-46680749' visible='true' version='1' lat='37.7658944' lon='-122.4196223' />
+  <node id='-46680751' visible='true' version='1' lat='37.765958' lon='-122.4196424' />
+  <node id='-46680753' visible='true' version='1' lat='37.7658937' lon='-122.4196332' />
+  <node id='-46680755' visible='true' version='1' lat='37.7659751' lon='-122.4193669' />
+  <node id='-46680757' visible='true' version='1' lat='37.7666241' lon='-122.4194223' />
+  <node id='-46680759' visible='true' version='1' lat='37.766394' lon='-122.4193159' />
+  <node id='-46680761' visible='true' version='1' lat='37.7665395' lon='-122.4193303' />
+  <node id='-46680763' visible='true' version='1' lat='37.7660967' lon='-122.4196568' />
+  <node id='-46680765' visible='true' version='1' lat='37.7659642' lon='-122.4195359' />
+  <node id='-46680767' visible='true' version='1' lat='37.7660014' lon='-122.4195393' />
+  <node id='-46680769' visible='true' version='1' lat='37.7660044' lon='-122.4194885' />
+  <node id='-46680771' visible='true' version='1' lat='37.7659681' lon='-122.4194852' />
+  <node id='-46680773' visible='true' version='1' lat='37.7659738' lon='-122.4193872' />
+  <node id='-46680775' visible='true' version='1' lat='37.766017' lon='-122.4193912' />
+  <node id='-46680777' visible='true' version='1' lat='37.7660201' lon='-122.4193364' />
+  <node id='-46680779' visible='true' version='1' lat='37.7659783' lon='-122.4193325' />
+  <node id='-46680781' visible='true' version='1' lat='37.7659839' lon='-122.4192359' />
+  <node id='-46680783' visible='true' version='1' lat='37.7661205' lon='-122.4192486' />
+  <node id='-46680785' visible='true' version='1' lat='37.766115' lon='-122.4193431' />
+  <node id='-46680787' visible='true' version='1' lat='37.7660833' lon='-122.4193402' />
+  <node id='-46680789' visible='true' version='1' lat='37.76608' lon='-122.4193963' />
+  <node id='-46680791' visible='true' version='1' lat='37.7661125' lon='-122.4193993' />
+  <node id='-46680793' visible='true' version='1' lat='37.7661068' lon='-122.4194973' />
+  <node id='-46680795' visible='true' version='1' lat='37.7660757' lon='-122.4194945' />
+  <node id='-46680797' visible='true' version='1' lat='37.7660725' lon='-122.4195501' />
+  <node id='-46680799' visible='true' version='1' lat='37.7661031' lon='-122.4195523' />
+  <node id='-46680801' visible='true' version='1' lat='37.7659961' lon='-122.4196459' />
+  <node id='-46680803' visible='true' version='1' lat='37.7661301' lon='-122.4196601' />
+  <node id='-46680805' visible='true' version='1' lat='37.7661047' lon='-122.4195271' />
+  <node id='-46680807' visible='true' version='1' lat='37.7661382' lon='-122.4195304' />
+  <node id='-46680809' visible='true' version='1' lat='37.7661395' lon='-122.4195086' />
+  <node id='-46680811' visible='true' version='1' lat='37.7662206' lon='-122.4195166' />
+  <node id='-46680813' visible='true' version='1' lat='37.7662823' lon='-122.4195484' />
+  <node id='-46680815' visible='true' version='1' lat='37.7662191' lon='-122.4195421' />
+  <node id='-46680817' visible='true' version='1' lat='37.7662846' lon='-122.4195112' />
+  <node id='-46680819' visible='true' version='1' lat='37.7663445' lon='-122.4195171' />
+  <node id='-46680821' visible='true' version='1' lat='37.7663426' lon='-122.4195474' />
+  <node id='-46680823' visible='true' version='1' lat='37.7663794' lon='-122.4195511' />
+  <node id='-46680825' visible='true' version='1' lat='37.7667058' lon='-122.4209795' />
+  <node id='-46680827' visible='true' version='1' lat='37.7667694' lon='-122.4200032' />
+  <node id='-46680829' visible='true' version='1' lat='37.7670917' lon='-122.4200354' />
+  <node id='-46680861' visible='true' version='1' lat='37.7662745' lon='-122.4196744' />
+  <node id='-46680863' visible='true' version='1' lat='37.7663344' lon='-122.4196803' />
+  <node id='-46680865' visible='true' version='1' lat='37.7663712' lon='-122.419684' />
+  <node id='-46680867' visible='true' version='1' lat='37.7665167' lon='-122.4196984' />
+  <node id='-46680869' visible='true' version='1' lat='37.7665343' lon='-122.4194134' />
+  <node id='-46680871' visible='true' version='1' lat='37.7666065' lon='-122.4197073' />
+  <way id='-46680876' visible='true' version='1'>
+    <nd ref='-46680537' />
+    <nd ref='-46680829' />
+    <nd ref='-46680827' />
+    <nd ref='-46680825' />
+    <nd ref='-46680535' />
+    <nd ref='-46680537' />
+    <tag k='REF1' v='009fac' />
+    <tag k='addr:city' v='San Francisco' />
+    <tag k='addr:housenumber' v='1600' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='15th Street' />
+    <tag k='error:circular' v='15' />
+    <tag k='landuse' v='residential' />
+    <tag k='name' v='Vara Apartments' />
+  </way>
+  <way id='-46680881' visible='true' version='1'>
+    <nd ref='-46680581' />
+    <nd ref='-46680665' />
+    <nd ref='-46680579' />
+    <nd ref='-46680585' />
+    <nd ref='-46680583' />
+    <nd ref='-46680681' />
+    <nd ref='-46680581' />
+    <tag k='REF1' v='009759' />
+    <tag k='area' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='highway' v='pedestrian' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680882' visible='true' version='1'>
+    <nd ref='-46680635' />
+    <nd ref='-46680637' />
+    <nd ref='-46680625' />
+    <nd ref='-46680623' />
+    <nd ref='-46680635' />
+    <tag k='REF1' v='006da0' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680883' visible='true' version='1'>
+    <nd ref='-46680631' />
+    <nd ref='-46680633' />
+    <nd ref='-46680621' />
+    <nd ref='-46680617' />
+    <nd ref='-46680631' />
+    <tag k='REF1' v='006da2' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680884' visible='true' version='1'>
+    <nd ref='-46680609' />
+    <nd ref='-46680615' />
+    <nd ref='-46680611' />
+    <nd ref='-46680607' />
+    <nd ref='-46680609' />
+    <tag k='REF1' v='006da3' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680885' visible='true' version='1'>
+    <nd ref='-46680651' />
+    <nd ref='-46680653' />
+    <nd ref='-46680645' />
+    <nd ref='-46680643' />
+    <nd ref='-46680651' />
+    <tag k='REF1' v='006da4' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680886' visible='true' version='1'>
+    <nd ref='-46680657' />
+    <nd ref='-46680649' />
+    <nd ref='-46680647' />
+    <nd ref='-46680655' />
+    <nd ref='-46680657' />
+    <tag k='REF1' v='006da5' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680887' visible='true' version='1'>
+    <nd ref='-46680627' />
+    <nd ref='-46680629' />
+    <nd ref='-46680619' />
+    <nd ref='-46680613' />
+    <nd ref='-46680627' />
+    <tag k='REF1' v='006da6' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680888' visible='true' version='1'>
+    <nd ref='-46680639' />
+    <nd ref='-46680659' />
+    <nd ref='-46680661' />
+    <nd ref='-46680641' />
+    <nd ref='-46680639' />
+    <tag k='REF1' v='006da8' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680889' visible='true' version='1'>
+    <nd ref='-46680589' />
+    <nd ref='-46680587' />
+    <nd ref='-46680597' />
+    <nd ref='-46680599' />
+    <nd ref='-46680593' />
+    <nd ref='-46680589' />
+    <tag k='REF1' v='006da9' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680890' visible='true' version='1'>
+    <nd ref='-46680605' />
+    <nd ref='-46680607' />
+    <nd ref='-46680609' />
+    <nd ref='-46680591' />
+    <nd ref='-46680589' />
+    <nd ref='-46680593' />
+    <nd ref='-46680595' />
+    <nd ref='-46680603' />
+    <nd ref='-46680601' />
+    <nd ref='-46680605' />
+    <tag k='REF1' v='006dab' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680891' visible='true' version='1'>
+    <nd ref='-46680685' />
+    <nd ref='-46680689' />
+    <nd ref='-46680673' />
+    <nd ref='-46680675' />
+    <nd ref='-46680693' />
+    <nd ref='-46680695' />
+    <nd ref='-46680677' />
+    <nd ref='-46680679' />
+    <nd ref='-46680671' />
+    <nd ref='-46680669' />
+    <nd ref='-46680685' />
+    <tag k='REF1' v='0089d8' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680892' visible='true' version='1'>
+    <nd ref='-46680581' />
+    <nd ref='-46680683' />
+    <nd ref='-46680687' />
+    <nd ref='-46680667' />
+    <nd ref='-46680665' />
+    <nd ref='-46680581' />
+    <tag k='REF1' v='0089e7' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680893' visible='true' version='1'>
+    <nd ref='-46680683' />
+    <nd ref='-46680701' />
+    <nd ref='-46680703' />
+    <nd ref='-46680691' />
+    <nd ref='-46680697' />
+    <nd ref='-46680687' />
+    <nd ref='-46680683' />
+    <tag k='REF1' v='0089ef' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680894' visible='true' version='1'>
+    <nd ref='-46680705' />
+    <nd ref='-46680707' />
+    <nd ref='-46680699' />
+    <nd ref='-46680701' />
+    <nd ref='-46680683' />
+    <nd ref='-46680581' />
+    <nd ref='-46680681' />
+    <nd ref='-46680705' />
+    <tag k='REF1' v='0089f1' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='source' v='Bing' />
+  </way>
+  <way id='-46680895' visible='true' version='1'>
+    <nd ref='-46680707' />
+    <nd ref='-46680709' />
+    <nd ref='-46680711' />
+    <nd ref='-46680697' />
+    <nd ref='-46680691' />
+    <nd ref='-46680703' />
+    <nd ref='-46680701' />
+    <nd ref='-46680699' />
+    <nd ref='-46680707' />
+    <tag k='REF1' v='0089fd' />
+    <tag k='amenity' v='parking' />
+    <tag k='error:circular' v='15' />
+  </way>
+  <way id='-46680896' visible='true' version='1'>
+    <nd ref='-46680719' />
+    <nd ref='-46680715' />
+    <nd ref='-46680713' />
+    <nd ref='-46680723' />
+    <nd ref='-46680717' />
+    <nd ref='-46680721' />
+    <nd ref='-46680719' />
+    <tag k='REF1' v='0086ed' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+  </way>
+  <way id='-46680897' visible='true' version='1'>
+    <nd ref='-46680727' />
+    <nd ref='-46680729' />
+    <nd ref='-46680731' />
+    <nd ref='-46680733' />
+    <nd ref='-46680727' />
+    <tag k='REF1' v='0085e9' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='The Lost Church' />
+  </way>
+  <way id='-46680898' visible='true' version='1'>
+    <nd ref='-46680735' />
+    <nd ref='-46680737' />
+    <nd ref='-46680739' />
+    <nd ref='-46680741' />
+    <nd ref='-46680743' />
+    <nd ref='-46680745' />
+    <nd ref='-46680735' />
+    <tag k='REF1' v='008a46' />
+    <tag k='addr:city' v='San Francisco' />
+    <tag k='addr:housenumber' v='1899' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='Mission Street' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='The Walden House' />
+    <tag k='source' v='ground survey' />
+  </way>
+  <way id='-46680899' visible='true' version='1'>
+    <nd ref='-46680749' />
+    <nd ref='-46680705' />
+    <nd ref='-46680707' />
+    <nd ref='-46680709' />
+    <nd ref='-46680749' />
+    <tag k='REF1' v='009389' />
+    <tag k='addr:city' v='San Francisco' />
+    <tag k='addr:housenumber' v='1947A' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='Mission Street' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='J + K Fitness' />
+  </way>
+  <way id='-46680900' visible='true' version='1'>
+    <nd ref='-46680751' />
+    <nd ref='-46680753' />
+    <nd ref='-46680749' />
+    <nd ref='-46680709' />
+    <nd ref='-46680755' />
+    <nd ref='-46680773' />
+    <nd ref='-46680771' />
+    <nd ref='-46680765' />
+    <nd ref='-46680751' />
+    <tag k='REF1' v='00938a' />
+    <tag k='addr:city' v='San Francisco' />
+    <tag k='addr:housenumber' v='1943' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='MIssion Street' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='World Class Boxing' />
+  </way>
+  <way id='-46680901' visible='true' version='1'>
+    <nd ref='-46680871' />
+    <nd ref='-46680867' />
+    <nd ref='-46680869' />
+    <nd ref='-46680757' />
+    <nd ref='-46680871' />
+    <tag k='REF1' v='00938b' />
+    <tag k='addr:city' v='San Francisco' />
+    <tag k='addr:housename' v='Bay Blend Cafe' />
+    <tag k='addr:housenumber' v='1905' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='Mission Street' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+  </way>
+  <way id='-46680902' visible='true' version='1'>
+    <nd ref='-46680867' />
+    <nd ref='-46680865' />
+    <nd ref='-46680823' />
+    <nd ref='-46680759' />
+    <nd ref='-46680761' />
+    <nd ref='-46680869' />
+    <nd ref='-46680867' />
+    <tag k='REF1' v='00938c' />
+    <tag k='building' v='yes' />
+    <tag k='building:levels' v='1' />
+    <tag k='error:circular' v='15' />
+  </way>
+  <way id='-46680903' visible='true' version='1'>
+    <nd ref='-46680763' />
+    <nd ref='-46680801' />
+    <nd ref='-46680751' />
+    <nd ref='-46680765' />
+    <nd ref='-46680767' />
+    <nd ref='-46680769' />
+    <nd ref='-46680771' />
+    <nd ref='-46680773' />
+    <nd ref='-46680775' />
+    <nd ref='-46680777' />
+    <nd ref='-46680779' />
+    <nd ref='-46680781' />
+    <nd ref='-46680783' />
+    <nd ref='-46680785' />
+    <nd ref='-46680787' />
+    <nd ref='-46680789' />
+    <nd ref='-46680791' />
+    <nd ref='-46680793' />
+    <nd ref='-46680795' />
+    <nd ref='-46680797' />
+    <nd ref='-46680799' />
+    <nd ref='-46680763' />
+    <tag k='REF1' v='00938d' />
+    <tag k='addr:city' v='San Francisco' />
+    <tag k='addr:housenumber' v='1933' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='Mission Street' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Apartments' />
+  </way>
+  <way id='-46680904' visible='true' version='1'>
+    <nd ref='-46680801' />
+    <nd ref='-46680751' />
+    <nd ref='-46680765' />
+    <nd ref='-46680767' />
+    <nd ref='-46680801' />
+    <tag k='REF1' v='00938e' />
+    <tag k='addr:city' v='San Francisco' />
+    <tag k='addr:housenumber' v='1939' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='Mission Street' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='Fida Market and Deli' />
+  </way>
+  <way id='-46680905' visible='true' version='1'>
+    <nd ref='-46680803' />
+    <nd ref='-46680763' />
+    <nd ref='-46680799' />
+    <nd ref='-46680805' />
+    <nd ref='-46680807' />
+    <nd ref='-46680803' />
+    <tag k='REF1' v='00938f' />
+    <tag k='addr:city' v='San Francisco' />
+    <tag k='addr:housenumber' v='1919' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='Mission Street' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+  </way>
+  <way id='-46680906' visible='true' version='1'>
+    <nd ref='-46680861' />
+    <nd ref='-46680803' />
+    <nd ref='-46680807' />
+    <nd ref='-46680809' />
+    <nd ref='-46680811' />
+    <nd ref='-46680815' />
+    <nd ref='-46680813' />
+    <nd ref='-46680861' />
+    <tag k='REF1' v='009390' />
+    <tag k='addr:city' v='San Francsico' />
+    <tag k='addr:housenumber' v='1911' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='MIssion Street' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+  </way>
+  <way id='-46680907' visible='true' version='1'>
+    <nd ref='-46680863' />
+    <nd ref='-46680861' />
+    <nd ref='-46680813' />
+    <nd ref='-46680817' />
+    <nd ref='-46680819' />
+    <nd ref='-46680821' />
+    <nd ref='-46680863' />
+    <tag k='REF1' v='009392' />
+    <tag k='addr:city' v='San Francisco' />
+    <tag k='addr:housename' v='MPI Properties' />
+    <tag k='addr:housenumber' v='1911' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='Mission Street' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+  </way>
+  <way id='-46680908' visible='true' version='1'>
+    <nd ref='-46680865' />
+    <nd ref='-46680863' />
+    <nd ref='-46680821' />
+    <nd ref='-46680823' />
+    <nd ref='-46680865' />
+    <tag k='REF1' v='009393' />
+    <tag k='addr:city' v='San Francisco' />
+    <tag k='addr:housename' v='The Butcher Shop' />
+    <tag k='addr:housenumber' v='1909' />
+    <tag k='addr:postcode' v='94103' />
+    <tag k='addr:street' v='Mission Street' />
+    <tag k='building' v='yes' />
+    <tag k='error:circular' v='15' />
+    <tag k='name' v='The Butcher Shop' />
+  </way>
+</osm>

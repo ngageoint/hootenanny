@@ -191,7 +191,7 @@ void MergerFactory::createMergers(
   }
 
   // In #2069, a ScriptMatch and a NetworkMatch are being grouped together, which ultimately causes
-  // the exception below to be thrown.  For now, attempting to bypass and only log a warning.  This
+  // the exception below to be thrown. Now, instead of an error we're only logging a warning. This
   // also required additional error handling in ScriptMerger (see ScriptMerger::_applyMergePair).
   if (logWarnCount < Log::getWarnMessageLimit())
   {
@@ -202,7 +202,6 @@ void MergerFactory::createMergers(
     LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
   }
   logWarnCount++;
-  //throw HootException("Error creating a merger for the provided set of matches.");
 }
 
 vector<CreatorDescription> MergerFactory::getAllAvailableCreators() const

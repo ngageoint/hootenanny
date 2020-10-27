@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.76584624553788" minlon="-122.4202077713553" maxlat="37.76645523071015" maxlon="-122.419007472719"/>
+    <node visible="true" id="-4689" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658462455378796" lon="-122.4202077713553081">
+        <tag k="name" v="Vacant Property"/>
+        <tag k="amenity" v="school"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="REF2" v="none"/>
+        <tag k="operator" v="San Francisco Unified School District"/>
+    </node>
+    <node visible="true" id="-4688" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7664552307101502" lon="-122.4190074727190307">
+        <tag k="name" v="Marshall Elementary School"/>
+        <tag k="amenity" v="school"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="REF2" v="000904"/>
+        <tag k="operator" v="San Francisco Unified School District"/>
+        <tag k="REVIEW" v="0086ed"/>
+    </node>
+</osm>
