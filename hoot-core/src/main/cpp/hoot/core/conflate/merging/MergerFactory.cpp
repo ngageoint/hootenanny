@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -66,6 +67,7 @@ void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
   LOG_DEBUG(
     "Marking overlapping matches across matchers as reviews for " <<
     StringUtils::formatLargeNumber(matchSets.size()) << " match sets...");
+  LOG_VARD(matchNameFilter);
 
   // Get a mapping of all element IDs to the match type they belong to. The same element may belong
   // to matches of multiple types.
@@ -99,6 +101,7 @@ void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
       }
     }
   }
+  LOG_VARD(elementIdsToMatchTypes.size());
   if (elementIdsToMatchTypes.isEmpty())
   {
     return;
@@ -116,6 +119,7 @@ void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
       elementIdsInvolvedInOverlappingMatch.insert(elementId);
     }
   }
+  LOG_VARD(elementIdsInvolvedInOverlappingMatch.size());
   if (elementIdsInvolvedInOverlappingMatch.isEmpty())
   {
     return;
@@ -134,15 +138,19 @@ void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
          ++matchSetItr)
     {
       ConstMatchPtr match = *matchSetItr;
-      const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+        const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
       for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
              matchPairs.begin();
            matchPairItr != matchPairs.end(); ++matchPairItr)
       {
         const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
-        if (elementIdsInvolvedInOverlappingMatch.contains(elementPair.first) ||
-            elementIdsInvolvedInOverlappingMatch.contains(elementPair.second))
+        if (match->getMatchName() == "POI to Polygon" &&
+            (elementIdsInvolvedInOverlappingMatch.contains(elementPair.first) ||
+             elementIdsInvolvedInOverlappingMatch.contains(elementPair.second)))
         {
+          LOG_TRACE(
+            "Adding review for inter-dataset conflict; type: " << match->getMatchName() <<
+            ", ids: " << matchPairs << "...");
           mergers.push_back(
             MergerPtr(
               new MarkForReviewMerger(
@@ -159,6 +167,8 @@ void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
       }
     }
   }
+  LOG_VARD(mergers.size());
+  LOG_VARD(filteredMatchSets.size());
   matchSets = filteredMatchSets;
 }
 
