@@ -49,6 +49,7 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/conflate/network/NetworkMatchCreator.h>
 #include <hoot/core/schema/SchemaUtils.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 
 // standard
 #include <algorithm>
@@ -299,14 +300,15 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Merging feature matches...");
 
-  // If there are matches with overlapping element IDs across matchers, then we need to mark them
-  // as reviews before having each MergerCreator create Mergers. Currently, this applies to any
-  // type of match that can overlap with POI/Polygon Conflation, so: BuildingMatch, ScriptMatches
-  // from POI Conflation, ScriptMatches from Area Conflation, and PoiPolygonMatch.
-  QStringList matchTypes;
-  matchTypes.append("POI to Polygon");
-  matchTypes.append("POI");
-  _mergerFactory->markInterMatcherOverlappingMatchesAsReviews(matchSets, _mergers, matchTypes);
+  // POI/Polygon matching is unique in that it is the only non-generic geometry type matcher that
+  // can duplicate matches with other non-generic geometry type matchers. If there are POI/Polygon
+  // matches sharing elements with a POI matcher, then we need to mark them as reviews before
+  // having each MergerCreator create Mergers. The reason we only care about overlapping POI matches
+  // and not building or area matches is that PoiPolygonMerger will remove a POI completely once it
+  // is merged with a polygon. If doesn't know about the existence of any POI to POI matches which
+  // reference the POI its removing. Because of that, we handle this before merging features with
+  // PoiPolygonMerger.
+  PoiPolygonMergerCreator::convertSharedMatchesToReviews(matchSets, _mergers);
 
   // TODO: Would it help to sort the matches so the biggest or best ones get merged first? - #2912
 

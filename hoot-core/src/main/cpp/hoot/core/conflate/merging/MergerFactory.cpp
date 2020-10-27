@@ -35,7 +35,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 
 using namespace std;
 
@@ -58,118 +57,6 @@ MergerFactory::~MergerFactory()
 void MergerFactory::reset()
 {
   _creators.clear();
-}
-
-void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
-  MatchSetVector& matchSets, std::vector<MergerPtr>& mergers,
-  const QStringList& matchNameFilter)
-{
-  LOG_DEBUG(
-    "Marking overlapping matches across matchers as reviews for " <<
-    StringUtils::formatLargeNumber(matchSets.size()) << " match sets...");
-  LOG_VARD(matchNameFilter);
-
-  // Get a mapping of all element IDs to the match type they belong to. The same element may belong
-  // to matches of multiple types.
-  QMultiHash<ElementId, QString> elementIdsToMatchTypes;
-  for (MatchSetVector::const_iterator matchSetsItr = matchSets.begin();
-       matchSetsItr != matchSets.end(); ++matchSetsItr)
-  {
-    MatchSet matchSet = *matchSetsItr;
-    for (MatchSet::const_iterator matchSetItr = matchSet.begin(); matchSetItr != matchSet.end();
-         ++matchSetItr)
-    {
-      ConstMatchPtr match = *matchSetItr;
-      const QString matchName = match->getMatchName();
-      if (matchNameFilter.isEmpty() || matchNameFilter.contains(matchName))
-      {
-        const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
-        for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
-               matchPairs.begin();
-             matchPairItr != matchPairs.end(); ++matchPairItr)
-        {
-          const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
-          if (!elementIdsToMatchTypes.contains(elementPair.first, matchName))
-          {
-              elementIdsToMatchTypes.insert(elementPair.first, matchName);
-          }
-          if (!elementIdsToMatchTypes.contains(elementPair.second, matchName))
-          {
-            elementIdsToMatchTypes.insert(elementPair.second, matchName);
-          }
-        }
-      }
-    }
-  }
-  LOG_VARD(elementIdsToMatchTypes.size());
-  if (elementIdsToMatchTypes.isEmpty())
-  {
-    return;
-  }
-
-  // Find all elements involved in matches of more than one type.
-  QSet<ElementId> elementIdsInvolvedInOverlappingMatch;
-  const QList<ElementId> elementIds = elementIdsToMatchTypes.keys();
-  for (QList<ElementId>::const_iterator elementIdsItr = elementIds.begin();
-       elementIdsItr != elementIds.end();  ++elementIdsItr)
-  {
-    const ElementId elementId = *elementIdsItr;
-    if (elementIdsToMatchTypes.values(elementId).size() > 1)
-    {
-      elementIdsInvolvedInOverlappingMatch.insert(elementId);
-    }
-  }
-  LOG_VARD(elementIdsInvolvedInOverlappingMatch.size());
-  if (elementIdsInvolvedInOverlappingMatch.isEmpty())
-  {
-    return;
-  }
-
-  // For all elements found to be in overlapping matches, add a review merger for the associated
-  // match pair, and exclude the match set that match pair is in from the output match set so the
-  // match set doesn't get processed more than once.
-  MatchSetVector filteredMatchSets;
-  for (MatchSetVector::const_iterator matchSetsItr = matchSets.begin();
-       matchSetsItr != matchSets.end(); ++matchSetsItr)
-  {
-    MatchSet filteredMatchSet;
-    MatchSet matchSet = *matchSetsItr;
-    for (MatchSet::const_iterator matchSetItr = matchSet.begin(); matchSetItr != matchSet.end();
-         ++matchSetItr)
-    {
-      ConstMatchPtr match = *matchSetItr;
-        const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
-      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
-             matchPairs.begin();
-           matchPairItr != matchPairs.end(); ++matchPairItr)
-      {
-        const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
-        if (match->getMatchName() == "POI to Polygon" &&
-            (elementIdsInvolvedInOverlappingMatch.contains(elementPair.first) ||
-             elementIdsInvolvedInOverlappingMatch.contains(elementPair.second)))
-        {
-          LOG_TRACE(
-            "Adding review for inter-dataset conflict; type: " << match->getMatchName() <<
-            ", ids: " << matchPairs << "...");
-          mergers.push_back(
-            MergerPtr(
-              new MarkForReviewMerger(
-                matchPairs, "Inter-matcher overlapping matches", match->getMatchName(), 1.0)));
-        }
-        else
-        {
-          filteredMatchSet.insert(match);
-        }
-      }
-      if (filteredMatchSet.size() != 0)
-      {
-        filteredMatchSets.push_back(matchSet);
-      }
-    }
-  }
-  LOG_VARD(mergers.size());
-  LOG_VARD(filteredMatchSets.size());
-  matchSets = filteredMatchSets;
 }
 
 void MergerFactory::createMergers(

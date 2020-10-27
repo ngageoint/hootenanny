@@ -32,6 +32,7 @@
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/conflate/matching/MatchGraph.h>
 
 namespace hoot
 {
@@ -64,6 +65,16 @@ public:
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   virtual void setOsmMap(const OsmMap* map) override { _map = map; }
+
+  /**
+   * Converts any POI/Polygon matches with elements overlapping with POI/POI matches to reviews
+   *
+   * @param matchSets a collection of pre-calculated match sets for all matchers
+   * @param mergers the collection of mergers to be applied during Unifying conflation; it will be
+   * populated with MarkForReviewMergers for any matches we convert to reviews
+   */
+  static void convertSharedMatchesToReviews(
+    MatchSetVector& matchSets, std::vector<MergerPtr>& mergers);
 
   void setAllowCrossConflationMerging(bool allow) { _allowCrossConflationMerging = allow; }
 
