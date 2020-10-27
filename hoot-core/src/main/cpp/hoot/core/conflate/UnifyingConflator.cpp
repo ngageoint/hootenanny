@@ -303,7 +303,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // as reviews before having each MergerCreator create Mergers. Currently, this applies to any
   // type of match that can overlap with POI/Polygon Conflation, so: BuildingMatch, ScriptMatches
   // from POI Conflation, ScriptMatches from Area Conflation, and PoiPolygonMatch.
-  //_mergerFactory->markInterMatcherOverlappingMatchesAsReviews(matchSets, _mergers);
+  _mergerFactory->markInterMatcherOverlappingMatchesAsReviews(matchSets, _mergers);
 
   // TODO: Would it help to sort the matches so the biggest or best ones get merged first? - #2912
 

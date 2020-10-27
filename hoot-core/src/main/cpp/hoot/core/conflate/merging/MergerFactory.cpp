@@ -84,10 +84,20 @@ void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
            matchPairItr != matchPairs.end(); ++matchPairItr)
       {
         const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
-        elementIdsToMatchTypes.insert(elementPair.first, match->getMatchName());
-        elementIdsToMatchTypes.insert(elementPair.second, match->getMatchName());
+        if (!elementIdsToMatchTypes.contains(elementPair.first, match->getMatchName()))
+        {
+          elementIdsToMatchTypes.insert(elementPair.first, match->getMatchName());
+        }
+        if (!elementIdsToMatchTypes.contains(elementPair.second, match->getMatchName()))
+        {
+          elementIdsToMatchTypes.insert(elementPair.second, match->getMatchName());
+        }
       }
     }
+  }
+  if (elementIdsToMatchTypes.isEmpty())
+  {
+    return;
   }
 
   // Find all elements involved in matches of more than one type.
@@ -101,6 +111,10 @@ void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
     {
       elementIdsInvolvedInOverlappingMatch.insert(elementId);
     }
+  }
+  if (elementIdsInvolvedInOverlappingMatch.isEmpty())
+  {
+    return;
   }
 
   // For all elements found to be in overlapping matches, add a review merger for the associated
