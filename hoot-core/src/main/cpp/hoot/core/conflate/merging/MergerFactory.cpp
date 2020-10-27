@@ -81,17 +81,17 @@ void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
     {
       ConstMatchPtr match = *matchSetItr;
       const QString matchName = match->getMatchName();
-      const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
-      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
-             matchPairs.begin();
-           matchPairItr != matchPairs.end(); ++matchPairItr)
+      if (matchNameFilter.isEmpty() || matchNameFilter.contains(matchName))
       {
-        const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
-        if (matchNameFilter.isEmpty() || matchNameFilter.contains(matchName))
+        const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+        for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
+               matchPairs.begin();
+             matchPairItr != matchPairs.end(); ++matchPairItr)
         {
+          const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
           if (!elementIdsToMatchTypes.contains(elementPair.first, matchName))
           {
-            elementIdsToMatchTypes.insert(elementPair.first, matchName);
+              elementIdsToMatchTypes.insert(elementPair.first, matchName);
           }
           if (!elementIdsToMatchTypes.contains(elementPair.second, matchName))
           {
