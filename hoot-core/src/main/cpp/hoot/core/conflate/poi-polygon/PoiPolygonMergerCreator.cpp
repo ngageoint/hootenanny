@@ -92,10 +92,6 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
   }
   LOG_VART(foundAPoi);
   LOG_VART(foundAPolygon);
-  if (!foundAPoi || !foundAPolygon)
-  {
-    LOG_TRACE("Match invalid; skipping merge.");
-  }
 
   // If there is at least one POI and at least one polygon, then we need to merge things in a
   // special way.
@@ -136,6 +132,10 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches,
 
     result = true;
   }
+  else
+  {
+    LOG_TRACE("Match invalid; skipping merge.");
+  }
 
   return result;
 }
@@ -174,7 +174,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
     // get out the matched pairs from the matches
     set<pair<ElementId, ElementId>> p1 = m1->getMatchPairs();
     set<pair<ElementId, ElementId>> p2 = m2->getMatchPairs();
-    // We're expecting them to have one match each, more could be handled, but are not necessary at
+    // We're expecting them to have one match each. More could be handled, but are not necessary at
     // this time.
     LOG_VART(p1.size());
     LOG_VART(p2.size());
@@ -188,7 +188,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
     LOG_VART(eids2.first);
     LOG_VART(eids1.second);
     LOG_VART(eids2.second);
-    // There should be one elementId that is shared between the matches. Find it as well as the
+    // There should be one element id that is shared between the matches. Find it as well as the
     // other elements.
     ElementId sharedEid, o1, o2;
     if (eids1.first == eids2.first || eids1.first == eids2.second)
@@ -201,7 +201,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
       sharedEid = eids1.second;
       o1 = eids1.first;
     }
-    // there are no overlapping ElementIds, this isn't a conflict.
+    // There are no overlapping element ids, so this isn't a conflict.
     else
     {
       LOG_TRACE("no conflict");
@@ -240,7 +240,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
     // Create POI/Polygon matches and check to see if it is a miss.
     std::shared_ptr<Match> ma(_createMatch(map, o1, o2));
 
-    // return conflict only if it is a miss, a review is ok.
+    // Return conflict only if it is a miss, a review is ok.
     result = false;
     if (ma.get() == 0 || ma->getType() == MatchType::Miss)
     {
