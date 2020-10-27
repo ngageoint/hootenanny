@@ -75,9 +75,11 @@ public:
    *
    * @param matchSets
    * @param result
+   * @param matchNameFilter
    */
   void markInterMatcherOverlappingMatchesAsReviews(
-    MatchSetVector& matchSets, std::vector<MergerPtr>& result);
+    MatchSetVector& matchSets, std::vector<MergerPtr>& result,
+    const QStringList& matchNameFilter = QStringList());
 
   /**
    * @brief Returns a description of all available match creators.

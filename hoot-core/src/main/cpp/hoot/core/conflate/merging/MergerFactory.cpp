@@ -59,9 +59,9 @@ void MergerFactory::reset()
   _creators.clear();
 }
 
-// TODO: add test for this?
 void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
-  MatchSetVector& matchSets, std::vector<MergerPtr>& mergers)
+  MatchSetVector& matchSets, std::vector<MergerPtr>& mergers,
+  const QStringList& matchNameFilter)
 {
   LOG_DEBUG(
     "Marking overlapping matches across matchers as reviews for " <<
@@ -78,19 +78,23 @@ void MergerFactory::markInterMatcherOverlappingMatchesAsReviews(
          ++matchSetItr)
     {
       ConstMatchPtr match = *matchSetItr;
+      const QString matchName = match->getMatchName();
       const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
       for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
              matchPairs.begin();
            matchPairItr != matchPairs.end(); ++matchPairItr)
       {
         const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
-        if (!elementIdsToMatchTypes.contains(elementPair.first, match->getMatchName()))
+        if (matchNameFilter.isEmpty() || matchNameFilter.contains(matchName))
         {
-          elementIdsToMatchTypes.insert(elementPair.first, match->getMatchName());
-        }
-        if (!elementIdsToMatchTypes.contains(elementPair.second, match->getMatchName()))
-        {
-          elementIdsToMatchTypes.insert(elementPair.second, match->getMatchName());
+          if (!elementIdsToMatchTypes.contains(elementPair.first, matchName))
+          {
+            elementIdsToMatchTypes.insert(elementPair.first, matchName);
+          }
+          if (!elementIdsToMatchTypes.contains(elementPair.second, matchName))
+          {
+            elementIdsToMatchTypes.insert(elementPair.second, matchName);
+          }
         }
       }
     }
