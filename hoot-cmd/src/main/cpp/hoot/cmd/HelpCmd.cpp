@@ -196,7 +196,7 @@ private:
     cout << "  Append:  [-D optionName+=optionValueEntry]" << endl;
     cout << "  Prepend: [-D optionName++=optionValueEntry]" << endl;
     cout << "  Remove:  [-D optionName-=optionValueEntry]" << endl;
-    cout << "  Replace: [-D optionName=\"<old optionValueEntry 1>-><new optionValueEntry 1>;<old optionValueEntry 2>-><new optionValueEntry 2>\"...]"
+    cout << "  Replace: [-D optionName=\"[old optionValueEntry 1]->[new optionValueEntry 1];[old optionValueEntry 2]->[new optionValueEntry 2]\"...]"
          << endl;
 
     return 0;
