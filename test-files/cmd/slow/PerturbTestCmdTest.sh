@@ -1,15 +1,15 @@
 #!/bin/bash
 set -e
 
-mkdir -p $HOOT_HOME/test-output/cmd/slow/PertyTestCmdTest
+mkdir -p $HOOT_HOME/test-output/cmd/slow/PerturbTestCmdTest
 
 # ROAD TEST
 
 infile=$HOOT_HOME/test-files/DcGisRoads.osm
-indir=$HOOT_HOME/test-files/cmd/slow/PertyTestCmdTest
-outdir=$HOOT_HOME/test-output/cmd/slow/PertyTestCmdTest
+indir=$HOOT_HOME/test-files/cmd/slow/PerturbTestCmdTest
+outdir=$HOOT_HOME/test-output/cmd/slow/PerturbTestCmdTest
 
-myCmd="hoot perty -C Testing.conf \
+myCmd="hoot perturb -C Testing.conf \
         -D random.seed=1 \
         -D perty.test.num.runs=1 \
         -D perty.test.num.simulations=1 \
@@ -30,7 +30,7 @@ fi
 
 infile=$indir"/poi-input.osm"
 
-myCmd="hoot perty -C Testing.conf \
+myCmd="hoot perturb -C Testing.conf \
         -D random.seed=1 \
         -D perty.test.num.runs=1 \
         -D perty.test.num.simulations=1 \

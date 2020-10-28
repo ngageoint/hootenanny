@@ -47,17 +47,17 @@ using namespace std;
 namespace hoot
 {
 
-class PertyCmd : public BaseCommand
+class PerturbCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::PertyCmd"; }
+  static string className() { return "hoot::PerturbCmd"; }
 
-  PertyCmd() = default;
+  PerturbCmd() = default;
 
   virtual QString getName() const override { return "perty"; }
 
-  virtual QString getDescription() const override { return "Perturbs a map"; }
+  virtual QString getDescription() const override { return "Perturbs a map using PERTY"; }
 
   virtual int runSimple(QStringList& args) override
   {
@@ -158,7 +158,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, PertyCmd)
+HOOT_FACTORY_REGISTER(Command, PerturbCmd)
 
 }
 

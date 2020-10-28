@@ -777,26 +777,26 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
 ===== Make a perturbed copy of a map:
 
 -----
-    hoot perty input.osm perturbed.osm
+    hoot perturb input.osm perturbed.osm
 -----
 
 ===== Make a perturbed copy of a map with some adjusted input parameters:
 
 -----
-    hoot perty -D perty.search.distance=20 -D random.way.generalizer.probability=0.7 \
+    hoot perturb -D perty.search.distance=20 -D random.way.generalizer.probability=0.7 \
       input.osm perturbed.osm
 -----
 
 ===== Make a perturbed copy of a map, conflate the original map against the perturbed copy, and score how well the conflation performed:
 
 -----
-    hoot perty input.osm /my/output/directory --score
+    hoot perturb input.osm /my/output/directory --score
 -----
 
 ===== Run a series of random map perturbations and score how well all of them conflate against a source map:
 
 -----
-    hoot perty -D perty.test.num.runs=10 -D perty.test.num.simulations=5 \
+    hoot perturb -D perty.test.num.runs=10 -D perty.test.num.simulations=5 \
       -D perty.test.dynamic.variables=perty.systematic.error.x;perty.systematic.error.y \
       -D perty.test.dynamic.variable.start.value=1.0 \
       -D perty.test.dynamic.variable.increment=5.0 \

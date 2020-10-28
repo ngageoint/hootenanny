@@ -58,13 +58,13 @@ public:
     _forceToRndList.append("db-delete");
     _forceToRndList.append("db-list");
     _forceToRndList.append("de-duplicate");
+    _forceToRndList.append("is-sorted");
     _forceToRndList.append("login");
     _forceToRndList.append("logout");
     _forceToRndList.append("optimize-network-conf");
-    _forceToRndList.append("perty");
+    _forceToRndList.append("perturb");
     _forceToRndList.append("plot-node-density");
     _forceToRndList.append("score-matches");
-    //_forceToRndList.append("score-matches-diff");
     _forceToRndList.append("sync-element-ids");
     _forceToRndList.append("type-similarity");
     _forceToRndList.append("type-tagger-rules");
