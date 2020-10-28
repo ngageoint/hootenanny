@@ -29,7 +29,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/auth/HootServicesLoginManager.h>
+#include <hoot/rnd/auth/HootServicesLoginManager.h>
 
 namespace hoot
 {
@@ -46,6 +46,8 @@ public:
 
   virtual QString getDescription() const override
   { return "Logs a user into the Hootenanny Web Services"; }
+
+  virtual QString getType() const { return "rnd"; }
 
   virtual int runSimple(QStringList& args) override
   {

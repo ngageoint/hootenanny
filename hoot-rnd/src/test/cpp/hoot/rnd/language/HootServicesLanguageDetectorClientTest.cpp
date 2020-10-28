@@ -33,12 +33,12 @@
 
 // hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/language/HootServicesLanguageDetectorMockClient.h>
+#include <hoot/rnd/language/HootServicesLanguageDetectorMockClient.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
-#include <hoot/core/language/LanguageDetectionConfidenceLevel.h>
+#include <hoot/rnd/language/LanguageDetectionConfidenceLevel.h>
 
 namespace hoot
 {

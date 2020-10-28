@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/language/HootServicesLanguageInfoClient.h>
+#include <hoot/rnd/language/HootServicesLanguageInfoClient.h>
 
 // Std
 #include <sstream>

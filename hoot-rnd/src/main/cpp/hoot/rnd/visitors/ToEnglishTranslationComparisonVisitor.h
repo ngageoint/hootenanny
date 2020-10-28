@@ -29,7 +29,7 @@
 #define TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
 
 // hoot
-#include <hoot/core/visitors/ToEnglishTranslationVisitor.h>
+#include <hoot/rnd/visitors/ToEnglishTranslationVisitor.h>
 #include <hoot/core/algorithms/string/StringDistance.h>
 #include <hoot/core/info/OperationStatusInfo.h>
 

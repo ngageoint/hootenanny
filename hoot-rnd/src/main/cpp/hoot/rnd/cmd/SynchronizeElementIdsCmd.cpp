@@ -56,6 +56,8 @@ public:
   virtual QString getDescription() const override
   { return "Copies element IDs from one map to another for identical elements (experimental)"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;

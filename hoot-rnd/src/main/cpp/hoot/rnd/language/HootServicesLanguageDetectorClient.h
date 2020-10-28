@@ -29,7 +29,7 @@
 #define HOOT_SERVICES_LANGUAGE_DETECTOR_CLIENT_H
 
 // hoot
-#include <hoot/core/language/LanguageDetector.h>
+#include <hoot/rnd/language/LanguageDetector.h>
 #include "LanguageDetectionConfidenceLevel.h"
 
 // Qt

@@ -28,8 +28,8 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/rnd/ImplicitTagRawRulesDeriver.h>
-#include <hoot/core/rnd/ImplicitTagRulesDatabaseDeriver.h>
+#include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
+#include <hoot/rnd/schema/ImplicitTagRulesDatabaseDeriver.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -51,6 +51,8 @@ public:
 
   virtual QString getDescription() const override
   { return "Creates rules for adding missing type tags to a map"; }
+
+  virtual QString getType() const { return "rnd"; }
 
   virtual int runSimple(QStringList& args) override
   {

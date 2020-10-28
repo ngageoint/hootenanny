@@ -63,6 +63,8 @@ public:
   virtual QString getDescription() const override
   { return "Writes name tag counts for a map"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;

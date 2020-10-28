@@ -28,7 +28,7 @@
 #define IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
 
 // hoot
-#include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
+#include <hoot/rnd/visitors/ImplicitPoiTypeTagger.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 
 namespace hoot

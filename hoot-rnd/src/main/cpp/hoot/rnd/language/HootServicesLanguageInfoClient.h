@@ -29,7 +29,7 @@
 #define HOOT_SERVICES_LANGUAGE_INFO_CLIENT_H
 
 // hoot
-#include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/rnd/language/LanguageInfoProvider.h>
 
 // Qt
 #include <QStringList>

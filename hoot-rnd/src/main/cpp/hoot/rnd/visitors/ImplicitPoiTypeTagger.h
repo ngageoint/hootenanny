@@ -28,7 +28,7 @@
 #define IMPLICITPOITYPETAGGER_H
 
 // hoot
-#include <hoot/core/visitors/ImplicitTypeTaggerBase.h>
+#include <hoot/rnd/visitors/ImplicitTypeTaggerBase.h>
 
 namespace hoot
 {

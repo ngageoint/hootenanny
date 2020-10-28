@@ -31,7 +31,7 @@
 #include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/ImplicitPoiTypeTagger.h>
+#include <hoot/rnd/visitors/ImplicitPoiTypeTagger.h>
 
 namespace hoot
 {

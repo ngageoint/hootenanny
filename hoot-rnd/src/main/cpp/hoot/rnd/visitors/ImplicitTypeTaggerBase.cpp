@@ -32,7 +32,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/schema/ImplicitTagUtils.h>
+#include <hoot/rnd/schema/ImplicitTagUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 #include <hoot/core/util/Factory.h>
 

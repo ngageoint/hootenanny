@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/schema/ImplicitTagCustomRules.h>
+#include <hoot/rnd/schema/ImplicitTagCustomRules.h>
 
 // Qt
 #include <QString>

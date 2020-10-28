@@ -28,7 +28,7 @@
 #include "HootServicesLanguageInfoClient.h"
 
 // hoot
-#include <hoot/core/auth/HootServicesLoginManager.h>
+#include <hoot/rnd/auth/HootServicesLoginManager.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/NetworkIoUtils.h>
 #include <hoot/core/util/ConfigOptions.h>

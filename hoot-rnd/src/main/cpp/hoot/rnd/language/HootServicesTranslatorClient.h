@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/language/ToEnglishTranslator.h>
-#include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/rnd/language/LanguageInfoProvider.h>
 
 // Qt
 #include <QCache>

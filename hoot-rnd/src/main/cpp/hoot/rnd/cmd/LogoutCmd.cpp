@@ -49,6 +49,8 @@ public:
   virtual QString getDescription() const override
   { return "Logs a user out of the Hootenanny Web Services"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList& args) override
   {
     if (args.size() != 0)

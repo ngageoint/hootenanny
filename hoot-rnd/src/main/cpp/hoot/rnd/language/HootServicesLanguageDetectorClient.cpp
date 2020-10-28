@@ -28,10 +28,10 @@
 #include "HootServicesLanguageDetectorClient.h"
 
 // hoot
-#include <hoot/core/auth/HootServicesLoginManager.h>
+#include <hoot/rnd/auth/HootServicesLoginManager.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/NetworkIoUtils.h>
-#include <hoot/core/language/LanguageUtils.h>
+#include <hoot/rnd/language/LanguageUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>

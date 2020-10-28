@@ -36,7 +36,7 @@
 #include <hoot/core/io/ElementVisitorInputStream.h>
 #include <hoot/core/visitors/SchemaTranslationVisitor.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/schema/ImplicitTagUtils.h>
+#include <hoot/rnd/schema/ImplicitTagUtils.h>
 #include <hoot/core/util/Factory.h>
 
 // Qt

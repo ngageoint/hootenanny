@@ -29,7 +29,7 @@
 #define HOOT_SERVICES_LANGUAGE_INFO_MOCK_CLIENT_H
 
 // hoot
-#include <hoot/core/language/HootServicesLanguageInfoClient.h>
+#include <hoot/rnd/language/HootServicesLanguageInfoClient.h>
 
 // Qt
 #include <QStringList>

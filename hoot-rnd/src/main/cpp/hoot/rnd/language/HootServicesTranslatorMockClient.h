@@ -29,7 +29,7 @@
 #define HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H
 
 // hoot
-#include <hoot/core/language/HootServicesTranslatorClient.h>
+#include <hoot/rnd/language/HootServicesTranslatorClient.h>
 
 // Qt
 #include <QMap>

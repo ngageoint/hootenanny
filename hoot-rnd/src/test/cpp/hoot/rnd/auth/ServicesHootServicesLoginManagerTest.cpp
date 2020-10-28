@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/auth/HootServicesLoginManager.h>
+#include <hoot/rnd/auth/HootServicesLoginManager.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/UuidHelper.h>

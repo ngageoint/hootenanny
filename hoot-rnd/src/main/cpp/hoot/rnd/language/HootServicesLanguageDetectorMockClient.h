@@ -29,7 +29,7 @@
 #define HOOT_SERVICES_LANGUAGE_DETECTOR_MOCK_CLIENT_H
 
 // hoot
-#include <hoot/core/language/HootServicesLanguageDetectorClient.h>
+#include <hoot/rnd/language/HootServicesLanguageDetectorClient.h>
 
 // Qt
 #include <QMap>

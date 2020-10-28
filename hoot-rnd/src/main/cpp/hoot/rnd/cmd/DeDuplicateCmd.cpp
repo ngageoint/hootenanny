@@ -56,6 +56,8 @@ public:
   virtual QString getDescription() const override
   { return "Removes duplicate features within a single map or between two maps (experimental)"; }
 
+  virtual QString getType() const { return "rnd"; }
+
   virtual int runSimple(QStringList& args) override
   {  
     QElapsedTimer timer;
