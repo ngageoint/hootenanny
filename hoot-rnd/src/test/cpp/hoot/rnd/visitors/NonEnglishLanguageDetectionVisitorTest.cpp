@@ -34,7 +34,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/visitors/NonEnglishLanguageDetectionVisitor.h>
+#include <hoot/rnd/visitors/NonEnglishLanguageDetectionVisitor.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/FileUtils.h>
