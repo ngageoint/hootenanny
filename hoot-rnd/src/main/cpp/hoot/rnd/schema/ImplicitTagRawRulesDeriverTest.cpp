@@ -28,7 +28,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
-#include <hoot/core/schema/ImplicitTagRawRulesDeriver.h>
+#include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
 
 // Qt
 #include <QTemporaryFile>

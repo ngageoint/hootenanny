@@ -28,8 +28,8 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/schema/ImplicitTagRawRulesDeriver.h>
-#include <hoot/core/schema/ImplicitTagRulesDatabaseDeriver.h>
+#include <hoot/core/rnd/ImplicitTagRawRulesDeriver.h>
+#include <hoot/core/rnd/ImplicitTagRulesDatabaseDeriver.h>
 #include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
 #include <hoot/core/util/StringUtils.h>
 
