@@ -33,15 +33,15 @@
 namespace hoot
 {
 
-class DbListMapsCmd : public BaseCommand
+class DbListCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::DbListMapsCmd"; }
+  static std::string className() { return "hoot::DbListCmd"; }
 
-  DbListMapsCmd() = default;
+  DbListCmd() = default;
 
-  virtual QString getName() const override { return "db-list-maps"; }
+  virtual QString getName() const override { return "db-list"; }
 
   virtual QString getDescription() const override
   { return "Lists maps in the Hootenanny Web Services database available to a user"; }
@@ -72,6 +72,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DbListMapsCmd)
+HOOT_FACTORY_REGISTER(Command, DbListCmd)
 
 }

@@ -14,7 +14,7 @@ hoot convert --warn $CONFIG -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.cre
 hoot convert --warn $CONFIG -D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true test-files/ToyTestB.osm $HOOT_DB_URL/DbListMapsCmdTest2
 
 # list the maps (not dealing with public maps here; see ServiceHootApiDbTest)
-hoot db-list-maps --warn $CONFIG -D api.db.email=$HOOT_EMAIL $HOOT_DB_URL
+hoot db-list --warn $CONFIG -D api.db.email=$HOOT_EMAIL $HOOT_DB_URL
 
 # clean-up the databases
 hoot db-delete --warn $CONFIG -D api.db.email=$HOOT_EMAIL $HOOT_DB_URL/DbListMapsCmdTest1

@@ -49,16 +49,20 @@ public:
   HelpCmd()
   {
     // Add hoot-core commands to this list that are in production use but either are typically
-    // used by developers only during advanced tasks like model training, etc. or commands that
-    // admittedly may need some testing against real world data before they're ready for the prime
-    // time. This makes the command list display a little cleaner and less confusing.
+    // used by developers only, used during advanced tasks like model training, etc. only, or
+    // commands that can't be put into the hoot-rnd library for whatever reason but admittedly may
+    // need some testing against real world data before they're ready for the prime time. This makes
+    // the command list display a little cleaner and less confusing for those only interested in
+    // basic hoot functionality.
     _forceToRndList.append("build-model");
+    _forceToRndList.append("db-delete");
+    _forceToRndList.append("db-list");
     _forceToRndList.append("de-duplicate");
     _forceToRndList.append("login");
     _forceToRndList.append("logout");
-    _forceToRndList.append("plot-node-density");
     _forceToRndList.append("optimize-network-conf");
     _forceToRndList.append("perty");
+    _forceToRndList.append("plot-node-density");
     _forceToRndList.append("score-matches");
     _forceToRndList.append("score-matches-diff");
     _forceToRndList.append("sync-element-ids");
