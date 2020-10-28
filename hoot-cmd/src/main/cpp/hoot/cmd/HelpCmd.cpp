@@ -189,7 +189,7 @@ private:
          << endl;
     cout << endl;
 
-    cout << "For detailed command help type: hoot help (command name)" << endl << endl;
+    cout << "For detailed command help type: hoot help (command name)" << endl;
 
     cout << endl << "Basic Commands:" << endl << endl;
     _printCommands(coreCmds);
