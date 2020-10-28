@@ -57,18 +57,11 @@ public:
     _forceToRndList.append("build-model");
     _forceToRndList.append("db-delete");
     _forceToRndList.append("db-list");
-    _forceToRndList.append("de-duplicate");
     _forceToRndList.append("is-sorted");
-    _forceToRndList.append("login");
-    _forceToRndList.append("logout");
     _forceToRndList.append("optimize-network-conf");
     _forceToRndList.append("perturb");
-    _forceToRndList.append("plot-node-density");
     _forceToRndList.append("score-matches");
-    _forceToRndList.append("sync-element-ids");
     _forceToRndList.append("type-similarity");
-    _forceToRndList.append("type-tagger-rules");
-    _forceToRndList.append("write-name-counts");
   }
 
   static bool commandCompare(const std::string& n1, const std::string& n2)
