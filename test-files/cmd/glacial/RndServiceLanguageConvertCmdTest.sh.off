@@ -5,14 +5,14 @@ set -e
 # this test remains turned off and just gets checked manually from time to time.  German and Spanish Joshua translation services need 
 # to be enabled in the config and then Tomcat restarted to enable them for this test to pass.  Also, populate your OAuth keys in HOOT_OPTS.
 
-INPUT_DIR=test-files/cmd/glacial/ServiceLanguageConvertCmdTest
+INPUT_DIR=test-files/cmd/glacial/RndServiceLanguageConvertCmdTest
 #TODO: will eventually need a better input file that supports testing detection and multiple translation languages
-INPUT_FILE=$INPUT_DIR/ServiceLanguageConvertCmdTest-in.osm
-DETECTION_GOLD_FILE=$INPUT_DIR/ServiceLanguageConvertCmdTest-detect-out.osm
-TRANSLATION_GOLD_FILE=$INPUT_DIR/ServiceLanguageConvertCmdTest-translate-out.osm
-OUTPUT_DIR=test-output/cmd/glacial/ServiceLanguageConvertCmdTest
-DETECTION_OUTPUT_FILE=$OUTPUT_DIR/ServiceLanguageConvertCmdTest-detect-out.osm
-TRANSLATION_OUTPUT_FILE=$OUTPUT_DIR/ServiceLanguageConvertCmdTest-translate-out.osm
+INPUT_FILE=$INPUT_DIR/RndServiceLanguageConvertCmdTest-in.osm
+DETECTION_GOLD_FILE=$INPUT_DIR/RndServiceLanguageConvertCmdTest-detect-out.osm
+TRANSLATION_GOLD_FILE=$INPUT_DIR/RndServiceLanguageConvertCmdTest-translate-out.osm
+OUTPUT_DIR=test-output/cmd/glacial/RndServiceLanguageConvertCmdTest
+DETECTION_OUTPUT_FILE=$OUTPUT_DIR/RndServiceLanguageConvertCmdTest-detect-out.osm
+TRANSLATION_OUTPUT_FILE=$OUTPUT_DIR/RndServiceLanguageConvertCmdTest-translate-out.osm
 
 mkdir -p $OUTPUT_DIR
 
