@@ -63,7 +63,7 @@ endif
 	#Remove test datasets from db
 	PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%'" \
 	| while read mapname; do \
- 	   echo hoot db-delete-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
+ 	   echo hoot db-delete $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
 	done; \
 	true
 
@@ -72,7 +72,7 @@ clean:
 	@if [[ `PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='maps');"` = 't' ]]; then \
 		PGPASSWORD=$(PGPASSWORD) psql $(AUTH) -t -A -c "SELECT display_name FROM maps WHERE display_name like '%Cucumber%'" \
 		| while read mapname; do \
-			echo hoot db-delete-map $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
+			echo hoot db-delete $(HOOT_OPTS) $(DB_URL)/$$mapname | bash ; \
 		done; \
 		true; \
 	fi

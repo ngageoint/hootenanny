@@ -39,15 +39,15 @@ using namespace std;
 namespace hoot
 {
 
-class DbDeleteMapCmd : public BaseCommand
+class DbDeleteCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::DbDeleteMapCmd"; }
+  static string className() { return "hoot::DbDeleteCmd"; }
 
-  DbDeleteMapCmd() = default;
+  DbDeleteCmd() = default;
 
-  virtual QString getName() const override { return "db-delete-map"; }
+  virtual QString getName() const override { return "db-delete"; }
 
   virtual QString getDescription() const override
   { return "Deletes a map from the Hootenanny Web Services database"; }
@@ -71,6 +71,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, DbDeleteMapCmd)
+HOOT_FACTORY_REGISTER(Command, DbDeleteCmd)
 
 }

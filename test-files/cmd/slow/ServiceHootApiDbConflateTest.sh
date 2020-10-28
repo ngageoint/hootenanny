@@ -15,8 +15,8 @@ mkdir -p test-output/cmd/slow/ServiceHootApiDbConflateTest
 
 echo "Running select all conflate..."
 
-hoot db-delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" &
-hoot db-delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
 wait
 ###
 # I've run into strange situations where it seems like the whole files isn't being converted.
@@ -31,13 +31,13 @@ wait
 hoot conflate $HOOT_OPTS $CONFLATE_OPTS -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" test-output/cmd/slow/ServiceHootApiDbConflateTest/output1.osm
 hoot diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output1.osm test-output/cmd/slow/ServiceHootApiDbConflateTest/output1.osm
 
-hoot db-delete-map $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" &
-hoot db-delete-map $HOOT_OPTS "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesA-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/AllDataTypesB-ServiceHootApiDbConflateTest" &
 wait
 
 export PGPASSWORD=$DB_PASSWORD
-psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesA-ServiceHootApiDbConflateTest && echo "Error: db-delete-map did not remove AllDataTypesA-ServiceHootApiDbConflateTest dataset"
-psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesB-ServiceHootApiDbConflateTest && echo "Error: db-delete-map did not remove AllDataTypesB-ServiceHootApiDbConflateTest dataset"
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesA-ServiceHootApiDbConflateTest && echo "Error: db-delete did not remove AllDataTypesA-ServiceHootApiDbConflateTest dataset"
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw AllDataTypesB-ServiceHootApiDbConflateTest && echo "Error: db-delete did not remove AllDataTypesB-ServiceHootApiDbConflateTest dataset"
 
 echo "Running select by bounds conflate..."
 
@@ -52,13 +52,13 @@ wait
 hoot conflate $HOOT_OPTS $CONFLATE_OPTS -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 -D conflate.post.ops++="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" test-output/cmd/slow/ServiceHootApiDbConflateTest/output2.osm
 hoot diff test-files/cmd/slow/ServiceHootApiDbConflateTest/output2.osm test-output/cmd/slow/ServiceHootApiDbConflateTest/output2.osm
 
-hoot db-delete-map $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" &
-hoot db-delete-map $HOOT_OPTS "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
 wait
 
 export PGPASSWORD=$DB_PASSWORD
-psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcGisRoads-ServiceHootApiDbConflateTest && echo "Error: db-delete-map did not remove DcGisRoads-ServiceHootApiDbConflateTest dataset"
-psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcTigerRoads-ServiceHootApiDbConflateTest && echo "Error: db-delete-map did not remove DcTigerRoads-ServiceHootApiDbConflateTest dataset"
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcGisRoads-ServiceHootApiDbConflateTest && echo "Error: db-delete did not remove DcGisRoads-ServiceHootApiDbConflateTest dataset"
+psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcTigerRoads-ServiceHootApiDbConflateTest && echo "Error: db-delete did not remove DcTigerRoads-ServiceHootApiDbConflateTest dataset"
 
 # Delete the user
 PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

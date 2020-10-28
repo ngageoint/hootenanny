@@ -35,7 +35,7 @@ export outputtype=gdb
 MAKEFLAGS= make -f $HOOT_HOME/scripts/core/osm2ogrscript > /dev/null
 
 echo "Remove ingested data"
-hoot db-delete-map $HOOT_OPTS $DB_URL/$input
+hoot db-delete $HOOT_OPTS $DB_URL/$input
 
 # Remove file output
 rm -rf $outputfolder
