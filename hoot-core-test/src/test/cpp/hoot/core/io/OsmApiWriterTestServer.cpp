@@ -135,7 +135,7 @@ bool RetryVersionTestServer::respond(HttpConnection::HttpConnectionPtr &connecti
     //  The first time through, the 'version' of element 1 should fail.
     if (!_has_error)
     {
-      response.reset(new HttpResponse(HttpResponseCode::HTTP_CONFLICT, "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Way 1"));
+      response.reset(new HttpResponse(HttpResponseCode::HTTP_CONFLICT, "Version mismatch: Provided 2, server had: 1 of Way 1"));
       _has_error = true;
     }
     else
@@ -612,7 +612,7 @@ const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_CHANGE
     " </modify>\n"
     "</osmChange>";
 const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_RESPONSE =
-    "Changeset conflict: Version mismatch: Provided %1, server had: %2 of Way 1";
+    "Version mismatch: Provided %1, server had: %2 of Way 1";
 const char* OsmApiSampleRequestResponse::SAMPLE_CHANGESET_VERSION_FAILURE_GET_RESPONSE =
     "<?xml version='1.0' encoding='UTF-8'?>\n"
     "<osm version='0.6' generator='hootenanny'>\n"

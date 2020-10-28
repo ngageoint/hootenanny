@@ -222,7 +222,7 @@ private:
    */
   bool _resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset);
   /**
-   * @brief _fixConflict Try to fix the "Changeset conflict: Version mismatch" errors from the OSM API
+   * @brief _fixConflict Try to fix the "Version mismatch" errors from the OSM API
    * @param request Network request object initialized with OSM API URL
    * @param changeset Pointer to the failed changeset
    * @param conflictExplanation Error message from OSM API

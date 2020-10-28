@@ -49,9 +49,9 @@ OsmApiMatchFailure::OsmApiMatchFailure()
     _deletePreconditionFailure(
       "Precondition failed: (Node|Way|Relation) (-?[0-9]+) is still used by (node|way|relation)s ((-?[0-9]+,?)+)",
       QRegularExpression::CaseInsensitiveOption),
-    //  Changeset conflict: Version mismatch: Provided 2, server had: 1 of Node 4869875616
+    //  Version mismatch: Provided 2, server had: 1 of Node 4869875616
     _conflictVersionFailure(
-      "Changeset conflict: Version mismatch: Provided ([0-9]+), server had: ([0-9]+) of (Node|Way|Relation) ([0-9]+)",
+      "Version mismatch: Provided ([0-9]+), server had: ([0-9]+) of (Node|Way|Relation) ([0-9]+)",
       QRegularExpression::CaseInsensitiveOption),
     //  Changeset conflict: The changeset 49514098 was closed at 2020-01-08 16:28:56 UTC
     _changesetClosedFailure(
@@ -176,7 +176,7 @@ bool OsmApiMatchFailure::matchesChangesetConflictVersionMismatchFailure(
     long& element_id, ElementType::Type& element_type,
     long& version_old, long& version_new) const
 {
-  //  Changeset conflict: Version mismatch: Provided 2, server had: 1 of Node 4869875616
+  //  Version mismatch: Provided 2, server had: 1 of Node 4869875616
   QRegularExpressionMatch match = _conflictVersionFailure.match(hint);
   if (match.hasMatch())
   {
