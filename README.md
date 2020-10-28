@@ -63,7 +63,7 @@ of adding new non-conflicting featues.
   * This workflow is the same as Differential Conflation with the added step of transferring tags to existing features in map A from matching features in map B. 
   * Use this type of conflation when you want to fill holes in your dataset with data from another source without modifying geometries in your original data but possibly modifying its tags. 
   * This is similar to Attribute Conflation but with the added capability of adding new non-conflicting features.
-* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cookie-cut.asciidoc)** (aka Cookie Cutter Conflation) - _Completely replace a section_
+* **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cut.asciidoc)** (aka Cookie Cutter Conflation) - _Completely replace a section_
   * Either:
     * Define a region in map A and replace data in that region with data in the same region from map B OR 
     * Define a region in map A to preserve and replace data outside of it with data outside of the region from map B. 
