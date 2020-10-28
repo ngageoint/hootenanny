@@ -56,7 +56,7 @@ public:
     _forceToRndList.append("de-duplicate");
     _forceToRndList.append("login");
     _forceToRndList.append("logout");
-    _forceToRndList.append("node-density-plot");
+    _forceToRndList.append("plot-node-density");
     _forceToRndList.append("optimize-network-conf");
     _forceToRndList.append("perty");
     _forceToRndList.append("score-matches");

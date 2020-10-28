@@ -50,16 +50,16 @@ using namespace std;
 namespace hoot
 {
 
-class NodeDensityPlotCmd : public BaseCommand
+class PlotNodeDensityCmd : public BaseCommand
 {
 
   public:
 
-    static string className() { return "hoot::NodeDensityPlotCmd"; }
+    static string className() { return "hoot::PlotNodeDensityCmd"; }
 
-    NodeDensityPlotCmd() = default;
+    PlotNodeDensityCmd() = default;
 
-    virtual QString getName() const override { return "node-density-plot"; }
+    virtual QString getName() const override { return "plot-node-density"; }
 
     virtual QString getDescription() const override
     { return "Creates a node density plot for a map"; }
@@ -289,6 +289,6 @@ class NodeDensityPlotCmd : public BaseCommand
     }
 };
 
-HOOT_FACTORY_REGISTER(Command, NodeDensityPlotCmd)
+HOOT_FACTORY_REGISTER(Command, PlotNodeDensityCmd)
 
 }

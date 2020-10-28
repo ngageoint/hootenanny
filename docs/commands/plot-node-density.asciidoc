@@ -1,9 +1,9 @@
-[[node-density-plot]]
-== node-density-plot
+[[plot-node-density]]
+== plot-node-density
 
 === Description
 
-The +node-density-plot+ command creates a density plot of the specified input.
+The +nplot-node-density+ command creates a density plot of the specified input.
 
 * +input+         - Input path; may be any supported input format (e.g. OSM file).
 * +output-image+  - Output image name. Must always be a +.png+ file. A corresponding +.pngw+ file will also be generated.
@@ -55,7 +55,7 @@ took about 4.5 hours.
 === Usage
 
 --------------------------------------
-node-density-plot (input) (output-image) (max-dimension) [base-colors] [multiplier]
+plot-node-density (input) (output-image) (max-dimension) [base-colors] [multiplier]
 --------------------------------------
 
 ==== Example
@@ -64,14 +64,14 @@ Paint node density using the default color scale of black to white where black i
 pixels or a maximum width of 100 pixels.
 
 --------------------------------------
-hoot node-density-plot MyInput.osm.pbf MyLocalOutput.png 100
+hoot plot-node-density MyInput.osm.pbf MyLocalOutput.png 100
 --------------------------------------
 
 Paint node density using the default color scale of transparent brown to opaque green. Transparent is no data. The image will be at most 256 
 pixels on one side.
 
 --------------------------------------
-hoot node-density-plot MyInput.osm.pbf MyLocalOutput.png 256 "100,0,0,0" "0,255,0,255"
+hoot plot-node-density MyInput.osm.pbf MyLocalOutput.png 256 "100,0,0,0" "0,255,0,255"
 --------------------------------------
 
 === See Also

@@ -765,7 +765,7 @@ Find street intersection locations in a map by street name:
 ===== Create a node density plot:
 
 -----
-    hoot node-density-plot input.osm output.png 100
+    hoot plot-node-density input.osm output.png 100
 -----
 
 ===== Detect railway intersections:
