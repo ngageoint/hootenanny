@@ -435,9 +435,8 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
   return relationMemberIdsToRemove;
 }
 
-std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
-                                                       const set<ElementId>& eid,
-                                                       const bool preserveTypes)
+std::shared_ptr<Element> BuildingMerger::buildBuilding(
+  const OsmMapPtr& map, const set<ElementId>& eid, const bool preserveTypes)
 {
   if (eid.size() > 0)
   {
@@ -525,7 +524,7 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
         }
       }
 
-      if (!isBuilding)
+      if (e && !isBuilding)
       {
         // If the building wasn't a relation, then just add the way building on the list of
         // buildings to be merged into a relation.
@@ -723,12 +722,12 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   return parentRelation;
 }
 
-std::shared_ptr<Element> BuildingMerger::_buildBuilding(const OsmMapPtr& map,
-                                                        const bool unknown1) const
+std::shared_ptr<Element> BuildingMerger::_buildBuilding(
+  const OsmMapPtr& map, const bool unknown1) const
 {
   set<ElementId> eids;
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-    it != _pairs.end(); ++it)
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
+       ++it)
   {
     if (unknown1)
     {

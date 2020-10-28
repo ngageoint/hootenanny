@@ -57,8 +57,7 @@ PoiPolygonMerger::PoiPolygonMerger() :
 MergerBase(),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
 _tagMergerClass(""),
-// TODO: change back to false
-_writeDebugMaps(true)
+_writeDebugMaps(false)
 {
 }
 
@@ -66,8 +65,7 @@ PoiPolygonMerger::PoiPolygonMerger(const set<pair<ElementId, ElementId>>& pairs)
 _pairs(pairs),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
 _tagMergerClass(""),
-// TODO: change back to false
-_writeDebugMaps(true)
+_writeDebugMaps(false)
 {
   assert(_pairs.size() >= 1);
 }
@@ -122,11 +120,44 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
   return _tagMerger;
 }
 
+void PoiPolygonMerger::_removeMissingElementRefs(const OsmMapPtr& map)
+{
+  std::set<std::pair<ElementId, ElementId>> modifiedPairs;
+  LOG_VART(_pairs);
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
+       ++it)
+  {
+    const pair<ElementId, ElementId>& p = *it;
+    ElementPtr e1 = map->getElement(p.first);
+    if (!e1)
+    {
+      LOG_TRACE(p.first << " does not exist. Removing match pair its involved in...");
+    }
+    ElementPtr e2 = map->getElement(p.second);
+    if (!e2)
+    {
+      LOG_TRACE(p.second << " does not exist. Removing match pair its involved in...");
+    }
+    if (e1 && e2)
+    {
+      modifiedPairs.insert(p);
+    }
+  }
+  _pairs = modifiedPairs;
+  LOG_VART(_pairs);
+}
+
 void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
-  /// See
-  /// https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
-  /// for more details.
+  // After the addition of the call to PoiPolygonMergerCreator::convertSharedMatchesToReviews in
+  // UnifyingConflator, some of the elements passed into this merger at times no longer exist by the
+  // point they are to be merged here (this doesn't completely make sense yet). So, this removes any
+  // that don't exist from the to merge list beforehand.
+  _removeMissingElementRefs(map);
+  if (_pairs.size() == 0)
+  {
+    return;
+  }
 
   // Merge all POI tags first, but keep Unknown1 and Unknown2 separate. It is implicitly assumed
   // that since they're in a single group they all represent the same entity.
@@ -302,8 +333,6 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
 Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s)
 {
-  LOG_TRACE("Merging POI tags for status: " << s << "...");
-
   Tags result;
 
   LOG_VART(_autoMergeManyPoiToOnePolyMatches);
@@ -314,16 +343,14 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s)
     LOG_VART(p);
     ElementPtr e1 = map->getElement(p.first);
     ElementPtr e2 = map->getElement(p.second);
-    if (e1->getStatus() == s && e1->getElementType() == ElementType::Node)
+    if (e1 && e1->getStatus() == s && e1->getElementType() == ElementType::Node)
     {
-      LOG_VART(e1->getElementId());
-      //LOG_VART(e1);
+      LOG_TRACE("Merging POI tags for: " << e1->getElementId() << " with status: " << s << "...");
       result = _getTagMerger()->mergeTags(result, e1->getTags(), e1->getElementType());
     }
-    if (e2->getStatus() == s && e2->getElementType() == ElementType::Node)
+    if (e2 && e2->getStatus() == s && e2->getElementType() == ElementType::Node)
     {
-      LOG_VART(e2->getElementId());
-      //LOG_VART(e2);
+      LOG_TRACE("Merging POI tags for: " << e2->getElementId() << " with status: " << s << "...");
       result = _getTagMerger()->mergeTags(result, e2->getTags(), e2->getElementType());
     }
   }
@@ -343,11 +370,11 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
     const pair<ElementId, ElementId>& p = *it;
     ElementPtr e1 = map->getElement(p.first);
     ElementPtr e2 = map->getElement(p.second);
-    if (e1->getStatus() == s && e1->getElementType() != ElementType::Node)
+    if (e1 && e1->getStatus() == s && e1->getElementType() != ElementType::Node)
     {
       result.push_back(e1->getElementId());
     }
-    if (e2->getStatus() == s && e2->getElementType() != ElementType::Node)
+    if (e2 && e2->getStatus() == s && e2->getElementType() != ElementType::Node)
     {
       result.push_back(e2->getElementId());
     }
@@ -387,8 +414,8 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
     return BuildingMerger::buildBuilding(map, eids)->getElementId();
   }
 
-  // the exact pairing doesn't matter for the building merger, it just breaks it back out into
-  // two groups
+  // The exact pairing doesn't matter for the building merger, as it just breaks it back out into
+  // two groups.
   for (size_t i = 0; i < max(buildings1.size(), buildings2.size()); i++)
   {
     size_t i1 = min(i, buildings1.size() - 1);
