@@ -1,12 +1,12 @@
-[[cut]]
-== cut
+[[cookie-cut]]
+== cookie-cut
 
 === Description
 
 When you have two data sets to conflate where one is clearly better than the other in every way (attributes and geometric accuracy),
 the cookie cutter can be a very useful tool. For instance, you may have country wide primary roads and very high quality city
 scale roads for a small region. In this case you'll want to remove a section of the country scale roads, then conflate the
-high quality roads back in.  The +cut+ command functions by reading in a OSM input file as the +cutter-shape+ and
+high quality roads back in.  The +cookie-cut+ command functions by reading in a OSM input file as the +cutter-shape+ and
 removes the cookie cutter shape from the contents of the 'dough' file. The resulting geometries are written to 'output'.
 The dough input is limited by the available RAM.
 
@@ -21,7 +21,7 @@ The dough input is limited by the available RAM.
 === Usage
 
 --------------------------------------
-cut (cutter-shape) (dough) (output) [buffer] [--crop]
+cookie-cut (cutter-shape) (dough) (output) [buffer] [--crop]
 --------------------------------------
 
 ==== Example
@@ -34,7 +34,7 @@ cp $HOOT_HOME/test-files/DcTigerRoads.osm DcSmall.osm
 # is generated. -15m works well for this square data, but will likely cause
 # issues on more complex shapes.
 hoot generate-alpha-shape --alpha 1000 --buffer -15 DcSmall.osm DcSmallBounds.shp
-hoot cut DcSmallBounds.shp DcBig.osm DcBigCut.osm
+hoot cookie-cut DcSmallBounds.shp DcBig.osm DcBigCut.osm
 hoot conflate DcSmall.osm DcBigCut.osm ConflatedDc.osm
 --------------------------------------
 
