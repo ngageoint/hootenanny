@@ -285,7 +285,8 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, EvalPointMovesCmd)
+// not currently in use
+//HOOT_FACTORY_REGISTER(Command, EvalPointMovesCmd)
 
 }
 

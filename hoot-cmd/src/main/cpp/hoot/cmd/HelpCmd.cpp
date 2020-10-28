@@ -64,7 +64,7 @@ public:
     _forceToRndList.append("perty");
     _forceToRndList.append("plot-node-density");
     _forceToRndList.append("score-matches");
-    _forceToRndList.append("score-matches-diff");
+    //_forceToRndList.append("score-matches-diff");
     _forceToRndList.append("sync-element-ids");
     _forceToRndList.append("type-similarity");
     _forceToRndList.append("type-tagger-rules");

@@ -108,6 +108,7 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, WriteNameCountsCmd)
+// not currently in use
+//HOOT_FACTORY_REGISTER(Command, WriteNameCountsCmd)
 
 }

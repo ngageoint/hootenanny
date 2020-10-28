@@ -41,8 +41,8 @@ psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name fro
 
 echo "Running select by bounds conflate..."
 
-hoot db-delete-map $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" &
-hoot db-delete-map $HOOT_OPTS "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" &
+hoot db-delete $HOOT_OPTS "$DB_URL/DcTigerRoads-ServiceHootApiDbConflateTest" &
 wait
 
 hoot convert $HOOT_OPTS test-files/DcGisRoads.osm "$DB_URL/DcGisRoads-ServiceHootApiDbConflateTest" &
