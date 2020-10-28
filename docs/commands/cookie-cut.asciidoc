@@ -33,7 +33,7 @@ cp $HOOT_HOME/test-files/DcTigerRoads.osm DcSmall.osm
 # It is a good idea to manually verify the alpha shape for correctness after it
 # is generated. -15m works well for this square data, but will likely cause
 # issues on more complex shapes.
-hoot generate-alpha-shape --alpha 1000 --buffer -15 DcSmall.osm DcSmallBounds.shp
+hoot alpha-shape --alpha 1000 --buffer -15 DcSmall.osm DcSmallBounds.shp
 hoot cookie-cut DcSmallBounds.shp DcBig.osm DcBigCut.osm
 hoot conflate DcSmall.osm DcBigCut.osm ConflatedDc.osm
 --------------------------------------

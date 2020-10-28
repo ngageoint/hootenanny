@@ -161,7 +161,7 @@ image::images/CookieCutter.png[]
 The cookie cutter operation is designed for situations where two data sets contain significant overlap, but one data set is better in _every way_. A typical scenario that warrants this strategy is coarse country wide data that needs to be conflated with high quality city level data. When employing cookie cutter a polygon that approximates the bounds of the city will be removed from the coarse country data before conflation.
 
 [[horizontalconflate_Boulder1]]
-.Boulder, CO with Street centerlines (gray) and OpenStreetMap Highways (red).  Right image depicts generate-alpha-shape (red polygon).  Street centerline data obtained from the link:$$https://www-static.bouldercolorado.gov/docs/opendata/Streets.zip$$[City of Boulder] and Highway data set downloaded from an OSM data provider.  The basemap shown here is OSM.
+.Boulder, CO with Street centerlines (gray) and OpenStreetMap Highways (red).  Right image depicts alpha-shape (red polygon).  Street centerline data obtained from the link:$$https://www-static.bouldercolorado.gov/docs/opendata/Streets.zip$$[City of Boulder] and Highway data set downloaded from an OSM data provider.  The basemap shown here is OSM.
 image::images/hootid-horizconfl.png[]
 
 [[horizontalconflate_hootid]]

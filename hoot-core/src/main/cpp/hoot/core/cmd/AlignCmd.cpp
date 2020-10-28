@@ -47,7 +47,7 @@ public:
 
   AlignCmd() = default;
 
-  virtual QString getName() const override { return "rubber-sheet"; }
+  virtual QString getName() const override { return "align"; }
 
   virtual QString getDescription() const override
   { return "Brings two maps into alignment using rubbersheeting"; }

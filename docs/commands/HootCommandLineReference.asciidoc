@@ -23,6 +23,7 @@ arguments and a short help screen will be displayed.
 :leveloffset: 1
 // be sure all included asciidocs end with a newline
 include::align.asciidoc[]
+include::alpha-shape.asciidoc[]
 include::build-model.asciidoc[]
 include::changeset-apply.asciidoc[]
 include::changeset-derive.asciidoc[]
@@ -42,7 +43,6 @@ include::db-list.asciidoc[]
 include::diff.asciidoc[]
 include::evaluate-point-moves.asciidoc[]
 include::extent.asciidoc[]
-include::generate-alpha-shape.asciidoc[]
 include::help.asciidoc[]
 include::info.asciidoc[]
 include::is-sorted.asciidoc[]

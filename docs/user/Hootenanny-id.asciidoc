@@ -388,7 +388,7 @@ Cookie Cutter & Horizontal Conflation is intended for use cases where a lower qu
 .Example of alpha shape generated with a 1km buffer around a "contrived" urban area (not an actual physical location). The blue line represents the convex hull and the red the alpha shape with the applied -1 km buffer.
 image::images/id/hoot_convexhull_example.png[scaledwidth="40%"]
 
-NOTE: In the user interface there is no way to tune or modify the generated generate-alpha-shape. You can however configure the alpha-value from the command line (see generate-alpha-shape in User Guide). In either case, the generated generate-alpha-shape will always approximate the bounds of the data regardless of shape of the urban area.
+NOTE: In the user interface there is no way to tune or modify the generated alpha shape. You can however configure the alpha-value from the command line (see generate-alpha-shape in User Guide). In either case, the generated alpha shape will always approximate the bounds of the data regardless of shape of the urban area.
 
 ==== Advanced Conflation
 

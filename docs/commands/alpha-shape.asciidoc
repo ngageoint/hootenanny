@@ -1,9 +1,9 @@
-[[generate-alpha-shape]]
-== generate-alpha-shape
+[[alpha-shape]]
+== alpha-shape
 
 === Description
 
-The +generate-alpha-shape+ command provides a way to generate a "concave hull" for a set of points.  Specifically, it reads data from
+The +alpha-shape+ command provides a way to generate a "concave hull" for a set of points.  Specifically, it reads data from
 one input, calculates the alpha shape and writes the resulting multipolygon to output. This is most useful when seeding the
 +cookie-cut+ command. The degree of the concaveness is determined by the alpha parameters. A small alpha parameter creates a
 shape with a large number of holes and concave sections. A large alpha value creates a shape closer to a convex hull. An alpha
@@ -27,7 +27,7 @@ be a multipolygon shapefile with a single record. Hootenanny doesn't support rel
 === Usage
 
 --------------------------------------
-generate-alpha-shape [--alpha value] [--buffer value] (points) (output)
+alpha-shape [--alpha value] [--buffer value] (points) (output)
 --------------------------------------
 
 ==== Example
@@ -36,20 +36,20 @@ Calculate an alpha shape using the points in CapitalHeightsBuildings.shp with an
 (Both commands are functionally equivalent.)
 
 --------------------------------------
-hoot generate-alpha-shape --alpha 200 CapitalHeightsBuildings.shp CapitalHeightsShape.shp
-hoot generate-alpha-shape --alpha 200 --buffer 0 CapitalHeightsBuildings.shp CapitalHeightsShape.shp
+hoot alpha-shape --alpha 200 CapitalHeightsBuildings.shp CapitalHeightsShape.shp
+hoot alpha-shape --alpha 200 --buffer 0 CapitalHeightsBuildings.shp CapitalHeightsShape.shp
 --------------------------------------
 
 Calculate an alpha shape using the same input with an alpha value of 200 m and a buffer of -10 m:
 
 --------------------------------------
-hoot generate-alpha-shape --alpha 200 --buffer -10 CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.shp
+hoot alpha-shape --alpha 200 --buffer -10 CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.shp
 --------------------------------------
 
 Calculate an alpha shape without an alpha value that is automatically generated based on the input data, and a buffer of 10 m:
 
 --------------------------------------
-hoot generate-alpha-shape --buffer 10 CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.shp
+hoot alpha-shape --buffer 10 CapitalHeightsBuildings.shp 200 0 CapitalHeightsShape.shp
 --------------------------------------
 
 

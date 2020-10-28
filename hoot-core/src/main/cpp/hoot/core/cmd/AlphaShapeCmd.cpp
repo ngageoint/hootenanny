@@ -46,15 +46,15 @@ namespace hoot
 {
 using namespace std;
 
-class GenerateAlphaShapeCmd : public BaseCommand
+class AlphaShapeCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::GenerateAlphaShapeCmd"; }
+  static string className() { return "hoot::AlphaShapeCmd"; }
 
-  GenerateAlphaShapeCmd() = default;
+  AlphaShapeCmd() = default;
 
-  virtual QString getName() const override { return "generate-alpha-shape"; }
+  virtual QString getName() const override { return "alpha-shape"; }
 
   virtual QString getDescription() const override
   { return "Generates a shape that covers a set of features in a map"; }
@@ -150,6 +150,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, GenerateAlphaShapeCmd)
+HOOT_FACTORY_REGISTER(Command, AlphaShapeCmd)
 
 }
