@@ -171,10 +171,17 @@ private:
     LOG_VART(coreCmds.size());
     LOG_VART(rndCmds.size());
 
+    cout << "Basic Commands:" << endl << endl;
+    _printCommands(coreCmds);
+    cout << endl << "Advanced Commands:" << endl << endl;
+    _printCommands(rndCmds);
+
     // Please update the asciidoc user documentation if you change this usage.
-    cout << "Usage: hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] " <<
+    cout << endl << "Usage: hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] " <<
             "[-D optionName=\"<optionValueEntry 1>;<optionValueEntry 2>;...\"] [args]"
          << endl << endl;
+
+    cout << "For detailed command help type: hoot help (command name)" << endl << endl;
 
     cout << "Log Levels:" << endl;
     cout << "  --trace" << endl;
@@ -191,14 +198,6 @@ private:
     cout << "  Remove:  [-D optionName-=optionValueEntry]" << endl;
     cout << "  Replace: [-D optionName=\"<old optionValueEntry 1>-><new optionValueEntry 1>;<old optionValueEntry 2>-><new optionValueEntry 2>\"...]"
          << endl;
-    cout << endl;
-
-    cout << "For detailed command help type: hoot help (command name)" << endl;
-
-    cout << endl << "Basic Commands:" << endl << endl;
-    _printCommands(coreCmds);
-    cout << endl << "Advanced Commands:" << endl << endl;
-    _printCommands(rndCmds);
 
     return 0;
   }

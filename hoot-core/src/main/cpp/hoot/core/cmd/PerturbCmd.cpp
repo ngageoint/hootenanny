@@ -55,7 +55,7 @@ public:
 
   PerturbCmd() = default;
 
-  virtual QString getName() const override { return "perty"; }
+  virtual QString getName() const override { return "perturb"; }
 
   virtual QString getDescription() const override { return "Perturbs a map using PERTY"; }
 
