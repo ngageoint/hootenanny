@@ -96,7 +96,7 @@ public:
                                                  std::vector<long>& member_ids, ElementType::Type& member_type) const;
   /**
    * @brief matchesChangesetConflictVersionMismatchFailure Checks the return from the API to see if it is similar to the following error message:
-   *        "Changeset conflict: Version mismatch: Provided 2, server had: 1 of Node 4869875616"
+   *        "Version mismatch: Provided 2, server had: 1 of Node 4869875616"
    * @param hint Error message from OSM API
    * @param member_id ID of the member element that caused the element to fail
    * @param member_type Type of the member element that caused the element to fail
