@@ -22,6 +22,7 @@ arguments and a short help screen will be displayed.
 
 :leveloffset: 1
 // be sure all included asciidocs end with a newline
+include::align.asciidoc[]
 include::build-model.asciidoc[]
 include::changeset-apply.asciidoc[]
 include::changeset-derive.asciidoc[]
@@ -53,7 +54,6 @@ include::multiary-score-poi-matches.asciidoc[]
 include::optimize-network-conf.asciidoc[]
 include::perturb.asciidoc[]
 include::plot-node-density.asciidoc[]
-include::rubber-sheet.asciidoc[]
 include::schema.asciidoc[]
 include::score-matches.asciidoc[]
 include::score-matches-diff.asciidoc[]

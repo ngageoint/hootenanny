@@ -263,7 +263,7 @@ See the User Guide for more details on command usage.
 ===== Bring two maps closer in alignment:
 
 -----
-    hoot rubber-sheet input1.osm input2.osm output.osm
+    hoot align input1.osm input2.osm output.osm
 -----
 
 ===== Display the geospatial extent of a map:

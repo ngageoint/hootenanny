@@ -39,17 +39,18 @@
 namespace hoot
 {
 
-class RubberSheetCmd : public BaseCommand
+class AlignCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::RubberSheetCmd"; }
+  static std::string className() { return "hoot::AlignCmd"; }
 
-  RubberSheetCmd() = default;
+  AlignCmd() = default;
 
   virtual QString getName() const override { return "rubber-sheet"; }
 
-  virtual QString getDescription() const override { return "Brings two maps into alignment"; }
+  virtual QString getDescription() const override
+  { return "Brings two maps into alignment using rubbersheeting"; }
 
   virtual int runSimple(QStringList& args) override
   {
@@ -110,14 +111,14 @@ public:
     }
 
     LOG_STATUS(
-      "Rubber sheeting operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      "Alignment operation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
       " total.");
 
     return 0;
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, RubberSheetCmd)
+HOOT_FACTORY_REGISTER(Command, AlignCmd)
 
 }
 

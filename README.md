@@ -155,7 +155,7 @@ hoot.saveMap(map, "output.osm");
 
 In addition to conflating map data, Hootenanny also provides these capabilities:
 * [Add missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features implicitly based on their name
-* [Align two maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/rubber-sheet.asciidoc) more closely with each other
+* [Align two maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/align.asciidoc) more closely with each other
 * [Apply data transformation operations](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations) to a map
 * [Calculate the geospatial extent](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/extent.asciidoc) of a map
 * [Clean map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/clean.asciidoc)
