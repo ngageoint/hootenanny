@@ -31,8 +31,8 @@
 // hoot
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/language/LanguageDetector.h>
-#include <hoot/core/language/LanguageInfoProvider.h>
+#include <hoot/rnd/language/LanguageDetector.h>
+#include <hoot/rnd/language/LanguageInfoProvider.h>
 
 // Qt
 #include <QMap>
