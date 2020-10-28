@@ -44,7 +44,7 @@ public:
   virtual QString getName() const override { return "db-list"; }
 
   virtual QString getDescription() const override
-  { return "Lists maps in the Hootenanny Web Services database available to a user"; }
+  { return "Lists maps in the Hootenanny Web Services database"; }
 
   virtual int runSimple(QStringList& args) override
   {
