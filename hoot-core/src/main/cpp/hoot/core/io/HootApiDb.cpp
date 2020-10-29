@@ -1090,7 +1090,7 @@ bool HootApiDb::isSupported(const QUrl& url)
                << MetadataTags::HootApiDbScheme() << "://myhost:5432/mydb/mylayer/1");
       valid = false;
     }
-    // need this for a base db connection; like used by db-list-maps
+    // need this for a base db connection; like used by db-list command
     else if (plist.size() == 2)
     {
       if (plist[1] == "")

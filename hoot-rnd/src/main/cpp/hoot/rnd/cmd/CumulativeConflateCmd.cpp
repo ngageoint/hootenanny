@@ -88,7 +88,8 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
+// not currently in use
+//HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
 
 }
 

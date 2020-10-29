@@ -380,7 +380,7 @@ NOTE: Average conflation will modify the merged layer geometry for any matching 
 
 Cookie Cutter & Horizontal Conflation is intended for use cases where a lower quality dataset such as a rural road network generated from a low resolution map needs to be conflated with a more accurate or precise dataset such as a urban centerline layer digitized from accurate high resolution imagery. In this scenario, the higher quality data (typically representing an urban area a city core) is buffered and cut, then stitched into the coarse resolution road layer using edge matching routines to create blend of the two layers. To walk through a sample Horizontal Conflation use case see <<HootiD-HorizontalConflationExample>>.  Additional background on Cookie Cutter and Horizontal conflation can also be found in the link:$$https://github.com/ngageoint/hootenanny/releases/download/v0.2.20/Hootenanny.-.User.Guide.pdf$$[Hootenanny User Guide]. When using this method the following settings are applied.
 
-* The bounds of the Reference layer (cookie cut portion) are approximated using an alpha shape (e.g. cookie-cut) that is created by generating a convex hull around the layer.
+* The bounds of the Reference layer (cookie cut portion) are approximated using an alpha shape (e.g. cut command) that is created by generating a convex hull around the layer.
 * The bounds of the Reference layer are buffered by 1km on each side of the convex hull (2 km distance in total). This improves the chances of merging seams between the two layers. Note that this operation works better at the city scale then at a regional or larger scale.
 * The Secondary layer (dough portion) is cut by the alpha shape generated from the Reference layer and matched to road features within the Secondary layer that fall within the buffered retion.
 
@@ -388,7 +388,7 @@ Cookie Cutter & Horizontal Conflation is intended for use cases where a lower qu
 .Example of alpha shape generated with a 1km buffer around a "contrived" urban area (not an actual physical location). The blue line represents the convex hull and the red the alpha shape with the applied -1 km buffer.
 image::images/id/hoot_convexhull_example.png[scaledwidth="40%"]
 
-NOTE: In the user interface there is no way to tune or modify the generated generate-alpha-shape. You can however configure the alpha-value from the command line (see generate-alpha-shape in User Guide). In either case, the generated generate-alpha-shape will always approximate the bounds of the data regardless of shape of the urban area.
+NOTE: In the user interface there is no way to tune or modify the generated alpha shape. You can however configure the alpha-value from the command line (see alpha-shape in User Guide). In either case, the generated alpha shape will always approximate the bounds of the data regardless of shape of the urban area.
 
 ==== Advanced Conflation
 
@@ -609,7 +609,7 @@ Zooming in with relevant imagery displayed in the background, we can see that _S
 .Verifying data on imagery. Boulder, CO; Boulder city street centerline (gray), OSM highways (red); DigitalGlobe GlobalBasemap (GBM).
 image::images/id/hoot_boulder_streetcenterline.png[scaledwidth="30%"]
 
-When using this conflation type, the first layer (cookie-cut) will contain the reference geometry and be used to perform the cookie-cut operation. The second layer represents the dough from which the first layer is cut. The process is depicted below in <<Cookie-Cutter_conceptual_workflow>>. In the image labeled A, the input dough layer (Boulder OSM) is shown. In image B, an alpha shape is generated around the cookie-cut region defined by Layer 1, the Boulder City Road data, with a -1 km buffer applied. The process continues with the OSM dough layer "cut" using the alpha shape (image C). Finally the two layers are combined (image D).
+When using this conflation type, the first layer (cookie-cut) will contain the reference geometry and be used to perform the cut operation. The second layer represents the dough from which the first layer is cut. The process is depicted below in <<Cookie-Cutter_conceptual_workflow>>. In the image labeled A, the input dough layer (Boulder OSM) is shown. In image B, an alpha shape is generated around the cut region defined by Layer 1, the Boulder City Road data, with a -1 km buffer applied. The process continues with the OSM dough layer "cut" using the alpha shape (image C). Finally the two layers are combined (image D).
 
 [[Cookie-Cutter_conceptual_workflow]]
 .Cookie Cutter and Horizontal conceptual workflow using Boulder, CO streets.
@@ -626,9 +626,9 @@ Viewing the workflow within the Hootenanny UI, the Boulder Streets data is added
 .Two Boulder, Colorado roads conflated using Cookie Cutter and Horizontal Conflation. Shown here are Boulder City Street centerlines (pink) as the Reference layer and OSM highways (blue) as the Secondary layer with DigitalGlobe GlobalBasemap (GBM). Note the use of OSM data is not an indication of the data quality but simply used here as an example of a larger dataset covering the greater Boulder metropolitan region.
 image::images/id/hoot_boulder_preconflate.png[]
 
-The final conflated layer represents the merger of the Boulder streets layer and the OSM highways data with all duplicates removed and cookie-cut roads joined. Once the conflation process has completed, the resulting dataset can be exported as a shapefile, FGDB, or WFS from the UI following the steps outlined <<Hoot-iD_Datasets,here>>.
+The final conflated layer represents the merger of the Boulder streets layer and the OSM highways data with all duplicates removed and cut roads joined. Once the conflation process has completed, the resulting dataset can be exported as a shapefile, FGDB, or WFS from the UI following the steps outlined <<Hoot-iD_Datasets,here>>.
 
-.Boulder cookie-cut and horizontal conflation output (green) displayed on DigitalGlobe GlobalBasemap (GBM).
+.Boulder cut and horizontal conflation output (green) displayed on DigitalGlobe GlobalBasemap (GBM).
 image::images/id/hoot_boulder_merged.png[]
 
 [[Poi2PoiConflation]]

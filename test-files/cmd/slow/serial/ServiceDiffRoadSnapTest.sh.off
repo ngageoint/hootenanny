@@ -79,7 +79,7 @@ hoot changeset-apply $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OUTPUT_DIR/d
 hoot convert $GENERAL_OPTS $DB_OPTS -D reader.use.data.source.ids=true $OSM_API_DB_URL $OUTPUT_DIR/out.osm
 hoot diff $GENERAL_OPTS $GOLD_DIR/out.osm $OUTPUT_DIR/out.osm
 
-hoot db-delete-map $GENERAL_OPTS $DB_OPTS $SEC_DB_INPUT $HOOT_DB_URL/$TEST_NAME-sec
+hoot db-delete $GENERAL_OPTS $DB_OPTS $SEC_DB_INPUT $HOOT_DB_URL/$TEST_NAME-sec
 
 # Delete the user
 PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

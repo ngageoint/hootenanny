@@ -48,23 +48,18 @@ public:
 
   HelpCmd()
   {
-    // Add hoot-core commands to this list that are in production use but either are typically
-    // used by developers only during advanced tasks like model training, etc. or commands that
-    // admittedly may need some testing against real world data before they're ready for the prime
-    // time. This makes the command list display a little cleaner and less confusing.
+    // Add hoot-core commands to this list that are not part of hoot-rnd and are typically used by
+    // developers only. This makes the command list display a little cleaner and less confusing for
+    // those only interested in basic hoot functionality. If a command is in hoot-rnd, it doesn't
+    // need to be manually added to this list. Simply have it return "rnd" in its getType() method.
     _forceToRndList.append("build-model");
-    _forceToRndList.append("de-duplicate");
-    _forceToRndList.append("login");
-    _forceToRndList.append("logout");
-    _forceToRndList.append("node-density-plot");
+    _forceToRndList.append("db-delete");
+    _forceToRndList.append("db-list");
+    _forceToRndList.append("is-sorted");
     _forceToRndList.append("optimize-network-conf");
-    _forceToRndList.append("perty");
+    _forceToRndList.append("perturb");
     _forceToRndList.append("score-matches");
-    _forceToRndList.append("score-matches-diff");
-    _forceToRndList.append("sync-element-ids");
     _forceToRndList.append("type-similarity");
-    _forceToRndList.append("type-tagger-rules");
-    _forceToRndList.append("write-name-counts");
   }
 
   static bool commandCompare(const std::string& n1, const std::string& n2)
@@ -167,10 +162,18 @@ private:
     LOG_VART(coreCmds.size());
     LOG_VART(rndCmds.size());
 
+    cout << "Basic Commands:" << endl << endl;
+    _printCommands(coreCmds);
+    cout << endl << "Advanced Commands:" << endl << endl;
+    _printCommands(rndCmds);
+
     // Please update the asciidoc user documentation if you change this usage.
-    cout << "Usage: hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] " <<
+    cout << endl << "Usage:" << endl << endl;
+    cout << "hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] " <<
             "[-D optionName=\"<optionValueEntry 1>;<optionValueEntry 2>;...\"] [args]"
          << endl << endl;
+
+    cout << "For detailed command help type: hoot help (command name)" << endl << endl;
 
     cout << "Log Levels:" << endl;
     cout << "  --trace" << endl;
@@ -185,16 +188,8 @@ private:
     cout << "  Append:  [-D optionName+=optionValueEntry]" << endl;
     cout << "  Prepend: [-D optionName++=optionValueEntry]" << endl;
     cout << "  Remove:  [-D optionName-=optionValueEntry]" << endl;
-    cout << "  Replace: [-D optionName=\"<old optionValueEntry 1>-><new optionValueEntry 1>;<old optionValueEntry 2>-><new optionValueEntry 2>\"...]"
+    cout << "  Replace: [-D optionName=\"[old optionValueEntry 1]->[new optionValueEntry 1];[old optionValueEntry 2]->[new optionValueEntry 2]\"...]"
          << endl;
-    cout << endl;
-
-    cout << "For detailed command help type: hoot help (command name)" << endl << endl;
-
-    cout << endl << "Basic Commands:" << endl << endl;
-    _printCommands(coreCmds);
-    cout << endl << "Advanced Commands:" << endl << endl;
-    _printCommands(rndCmds);
 
     return 0;
   }

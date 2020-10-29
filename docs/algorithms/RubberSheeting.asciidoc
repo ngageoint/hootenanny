@@ -95,7 +95,7 @@ the lowest RMSE. The best approach is selected.
 The best interpolation method is applied to the data by either moving one dataset
 toward the other, or moving both datasets towards each other. There is also
 functionality for storing the solution and applying it at a later time using
-`rubber-sheet --derive` and `rubber-sheet --apply` (see <<hootuser>> for details).
+`align --derive` and `align --apply` (see <<hootuser>> for details).
 
 === Future Work
 
