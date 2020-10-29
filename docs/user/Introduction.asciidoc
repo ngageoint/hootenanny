@@ -177,9 +177,9 @@ hoot conflate -C HorizontalConflation.conf input1.osm input2.osm output.osm
 
 See also:
 
-* <<generate-alpha-shape,generate-alpha-shape command>>
+* <<alpha-shape,alpha-shape command>>
 * <<conflate,conflate command>>
-* <<cookie-cut,cookie-cut command>>
+* <<cut,cut command>>
 * <<crop,crop command>>
 * <<hootUI, horizontal conflation example>>
 
