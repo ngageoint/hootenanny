@@ -592,7 +592,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     {
       // used to actually log a warning for this but seem excessive...still going to limit it like
       // a warning, though.
-      LOG_DEBUG(
+      LOG_TRACE(
         "Merging building group where some buildings have 3D tags and others do not. A " <<
         "multipolygon relation will be created instead of a building relation. Buildings: " <<
         ElementIdUtils::elementsToElementIds(constituentBuildings));

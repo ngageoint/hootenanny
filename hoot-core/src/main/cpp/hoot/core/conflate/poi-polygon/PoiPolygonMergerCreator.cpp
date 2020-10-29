@@ -336,9 +336,12 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
     "Marking POI/Polygon matches overlapping with POI/POI matches as reviews for " <<
     StringUtils::formatLargeNumber(matchSets.size()) << " match sets...");
 
-  // Get a mapping of all the IDs of elements belonging to both POI/Polygon and POI/POI matches.
+  // Get a mapping of all the IDs of elements belonging to both POI/Polygon and another type of
+  // match.
   QStringList matchNameFilter;
   matchNameFilter.append(PoiPolygonMatch::MATCH_NAME);
+  // We only care about POI/Poly overlapping matches with POI matches, since only those will cause
+  // a problem if merged, since POI/Poly merging removes the POI part of the match completely.
   // TODO: need a way to not hardcode this...get it from ScriptMatch somehow?
   matchNameFilter.append("POI");
   QMultiHash<ElementId, QString> elementIdsToMatchTypes;
@@ -377,7 +380,7 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
     return;
   }
 
-  // Find all elements involved in matches of both types.
+  // Find all elements involved in matches of multiple types.
   QSet<ElementId> elementIdsInvolvedInOverlappingMatch;
   const QList<ElementId> elementIds = elementIdsToMatchTypes.keys();
   for (QList<ElementId>::const_iterator elementIdsItr = elementIds.begin();
@@ -409,7 +412,7 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
          ++matchSetItr)
     {
       ConstMatchPtr match = *matchSetItr;
-        const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+      const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
       for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
              matchPairs.begin();
            matchPairItr != matchPairs.end(); ++matchPairItr)
@@ -420,8 +423,8 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
              elementIdsInvolvedInOverlappingMatch.contains(elementPair.second)))
         {
           LOG_TRACE(
-            "Adding review for POI to Polygon match conflicting with POI match and removing " <<
-            " from matches. match:" << match << ", ids: " << matchPairs << "...");
+            "Adding review for POI to Polygon match conflicting with another match and removing " <<
+            "; ids: " << matchPairs << "...");
           mergers.push_back(
             MergerPtr(
               new MarkForReviewMerger(
@@ -432,10 +435,10 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
           filteredMatchSet.insert(match);
         }
       }
-      if (filteredMatchSet.size() != 0)
-      {
-        filteredMatchSets.push_back(matchSet);
-      }
+    }
+    if (filteredMatchSet.size() != 0)
+    {
+      filteredMatchSets.push_back(matchSet);
     }
   }
   LOG_VARD(mergers.size());

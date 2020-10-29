@@ -121,65 +121,53 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
   return _tagMerger;
 }
 
-void PoiPolygonMerger::_removeMissingAndReviewable(const OsmMapPtr& map)
-{
-  std::set<std::pair<ElementId, ElementId>> modifiedPairs;
-  LOG_VARD(_pairs);
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
-       ++it)
-  {
-    const pair<ElementId, ElementId>& p = *it;
-    ElementPtr e1 = map->getElement(p.first);
-    if (e1)
-    {
-      LOG_VARD(e1->getStatus());
-    }
-    bool eitherMarkedForReview = false;
-    if (!e1)
-    {
-      LOG_DEBUG(p.first << " does not exist. Removing match pair its involved in...");
-    }
-    else if (ReviewMarker::isNeedsReview(map, e1))
-    {
-      LOG_DEBUG(p.second << " is marked for review. Removing match pair its involved in...");
-      eitherMarkedForReview = true;
-    }
-    ElementPtr e2 = map->getElement(p.second);
-    if (e2)
-    {
-      LOG_VARD(e2->getStatus());
-    }
-    if (!e2)
-    {
-      LOG_DEBUG(p.second << " does not exist. Removing match pair its involved in...");
-    }
-    else if (ReviewMarker::isNeedsReview(map, e2))
-    {
-      LOG_DEBUG(p.second << " is marked for review. Removing match pair its involved in...");
-      eitherMarkedForReview = true;
-    }
-    if (e1 && e2 && !eitherMarkedForReview)
-    {
-      modifiedPairs.insert(p);
-    }
-  }
-  _pairs = modifiedPairs;
-  LOG_VARD(_pairs);
-}
+//void PoiPolygonMerger::_removeMissing(const OsmMapPtr& map)
+//{
+//  std::set<std::pair<ElementId, ElementId>> modifiedPairs;
+//  LOG_VART(_pairs);
+//  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
+//       ++it)
+//  {
+//    const pair<ElementId, ElementId>& p = *it;
+//    ElementPtr e1 = map->getElement(p.first);
+//    if (e1)
+//    {
+//      LOG_VART(e1->getStatus());
+//    }
+//    bool eitherMarkedForReview = false;
+//    if (!e1)
+//    {
+//      LOG_TRACE(p.first << " does not exist. Removing match pair its involved in...");
+//    }
+//    ElementPtr e2 = map->getElement(p.second);
+//    if (e2)
+//    {
+//      LOG_VART(e2->getStatus());
+//    }
+//    if (!e2)
+//    {
+//      LOG_TRACE(p.second << " does not exist. Removing match pair its involved in...");
+//    }
+//    if (e1 && e2 && !eitherMarkedForReview)
+//    {
+//      modifiedPairs.insert(p);
+//    }
+//  }
+//  _pairs = modifiedPairs;
+//  LOG_VART(_pairs);
+//}
 
 void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
   // After the addition of the call to PoiPolygonMergerCreator::convertSharedMatchesToReviews in
   // UnifyingConflator, some of the elements passed into this merger at times no longer exist by the
-  // point they are to be merged here (this doesn't completely make sense yet) or will have already
-  // been marked for review. If they don't exist, we can't merge them, obviously and if they have
-  // already been marked for review, we don't want want to merge them.
-  _removeMissingAndReviewable(map);
-  LOG_VARD(_pairs.size());
-  if (_pairs.size() == 0)
-  {
-    return;
-  }
+  // point they are to be merged here (this doesn't completely make sense yet) . If they don't
+  // exist, we can't merge them, obviously.
+//  _removeMissing(map);
+//  if (_pairs.size() == 0)
+//  {
+//    return;
+//  }
 
   // Merge all POI tags first, but keep Unknown1 and Unknown2 separate. It is implicitly assumed
   // that since they're in a single group they all represent the same entity.
@@ -355,16 +343,24 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
 Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s)
 {
-  Tags result;
+  LOG_VART(s);
 
-  LOG_VART(_autoMergeManyPoiToOnePolyMatches);
+  Tags result;
   for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
        ++it)
   {
     const pair<ElementId, ElementId>& p = *it;
     LOG_VART(p);
     ElementPtr e1 = map->getElement(p.first);
+    if (e1)
+    {
+      LOG_VART(e1->getStatus());
+    }
     ElementPtr e2 = map->getElement(p.second);
+    if (e2)
+    {
+      LOG_VART(e2->getStatus());
+    }
     if (e1 && e1->getStatus() == s && e1->getElementType() == ElementType::Node)
     {
       LOG_TRACE("Merging POI tags for: " << e1->getElementId() << " with status: " << s << "...");
@@ -376,7 +372,6 @@ Tags PoiPolygonMerger::_mergePoiTags(const OsmMapPtr& map, Status s)
       result = _getTagMerger()->mergeTags(result, e2->getTags(), e2->getElementType());
     }
   }
-
   LOG_TRACE("Merged POI tags: " << result);
   return result;
 }
@@ -391,7 +386,15 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
   {
     const pair<ElementId, ElementId>& p = *it;
     ElementPtr e1 = map->getElement(p.first);
+    if (e1)
+    {
+      LOG_VART(e1->getStatus());
+    }
     ElementPtr e2 = map->getElement(p.second);
+    if (e2)
+    {
+      LOG_VART(e2->getStatus());
+    }
     if (e1 && e1->getStatus() == s && e1->getElementType() != ElementType::Node)
     {
       result.push_back(e1->getElementId());
@@ -401,7 +404,6 @@ vector<ElementId> PoiPolygonMerger::_getBuildingParts(const OsmMapPtr& map, Stat
       result.push_back(e2->getElementId());
     }
   }
-
   LOG_TRACE("Building part IDs: " << result);
   return result;
 }
@@ -560,7 +562,7 @@ ElementId PoiPolygonMerger::mergeOnePoiAndOnePolygon(OsmMapPtr map)
   merger.apply(map, replacedElements);
 
   LOG_INFO("Merged POI: " << poiId << " into polygon: " << polyId);
-  LOG_DEBUG("Merged feature: " << map->getElement(polyId));
+  LOG_TRACE("Merged feature: " << map->getElement(polyId));
 
   return polyId;
 }

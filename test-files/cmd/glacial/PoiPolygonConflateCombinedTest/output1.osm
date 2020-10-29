@@ -18353,18 +18353,7 @@
         <tag k="access" v="customers"/>
         <tag k="error:circular" v="15"/>
     </way>
-    <relation visible="true" id="-691" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-798" role="reviewee"/>
-        <member type="way" ref="-785" role="reviewee"/>
-        <tag k="hoot:review:type" v="Area"/>
-        <tag k="hoot:review:sort_order" v="302"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: The feature pair with a match score of 1 was matched because it met the threshold for a match at 0.6."/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-690" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-577" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-1960" role="reviewee"/>
         <member type="way" ref="-443" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
@@ -18375,95 +18364,7 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-689" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-2390" role="reviewee"/>
-        <member type="way" ref="-384" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="81"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-688" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-2390" role="reviewee"/>
-        <member type="way" ref="-410" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="82"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-687" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-3924" role="reviewee"/>
-        <member type="way" ref="-673" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="506"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-686" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-3926" role="reviewee"/>
-        <member type="way" ref="-673" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="507"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-685" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-3955" role="reviewee"/>
-        <member type="way" ref="-580" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="250"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-684" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-3955" role="reviewee"/>
-        <member type="way" ref="-583" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="261"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-683" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4217" role="reviewee"/>
-        <member type="way" ref="-183" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="451"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-682" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4217" role="reviewee"/>
-        <member type="way" ref="-190" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="452"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-681" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-576" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4237" role="reviewee"/>
         <member type="way" ref="-310" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
@@ -18474,7 +18375,7 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-680" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-575" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4237" role="reviewee"/>
         <member type="way" ref="-416" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
@@ -18485,7 +18386,7 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-679" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-574" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4452" role="reviewee"/>
         <member type="way" ref="-413" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
@@ -18496,18 +18397,7 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-678" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4676" role="reviewee"/>
-        <member type="way" ref="-785" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="303"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-677" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-573" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4679" role="reviewee"/>
         <member type="way" ref="-728" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
@@ -18518,7 +18408,7 @@
         <tag k="hoot:review:score" v="0"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-676" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-572" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4681" role="reviewee"/>
         <member type="way" ref="-728" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
@@ -18529,7 +18419,7 @@
         <tag k="hoot:review:score" v="0"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-675" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-571" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4683" role="reviewee"/>
         <member type="way" ref="-725" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
@@ -18540,7 +18430,7 @@
         <tag k="hoot:review:score" v="0"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-674" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-570" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4685" role="reviewee"/>
         <member type="way" ref="-725" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon"/>
@@ -18551,161 +18441,150 @@
         <tag k="hoot:review:score" v="0"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-673" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4687" role="reviewee"/>
-        <member type="way" ref="-785" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="304"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-672" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4720" role="reviewee"/>
+    <relation visible="true" id="-569" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4218" role="reviewee"/>
+        <member type="node" ref="-4720" role="reviewee"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:sort_order" v="329"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (41m) - very similar names, similar POI type"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-671" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4722" role="reviewee"/>
-        <member type="node" ref="-4212" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="148"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (230m) - very similar names and generic type"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-670" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4722" role="reviewee"/>
-        <member type="node" ref="-4213" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="150"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (270m) - very similar names and generic type"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-669" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4722" role="reviewee"/>
-        <member type="node" ref="-4313" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="149"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (260m) - very similar names and generic type"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-668" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4725" role="reviewee"/>
-        <member type="node" ref="-4234" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="42"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (22m) - very similar names, very close together, similar POI type"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-667" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4743" role="reviewee"/>
-        <member type="node" ref="-4212" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="169"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (16m) - very similar names and generic type"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-666" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4743" role="reviewee"/>
-        <member type="node" ref="-4213" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="165"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (36m) - very similar names and generic type"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-665" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4743" role="reviewee"/>
-        <member type="node" ref="-4313" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="166"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (23m) - very similar names and generic type"/>
-        <tag k="hoot:review:members" v="2"/>
-        <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
-        <tag k="type" v="review"/>
-    </relation>
-    <relation visible="true" id="-664" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4754" role="reviewee"/>
+    <relation visible="true" id="-568" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4218" role="reviewee"/>
+        <member type="node" ref="-4754" role="reviewee"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:sort_order" v="355"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (200m) - very similar names, similar POI type"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-663" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4756" role="reviewee"/>
+    <relation visible="true" id="-567" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4234" role="reviewee"/>
+        <member type="node" ref="-4725" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI"/>
+        <tag k="hoot:review:sort_order" v="42"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-566" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4234" role="reviewee"/>
+        <member type="node" ref="-4756" role="reviewee"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:sort_order" v="51"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (11m) - very similar names, very close together, similar POI type"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-662" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4759" role="reviewee"/>
+    <relation visible="true" id="-565" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4212" role="reviewee"/>
+        <member type="node" ref="-4722" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI"/>
+        <tag k="hoot:review:sort_order" v="148"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-564" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4212" role="reviewee"/>
+        <member type="node" ref="-4743" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI"/>
+        <tag k="hoot:review:sort_order" v="169"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-563" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4212" role="reviewee"/>
+        <member type="node" ref="-4759" role="reviewee"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:sort_order" v="170"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (31m) - very similar names and generic type"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-661" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4759" role="reviewee"/>
+    <relation visible="true" id="-562" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4213" role="reviewee"/>
+        <member type="node" ref="-4722" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI"/>
+        <tag k="hoot:review:sort_order" v="150"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-561" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4213" role="reviewee"/>
+        <member type="node" ref="-4743" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI"/>
+        <tag k="hoot:review:sort_order" v="165"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-560" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4213" role="reviewee"/>
+        <member type="node" ref="-4759" role="reviewee"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:sort_order" v="238"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (12m) - very similar names and generic type"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-660" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="node" ref="-4759" role="reviewee"/>
+    <relation visible="true" id="-559" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-4313" role="reviewee"/>
+        <member type="node" ref="-4722" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI"/>
+        <tag k="hoot:review:sort_order" v="149"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-558" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4313" role="reviewee"/>
+        <member type="node" ref="-4743" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI"/>
+        <tag k="hoot:review:sort_order" v="166"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-557" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4313" role="reviewee"/>
+        <member type="node" ref="-4759" role="reviewee"/>
         <tag k="hoot:review:type" v="POI"/>
         <tag k="hoot:review:sort_order" v="173"/>
-        <tag k="hoot:review:note" v="Multiple overlapping high confidence reviews: Very similar (9.2m) - very similar names and generic type"/>
+        <tag k="hoot:review:note" v="Overlapping matches"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
-        <tag k="hoot:review:score" v="0"/>
+        <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-570" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-556" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-728" role="reviewee"/>
         <member type="way" ref="-799" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon;Area"/>
@@ -18716,11 +18595,132 @@
         <tag k="hoot:review:score" v="1"/>
         <tag k="type" v="review"/>
     </relation>
-    <relation visible="true" id="-567" timestamp="1970-01-01T00:00:00Z" version="1">
+    <relation visible="true" id="-553" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-725" role="reviewee"/>
         <member type="way" ref="-801" role="reviewee"/>
         <tag k="hoot:review:type" v="POI to Polygon;Area"/>
         <tag k="hoot:review:sort_order" v="98"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-550" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-785" role="reviewee"/>
+        <member type="way" ref="-798" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:sort_order" v="302"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-549" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4676" role="reviewee"/>
+        <member type="way" ref="-785" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:sort_order" v="303"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-548" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4687" role="reviewee"/>
+        <member type="way" ref="-785" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon;Area"/>
+        <tag k="hoot:review:sort_order" v="304"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-547" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-2390" role="reviewee"/>
+        <member type="way" ref="-384" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="81"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-546" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-2390" role="reviewee"/>
+        <member type="way" ref="-410" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="82"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-545" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-3924" role="reviewee"/>
+        <member type="way" ref="-673" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="506"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-544" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-3926" role="reviewee"/>
+        <member type="way" ref="-673" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="507"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-543" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-3955" role="reviewee"/>
+        <member type="way" ref="-580" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="250"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-542" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-3955" role="reviewee"/>
+        <member type="way" ref="-583" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="261"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-541" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4217" role="reviewee"/>
+        <member type="way" ref="-183" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="451"/>
+        <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-540" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-4217" role="reviewee"/>
+        <member type="way" ref="-190" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="452"/>
         <tag k="hoot:review:note" v="Conflicting information: multiple features have been matched to the same feature and require review."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>

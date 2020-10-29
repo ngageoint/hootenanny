@@ -112,9 +112,9 @@ private:
 
   /*
    * Removes any element IDs from the to be merged collection if they are associated with elements
-   * that either no longer exist or have been marked for review
+   * that no longer exist
    */
-  void _removeMissingAndReviewable(const OsmMapPtr& map);
+  //void _removeMissing(const OsmMapPtr& map);
 
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
                             std::vector<ElementId>& buildings2,
