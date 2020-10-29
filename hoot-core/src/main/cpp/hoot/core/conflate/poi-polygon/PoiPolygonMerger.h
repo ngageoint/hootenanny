@@ -111,9 +111,10 @@ private:
   bool _writeDebugMaps;
 
   /*
-   * Removes any element IDs from the to be merged collection if they no longer exist
+   * Removes any element IDs from the to be merged collection if they are associated with elements
+   * that either no longer exist or have been marked for review
    */
-  void _removeMissingElementRefs(const OsmMapPtr& map);
+  void _removeMissingAndReviewable(const OsmMapPtr& map);
 
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
                             std::vector<ElementId>& buildings2,
