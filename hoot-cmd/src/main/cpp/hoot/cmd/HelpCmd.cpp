@@ -48,12 +48,10 @@ public:
 
   HelpCmd()
   {
-    // Add hoot-core commands to this list that are in production use but either are typically
-    // used by developers only, used during advanced tasks like model training, etc. only, or
-    // commands that can't be put into the hoot-rnd library for whatever reason but admittedly may
-    // need some testing against real world data before they're ready for the prime time. This makes
-    // the command list display a little cleaner and less confusing for those only interested in
-    // basic hoot functionality.
+    // Add hoot-core commands to this list that are not part of hoot-rnd and are typically used by
+    // developers only. This makes the command list display a little cleaner and less confusing for
+    // those only interested in basic hoot functionality. If a command is in hoot-rnd, it doesn't
+    // need to be manually added to this list. Simply have it return "rnd" in its getType() method.
     _forceToRndList.append("build-model");
     _forceToRndList.append("db-delete");
     _forceToRndList.append("db-list");
@@ -170,7 +168,8 @@ private:
     _printCommands(rndCmds);
 
     // Please update the asciidoc user documentation if you change this usage.
-    cout << endl << "Usage: hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] " <<
+    cout << endl << "Usage:" << endl << endl;
+    cout << "hoot <command> [--logLevel] [-C configFile ] [-D optionName=optionValue] " <<
             "[-D optionName=\"<optionValueEntry 1>;<optionValueEntry 2>;...\"] [args]"
          << endl << endl;
 
