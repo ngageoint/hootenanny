@@ -267,7 +267,7 @@ if [[ $SOURCE_FORMATS == *"db"* ]]; then
 
   # CLEANUP
 
-  hoot db-delete-map $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/cleanup-db.osm $SEC_DB_INPUT
+  hoot db-delete $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/cleanup-db.osm $SEC_DB_INPUT
 
 fi
 

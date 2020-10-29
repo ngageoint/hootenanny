@@ -249,12 +249,12 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
   long version = ElementData::VERSION_EMPTY;
   if (attributes.value("version") != "")
   {
-    version = _parseDouble(attributes.value("version"));
+    version = _parseLong(attributes.value("version"));
   }
   long changeset = ElementData::CHANGESET_EMPTY;
   if (attributes.value("changeset") != "")
   {
-    changeset = _parseDouble(attributes.value("changeset"));
+    changeset = _parseLong(attributes.value("changeset"));
   }
   unsigned int timestamp = ElementData::TIMESTAMP_EMPTY;
   if (attributes.value("timestamp") != "")
@@ -269,7 +269,7 @@ void OsmXmlReader::_createWay(const QXmlAttributes& attributes)
   long uid = ElementData::UID_EMPTY;
   if (attributes.value("uid") != "")
   {
-    uid = _parseDouble(attributes.value("uid"));
+    uid = _parseLong(attributes.value("uid"));
   }
   LOG_VART(version);
   if (_warnOnVersionZeroElement && version == 0)

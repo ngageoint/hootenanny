@@ -46,7 +46,7 @@ public:
   virtual QString getName() const override { return "multiary-poi-ingest"; }
 
   virtual QString getDescription() const override
-  { return "Ingests POIs for use by the multiary-conflate command (experimental) "; }
+  { return "Ingests POIs for use by Multiary POI Conflation (experimental) "; }
 
   virtual QString getType() const override { return "rnd"; }
 

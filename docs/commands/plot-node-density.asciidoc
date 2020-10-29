@@ -1,0 +1,79 @@
+[[plot-node-density]]
+== plot-node-density
+
+=== Description
+
+The +nplot-node-density+ command creates a density plot of the specified input.
+
+* +input+         - Input path; may be any supported input format (e.g. OSM file).
+* +output-image+  - Output image name. Must always be a +.png+ file. A corresponding +.pngw+ file will also be generated.
+* +max-dimension+ - Maximum size of the image on one side. The actual size will be determined based on the envelope. If the envelope is wider 
+                    than tall then this will be the width of the image (and vice versa). The pixels in the output image will always be square 
+                    and the image may be slightly larger than the envelope to accommodate this.
+* +base-colors+   - Base colors to use for each channel. These will be added to each channel (R,G,B,A). Alpha of 255 is opaque.
+* +multiplier+    - Multiply the log count ratio by these values. 4 comma delimited values (R,G,B,A).
+
+By default the colors of the image are black to white where black represents no data. The colors are always in log scale. You can manipulate 
+the +base-color+ and +count-colors+ parameters to change the colors. This approach allows creating simple positive gradients. If you require 
+more complex color mappings you may want to take a peek at link:$$http://www.imagemagick.org/$$[ImageMagick] or some other similar mechanism.
+
+The coloring uses the following equations for each pixel:
+
+// print pretty equations
+ifdef::HasLatexMath[]
+[latexmath]
++++++++++++++++++++++++++
+\[v = \frac{log(pixelCount + 1)}{log(maxPixelCount)}\]
+\[red = v \cdot colorMultiplier[0] + baseColor[0]\]
+\[green = v \cdot colorMultiplier[1] + baseColor[1]\]
+\[blue = v \cdot colorMultiplier[2] + baseColor[2]\]
+\[alpha = v \cdot colorMultiplier[3] + baseColor[3]\]
++++++++++++++++++++++++++
+endif::HasLatexMath[]
+
+// print simple equations
+ifndef::HasLatexMath[]
+--------------------------------------
+v = log(pixelCount + 1) / log(maxPixelCount)
+red = v * colorMultiplier[0] + baseColor[0]
+green = v * colorMultiplier[1] + baseColor[1]
+blue = v * colorMultiplier[2] + baseColor[2]
+alpha = v * colorMultiplier[3] + baseColor[3]
+--------------------------------------
+endif::HasLatexMath[]
+
+* +pixelCount+ The number of nodes in a given pixel.
+* +maxPixelCount+ The maximum number of nodes in any pixel.
+* +colorMultiplier+ The array passed in the +multiplier+ argument.
+* +baseColor+ The array passed in the +base-colors+ argument.
+
+All the color values are bound to 0-255 before being assigned in the output image.
+
+The amount of time this takes depends on many factors, but on circa 2012 hardware processing all of OSM's planet file in a +.osm.pbf+ format 
+took about 4.5 hours.
+
+=== Usage
+
+--------------------------------------
+plot-node-density (input) (output-image) (max-dimension) [base-colors] [multiplier]
+--------------------------------------
+
+==== Example
+
+Paint node density using the default color scale of black to white where black is no data. The image will either have a maximum height of 100 
+pixels or a maximum width of 100 pixels.
+
+--------------------------------------
+hoot plot-node-density MyInput.osm.pbf MyLocalOutput.png 100
+--------------------------------------
+
+Paint node density using the default color scale of transparent brown to opaque green. Transparent is no data. The image will be at most 256 
+pixels on one side.
+
+--------------------------------------
+hoot plot-node-density MyInput.osm.pbf MyLocalOutput.png 256 "100,0,0,0" "0,255,0,255"
+--------------------------------------
+
+=== See Also
+
+* https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]

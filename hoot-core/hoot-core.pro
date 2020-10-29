@@ -36,6 +36,10 @@ OTHER_FILES = \
     ../conf/core/ConfigOptions.asciidoc \
     ../conf/core/*Conflation.conf \
     ../conf/core/*Algorithm.conf \
+    ../conf/core/Grail*.conf \
+    ../conf/core/*Export.conf \
+    ../conf/core/*Import.conf \
+    ../conf/core/*Changeset.conf \
     ../scripts/jenkins/Jenkinsfile \
     $$files(../scripts/copyright/*, true) \
     ../sonar-project.properties \

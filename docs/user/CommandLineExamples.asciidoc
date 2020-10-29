@@ -263,7 +263,7 @@ See the User Guide for more details on command usage.
 ===== Bring two maps closer in alignment:
 
 -----
-    hoot rubber-sheet input1.osm input2.osm output.osm
+    hoot align input1.osm input2.osm output.osm
 -----
 
 ===== Display the geospatial extent of a map:
@@ -357,6 +357,18 @@ Find street intersection locations in a map by street name:
     hoot convert -D convert.ops="hoot::FindStreetIntersectionsByName" \
       -D name.criterion.names="streetName1;streetName2" -D name.criterion.case.sensitive=false \
       -D name.criterion.partial.match=false input.osm output.osm
+-----
+
+Create a shape that covers a set of features by manually specifying an alpha value:
+
+-----
+hoot alpha-shape --alpha 200 --buffer -10 input.osm 200 0 output.osm
+-----
+
+Create a shape that covers a set of features with automatic calculation of the alpha value:
+
+-----
+hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
 -----
 
 ==== Comparison
@@ -765,7 +777,7 @@ Find street intersection locations in a map by street name:
 ===== Create a node density plot:
 
 -----
-    hoot node-density-plot input.osm output.png 100
+    hoot plot-node-density input.osm output.png 100
 -----
 
 ===== Detect railway intersections:
@@ -777,26 +789,26 @@ hoot convert -D convert.ops="hoot::FindRailwayIntersectionsOp" input.osm output.
 ===== Make a perturbed copy of a map:
 
 -----
-    hoot perty input.osm perturbed.osm
+    hoot perturb input.osm perturbed.osm
 -----
 
 ===== Make a perturbed copy of a map with some adjusted input parameters:
 
 -----
-    hoot perty -D perty.search.distance=20 -D random.way.generalizer.probability=0.7 \
+    hoot perturb -D perty.search.distance=20 -D random.way.generalizer.probability=0.7 \
       input.osm perturbed.osm
 -----
 
 ===== Make a perturbed copy of a map, conflate the original map against the perturbed copy, and score how well the conflation performed:
 
 -----
-    hoot perty input.osm /my/output/directory --score
+    hoot perturb input.osm /my/output/directory --score
 -----
 
 ===== Run a series of random map perturbations and score how well all of them conflate against a source map:
 
 -----
-    hoot perty -D perty.test.num.runs=10 -D perty.test.num.simulations=5 \
+    hoot perturb -D perty.test.num.runs=10 -D perty.test.num.simulations=5 \
       -D perty.test.dynamic.variables=perty.systematic.error.x;perty.systematic.error.y \
       -D perty.test.dynamic.variable.start.value=1.0 \
       -D perty.test.dynamic.variable.increment=5.0 \
