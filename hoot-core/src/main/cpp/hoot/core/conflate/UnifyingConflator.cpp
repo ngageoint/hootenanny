@@ -358,7 +358,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     }
     else
     {
-      LOG_TRACE(msg);
+      LOG_DEBUG(msg);
     }
 
     merger->apply(map, replaced);
