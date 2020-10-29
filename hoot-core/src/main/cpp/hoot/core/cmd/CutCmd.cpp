@@ -44,15 +44,15 @@ namespace hoot
 {
 using namespace std;
 
-class CookieCutCmd : public BaseCommand
+class CutCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::CookieCutCmd"; }
+  static string className() { return "hoot::CutCmd"; }
 
-  CookieCutCmd() = default;
+  CutCmd() = default;
 
-  virtual QString getName() const override { return "cookie-cut"; }
+  virtual QString getName() const override { return "cut"; }
 
   virtual QString getDescription() const override { return "Cuts out a portion from a map"; }
 
@@ -118,6 +118,6 @@ public:
   }
 };
 
-HOOT_FACTORY_REGISTER(Command, CookieCutCmd)
+HOOT_FACTORY_REGISTER(Command, CutCmd)
 
 }

@@ -5,7 +5,7 @@
 
 The +alpha-shape+ command provides a way to generate a "concave hull" for a set of points.  Specifically, it reads data from
 one input, calculates the alpha shape and writes the resulting multipolygon to output. This is most useful when seeding the
-+cookie-cut+ command. The degree of the concaveness is determined by the alpha parameters. A small alpha parameter creates a
++cut+ command. The degree of the concaveness is determined by the alpha parameters. A small alpha parameter creates a
 shape with a large number of holes and concave sections. A large alpha value creates a shape closer to a convex hull. An alpha
 value equal to the maximum distance between any two points in the data or larger will create a convex hull. Additional details
 can be found in the _Cookie Cutter_ section of <<hootalgo, Hootenanny - Algorithms>> and in the following documents:
