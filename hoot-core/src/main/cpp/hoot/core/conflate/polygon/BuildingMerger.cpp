@@ -56,6 +56,7 @@
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 
 using namespace std;
 
@@ -115,6 +116,7 @@ _manyToManyMatch(false),
 _useChangedReview(ConfigOptions().getBuildingChangedReview()),
 _changedReviewIouThreshold(ConfigOptions().getBuildingChangedReviewIouThreshold())
 {
+  // TODO: change back to trace
   LOG_VART(_pairs);
 }
 
@@ -153,14 +155,40 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
 
   ElementPtr e1 = _buildBuilding(map, true);
-  if (e1.get())
+  if (!e1)
+  {
+    LOG_TRACE("Built building 1 null. Skipping merging.");
+    return;
+  }
+  else
   {
     LOG_TRACE("BuildingMerger: built building e1\n" << OsmUtils::getElementDetailString(e1, map));
+    if (e1->getElementType() == ElementType::Relation &&
+        (std::dynamic_pointer_cast<const Relation>(e1))->getMemberCount() == 0)
+    {
+      LOG_TRACE(
+        e1->getElementId() << " is a relation with no members. Skipping merging and removing.");
+      RemoveRelationByEid::removeRelation(map, e1->getElementId().getId());
+      return;
+    }
   }
   ElementPtr e2 = _buildBuilding(map, false);
-  if (e2.get())
+  if (!e2)
+  {
+    LOG_TRACE("Built building 2 null. Skipping merging.");
+    return;
+  }
+  else
   {
     LOG_TRACE("BuildingMerger: built building e2\n" << OsmUtils::getElementDetailString(e2, map));
+    if (e2->getElementType() == ElementType::Relation &&
+        (std::dynamic_pointer_cast<const Relation>(e2))->getMemberCount() == 0)
+    {
+      LOG_TRACE(
+        e2->getElementId() << " is a relation with no members. Skipping merging and removing.");
+      RemoveRelationByEid::removeRelation(map, e2->getElementId().getId());
+      return;
+    }
   }
 
   LOG_VART(_keepMoreComplexGeometryWhenAutoMerging);

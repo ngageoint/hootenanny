@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-49380226' visible='true' version='1' lat='-0.363877523' lon='42.556012513'>
+    <tag k='REF1' v='000009' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='length' v='20' />
+    <tag k='man_made' v='storage_tank' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+    <tag k='supported' v='no' />
+    <tag k='underground' v='no' />
+  </node>
+  <node id='-49380228' visible='true' version='1' lat='-0.363710756' lon='42.555522319'>
+    <tag k='REF1' v='00000a' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='length' v='15' />
+    <tag k='man_made' v='storage_tank' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+    <tag k='supported' v='no' />
+    <tag k='underground' v='no' />
+  </node>
+  <node id='-49380230' visible='true' version='1' lat='-0.363579364' lon='42.555921549'>
+    <tag k='REF1' v='00000b' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='length' v='20' />
+    <tag k='man_made' v='storage_tank' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+    <tag k='supported' v='no' />
+    <tag k='underground' v='no' />
+  </node>
+  <node id='-49380232' visible='true' version='1' lat='-0.363498507' lon='42.555451569'>
+    <tag k='REF1' v='00000c' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='length' v='10' />
+    <tag k='man_made' v='storage_tank' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+    <tag k='supported' v='no' />
+    <tag k='underground' v='no' />
+  </node>
+  <node id='-49380234' visible='true' version='1' lat='-0.363321633' lon='42.555401034'>
+    <tag k='REF1' v='00000d' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='length' v='12' />
+    <tag k='man_made' v='storage_tank' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+    <tag k='supported' v='no' />
+    <tag k='underground' v='no' />
+  </node>
+  <node id='-49380236' visible='true' version='1' lat='-0.363306472' lon='42.555855853'>
+    <tag k='REF1' v='00000e' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='length' v='15' />
+    <tag k='man_made' v='storage_tank' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+    <tag k='supported' v='no' />
+    <tag k='underground' v='no' />
+  </node>
+  <node id='-49380238' visible='true' version='1' lat='-0.363149812' lon='42.555340391'>
+    <tag k='REF1' v='00000f' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='length' v='10' />
+    <tag k='man_made' v='storage_tank' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+    <tag k='supported' v='no' />
+    <tag k='underground' v='no' />
+  </node>
+  <node id='-49380240' visible='true' version='1' lat='-0.363007247' lon='42.55572961'>
+    <tag k='REF1' v='000010' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='length' v='20' />
+    <tag k='man_made' v='storage_tank' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+    <tag k='supported' v='no' />
+    <tag k='underground' v='no' />
+  </node>
+  <node id='-49380242' visible='true' version='1' lat='-0.339696114' lon='42.555893505' />
+  <node id='-49380244' visible='true' version='1' lat='-0.33968153' lon='42.555919153' />
+  <node id='-49380246' visible='true' version='1' lat='-0.339646326' lon='42.555899372' />
+  <node id='-49380248' visible='true' version='1' lat='-0.339571727' lon='42.556030968' />
+  <node id='-49380250' visible='true' version='1' lat='-0.339606763' lon='42.556050582' />
+  <node id='-49380252' visible='true' version='1' lat='-0.339588491' lon='42.556082768' />
+  <node id='-49380254' visible='true' version='1' lat='-0.339648002' lon='42.556116128' />
+  <node id='-49380256' visible='true' version='1' lat='-0.339666275' lon='42.556083942' />
+  <node id='-49380258' visible='true' version='1' lat='-0.339682536' lon='42.556092994' />
+  <node id='-49380260' visible='true' version='1' lat='-0.339771719' lon='42.55593575' />
+  <node id='-49380262' visible='true' version='1' lat='-0.339755626' lon='42.555926865' />
+  <node id='-49380264' visible='true' version='1' lat='-0.344189317' lon='42.55537215' />
+  <node id='-49380266' visible='true' version='1' lat='-0.343920594' lon='42.555395955' />
+  <node id='-49380268' visible='true' version='1' lat='-0.343944901' lon='42.555664008' />
+  <node id='-49380270' visible='true' version='1' lat='-0.34412243' lon='42.55564825' />
+  <node id='-49380272' visible='true' version='1' lat='-0.344118742' lon='42.555605838' />
+  <node id='-49380274' visible='true' version='1' lat='-0.344209602' lon='42.555597791' />
+  <node id='-49380276' visible='true' version='1' lat='-0.344200549' lon='42.55549637' />
+  <node id='-49380278' visible='true' version='1' lat='-0.344251008' lon='42.555492012' />
+  <node id='-49380280' visible='true' version='1' lat='-0.344244135' lon='42.555414228' />
+  <node id='-49380282' visible='true' version='1' lat='-0.344193508' lon='42.555418754' />
+  <way id='-49380284' visible='true' version='1'>
+    <nd ref='-49380264' />
+    <nd ref='-49380266' />
+    <nd ref='-49380268' />
+    <nd ref='-49380270' />
+    <nd ref='-49380272' />
+    <nd ref='-49380274' />
+    <nd ref='-49380276' />
+    <nd ref='-49380278' />
+    <nd ref='-49380280' />
+    <nd ref='-49380282' />
+    <nd ref='-49380264' />
+    <tag k='REF1' v='000102' />
+    <tag k='amenity' v='islamic_prayer_hall' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='building' v='mosque' />
+    <tag k='building:levels' v='1' />
+    <tag k='condition' v='functional' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='5' />
+    <tag k='religion' v='muslim' />
+    <tag k='roof:shape' v='flat' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+  </way>
+  <way id='-49380285' visible='true' version='1'>
+    <nd ref='-49380242' />
+    <nd ref='-49380244' />
+    <nd ref='-49380246' />
+    <nd ref='-49380248' />
+    <nd ref='-49380250' />
+    <nd ref='-49380252' />
+    <nd ref='-49380254' />
+    <nd ref='-49380256' />
+    <nd ref='-49380258' />
+    <nd ref='-49380260' />
+    <nd ref='-49380262' />
+    <nd ref='-49380242' />
+    <tag k='REF1' v='00010a' />
+    <tag k='attribution' v='usNationalGeoIntelAgency' />
+    <tag k='building' v='school' />
+    <tag k='building:levels' v='2' />
+    <tag k='condition' v='damaged' />
+    <tag k='error:circular' v='15' />
+    <tag k='height' v='6' />
+    <tag k='note' v='Probable Police School' />
+    <tag k='roof:shape' v='flat' />
+    <tag k='security:classification' v='unclassified' />
+    <tag k='security:non_ic_dissem_ctl' v='limited_distribution' />
+    <tag k='source:res_owner' v='USA' />
+  </way>
+</osm>

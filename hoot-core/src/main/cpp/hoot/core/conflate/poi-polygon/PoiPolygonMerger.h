@@ -110,12 +110,6 @@ private:
 
   bool _writeDebugMaps;
 
-  /*
-   * Removes any element IDs from the to be merged collection if they are associated with elements
-   * that no longer exist
-   */
-  //void _removeMissing(const OsmMapPtr& map);
-
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
                             std::vector<ElementId>& buildings2,
                             std::vector<std::pair<ElementId, ElementId>>& replaced);

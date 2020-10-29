@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/MultiVisitor.h>

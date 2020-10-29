@@ -336,12 +336,11 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
     "Marking POI/Polygon matches overlapping with POI/POI matches as reviews for " <<
     StringUtils::formatLargeNumber(matchSets.size()) << " match sets...");
 
-  // Get a mapping of all the IDs of elements belonging to both POI/Polygon and another type of
-  // match.
-  QStringList matchNameFilter;
-  matchNameFilter.append(PoiPolygonMatch::MATCH_NAME);
+  // Get a mapping of all the IDs of elements belonging to both POI/Polygon and a POI/POI match.
   // We only care about POI/Poly overlapping matches with POI matches, since only those will cause
   // a problem if merged, since POI/Poly merging removes the POI part of the match completely.
+  QStringList matchNameFilter;
+  matchNameFilter.append(PoiPolygonMatch::MATCH_NAME);
   // TODO: need a way to not hardcode this...get it from ScriptMatch somehow?
   matchNameFilter.append("POI");
   QMultiHash<ElementId, QString> elementIdsToMatchTypes;
@@ -423,8 +422,8 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
              elementIdsInvolvedInOverlappingMatch.contains(elementPair.second)))
         {
           LOG_TRACE(
-            "Adding review for POI to Polygon match conflicting with another match and removing " <<
-            "; ids: " << matchPairs << "...");
+            "Adding review for POI to Polygon match conflicting with another POI/POI match and " <<
+            "removing; ids: " << matchPairs << "...");
           mergers.push_back(
             MergerPtr(
               new MarkForReviewMerger(

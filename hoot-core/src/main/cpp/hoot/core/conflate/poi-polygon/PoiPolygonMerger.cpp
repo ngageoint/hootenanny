@@ -121,54 +121,8 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
   return _tagMerger;
 }
 
-//void PoiPolygonMerger::_removeMissing(const OsmMapPtr& map)
-//{
-//  std::set<std::pair<ElementId, ElementId>> modifiedPairs;
-//  LOG_VART(_pairs);
-//  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
-//       ++it)
-//  {
-//    const pair<ElementId, ElementId>& p = *it;
-//    ElementPtr e1 = map->getElement(p.first);
-//    if (e1)
-//    {
-//      LOG_VART(e1->getStatus());
-//    }
-//    bool eitherMarkedForReview = false;
-//    if (!e1)
-//    {
-//      LOG_TRACE(p.first << " does not exist. Removing match pair its involved in...");
-//    }
-//    ElementPtr e2 = map->getElement(p.second);
-//    if (e2)
-//    {
-//      LOG_VART(e2->getStatus());
-//    }
-//    if (!e2)
-//    {
-//      LOG_TRACE(p.second << " does not exist. Removing match pair its involved in...");
-//    }
-//    if (e1 && e2 && !eitherMarkedForReview)
-//    {
-//      modifiedPairs.insert(p);
-//    }
-//  }
-//  _pairs = modifiedPairs;
-//  LOG_VART(_pairs);
-//}
-
 void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
-  // After the addition of the call to PoiPolygonMergerCreator::convertSharedMatchesToReviews in
-  // UnifyingConflator, some of the elements passed into this merger at times no longer exist by the
-  // point they are to be merged here (this doesn't completely make sense yet) . If they don't
-  // exist, we can't merge them, obviously.
-//  _removeMissing(map);
-//  if (_pairs.size() == 0)
-//  {
-//    return;
-//  }
-
   // Merge all POI tags first, but keep Unknown1 and Unknown2 separate. It is implicitly assumed
   // that since they're in a single group they all represent the same entity.
   Tags poiTags1 = _mergePoiTags(map, Status::Unknown1);
