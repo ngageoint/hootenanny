@@ -1439,7 +1439,6 @@ QSet<QString> OsmSchema::getAllTagKeys()
   if (_allTagKeysCache.isEmpty())
   {
     _allTagKeysCache = d->getAllTagKeys();
-    //LOG_VART(_allTagKeysCache);
   }
   return _allTagKeysCache;
 }
@@ -1692,6 +1691,16 @@ bool OsmSchema::hasCategory(const QString& kvp, const QString& category) const
   return tv.categories.contains(category);
 }
 
+bool OsmSchema::hasCategory(const Tags& t, const OsmSchemaCategory& category) const
+{
+  return hasCategory(t, category.toString());
+}
+
+bool OsmSchema::hasCategory(const QString& kvp, const OsmSchemaCategory& category) const
+{
+  return hasCategory(kvp, category.toString());
+}
+
 bool OsmSchema::isAncestor(const QString& childKvp, const QString& parentKvp)
 {
   return d->isAncestor(childKvp, parentKvp);
@@ -1918,6 +1927,32 @@ bool OsmSchema::explicitTypeMismatch(const Tags& tags1, const Tags& tags2,
   return featuresHaveExplicitTypeMismatch;
 }
 
+bool OsmSchema::typeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore)
+{
+  // TODO: We may need to take category into account here as well.
+
+  LOG_VART(tags1);
+  LOG_VART(tags2);
+
+  bool featuresHaveTypeMismatch = false;
+
+  const double typeScore = scoreTypes(tags1, tags2, true);
+  if (typeScore < minTypeScore)
+  {
+    featuresHaveTypeMismatch = true;
+    LOG_TRACE(
+      "type mismatch: " << getFirstType(tags1, false) << " and " << getFirstType(tags2, false));
+  }
+  else
+  {
+    LOG_TRACE(
+      "type match: " << getFirstType(tags1, false) << " and " << getFirstType(tags2, false));
+  }
+
+  LOG_VART(featuresHaveTypeMismatch);
+  return featuresHaveTypeMismatch;
+}
+
 bool OsmSchema::hasType(const Tags& tags)
 {
   for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
@@ -1937,6 +1972,7 @@ bool OsmSchema::hasType(const Tags& tags)
 QString OsmSchema::mostSpecificType(const Tags& tags)
 {
   QString mostSpecificType;
+  bool currentMostSpecificTypeIsCombo = false;
   for (Tags::const_iterator tagsItr = tags.begin(); tagsItr != tags.end(); ++tagsItr)
   {
     const QString key = tagsItr.key();
@@ -1945,9 +1981,20 @@ QString OsmSchema::mostSpecificType(const Tags& tags)
     LOG_VART(kvp);
     LOG_VART(isTypeKey(tagsItr.key()));
 
-    if (isTypeKey(key) && (mostSpecificType.isEmpty() || !isAncestor(kvp, mostSpecificType)))
+    if (isTypeKey(key)) // Is this type in the schema at all?
     {
-      mostSpecificType = kvp;
+      const bool kvpIsCombo = hasCategory(kvp, OsmSchemaCategory::combination());
+      // If this tag is considered a "combo" tag, or one that must be used in combination with some
+      // other type tag to uniquely identify a type, we considering it a less specific type than a
+      // non-combo tag. So, if we already have a non-combo tag for our most specific type, then skip
+      // this if its a combot tag.
+      if ((!kvpIsCombo || currentMostSpecificTypeIsCombo) &&
+          // Ensure that this tag isn't more generic (ancestor) than the current specific type tag.
+          (mostSpecificType.isEmpty() || !isAncestor(kvp, mostSpecificType)))
+      {
+        mostSpecificType = kvp;
+        currentMostSpecificTypeIsCombo = kvpIsCombo;
+      }
     }
   }
   return mostSpecificType;

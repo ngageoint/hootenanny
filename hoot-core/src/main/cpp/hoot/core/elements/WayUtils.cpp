@@ -38,6 +38,7 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // GEOS
 #include <geos/geom/Coordinate.h>
@@ -108,6 +109,38 @@ std::vector<ConstWayPtr> WayUtils::getContainingWaysByNodeId(
     }
   }
   return containingWays;
+}
+
+std::set<QString> WayUtils::getContainingWaysMostSpecificTypesByNodeId(
+  const long nodeId, const ConstOsmMapPtr& map)
+{
+  std::set<QString> uniqueTypes;
+  std::vector<ConstWayPtr> containingWays = getContainingWaysByNodeId(nodeId, map);
+  std::sort(containingWays.begin(), containingWays.end());
+  OsmSchema& schema = OsmSchema::getInstance();
+  for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
+       containingWaysItr != containingWays.end(); ++containingWaysItr)
+  {
+    const QString mostSpecificType = schema.mostSpecificType((*containingWaysItr)->getTags());
+    if (!mostSpecificType.isEmpty())
+    {
+      uniqueTypes.insert(mostSpecificType);
+    }
+  }
+  return uniqueTypes;
+}
+
+std::set<QString> WayUtils::getContainingWaysMostSpecificTypeKeysByNodeId(
+  const long nodeId, const ConstOsmMapPtr& map)
+{
+  std::set<QString> uniqueTypeKeys;
+  const std::set<QString> uniqueTypes = getContainingWaysMostSpecificTypesByNodeId(nodeId, map);
+  for (std::set<QString>::const_iterator uniqueTypesItr = uniqueTypes.begin();
+       uniqueTypesItr != uniqueTypes.end(); ++uniqueTypesItr)
+  {
+    uniqueTypeKeys.insert(Tags::kvpToKey(*uniqueTypesItr));
+  }
+  return uniqueTypeKeys;
 }
 
 QSet<long> WayUtils::getConnectedWays(const long wayId, const ConstOsmMapPtr& map)
@@ -411,6 +444,32 @@ bool WayUtils::wayIntersectsWithWayHavingKvp(
     if (intersectingWay && intersectingWay->getTags().hasKvp(kvp))
     {
       return true;
+    }
+  }
+  return false;
+}
+
+bool WayUtils::nodeContainedByWaySharingNodesWithAnotherWay(
+  const long nodeId, const long wayId, const OsmMapPtr& map)
+{
+  ConstWayPtr way = map->getWay(wayId);
+  if (!way)
+  {
+    return false;
+  }
+
+  const std::vector<ConstWayPtr> waysContainingNode =
+    getContainingWaysByNodeId(nodeId, map);
+  for (std::vector<ConstWayPtr>::const_iterator containingWayItr = waysContainingNode.begin();
+       containingWayItr != waysContainingNode.end(); ++containingWayItr)
+  {
+    ConstWayPtr containingWay = *containingWayItr;
+    if (containingWay)
+    {
+      if (containingWay->hasSharedNode(*way))
+      {
+        return true;
+      }
     }
   }
   return false;

@@ -51,6 +51,15 @@ namespace hoot
 
 int MaximalSubline::logWarnCount = 0;
 
+MaximalSubline::MaximalSubline(MatchCriteria* criteria, Meters minSplitSize) :
+_criteria(criteria),
+_spacing(ConfigOptions().getMaximalSublineSpacing()),
+_minSplitSize(minSplitSize),
+_maxRecursions(-1),
+_findBestMatchesRecursionCount(0)
+{
+}
+
 MaximalSubline::ThresholdMatchCriteria::ThresholdMatchCriteria(Meters maxDistance,
   Radians maxAngleDiff)
 {
@@ -157,15 +166,6 @@ void MaximalSubline::MatchCriteria::maximalNearestSubline(LineSegment& a,
 
   b.p0 = b1;
   b.p1 = b2;
-}
-
-MaximalSubline::MaximalSubline(MatchCriteria* criteria, Meters minSplitSize) :
-_criteria(criteria),
-_spacing(ConfigOptions().getMaximalSublineSpacing()),
-_minSplitSize(minSplitSize),
-_maxRecursionComplexity(-1),
-_findBestMatchesRecursionCount(0)
-{
 }
 
 WayLocation MaximalSubline::_calculateEndWayLocation(const ConstOsmMapPtr &map,
@@ -392,9 +392,16 @@ double MaximalSubline::_findBestMatchesRecursive(
 {
   _findBestMatchesRecursionCount++;
   // kick out if we've made too many calls to this
-  if (_maxRecursionComplexity != -1 && _findBestMatchesRecursionCount > _maxRecursionComplexity)
+  if (_findBestMatchesRecursionCount > MAX_RECURSIONS_UPPER_LIMIT ||
+      (_maxRecursions != -1 && _findBestMatchesRecursionCount > _maxRecursions))
   {
     throw RecursiveComplexityException();
+  }
+  else if (_findBestMatchesRecursionCount %
+           (ConfigOptions().getTaskStatusUpdateInterval() * 100) == 0)
+  {
+    PROGRESS_TRACE(
+      "Maximal subline find best matches recursive call count: " << _findBestMatchesRecursionCount);
   }
 
   if (offset == candidates.size())

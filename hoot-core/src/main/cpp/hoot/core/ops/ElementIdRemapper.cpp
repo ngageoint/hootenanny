@@ -36,7 +36,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, ElementIdRemapper)
 
 ElementIdRemapper::ElementIdRemapper() :
-_remappedIds(0)
+_restoredIds(0)
 {
 }
 
@@ -45,7 +45,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   LOG_INFO("Remapping element IDs for: " << map->getName() << "...");
 
   _numAffected = 0;
-  _remappedIds = 0;
+  _restoredIds = 0;
   _originalToRemappedElementIds.clear();
 
   // TODO: make this more generic, if possible; use ElementIterator?
@@ -134,7 +134,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
 {
   LOG_INFO("Restoring original element IDs for: " << map->getName() << "...");
 
-  _remappedIds = 0;
+  _restoredIds = 0;
 
   // TODO: make this more generic, if possible; use ElementIterator?
 
@@ -160,7 +160,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
       map->replace(currentElement, originalElement);
       //IdSwapOp idSwapper(currentElement->getElementId(), originalElement->getElementId());
       //idSwapper.apply(map);
-      _remappedIds++;
+      _restoredIds++;
     }
   }
 
@@ -186,7 +186,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
       map->replace(currentElement, originalElement);
       //IdSwapOp idSwapper(currentElement->getElementId(), originalElement->getElementId());
       //idSwapper.apply(map);
-      _remappedIds++;
+      _restoredIds++;
     }
   }
 
@@ -213,7 +213,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
       map->replace(currentElement, originalElement);
       //IdSwapOp idSwapper(currentElement->getElementId(), originalElement->getElementId());
       //idSwapper.apply(map);
-      _remappedIds++;
+      _restoredIds++;
     }
   }
 }

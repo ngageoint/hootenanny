@@ -86,7 +86,7 @@ image::images/id/hoot_edit_save.png[scaledwidth="75%"]
 
 It is also possible to create new features for a given layer in Hootenanny iD but any new feature added must be done with at least one layer present. Note that any new features added without an associated layer cannot be saved. The ability to create new features within the GUI is a key component of the OpenStreetMap version of iD Editor and additional background and editing workflows can be found online via link:$$https://www.openstreetmap.org/edit?editor=id$$[OpenStreetMap-iD's] help menu. A brief background is provided here for general user orientation.
 
-To add a new point, click on the Point button appearing in the Map Viewer or use the 1 shortcut key. Points can be used to represent features such as shops, restaurants, parks and monuments, etc. They mark a specific location and describe the feature based on the OSM/TDS tag relationship. Once a new point is added to the map, a panel will appear on the map prompting you to select an appropriate feature type (park, cafe, etc) and any associated tags. Note that even though OSM values are presented, the data is stored on the database using the TDS tag equivalent. The next time it is edited within Hootenanny it will display the values using the english translated LTDS schema.
+To add a new point, click on the Point button appearing in the Map Viewer or use the 1 shortcut key. Points can be used to represent features such as shops, restaurants, parks and monuments, etc. They mark a specific location and describe the feature based on the OSM/TDS tag relationship. Once a new point is added to the map, a panel will appear on the map prompting you to select an appropriate feature type (park, cafe, etc) and any associated tags. Note that even though OSM values are presented, the data is stored on the database using the TDS tag equivalent. The next time it is edited within Hootenanny it will display the values using the english translated TDS schema.
 
 .Adding a new point in Hootenanny. In this example a new Point is added to the Haiti OSM roads data indicating that the feature represents a Hospital Grounds `amenity=hospital`. DigitalGlobe GlobalBasemap (GBM).
 image::images/id/hoot_adddata.png[scaledwidth="75%"]
@@ -339,7 +339,7 @@ image::images/id/hoot_conflation_new.png[]
 
 *_New Folder Name_* (optional): The name of any new folder you want to save the output to.  Note that it will be created at the folder level specified in the Path.  Leave blank if no new folder is required.
 
-*_Type_*:  This is the type of conflation you want to run.  Note that there are four conflation options available: _Reference Conflation_, _Average Conflation_, _Cookie Cutter & Horizontal Conflation_ and _Advanced Conflation_.
+*_Type_*:  This is the type of conflation you want to run.  Note that there are four conflation options available: _Reference Conflation_, _Cookie Cutter & Horizontal Conflation_ and _Advanced Conflation_.
 
 [[HootiD-AttributionRefLayer]]
 *_Attribute Reference Layer_*:  By default, the Reference layer contains both the geometry and attribution that dictates the merged features. In many cases, however, reference geometry and attribution exists across multiple layers and therefore we provide the ability to utilize the Secondary layer as the reference attribution for cases where the secondary layer is determined to contain the most accurate tag information while the reference layer contains the most accurate geometry.
@@ -370,17 +370,11 @@ When using Reference Conflation the output is assumed to contain the following:
 
 NOTE: If a required tag has a null or missing value, a default value will get assigned based on the output specification for that field and data type.
 
-==== Average Conflation
-
-Average conflation maintains the general shape of the two inputs, produces close to an exact average, and avoids large data perturbations. Using the road data example, the operator starts by averaging the first two nodes for a road, then moves along each segment or way, averaging nodes together and at the end of the feature averages the final two nodes. To determine the average value for each way, it first calculates the maximal nearest subline, assigns a weight based on the circular error (lowest error, highest weight and vice-versa), and returns the weighted average of the two geometries.
-
-NOTE: Average conflation will modify the merged layer geometry for any matching features.  For this reason caution should be applied and the output should be verified by a qualified data steward for any inaccurate intersections generated in the process.
-
 ==== Cookie Cutter & Horizontal Conflation
 
 Cookie Cutter & Horizontal Conflation is intended for use cases where a lower quality dataset such as a rural road network generated from a low resolution map needs to be conflated with a more accurate or precise dataset such as a urban centerline layer digitized from accurate high resolution imagery. In this scenario, the higher quality data (typically representing an urban area a city core) is buffered and cut, then stitched into the coarse resolution road layer using edge matching routines to create blend of the two layers. To walk through a sample Horizontal Conflation use case see <<HootiD-HorizontalConflationExample>>.  Additional background on Cookie Cutter and Horizontal conflation can also be found in the link:$$https://github.com/ngageoint/hootenanny/releases/download/v0.2.20/Hootenanny.-.User.Guide.pdf$$[Hootenanny User Guide]. When using this method the following settings are applied.
 
-* The bounds of the Reference layer (cookie cut portion) are approximated using an alpha shape (e.g. cookie-cut) that is created by generating a convex hull around the layer.
+* The bounds of the Reference layer (cookie cut portion) are approximated using an alpha shape (e.g. cut command) that is created by generating a convex hull around the layer.
 * The bounds of the Reference layer are buffered by 1km on each side of the convex hull (2 km distance in total). This improves the chances of merging seams between the two layers. Note that this operation works better at the city scale then at a regional or larger scale.
 * The Secondary layer (dough portion) is cut by the alpha shape generated from the Reference layer and matched to road features within the Secondary layer that fall within the buffered retion.
 
@@ -388,7 +382,7 @@ Cookie Cutter & Horizontal Conflation is intended for use cases where a lower qu
 .Example of alpha shape generated with a 1km buffer around a "contrived" urban area (not an actual physical location). The blue line represents the convex hull and the red the alpha shape with the applied -1 km buffer.
 image::images/id/hoot_convexhull_example.png[scaledwidth="40%"]
 
-NOTE: In the user interface there is no way to tune or modify the generated generate-alpha-shape. You can however configure the alpha-value from the command line (see generate-alpha-shape in User Guide). In either case, the generated generate-alpha-shape will always approximate the bounds of the data regardless of shape of the urban area.
+NOTE: In the user interface there is no way to tune or modify the generated alpha shape. You can however configure the alpha-value from the command line (see alpha-shape in User Guide). In either case, the generated alpha shape will always approximate the bounds of the data regardless of shape of the urban area.
 
 ==== Advanced Conflation
 
@@ -609,7 +603,7 @@ Zooming in with relevant imagery displayed in the background, we can see that _S
 .Verifying data on imagery. Boulder, CO; Boulder city street centerline (gray), OSM highways (red); DigitalGlobe GlobalBasemap (GBM).
 image::images/id/hoot_boulder_streetcenterline.png[scaledwidth="30%"]
 
-When using this conflation type, the first layer (cookie-cut) will contain the reference geometry and be used to perform the cookie-cut operation. The second layer represents the dough from which the first layer is cut. The process is depicted below in <<Cookie-Cutter_conceptual_workflow>>. In the image labeled A, the input dough layer (Boulder OSM) is shown. In image B, an alpha shape is generated around the cookie-cut region defined by Layer 1, the Boulder City Road data, with a -1 km buffer applied. The process continues with the OSM dough layer "cut" using the alpha shape (image C). Finally the two layers are combined (image D).
+When using this conflation type, the first layer (cookie-cut) will contain the reference geometry and be used to perform the cut operation. The second layer represents the dough from which the first layer is cut. The process is depicted below in <<Cookie-Cutter_conceptual_workflow>>. In the image labeled A, the input dough layer (Boulder OSM) is shown. In image B, an alpha shape is generated around the cut region defined by Layer 1, the Boulder City Road data, with a -1 km buffer applied. The process continues with the OSM dough layer "cut" using the alpha shape (image C). Finally the two layers are combined (image D).
 
 [[Cookie-Cutter_conceptual_workflow]]
 .Cookie Cutter and Horizontal conceptual workflow using Boulder, CO streets.
@@ -626,9 +620,9 @@ Viewing the workflow within the Hootenanny UI, the Boulder Streets data is added
 .Two Boulder, Colorado roads conflated using Cookie Cutter and Horizontal Conflation. Shown here are Boulder City Street centerlines (pink) as the Reference layer and OSM highways (blue) as the Secondary layer with DigitalGlobe GlobalBasemap (GBM). Note the use of OSM data is not an indication of the data quality but simply used here as an example of a larger dataset covering the greater Boulder metropolitan region.
 image::images/id/hoot_boulder_preconflate.png[]
 
-The final conflated layer represents the merger of the Boulder streets layer and the OSM highways data with all duplicates removed and cookie-cut roads joined. Once the conflation process has completed, the resulting dataset can be exported as a shapefile, FGDB, or WFS from the UI following the steps outlined <<Hoot-iD_Datasets,here>>.
+The final conflated layer represents the merger of the Boulder streets layer and the OSM highways data with all duplicates removed and cut roads joined. Once the conflation process has completed, the resulting dataset can be exported as a shapefile, FGDB, or WFS from the UI following the steps outlined <<Hoot-iD_Datasets,here>>.
 
-.Boulder cookie-cut and horizontal conflation output (green) displayed on DigitalGlobe GlobalBasemap (GBM).
+.Boulder cut and horizontal conflation output (green) displayed on DigitalGlobe GlobalBasemap (GBM).
 image::images/id/hoot_boulder_merged.png[]
 
 [[Poi2PoiConflation]]
@@ -672,7 +666,7 @@ image::images/id/hoot_export_options.png[scaledwidth="25%"]
 
 ===== Export Translation Schema
 
-Users can select which translation schema (MGCP, LTDS 4.0, LTDS 6.1) they would like to export their data. This list will likely expand as new schemas are added to the deployed build after subsequent software releases.
+Users can select which translation schema (MGCP, TDS 4.0, TDS 6.1) they would like to export their data. This list will likely expand as new schemas are added to the deployed build after subsequent software releases.
 
 ===== Export Format
 

@@ -23,7 +23,7 @@ export TB_COUNT=`psql -A -t -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c "
 echo "Tunnel or bridge count (should be zero): " $TB_COUNT
 
 # Clean up the map from the database
-hoot db-delete-map $HOOT_OPTS -D api.db.email=$HOOT_EMAIL $DB_URL/HootApiDbEmptyTagTest
+hoot db-delete $HOOT_OPTS -D api.db.email=$HOOT_EMAIL $DB_URL/HootApiDbEmptyTagTest
 
 # Delete the user
 PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

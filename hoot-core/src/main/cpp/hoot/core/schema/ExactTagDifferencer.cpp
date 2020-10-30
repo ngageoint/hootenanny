@@ -39,7 +39,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(TagDifferencer, ExactTagDifferencer)
 
-double ExactTagDifferencer::diff(const ConstOsmMapPtr&/*map*/, const ConstElementPtr& e1,
+double ExactTagDifferencer::diff(const ConstOsmMapPtr& /*map*/, const ConstElementPtr& e1,
   const ConstElementPtr& e2) const
 {
   const Tags& t1 = e1->getTags();
@@ -48,32 +48,58 @@ double ExactTagDifferencer::diff(const ConstOsmMapPtr&/*map*/, const ConstElemen
 
   for (Tags::const_iterator it = t1.begin(); it != t1.end(); ++it)
   {
+    LOG_VART(it.key());
+    LOG_VART(it.value());
+
     touched.insert(it.key());
 
+    LOG_VART(OsmSchema::getInstance().isMetaData(it.key(), it.value()));
     if (OsmSchema::getInstance().isMetaData(it.key(), it.value()) == false)
     {
       if (it.value() != t2.get(it.key()))
       {
+        LOG_TRACE(
+          "Returning exact tag difference on key: " << it.key() << " for " << e1->getElementId() <<
+          " and " << e2->getElementId() << "...");
         return 1;
       }
     }
   }
+  LOG_VART(touched);
 
   for (Tags::const_iterator it = t2.begin(); it != t2.end(); ++it)
   {
+    LOG_VART(it.key());
+    LOG_VART(it.value());
+
     if (touched.contains(it.key()) == false)
     {
+      LOG_VART(OsmSchema::getInstance().isMetaData(it.key(), it.value()));
       if (OsmSchema::getInstance().isMetaData(it.key(), it.value()) == false)
       {
-        if (it.value() != t2.get(it.key()))
+        if (it.value() != t1.get(it.key()))
         {
+          LOG_TRACE(
+            "Returning exact tag difference on key: " << it.key() << " for " <<
+            e1->getElementId() << " and " << e2->getElementId() << "...");
           return 1;
         }
       }
     }
   }
 
+  LOG_TRACE(
+    "Returning exact tag match for " << e1->getElementId() << " and " << e2->getElementId() <<
+    "...");
   return 0;
+
+  // TODO: Possibly, the above could be replaced with this below but still need to sort through test
+  // failures caused by the change.
+//  if (e1->getTags().hasSameNonMetadataTags(e2->getTags()))
+//  {
+//    return 0.0;
+//  }
+//  return 1.0;
 }
 
 }

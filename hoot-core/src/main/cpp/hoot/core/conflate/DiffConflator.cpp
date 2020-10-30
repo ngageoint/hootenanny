@@ -111,7 +111,7 @@ DiffConflator::~DiffConflator()
   _reset();
 }
 
-void DiffConflator::setConfiguration(const Settings &conf)
+void DiffConflator::setConfiguration(const Settings& conf)
 {
   _settings = conf;
   _matchThreshold.reset();
@@ -278,9 +278,12 @@ void DiffConflator::_removeMatches(const Status& status)
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
-    LOG_VART(match);
     if (treatReviewsAsMatches || match->getType() != MatchType::Review)
     {
+      LOG_VART(match);
+      LOG_VART(match->getClassification().getMissP());
+      LOG_VART(match->getClassification().getReviewP());
+
       std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
       for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
            pit != pairs.end(); ++pit)
@@ -306,14 +309,14 @@ void DiffConflator::_removeMatches(const Status& status)
             !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
               _intraDatasetMatchOnlyElementIds.contains(pit->first)))
         {
-          LOG_VART(e1);
+          LOG_TRACE("Removing element involved in match: " << pit->first << "...");
           RecursiveElementRemover(pit->first).apply(_pMap);
         }
         if (e2 && e2->getStatus() == status &&
             !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
              _intraDatasetMatchOnlyElementIds.contains(pit->second)))
         {
-          LOG_VART(e2);
+          LOG_TRACE("Removing element involved in match: " << pit->second << "...");
           RecursiveElementRemover(pit->second).apply(_pMap);
         }
       }
@@ -468,9 +471,7 @@ void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChange
     else if (ElementType::Relation == c.getElement()->getElementType().getEnum())
     {
       // Diff conflation w/ tags doesn't handle relations. Changed this to log that the relations
-      // are being skipped for now. #3449 was originally created to deal with adding relation
-      // support and then closed since we lack a use case currently that requires it. If we ever
-      // get one, then we can re-open that issue.
+      // are being skipped for now. #4298 would add support for relations.
 
       LOG_DEBUG("Relation handling not implemented with differential conflation: " << c);
       if (Log::getInstance().getLevel() <= Log::Trace)

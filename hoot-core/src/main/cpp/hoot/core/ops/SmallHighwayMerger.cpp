@@ -97,7 +97,7 @@ void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
       std::shared_ptr<Way> w = it->second;
 
       // if the way is smaller than the threshold, that isn't a `hoot:special` way
-      if (highwayCrit.isSatisfied(w) &&
+      if (w && highwayCrit.isSatisfied(w) &&
           !w->getTags().contains(MetadataTags::HootSpecial()))
       {
         std::shared_ptr<LineString> linestring = ElementConverter(map).convertToLineString(w);

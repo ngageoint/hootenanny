@@ -177,6 +177,28 @@ public:
     const ElementCriterionPtr& wayCriterion = ElementCriterionPtr());
 
   /**
+   * Returns the most specific feature types, as identified by the schema, for all ways containing
+   * the specified node
+   *
+   * @param nodeId ID of the node to return containing way types for
+   * @param map map which owns the input node
+   * @return a unique collection of type key/value pair strings
+   */
+  static std::set<QString> getContainingWaysMostSpecificTypesByNodeId(
+    const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
+   * Returns the most specific feature type key, as identified by the schema, for all ways
+   * containing the specified node
+   *
+   * @param nodeId ID of the node to return containing way type keys for
+   * @param map map which owns the input node
+   * @return a unique collection of type key strings
+   */
+  static std::set<QString> getContainingWaysMostSpecificTypeKeysByNodeId(
+    const long nodeId, const ConstOsmMapPtr& map);
+
+  /**
    * Determines if two nodes are contained in exactly the same set of ways
    *
    * @param nodeId1 ID of the first node to examine
@@ -253,6 +275,18 @@ public:
    */
   static bool wayIntersectsWithWayHavingKvp(const long wayId, const QString& kvp,
                                             const OsmMapPtr& map);
+
+  /**
+   * This determines if a node belongs to a way that shares any nodes with another way.
+   *
+   * @param nodeId ID of the node to examine
+   * @param wayId ID of the way to examine
+   * @param map map owning the input elements
+   * @return true if the node with ID nodeId belongs to a way that has any way nodes in common with
+   * the way having ID wayId; false otherwise
+   */
+  static bool nodeContainedByWaySharingNodesWithAnotherWay(
+    const long nodeId, const long wayId, const OsmMapPtr& map);
 };
 
 }

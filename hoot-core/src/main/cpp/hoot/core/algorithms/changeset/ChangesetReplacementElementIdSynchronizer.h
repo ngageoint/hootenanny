@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * This performs some additional element ID synchonization specific to cut and replace.
+ * This performs some additional element ID synchronization specific to cut and replace.
  */
 class ChangesetReplacementElementIdSynchronizer : public ElementIdSynchronizer
 {
@@ -49,11 +49,12 @@ public:
   /**
    * see ElementIdSynchronizer
    */
-  virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2) override;
+  virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
+                           const ElementType& elementType = ElementType::Unknown) override;
 
 private:
 
-  WayNodeCriterion _wayNodeCrit;
+  void _syncElementIds(const QSet<QString>& identicalHashes);
 };
 
 }

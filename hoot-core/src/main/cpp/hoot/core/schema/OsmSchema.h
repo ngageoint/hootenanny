@@ -45,14 +45,16 @@ namespace hoot
 
 class Tags;
 
+// There are some unused and now disabled types here that the original design intention of which is
+// unclear.
 enum EdgeType
 {
-  CanHave,  //not used
+  //CanHave,  // not used
   IsA,
   SimilarTo,
-  ParentOf, //not used
-  AssociatedWith,
-  CompoundComponent //not used
+  //ParentOf, // not used
+  AssociatedWith//,
+  //CompoundComponent // not used
 };
 
 struct OsmSchemaCategory
@@ -66,7 +68,14 @@ struct OsmSchemaCategory
     Use =             0x08,
     Name =            0x10,
     PseudoName =      0x20,
-    Multiuse =        0x40//,
+    // use for the feature may have multiple purposes
+    Multiuse =        0x40,
+    // This tag must be combined with another tag to get the type of the feature. e.g.
+    // surface=asphalt must be combined with highway=*, amenity=parking, etc. to know the type of a
+    // feature with it as a tag. TODO: This probably makes more sense as an EdgeType rather than a
+    // category (maybe CompoundComponent?), but have been unable to come up with a simple design
+    // where it could be used in that way yet.
+    Combination =     0x80//,
     //All = Poi | Building | Transportation | Use | Name | PseudoName | Multiuse
   };
 
@@ -80,6 +89,7 @@ struct OsmSchemaCategory
   static OsmSchemaCategory name() { return OsmSchemaCategory(Name); }
   static OsmSchemaCategory pseudoName() { return OsmSchemaCategory(PseudoName); }
   static OsmSchemaCategory multiUse() { return OsmSchemaCategory(Multiuse); }
+  static OsmSchemaCategory combination() { return OsmSchemaCategory(Combination); }
 
   bool operator==(const OsmSchemaCategory& t) const { return t._type == _type; }
   bool operator!=(const OsmSchemaCategory& t) const { return t._type != _type; }
@@ -115,6 +125,10 @@ struct OsmSchemaCategory
     else if (s == "multiuse")
     {
       return Multiuse;
+    }
+    else if (s == "combination")
+    {
+      return Combination;
     }
     else if (s == "")
     {
@@ -179,6 +193,10 @@ struct OsmSchemaCategory
     if (_type & Multiuse)
     {
       result << "multiuse";
+    }
+    if (_type & Combination)
+    {
+      result << "combination";
     }
 
     return result;
@@ -361,6 +379,17 @@ public:
   bool hasCategory(const QString& kvp, const QString& category) const;
 
   /**
+   * Returns true if at least one tag in the set of specified tags is part of the specified
+   * category.
+   */
+  bool hasCategory(const Tags& t, const OsmSchemaCategory& category) const;
+
+  /**
+   * Returns true if the specified kvp is part of the specified category.
+   */
+  bool hasCategory(const QString& kvp, const OsmSchemaCategory& category) const;
+
+  /**
    * Determines if the key is part of any category in the schema
    *
    * @param key tag key
@@ -451,6 +480,18 @@ public:
   bool explicitTypeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore);
 
   /**
+   * Determines if two sets of tags have an explicit type mismatch. Empty tags and generic types
+   * are not ignored during the comparison
+   *
+   * @param tags1 the first set of tags to compare
+   * @param tags2 the second set of tags to compare
+   * @param minTypeScore the minimum similarity score at or above which the two sets of tags must
+   * score in to be considered a match
+   * @return true if the tags mismatch; false otherwise
+   */
+  bool typeMismatch(const Tags& tags1, const Tags& tags2, const double minTypeScore);
+
+  /**
    * Determines if a key/value pair represents a generic feature type
    *
    * @param kvp the key/value pair to examine
@@ -487,7 +528,6 @@ public:
    *
    * @param tags the tags to search
    * @return a single key/value pair string
-   * @todo handle multiple types without inheritance
    */
   QString mostSpecificType(const Tags& tags);
 

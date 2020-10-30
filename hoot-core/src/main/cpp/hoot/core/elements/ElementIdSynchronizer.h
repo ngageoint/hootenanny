@@ -30,13 +30,14 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
 
 /**
- * This class allows for synchronizing element IDs between to maps that have identical features.
- * This works across multiple maps, so something like IdSwapOp won't work here.
+ * This class allows for synchronizing element IDs between two maps that have identical features. It
+ * could handle way nodes better (see ChangesetReplacementElementIdSynchronizer).
  */
 class ElementIdSynchronizer
 {
@@ -54,8 +55,16 @@ public:
    * ConstOsmMapPtr can't be used here due to the use of ElementHashVisitor, even though the map
    * is not modified.
    * @param map2 map to update element IDs on
+   * @param elementType the type of element to synchronize the IDs of; all element types will have
+   * IDs synchronized if no type is specified
    */
-  virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2);
+  virtual void synchronize(const OsmMapPtr& map1, const OsmMapPtr& map2,
+                           const ElementType& elementType = ElementType::Unknown);
+
+  /**
+   * Clears the underlying hash and synchronized element ID data
+   */
+  void clear();
 
   int getNumNodeIdsSynchronized() const { return _updatedNodeCtr; }
   int getNumWayIdsSynchronized() const { return _updatedWayCtr; }
@@ -69,15 +78,52 @@ protected:
 
   // see ElementHashVisitor
   bool _useNodeTagsForHash;
+  int _coordinateComparisonSensitivity;
+
+  OsmMapPtr _map1;
+  OsmMapPtr _map2;
+
+  WayNodeCriterion _wayNodeCrit;
+
+  // see ElementHashVisitor
+  QMap<QString, ElementId> _map1HashesToElementIds;
+  QMap<ElementId, QString> _map1ElementIdsToHashes;
+  QSet<std::pair<ElementId, ElementId>> _map1Dupes;
+  QMap<QString, ElementId> _map2HashesToElementIds;
+  QMap<ElementId, QString> _map2ElementIdsToHashes;
+  QSet<std::pair<ElementId, ElementId>> _map2Dupes;
+
+  QSet<ElementId> _syncedElementIds;
 
   int _updatedNodeCtr;
   int _updatedWayCtr;
   int _updatedRelationCtr;
 
-  QMap<QString, ElementId> _calcElementHashes(
-    const OsmMapPtr& map,
-      const int coordinateComparisonSensitivity =
-        ConfigOptions().getNodeComparisonCoordinateSensitivity());
+  /*
+   * Calculates the element unique hashes used for comparison
+   */
+  void _calcElementHashes(
+    const OsmMapPtr& map, QMap<QString, ElementId>& hashesToElementIds,
+    QMap<ElementId, QString>& elementIdsToHashes);
+
+  /*
+   * Determines if two elements (one from each input map) are way nodes which don't have a way
+   * parent in common.
+   */
+  bool _areWayNodesWithoutAWayInCommon(ElementPtr element1, ElementPtr element2);
+
+  /*
+   * Determines if two elements (one from each input map) belong to ways with types different enough
+   * to prevent ID synchronization from occurring..
+   */
+  bool _areWayNodesInWaysOfMismatchedType(ElementPtr element1, ElementPtr element2);
+
+  QSet<QString> _getHashesByElementType(
+    const QMap<ElementId, QString>& hashesByElementId, const ElementType& elementType) const;
+
+private:
+
+  void _syncElementIds(const QSet<QString>& identicalHashes);
 };
 
 }

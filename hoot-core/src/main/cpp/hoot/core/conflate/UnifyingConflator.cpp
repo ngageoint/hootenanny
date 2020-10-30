@@ -99,8 +99,8 @@ void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassifica
   tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
 }
 
-void UnifyingConflator::_addReviewTags(const OsmMapPtr& map,
-                                       const std::vector<ConstMatchPtr>& matches)
+void UnifyingConflator::_addReviewAndScoreTags(
+  const OsmMapPtr& map, const std::vector<ConstMatchPtr>& matches)
 {
   if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
   {
@@ -118,7 +118,7 @@ void UnifyingConflator::_addReviewTags(const OsmMapPtr& map,
           ElementPtr e2 = map->getElement(it->second);
 
           LOG_TRACE(
-            "Adding review tags to " << e1->getElementId() << " and " << e2->getElementId() <<
+            "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() <<
             "...");
 
           _addScoreTags(e1, mc);
@@ -204,8 +204,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   vector<ConstMatchPtr> allMatches = _matches;
 
-  // add review tags to all matches that have some review component
-  _addReviewTags(map, allMatches);
+  // add score tags to all matches that have some score component
+  _addReviewAndScoreTags(map, allMatches);
 
   LOG_DEBUG("Pre-constraining match count: " << StringUtils::formatLargeNumber(allMatches.size()));
   _stats.append(SingleStat("Number of Matches Before Whole Groups", _matches.size()));
@@ -361,11 +361,11 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     LOG_VART(merger->getImpactedElementIds());
 
     // WARNING: Enabling this could result in a lot of files being generated.
-    //if (i % 30 == 0)
-//    {
-//      OsmMapWriterFactory::writeDebugMap(
-//        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
-//    }
+    if (i % 30 == 0)
+    {
+      OsmMapWriterFactory::writeDebugMap(
+        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+    }
   }
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");

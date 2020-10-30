@@ -101,6 +101,9 @@ double EuclideanDistanceExtractor::distance(
     return nullValue();
   }
 
+  LOG_VART(g1->toString());
+  LOG_VART(g2->toString());
+
   return g1->distance(g2.get());
 }
 

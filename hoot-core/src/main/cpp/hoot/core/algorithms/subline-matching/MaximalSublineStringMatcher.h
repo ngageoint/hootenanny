@@ -30,12 +30,12 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineMatcher.h>
 
 namespace hoot
 {
 class MaximalSublineStringMatcherTest;
 class WaySublineMatchString;
-class SublineMatcher;
 
 /**
  * This class wraps the MaximalSublineMatcher class to create a matcher that can work on
@@ -69,6 +69,10 @@ public:
 
   virtual QString getDescription() const
   { return "Matches lines based on the maximal subline string found"; }
+
+  virtual std::string getClassName() const { return className(); }
+
+  virtual std::string getSublineMatcherName() const { return _sublineMatcher->getClassName(); }
 
 private:
 

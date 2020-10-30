@@ -198,7 +198,8 @@ vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
 
 bool NetworkMatchCreator::isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
-  // special tag is currently only used by roundabout processing to mark temporary features
+  // The hoot:special tag is currently only used by roundabout processing to mark temporary
+  // features.
   if (element->getTags().contains(MetadataTags::HootSpecial()) ||
       (_filter && !_filter->isSatisfied(element)))
   {

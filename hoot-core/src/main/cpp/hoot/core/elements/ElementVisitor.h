@@ -78,12 +78,12 @@ public:
   /**
    * @see OperationStatusInfo
    */
-  QString getInitStatusMessage() const override { return ""; }
+  virtual QString getInitStatusMessage() const override { return ""; }
 
   /**
    * @see OperationStatusInfo
    */
-  QString getCompletedStatusMessage() const override { return ""; }
+  virtual QString getCompletedStatusMessage() const override { return ""; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -93,7 +93,7 @@ public:
    * they are run against during conflation should populate this list. The list is treated in a
    * logical OR fashion.
    */
-  QStringList getCriteria() const override { return QStringList(); }
+  virtual QStringList getCriteria() const override { return QStringList(); }
 
   /**
    * Returns the visitor's class name

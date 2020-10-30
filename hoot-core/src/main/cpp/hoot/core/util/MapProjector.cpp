@@ -289,10 +289,10 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createOrthographic(double x, 
 std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const OGREnvelope& env,
   Radians maxAngleError, Meters maxDistanceError, Meters testDistance, bool warnOnFail)
 {
-  LOG_DEBUG("Selecting best planar projection...");
+  LOG_TRACE("Selecting best planar projection...");
 
   vector<std::shared_ptr<OGRSpatialReference>> projs = createAllPlanarProjections(env);
-  LOG_VARD(projs.size());
+  LOG_VART(projs.size());
 
   QString deg = QChar(0x00B0);
 
@@ -342,14 +342,14 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
     "'Hootenanny - Distance and Angle Errors Due to Reprojection' for more "
     "information. You may experience poor conflation performance as a result.";
   int bestIndex = -1;
-  Log::WarningLevel level = Log::Debug;
-  LOG_VARD(passingResults.size());
-  LOG_VARD(testResults.size());
+  Log::WarningLevel level = Log::Trace;
+  LOG_VART(passingResults.size());
+  LOG_VART(testResults.size());
   if (passingResults.size() > 0)
   {
     bestIndex = _findBestScore(passingResults);
-    LOG_VARD(bestIndex);
-    LOG_VARD(toWkt(projs[bestIndex]));
+    LOG_VART(bestIndex);
+    LOG_VART(toWkt(projs[bestIndex]));
   }
   else if (warnOnFail == false)
   {
@@ -359,7 +359,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
   {
     LOG_WARN(errorMessage);
     bestIndex = _findBestScore(testResults);
-    LOG_VARD(bestIndex);
+    LOG_VART(bestIndex);
     level = Log::Info;
   }
 
@@ -381,7 +381,7 @@ std::shared_ptr<OGRSpatialReference> MapProjector::createPlanarProjection(const 
     throw HootException(errorMessage);
   }
 
-  LOG_VARD(toWkt(projs[bestIndex].get()));
+  LOG_VART(toWkt(projs[bestIndex].get()));
   return projs[bestIndex];
 }
 
@@ -516,7 +516,7 @@ Coordinate MapProjector::project(const Coordinate& c,
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
   }
 
-  LOG_DEBUG("Reprojecting map from: " << toWkt(srs1) << " to " << toWkt(srs2) << "...");
+  LOG_TRACE("Reprojecting map from: " << toWkt(srs1) << " to " << toWkt(srs2) << "...");
 
   Coordinate result;
   result.x = c.x;
@@ -531,7 +531,7 @@ Coordinate MapProjector::project(const Coordinate& c,
 void MapProjector::project(const std::shared_ptr<OsmMap>& map,
                            const std::shared_ptr<OGRSpatialReference>& ref)
 {
-  LOG_DEBUG("Reprojecting map to: " << toWkt(ref) << "...");
+  LOG_TRACE("Reprojecting map to: " << toWkt(ref) << "...");
 
   std::shared_ptr<OGRSpatialReference> sourceSrs = map->getProjection();
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(sourceSrs.get(), ref.get()));
@@ -573,7 +573,7 @@ void MapProjector::project(const std::shared_ptr<OsmMap>& map,
 
     if (count % 10000 == 0)
     {
-      PROGRESS_DEBUG(
+      PROGRESS_TRACE(
         "Reprojecting " << StringUtils::formatLargeNumber(count) << " / " <<
         StringUtils::formatLargeNumber(nodes.size()));
     }
@@ -595,7 +595,7 @@ void MapProjector::project(const std::shared_ptr<Geometry>& g,
     throw HootException(QString("Error creating transformation object: ") + CPLGetLastErrorMsg());
   }
 
-  LOG_DEBUG("Reprojecting map from: " << toWkt(srs1) << " to " << toWkt(srs1) << "...");
+  LOG_TRACE("Reprojecting map from: " << toWkt(srs1) << " to " << toWkt(srs1) << "...");
 
   ReprojectCoordinateFilter filter(t);
   g->apply_rw(&filter);
@@ -618,7 +618,7 @@ void MapProjector::projectToOrthographic(const std::shared_ptr<OsmMap>& map)
 
 void MapProjector::projectToOrthographic(const std::shared_ptr<OsmMap>& map, const OGREnvelope& env)
 {
-  LOG_DEBUG("Projecting to orthographic...");
+  LOG_TRACE("Projecting to orthographic...");
   MapProjector proj;
   std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   double x = (env.MinX + env.MaxX) / 2.0;
@@ -643,7 +643,7 @@ void MapProjector::projectToPlanar(const std::shared_ptr<OsmMap>& map, const OGR
 {
   if (map->getProjection()->IsProjected() == false)
   {
-    LOG_DEBUG("Projecting to planar...");
+    LOG_TRACE("Projecting to planar...");
     LOG_VART(GeometryUtils::toEnvelope(env)->toString());
     project(map, getInstance().createPlanarProjection(env));
   }
@@ -663,7 +663,7 @@ void MapProjector::projectToWgs84(const std::shared_ptr<OsmMap>& map)
 Coordinate MapProjector::projectFromWgs84(const Coordinate& c,
                                           const std::shared_ptr<OGRSpatialReference>& srs)
 {
-  LOG_DEBUG("Projecting from WGS84...");
+  LOG_TRACE("Projecting from WGS84...");
   std::shared_ptr<OGRSpatialReference> wgs84(new OGRSpatialReference());
   wgs84->importFromEPSG(4326);
   return project(c, wgs84, srs);

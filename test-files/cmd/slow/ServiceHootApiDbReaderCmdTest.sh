@@ -24,7 +24,7 @@ hoot convert --warn $CONFIG -D api.db.email=$HOOT_EMAIL -D convert.ops="hoot::Re
 hoot diff $CONFIG test-files/cmd/slow/ServiceHootApiDbReaderTest/output2.osm $OUTPUT_DIR/output2.osm
 
 echo "clean up database"
-hoot db-delete-map --warn $CONFIG -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/DcGisRoads-ServiceHootApiDbReaderCmdTest"
+hoot db-delete --warn $CONFIG -D api.db.email=$HOOT_EMAIL "$HOOT_DB_URL/DcGisRoads-ServiceHootApiDbReaderCmdTest"
 
 # Delete the user
 PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

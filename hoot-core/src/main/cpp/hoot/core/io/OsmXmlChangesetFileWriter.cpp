@@ -131,6 +131,11 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       _change = changesetProvider->readNextChange();
       LOG_VART(_change.toString());
 
+      if (!_change.getElement())
+      {
+        continue;
+      }
+
       // When multiple changeset providers are passed in, sometimes multiple changes for the same
       // element may exist as a result of combining their results together, so we're skipping those
       // dupes here. Formerly, we only checked for exact duplicate statements and now we're more

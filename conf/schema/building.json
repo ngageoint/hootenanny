@@ -72,6 +72,10 @@
         "objectType": "tag"
     },
     {
+        "categories": [
+            "building",
+            "combination"
+        ],
         "dataType": "enumeration",
         "geometries": [
             "area",
@@ -96,6 +100,10 @@
         }
     },
     {
+        "categories": [
+            "building",
+            "combination"
+        ],
         "dataType": "enumeration",
         "geometries": [
             "area",
@@ -163,6 +171,20 @@
         "isA": "building",
         "name": "building=fort",
         "objectType": "tag"
+    },
+    {
+        "isA": "building",
+        "name": "building=house",
+        "objectType": "tag"
+    },
+    {
+        "isA": "building",
+        "name": "building=museum",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "tourism=museum",
+            "weight": 0.8
+        }
     },
     {
         "categories": [

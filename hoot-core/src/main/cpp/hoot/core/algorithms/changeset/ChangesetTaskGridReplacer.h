@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-class ChangesetReplacementCreator;
+class ChangesetReplacement;
 class OsmApiDbSqlChangesetApplier;
 
 /**
@@ -68,6 +68,11 @@ public:
    * @param taskGrid the task grid that partitions the individual replacement operations
    */
   void replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
+
+  int getNumOrphanedNodesInOutput() const { return _orphanedNodes; }
+  int getNumDisconnectedWaysInOutput() const { return _disconnectedWays; }
+  int getNumEmptyWaysInOutput() const { return _emptyWays; }
+  int getNumDuplicateElementPairsInOutput() const { return _duplicateElementPairs; }
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
@@ -107,7 +112,7 @@ private:
   geos::geom::Envelope _taskGridBounds;
 
   // derives the replacement changesets
-  std::shared_ptr<ChangesetReplacementCreator> _changesetCreator;
+  std::shared_ptr<ChangesetReplacement> _changesetCreator;
   // all changeset files generated are stored here
   QString _changesetsOutputDir;
   // the ID of the task grid cell currently being processed
@@ -127,6 +132,14 @@ private:
   QString _finalOutput;
   // adds tags to features that are suspect as result of the replacement op
   bool _tagQualityIssues;
+  // the number of orphaned nodes found in the final output if _tagQualityIssues=true
+  int _orphanedNodes;
+  // the number of disconnected ways found in the final output if _tagQualityIssues=true
+  int _disconnectedWays;
+  // the number of empty ways found in the final output if _tagQualityIssues=true
+  int _emptyWays;
+  // the number of duplicated elements found in the final output if _tagQualityIssues=true
+  int _duplicateElementPairs;
   // uses diff conflate to calculate the difference between the final replaced data and the original
   // data used for replacement
   bool _calcDiffWithReplacement;
@@ -140,6 +153,8 @@ private:
     const TaskGrid::TaskGridCell& taskGridCell, const int changesetNum, const int taskGridSize);
   void _initChangesetStats();
   void _printChangesetStats();
+
+  // TODO: move the quality issue tagging and diff gen out to a separate class
 
   // writes out all of the ref data; useful for debugging...expensive
   void _getUpdatedData(const QString& outputFile);

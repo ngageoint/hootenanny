@@ -594,9 +594,9 @@ long ApiDb::round(double x)
 
 std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
 {
-  LOG_VARD(bounds);
+  LOG_VART(bounds);
   const vector<Range> tileRanges = _getTileRanges(bounds);
-  LOG_VARD(tileRanges.size());
+  LOG_VART(tileRanges.size());
 
   // I'm not sure yet if the number of tile ID ranges is constant or not.  If it is, then we could
   // modify this to add placeholders for the tile ID ranges and make it so the query only gets
@@ -627,8 +627,8 @@ std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
     _selectNodesByBounds->bindValue(":minLat", bounds.getMinY());
     _selectNodesByBounds->bindValue(":maxLat", bounds.getMaxY());
   }
-  LOG_VARD(_selectNodesByBounds->lastQuery());
-  LOG_VARD(_selectNodesByBounds->boundValues());
+  LOG_VART(_selectNodesByBounds->lastQuery());
+  LOG_VART(_selectNodesByBounds->boundValues());
 
   if (_selectNodesByBounds->exec() == false)
   {
@@ -636,7 +636,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
       "Error selecting nodes by bounds: " + QString::fromStdString(bounds.toString()) + " Error: " +
       _selectNodesByBounds->lastError().text());
   }
-  LOG_VARD(_selectNodesByBounds->numRowsAffected());
+  LOG_VART(_selectNodesByBounds->numRowsAffected());
   return _selectNodesByBounds;
 }
 
@@ -656,7 +656,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& 
   QString sql = "SELECT DISTINCT way_id FROM " + tableTypeToTableName(TableType::WayNode);
   sql += " WHERE node_id IN (" + QStringList(nodeIds.toList()).join(",") + ")";
   _selectWayIdsByWayNodeIds->prepare(sql);
-  LOG_VARD(_selectWayIdsByWayNodeIds->lastQuery().right(100));
+  LOG_VART(_selectWayIdsByWayNodeIds->lastQuery().right(100));
 
   if (_selectWayIdsByWayNodeIds->exec() == false)
   {
@@ -664,7 +664,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& 
       "Error selecting way IDs by way node IDs.  Error: " +
       _selectWayIdsByWayNodeIds->lastError().text());
   }
-  LOG_VARD(_selectWayIdsByWayNodeIds->numRowsAffected());
+  LOG_VART(_selectWayIdsByWayNodeIds->numRowsAffected());
   return _selectWayIdsByWayNodeIds;
 }
 
@@ -722,7 +722,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QStri
   sql += " AND id IN (" + QStringList(elementIds.toList()).join(",") + ")";
   sql += " ORDER BY id DESC";
   _selectElementsByElementIdList->prepare(sql);
-  LOG_VARD(_selectElementsByElementIdList->lastQuery().right(100));
+  LOG_VART(_selectElementsByElementIdList->lastQuery().right(100));
 
   if (_selectElementsByElementIdList->exec() == false)
   {
@@ -730,7 +730,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QStri
       "Error selecting elements by element ID list:  Error: " +
       _selectElementsByElementIdList->lastError().text());
   }
-  LOG_VARD(_selectElementsByElementIdList->numRowsAffected());
+  LOG_VART(_selectElementsByElementIdList->numRowsAffected());
   return _selectElementsByElementIdList;
 }
 
@@ -751,7 +751,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& 
   sql += " way_id IN (" + QStringList(wayIds.toList()).join(",") + ")";
   //sql += " ORDER BY sequence_id";
   _selectWayNodeIdsByWayIds->prepare(sql);
-  LOG_VARD(_selectWayNodeIdsByWayIds->lastQuery().right(100));
+  LOG_VART(_selectWayNodeIdsByWayIds->lastQuery().right(100));
 
   if (_selectWayNodeIdsByWayIds->exec() == false)
   {
@@ -759,7 +759,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& 
       "Error selecting way node IDs by way IDs.  Error: " +
       _selectWayNodeIdsByWayIds->lastError().text());
   }
-  LOG_VARD(_selectWayNodeIdsByWayIds->numRowsAffected());
+  LOG_VART(_selectWayNodeIdsByWayIds->numRowsAffected());
   return _selectWayNodeIdsByWayIds;
 }
 
@@ -791,8 +791,8 @@ std::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QStrin
   {
     _selectRelationIdsByMemberIds->bindValue(":elementType", memberElementType.toString());
   }
-  LOG_VARD(_selectRelationIdsByMemberIds->lastQuery().right(100));
-  LOG_VARD(_selectRelationIdsByMemberIds->boundValues());
+  LOG_VART(_selectRelationIdsByMemberIds->lastQuery().right(100));
+  LOG_VART(_selectRelationIdsByMemberIds->boundValues());
 
   if (_selectRelationIdsByMemberIds->exec() == false)
   {
@@ -800,7 +800,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QStrin
       "Error selecting relation IDs by member IDs.  Error: " +
       _selectRelationIdsByMemberIds->lastError().text());
   }
-  LOG_VARD(_selectRelationIdsByMemberIds->numRowsAffected());
+  LOG_VART(_selectRelationIdsByMemberIds->numRowsAffected());
   return _selectRelationIdsByMemberIds;
 }
 
@@ -852,7 +852,7 @@ QString ApiDb::_getTileWhereCondition(const vector<Range>& tileIdRanges) const
 
 std::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString& timeStr)
 {
-  LOG_VARD(timeStr);
+  LOG_VART(timeStr);
   if (!_selectChangesetsCreatedAfterTime)
   {
     _selectChangesetsCreatedAfterTime.reset(new QSqlQuery(_db));
@@ -871,8 +871,8 @@ std::shared_ptr<QSqlQuery> ApiDb::getChangesetsCreatedAfterTime(const QString& t
       "Could not execute changesets query: " +
       _selectChangesetsCreatedAfterTime->lastError().text());
   }
-  LOG_VARD(_selectChangesetsCreatedAfterTime->executedQuery());
-  LOG_VARD(_selectChangesetsCreatedAfterTime->numRowsAffected());
+  LOG_VART(_selectChangesetsCreatedAfterTime->executedQuery());
+  LOG_VART(_selectChangesetsCreatedAfterTime->numRowsAffected());
 
   return _selectChangesetsCreatedAfterTime;
 }

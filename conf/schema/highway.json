@@ -50,12 +50,29 @@
         ]
     },
     {
+        "#": "This likely has similar problems to highway=construction.",
+        "isA": "highway=road",
+        "name": "highway=proposed",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "highway=road",
+                "weight": 0.3
+            }
+        ]
+    },
+    {
         "# preferred": {
             "foot": "designated",
             "highway": "path"
         },
         "isA": "highway=path",
         "name": "highway=footway",
+        "objectType": "tag"
+    },
+    {
+        "isA": "highway=path",
+        "name": "highway=elevator",
         "objectType": "tag"
     },
     {
@@ -324,9 +341,18 @@
         "objectType": "tag"
     },
     {
-        "isA": "highway=footway",
+        "aliases": [
+            "highway=escalator"
+        ],
+        "isA": "highway=path",
         "name": "highway=steps",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "highway=footway",
+                "weight": 0.3
+            }
+        ]
     },
     {
         "isA": "highway=road",
@@ -437,5 +463,17 @@
                 "weight": 0.8
             }
         ]
+    },
+    {
+        "geometries": [ "linestring" ],
+        "isA": "highway",
+        "name": "highway=cycleway",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [ "linestring" ],
+        "isA": "highway",
+        "name": "highway=bridleway",
+        "objectType": "tag"
     }
 ]

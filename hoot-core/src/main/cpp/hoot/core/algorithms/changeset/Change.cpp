@@ -68,13 +68,21 @@ QString Change::changeTypeToString(const ChangeType changeType)
 
 bool Change::operator==(const Change& other) const
 {
+  if (!getElement() || !other.getElement())
+  {
+    return false;
+  }
   return _type == other.getType() && other.getElement()->getElementId() == _element->getElementId();
 }
 
 QString Change::toString() const
 {
-  return
-    "Change type: " + changeTypeToString(_type) + ", ID: " + _element->getElementId().toString();
+  QString str =  "Change type: " + changeTypeToString(_type);
+  if (_element)
+  {
+    str += ", ID: " + _element->getElementId().toString();
+  }
+  return str;
 }
 
 }

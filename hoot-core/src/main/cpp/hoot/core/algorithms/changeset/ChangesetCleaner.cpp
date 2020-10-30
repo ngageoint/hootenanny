@@ -43,46 +43,62 @@ _numDeleteChangesRemoved(0)
   _clean();
 }
 
+ChangesetCleaner::~ChangesetCleaner()
+{
+  close();
+}
+
 void ChangesetCleaner::_clean()
 {
+  LOG_DEBUG("Deriving and cleaning " << _changesetProviders.size() << " changeset(s)...");
+
   for (QList<ChangesetProviderPtr>::const_iterator itr =
-       _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
+         _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
   {
     ChangesetProviderPtr changesetProvider = *itr;
     while (changesetProvider->hasMoreChanges())
     {
       const Change change = changesetProvider->readNextChange();
-      const ElementId id = change.getElement()->getElementId();
-      if (_changesById.contains(id))
+      if (change.getElement())
       {
-        const Change existingChange = _changesById[id];
-
-        // We already have a modify or create change for this element, so ignore the delete change.
-        if (existingChange.getType() != Change::Delete && change.getType() == Change::Delete)
+        LOG_VART(change);
+        const ElementId id = change.getElement()->getElementId();
+        if (_changesById.contains(id))
         {
-          _numDeleteChangesRemoved++;
-          continue;
+          const Change existingChange = _changesById[id];
+          LOG_VART(existingChange);
+          // We already have a modify or create change for this element, so ignore the delete
+          // change.
+          if (existingChange.getType() != Change::Delete && change.getType() == Change::Delete)
+          {
+            _numDeleteChangesRemoved++;
+            continue;
+          }
+          else
+          {
+            // If the existing change is a delete, then we'll overwrite it with a create or
+            // modify.
+            _changesById[id] = change;
+            _changes.push_back(change);
+          }
         }
         else
         {
-          // If the existing change is a delete, then we'll overwrite it with a create or modify.
           _changesById[id] = change;
           _changes.push_back(change);
         }
       }
-      else
-      {
-        _changesById[id] = change;
-        _changes.push_back(change);
-      }
     }
   }
+  LOG_VARD(_changesById.size());
+  LOG_VARD(_changes.size());
   _changeItr = _changes.begin();
 }
 
-ChangesetCleaner::~ChangesetCleaner()
+void ChangesetCleaner::close()
 {
-  close();
+  _changesById.clear();
+  _changes.clear();
 }
 
 std::shared_ptr<OGRSpatialReference> ChangesetCleaner::getProjection() const
@@ -97,8 +113,8 @@ bool ChangesetCleaner::hasMoreChanges()
 
 Change ChangesetCleaner::readNextChange()
 {
-  Change change = *_changeItr;
-  ++_changeItr;
+  Change change = *_changeItr;;
+  ++_changeItr;;
   return change;
 }
 
@@ -164,8 +180,7 @@ int ChangesetCleaner::getNumChanges() const
   for (QList<ChangesetProviderPtr>::const_iterator itr =
        _changesetProviders.begin(); itr != _changesetProviders.end(); ++itr)
   {
-    ChangesetProviderPtr changesetProvider = *itr;
-    total += changesetProvider->getNumCreateChanges();
+    total += (*itr)->getNumChanges();
   }
   return total;
 }

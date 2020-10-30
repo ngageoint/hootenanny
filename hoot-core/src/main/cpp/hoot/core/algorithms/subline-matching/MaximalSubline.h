@@ -164,7 +164,9 @@ public:
   double findMaximalSubline(const ConstOsmMapPtr &map, const ConstWayPtr& w1, const ConstWayPtr& w2,
     std::vector<WayLocation>& wl1, std::vector<WayLocation>& wl2);
 
-  void setMaxRecursionComplexity(int maxRecursions) { _maxRecursionComplexity = maxRecursions; }
+  int getBestMatchesRecursionCount() const { return _findBestMatchesRecursionCount; }
+
+  void setMaxRecursions(int maxRecursions) { _maxRecursions = maxRecursions; }
 
 private:
 
@@ -176,8 +178,10 @@ private:
 
   // places a limit on the number of recursive matching calls that can be made and throws an
   // exception once that limit has been reached; only used in select places in the code
-  int _maxRecursionComplexity;
+  int _maxRecursions;
   int _findBestMatchesRecursionCount;
+  // hard stop at this value
+  static const int MAX_RECURSIONS_UPPER_LIMIT = 1e6;
 
   struct SublineScore
   {

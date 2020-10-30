@@ -110,6 +110,7 @@ public:
    * checked
    * @return true if the element is a member of a relation with the specified tag key OR if the
    * element is simply a member of a relation and a tag key is not specified
+   * @todo This is redundant with isMemberOfRelationSatisfyingCriterion using a TagKeyCriterion.
    */
   static bool isMemberOfRelationWithTagKey(const ConstOsmMapPtr& map, const ElementId& childId,
                                            const QString& tagKey = "");

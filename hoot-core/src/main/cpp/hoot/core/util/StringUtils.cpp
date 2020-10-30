@@ -255,6 +255,19 @@ bool StringUtils::containsAny(const QStringList& input, const QStringList& toCom
   return false;
 }
 
+bool StringUtils::startsWithAny(const QString& input, const QStringList& toCompare,
+                                Qt::CaseSensitivity caseSensitivity)
+{
+  for (int i = 0; i < toCompare.size(); i++)
+  {
+    if (input.startsWith(toCompare.at(i), caseSensitivity))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 bool StringUtils::endsWithAny(const QString& input, const QStringList& toCompare,
                               Qt::CaseSensitivity caseSensitivity)
 {

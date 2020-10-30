@@ -211,6 +211,17 @@ public:
                           Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
 
   /**
+   * Determines if a string starts with any one of a group of strings
+   *
+   * @param input the string to examine
+   * @param compareList list to compare with
+   * @param caseSensitivity determines whether comparisons are case sensitive
+   * @return true if the input starts with any string in the compare list; false otherwise
+   */
+  static bool startsWithAny(const QString& input, const QStringList& compareList,
+                            Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive);
+
+  /**
    * Determines if a string ends with any one of a group of strings
    *
    * @param input the string to examine

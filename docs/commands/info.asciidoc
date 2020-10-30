@@ -21,7 +21,6 @@ Only one of the following options can be passed to the command:
 * +--filters+                  - Displays a list of all criteria that can be used for element filtering
 * +--formats+                  - Displays supported data input/output formats
 * +--geometry-type-criteria+   - Displays criteria that identify a feature geometry type
-* +--languages+                - Displays information about translatable/detectable spoken languages
 * +--matchers+                 - Displays available feature matchers used during conflation
 * +--match-creators+           - Displays available feature match creators used during conflation
 * +--mergers+                  - Displays available feature mergers used during conflation
@@ -250,82 +249,6 @@ info --geometry-type-crieria
 
 --------------------------------------
 hoot info --geometry-type-crieria
---------------------------------------
-
-=== Languages
-
-The +languages+ option displays information about Hootenanny language translation/detection capabilities.
-
-All uses of the +languages+ command require the following configuration options to be populated:
-* hoot.services.auth.user.name
-* hoot.services.auth.access.token
-* hoot.services.auth.access.token.secret
-
-For more information on logging into the web services, see the 'login' command documentation.  Those options are omitted from the
-following command examples.
-
-Only one of the following options can be passed to the command:
-
-* +--detectable+    - Prints all spoken languages that Hootenanny can detect and the detectors that can detect them
-* +--detectors+     - Prints all available language detector implementations for the translation service
-* +--translatable+  - Prints all spoken languages that Hootenanny translate from to English and the translators that can translate them
-* +--translators+   - Prints all available language translator implementations for the translation service
-
-The +--detectors+ option prints out all available language detectors that can be used with the Hootenanny web services.
-
-==== Usage
-
---------------------------------------
-info --languages --detectors
---------------------------------------
-
-==== Example
-
---------------------------------------
-hoot info --languages --detectors
---------------------------------------
-
-The +--translators+ option prints out all available language translators that can be used with the Hootenanny web services.
-
-==== Usage
-
---------------------------------------
-info --languages --translators
---------------------------------------
-
-==== Example
-
---------------------------------------
-hoot info --languages --translators
---------------------------------------
-
-The +--detectable+ option prints out spoken languages which Hootenanny can detect when using the Hootenanny web services.
-
-==== Usage
-
---------------------------------------
-info --languages --detectable
---------------------------------------
-
-==== Example
-
---------------------------------------
-hoot info --languages --detectable
---------------------------------------
-
-The +--translatable+ option prints out spoken languages which Hootenanny can translate from to English when using the Hootenanny web
-services.
-
-==== Usage
-
---------------------------------------
-info --languages --translatable
---------------------------------------
-
-==== Example
-
---------------------------------------
-hoot info --languages --translatable
 --------------------------------------
 
 === Matchers

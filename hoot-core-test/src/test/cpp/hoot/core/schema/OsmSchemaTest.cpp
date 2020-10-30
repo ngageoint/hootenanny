@@ -561,6 +561,14 @@ public:
     tags["building"] = "yes";
     tags["name"] = "fort";
     HOOT_STR_EQUALS("building=yes", uut.mostSpecificType(tags));
+
+    // Even though surface=asphalt isn't a child of highway-secondary, surface=asphalt is identified
+    // in the schema as a combo tag, which means it needs to be used in combination with another
+    // tag to clearly delinate a type. Non-type tags are considered more specific than type tags.
+    tags.clear();
+    tags["highway"] = "secondary";
+    tags["surface"] = "asphalt";
+    HOOT_STR_EQUALS("highway=secondary", uut.mostSpecificType(tags));
   }
 };
 

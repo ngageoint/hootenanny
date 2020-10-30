@@ -39,6 +39,11 @@ HOOT_FACTORY_REGISTER(ElementVisitor, OneWayRoadStandardizer)
 
 void OneWayRoadStandardizer::visit(const std::shared_ptr<Element>& e)
 {
+  if (!e)
+  {
+    return;
+  }
+
   if (ReversedRoadCriterion(_map->shared_from_this()).isSatisfied(e))
   {
     // must be a way or relation if ReversedRoadCriterion was satisfied

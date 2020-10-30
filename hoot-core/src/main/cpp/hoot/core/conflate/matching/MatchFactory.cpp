@@ -139,7 +139,7 @@ void MatchFactory::registerCreator(const QString& c)
 
     if (!_tagFilter.trimmed().isEmpty())
     {
-      // We're specifically checking for an option to feed this tag criterion.  Additional combined
+      // We're specifically checking for an option to feed this tag criterion. Additional combined
       // criteria can be added to this match creator if needed.
       std::shared_ptr<TagAdvancedCriterion> filter(new TagAdvancedCriterion(_tagFilter));
       mc->setCriterion(filter);

@@ -42,6 +42,8 @@ namespace hoot
  * This has a more strict definition of way duplicates than DuplicateWayRemover and will only remove
  * exact duplicates.
  *
+ * @todo This doesn't handle way nodes as well as it should. See
+ * ChangesetReplacementElementIdSynchronizer.
  * @todo its convoluted to have both a boolean and a criterion for each element type; removal should
  * be able to all be done with a single criterion and all elements, regardless of type, can be
  * processed in one pass...will just take a decent amount of refactoring
@@ -75,7 +77,7 @@ public:
 
   /**
    * Uses ElementHashVisitor to assign unique hashes to elements and also retrieves the element
-   * IDs of any duplicates found
+   * IDs of any duplicates found within a single map.
    *
    * @param map the map owning the elements to assign hashes to
    * @param hashes a collection of hashes to update
@@ -175,6 +177,15 @@ private:
   void _removeWaysCheckMap(
     const QSet<ElementId>& waysToRemove, OsmMapPtr map1, OsmMapPtr map2,
     const QMap<ElementId, QString>& elementIdsToRemoveFromMap);
+
+  /*
+   * Determines if two elements belong to ways with different types.
+   */
+  static bool _areWayNodesInWaysOfMismatchedType(
+    ElementPtr element1, ElementPtr element2, OsmMapPtr map);
+
+  static QSet<std::pair<ElementId, ElementId>>_filterOutNonDupeWayNodes(
+    const QSet<std::pair<ElementId, ElementId>>& dupes, OsmMapPtr map);
 };
 
 }

@@ -56,7 +56,16 @@ public:
   ElementHashVisitor();
   virtual ~ElementHashVisitor() = default;
 
-  virtual void visit(const ElementPtr &e);
+  virtual void visit(const ElementPtr& e);
+
+  /**
+   * Inserts a hash tag into an element and/or records the hash mapping with the element for later
+   * use.
+   *
+   * @param element element whose hash to record
+   * @param hash a unique hash value for the element
+   */
+  void insertHash(const ElementPtr& element, const QString& hash);
 
   QString toJson(const ConstElementPtr& e) const;
   virtual QString toJson(const Tags& tags, const double ce = -1.0) const;
@@ -66,20 +75,22 @@ public:
   QString toHashString(const ConstElementPtr& e) const;
   QString toHashString(const Tags& tags, const double ce = -1.0) const;
 
+  void clearHashes();
+
   virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 
   virtual std::string getClassName() const { return className(); }
 
+  QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }
+  QMap<ElementId, QString> getElementIdsToHashes() const { return _elementIdsToHashes; }
+  QSet<std::pair<ElementId, ElementId>> getDuplicates() const { return _duplicates; }
+
   void setCoordinateComparisonSensitivity(int sensitivity)
-  { _coordinateComparisonSensitivity = sensitivity; LOG_VARD(_coordinateComparisonSensitivity); }
+  { _coordinateComparisonSensitivity = sensitivity; }
   void setIncludeCircularError(bool include) { _includeCe = include; }
   void setUseNodeTags(bool use) { _useNodeTags = use; }
   void setWriteHashes(bool write) { _writeHashes = write; }
   void setCollectHashes(bool collect) { _collectHashes = collect; }
-
-  QMap<QString, ElementId> getHashes() const { return _hashesToElementIds; }
-  QSet<std::pair<ElementId, ElementId>> getDuplicates() const { return _duplicates; }
-  void clearHashes() { _hashesToElementIds.clear(); }
 
 protected:
 
@@ -105,7 +116,9 @@ private:
   bool _collectHashes;
 
   // collected hash values mapped to element IDs
-  QMap<QString, ElementId> _hashesToElementIds;
+  QMap<QString, ElementId> _hashesToElementIds; // TODO: make this QHash?
+  // collected element IDs mapped to hash values
+  QMap<ElementId, QString> _elementIdsToHashes;
   // pairings of all duplicate elements found
   QSet<std::pair<ElementId, ElementId>> _duplicates;
 };

@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/algorithms/changeset/ChangesetReplacementCreator1.h>
+#include <hoot/core/algorithms/changeset/ChangesetCutOnlyCreator.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/criterion/TagCriterion.h>
@@ -41,9 +41,13 @@ namespace hoot
  * actual changeset generation from command line tests instead
  * (ServiceChangesetReplacement*Test.sh), since it is easy to see the results of applying the
  * changesets back to the source data. That being said, the command line tests are slow and
- * numerous. Eventually, when C&R is more stable the command line tests will probably be rolled back
- * to just a handful and many of them will be converted to unit tests with a workflow similar to,
- * but not as complicated as, that in ServiceChangesetReplacementGridTest.
+ * numerous. Eventually when C&R is more stable, the command line tests will probably be rolled back
+ * to just a handful and many of them will be converted to unit tests with a workflow similar to
+ * that in ServiceChangesetReplacementGridTest.
+ *
+ * UPDATE 10/22/20: These tests have to be run against ChangesetCutOnlyCreator instead of
+ * ChangesetReplacementCreator for now since ChangesetReplacementCreator doesn't have a working
+ * additional filter implementation (#4267).
  */
 class ChangesetReplacementCreatorTest : public HootTestFixture
 {
@@ -67,7 +71,7 @@ public:
   void runInvalidGeometryFilterTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator1 changesetCreator;
+    ChangesetCutOnlyCreator changesetCreator;
     try
     {
       changesetCreator.setGeometryFilters(QStringList("hoot::TagCriterion"));
@@ -82,7 +86,7 @@ public:
   void runInvalidReplacementFilterTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator1 changesetCreator;
+    ChangesetCutOnlyCreator changesetCreator;
 
     try
     {
@@ -108,7 +112,7 @@ public:
   void runInvalidRetainmentFilterTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator1 changesetCreator;
+    ChangesetCutOnlyCreator changesetCreator;
 
     try
     {
@@ -134,7 +138,7 @@ public:
   void runNonBoundableReaderTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator1 changesetCreator;
+    ChangesetCutOnlyCreator changesetCreator;
     try
     {
       changesetCreator.create(
@@ -153,7 +157,7 @@ public:
   void runGeoJsonTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator1 changesetCreator;
+    ChangesetCutOnlyCreator changesetCreator;
     try
     {
       changesetCreator.create("test1.geojson", "test2.osm", geos::geom::Envelope(), "out.osm");
@@ -170,7 +174,7 @@ public:
   void runInvalidFilterConfigOptsTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator1 changesetCreator;
+    ChangesetCutOnlyCreator changesetCreator;
 
     // the filter can be any non-geometry crit here
     changesetCreator.setReplacementFilters(
@@ -202,7 +206,7 @@ public:
   void runConvertOpsTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator1 changesetCreator;
+    ChangesetCutOnlyCreator changesetCreator;
     // the convert ops added here can contain any op
     conf().set(
       ConfigOptions::getConvertOpsKey(),
@@ -223,7 +227,7 @@ public:
   void runFullReplacmentWithRetainmentFilterTest()
   {
     QString exceptionMsg;
-    ChangesetReplacementCreator1 changesetCreator;
+    ChangesetCutOnlyCreator changesetCreator;
     changesetCreator.setFullReplacement(true);
     // the filter can be any non-geometry crit here
     changesetCreator.setRetainmentFilters(

@@ -34,6 +34,7 @@
 #include <hoot/core/util/GeometryUtils.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
@@ -52,6 +53,9 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
  * cells. By removing the processes of input data retrieval and changeset application via API from
  * the test workflow, bugs can more easily be narrowed down to just those caused by
  * ChangesetReplacementGenerator (most of the time).
+ *
+ * Its worth noting that both the orphaned node and duplicate elements counts may be a little
+ * dubious at this point, but at least they give us a baseline until their accuracy can be improved.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
@@ -60,8 +64,9 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(orphanedNodes1Test);
   CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(droppedNodes1Test);
-  // TODO: fixing this as part of 4226
-  //CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(badPolyIdSync1Test);
+  CPPUNIT_TEST(badPolyIdSync2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -83,7 +88,7 @@ public:
 
   virtual void setUp()
   {
-    HootTestFixture::setUp();
+    HootTestFixture::setUp(); // Be sure the parent cleans out the config before each test.
     _subTaskTimer.start();
     _initConfig();
   }
@@ -92,7 +97,6 @@ public:
   {
     _cleanupDataToReplace();
     _cleanupReplacementData();
-    //TestUtils::resetEnvironment();
   }
 
   void orphanedNodes1Test()
@@ -105,8 +109,8 @@ public:
 
     _testName = "orphanedNodes1Test";
     _prepInput(
-      _inputPath + "/orphanedNodes1Test-Input1.osm",
-      _inputPath + "/orphanedNodes1Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
 
     ChangesetTaskGridReplacer uut;
@@ -115,7 +119,7 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
     uut.replace(
@@ -124,18 +128,22 @@ public:
       BoundsFileTaskGridGenerator(
         QStringList(_inputPath + "/orphanedNodes1Test-task-grid.osm")).generateTaskGrid());
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(28, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
   void orphanedNodes2Test()
   {
     // github 4216; similar to orphanedNodes1Test - There should be no orphaned nodes in the
-    // output. You can check for orphaned node counts with uut.setTagQualityIssues(true).
+    // output.
 
     _testName = "orphanedNodes2Test";
     _prepInput(
-      _inputPath + "/orphanedNodes2Test-Input1.osm",
-      _inputPath + "/orphanedNodes2Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
 
     ChangesetTaskGridReplacer uut;
@@ -144,8 +152,9 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
 
     // to suppress a SpatialIndexer warning that should be looked into at some point
@@ -161,6 +170,10 @@ public:
 
     Log::getInstance().setLevel(logLevel);
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -171,8 +184,8 @@ public:
 
     _testName = "droppedNodes1Test";
     _prepInput(
-      _inputPath + "/droppedNodes1Test-Input1.osm",
-      _inputPath + "/droppedNodes1Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
 
@@ -182,8 +195,9 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -192,17 +206,27 @@ public:
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
   void droppedPointPolyRelationMembers1Test()
   {
-    // part of github 4228 - TODO: add description
+    // part of github 4228 - The POI, Desert Shores, belongs in a relation with a landuse poly.
+    // Neither should be dropped from the output due to being in a relation with members of mixed
+    // geometry types.
+
+    // This is needed to suppress some ElementConverter warnings messages that should eventually be
+    // looked into.
+    DisableLog dl;
 
     _testName = "droppedPointPolyRelationMembers1Test";
     _prepInput(
-      _inputPath + "/droppedPointPolyRelationMembers1Test-Input1.osm",
-      _inputPath + "/droppedPointPolyRelationMembers1Test-Input2.osm",
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
       "");
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
 
@@ -212,8 +236,9 @@ public:
     const QString outFull = _outputPath + "/" + outFile;
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(false);
+    uut.setTagQualityIssues(true);
     uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -222,6 +247,84 @@ public:
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(6, uut.getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void badPolyIdSync1Test()
+  {
+    // part of github 4297 - The landuse=residential poly surrounding Flanagan Drive should not be
+    // corrupted in the output. Before this fix, skipped element ID synchronizations were causing
+    // the upper right node to drop out and mangle the poly.
+
+    _testName = "badPolyIdSync1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.2434,36.3022,-115.2317,36.3136", 1,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void badPolyIdSync2Test()
+  {
+    // part of github 4297 - The longer surface parking poly in the output should match that in the
+    // replacement data. Before this fix, skipped element ID synchronizations were causing the lower
+    // right section to be truncated.
+
+    _testName = "badPolyIdSync2Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.2822,36.2226,-115.2779,36.2261", 1,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -229,7 +332,7 @@ public:
 
   void github4216UniformTest()
   {
-    // reproduces orphaned nodes; larger AOI version of orphanedNodes2Test
+    // larger AOI version of orphanedNodes2Test; good intermediately sized test dataset
 
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -247,8 +350,8 @@ public:
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false); // TOOD: change back to true
-    uut.setOutputNonConflatable(true);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -256,39 +359,50 @@ public:
         "-115.1208,36.1550,-115.0280,36.2182", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
+
+    // TODO: after separating quality issue tagging from replacement, call these directly after
+    // the replacement and before the diff calc
+//    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
+//    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+//    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+//    CPPUNIT_ASSERT_EQUAL(28, uut.getNumDuplicateElementPairsInOutput());
   }
 
   void northVegasLargeUniformTest()
   {
-    // lenient
-
-    // whole northern half of city, 64 changesets, ~32.5M changes, avg derivation: 44s,
-    // total time: ~1h2m, ~524k changes/min; 70 orphaned nodes; diff between replacement: ~11.5k
-
-    // whole northern half of city, 64 changesets, ~33.2M changes, avg derivation: 51s,
-    // total time: ~1h10m, ~524k changes/min; 624 orphaned nodes; ~12.2k duplicate feature pairs;
-    // diff between replacement: ~11.5k
+    // whole northern half of city - 64 changesets, ~33.0M changes, avg derivation: 47s,
+    // total time: 1hr7min, ~492k changes/min, diff between replacement: 6.4k (1hr28m), 772
+    // unconflatable
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
     _prepInput(
       rootDir + "/combined-data/NOMEData.osm",
       rootDir + "/combined-data/OSMData.osm",
       "");
+    // for cell subset debugging
+//    _prepInput(
+//      rootDir + "/combined-data/NOMEData.osm",
+//      rootDir + "/combined-data/OSMData.osm",
+//      "-115.0317,36.2456,-114.9747,36.2870",
+//      outDir);
 
     ChangesetTaskGridReplacer uut;
-    //uut.setKillAfterNumChangesetDerivations(2);
     uut.setChangesetsOutputDir(outDir);
     uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(true);
+    uut.setCalcDiffWithReplacement(false);
+    uut.setOutputNonConflatable(false);
+    // for cell subset debugging
 //    QList<int> includeIds;
-//    includeIds.append(26);
-    //uut.setTaskCellIncludeIds(includeIds);
+//    includeIds.append(59);
+//    uut.setTaskCellIncludeIds(includeIds);
+    //uut.setKillAfterNumChangesetDerivations(2);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -296,6 +410,19 @@ public:
         "-115.3528,36.0919,-114.9817,36.3447", 8,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
+    // for cell subset debugging
+//    uut.replace(
+//      DATA_TO_REPLACE_URL,
+//      _replacementDataUrl,
+//      UniformTaskGridGenerator(
+//        "-115.0280,36.2499,-114.9817,36.2817", 1,
+//        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+//        .generateTaskGrid());
+
+    //CPPUNIT_ASSERT_EQUAL(26, uut.getNumOrphanedNodesInOutput());
+    //CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
+    //CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
+    //CPPUNIT_ASSERT_EQUAL(506, uut.getNumDuplicateElementPairsInOutput());
   }
 
 private:
@@ -335,14 +462,7 @@ private:
     conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getChangesetReplacementPassConflateReviewsKey(), true);
-    conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
-//    conf().set(
-//      ConfigOptions::getChangesetReplacementImplementationKey(),
-//      "hoot::ChangesetReplacementCreator1");
-//    conf().set(
-//      ConfigOptions::getLogClassFilterKey(),
-//      "ElementDeduplicator");
-
+    conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false); 
     // leave enabled for debugging only
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
@@ -396,6 +516,10 @@ private:
       }
       _subTaskTimer.restart();
     }
+
+    // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
+    // for this data.
+
     LOG_STATUS("Loading the data to replace db to: ..." << DATA_TO_REPLACE_URL.right(25) << "...");
     OsmMapWriterFactory::write(map, DATA_TO_REPLACE_URL);
     _originalDataSize = (int)map->size();
@@ -443,6 +567,10 @@ private:
       }
       _subTaskTimer.restart();
     }
+
+    // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
+    // for this data.
+
     LOG_STATUS("Loading the replacement data db to: ..." << _replacementDataUrl.right(25) << "...");
     OsmMapWriterFactory::write(map, _replacementDataUrl);
     LOG_STATUS(

@@ -27,6 +27,12 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["area"],
+        "isA": "natural",
+        "name": "natural=sand",
+        "objectType": "tag"
+    },
+    {
         "geometries": ["linestring"],
         "aliases":[
         "natural=land_water_boundary"

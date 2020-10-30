@@ -98,6 +98,11 @@ void RemoveElementsVisitor::setOsmMap(OsmMap* map)
 
 void RemoveElementsVisitor::visit(const ElementPtr& e)
 {
+  if (!e)
+  {
+    return;
+  }
+
   if (_criteria.size() == 0)
   {
     throw IllegalArgumentException("No criteria specified for RemoveElementsVisitor.");

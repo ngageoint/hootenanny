@@ -423,24 +423,35 @@ void PoiPolygonMerger::_fixStatuses(OsmMapPtr map, const ElementId& poiId, const
   // The BuildingMerger (used by both poi/poly and building merging) assumes that all input elements
   // will either have an Unknown1 or Unknown2 status. If we are merging an element that was
   // previously merged and given a conflated status, we need to replace that status with the
-  // appropriate unconflated status, if we can determine it. This logic could possibly be combined
-  // with the invalid status related logic above.
+  // appropriate unconflated status, if we can determine it. POIs always get merged into polys, but
+  // an incoming POI could have a conflated status if it was merged with another POI beforehand.
+  // This logic could possibly be combined with the invalid status related logic above.
+
   ElementPtr poi = map->getElement(poiId);
   LOG_VART(poi);
   ElementPtr poly = map->getElement(polyId);
   LOG_VART(poly);
-  // pois always get merged into polys
   LOG_VART(poi->getStatus());
   LOG_VART(poly->getStatus());
-  if (poi->getStatus() == Status::Conflated)
+  if (poi->getStatus() == Status::Conflated && poly->getStatus() == Status::Conflated)
   {
-    // don't think this should ever occur
-    throw IllegalArgumentException(
-      "POI being merged with polygon must have an Unknown1 or Unknown2 status.");
+    // arbitrarily assign...not sure if this is a good thing yet...
+    poly->setStatus(Status::Unknown1);
+    poi->setStatus(Status::Unknown2);
+  }
+  else if (poi->getStatus() == Status::Conflated)
+  {
+    if (poly->getStatus() == Status::Unknown1)
+    {
+      poi->setStatus(Status::Unknown2);
+    }
+    else if (poly->getStatus() == Status::Unknown2)
+    {
+      poi->setStatus(Status::Unknown1);
+    }
   }
   else if (poly->getStatus() == Status::Conflated)
   {
-    // we've already handled invalid statuses above
     if (poi->getStatus() == Status::Unknown1)
     {
       poly->setStatus(Status::Unknown2);

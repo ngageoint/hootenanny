@@ -88,6 +88,10 @@ void SuperfluousWayRemover::removeWays()
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
+    if (!w)
+    {
+      continue;
+    }
     LOG_VART(w->getElementId());
     //LOG_VART(w);
 

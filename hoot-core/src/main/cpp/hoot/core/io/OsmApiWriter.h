@@ -145,10 +145,10 @@ public:
    */
   bool writeErrorFile() { return _changeset.writeErrorFile(); }
   /**
-   * @brief getLastChangesetId Get the ID of the last changeset uploaded
-   * @return ID of last changeset closed
+   * @brief getLastChangesetId Get the element information of the last element uploaded
+   * @return information of last element uploaded
    */
-  long getLastChangesetId() { return _lastChangesetId; }
+  LastElementInfo getLastElementInfo() { return _lastElement; }
 
 private:
   /**
@@ -157,8 +157,11 @@ private:
   struct OsmApiFailureInfo
   {
     OsmApiFailureInfo() : success(false), status(0), response("") { }
+    /** Success flag */
     bool success;
+    /** HTTP response code */
     int status;
+    /** HTTP response body */
     QString response;
   };
   typedef std::shared_ptr<OsmApiFailureInfo> OsmApiFailureInfoPtr;
@@ -178,10 +181,10 @@ private:
    * @brief _closeChangeset End the changeset
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
    * @param request - Network request object initialized with OSM API URL
-   * @param id - ID of the changeset to close
-   * @param size - Size of the changeset to close, empty changesets don't update last changeset ID
+   * @param changeset_id - ID of the changeset to close
+   * @param last_element - Last element info
    */
-  void _closeChangeset(HootNetworkRequestPtr request, long id, long size);
+  void _closeChangeset(HootNetworkRequestPtr request, long changeset_id, const LastElementInfo& last_element);
   /**
    * @brief _uploadChangeset Upload a changeset to the OSM API
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Diff_upload:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fupload
@@ -219,7 +222,7 @@ private:
    */
   bool _resolveIssues(HootNetworkRequestPtr request, ChangesetInfoPtr changeset);
   /**
-   * @brief _fixConflict Try to fix the "Changeset conflict: Version mismatch" errors from the OSM API
+   * @brief _fixConflict Try to fix the "Version mismatch" errors from the OSM API
    * @param request Network request object initialized with OSM API URL
    * @param changeset Pointer to the failed changeset
    * @param conflictExplanation Error message from OSM API
@@ -355,11 +358,18 @@ private:
    */
   void _updateThreadStatus(int thread_index, ThreadStatus status);
   /**
-   * @brief _statusMessage
-   * @param info
-   * @param changesetId
+   * @brief _statusMessage Conver the HTTP error response into human readable format
+   * @param info Failure information structure
+   * @param changesetId Current changeset ID
    */
   void _statusMessage(OsmApiFailureInfoPtr info, long changesetId);
+  /**
+   * @brief _extractLastElement Get the last element uploaded in this changeset and
+   *  extract the actual ID (if created) and the version
+   * @param workInfo Last set of elements in the current changeset
+   * @return LastElementInfo object completely filled out
+   */
+  LastElementInfo _extractLastElement(const ChangesetInfoPtr& workInfo);
   /** Vector of statuses for each running thread */
   std::vector<ThreadStatus> _threadStatus;
   /** Mutex protecting status vector */
@@ -410,8 +420,8 @@ private:
   QString _secretToken;
   /** Number of changesets written to API */
   int _changesetCount;
-  /** Last changeset ID pushed for synchonization */
-  long _lastChangesetId;
+  /** Last element infomation pushed for synchonization */
+  LastElementInfo _lastElement;
   /** Mutex for changeset count */
   std::mutex _changesetCountMutex;
   /** Output requests and responses for debugging  */

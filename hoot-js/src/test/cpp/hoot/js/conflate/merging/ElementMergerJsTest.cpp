@@ -85,10 +85,8 @@ class ElementMergerJsTest : public HootTestFixture
   CPPUNIT_TEST(poiToPolyMergeExtraNonPolyWayTest);
   CPPUNIT_TEST(poiToPolyMergeExtraNonPolyRelationTest);
   CPPUNIT_TEST(poiToPolyMergeExtraNonPoiNodeTest);
-  // TODO: fix
-  //CPPUNIT_TEST(poiToPolyPolyInputWithConflatedStatusTest);
-  // TODO: fix
-  //CPPUNIT_TEST(poiToPolyPoiInputWithConflatedStatusTest);
+  CPPUNIT_TEST(poiToPolyPolyInputWithConflatedStatusTest);
+  CPPUNIT_TEST(poiToPolyPoiInputWithConflatedStatusTest);
 
   // POI TO POI
   CPPUNIT_TEST(poiToPoiMergeTwoPoisTest);
@@ -268,8 +266,7 @@ public:
   void poiToPolyPoiInputWithConflatedStatusTest()
   {
     testMerge(
-      "poi-poly-way-poly-conflated-2-in.osm", "poi-poly-way-poly-out.osm",
-      "POI being merged with polygon cannot must have an Unknown1 or Unknown2 status");
+      "poi-poly-way-poly-conflated-2-in.osm", "poi-poly-way-poly-out.osm");
   }
 
   //POI TO POI

@@ -37,24 +37,21 @@ class NodeData : public ElementData
 public:
 
   NodeData() = default;
-
   NodeData(const NodeData& nd);
-
   NodeData(long id, double x, double y);
 
   virtual ~NodeData() = default;
 
-  double getX() const { return _x; }
-
-  double getY() const { return _y; }
-
   void init(long id, double x, double y, long changeset = ElementData::CHANGESET_EMPTY,
-            long version = ElementData::VERSION_EMPTY, quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
+            long version = ElementData::VERSION_EMPTY,
+            quint64 timestamp = ElementData::TIMESTAMP_EMPTY,
             QString user = ElementData::USER_EMPTY, long uid = ElementData::UID_EMPTY,
             bool visible = ElementData::VISIBLE_EMPTY);
 
-  void setX(double x) { _x = x; }
+  double getX() const { return _x; }
+  double getY() const { return _y; }
 
+  void setX(double x) { _x = x; }
   void setY(double y) { _y = y; }
 
   NodeData& operator=(const NodeData& nd);
