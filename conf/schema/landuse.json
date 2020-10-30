@@ -15,6 +15,12 @@
         "name": "landuse=*",
         "objectType": "tag"
     },
+     {
+        "isA": "landuse",
+        "geometries": ["node","linestring","area"],
+        "name": "landuse=aquaculture",
+        "objectType": "tag"
+    },
     {
         "aliases": [
             "landuse=cemetary"
