@@ -53,7 +53,6 @@ Feature: Advanced Conflation Options
         And I should see checkbox "Frechet Distance Subline Matcher" unchecked
 	And I should see checkbox "Add Review Tags To Individual Features" unchecked
         And I should see element "#unify_optimizer_time_limit" with no value and placeholder "60"
-        And I should see checkbox "OGR Split O2S" unchecked
         And I should see checkbox "OGR Esri FCSubtype" checked
         And I should see checkbox "OGR Thematic Structure" checked
         And I should see checkbox "Duplicate Name Remover Case Sensitive" checked

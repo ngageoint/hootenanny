@@ -50,7 +50,16 @@ mgcp = {
 
   // Now add an o2s[A,L,P] feature to the mgcp.rawSchema
   // We can drop features but this is a nice way to see what we would drop
-  mgcp.rawSchema = translate.addEmptyFeature(mgcp.rawSchema);
+  if (config.getOgrOutputFormat() == 'shp')
+  {
+    // Add tag1, tag2, tag3 and tag4
+    mgcp.rawSchema = translate.addEmptyFeature(mgcp.rawSchema);
+  }
+  else
+  {
+    // Just add tag1
+    mgcp.rawSchema = translate.addSingleO2sFeature(mgcp.rawSchema);
+  }
 
   // Add empty Review layers
   mgcp.rawSchema = translate.addReviewFeature(mgcp.rawSchema);
@@ -567,7 +576,7 @@ mgcp = {
     }
 
     // Tag retired
-    if (tags.controlling_authority) 
+    if (tags.controlling_authority)
     {
       tags.operator = tags.controlling_authority;
       delete tags.controlling_authority;
@@ -1029,7 +1038,7 @@ mgcp = {
         tags.condition = 'construction';
         delete tags[i];
         continue;
-      }    
+      }
     } // End Cleanup loop
 
     // Lifecycle tags
@@ -1045,11 +1054,11 @@ mgcp = {
           if (tags.construction)
           {
             tags[typ] = tags.construction;
-            delete tags.construction;           
+            delete tags.construction;
           }
           else
           {
-            tags[typ] = cycleList[typ]; 
+            tags[typ] = cycleList[typ];
           }
           tags.condition = 'construction';
           break;
@@ -2139,7 +2148,7 @@ mgcp = {
       mgcp.configOut = {};
       mgcp.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
       mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-      mgcp.configOut.OgrSplitO2s = config.getOgrSplitO2s();
+      mgcp.configOut.OgrFormat = config.getOgrOutputFormat();
       mgcp.configOut.OgrThrowError = config.getOgrThrowError();
       mgcp.configOut.OgrAddUuid = config.getOgrAddUuid();
 
@@ -2337,25 +2346,21 @@ mgcp = {
       // Shapefiles can't handle fields > 254 chars
       // If the tags are > 254 char, split into pieces. Not pretty but stops errors
       // A nicer thing would be to arrange the tags until they fit neatly
-      if (str.length < 255 || mgcp.configOut.OgrSplitO2s == 'false')
+      if (mgcp.configOut.OgrFormat == 'shp')
       {
-        //return {attrs:{tag1:str}, tableName: tableName};
-        attrs = {tag1:str};
+        // Throw a warning that text will get truncated.
+        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
+
+        // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
+        // which means that it returns an empty string.
+        attrs = {tag1:str.substring(0,253),
+          tag2:str.substring(253,506),
+          tag3:str.substring(506,759),
+          tag4:str.substring(759,1012)};
       }
       else
       {
-        // Not good. Will fix with the rewrite of the tag splitting code
-        if (str.length > 1012)
-        {
-          hoot.logTrace('o2s tags truncated to fit in available space.');
-          str = str.substring(0,1012);
-        }
-
-        // Now split the text across the available tags
-        attrs = {tag1:str.substring(0,253),
-            tag2:str.substring(253,506),
-            tag3:str.substring(506,759),
-            tag4:str.substring(759,1012)};
+        attrs = {tag1:str};
       }
 
       returnData.push({attrs: attrs, tableName: tableName});
