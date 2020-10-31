@@ -184,7 +184,7 @@ private:
    * @param changeset_id - ID of the changeset to close
    * @param last_element - Last element info
    */
-  void _closeChangeset(HootNetworkRequestPtr request, long changeset_id, const LastElementInfo& last_element);
+  void _closeChangeset(HootNetworkRequestPtr request, long changeset_id, LastElementInfo& last_element);
   /**
    * @brief _uploadChangeset Upload a changeset to the OSM API
    *  see: https://wiki.openstreetmap.org/wiki/API_v0.6#Diff_upload:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fupload
