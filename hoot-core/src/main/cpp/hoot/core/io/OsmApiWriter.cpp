@@ -825,7 +825,7 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
-void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset_id, const LastElementInfo& last)
+void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset_id, LastElementInfo& last)
 {
   try
   {
@@ -847,7 +847,10 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
       _changesetCount++;
       //  Keep track of the last element information
       if (!last._id.isNull())
+      {
         _lastElement = last;
+        last = LastElementInfo();
+      }
       _changesetCountMutex.unlock();
       break;
     default:
