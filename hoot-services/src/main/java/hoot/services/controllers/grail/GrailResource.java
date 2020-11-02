@@ -347,7 +347,7 @@ public class GrailResource {
             }
 
             if (!deriveType.equals("Adds only")) {
-                // Wait to detect overpass 'Last changeset pushed ID'
+                // Wait to detect overpass 'Last element pushed'
                 GrailParams waitParams = new GrailParams(reqParams);
                 workflow.add(grailCommandFactory.build(jobId, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
             }
@@ -413,7 +413,7 @@ public class GrailResource {
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(errorMsg).build());
         }
 
-        // Wait to detect overpass 'Last changeset pushed ID'
+        // Wait to detect overpass 'Last element pushed'
         GrailParams waitParams = new GrailParams();
         waitParams.setUser(user);
         waitParams.setTaskInfo(projectTaskInfo);

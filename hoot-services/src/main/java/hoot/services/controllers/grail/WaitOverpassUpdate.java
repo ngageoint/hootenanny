@@ -31,7 +31,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +81,7 @@ class WaitOverpassUpdate extends GrailCommand {
         commandResultStart.setJobId(jobId);
         commandResultStart.setStdout("Starting wait on overpass sync...\n");
         commandResultStart.setStderr("");
-        commandResultStart.setPercentProgress(100);
+        commandResultStart.setPercentProgress(99);
         commandResultStart.setCaller(caller.getName());
         commandResultStart.setExitCode(CommandResult.SUCCESS);
         commandResultStart.setFinish(startTime);
@@ -86,23 +91,19 @@ class WaitOverpassUpdate extends GrailCommand {
         if (GrailResource.isPrivateOverpassActive()) {
             long timeSpent = 0;
             String url = null;
-            boolean foundChangesetId = false;
+            boolean elementFound = false;
 
-            String lastId = DbUtils.getLastPushedId(jobId);
-            if (lastId == null) {
+            Map<String, String> elementInfo = DbUtils.getLastPushedInfo(jobId);
+            if (elementInfo.isEmpty()) {
                 String msg = "No changeset id found. No changeset was pushed or timed out job may have been deleted.";
                 throw new WebApplicationException(new NotFoundException(), Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
             }
 
-            LocalDateTime jobStartTime = DbUtils.getJobStartDate(jobId); // check if changeset id exists in overpass since the time the job was initially run
-            String time = jobStartTime.minusMinutes(2).toString(); // get 2 minutes before just for a little leeway
-            String query = "[out:csv(::changeset)][bbox:{{bbox}}];"
-                    + "("
-                    + "node(newer:\"" + time + "\");"
-                    + "way(newer:\"" + time + "\");"
-                    + "rel(newer:\"" + time + "\");"
-                    + ");"
-                    + "out meta;";
+            String operationType = elementInfo.get("operationType").toLowerCase();
+            Long elementVersion = Long.parseLong(elementInfo.get("version"));
+            String query = "[out:json];"
+                + elementInfo.get("featureType").toLowerCase() + "(" + elementInfo.get("featureId") + ");"
+                + "out meta;";
 
             try {
                 logger.info("Database sync starting...");
@@ -119,17 +120,26 @@ class WaitOverpassUpdate extends GrailCommand {
                         responseStream = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
                     }
 
+                    // get overpass response
                     br = new BufferedReader(new InputStreamReader(responseStream));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        if (line.contains(lastId)) {
-                            foundChangesetId = true;
-                            break;
-                        }
-                    }
+                    String urlResult = br.lines().collect(Collectors.joining());
                     br.close();
+                    JSONParser parser = new JSONParser();
+                    JSONObject json = (JSONObject) parser.parse(urlResult);
+                    JSONArray elementsArray = (JSONArray) json.get("elements");
 
-                    if (foundChangesetId) {
+                    // if create then we should have 1 element found with the specified feature type + id
+                    // if delete and no element with specified id is found then we assume it was deleted
+                    if ((operationType.equals("create") && elementsArray.size() == 1) ||
+                            (operationType.equals("delete") && elementsArray.size() == 0)) {
+                        elementFound = true;
+                    } else if (operationType.equals("modify") && elementsArray.size() > 0) {
+                        // For modify check if the version matches
+                        JSONObject element = (JSONObject) elementsArray.get(0);
+                        elementFound = element.get("version") == elementVersion;
+                    }
+
+                    if (elementFound) {
                         break;
                     } else {
                         Thread.sleep(SLEEP_TIME);
@@ -146,7 +156,7 @@ class WaitOverpassUpdate extends GrailCommand {
             }
 
             // tag timeout if not found
-            if (!foundChangesetId) {
+            if (!elementFound) {
                 DbUtils.tagTimeoutTask(jobId);
                 String msg = "Overpass sync wait time exceeded.";
                 throw new WebApplicationException(new NotFoundException(), Response.status(Response.Status.BAD_REQUEST).entity(msg).build());
