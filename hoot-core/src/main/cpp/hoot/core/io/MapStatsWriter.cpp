@@ -195,7 +195,8 @@ QString MapStatsWriter::statsToString(QList<QList<SingleStat>>& stats, QString s
       {
         if (stats[j][k].name == allStatNames[i])
         {
-          l << QString::number(stats[j][k].value, 'g', precision);
+          QString value = QString::number(stats[j][k].value, 'g', precision);
+          l << ((value != "nan") ? value : "-");
           foundIt = true;
         }
       }
