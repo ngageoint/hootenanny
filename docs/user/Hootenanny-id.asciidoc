@@ -86,7 +86,7 @@ image::images/id/hoot_edit_save.png[scaledwidth="75%"]
 
 It is also possible to create new features for a given layer in Hootenanny iD but any new feature added must be done with at least one layer present. Note that any new features added without an associated layer cannot be saved. The ability to create new features within the GUI is a key component of the OpenStreetMap version of iD Editor and additional background and editing workflows can be found online via link:$$https://www.openstreetmap.org/edit?editor=id$$[OpenStreetMap-iD's] help menu. A brief background is provided here for general user orientation.
 
-To add a new point, click on the Point button appearing in the Map Viewer or use the 1 shortcut key. Points can be used to represent features such as shops, restaurants, parks and monuments, etc. They mark a specific location and describe the feature based on the OSM/TDS tag relationship. Once a new point is added to the map, a panel will appear on the map prompting you to select an appropriate feature type (park, cafe, etc) and any associated tags. Note that even though OSM values are presented, the data is stored on the database using the TDS tag equivalent. The next time it is edited within Hootenanny it will display the values using the english translated LTDS schema.
+To add a new point, click on the Point button appearing in the Map Viewer or use the 1 shortcut key. Points can be used to represent features such as shops, restaurants, parks and monuments, etc. They mark a specific location and describe the feature based on the OSM/TDS tag relationship. Once a new point is added to the map, a panel will appear on the map prompting you to select an appropriate feature type (park, cafe, etc) and any associated tags. Note that even though OSM values are presented, the data is stored on the database using the TDS tag equivalent. The next time it is edited within Hootenanny it will display the values using the english translated TDS schema.
 
 .Adding a new point in Hootenanny. In this example a new Point is added to the Haiti OSM roads data indicating that the feature represents a Hospital Grounds `amenity=hospital`. DigitalGlobe GlobalBasemap (GBM).
 image::images/id/hoot_adddata.png[scaledwidth="75%"]
@@ -339,7 +339,7 @@ image::images/id/hoot_conflation_new.png[]
 
 *_New Folder Name_* (optional): The name of any new folder you want to save the output to.  Note that it will be created at the folder level specified in the Path.  Leave blank if no new folder is required.
 
-*_Type_*:  This is the type of conflation you want to run.  Note that there are four conflation options available: _Reference Conflation_, _Average Conflation_, _Cookie Cutter & Horizontal Conflation_ and _Advanced Conflation_.
+*_Type_*:  This is the type of conflation you want to run.  Note that there are four conflation options available: _Reference Conflation_, _Cookie Cutter & Horizontal Conflation_ and _Advanced Conflation_.
 
 [[HootiD-AttributionRefLayer]]
 *_Attribute Reference Layer_*:  By default, the Reference layer contains both the geometry and attribution that dictates the merged features. In many cases, however, reference geometry and attribution exists across multiple layers and therefore we provide the ability to utilize the Secondary layer as the reference attribution for cases where the secondary layer is determined to contain the most accurate tag information while the reference layer contains the most accurate geometry.
@@ -369,12 +369,6 @@ When using Reference Conflation the output is assumed to contain the following:
 2) Unmatched feature geometry/tags from both the Reference and Secondary Datasets.
 
 NOTE: If a required tag has a null or missing value, a default value will get assigned based on the output specification for that field and data type.
-
-==== Average Conflation
-
-Average conflation maintains the general shape of the two inputs, produces close to an exact average, and avoids large data perturbations. Using the road data example, the operator starts by averaging the first two nodes for a road, then moves along each segment or way, averaging nodes together and at the end of the feature averages the final two nodes. To determine the average value for each way, it first calculates the maximal nearest subline, assigns a weight based on the circular error (lowest error, highest weight and vice-versa), and returns the weighted average of the two geometries.
-
-NOTE: Average conflation will modify the merged layer geometry for any matching features.  For this reason caution should be applied and the output should be verified by a qualified data steward for any inaccurate intersections generated in the process.
 
 ==== Cookie Cutter & Horizontal Conflation
 
@@ -672,7 +666,7 @@ image::images/id/hoot_export_options.png[scaledwidth="25%"]
 
 ===== Export Translation Schema
 
-Users can select which translation schema (MGCP, LTDS 4.0, LTDS 6.1) they would like to export their data. This list will likely expand as new schemas are added to the deployed build after subsequent software releases.
+Users can select which translation schema (MGCP, TDS 4.0, TDS 6.1) they would like to export their data. This list will likely expand as new schemas are added to the deployed build after subsequent software releases.
 
 ===== Export Format
 

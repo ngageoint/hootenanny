@@ -317,7 +317,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
       {
         id = _createChangeset(request, _description, _source, _hashtags, create_changeset_status);
         changesetSize = 0;
-        last = LastElementInfo();
       }
       //  An ID of less than 1 isn't valid, try to fix it
       if (id < 1)
@@ -379,6 +378,8 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         _changesetMutex.unlock();
         //  Update the size of the current changeset that is open
         changesetSize += workInfo->size();
+        //  Get the last element from this changeset chunk
+        last = _extractLastElement(workInfo);
         //  When the changeset eclipses the 10k max, the API automatically closes the changeset,
         //  reset the id and continue
         if (changesetSize >= _maxChangesetSize)
@@ -391,7 +392,6 @@ void OsmApiWriter::_changesetThreadFunc(int index)
         //  otherwise keep it open and go again
         else if (changesetSize > _maxChangesetSize - (int)(_maxPushSize * 1.5))
         {
-          last = _extractLastElement(workInfo);
           //  Close the changeset
           _closeChangeset(request, id, last);
           //  Signal for a new changeset id
@@ -825,7 +825,7 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
 }
 
 //  https://wiki.openstreetmap.org/wiki/API_v0.6#Close:_PUT_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fclose
-void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset_id, const LastElementInfo& last)
+void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset_id, LastElementInfo& last)
 {
   try
   {
@@ -847,7 +847,10 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
       _changesetCount++;
       //  Keep track of the last element information
       if (!last._id.isNull())
+      {
         _lastElement = last;
+        last = LastElementInfo();
+      }
       _changesetCountMutex.unlock();
       break;
     default:

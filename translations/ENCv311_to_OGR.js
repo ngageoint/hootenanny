@@ -52,7 +52,16 @@ function getDbSchema()
 
   // Now add an o2s[A,L,P] feature to the enc311.rawSchema
   // We can drop features but this is a nice way to see what we would drop
-  enc311.rawSchema = translate.addEmptyFeature(enc311.rawSchema);
+  if (config.getOgrOutputFormat() == 'shp')
+  {
+    // Add tag1, tag2, tag3 and tag4
+    enc311.rawSchema = translate.addEmptyFeature(enc311.rawSchema);
+  }
+  else
+  {
+    // Just add tag1
+    enc311.rawSchema = translate.addSingleO2sFeature(enc311.rawSchema);
+  }
 
   // Debug:
   // print('##### Start Schema #####');
@@ -171,7 +180,7 @@ enc311 = {
     if (tags.natural == 'beach' || tags.natural == 'sand') return 'LNDRGN';
 
     // If nothing, send back undefined so it stays unset
-    return undefined;     
+    return undefined;
   }, // End findLayerName
 
 
@@ -249,7 +258,7 @@ enc311 = {
           if (tags.construction)
           {
             tags[typ] = tags.construction;
-            delete tags.construction;          
+            delete tags.construction;
           }
           else
           {
@@ -316,7 +325,7 @@ enc311 = {
     if (tags['addr:country'])
     {
       tags['addr:country'] = translate.findCountryCode('c2',tags['addr:country']);
-      if (tags['addr:country'] == '') delete tags['addr:country'];     
+      if (tags['addr:country'] == '') delete tags['addr:country'];
     }
 
     // Power plants & generation
@@ -559,7 +568,7 @@ enc311 = {
       enc311.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
       enc311.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
       enc311.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-      enc311.configOut.OgrSplitO2s = config.getOgrSplitO2s();
+      enc311.configOut.OgrFormat = config.getOgrOutputFormat();
       enc311.configOut.OgrThrowError = config.getOgrThrowError();
 
       // Get any changes to OSM tags
@@ -719,25 +728,21 @@ enc311 = {
       // Shapefiles can't handle fields > 254 chars.
       // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
       // A nicer thing would be to arrange the tags until they fit neatly
-      if (str.length < 255 || enc311.configOut.OgrSplitO2s == 'false')
+      if (enc311.configOut.OgrFormat == 'shp')
       {
-        // return {attrs:{tag1:str}, tableName: o2sLayerName};
-        attrs = {tag1:str};
-      }
-      else
-      {
-        // Not good. Will fix with the rewrite of the tag splitting code
-        if (str.length > 1012)
-        {
-          hoot.logTrace('o2s tags truncated to fit in available space.');
-          str = str.substring(0,1012);
-        }
+        // Throw a warning that text will get truncated.
+        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
 
-        // return {attrs:{tag1:str.substring(0,253), tag2:str.substring(253)}, tableName: o2sLayerName};
+        // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
+        // which means that it returns an empty string.
         attrs = {tag1:str.substring(0,253),
           tag2:str.substring(253,506),
           tag3:str.substring(506,759),
           tag4:str.substring(759,1012)};
+      }
+      else
+      {
+        attrs = {tag1:str};
       }
 
       returnData.push({'attrs': attrs, 'tableName': o2sLayerName});

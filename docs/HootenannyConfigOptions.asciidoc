@@ -117,7 +117,6 @@ Configuration Parameters:
 *  +ogr.writer.pre.layer.name+ - A string to prepend onto layer names before writing. This is most useful when exporting a number of layers into a single database.
 *  +ogr.writer.script+ - The script to use for performing the translations.
 *  +ogr.strict.checking+ - Takes one of three values; +on+ , +off+ or +warn+ . This reports issues between the defined schema and the produced output. If strict checking is +on+ then an error will be reported and translation will stop. If +warn+ is specified a warning will be reported in most instances and the program will continue running. If +off+ is specified then most common errors are silenced. Defaults to +on+.
-*  +ogr.split.o2s+ - A boolean value ( +true+ or +false+ ). If true, the list of OSM tags for o2s (Out Of Spec) features will be split into four 254 character attributes on export. This is to avoid errors when exporting to ESRI Shapefiles.
 *  +ogr.esri.fcsubtype+ - A boolean value ( +true+ or +false+ ). If true, the ESRI specific FcSubType field and associated values are added to the output.
 
 This driver will likely work with most supported OGR formats, but is only actively tested with Shapefile and FileGDB. FileGDB will only work if it has been compiled into your version of GDAL. If not, see link:$$Developer_-_BuildHootVM.html#Install-FileGDB-Format-Support-for-GDAL$$[this] .
