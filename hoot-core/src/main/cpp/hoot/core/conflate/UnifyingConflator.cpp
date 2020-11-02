@@ -308,7 +308,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // is merged with a polygon. If doesn't know about the existence of any POI to POI matches which
   // reference the POI its removing. Because of that, we handle this before merging features with
   // PoiPolygonMerger.
-  PoiPolygonMergerCreator::convertSharedMatchesToReviews(matchSets, _mergers);
+  //PoiPolygonMergerCreator::convertSharedMatchesToReviews(matchSets, _mergers);
 
   // TODO: Would it help to sort the matches so the biggest or best ones get merged first? - #2912
 

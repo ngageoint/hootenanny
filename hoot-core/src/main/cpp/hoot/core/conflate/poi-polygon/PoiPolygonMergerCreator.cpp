@@ -37,6 +37,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
 
 // Standard
 #include <typeinfo>
@@ -343,6 +344,7 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
   matchNameFilter.append(PoiPolygonMatch::MATCH_NAME);
   // TODO: need a way to not hardcode this...get it from ScriptMatch somehow?
   matchNameFilter.append("POI");
+  //matchNameFilter.append(BuildingMatch::MATCH_NAME);
   QMultiHash<ElementId, QString> elementIdsToMatchTypes;
   for (MatchSetVector::const_iterator matchSetsItr = matchSets.begin();
        matchSetsItr != matchSets.end(); ++matchSetsItr)
@@ -355,6 +357,10 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
       const QString matchName = match->getMatchName();
       if (matchNameFilter.contains(matchName))
       {
+//        if (matchName == "POI" && match->getType() != MatchType::Review)
+//        {
+//          continue;
+//        }
         const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
         for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
                matchPairs.begin();
