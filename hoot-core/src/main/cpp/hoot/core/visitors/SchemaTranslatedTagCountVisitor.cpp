@@ -48,10 +48,10 @@ HOOT_FACTORY_REGISTER(ElementVisitor, SchemaTranslatedTagCountVisitor)
 
 SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   const std::shared_ptr<ScriptSchemaTranslator>& t) :
-  _map(),
-  _populatedCount(),
-  _defaultCount(),
-  _nullCount(),
+  _map(NULL),
+  _populatedCount(0),
+  _defaultCount(0),
+  _nullCount(0),
   _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _translator = std::dynamic_pointer_cast<ScriptToOgrSchemaTranslator>(t);
