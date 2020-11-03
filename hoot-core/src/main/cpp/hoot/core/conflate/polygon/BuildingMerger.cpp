@@ -160,34 +160,12 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
     LOG_TRACE("Built building 1 null. Skipping merge.");
     return;
   }
-//  else
-//  {
-//    LOG_TRACE("BuildingMerger: built building e1\n" << OsmUtils::getElementDetailString(e1, map));
-//    if (e1->getElementType() == ElementType::Relation &&
-//        (std::dynamic_pointer_cast<const Relation>(e1))->getMemberCount() == 0)
-//    {
-//      LOG_TRACE(
-//        e1->getElementId() << " is a relation with no members. Skipping merge.");
-//      return;
-//    }
-//  }
   ElementPtr e2 = _buildBuilding(map, false);
   if (!e2)
   {
     LOG_TRACE("Built building 2 null. Skipping merge.");
     return;
   }
-//  else
-//  {
-//    LOG_TRACE("BuildingMerger: built building e2\n" << OsmUtils::getElementDetailString(e2, map));
-//    if (e2->getElementType() == ElementType::Relation &&
-//        (std::dynamic_pointer_cast<const Relation>(e2))->getMemberCount() == 0)
-//    {
-//      LOG_TRACE(
-//        e2->getElementId() << " is a relation with no members. Skipping merge.");
-//      return;
-//    }
-//  }
 
   LOG_VART(_keepMoreComplexGeometryWhenAutoMerging);
   LOG_VART(_useChangedReview);
