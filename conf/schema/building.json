@@ -73,7 +73,6 @@
     },
     {
         "categories": [
-            "building",
             "combination"
         ],
         "dataType": "enumeration",
@@ -101,7 +100,6 @@
     },
     {
         "categories": [
-            "building",
             "combination"
         ],
         "dataType": "enumeration",
