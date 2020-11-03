@@ -64,8 +64,12 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
     ConstRelationPtr relation = it->second;
     LOG_VART(relation->getType());
     LOG_VART(relation->getTags()[MetadataTags::HootReviewType()]);
+    // This problem only affects POIs being merged that are involved in either POI/Polygon or
+    // POI/POI reviews
     if (relation->getType() == MetadataTags::RelationReview() &&
-        relation->getTags()[MetadataTags::HootReviewType()] == PoiPolygonMatch::MATCH_NAME)
+        (relation->getTags()[MetadataTags::HootReviewType()] == PoiPolygonMatch::MATCH_NAME ||
+         // TODO: need a way to not hardcode this...get it from ScriptMatchCreator somehow?
+         relation->getTags()[MetadataTags::HootReviewType()] == "POI"))
     {
       const std::vector<RelationData::Entry>& members = relation->getMembers();
       for (size_t i = 0; i < members.size(); i++)
@@ -150,7 +154,6 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
     {
       LOG_TRACE("Removing node: " << n->getElementId() << "...");
       RemoveNodeByEid::removeNodeNoCheck(map, nodeId);
-      //RecursiveElementRemover(n->getElementId()).apply(map);
       _numAffected++;
     }
     _numProcessed++;
