@@ -1149,30 +1149,33 @@ NOT EXISTS
         createQuery().delete(reviewBookmarks).where(reviewBookmarks.mapId.eq(mapId)).execute();
     }
 
-    public static String getLastPushedId(String jobId) {
-        String id = null;
+    public static Map<String, String> getLastPushedInfo(String jobId) {
+        Map<String, String> elementInfo = new HashMap<>();
 
         if (jobId != null) {
             String stdOutWithId = createQuery()
                 .select(commandStatus.stdout)
                 .from(commandStatus)
-                .where(commandStatus.stdout.like("%Last changeset pushed ID:%").and(commandStatus.jobId.eq(jobId)))
+                .where(commandStatus.stdout.like("%Last element pushed:%").and(commandStatus.jobId.eq(jobId)))
                 .fetchFirst();
 
-            if (stdOutWithId == null) return null;
+            if (stdOutWithId == null) return elementInfo;
 
-            String patternString = "Last changeset pushed ID: ([0-9]*)";
+            String patternString = "Last element pushed: Type\\((\\w+)\\) (\\w+)\\(([0-9]+)\\) Version\\(([0-9]+)\\)";
 
             Pattern pattern = Pattern.compile(patternString);
             Matcher matcher = pattern.matcher(stdOutWithId);
             boolean found = matcher.find();
 
             if (found) {
-                id = matcher.group(1);
+                elementInfo.put("operationType", matcher.group(1));
+                elementInfo.put("featureType", matcher.group(2));
+                elementInfo.put("featureId", matcher.group(3));
+                elementInfo.put("version", matcher.group(4));
             }
         }
 
-        return id;
+        return elementInfo;
     }
 
     public static LocalDateTime getJobStartDate(String jobId) {
