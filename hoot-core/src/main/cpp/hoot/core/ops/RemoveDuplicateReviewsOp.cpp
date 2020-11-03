@@ -86,8 +86,8 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
     LOG_VART(eids.size());
     LOG_VART(duplicateReviews.size());
 
-    // Only remove reviews and process if there is more than one review
-    // See discussion here: https://github.com/ngageoint/hootenanny/issues/81#issuecomment-162980656
+    // Only remove reviews and process if there is more than one review. See discussion here:
+    // https://github.com/ngageoint/hootenanny/issues/81#issuecomment-162980656
     if (eids.size() == 2 && duplicateReviews.size() > 1)
     {
       for (int i = 0; i < duplicateReviews.size(); i++)

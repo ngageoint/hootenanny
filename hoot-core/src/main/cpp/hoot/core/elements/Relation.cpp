@@ -197,20 +197,20 @@ Envelope* Relation::getEnvelope(const std::shared_ptr<const ElementProvider>& ep
   return new Envelope(getEnvelopeInternal(ep));
 }
 
-const Envelope& Relation::getEnvelopeInternal(const std::shared_ptr<const ElementProvider>& ep) const
+const Envelope& Relation::getEnvelopeInternal(
+  const std::shared_ptr<const ElementProvider>& ep) const
 {
   LOG_VART(ep.get());
 
   _cachedEnvelope.init();
 
   const vector<RelationData::Entry>& members = getMembers();
-
   for (size_t i = 0; i < members.size(); i++)
   {
     const RelationData::Entry& m = members[i];
     LOG_VART(m.getElementId());
 
-    // if any of the elements don't exist then return an empty envelope.
+    // If any of the elements don't exist, then return an empty envelope.
     if (ep->containsElement(m.getElementId()) == false)
     {
       LOG_TRACE(m.getElementId() << " missing.  Returning empty envelope...");
@@ -219,17 +219,19 @@ const Envelope& Relation::getEnvelopeInternal(const std::shared_ptr<const Elemen
     }
 
     const std::shared_ptr<const Element> e = ep->getElement(m.getElementId());
+    LOG_VART(e.get());
     if (e)
     {
       std::shared_ptr<Envelope> childEnvelope(e->getEnvelope(ep));
-
+      LOG_VART(childEnvelope.get());
+      LOG_VART(childEnvelope->isNull());
       if (childEnvelope->isNull())
       {
-        LOG_TRACE("Child envelope for " << m.getElementId() << " null.  Returning empty envelope...");
+        LOG_TRACE(
+          "Child envelope for " << m.getElementId() << " null.  Returning empty envelope...");
         _cachedEnvelope.setToNull();
         return _cachedEnvelope;
       }
-
       _cachedEnvelope.expandToInclude(childEnvelope.get());
     }
   }

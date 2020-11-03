@@ -48,6 +48,10 @@ class TagMerger;
  * alt_tags field, so none of the types are lost. The exception to this is when the Attribute
  * Conflation workflow is being run. For AC, we favor the POI tags during conflicts instead of the
  * building tags (with some configurable exceptions).
+ *
+ * See
+ * https://github.com/ngageoint/hootenanny/files/607197/Hootenanny.-.POI.to.Polygon.2016-11-15.pptx
+ * for more details.
  */
 class PoiPolygonMerger : public MergerBase
 {
@@ -103,6 +107,8 @@ private:
   QString _tagMergerClass;
   // this is the tag merger that is used throughout poi/poly merging
   std::shared_ptr<TagMerger> _tagMerger;
+
+  bool _writeDebugMaps;
 
   ElementId _mergeBuildings(const OsmMapPtr& map, std::vector<ElementId>& buildings1,
                             std::vector<ElementId>& buildings2,

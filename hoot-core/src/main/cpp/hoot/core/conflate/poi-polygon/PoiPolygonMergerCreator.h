@@ -32,6 +32,7 @@
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/conflate/matching/MatchGraph.h>
 
 namespace hoot
 {
@@ -54,7 +55,8 @@ public:
    * appended. If there is more than one match and at least one is a PoiPolygonMatch then a
    * MarkForReviewMerger is created.
    */
-  virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
+  virtual bool createMergers(const MatchSet& matches,
+                             std::vector<MergerPtr>& mergers) const override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 
@@ -63,6 +65,25 @@ public:
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const override;
 
   virtual void setOsmMap(const OsmMap* map) override { _map = map; }
+
+  // POI/Polygon matching is unique in that it is the only non-generic geometry type matcher that
+  // can duplicate matches with other non-generic geometry type matchers (namely POI and Building).
+  // One way to deal with this could be that if there are POI/Polygon matches sharing elements with
+  // a POI matcher, then we could mark them as reviews before having each MergerCreator create
+  // Mergers. The reason we would only care about overlapping POI matches in this situation, and not
+  // building or area matches, is that PoiPolygonMerger attempts to remove a POI completely once it
+  // is merged with a polygon, which could result in an orphaned node
+  // (PoiPolygonInvalidReviewNodeRemover specifically deals with this issue). Since PoiPolygonMerger
+  // doesn't know about the existence of any POI to POI matches which reference the POI its
+  // removing, we could handle this in this method before merging features with PoiPolygonMerger.
+  //
+  // HOWEVER, we're favoring getting POI/Polygon matches preserved at the expense of potentially
+  // losing some POI/POI reviews for now. This method is being left in here as an alternative
+  // workflow from now and could be called in UnifyingConflator before the merging process, if
+  // desired.
+
+  //static void convertSharedMatchesToReviews(
+    //MatchSetVector& matchSets, std::vector<MergerPtr>& mergers);
 
   void setAllowCrossConflationMerging(bool allow) { _allowCrossConflationMerging = allow; }
 
@@ -82,7 +103,7 @@ private:
 
   MatchPtr _createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const;
 
-  /**
+  /*
    * Returns true if one or more matches are conflicting matches.
    */
   bool _isConflictingSet(const MatchSet& matches) const;

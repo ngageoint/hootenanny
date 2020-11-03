@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/conflate/matching/Match.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
@@ -58,8 +59,8 @@ void MergerFactory::reset()
   _creators.clear();
 }
 
-void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
-  vector<MergerPtr>& result) const
+void MergerFactory::createMergers(
+  const OsmMapPtr& map, const MatchSet& matches, vector<MergerPtr>& result) const
 {
   LOG_TRACE(
     "Creating merger group for " <<
@@ -87,7 +88,7 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
   }
 
   // In #2069, a ScriptMatch and a NetworkMatch are being grouped together, which ultimately causes
-  // the exception below to be thrown.  For now, attempting to bypass and only log a warning.  This
+  // the exception below to be thrown. Now, instead of an error we're only logging a warning. This
   // also required additional error handling in ScriptMerger (see ScriptMerger::_applyMergePair).
   if (logWarnCount < Log::getWarnMessageLimit())
   {
@@ -98,7 +99,6 @@ void MergerFactory::createMergers(const OsmMapPtr& map, const MatchSet& matches,
     LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
   }
   logWarnCount++;
-  //throw HootException("Error creating a merger for the provided set of matches.");
 }
 
 vector<CreatorDescription> MergerFactory::getAllAvailableCreators() const
@@ -141,8 +141,6 @@ bool MergerFactory::isConflicting(
   const ConstOsmMapPtr& map, const ConstMatchPtr& m1, const ConstMatchPtr& m2,
   const QHash<QString, ConstMatchPtr>& matches) const
 {
-  //LOG_VART(_creators.size());
-
   // if any creator considers a match conflicting then it is a conflict
   for (size_t i = 0; i < _creators.size(); i++)
   {

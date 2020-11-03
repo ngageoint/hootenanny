@@ -56,6 +56,7 @@
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 
 using namespace std;
 
@@ -115,6 +116,7 @@ _manyToManyMatch(false),
 _useChangedReview(ConfigOptions().getBuildingChangedReview()),
 _changedReviewIouThreshold(ConfigOptions().getBuildingChangedReviewIouThreshold())
 {
+  // TODO: change back to trace
   LOG_VART(_pairs);
 }
 
@@ -153,14 +155,16 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   }
 
   ElementPtr e1 = _buildBuilding(map, true);
-  if (e1.get())
+  if (!e1)
   {
-    LOG_TRACE("BuildingMerger: built building e1\n" << OsmUtils::getElementDetailString(e1, map));
+    LOG_TRACE("Built building 1 null. Skipping merge.");
+    return;
   }
   ElementPtr e2 = _buildBuilding(map, false);
-  if (e2.get())
+  if (!e2)
   {
-    LOG_TRACE("BuildingMerger: built building e2\n" << OsmUtils::getElementDetailString(e2, map));
+    LOG_TRACE("Built building 2 null. Skipping merge.");
+    return;
   }
 
   LOG_VART(_keepMoreComplexGeometryWhenAutoMerging);
@@ -435,9 +439,8 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
   return relationMemberIdsToRemove;
 }
 
-std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
-                                                       const set<ElementId>& eid,
-                                                       const bool preserveTypes)
+std::shared_ptr<Element> BuildingMerger::buildBuilding(
+  const OsmMapPtr& map, const set<ElementId>& eid, const bool preserveTypes)
 {
   if (eid.size() > 0)
   {
@@ -525,7 +528,7 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(const OsmMapPtr& map,
         }
       }
 
-      if (!isBuilding)
+      if (e && !isBuilding)
       {
         // If the building wasn't a relation, then just add the way building on the list of
         // buildings to be merged into a relation.
@@ -593,7 +596,7 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
     {
       // used to actually log a warning for this but seem excessive...still going to limit it like
       // a warning, though.
-      LOG_DEBUG(
+      LOG_TRACE(
         "Merging building group where some buildings have 3D tags and others do not. A " <<
         "multipolygon relation will be created instead of a building relation. Buildings: " <<
         ElementIdUtils::elementsToElementIds(constituentBuildings));
@@ -723,12 +726,12 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   return parentRelation;
 }
 
-std::shared_ptr<Element> BuildingMerger::_buildBuilding(const OsmMapPtr& map,
-                                                        const bool unknown1) const
+std::shared_ptr<Element> BuildingMerger::_buildBuilding(
+  const OsmMapPtr& map, const bool unknown1) const
 {
   set<ElementId> eids;
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
-    it != _pairs.end(); ++it)
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
+       ++it)
   {
     if (unknown1)
     {

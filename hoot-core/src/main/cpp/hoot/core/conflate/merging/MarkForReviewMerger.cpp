@@ -96,7 +96,7 @@ set<ElementId> MarkForReviewMerger::getImpactedElementIds() const
   }
   else
   {
-    // make sure the map contains all our elements and they aren't conflated.
+    // Make sure the map contains all our elements and they aren't conflated.
     for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin();
       it != _pairs.end(); ++it)
     {

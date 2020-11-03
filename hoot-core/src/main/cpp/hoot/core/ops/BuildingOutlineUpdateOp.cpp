@@ -47,7 +47,6 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -251,7 +250,9 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
           {
             LOG_WARN(
               "Found a building with a non-multipolygon relation 'part'. " <<
-              relation->toString() << "Building: " << pBuilding->toString());
+              relation->getElementId() << "Building: " << pBuilding->getElementId());
+            LOG_TRACE(relation);
+            LOG_TRACE(pBuilding);
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {

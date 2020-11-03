@@ -40,8 +40,11 @@ namespace hoot
 /**
  * This removes any untagged nodes from POI/Polygon review relations. Its a band-aid on a POI/Poly
  * bug that should eventually be dealt with. The bug involves the fact that auto merging or the
- * keep closest matches only option to work when an an element is involved in a both a match and a
- * review.
+ * keep closest matches only options don't work when an an element is involved in a both a match and
+ * a review.
+ *
+ * See related notes in the disabled code for
+ * PoiPolygonMergerCreator::convertSharedMatchesToReviews.
  */
 class PoiPolygonInvalidReviewNodeRemover : public ConstOsmMapOperation
 {

@@ -36,6 +36,8 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+//#include <hoot/core/conflate/polygon/BuildingMatch.h>
 
 // Standard
 #include <typeinfo>
@@ -55,13 +57,14 @@ _allowCrossConflationMerging(ConfigOptions().getPoiPolygonAllowCrossConflationMe
   LOG_VARD(_allowCrossConflationMerging);
 }
 
-MatchPtr PoiPolygonMergerCreator::_createMatch(const ConstOsmMapPtr& map, ElementId eid1,
-  ElementId eid2) const
+MatchPtr PoiPolygonMergerCreator::_createMatch(
+  const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) const
 {
   return MatchFactory::getInstance().createMatch(map, eid1, eid2);
 }
 
-bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<MergerPtr>& mergers) const
+bool PoiPolygonMergerCreator::createMergers(
+  const MatchSet& matches, vector<MergerPtr>& mergers) const
 {
   LOG_TRACE("Creating mergers with " << className() << "...");
 
@@ -91,10 +94,6 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
   }
   LOG_VART(foundAPoi);
   LOG_VART(foundAPolygon);
-  if (!foundAPoi || !foundAPolygon)
-  {
-    LOG_TRACE("Match invalid; skipping merge.");
-  }
 
   // If there is at least one POI and at least one polygon, then we need to merge things in a
   // special way.
@@ -108,11 +107,11 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
       ConstMatchPtr m = *it;
       LOG_VART(m->toString());
 
-      //All of the other merger creators check the type of the match and do nothing if it isn't
-      //the correct type (in this case a PoiPolygon match).  Adding that logic in here can cause
-      //problems where some matches are passed up completely by all mergers, which results in an
-      //exception.  If this merger is meant to be catch all for pois/polygons, then this is ok.  If
-      //not, then some rework may need to be done here.
+      // All of the other merger creators check the type of the match and do nothing if it isn't
+      // the correct type (in this case a PoiPolygon match).  Adding that logic in here can cause
+      // problems where some matches are passed up completely by all mergers, which results in an
+      // exception.  If this merger is meant to be catch all for pois/polygons, then this is ok.  If
+      // not, then some rework may need to be done here.
       set<pair<ElementId, ElementId>> s = m->getMatchPairs();
       eids.insert(s.begin(), s.end());
     }
@@ -127,13 +126,19 @@ bool PoiPolygonMergerCreator::createMergers(const MatchSet& matches, vector<Merg
             QString("Conflicting information: multiple features have been matched to the same ") +
             QString("feature and require review."),
             matchTypes.join(";"), 1)));
+      LOG_TRACE("Pushed back review merger for : " << eids);
     }
     else
     {
       mergers.push_back(MergerPtr(new PoiPolygonMerger(eids)));
+      LOG_TRACE("Pushed back merger for : " << eids);
     }
 
     result = true;
+  }
+  else
+  {
+    LOG_TRACE("Match invalid; skipping merge.");
   }
 
   return result;
@@ -173,7 +178,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
     // get out the matched pairs from the matches
     set<pair<ElementId, ElementId>> p1 = m1->getMatchPairs();
     set<pair<ElementId, ElementId>> p2 = m2->getMatchPairs();
-    // We're expecting them to have one match each, more could be handled, but are not necessary at
+    // We're expecting them to have one match each. More could be handled, but are not necessary at
     // this time.
     LOG_VART(p1.size());
     LOG_VART(p2.size());
@@ -187,7 +192,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
     LOG_VART(eids2.first);
     LOG_VART(eids1.second);
     LOG_VART(eids2.second);
-    // There should be one elementId that is shared between the matches. Find it as well as the
+    // There should be one element id that is shared between the matches. Find it as well as the
     // other elements.
     ElementId sharedEid, o1, o2;
     if (eids1.first == eids2.first || eids1.first == eids2.second)
@@ -200,7 +205,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
       sharedEid = eids1.second;
       o1 = eids1.first;
     }
-    // there are no overlapping ElementIds, this isn't a conflict.
+    // There are no overlapping element ids, so this isn't a conflict.
     else
     {
       LOG_TRACE("no conflict");
@@ -221,12 +226,12 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
     }
     LOG_VART(o2);
 
-    //We only want the auto-merge to occur here in the situation where two pois are matching
-    //against the same poly. We do not want auto-merges occurring in the situation where the
-    //same poi is being reviewed against multiple polys, so those end up as reviews.
+    // We only want the auto-merge to occur here in the situation where two pois are matching
+    // against the same poly. We do not want auto-merges occurring in the situation where the
+    // same poi is being reviewed against multiple polys, so those end up as reviews.
 
-    //not passing the tag ignore list here, since it would have already be used when calling
-    //these methods from PoiPolygonMatch
+    // not passing the tag ignore list here, since it would have already be used when calling
+    // these methods from PoiPolygonMatch
     if (_autoMergeManyPoiToOnePolyMatches &&
         _poiCrit.isSatisfied(map->getElement(o1)) &&
         _poiCrit.isSatisfied(map->getElement(o2)) &&
@@ -236,10 +241,10 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
       return false;
     }
 
-    // create POI/Polygon matches and check to see if it is a miss
+    // Create POI/Polygon matches and check to see if it is a miss.
     std::shared_ptr<Match> ma(_createMatch(map, o1, o2));
 
-    // return conflict only if it is a miss, a review is ok.
+    // Return conflict only if it is a miss, a review is ok.
     result = false;
     if (ma.get() == 0 || ma->getType() == MatchType::Miss)
     {
@@ -247,7 +252,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
       result = true;
     }
   }
-  // if you don't dereference the m1/m2 pointers it always returns Match as the typeid. Odd.
+  // If you don't dereference the m1/m2 pointers it always returns Match as the typeid. Odd.
   else if (typeid(*m1) == typeid(*m2))
   {
     result = m1->isConflicting(m2, map);
@@ -324,5 +329,123 @@ bool PoiPolygonMergerCreator::_isConflictingSet(const MatchSet& matches) const
 
   return false;
 }
+
+//void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
+//  MatchSetVector& matchSets, std::vector<MergerPtr>& mergers)
+//{
+//  LOG_DEBUG(
+//    "Marking POI/Polygon matches overlapping with POI/POI matches as reviews for " <<
+//    StringUtils::formatLargeNumber(matchSets.size()) << " match sets...");
+
+//  // Get a mapping of all the IDs of elements belonging to both POI/Polygon and a POI/POI match.
+//  // We only care about POI/Poly overlapping matches with POI matches, since only those will cause
+//  // a problem if merged, since POI/Poly merging removes the POI part of the match completely.
+//  QStringList matchNameFilter;
+//  matchNameFilter.append(PoiPolygonMatch::MATCH_NAME);
+//  // TODO: need a way to not hardcode this...get it from ScriptMatch somehow?
+//  matchNameFilter.append("POI");
+//  //matchNameFilter.append(BuildingMatch::MATCH_NAME);
+//  QMultiHash<ElementId, QString> elementIdsToMatchTypes;
+//  for (MatchSetVector::const_iterator matchSetsItr = matchSets.begin();
+//       matchSetsItr != matchSets.end(); ++matchSetsItr)
+//  {
+//    MatchSet matchSet = *matchSetsItr;
+//    for (MatchSet::const_iterator matchSetItr = matchSet.begin(); matchSetItr != matchSet.end();
+//         ++matchSetItr)
+//    {
+//      ConstMatchPtr match = *matchSetItr;
+//      const QString matchName = match->getMatchName();
+//      if (matchNameFilter.contains(matchName))
+//      {
+//        const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+//        for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
+//               matchPairs.begin();
+//             matchPairItr != matchPairs.end(); ++matchPairItr)
+//        {
+//          const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
+//          if (!elementIdsToMatchTypes.contains(elementPair.first, matchName))
+//          {
+//            elementIdsToMatchTypes.insert(elementPair.first, matchName);
+//          }
+//          if (!elementIdsToMatchTypes.contains(elementPair.second, matchName))
+//          {
+//            elementIdsToMatchTypes.insert(elementPair.second, matchName);
+//          }
+//        }
+//      }
+//    }
+//  }
+//  LOG_VARD(elementIdsToMatchTypes.size());
+//  if (elementIdsToMatchTypes.isEmpty())
+//  {
+//    return;
+//  }
+
+//  // Find all elements involved in matches of multiple types.
+//  QSet<ElementId> elementIdsInvolvedInOverlappingMatch;
+//  const QList<ElementId> elementIds = elementIdsToMatchTypes.keys();
+//  for (QList<ElementId>::const_iterator elementIdsItr = elementIds.begin();
+//       elementIdsItr != elementIds.end();  ++elementIdsItr)
+//  {
+//    const ElementId elementId = *elementIdsItr;
+//    if (elementIdsToMatchTypes.values(elementId).size() > 1)
+//    {
+//      elementIdsInvolvedInOverlappingMatch.insert(elementId);
+//    }
+//  }
+//  LOG_VARD(elementIdsInvolvedInOverlappingMatch.size());
+//  if (elementIdsInvolvedInOverlappingMatch.isEmpty())
+//  {
+//    return;
+//  }
+
+//  // For all elements found to be in overlapping POI/Polygon matches, add a review merger for the
+//  // associated match pairs, and exclude the entire match set that match pair is in from the output
+//  // match set so the match set doesn't get processed more than once.
+//  const int matchSetsStartingSize = matchSets.size();
+//  MatchSetVector filteredMatchSets;
+//  for (MatchSetVector::const_iterator matchSetsItr = matchSets.begin();
+//       matchSetsItr != matchSets.end(); ++matchSetsItr)
+//  {
+//    MatchSet filteredMatchSet;
+//    MatchSet matchSet = *matchSetsItr;
+//    for (MatchSet::const_iterator matchSetItr = matchSet.begin(); matchSetItr != matchSet.end();
+//         ++matchSetItr)
+//    {
+//      ConstMatchPtr match = *matchSetItr;
+//      const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
+//      for (std::set<std::pair<ElementId, ElementId>>::const_iterator matchPairItr =
+//             matchPairs.begin();
+//           matchPairItr != matchPairs.end(); ++matchPairItr)
+//      {
+//        const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
+//        if (match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
+//            (elementIdsInvolvedInOverlappingMatch.contains(elementPair.first) ||
+//             elementIdsInvolvedInOverlappingMatch.contains(elementPair.second)))
+//        {
+//          LOG_TRACE(
+//            "Adding review for POI to Polygon match conflicting with another POI/POI match and " <<
+//            "removing; ids: " << matchPairs << "...");
+//          mergers.push_back(
+//            MergerPtr(
+//              new MarkForReviewMerger(
+//                matchPairs, "Inter-matcher overlapping matches", match->getMatchName(), 1.0)));
+//        }
+//        else
+//        {
+//          filteredMatchSet.insert(match);
+//        }
+//      }
+//    }
+//    if (filteredMatchSet.size() != 0)
+//    {
+//      filteredMatchSets.push_back(matchSet);
+//    }
+//  }
+//  LOG_VARD(mergers.size());
+//  LOG_VARD(matchSetsStartingSize);
+//  LOG_VARD(filteredMatchSets.size());
+//  matchSets = filteredMatchSets;
+//}
 
 }

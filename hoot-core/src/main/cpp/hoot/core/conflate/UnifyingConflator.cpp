@@ -49,6 +49,7 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/conflate/network/NetworkMatchCreator.h>
 #include <hoot/core/schema/SchemaUtils.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 
 // standard
 #include <algorithm>
@@ -181,9 +182,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // find all the matches in this map
   if (_matchThreshold.get())
   {
-    //ScoreMatches logic seems to be the only one that needs to pass in the match threshold now when
-    //the optimize param is activated.  Otherwise, we get the match threshold information from the
-    //config.
+    // Match scoring logic seems to be the only one that needs to pass in the match threshold now
+    // when the optimize param is activated.  Otherwise, we get the match threshold information from
+    // the config.
     _matchFactory.createMatches(map, _matches, _bounds, _matchThreshold);
   }
   else
@@ -284,7 +285,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   OsmMapWriterFactory::writeDebugMap(map, "after-match-optimization");
 
   {
-    // search the matches for groups (subgraphs) of matches. In other words, groups where all the
+    // Search the matches for groups (subgraphs) of matches. In other words, groups where all the
     // matches are interrelated by element id
     MatchGraph mg;
     mg.addMatches(_matches.begin(), _matches.end());
@@ -299,8 +300,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _updateProgress(currentStep - 1, "Merging feature matches...");
 
-  // Would it help to sort the matches so the biggest or best ones get merged first?
-  // convert all the match sets into mergers - #2912
+  // TODO: Would it help to sort the matches so the biggest or best ones get merged first? - #2912
+
   LOG_DEBUG(
     "Converting " << StringUtils::formatLargeNumber(matchSets.size()) <<
     " match sets to mergers...");
@@ -341,13 +342,15 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     const QString msg =
       "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
       " / " + StringUtils::formatLargeNumber(_mergers.size());
+    // There are way more log statements generated from this than we normally want to see, so just
+    // info out a subset. If running in debug, then you'll see all of them which can be useful.
     if (i != 0 && i % 10 == 0)
     {
       PROGRESS_INFO(msg);
     }
     else
     {
-      LOG_TRACE(msg);
+      LOG_DEBUG(msg);
     }
 
     merger->apply(map, replaced);
@@ -361,11 +364,11 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     LOG_VART(merger->getImpactedElementIds());
 
     // WARNING: Enabling this could result in a lot of files being generated.
-    if (i % 30 == 0)
-    {
-      OsmMapWriterFactory::writeDebugMap(
-        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
-    }
+    //if (i % 30 == 0)
+    //{
+      //OsmMapWriterFactory::writeDebugMap(
+        //map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+    //}
   }
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
@@ -518,7 +521,8 @@ void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches)
   }
 }
 
-void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter)
+void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches,
+                                      const MatchType& typeFilter)
 {
   for (size_t i = 0; i < matches.size(); i++)
   {

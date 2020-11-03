@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="37.7650804" minlon="-122.421" maxlat="37.76709169999999" maxlon="-122.4179828"/>
+    <node visible="true" id="-46680872" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658462455378725" lon="-122.4202077713553081">
+        <tag k="amenity" v="school"/>
+        <tag k="name" v="Vacant Property"/>
+        <tag k="operator" v="San Francisco Unified School District"/>
+        <tag k="REF2" v="none"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-46680871" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7666065000000017" lon="-122.4197072999999989"/>
+    <node visible="true" id="-46680869" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7665342999999964" lon="-122.4194133999999963"/>
+    <node visible="true" id="-46680867" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7665166999999968" lon="-122.4196984000000015"/>
+    <node visible="true" id="-46680865" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7663712000000018" lon="-122.4196840000000179"/>
+    <node visible="true" id="-46680863" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7663343999999910" lon="-122.4196802999999818"/>
+    <node visible="true" id="-46680861" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7662744999999944" lon="-122.4196744000000194"/>
+    <node visible="true" id="-46680829" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7670916999999946" lon="-122.4200353999999891"/>
+    <node visible="true" id="-46680827" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7667694000000012" lon="-122.4200031999999965"/>
+    <node visible="true" id="-46680825" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7667057999999969" lon="-122.4209795000000014"/>
+    <node visible="true" id="-46680823" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7663793999999911" lon="-122.4195510999999925"/>
+    <node visible="true" id="-46680821" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7663426000000086" lon="-122.4195473999999990"/>
+    <node visible="true" id="-46680819" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7663444999999882" lon="-122.4195170999999789"/>
+    <node visible="true" id="-46680817" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7662845999999988" lon="-122.4195112000000165"/>
+    <node visible="true" id="-46680815" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7662191000000007" lon="-122.4195421000000010"/>
+    <node visible="true" id="-46680813" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7662822999999932" lon="-122.4195483999999965"/>
+    <node visible="true" id="-46680811" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7662205999999898" lon="-122.4195165999999944"/>
+    <node visible="true" id="-46680809" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661394999999942" lon="-122.4195085999999861"/>
+    <node visible="true" id="-46680807" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661381999999932" lon="-122.4195303999999993"/>
+    <node visible="true" id="-46680805" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661046999999854" lon="-122.4195270999999963"/>
+    <node visible="true" id="-46680803" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661300999999980" lon="-122.4196600999999873"/>
+    <node visible="true" id="-46680801" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659961000000095" lon="-122.4196458999999919"/>
+    <node visible="true" id="-46680799" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661031000000023" lon="-122.4195522999999923"/>
+    <node visible="true" id="-46680797" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660725000000070" lon="-122.4195500999999808"/>
+    <node visible="true" id="-46680795" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660757000000089" lon="-122.4194944999999848"/>
+    <node visible="true" id="-46680793" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661067999999958" lon="-122.4194973000000033"/>
+    <node visible="true" id="-46680791" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661124999999984" lon="-122.4193992999999949"/>
+    <node visible="true" id="-46680789" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660800000000094" lon="-122.4193963000000167"/>
+    <node visible="true" id="-46680787" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660832999999982" lon="-122.4193401999999935"/>
+    <node visible="true" id="-46680785" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661149999999921" lon="-122.4193431000000061"/>
+    <node visible="true" id="-46680783" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661204999999995" lon="-122.4192486000000031"/>
+    <node visible="true" id="-46680781" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659839000000019" lon="-122.4192359000000039"/>
+    <node visible="true" id="-46680779" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659782999999933" lon="-122.4193324999999817"/>
+    <node visible="true" id="-46680777" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660200999999915" lon="-122.4193364000000059"/>
+    <node visible="true" id="-46680775" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660169999999908" lon="-122.4193911999999926"/>
+    <node visible="true" id="-46680773" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659737999999976" lon="-122.4193872000000027"/>
+    <node visible="true" id="-46680771" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659681000000020" lon="-122.4194851999999827"/>
+    <node visible="true" id="-46680769" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660043999999999" lon="-122.4194884999999857"/>
+    <node visible="true" id="-46680767" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660013999999933" lon="-122.4195392999999967"/>
+    <node visible="true" id="-46680765" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659641999999991" lon="-122.4195358999999854"/>
+    <node visible="true" id="-46680763" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660966999999914" lon="-122.4196567999999843"/>
+    <node visible="true" id="-46680761" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7665395000000004" lon="-122.4193302999999986"/>
+    <node visible="true" id="-46680759" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7663939999999982" lon="-122.4193159000000151"/>
+    <node visible="true" id="-46680757" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7666241000000014" lon="-122.4194222999999795"/>
+    <node visible="true" id="-46680755" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659750999999986" lon="-122.4193669000000000"/>
+    <node visible="true" id="-46680753" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658936999999995" lon="-122.4196332000000069"/>
+    <node visible="true" id="-46680751" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659579999999977" lon="-122.4196423999999865"/>
+    <node visible="true" id="-46680749" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658944000000005" lon="-122.4196222999999861"/>
+    <node visible="true" id="-46680745" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7670108000000013" lon="-122.4194154999999995"/>
+    <node visible="true" id="-46680743" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7668792999999923" lon="-122.4194047999999810"/>
+    <node visible="true" id="-46680741" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7668877999999992" lon="-122.4193618999999842"/>
+    <node visible="true" id="-46680739" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7668241999999950" lon="-122.4193618999999842"/>
+    <node visible="true" id="-46680737" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7668034000000006" lon="-122.4197416999999888"/>
+    <node visible="true" id="-46680735" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7669970000000035" lon="-122.4197601999999989"/>
+    <node visible="true" id="-46680733" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7657625000000081" lon="-122.4183753999999880"/>
+    <node visible="true" id="-46680731" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658249999999995" lon="-122.4183822999999904"/>
+    <node visible="true" id="-46680729" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658128999999931" lon="-122.4185586999999913"/>
+    <node visible="true" id="-46680727" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7657503999999946" lon="-122.4185517999999888"/>
+    <node visible="true" id="-46680725" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7650804000000022" lon="-122.4196567999999843">
+        <tag k="public_transport" v="station"/>
+        <tag k="name" v="16th Street Mission"/>
+        <tag k="railway" v="station"/>
+        <tag k="operator" v="BART"/>
+        <tag k="REF1" v="003907"/>
+        <tag k="train" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-46680723" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7666108000000023" lon="-122.4188570000000027"/>
+    <node visible="true" id="-46680721" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7663068000000095" lon="-122.4192221999999930"/>
+    <node visible="true" id="-46680719" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7666228000000004" lon="-122.4192548999999985"/>
+    <node visible="true" id="-46680717" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7663322999999949" lon="-122.4188280999999847"/>
+    <node visible="true" id="-46680715" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7666418000000021" lon="-122.4189609999999959"/>
+    <node visible="true" id="-46680713" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7666042999999902" lon="-122.4189570999999859"/>
+    <node visible="true" id="-46680711" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659413999999956" lon="-122.4187719999999899"/>
+    <node visible="true" id="-46680709" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659107999999932" lon="-122.4193603999999880"/>
+    <node visible="true" id="-46680707" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658555999999948" lon="-122.4193566000000004"/>
+    <node visible="true" id="-46680705" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658384000000069" lon="-122.4196179000000058"/>
+    <node visible="true" id="-46680703" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655953999999952" lon="-122.4189480000000003"/>
+    <node visible="true" id="-46680701" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655748999999972" lon="-122.4192888000000039"/>
+    <node visible="true" id="-46680699" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655724000000035" lon="-122.4193293000000011"/>
+    <node visible="true" id="-46680697" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655249999999967" lon="-122.4187317999999891"/>
+    <node visible="true" id="-46680695" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655243000000027" lon="-122.4180271000000033"/>
+    <node visible="true" id="-46680693" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655154999999993" lon="-122.4181646999999913"/>
+    <node visible="true" id="-46680691" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655124999999998" lon="-122.4189399999999921"/>
+    <node visible="true" id="-46680689" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654957000000024" lon="-122.4181827000000169"/>
+    <node visible="true" id="-46680687" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654892999999916" lon="-122.4187284000000204"/>
+    <node visible="true" id="-46680685" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654736000000000" lon="-122.4185264999999987"/>
+    <node visible="true" id="-46680683" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654561999999956" lon="-122.4192773000000045"/>
+    <node visible="true" id="-46680681" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653873999999874" lon="-122.4195652999999879"/>
+    <node visible="true" id="-46680679" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653536999999986" lon="-122.4179903999999937"/>
+    <node visible="true" id="-46680677" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653524999999988" lon="-122.4180094999999966"/>
+    <node visible="true" id="-46680675" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653424000000015" lon="-122.4181468999999964"/>
+    <node visible="true" id="-46680673" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653411000000006" lon="-122.4181667999999945"/>
+    <node visible="true" id="-46680671" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652794999999912" lon="-122.4179828000000043"/>
+    <node visible="true" id="-46680669" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652460999999988" lon="-122.4185030999999952"/>
+    <node visible="true" id="-46680667" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652270000000030" lon="-122.4187031000000019"/>
+    <node visible="true" id="-46680665" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651938999999999" lon="-122.4192520000000144"/>
+    <node visible="true" id="-46680661" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661223999999933" lon="-122.4199684000000019"/>
+    <node visible="true" id="-46680659" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661153999999968" lon="-122.4200727000000057"/>
+    <node visible="true" id="-46680657" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7661133000000007" lon="-122.4201321000000036"/>
+    <node visible="true" id="-46680655" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660982000000018" lon="-122.4203853000000066"/>
+    <node visible="true" id="-46680653" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660910999999828" lon="-122.4204553999999945"/>
+    <node visible="true" id="-46680651" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660860000000156" lon="-122.4205347999999987"/>
+    <node visible="true" id="-46680649" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660289000000020" lon="-122.4201240999999953"/>
+    <node visible="true" id="-46680647" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7660138999999972" lon="-122.4203772999999984"/>
+    <node visible="true" id="-46680645" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659260000000074" lon="-122.4204385000000030"/>
+    <node visible="true" id="-46680643" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659208999999905" lon="-122.4205180000000013"/>
+    <node visible="true" id="-46680641" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659204999999929" lon="-122.4199468000000053"/>
+    <node visible="true" id="-46680639" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7659135000000035" lon="-122.4200510999999807"/>
+    <node visible="true" id="-46680637" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658760999999998" lon="-122.4204200999999870"/>
+    <node visible="true" id="-46680635" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658685000000034" lon="-122.4205307999999803"/>
+    <node visible="true" id="-46680633" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658272000000039" lon="-122.4199354999999940"/>
+    <node visible="true" id="-46680631" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7658215000000084" lon="-122.4200430000000068"/>
+    <node visible="true" id="-46680629" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656982999999897" lon="-122.4200895999999972"/>
+    <node visible="true" id="-46680627" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656806999999901" lon="-122.4203463000000056"/>
+    <node visible="true" id="-46680625" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656739999999971" lon="-122.4203978999999833"/>
+    <node visible="true" id="-46680623" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656664000000006" lon="-122.4205086000000051"/>
+    <node visible="true" id="-46680621" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656230000000050" lon="-122.4199181999999837"/>
+    <node visible="true" id="-46680619" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656178000000011" lon="-122.4200807999999796"/>
+    <node visible="true" id="-46680617" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656173000000024" lon="-122.4200256999999965"/>
+    <node visible="true" id="-46680615" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656069000000016" lon="-122.4198674999999810"/>
+    <node visible="true" id="-46680613" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7656002000000015" lon="-122.4203374999999880"/>
+    <node visible="true" id="-46680611" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7655950999999988" lon="-122.4200692000000004"/>
+    <node visible="true" id="-46680609" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653364999999965" lon="-122.4198420000000027"/>
+    <node visible="true" id="-46680607" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653245999999996" lon="-122.4200436999999937"/>
+    <node visible="true" id="-46680605" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653241000000008" lon="-122.4200537000000111"/>
+    <node visible="true" id="-46680603" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652818999999980" lon="-122.4199694999999792"/>
+    <node visible="true" id="-46680601" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652771999999928" lon="-122.4200493000000023"/>
+    <node visible="true" id="-46680599" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652730999999946" lon="-122.4200491000000000"/>
+    <node visible="true" id="-46680597" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652613999999929" lon="-122.4202479000000068"/>
+    <node visible="true" id="-46680595" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652588999999992" lon="-122.4199673000000104"/>
+    <node visible="true" id="-46680593" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652542000000082" lon="-122.4200472999999931"/>
+    <node visible="true" id="-46680591" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651722000000021" lon="-122.4198265999999933"/>
+    <node visible="true" id="-46680589" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651596999999981" lon="-122.4200383999999957"/>
+    <node visible="true" id="-46680587" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651480000000177" lon="-122.4202372999999966"/>
+    <node visible="true" id="-46680585" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651477000000000" lon="-122.4195627000000002"/>
+    <node visible="true" id="-46680583" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653861999999876" lon="-122.4195856999999847"/>
+    <node visible="true" id="-46680581" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654050999999882" lon="-122.4192723999999970"/>
+    <node visible="true" id="-46680579" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651666000000006" lon="-122.4192493999999840"/>
+    <node visible="true" id="-46680575" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652339999999995" lon="-122.4191090000000059">
+        <tag k="drive_in" v="no"/>
+        <tag k="drive_through" v="no"/>
+        <tag k="amenity" v="fast_food"/>
+        <tag k="wheelchair" v="yes"/>
+        <tag k="addr:street" v="16th Street"/>
+        <tag k="name" v="Burger King"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="cuisine" v="burger"/>
+        <tag k="ref" v="6287"/>
+        <tag k="phone" v="+1 (415) 863-5066"/>
+        <tag k="REF1" v="000505"/>
+        <tag k="addr:housenumber" v="2978"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-46680573" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7651503000000019" lon="-122.4193839999999938">
+        <tag k="source" v="survey"/>
+        <tag k="highway" v="bus_stop"/>
+        <tag k="shelter" v="no"/>
+        <tag k="ticker" v="no"/>
+        <tag k="route_ref" v="22;53"/>
+        <tag k="operator" v="Muni"/>
+        <tag k="REF1" v="0000fe"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-46680571" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7653009999999938" lon="-122.4195354000000009">
+        <tag k="source" v="survey"/>
+        <tag k="highway" v="bus_stop"/>
+        <tag k="shelter" v="yes"/>
+        <tag k="ticker" v="yes"/>
+        <tag k="route_ref" v="14;14L;49"/>
+        <tag k="operator" v="Muni"/>
+        <tag k="REF1" v="0000db"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-46680569" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7663919999999891" lon="-122.4198731999999836">
+        <tag k="source" v="survey"/>
+        <tag k="highway" v="bus_stop"/>
+        <tag k="shelter" v="no"/>
+        <tag k="ticker" v="no"/>
+        <tag k="route_ref" v="14;49"/>
+        <tag k="operator" v="Muni"/>
+        <tag k="REF1" v="0000c7"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-46680565" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7654162999999983" lon="-122.4195182999999787">
+        <tag k="amenity" v="pharmacy"/>
+        <tag k="addr:street" v="Mission Street"/>
+        <tag k="dispensing" v="yes"/>
+        <tag k="name" v="Walgreens"/>
+        <tag k="shop" v="convenience"/>
+        <tag k="REF1" v="000747"/>
+        <tag k="addr:housenumber" v="1979"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-46680563" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7664816000000059" lon="-122.4190032999999858">
+        <tag k="amenity" v="school"/>
+        <tag k="name" v="Marshall Elementary School"/>
+        <tag k="ele" v="8"/>
+        <tag k="REVIEW" v="0086ed"/>
+        <tag k="operator" v="San Francisco Unified School District"/>
+        <tag k="gnis:state_id" v="06"/>
+        <tag k="REF1" v="000904"/>
+        <tag k="REF2" v="000904"/>
+        <tag k="gnis:feature_id" v="228151"/>
+        <tag k="gnis:county_id" v="075"/>
+        <tag k="gnis:created" v="06/14/2000"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-46680557" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7652723999999935" lon="-122.4193839999999938">
+        <tag k="created_by" v="Potlatch 0.10f"/>
+        <tag k="name" v="16th St. Mission BART"/>
+        <tag k="railway" v="subway_entrance"/>
+        <tag k="operator" v="BART"/>
+        <tag k="REF1" v="003e33"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-46680537" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7670288621799983" lon="-122.4209999999999923"/>
+    <node visible="true" id="-46680535" timestamp="1970-01-01T00:00:00Z" version="1" lat="37.7669109909899987" lon="-122.4209999999999923"/>
+    <way visible="true" id="-46680908" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680865"/>
+        <nd ref="-46680863"/>
+        <nd ref="-46680821"/>
+        <nd ref="-46680823"/>
+        <nd ref="-46680865"/>
+        <tag k="addr:street" v="Mission Street"/>
+        <tag k="name" v="The Butcher Shop"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:housename" v="The Butcher Shop"/>
+        <tag k="REF1" v="009393"/>
+        <tag k="addr:housenumber" v="1909"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680907" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680863"/>
+        <nd ref="-46680861"/>
+        <nd ref="-46680813"/>
+        <nd ref="-46680817"/>
+        <nd ref="-46680819"/>
+        <nd ref="-46680821"/>
+        <nd ref="-46680863"/>
+        <tag k="addr:street" v="Mission Street"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:housename" v="MPI Properties"/>
+        <tag k="REF1" v="009392"/>
+        <tag k="addr:housenumber" v="1911"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680906" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680861"/>
+        <nd ref="-46680803"/>
+        <nd ref="-46680807"/>
+        <nd ref="-46680809"/>
+        <nd ref="-46680811"/>
+        <nd ref="-46680815"/>
+        <nd ref="-46680813"/>
+        <nd ref="-46680861"/>
+        <tag k="addr:street" v="MIssion Street"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francsico"/>
+        <tag k="REF1" v="009390"/>
+        <tag k="addr:housenumber" v="1911"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680905" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680803"/>
+        <nd ref="-46680763"/>
+        <nd ref="-46680799"/>
+        <nd ref="-46680805"/>
+        <nd ref="-46680807"/>
+        <nd ref="-46680803"/>
+        <tag k="addr:street" v="Mission Street"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="REF1" v="00938f"/>
+        <tag k="addr:housenumber" v="1919"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680904" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680801"/>
+        <nd ref="-46680751"/>
+        <nd ref="-46680765"/>
+        <nd ref="-46680767"/>
+        <nd ref="-46680801"/>
+        <tag k="addr:street" v="Mission Street"/>
+        <tag k="name" v="Fida Market and Deli"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="REF1" v="00938e"/>
+        <tag k="addr:housenumber" v="1939"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680903" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680763"/>
+        <nd ref="-46680801"/>
+        <nd ref="-46680751"/>
+        <nd ref="-46680765"/>
+        <nd ref="-46680767"/>
+        <nd ref="-46680769"/>
+        <nd ref="-46680771"/>
+        <nd ref="-46680773"/>
+        <nd ref="-46680775"/>
+        <nd ref="-46680777"/>
+        <nd ref="-46680779"/>
+        <nd ref="-46680781"/>
+        <nd ref="-46680783"/>
+        <nd ref="-46680785"/>
+        <nd ref="-46680787"/>
+        <nd ref="-46680789"/>
+        <nd ref="-46680791"/>
+        <nd ref="-46680793"/>
+        <nd ref="-46680795"/>
+        <nd ref="-46680797"/>
+        <nd ref="-46680799"/>
+        <nd ref="-46680763"/>
+        <tag k="addr:street" v="Mission Street"/>
+        <tag k="name" v="Apartments"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="REF1" v="00938d"/>
+        <tag k="addr:housenumber" v="1933"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680902" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680867"/>
+        <nd ref="-46680865"/>
+        <nd ref="-46680823"/>
+        <nd ref="-46680759"/>
+        <nd ref="-46680761"/>
+        <nd ref="-46680869"/>
+        <nd ref="-46680867"/>
+        <tag k="building:levels" v="1"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="00938c"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680901" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680871"/>
+        <nd ref="-46680867"/>
+        <nd ref="-46680869"/>
+        <nd ref="-46680757"/>
+        <nd ref="-46680871"/>
+        <tag k="addr:street" v="Mission Street"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="addr:housename" v="Bay Blend Cafe"/>
+        <tag k="REF1" v="00938b"/>
+        <tag k="addr:housenumber" v="1905"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680900" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680751"/>
+        <nd ref="-46680753"/>
+        <nd ref="-46680749"/>
+        <nd ref="-46680709"/>
+        <nd ref="-46680755"/>
+        <nd ref="-46680773"/>
+        <nd ref="-46680771"/>
+        <nd ref="-46680765"/>
+        <nd ref="-46680751"/>
+        <tag k="addr:street" v="MIssion Street"/>
+        <tag k="name" v="World Class Boxing"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="REF1" v="00938a"/>
+        <tag k="addr:housenumber" v="1943"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680899" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680749"/>
+        <nd ref="-46680705"/>
+        <nd ref="-46680707"/>
+        <nd ref="-46680709"/>
+        <nd ref="-46680749"/>
+        <tag k="addr:street" v="Mission Street"/>
+        <tag k="name" v="J + K Fitness"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="REF1" v="009389"/>
+        <tag k="addr:housenumber" v="1947A"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680898" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680735"/>
+        <nd ref="-46680737"/>
+        <nd ref="-46680739"/>
+        <nd ref="-46680741"/>
+        <nd ref="-46680743"/>
+        <nd ref="-46680745"/>
+        <nd ref="-46680735"/>
+        <tag k="source" v="ground survey"/>
+        <tag k="addr:street" v="Mission Street"/>
+        <tag k="name" v="The Walden House"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="building" v="yes"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="REF1" v="008a46"/>
+        <tag k="addr:housenumber" v="1899"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680897" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680727"/>
+        <nd ref="-46680729"/>
+        <nd ref="-46680731"/>
+        <nd ref="-46680733"/>
+        <nd ref="-46680727"/>
+        <tag k="name" v="The Lost Church"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="0085e9"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680896" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680719"/>
+        <nd ref="-46680715"/>
+        <nd ref="-46680713"/>
+        <nd ref="-46680723"/>
+        <nd ref="-46680717"/>
+        <nd ref="-46680721"/>
+        <nd ref="-46680719"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="0086ed"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680895" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680707"/>
+        <nd ref="-46680709"/>
+        <nd ref="-46680711"/>
+        <nd ref="-46680697"/>
+        <nd ref="-46680691"/>
+        <nd ref="-46680703"/>
+        <nd ref="-46680701"/>
+        <nd ref="-46680699"/>
+        <nd ref="-46680707"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="REF1" v="0089fd"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680894" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680705"/>
+        <nd ref="-46680707"/>
+        <nd ref="-46680699"/>
+        <nd ref="-46680701"/>
+        <nd ref="-46680683"/>
+        <nd ref="-46680581"/>
+        <nd ref="-46680681"/>
+        <nd ref="-46680705"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="0089f1"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680893" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680683"/>
+        <nd ref="-46680701"/>
+        <nd ref="-46680703"/>
+        <nd ref="-46680691"/>
+        <nd ref="-46680697"/>
+        <nd ref="-46680687"/>
+        <nd ref="-46680683"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="0089ef"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680892" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680581"/>
+        <nd ref="-46680683"/>
+        <nd ref="-46680687"/>
+        <nd ref="-46680667"/>
+        <nd ref="-46680665"/>
+        <nd ref="-46680581"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="0089e7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680891" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680685"/>
+        <nd ref="-46680689"/>
+        <nd ref="-46680673"/>
+        <nd ref="-46680675"/>
+        <nd ref="-46680693"/>
+        <nd ref="-46680695"/>
+        <nd ref="-46680677"/>
+        <nd ref="-46680679"/>
+        <nd ref="-46680671"/>
+        <nd ref="-46680669"/>
+        <nd ref="-46680685"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="0089d8"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680890" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680605"/>
+        <nd ref="-46680607"/>
+        <nd ref="-46680609"/>
+        <nd ref="-46680591"/>
+        <nd ref="-46680589"/>
+        <nd ref="-46680593"/>
+        <nd ref="-46680595"/>
+        <nd ref="-46680603"/>
+        <nd ref="-46680601"/>
+        <nd ref="-46680605"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="006dab"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680889" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680589"/>
+        <nd ref="-46680587"/>
+        <nd ref="-46680597"/>
+        <nd ref="-46680599"/>
+        <nd ref="-46680593"/>
+        <nd ref="-46680589"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="006da9"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680888" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680639"/>
+        <nd ref="-46680659"/>
+        <nd ref="-46680661"/>
+        <nd ref="-46680641"/>
+        <nd ref="-46680639"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="006da8"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680887" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680627"/>
+        <nd ref="-46680629"/>
+        <nd ref="-46680619"/>
+        <nd ref="-46680613"/>
+        <nd ref="-46680627"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="006da6"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680886" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680657"/>
+        <nd ref="-46680649"/>
+        <nd ref="-46680647"/>
+        <nd ref="-46680655"/>
+        <nd ref="-46680657"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="006da5"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680885" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680651"/>
+        <nd ref="-46680653"/>
+        <nd ref="-46680645"/>
+        <nd ref="-46680643"/>
+        <nd ref="-46680651"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="006da4"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680884" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680609"/>
+        <nd ref="-46680615"/>
+        <nd ref="-46680611"/>
+        <nd ref="-46680607"/>
+        <nd ref="-46680609"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="006da3"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680883" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680631"/>
+        <nd ref="-46680633"/>
+        <nd ref="-46680621"/>
+        <nd ref="-46680617"/>
+        <nd ref="-46680631"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="006da2"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680882" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680635"/>
+        <nd ref="-46680637"/>
+        <nd ref="-46680625"/>
+        <nd ref="-46680623"/>
+        <nd ref="-46680635"/>
+        <tag k="source" v="Bing"/>
+        <tag k="building" v="yes"/>
+        <tag k="REF1" v="006da0"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680881" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680581"/>
+        <nd ref="-46680665"/>
+        <nd ref="-46680579"/>
+        <nd ref="-46680585"/>
+        <nd ref="-46680583"/>
+        <nd ref="-46680681"/>
+        <nd ref="-46680581"/>
+        <tag k="source" v="Bing"/>
+        <tag k="area" v="yes"/>
+        <tag k="highway" v="pedestrian"/>
+        <tag k="REF1" v="009759"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-46680876" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46680537"/>
+        <nd ref="-46680829"/>
+        <nd ref="-46680827"/>
+        <nd ref="-46680825"/>
+        <nd ref="-46680535"/>
+        <nd ref="-46680537"/>
+        <tag k="addr:street" v="15th Street"/>
+        <tag k="landuse" v="residential"/>
+        <tag k="name" v="Vara Apartments"/>
+        <tag k="addr:postcode" v="94103"/>
+        <tag k="addr:city" v="San Francisco"/>
+        <tag k="REF1" v="009fac"/>
+        <tag k="addr:housenumber" v="1600"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680563" role="reviewee"/>
+        <member type="way" ref="-46680896" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="10"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680563" role="reviewee"/>
+        <member type="way" ref="-46680902" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="6"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: no (28m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680563" role="reviewee"/>
+        <member type="node" ref="-46680872" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI"/>
+        <tag k="hoot:review:sort_order" v="5"/>
+        <tag k="hoot:review:note" v="Somewhat similar (130m) - similar POI type"/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680872" role="reviewee"/>
+        <member type="way" ref="-46680882" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="9"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: no (18m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680872" role="reviewee"/>
+        <member type="way" ref="-46680883" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="3"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: no (15m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680872" role="reviewee"/>
+        <member type="way" ref="-46680884" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="2"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: no (31m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680872" role="reviewee"/>
+        <member type="way" ref="-46680885" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="7"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: no (22m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680872" role="reviewee"/>
+        <member type="way" ref="-46680886" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="8"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: no (20m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680872" role="reviewee"/>
+        <member type="way" ref="-46680887" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: no (17m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680872" role="reviewee"/>
+        <member type="way" ref="-46680888" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="4"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: no (16m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680565" role="reviewee"/>
+        <member type="way" ref="-46680894" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="1"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="node" ref="-46680575" role="reviewee"/>
+        <member type="way" ref="-46680892" role="reviewee"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
+        <tag k="hoot:review:sort_order" v="11"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
+        <tag k="hoot:review:members" v="2"/>
+        <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:score" v="1"/>
+        <tag k="type" v="review"/>
+    </relation>
+</osm>

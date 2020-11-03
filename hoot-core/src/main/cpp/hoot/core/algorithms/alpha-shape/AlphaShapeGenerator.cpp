@@ -117,7 +117,7 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
   }
   catch (const IllegalArgumentException& /*e*/)
   {
-    LOG_INFO(
+    LOG_DEBUG(
       "Failed to generate alpha shape geometry with alpha value of: " <<
       StringUtils::formatLargeNumber(_alpha) << ".");
   }

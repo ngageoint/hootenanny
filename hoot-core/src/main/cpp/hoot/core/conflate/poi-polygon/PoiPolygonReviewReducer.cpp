@@ -515,7 +515,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   }
 
   //QElapsedTimer timer2;
-  LOG_DEBUG("Checking neighbors...");
+  LOG_TRACE("Checking neighbors...");
   LOG_VART(_polyNeighborIds.size());
   // This loop becomes more expensive as the search radius is increased.
   for (std::set<ElementId>::const_iterator polyNeighborItr = _polyNeighborIds.begin();

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScoreMatchesDiff.h"
 
@@ -124,8 +124,9 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   if (numManualMatches1 != numManualMatches2)
   {
     throw HootException(
-      QString("The two input datasets have a different number of manual matches and, therefore, ") +
-      QString("must not been derived from the same input data."));
+      QString("The two input datasets have a different number of manual matches (") +
+      QString::number(numManualMatches1) + " and " + QString::number(numManualMatches2) +
+      QString(") and, therefore, must not been derived from the same input data."));
   }
   _numManualMatches = numManualMatches1;
 
