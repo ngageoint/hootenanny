@@ -33,7 +33,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/ElementToRelationMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/CoordinateExt.h>
+#include <hoot/core/geometry/CoordinateExt.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
 

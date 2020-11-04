@@ -34,7 +34,7 @@
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/CoordinateExt.h>
+#include <hoot/core/geometry/CoordinateExt.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 

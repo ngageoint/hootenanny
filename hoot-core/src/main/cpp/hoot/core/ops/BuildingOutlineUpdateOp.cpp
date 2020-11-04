@@ -153,7 +153,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
                                             const ElementPtr& pElement,
                                             std::shared_ptr<Geometry>& pOutline)
 {
-  ElementToGeometryConverter ElementToGeometryConverter = ElementToGeometryConverter(_map);
+  ElementToGeometryConverter elementConverter = ElementToGeometryConverter(_map);
   std::shared_ptr<Geometry> pGeometry;
   try
   {
@@ -164,14 +164,14 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
       LOG_VART(pWay->isClosedArea());
       if (pWay->isClosedArea())
       {
-        pGeometry = ElementToGeometryConverter.convertToPolygon(pWay);
+        pGeometry = elementConverter.convertToPolygon(pWay);
         LOG_VART(pGeometry->getGeometryTypeId());
       }
     }
 
     if (!pGeometry)
     {
-      pGeometry = ElementToGeometryConverter.convertToGeometry(pElement);
+      pGeometry = elementConverter.convertToGeometry(pElement);
       LOG_VART(pGeometry->getGeometryTypeId());
     }
 

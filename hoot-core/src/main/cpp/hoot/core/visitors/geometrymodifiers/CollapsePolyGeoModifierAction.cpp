@@ -36,7 +36,7 @@
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/CoordinateExt.h>
+#include <hoot/core/geometry/CoordinateExt.h>
 
 using namespace geos::geom;
 using namespace geos::algorithm;
