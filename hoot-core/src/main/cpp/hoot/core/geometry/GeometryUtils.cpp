@@ -211,10 +211,11 @@ bool GeometryUtils::isEnvelopeConfigString(const QString& str)
 
 QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
 {
-  return QString::number(bounds.getMinX()) + "," +
-    QString::number(bounds.getMinY()) + "," +
-    QString::number(bounds.getMaxX()) + "," +
-    QString::number(bounds.getMaxY());
+  const int precision = ConfigOptions().getWriterPrecision();
+  return QString::number(bounds.getMinX(), 'g', precision) + "," +
+    QString::number(bounds.getMinY(), 'g', precision) + "," +
+    QString::number(bounds.getMaxX(), 'g', precision) + "," +
+    QString::number(bounds.getMaxY(), 'g', precision);
 }
 
 Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
@@ -241,6 +242,25 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
   return
     Envelope(boundsParts.at(0).toDouble(), boundsParts.at(2).toDouble(),
       boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
+}
+
+std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
+  const geos::geom::Envelope& env)
+{
+  CoordinateSequence* coordSeq =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(5, 2);
+  coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMinY()), 0);
+  coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMaxY()), 1);
+  coordSeq->setAt(geos::geom::Coordinate(env.getMaxX(), env.getMaxY()), 2);
+  coordSeq->setAt(geos::geom::Coordinate(env.getMaxX(), env.getMinY()), 3);
+  coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMinY()), 4);
+
+  // an empty set of holes
+  vector<Geometry*>* holes = new vector<Geometry*>();
+  // create the outer line
+  LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
+  return std::shared_ptr<Polygon>(
+    GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
 }
 
 std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
@@ -340,7 +360,6 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
 Geometry* GeometryUtils::validateGeometryCollection(const GeometryCollection *gc)
 {
   Geometry* result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
-
   for (size_t i = 0; i < gc->getNumGeometries(); i++)
   {
     std::shared_ptr<Geometry> geometry(validateGeometry(gc->getGeometryN(i)));

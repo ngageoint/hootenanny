@@ -134,6 +134,14 @@ public:
   /**
    * TODO
    *
+   * @param env
+   * @return
+   */
+  static std::shared_ptr<geos::geom::Polygon> envelopeToPolygon(const geos::geom::Envelope& env);
+
+  /**
+   * TODO
+   *
    * @param str
    * @return
    */

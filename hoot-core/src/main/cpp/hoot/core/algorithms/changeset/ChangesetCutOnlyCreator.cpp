@@ -370,7 +370,7 @@ void ChangesetCutOnlyCreator::_printJobDescription() const
   str += "Deriving replacement output changeset:";
   str += "\nBeing replaced: ..." + _input1.right(_maxFilePrintLength);
   str += "\nReplacing with ..." + _input2.right(_maxFilePrintLength);
-  str += "\nAt Bounds: " + _replacementBounds;
+  str += "\nAt Bounds: " + GeometryUtils::polygonToString(_replacementBounds);
   str += "\nOutput Changeset: ..." + _output.right(_maxFilePrintLength);
   LOG_STATUS(str);
 
@@ -392,19 +392,19 @@ void ChangesetCutOnlyCreator::setRetainmentFilterOptions(const QStringList& opti
 }
 
 void ChangesetCutOnlyCreator::create(
-  const QString& /*input1*/, const QString& /*input2*/,
-  const std::shared_ptr<geos::geom::Polygon>& /*bounds*/, const QString& /*output*/)
-{
-  // TODO: finish
-}
-
-void ChangesetCutOnlyCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
+  create(input1, input2, GeometryUtils::envelopeToPolygon(bounds), output);
+}
+
+void ChangesetCutOnlyCreator::create(
+  const QString& input1, const QString& input2,
+  const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output)
+{
   LOG_VARD(input1);
   LOG_VARD(input2);
-  LOG_VARD(GeometryUtils::envelopeToConfigString(bounds));
+  LOG_VARD(GeometryUtils::polygonToString(bounds));
   LOG_VARD(output);
 
   QElapsedTimer timer;
@@ -417,12 +417,7 @@ void ChangesetCutOnlyCreator::create(
   _input2 = input2;
   _input2Map.reset();
   _output = output;
-  //_replacementBounds = bounds;
-  // TODO: It makes more sense to store the bounds and then just convert it to a string as needed.
-  // The default string stores six decimal places, which should be fine for a bounds. Strangely,
-  // when I store the bounds or try to increase the precision of the bounds string, I'm getting a
-  // lot of test output issues...needs to be looked into.
-  _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
+  _replacementBounds = bounds;
   _validateInputs();
   _setGlobalOpts();
   _printJobDescription();
@@ -908,7 +903,7 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
+  //conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
 
   // For this being enabled to have any effect,
   // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
@@ -1318,9 +1313,7 @@ OsmMapPtr ChangesetCutOnlyCreator::_loadInputMap(
       "Copying map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<
       " from: " << cachedMap->getName() << "...");
     map.reset(new OsmMap(cachedMap));
-    IoUtils::cropToBounds(
-      map, GeometryUtils::envelopeFromConfigString(_replacementBounds),
-      keepImmediatelyConnectedWaysOutsideBounds);
+    IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
   }
 
   if (warnOnZeroVersions)
@@ -1530,7 +1523,7 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
           mapName += "-" + GeometryTypeCriterion::typeToString(geometryType);
         }
         cookieCutMap->setName(mapName);
-        MapCropper cropper(GeometryUtils::envelopeFromConfigString(_replacementBounds));
+        MapCropper cropper(_replacementBounds);
         cropper.setRemoveSuperflousFeatures(false);
         cropper.setKeepEntireFeaturesCrossingBounds(false);
         cropper.setKeepOnlyFeaturesInsideBounds(false);
@@ -1874,7 +1867,7 @@ void ChangesetCutOnlyCreator::_cropMapForChangesetDerivation(
   LOG_VARD(keepEntireFeaturesCrossingBounds);
   LOG_VARD(keepOnlyFeaturesInsideBounds);
 
-  MapCropper cropper(GeometryUtils::envelopeFromConfigString(_replacementBounds));
+  MapCropper cropper(_replacementBounds);
   cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);
   cropper.setKeepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds);
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
@@ -1929,7 +1922,7 @@ void ChangesetCutOnlyCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& m
   // bounds.
 
   std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(_boundsOpts.inBoundsStrict));
-  boundsCrit->setBounds(GeometryUtils::envelopeFromConfigString(_replacementBounds));
+  boundsCrit->setBounds(_replacementBounds);
   boundsCrit->setOsmMap(map.get());
   std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
   std::shared_ptr<ChainCriterion> elementCrit(

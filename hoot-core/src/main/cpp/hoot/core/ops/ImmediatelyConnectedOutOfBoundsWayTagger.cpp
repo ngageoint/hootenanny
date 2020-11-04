@@ -51,6 +51,14 @@ _strictBounds(strictBounds)
   _boundsChecker.setMustCompletelyContain(_strictBounds);
 }
 
+ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger(
+  const std::shared_ptr<geos::geom::Geometry>& bounds, const bool strictBounds) :
+_strictBounds(strictBounds)
+{
+  setBounds(bounds);
+  _boundsChecker.setMustCompletelyContain(_strictBounds);
+}
+
 void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
 {  
   _numAffected = 0;

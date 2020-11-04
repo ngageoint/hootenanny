@@ -41,6 +41,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -193,17 +194,17 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
                            const bool keepConnectedOobWays)
 {
+  cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
+}
+
+void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Polygon>& bounds,
+                           const bool keepConnectedOobWays)
+{
   LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
   LOG_VARD(keepConnectedOobWays);
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
-  // We can get more precise bounds intersection calcs for ways when passing in a geometry here
-  // instead of an envelope.
-//  std::shared_ptr<geos::geom::Geometry> boundsGeom(
-//    geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
-//  MapCropper cropper(boundsGeom);
   MapCropper cropper(bounds);
-
   cropper.setKeepEntireFeaturesCrossingBounds(
     ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
   const bool strictBoundsHandling =

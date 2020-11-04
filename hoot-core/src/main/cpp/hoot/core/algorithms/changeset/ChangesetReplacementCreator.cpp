@@ -123,14 +123,14 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
 }
 
 void ChangesetReplacementCreator::create(
-  const QString& /*input1*/, const QString& /*input2*/,
-  const std::shared_ptr<geos::geom::Polygon>& /*bounds*/, const QString& /*output*/)
+  const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+  const QString& output)
 {
-  // TODO: finish
+  create(input1, input2, GeometryUtils::envelopeToPolygon(bounds), output);
 }
 
 void ChangesetReplacementCreator::create(
-  const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
+  const QString& input1, const QString& input2, const std::shared_ptr<geos::geom::Polygon>& bounds,
   const QString& output)
 {
   QElapsedTimer timer;
@@ -143,12 +143,8 @@ void ChangesetReplacementCreator::create(
   _input2 = input2;
   _input2Map.reset();
   _output = output;
-  // TODO: It makes more sense to store the bounds and then just convert it to a string as needed.
-  // The default string stores six decimal places, which should be fine for a bounds. Strangely,
-  // when I store the bounds or try to increase the precision of the bounds string, I'm getting a
-  // lot of test output issues...needs to be looked into.
-  _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
-  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
+  _replacementBounds = bounds;
+  //conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
   _validateInputs();
   _printJobDescription();
 

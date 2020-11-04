@@ -72,6 +72,13 @@ void InBoundsCriterion::setBounds(const geos::geom::Envelope& bounds)
   LOG_VART(_boundsGeom->toString());
 }
 
+void InBoundsCriterion::setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
+{
+  _boundsGeom = bounds;
+  LOG_VART(_boundsGeom->toString());
+}
+
+
 void InBoundsCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();

@@ -54,6 +54,8 @@ public:
   ImmediatelyConnectedOutOfBoundsWayTagger();
   ImmediatelyConnectedOutOfBoundsWayTagger(const geos::geom::Envelope& bounds,
                                            const bool strictBounds);
+  ImmediatelyConnectedOutOfBoundsWayTagger(const std::shared_ptr<geos::geom::Geometry>& bounds,
+                                           const bool strictBounds);
   virtual ~ImmediatelyConnectedOutOfBoundsWayTagger() = default;
 
   /**
@@ -65,6 +67,9 @@ public:
    * @see Boundable
    */
   virtual void setBounds(const geos::geom::Envelope& bounds) { _boundsChecker.setBounds(bounds); }
+
+  void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
+  { _boundsChecker.setBounds(bounds); }
 
   /**
    * @see OperationStatusInfo

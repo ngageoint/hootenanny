@@ -190,7 +190,7 @@ protected:
   QString _output;
 
   // the AOI over which the replacement is being performed
-  QString _replacementBounds;
+  std::shared_ptr<geos::geom::Polygon> _replacementBounds;
 
   // determines how strict the handling of the bounds is during replacement
   BoundsInterpretation _boundsInterpretation;
