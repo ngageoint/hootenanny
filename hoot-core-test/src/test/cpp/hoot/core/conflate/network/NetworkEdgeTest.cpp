@@ -30,7 +30,7 @@
 #include <hoot/core/conflate/network/NetworkEdge.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 
 using namespace geos::geom;
 

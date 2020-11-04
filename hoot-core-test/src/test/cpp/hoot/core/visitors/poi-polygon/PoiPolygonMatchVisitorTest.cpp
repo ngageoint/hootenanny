@@ -32,7 +32,7 @@
 #include <hoot/core/visitors/poi-polygon/PoiPolygonMatchVisitor.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace geos::geom;

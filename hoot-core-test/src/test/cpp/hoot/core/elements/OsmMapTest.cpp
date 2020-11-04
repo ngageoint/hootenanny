@@ -43,7 +43,7 @@
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/io/OsmJsonReader.h>

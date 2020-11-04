@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmJsonWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/AddGeometryTypeVisitor.h>
 
 using namespace std;

@@ -34,7 +34,7 @@
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/NodeUtils.h>

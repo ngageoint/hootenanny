@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/MapComparator.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>
 

@@ -30,7 +30,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>

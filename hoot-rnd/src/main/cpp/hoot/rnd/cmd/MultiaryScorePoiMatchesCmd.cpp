@@ -36,7 +36,7 @@
 #include <hoot/rnd/scoring/multiary/MultiaryMatchComparator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
 #include <hoot/core/io/IoUtils.h>

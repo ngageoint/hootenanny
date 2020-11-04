@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/elements/OsmUtils.h>
 

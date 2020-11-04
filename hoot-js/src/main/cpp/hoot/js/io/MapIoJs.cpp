@@ -27,7 +27,7 @@
 #include "MapIoJs.h"
 
 // hoot
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmGeoJsonReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>

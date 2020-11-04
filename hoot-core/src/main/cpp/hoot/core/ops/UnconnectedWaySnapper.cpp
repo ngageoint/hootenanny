@@ -39,7 +39,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>

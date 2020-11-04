@@ -36,7 +36,7 @@
 #include <hoot/core/criterion/PointCriterion.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {

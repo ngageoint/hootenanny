@@ -35,7 +35,7 @@
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>

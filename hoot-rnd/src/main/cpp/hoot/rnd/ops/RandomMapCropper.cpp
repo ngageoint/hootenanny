@@ -35,7 +35,7 @@
 #include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/conflate/tile/NodeDensityTileBoundsCalculator.h>
 #include <hoot/core/io/NodeDensityTaskGridWriter.h>

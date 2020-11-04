@@ -41,7 +41,7 @@
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 
 // TGS
 #include <tgs/System/Time.h>

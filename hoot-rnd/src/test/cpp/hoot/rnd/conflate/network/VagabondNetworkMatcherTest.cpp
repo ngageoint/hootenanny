@@ -36,7 +36,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/rnd/conflate/network/VagabondNetworkMatcher.h>
 
 namespace hoot

@@ -37,7 +37,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/index/metric-hybrid/RFqHybridTree.h>
 #include <hoot/core/io/OsmPbfReader.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>

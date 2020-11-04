@@ -27,7 +27,7 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/geometry/GeometryUtils.h>

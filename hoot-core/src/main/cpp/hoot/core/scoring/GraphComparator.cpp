@@ -48,7 +48,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 
 // Qt
 #include <QDebug>

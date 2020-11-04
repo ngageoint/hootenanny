@@ -35,7 +35,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/RemoveRef2Visitor.h>
 #include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 
 // TGS
 #include <tgs/Statistics/Random.h>

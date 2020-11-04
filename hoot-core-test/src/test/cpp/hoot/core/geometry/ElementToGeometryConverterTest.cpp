@@ -29,7 +29,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 
 // CPP Unit

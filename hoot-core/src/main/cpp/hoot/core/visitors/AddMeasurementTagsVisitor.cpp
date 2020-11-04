@@ -35,7 +35,7 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/CoordinateExt.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>

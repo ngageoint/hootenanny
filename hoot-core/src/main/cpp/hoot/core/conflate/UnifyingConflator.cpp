@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>

@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 
 // qt
 #include <QDir>

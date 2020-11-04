@@ -50,7 +50,7 @@ using namespace geos::geom;
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
