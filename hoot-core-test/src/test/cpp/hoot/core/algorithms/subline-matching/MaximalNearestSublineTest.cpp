@@ -32,7 +32,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/WayAverager.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
@@ -92,25 +92,25 @@ public:
                                                         map->getWay(-313),
       10.0, 10.0);
     w->setStatus(Status::Conflated);
-    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    ss << ElementToGeometryConverter(map).convertToLineString(w)->toString() << endl;
 
     w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-313),
                                                         map->getWay(-353),
                                                         10.0, 10.0);
     w->setStatus(Status::Conflated);
-    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    ss << ElementToGeometryConverter(map).convertToLineString(w)->toString() << endl;
 
     w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-260),
                                                         map->getWay(-247),
                                                         10.0, 10.0);
     w->setStatus(Status::Conflated);
-    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    ss << ElementToGeometryConverter(map).convertToLineString(w)->toString() << endl;
 
     w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-247),
                                                         map->getWay(-260),
                                                         10.0, 10.0);
     w->setStatus(Status::Conflated);
-    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    ss << ElementToGeometryConverter(map).convertToLineString(w)->toString() << endl;
 
     QFile fp(_inputPath + "MaximalNearestSublineTest.txt");
     fp.open(QIODevice::ReadOnly);

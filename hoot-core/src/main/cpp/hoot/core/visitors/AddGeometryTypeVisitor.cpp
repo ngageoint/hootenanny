@@ -31,7 +31,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 namespace hoot
 {
@@ -49,7 +49,7 @@ void AddGeometryTypeVisitor::visit(const std::shared_ptr<Element>& e)
     else
     {
       QString type = QString::fromStdString(
-        ElementConverter(_map->shared_from_this()).convertToGeometry(e)->getGeometryType());
+        ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e)->getGeometryType());
       e->getTags()["geometry_type"] = type;
     }
   }

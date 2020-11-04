@@ -39,9 +39,9 @@
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/GeometryConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Log.h>
@@ -153,7 +153,7 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
                                             const ElementPtr& pElement,
                                             std::shared_ptr<Geometry>& pOutline)
 {
-  ElementConverter elementConverter = ElementConverter(_map);
+  ElementToGeometryConverter ElementToGeometryConverter = ElementToGeometryConverter(_map);
   std::shared_ptr<Geometry> pGeometry;
   try
   {
@@ -164,14 +164,14 @@ void BuildingOutlineUpdateOp::_unionOutline(const RelationPtr& pBuilding,
       LOG_VART(pWay->isClosedArea());
       if (pWay->isClosedArea())
       {
-        pGeometry = elementConverter.convertToPolygon(pWay);
+        pGeometry = ElementToGeometryConverter.convertToPolygon(pWay);
         LOG_VART(pGeometry->getGeometryTypeId());
       }
     }
 
     if (!pGeometry)
     {
-      pGeometry = elementConverter.convertToGeometry(pElement);
+      pGeometry = ElementToGeometryConverter.convertToGeometry(pElement);
       LOG_VART(pGeometry->getGeometryTypeId());
     }
 
@@ -271,12 +271,12 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
       "Creating building outline element for geometry: " << outline->getGeometryTypeId() << "...");
 
     const std::shared_ptr<Element> pOutlineElement =
-      GeometryConverter(_map).convertGeometryToElement(
+      GeometryToElementConverter(_map).convertGeometryToElement(
         outline.get(), pBuilding->getStatus(), pBuilding->getCircularError());
     LOG_VART(pOutlineElement->getElementType());
-    // This is a bit of a hack. The GeometryConverter is returning us an area here, when we want
+    // This is a bit of a hack. The GeometryToElementConverter is returning us an area here, when we want
     // a building. There needs to be some investigation into why an area is being returned and if
-    // we can get GeometryConverter to return a building instead.
+    // we can get GeometryToElementConverter to return a building instead.
     if (pOutlineElement->getTags()["area"] == "yes")
     {
       pOutlineElement->getTags().remove("area");

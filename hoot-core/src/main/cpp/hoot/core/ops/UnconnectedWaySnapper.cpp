@@ -31,7 +31,7 @@
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -933,7 +933,7 @@ bool UnconnectedWaySnapper::_snapClosestEndpointToWay(const WayPtr& disconnected
     return false;
   //  Get the endpoint closest to the way to connect to it
   const std::vector<long> nodeIds = disconnected->getNodeIds();
-  ElementConverter converter(_map);
+  ElementToGeometryConverter converter(_map);
   std::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(connectTo);
 
   NodePtr endpoint1 = _map->getNode(nodeIds[0]);

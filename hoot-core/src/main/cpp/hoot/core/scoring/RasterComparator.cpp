@@ -31,7 +31,7 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/util/GeometryPainter.h>
+#include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>

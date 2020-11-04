@@ -29,7 +29,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 
@@ -314,8 +314,8 @@ public:
 
     // there was a bug at one point that modified the original way, make sure it didn't change
     // length.
-    HOOT_STR_EQUALS(70, ElementConverter(map).calculateLength(w1));
-    HOOT_STR_EQUALS(40, ElementConverter(map).calculateLength(wayCopy));
+    HOOT_STR_EQUALS(70, ElementToGeometryConverter(map).calculateLength(w1));
+    HOOT_STR_EQUALS(40, ElementToGeometryConverter(map).calculateLength(wayCopy));
     HOOT_STR_EQUALS("way(-2)\n"
                     "nodes: [3]{-1, -2, -4}\n"
                     "tags: name = w1\n"

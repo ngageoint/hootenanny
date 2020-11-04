@@ -32,7 +32,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>

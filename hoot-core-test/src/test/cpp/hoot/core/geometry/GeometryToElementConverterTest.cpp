@@ -36,7 +36,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
@@ -44,9 +44,9 @@ using namespace geos::geom;
 namespace hoot
 {
 
-class GeometryConverterTest : public HootTestFixture
+class GeometryToElementConverterTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(GeometryConverterTest);
+  CPPUNIT_TEST_SUITE(GeometryToElementConverterTest);
   CPPUNIT_TEST(emptyWayTest);
   CPPUNIT_TEST_SUITE_END();
 
@@ -58,7 +58,7 @@ public:
     ElementPtr w(new Way(Status::Unknown1, -1, 0));
     w->getTags()["building"] = "yes";
 
-    ElementConverter uut(map);
+    ElementToGeometryConverter uut(map);
     std::shared_ptr<Geometry> g = uut.convertToGeometry(w);
 
     CPPUNIT_ASSERT_EQUAL(true, g->isEmpty());
@@ -66,7 +66,7 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GeometryConverterTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GeometryToElementConverterTest, "quick");
 
 }
 

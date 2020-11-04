@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/rnd/ops/RandomMapCropper.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt

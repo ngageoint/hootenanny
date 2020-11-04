@@ -44,8 +44,8 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
@@ -541,7 +541,7 @@ public:
       map->addWay(ws1);
       map->addWay(ws2);
 
-      ElementConverter ec(map);
+      ElementToGeometryConverter ec(map);
       result = (ec.calculateLength(ws1) + ec.calculateLength(ws2)) / 2.0;
     }
     else

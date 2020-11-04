@@ -29,7 +29,7 @@
 
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 
 namespace hoot
 {
@@ -125,7 +125,7 @@ public:
    * @param reuse - flag for reusing way id or getting a new one from the map
    * @return
    */
-  WayPtr toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* nf = 0,
+  WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = 0,
                bool reuse = false) const;
 
   /**

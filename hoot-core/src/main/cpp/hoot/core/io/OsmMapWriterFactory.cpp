@@ -37,7 +37,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/conflate/network/DebugNetworkMapCreator.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
-#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -210,7 +210,7 @@ void OsmMapWriterFactory::writeDebugMap(
 {
   OsmMapPtr map(new OsmMap(spatRef));
   // add the resulting alpha shape for debugging.
-  GeometryConverter(map).convertGeometryToElement(geometry.get(), Status::Invalid, -1);
+  GeometryToElementConverter(map).convertGeometryToElement(geometry.get(), Status::Invalid, -1);
 
   writeDebugMap(map, title, matcher);
 }

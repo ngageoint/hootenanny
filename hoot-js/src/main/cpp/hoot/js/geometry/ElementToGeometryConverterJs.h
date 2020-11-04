@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTCONVERTERJS_H
-#define ELEMENTCONVERTERJS_H
+#ifndef ELEMENT_TO_GEOMETRY_CONVERTER_JS_H
+#define ELEMENT_TO_GEOMETRY_CONVERTER_JS_H
 
 //  Hoot
 #include <hoot/js/HootBaseJs.h>
@@ -33,21 +33,21 @@
 namespace hoot
 {
 
-class ElementConverterJs : public HootBaseJs
+class ElementToGeometryConverterJs : public HootBaseJs
 {
 public:
 
  static void Init(v8::Handle<v8::Object> target);
 
- virtual ~ElementConverterJs() = default;
+ virtual ~ElementToGeometryConverterJs() = default;
 
 private:
 
-  ElementConverterJs() = default;
+  ElementToGeometryConverterJs() = default;
 
   static void calculateLength(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }
 
-#endif // ELEMENTCONVERTERJS_H
+#endif // ELEMENT_TO_GEOMETRY_CONVERTER_JS_H

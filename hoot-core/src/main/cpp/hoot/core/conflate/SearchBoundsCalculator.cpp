@@ -27,7 +27,7 @@
 #include "SearchBoundsCalculator.h"
 
 // hoot
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 namespace hoot
 {

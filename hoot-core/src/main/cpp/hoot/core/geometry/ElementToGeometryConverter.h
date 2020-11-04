@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ELEMENTCONVERTER_H
-#define ELEMENTCONVERTER_H
+#ifndef ELEMENT_TO_GEOMETRY_CONVERTER_H
+#define ELEMENT_TO_GEOMETRY_CONVERTER_H
 
 // GDAL
 class OGRSpatialReference;
@@ -69,13 +69,13 @@ namespace hoot
 /**
  * Converts elements to geometries
  */
-class ElementConverter
+class ElementToGeometryConverter
 {
 public:
 
   static int logWarnCount;
 
-  static std::string className() { return "hoot::ElementConverter"; }
+  static std::string className() { return "hoot::ElementToGeometryConverter"; }
 
   /**
    * see class description
@@ -84,7 +84,7 @@ public:
    *      from the parameter will be set as the spatial reference for the element converter
    * @note the default spatial reference used is WGS84
    */
-  ElementConverter(const ConstElementProviderPtr& provider,
+  ElementToGeometryConverter(const ConstElementProviderPtr& provider,
                    const bool logWarningsForMissingElements = true);
 
   /**
@@ -145,4 +145,4 @@ protected:
 
 }
 
-#endif // ELEMENTCONVERTER_H
+#endif // ELEMENT_TO_GEOMETRY_CONVERTER_H

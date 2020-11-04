@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 
 // geos
@@ -48,16 +48,16 @@ double PoiPolygonAlphaShapeDistanceExtractor::extract(const OsmMap& map,
 {
   try
   {
-    //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
+    //to suppress the ElementToGeometryConverter poly warnings...warnings worth looking into at some point
     //DisableLog dl(Log::Warn);
 
-    ElementConverter elementConverter(map.shared_from_this());
-    std::shared_ptr<Geometry> polyGeom = elementConverter.convertToGeometry(poly);
+    ElementToGeometryConverter ElementToGeometryConverter(map.shared_from_this());
+    std::shared_ptr<Geometry> polyGeom = ElementToGeometryConverter.convertToGeometry(poly);
     if (QString::fromStdString(polyGeom->toString()).toUpper().contains("EMPTY"))
     {
       throw geos::util::TopologyException();
     }
-    std::shared_ptr<Geometry> poiGeom = elementConverter.convertToGeometry(poi);
+    std::shared_ptr<Geometry> poiGeom = ElementToGeometryConverter.convertToGeometry(poi);
 
     OsmMapPtr polyMap(new OsmMap());
     ElementPtr polyTemp(poly->clone());

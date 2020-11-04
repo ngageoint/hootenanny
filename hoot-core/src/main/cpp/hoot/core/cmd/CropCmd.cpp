@@ -32,7 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 // Qt

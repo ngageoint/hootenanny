@@ -33,7 +33,7 @@
 #include <geos/geom/CoordinateSequence.h>
 
 // Hoot
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/CoordinateExt.h>
@@ -57,14 +57,14 @@ bool CollapsePolyGeoModifierAction::processElement(const ElementPtr& pElement, O
   if (!pWay->isClosedArea()) return false;
 
   OsmMapPtr mapPtr = pMap->shared_from_this();
-  ElementConverter elementConverter(mapPtr);
+  ElementToGeometryConverter ElementToGeometryConverter(mapPtr);
 
   bool checkLength = _length != 0;
   bool checkArea = _area != 0;
 
   if (checkArea || checkLength)
   {
-    std::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+    std::shared_ptr<Polygon> pPoly = ElementToGeometryConverter.convertToPolygon(pWay);
 
     // calculate poly area only if we need it
     double polyArea = checkArea ? pPoly->getArea() : 0;

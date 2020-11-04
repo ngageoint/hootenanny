@@ -30,8 +30,8 @@
 // Hoot
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/GeometryConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
@@ -71,7 +71,7 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   result.reset(new OsmMap(inputMap->getProjection()));
   result->appendSource(inputMap->getSource());
   // add the resulting alpha shape for debugging.
-  GeometryConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
+  GeometryToElementConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
   OsmMapWriterFactory::writeDebugMap(result, "alpha-shape-result-map");
 
   const RelationMap& rm = result->getRelations();

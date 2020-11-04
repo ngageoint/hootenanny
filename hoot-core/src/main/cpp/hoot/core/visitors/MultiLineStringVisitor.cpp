@@ -33,7 +33,7 @@
 // hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 
@@ -91,7 +91,7 @@ void MultiLineStringVisitor::visit(const ConstWayPtr& w)
       _ls = new vector<Geometry*>();
     }
 
-    Geometry* g = ElementConverter(_provider).convertToLineString(w)->clone();
+    Geometry* g = ElementToGeometryConverter(_provider).convertToLineString(w)->clone();
     _ls->push_back(g);
   }
 }

@@ -41,7 +41,7 @@
 // hoot
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 

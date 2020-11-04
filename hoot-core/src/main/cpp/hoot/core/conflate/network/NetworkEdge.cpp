@@ -27,7 +27,7 @@
 #include "NetworkEdge.h"
 
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 namespace hoot
 {
@@ -55,7 +55,7 @@ Meters NetworkEdge::calculateLength(const ConstElementProviderPtr& provider) con
     throw NotImplementedException("Edges with multiple members are not yet supported.");
   }
 
-  return ElementConverter(provider).calculateLength(_members[0]);
+  return ElementToGeometryConverter(provider).calculateLength(_members[0]);
 }
 
 bool NetworkEdge::contains(const ConstNetworkVertexPtr& v) const

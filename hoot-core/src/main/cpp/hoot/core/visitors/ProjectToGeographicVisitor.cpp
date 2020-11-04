@@ -31,7 +31,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/MapProjector.h>
 
 using namespace geos::geom;

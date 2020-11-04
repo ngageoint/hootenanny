@@ -28,7 +28,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 
@@ -48,9 +48,9 @@ using namespace geos::geom;
 namespace hoot
 {
 
-class ElementConverterTest : public HootTestFixture
+class ElementToGeometryConverterTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(ElementConverterTest);
+  CPPUNIT_TEST_SUITE(ElementToGeometryConverterTest);
   CPPUNIT_TEST(calculateLengthTest);
   CPPUNIT_TEST(convertToGeometryTest);
   CPPUNIT_TEST(convertToLinestringTest);
@@ -70,7 +70,7 @@ public:
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0, 10.0));
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0, 10.0));
     WayPtr way = TestUtils::createWay(map, nodes);
-    ElementConverter ec(map);
+    ElementToGeometryConverter ec(map);
 
     //  Check the length of a way
     CPPUNIT_ASSERT_DOUBLES_EQUAL(30.0, ec.calculateLength(way), 1e-3);
@@ -87,7 +87,7 @@ public:
   void convertToGeometryTest()
   {
     OsmMapPtr map(new OsmMap());
-    ElementConverter ec(map);
+    ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0,  0.0));
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0,  0.0));
@@ -132,7 +132,7 @@ public:
   void convertToLinestringTest()
   {
     OsmMapPtr map(new OsmMap());
-    ElementConverter ec(map);
+    ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0,  0.0));
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0,  0.0));
@@ -149,7 +149,7 @@ public:
   void convertToPolygonTest()
   {
     OsmMapPtr map(new OsmMap());
-    ElementConverter ec(map);
+    ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0,  0.0));
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0,  0.0));
@@ -167,7 +167,7 @@ public:
   void getGeometryTypeTest()
   {
     OsmMapPtr map(new OsmMap());
-    ElementConverter ec(map);
+    ElementToGeometryConverter ec(map);
     QList<NodePtr> nodes;
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0,  0.0));
     nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0,  0.0));
@@ -223,8 +223,8 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementConverterTest, "quick");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementConverterTest, "current");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementToGeometryConverterTest, "quick");
+//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ElementToGeometryConverterTest, "current");
 
 }
 

@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "GeometryConverter.h"
+#include "GeometryToElementConverter.h"
 
 // GEOS
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -54,22 +54,22 @@ using namespace geos::geom;
 namespace hoot
 {
 
-int GeometryConverter::logWarnCount = 0;
+int GeometryToElementConverter::logWarnCount = 0;
 
-GeometryConverter::GeometryConverter(const OsmMapPtr& map) :
+GeometryToElementConverter::GeometryToElementConverter(const OsmMapPtr& map) :
 _constMap(map),
 _map(map)
 {
   assert(map.get());
 }
 
-GeometryConverter::GeometryConverter(const ConstOsmMapPtr& map) :
+GeometryToElementConverter::GeometryToElementConverter(const ConstOsmMapPtr& map) :
 _constMap(map)
 {
   assert(map.get());
 }
 
-std::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const GeometryCollection* gc,
+std::shared_ptr<Element> GeometryToElementConverter::convertGeometryCollection(const GeometryCollection* gc,
   Status s, double circularError)
 {
   LOG_TRACE("Converting geometry collection...");
@@ -98,7 +98,7 @@ std::shared_ptr<Element> GeometryConverter::convertGeometryCollection(const Geom
   }
 }
 
-std::shared_ptr<Element> GeometryConverter::convertGeometryToElement(
+std::shared_ptr<Element> GeometryToElementConverter::convertGeometryToElement(
   const Geometry* g, Status s, double circularError)
 {
   LOG_VART(g->getGeometryTypeId());
@@ -133,14 +133,14 @@ std::shared_ptr<Element> GeometryConverter::convertGeometryToElement(
     return std::shared_ptr<Element>();
   }
 }
-NodePtr GeometryConverter::convertPointToNode(const geos::geom::Point* point, const OsmMapPtr& map,
+NodePtr GeometryToElementConverter::convertPointToNode(const geos::geom::Point* point, const OsmMapPtr& map,
                                               Status s, double circularError)
 {
   LOG_TRACE("Converting point to node...");
   return _createNode(map, Coordinate(point->getX(), point->getY()), s, circularError);
 }
 
-WayPtr GeometryConverter::convertLineStringToWay(const LineString* ls,
+WayPtr GeometryToElementConverter::convertLineStringToWay(const LineString* ls,
   const OsmMapPtr& map, Status s, double circularError)
 {
   LOG_TRACE("Converting line string to way...");
@@ -162,7 +162,7 @@ WayPtr GeometryConverter::convertLineStringToWay(const LineString* ls,
   return way;
 }
 
-std::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(
+std::shared_ptr<Element> GeometryToElementConverter::convertMultiLineStringToElement(
   const MultiLineString* mls, const OsmMapPtr& map, Status s, double circularError)
 {
   LOG_TRACE("Converting multiline string to element...");
@@ -189,7 +189,7 @@ std::shared_ptr<Element> GeometryConverter::convertMultiLineStringToElement(
   }
 }
 
-RelationPtr GeometryConverter::convertMultiPolygonToRelation(const MultiPolygon* mp,
+RelationPtr GeometryToElementConverter::convertMultiPolygonToRelation(const MultiPolygon* mp,
   const OsmMapPtr& map, Status s, double circularError)
 {
   LOG_TRACE("Converting multipolygon to relation...");
@@ -206,7 +206,7 @@ RelationPtr GeometryConverter::convertMultiPolygonToRelation(const MultiPolygon*
   return r;
 }
 
-std::shared_ptr<Element> GeometryConverter::convertPolygonToElement(const Polygon* polygon,
+std::shared_ptr<Element> GeometryToElementConverter::convertPolygonToElement(const Polygon* polygon,
   const OsmMapPtr& map, Status s, double circularError)
 {
   LOG_TRACE("Converting polygon to element...");
@@ -228,7 +228,7 @@ std::shared_ptr<Element> GeometryConverter::convertPolygonToElement(const Polygo
   }
 }
 
-RelationPtr GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
+RelationPtr GeometryToElementConverter::convertPolygonToRelation(const Polygon* polygon,
   const OsmMapPtr& map, Status s, double circularError)
 {
   RelationPtr r(new Relation(s, map->createNextRelationId(), circularError,
@@ -238,7 +238,7 @@ RelationPtr GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
   return r;
 }
 
-void GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
+void GeometryToElementConverter::convertPolygonToRelation(const Polygon* polygon,
   const OsmMapPtr& map, const RelationPtr& r, Status s, double circularError)
 {
   WayPtr outer = convertLineStringToWay(polygon->getExteriorRing(), map, s, circularError);
@@ -253,7 +253,7 @@ void GeometryConverter::convertPolygonToRelation(const Polygon* polygon,
   }
 }
 
-NodePtr GeometryConverter::_createNode(const OsmMapPtr& map, const Coordinate& c,
+NodePtr GeometryToElementConverter::_createNode(const OsmMapPtr& map, const Coordinate& c,
   Status s, double circularError)
 {
   if (_nf == 0)

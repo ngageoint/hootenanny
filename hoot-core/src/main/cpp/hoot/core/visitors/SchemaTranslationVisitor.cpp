@@ -32,7 +32,7 @@
 #include <geos/geom/Geometry.h>
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
@@ -108,10 +108,10 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
   {
     Tags& tags = e->getTags();
 
-    GeometryTypeId gtype = ElementConverter::getGeometryType(e, false);
+    GeometryTypeId gtype = ElementToGeometryConverter::getGeometryType(e, false);
 
     // If we don't know what it is, no point in translating it.
-    if (gtype == ElementConverter::UNKNOWN_GEOMETRY)
+    if (gtype == ElementToGeometryConverter::UNKNOWN_GEOMETRY)
     {
       return;
     }

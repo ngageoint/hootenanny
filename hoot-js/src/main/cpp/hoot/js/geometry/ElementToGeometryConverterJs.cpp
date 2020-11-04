@@ -24,11 +24,11 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "ElementConverterJs.h"
+#include "ElementToGeometryConverterJs.h"
 
 // hoot
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/elements/OsmMapJs.h>
 #include <hoot/js/elements/ElementJs.h>
@@ -42,19 +42,19 @@ using namespace v8;
 namespace hoot
 {
 
-HOOT_JS_REGISTER(ElementConverterJs)
+HOOT_JS_REGISTER(ElementToGeometryConverterJs)
 
-void ElementConverterJs::Init(Handle<Object> exports)
+void ElementToGeometryConverterJs::Init(Handle<Object> exports)
 {
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Handle<Object> thisObj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "ElementConverter"), thisObj);
+  exports->Set(String::NewFromUtf8(current, "ElementToGeometryConverter"), thisObj);
   thisObj->Set(String::NewFromUtf8(current, "calculateLength"),
                FunctionTemplate::New(current, calculateLength)->GetFunction());
 }
 
-void ElementConverterJs::calculateLength(const FunctionCallbackInfo<Value>& args)
+void ElementToGeometryConverterJs::calculateLength(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
@@ -66,7 +66,7 @@ void ElementConverterJs::calculateLength(const FunctionCallbackInfo<Value>& args
     ConstOsmMapPtr m = toCpp<ConstOsmMapPtr>(args[0]);
     ConstElementPtr e = toCpp<ConstElementPtr>(args[1]);
 
-    args.GetReturnValue().Set(toV8(ElementConverter(m).calculateLength(e)));
+    args.GetReturnValue().Set(toV8(ElementToGeometryConverter(m).calculateLength(e)));
   }
   catch (const HootException& err)
   {

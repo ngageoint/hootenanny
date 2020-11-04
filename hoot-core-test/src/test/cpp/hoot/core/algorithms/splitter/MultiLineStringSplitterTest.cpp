@@ -39,7 +39,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 

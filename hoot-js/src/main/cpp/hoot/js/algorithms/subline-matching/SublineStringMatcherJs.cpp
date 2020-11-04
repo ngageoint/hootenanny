@@ -44,7 +44,7 @@
 #include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Qt
 #include <QStringList>

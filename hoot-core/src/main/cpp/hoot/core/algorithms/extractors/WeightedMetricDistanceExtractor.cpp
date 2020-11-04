@@ -35,7 +35,7 @@
 // hoot
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
@@ -80,7 +80,7 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   wd.discretize(2.0, v);
 
   std::shared_ptr<LineString> ls2 =
-    ElementConverter(map.shared_from_this()).convertToLineString(w2);
+    ElementToGeometryConverter(map.shared_from_this()).convertToLineString(w2);
 
   double sigma = _searchRadius;
 

@@ -52,8 +52,8 @@ using namespace geos::operation::buffer;
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
@@ -105,7 +105,7 @@ _map(map)
 std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<const Way>& w,
                                                         Meters bufferSize, bool left)
 {
-  std::shared_ptr<const LineString> ls = ElementConverter(_result).convertToLineString(w);
+  std::shared_ptr<const LineString> ls = ElementToGeometryConverter(_result).convertToLineString(w);
 
   BufferParameters bp(8, BufferParameters::CAP_FLAT, BufferParameters::JOIN_ROUND,
                       bufferSize * 2);
@@ -417,7 +417,7 @@ void DualHighwaySplitter::_splitWay(long wid)
 {
   _working = _map->getWay(wid);
 
-  if (!_working || ElementConverter(_result).convertToLineString(_working)->getLength() <= 0.0)
+  if (!_working || ElementToGeometryConverter(_result).convertToLineString(_working)->getLength() <= 0.0)
   {
     return;
   }

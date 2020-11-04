@@ -36,7 +36,7 @@
 #include <hoot/core/schema/ScriptToOgrSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
@@ -112,7 +112,7 @@ void MultiaryMatchComparator::_calculateNodeBasedStats(const ConstOsmMapPtr& con
   UniqueElementIdVisitor eids;
   conflated->visitRo(eids);
 
-  ElementConverter ec(conflated);
+  ElementToGeometryConverter ec(conflated);
 
   foreach (ElementId eid, eids.getElementSet())
   {

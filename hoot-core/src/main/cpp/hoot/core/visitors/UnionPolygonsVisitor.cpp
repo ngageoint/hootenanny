@@ -30,7 +30,7 @@
 #include <geos/geom/GeometryFactory.h>
 
 // hoot
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 using namespace geos::geom;
@@ -54,7 +54,7 @@ void UnionPolygonsVisitor::visit(const std::shared_ptr<const Element>& e)
 
   if (AreaCriterion().isSatisfied(e))
   {
-    std::shared_ptr<Geometry> g = ElementConverter(_map->shared_from_this()).convertToGeometry(e);
+    std::shared_ptr<Geometry> g = ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e);
     _result.reset(g->Union(_result.get()));
     _numAffected++;
   }

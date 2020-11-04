@@ -41,7 +41,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Float.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/PolygonCompare.h>
+#include <hoot/core/geometry/PolygonCompare.h>
 #include <hoot/core/util/Units.h>
 
 // Qt

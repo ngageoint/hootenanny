@@ -31,7 +31,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 #include <float.h>
 
@@ -61,7 +61,7 @@ void LengthOfWaysVisitor::visit(const ConstElementPtr& e)
   {
     const ConstWayPtr w = _map->getWay(e->getId());
     const Meters length =
-      ElementConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
+      ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
 
     _total += length;
 

@@ -41,7 +41,7 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/conflate/highway/HighwaySnapMerger.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/io/OsmJsonWriter.h>
@@ -132,7 +132,7 @@ public:
     RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
     map->visitRw(hashRemover);
 
-    ElementConverter ec(map);
+    ElementToGeometryConverter ec(map);
     HOOT_STR_EQUALS("[2]{(Way(-1), Way(-5)), (Way(-2), Way(-7))}", replaced);
     HOOT_STR_EQUALS("LINESTRING (50.0000000000000000 0.0000000000000000, 100.0000000000000000 0.0000000000000000)",
       ec.convertToLineString(map->getWay(-1))->toString());

@@ -37,7 +37,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/KnnWayIterator.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/util/StringUtils.h>
@@ -169,7 +169,7 @@ void OsmMapIndex::_buildWayTree() const
     ConstWayPtr w = it->second;
 
     std::shared_ptr<LineString> ls =
-      ElementConverter(_map.shared_from_this()).convertToLineString(w);
+      ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(w);
     if (ls)
     {
       const Envelope* e = ls->getEnvelopeInternal();
@@ -305,7 +305,7 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
 
   // grab the geometry for the way that we're comparing all others against.
   std::shared_ptr<LineString> ls1 =
-    ElementConverter(_map.shared_from_this()).convertToLineString(way);
+    ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(way);
 
   // go through all other ways
   for (WayMap::const_iterator it = _map.getWays().begin();
@@ -316,7 +316,7 @@ vector<long> OsmMapIndex::findWayNeighborsBruteForce(ConstWayPtr way, Meters buf
     if (n != 0 && nId != way->getId())
     {
       std::shared_ptr<LineString> ls2 =
-        ElementConverter(_map.shared_from_this()).convertToLineString(n);
+        ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = ls1->distance(ls2.get());
 
       if (d < buffer)
@@ -346,7 +346,7 @@ long OsmMapIndex::findNearestWay(Coordinate c) const
     if (n != 0 && n->getNodeCount() > 1)
     {
       std::shared_ptr<LineString> ls2 =
-        ElementConverter(_map.shared_from_this()).convertToLineString(n);
+        ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
 
       if (d < bestDistance)
@@ -378,7 +378,7 @@ std::vector<long> OsmMapIndex::findWayNeighbors(Coordinate& from, Meters buffer)
     if (n != 0 && n->getNodeCount() > 1)
     {
       std::shared_ptr<LineString> ls2 =
-        ElementConverter(_map.shared_from_this()).convertToLineString(n);
+        ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(n);
       Meters d = p->distance(ls2.get());
 
       if (d < buffer)
@@ -544,7 +544,7 @@ void OsmMapIndex::_insertWay(long wid)
   Box b(2);
 
   std::shared_ptr<LineString> ls =
-    ElementConverter(_map.shared_from_this()).convertToLineString(w);
+    ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(w);
   const Envelope* e = ls->getEnvelopeInternal();
 
   b.setBounds(0, e->getMinX() - _indexSlush, e->getMaxX() + _indexSlush);

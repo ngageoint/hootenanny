@@ -39,7 +39,7 @@
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 
 

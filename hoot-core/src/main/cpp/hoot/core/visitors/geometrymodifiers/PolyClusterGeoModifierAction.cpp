@@ -29,13 +29,13 @@
 
 // Hoot
 #include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/CoordinateExt.h>
-#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // Geos
@@ -175,14 +175,14 @@ void PolyClusterGeoModifierAction::_clearProcessData()
 
 void PolyClusterGeoModifierAction::_createWayPolygons()
 {
-  ElementConverter elementConverter(_pMap);
+  ElementToGeometryConverter ElementToGeometryConverter(_pMap);
 
   // create a polygon from each building/way
   _polys.clear();
 
   foreach (WayPtr pWay, _ways)
   {
-    std::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+    std::shared_ptr<Polygon> pPoly = ElementToGeometryConverter.convertToPolygon(pWay);
     long wayId = pWay->getId();
     // set id as user data
     pPoly->setUserData((void*)wayId);
@@ -385,7 +385,7 @@ void PolyClusterGeoModifierAction::_createClusterPolygons()
     std::shared_ptr<Geometry> pCombinedPoly = geos::operation::geounion::UnaryUnionOp::Union(*mp);
 
     // create a new element with cluster representation
-    GeometryConverter gc(_pMap);
+    GeometryToElementConverter gc(_pMap);
     std::shared_ptr<Element> pElem = gc.convertGeometryToElement(
           pCombinedPoly.get(),
           Status::Unknown1,

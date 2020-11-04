@@ -33,7 +33,7 @@
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -100,7 +100,7 @@ WaySublineMatchString MaximalNearestSublineMatcher::findMatch(const ConstOsmMapP
 
   if (subline1->getNodeCount() > 1)
   {
-    std::shared_ptr<LineString> ls = ElementConverter(mapCopy).convertToLineString(subline1);
+    std::shared_ptr<LineString> ls = ElementToGeometryConverter(mapCopy).convertToLineString(subline1);
     if (ls->isValid())
     {
       score = ls->getLength();

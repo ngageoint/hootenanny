@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef GEOMETRYCONVERTER_H
-#define GEOMETRYCONVERTER_H
+#ifndef GEOMETRY_TO_ELEMENT_CONVERTER_H
+#define GEOMETRY_TO_ELEMENT_CONVERTER_H
 
 // GEOS
 #include <geos/geom/Envelope.h>
@@ -61,15 +61,15 @@ namespace hoot
 /**
  * Converts geometries between OSM and GEOS formats
  */
-class GeometryConverter
+class GeometryToElementConverter
 {
 public:
 
-  static std::string className() { return "hoot::GeometryConverter"; }
+  static std::string className() { return "hoot::GeometryToElementConverter"; }
 
-  GeometryConverter(const OsmMapPtr& map);
-  GeometryConverter(const ConstOsmMapPtr& map);
-  virtual ~GeometryConverter() = default;
+  GeometryToElementConverter(const OsmMapPtr& map);
+  GeometryToElementConverter(const ConstOsmMapPtr& map);
+  virtual ~GeometryToElementConverter() = default;
 
   class NodeFactory
   {
@@ -214,4 +214,4 @@ protected:
 
 }
 
-#endif // GEOMETRYCONVERTER_H
+#endif // GEOMETRY_TO_ELEMENT_CONVERTER_H

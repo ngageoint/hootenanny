@@ -30,7 +30,7 @@
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/StringUtils.h>
 

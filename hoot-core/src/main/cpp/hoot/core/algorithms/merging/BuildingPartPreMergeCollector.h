@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/StringUtils.h>
 
 // TGS
@@ -123,7 +123,7 @@ private:
 
   ConstOsmMapPtr _map;
 
-  std::shared_ptr<ElementConverter> _elementConverter;
+  std::shared_ptr<ElementToGeometryConverter> _ElementToGeometryConverter;
 
   // protects the input data
   QMutex* _buildingPartInputMutex;

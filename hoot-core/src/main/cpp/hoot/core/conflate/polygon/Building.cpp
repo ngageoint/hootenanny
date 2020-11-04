@@ -32,7 +32,7 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -46,7 +46,7 @@ Building::Building(const OsmMap& map, const ConstElementPtr& e) : _e(e), _map(ma
 
 std::shared_ptr<Geometry> Building::buildOutline() const
 {
-  ElementConverter ec(_map.shared_from_this());
+  ElementToGeometryConverter ec(_map.shared_from_this());
   std::shared_ptr<Geometry> result;
 
   // if this is a building relation

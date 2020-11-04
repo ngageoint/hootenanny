@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "ElementConverter.h"
+#include "ElementToGeometryConverter.h"
 
 // GDAL
 #include <ogr_spatialref.h>
@@ -40,19 +40,19 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/conflate/polygon/MultiPolygonCreator.h>
+#include <hoot/core/geometry/MultiPolygonCreator.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/CollectionRelationCriterion.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/MapProjector.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QString>
@@ -67,9 +67,9 @@ using namespace std;
 namespace hoot
 {
 
-int ElementConverter::logWarnCount = 0;
+int ElementToGeometryConverter::logWarnCount = 0;
 
-ElementConverter::ElementConverter(const ConstElementProviderPtr& provider,
+ElementToGeometryConverter::ElementToGeometryConverter(const ConstElementProviderPtr& provider,
                                    const bool logWarningsForMissingElements) :
 _constProvider(provider),
 _spatialReference(provider->getProjection()),
@@ -78,7 +78,7 @@ _logWarningsForMissingElements(logWarningsForMissingElements)
 {
 }
 
-Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
+Meters ElementToGeometryConverter::calculateLength(const ConstElementPtr &e) const
 {
   // Doing length/distance calcs only make sense if we've projected down onto a flat surface
   if (!MapProjector::isPlanar(_constProvider))
@@ -102,7 +102,7 @@ Meters ElementConverter::calculateLength(const ConstElementPtr &e) const
   }
 }
 
-std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
+std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
   const std::shared_ptr<const Element>& e, bool throwError, const bool statsFlag) const
 {
   LOG_VART(e->getElementId());
@@ -120,18 +120,18 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
   }
 }
 
-std::shared_ptr<Point> ElementConverter::convertToGeometry(const ConstNodePtr& n) const
+std::shared_ptr<Point> ElementToGeometryConverter::convertToGeometry(const ConstNodePtr& n) const
 {
   return
     std::shared_ptr<Point>(GeometryFactory::getDefaultInstance()->createPoint(n->toCoordinate()));
 }
 
-std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) const
+std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const WayPtr& w) const
 {
   return convertToGeometry((ConstWayPtr)w);
 }
 
-std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
+std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
   const ConstWayPtr& e, bool throwError, const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
@@ -153,7 +153,7 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
   }
 }
 
-std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
+std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
   const ConstRelationPtr& e, bool throwError, const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
@@ -178,12 +178,12 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
   }
 }
 
-std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const RelationPtr& r) const
+std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const RelationPtr& r) const
 {
   return convertToGeometry((ConstRelationPtr)r);
 }
 
-std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWayPtr& w) const
+std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(const ConstWayPtr& w) const
 {
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();
@@ -243,7 +243,7 @@ std::shared_ptr<LineString> ElementConverter::convertToLineString(const ConstWay
   return result;
 }
 
-std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w) const
+std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const ConstWayPtr& w) const
 {
   const std::vector<long>& ids = w->getNodeIds();
   LOG_VART(ids);
@@ -326,7 +326,7 @@ std::shared_ptr<Polygon> ElementConverter::convertToPolygon(const ConstWayPtr& w
   return result;
 }
 
-geos::geom::GeometryTypeId ElementConverter::getGeometryType(
+geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
   const ConstElementPtr& e, bool throwError, const bool statsFlag,
   const bool requireAreaForPolygonConversion)
 {

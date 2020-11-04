@@ -27,7 +27,7 @@
 #include "PoiPolygonDistanceExtractor.h"
 
 // hoot
-//#include <hoot/core/elements/ElementConverter.h>
+//#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
@@ -57,7 +57,7 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& /*map*/, const ConstEl
   LOG_VART(poi->getElementId());
   LOG_VART(poly->getElementId());
 
-  //to suppress the ElementConverter poly warnings...warnings worth looking into at some point
+  //to suppress the ElementToGeometryConverter poly warnings...warnings worth looking into at some point
   //DisableLog dl(Log::Warn);
 
   return _infoCache->getDistance(poly, poi);

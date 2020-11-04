@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/conflate/polygon/MultiPolygonCreator.h>
+#include <hoot/core/geometry/MultiPolygonCreator.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 
 using namespace geos::geom;

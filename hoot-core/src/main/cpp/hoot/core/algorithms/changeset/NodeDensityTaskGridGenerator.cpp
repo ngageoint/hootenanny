@@ -33,7 +33,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/HootApiDbReader.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 namespace hoot
 {
