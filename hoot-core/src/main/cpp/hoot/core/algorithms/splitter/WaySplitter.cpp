@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WaySplitter.h"
@@ -37,7 +37,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 
 using namespace geos::geom;
@@ -120,7 +120,7 @@ vector<WayPtr> WaySplitter::split(const OsmMapPtr& map, WayPtr a, WayLocation& s
 
 void WaySplitter::split(const OsmMapPtr& map, const WayPtr& w, double maxSize)
 {
-  std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+  std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
 
   double l = ls->getLength();
 

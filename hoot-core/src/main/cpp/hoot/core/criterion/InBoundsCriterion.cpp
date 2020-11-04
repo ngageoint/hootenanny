@@ -34,7 +34,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 namespace hoot
 {
@@ -75,7 +75,7 @@ void InBoundsCriterion::setBounds(const geos::geom::Envelope& bounds)
 void InBoundsCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
-  _elementConverter.reset(new ElementConverter(_map));
+  _ElementToGeometryConverter.reset(new ElementToGeometryConverter(_map));
 }
 
 bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
@@ -84,13 +84,13 @@ bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     throw IllegalArgumentException("No bounds passed to InBoundsCriterion.");
   }
-  if (!_elementConverter)
+  if (!_ElementToGeometryConverter)
   {
     throw IllegalArgumentException("No map set on InBoundsCriterion.");
   }
 
   LOG_VART(e->getElementId());
-  std::shared_ptr<geos::geom::Geometry> geom = _elementConverter->convertToGeometry(e);
+  std::shared_ptr<geos::geom::Geometry> geom = _ElementToGeometryConverter->convertToGeometry(e);
   LOG_VART(geom->toString());
   if (_mustCompletelyContain)
   {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DirectedGraph.h"
@@ -32,7 +32,7 @@
 
 // Hoot
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 
@@ -103,7 +103,7 @@ void DirectedGraph::deriveEdges(const std::shared_ptr<const OsmMap>& map)
   {
     const std::shared_ptr<Way>& way = it->second;
     double cost = determineCost(way);
-    double length = ElementConverter(map).convertToLineString(way)->getLength();
+    double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();
 
     long nStart = way->getNodeId(0);
     long nEnd = way->getNodeId(way->getNodeCount() - 1);

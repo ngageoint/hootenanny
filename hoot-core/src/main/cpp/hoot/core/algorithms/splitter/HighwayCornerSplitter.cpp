@@ -41,7 +41,7 @@
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/GeometryFactory.h>
 using namespace geos::geom;
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Qt
 #include <QDebug>
@@ -246,7 +246,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
     //  Check the previous segment to ensure it is larger than the circular error before splitting
     if (nodeIdx == 1)
     {
-      std::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(pWay);
+      std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map).convertToLineString(pWay);
       CoordinateArraySequence* subline = new CoordinateArraySequence();
       subline->add(0, ls->getCoordinateN(nodeIdx), true);
       subline->add(1, ls->getCoordinateN(nodeIdx - 1), true);
@@ -257,7 +257,7 @@ bool HighwayCornerSplitter::_splitWay(long wayId, long nodeIdx, long nodeId, boo
     //  Check the next segment to ensure it is larger than the circular error before splitting
     if (nodeIdx == (long)(pWay->getNodeCount() - 2))
     {
-      std::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(pWay);
+      std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map).convertToLineString(pWay);
       CoordinateArraySequence* subline = new CoordinateArraySequence();
       subline->add(0, ls->getCoordinateN(nodeIdx), true);
       subline->add(1, ls->getCoordinateN(nodeIdx + 1), true);

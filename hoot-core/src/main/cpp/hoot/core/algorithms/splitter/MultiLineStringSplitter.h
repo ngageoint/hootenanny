@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTILINESTRINGSPLITTER_H
 #define MULTILINESTRINGSPLITTER_H
 
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 
 namespace hoot
 {
@@ -56,7 +56,7 @@ public:
    *  the subline way tags. Status and CE will be taken from the first matching subline.
    */
   ElementPtr createSublines(const OsmMapPtr& map, const WaySublineCollection& string,
-    const std::vector<bool>& reverse, GeometryConverter::NodeFactory* nf = 0) const;
+    const std::vector<bool>& reverse, GeometryToElementConverter::NodeFactory* nf = 0) const;
 
   /**
    * Given a subline string, cut out all the bits that match the subline and put them into @a match
@@ -73,7 +73,7 @@ public:
    */
   void split(const OsmMapPtr& map, const WaySublineCollection& string,
              const std::vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
-             GeometryConverter::NodeFactory *nf = 0) const;
+             GeometryToElementConverter::NodeFactory *nf = 0) const;
 
   /**
    * Split a multi-line string at a given location and put the matching subline into @a match.

@@ -29,8 +29,8 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 using namespace geos::geom;
 
@@ -52,7 +52,7 @@ void EuclideanDistanceExtractor::setConfiguration(const Settings& conf)
 double EuclideanDistanceExtractor::distance(
   const OsmMap& map, const ConstElementPtr& target, const ConstElementPtr& candidate) const
 {
-  ElementConverter ec(map.shared_from_this());
+  ElementToGeometryConverter ec(map.shared_from_this());
   ec.setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
@@ -77,7 +77,7 @@ double EuclideanDistanceExtractor::distance(
   const OsmMap& map1, const OsmMap& map2, const ConstElementPtr& target,
   const ConstElementPtr& candidate) const
 {
-  ElementConverter ec1(map1.shared_from_this());
+  ElementToGeometryConverter ec1(map1.shared_from_this());
   ec1.setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
   std::shared_ptr<Geometry> g1 = ec1.convertToGeometry(target);
   if (g1->isEmpty())
@@ -85,7 +85,7 @@ double EuclideanDistanceExtractor::distance(
     return nullValue();
   }
 
-  ElementConverter ec2(map2.shared_from_this());
+  ElementToGeometryConverter ec2(map2.shared_from_this());
   ec2.setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
   std::shared_ptr<Geometry> g2 = ec2.convertToGeometry(candidate);
   if (g2->isEmpty())

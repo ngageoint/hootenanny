@@ -28,7 +28,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 
 namespace hoot
@@ -44,10 +44,10 @@ double IntersectionOverUnionExtractor::extract(
   if (target->getElementType() == ElementType::Way &&
       candidate->getElementType() == ElementType::Way)
   {
-    ElementConverter elementConverter(map.shared_from_this());
-    std::shared_ptr<geos::geom::Geometry> targetGeom = elementConverter.convertToGeometry(target);
+    ElementToGeometryConverter ElementToGeometryConverter(map.shared_from_this());
+    std::shared_ptr<geos::geom::Geometry> targetGeom = ElementToGeometryConverter.convertToGeometry(target);
     std::shared_ptr<geos::geom::Geometry> candidateGeom =
-      elementConverter.convertToGeometry(candidate);
+      ElementToGeometryConverter.convertToGeometry(candidate);
     if (!targetGeom->isEmpty() && !candidateGeom->isEmpty())
     {
       std::shared_ptr<geos::geom::Geometry> intersectionGeom(

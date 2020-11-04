@@ -31,7 +31,7 @@
 #include <hoot/core/josm/ops/JosmMapValidator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/info/ApiEntityDisplayInfo.h>
 

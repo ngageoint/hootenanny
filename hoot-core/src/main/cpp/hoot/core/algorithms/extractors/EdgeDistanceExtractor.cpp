@@ -37,9 +37,9 @@
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/aggregator/MeanAggregator.h>
 #include <hoot/core/algorithms/aggregator/ValueAggregator.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/GeometryConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 
 using namespace geos::geom;
@@ -88,7 +88,7 @@ public:
     if (e->getElementType() == ElementType::Way)
     {
       ConstWayPtr w(std::dynamic_pointer_cast<const Way>(e));
-      Geometry* ls = ElementConverter(_map->shared_from_this()).convertToLineString(w)->clone();
+      Geometry* ls = ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->clone();
       _lines.push_back(ls);
     }
   }

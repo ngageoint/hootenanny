@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkDetails.h"
 
@@ -41,7 +41,7 @@
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
@@ -149,7 +149,7 @@ Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e,
 Meters NetworkDetails::calculateLength(ConstNetworkEdgePtr e) const
 {
   assert(e->getMembers().size() == 1);
-  return ElementConverter(_map).calculateLength(e->getMembers()[0]);
+  return ElementToGeometryConverter(_map).calculateLength(e->getMembers()[0]);
 }
 
 Meters NetworkDetails::calculateLength(ConstEdgeSublinePtr e) const
@@ -450,8 +450,8 @@ EdgeMatchPtr NetworkDetails::extendEdgeMatch(ConstEdgeMatchPtr em, ConstNetworkE
 
   WayPtr w1 = toWayString(es1)->copySimplifiedWayIntoMap(*_map, map);
   WayPtr w2 = toWayString(es2)->copySimplifiedWayIntoMap(*_map, map);
-  LOG_VART(ElementConverter(map).convertToLineString(w1)->toString());
-  LOG_VART(ElementConverter(map).convertToLineString(w2)->toString());
+  LOG_VART(ElementToGeometryConverter(map).convertToLineString(w1)->toString());
+  LOG_VART(ElementToGeometryConverter(map).convertToLineString(w2)->toString());
   // - calculate the matching subline of the two ways
   SublineCache sc = _calculateSublineScore(map, w1, w2);
   LOG_VART(sc.p);
@@ -1079,7 +1079,7 @@ EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetwork
 {
   EdgeSublinePtr result;
 
-  Meters l = ElementConverter(_map).calculateLength(ws.getWay());
+  Meters l = ElementToGeometryConverter(_map).calculateLength(ws.getWay());
   result.reset(new EdgeSubline(e, ws.getStart().calculateDistanceOnWay() / l,
     ws.getEnd().calculateDistanceOnWay() / l));
 

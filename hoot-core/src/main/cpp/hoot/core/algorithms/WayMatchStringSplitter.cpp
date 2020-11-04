@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 
 using namespace std;
@@ -81,7 +81,7 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
 {
   LOG_TRACE(QString("Splitting way %1...").arg((int)wn));
 
-  ElementConverter ec(map);
+  ElementToGeometryConverter ec(map);
 
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> wayMapping =
     _buildWayIndex(wn, map, mappings);

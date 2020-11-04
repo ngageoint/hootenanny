@@ -28,13 +28,13 @@
 #include "Roundabout.h"
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/elements/NodeUtils.h>
@@ -145,7 +145,7 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
   std::vector<long> intersectIds = pMap->getIndex().findWays(rndEnv);
 
   // Calculate intersection points of crossing ways
-  ElementConverter converter(pMap);
+  ElementToGeometryConverter converter(pMap);
   GeomPtr pRndGeo = converter.convertToGeometry(_roundaboutWay);
   for (size_t i = 0; i < intersectIds.size(); i++)
   {
@@ -399,7 +399,7 @@ void Roundabout::replaceRoundabout(OsmMapPtr pMap)
     LOG_VART(WayUtils::getWayNodesDetailedString(pRoundabout, pMap));
 
     //  Convert the roundabout to a geometry for distance checking later
-    ElementConverter converter(pMap);
+    ElementToGeometryConverter converter(pMap);
     std::shared_ptr<geos::geom::Geometry> geometry = converter.convertToGeometry(pRoundabout);
     //  Check all of the connecting ways (if they exist) for an endpoint on or near the roundabout
     LOG_VART(_connectingWays.size());

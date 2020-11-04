@@ -33,7 +33,7 @@
 
 // Hoot
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 
 // Standard
@@ -65,7 +65,7 @@ _map(map)
   _segmentFraction = -1;
 
   _way = way;
-  double length = ElementConverter(map).convertToLineString(way)->getLength();
+  double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();
 
   if (distance <= 0)
   {
@@ -147,7 +147,7 @@ _map(map)
 Meters WayLocation::calculateDistanceFromEnd() const
 {
   return
-    ElementConverter(getMap()).convertToLineString(getWay())->getLength() - calculateDistanceOnWay();
+    ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength() - calculateDistanceOnWay();
 }
 
 Meters WayLocation::calculateDistanceOnWay() const

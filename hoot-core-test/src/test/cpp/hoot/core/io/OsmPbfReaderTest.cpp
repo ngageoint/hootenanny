@@ -35,7 +35,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/io/OsmJsonReader.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 using namespace hoot::pb;
 
 // CPP Unit

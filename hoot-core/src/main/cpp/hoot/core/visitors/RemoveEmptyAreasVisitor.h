@@ -35,7 +35,7 @@
 
 namespace hoot
 {
-class ElementConverter;
+class ElementToGeometryConverter;
 
 /**
  * Removes all "area" elements that have an area of zero.
@@ -72,7 +72,7 @@ public:
 
 private:
 
-  std::shared_ptr<ElementConverter> _ec;
+  std::shared_ptr<ElementToGeometryConverter> _ec;
   bool _requireAreaForPolygonConversion;
 };
 

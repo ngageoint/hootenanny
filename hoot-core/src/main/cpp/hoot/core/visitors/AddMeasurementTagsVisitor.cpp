@@ -22,20 +22,20 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "AddMeasurementTagsVisitor.h"
 
 // Hoot
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/RelationMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/ElementToRelationMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/CoordinateExt.h>
+#include <hoot/core/geometry/CoordinateExt.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 
 // Boost
 #include <boost/shared_ptr.hpp>
@@ -83,7 +83,7 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
 {
   // for length/width combine all way member polygons
   std::shared_ptr<Geometry> pCombined = std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
-  ElementConverter elementConverter(_map->shared_from_this());
+  ElementToGeometryConverter ElementToGeometryConverter(_map->shared_from_this());
 
   // for area add all outer role polys and subtract all inner role polys
   double totalArea = 0;
@@ -94,7 +94,7 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
     if (pMember->getElementType() == ElementType::Way)
     {
       const WayPtr& pWay = std::dynamic_pointer_cast<Way>(pMember);
-      std::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+      std::shared_ptr<Polygon> pPoly = ElementToGeometryConverter.convertToPolygon(pWay);
 
       // build a combined polygon for extents
       if (_addLength || _addWidth)
@@ -137,8 +137,8 @@ void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
 {
   Tags& tags = pWay->getTags();
 
-  ElementConverter elementConverter(_map->shared_from_this());
-  std::shared_ptr<Polygon> pPoly = elementConverter.convertToPolygon(pWay);
+  ElementToGeometryConverter ElementToGeometryConverter(_map->shared_from_this());
+  std::shared_ptr<Polygon> pPoly = ElementToGeometryConverter.convertToPolygon(pWay);
 
   if (_addLength || _addWidth)
   {
@@ -148,7 +148,7 @@ void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
 
     if (pPoly->getNumPoints() == 0)
     {
-      std::shared_ptr<LineString> pLine = elementConverter.convertToLineString(pWay);
+      std::shared_ptr<LineString> pLine = ElementToGeometryConverter.convertToLineString(pWay);
       polyLength = pLine->getLength();
     }
     else

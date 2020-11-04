@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // geos
@@ -34,7 +34,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
 using namespace geos::geom;
@@ -72,7 +72,7 @@ public:
   void runTest()
   {
     OsmMapPtr map = createTestMap();
-    ElementConverter ec(map);
+    ElementToGeometryConverter ec(map);
     WayPtr w1 =
       map->getWay(ElementIdsVisitor::findElementsByTag(map, ElementType::Way, "note", "w1")[0]);
     WayPtr w2 =

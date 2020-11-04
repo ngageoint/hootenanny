@@ -33,8 +33,8 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/elements/Element.h>
 
 using namespace geos::geom;
@@ -61,7 +61,7 @@ double SmallerOverlapExtractor::extract(const OsmMap& map, const ConstElementPtr
   LOG_VART(target->getElementId());
   LOG_VART(candidate->getElementId());
 
-  ElementConverter ec(map.shared_from_this());
+  ElementToGeometryConverter ec(map.shared_from_this());
   ec.setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target, false);
   if (g1->isEmpty())

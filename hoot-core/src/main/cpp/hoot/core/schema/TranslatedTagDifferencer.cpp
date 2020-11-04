@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TranslatedTagDifferencer.h"
 
@@ -35,7 +35,7 @@
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/io/schema/Feature.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/HootException.h>
 
 using namespace geos::geom;
@@ -201,7 +201,7 @@ Tags TranslatedTagDifferencer::_toTags(const ScriptToOgrSchemaTranslator::Transl
 vector<ScriptToOgrSchemaTranslator::TranslatedFeature> TranslatedTagDifferencer::_translate(
   const ConstOsmMapPtr& map, const ConstElementPtr& e) const
 {
-  std::shared_ptr<Geometry> g = ElementConverter(map).convertToGeometry(e);
+  std::shared_ptr<Geometry> g = ElementToGeometryConverter(map).convertToGeometry(e);
   Tags t = e->getTags();
 
   return _getTranslator()->translateToOgr(t, e->getElementType(), g->getGeometryTypeId());

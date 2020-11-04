@@ -30,7 +30,7 @@
 #include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacement.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>

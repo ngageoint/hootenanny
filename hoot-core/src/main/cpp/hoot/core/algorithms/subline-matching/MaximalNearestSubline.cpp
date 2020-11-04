@@ -39,7 +39,7 @@
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 
 using namespace geos::geom;
@@ -168,7 +168,7 @@ const vector<WayLocation>& MaximalNearestSubline::getInterval()
   // sort the locations
   sort(testPoints.begin(), testPoints.end());
 
-  std::shared_ptr<LineString> bls = ElementConverter(_map).convertToLineString(_b);
+  std::shared_ptr<LineString> bls = ElementToGeometryConverter(_map).convertToLineString(_b);
   double bestLength = -1;
   vector<WayLocation> bestInterval;
   bestInterval.resize(2);
@@ -359,7 +359,7 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
     WayLocation wl(map, _a, 0, 0.0);
     WayPtr way1 = WaySubline(wl, start).toWay(map, nf.get());
 
-    double l = ElementConverter(map).convertToLineString(way1)->getLength();
+    double l = ElementToGeometryConverter(map).convertToLineString(way1)->getLength();
     // if the way is too short, round to the first way.
     if (l < _minSplitSize)
     {
@@ -377,7 +377,7 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
     WayPtr way3 = WaySubline(end, WayLocation(map, _a, _a->getNodeCount() - 1, 0.0)).
       toWay(map, nf.get());
 
-    double l = ElementConverter(map).convertToLineString(way3)->getLength();
+    double l = ElementToGeometryConverter(map).convertToLineString(way3)->getLength();
     // if the way is too short, round to the first way.
     if (l < _minSplitSize)
     {
@@ -391,7 +391,7 @@ vector<WayPtr> MaximalNearestSubline::splitWay(OsmMapPtr map, int& mnsIndex)
 
   // in all cases we add the middle line.
   WayPtr way2 = WaySubline(start, end).toWay(map, nf.get());
-  double l = ElementConverter(map).convertToLineString(way2)->getLength();
+  double l = ElementToGeometryConverter(map).convertToLineString(way2)->getLength();
   // if the way is big enough then add it on.
   if (l > _minSplitSize)
   {

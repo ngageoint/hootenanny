@@ -33,7 +33,7 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/algorithms/FrechetDistance.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -78,8 +78,8 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(
     //  Calculate the score (max length of both sublines)
     if (sub1->getNodeCount() > 1 && sub2->getNodeCount() > 1)
     {
-      std::shared_ptr<LineString> ls1 = ElementConverter(mapCopy).convertToLineString(sub1);
-      std::shared_ptr<LineString> ls2 = ElementConverter(mapCopy).convertToLineString(sub2);
+      std::shared_ptr<LineString> ls1 = ElementToGeometryConverter(mapCopy).convertToLineString(sub1);
+      std::shared_ptr<LineString> ls2 = ElementToGeometryConverter(mapCopy).convertToLineString(sub2);
       if (ls1->isValid() && ls2->isValid())
       {
         score = min(ls1->getLength(), ls2->getLength());

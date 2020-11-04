@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ParallelWayCriterion.h"
@@ -38,7 +38,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
 
@@ -63,7 +63,7 @@ ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPt
 
   // space 4m or get at least 5 samples
   std::vector<Coordinate> coords;
-  Meters spacing = std::min(ElementConverter(map).calculateLength(baseWay) / 5, 4.0);
+  Meters spacing = std::min(ElementToGeometryConverter(map).calculateLength(baseWay) / 5, 4.0);
   if (spacing <= 0.0)
   {
     spacing = 4.0;
@@ -92,7 +92,7 @@ ParallelWayCriterion::~ParallelWayCriterion()
 
 Radians ParallelWayCriterion::calculateDifference(const ConstWayPtr& w) const
 {
-  std::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(w);
+  std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map).convertToLineString(w);
 
   Radians deltaSum = 0.0;
   int count = 0;

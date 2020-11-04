@@ -30,7 +30,7 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/rnd/schema/ImplicitTagRawRulesDeriver.h>
 #include <hoot/rnd/schema/ImplicitTagRulesDatabaseDeriver.h>
-#include <hoot/core/io/ImplicitTagRulesSqliteReader.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteReader.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt

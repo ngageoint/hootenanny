@@ -31,7 +31,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/HootApiDb.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
@@ -221,7 +221,7 @@ public:
     // Neither should be dropped from the output due to being in a relation with members of mixed
     // geometry types.
 
-    // This is needed to suppress some ElementConverter warnings messages that should eventually be
+    // This is needed to suppress some ElementToGeometryConverter warnings messages that should eventually be
     // looked into.
     DisableLog dl;
 

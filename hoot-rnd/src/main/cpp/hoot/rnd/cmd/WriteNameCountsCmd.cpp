@@ -28,8 +28,8 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/core/io/WordCount.h>
-#include <hoot/core/io/WordCountWriter.h>
+#include <hoot/rnd/io/WordCount.h>
+#include <hoot/rnd/io/WordCountWriter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/TagDistribution.h>
 #include <hoot/core/util/StringUtils.h>
