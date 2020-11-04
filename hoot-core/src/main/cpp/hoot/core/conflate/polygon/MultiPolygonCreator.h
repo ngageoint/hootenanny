@@ -42,8 +42,6 @@ namespace hoot
 {
 
 /**
- * A work in progress. Only basic functionality exists. See Redmine #2115 for details.
- *
  * This will happily try to convert any relation into a multipolygon regardless of tags. It is the
  * caller's job to determine if this is appropriate or not.
  *
@@ -64,6 +62,8 @@ namespace hoot
  * of inner and/or outer rings).
  *
  * 1. http://wiki.openstreetmap.org/wiki/Relation:multipolygon
+ *
+ * See Redmine #2115 for additional details
  */
 class MultiPolygonCreator
 {
@@ -87,30 +87,30 @@ private:
   const ConstElementProviderPtr& _provider;
   const ConstRelationPtr& _r;
 
-  geos::geom::Geometry* _addHoles(std::vector<geos::geom::LinearRing*> &outers,
-                                  std::vector<geos::geom::LinearRing*> &inners) const;
+  geos::geom::Geometry* _addHoles(std::vector<geos::geom::LinearRing*>& outers,
+                                  std::vector<geos::geom::LinearRing*>& inners) const;
 
   void _addWayToSequence(ConstWayPtr w, geos::geom::CoordinateSequence& cs, bool reversed) const;
 
-  void _createRings(const QString &role, std::vector<geos::geom::LinearRing *> &rings) const;
+  void _createRings(const QString &role, std::vector<geos::geom::LinearRing *>& rings) const;
 
   void _createRingsFromPartials(
-    const std::vector<ConstWayPtr>& partials, std::vector<geos::geom::LinearRing *> &rings) const;
+    const std::vector<ConstWayPtr>& partials, std::vector<geos::geom::LinearRing *>& rings) const;
 
   /*
    * Given a vector of unsorted partial ways, create a ring. If the partials do not create a
    * complete ring, log a warning and just connect the ends.
    */
   void _createSingleRing(const std::vector<ConstWayPtr>& partials,
-                         std::vector<geos::geom::LinearRing *> &rings) const;
+                         std::vector<geos::geom::LinearRing *>& rings) const;
 
   /*
    * Given a set of rings that are not either an inner or an outer, figure out what they are and
    * add them to the appropriate ring set.
    */
-  void _classifyRings(std::vector<geos::geom::LinearRing *> &noRole,
-                      std::vector<geos::geom::LinearRing *> &inners,
-                      std::vector<geos::geom::LinearRing *> &outers) const;
+  void _classifyRings(std::vector<geos::geom::LinearRing *>& noRole,
+                      std::vector<geos::geom::LinearRing *>& inners,
+                      std::vector<geos::geom::LinearRing *>& outers) const;
 
   /*
    * Given two Linear Rings, determine the realtionship between the two.

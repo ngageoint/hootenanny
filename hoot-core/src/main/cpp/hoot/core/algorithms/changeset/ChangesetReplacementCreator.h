@@ -50,15 +50,7 @@ public:
   ChangesetReplacementCreator();
 
   /**
-   * Creates a changeset that replaces features in the first input with features from the second
-   * input
-   *
-   * @param input1 the target data file path for the changeset in which to replace features; must
-   * support Boundable
-   * @param input2 the source data file path for the changeset to get replacement features from;
-   * must support Boundable
-   * @param bounds the bounds over which features are to be replaced
-   * @param output the changeset file output location
+   * @see ChangesetReplacement
    */
   virtual void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,

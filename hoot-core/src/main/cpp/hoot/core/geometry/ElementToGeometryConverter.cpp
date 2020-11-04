@@ -131,9 +131,8 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const WayPtr& w) c
   return convertToGeometry((ConstWayPtr)w);
 }
 
-std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr& e,
-                                                              bool throwError,
-                                                              const bool statsFlag) const
+std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
+  const ConstWayPtr& e, bool throwError, const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
   LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
@@ -154,9 +153,8 @@ std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstWayPtr&
   }
 }
 
-std::shared_ptr<Geometry> ElementConverter::convertToGeometry(const ConstRelationPtr& e,
-                                                              bool throwError,
-                                                              const bool statsFlag) const
+std::shared_ptr<Geometry> ElementConverter::convertToGeometry(
+  const ConstRelationPtr& e, bool throwError, const bool statsFlag) const
 {
   GeometryTypeId gid = getGeometryType(e, throwError, statsFlag, _requireAreaForPolygonConversion);
   LOG_VART(GeometryUtils::geometryTypeIdToString(gid));

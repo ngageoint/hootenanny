@@ -65,7 +65,8 @@ PolygonCompare::PolygonCompare(const PolygonCompare& other)
   _size = other._size;
 }
 
-bool PolygonCompare::operator()(const std::shared_ptr<geos::geom::Geometry>& p1, const std::shared_ptr<geos::geom::Geometry>& p2)
+bool PolygonCompare::operator()(const std::shared_ptr<geos::geom::Geometry>& p1,
+                                const std::shared_ptr<geos::geom::Geometry>& p2)
 {
   const Envelope* e1 = p1->getEnvelopeInternal();
   const Envelope* e2 = p2->getEnvelopeInternal();

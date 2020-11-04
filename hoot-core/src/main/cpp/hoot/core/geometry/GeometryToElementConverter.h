@@ -179,7 +179,7 @@ public:
    *
    * @param polygon polygon to convert to OSM
    * @param map map to assign the returned element to
-   * @param r
+   * @param r TODO
    * @param s status of the returned element
    * @param circularError circular error of the returned element
    */
