@@ -33,7 +33,7 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>
-#include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 
 // Qt
 #include <QStringBuilder>

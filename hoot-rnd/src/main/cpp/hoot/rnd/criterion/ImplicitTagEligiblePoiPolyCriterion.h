@@ -24,34 +24,35 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef IMPLICIT_TAG_ELIGIBLE_POI_CRITERION_H
-#define IMPLICIT_TAG_ELIGIBLE_POI_CRITERION_H
+#ifndef IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
+#define IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ImplicitTagEligibleCriterion.h>
+#include <hoot/rnd/criterion/ImplicitTagEligibleCriterion.h>
 
 namespace hoot
 {
 
 /**
- * Any POI whose name can be harvested to feed the POI implicit tagger will pass this criterion
+ * Any POI or polygon whose name can be harvested to feed the POI/Poly implicit tagger will pass
+ * this criterion
  */
-class ImplicitTagEligiblePoiCriterion : public ImplicitTagEligibleCriterion
+class ImplicitTagEligiblePoiPolyCriterion : public ImplicitTagEligibleCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitTagEligiblePoiCriterion"; }
+  static std::string className() { return "hoot::ImplicitTagEligiblePoiPolyCriterion"; }
 
-  ImplicitTagEligiblePoiCriterion() = default;
-  virtual ~ImplicitTagEligiblePoiCriterion() = default;
+  ImplicitTagEligiblePoiPolyCriterion() = default;
+  virtual ~ImplicitTagEligiblePoiPolyCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new ImplicitTagEligiblePoiCriterion()); }
+  { return ElementCriterionPtr(new ImplicitTagEligiblePoiPolyCriterion()); }
 
   /**
-   * Returns all tag key/value pairs which could be applied implicitly by an implicit POI tagger
+   * Returns all tag key/value pairs which could be applied implicitly by an implicit POI/Poly tagger
    *
    * @param tags tags to examine
    * @return a list of key/value pairs (key=value)
@@ -60,7 +61,7 @@ public:
 
   /**
    * Returns true if the input tags contain at least one key/value pair which could be applied
-   * implicitly by an implicit POI tagger
+   * implicitly by an implicit POI/Poly tagger
    *
    * @param tags tags to examine
    * @return true if any eligible tags are present; false otherwise
@@ -68,7 +69,7 @@ public:
   virtual bool hasEligibleKvp(const Tags& tags) const override;
 
   virtual QString getDescription() const
-  { return "Identifies POIs eligible for type tag addition"; }
+  { return "Identifies POIs and polygons eligible for type tag addition"; }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }

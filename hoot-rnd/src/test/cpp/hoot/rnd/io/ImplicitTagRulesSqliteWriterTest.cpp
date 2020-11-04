@@ -26,7 +26,7 @@
  */
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/ImplicitTagRulesSqliteWriter.h>
+#include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 
 namespace hoot
 {
