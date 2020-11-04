@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-8164798' action='modify' visible='true' lat='21.783672' lon='39.183911'>
+    <tag k='addr:full' v='حي الفلاح،، Al Falah District, Jeddah 23762 3838, Saudi Arabia' />
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='building' v='mosque' />
+    <tag k='name' v='Abu Bakr Siddiq Mosque' />
+    <tag k='religion' v='muslim' />
+    <tag k='source:ingest:datetime' v='2020-07-01T12:51:24.243Z' />
+  </node>
+</osm>

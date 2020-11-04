@@ -3580,6 +3580,18 @@ features will be classified as a review or miss, depending on the value of
 'poi.polygon.review.evidence.threshold'.  Generally, this setting should not be changed except
 when working with specific POI/Polygon conflation use cases that require it.
 
+=== poi.polygon.match.takes.precedence.over.poi.to.poi.review
+
+* Data Type: bool
+* Default Value: `true`
+
+For all intra-dataset matching, the default is to throw out all matches for a feature if it is also
+involved in another match or review. It has been found that POI/Polygon Conflation performs better
+if these matches are kept when they have features that overlap with a POI/POI match/review, as the
+overall number of reviews can increase substantially otherwise. Disabling this setting will force
+all POI/Polygon matches to be converted to reviews if they contain a feature that overlaps with a
+POI/POI review.
+
 === poi.polygon.max.size.per.cache
 
 * Data Type: int

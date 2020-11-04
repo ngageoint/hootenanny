@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-8164805' action='modify' visible='true' lat='21.7837132' lon='39.1841333'>
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='religion' v='muslim' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:imagery:datetime' v='2017-09-28 08:18:59' />
+    <tag k='source:imagery:id' v='97111e3e24c5b102618fc9bc1efcef30' />
+    <tag k='source:imagery:sensor' v='GE01' />
+  </node>
+  <node id='-8164806' action='modify' visible='true' lat='21.7838673' lon='39.1842053' />
+  <node id='-8164807' action='modify' visible='true' lat='21.7837672' lon='39.1839588' />
+  <node id='-8164808' action='modify' visible='true' lat='21.7835555' lon='39.1840451' />
+  <node id='-8164809' action='modify' visible='true' lat='21.7835812' lon='39.1841622' />
+  <node id='-8164810' action='modify' visible='true' lat='21.7837157' lon='39.1842731' />
+  <way id='-4661046' action='modify' visible='true'>
+    <nd ref='-8164806' />
+    <nd ref='-8164807' />
+    <nd ref='-8164808' />
+    <nd ref='-8164809' />
+    <nd ref='-8164810' />
+    <nd ref='-8164806' />
+    <tag k='amenity' v='place_of_worship' />
+    <tag k='angle' v='337.4' />
+    <tag k='building' v='yes' />
+    <tag k='feature_area' v='683.1' />
+    <tag k='length' v='28.6' />
+    <tag k='religion' v='muslim' />
+    <tag k='security:classification' v='UNCLASSIFIED' />
+    <tag k='source' v='DigitalGlobe' />
+    <tag k='source:datetime' v='2017-03-14T15:14:15Z' />
+    <tag k='source:imagery:datetime' v='2016-08-17 08:07:39' />
+    <tag k='source:imagery:id' v='c8eb69aab6e5756c38217a44546ed58f' />
+    <tag k='source:imagery:sensor' v='WV02' />
+    <tag k='width' v='27.7' />
+  </way>
+</osm>
