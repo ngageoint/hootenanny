@@ -131,7 +131,23 @@ public:
    */
   static geos::geom::Envelope envelopeFromConfigString(const QString& boundsStr);
 
-  static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry *g);
+  /**
+   * TODO
+   *
+   * @param str
+   * @return
+   */
+  static std::shared_ptr<geos::geom::Polygon> polygonFromString(const QString& str);
+
+  /**
+   * TODO
+   *
+   * @param poly
+   * @return
+   */
+  static QString polygonToString(const std::shared_ptr<geos::geom::Polygon>& poly);
+
+  static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry* g);
 
   static geos::geom::Geometry* validateGeometryCollection(const geos::geom::GeometryCollection* gc);
 

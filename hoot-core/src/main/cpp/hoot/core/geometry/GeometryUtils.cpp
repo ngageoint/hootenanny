@@ -28,6 +28,7 @@
 #include "GeometryUtils.h"
 
 // GEOS
+#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/MultiLineString.h>
@@ -228,18 +229,82 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
   const QRegExp boundsRegEx("(-*\\d+\\.*\\d*,){3}-*\\d+\\.*\\d*");
   if (!boundsRegEx.exactMatch(boundsStr))
   {
-    throw HootException(errorMsg);
+    throw IllegalArgumentException(errorMsg);
   }
   const QStringList boundsParts = boundsStr.split(",");
   assert(boundsParts.size() == 4);
   if ((boundsParts.at(2).toDouble() <= boundsParts.at(0).toDouble()) ||
        boundsParts.at(3).toDouble() <= boundsParts.at(1).toDouble())
   {
-    throw HootException(errorMsg);
+    throw IllegalArgumentException(errorMsg);
   }
   return
     Envelope(boundsParts.at(0).toDouble(), boundsParts.at(2).toDouble(),
       boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
+}
+
+std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
+{
+  const QString errorMsg = "Invalid polygon string: " + str;
+  if (str.trimmed().isEmpty())
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  QStringList coords = str.split(";");
+  if (coords.size() < 3)
+  {
+    throw IllegalArgumentException(errorMsg);
+  }
+
+  if (coords.at(0) != coords.at(coords.size() - 1))
+  {
+    coords.append(coords.at(0));
+  }
+
+  CoordinateSequence* coordSeq =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(coords.size(), 2);
+  for (int i = 0; i < coords.size(); i++)
+  {
+    const QString coordStr = coords.at(i);
+    const QStringList coordStrs = coordStr.split(",");
+    if (coordStrs.size() != 2)
+    {
+      throw IllegalArgumentException("Invalid polygon coordinate string: " + coordStr);
+    }
+    bool ok = false;
+    const double x = coordStrs.at(0).toDouble(&ok);
+    if (!ok)
+    {
+      throw IllegalArgumentException("Invalid polygon coordinate x value: " + coordStrs.at(0));
+    }
+    const double y = coordStrs.at(1).toDouble(&ok);
+    if (!ok)
+    {
+      throw IllegalArgumentException("Invalid polygon coordinate y value: " + coordStrs.at(1));
+    }
+    coordSeq->setAt(geos::geom::Coordinate(x, y), i);
+  }
+
+  // an empty set of holes
+  vector<Geometry*>* holes = new vector<Geometry*>();
+  // create the outer line
+  LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
+  return std::shared_ptr<Polygon>(
+    GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+}
+
+QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
+{
+  geos::geom::CoordinateSequence* coords = poly->getCoordinates();
+  QString str;
+  for (size_t i = 0; i < coords->getSize(); i++)
+  {
+    const geos::geom::Coordinate& coord = coords->getAt(i);
+    str += QString::number(coord.x) + "," + QString::number(coord.y) + ";";
+  }
+  str.chop(1);
+  return str;
 }
 
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)

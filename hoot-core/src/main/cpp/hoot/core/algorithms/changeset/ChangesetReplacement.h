@@ -29,6 +29,7 @@
 
 //GEOS
 #include <geos/geom/Envelope.h>
+#include <geos/geom/Polygon.h>
 
 // Qt
 #include <QString>
@@ -67,12 +68,27 @@ public:
    * support Boundable
    * @param input2 the source data file path for the changeset to get replacement features from;
    * must support Boundable
-   * @param bounds the bounds over which features are to be replaced
+   * @param bounds the rectangular bounds over which features are to be replaced
    * @param output the changeset file output location
    */
   virtual void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) = 0;
+
+  /**
+   * Creates a changeset that replaces features in the first input with features from the second
+   * input
+   *
+   * @param input1 the target data file path for the changeset in which to replace features; must
+   * support Boundable
+   * @param input2 the source data file path for the changeset to get replacement features from;
+   * must support Boundable
+   * @param bounds the bounds over which features are to be replaced
+   * @param output the changeset file output location
+   */
+  virtual void create(
+    const QString& input1, const QString& input2,
+    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) = 0;
 
   virtual int getNumChanges() const = 0;
 

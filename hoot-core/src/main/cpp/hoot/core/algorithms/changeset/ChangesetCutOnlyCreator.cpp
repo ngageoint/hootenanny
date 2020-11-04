@@ -392,6 +392,13 @@ void ChangesetCutOnlyCreator::setRetainmentFilterOptions(const QStringList& opti
 }
 
 void ChangesetCutOnlyCreator::create(
+  const QString& /*input1*/, const QString& /*input2*/,
+  const std::shared_ptr<geos::geom::Polygon>& /*bounds*/, const QString& /*output*/)
+{
+  // TODO: finish
+}
+
+void ChangesetCutOnlyCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {

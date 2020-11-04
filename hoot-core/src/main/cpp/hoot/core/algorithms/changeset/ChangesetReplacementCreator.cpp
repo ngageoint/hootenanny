@@ -123,6 +123,13 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
 }
 
 void ChangesetReplacementCreator::create(
+  const QString& /*input1*/, const QString& /*input2*/,
+  const std::shared_ptr<geos::geom::Polygon>& /*bounds*/, const QString& /*output*/)
+{
+  // TODO: finish
+}
+
+void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {

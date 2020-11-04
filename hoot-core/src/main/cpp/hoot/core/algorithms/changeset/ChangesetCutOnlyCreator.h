@@ -137,6 +137,13 @@ public:
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output);
 
+  /**
+   * @see ChangesetReplacement
+   */
+  virtual void create(
+    const QString& input1, const QString& input2,
+    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output);
+
   virtual int getNumChanges() const { return _numChanges; }
 
   virtual void setFullReplacement(const bool full) { _fullReplacement = full; }

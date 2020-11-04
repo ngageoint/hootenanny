@@ -97,7 +97,8 @@ public:
   {
     return
       "Cropped " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-      StringUtils::formatLargeNumber(_numProcessed) + " elements"; }
+      StringUtils::formatLargeNumber(_numProcessed) + " elements";
+  }
 
   void setInvert(bool invert);
   void setKeepEntireFeaturesCrossingBounds(bool keep);
