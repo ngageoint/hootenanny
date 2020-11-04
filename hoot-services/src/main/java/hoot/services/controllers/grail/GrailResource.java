@@ -566,6 +566,7 @@ public class GrailResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response changesetPush(@Context HttpServletRequest request,
             GrailParams reqParams,
+            @QueryParam("deriveType") @DefaultValue("") String deriveType,
             @QueryParam("DEBUG_LEVEL") @DefaultValue("info") String debugLevel) {
 
         Users user = Users.fromRequest(request);
@@ -626,6 +627,12 @@ public class GrailResource {
                     String msg = "Error during changset push! Could not find osc tags file ";
                     throw new WebApplicationException(new FileNotFoundException(), Response.serverError().entity(msg).build());
                 }
+            }
+
+            if (changesetFile.exists() && !deriveType.equals("Adds only")) {
+                // Wait to detect overpass 'Last element pushed'
+                GrailParams waitParams = new GrailParams(params);
+                workflow.add(grailCommandFactory.build(jobId, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
             }
 
             Map<String, Object> jobStatusTags = new HashMap<>();
