@@ -33,8 +33,8 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/elements/Element.h>
 
 #include <QElapsedTimer>
@@ -54,7 +54,7 @@ double OverlapExtractor::extract(const OsmMap& map, const ConstElementPtr& targe
     "Calculating overlap for " << target->getElementId() << " and " << candidate->getElementId() <<
     "...");
 
-  ElementConverter ec(map.shared_from_this());
+  ElementToGeometryConverter ec(map.shared_from_this());
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   if (g1->isEmpty())
   {

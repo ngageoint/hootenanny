@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GEOS
@@ -32,11 +32,11 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/WayAverager.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 
@@ -92,25 +92,25 @@ public:
                                                         map->getWay(-313),
       10.0, 10.0);
     w->setStatus(Status::Conflated);
-    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    ss << ElementToGeometryConverter(map).convertToLineString(w)->toString() << endl;
 
     w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-313),
                                                         map->getWay(-353),
                                                         10.0, 10.0);
     w->setStatus(Status::Conflated);
-    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    ss << ElementToGeometryConverter(map).convertToLineString(w)->toString() << endl;
 
     w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-260),
                                                         map->getWay(-247),
                                                         10.0, 10.0);
     w->setStatus(Status::Conflated);
-    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    ss << ElementToGeometryConverter(map).convertToLineString(w)->toString() << endl;
 
     w = MaximalNearestSubline::getMaximalNearestSubline(map, map->getWay(-247),
                                                         map->getWay(-260),
                                                         10.0, 10.0);
     w->setStatus(Status::Conflated);
-    ss << ElementConverter(map).convertToLineString(w)->toString() << endl;
+    ss << ElementToGeometryConverter(map).convertToLineString(w)->toString() << endl;
 
     QFile fp(_inputPath + "MaximalNearestSublineTest.txt");
     fp.open(QIODevice::ReadOnly);

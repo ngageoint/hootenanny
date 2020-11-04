@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -54,7 +54,7 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
 
   // Get the total length of all the rivers in the dataset.
-  ElementConverter measurer(map);
+  ElementToGeometryConverter measurer(map);
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {

@@ -34,7 +34,7 @@
 
 // Hoot
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 
@@ -57,7 +57,7 @@ WayBufferCriterion::WayBufferCriterion(ConstOsmMapPtr map,
 {
   _matchPercent = matchPercent;
   _buffer = buffer + baseWay->getCircularError();
-  _baseLs = ElementConverter(map).convertToLineString(baseWay);
+  _baseLs = ElementToGeometryConverter(map).convertToLineString(baseWay);
   _baseLength = _baseLs->getLength();
   _bufferAccuracy = -1;
 }
@@ -84,7 +84,7 @@ bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
   try
   {
     bool result = true;
-    std::shared_ptr<LineString> ls2 = ElementConverter(_map).
+    std::shared_ptr<LineString> ls2 = ElementToGeometryConverter(_map).
         convertToLineString(_map->getWay(w->getId()));
 
     if (fabs((w->getCircularError() + _buffer) - _bufferAccuracy) > 0.1)
@@ -120,7 +120,7 @@ bool WayBufferCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   catch (const geos::util::TopologyException&)
   {
-    LOG_VART(ElementConverter(_map).convertToLineString(_map->getWay(w->getId())));
+    LOG_VART(ElementToGeometryConverter(_map).convertToLineString(_map->getWay(w->getId())));
     throw;
   }
 }

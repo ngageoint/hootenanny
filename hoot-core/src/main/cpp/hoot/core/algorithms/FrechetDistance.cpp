@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FrechetDistance.h"
 
@@ -37,7 +37,7 @@
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -58,8 +58,8 @@ FrechetDistance::FrechetDistance(const ConstOsmMapPtr &map, const ConstWayPtr &w
   _w1 = _map->getWay(way1->getId());
   _w2 = _map->getWay(way2->getId());
   //  Convert both ways to line strings
-  _ls1 = ElementConverter(_map).convertToLineString(_w1);
-  _ls2 = ElementConverter(_map).convertToLineString(_w2);
+  _ls1 = ElementToGeometryConverter(_map).convertToLineString(_w1);
+  _ls2 = ElementToGeometryConverter(_map).convertToLineString(_w2);
   //  Precalculate the locations and distances for way1
   LocationOfPoint locatorWay2(_map, _w2);
   for (size_t i = 0; i < _w1->getNodeCount(); i++)

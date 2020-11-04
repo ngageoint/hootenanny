@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LargeWaySplitter.h"
@@ -38,7 +38,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
@@ -64,7 +64,7 @@ void LargeWaySplitter::apply(const std::shared_ptr<OsmMap>& map)
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     std::shared_ptr<Way> w = it->second;
-    std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+    std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
     double len = ls->getLength();
     // if the way is larger than the threshold
     if (len > _threshold)
@@ -77,7 +77,7 @@ void LargeWaySplitter::apply(const std::shared_ptr<OsmMap>& map)
 
 void LargeWaySplitter::_divideWay(const std::shared_ptr<Way>& way, int numPieces)
 {
-  double startLength = ElementConverter(_map).convertToLineString(way)->getLength();
+  double startLength = ElementToGeometryConverter(_map).convertToLineString(way)->getLength();
   double pieceLength = startLength / (double)numPieces;
 
   // iteratively carve off pieceLength sized ways from the beginning

@@ -34,7 +34,7 @@
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/OrCriterion.h>

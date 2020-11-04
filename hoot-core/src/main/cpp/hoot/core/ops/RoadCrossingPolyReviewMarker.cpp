@@ -36,7 +36,7 @@
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/util/GeometricRelationship.h>
+#include <hoot/core/geometry/GeometricRelationship.h>
 
 namespace hoot
 {

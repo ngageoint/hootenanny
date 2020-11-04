@@ -28,7 +28,7 @@
 
 // Hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/OsmSchema.h>
@@ -75,7 +75,7 @@ void BuildingPartMergeOp::_init(OsmMapPtr& map)
 {
   _buildingPartGroups.clear();
   _map = map;
-  _elementConverter.reset(new ElementConverter(_map));
+  _ElementToGeometryConverter.reset(new ElementToGeometryConverter(_map));
   _numAffected = 0;
   _totalBuildingGroupsProcessed = 0;
   _numBuildingGroupsMerged = 0;
@@ -396,10 +396,10 @@ std::shared_ptr<geos::geom::Geometry> BuildingPartMergeOp::_getGeometry(
     {
       case ElementType::Way:
         return
-          _elementConverter->convertToGeometry(std::dynamic_pointer_cast<const Way>(element));
+          _ElementToGeometryConverter->convertToGeometry(std::dynamic_pointer_cast<const Way>(element));
       case ElementType::Relation:
         return
-          _elementConverter->convertToGeometry(
+          _ElementToGeometryConverter->convertToGeometry(
             std::dynamic_pointer_cast<const Relation>(element));
       default:
         throw IllegalArgumentException(

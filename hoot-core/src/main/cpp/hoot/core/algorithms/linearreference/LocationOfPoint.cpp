@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LocationOfPoint.h"
@@ -34,7 +34,7 @@
 
 // Hoot
 #include <hoot/core/util/Assert.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 
 // Standard
@@ -64,7 +64,7 @@ Coordinate LocationOfPoint::locate(double d)
 {
   if (_length == -1)
   {
-    _length = ElementConverter(_map).convertToLineString(_way)->getLength();
+    _length = ElementToGeometryConverter(_map).convertToLineString(_way)->getLength();
   }
 
   if (d <= 0)
@@ -118,7 +118,7 @@ WayLocation LocationOfPoint::locate(const Coordinate& inputPt) const
 
   if (_length == -1)
   {
-    _length = ElementConverter(_map).convertToLineString(_way)->getLength();
+    _length = ElementToGeometryConverter(_map).convertToLineString(_way)->getLength();
   }
 
   if (_length <= 0.0)

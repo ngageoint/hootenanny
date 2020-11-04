@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CalculateAreaForStatsVisitor.h"
 
@@ -31,7 +31,7 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
@@ -52,7 +52,7 @@ Meters CalculateAreaForStatsVisitor::getArea(const OsmMapPtr& map, ElementPtr e)
 void CalculateAreaForStatsVisitor::visit(const ConstElementPtr& e)
 {
   std::shared_ptr<Geometry> g =
-    ElementConverter(_map->shared_from_this()).convertToGeometry(e, true, true);
+    ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e, true, true);
   _total += g->getArea();
 }
 

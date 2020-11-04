@@ -32,7 +32,7 @@
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/merging/BuildingPartPreMergeCollector.h>
@@ -142,7 +142,7 @@ private:
   OsmMapPtr _map;
 
   BuildingCriterion _buildingCrit;
-  std::shared_ptr<ElementConverter> _elementConverter;
+  std::shared_ptr<ElementToGeometryConverter> _ElementToGeometryConverter;
 
   int _totalBuildingGroupsProcessed;
   int _numBuildingGroupsMerged;

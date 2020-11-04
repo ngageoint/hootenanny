@@ -33,7 +33,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
 #include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 namespace hoot
 {

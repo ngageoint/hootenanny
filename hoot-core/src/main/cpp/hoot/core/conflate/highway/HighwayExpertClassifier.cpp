@@ -30,7 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatchString.h>
 
@@ -87,7 +87,7 @@ MatchClassification HighwayExpertClassifier::classify(const ConstOsmMapPtr& map,
   WayPtr sl1 = match.getSubline1().toWay(mapCopy);
   WayPtr sl2 = match.getSubline2().toWay(mapCopy);
 
-  ElementConverter ec(mapCopy);
+  ElementToGeometryConverter ec(mapCopy);
   Meters l1 = ec.convertToLineString(match.getSubline1().getWay())->getLength();
   Meters l2 = ec.convertToLineString(match.getSubline2().getWay())->getLength();
 

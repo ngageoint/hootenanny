@@ -61,9 +61,9 @@
 #include <hoot/core/io/schema/StringFieldDefinition.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Settings.h>
 
@@ -603,7 +603,7 @@ void OgrWriter::write(const ConstOsmMapPtr& map)
 
     try
     {
-      g = ElementConverter(provider).convertToGeometry(e, false);
+      g = ElementToGeometryConverter(provider).convertToGeometry(e, false);
     }
     catch (const IllegalArgumentException& err)
     {

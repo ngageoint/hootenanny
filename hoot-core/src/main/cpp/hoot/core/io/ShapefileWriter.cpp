@@ -37,7 +37,7 @@ using namespace geos::geom;
 
 // Hoot
 #include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/Way.h>
@@ -268,7 +268,7 @@ void ShapefileWriter::writeLines(const ConstOsmMapPtr& map, const QString& path)
       }
 
       // convert the geometry.
-      std::string wkt = ElementConverter(map).convertToLineString(way)->toString();
+      std::string wkt = ElementToGeometryConverter(map).convertToLineString(way)->toString();
       char* t = (char*)wkt.data();
       OGRGeometry* geom;
       if (OGRGeometryFactory::createFromWkt(&t, poLayer->GetSpatialRef(), &geom) != OGRERR_NONE)
@@ -506,7 +506,7 @@ void ShapefileWriter::_writeRelationPolygon(const ConstOsmMapPtr& map,
 
   // convert the geometry.
   const ConstRelationPtr& r = relation;
-  std::string wkt = ElementConverter(map).convertToGeometry(r)->toString();
+  std::string wkt = ElementToGeometryConverter(map).convertToGeometry(r)->toString();
   char* t = (char*)wkt.data();
   OGRGeometry* geom;
   if (OGRGeometryFactory::createFromWkt(&t, poLayer->GetSpatialRef(), &geom) != OGRERR_NONE)
@@ -548,7 +548,7 @@ void ShapefileWriter::_writeWayPolygon(const ConstOsmMapPtr& map, const WayPtr& 
   }
 
   // convert the geometry.
-  std::shared_ptr<Geometry> p = ElementConverter(map).convertToGeometry(way);
+  std::shared_ptr<Geometry> p = ElementToGeometryConverter(map).convertToGeometry(way);
   if (p->getGeometryTypeId() != GEOS_POLYGON)
   {
     throw InternalErrorException("Expected a polygon geometry, but got a: " +

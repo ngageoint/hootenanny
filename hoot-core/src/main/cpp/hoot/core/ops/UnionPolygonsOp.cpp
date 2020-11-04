@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UnionPolygonsOp.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
@@ -59,7 +59,7 @@ void UnionPolygonsOp::apply(std::shared_ptr<OsmMap>& map)
   LOG_VART(g.get());
 
   OsmMapPtr result(new OsmMap());
-  GeometryConverter(result).convertGeometryToElement(
+  GeometryToElementConverter(result).convertGeometryToElement(
     g.get(), Status::Unknown1, WorstCircularErrorVisitor::getWorstCircularError(map));
 
   map.reset(new OsmMap(result));

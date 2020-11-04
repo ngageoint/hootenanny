@@ -33,7 +33,7 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Configurable.h>
 
 // GEOS
@@ -93,7 +93,7 @@ private:
 
   std::shared_ptr<const geos::geom::Geometry> _boundsGeom;
   ConstOsmMapPtr _map;
-  std::shared_ptr<ElementConverter> _elementConverter;
+  std::shared_ptr<ElementToGeometryConverter> _ElementToGeometryConverter;
   // If false, the element can cross the bounds and still be considered within bounds.
   bool _mustCompletelyContain;
 };

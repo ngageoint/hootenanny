@@ -27,7 +27,7 @@
 #ifndef FINDNODESINWAYFACTORY_H
 #define FINDNODESINWAYFACTORY_H
 
-#include <hoot/core/util/GeometryConverter.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ namespace hoot
  * creating new nodes. If new nodes are created then they are also used before creating another
  * node.
  */
-class FindNodesInWayFactory : public GeometryConverter::NodeFactory
+class FindNodesInWayFactory : public GeometryToElementConverter::NodeFactory
 {
 public:
 

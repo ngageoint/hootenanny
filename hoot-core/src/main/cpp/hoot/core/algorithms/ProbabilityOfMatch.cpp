@@ -41,7 +41,7 @@ using namespace geos::geom;
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
@@ -88,7 +88,7 @@ double ProbabilityOfMatch::attributeScore(const ConstOsmMapPtr& map,
 double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
                                          const ConstWayPtr& w2)
 {
-  return distanceScore(map, w1, ElementConverter(map).convertToLineString(w2), w2->getCircularError());
+  return distanceScore(map, w1, ElementToGeometryConverter(map).convertToLineString(w2), w2->getCircularError());
 }
 
 double ProbabilityOfMatch::distanceScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
@@ -143,8 +143,8 @@ ProbabilityOfMatch& ProbabilityOfMatch::getInstance()
 double ProbabilityOfMatch::lengthScore(const ConstOsmMapPtr& map, const ConstWayPtr& w1,
   const ConstWayPtr &w2)
 {
-  Meters l1 = ElementConverter(map).convertToLineString(w1)->getLength();
-  Meters l2 = ElementConverter(map).convertToLineString(w2)->getLength();
+  Meters l1 = ElementToGeometryConverter(map).convertToLineString(w1)->getLength();
+  Meters l2 = ElementToGeometryConverter(map).convertToLineString(w2)->getLength();
 
   // longer matches get a higher score.
   Meters mean = (l1 + l2) / 2.0;
@@ -172,8 +172,8 @@ double ProbabilityOfMatch::expertProbability(const ConstOsmMapPtr& map, const Co
   double ls = lengthScore(map, w1, w2);
 
   LOG_TRACE("  ds2 " << distanceScore(map, w2, w1));
-  LOG_TRACE("  l1 " << ElementConverter(map).convertToLineString(w1)->getLength());
-  LOG_TRACE("  l2 " << ElementConverter(map).convertToLineString(w2)->getLength());
+  LOG_TRACE("  l1 " << ElementToGeometryConverter(map).convertToLineString(w1)->getLength());
+  LOG_TRACE("  l2 " << ElementToGeometryConverter(map).convertToLineString(w2)->getLength());
   LOG_TRACE("probability of match " << ds << " " << ps << " " << as << " " << zs << " " << ls);
   LOG_TRACE("  " << ds * ps * as * zs * ls);
 

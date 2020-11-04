@@ -35,7 +35,7 @@
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 

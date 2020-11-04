@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/criterion/ImplicitTagEligibleCriterion.h>
+#include <hoot/rnd/criterion/ImplicitTagEligibleCriterion.h>
 #include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/algorithms/string/StringTokenizer.h>

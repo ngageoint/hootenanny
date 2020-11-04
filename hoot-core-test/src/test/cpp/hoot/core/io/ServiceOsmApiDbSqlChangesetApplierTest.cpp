@@ -37,7 +37,7 @@
 #include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 #include <hoot/core/io/ServicesDbTestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 
 // Qt

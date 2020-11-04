@@ -30,7 +30,7 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 
@@ -133,7 +133,7 @@ WaySubline WaySubline::reverse(const ConstWayPtr& reversedWay) const
   assert(reversedWay->getNodeCount() == getWay()->getNodeCount());
   //assert(reversedWay->getNodeId(0) == getWay()->getLastNodeId());
 
-  double l = ElementConverter(getMap()).convertToLineString(getWay())->getLength();
+  double l = ElementToGeometryConverter(getMap()).convertToLineString(getWay())->getLength();
 
   result._start = WayLocation(getMap(), reversedWay, l - getEnd().calculateDistanceOnWay());
   result._end = WayLocation(getMap(), reversedWay, l - getStart().calculateDistanceOnWay());
@@ -146,11 +146,11 @@ QString WaySubline::toString() const
   return "start: " + getStart().toString() + " end: " + getEnd().toString();
 }
 
-WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryConverter::NodeFactory* nf, bool reuse) const
+WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf, bool reuse) const
 {
   ConstWayPtr way = _start.getWay();
 
-  std::shared_ptr<GeometryConverter::NodeFactory> nfPtr;
+  std::shared_ptr<GeometryToElementConverter::NodeFactory> nfPtr;
   if (nf == 0)
   {
     nf = new FindNodesInWayFactory(way);

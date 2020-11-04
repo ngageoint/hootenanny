@@ -44,14 +44,14 @@
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/StringUtils.h>
@@ -278,7 +278,7 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_VART(w);
 
     std::shared_ptr<LineString> ls =
-      ElementConverter(map, _logWarningsForMissingElements).convertToLineString(w);
+      ElementToGeometryConverter(map, _logWarningsForMissingElements).convertToLineString(w);
     if (!ls.get())
     {
       if (_logWarningsForMissingElements)
@@ -529,7 +529,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
 
   std::shared_ptr<Way> way = map->getWay(wid);
   std::shared_ptr<Geometry> fg =
-    ElementConverter(map, _logWarningsForMissingElements).convertToGeometry(way);
+    ElementToGeometryConverter(map, _logWarningsForMissingElements).convertToGeometry(way);
   LOG_VART(GeometryUtils::geometryTypeIdToString(fg));
 
   // perform the intersection with the geometry
@@ -553,7 +553,7 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   LOG_VART(GeometryUtils::geometryTypeIdToString(g));
 
   std::shared_ptr<FindNodesInWayFactory> nodeFactory(new FindNodesInWayFactory(way));
-  GeometryConverter gc(map);
+  GeometryToElementConverter gc(map);
   gc.setNodeFactory(nodeFactory);
   ElementPtr e = gc.convertGeometryToElement(g.get(), way->getStatus(), way->getCircularError());
   LOG_VART(e.get());
