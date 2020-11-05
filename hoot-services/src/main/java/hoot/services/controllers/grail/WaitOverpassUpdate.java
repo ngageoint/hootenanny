@@ -111,7 +111,7 @@ class WaitOverpassUpdate extends GrailCommand {
                 BufferedReader br;
                 InputStream responseStream;
                 while (TIMEOUT_TIME > timeSpent) {
-                    url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(PRIVATE_OVERPASS_URL), this.params.getBounds(), "csv", query);
+                    url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(PRIVATE_OVERPASS_URL), null, "csv", query);
 
                     // if cert path and phrase are specified then we assume to use them for the request
                     if (!replaceSensitiveData(PRIVATE_OVERPASS_CERT_PATH).equals(PRIVATE_OVERPASS_CERT_PATH)) {
