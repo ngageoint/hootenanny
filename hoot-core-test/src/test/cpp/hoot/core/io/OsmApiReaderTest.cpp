@@ -35,6 +35,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/OsmApiUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 //  Run tests against a local test server
 #define RUN_LOCAL_TEST_SERVER
@@ -80,7 +81,9 @@ public:
 
     OsmApiReader reader;
     //  Set the bounds to be smaller than 0.25 degrees by 0.25 degrees so that there is no splitting
-    reader.setBounds(geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577));
+    reader.setBounds(
+      GeometryUtils::envelopeToPolygon(
+        geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577)));
     reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + OsmApiEndpoints::API_PATH_MAP);
     reader.read(map);
 
@@ -107,7 +110,9 @@ public:
     s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
     reader.setConfiguration(s);
     //  Set the bounds to be larger than 0.25 degrees by 0.25 degrees to cause a geographic split
-    reader.setBounds(geos::geom::Envelope(-111.3914, -111.1142, 40.4557, 40.7577));
+    reader.setBounds(
+      GeometryUtils::envelopeToPolygon(
+        geos::geom::Envelope(-111.3914, -111.1142, 40.4557, 40.7577)));
     reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_GEO) + OsmApiEndpoints::API_PATH_MAP);
     reader.read(map);
 
@@ -134,7 +139,9 @@ public:
     s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
     reader.setConfiguration(s);
     //  Set the bounds to be smaller than 0.25 degrees by 0.25 degrees so that it is split by elements on the server
-    reader.setBounds(geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577));
+    reader.setBounds(
+      GeometryUtils::envelopeToPolygon(
+        geos::geom::Envelope(-111.3914, -111.1942, 40.5557, 40.7577)));
     reader.open(LOCAL_TEST_API_URL.arg(PORT_SPLIT_ELEMENTS) + OsmApiEndpoints::API_PATH_MAP);
     reader.read(map);
 
@@ -157,7 +164,9 @@ public:
       OsmMapPtr map(new OsmMap());
       OsmApiReader reader;
       //  Set the bounds to be larger than 1 degree by 1 degree so that it will fail
-      reader.setBounds(geos::geom::Envelope(-111.3914, -110.2914, 40.5557, 41.7557));
+      reader.setBounds(
+        GeometryUtils::envelopeToPolygon(
+          geos::geom::Envelope(-111.3914, -110.2914, 40.5557, 41.7557)));
       //  Can reuse PORT_SIMPLE here because it isn't actually used before the test fails
       reader.open(LOCAL_TEST_API_URL.arg(PORT_SIMPLE) + OsmApiEndpoints::API_PATH_MAP);
       reader.read(map);

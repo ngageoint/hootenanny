@@ -185,10 +185,10 @@ void OsmMapReaderFactory::_read(const OsmMapPtr& map,
                                 const std::shared_ptr<OsmMapReader>& reader, const QString& url)
 {
   std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
-  if (!ConfigOptions().getConvertBoundingBox().trimmed().isEmpty() && !boundable.get())
+  if (!ConfigOptions().getConvertBounds().trimmed().isEmpty() && !boundable.get())
   {
     throw IllegalArgumentException(
-      ConfigOptions::getConvertBoundingBoxKey() +
+      ConfigOptions::getConvertBoundsKey() +
       " configuration option used with unsupported reader for data source: " + url);
   }
 

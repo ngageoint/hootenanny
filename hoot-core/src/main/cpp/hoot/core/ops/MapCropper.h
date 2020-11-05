@@ -69,7 +69,6 @@ public:
   static std::string className() { return "hoot::MapCropper"; }
 
   MapCropper();
-  MapCropper(const geos::geom::Envelope& envelope);
   MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g);
   virtual ~MapCropper() = default;
 
@@ -84,8 +83,7 @@ public:
   /**
    * Sets the bounds on the nodes that will be removed.
    */
-  virtual void setBounds(const geos::geom::Envelope& bounds) override;
-  virtual void setBounds(const std::shared_ptr<const geos::geom::Geometry>& g);
+  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) override;
 
   virtual void writeObject(QDataStream& os) const override;
 
@@ -112,10 +110,11 @@ private:
 
   friend class MapCropperTest;
 
-  geos::geom::Envelope _envelope;
-  std::shared_ptr<const geos::geom::Geometry> _envelopeG;
+  //geos::geom::Envelope _envelope;
+  std::shared_ptr<const geos::geom::Geometry> _nodeBounds;
+  std::shared_ptr<const geos::geom::Geometry> _envelope;
   bool _invert;
-  geos::geom::Envelope _nodeBounds;
+  //geos::geom::Envelope _nodeBounds;
   // If true, won't split apart features straddling the specified bounds.
   bool _keepEntireFeaturesCrossingBounds;
   // If true, will only keep features falling completely inside the specified bounds. This overrides

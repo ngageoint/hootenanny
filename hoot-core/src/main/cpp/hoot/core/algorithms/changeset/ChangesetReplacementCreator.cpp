@@ -144,7 +144,8 @@ void ChangesetReplacementCreator::create(
   _input2Map.reset();
   _output = output;
   _replacementBounds = bounds;
-  //conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
+  conf().set(
+    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
   _validateInputs();
   _printJobDescription();
 
@@ -313,8 +314,8 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
 
   // For this being enabled to have any effect,
-  // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
-  conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  // convert.bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.
+  conf().set(ConfigOptions::getConvertBoundsTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
@@ -326,7 +327,7 @@ void ChangesetReplacementCreator::_setGlobalOpts()
 
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
-  conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
+  conf().set(ConfigOptions::getConvertBoundsRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
   conf().set(ConfigOptions::getLogWarningsForMissingElementsKey(), false);
 

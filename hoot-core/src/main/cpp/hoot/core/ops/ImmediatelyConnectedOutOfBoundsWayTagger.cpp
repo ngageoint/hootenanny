@@ -44,15 +44,7 @@ _strictBounds(true)
 }
 
 ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger(
-  const geos::geom::Envelope& bounds, const bool strictBounds) :
-_strictBounds(strictBounds)
-{
-  setBounds(bounds);
-  _boundsChecker.setMustCompletelyContain(_strictBounds);
-}
-
-ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger(
-  const std::shared_ptr<geos::geom::Geometry>& bounds, const bool strictBounds) :
+  const std::shared_ptr<geos::geom::Polygon>& bounds, const bool strictBounds) :
 _strictBounds(strictBounds)
 {
   setBounds(bounds);

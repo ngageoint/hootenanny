@@ -33,6 +33,7 @@
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/MapCropper.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 #include <tgs/Statistics/Random.h>
 
@@ -82,7 +83,8 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/DcTigerRoads.osm", map);
 
-    MapCropper(Envelope(-77.0554,-77.0441,38.8833,38.8933)).apply(map);
+    MapCropper(GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)))
+      .apply(map);
 
     MapCleaner().apply(map);
     RubberSheet uut;
@@ -110,7 +112,8 @@ public:
       reader.setDefaultStatus(Status::Unknown2);
       reader.read("test-files/DcTigerRoads.osm", map);
 
-      MapCropper(Envelope(-77.0554,-77.0441,38.8833,38.8933)).apply(map);
+      MapCropper(GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)))
+        .apply(map);
 
       MapCleaner().apply(map);
       RubberSheet uut;
@@ -137,7 +140,8 @@ public:
       reader.setDefaultStatus(Status::Unknown2);
       reader.read("test-files/DcTigerRoads.osm", map);
 
-      MapCropper(Envelope(-77.0554,-77.0441,38.8833,38.8933)).apply(map);
+      MapCropper(GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)))
+        .apply(map);
 
       MapCleaner().apply(map);
       RubberSheet uut;
@@ -210,7 +214,8 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/DcTigerRoads.osm", map);
 
-    MapCropper(Envelope(-77.0554,-77.0441,38.8833,38.8933)).apply(map);
+    MapCropper(GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)))
+      .apply(map);
 
     MapCleaner().apply(map);
     RubberSheet uut;

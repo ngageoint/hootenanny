@@ -60,7 +60,7 @@ public:
 
   virtual bool isSupported(const QString& urlStr) override;
 
-  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) { _bounds = bounds; }
 
   void setBoundingBox(const QString& bbox);
   void setOverrideBoundingBox(const QString& bbox);
@@ -130,8 +130,8 @@ protected:
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
 
-  geos::geom::Envelope _bounds;
-  geos::geom::Envelope _overrideBounds; // this will override _bounds
+  std::shared_ptr<geos::geom::Polygon> _bounds;
+  std::shared_ptr<geos::geom::Polygon>_overrideBounds; // this will override _bounds
   // controls use of _readByBounds2 vs the default _readByBounds
   bool _readFullThenCropOnBounded;
 
@@ -173,7 +173,6 @@ protected:
                           QSet<QString>& additionalNodeIds, long& nodeCount, long& wayCount);
   void _updateMetadataOnElement(ElementPtr element);
 
-  static bool _isValidBounds(const geos::geom::Envelope& bounds);
   bool _hasBounds();
 
 private:

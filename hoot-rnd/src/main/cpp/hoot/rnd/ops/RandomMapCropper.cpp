@@ -112,7 +112,8 @@ void RandomMapCropper::apply(OsmMapPtr& map)
     NodeDensityTaskGridWriter::writeTilesToOsm(tiles, nodeCounts, _tileFootprintOutputPath);
     LOG_INFO("Wrote tile footprints to: " << _tileFootprintOutputPath);
   }
-  _cropper.setBounds(TileUtils::getRandomTile(tiles, _randomSeed));
+  _cropper.setBounds(
+    GeometryUtils::envelopeToPolygon(TileUtils::getRandomTile(tiles, _randomSeed)));
   _cropper.apply(map);
 
   // cleanup

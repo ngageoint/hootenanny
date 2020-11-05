@@ -37,6 +37,7 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -78,9 +79,8 @@ _isFile(false),
 _isWeb(false),
 _numRead(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
-_bounds(GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox())),
 _keepImmediatelyConnectedWaysOutsideBounds(
-  ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds()),
+  ConfigOptions().getConvertBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
 _missingNodeCount(0),
 _missingWayCount(0),
 _addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
@@ -160,6 +160,12 @@ void OsmJsonReader::open(const QString& url)
     oss << "Exception opening URL (" << url << "): " << ex.what();
     throw HootException(QString("Exception opening URL (%1): %2").arg(url).arg(ex.what()));
   }
+
+  if (!_isFile && !GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
+  {
+    throw IllegalArgumentException("TODO");
+  }
+  _bounds = ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey());
 }
 
 void OsmJsonReader::_reset()
@@ -213,7 +219,7 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   LOG_VARD(_map->getElementCount());
 
   // See related note in OsmXmlReader::read.
-  if (!_bounds.isNull())
+  if (_bounds.get())
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
@@ -225,7 +231,7 @@ void OsmJsonReader::_readToMap()
   _parseOverpassJson();
   LOG_VARD(_map->getElementCount());
 
-  if (!_bounds.isNull())
+  if (_bounds.get())
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
@@ -326,7 +332,7 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _coordGridSize = opts.getReaderHttpBboxMaxSize();
   _threadCount = opts.getReaderHttpBboxThreadCount();
-  setBounds(GeometryUtils::envelopeFromConfigString(opts.getConvertBoundingBox()));
+  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey()));
   setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
 }
 
@@ -1016,7 +1022,7 @@ void OsmJsonReader::_readFromHttp()
   urlQuery.addQueryItem("srsname", "EPSG:4326");
   _sourceUrl.setQuery(urlQuery);
   //  Spin up the threads
-  beginRead(_sourceUrl, _bounds);
+  beginRead(_sourceUrl, *_bounds->getEnvelopeInternal());
   //  Iterate all of the XML results
   while (hasMoreResults())
   {

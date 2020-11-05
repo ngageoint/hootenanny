@@ -70,7 +70,7 @@ MatchPtr MatchFactory::createMatch(const ConstOsmMapPtr& map, ElementId eid1, El
 }
 
 void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-  const Envelope& bounds, std::shared_ptr<const MatchThreshold> threshold) const
+  const std::shared_ptr<Polygon>& bounds, std::shared_ptr<const MatchThreshold> threshold) const
 {
   for (size_t i = 0; i < _creators.size(); ++i)
   { 
@@ -91,9 +91,9 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMat
 }
 
 void MatchFactory::_checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
-                                               const Envelope& bounds) const
+                                               const std::shared_ptr<Polygon>& bounds) const
 {
-  if (bounds.isNull() == false)
+  if (bounds.get())
   {
     std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(matchCreator);
     if (boundable == 0)

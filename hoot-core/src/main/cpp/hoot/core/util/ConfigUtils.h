@@ -28,6 +28,10 @@
 #ifndef CONFIGUTILS_H
 #define CONFIGUTILS_H
 
+// Hoot
+#include <hoot/core/geometry/GeometryUtils.h>
+
+// Qt
 #include <QStringList>
 
 namespace hoot
@@ -67,6 +71,14 @@ public:
    * @param entryToRemove value of the list member from the configuration option to remove
    */
   static void removeListOpEntry(const QString& opName, const QString& entryToRemove);
+
+  /**
+   * TODO
+   *
+   * @param name
+   * @return
+   */
+  static std::shared_ptr<geos::geom::Polygon> getOptionBounds(const QString& name);
 };
 
 }

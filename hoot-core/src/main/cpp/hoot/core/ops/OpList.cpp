@@ -61,7 +61,7 @@ void OpList::readObject(QDataStream& is)
   }
 }
 
-void OpList::setBounds(const Envelope &bounds)
+void OpList::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
 {
   for (size_t i = 0; i < _ops.size(); i++)
   {

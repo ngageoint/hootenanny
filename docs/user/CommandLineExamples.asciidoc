@@ -65,7 +65,7 @@ See the User Guide for more details on command usage.
 ===== Conflate over a bounding box (not supported by all input formats):
 
 -----
-    hoot conflate -D convert.bounding.box="-71.4698,42.4866,-71.4657,42.4902" input1.osm input2.osm output.osm
+    hoot conflate -D convert.bounds="-71.4698,42.4866,-71.4657,42.4902" input1.osm input2.osm output.osm
 -----
 
 ==== Applying Changes

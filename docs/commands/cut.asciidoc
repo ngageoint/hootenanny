@@ -37,7 +37,7 @@ cp $HOOT_HOME/test-files/DcTigerRoads.osm DcSmall.osm
 hoot alpha-shape --alpha 1000 --buffer -15 DcSmall.osm DcSmallBounds.shp
 hoot cookie-cut DcSmallBounds.shp DcBig.osm DcBigCut.osm
 =======
-hoot generate-alpha-shape --alpha 1000 --buffer -15 DcSmall.osm DcSmallBounds.shp
+hoot alpha-shape --alpha 1000 --buffer -15 DcSmall.osm DcSmallBounds.shp
 hoot cut DcSmallBounds.shp DcBig.osm DcBigCut.osm
 >>>>>>> parent of 5b12b31... Revert "rename command":docs/commands/cut.asciidoc
 hoot conflate DcSmall.osm DcBigCut.osm ConflatedDc.osm

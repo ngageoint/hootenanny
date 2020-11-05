@@ -30,6 +30,7 @@
 
 // GEOS
 #include <geos/geom/Envelope.h>
+#include <geos/geom/Polygon.h>
 
 namespace geos
 {
@@ -154,6 +155,14 @@ public:
    * @return
    */
   static QString polygonToString(const std::shared_ptr<geos::geom::Polygon>& poly);
+
+  /**
+   * TODO
+   *
+   * @param str
+   * @return
+   */
+  static std::shared_ptr<geos::geom::Polygon> boundsFromConfigString(const QString& str);
 
   static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry* g);
 

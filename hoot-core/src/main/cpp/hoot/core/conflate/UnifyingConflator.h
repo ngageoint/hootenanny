@@ -90,7 +90,8 @@ public:
 
   virtual void readObject(QDataStream& /*is*/) override {}
 
-  virtual void setBounds(const geos::geom::Envelope& bounds) override { _bounds = bounds; }
+  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) override
+  { _bounds = bounds; }
 
   virtual void setConfiguration(const Settings &conf) override;
 
@@ -116,7 +117,7 @@ public:
 
 private:
 
-  geos::geom::Envelope _bounds;
+  std::shared_ptr<geos::geom::Polygon> _bounds;
   const MatchFactory& _matchFactory;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   std::shared_ptr<MergerFactory> _mergerFactory;

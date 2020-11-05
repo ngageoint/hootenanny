@@ -224,7 +224,7 @@ public:
     // do this here to get the --write-bounds param removed from args before the param error
     // checking and non-optional param parsing
     const QString boundsStr = args[boundsIndex].trimmed();
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
+    conf().set(ConfigOptions::getConvertBoundsKey(), boundsStr);
     BoundedCommand::runSimple(args);
 
     LOG_VARD(args);
@@ -257,7 +257,9 @@ public:
       input2 = args[input2Index].trimmed();
       LOG_VARD(input1);
     }
-    const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
+    std::shared_ptr<geos::geom::Polygon> bounds =
+      std::dynamic_pointer_cast<geos::geom::Polygon>(
+        GeometryUtils::boundsFromConfigString(boundsStr));
     LOG_VARD(bounds);
     const QString output = args[outputIndex].trimmed();
     LOG_VARD(output);

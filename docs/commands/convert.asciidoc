@@ -12,7 +12,7 @@ Data Formats section for more information.
                      also optionally be specified.  Use a single space to separate each input and a ';' between inputs and layer 
                      (<filename>;<layer name>).
 * +output+         - Output path to convert to; may be any supported output format (e.g. .osm file, etc.).
-* +--write-bounds+ - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
+* +--write-bounds+ - If the `convert.bounds` configuration option is specified, optionally outputs a file containing the input bounds.
                      The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage
@@ -40,7 +40,7 @@ hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
 
 === Bounded Conversions
 
-If a configuration option matching, `convert.bounding.box.*` is set to a valid bounding box, supporting readers will read data only from
+If a configuration option matching, `convert.bounds.*` is set to a valid bounding box, supporting readers will read data only from
 the specified bounds.
 
 ==== Schema Translation
@@ -174,7 +174,7 @@ hoot convert -D schema.translation.script=TDSv40.js /vsizip//gis-data/test_data.
 Retrieve OSM data around Paris, France from an OSM API and save it to an OSM file:
 
 --------------------------------------
-hoot convert -D convert.bounding.box=2.277303,48.851684,2.311635,48.864701 https://osm-api-url/api/0.6/map download.osm
+hoot convert -D convert.bounds=2.277303,48.851684,2.311635,48.864701 https://osm-api-url/api/0.6/map download.osm
 --------------------------------------
 
 === Notes

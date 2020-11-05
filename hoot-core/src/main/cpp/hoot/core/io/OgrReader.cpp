@@ -868,7 +868,11 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
 {
   ConfigOptions co(s);
   std::shared_ptr<Envelope> result;
-  const QString bboxStrRaw = co.getConvertBoundingBox();
+  const QString bboxStrRaw = co.getConvertBounds();
+  if (!GeometryUtils::isEnvelopeConfigString(bboxStrRaw))
+  {
+    throw IllegalArgumentException("TODO");
+  }
   const bool asWgs84 = co.getOgrReaderBoundingBoxLatlng();
   QString bboxStr;
   QString key;
@@ -899,7 +903,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
     if (bbox.size() != 4)
     {
       throw HootException(
-        QString("Error parsing %1 (%2)").arg(co.getConvertBoundingBoxKey()).arg(bboxStr));
+        QString("Error parsing %1 (%2)").arg(co.getConvertBoundsKey()).arg(bboxStr));
     }
 
     bool ok;
@@ -910,7 +914,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
       if (!ok)
       {
         throw HootException(
-          QString("Error parsing %1 (%2)").arg(co.getConvertBoundingBoxKey()).arg(bboxStr));
+          QString("Error parsing %1 (%2)").arg(co.getConvertBoundsKey()).arg(bboxStr));
       }
     }
 

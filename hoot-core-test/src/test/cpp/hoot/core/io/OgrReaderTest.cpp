@@ -91,7 +91,7 @@ public:
         // 15512.4m wide at the top
         // 19381.6m wide at the bottom
         // 111385.6m tall
-        s.set(ConfigOptions::getConvertBoundingBoxKey(), "-1,85,1,86");
+        s.set(ConfigOptions::getConvertBoundsKey(), "-1,85,1,86");
         s.set(ConfigOptions::getOgrReaderBoundingBoxLatlngKey(), "true");
         // resulting bounding box is
         // 19403.28m wide
@@ -104,7 +104,7 @@ public:
         Settings s;
         // 15512.4m wide
         // 111385.6m tall
-        s.set(ConfigOptions::getConvertBoundingBoxKey(), "-7756.2,-55692.8,7756.2,55692.8");
+        s.set(ConfigOptions::getConvertBoundsKey(), "-7756.2,-55692.8,7756.2,55692.8");
         HOOT_STR_EQUALS("Env[-7756.2:7756.2,-55692.8:55692.8]",
           uut.getBoundingBoxFromConfig(s, 0)->toString());
       }

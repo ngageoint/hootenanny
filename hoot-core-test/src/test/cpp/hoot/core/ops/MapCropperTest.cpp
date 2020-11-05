@@ -173,22 +173,25 @@ public:
 
     settings.set("crop.bounds", "12.462,41.891,12.477,41.898");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS("Env[12.462:12.477,41.891:41.898]", cropper._envelope.toString());
+    HOOT_STR_EQUALS(
+      "Env[12.462:12.477,41.891:41.898]", cropper._envelope->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set("crop.bounds", "-12.462,41.891,12.477,41.898");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS("Env[-12.462:12.477,41.891:41.898]", cropper._envelope.toString());
+    HOOT_STR_EQUALS(
+      "Env[-12.462:12.477,41.891:41.898]", cropper._envelope->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set("crop.bounds", "12,41.891,13,41.898");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS("Env[12:13,41.891:41.898]", cropper._envelope.toString());
+    HOOT_STR_EQUALS(
+      "Env[12:13,41.891:41.898]", cropper._envelope->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set("crop.bounds", "12,41.891,13.,42");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS("Env[12:13,41.891:42]", cropper._envelope.toString());
+    HOOT_STR_EQUALS("Env[12:13,41.891:42]", cropper._envelope->getEnvelopeInternal()->toString());
   }
 
   void runMultiPolygonTest()
@@ -198,7 +201,7 @@ public:
 
     Envelope env(0.30127,0.345,0.213,0.28154);
 
-    MapCropper uut(env);
+    MapCropper uut(GeometryUtils::envelopeToPolygon(env));
     uut.apply(map);
 
     //compare relations
@@ -244,7 +247,7 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/" + testFileNameBase + "-bounds.osm");
-    MapCropper uut(bounds);
+    MapCropper uut(GeometryUtils::envelopeToPolygon(bounds));
 
     // regular crop output
     map.reset(new OsmMap());
@@ -307,7 +310,7 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/" + testFileNameBase + "-bounds.osm");
-    MapCropper uut(bounds);
+    MapCropper uut(GeometryUtils::envelopeToPolygon(bounds));
 
     // regular crop output
     map.reset(new OsmMap());
@@ -370,7 +373,7 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/" + testFileNameBase + "-bounds.osm");
-    MapCropper uut(bounds);
+    MapCropper uut(GeometryUtils::envelopeToPolygon(bounds));
 
     // should end up with everything inside of the bounds
     map.reset(new OsmMap());
@@ -407,7 +410,7 @@ public:
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/" + testFileNameBase + "-bounds.osm");
 
-    MapCropper uut(bounds);
+    MapCropper uut(GeometryUtils::envelopeToPolygon(bounds));
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(
       map, "test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", true);

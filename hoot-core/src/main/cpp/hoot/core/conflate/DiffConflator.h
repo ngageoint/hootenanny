@@ -131,7 +131,7 @@ public:
 
   virtual void readObject(QDataStream& /*is*/) {}
 
-  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) { _bounds = bounds; }
 
   virtual void setConfiguration(const Settings &conf);
 
@@ -201,7 +201,7 @@ private:
   static int logWarnCount;
 
   OsmMapPtr _pMap;
-  geos::geom::Envelope _bounds;
+  std::shared_ptr<geos::geom::Polygon> _bounds;
   const MatchFactory& _matchFactory;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   Settings _settings;

@@ -35,6 +35,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
 {
@@ -57,57 +58,45 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
   _mustCompletelyContain = config.getInBoundsCriterionStrict();
   LOG_VART(_mustCompletelyContain);
-  const geos::geom::Envelope bounds =
-    GeometryUtils::envelopeFromConfigString(config.getInBoundsCriterionBounds());
-  if (!bounds.isNull())
-  {
-    setBounds(bounds);
-  }
+  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getInBoundsCriterionBoundsKey()));
 }
 
-void InBoundsCriterion::setBounds(const geos::geom::Envelope& bounds)
+void InBoundsCriterion::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
 {
-  LOG_VART(bounds);
-  _boundsGeom.reset(geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
-  LOG_VART(_boundsGeom->toString());
-}
-
-void InBoundsCriterion::setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
-{
-  _boundsGeom = bounds;
-  LOG_VART(_boundsGeom->toString());
+  _bounds = bounds;
+  LOG_VART(_bounds->toString());
 }
 
 
 void InBoundsCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
-  _ElementToGeometryConverter.reset(new ElementToGeometryConverter(_map));
+  _elementConverter.reset(new ElementToGeometryConverter(_map));
 }
 
 bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (!_boundsGeom)
+  if (!_bounds)
   {
     throw IllegalArgumentException("No bounds passed to InBoundsCriterion.");
   }
-  if (!_ElementToGeometryConverter)
+  if (!_elementConverter)
   {
     throw IllegalArgumentException("No map set on InBoundsCriterion.");
   }
 
   LOG_VART(e->getElementId());
-  std::shared_ptr<geos::geom::Geometry> geom = _ElementToGeometryConverter->convertToGeometry(e);
+  std::shared_ptr<geos::geom::Geometry> geom = _elementConverter->convertToGeometry(e);
   LOG_VART(geom->toString());
   if (_mustCompletelyContain)
   {
-    LOG_VART(_boundsGeom->contains(geom.get()));
-    return _boundsGeom->contains(geom.get());
+    LOG_VART(_bounds->contains(geom.get()));
+    return _bounds->contains(geom.get());
   }
   else
   {
-    LOG_VART(_boundsGeom->intersects(geom.get()));
-    return _boundsGeom->intersects(geom.get());
+    LOG_VART(_bounds->intersects(geom.get()));
+    return _bounds->intersects(geom.get());
   }
 }
 

@@ -68,7 +68,7 @@ bool ElementStreamer::isStreamableIo(const QString& input, const QString& output
     //option be specified in order to stream when writing that format
     (writerName != "hoot::OsmXmlWriter" ||
     (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
-    //no readers when enforcing a convert bounding box are able to do streaming I/O at this point
+    //no readers when enforcing a convert.bounds are able to do streaming I/O at this point
     !ConfigUtils::boundsOptionEnabled();
 }
 

@@ -170,7 +170,7 @@ void ChangesetTaskGridReplacer::_initConfig()
   conf().set(ConfigOptions::getApidbBulkInserterValidateDataKey(), true);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-  conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
+  conf().set(ConfigOptions::getConvertBoundsRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
 }
 
@@ -392,7 +392,7 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
 void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
 {
   // clear this out so we get all the data back
-  conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
+  conf().set(ConfigOptions::getConvertBoundsKey(), "");
 
   LOG_STATUS("Reading the modified data out of: ..." << _dataToReplaceUrl.right(25) << "...");
   OsmMapPtr map(new OsmMap());
@@ -451,11 +451,14 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   // fixed until its replaced. So, restrict each of these quality checks to be in the replacement
   // AOI.
 
+  std::shared_ptr<geos::geom::Polygon> boundsGeom =
+    GeometryUtils::envelopeToPolygon(_taskGridBounds);
+
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
   crit.reset(
     new ElementIdCriterion(
       ElementType::Node,
-      SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, _taskGridBounds)));
+      SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, boundsGeom)));
   filteredVis.reset(new FilteredVisitor(crit, tagVis));
   map->visitRo(*filteredVis);
   _orphanedNodes = tagVis->getNumFeaturesAffected();
@@ -466,7 +469,7 @@ void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
   // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
   // replacement bounds.
   std::shared_ptr<InBoundsCriterion> inBoundsCrit(new InBoundsCriterion(true));
-  inBoundsCrit->setBounds(_taskGridBounds);
+  inBoundsCrit->setBounds(boundsGeom);
   inBoundsCrit->setOsmMap(map.get());
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
@@ -528,13 +531,13 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
   // We only want to calculate the diff out to the task grid bounds, b/c that's the data that was
   // actually replaced.
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKey(),
+    ConfigOptions::getConvertBoundsKey(),
     GeometryUtils::envelopeToConfigString(_taskGridBounds));
   // use lenient bounds
-  conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), true);
+  conf().set(ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
-  conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), false);
+    ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+  conf().set(ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(), false);
   //conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
 
   // By default rubbersheeting has no filters. When conflating, we need to add the ones from the

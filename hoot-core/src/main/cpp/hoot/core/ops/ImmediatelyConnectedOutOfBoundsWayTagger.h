@@ -52,9 +52,7 @@ public:
   static std::string className() { return "hoot::ImmediatelyConnectedOutOfBoundsWayTagger"; }
 
   ImmediatelyConnectedOutOfBoundsWayTagger();
-  ImmediatelyConnectedOutOfBoundsWayTagger(const geos::geom::Envelope& bounds,
-                                           const bool strictBounds);
-  ImmediatelyConnectedOutOfBoundsWayTagger(const std::shared_ptr<geos::geom::Geometry>& bounds,
+  ImmediatelyConnectedOutOfBoundsWayTagger(const std::shared_ptr<geos::geom::Polygon>& bounds,
                                            const bool strictBounds);
   virtual ~ImmediatelyConnectedOutOfBoundsWayTagger() = default;
 
@@ -66,9 +64,7 @@ public:
   /**
    * @see Boundable
    */
-  virtual void setBounds(const geos::geom::Envelope& bounds) { _boundsChecker.setBounds(bounds); }
-
-  void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
+  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
   { _boundsChecker.setBounds(bounds); }
 
   /**

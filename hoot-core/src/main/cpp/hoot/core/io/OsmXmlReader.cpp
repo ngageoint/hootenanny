@@ -45,6 +45,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -100,10 +101,10 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
   setPreserveAllTags(configOptions.getReaderPreserveAllTags());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
-  setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
+  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey()));
   // If a bounds was set and we don't want to remove missing elements as a result of cropping, we
   // need to modify the reader to allow reading in the missing refs.
-  if (!_bounds.isNull() && !configOptions.getConvertBoundingBoxRemoveMissingElements())
+  if (_bounds.get() && !configOptions.getConvertBoundsRemoveMissingElements())
   {
     setAddChildRefsWhenMissing(true);
   }
@@ -112,7 +113,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
     setAddChildRefsWhenMissing(configOptions.getMapReaderAddChildRefsWhenMissing());
   }
   setKeepImmediatelyConnectedWaysOutsideBounds(
-    configOptions.getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds());
+    configOptions.getConvertBoundsKeepImmediatelyConnectedWaysOutsideBounds());
   setWarnOnVersionZeroElement(configOptions.getReaderWarnOnZeroVersionElement());
   setLogWarningsForMissingElements(configOptions.getLogWarningsForMissingElements());
   setCircularErrorTagKeys(configOptions.getCircularErrorTagKeys());
@@ -464,8 +465,8 @@ void OsmXmlReader::read(const OsmMapPtr& map)
   // bounds is already smaller than _bounds, this will have no effect. Also, We don't support
   // cropping during streaming, and there is a check in ElementStreamer::isStreamableIo to make
   // sure nothing tries to stream with this reader when a bounds has been set.
-  LOG_VARD(_bounds.isNull());
-  if (!_bounds.isNull())
+  LOG_VARD(_bounds.get());
+  if (_bounds.get())
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
@@ -525,8 +526,8 @@ void OsmXmlReader::readFromString(const QString& xml, const OsmMapPtr& map)
 
   LOG_DEBUG("Parsed map from xml.");
 
-  LOG_VARD(_bounds.isNull());
-  if (!_bounds.isNull())
+  LOG_VARD(_bounds.get());
+  if (_bounds.get())
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));

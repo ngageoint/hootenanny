@@ -31,6 +31,7 @@
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 namespace hoot
 {
@@ -200,7 +201,8 @@ public:
     // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
 
     OsmXmlReader uut;
-    uut.setBounds(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552));
+    uut.setBounds(
+      GeometryUtils::envelopeToPolygon(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552)));
     OsmMapPtr map(new OsmMap());
     uut.read("test-files/ToyTestA.osm", map);
     uut.close();
@@ -217,12 +219,14 @@ public:
     const QString testFileName = "runBoundsLeaveConnectedOobWaysTest.osm";
 
     OsmXmlReader uut;
-    uut.setBounds(geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506));
+    uut.setBounds(
+      GeometryUtils::envelopeToPolygon(
+        geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506)));
     uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
 
     // set cropping up for strict bounds handling
-    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
-    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+    conf().set(ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(), true);
 
     OsmMapPtr map(new OsmMap());
     uut.read("test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", map);

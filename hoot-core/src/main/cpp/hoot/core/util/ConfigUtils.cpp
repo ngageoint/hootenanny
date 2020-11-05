@@ -39,9 +39,9 @@ namespace hoot
 bool ConfigUtils::boundsOptionEnabled()
 {
   return
-    !conf().get(ConfigOptions::getConvertBoundingBoxKey()).toString().trimmed().isEmpty() ||
-    !conf().get(ConfigOptions::getConvertBoundingBoxHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
-    !conf().get(ConfigOptions::getConvertBoundingBoxOsmApiDatabaseKey()).toString().trimmed().isEmpty();
+    !conf().get(ConfigOptions::getConvertBoundsKey()).toString().trimmed().isEmpty() ||
+    !conf().get(ConfigOptions::getConvertBoundsHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
+    !conf().get(ConfigOptions::getConvertBoundsOsmApiDatabaseKey()).toString().trimmed().isEmpty();
 }
 
 void ConfigUtils::checkForTagValueTruncationOverride()
@@ -81,6 +81,24 @@ void ConfigUtils::removeListOpEntry(const QString& opName, const QString& entryT
   QStringList opValue = conf().getList(opName);
   opValue.removeAll(entryToRemove);
   conf().set(opName, opValue);
+}
+
+std::shared_ptr<geos::geom::Polygon> ConfigUtils::getOptionBounds(const QString& name)
+{
+  const QString boundsStr = conf().getString(name);
+  if (boundsStr.trimmed().isEmpty())
+  {
+    return std::shared_ptr<geos::geom::Polygon>();
+  }
+  if (GeometryUtils::isEnvelopeConfigString(boundsStr))
+  {
+    return
+      GeometryUtils::envelopeToPolygon(GeometryUtils::envelopeFromConfigString(boundsStr));
+  }
+  else
+  {
+    return GeometryUtils::polygonFromString(boundsStr);
+  }
 }
 
 }

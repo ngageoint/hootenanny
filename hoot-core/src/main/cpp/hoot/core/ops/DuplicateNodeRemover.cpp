@@ -39,6 +39,7 @@
 #include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Qt
 #include <QTime>
@@ -100,7 +101,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   {
     planar = map;
     // if we need to check for bounds containment
-    if (_bounds.isNull() == false)
+    if (_bounds.get())
     {
       wgs84.reset(new OsmMap(map));
       MapProjector::projectToWgs84(wgs84);
@@ -137,6 +138,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   cph.resetIterator();
   ExactTagDifferencer tagDiff;
 
+  ElementToGeometryConverter elementConverter(map);
   while (cph.next())
   {
     const std::vector<long>& v = cph.getMatch();
@@ -168,17 +170,20 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
             if (distanceSquared > calcdDistanceSquared)
             {
               // if the geographic bounds are not specified.
-              if (_bounds.isNull() == true)
+              if (!_bounds)
               {
                 replace = true;
               }
               // if the geographic bounds are specified, then make sure both points are inside.
               else
               {
-                const NodePtr& g1 = wgs84->getNode(matchIdI);
-                const NodePtr& g2 = wgs84->getNode(matchIdJ);
-                if (_bounds.contains(g1->getX(), g1->getY()) &&
-                    _bounds.contains(g2->getX(), g2->getY()))
+                ConstNodePtr node1 = wgs84->getNode(matchIdI);
+                std::shared_ptr<geos::geom::Geometry> geom1 =
+                  elementConverter.convertToGeometry(node1);
+                ConstNodePtr node2 = wgs84->getNode(matchIdJ);
+                std::shared_ptr<geos::geom::Geometry> geom2 =
+                  elementConverter.convertToGeometry(node2);
+                if (_bounds->contains(geom1.get()) && _bounds->contains(geom2.get()))
                 {
                   replace = true;
                 }

@@ -28,7 +28,7 @@
 #define BOUNDABLE_H
 
 // geos
-#include <geos/geom/Envelope.h>
+#include <geos/geom/Polygon.h>
 
 namespace hoot
 {
@@ -49,7 +49,7 @@ public:
    * Sets the bounds in WGS84. It is important to note that even if the rest of the operation is
    * not in WGS84 the bounds will still be in WGS84.
    */
-  virtual void setBounds(const geos::geom::Envelope& bounds) = 0;
+  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) = 0;
 };
 
 }

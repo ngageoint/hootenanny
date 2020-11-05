@@ -36,6 +36,7 @@
 #include <hoot/core/util/OsmApiUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -71,7 +72,11 @@ void OsmApiReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   //  Get the bounds of the query
-  setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
+  if (!GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
+  {
+    throw IllegalArgumentException("TODO");
+  }
+  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey()));
   setMaxThreads(configOptions.getReaderHttpBboxThreadCount());
   setCoordGridSize(configOptions.getReaderHttpBboxMaxSize());
   setMaxGridSize(configOptions.getReaderHttpBboxMaxDownloadSize());
@@ -133,7 +138,7 @@ void OsmApiReader::read(const OsmMapPtr& map)
   _map->appendSource(_url);
 
   //  Spin up the threads
-  beginRead(_url, _bounds);
+  beginRead(_url, *(_bounds->getEnvelopeInternal()));
 
   //  Iterate all of the XML results
   while (hasMoreResults())

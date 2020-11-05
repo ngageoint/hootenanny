@@ -206,11 +206,11 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Pol
 
   MapCropper cropper(bounds);
   cropper.setKeepEntireFeaturesCrossingBounds(
-    ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
+    ConfigOptions().getConvertBoundsKeepEntireFeaturesCrossingBounds());
   const bool strictBoundsHandling =
-    ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds();
+    ConfigOptions().getConvertBoundsKeepOnlyFeaturesInsideBounds();
   cropper.setKeepOnlyFeaturesInsideBounds(strictBoundsHandling);
-  cropper.setRemoveMissingElements(ConfigOptions().getConvertBoundingBoxRemoveMissingElements());
+  cropper.setRemoveMissingElements(ConfigOptions().getConvertBoundsRemoveMissingElements());
 
   // If we want to keep ways that are outside of the crop bounds but connected to a way that's
   // inside the bounds, we need to tag them before cropping and then tell the cropper to leave

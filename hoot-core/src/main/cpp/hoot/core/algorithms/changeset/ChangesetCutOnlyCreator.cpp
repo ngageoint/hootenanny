@@ -417,6 +417,8 @@ void ChangesetCutOnlyCreator::create(
   _input2 = input2;
   _input2Map.reset();
   _output = output;
+  conf().set(
+    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
   _replacementBounds = bounds;
   _validateInputs();
   _setGlobalOpts();
@@ -903,11 +905,11 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-  //conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
+  //conf().set(ConfigOptions::getConvertBoundsKey(), _replacementBounds);
 
   // For this being enabled to have any effect,
-  // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
-  conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  // convert.bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.
+  conf().set(ConfigOptions::getConvertBoundsTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
@@ -927,7 +929,7 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
     QString::fromStdString(RemoveMissingElementsVisitor::className()));
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
-  conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
+  conf().set(ConfigOptions::getConvertBoundsRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
   conf().set(ConfigOptions::getLogWarningsForMissingElementsKey(), false);
 
@@ -1260,13 +1262,13 @@ OsmMapPtr ChangesetCutOnlyCreator::_loadInputMap(
   OsmMapPtr& cachedMap)
 {
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+    ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(),
     keepEntireFeaturesCrossingBounds);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+    ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(),
    keepOnlyFeaturesInsideBounds);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
+    ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(),
     keepImmediatelyConnectedWaysOutsideBounds);
 
 
@@ -1298,8 +1300,8 @@ OsmMapPtr ChangesetCutOnlyCreator::_loadInputMap(
     {
       // Clear out the bounding box param temporarily, so that we can read the full map here. Kind
       // of kludgy, but there is no access to it from here via IoUtils::loadMap.
-      const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
-      conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
+      const QString bbox = conf().getString(ConfigOptions::getConvertBoundsKey());
+      conf().set(ConfigOptions::getConvertBoundsKey(), "");
 
       LOG_STATUS("Loading map from: ..." << inputUrl.right(_maxFilePrintLength) << "...");
       cachedMap.reset(new OsmMap());
@@ -1307,7 +1309,7 @@ OsmMapPtr ChangesetCutOnlyCreator::_loadInputMap(
       IoUtils::loadMap(cachedMap, inputUrl, useFileIds, status);
 
       // Restore it back to original.
-      conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
+      conf().set(ConfigOptions::getConvertBoundsKey(), bbox);
     }
     LOG_STATUS(
       "Copying map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<

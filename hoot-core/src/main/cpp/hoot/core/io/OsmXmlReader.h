@@ -117,7 +117,7 @@ public:
   /**
    * This will adds child refs to elements when they aren't present in the source data.  This is
    * only useful when dealing with disconnected chunks of map data, as in external sorting, and
-   * should only be activated in that circumstance.  Some verification should be done after
+   * should only be activated in that circumstance. Some verification should be done after
    * reading data with the parameter enabled to ensure all child data is actually present (reading
    * the data a second time will log warnings if any data is missing).
    */
@@ -127,7 +127,7 @@ public:
 
   virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
 
-  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
+  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) { _bounds = bounds; }
 
   virtual void setConfiguration(const Settings& conf) override;
 
@@ -192,7 +192,7 @@ protected:
   long _numRead;
   long _statusUpdateInterval;
 
-  geos::geom::Envelope _bounds;
+  std::shared_ptr<geos::geom::Polygon> _bounds;
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
 

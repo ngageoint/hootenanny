@@ -34,7 +34,6 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
-#include <geos/geom/Polygon.h>
 #include <geos/util/IllegalArgumentException.h>
 
 // hoot
@@ -316,15 +315,31 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
 
 QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
 {
+  const int precision = ConfigOptions().getWriterPrecision();
   geos::geom::CoordinateSequence* coords = poly->getCoordinates();
   QString str;
   for (size_t i = 0; i < coords->getSize(); i++)
   {
     const geos::geom::Coordinate& coord = coords->getAt(i);
-    str += QString::number(coord.x) + "," + QString::number(coord.y) + ";";
+    str +=
+      QString::number(coord.x, 'g', precision) + "," + QString::number(coord.y, 'g', precision) +
+      ";";
   }
   str.chop(1);
   return str;
+}
+
+std::shared_ptr<geos::geom::Polygon> GeometryUtils::boundsFromConfigString(const QString& str)
+{
+  if (isEnvelopeConfigString(str))
+  {
+    return envelopeToPolygon(envelopeFromConfigString(str));
+  }
+  else
+  {
+    return polygonFromString(str);
+  }
+  return std::shared_ptr<geos::geom::Polygon>();
 }
 
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)

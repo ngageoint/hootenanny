@@ -62,9 +62,7 @@ public:
   /**
    * @see Boundable
    */
-  virtual void setBounds(const geos::geom::Envelope& bounds);
-
-  void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds);
+  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds);
 
   /**
    * @see Configurable
@@ -93,9 +91,9 @@ public:
 
 private:
 
-  std::shared_ptr<geos::geom::Geometry> _boundsGeom;
+  std::shared_ptr<geos::geom::Polygon> _bounds;
   ConstOsmMapPtr _map;
-  std::shared_ptr<ElementToGeometryConverter> _ElementToGeometryConverter;
+  std::shared_ptr<ElementToGeometryConverter> _elementConverter;
   // If false, the element can cross the bounds and still be considered within bounds.
   bool _mustCompletelyContain;
 };

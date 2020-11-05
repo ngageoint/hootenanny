@@ -24,7 +24,7 @@ IDs in the secondary data are not retained and those elements treated as complet
                                    bounded reading (e.g. OSM file); leave empty to cut data out of input1 while adding no replacement data. 
                                    See the "Input Data and "Bounds Handling" sections for more detail.
 * +bounds+                       - Boundary over which to do the feature replacement of the form: minx,miny,maxx,maxy; 
-                                   e.g. "-71.4698,42.4866,-71.4657,42.4902" See the ""Bounds Handling" section for more detail.
+                                   e.g. "-71.4698,42.4866,-71.4657,42.4902" or TODO: update See the ""Bounds Handling" section for more detail.
 * +output+                       - Changeset output location; must be a changeset .osc or .osc.sql file.
 * +osmApiDatabaseUrl+            - Target OSM API database where the derived changeset is to be applied, used to maintain element ID continuity. 
                                    Required only if the changeset output format is .osc.sql. 
@@ -45,7 +45,7 @@ IDs in the secondary data are not retained and those elements treated as complet
                                    "Retainment Filtering" section for more detail.
 * +--stats+                      - Displays changeset statistics and may be optionally followed by an output JSON file name to write the 
                                    statistics to.
-* +--write-bounds+               - If the +convert.bounding.box+ configuration option is specified, outputs a file containing the specified 
+* +--write-bounds+               - If the +convert.bounds+ configuration option is specified, outputs a file containing the specified 
                                    input bounds. The location of the file is controlled via the +bounds.output.file+ configuration option.
 
 === Usage
@@ -180,7 +180,7 @@ If you are using this command with file based data sources and in conjunction wi
 following configuration options to properly manage references to missing child elements (`changeset-derive-replacment` sets these options 
 automatically internally for itself):
 
-* +convert.bounding.box.remove.missing.elements+=false
+* +convert.bounds.remove.missing.elements+=false
 * +map.reader.add.child.refs.when.missing+=true
 * +log.warnings.for.missing.elements+=false
 

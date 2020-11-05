@@ -77,7 +77,8 @@ public:
    */
   static void removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1);
 
-  virtual void setBounds(const geos::geom::Envelope& bounds) override { _bounds = bounds; }
+  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) override
+  { _bounds = bounds; }
 
   virtual void readObject(QDataStream& is) override;
   virtual void writeObject(QDataStream& os) const override;
@@ -93,7 +94,7 @@ protected:
 
   std::shared_ptr<OsmMap> _map;
   Meters _distance;
-  geos::geom::Envelope _bounds;
+  std::shared_ptr<geos::geom::Polygon> _bounds;
 
   void _logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
                        const double distance = -1.0, const double calcdDistance = -1.0);

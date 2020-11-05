@@ -28,9 +28,6 @@
 #ifndef OPLIST_H
 #define OPLIST_H
 
-// geos
-#include <geos/geom/Envelope.h>
-
 // hoot
 #include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
@@ -69,7 +66,7 @@ public:
 
   virtual void readObject(QDataStream& is);
 
-  virtual void setBounds(const geos::geom::Envelope &bounds);
+  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds);
 
   virtual void writeObject(QDataStream& os) const;
 

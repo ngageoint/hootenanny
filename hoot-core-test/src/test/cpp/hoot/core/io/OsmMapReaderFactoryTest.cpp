@@ -48,9 +48,9 @@ public:
 
   void runUnsupportedBoundingBoxRead()
   {
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), "-180,-90,180,90");
+    conf().set(ConfigOptions::getConvertBoundsKey(), "-180,-90,180,90");
     //map and data inputs don't matter; we just want to see that it throws for any reader other
-    //than db readers when convert bounding box is used (only readers that currently support it)
+    //than db readers when convert.bounds is used (only readers that currently support it)
     OsmMapPtr map(new OsmMap());
 
     QString exceptionMsg("");
@@ -65,7 +65,7 @@ public:
     }
     CPPUNIT_ASSERT(
       exceptionMsg.contains(
-        ConfigOptions::getConvertBoundingBoxKey() +
+        ConfigOptions::getConvertBoundsKey() +
         " configuration option used with unsupported reader"));
 
   }
