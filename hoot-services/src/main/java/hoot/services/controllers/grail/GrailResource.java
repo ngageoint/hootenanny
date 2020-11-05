@@ -346,11 +346,9 @@ public class GrailResource {
                 jobType = JobType.BULK_DIFFERENTIAL;
             }
 
-            if (!deriveType.equals("Adds only")) {
-                // Wait to detect overpass 'Last element pushed'
-                GrailParams waitParams = new GrailParams(reqParams);
-                workflow.add(grailCommandFactory.build(jobId, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
-            }
+            // Wait to detect overpass 'Last element pushed'
+            GrailParams waitParams = new GrailParams(reqParams);
+            workflow.add(grailCommandFactory.build(jobId, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
 
             // Clean up pulled files
             ArrayList<File> deleteFiles = new ArrayList<>();
@@ -629,7 +627,7 @@ public class GrailResource {
                 }
             }
 
-            if (changesetFile.exists() && !deriveType.equals("Adds only")) {
+            if (changesetFile.exists()) {
                 // Wait to detect overpass 'Last element pushed'
                 GrailParams waitParams = new GrailParams(params);
                 workflow.add(grailCommandFactory.build(jobId, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
