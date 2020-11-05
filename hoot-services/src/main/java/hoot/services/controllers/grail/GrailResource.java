@@ -353,8 +353,8 @@ public class GrailResource {
             // Clean up pulled files
             ArrayList<File> deleteFiles = new ArrayList<>();
             deleteFiles.add(workDir);
-            InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
-            workflow.add(cleanFolders);
+            // InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+            // workflow.add(cleanFolders);
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
@@ -722,8 +722,8 @@ public class GrailResource {
         // Clean up pulled files
         ArrayList<File> deleteFiles = new ArrayList<>();
         deleteFiles.add(workDir);
-        InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
-        workflow.add(cleanFolders);
+        // InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+        // workflow.add(cleanFolders);
 
         Map<String, Object> jobStatusTags = new HashMap<>();
         jobStatusTags.put("bbox", bbox);
@@ -992,8 +992,8 @@ public class GrailResource {
             // Clean up pulled files
             ArrayList<File> deleteFiles = new ArrayList<>();
             deleteFiles.add(params.getWorkDir());
-            InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
-            workflow.add(cleanFolders);
+            // InternalCommand cleanFolders = removeFilesCommandFactory.build(jobId, deleteFiles);
+            // workflow.add(cleanFolders);
         }
 
         return workflow;
