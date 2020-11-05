@@ -240,16 +240,19 @@ void OsmJsonReader::_readToMap()
   _parseOverpassJson();
   LOG_VARD(_map->getElementCount());
 
-  if (!_isFile)
+  if (_bounds.get())
   {
-    IoUtils::cropToBounds(
-      _map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
+    if (!_isFile)
+    {
+      IoUtils::cropToBounds(
+        _map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
+    }
+    else
+    {
+      IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    }
+    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
-  else
-  {
-    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
-  }
-  LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
 }
 
 void OsmJsonReader::_loadJSON(const QString& jsonStr)
