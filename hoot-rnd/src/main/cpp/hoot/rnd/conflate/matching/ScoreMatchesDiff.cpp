@@ -334,7 +334,8 @@ QMap<QString, QSet<ElementId>> ScoreMatchesDiff::_getMatchScoringDiff(
     }
     else
     {
-      throw IllegalArgumentException("TODO");
+      // shouldn't get here
+      throw HootException("");
     }
   }
   return matchSwitches;

@@ -74,7 +74,7 @@ void OsmApiReader::setConfiguration(const Settings& conf)
   //  Get the bounds of the query
   if (!GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException("OsmApiReader does not support a non-rectangular bounds.");
   }
   setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey()));
   setMaxThreads(configOptions.getReaderHttpBboxThreadCount());

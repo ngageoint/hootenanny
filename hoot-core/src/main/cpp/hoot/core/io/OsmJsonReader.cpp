@@ -163,7 +163,8 @@ void OsmJsonReader::open(const QString& url)
 
   if (!_isFile && !GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
   {
-    throw IllegalArgumentException("TODO");
+    throw IllegalArgumentException(
+      "OsmJsonReader does not support a non-rectangular bounds for HTTP reads.");
   }
   _bounds = ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey());
 }
@@ -221,7 +222,15 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   // See related note in OsmXmlReader::read.
   if (_bounds.get())
   {
-    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    if (!_isFile)
+    {
+      IoUtils::cropToBounds(
+        _map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
+    }
+    else
+    {
+      IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    }
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 }
@@ -231,11 +240,16 @@ void OsmJsonReader::_readToMap()
   _parseOverpassJson();
   LOG_VARD(_map->getElementCount());
 
-  if (_bounds.get())
+  if (!_isFile)
+  {
+    IoUtils::cropToBounds(
+      _map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
+  }
+  else
   {
     IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
-    LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
+  LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
 }
 
 void OsmJsonReader::_loadJSON(const QString& jsonStr)
@@ -1022,7 +1036,7 @@ void OsmJsonReader::_readFromHttp()
   urlQuery.addQueryItem("srsname", "EPSG:4326");
   _sourceUrl.setQuery(urlQuery);
   //  Spin up the threads
-  beginRead(_sourceUrl, *_bounds->getEnvelopeInternal());
+  beginRead(_sourceUrl, *(_bounds->getEnvelopeInternal()));
   //  Iterate all of the XML results
   while (hasMoreResults())
   {
