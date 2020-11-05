@@ -836,6 +836,21 @@ mgcp = {
       case undefined: // Break early if no value
         break;
 
+      case 'AA050': // Well
+        if (tags.product)
+        {
+          tags.substance = tags.product;
+          delete tags.product;
+
+          if (tags.substance == 'oil' || tags.substance == 'gas') tags.man_made = 'petroleum_well';
+          if (tags.substance == 'water' )
+          {
+            tags.man_made = 'water_well';
+            delete tags.substance;
+          }
+        }
+        break;
+
       case 'AA052': // Hydrocarbons Field
         tags.landuse = 'industrial';
         break;
@@ -1563,6 +1578,21 @@ mgcp = {
       }
     } // End loading
 
+    // Product vs substance vs resource.  Sigh...
+    if (!tags.product)
+    {
+      if (tags.substance)
+      {
+        tags.product = tags.substance;
+        delete tags.substance;
+      }
+      else if (tags.resource)
+      {
+        tags.product = tags.resource;
+        delete tags.resource;
+      }
+    }
+
     // We don't have BH220 in MGCP
     switch (tags.man_made)
     {
@@ -1585,6 +1615,14 @@ mgcp = {
         delete tags.man_made;
         attrs.F_CODE = 'AM070'; // Storage Tank
         tags.product = 'gas';
+        break;
+
+      case 'water_well': // Fixing these since it is convenient
+        if (!tags.product) tags.product = 'water';
+        break;
+
+      case 'petroleum_well':
+        if (!tags.product) tags.product = 'oil'; // Not great
         break;
     }
 
@@ -1916,8 +1954,6 @@ mgcp = {
       // If we don't change it here, hoot tries to output the wrong FCODE
       var rulesList = [
       ["t.control_tower == 'yes'","a.F_CODE = 'AL241'"],
-      ["t.man_made == 'water_well'","a.F_CODE = 'AA050'"],
-      ["t.man_made == 'well'","a.F_CODE = 'AA050'"],
       ["t.sport == 'tennis'","a.F_CODE = 'AK040'"],
       ["t.natural == 'tree'","a.F_CODE = 'EC030'"],
       ["t.amenity == 'ferry_terminal'","a.F_CODE = 'AQ125'; a.FFN = '7'"],

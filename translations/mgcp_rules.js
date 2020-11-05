@@ -48,7 +48,7 @@ mgcp.rules = {
     // These are used for both import and export
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
     ['F_CODE','AL015','building','yes'], // Building - changed to AL013
-    ['F_CODE','AA050','man_made','water_well'], // Well - NFDD BH230 or AA054
+    ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230 or AA054 based on Product type
     ['F_CODE','AC000','facility','processing'], // Processing Facility - NFDD AL010
     // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
@@ -81,6 +81,9 @@ mgcp.rules = {
     // These are for finding an FCODE for export.
     // Note: These get swapped around before being used
     fcodeOne2oneOut : [
+    ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230 or AA054 based on product
+    ['F_CODE','AA050','man_made','water_well'], // Well - NFDD BH230
+    ['F_CODE','AA050','man_made','petroleum_well'], // Well - NFDD AA054
     ['F_CODE','AD010','power','station'], // Electric Power Station, Power Plant
     ['F_CODE','AG030',undefined,undefined], // Shopping Complex - Not valid MGCP
     ['F_CODE','AH050','historic','castle'], // Fortification - Not great
