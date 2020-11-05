@@ -155,6 +155,13 @@ public:
   int size() const { return _settings.size(); }
 
   /**
+   * TODO
+   *
+   * @return
+   */
+  bool isEmpty() const { return _settings.size() == 0; }
+
+  /**
    * Replace individual list entries in the current value of a configuration option with new list
    * entries
    *

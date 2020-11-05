@@ -73,6 +73,8 @@ public:
     }
     LOG_VARD(verbose);
 
+    conf().set(ConfigOptions::getWriterPrecisionKey(), 9);
+
     const QString input = args[0];
     LOG_VARD(input);
     OsmMapPtr map(new OsmMap());

@@ -113,6 +113,7 @@ _numCrossingWaysRemoved(0),
 _numNodesRemoved(0),
 _logWarningsForMissingElements(true)
 {
+  LOG_VART(_envelope.get());
 }
 
 QString MapCropper::getInitStatusMessage() const
@@ -189,12 +190,14 @@ void MapCropper::setKeepOnlyFeaturesInsideBounds(bool keep)
 void MapCropper::setConfiguration(const Settings& conf)
 {
   ConfigOptions confOpts = ConfigOptions(conf);
+
   std::shared_ptr<geos::geom::Geometry> envelope =
-    ConfigUtils::getOptionBounds(ConfigOptions::getCropBoundsKey());
-  if (_envelope)
+    ConfigUtils::getOptionBounds(ConfigOptions::getCropBoundsKey(), conf);
+  LOG_VART(envelope.get());
+  if (envelope)
   {
-    LOG_VARD(_envelope);
     _envelope = envelope;
+    LOG_VARD(_envelope);
   }
 
   // invert must be set before the two options following it

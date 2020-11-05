@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QStringList>
@@ -76,9 +77,11 @@ public:
    * TODO
    *
    * @param name
+   * @param settings
    * @return
    */
-  static std::shared_ptr<geos::geom::Polygon> getOptionBounds(const QString& name);
+  static std::shared_ptr<geos::geom::Polygon> getOptionBounds(
+    const QString& name, const Settings& settings = Settings());
 };
 
 }

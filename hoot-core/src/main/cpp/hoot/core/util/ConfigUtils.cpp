@@ -83,13 +83,22 @@ void ConfigUtils::removeListOpEntry(const QString& opName, const QString& entryT
   conf().set(opName, opValue);
 }
 
-std::shared_ptr<geos::geom::Polygon> ConfigUtils::getOptionBounds(const QString& name)
+std::shared_ptr<geos::geom::Polygon> ConfigUtils::getOptionBounds(
+  const QString& name, const Settings& settings)
 {
-  const QString boundsStr = conf().getString(name);
+  LOG_VART(name);
+  Settings settingsToUse = settings;
+  if (settingsToUse.isEmpty())
+  {
+    settingsToUse = conf();
+  }
+  const QString boundsStr = settingsToUse.getString(name);
+  LOG_VART(boundsStr);
   if (boundsStr.trimmed().isEmpty())
   {
     return std::shared_ptr<geos::geom::Polygon>();
   }
+  LOG_VART(GeometryUtils::isEnvelopeConfigString(boundsStr));
   if (GeometryUtils::isEnvelopeConfigString(boundsStr))
   {
     return

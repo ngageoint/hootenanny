@@ -160,13 +160,6 @@ void OsmJsonReader::open(const QString& url)
     oss << "Exception opening URL (" << url << "): " << ex.what();
     throw HootException(QString("Exception opening URL (%1): %2").arg(url).arg(ex.what()));
   }
-
-  if (!_isFile && !GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
-  {
-    throw IllegalArgumentException(
-      "OsmJsonReader does not support a non-rectangular bounds for HTTP reads.");
-  }
-  _bounds = ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey());
 }
 
 void OsmJsonReader::_reset()
@@ -199,6 +192,13 @@ void OsmJsonReader::close()
 
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
+  if (!_isFile && !GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
+  {
+    throw IllegalArgumentException(
+      "OsmJsonReader does not support a non-rectangular bounds for HTTP reads.");
+  }
+  _bounds = ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey());
+
   LOG_DEBUG("Reading map...");
 
   _map = map;

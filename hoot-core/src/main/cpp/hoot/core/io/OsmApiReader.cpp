@@ -72,11 +72,7 @@ void OsmApiReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
   //  Get the bounds of the query
-  if (!GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
-  {
-    throw IllegalArgumentException("OsmApiReader does not support a non-rectangular bounds.");
-  }
-  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey()));
+  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey(), conf));
   setMaxThreads(configOptions.getReaderHttpBboxThreadCount());
   setCoordGridSize(configOptions.getReaderHttpBboxMaxSize());
   setMaxGridSize(configOptions.getReaderHttpBboxMaxDownloadSize());
@@ -120,6 +116,11 @@ void OsmApiReader::read(const OsmMapPtr& map)
   LOG_VART(_useFileStatus);
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
+
+  if (!GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
+  {
+    throw IllegalArgumentException("OsmApiReader does not support a non-rectangular bounds.");
+  }
 
   //  Reusing the reader for multiple reads has two options, the first is the
   //  default where the reader is reset and duplicates error out.  The second

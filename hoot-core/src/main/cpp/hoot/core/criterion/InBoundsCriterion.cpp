@@ -58,7 +58,7 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
   _mustCompletelyContain = config.getInBoundsCriterionStrict();
   LOG_VART(_mustCompletelyContain);
-  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getInBoundsCriterionBoundsKey()));
+  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getInBoundsCriterionBoundsKey(), conf));
 }
 
 void InBoundsCriterion::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
