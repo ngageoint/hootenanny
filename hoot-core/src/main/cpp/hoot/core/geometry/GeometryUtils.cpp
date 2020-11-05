@@ -246,6 +246,7 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
 std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
   const geos::geom::Envelope& env)
 {
+  LOG_VART(env.isNull());
   if (env.isNull())
   {
     return std::shared_ptr<geos::geom::Polygon>();
@@ -263,8 +264,10 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
   vector<Geometry*>* holes = new vector<Geometry*>();
   // create the outer line
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
-  return std::shared_ptr<Polygon>(
+  std::shared_ptr<Polygon> poly(
     GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+  LOG_VAR(poly->isValid());
+  return poly;
 }
 
 std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
