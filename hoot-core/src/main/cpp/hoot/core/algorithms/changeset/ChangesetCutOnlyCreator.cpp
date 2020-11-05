@@ -417,9 +417,9 @@ void ChangesetCutOnlyCreator::create(
   _input2 = input2;
   _input2Map.reset();
   _output = output;
+  _replacementBounds = bounds;
   conf().set(
     ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
-  _replacementBounds = bounds;
   _validateInputs();
   _setGlobalOpts();
   _printJobDescription();

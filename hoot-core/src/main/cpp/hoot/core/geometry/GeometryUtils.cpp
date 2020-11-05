@@ -246,6 +246,11 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
 std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
   const geos::geom::Envelope& env)
 {
+  if (env.isNull())
+  {
+    return std::shared_ptr<geos::geom::Polygon>();
+  }
+
   CoordinateSequence* coordSeq =
     GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(5, 2);
   coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMinY()), 0);
