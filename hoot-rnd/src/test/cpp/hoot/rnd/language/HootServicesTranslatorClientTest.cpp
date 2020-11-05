@@ -37,7 +37,6 @@
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/ServicesDbTestUtils.h>
 
 namespace hoot
 {
