@@ -29,7 +29,9 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/rnd/auth/HootServicesLoginManager.h>
+#ifdef HOOT_HAVE_SERVICES
 #include <hoot/core/io/ServicesDbTestUtils.h>
+#endif  // HOOT_HAVE_SERVICES
 #include <hoot/core/io/HootApiDb.h>
 #include <hoot/core/util/UuidHelper.h>
 
@@ -44,21 +46,24 @@ namespace hoot
 
 /**
  * Parts of this test will fail if Tomcat is not running.
+ *
+ * @todo Some of these tests (disabled now) started failing on Jenkins for an unknown reason.
+ * They're not that critical, as they're only needed by the language translation feature which isn't
+ * currently in active use. They can be fixed at a later time.
  */
 class ServicesHootServicesLoginManagerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServicesHootServicesLoginManagerTest);
-  // These tests started failing on Jenkins for an unknown reason. They're not that critical
-  // currently, as they're only needed by the language translation feature which isn't currently
-  // in active use. They can be fixed at a later time.
   //CPPUNIT_TEST(getRequestTokenTest);
+  #ifdef HOOT_HAVE_SERVICES
   CPPUNIT_TEST(loginRequestTest);
-  CPPUNIT_TEST(loginResponseTest);
   CPPUNIT_TEST(getAccessTokensTest);
-  CPPUNIT_TEST(getAccessTokensInvalidUserIdTest);
   //CPPUNIT_TEST(logoutTest);
   CPPUNIT_TEST(logoutInvalidTokensTest);
   CPPUNIT_TEST(logoutInvalidUserTest);
+  #endif  // HOOT_HAVE_SERVICES
+  CPPUNIT_TEST(loginResponseTest);
+  CPPUNIT_TEST(getAccessTokensInvalidUserIdTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -76,6 +81,7 @@ public:
     CPPUNIT_ASSERT(authUrl.endsWith(responseToken));
   }
 
+  #ifdef HOOT_HAVE_SERVICES
   void loginRequestTest()
   {
     HootServicesLoginManager uut;
@@ -95,6 +101,7 @@ public:
       "http://localhost:8080/hoot-services/auth/oauth1/verify?oauth_token=testRequestToken&oauth_verifier=testVerifier",
       loginUrl.toString());
   }
+  #endif  // HOOT_HAVE_SERVICES
 
   void loginResponseTest()
   {
@@ -105,6 +112,7 @@ public:
         "{\"email\":\"1@hootenanny\",\"id\":1,\"display_name\":\"icenine18\",\"provider_created_at\":1268772678000,\"last_authorized\":1539029718227,\"created_at\":1539029718190}"));
   }
 
+  #ifdef HOOT_HAVE_SERVICES
   void getAccessTokensTest()
   {
     const QString sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
@@ -124,6 +132,7 @@ public:
     HOOT_STR_EQUALS("testAccessToken", accessToken);
     HOOT_STR_EQUALS("testAccessTokenSecret", accessTokenSecret);
   }
+  #endif  // HOOT_HAVE_SERVICES
 
   void getAccessTokensInvalidUserIdTest()
   {
@@ -142,6 +151,7 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.contains("User does not exist."));
   }
 
+  #ifdef HOOT_HAVE_SERVICES
   void logoutTest()
   {
     const QString sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
@@ -163,7 +173,9 @@ public:
     db.open(url);
     CPPUNIT_ASSERT(!db.userExists(userId));
   }
+  #endif  // HOOT_HAVE_SERVICES
 
+  #ifdef HOOT_HAVE_SERVICES
   void logoutInvalidTokensTest()
   {
     const QString sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
@@ -205,7 +217,9 @@ public:
     ServicesDbTestUtils::deleteUserByUserName(
       "ServicesHootServicesLoginManagerTest::logoutInvalidTokensTest");
   }
+  #endif  // HOOT_HAVE_SERVICES
 
+  #ifdef HOOT_HAVE_SERVICES
   void logoutInvalidUserTest()
   {
     const QString sessionId = UuidHelper::createUuid().toString().replace("{", "").replace("}", "");
@@ -232,11 +246,9 @@ public:
     ServicesDbTestUtils::deleteUserByUserName(
       "ServicesHootServicesLoginManagerTest::logoutInvalidUserTest");
   }
+  #endif  // HOOT_HAVE_SERVICES
 };
 
-#ifdef HOOT_HAVE_SERVICES
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesHootServicesLoginManagerTest, "slow");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ServicesHootServicesLoginManagerTest, "serial");
-#endif  // HOOT_HAVE_SERVICES
 
 }
