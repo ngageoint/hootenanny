@@ -28,7 +28,7 @@
 #include "TileUtils.h"
 
 // hoot
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/RandomNumberUtils.h>
 
 // Tgs

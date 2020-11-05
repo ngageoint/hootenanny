@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayAverager.h"
@@ -39,7 +39,7 @@ using namespace geos::operation::distance;
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
@@ -87,9 +87,9 @@ WayPtr WayAverager::average()
   }
 
   std::shared_ptr<const LineString> ls1 =
-    ElementConverter(_map.shared_from_this()).convertToLineString(_w1);
+    ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(_w1);
   std::shared_ptr<const LineString> ls2 =
-    ElementConverter(_map.shared_from_this()).convertToLineString(_w2);
+    ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(_w2);
 
   // All of the fancy stats here are compliments of Mike Porter.
 

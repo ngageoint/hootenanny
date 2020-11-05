@@ -31,7 +31,7 @@
 #include <hoot/core/jni/JavaEnvironment.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/jni/JniConversion.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/jni/JniUtils.h>
 
 namespace hoot

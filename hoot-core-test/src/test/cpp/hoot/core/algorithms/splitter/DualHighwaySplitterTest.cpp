@@ -37,7 +37,7 @@
 #include <hoot/core/algorithms/splitter/DualHighwaySplitter.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 
 // TGS
 #include <tgs/StreamUtils.h>

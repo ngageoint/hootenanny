@@ -31,7 +31,7 @@
 
 // Hoot
 #include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/util/CoordinateExt.h>
+#include <hoot/core/geometry/CoordinateExt.h>
 
 #include <vector>
 

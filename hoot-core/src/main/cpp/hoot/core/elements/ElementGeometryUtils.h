@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/GeometricRelationship.h>
+#include <hoot/core/geometry/GeometricRelationship.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
 
 // GEOS

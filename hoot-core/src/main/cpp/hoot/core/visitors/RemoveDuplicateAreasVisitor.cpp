@@ -36,8 +36,8 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/TagComparator.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/CompletelyContainedByMapElementVisitor.h>
@@ -74,7 +74,7 @@ std::shared_ptr<Geometry> RemoveDuplicateAreasVisitor::_convertToGeometry(
   {
     return it.value();
   }
-  ElementConverter gc(_map->shared_from_this());
+  ElementToGeometryConverter gc(_map->shared_from_this());
   std::shared_ptr<Geometry> g = gc.convertToGeometry(e1);
   _geoms[e1->getElementId()] = g;
   return g;

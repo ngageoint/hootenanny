@@ -42,7 +42,7 @@
 #include <hoot/core/ops/VisitorOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/visitors/FindIntersectionsVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>

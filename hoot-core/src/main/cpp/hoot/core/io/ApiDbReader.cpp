@@ -27,7 +27,7 @@
 #include "ApiDbReader.h"
 
 // Hoot
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/io/TableType.h>
 #include <hoot/core/io/ApiDb.h>

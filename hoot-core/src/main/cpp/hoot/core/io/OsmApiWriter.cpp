@@ -33,7 +33,7 @@
 #include <hoot/core/io/OsmApiChangesetElement.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/Log.h>
@@ -483,16 +483,26 @@ void OsmApiWriter::_changesetThreadFunc(int index)
             }
           }
           break;
+        case HttpResponseCode::HTTP_GONE:                   //  Element has already been deleted, split and retry (error body is blank sometimes)
+          //  Where there is only one element left and it is GONE, there is no need to retry it
+          if (workInfo->size() == 1)
+            workInfo->setAttemptedResolveChangesetIssues(true);
+          //  Attempt to split the changeset
+          if (!_splitChangeset(workInfo, info->response))
+          {
+            //  For HTTP_GONE, it could come back false if the element that is gone is removed
+            //  successfully and the rest of the changeset needs to be processed
+            if (workInfo->size() > 0)
+              _pushChangesets(workInfo);
+          }
+          break;
         case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:  //  Internal Server Error, could be caused by the database being saturated
         case HttpResponseCode::HTTP_BAD_GATEWAY:            //  Bad Gateway, there are issues with the gateway, split and retry
         case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:        //  Gateway Timeout, server is taking too long, split and retry
-        case HttpResponseCode::HTTP_GONE:                   //  Element has already been deleted, split and retry (error body is blank sometimes)
           if (!_splitChangeset(workInfo, info->response))
           {
             //  Splitting failed which means that the changeset only has one element in it,
             //  push it back on the queue and give the API a break
-            //  For HTTP_GONE, it could come back false if the element that is gone is removed
-            //  successfully and the rest of the changeset needs to be processed
             _pushChangesets(workInfo);
             //  Sleep the thread
             _yield();

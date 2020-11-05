@@ -32,7 +32,7 @@
 #include <geos/geom/Point.h>
 
 // Hoot
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 
 // Standard

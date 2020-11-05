@@ -36,7 +36,7 @@ using namespace geos::geom;
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Standard
 #include <iostream>
@@ -134,7 +134,7 @@ bool WayDiscretizer::discretize(double spacing, vector<WayLocation>& result)
 
   LOG_TRACE("Discretizing way with spacing: " << spacing << "...");
 
-  Meters wayLength = ElementConverter(_map).convertToLineString(_way)->getLength();
+  Meters wayLength = ElementToGeometryConverter(_map).convertToLineString(_way)->getLength();
   LOG_VART(wayLength);
 
   int count = ceil(wayLength / spacing);

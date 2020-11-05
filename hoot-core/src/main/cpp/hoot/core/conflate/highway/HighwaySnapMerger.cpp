@@ -40,7 +40,7 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/ElementComparer.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -54,7 +54,7 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/WaysVisitor.h>
@@ -171,7 +171,7 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Eleme
 
 bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtr& map, WayPtr w) const
 {
-  std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+  std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
 
   CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
     create(2, 2);

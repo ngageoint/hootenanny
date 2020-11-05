@@ -29,8 +29,8 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -44,7 +44,7 @@ double CentroidDistanceExtractor::distance(const OsmMap& map,
   const std::shared_ptr<const Element>& target,
   const std::shared_ptr<const Element>& candidate) const
 {
-  ElementConverter ec(map.shared_from_this());
+  ElementToGeometryConverter ec(map.shared_from_this());
   std::shared_ptr<Geometry> g1 = ec.convertToGeometry(target);
   std::shared_ptr<Geometry> g2 = ec.convertToGeometry(candidate);
 

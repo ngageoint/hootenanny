@@ -39,16 +39,16 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/scoring/DirectedGraph.h>
 #include <hoot/core/scoring/ShortestPath.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/GeometryPainter.h>
+#include <hoot/core/geometry/GeometryPainter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 
 // Qt
 #include <QDebug>
@@ -459,7 +459,7 @@ void GraphComparator::_paintWay(cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, do
                                 double startCost, double endCost)
 {
   LocationOfPoint lop(map, way);
-  double length = ElementConverter(map).convertToLineString(way)->getLength();
+  double length = ElementToGeometryConverter(map).convertToLineString(way)->getLength();
   // v is the distance along the way in meters
   for (double v = 0.0; v <= length; v += _pixelSize / 2.0)
   {

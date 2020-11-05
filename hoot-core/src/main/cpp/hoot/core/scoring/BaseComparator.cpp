@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BaseComparator.h"
@@ -35,11 +35,11 @@
 using namespace geos::operation::distance;
 
 // Hoot
-#include <hoot/core/util/GeometryPainter.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/geometry/GeometryPainter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/OpenCv.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
 
@@ -153,7 +153,7 @@ Coordinate BaseComparator::_findNearestPointOnFeature(const std::shared_ptr<OsmM
 
   // find the nearest point on that feature.
   std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(c));
-  std::shared_ptr<LineString> ls = ElementConverter(map).convertToLineString(w);
+  std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
   CoordinateSequence* cs = DistanceOp::closestPoints(p.get(), ls.get());
 
   cs->getAt(0, result);

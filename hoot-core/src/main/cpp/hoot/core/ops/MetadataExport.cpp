@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MetadataExport.h"
 
 // Hoot
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
@@ -72,7 +72,7 @@ void MetadataExport::_createCells()
 {
   const geos::geom::Envelope bounds = CalculateMapBoundsVisitor::getGeosBounds(_pMap);
 
-  ElementConverter elementConverter(_pMap);
+  ElementToGeometryConverter ElementToGeometryConverter(_pMap);
 
   double minX = bounds.getMinX();
   double maxX = bounds.getMaxX();
@@ -114,7 +114,7 @@ void MetadataExport::_createCells()
       _pMap->addElement(pGrid);
 
       // convert to poly for assigning nodes based on location
-      _datasetWayPolys[pGrid] = elementConverter.convertToPolygon(pGrid);
+      _datasetWayPolys[pGrid] = ElementToGeometryConverter.convertToPolygon(pGrid);
 
       // add these to the _mergedGeoms list (merging is for import only but we still need this
       // proper node location assignment)

@@ -36,7 +36,7 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
 #include <hoot/core/util/Exception.h>
@@ -237,8 +237,8 @@ vector<pair<WayLocation, WayLocation>> MaximalSubline::_discretizePointPairs(
 
   Meters w1Offset = max(0.0, diff);
   Meters w2Offset = max(0.0, -diff);
-  Meters w1Length = ElementConverter(map).convertToLineString(w1)->getLength();
-  Meters w2Length = ElementConverter(map).convertToLineString(w2)->getLength();
+  Meters w1Length = ElementToGeometryConverter(map).convertToLineString(w1)->getLength();
+  Meters w2Length = ElementToGeometryConverter(map).convertToLineString(w2)->getLength();
 
   const int count = min((w1Length - w1Offset) / _spacing, (w2Length - w2Offset) / _spacing) + 1;
   LOG_VART(count);
@@ -975,7 +975,7 @@ void MaximalSubline::_snapToTerminal(WayLocation& wl, bool startOfLines, double 
   if (!startOfLines)
   {
     // calculate the distance from the end to this way location.
-    d1 = ElementConverter(wl.getMap()).convertToLineString(wl.getWay())->getLength() - d1;
+    d1 = ElementToGeometryConverter(wl.getMap()).convertToLineString(wl.getWay())->getLength() - d1;
   }
 
   if (thresh == -1)

@@ -31,12 +31,12 @@
 
 // hoot
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 using namespace geos::geom;
 namespace hoot
@@ -67,7 +67,7 @@ void RemoveEmptyAreasVisitor::visit(const std::shared_ptr<Element>& e)
 
   if (!_ec.get())
   {
-    _ec.reset(new ElementConverter(_map->shared_from_this()));
+    _ec.reset(new ElementToGeometryConverter(_map->shared_from_this()));
     // TODO: This is directly related to the relation change commented out below. If this logic
     // isn't needed, then we can remove implementation of the Configurable interface.
     _ec->setRequireAreaForPolygonConversion(_requireAreaForPolygonConversion);

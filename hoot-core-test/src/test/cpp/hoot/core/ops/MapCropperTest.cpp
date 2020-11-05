@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -33,11 +33,11 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/criterion/ElementIdCriterion.h>
 
@@ -218,7 +218,7 @@ public:
     for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
     {
       const WayPtr& w = it->second;
-      std::shared_ptr<Polygon> pl = ElementConverter(map).convertToPolygon(w);
+      std::shared_ptr<Polygon> pl = ElementToGeometryConverter(map).convertToPolygon(w);
       const Envelope& e = *(pl->getEnvelopeInternal());
       double area = pl->getArea();
       if (count == 0)

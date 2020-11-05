@@ -31,11 +31,11 @@
 
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/algorithms/extractors/AddressScoreExtractor.h>
 
 // Std
@@ -181,7 +181,7 @@ std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
     "Feature passed to PoiPolygonInfoCache caused topology exception on conversion to a geometry: ";
   try
   {
-    newGeom = ElementConverter(_map).convertToGeometry(element);
+    newGeom = ElementToGeometryConverter(_map).convertToGeometry(element);
   }
   catch (const geos::util::TopologyException& e)
   {

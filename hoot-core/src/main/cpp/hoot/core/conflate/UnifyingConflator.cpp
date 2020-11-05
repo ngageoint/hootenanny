@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/conflate/merging/MarkForReviewMergerCreator.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
@@ -299,6 +299,26 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   currentStep++;
 
   _updateProgress(currentStep - 1, "Merging feature matches...");
+
+  // POI/Polygon matching is unique in that it is the only non-generic geometry type matcher that
+  // can duplicate matches with other non-generic geometry type matchers (namely POI and Building).
+  // For all intra-dataset matching, the default is to convert all matches for a feature to a review
+  // if it is also involved in another match. It has been found that POI/Polygon Conflation performs
+  // better if these matches are kept when they have features that overlap with a POI/POI
+  // match/review, as the overall number of reviews can increase too substantially otherwise (see
+  // poi.polygon.match.takes.precedence.over.poi.to.poi.review).
+
+  // An alternative way to deal with this is if there are POI/Polygon matches sharing elements with
+  // a POI matcher, then mark all matches involved as reviews before having each MergerCreator
+  // create Mergers (poi.polygon.match.takes.precedence.over.poi.to.poi.review=false). Note that
+  // we're only doing this right now for POI matches and not Building matches, as it hasn't been
+  // seen as necessary for buildings so far.
+
+  if (!ConfigOptions().getPoiPolygonMatchTakesPrecedenceOverPoiToPoiReview())
+  {
+    // TODO: need a way to not hardcode the POI match name...get it from ScriptMatch somehow?
+    PoiPolygonMergerCreator::convertSharedMatchesToReviews(matchSets, _mergers, QStringList("POI"));
+  }
 
   // TODO: Would it help to sort the matches so the biggest or best ones get merged first? - #2912
 

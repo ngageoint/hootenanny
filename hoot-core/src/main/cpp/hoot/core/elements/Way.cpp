@@ -29,9 +29,9 @@
 
 // Hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/Node.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
 
 // Geos

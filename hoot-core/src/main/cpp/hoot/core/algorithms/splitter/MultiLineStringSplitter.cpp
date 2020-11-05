@@ -32,7 +32,7 @@
 // hoot
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
@@ -74,7 +74,7 @@ std::shared_ptr<FindNodesInWayFactory> MultiLineStringSplitter::_createNodeFacto
 
 ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   const WaySublineCollection& string, const vector<bool>& reverse,
-  GeometryConverter::NodeFactory* nf) const
+  GeometryToElementConverter::NodeFactory* nf) const
 {
   assert(reverse.size() == string.getSublines().size());
   LOG_VART(string.getSublines().size());
@@ -101,7 +101,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
     {
       w->reverseOrder();
     }
-    if (ElementConverter(map).calculateLength(w) > 0)
+    if (ElementToGeometryConverter(map).calculateLength(w) > 0)
     {
       matches.push_back(w);
       LOG_TRACE("Adding " << w->getElementId() << " to map...");
@@ -143,7 +143,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
 
 void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollection& string,
   const vector<bool>& reverse, ElementPtr& match, ElementPtr& scraps,
-  GeometryConverter::NodeFactory* nf) const
+  GeometryToElementConverter::NodeFactory* nf) const
 {
   LOG_TRACE("Splitting " << string.toString().left(100) << "...");
 

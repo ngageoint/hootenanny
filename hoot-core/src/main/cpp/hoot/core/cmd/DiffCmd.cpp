@@ -33,7 +33,7 @@
 #include <hoot/core/scoring/MapComparator.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/MapProjector.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/util/StringUtils.h>

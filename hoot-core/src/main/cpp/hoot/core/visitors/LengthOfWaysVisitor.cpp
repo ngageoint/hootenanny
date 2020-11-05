@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "LengthOfWaysVisitor.h"
 
@@ -31,7 +31,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 #include <float.h>
 
@@ -61,7 +61,7 @@ void LengthOfWaysVisitor::visit(const ConstElementPtr& e)
   {
     const ConstWayPtr w = _map->getWay(e->getId());
     const Meters length =
-      ElementConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
+      ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->getLength();
 
     _total += length;
 

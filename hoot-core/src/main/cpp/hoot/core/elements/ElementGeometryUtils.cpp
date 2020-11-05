@@ -30,8 +30,8 @@
 // Hoot
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/ElementConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
@@ -162,7 +162,7 @@ std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
     "Feature passed to OsmUtils caused topology exception on conversion to a geometry: ";
   try
   {
-    newGeom = ElementConverter(map).convertToGeometry(element);
+    newGeom = ElementToGeometryConverter(map).convertToGeometry(element);
   }
   catch (const geos::util::TopologyException& e)
   {

@@ -30,7 +30,7 @@
 #include "GeometryModifierAction.h"
 
 // Hoot
-#include <hoot/core/util/CoordinateExt.h>
+#include <hoot/core/geometry/CoordinateExt.h>
 #include <hoot/core/index/ClosePointHash.h>
 
 // Geos

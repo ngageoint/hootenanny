@@ -41,7 +41,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/schema/TagDifferencer.h>
@@ -100,7 +100,7 @@ void SmallHighwayMerger::apply(std::shared_ptr<OsmMap>& map)
       if (w && highwayCrit.isSatisfied(w) &&
           !w->getTags().contains(MetadataTags::HootSpecial()))
       {
-        std::shared_ptr<LineString> linestring = ElementConverter(map).convertToLineString(w);
+        std::shared_ptr<LineString> linestring = ElementToGeometryConverter(map).convertToLineString(w);
         if (linestring && linestring->getLength() <= _threshold)
           _mergeNeighbors(w);
       }

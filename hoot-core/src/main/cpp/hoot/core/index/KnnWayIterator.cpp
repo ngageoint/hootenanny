@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "KnnWayIterator.h"
@@ -33,7 +33,7 @@
 
 // hoot
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Log.h>
 
 // Standard
@@ -53,7 +53,7 @@ KnnWayIterator::KnnWayIterator(const OsmMap& map, ConstWayPtr way,
   _treeIdToWid(treeIdToWid)
 {
   _wayId = way->getId();
-  _ls = ElementConverter(map.shared_from_this()).convertToLineString(way);
+  _ls = ElementToGeometryConverter(map.shared_from_this()).convertToLineString(way);
   _lsFast = _ls.get();
   _indexSlush = _map.getIndex().getIndexSlush();
   _distanceCount = 0;
@@ -78,7 +78,7 @@ double KnnWayIterator::_calculateDistance(const BoxInternalData&, int id)
     ConstWayPtr w = _map.getWay(otherWayId);
 
     // grab the geometry for the way that we're comparing against.
-    std::shared_ptr<LineString> ls = ElementConverter(_map.shared_from_this()).convertToLineString(w);
+    std::shared_ptr<LineString> ls = ElementToGeometryConverter(_map.shared_from_this()).convertToLineString(w);
 
     Meters d = ls->distance(_lsFast);
 

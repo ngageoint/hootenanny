@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "MetadataImport.h"
 
 // Hoot
-#include <hoot/core/elements/ElementConverter.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Factory.h>
 
 // geos
@@ -68,7 +68,7 @@ void MetadataImport::_findDatasetWays()
 {
   QString indiKey = _datasetIndicator.first;
   QString indiVal = _datasetIndicator.second;
-  ElementConverter elementConverter(_pMap);
+  ElementToGeometryConverter ElementToGeometryConverter(_pMap);
 
   for (WayMap::const_iterator it = _allWays.begin(); it != _allWays.end(); ++it)
   {
@@ -80,7 +80,7 @@ void MetadataImport::_findDatasetWays()
       LOG_TRACE( "Found dataset indicator in way " << pWay->getId());
 
       // store dataset way and its polygon geometry
-      _datasetWayPolys[pWay] = elementConverter.convertToPolygon(pWay);
+      _datasetWayPolys[pWay] = ElementToGeometryConverter.convertToPolygon(pWay);
     }
   }
 }

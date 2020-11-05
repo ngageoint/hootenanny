@@ -31,8 +31,8 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/GeometryConverter.h>
-#include <hoot/core/util/GeometryUtils.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
 // GEOS
@@ -239,7 +239,7 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
 OsmMapPtr AlphaShape::_toOsmMap()
 {
   OsmMapPtr result(new OsmMap());
-  GeometryConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
+  GeometryToElementConverter(result).convertGeometryToElement(toGeometry().get(), Status::Unknown1, -1);
   const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
   {
