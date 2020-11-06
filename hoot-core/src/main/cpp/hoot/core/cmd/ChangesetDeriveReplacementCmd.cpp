@@ -154,7 +154,8 @@ public:
     int outputIndex = 3;
     int osmApiDbUrlIndex = 4;
     LOG_VARD(args[2]);
-    if (!GeometryUtils::isEnvelopeConfigString(args[2].trimmed()))
+    if (!GeometryUtils::isEnvelopeConfigString(args[2].trimmed()) &&
+        !GeometryUtils::isPolygonConfigString(args[2].trimmed()))
     {
       input2Index = -1;
       boundsIndex = 1;

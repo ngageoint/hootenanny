@@ -197,15 +197,30 @@ QString GeometryUtils::toConfigString(const Envelope& e)
 
 bool GeometryUtils::isEnvelopeConfigString(const QString& str)
 {
+  Envelope env;
   try
   {
-    GeometryUtils::envelopeFromConfigString(str);
+    env = GeometryUtils::envelopeFromConfigString(str);
   }
-  catch (const HootException&)
+  catch (const IllegalArgumentException&)
   {
     return false;
   }
-  return true;
+  return !env.isNull();
+}
+
+bool GeometryUtils::isPolygonConfigString(const QString& str)
+{
+  std::shared_ptr<Polygon> poly;
+  try
+  {
+    poly = GeometryUtils::polygonFromString(str);
+  }
+  catch (const IllegalArgumentException&)
+  {
+    return false;
+  }
+  return poly.get() != 0;
 }
 
 QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
@@ -274,7 +289,8 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
 {
   if (str.trimmed().isEmpty())
   {
-    throw IllegalArgumentException("Empty polygon string: " + str);
+    //throw IllegalArgumentException("Empty polygon string: " + str);
+    return std::shared_ptr<Polygon>();
   }
 
   QStringList coords = str.split(";");

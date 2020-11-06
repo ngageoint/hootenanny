@@ -869,7 +869,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
   ConfigOptions co(s);
   std::shared_ptr<Envelope> result;
   const QString bboxStrRaw = co.getConvertBounds();
-  if (!GeometryUtils::isEnvelopeConfigString(bboxStrRaw))
+  if (!bboxStrRaw.trimmed().isEmpty() && !GeometryUtils::isEnvelopeConfigString(bboxStrRaw))
   {
     throw IllegalArgumentException("OGR reader only supports rectangular convert bounds.");
   }

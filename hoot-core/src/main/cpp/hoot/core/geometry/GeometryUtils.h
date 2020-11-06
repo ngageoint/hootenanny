@@ -135,6 +135,14 @@ public:
   /**
    * TODO
    *
+   * @param str
+   * @return
+   */
+  static bool isPolygonConfigString(const QString& str);
+
+  /**
+   * TODO
+   *
    * @param env
    * @return
    */

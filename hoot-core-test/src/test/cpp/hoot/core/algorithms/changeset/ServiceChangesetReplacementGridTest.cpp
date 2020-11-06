@@ -69,6 +69,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
   CPPUNIT_TEST(badPolyIdSync1Test);
   CPPUNIT_TEST(badPolyIdSync2Test);
+  // TODO: add non-rectangular bounds test
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
