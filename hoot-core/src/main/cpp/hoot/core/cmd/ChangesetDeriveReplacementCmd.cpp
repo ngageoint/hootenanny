@@ -209,7 +209,12 @@ public:
     std::shared_ptr<geos::geom::Polygon> bounds =
       std::dynamic_pointer_cast<geos::geom::Polygon>(
         GeometryUtils::boundsFromString(boundsStr));
-    LOG_VARD(bounds);
+    if (!bounds)
+    {
+      throw IllegalArgumentException(
+        "Invalid replacement bounds passed to changeset replacement derivation.");
+    }
+    LOG_VARD(bounds->toString());
     const QString output = args[outputIndex].trimmed();
     LOG_VARD(output);
     QString osmApiDbUrl;
