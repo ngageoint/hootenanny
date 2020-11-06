@@ -52,7 +52,6 @@
 #include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
-//#include <hoot/core/criterion/RoundaboutCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
@@ -418,8 +417,6 @@ void ChangesetCutOnlyCreator::create(
   _input2Map.reset();
   _output = output;
   _replacementBounds = bounds;
-  conf().set(
-    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
   _validateInputs();
   _setGlobalOpts();
   _printJobDescription();
@@ -513,20 +510,8 @@ void ChangesetCutOnlyCreator::create(
   // some duplicated features that need to be cleaned up before we generate the changesets. This
   // is kind of a band-aid :-(
 
-  // UPDATE 8/17/20: This de-duplication appears no longer necessary after applying the ID
-  // synchronization just after it. More testing needs to happen before verifying that, though.
-
-  // If we have the maps for only one geometry type, then there isn't a possibility of duplication
-  // created by the replacement operation.
-//  if (refMaps.size() > 1)
-//  {
-//    // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
-//    // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
-//    // de-duping. Mostly worried that not doing so could break the overlapping only replacement
-//    // (non-full) scenario...we'll see...
-//    //_dedupeMaps(refMaps);
-//    _dedupeMaps(conflatedMaps);
-//  }
+  // UPDATE 8/17/20: Feature de-duplication appears no longer necessary after applying the ID
+  // synchronization below.
 
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements. This must be done with the ref/sec maps separated to avoid ID
@@ -905,7 +890,8 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-  //conf().set(ConfigOptions::getConvertBoundsKey(), _replacementBounds);
+  conf().set(
+    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
 
   // For this being enabled to have any effect,
   // convert.bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.

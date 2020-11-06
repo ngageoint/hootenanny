@@ -39,8 +39,6 @@
 
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
-//#include <hoot/core/ops/ElementIdRemapper.h>
-
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
@@ -214,14 +212,13 @@ void ChangesetReplacementCreator::create(
 
   // SNAP BEFORE CHANGESET DERIVATION CROPPING
 
-  // Had an idea here to try to load source IDs for sec data, remap sec IDs to be unique just before
-  // the ref and sec have to be combined, and then restore the original sec IDs after the snapping
-  // is complete. The idea was to reduce the need for ID synchronization, which doesn't work
-  // perfectly yet (of course, if you're replacing with data from a different data source the ID
-  // sync would happen regardless...just not needed for OSM to OSM replacement). Unfortunately, this
-  // leads to all kinds of duplicate ID errors when the resulting changesets are applied.
-  //ElementIdRemapper secIdRemapper;
-  //secIdRemapper.apply(secMap);
+  // Had an idea once here to try to load source IDs for sec data, remap sec IDs to be unique just
+  // before the ref and sec have to be combined, and then restore the original sec IDs after the
+  // snapping is complete with ElementIdRemapper. The idea was to reduce the need for ID
+  // synchronization, which doesn't work perfectly yet (of course, if you're replacing with data
+  // from a different data source the ID sync would happen regardless...just not needed for OSM to
+  // OSM replacement). Unfortunately, this leads to all kinds of duplicate ID errors when the
+  // resulting changesets are applied.
 
   // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
@@ -280,8 +277,6 @@ void ChangesetReplacementCreator::create(
     // tag that will cause the deriver to skip deleting them.
     _excludeFeaturesFromChangesetDeletion(refMap);
   }
-
-  //secIdRemapper.restore(combinedMap);
 
   // CLEANUP
 
