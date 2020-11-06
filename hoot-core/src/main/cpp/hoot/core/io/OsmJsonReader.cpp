@@ -192,12 +192,21 @@ void OsmJsonReader::close()
 
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
-  if (!_isFile && !GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
+  LOG_VART(_isFile);
+  if (!_bounds)
   {
-    throw IllegalArgumentException(
-      "OsmJsonReader does not support a non-rectangular bounds for HTTP reads.");
+    if (!_isFile && !ConfigOptions().getConvertBounds().trimmed().isEmpty() &&
+        !GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
+    {
+      throw IllegalArgumentException(
+        "OsmJsonReader does not support a non-rectangular bounds for HTTP reads.");
+    }
+    _bounds = ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey());
   }
-  _bounds = ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey());
+  if (_bounds)
+  {
+    LOG_VART(_bounds);
+  }
 
   LOG_DEBUG("Reading map...");
 
@@ -1038,8 +1047,17 @@ void OsmJsonReader::_readFromHttp()
     urlQuery.removeQueryItem("srsname");
   urlQuery.addQueryItem("srsname", "EPSG:4326");
   _sourceUrl.setQuery(urlQuery);
+  geos::geom::Envelope env;
+  if (!_bounds)
+  {
+    env = geos::geom::Envelope();
+  }
+  else
+  {
+    env = *(_bounds->getEnvelopeInternal());
+  }
   //  Spin up the threads
-  beginRead(_sourceUrl, *(_bounds->getEnvelopeInternal()));
+  beginRead(_sourceUrl, env);
   //  Iterate all of the XML results
   while (hasMoreResults())
   {

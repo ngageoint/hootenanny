@@ -345,7 +345,8 @@ public:
     // Try hitting the network to get some data...
 
     // needed to suppress map crop missing element warnings
-    DisableLog dl;
+    // TODO: re-enable
+    //DisableLog dl;
 
     OsmMapPtr pMap;
     const QString overpassHost = ConfigOptions().getOverpassApiHost();
