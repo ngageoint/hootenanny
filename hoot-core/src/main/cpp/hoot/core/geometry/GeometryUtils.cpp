@@ -366,6 +366,7 @@ QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
 
 std::shared_ptr<geos::geom::Polygon> GeometryUtils::boundsFromString(const QString& str)
 {
+  LOG_VART(str);
   if (isEnvelopeString(str))
   {
     return envelopeToPolygon(envelopeFromString(str));

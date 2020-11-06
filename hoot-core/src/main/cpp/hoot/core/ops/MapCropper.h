@@ -53,10 +53,6 @@ class Way;
  * In the class, outside and inside are referenced. Outside refers to a geometry that is wholly
  * outside the region that will be kept. Inside refers to a geometry that is at least partially
  * inside the region that will be kept.
- *
- * This class works with four pass conflation (used in Hadoop only) as long as all data, bounds and
- * crop geometry are in WGS84. If the data before this operation is in a planar projection then it
- * should be reprojected using ReprojectToGeographicOp.
  */
 class MapCropper : public OsmMapOperation, public Boundable, public Configurable
 {
@@ -104,7 +100,10 @@ private:
 
   friend class MapCropperTest;
 
+  // the boundary at which the data is cropped
   std::shared_ptr<const geos::geom::Geometry> _envelope;
+  // if false data outside of the boundary is removed; if true, data inside of the boundary is
+  // removed
   bool _invert;
   // If true, won't split apart features straddling the specified bounds.
   bool _keepEntireFeaturesCrossingBounds;

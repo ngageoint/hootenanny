@@ -151,6 +151,7 @@ void NamedOp::apply(OsmMapPtr& map)
       // The ordering of setting the config before the map here seems to make sense, but all
       // ElementVisitors implementing OsmMapConsumer will need to be aware of it.
 
+      // TODO: move this before the call to _getInitMessage?
       Configurable* c = dynamic_cast<Configurable*>(vis.get());
       if (_conf != 0 && c != 0)
       {
