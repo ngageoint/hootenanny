@@ -36,7 +36,6 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-
 using namespace geos::geom;
 
 namespace hoot
@@ -99,10 +98,9 @@ public:
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid envelope string"));
 
-      // TODO: fix
-//    Envelope env("1,2,3,4");
-//    LOG_VART(env.isNull());
-//    HOOT_STR_EQUALS("Env[1:3,2:4]", GeometryUtils::envelopeToString(env));
+    HOOT_STR_EQUALS(
+      "-71.48090000000001,-71.45688,42.4808,42.493",
+      GeometryUtils::envelopeToString(Envelope("-71.4809,42.4808,-71.45688,42.49368")));
   }
 
   void polygonTest()
@@ -164,8 +162,9 @@ public:
       GeometryUtils::polygonFromString(
         "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841")->toString());
 
-    // TODO: fix
-    //HOOT_STR_EQUALS("1,2,3,4", GeometryUtils::envelopeToPolygon(Envelope("1,2,3,4"))->toString());
+    HOOT_STR_EQUALS(
+      "POLYGON ((-71.4809000000000054 -71.4568799999999982, -71.4809000000000054 42.4930000000000021, 42.4808000000000021 42.4930000000000021, 42.4808000000000021 -71.4568799999999982, -71.4809000000000054 -71.4568799999999982))",
+      GeometryUtils::envelopeToPolygon(Envelope("-71.4809,42.4808,-71.45688,42.49368"))->toString());
 
     HOOT_STR_EQUALS(
       "-71.47450000000001,42.4839,-71.4619,42.4918",
