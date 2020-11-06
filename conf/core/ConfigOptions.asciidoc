@@ -976,13 +976,13 @@ ID of the node that ContainsNodeCriterion should search for.
 * Data Type: string
 * Default Value: ``
 
-If specified, supporting readers will limit data read from the data source to only features that
-intersect a given rectangular bounding box or closed polygon. Not all supporting readers allow for the closed polygon
-in addition to the rectangular bounding box. The format can be either "minx,miny,maxx,maxy"
-("min_lon,min_lat,max_lon,max_lat") for a rectangular bounds or "x1,y1;x2,y2;..."
-("lon1,lat1;lon2,lat2;...") for non-rectangular closed polygon. The coordinates are specified in the
-projection of the input data source.  This setting can be used with both the convert and conflate
-commands. See the command documentation for more details.
+If specified, supporting readers will limit data read from the source to only features that
+intersect a given rectangular bounding box or closed polygon. Not all supporting readers allow for
+the closed polygon in addition to the rectangular bounding box. The format can be either:
+"minx,miny,maxx,maxy" ("min_lon,min_lat,max_lon,max_lat") for a rectangular bounds or
+"x1,y1;x2,y2;x3,y3;..." ("lon1,lat1;lon2,lat2;lon3,lat3...") for a closed polygon. The coordinates
+are specified in the projection of the input data source.  This option can be used with both the
+convert and conflate commands. See the command documentation for more details.
 
 Example Usage:
 

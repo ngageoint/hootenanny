@@ -272,16 +272,15 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
 
 std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
 {
-  const QString errorMsg = "Invalid polygon string: " + str;
   if (str.trimmed().isEmpty())
   {
-    throw IllegalArgumentException(errorMsg);
+    throw IllegalArgumentException("Empty polygon string: " + str);
   }
 
   QStringList coords = str.split(";");
   if (coords.size() < 3)
   {
-    throw IllegalArgumentException(errorMsg);
+    throw IllegalArgumentException("Polygon string must have at least three points: " + str);
   }
 
   if (coords.at(0) != coords.at(coords.size() - 1))
@@ -303,12 +302,12 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
     const double x = coordStrs.at(0).toDouble(&ok);
     if (!ok)
     {
-      throw IllegalArgumentException("Invalid polygon coordinate x value: " + coordStrs.at(0));
+      throw IllegalArgumentException("Invalid polygon x coordinate value: " + coordStrs.at(0));
     }
     const double y = coordStrs.at(1).toDouble(&ok);
     if (!ok)
     {
-      throw IllegalArgumentException("Invalid polygon coordinate y value: " + coordStrs.at(1));
+      throw IllegalArgumentException("Invalid polygon y coordinate value: " + coordStrs.at(1));
     }
     coordSeq->setAt(geos::geom::Coordinate(x, y), i);
   }

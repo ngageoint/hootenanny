@@ -23,10 +23,13 @@ IDs in the secondary data are not retained and those elements treated as complet
 * +input2+                       - Map input with the features to be used for replacement; may be any supported input format that also supports 
                                    bounded reading (e.g. OSM file); leave empty to cut data out of input1 while adding no replacement data. 
                                    See the "Input Data and "Bounds Handling" sections for more detail.
-* +bounds+                       - Boundary over which to do the feature replacement of the form: minx,miny,maxx,maxy; 
-                                   e.g. "-71.4698,42.4866,-71.4657,42.4902" or TODO: update See the ""Bounds Handling" section for more detail.
+* +bounds+                       - Boundary over which to do the feature replacement. Can be either a rectangular bounding box of the form: 
+                                   minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902" or a closed polygon of the form:
+                                   x1,y1;x2,y2;x3,y3;...; e.g. "-71.4698,42.4866,-71.4657,42.4902". See the ""Bounds Handling" section for 
+                                   more detail.
 * +output+                       - Changeset output location; must be a changeset .osc or .osc.sql file.
-* +osmApiDatabaseUrl+            - Target OSM API database where the derived changeset is to be applied, used to maintain element ID continuity. 
+* +osmApiDatabaseUrl+            - Target OSM API database where the derived changeset is to be applied, used to maintain element ID 
+                                   continuity. 
                                    Required only if the changeset output format is .osc.sql. 
 * +--geometry-filters+           - Optional criteria used to control the geometry type of the features that are replaced. When this option is
                                    omitted, features of all geometry types are replaced by features of a like geometry type. See the 
@@ -68,7 +71,8 @@ The high level workflow for the command looks like the following:
 * Load the input 2 secondary map (data you are using as replacement) at the specified bounds
 * Filter the secondary map based on geometry and/or other filters (optional)
 * Cut data out of the reference map for each feature geometry type being replaced. If performing full replacement, the shape cut out covers the 
-  entire specified bounds. If performing overlapping only replacement, the shape cut out is the shape of the secondary data used for replacement.
+  entire specified bounds. If performing overlapping only replacement, the shape cut out is the shape of the secondary data used for 
+  replacement.
 * Combine the cut out reference data back with the replacement data from the secondary map
 * Snap replacement linear features that are disconnected at the specified bounds seam back to the reference data
 * Derive a difference changeset between the new map with replacement data added and the original reference map with removed data
