@@ -116,6 +116,8 @@ void OsmApiReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
+  // If a non-rectangular bounds was passed in from the config, we'll catch it here. If it is passed
+  // in from setBounds, we'll silently disregard by using the envelope of the bounds only.
   if (!ConfigOptions().getConvertBounds().trimmed().isEmpty() &&
       !GeometryUtils::isEnvelopeString(ConfigOptions().getConvertBounds()))
   {
@@ -140,7 +142,8 @@ void OsmApiReader::read(const OsmMapPtr& map)
   _map = map;
   _map->appendSource(_url);
 
-  //  Spin up the threads
+  //  Spin up the threads. Use the envelope of the boundsto throw away any non-retangular bounds
+  // that may have been  passed.
   beginRead(_url, *(_bounds->getEnvelopeInternal()));
 
   //  Iterate all of the XML results

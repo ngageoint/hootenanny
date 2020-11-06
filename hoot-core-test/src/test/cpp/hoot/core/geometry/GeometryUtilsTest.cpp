@@ -107,13 +107,16 @@ public:
   {
     QString exceptionMsg;
 
+    // closed poly
     CPPUNIT_ASSERT(
       GeometryUtils::isPolygonString(
         "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841"));
+    // not closed but valid b/c the parser will automatically close it up
     CPPUNIT_ASSERT(
       GeometryUtils::isPolygonString(
         "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839"));
     CPPUNIT_ASSERT(!GeometryUtils::isPolygonString(" "));
+    // not enough points
     CPPUNIT_ASSERT(
       !GeometryUtils::isPolygonString("-71.4745,42.4841;-71.4669,42.4918"));
     CPPUNIT_ASSERT(

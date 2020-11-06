@@ -252,6 +252,9 @@ public:
 
   void runInvalidBoundsTest()
   {
+    // This is just doing null checks. GeometryUtilsTest goes into more detail on validation of
+    // these bounds from string.
+
     QString exceptionMsg;
     ChangesetCutOnlyCreator changesetCreator;
 

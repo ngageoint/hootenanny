@@ -37,6 +37,14 @@ namespace hoot
  * An interface defining a class that may have the bounds set. The exact meaning of setting the
  * bounds is context dependent, but in the case of OsmMapOperations it limits the scope of the
  * operation.
+ *
+ * Defining a bounds in terms of a polygon for now (used to be an envelope). Its possible that we
+ * could support other geometries, but not seeing the need for it now, and other geometries
+ * possibly wouldn't make sense with some implementations. For the few implementations that may need
+ * the bounds to be a rectangular envelope, custom error checking should be added to their
+ * configuration parsing to ensure an envelope is passed. As far as the setBounds method is
+ * concerned, simply automatically and silently using the envelope of the passed geometry is what's
+ * being done at this time.
  */
 class Boundable
 {

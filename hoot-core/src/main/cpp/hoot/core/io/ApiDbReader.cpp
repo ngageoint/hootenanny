@@ -107,14 +107,12 @@ void ApiDbReader::initializePartial()
 
 bool ApiDbReader::_hasBounds()
 {
-  //return _isValidBounds(_bounds) || _isValidBounds(_overrideBounds);
   return _bounds.get() || _overrideBounds.get();
 }
 
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
   ElementId result;
-  //LOG_VART(_useDataSourceIds);
   if (_useDataSourceIds)
   {
     result = oldId;
@@ -604,6 +602,9 @@ void ApiDbReader::read(const OsmMapPtr& map)
     {
       bounds = _bounds;
     }
+    // api db bounds reading is based off of quad tiles which only operates on rectangular bounds,
+    // so we have to pass an envelope here. The actual bounds is used to crop down the queried
+    // result later.
     if (!_readFullThenCropOnBounded)
     {
       LOG_DEBUG(

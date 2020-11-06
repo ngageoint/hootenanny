@@ -1031,7 +1031,7 @@ the convert command only and kept as a separate option.
 * Data Type: string
 * Default Value: ``
 
-Same as `onvert.bounds` but the resultant bounds filtering is only applied to OSM API database
+Same as `convert.bounds` but the resultant bounds filtering is only applied to OSM API database
 data sources when used with the convert and conflate commands.  This setting takes precendence over
 the `convert.bounds` setting for OSM API database data sources only.
 

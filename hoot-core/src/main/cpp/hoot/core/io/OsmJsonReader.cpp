@@ -196,11 +196,13 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   LOG_VART(_isFile);
   if (!_bounds)
   {
+    // If we're doing a web pull, ensure a rectangular bounds from the config. See a related note in
+    // OsmApiReader::read.
     if (!_isFile && !ConfigOptions().getConvertBounds().trimmed().isEmpty() &&
         !GeometryUtils::isEnvelopeString(ConfigOptions().getConvertBounds()))
     {
       throw IllegalArgumentException(
-        "OsmJsonReader does not support a non-rectangular bounds for HTTP reads.");
+        "OsmJsonReader does not support a non-rectangular bounds for reading over HTTP.");
     }
     _bounds = GeometryUtils::boundsFromString(ConfigOptions().getConvertBounds());
   }
@@ -1049,10 +1051,13 @@ void OsmJsonReader::_readFromHttp()
   geos::geom::Envelope env;
   if (!_bounds)
   {
+    // If no bounds was set, the read method still expects an empty one.
     env = geos::geom::Envelope();
   }
   else
   {
+    // Use the envelope of the boundsto throw away any non-retangular bounds that may have been
+    // passed.
     env = *(_bounds->getEnvelopeInternal());
   }
   //  Spin up the threads
