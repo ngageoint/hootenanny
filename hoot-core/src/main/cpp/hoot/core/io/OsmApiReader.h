@@ -91,6 +91,8 @@ public:
    * @param conf Updated configuration
    */
   virtual void setConfiguration(const Settings& conf) override;
+
+  // TODO: override setBounds to always use env
 };
 
 }

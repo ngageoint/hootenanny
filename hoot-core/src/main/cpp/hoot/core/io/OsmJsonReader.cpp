@@ -192,6 +192,7 @@ void OsmJsonReader::close()
 
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
+  // TODO: move to open
   LOG_VART(_isFile);
   if (!_bounds)
   {
@@ -201,6 +202,7 @@ void OsmJsonReader::read(const OsmMapPtr& map)
       throw IllegalArgumentException(
         "OsmJsonReader does not support a non-rectangular bounds for HTTP reads.");
     }
+    // TODO: override setBounds to always use env
     _bounds = ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey());
   }
   if (_bounds)

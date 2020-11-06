@@ -64,7 +64,10 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
 void InBoundsCriterion::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
 {
   _bounds = bounds;
-  LOG_VART(_bounds->toString());
+  if (_bounds)
+  {
+    LOG_VART(_bounds->toString());
+  }
 }
 
 
