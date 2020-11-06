@@ -35,7 +35,6 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
 {
@@ -58,7 +57,7 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
   ConfigOptions config = ConfigOptions(conf);
   _mustCompletelyContain = config.getInBoundsCriterionStrict();
   LOG_VART(_mustCompletelyContain);
-  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getInBoundsCriterionBoundsKey(), conf));
+  setBounds(GeometryUtils::boundsFromConfigString(config.getInBoundsCriterionBounds()));
 }
 
 void InBoundsCriterion::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)

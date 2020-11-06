@@ -54,5 +54,3 @@ Total Deletions: 1,430
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementRelationCropTest-xml-replaced.osm for verification...
 
-16:40:15.693 WARN   ...core/scoring/MapComparator.cpp( 380) Number of nodes does not match (1: 17679; 2: 17681)
-16:40:15.711 WARN   ...core/scoring/MapComparator.cpp( 360) 	Nodes in map 2 and not in map 1 (limit 5): [19013, 19014]

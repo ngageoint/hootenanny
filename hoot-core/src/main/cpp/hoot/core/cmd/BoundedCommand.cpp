@@ -51,12 +51,11 @@ void BoundedCommand::_writeBoundsFile()
   ConfigOptions opts;
   // TODO: We aren't dealing with the osm/hoot api db reader version of bounding box, which could
   // eventually cause a problem.
-  const QString boundsStr = opts.getConvertBounds().trimmed();
+  QString boundsStr = opts.getConvertBounds().trimmed();
   if (!boundsStr.isEmpty())
   {
-    // TODO: This needs to be updated to work with polys.
     OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(GeometryUtils::envelopeFromConfigString(boundsStr)),
+      GeometryUtils::createMapFromBounds(GeometryUtils::boundsFromConfigString(boundsStr)),
       opts.getBoundsOutputFile());
   }
 }

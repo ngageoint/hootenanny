@@ -70,16 +70,11 @@ OsmApiReader::~OsmApiReader()
 
 void OsmApiReader::setConfiguration(const Settings& conf)
 {
-  //  Get the bounds of the query
-  // TODO: fix
-//  if (!conf.getString(ConfigOptions::getConvertBoundsKey()).trimmed().isEmpty())
-//  {
-//    setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey(), conf));
-//  }
   ConfigOptions configOptions(conf);
   setMaxThreads(configOptions.getReaderHttpBboxThreadCount());
   setCoordGridSize(configOptions.getReaderHttpBboxMaxSize());
   setMaxGridSize(configOptions.getReaderHttpBboxMaxDownloadSize());
+  setBounds(GeometryUtils::boundsFromConfigString(configOptions.getConvertBounds()));
 }
 
 void OsmApiReader::setUseDataSourceIds(bool /*useDataSourceIds*/)

@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QStringList>
@@ -72,16 +71,6 @@ public:
    * @param entryToRemove value of the list member from the configuration option to remove
    */
   static void removeListOpEntry(const QString& opName, const QString& entryToRemove);
-
-  /**
-   * TODO
-   *
-   * @param name
-   * @param settings
-   * @return
-   */
-  static std::shared_ptr<geos::geom::Polygon> getOptionBounds(
-    const QString& name, const Settings& settings = Settings());
 };
 
 }

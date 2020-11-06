@@ -45,7 +45,6 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
-#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -101,7 +100,7 @@ void OsmXmlReader::setConfiguration(const Settings& conf)
   setAddSourceDateTime(configOptions.getReaderAddSourceDatetime());
   setPreserveAllTags(configOptions.getReaderPreserveAllTags());
   setStatusUpdateInterval(configOptions.getTaskStatusUpdateInterval() * 10);
-  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey(), conf));
+  setBounds(GeometryUtils::boundsFromConfigString(configOptions.getConvertBounds()));
   // If a bounds was set and we don't want to remove missing elements as a result of cropping, we
   // need to modify the reader to allow reading in the missing refs.
   if (_bounds.get() && !configOptions.getConvertBoundsRemoveMissingElements())

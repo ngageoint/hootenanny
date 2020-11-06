@@ -47,7 +47,7 @@ class GeometryUtilsTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(GeometryUtilsTest);
   CPPUNIT_TEST(calculateDestinationTest);
   CPPUNIT_TEST(envelopeFromConfigStringTest);
-  // TODO: add poly config string test
+  // TODO: add poly config string test; closed and unclosed
   CPPUNIT_TEST_SUITE_END();
 
 public:

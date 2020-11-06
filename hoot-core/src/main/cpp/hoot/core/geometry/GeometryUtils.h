@@ -172,6 +172,14 @@ public:
    */
   static std::shared_ptr<geos::geom::Polygon> boundsFromConfigString(const QString& str);
 
+  /**
+   * TODO
+   *
+   * @param str
+   * @return
+   */
+  static QString polygonStringToEnvelopeString(const QString& str);
+
   static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry* g);
 
   static geos::geom::Geometry* validateGeometryCollection(const geos::geom::GeometryCollection* gc);
@@ -194,6 +202,14 @@ public:
    * @return a bounding box map
    */
   static OsmMapPtr createMapFromBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * Creates a map representing a single polygon bounds
+   *
+   * @param bounds bounds
+   * @return a bounds map
+   */
+  static OsmMapPtr createMapFromBounds(const std::shared_ptr<geos::geom::Polygon>& bounds);
 
   /**
    * Creates a rectangular map representing multiple bounding boxes

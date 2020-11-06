@@ -31,7 +31,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
-#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {
@@ -81,37 +80,6 @@ void ConfigUtils::removeListOpEntry(const QString& opName, const QString& entryT
   QStringList opValue = conf().getList(opName);
   opValue.removeAll(entryToRemove);
   conf().set(opName, opValue);
-}
-
-std::shared_ptr<geos::geom::Polygon> ConfigUtils::getOptionBounds(
-  const QString& name, const Settings& settings)
-{
-  LOG_VART(name); 
-  LOG_VART(settings.isEmpty());
-  QString boundsStr;
-  if (settings.isEmpty())
-  {
-    boundsStr = conf().getString(name);
-  }
-  else
-  {
-    boundsStr = settings.getString(name);
-  }
-  LOG_VART(boundsStr);
-  if (boundsStr.trimmed().isEmpty())
-  {
-    return std::shared_ptr<geos::geom::Polygon>();
-  }
-  LOG_VART(GeometryUtils::isEnvelopeConfigString(boundsStr));
-  if (GeometryUtils::isEnvelopeConfigString(boundsStr))
-  {
-    return
-      GeometryUtils::envelopeToPolygon(GeometryUtils::envelopeFromConfigString(boundsStr));
-  }
-  else
-  {
-    return GeometryUtils::polygonFromString(boundsStr);
-  }
 }
 
 }

@@ -37,7 +37,6 @@
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
-#include <hoot/core/util/ConfigUtils.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -192,7 +191,8 @@ void OsmJsonReader::close()
 
 void OsmJsonReader::read(const OsmMapPtr& map)
 {
-  // TODO: move to open
+  LOG_DEBUG("Reading map...");
+
   LOG_VART(_isFile);
   if (!_bounds)
   {
@@ -202,15 +202,12 @@ void OsmJsonReader::read(const OsmMapPtr& map)
       throw IllegalArgumentException(
         "OsmJsonReader does not support a non-rectangular bounds for HTTP reads.");
     }
-    // TODO: override setBounds to always use env
-    _bounds = ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey());
+    _bounds = GeometryUtils::boundsFromConfigString(ConfigOptions().getConvertBounds());
   }
   if (_bounds)
   {
     LOG_VART(_bounds);
   }
-
-  LOG_DEBUG("Reading map...");
 
   _map = map;
   _map->appendSource(_url);
@@ -360,7 +357,7 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _coordGridSize = opts.getReaderHttpBboxMaxSize();
   _threadCount = opts.getReaderHttpBboxThreadCount();
-  setBounds(ConfigUtils::getOptionBounds(ConfigOptions::getConvertBoundsKey()));
+  setBounds(GeometryUtils::boundsFromConfigString(opts.getConvertBounds()));
   setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
 }
 

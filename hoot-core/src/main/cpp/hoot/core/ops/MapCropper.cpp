@@ -61,7 +61,6 @@
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/ConfigUtils.h>
 
 // Standard
 #include <limits>
@@ -192,7 +191,7 @@ void MapCropper::setConfiguration(const Settings& conf)
   ConfigOptions confOpts = ConfigOptions(conf);
 
   std::shared_ptr<geos::geom::Geometry> envelope =
-    ConfigUtils::getOptionBounds(ConfigOptions::getCropBoundsKey(), conf);
+    GeometryUtils::boundsFromConfigString(confOpts.getCropBounds());
   LOG_VART(envelope.get());
   if (envelope)
   {

@@ -37,10 +37,7 @@ namespace hoot
 {
 
 /**
- * Generates a task grid with a single cell from an envelope string
- *
- * TODO: Maybe we could support a non-rectangular bounds in this class (?), but not sure we need to
- * right now.
+ * Generates a rectangular task grid with a single cell from an envelope string
  */
 class BoundsStringTaskGridGenerator : public TaskGridGenerator
 {
