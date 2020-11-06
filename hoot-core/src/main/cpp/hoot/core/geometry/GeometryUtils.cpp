@@ -195,12 +195,12 @@ QString GeometryUtils::toConfigString(const Envelope& e)
       arg(e.getMaxY(), 0, 'f', precision);
 }
 
-bool GeometryUtils::isEnvelopeConfigString(const QString& str)
+bool GeometryUtils::isEnvelopeString(const QString& str)
 {
   Envelope env;
   try
   {
-    env = envelopeFromConfigString(str);
+    env = envelopeFromString(str);
   }
   catch (const IllegalArgumentException&)
   {
@@ -209,7 +209,7 @@ bool GeometryUtils::isEnvelopeConfigString(const QString& str)
   return !env.isNull();
 }
 
-bool GeometryUtils::isPolygonConfigString(const QString& str)
+bool GeometryUtils::isPolygonString(const QString& str)
 {
   std::shared_ptr<Polygon> poly;
   try
@@ -223,8 +223,9 @@ bool GeometryUtils::isPolygonConfigString(const QString& str)
   return poly.get() != 0;
 }
 
-QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
+QString GeometryUtils::envelopeToString(const Envelope& bounds)
 {
+  LOG_VART(bounds);
   const int precision = ConfigOptions().getWriterPrecision();
   return QString::number(bounds.getMinX(), 'g', precision) + "," +
     QString::number(bounds.getMinY(), 'g', precision) + "," +
@@ -232,7 +233,7 @@ QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
     QString::number(bounds.getMaxY(), 'g', precision);
 }
 
-Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
+Envelope GeometryUtils::envelopeFromString(const QString& boundsStr)
 {
   LOG_VART(boundsStr);
   if (boundsStr.trimmed().isEmpty())
@@ -287,6 +288,8 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
 
 std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
 {
+  // x1,y1;x2,y2;x3,y3...
+
   LOG_VART(str);
   if (str.trimmed().isEmpty())
   {
@@ -342,7 +345,7 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
 
 QString GeometryUtils::polygonStringToEnvelopeString(const QString& str)
 {
-  return envelopeToConfigString(*(polygonFromString(str)->getEnvelopeInternal()));
+  return envelopeToString(*(polygonFromString(str)->getEnvelopeInternal()));
 }
 
 QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
@@ -361,11 +364,11 @@ QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
   return str;
 }
 
-std::shared_ptr<geos::geom::Polygon> GeometryUtils::boundsFromConfigString(const QString& str)
+std::shared_ptr<geos::geom::Polygon> GeometryUtils::boundsFromString(const QString& str)
 {
-  if (isEnvelopeConfigString(str))
+  if (isEnvelopeString(str))
   {
-    return envelopeToPolygon(envelopeFromConfigString(str));
+    return envelopeToPolygon(envelopeFromString(str));
   }
   else
   {

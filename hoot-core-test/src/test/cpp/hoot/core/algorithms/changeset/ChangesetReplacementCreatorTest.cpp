@@ -60,7 +60,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runInvalidFilterConfigOptsTest);
   CPPUNIT_TEST(runConvertOpsTest);
   CPPUNIT_TEST(runFullReplacmentWithRetainmentFilterTest);
-  // TODO: add poly input test
+  CPPUNIT_TEST(runInvalidBoundsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -247,6 +247,38 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       QString("Both full reference data replacement and a reference data retainment filter may not "
               "be specified for replacement changeset derivation.").toStdString(),
+      exceptionMsg.toStdString());
+  }
+
+  void runInvalidBoundsTest()
+  {
+    QString exceptionMsg;
+    ChangesetCutOnlyCreator changesetCreator;
+
+    try
+    {
+      changesetCreator.create(
+        "test1.osm", "test2.osm", std::shared_ptr<geos::geom::Polygon>(), "out.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Invalid replacement bounds passed to changeset replacement derivation.").toStdString(),
+      exceptionMsg.toStdString());
+
+    try
+    {
+      changesetCreator.create(
+        "test1.osm", "test2.osm", geos::geom::Envelope(), "out.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Invalid replacement bounds passed to changeset replacement derivation.").toStdString(),
       exceptionMsg.toStdString());
   }
 };

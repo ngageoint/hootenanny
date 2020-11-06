@@ -197,12 +197,12 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   if (!_bounds)
   {
     if (!_isFile && !ConfigOptions().getConvertBounds().trimmed().isEmpty() &&
-        !GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
+        !GeometryUtils::isEnvelopeString(ConfigOptions().getConvertBounds()))
     {
       throw IllegalArgumentException(
         "OsmJsonReader does not support a non-rectangular bounds for HTTP reads.");
     }
-    _bounds = GeometryUtils::boundsFromConfigString(ConfigOptions().getConvertBounds());
+    _bounds = GeometryUtils::boundsFromString(ConfigOptions().getConvertBounds());
   }
   if (_bounds)
   {
@@ -357,7 +357,7 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _coordGridSize = opts.getReaderHttpBboxMaxSize();
   _threadCount = opts.getReaderHttpBboxThreadCount();
-  setBounds(GeometryUtils::boundsFromConfigString(opts.getConvertBounds()));
+  setBounds(GeometryUtils::boundsFromString(opts.getConvertBounds()));
   setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
 }
 

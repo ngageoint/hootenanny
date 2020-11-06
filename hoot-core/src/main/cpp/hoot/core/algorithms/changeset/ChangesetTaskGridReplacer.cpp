@@ -279,7 +279,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     "Applying changeset: " << changesetNum << " / " <<
     StringUtils::formatLargeNumber(taskGridSize) << " with " <<
     StringUtils::formatLargeNumber(numChanges) << " changes for task grid cell: " <<
-    taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeFromConfigString(boundsStr) <<
+    taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeFromString(boundsStr) <<
     ", from file: ..." << changesetFile.fileName().right(25) << "...");
 
   _changesetApplier->write(changesetFile);
@@ -532,7 +532,7 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
   // actually replaced.
   conf().set(
     ConfigOptions::getConvertBoundsKey(),
-    GeometryUtils::envelopeToConfigString(_taskGridBounds));
+    GeometryUtils::envelopeToString(_taskGridBounds));
   // use lenient bounds
   conf().set(ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
   conf().set(

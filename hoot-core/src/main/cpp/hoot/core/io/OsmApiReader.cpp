@@ -74,7 +74,7 @@ void OsmApiReader::setConfiguration(const Settings& conf)
   setMaxThreads(configOptions.getReaderHttpBboxThreadCount());
   setCoordGridSize(configOptions.getReaderHttpBboxMaxSize());
   setMaxGridSize(configOptions.getReaderHttpBboxMaxDownloadSize());
-  setBounds(GeometryUtils::boundsFromConfigString(configOptions.getConvertBounds()));
+  setBounds(GeometryUtils::boundsFromString(configOptions.getConvertBounds()));
 }
 
 void OsmApiReader::setUseDataSourceIds(bool /*useDataSourceIds*/)
@@ -117,7 +117,7 @@ void OsmApiReader::read(const OsmMapPtr& map)
   LOG_VART(_preserveAllTags);
 
   if (!ConfigOptions().getConvertBounds().trimmed().isEmpty() &&
-      !GeometryUtils::isEnvelopeConfigString(ConfigOptions().getConvertBounds()))
+      !GeometryUtils::isEnvelopeString(ConfigOptions().getConvertBounds()))
   {
     throw IllegalArgumentException(
       "OsmApiReader does not support a non-rectangular bounds: " +

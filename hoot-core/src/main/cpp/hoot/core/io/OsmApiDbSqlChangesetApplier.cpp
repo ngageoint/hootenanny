@@ -260,7 +260,7 @@ bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString& boundsSt
   LOG_DEBUG("Checking for OSM API DB conflicts for " << ApiDb::getChangesetsTableName() <<
            " within " << boundsStr << " and created after " << timeStr << "...");
 
-  const Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
+  const Envelope bounds = GeometryUtils::envelopeFromString(boundsStr);
   LOG_VARD(bounds.toString());
 
   const QDateTime time = QDateTime::fromString(timeStr, OsmApiDb::TIME_FORMAT);

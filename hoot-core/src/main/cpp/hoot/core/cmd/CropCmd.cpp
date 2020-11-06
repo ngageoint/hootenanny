@@ -72,7 +72,7 @@ public:
 
     BoundedCommand::runSimple(args);
 
-    _env = GeometryUtils::boundsFromConfigString(args[2]);
+    _env = GeometryUtils::boundsFromString(args[2]);
 
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, in, true);

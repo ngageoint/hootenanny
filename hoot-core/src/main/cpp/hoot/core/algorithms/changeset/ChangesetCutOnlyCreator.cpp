@@ -401,13 +401,16 @@ void ChangesetCutOnlyCreator::create(
   const QString& input1, const QString& input2,
   const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output)
 {
-  LOG_VARD(input1);
-  LOG_VARD(input2);
-  LOG_VARD(GeometryUtils::polygonToString(bounds));
-  LOG_VARD(output);
-
   QElapsedTimer timer;
   timer.start();
+
+  LOG_VARD(input1);
+  LOG_VARD(input2);
+  if (bounds)
+  {
+    LOG_VARD(GeometryUtils::polygonToString(bounds));
+  }
+  LOG_VARD(output);
 
   // INPUT VALIDATION AND SETUP
 
@@ -833,6 +836,12 @@ void ChangesetCutOnlyCreator::_processMaps(
 
 void ChangesetCutOnlyCreator::_validateInputs()
 {
+  if (!_replacementBounds)
+  {
+    throw IllegalArgumentException(
+      "Invalid replacement bounds passed to changeset replacement derivation.");
+  }
+
   // Fail if the reader that supports either input doesn't implement Boundable.
   std::shared_ptr<Boundable> boundable =
     std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input1));

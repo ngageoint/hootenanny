@@ -142,9 +142,9 @@ void ChangesetReplacementCreator::create(
   _input2Map.reset();
   _output = output;
   _replacementBounds = bounds;
+  _validateInputs();
   conf().set(
     ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
-  _validateInputs();
   _printJobDescription();
 
   LOG_INFO("******************************************");

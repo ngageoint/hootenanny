@@ -154,8 +154,8 @@ public:
     int outputIndex = 3;
     int osmApiDbUrlIndex = 4;
     LOG_VARD(args[2]);
-    if (!GeometryUtils::isEnvelopeConfigString(args[2].trimmed()) &&
-        !GeometryUtils::isPolygonConfigString(args[2].trimmed()))
+    if (!GeometryUtils::isEnvelopeString(args[2].trimmed()) &&
+        !GeometryUtils::isPolygonString(args[2].trimmed()))
     {
       input2Index = -1;
       boundsIndex = 1;
@@ -208,7 +208,7 @@ public:
     }
     std::shared_ptr<geos::geom::Polygon> bounds =
       std::dynamic_pointer_cast<geos::geom::Polygon>(
-        GeometryUtils::boundsFromConfigString(boundsStr));
+        GeometryUtils::boundsFromString(boundsStr));
     LOG_VARD(bounds);
     const QString output = args[outputIndex].trimmed();
     LOG_VARD(output);

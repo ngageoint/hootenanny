@@ -78,12 +78,12 @@ bool ApiDbReader::isSupported(const QString& urlStr)
 
 void ApiDbReader::setBoundingBox(const QString& bbox)
 {
-  setBounds(GeometryUtils::boundsFromConfigString(bbox));
+  setBounds(GeometryUtils::boundsFromString(bbox));
 }
 
 void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 {
-  _overrideBounds = GeometryUtils::boundsFromConfigString(bbox);
+  _overrideBounds = GeometryUtils::boundsFromString(bbox);
 }
 
 void ApiDbReader::initializePartial()

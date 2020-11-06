@@ -191,7 +191,7 @@ void MapCropper::setConfiguration(const Settings& conf)
   ConfigOptions confOpts = ConfigOptions(conf);
 
   std::shared_ptr<geos::geom::Geometry> envelope =
-    GeometryUtils::boundsFromConfigString(confOpts.getCropBounds());
+    GeometryUtils::boundsFromString(confOpts.getCropBounds());
   LOG_VART(envelope.get());
   if (envelope)
   {

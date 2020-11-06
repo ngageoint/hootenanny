@@ -65,8 +65,12 @@ See the User Guide for more details on command usage.
 ===== Conflate over a bounding box (not supported by all input formats):
 
 -----
+    # rectangular bounding box
     hoot conflate -D convert.bounds="-71.4698,42.4866,-71.4657,42.4902" input1.osm input2.osm output.osm
-    # TODO: add for non-rectangular bounds
+
+    # non-rectangular polygon bounds
+    hoot conflate -D convert.bounds="-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841" input1.osm \ 
+      input2.osm output.osm
 -----
 
 ==== Applying Changes
@@ -78,39 +82,25 @@ See the User Guide for more details on command usage.
     hoot changeset-apply changeset.osc http://railsPortUrl --stats --progress
 -----
 
-===== Create a changeset that replaces features with only overlapping features from another dataset within a specified bounds:
+===== Create a changeset that completely replaces features with those from another dataset within a specified bounding box:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc
 -----
 
-===== Create a changeset that completely replaces features with features from another dataset within a specified bounds:
+===== Create a changeset that completely replaces features with those from another dataset within a specified non-rectangular bounds:
 
 -----
-    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
-      output.osc --full-replacement
+    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm \
+      "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841" output.osc
 -----
 
-===== Create a changeset that completely replaces features with features from another dataset within a specified bounds and modifies no features outside the bounds:
-
------
-    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
-      output.osc --full-replacement --strict-bounds
------
-
-===== Create a changeset that replaces buildings with only overlapping buildings from another dataset within a specified bounds:
+===== Create a changeset that completely replaces all buildings with those from another dataset within a specified bounding box:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
       output.osc --geometry-filters "hoot::BuildingCriterion"
------
-
-===== Create a changeset that completely replaces all buildings with buildings from another dataset within a specified bounds:
-
------
-    hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
-      output.osc --geometry-filters "hoot::BuildingCriterion" --full-replacement
 -----
 
 ==== MetaInfo
@@ -532,7 +522,7 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
     hoot changeset-apply changeset.osc.sql osmapidb://username:password@localhost:5432/databaseName
 -----
 
-===== Create a changeset that replaces all buildings and POIs in a dataset with overlapping buildings and POIs from another dataset within a specified bounds:
+===== Create a changeset that replaces all buildings and POIs in a dataset with buildings and POIs from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm "-71.4698,42.4866,-71.4657,42.4902" \
@@ -549,7 +539,7 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
       --retainment-filter-options "tag.criterion.kvps='name=Staunton' --full-replacement
 -----
 
-===== Create a changeset that replaces all POIs in a dataset with overlapping cafes having "Java" in the name from another dataset within a specified bounds:
+===== Create a changeset that replaces all POIs in a dataset with cafes having "Java" in the name from another dataset within a specified bounds:
 
 -----
     hoot changeset-derive-replacement -D changeset.user.id=1 input1.osm input2.osm \

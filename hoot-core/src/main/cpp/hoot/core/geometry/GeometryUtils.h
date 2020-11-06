@@ -111,7 +111,7 @@ public:
    * @param str string to examine
    * @return true if the input represents an envelope; false otherwise
    */
-  static bool isEnvelopeConfigString(const QString& str);
+  static bool isEnvelopeString(const QString& str);
 
   /**
    * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
@@ -121,7 +121,7 @@ public:
    * @return an envelope string
    * @todo This should be replaced by toConfigString.
    */
-  static QString envelopeToConfigString(const geos::geom::Envelope& bounds);
+  static QString envelopeToString(const geos::geom::Envelope& bounds);
 
   /**
    * Converts a bounds in the format used in the hoot options config (minx,miny,maxx,maxy) to an
@@ -129,54 +129,57 @@ public:
    *
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
    * @return an envelope
+   * @throws if the string is non-empty and an invalid envelope string
    */
-  static geos::geom::Envelope envelopeFromConfigString(const QString& boundsStr);
+  static geos::geom::Envelope envelopeFromString(const QString& boundsStr);
 
   /**
-   * TODO
+   * Determines if a string represents a polygon
    *
-   * @param str
-   * @return
+   * @param str string to examine
+   * @return true if the input represents an polygon; false otherwise
    */
-  static bool isPolygonConfigString(const QString& str);
+  static bool isPolygonString(const QString& str);
 
   /**
-   * TODO
+   * Converts an envelope to a polygon
    *
-   * @param env
-   * @return
+   * @param env the envelope to convert
+   * @return a polygon
    */
   static std::shared_ptr<geos::geom::Polygon> envelopeToPolygon(const geos::geom::Envelope& env);
 
   /**
-   * TODO
+   * Parses a polygon from a string
    *
-   * @param str
-   * @return
+   * @param str the string to parse
+   * @return a valid polygon or null if the input string is empty
+   * @throws if the string is non-empty and an invalid polygon string
    */
   static std::shared_ptr<geos::geom::Polygon> polygonFromString(const QString& str);
 
   /**
-   * TODO
+   * Converts a polygon to a string representation
    *
-   * @param poly
-   * @return
+   * @param poly the polygon to convert
+   * @return a polygon string
    */
   static QString polygonToString(const std::shared_ptr<geos::geom::Polygon>& poly);
 
   /**
-   * TODO
+   * Converts either a envelope or polygon string to a polygon
    *
-   * @param str
-   * @return
+   * @param str the string to parse
+   * @return a valid polygon if the input string is a valid envelope or polygon string; a null
+   * object otherwise
    */
-  static std::shared_ptr<geos::geom::Polygon> boundsFromConfigString(const QString& str);
+  static std::shared_ptr<geos::geom::Polygon> boundsFromString(const QString& str);
 
   /**
-   * TODO
+   * Converts a polygon string to an envelope string
    *
-   * @param str
-   * @return
+   * @param str the string to convert
+   * @return an envelope string
    */
   static QString polygonStringToEnvelopeString(const QString& str);
 

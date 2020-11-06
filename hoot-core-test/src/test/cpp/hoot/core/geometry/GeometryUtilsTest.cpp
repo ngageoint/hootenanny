@@ -46,8 +46,8 @@ class GeometryUtilsTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(GeometryUtilsTest);
   CPPUNIT_TEST(calculateDestinationTest);
-  CPPUNIT_TEST(envelopeFromConfigStringTest);
-  // TODO: add poly config string test; closed and unclosed
+  CPPUNIT_TEST(envelopeTest);
+  CPPUNIT_TEST(polygonTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -66,43 +66,112 @@ public:
     CPPUNIT_ASSERT_DOUBLES_EQUAL(39.652, dest.y, 1e-3);
   }
 
-  void envelopeFromConfigStringTest()
-  {
-    HOOT_STR_EQUALS("Env[1:3,2:4]", GeometryUtils::envelopeFromConfigString("1,2,3,4").toString());
-
+  void envelopeTest()
+  { 
     QString exceptionMsg;
 
+    CPPUNIT_ASSERT(GeometryUtils::isEnvelopeString("1,2,3,4"));
+    CPPUNIT_ASSERT(!GeometryUtils::isEnvelopeString(" "));
+    CPPUNIT_ASSERT(!GeometryUtils::isEnvelopeString("-10,-10,10,"));
+    CPPUNIT_ASSERT(!GeometryUtils::isEnvelopeString("-10,-10,a,10"));
+
+    HOOT_STR_EQUALS("Env[1:3,2:4]", GeometryUtils::envelopeFromString("1,2,3,4").toString());
+
+    exceptionMsg = "";
     try
     {
-      GeometryUtils::envelopeFromConfigString("-10,-10,10,");
+      GeometryUtils::envelopeFromString("-10,-10,10,");
     }
-    catch (const HootException& e)
+    catch (const IllegalArgumentException& e)
     {
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid envelope string"));
 
+    exceptionMsg = "";
     try
     {
-      GeometryUtils::envelopeFromConfigString("-10,-10,a,10");
+      GeometryUtils::envelopeFromString("-10,-10,a,10");
     }
-    catch (const HootException& e)
+    catch (const IllegalArgumentException& e)
     {
       exceptionMsg = e.what();
     }
     CPPUNIT_ASSERT(exceptionMsg.contains("Invalid envelope string"));
 
-    try
-    {
-      GeometryUtils::envelopeFromConfigString(" ");
-    }
-    catch (const HootException& e)
-    {
-      exceptionMsg = e.what();
-    }
-    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid envelope string"));
+      // TODO: fix
+//    Envelope env("1,2,3,4");
+//    LOG_VART(env.isNull());
+//    HOOT_STR_EQUALS("Env[1:3,2:4]", GeometryUtils::envelopeToString(env));
   }
 
+  void polygonTest()
+  {
+    QString exceptionMsg;
+
+    CPPUNIT_ASSERT(
+      GeometryUtils::isPolygonString(
+        "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841"));
+    CPPUNIT_ASSERT(
+      GeometryUtils::isPolygonString(
+        "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839"));
+    CPPUNIT_ASSERT(!GeometryUtils::isPolygonString(" "));
+    CPPUNIT_ASSERT(
+      !GeometryUtils::isPolygonString("-71.4745,42.4841;-71.4669,42.4918"));
+    CPPUNIT_ASSERT(
+      !GeometryUtils::isPolygonString("-71.4745,42.4841;-71.4669,a;-71.4619,42.4839"));
+
+    HOOT_STR_EQUALS(
+      "POLYGON ((-71.4745000000000061 42.4840999999999980, -71.4668999999999954 42.4917999999999978, -71.4619000000000000 42.4838999999999984, -71.4745000000000061 42.4840999999999980))",
+      GeometryUtils::polygonFromString(
+        "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841")->toString());
+
+    exceptionMsg = "";
+    try
+    {
+      GeometryUtils::polygonFromString("-71.4745,42.4841;-71.4669,42.4918");
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Polygon string must have at least three points"));
+
+    exceptionMsg = "";
+    try
+    {
+      GeometryUtils::polygonFromString("-71.4745,42.4841;a,42.4918;-71.4619,42.4839");
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid polygon x coordinate value"));
+
+    exceptionMsg = "";
+    try
+    {
+      GeometryUtils::polygonFromString("-71.4745,42.4841;-71.4669,a;-71.4619,42.4839");
+    }
+    catch (const IllegalArgumentException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT(exceptionMsg.contains("Invalid polygon y coordinate value"));
+
+    HOOT_STR_EQUALS(
+      "POLYGON ((-71.4745000000000061 42.4840999999999980, -71.4668999999999954 42.4917999999999978, -71.4619000000000000 42.4838999999999984, -71.4745000000000061 42.4840999999999980))",
+      GeometryUtils::polygonFromString(
+        "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841")->toString());
+
+    // TODO: fix
+    //HOOT_STR_EQUALS("1,2,3,4", GeometryUtils::envelopeToPolygon(Envelope("1,2,3,4"))->toString());
+
+    HOOT_STR_EQUALS(
+      "-71.47450000000001,42.4839,-71.4619,42.4918",
+      GeometryUtils::polygonStringToEnvelopeString(
+        "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841"));
+  }
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(GeometryUtilsTest, "quick");

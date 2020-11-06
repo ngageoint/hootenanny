@@ -101,7 +101,7 @@ public:
     OsmApiDb db;
     db.open(ServicesDbTestUtils::getOsmApiDbUrl());
 
-    const Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
+    const Envelope bounds = GeometryUtils::envelopeFromString(boundsStr);
     LOG_VARD(boundsStr);
     LOG_VARD(createdAt.toString(OsmApiDb::TIME_FORMAT));
     const QString sql =

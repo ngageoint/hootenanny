@@ -55,7 +55,7 @@ void BoundedCommand::_writeBoundsFile()
   if (!boundsStr.isEmpty())
   {
     OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(GeometryUtils::boundsFromConfigString(boundsStr)),
+      GeometryUtils::createMapFromBounds(GeometryUtils::boundsFromString(boundsStr)),
       opts.getBoundsOutputFile());
   }
 }
