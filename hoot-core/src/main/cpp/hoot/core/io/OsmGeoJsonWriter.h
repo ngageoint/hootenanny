@@ -39,9 +39,8 @@ namespace hoot
 
 /**
  * Writes an OsmMap to a GeoJson file format.
+ *
  * https://geojson.org/geojson-spec.html
- *
- *
  */
 class OsmGeoJsonWriter : public OsmJsonWriter
 {
