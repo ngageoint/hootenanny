@@ -211,11 +211,6 @@ void MapCropper::setConfiguration(const Settings& conf)
 
 void MapCropper::apply(OsmMapPtr& map)
 {
-  if (MapProjector::isGeographic(map) == false && _nodeBounds.get())
-  {
-    throw HootException("If the node bounds is set the projection must be geographic.");
-  }
-
   LOG_DEBUG("Cropping ways...");
   LOG_VARD(map->size());
   LOG_VART(ElementIdUtils::allElementIdsPositive(map));
@@ -412,26 +407,15 @@ void MapCropper::apply(OsmMapPtr& map)
       // if the node is outside
       if (!nodeInside)
       {
-        // if the node is within the limiting bounds.
-        // TODO: This may have been left over from support for four pass conflation using Hadoop.
-        // Could we just use _envelope here instead?
-        LOG_VART(_nodeBounds.get());
-        if (_nodeBounds.get())
+        // If the node is within the limiting bounds, and the node is not part of a way,
+        if (n2w->find(it->first) == n2w->end())
         {
-          LOG_VART(_nodeBounds->contains(p.get()));
-        }
-        if (!_nodeBounds.get() || _nodeBounds->contains(p.get()))
-        {
-          // if the node is not part of a way
-          if (n2w->find(it->first) == n2w->end())
-          {
-            // remove the node
-            LOG_TRACE(
-              "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
-            RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
-            nodesRemoved++;
-            _numAffected++;
-          }
+          // remove the node.
+          LOG_TRACE(
+            "Removing node with coords: " << it->second->getX() << " : " << it->second->getY());
+          RemoveNodeByEid::removeNodeNoCheck(map, it->second->getId());
+          nodesRemoved++;
+          _numAffected++;
         }
       }
     }
@@ -447,8 +431,7 @@ void MapCropper::apply(OsmMapPtr& map)
   }
   LOG_VARD(map->size());
 
-  // Remove dangling features here now, which used to be done in CropCmd only. Haven't seen any
-  // bad side effects yet.
+  // Remove dangling features here now, which used to be done in CropCmd only.
   long numSuperfluousWaysRemoved = 0;
   long numSuperfluousNodesRemoved = 0;
   if (_removeSuperfluousFeatures)

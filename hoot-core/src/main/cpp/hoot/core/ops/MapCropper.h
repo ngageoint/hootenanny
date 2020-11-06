@@ -104,11 +104,8 @@ private:
 
   friend class MapCropperTest;
 
-  //geos::geom::Envelope _envelope;
-  std::shared_ptr<const geos::geom::Geometry> _nodeBounds;
   std::shared_ptr<const geos::geom::Geometry> _envelope;
   bool _invert;
-  //geos::geom::Envelope _nodeBounds;
   // If true, won't split apart features straddling the specified bounds.
   bool _keepEntireFeaturesCrossingBounds;
   // If true, will only keep features falling completely inside the specified bounds. This overrides
