@@ -33,7 +33,6 @@
 
 // Hoot
 #include <hoot/core/util/Units.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/elements/Tags.h>
@@ -62,8 +61,7 @@ class OsmMap;
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
  * with no nodes.
  */
-class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable,
-  public Configurable
+class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public Configurable
 {
 public:
 
@@ -119,9 +117,6 @@ public:
    * @see Configurable
    */
   virtual void setConfiguration(const Settings& conf);
-
-  virtual void readObject(QDataStream& is);
-  virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const { return "Removes all nodes not part of a way"; }
 

@@ -27,8 +27,6 @@
 #include "OpList.h"
 
 // hoot
-#include <hoot/core/io/ObjectInputStream.h>
-#include <hoot/core/io/ObjectOutputStream.h>
 #include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
@@ -47,20 +45,6 @@ void OpList::apply(std::shared_ptr<OsmMap> &map)
   }
 }
 
-void OpList::readObject(QDataStream& is)
-{
-  uint size;
-  is >> size;
-  LOG_INFO("Reading " << size << " objects.");
-  ObjectInputStream ois(is);
-  for (uint i = 0; i < size; i++)
-  {
-    LOG_INFO("Reading op.");
-    OsmMapOperation* op = ois.readObject<OsmMapOperation>();
-    _ops.push_back(std::shared_ptr<OsmMapOperation>(op));
-  }
-}
-
 void OpList::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
 {
   for (size_t i = 0; i < _ops.size(); i++)
@@ -70,16 +54,6 @@ void OpList::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
     {
       b->setBounds(bounds);
     }
-  }
-}
-
-void OpList::writeObject(QDataStream& os) const
-{
-  os << (uint)_ops.size();
-  ObjectOutputStream oos(os);
-  for (size_t i = 0; i < _ops.size(); i++)
-  {
-    oos.writeObject(*_ops[i]);
   }
 }
 

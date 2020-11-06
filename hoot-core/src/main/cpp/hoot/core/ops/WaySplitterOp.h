@@ -30,7 +30,6 @@
 
 // hoot
 #include <hoot/core/util/Units.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -47,7 +46,7 @@ namespace hoot
  *
  * If way.splitter.max.length is not specified then it defaults to 5km.
  */
-class WaySplitterOp : public OsmMapOperation, public Serializable, public Configurable
+class WaySplitterOp : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -62,13 +61,9 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual void readObject(QDataStream& is);
-
   virtual void setConfiguration(const Settings& conf);
 
   void setMaxLength(Meters l) { _maxLength = l; }
-
-  virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const { return "Splits ways"; }
 

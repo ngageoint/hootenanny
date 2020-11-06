@@ -28,8 +28,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/ObjectInputStream.h>
-#include <hoot/core/io/ObjectOutputStream.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/MapCropper.h>
@@ -67,7 +65,6 @@ class MapCropperTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MapCropperTest);
   CPPUNIT_TEST(runGeometryTest);
-  CPPUNIT_TEST(runSerializationTest);
   CPPUNIT_TEST(runConfigurationTest);
   CPPUNIT_TEST(runMultiPolygonTest);
   CPPUNIT_TEST(runKeepFeaturesOnlyCompletelyInBoundsTest);
@@ -138,32 +135,6 @@ public:
       uut.apply(map);
       CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodes().size());
     }
-  }
-
-  void runSerializationTest()
-  {
-    std::shared_ptr<Geometry> g(geos::io::WKTReader().read(
-      "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
-
-    MapCropper pre(g);
-    pre.setInvert(false);
-    OsmMapPtr mapPre = genPoints(0);
-    pre.apply(mapPre);
-
-    stringstream ss;
-    {
-      ObjectOutputStream oos(ss);
-      oos.writeObject(pre);
-    }
-
-    stringstream ss2(ss.str());
-    ObjectInputStream ois(ss2);
-    std::shared_ptr<OsmMapOperation> post(ois.readObject<OsmMapOperation>());
-    OsmMapPtr mapPost = genPoints(0);
-    post->apply(mapPost);
-
-    // do we get the same result before/after serialization?
-    CPPUNIT_ASSERT_EQUAL(mapPre->getNodes().size(), mapPost->getNodes().size());
   }
 
   void runConfigurationTest()

@@ -34,7 +34,6 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
@@ -59,8 +58,7 @@ class Way;
  * crop geometry are in WGS84. If the data before this operation is in a planar projection then it
  * should be reprojected using ReprojectToGeographicOp.
  */
-class MapCropper : public OsmMapOperation, public Serializable, public Boundable,
-  public Configurable
+class MapCropper : public OsmMapOperation, public Boundable, public Configurable
 {
 public:
 
@@ -78,14 +76,10 @@ public:
 
   virtual std::string getClassName() const override { return className(); }
 
-  virtual void readObject(QDataStream& is) override;
-
   /**
    * Sets the bounds on the nodes that will be removed.
    */
   virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) override;
-
-  virtual void writeObject(QDataStream& os) const override;
 
   virtual QString getDescription() const override { return "Crops a map"; }
 

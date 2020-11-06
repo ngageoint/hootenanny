@@ -29,7 +29,6 @@
 #define OPLIST_H
 
 // hoot
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
@@ -45,7 +44,7 @@ namespace hoot
  * std::shared_ptr<OpList> a(new OpList());
  * a->addOp(a);
  */
-class OpList : public OsmMapOperation, public Serializable, public Boundable
+class OpList : public OsmMapOperation, public Boundable
 {
 public:
 
@@ -64,11 +63,7 @@ public:
 
   virtual std::string getClassName() const { return className(); }
 
-  virtual void readObject(QDataStream& is);
-
   virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds);
-
-  virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const { return ""; }
 

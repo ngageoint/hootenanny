@@ -34,7 +34,6 @@
 #include <hoot/core/conflate/matching/MatchGraph.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStat.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
@@ -81,8 +80,8 @@ class MatchThreshold;
  * matches, and compare tags. A set of newer tags is returned as a changeset (because updating the
  * tags requires a modify operation).
  */
-class DiffConflator : public OsmMapOperation, public Serializable, public Boundable,
-    public Configurable, public ProgressReporter
+class DiffConflator : public OsmMapOperation, public Boundable, public Configurable,
+  public ProgressReporter
 {
 public:
 
@@ -129,13 +128,9 @@ public:
   void enableTags() { _conflateTags = true; }
   bool conflatingTags() const { return _conflateTags;}
 
-  virtual void readObject(QDataStream& /*is*/) {}
-
   virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) { _bounds = bounds; }
 
   virtual void setConfiguration(const Settings &conf);
-
-  virtual void writeObject(QDataStream& /*os*/) const {}
 
   virtual QString getDescription() const
   { return "Conflates two maps into a single map based on the difference between the inputs"; }

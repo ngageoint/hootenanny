@@ -309,14 +309,4 @@ void DuplicateNodeRemover::removeNodes(std::shared_ptr<OsmMap> map, Meters dista
   mnn.apply(map);
 }
 
-void DuplicateNodeRemover::readObject(QDataStream& is)
-{
-  is >> _distance;
-}
-
-void DuplicateNodeRemover::writeObject(QDataStream& os) const
-{
-  os << _distance;
-}
-
 }

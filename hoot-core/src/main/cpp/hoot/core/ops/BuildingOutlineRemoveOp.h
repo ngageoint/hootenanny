@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 
 // Standard
@@ -43,7 +42,7 @@ class Relation;
 /**
  * Goes through all building relations and removes features with the outline role.
  */
-class BuildingOutlineRemoveOp : public OsmMapOperation, public Serializable
+class BuildingOutlineRemoveOp : public OsmMapOperation
 {
 public:
 
@@ -55,10 +54,6 @@ public:
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
-
-  virtual void readObject(QDataStream& /*is*/) {}
-
-  virtual void writeObject(QDataStream& /*os*/) const {}
 
   virtual QString getInitStatusMessage() const { return "Removing outlines around buildings..."; }
 

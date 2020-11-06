@@ -340,30 +340,4 @@ void SuperfluousNodeRemover::setBounds(const std::shared_ptr<geos::geom::Polygon
   _bounds = bounds;
 }
 
-void SuperfluousNodeRemover::readObject(QDataStream& is)
-{
-  bool hasBounds;
-  is >> hasBounds;
-  if (hasBounds)
-  {
-    double minx, miny, maxx, maxy;
-    is >> minx >> miny >> maxx >> maxy;
-    _bounds = GeometryUtils::envelopeToPolygon(Envelope(minx, maxx, miny, maxy));
-  }
-}
-
-void SuperfluousNodeRemover::writeObject(QDataStream& os) const
-{
-  if (_bounds.get())
-  {
-    os << false;
-  }
-  else
-  {
-    os << true;
-    const Envelope env = *(_bounds->getEnvelopeInternal());
-    os << env.getMinX() << env.getMinY() << env.getMaxX() << env.getMaxY();
-  }
-}
-
 }

@@ -29,7 +29,6 @@
 #define DUPLICATE_NODE_REMOVER_H
 
 // hoot
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
@@ -55,7 +54,7 @@ namespace hoot
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
  * with no nodes.
  */
-class DuplicateNodeRemover : public OsmMapOperation, public Serializable, public Boundable
+class DuplicateNodeRemover : public OsmMapOperation, public Boundable
 {
 public:
 
@@ -79,9 +78,6 @@ public:
 
   virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) override
   { _bounds = bounds; }
-
-  virtual void readObject(QDataStream& is) override;
-  virtual void writeObject(QDataStream& os) const override;
 
   virtual QString getDescription() const override { return "Removes duplicate nodes"; }
 
