@@ -155,9 +155,9 @@ public:
   int size() const { return _settings.size(); }
 
   /**
-   * TODO
+   * Determines if this instance contains no settings
    *
-   * @return
+   * @return true if no settings are present; false otherwise
    */
   bool isEmpty() const { return _settings.size() == 0; }
 
