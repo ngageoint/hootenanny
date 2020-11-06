@@ -252,7 +252,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(6, uut.getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(8, uut.getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
