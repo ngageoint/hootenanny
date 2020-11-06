@@ -74,15 +74,6 @@ public:
   {
     // process optional params
 
-    // TODO: eventually this check can go away
-    if (args.contains("--full-replacement"))
-    {
-      LOG_WARN(
-        "All replacements are now done fully over the replacement bounds, so the " <<
-        "--full-replacement option need no longer be specified to " << getName());
-      args.removeAll("--full-replacement");
-    }
-
     QStringList geometryFilters;
     if (args.contains("--geometry-filters"))
     {
@@ -149,52 +140,9 @@ public:
     }
     LOG_VARD(retainmentFilterOptions);
 
-    // TODO: eventually this check can go away
-    if (args.contains("--strict-bounds"))
-    {
-      LOG_WARN(
-        "Bounds handling is now determined automatically by the replacement workflow selected, " <<
-        "so the --full-replacement option need no longer be specified to " << getName());
-      args.removeAll("--strict-bounds");
-    }
-
     bool printStats = false;
     QString outputStatsFile;
     processStatsParams(args, printStats, outputStatsFile);
-
-    if (args.contains("--disable-way-snapping"))
-    {
-      LOG_WARN("--disable-way-snapping no longer supported by " << getName());
-      args.removeAll("--disable-way-snapping");
-    }
-
-    // TODO: eventually this check can go away
-    if (args.contains("--conflate"))
-    {
-      LOG_WARN("--conflate option is no longer supported by  " << getName() << ".");
-      args.removeAll("--conflate");
-    }
-    if (args.contains("--disable-conflation"))
-    {
-      LOG_WARN("The --disable-conflation option is no longer supported by " << getName() << ".");
-      args.removeAll("--disable-conflation");
-    }
-
-    // TODO: eventually this check can go away
-    if (args.contains("--disable-cleaning"))
-    {
-      LOG_WARN(
-        "Cleaning now done on an as-needed basis, so the --disable-cleaning option is no " <<
-        "longer supported by " << getName());
-      args.removeAll("--disable-cleaning");
-    }
-
-    // TODO: eventually this check can go away
-    if (args.contains("--disable-oob-way-handling"))
-    {
-      LOG_WARN("The --disable-oob-way-handling option is no longer supported by " << getName());
-      args.removeAll("--disable-oob-way-handling");
-    }
 
     // command workflow identification and input param error checking
 

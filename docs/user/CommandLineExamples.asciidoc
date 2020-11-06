@@ -66,6 +66,7 @@ See the User Guide for more details on command usage.
 
 -----
     hoot conflate -D convert.bounds="-71.4698,42.4866,-71.4657,42.4902" input1.osm input2.osm output.osm
+    # TODO: add for non-rectangular bounds
 -----
 
 ==== Applying Changes
