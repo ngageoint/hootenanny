@@ -1051,7 +1051,7 @@ remove missing references to missing elements as a result of map cropping.
 If enabled, all ways that are outside of the bounds specified by `convert.bounds` when
 performing a bounded API database query but are immediately connected to a way that falls within or
 crosses the bounds are tagged with a custom tag. Must be used in conjunction with
-`convert.bbounds.keep.immediately.connected.ways.outside.bounds`. Not supported by all readers.
+`convert.bounds.keep.immediately.connected.ways.outside.bounds`. Not supported by all readers.
 
 === convert.require.area.for.polygon
 

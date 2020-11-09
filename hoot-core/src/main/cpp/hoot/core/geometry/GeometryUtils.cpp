@@ -288,7 +288,11 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
 
 std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
 {
-  // x1,y1;x2,y2;x3,y3...
+  // format: x1,y1;x2,y2;x3,y3...
+
+  // You could make the argument to use something more standardized here, like WKT. This format
+  // is easier to read and parse. If we decide to support geometries other than polys, then we may
+  // need to go to something like WKT.
 
   LOG_VART(str);
   if (str.trimmed().isEmpty())
@@ -652,7 +656,9 @@ QString GeometryUtils::geometryTypeIdToString(const std::shared_ptr<geos::geom::
   return geometryTypeIdToString(geometry->getGeometryTypeId());
 }
 
-std::shared_ptr<geos::geom::Geometry> GeometryUtils::mergeGeometries(std::vector<std::shared_ptr<geos::geom::Geometry>> geometries, const geos::geom::Envelope& envelope)
+std::shared_ptr<geos::geom::Geometry> GeometryUtils::mergeGeometries(
+  std::vector<std::shared_ptr<geos::geom::Geometry>> geometries,
+  const geos::geom::Envelope& envelope)
 {
   std::vector<std::shared_ptr<geos::geom::Geometry>> temp;
   PolygonCompare compare(envelope);

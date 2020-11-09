@@ -108,7 +108,6 @@ public:
     OsmApiReader reader;
     Settings s;
     s.set(ConfigOptions::getReaderHttpBboxThreadCountKey(), 1);
-    //s.set(ConfigOptions::getConvertBoundsKey(), "-111.3914, 40.4557, -111.1142, 40.7577");
     reader.setConfiguration(s);
     //  Set the bounds to be larger than 0.25 degrees by 0.25 degrees to cause a geographic split
     reader.setBounds(

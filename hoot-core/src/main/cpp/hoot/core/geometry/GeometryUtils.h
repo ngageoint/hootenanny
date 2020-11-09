@@ -167,7 +167,10 @@ public:
   static QString polygonToString(const std::shared_ptr<geos::geom::Polygon>& poly);
 
   /**
-   * Converts either a envelope or polygon string to a polygon
+   * Converts either a envelope or polygon bounds string to a polygon
+   *
+   * Currently we're only support polygon here, but the bounds string format could be extended to
+   * support other geometries if needed.
    *
    * @param str the string to parse
    * @return a valid polygon if the input string is a valid envelope or polygon string; a null
@@ -280,8 +283,8 @@ public:
   /**
    * @brief mergeGeometries Merge a vector of geometries all into one single geometry
    * @param geometries Vector of geos::geom::Geometry pointers that are to be merged together
-   * @param envelope Bounding envelope used for sorting goemetries by distance
-   * @return Single geometry object that contains all goemetries merged (geos::geom::Geometry::union)
+   * @param envelope Bounding envelope used for sorting geometries by distance
+   * @return Single geometry object that contains all geometries merged (geos::geom::Geometry::union)
    */
   static std::shared_ptr<geos::geom::Geometry> mergeGeometries(
     std::vector<std::shared_ptr<geos::geom::Geometry>> geometries,

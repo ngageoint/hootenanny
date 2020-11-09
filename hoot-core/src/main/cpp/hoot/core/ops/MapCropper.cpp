@@ -288,11 +288,11 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_VART(wayEnv);
 
     // It seems very unnecessary to check against both the way's linestring geometry and its
-    // envelope, however, this is how this was originally written after the option to check against
-    // a geometry was added (the class originally only checked against envelopes). A lot of test
-    // failures occur if you just try to check one or the other (checking against the linestring
-    // geometry seems to make more sense). Checking both may be contributing to crop performance
-    // issues. Opened #4359 to look further into it.
+    // envelope here, however, this is how this was originally written after the option to check
+    // against a geometry was added (the class originally only checked against envelopes). Several
+    // test failures occur if you just try to check one or the other (checking against the
+    // linestring geometry seems to make more sense...but maybe not...). Checking both could
+    // contribute to crop performance issues. Opened #4359 to look further into it.
     if (_isWhollyOutside(wayEnv) || _isWhollyOutside(*ls))
     {
       // remove the way
@@ -301,7 +301,9 @@ void MapCropper::apply(OsmMapPtr& map)
       _numWaysOutOfBounds++;
       _numAffected++;
     }
-    else if (_isWhollyInside(wayEnv) || _isWhollyInside(*ls))
+   //  For whatever reason, the inside check against an envelope only causes no problems, but
+   // checking against just the geometry yields test failures.
+    else if (_isWhollyInside(wayEnv))
     {
       // keep the way
       LOG_TRACE("Keeping wholly inside way: " << w->getElementId() << "...");
