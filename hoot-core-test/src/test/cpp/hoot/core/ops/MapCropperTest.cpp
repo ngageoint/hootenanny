@@ -145,24 +145,24 @@ public:
     settings.set("crop.bounds", "12.462,41.891,12.477,41.898");
     cropper.setConfiguration(settings);
     HOOT_STR_EQUALS(
-      "Env[12.462:12.477,41.891:41.898]", cropper._envelope->getEnvelopeInternal()->toString());
+      "Env[12.462:12.477,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set("crop.bounds", "-12.462,41.891,12.477,41.898");
     cropper.setConfiguration(settings);
     HOOT_STR_EQUALS(
-      "Env[-12.462:12.477,41.891:41.898]", cropper._envelope->getEnvelopeInternal()->toString());
+      "Env[-12.462:12.477,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set("crop.bounds", "12,41.891,13,41.898");
     cropper.setConfiguration(settings);
     HOOT_STR_EQUALS(
-      "Env[12:13,41.891:41.898]", cropper._envelope->getEnvelopeInternal()->toString());
+      "Env[12:13,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set("crop.bounds", "12,41.891,13.,42");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS("Env[12:13,41.891:42]", cropper._envelope->getEnvelopeInternal()->toString());
+    HOOT_STR_EQUALS("Env[12:13,41.891:42]", cropper._bounds->getEnvelopeInternal()->toString());
   }
 
   void runMultiPolygonTest()

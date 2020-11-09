@@ -49,10 +49,6 @@ class Way;
 /**
  * Provides a clean crop at the edges of the map rather than the ragged crop you get from Osmosis.
  * As a result, it introduces new nodes into the data and may split ways up into multiple ways.
- *
- * In the class, outside and inside are referenced. Outside refers to a geometry that is wholly
- * outside the region that will be kept. Inside refers to a geometry that is at least partially
- * inside the region that will be kept.
  */
 class MapCropper : public OsmMapOperation, public Boundable, public Configurable
 {
@@ -63,6 +59,9 @@ public:
   static std::string className() { return "hoot::MapCropper"; }
 
   MapCropper();
+  // This is the only Boundable implementation where we're storing a Geometry instead of a Polygon.
+  // This is due to the fact that cookie cutting needs to be able to pass in geometry types other
+  // than Polygon. That object is passed in via the constructor instead of through setBounds.
   MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g);
   virtual ~MapCropper() = default;
 
@@ -100,8 +99,8 @@ private:
 
   friend class MapCropperTest;
 
-  // the boundary at which the data is cropped
-  std::shared_ptr<const geos::geom::Geometry> _envelope;
+  // the boundary at which the data is cropped; see comments in constructor header
+  std::shared_ptr<const geos::geom::Geometry> _bounds;
   // if false data outside of the boundary is removed; if true, data inside of the boundary is
   // removed
   bool _invert;

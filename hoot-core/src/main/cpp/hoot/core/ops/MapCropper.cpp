@@ -97,7 +97,7 @@ _logWarningsForMissingElements(true)
 }
 
 MapCropper::MapCropper(const std::shared_ptr<const Geometry>& g) :
-_envelope(g),
+_bounds(g),
 _invert(false),
 _keepEntireFeaturesCrossingBounds(false),
 _keepOnlyFeaturesInsideBounds(false),
@@ -112,18 +112,17 @@ _numCrossingWaysRemoved(0),
 _numNodesRemoved(0),
 _logWarningsForMissingElements(true)
 {
-  LOG_VART(_envelope.get());
+  LOG_VART(_bounds.get());
 }
 
 QString MapCropper::getInitStatusMessage() const
 {
   QString msg = "Cropping map at bounds: ";
-  // TODO: remove
-  if (_envelope.get())
+  if (_bounds)
   {
     msg +=
       "..." +
-      QString::fromStdString(_envelope->toString()).right(
+      QString::fromStdString(_bounds->toString()).right(
         ConfigOptions().getProgressVarPrintLengthMax() * 2);
   }
   msg += "...";
@@ -132,7 +131,7 @@ QString MapCropper::getInitStatusMessage() const
 
 void MapCropper::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
 {
-  _envelope = bounds;
+  _bounds = bounds;
 }
 
 void MapCropper::setInvert(bool invert)
@@ -191,13 +190,13 @@ void MapCropper::setConfiguration(const Settings& conf)
 {
   ConfigOptions confOpts = ConfigOptions(conf);
 
-  std::shared_ptr<geos::geom::Geometry> envelope =
+  std::shared_ptr<geos::geom::Geometry> bounds =
     GeometryUtils::boundsFromString(confOpts.getCropBounds());
-  LOG_VART(envelope.get());
-  if (envelope)
+  LOG_VART(bounds.get());
+  if (bounds)
   {
-    _envelope = envelope;
-    LOG_VARD(_envelope);
+    _bounds = bounds;
+    LOG_VARD(_bounds);
   }
 
   // invert must be set before the two options following it
@@ -216,7 +215,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(map->size());
   LOG_VART(ElementIdUtils::allElementIdsPositive(map));
 
-  if (!_envelope)
+  if (!_bounds)
   {
     throw IllegalArgumentException("No bounds set on MapCropper.");
   }
@@ -235,7 +234,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(_invert);
   LOG_VARD(_keepEntireFeaturesCrossingBounds);
   LOG_VARD(_keepOnlyFeaturesInsideBounds);
-  LOG_VART(_envelope->toString());
+  LOG_VART(_bounds->toString());
   LOG_VARD(_inclusionCrit.get());
 
   // go through all the ways
@@ -248,6 +247,21 @@ void MapCropper::apply(OsmMapPtr& map)
     LOG_TRACE("Checking " << w->getElementId() << " for cropping...");
     LOG_VART(w->getNodeIds());
     LOG_VART(w);
+
+    if (_inclusionCrit)
+    {
+      LOG_VART(_inclusionCrit->isSatisfied(w));
+    }
+    if (_inclusionCrit && _inclusionCrit->isSatisfied(w))
+    {
+      // keep the way
+      LOG_TRACE("Keeping explicitly included way: " << w->getElementId() << "...");
+      _explicitlyIncludedWayIds.insert(w->getId());
+      _numWaysInBounds++;
+      _numProcessed++;
+      wayCtr++;
+      continue;
+    }
 
     std::shared_ptr<LineString> ls = elementConverter.convertToLineString(w);
     if (!ls.get())
@@ -273,21 +287,14 @@ void MapCropper::apply(OsmMapPtr& map)
     const Envelope& wayEnv = *(ls->getEnvelopeInternal());
     LOG_VART(wayEnv);
 
-    if (_inclusionCrit)
-    {
-      LOG_VART(_inclusionCrit->isSatisfied(w));
-    }
-    if (_inclusionCrit && _inclusionCrit->isSatisfied(w))
-    {
-      // keep the way
-      LOG_TRACE("Keeping explicitly included way: " << w->getElementId() << "...");
-      _explicitlyIncludedWayIds.insert(w->getId());
-      _numWaysInBounds++;
-    }
-    // Have found that if we have the geometry based bounds, using it for inside/outside way
-    // comparison is more accurate than using the envelope based bounds. Its possible that we could
-    // eventually use that method exclusively and get rid of storing the envelope.
-    else if (_isWhollyOutside(*ls) || _isWhollyOutside(wayEnv))
+    // Originally, this class only worked with envelopes. After it was changed to work with other
+    // geometries, these bounds checks were intended to be written to check the Geometry bounds if
+    // we were working with a Geometry and otherwise check the Envelope's bounds. However, they seem
+    // to have been written incorrectly to always check the Envelope of the ways regardless of
+    // whether the Geometry was populated or not. This also may be contributing to crop performance
+    // issues. Trying to correct this now by removing the envelope check causes several test
+    // failures. Opened #4359 to look further into it.
+    if (_isWhollyOutside(*ls) || _isWhollyOutside(wayEnv))
     {
       // remove the way
       LOG_TRACE("Dropping wholly outside way: " << w->getElementId() << "...");
@@ -373,14 +380,14 @@ void MapCropper::apply(OsmMapPtr& map)
       LOG_VART(c.toString());
       if (_invert == false)
       {
-        nodeInside = _envelope->covers(p.get());
+        nodeInside = _bounds->covers(p.get());
         LOG_TRACE(
           "Node inside check: non-inverted crop and the envelope covers the element=" <<
           nodeInside);
       }
       else
       {
-        nodeInside = !_envelope->covers(p.get());
+        nodeInside = !_bounds->covers(p.get());
         LOG_TRACE(
           "Node inside check: inverted crop and the envelope covers the element=" << !nodeInside);
       }
@@ -476,18 +483,18 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
   try
   {
     if (_invert)
-      g.reset(fg->difference(_envelope.get()));
+      g.reset(fg->difference(_bounds.get()));
     else
-      g.reset(fg->intersection(_envelope.get()));
+      g.reset(fg->intersection(_bounds.get()));
   }
   catch (const geos::util::GEOSException&)
   {
     // try cleaning up the geometry and try again.
     fg.reset(GeometryUtils::validateGeometry(fg.get()));
     if (_invert)
-      g.reset(fg->difference(_envelope.get()));
+      g.reset(fg->difference(_bounds.get()));
     else
-      g.reset(fg->intersection(_envelope.get()));
+      g.reset(fg->intersection(_bounds.get()));
   }
   LOG_VART(GeometryUtils::geometryTypeIdToString(g));
 
@@ -566,7 +573,7 @@ bool MapCropper::_isWhollyInside(const Envelope& e)
   bool result = false;;
   if (_invert)
   {
-    result = !_envelope->getEnvelopeInternal()->intersects(e);
+    result = !_bounds->getEnvelopeInternal()->intersects(e);
     LOG_TRACE(
       "Wholly inside way check: inverted crop and the envelope intersects with the element=" <<
       !result);
@@ -574,7 +581,7 @@ bool MapCropper::_isWhollyInside(const Envelope& e)
   else
   {
     // If it isn't inverted, we need to do an expensive check.
-    result = _envelope->getEnvelopeInternal()->covers(e);
+    result = _bounds->getEnvelopeInternal()->covers(e);
     LOG_TRACE(
       "Wholly inside way check: non-inverted crop and the envelope covers the element=" << result);
   }
@@ -587,7 +594,7 @@ bool MapCropper::_isWhollyInside(const Geometry& e)
   bool result = false;
   if (_invert)
   {
-    result = !_envelope->intersects(&e);
+    result = !_bounds->intersects(&e);
     LOG_TRACE(
       "Wholly inside way check: inverted crop and the envelope intersects with the element=" <<
       !result);
@@ -595,7 +602,7 @@ bool MapCropper::_isWhollyInside(const Geometry& e)
   else
   {
     // If it isn't inverted, we need to do an expensive check.
-    result = _envelope->covers(&e);
+    result = _bounds->covers(&e);
     LOG_TRACE(
       "Wholly inside way check: non-inverted crop and the envelope covers the element=" << result);
   }
@@ -608,16 +615,16 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
   bool result = false;
   if (!_invert)
   {
-    LOG_VART(_envelope);
-    LOG_VART(_envelope->getEnvelopeInternal());
-    result = !_envelope->getEnvelopeInternal()->intersects(e);
+    LOG_VART(_bounds);
+    LOG_VART(_bounds->getEnvelopeInternal());
+    result = !_bounds->getEnvelopeInternal()->intersects(e);
     LOG_TRACE(
       "Wholly outside way check: non-inverted crop and the envelope intersects with the element=" <<
       !result);
   }
   else
   {
-    result = _envelope->getEnvelopeInternal()->covers(e);
+    result = _bounds->getEnvelopeInternal()->covers(e);
     LOG_TRACE(
       "Wholly outside way check: inverted crop and the envelope covers the element=" << result);
   }
@@ -630,14 +637,14 @@ bool MapCropper::_isWhollyOutside(const Geometry& e)
   bool result = false;
   if (!_invert)
   {
-    result = !_envelope->intersects(&e);
+    result = !_bounds->intersects(&e);
     LOG_TRACE(
       "Wholly outside way check: non-inverted crop and the envelope intersects with the element=" <<
       !result);
   }
   else
   {
-    result = _envelope->covers(&e);
+    result = _bounds->covers(&e);
     LOG_TRACE(
       "Wholly outside way check: inverted crop and the envelope covers the element=" << result);
   }
