@@ -282,8 +282,8 @@ void MapCropper::apply(OsmMapPtr& map)
       _numWaysOutOfBounds++;
       _numAffected++;
     }
-   //  For whatever reason, the inside check against an envelope only causes no problems, but
-   // checking against just the geometry yields test failures.
+    //  For whatever reason, the inside check against an envelope only causes no problems, but
+    // checking against just the geometry yields test failures.
     else if (_isWhollyInside(wayEnv))
     {
       // keep the way
