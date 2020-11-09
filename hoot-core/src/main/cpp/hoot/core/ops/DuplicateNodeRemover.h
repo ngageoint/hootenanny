@@ -76,7 +76,7 @@ public:
    */
   static void removeNodes(std::shared_ptr<OsmMap> map, Meters distanceThreshold = -1);
 
-  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) override
+  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) override
   { _bounds = bounds; }
 
   virtual QString getDescription() const override { return "Removes duplicate nodes"; }
@@ -90,7 +90,7 @@ protected:
 
   std::shared_ptr<OsmMap> _map;
   Meters _distance;
-  std::shared_ptr<geos::geom::Polygon> _bounds;
+  std::shared_ptr<geos::geom::Geometry> _bounds;
 
   void _logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
                        const double distance = -1.0, const double calcdDistance = -1.0);

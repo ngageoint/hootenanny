@@ -83,8 +83,9 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/DcTigerRoads.osm", map);
 
-    MapCropper(GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)))
-      .apply(map);
+    MapCropper cropper;
+    cropper.setBounds(GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)));
+    cropper.apply(map);
 
     MapCleaner().apply(map);
     RubberSheet uut;
@@ -112,8 +113,10 @@ public:
       reader.setDefaultStatus(Status::Unknown2);
       reader.read("test-files/DcTigerRoads.osm", map);
 
-      MapCropper(GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)))
-        .apply(map);
+      MapCropper cropper;
+      cropper.setBounds(
+        GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)));
+      cropper.apply(map);
 
       MapCleaner().apply(map);
       RubberSheet uut;
@@ -140,8 +143,10 @@ public:
       reader.setDefaultStatus(Status::Unknown2);
       reader.read("test-files/DcTigerRoads.osm", map);
 
-      MapCropper(GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)))
-        .apply(map);
+      MapCropper cropper;
+      cropper.setBounds(
+        GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)));
+      cropper.apply(map);
 
       MapCleaner().apply(map);
       RubberSheet uut;
@@ -214,8 +219,10 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/DcTigerRoads.osm", map);
 
-    MapCropper(GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)))
-      .apply(map);
+    MapCropper cropper;
+    cropper.setBounds(
+      GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)));
+    cropper.apply(map);
 
     MapCleaner().apply(map);
     RubberSheet uut;

@@ -30,8 +30,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/visitors/UnionPolygonsVisitor.h>
 #include <hoot/core/visitors/CalculateMapBoundsVisitor.h>
@@ -92,7 +90,8 @@ void CookieCutter::cut(OsmMapPtr& cutterShapeOutlineMap, OsmMapPtr& doughMap)
   cutterShapeOutlineMap.reset();
 
   // remove the cookie cutter portion from the dough
-  MapCropper cropper(cutterShape);
+  MapCropper cropper;
+  cropper.setBounds(cutterShape);
   cropper.setConfiguration(conf());
   cropper.setKeepEntireFeaturesCrossingBounds(_keepEntireFeaturesCrossingBounds);
   cropper.setKeepOnlyFeaturesInsideBounds(_keepOnlyFeaturesInsideBounds);

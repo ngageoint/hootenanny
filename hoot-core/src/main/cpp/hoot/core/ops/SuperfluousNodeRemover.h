@@ -87,7 +87,7 @@ public:
    */
   static long removeNodes(
     std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
-    const std::shared_ptr<geos::geom::Polygon>& bounds = std::shared_ptr<geos::geom::Polygon>());
+    const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
 
   /**
    * Counts superfluous nodes in a map without removing them
@@ -99,7 +99,7 @@ public:
    */
   static long countSuperfluousNodes(
     std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
-    const std::shared_ptr<geos::geom::Polygon>& bounds = std::shared_ptr<geos::geom::Polygon>());
+    const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
 
   /**
    * Collects superfluous nodes from a map without removing them
@@ -111,7 +111,7 @@ public:
    */
   static std::set<long> collectSuperfluousNodeIds(
     std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
-    const std::shared_ptr<geos::geom::Polygon>& bounds = std::shared_ptr<geos::geom::Polygon>());
+    const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
 
   /**
    * @see Configurable
@@ -127,13 +127,13 @@ public:
 
   std::set<long> getSuperfluousNodeIds() const { return _superfluousNodeIds; }
 
-  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds);
+  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds);
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
   void setRemoveNodes(bool remove) { _removeNodes = remove; }
 
 protected:
 
-  std::shared_ptr<geos::geom::Polygon> _bounds;
+  std::shared_ptr<geos::geom::Geometry> _bounds;
 
   // turning this off is useful for debugging the existence of orphaned nodes
   bool _removeNodes;

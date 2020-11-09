@@ -128,7 +128,7 @@ public:
   void enableTags() { _conflateTags = true; }
   bool conflatingTags() const { return _conflateTags;}
 
-  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) { _bounds = bounds; }
+  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) { _bounds = bounds; }
 
   virtual void setConfiguration(const Settings &conf);
 
@@ -196,7 +196,7 @@ private:
   static int logWarnCount;
 
   OsmMapPtr _pMap;
-  std::shared_ptr<geos::geom::Polygon> _bounds;
+  std::shared_ptr<geos::geom::Geometry> _bounds;
   const MatchFactory& _matchFactory;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   Settings _settings;

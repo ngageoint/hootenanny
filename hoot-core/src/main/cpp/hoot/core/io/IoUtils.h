@@ -137,7 +137,7 @@ public:
    * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
    * connected to a way within the bounds will be kept
    */
-  static void cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Polygon>& bounds,
+  static void cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
                            const bool keepConnectedOobWays = false);
 
   /**

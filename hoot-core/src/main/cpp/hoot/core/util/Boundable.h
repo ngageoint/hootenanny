@@ -28,7 +28,7 @@
 #define BOUNDABLE_H
 
 // geos
-#include <geos/geom/Polygon.h>
+#include <geos/geom/Geometry.h>
 
 namespace hoot
 {
@@ -38,13 +38,13 @@ namespace hoot
  * bounds is context dependent, but in the case of OsmMapOperations it limits the scope of the
  * operation.
  *
- * Defining a bounds in terms of a polygon for now (used to be an envelope). Its possible that we
- * could support other geometries, but not seeing the need for it now, and other geometries
- * possibly wouldn't make sense with some implementations. For the few implementations that may need
- * the bounds to be a rectangular envelope, custom error checking should be added to their
- * configuration parsing to ensure an envelope is passed. As far as the setBounds method is
- * concerned, simply automatically and silently using the envelope of the passed geometry is what's
- * being done at this time.
+ * The bounds is defined in terms of a geometry (used to be an envelope). Currently from a config
+ * string we're only supporting Envelope and Polygon geometries
+ * (see GeometryUtils::boundsFromString), but that could change. For the implementations
+ * that may need the bounds to be a rectangular envelope, custom error checking should be added to
+ * their configuration parsing to ensure an envelope is passed. As far as the setBounds method is
+ * concerned, simply automatically and silently using the envelope of the passed in geometry is the
+ * preferred method.
  */
 class Boundable
 {
@@ -57,7 +57,7 @@ public:
    * Sets the bounds in WGS84. It is important to note that even if the rest of the operation is
    * not in WGS84 the bounds will still be in WGS84.
    */
-  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) = 0;
+  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) = 0;
 };
 
 }

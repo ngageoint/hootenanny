@@ -52,7 +52,7 @@ public:
   static std::string className() { return "hoot::ImmediatelyConnectedOutOfBoundsWayTagger"; }
 
   ImmediatelyConnectedOutOfBoundsWayTagger();
-  ImmediatelyConnectedOutOfBoundsWayTagger(const std::shared_ptr<geos::geom::Polygon>& bounds,
+  ImmediatelyConnectedOutOfBoundsWayTagger(const std::shared_ptr<geos::geom::Geometry>& bounds,
                                            const bool strictBounds);
   virtual ~ImmediatelyConnectedOutOfBoundsWayTagger() = default;
 
@@ -64,7 +64,7 @@ public:
   /**
    * @see Boundable
    */
-  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
+  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
   { _boundsChecker.setBounds(bounds); }
 
   /**
@@ -87,7 +87,10 @@ public:
    * @see ApiEntityInfo
    */
   virtual QString getDescription() const
-  { return "Tags ways outside of a query bounds but immediately connected to ways that cross the bounds"; }
+  {
+    return
+      "Tags ways outside of a bounds but immediately connected to ways that cross the bounds";
+  }
 
   long getNumTagged() const { return _numAffected; }
 

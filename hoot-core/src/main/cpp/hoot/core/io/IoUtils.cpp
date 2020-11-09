@@ -197,14 +197,15 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
 }
 
-void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Polygon>& bounds,
+void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
                            const bool keepConnectedOobWays)
 {
   LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
   LOG_VARD(keepConnectedOobWays);
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
-  MapCropper cropper(bounds);
+  MapCropper cropper;
+  cropper.setBounds(bounds);
   cropper.setKeepEntireFeaturesCrossingBounds(
     ConfigOptions().getConvertBoundsKeepEntireFeaturesCrossingBounds());
   const bool strictBoundsHandling =

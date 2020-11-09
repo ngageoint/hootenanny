@@ -60,16 +60,6 @@ void InBoundsCriterion::setConfiguration(const Settings& conf)
   setBounds(GeometryUtils::boundsFromString(config.getInBoundsCriterionBounds()));
 }
 
-void InBoundsCriterion::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
-{
-  _bounds = bounds;
-  if (_bounds)
-  {
-    LOG_VART(_bounds->toString());
-  }
-}
-
-
 void InBoundsCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();

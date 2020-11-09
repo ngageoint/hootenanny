@@ -44,7 +44,7 @@ _strictBounds(true)
 }
 
 ImmediatelyConnectedOutOfBoundsWayTagger::ImmediatelyConnectedOutOfBoundsWayTagger(
-  const std::shared_ptr<geos::geom::Polygon>& bounds, const bool strictBounds) :
+  const std::shared_ptr<geos::geom::Geometry>& bounds, const bool strictBounds) :
 _strictBounds(strictBounds)
 {
   setBounds(bounds);

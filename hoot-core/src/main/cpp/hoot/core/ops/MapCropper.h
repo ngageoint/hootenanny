@@ -59,10 +59,6 @@ public:
   static std::string className() { return "hoot::MapCropper"; }
 
   MapCropper();
-  // This is the only Boundable implementation where we're storing a Geometry instead of a Polygon.
-  // This is due to the fact that cookie cutting needs to be able to pass in geometry types other
-  // than Polygon. That object is passed in via the constructor instead of through setBounds.
-  MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g);
   virtual ~MapCropper() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
@@ -74,7 +70,7 @@ public:
   /**
    * Sets the bounds on the nodes that will be removed.
    */
-  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) override;
+  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) override;
 
   virtual QString getDescription() const override { return "Crops a map"; }
 

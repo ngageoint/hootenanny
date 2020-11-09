@@ -77,7 +77,8 @@ public:
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, in, true);
 
-    MapCropper cropper(_env);
+    MapCropper cropper;
+    cropper.setBounds(_env);
     cropper.setConfiguration(Settings::getInstance());
     cropper.apply(map);
 

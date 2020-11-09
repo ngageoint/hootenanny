@@ -1520,7 +1520,8 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
           mapName += "-" + GeometryTypeCriterion::typeToString(geometryType);
         }
         cookieCutMap->setName(mapName);
-        MapCropper cropper(_replacementBounds);
+        MapCropper cropper;
+        cropper.setBounds(_replacementBounds);
         cropper.setRemoveSuperflousFeatures(false);
         cropper.setKeepEntireFeaturesCrossingBounds(false);
         cropper.setKeepOnlyFeaturesInsideBounds(false);
@@ -1864,7 +1865,8 @@ void ChangesetCutOnlyCreator::_cropMapForChangesetDerivation(
   LOG_VARD(keepEntireFeaturesCrossingBounds);
   LOG_VARD(keepOnlyFeaturesInsideBounds);
 
-  MapCropper cropper(_replacementBounds);
+  MapCropper cropper;
+  cropper.setBounds(_replacementBounds);
   cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);
   cropper.setKeepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds);
   // We're not going to remove missing elements, as we want to have as minimal of an impact on

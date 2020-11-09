@@ -127,7 +127,7 @@ public:
 
   virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
 
-  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) { _bounds = bounds; }
+  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) { _bounds = bounds; }
 
   virtual void setConfiguration(const Settings& conf) override;
 
@@ -192,7 +192,7 @@ protected:
   long _numRead;
   long _statusUpdateInterval;
 
-  std::shared_ptr<geos::geom::Polygon> _bounds;
+  std::shared_ptr<geos::geom::Geometry> _bounds;
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
 

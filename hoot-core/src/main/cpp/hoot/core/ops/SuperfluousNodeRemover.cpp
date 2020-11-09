@@ -82,6 +82,11 @@ void SuperfluousNodeRemover::setConfiguration(const Settings& conf)
   LOG_VARD(_excludeIds.size());
 }
 
+void SuperfluousNodeRemover::setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
+{
+  _bounds = bounds;
+}
+
 void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;     // _numAffected reflects the actual number of nodes removed
@@ -283,7 +288,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 
 long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
                                          const bool ignoreInformationTags,
-                                         const std::shared_ptr<geos::geom::Polygon>& bounds)
+                                         const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   SuperfluousNodeRemover nodeRemover;
   nodeRemover.setIgnoreInformationTags(ignoreInformationTags);
@@ -299,7 +304,7 @@ long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
 
 long SuperfluousNodeRemover::countSuperfluousNodes(
   std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags,
-  const std::shared_ptr<geos::geom::Polygon>& bounds)
+  const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   SuperfluousNodeRemover nodeCounter;
   nodeCounter.setIgnoreInformationTags(ignoreInformationTags);
@@ -318,7 +323,7 @@ long SuperfluousNodeRemover::countSuperfluousNodes(
 
 std::set<long> SuperfluousNodeRemover::collectSuperfluousNodeIds(
   std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags,
-  const std::shared_ptr<geos::geom::Polygon>& bounds)
+  const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   SuperfluousNodeRemover nodeIdCollector;
   nodeIdCollector.setIgnoreInformationTags(ignoreInformationTags);
@@ -333,11 +338,6 @@ std::set<long> SuperfluousNodeRemover::collectSuperfluousNodeIds(
   msg = nodeIdCollector.getCompletedStatusMessage().replace("Removed", "Collected");
   LOG_DEBUG(msg);
   return nodeIdCollector.getSuperfluousNodeIds();
-}
-
-void SuperfluousNodeRemover::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
-{
-  _bounds = bounds;
 }
 
 }

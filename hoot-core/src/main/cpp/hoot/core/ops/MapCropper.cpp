@@ -96,25 +96,6 @@ _logWarningsForMissingElements(true)
 {
 }
 
-MapCropper::MapCropper(const std::shared_ptr<const Geometry>& g) :
-_bounds(g),
-_invert(false),
-_keepEntireFeaturesCrossingBounds(false),
-_keepOnlyFeaturesInsideBounds(false),
-_removeSuperfluousFeatures(true),
-_removeMissingElements(true),
-_statusUpdateInterval(1000),
-_numWaysInBounds(0),
-_numWaysOutOfBounds(0),
-_numWaysCrossingThreshold(0),
-_numCrossingWaysKept(0),
-_numCrossingWaysRemoved(0),
-_numNodesRemoved(0),
-_logWarningsForMissingElements(true)
-{
-  LOG_VART(_bounds.get());
-}
-
 QString MapCropper::getInitStatusMessage() const
 {
   QString msg = "Cropping map at bounds: ";
@@ -129,7 +110,7 @@ QString MapCropper::getInitStatusMessage() const
   return msg;
 }
 
-void MapCropper::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
+void MapCropper::setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   _bounds = bounds;
 }

@@ -497,7 +497,8 @@ private:
     _subTaskTimer.restart();
     if (!cropBounds.isEmpty())
     {
-      MapCropper cropper(GeometryUtils::boundsFromString(cropBounds));
+      MapCropper cropper;
+      cropper.setBounds(GeometryUtils::boundsFromString(cropBounds));
       cropper.setRemoveMissingElements(false);
       cropper.setRemoveSuperflousFeatures(false);
       LOG_STATUS(
@@ -548,7 +549,8 @@ private:
     _subTaskTimer.restart();
     if (!cropBounds.isEmpty())
     {
-      MapCropper cropper(GeometryUtils::boundsFromString(cropBounds));
+      MapCropper cropper;
+      cropper.setBounds(GeometryUtils::boundsFromString(cropBounds));
       cropper.setRemoveMissingElements(false);
       cropper.setRemoveSuperflousFeatures(false);
       LOG_STATUS(

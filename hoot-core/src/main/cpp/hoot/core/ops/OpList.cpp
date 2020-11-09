@@ -45,7 +45,7 @@ void OpList::apply(std::shared_ptr<OsmMap> &map)
   }
 }
 
-void OpList::setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
+void OpList::setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   for (size_t i = 0; i < _ops.size(); i++)
   {

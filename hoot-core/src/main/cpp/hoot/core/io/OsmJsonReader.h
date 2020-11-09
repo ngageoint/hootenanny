@@ -234,7 +234,7 @@ public:
    */
   virtual void setConfiguration(const Settings& conf) override;
 
-  virtual void setBounds(const std::shared_ptr<geos::geom::Polygon>& bounds) { _bounds = bounds; }
+  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) { _bounds = bounds; }
 
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
@@ -274,7 +274,7 @@ protected:
   /** List of JSON strings, one for each HTTP response */
   QStringList _results;
 
-  std::shared_ptr<geos::geom::Polygon> _bounds;
+  std::shared_ptr<geos::geom::Geometry> _bounds;
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
 
