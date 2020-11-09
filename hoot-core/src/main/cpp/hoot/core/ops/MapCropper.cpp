@@ -254,7 +254,7 @@ void MapCropper::apply(OsmMapPtr& map)
     }
     if (_inclusionCrit && _inclusionCrit->isSatisfied(w))
     {
-      // keep the way
+      // keep the way; We don't need to do a geometry check, since it was explicitly included.
       LOG_TRACE("Keeping explicitly included way: " << w->getElementId() << "...");
       _explicitlyIncludedWayIds.insert(w->getId());
       _numWaysInBounds++;
@@ -287,14 +287,13 @@ void MapCropper::apply(OsmMapPtr& map)
     const Envelope& wayEnv = *(ls->getEnvelopeInternal());
     LOG_VART(wayEnv);
 
-    // Originally, this class only worked with envelopes. After it was changed to work with other
-    // geometries, these bounds checks were intended to be written to check the Geometry bounds if
-    // we were working with a Geometry and otherwise check the Envelope's bounds. However, they seem
-    // to have been written incorrectly to always check the Envelope of the ways regardless of
-    // whether the Geometry was populated or not. This also may be contributing to crop performance
-    // issues. Trying to correct this now by removing the envelope check causes several test
-    // failures. Opened #4359 to look further into it.
-    if (_isWhollyOutside(*ls) || _isWhollyOutside(wayEnv))
+    // It seems very unnecessary to check against both the way's linestring geometry and its
+    // envelope, however, this is how this was originally written after the option to check against
+    // a geometry was added (the class originally only checked against envelopes). A lot of test
+    // failures occur if you just try to check one or the other (checking against the linestring
+    // geometry seems to make more sense). Checking both may be contributing to crop performance
+    // issues. Opened #4359 to look further into it.
+    if (_isWhollyOutside(wayEnv) || _isWhollyOutside(*ls))
     {
       // remove the way
       LOG_TRACE("Dropping wholly outside way: " << w->getElementId() << "...");
@@ -302,7 +301,7 @@ void MapCropper::apply(OsmMapPtr& map)
       _numWaysOutOfBounds++;
       _numAffected++;
     }
-    else if (_isWhollyInside(*ls) || _isWhollyInside(wayEnv))
+    else if (_isWhollyInside(wayEnv) || _isWhollyInside(*ls))
     {
       // keep the way
       LOG_TRACE("Keeping wholly inside way: " << w->getElementId() << "...");
