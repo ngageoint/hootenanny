@@ -90,6 +90,14 @@ private:
   void _snapUnconnectedPostChangesetMapCropping(
     OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays);
 
+  /*
+   * Performs cropping to prepare a map for changeset derivation. This is potentially different
+   * cropping than done during initial load and cookie cutting.
+   */
+  void _cropMapForChangesetDerivation(
+    OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
+    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName);
+
   void _generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap);
 };
 

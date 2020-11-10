@@ -754,23 +754,10 @@ void ChangesetCutOnlyCreator::_processMaps(
     immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
   }
 
-  // Crop the original ref and conflated maps appropriately for changeset derivation.
-  //
-  // After the change to support polygon bounds, doing this cropping on the secondary data causes
-  // output features to be dropped, and it doesn't appear to help when used on the ref data, so
-  // disabling it completely for cut only (only one that uses strict bounds). This probably needs
-  // more investigation, as well as adding some more cut only test cases.
-  if (_boundsInterpretation != ChangesetReplacement::BoundsInterpretation::Strict)
-  {
-    _cropMapForChangesetDerivation(
-      refMap, _boundsOpts.changesetRefKeepEntireCrossingBounds,
-      _boundsOpts.changesetRefKeepOnlyInsideBounds, _changesetId +
-      "-ref-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
-    _cropMapForChangesetDerivation(
-      conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
-      _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId +
-      "-sec-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
-  }
+  // Used to do an additional round of cropping here to prepare for changeset derivation. After the
+  // change to support polygon bounds it was found it wasn't needed anymore when only cutting data,
+  // and actually had negative effects on the output. So, removing it completely for cut only. Its
+  // worth noting that we may end up needing it again as we expand the cut only tests cases.
 
   if (_boundsInterpretation == BoundsInterpretation::Lenient &&
       _currentChangeDerivationPassIsLinear)
@@ -1868,37 +1855,6 @@ OsmMapPtr ChangesetCutOnlyCreator::_getImmediatelyConnectedOutOfBoundsWays(
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(connectedWays, _changesetId + "-connected-ways");
   return connectedWays;
-}
-
-void ChangesetCutOnlyCreator::_cropMapForChangesetDerivation(
-  OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
-  const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName)
-{
-  if (map->size() == 0)
-  {
-    LOG_DEBUG("Skipping cropping empty map: " << map->getName() << "...");
-    return;
-  }
-
-  LOG_INFO("Cropping map: " << map->getName() << " for changeset derivation...");
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  LOG_VARD(keepEntireFeaturesCrossingBounds);
-  LOG_VARD(keepOnlyFeaturesInsideBounds);
-
-  MapCropper cropper;
-  cropper.setBounds(_replacementBounds);
-  cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);
-  cropper.setKeepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds);
-  // We're not going to remove missing elements, as we want to have as minimal of an impact on
-  // the resulting changeset as possible.
-  cropper.setRemoveMissingElements(false);
-  cropper.apply(map);
-  LOG_DEBUG(cropper.getCompletedStatusMessage());
-
-  MemoryUsageChecker::getInstance().check();
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
-  LOG_DEBUG("Cropped map: " << map->getName() << " size: " << map->size());
 }
 
 void ChangesetCutOnlyCreator::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map)

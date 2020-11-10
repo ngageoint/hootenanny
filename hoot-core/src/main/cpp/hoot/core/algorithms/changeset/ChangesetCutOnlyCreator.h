@@ -366,14 +366,6 @@ protected:
   OsmMapPtr _getImmediatelyConnectedOutOfBoundsWays(const ConstOsmMapPtr& map) const;
 
   /*
-   * Performs cropping to prepare a map for changeset derivation. This is potentially different
-   * cropping than done during initial load and cookie cutting.
-   */
-  void _cropMapForChangesetDerivation(
-    OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
-    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName);
-
-  /*
    * Snaps unnconnected ways with a map to each other
    *
    * @param map the map to snap ways within

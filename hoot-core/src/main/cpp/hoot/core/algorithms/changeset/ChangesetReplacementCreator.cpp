@@ -35,14 +35,17 @@
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
 
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/MapUtils.h>
+
+#include <hoot/core/geometry/GeometryUtils.h>
 
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
+#include <hoot/core/ops/MapCropper.h>
+
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 // Qt
@@ -514,6 +517,37 @@ void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
   // properly.
   MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
   OsmMapWriterFactory::writeDebugMap(refMap, _changesetId + "-ref-connected-combined");
+}
+
+void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
+  OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
+  const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName)
+{
+  if (map->size() == 0)
+  {
+    LOG_DEBUG("Skipping cropping empty map: " << map->getName() << "...");
+    return;
+  }
+
+  LOG_INFO("Cropping map: " << map->getName() << " for changeset derivation...");
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  LOG_VARD(keepEntireFeaturesCrossingBounds);
+  LOG_VARD(keepOnlyFeaturesInsideBounds);
+
+  MapCropper cropper;
+  cropper.setBounds(_replacementBounds);
+  cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);
+  cropper.setKeepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds);
+  // We're not going to remove missing elements, as we want to have as minimal of an impact on
+  // the resulting changeset as possible.
+  cropper.setRemoveMissingElements(false);
+  cropper.apply(map);
+  LOG_DEBUG(cropper.getCompletedStatusMessage());
+
+  MemoryUsageChecker::getInstance().check();
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
+  LOG_DEBUG("Cropped map: " << map->getName() << " size: " << map->size());
 }
 
 void ChangesetReplacementCreator::_generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap)
