@@ -101,10 +101,21 @@ QString MapCropper::getInitStatusMessage() const
   QString msg = "Cropping map at bounds: ";
   if (_bounds)
   {
+    QString boundsStr;
+    std::shared_ptr<geos::geom::Polygon> polyBounds =
+      std::dynamic_pointer_cast<geos::geom::Polygon>(_bounds);
+    if (polyBounds)
+    {
+      // This is easier to read.
+      boundsStr = GeometryUtils::polygonToString(polyBounds);
+    }
+    else
+    {
+      boundsStr = _bounds->toString();
+    }
     msg +=
       "..." +
-      QString::fromStdString(_bounds->toString()).right(
-        ConfigOptions().getProgressVarPrintLengthMax() * 8);
+      QString::fromStdString(boundsStr).right(ConfigOptions().getProgressVarPrintLengthMax() * 2);
   }
   msg += "...";
   return msg;
