@@ -129,7 +129,6 @@ public:
 
   std::set<long> getSuperfluousNodeIds() const { return _superfluousNodeIds; }
 
-  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds);
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
   void setRemoveNodes(bool remove) { _removeNodes = remove; }
 
