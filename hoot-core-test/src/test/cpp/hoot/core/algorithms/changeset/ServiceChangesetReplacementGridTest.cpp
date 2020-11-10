@@ -372,9 +372,9 @@ public:
 
   void northVegasLargeUniformTest()
   {
-    // whole northern half of city - 64 changesets, ~33.0M changes, avg derivation: 47s,
-    // total time: 1hr7min, ~492k changes/min, diff between replacement: 6.4k (1hr28m), 772
-    // unconflatable
+    // whole northern half of city - 64 changesets, ~33.0M changes, avg derivation: 41s,
+    // total time: 59min39s, ~553k changes/min, diff between replacement: 6.4k (1hr28m)*, 772
+    // unconflatable*
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -421,10 +421,10 @@ public:
 //        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
 //        .generateTaskGrid());
 
-    //CPPUNIT_ASSERT_EQUAL(26, uut.getNumOrphanedNodesInOutput());
+    //CPPUNIT_ASSERT_EQUAL(4, uut.getNumOrphanedNodesInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
     //CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    //CPPUNIT_ASSERT_EQUAL(506, uut.getNumDuplicateElementPairsInOutput());
+    //CPPUNIT_ASSERT_EQUAL(517, uut.getNumDuplicateElementPairsInOutput());
   }
 
 private:
