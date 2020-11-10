@@ -102,6 +102,9 @@ corrupting reference data. The behavior affects the different feature geometry t
 * Polygon features either inside or overlapping the specified bounds are completely replaced. Polygon features are never split but may be 
   conflated at the specified boundary if conflation is enabled.
 
+Currently, only rectangular bounding box or closed polygon shapes are supported for the bounds. Support for other geometries may be added going
+forward.
+
 ==== Out of Bounds Connected Ways
 
 When performing replacement, a method is required to protect the reference linear features that fall outside of the replacement bounds from
