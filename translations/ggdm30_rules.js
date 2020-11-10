@@ -47,6 +47,7 @@ ggdm30.rules = {
     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
     // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
     ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
+    ['F_CODE','AA054','man_made','petroleum_well'], // Non-Water Well
     ['F_CODE','AD010','power','station'], // Electric Power Station, Power Plant
     ['F_CODE','AJ110','building','greenhouse_horticulture'], // Greenhouse
     ['F_CODE','AK030','leisure','water_park'], // Amusement Park

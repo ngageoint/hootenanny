@@ -688,6 +688,9 @@ tds70 = {
     // Drop the FCSUBTYPE since we don't use it
     if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
+    // Drop the mosaic tag if we don't have an image id
+    if (attrs.AEI == 'No Information') delete attrs.img_mosaic;
+
     // List of data values to drop/ignore
     var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
 
@@ -1032,6 +1035,17 @@ tds70 = {
     switch (attrs.F_CODE)
     {
     case undefined: // Break early if no value. Should not get here.....
+      break;
+
+    case 'AA054': // Non-water Well
+      if (tags.product)
+      {
+        tags.substance = tags.product;
+        delete tags.product;
+
+        var petroleum = ['gas','liquefied_petroleum_gas_(lpg)','petroleum','coalbed_methane','natural_gas_condensate'];
+        if (petroleum.indexOf(tags.substance) > -1) tags.man_made = 'petroleum_well';
+      }
       break;
 
     // Fix up landuse tags
@@ -2009,6 +2023,20 @@ tds70 = {
         delete tags['is_in:country'];
     }
 
+    // Product vs substance vs resource.  Sigh...
+    if (!tags.product)
+    {
+      if (tags.substance)
+      {
+        tags.product = tags.substance;
+        delete tags.substance;
+      }
+      else if (tags.resource)
+      {
+        tags.product = tags.resource;
+        delete tags.resource;
+      }
+    }
 
   }, // End applyToTdsPreProcessing
 

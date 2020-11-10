@@ -878,6 +878,17 @@ tds40 = {
     case undefined: // Break early if no value. Should not get here.....
       break;
 
+    case 'AA054': // Non-water Well
+      if (tags.product)
+      {
+        tags.substance = tags.product;
+        delete tags.product;
+
+        var petroleum = ['gas','liquefied_petroleum_gas_(lpg)','petroleum','coalbed_methane','natural_gas_condensate'];
+        if (petroleum.indexOf(tags.substance) > -1) tags.man_made = 'petroleum_well';
+      }
+      break;
+
     case 'AP030':
       /* Now sort out Roads
                 HCT, TYP, RTY etc are related. No easy way to use one2one rules
@@ -1998,6 +2009,21 @@ tds40 = {
       {
         hoot.logWarn('Dropping invalid country code value: ' + tags['addr:country']);
         delete tags['addr:country'];
+      }
+    }
+
+    // Product vs substance vs resource.  Sigh...
+    if (!tags.product)
+    {
+      if (tags.substance)
+      {
+        tags.product = tags.substance;
+        delete tags.substance;
+      }
+      else if (tags.resource)
+      {
+        tags.product = tags.resource;
+        delete tags.resource;
       }
     }
 
