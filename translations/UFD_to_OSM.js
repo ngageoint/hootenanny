@@ -38,7 +38,8 @@ ufd = {
   // FCODE rules for Import
   fcodeOne2oneIn : [
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
-    ['F_CODE','AA050','man_made','water_well'], // Well - NFDD BH230
+    // ['F_CODE','AA050','man_made','water_well'], // Well  Might not be NFDD BH230 (Water Well)
+    ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230
     ['F_CODE','AC000','facility','yes'], // Processing/Treatment Plant - NFDD AL010
     ['F_CODE','AE010','facility','yes'], // Assembly Plant - NFDD AL010
     ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
@@ -3495,10 +3496,8 @@ ufd = {
       delete tags.product;
     }
 
-    // EW Radar Site
-    if (attrs.F_CODE == 'AT020') tags['radar:use'] = 'early_warning';
-
     // Sluice Gate
+    // NOTE: Can't move this into the F_CODE switch since 'waterway' is tested before the switch
     if (attrs.F_CODE == 'BI040') tags.waterway = 'sluice_gate';
 
     translate.fixConstruction(tags, 'highway');
@@ -3533,14 +3532,6 @@ ufd = {
 
     // Lakes and other water features
     if (tags.water && !(tags.natural)) tags.natural = 'water';
-
-    // Amusement Park Attractions
-    // Artificial Mountain can be in multiple F_CODES
-    if (attrs.F_CODE == 'AK020' && tags.shape)
-    {
-      tags.attraction = tags.shape;
-      delete tags.shape;
-    }
 
     // Sort out security stuff - not pretty
     // I'm pretty sure we are not going to see 99% of these but they are in the spec
@@ -3593,6 +3584,40 @@ ufd = {
     case undefined: // Break early if no value
       break;
 
+    // Amusement Park Attractions
+    // Artificial Mountain can be in multiple F_CODES
+    case'AK020':
+        if (tags.shape)
+        {
+          tags.attraction = tags.shape;
+          delete tags.shape;
+        }
+        break;
+
+    case 'AT020': // EW Radar Site
+        tags['radar:use'] = 'early_warning';
+        break;
+
+     case 'AA050': // Well
+        switch (tags.product)
+        {
+            case undefined: // Break early, Unknown product
+                break;
+
+            case 'gas': // Unknown product
+            case 'oil': // Unknown product
+                tags.man_made = 'petroleum_well';
+                tags.substance = tags.product;
+                delete tags.product;
+                break;
+
+            case 'water': // Unknown product
+                tags.man_made = 'water_well';
+                delete tags.product;
+                break;
+        }
+        break;
+
     case 'FA020': // Armistice Line
       tags.historic='armistice_line';
       break;
@@ -3601,25 +3626,24 @@ ufd = {
     case 'FA000': // Administrative Boundary
       switch (attrs.USG)
       {
-      case undefined: // Break early if no value
-        break;
+        case undefined: // Break early if no value
+          break;
 
-      case '26': // 1st order
-      case 'Primary/1st Order':
-        tags.admin_level = '4';
-        break;
+        case '26': // 1st order
+        case 'Primary/1st Order':
+          tags.admin_level = '4';
+          break;
 
-      case '30': // 2nd order
-      case 'Secondary/2nd Order':
-        tags.admin_level = '6';
-        break;
+        case '30': // 2nd order
+        case 'Secondary/2nd Order':
+          tags.admin_level = '6';
+          break;
 
-      case '31': // 3rd order
-      case 'Tertiary/3rd Order':
-        tags.admin_level = '8';
-        break;
+        case '31': // 3rd order
+        case 'Tertiary/3rd Order':
+          tags.admin_level = '8';
+          break;
       }
-
       break;
 
     case 'AL045': // Complex Outline. Going with landuse for this
