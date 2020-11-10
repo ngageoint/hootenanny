@@ -369,7 +369,10 @@ void ChangesetCutOnlyCreator::_printJobDescription() const
   str += "Deriving replacement output changeset:";
   str += "\nBeing replaced: ..." + _input1.right(_maxFilePrintLength);
   str += "\nReplacing with ..." + _input2.right(_maxFilePrintLength);
-  str += "\nAt Bounds: " + GeometryUtils::polygonToString(_replacementBounds);
+  str +=
+    "\nAt Bounds: " +
+    GeometryUtils::polygonToString(_replacementBounds)
+      .right(ConfigOptions().getProgressVarPrintLengthMax() * 2);
   str += "\nOutput Changeset: ..." + _output.right(_maxFilePrintLength);
   LOG_STATUS(str);
 
