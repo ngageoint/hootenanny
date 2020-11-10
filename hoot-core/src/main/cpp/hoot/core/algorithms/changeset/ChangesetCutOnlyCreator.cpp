@@ -759,10 +759,16 @@ void ChangesetCutOnlyCreator::_processMaps(
     refMap, _boundsOpts.changesetRefKeepEntireCrossingBounds,
     _boundsOpts.changesetRefKeepOnlyInsideBounds, _changesetId +
     "-ref-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
-  _cropMapForChangesetDerivation(
-    conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
-    _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId +
-    "-sec-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
+  // After the change to support polygon bounds, doing this cropping on the secondary data causes
+  // output features to be dropped, so disabling it. This probably needs more investigation, as well
+  // as adding some more cut only test cases.
+  if (_boundsInterpretation != ChangesetReplacement::BoundsInterpretation::Strict)
+  {
+    _cropMapForChangesetDerivation(
+      conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
+      _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId +
+      "-sec-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
+  }
 
   if (_boundsInterpretation == BoundsInterpretation::Lenient &&
       _currentChangeDerivationPassIsLinear)
@@ -899,6 +905,8 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+  // This is kind of klunky to set this here, imo. However, its currently the only way to get this
+  // bounds to the readers.
   conf().set(
     ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
 
@@ -1512,8 +1520,9 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
       else if (_fullReplacement && _boundsInterpretation != BoundsInterpretation::Lenient )
       {
         // With the strict bounds interpretation, full replacement, and an empty secondary map,
-        // we want simply the replacement bounds cut out, since we can't calc an alpha shape off of
-        // no replacement data. No need to use the cookie cutter here. Just use the map cropper.
+        // we want simply to cut the replacement bounds out, since we can't calc an alpha shape off
+        // of no replacement data. No need to use the cookie cutter here if no alpha shape is
+        // involved. Just use the map cropper.
         LOG_DEBUG(
           "Nothing in cutter map. Full replacement with strict bounds enabled, so cropping out " <<
           "the bounds area of the dough map to be the map after cutting: " <<
@@ -1534,9 +1543,13 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
         // We're not going to remove missing elements, as we want to have as minimal of an impact on
         // the resulting changeset as possible.
         cropper.setRemoveMissingElements(false);
+        // TODO: temp
+        //Log::WarningLevel logLevel = Log::getInstance().getLevel();
+        //Log::getInstance().setLevel(Log::Trace);
         LOG_STATUS(cropper.getInitStatusMessage());
         cropper.apply(cookieCutMap);
         LOG_INFO(cropper.getCompletedStatusMessage());
+        //Log::getInstance().setLevel(logLevel);
         OsmMapWriterFactory::writeDebugMap(cookieCutMap, _changesetId + "-cookie-cut");
         return cookieCutMap;
       }
@@ -1545,8 +1558,8 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
         // If the sec map is empty and we're not doing full replacement, there's nothing in the sec
         // to overlap with the ref, so leave the ref untouched.
         LOG_DEBUG(
-          "Nothing in cutter map for linear features. Full replacement not enabled, so returning the "
-          "entire dough map as the map after cutting: " << doughMap->getName() << "...");
+          "Nothing in cutter map for linear features. Full replacement not enabled, so returning "
+          "the entire dough map as the map after cutting: " << doughMap->getName() << "...");
         OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
         // copy here to avoid changing the ref map passed in as the dough map input
         return OsmMapPtr(new OsmMap(doughMap));

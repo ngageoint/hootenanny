@@ -70,7 +70,8 @@ public:
   /**
    * Sets the bounds on the nodes that will be removed.
    */
-  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) override;
+  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) override
+  { _bounds = bounds; }
 
   virtual QString getDescription() const override { return "Crops a map"; }
 

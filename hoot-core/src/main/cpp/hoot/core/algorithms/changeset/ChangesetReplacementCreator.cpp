@@ -143,6 +143,8 @@ void ChangesetReplacementCreator::create(
   _output = output;
   _replacementBounds = bounds;
   _validateInputs();
+  // This is kind of klunky to set this here, imo. However, its currently the only way to get this
+  // bounds to the readers.
   conf().set(
     ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
   _printJobDescription();

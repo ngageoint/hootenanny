@@ -110,16 +110,11 @@ QString MapCropper::getInitStatusMessage() const
   return msg;
 }
 
-void MapCropper::setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
-{
-  _bounds = bounds;
-}
-
 void MapCropper::setInvert(bool invert)
 {
   _invert = invert;
-  // Haven't seen evidence that these options make sense when we're doing inverted cropping so
-  // let's leave them turned off if inverting is selected.
+  // Haven't seen evidence that these options make sense when we're doing inverted cropping, so
+  // let's leave them turned off if inversion is selected.
   if (!_invert)
   {
     _keepOnlyFeaturesInsideBounds = false;
@@ -512,6 +507,8 @@ void MapCropper::_cropWay(const OsmMapPtr& map, long wid)
     LOG_TRACE(
       "Replacing way during crop check: " << way->getElementId() << " with element: " <<
       e->getElementId() << "...");
+    //LOG_VART(way);
+    //LOG_VART(e);
 
     e->setTags(way->getTags());
 
