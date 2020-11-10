@@ -1421,10 +1421,15 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
   // strict/lenient bounds in here by changing some of the initial crop related opts set in
   // _parseConfigOpts...not sure.
 
+  LOG_DEBUG(
+    "Calculating the cutting of replacement data area out of data to be replaced for geometry: " <<
+    GeometryTypeCriterion::typeToString(geometryType) << "...");
   LOG_VARD(_fullReplacement);
   LOG_VARD(_boundsInterpretationToString(_boundsInterpretation));
   LOG_VARD(_currentChangeDerivationPassIsLinear);
+  LOG_VARD(doughMap->getName());
   LOG_VARD(doughMap->size());
+  LOG_VARD(cutterMap->getName());
   LOG_VARD(cutterMap->size());
   OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map-input");
   OsmMapWriterFactory::writeDebugMap(cutterMap, _changesetId + "-cutter-map-input");
@@ -1577,8 +1582,8 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
       // replaced.
       LOG_DEBUG("Using dough map: " << doughMap->getName() << " as cutter shape map...");
       cutterMapToUse = doughMap;
-      // TODO: riverbank test fails with missing POIs without this and the single point test has
-      // extra POIs in output without this; explain
+      // riverbank test fails with missing POIs without this and the single point test has
+      // extra POIs in output without this; why?
       cookieCutterAlphaShapeBuffer = 10.0;
     }
     else
@@ -1607,7 +1612,7 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
     }
   }
 
-  // Found that if a map only has a couple points or less, generating an alpha shape from them may
+  // Found that if a map only has less than a few points, generating an alpha shape from them may
   // not be possible (or at least don't know how to yet). So instead, go through the points in the
   // map and replace them with small square shaped polys...from that we can generate the alpha
   // shape.

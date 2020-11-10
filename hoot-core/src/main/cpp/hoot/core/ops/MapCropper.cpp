@@ -597,8 +597,8 @@ bool MapCropper::_isWhollyOutside(const Envelope& e)
   bool result = false;
   if (!_invert)
   {
-    LOG_VART(_bounds);
-    LOG_VART(_bounds->getEnvelopeInternal());
+    LOG_VART(_bounds->toString());
+    LOG_VART(_bounds->getEnvelopeInternal()->toString());
     result = !_bounds->getEnvelopeInternal()->intersects(e);
     LOG_TRACE(
       "Wholly outside way check: non-inverted crop and the envelope intersects with the element=" <<
