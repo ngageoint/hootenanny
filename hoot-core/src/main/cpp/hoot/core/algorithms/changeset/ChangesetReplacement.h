@@ -39,6 +39,11 @@ namespace hoot
 
 /**
  * Interface for classes generating changesets where one dataset replaces another
+ *
+ * The interface supports a Polygon geometry instead of any geometry due to the fact convert.bounds
+ * has to be set by the creators at the beginning of the replacement operation and there only exists
+ * a geometry string parsing implementation for Polygon. May support additional geometries at some
+ * point going forward.
  */
 class ChangesetReplacement
 {
