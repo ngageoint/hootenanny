@@ -29,7 +29,7 @@
 #define IOUTILS_H
 
 // GEOS
-#include <geos/geom/Polygon.h>
+#include <geos/geom/Geometry.h>
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
