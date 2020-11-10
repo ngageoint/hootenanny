@@ -755,15 +755,17 @@ void ChangesetCutOnlyCreator::_processMaps(
   }
 
   // Crop the original ref and conflated maps appropriately for changeset derivation.
-  _cropMapForChangesetDerivation(
-    refMap, _boundsOpts.changesetRefKeepEntireCrossingBounds,
-    _boundsOpts.changesetRefKeepOnlyInsideBounds, _changesetId +
-    "-ref-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
+  //
   // After the change to support polygon bounds, doing this cropping on the secondary data causes
-  // output features to be dropped, so disabling it. This probably needs more investigation, as well
-  // as adding some more cut only test cases.
+  // output features to be dropped, and it doesn't appear to help when used on the ref data, so
+  // disabling it completely for cut only (only one that uses strict bounds). This probably needs
+  // more investigation, as well as adding some more cut only test cases.
   if (_boundsInterpretation != ChangesetReplacement::BoundsInterpretation::Strict)
   {
+    _cropMapForChangesetDerivation(
+      refMap, _boundsOpts.changesetRefKeepEntireCrossingBounds,
+      _boundsOpts.changesetRefKeepOnlyInsideBounds, _changesetId +
+      "-ref-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
     _cropMapForChangesetDerivation(
       conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
       _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId +
