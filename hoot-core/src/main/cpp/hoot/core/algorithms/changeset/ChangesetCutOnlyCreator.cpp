@@ -1535,13 +1535,9 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
         // We're not going to remove missing elements, as we want to have as minimal of an impact on
         // the resulting changeset as possible.
         cropper.setRemoveMissingElements(false);
-        // TODO: temp
-        //Log::WarningLevel logLevel = Log::getInstance().getLevel();
-        //Log::getInstance().setLevel(Log::Trace);
         LOG_STATUS(cropper.getInitStatusMessage());
         cropper.apply(cookieCutMap);
         LOG_INFO(cropper.getCompletedStatusMessage());
-        //Log::getInstance().setLevel(logLevel);
         OsmMapWriterFactory::writeDebugMap(cookieCutMap, _changesetId + "-cookie-cut");
         return cookieCutMap;
       }

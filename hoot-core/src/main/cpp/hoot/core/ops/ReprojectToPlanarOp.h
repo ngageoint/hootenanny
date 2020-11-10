@@ -37,8 +37,6 @@ namespace hoot
 /**
  * If not already reprojected, reprojects the given map to a custom planar projection. See
  * MapProjector::reprojectToPlanar
- *
- * This is compatible with fourpass.
  */
 class ReprojectToPlanarOp : public OsmMapOperation
 {

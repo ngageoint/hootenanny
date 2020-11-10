@@ -82,11 +82,6 @@ void SuperfluousNodeRemover::setConfiguration(const Settings& conf)
   LOG_VARD(_excludeIds.size());
 }
 
-void SuperfluousNodeRemover::setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
-{
-  _bounds = bounds;
-}
-
 void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;     // _numAffected reflects the actual number of nodes removed

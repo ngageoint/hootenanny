@@ -91,7 +91,7 @@ public:
 
 protected:
 
-  std::shared_ptr<geos::geom::Polygon> _env;
+  std::shared_ptr<geos::geom::Geometry> _env;
 
   virtual void _writeBoundsFile() override
   {

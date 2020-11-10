@@ -45,7 +45,6 @@ class BoundedCommand : public BaseCommand
 public:
 
   BoundedCommand() = default;
-
   virtual ~BoundedCommand() = default;
 
   virtual int runSimple(QStringList& args) override;
