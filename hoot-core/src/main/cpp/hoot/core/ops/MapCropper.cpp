@@ -111,7 +111,7 @@ QString MapCropper::getInitStatusMessage() const
     }
     else
     {
-      boundsStr = _bounds->toString();
+      boundsStr = QString::fromStdString(_bounds->toString());
     }
     msg +=
       "..." +
