@@ -1512,11 +1512,11 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
       else if (_fullReplacement && _boundsInterpretation != BoundsInterpretation::Lenient )
       {
         // With the strict bounds interpretation, full replacement, and an empty secondary map,
-        // we want simply the rectangular replacement bounds cut out. No need to use the cookie
-        // cutter here. Just use the map cropper.
+        // we want simply the replacement bounds cut out, since we can't calc an alpha shape off of
+        // no replacement data. No need to use the cookie cutter here. Just use the map cropper.
         LOG_DEBUG(
           "Nothing in cutter map. Full replacement with strict bounds enabled, so cropping out " <<
-          "the rectangular bounds area of the dough map to be the map after cutting: " <<
+          "the bounds area of the dough map to be the map after cutting: " <<
           doughMap->getName() << "...");
         OsmMapPtr cookieCutMap(new OsmMap(doughMap));
         mapName = "cookie-cut";

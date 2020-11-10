@@ -290,9 +290,9 @@ std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
 {
   // format: x1,y1;x2,y2;x3,y3...
 
-  // You could make the argument to use something more standardized here, like WKT. This format
-  // is easier to read and parse. If we decide to support geometries other than polys, then we may
-  // need to go to something like WKT.
+  // You could make the argument to use something more standardized here for the format, like WKT.
+  // This format is easier to read and parse. If we decide to support geometries other than polys,
+  // then we may need to use a different format.
 
   LOG_VART(str);
   if (str.trimmed().isEmpty())
