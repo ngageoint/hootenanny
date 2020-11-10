@@ -97,7 +97,7 @@ private:
   friend class MapCropperTest;
 
   // the boundary at which the data is cropped; see comments in constructor header
-  std::shared_ptr<const geos::geom::Geometry> _bounds;
+  std::shared_ptr<geos::geom::Geometry> _bounds;
   // if false data outside of the boundary is removed; if true, data inside of the boundary is
   // removed
   bool _invert;
