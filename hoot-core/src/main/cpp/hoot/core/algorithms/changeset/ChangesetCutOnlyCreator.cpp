@@ -37,8 +37,6 @@
 #include <hoot/core/algorithms/changeset/ChangesetReplacementElementIdSynchronizer.h>
 
 #include <hoot/core/conflate/CookieCutter.h>
-#include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
-#include <hoot/core/conflate/UnifyingConflator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
@@ -71,7 +69,6 @@
 #include <hoot/core/ops/ElementIdToVersionMapper.h>
 #include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/ops/PointsToPolysConverter.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
@@ -118,7 +115,6 @@ HOOT_FACTORY_REGISTER(ChangesetReplacement, ChangesetCutOnlyCreator)
 
 ChangesetCutOnlyCreator::ChangesetCutOnlyCreator() :
 _boundsInterpretation(BoundsInterpretation::Lenient),
-_conflationEnabled(false),
 _changesetId("1"),
 _currentChangeDerivationPassIsLinear(false),
 _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 2),
@@ -352,12 +348,6 @@ void ChangesetCutOnlyCreator::_printJobDescription() const
     retainmentFiltersStr += "not ";
   }
   retainmentFiltersStr += "specified";
-  QString conflationStr = "is ";
-  if (!_conflationEnabled)
-  {
-    conflationStr += "not ";
-  }
-  conflationStr += "enabled";
   QString cropDbInputOnReadStr = "is ";
   if (!ConfigOptions().getApidbReaderReadFullThenCropOnBounded())
   {
@@ -382,7 +372,6 @@ void ChangesetCutOnlyCreator::_printJobDescription() const
   str += "\nGeometry filters: " + geometryFiltersStr;
   str += "\nReplacement filter: " + replacementFiltersStr;
   str += "\nRetainment filter: " + retainmentFiltersStr;
-  str += "\nConflation: " + conflationStr;
   str += "\nCropping database inputs after read: " + cropDbInputOnReadStr;
   LOG_INFO(str);
 }
@@ -532,7 +521,7 @@ void ChangesetCutOnlyCreator::create(
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
   _changesetCreator->setIncludeReviews(
-    _conflationEnabled && ConfigOptions().getChangesetReplacementPassConflateReviews());
+    ConfigOptions().getChangesetReplacementPassConflateReviews());
   // We have some instances where modify and delete changes are being generated for the same
   // element, which causes error during changeset application. Eventually, we should eliminate their
   // causes, but for now we'll activate changeset cleaning to get rid of the delete statements.
@@ -685,7 +674,7 @@ void ChangesetCutOnlyCreator::_processMaps(
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
 
-  // CONFLATE / CLEAN
+  // CLEAN
 
   // conflate the cookie cut ref map with the sec map if conflation is enabled
 
@@ -694,25 +683,11 @@ void ChangesetCutOnlyCreator::_processMaps(
   conflatedMap = cookieCutRefMap;
   if (secMapSize > 0)
   {
-    if (_conflationEnabled)
-    {
-      // conflation cleans beforehand
-      _conflate(conflatedMap);
-      conflatedMap->setName("conflated-" + GeometryTypeCriterion::typeToString(geometryType));
 
-      if (!ConfigOptions().getChangesetReplacementPassConflateReviews())
-      {
-        // remove all conflate reviews
-        _removeConflateReviews(conflatedMap);
-      }
-    }
     // This is a little misleading to only clean when the sec map has elements, however a test fails
     // if we don't. May need further investigation.
-    else
-    {
-      _clean(conflatedMap);
-      conflatedMap->setName("cleaned-" + GeometryTypeCriterion::typeToString(geometryType));
-    }
+    _clean(conflatedMap);
+    conflatedMap->setName("cleaned-" + GeometryTypeCriterion::typeToString(geometryType));
   }
 
   // SNAP
@@ -936,22 +911,6 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
     conf().set(
       ConfigOptions::getChangesetMetadataAllowedTagKeysKey(),
       QStringList(MetadataTags::HootMissingChild()));
-  }
-
-  // Came across a very odd bug in #4101, where if RemoveInvalidMultilineStringMembersVisitor ran
-  // as part of the pre-conflate map cleaning during replacement with conflation enabled, the match
-  // conflict resolution would slow down to a crawl. When it was removed from the cleaning ops, the
-  // conflate operation ran very quickly. So as a not so great workaround (aka hack), removing that
-  // pre-op here when running conflation. It still will run post conflate, though. This change had
-  // a very minor affect on changeset replacement test output where one test got slightly better
-  // output after the change and another slightly worse. See more details in #4101, which is closed,
-  // but if we can figure out what's going on at some point maybe this situation can be handled
-  // properly.
-  if (_conflationEnabled)
-  {
-    ConfigUtils::removeListOpEntry(
-      ConfigOptions::getMapCleanerTransformsKey(),
-      QString::fromStdString(RemoveInvalidMultilineStringMembersVisitor::className()));
   }
 
   // We run a custom set of cleaning ops for changeset replacement.
@@ -1699,46 +1658,6 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
   return cookieCutMap;
 }
 
-void ChangesetCutOnlyCreator::_conflate(OsmMapPtr& map)
-{
-  conf().set(ConfigOptions::getWayJoinerLeaveParentIdKey(), true);
-  if (_boundsInterpretation != BoundsInterpretation::Lenient)
-  {
-    // not exactly sure yet why this needs to be done
-    conf().set(ConfigOptions::getWayJoinerKey(), WayJoinerAdvanced::className());
-  }
-  else
-  {
-    conf().set(ConfigOptions::getWayJoinerKey(), WayJoinerBasic::className());
-  }
-  conf().set(
-    ConfigOptions::getWayJoinerAdvancedStrictNameMatchKey(),
-    !UnifyingConflator::isNetworkConflate());
-
-  if (ConfigOptions().getConflateRemoveSuperfluousOps())
-  {
-    SuperfluousConflateOpRemover::removeSuperfluousOps();
-  }
-
-  LOG_STATUS("Applying pre-conflate operations...");
-  NamedOp preOps(ConfigOptions().getConflatePreOps());
-  preOps.apply(map);
-
-  LOG_STATUS(
-    "Conflating the cookie cut reference map with the secondary map into " << map->getName() <<
-    "...");
-  UnifyingConflator().apply(map);
-
-  LOG_STATUS("Applying post-conflate operations...");
-  NamedOp postOps(ConfigOptions().getConflatePostOps());
-  postOps.apply(map);
-
-  MapProjector::projectToWgs84(map);  // conflation works in planar
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-conflated");
-  LOG_DEBUG("Conflated map size: " << map->size());
-}
-
 void ChangesetCutOnlyCreator::_clean(OsmMapPtr& map)
 {
   LOG_STATUS(
@@ -1935,31 +1854,6 @@ void ChangesetCutOnlyCreator::_cleanup(OsmMapPtr& map)
 
   // get out of orthographic
   MapProjector::projectToWgs84(map);
-}
-
-void ChangesetCutOnlyCreator::_removeConflateReviews(OsmMapPtr& map)
-{
-  LOG_INFO("Removing reviews added during conflation from " << map->getName() << "...");
-
-  RemoveElementsVisitor removeVis;
-  removeVis.addCriterion(ElementCriterionPtr(new RelationCriterion("review")));
-  removeVis.addCriterion(
-    ElementCriterionPtr(
-      new NotCriterion(
-        std::shared_ptr<TagCriterion>(
-          new TagCriterion(
-            MetadataTags::HootReviewType(),
-            QString::fromStdString(ReportMissingElementsVisitor::className()))))));
-  removeVis.setChainCriteria(true);
-  removeVis.setRecursive(false);
-  //LOG_STATUS("\t" << removeVis.getInitStatusMessage());
-  map->visitRw(removeVis);
-  LOG_DEBUG(removeVis.getCompletedStatusMessage());
-
-  MemoryUsageChecker::getInstance().check();
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-conflate-reviews-removed");
 }
 
 void ChangesetCutOnlyCreator::_synchronizeIds(

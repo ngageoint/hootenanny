@@ -107,8 +107,16 @@ public:
   virtual void setRetainmentFilters(const QStringList& filterClassNames) = 0;
   virtual void setChainRetainmentFilters(const bool chain) = 0;
   virtual void setRetainmentFilterOptions(const QStringList& optionKvps) = 0;
-  virtual void setConflationEnabled(const bool enabled) = 0;
   virtual void setChangesetId(const QString& id) = 0;
+
+  /**
+   * Sets changeset options
+   *
+   * @param printStats prints statistics for the output changeset
+   * @param outputStatsFile optional file to output the changeset statistics to
+   * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
+   * the output changeset is of type .osc.sql.
+   */
   virtual void setChangesetOptions(
     const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl) = 0;
 

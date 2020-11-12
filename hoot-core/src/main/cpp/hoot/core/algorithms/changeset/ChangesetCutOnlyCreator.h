@@ -50,10 +50,10 @@ class ConstOsmMapConsumer;
  * This class uses a customized workflow that depends upon the feature type the changeset is being
  * generated for, whether all the reference features or just those that overlap secondary features
  * are to be replaced, and how strict the AOI is to be interpreted. ChangesetCreator is used for the
- * actual changeset generation and file output. This class handles the cookie cutting, conflation,
- * and a host of other things that need to happen before the replacement changeset is generated.
- * The secondary data added to the output changeset, as well as the reference data removed from the
- * changeset can be further restricted with a non-geometry type filter.
+ * actual changeset generation and file output. This class handles the cookie cutting and a host of
+ * other things that need to happen before the replacement changeset is generated. The secondary
+ * data added to the output changeset, as well as the reference data removed from the changeset can
+ * be further restricted with a non-geometry type filter.
  *
  * Occasionally, relations will be passed in with some members missing. This class will optionally
  * tag those with a custom metadata tag to be passed to the changeset output. This allows for
@@ -61,14 +61,11 @@ class ConstOsmMapConsumer;
  * tag can then be removed. This is also a configurable feature, which can be turned off.
  *
  * UPDATE 10/22/20: This has been refactored to be the cut only version of C&R. The replacement
- * version inherits from this. @todo This needs to be refactored into an abstract base class which
- * the cut only and replacement versions inherit from.
+ * version inherits from this.
  *
- * @todo implement progress
  * @todo break this up into separate classes by function:
  *  - input prep
  *  - data replacement
- *  - conflation
  *  - snapping?
  *  - changeset derivation
  *  - cleanup
@@ -156,15 +153,10 @@ public:
   virtual void setRetainmentFilters(const QStringList& filterClassNames);
   virtual void setChainRetainmentFilters(const bool chain) { _chainRetainmentFilters = chain; }
   virtual void setRetainmentFilterOptions(const QStringList& optionKvps);
-  virtual void setConflationEnabled(const bool enabled) { _conflationEnabled = enabled; }
   virtual void setChangesetId(const QString& id) { _changesetId = id; }
+
   /**
-   * Sets changeset options
-   *
-   * @param printStats prints statistics for the output changeset
-   * @param outputStatsFile optional file to output the changeset statistics to
-   * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
-   * the output changeset is of type .osc.sql.
+   * @see ChangesetReplacement
    */
   virtual void setChangesetOptions(
     const bool printStats, const QString& statsOutputFile, const QString osmApiDbUrl);
@@ -201,16 +193,11 @@ protected:
   // Configuration options to pass to the filters in _replacementFilter.
   Settings _replacementFilterOptions;
 
-  // turn on/off conflation of cookie cut data being replaced with replacement data
-  bool _conflationEnabled;
-
   // helpful to name the debug map files when doing successive replacements
   QString _changesetId;
 
   // determines if the current changeset map generation pass contains only linear features
   bool _currentChangeDerivationPassIsLinear;
-
-  friend class ChangesetReplacementCreatorTest;
 
   // used to keep log messages with urls in them shorter
   int _maxFilePrintLength;
@@ -231,7 +218,7 @@ protected:
   // secondary input. Allows for further restriction of the secondary data that makes it to output.
   std::shared_ptr<ChainCriterion> _replacementFilter;
 
-  // If true the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
+  // If true, the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
   // together.
   bool _chainReplacementFilters;
 
@@ -239,7 +226,7 @@ protected:
   // reference input. Allows for further restriction of the ref data that gets replaced.
   std::shared_ptr<ChainCriterion> _retainmentFilter;
 
-  // If true the filters specified in _retainmentFilter are AND'd together. Otherwise, they're OR'd
+  // If true, the filters specified in _retainmentFilter are AND'd together. Otherwise, they're OR'd
   // together.
   bool _chainRetainmentFilters;
 
@@ -250,40 +237,11 @@ protected:
   std::shared_ptr<ChangesetCreator> _changesetCreator;
   int _numChanges;
 
-  QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
-
-  bool _roadFilterExists() const;
-
-  void _setInputFilter(
-    std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
-    const bool chainFilters);
-
-  void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
-
-  /*
-   * Conflates data within the input map
-   */
-  void _conflate(OsmMapPtr& map);
-
-  /*
-   * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
-   * being replaced with the IDs from the maps being replaced.
-   */
-  void _synchronizeIds(
-    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
-  void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap);
-
-  OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
-
-  void _intraDedupeMap(OsmMapPtr& map);
-
   virtual void _setGlobalOpts();
-
   void _parseConfigOpts(const GeometryTypeCriterion::GeometryType& geometryType);
-
   void _validateInputs();
-
   void _printJobDescription() const;
+  QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
 
   /*
    * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
@@ -291,12 +249,18 @@ protected:
    */
   virtual QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
     _getDefaultGeometryFilters() const;
-
   /*
    * Combines filters in _geometryTypeFilters with _replacementFilter.
    */
   QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
     std::shared_ptr<ChainCriterion> nonGeometryFilter);
+  bool _roadFilterExists() const;
+  void _setInputFilter(
+    std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
+    const bool chainFilters);
+  void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
+
+  OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
 
   OsmMapPtr _loadRefMap(const GeometryTypeCriterion::GeometryType& geometryType);
   OsmMapPtr _loadSecMap(const GeometryTypeCriterion::GeometryType& geometryType);
@@ -354,12 +318,6 @@ protected:
    */
   OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
                              const GeometryTypeCriterion::GeometryType& geometryType);
-
-  /*
-   * Removes all reviews from the map
-   */
-  void _removeConflateReviews(OsmMapPtr& map);
-
   /*
    * Copies all ways that are tagged with MetadataTags::HootConnectedWayOutsideBounds() out of a map
    */
@@ -398,10 +356,23 @@ protected:
   virtual void _cleanup(OsmMapPtr& map);
 
   /*
+   * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
+   * being replaced with the IDs from the maps being replaced.
+   */
+  void _synchronizeIds(
+    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
+  void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap);
+  void _intraDedupeMap(OsmMapPtr& map);
+
+  /*
    * Runs the default hoot cleaning on the data. This helps solve a lot of problems with output, but
    * its likely a subset of the cleaning ops could be run instead to be more efficient.
    */
   virtual void _clean(OsmMapPtr& map);
+
+private:
+
+  friend class ChangesetReplacementCreatorTest;
 };
 
 }

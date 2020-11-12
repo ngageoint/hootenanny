@@ -79,7 +79,7 @@ protected:
 
   ElementCriterionPtr _geometryTypeFilter;
 
-  virtual void _setGlobalOpts();
+  virtual void _setGlobalOpts() override;
 
 private:
 

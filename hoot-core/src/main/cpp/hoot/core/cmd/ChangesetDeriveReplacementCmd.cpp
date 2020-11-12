@@ -264,7 +264,6 @@ public:
     changesetCreator->setChainRetainmentFilters(chainRetainmentFilters);
     changesetCreator->setRetainmentFilters(retainmentFilters);
     changesetCreator->setRetainmentFilterOptions(retainmentFilterOptions);
-    changesetCreator->setConflationEnabled(false);
     changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
     changesetCreator->create(input1, input2, bounds, output);
   }
