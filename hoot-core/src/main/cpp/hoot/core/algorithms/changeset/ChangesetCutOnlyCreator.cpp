@@ -57,6 +57,7 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/util/Progress.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
@@ -423,7 +424,7 @@ void ChangesetCutOnlyCreator::_processMaps(
   LOG_VARD(refFeatureFilter->toString());
   LOG_VARD(secFeatureFilter->toString());
 
-  // INPUT VALIDATION AND SETUP
+  // INPUT PARSING
 
   _parseConfigOpts(geometryType);
 
@@ -579,8 +580,6 @@ void ChangesetCutOnlyCreator::_processMaps(
     LOG_VART(MapProjector::toWkt(conflatedMap->getProjection()));
   }
 
-  // PRE-CHANGESET DERIVATION DATA PREP
-
   OsmMapPtr immediatelyConnectedOutOfBoundsWays;
   if (_boundsInterpretation == BoundsInterpretation::Lenient &&
       _currentChangeDerivationPassIsLinear)
@@ -658,6 +657,8 @@ void ChangesetCutOnlyCreator::_processMaps(
     // tag that will cause the deriver to skip deleting them.
     _excludeFeaturesFromChangesetDeletion(refMap);
   }
+
+  // CLEANUP
 
   // clean up any mistakes introduced
   _cleanup(refMap);

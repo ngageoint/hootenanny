@@ -119,6 +119,8 @@ public:
 
   static std::string className() { return "hoot::ChangesetReplacementCreatorAbstract"; }
 
+  static const QString JOB_SOURCE;
+
   ChangesetReplacementCreatorAbstract();
   virtual ~ChangesetReplacementCreatorAbstract() = default;
 
@@ -167,9 +169,6 @@ protected:
   // Configuration options to pass to the filters in _replacementFilter.
   Settings _replacementFilterOptions;
 
-  // helpful to name the debug map files when doing successive replacements
-  QString _changesetId;
-
   // determines if the current changeset map generation pass contains only linear features
   bool _currentChangeDerivationPassIsLinear;
 
@@ -208,9 +207,16 @@ protected:
   // Configuration options to pass to the filters in _retainmentFilter.
   Settings _retainmentFilterOptions;
 
+  // helpful to name the debug map files when doing successive replacements
+  QString _changesetId;
   // handles changeset generation and output
   std::shared_ptr<ChangesetCreator> _changesetCreator;
   int _numChanges;
+
+  int _numTotalTasks;
+  int _currentTask;
+
+  float _getJobPercentComplete() const;
 
   virtual void _setGlobalOpts() = 0;
   void _validateInputs();

@@ -84,13 +84,17 @@
 namespace hoot
 {
 
+const QString ChangesetReplacementCreatorAbstract::JOB_SOURCE = "ChangesetDeriveReplacement";
+
 ChangesetReplacementCreatorAbstract::ChangesetReplacementCreatorAbstract() :
-_changesetId("1"),
 _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 2),
 _geometryFiltersSpecified(false),
 _chainReplacementFilters(false),
 _chainRetainmentFilters(false),
-_numChanges(0)
+_changesetId("1"),
+_numChanges(0),
+_numTotalTasks(-1),
+_currentTask(1)
 {
 }
 
@@ -171,6 +175,11 @@ void ChangesetReplacementCreatorAbstract::_printJobDescription() const
   str += "\nRetainment filter: " + retainmentFiltersStr;
   str += "\nCropping database inputs after read: " + cropDbInputOnReadStr;
   LOG_INFO(str);
+}
+
+float ChangesetReplacementCreatorAbstract::_getJobPercentComplete() const
+{
+  return (float)(_currentTask - 1) / (float)_numTotalTasks;
 }
 
 void ChangesetReplacementCreatorAbstract::_validateInputs()
@@ -655,8 +664,7 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
 
 void ChangesetReplacementCreatorAbstract::_clean(OsmMapPtr& map)
 {
-  LOG_STATUS(
-    "Cleaning the combined cookie cut reference and secondary maps: " << map->getName() << "...");
+  LOG_STATUS("Cleaning map: " << map->getName() << "...");
 
   // TODO: since we're never conflating when we call clean, should we remove cleaning ops like
   // IntersectionSplitter?

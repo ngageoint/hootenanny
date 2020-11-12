@@ -47,6 +47,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/util/Progress.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -62,6 +63,10 @@ ChangesetReplacementCreatorAbstract()
   _currentChangeDerivationPassIsLinear = true;
   _boundsInterpretation = BoundsInterpretation::Lenient;
   _fullReplacement = true;
+  // Every capitalized section of the "create" method (e.g. "LOAD AND FILTER"), except validation is
+  // being considered a separate step for progress. The number of steps here must be updated as you
+  // add/remove job steps in the logic.
+  _numTotalTasks = 8;
 
   _setGlobalOpts();
 }
@@ -137,6 +142,13 @@ void ChangesetReplacementCreator::create(
   QElapsedTimer timer;
   timer.start();
 
+  LOG_INFO("******************************************");
+  _currentTask = 1;
+  Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
+  progress.set(
+    0.0, "Generating diff maps for changeset derivation with ID: " + _changesetId + "...");
+  LOG_VARD(toString());
+
   // VALIDATION
 
   _input1 = input1;
@@ -152,12 +164,9 @@ void ChangesetReplacementCreator::create(
     ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
   _printJobDescription();
 
-  LOG_INFO("******************************************");
-  LOG_STATUS("Generating diff maps for changeset derivation with ID: " << _changesetId << "...");
-  LOG_VARD(toString());
-
   // LOAD AND FILTER
 
+  progress.set(_getJobPercentComplete(), "Loading input data...");
   QMap<ElementId, long> refIdToVersionMappings; // This is needed during snapping.
   OsmMapPtr refMap = _loadAndFilterRefMap(refIdToVersionMappings);
   OsmMapPtr secMap = _loadAndFilterSecMap();
@@ -173,23 +182,25 @@ void ChangesetReplacementCreator::create(
     LOG_STATUS("Both maps empty, so skipping data removal...");
     return;
   }
+  _currentTask++;
 
   // CUT
 
   // cut the shape of the secondary data out of the reference data; pass in an unknown geometry
   // type since we're replacing all types and that also prevents alpha shapes from trying to cover
   // stragglers, which can be expensive
+  progress.set(_getJobPercentComplete(), "Cutting out features...");
   OsmMapPtr cookieCutRefMap =
     _getCookieCutMap(refMap, secMap, GeometryTypeCriterion::GeometryType::Unknown);
   const int cookieCutSize = cookieCutRefMap->size();
   LOG_VARD(cookieCutSize);
   const int dataRemoved = refMapSize - cookieCutSize;
   LOG_VARD(dataRemoved);
-
   // sec map size may have changed after call to _getCookieCutMap
   LOG_STATUS(
     "Replacing " << StringUtils::formatLargeNumber(dataRemoved) << " feature(s) with " <<
     StringUtils::formatLargeNumber(secMap->size()) << " feature(s)...");
+  _currentTask++;
 
   // At one point it was necessary to re-number the relations in the sec map, as they could have ID
   // overlap with those in the cookie cut ref map at this point. It seemed that this was due to the
@@ -206,6 +217,7 @@ void ChangesetReplacementCreator::create(
   // are actually needed at some point. This cleaning *probably* still needs to occur after cutting,
   // though, as it seems to get rid of some of the artifacts produced by that process.
 
+  progress.set(_getJobPercentComplete(), "Cleaning data...");
   if (secMap->size() > 0)
   {
     _clean(secMap);
@@ -214,8 +226,11 @@ void ChangesetReplacementCreator::create(
   {
     _clean(cookieCutRefMap);
   }
+  _currentTask++;
 
   // SNAP BEFORE CHANGESET DERIVATION CROPPING
+
+  progress.set(_getJobPercentComplete(), "Snapping linear features...");
 
   // Had an idea once here to try to load source IDs for sec data, remap sec IDs to be unique just
   // before the ref and sec have to be combined, and then restore the original sec IDs after the
@@ -246,7 +261,11 @@ void ChangesetReplacementCreator::create(
   LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-after-way-joining");
 
+  _currentTask++;
+
   // PRE-CHANGESET DERIVATION CROP
+
+  progress.set(_getJobPercentComplete(), "Cropping maps for changeset derivation...");
 
   // If we're conflating linear features with the lenient bounds requirement, copy the
   // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
@@ -262,7 +281,11 @@ void ChangesetReplacementCreator::create(
     combinedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId + "-sec-cropped-for-changeset");
 
+  _currentTask++;
+
   // SNAP AFTER CHANGESET DERIVATION CROPPING
+
+  progress.set(_getJobPercentComplete(), "Snapping linear features...");
 
   // The non-strict bounds interpretation way replacement workflow benefits from a second
   // set of snapping runs right before changeset derivation due to there being ways connected to
@@ -283,7 +306,11 @@ void ChangesetReplacementCreator::create(
     _excludeFeaturesFromChangesetDeletion(refMap);
   }
 
+  _currentTask++;
+
   // CLEANUP
+
+  progress.set(_getJobPercentComplete(), "Cleaning up erroneous features...");
 
   // clean up any mistakes introduced
   _cleanup(refMap);
@@ -295,16 +322,21 @@ void ChangesetReplacementCreator::create(
   // conflicts.
   _synchronizeIds(refMap, combinedMap);
 
+  _currentTask++;
+
   // CHANGESET GENERATION
 
+  progress.set(_getJobPercentComplete(), "Generating changeset...");
   _generateChangeset(refMap, combinedMap);
+  _currentTask++;
 
-  LOG_STATUS(
-    "Derived replacement changeset: ..." << _output.right(_maxFilePrintLength) << " with " <<
-    StringUtils::formatLargeNumber(_numChanges) << " changes for " <<
-    StringUtils::formatLargeNumber(refMapSize) << " features to replace and " <<
-    StringUtils::formatLargeNumber(secMapSize)  << " replacement features in " <<
-    StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+  progress.set(
+    1.0, Progress::JobState::Successful,
+    "Derived replacement changeset: ..." + _output.right(_maxFilePrintLength) + " with " +
+    StringUtils::formatLargeNumber(_numChanges) + " changes for " +
+    StringUtils::formatLargeNumber(refMapSize) + " features to replace and " +
+    StringUtils::formatLargeNumber(secMapSize)  + " replacement features in " +
+    StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
 }
 
 void ChangesetReplacementCreator::_setGlobalOpts()
