@@ -60,8 +60,6 @@ public:
 
   virtual bool isSupported(const QString& urlStr) override;
 
-  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) { _bounds = bounds; }
-
   void setBoundingBox(const QString& bbox);
   void setOverrideBoundingBox(const QString& bbox);
   void setReturnNodesOnly(const bool returnNodesOnly)
@@ -131,8 +129,7 @@ protected:
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
 
-  std::shared_ptr<geos::geom::Geometry> _bounds;
-  std::shared_ptr<geos::geom::Geometry>_overrideBounds; // this will override _bounds
+  std::shared_ptr<geos::geom::Geometry> _overrideBounds; // this will override _bounds
   // controls use of _readByBounds2 vs the default _readByBounds
   bool _readFullThenCropOnBounded;
 

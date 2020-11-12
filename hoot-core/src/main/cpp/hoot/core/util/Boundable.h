@@ -27,24 +27,23 @@
 #ifndef BOUNDABLE_H
 #define BOUNDABLE_H
 
-// geos
-#include <geos/geom/Geometry.h>
+// Hoot
+#include <hoot/core/geometry/GeometryUtils.h>
 
 namespace hoot
 {
 
 /**
- * An interface defining a class that may have the bounds set. The exact meaning of setting the
- * bounds is context dependent, but in the case of OsmMapOperations it limits the scope of the
- * operation.
+ * A base class for setting a geospatial boundary on an object (used to be a base class but doesn't
+ * seem to be causing any problems in inheritors due to MI). The exact meaning of setting the bounds
+ * is context dependent. In the case of OsmMapOperation, for example, it limits the scope of the
+ * operation. It is important to note that even if the rest of the operation in an implementation is
+ * not in WGS84, the bounds itself will still be in WGS84.
  *
- * The bounds is defined in terms of a geometry (used to be an envelope). Currently from a config
- * string we're only supporting Envelope and Polygon geometries
- * (see GeometryUtils::boundsFromString), but that could change. For the implementations
- * that may need the bounds to be a rectangular envelope, custom error checking should be added to
- * their configuration parsing to ensure an envelope is passed. As far as the setBounds method is
- * concerned, simply automatically and silently using the envelope of the passed in geometry is the
- * preferred method.
+ * Currently from a config string we're only supporting Envelope and Polygon geometries (see
+ * GeometryUtils::boundsFromString), but that could be expanded. For the implementations that
+ * require the bounds to be a rectangular envelope, custom error checking should be added to their
+ * configuration parsing to ensure an envelope string is passed in.
  */
 class Boundable
 {
@@ -54,10 +53,21 @@ public:
   virtual ~Boundable() = default;
 
   /**
-   * Sets the bounds in WGS84. It is important to note that even if the rest of the operation is
-   * not in WGS84 the bounds will still be in WGS84.
+   * Sets the bounds from a geometry in WGS84
    */
-  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) = 0;
+  virtual void setBounds(std::shared_ptr<geos::geom::Geometry> bounds) { _bounds = bounds; }
+
+  /**
+   * Sets the bounds from an envelope in WGS84
+   */
+  virtual void setBounds(const geos::geom::Envelope& bounds)
+  {
+    setBounds(GeometryUtils::envelopeToPolygon(bounds));
+  }
+
+protected:
+
+  std::shared_ptr<geos::geom::Geometry> _bounds;
 };
 
 }

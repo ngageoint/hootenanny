@@ -221,7 +221,8 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geo
   {
     // The two cropper config opts above will always be opposite of one another, so we'll just
     // determine bounds strictness off of one of them.
-    ImmediatelyConnectedOutOfBoundsWayTagger tagger(bounds, strictBoundsHandling);
+    ImmediatelyConnectedOutOfBoundsWayTagger tagger(strictBoundsHandling);
+    tagger.setBounds(bounds);
     LOG_INFO(tagger.getInitStatusMessage());
     tagger.apply(map);
     LOG_DEBUG(tagger.getCompletedStatusMessage());

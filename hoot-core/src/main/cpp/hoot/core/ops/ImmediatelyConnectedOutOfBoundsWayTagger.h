@@ -52,8 +52,7 @@ public:
   static std::string className() { return "hoot::ImmediatelyConnectedOutOfBoundsWayTagger"; }
 
   ImmediatelyConnectedOutOfBoundsWayTagger();
-  ImmediatelyConnectedOutOfBoundsWayTagger(const std::shared_ptr<geos::geom::Geometry>& bounds,
-                                           const bool strictBounds);
+  ImmediatelyConnectedOutOfBoundsWayTagger(const bool strictBounds);
   virtual ~ImmediatelyConnectedOutOfBoundsWayTagger() = default;
 
   /**
@@ -64,8 +63,14 @@ public:
   /**
    * @see Boundable
    */
-  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds)
+  virtual void setBounds(std::shared_ptr<geos::geom::Geometry> bounds) override
   { _boundsChecker.setBounds(bounds); }
+
+  // Why must this be explicitly called once the
+  // setBounds(std::shared_ptr<geos::geom::Geometry> bounds) version is overridden to avoid compiler
+  // errors?
+  virtual void setBounds(const geos::geom::Envelope& bounds) override
+  { Boundable::setBounds(bounds); }
 
   /**
    * @see OperationStatusInfo
