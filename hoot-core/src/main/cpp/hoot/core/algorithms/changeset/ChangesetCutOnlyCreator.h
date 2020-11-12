@@ -238,32 +238,9 @@ protected:
   int _numChanges;
 
   virtual void _setGlobalOpts();
-  void _parseConfigOpts(const GeometryTypeCriterion::GeometryType& geometryType);
   void _validateInputs();
   void _printJobDescription() const;
-  QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
 
-  /*
-   * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
-   * are specified
-   */
-  virtual QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-    _getDefaultGeometryFilters() const;
-  /*
-   * Combines filters in _geometryTypeFilters with _replacementFilter.
-   */
-  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
-    std::shared_ptr<ChainCriterion> nonGeometryFilter);
-  bool _roadFilterExists() const;
-  void _setInputFilter(
-    std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
-    const bool chainFilters);
-  void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
-
-  OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
-
-  OsmMapPtr _loadRefMap(const GeometryTypeCriterion::GeometryType& geometryType);
-  OsmMapPtr _loadSecMap(const GeometryTypeCriterion::GeometryType& geometryType);
   OsmMapPtr _loadInputMap(
     const QString& mapName, const QString& inputUrl, const bool useFileIds, const Status& status,
     const bool keepEntireFeaturesCrossingBounds, const bool keepOnlyFeaturesInsideBounds,
@@ -278,16 +255,6 @@ protected:
     OsmMapPtr& map, const ElementCriterionPtr& featureFilter,
     const GeometryTypeCriterion::GeometryType& geometryType, const Settings& config,
     const QString& debugFileName);
-
-  /*
-   * Populates a reference and a conflated map based on the geometry type being replaced. The maps
-   * can then used to derive the replacement changeset.
-   */
-  virtual void _processMaps(
-    OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const ElementCriterionPtr& refFeatureFilter,
-    const ElementCriterionPtr& secFeatureFilter,
-    const GeometryTypeCriterion::GeometryType& geometryType,
-    const QStringList& linearFilterClassNames = QStringList());
 
   /*
    * Removes changeset replacement metadata tags which should be seen in raw input
@@ -356,13 +323,10 @@ protected:
   virtual void _cleanup(OsmMapPtr& map);
 
   /*
-   * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
-   * being replaced with the IDs from the maps being replaced.
+   * Replaces the IDs of elements in the replacment map that are identical with those in the map
+   * being replaced with the IDs from the map being replaced.
    */
-  void _synchronizeIds(
-    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
   void _synchronizeIds(OsmMapPtr mapBeingReplaced, OsmMapPtr replacementMap);
-  void _intraDedupeMap(OsmMapPtr& map);
 
   /*
    * Runs the default hoot cleaning on the data. This helps solve a lot of problems with output, but
@@ -373,6 +337,48 @@ protected:
 private:
 
   friend class ChangesetReplacementCreatorTest;
+
+  void _parseConfigOpts(const GeometryTypeCriterion::GeometryType& geometryType);
+    QString _boundsInterpretationToString(const BoundsInterpretation& boundsInterpretation) const;
+
+  /*
+   * Returns the default geometry filters (point, line, poly) to use when no other geometry filters
+   * are specified
+   */
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
+    _getDefaultGeometryFilters() const;
+  /*
+   * Combines filters in _geometryTypeFilters with _replacementFilter.
+   */
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
+    std::shared_ptr<ChainCriterion> nonGeometryFilter);
+  bool _roadFilterExists() const;
+  void _setInputFilter(
+    std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
+    const bool chainFilters);
+  void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
+
+  OsmMapPtr _getMapByGeometryType(const QList<OsmMapPtr>& maps, const QString& geometryTypeStr);
+
+  OsmMapPtr _loadRefMap(const GeometryTypeCriterion::GeometryType& geometryType);
+  OsmMapPtr _loadSecMap(const GeometryTypeCriterion::GeometryType& geometryType);
+
+  /*
+   * Populates a reference and a conflated map based on the geometry type being replaced. The maps
+   * can then used to derive the replacement changeset.
+   */
+  void _processMaps(
+    OsmMapPtr& refMap, OsmMapPtr& conflatedMap, const ElementCriterionPtr& refFeatureFilter,
+    const ElementCriterionPtr& secFeatureFilter,
+    const GeometryTypeCriterion::GeometryType& geometryType,
+    const QStringList& linearFilterClassNames = QStringList());
+
+  /*
+   * Replaces the IDs of elements in the replacment maps that are identical with those in the maps
+   * being replaced with the IDs from the maps being replaced.
+   */
+  void _synchronizeIds(
+    const QList<OsmMapPtr>& mapsBeingReplaced, const QList<OsmMapPtr>& replacementMaps);
 };
 
 }
