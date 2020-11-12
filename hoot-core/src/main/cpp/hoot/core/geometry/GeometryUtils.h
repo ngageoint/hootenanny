@@ -42,7 +42,6 @@ namespace geos
     class LineString;
     class MultiLineString;
     class MultiPolygon;
-    class Polygon;
   }
 }
 

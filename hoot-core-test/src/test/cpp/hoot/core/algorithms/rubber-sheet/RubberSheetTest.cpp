@@ -84,7 +84,7 @@ public:
     reader.read("test-files/DcTigerRoads.osm", map);
 
     MapCropper cropper;
-    cropper.setBounds(GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)));
+    cropper.setBounds(Envelope(-77.0554,-77.0441,38.8833,38.8933));
     cropper.apply(map);
 
     MapCleaner().apply(map);
@@ -114,8 +114,7 @@ public:
       reader.read("test-files/DcTigerRoads.osm", map);
 
       MapCropper cropper;
-      cropper.setBounds(
-        GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)));
+      cropper.setBounds(Envelope(-77.0554,-77.0441,38.8833,38.8933));
       cropper.apply(map);
 
       MapCleaner().apply(map);
@@ -144,8 +143,7 @@ public:
       reader.read("test-files/DcTigerRoads.osm", map);
 
       MapCropper cropper;
-      cropper.setBounds(
-        GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)));
+      cropper.setBounds(Envelope(-77.0554,-77.0441,38.8833,38.8933));
       cropper.apply(map);
 
       MapCleaner().apply(map);
@@ -220,8 +218,7 @@ public:
     reader.read("test-files/DcTigerRoads.osm", map);
 
     MapCropper cropper;
-    cropper.setBounds(
-      GeometryUtils::envelopeToPolygon(Envelope(-77.0554,-77.0441,38.8833,38.8933)));
+    cropper.setBounds(Envelope(-77.0554,-77.0441,38.8833,38.8933));
     cropper.apply(map);
 
     MapCleaner().apply(map);

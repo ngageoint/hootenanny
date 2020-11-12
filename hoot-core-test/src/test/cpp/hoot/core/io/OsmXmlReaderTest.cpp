@@ -201,8 +201,7 @@ public:
     // See related note in ServiceOsmApiDbReaderTest::runReadByBoundsTest.
 
     OsmXmlReader uut;
-    uut.setBounds(
-      GeometryUtils::envelopeToPolygon(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552)));
+    uut.setBounds(geos::geom::Envelope(-104.8996,-104.8976,38.8531,38.8552));
     OsmMapPtr map(new OsmMap());
     uut.read("test-files/ToyTestA.osm", map);
     uut.close();
@@ -219,9 +218,7 @@ public:
     const QString testFileName = "runBoundsLeaveConnectedOobWaysTest.osm";
 
     OsmXmlReader uut;
-    uut.setBounds(
-      GeometryUtils::envelopeToPolygon(
-        geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506)));
+    uut.setBounds(geos::geom::Envelope(38.91362, 38.915478, 15.37365, 15.37506));
     uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
 
     // set cropping up for strict bounds handling

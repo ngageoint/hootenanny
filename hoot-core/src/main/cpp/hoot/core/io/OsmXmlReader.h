@@ -127,8 +127,6 @@ public:
 
   virtual QString supportedFormats() override { return ".osm;.osm.bz2;.osm.gz"; }
 
-  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) { _bounds = bounds; }
-
   virtual void setConfiguration(const Settings& conf) override;
 
   // Its possible we may want to move this method and the ones for all other classes using it up
@@ -192,7 +190,6 @@ protected:
   long _numRead;
   long _statusUpdateInterval;
 
-  std::shared_ptr<geos::geom::Geometry> _bounds;
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
 

@@ -118,8 +118,6 @@ public:
    */
   virtual void setConfiguration(const Settings& conf);
 
-  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) { _bounds = bounds; }
-
   virtual QString getDescription() const { return "Removes all nodes not part of a way"; }
 
   virtual QString getInitStatusMessage() const { return "Removing superfluous nodes..."; }
@@ -133,8 +131,6 @@ public:
   void setRemoveNodes(bool remove) { _removeNodes = remove; }
 
 protected:
-
-  std::shared_ptr<geos::geom::Geometry> _bounds;
 
   // turning this off is useful for debugging the existence of orphaned nodes
   bool _removeNodes;
