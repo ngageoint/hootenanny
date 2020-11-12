@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_H
 #define CHANGESET_REPLACEMENT_H
@@ -57,7 +57,7 @@ public:
    * The manner in which replacement boundary conditions are handled. See the
    * changeset-derive-replacement CLI doc for more detail.
    *
-   * @todo Hybrid may go away
+   * @todo remove Hybrid
    */
   enum BoundsInterpretation
   {
@@ -67,13 +67,10 @@ public:
   };
 
   /**
-   * Creates a changeset that replaces features in the first input with features from the second
-   * input
+   * Creates a changeset that replaces data
    *
-   * @param input1 the target data file path for the changeset in which to replace features; must
-   * support Boundable
-   * @param input2 the source data file path for the changeset to get replacement features from;
-   * must support Boundable
+   * @param input1 the target data file path
+   * @param input2 the source data file path
    * @param bounds the rectangular bounds over which features are to be replaced
    * @param output the changeset file output location
    */
@@ -82,13 +79,10 @@ public:
     const QString& output) = 0;
 
   /**
-   * Creates a changeset that replaces features in the first input with features from the second
-   * input
+   * Creates a changeset that replaces data
    *
-   * @param input1 the target data file path for the changeset in which to replace features; must
-   * support Boundable
-   * @param input2 the source data file path for the changeset to get replacement features from;
-   * must support Boundable
+   * @param input1 the target data file path
+   * @param input2 the source data file path
    * @param bounds the bounds over which features are to be replaced
    * @param output the changeset file output location
    */

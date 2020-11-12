@@ -57,7 +57,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ChangesetReplacement, ChangesetReplacementCreator)
 
 ChangesetReplacementCreator::ChangesetReplacementCreator() :
-ChangesetCutOnlyCreator()
+ChangesetReplacementCreatorAbstract()
 {
   _currentChangeDerivationPassIsLinear = true;
   _boundsInterpretation = BoundsInterpretation::Lenient;
