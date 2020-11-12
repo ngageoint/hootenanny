@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/algorithms/changeset/ChangesetReplacement.h>
+#include <hoot/core/util/Progress.h>
 
 namespace hoot
 {
@@ -213,6 +214,7 @@ protected:
   std::shared_ptr<ChangesetCreator> _changesetCreator;
   int _numChanges;
 
+  std::shared_ptr<Progress> _progress;
   int _numTotalTasks;
   int _currentTask;
 

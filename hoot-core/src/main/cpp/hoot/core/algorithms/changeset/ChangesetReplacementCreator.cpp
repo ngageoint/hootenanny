@@ -47,7 +47,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/util/Progress.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -63,9 +62,10 @@ ChangesetReplacementCreatorAbstract()
   _currentChangeDerivationPassIsLinear = true;
   _boundsInterpretation = BoundsInterpretation::Lenient;
   _fullReplacement = true;
-  // Every capitalized section of the "create" method (e.g. "LOAD AND FILTER"), except validation is
-  // being considered a separate step for progress. The number of steps here must be updated as you
-  // add/remove job steps in the logic.
+
+  // Every capitalized labeled section of the "create" method (e.g. "LOAD AND FILTER"), except input
+  // validation is being considered a separate step for progress. The number of tasks per pass must
+  // be updated as you add/remove job steps in the create logic.
   _numTotalTasks = 8;
 
   _setGlobalOpts();
@@ -144,10 +144,10 @@ void ChangesetReplacementCreator::create(
 
   LOG_INFO("******************************************");
   _currentTask = 1;
-  Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
-  progress.set(
+  _progress.reset(
+    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
+  _progress->set(
     0.0, "Generating diff maps for changeset derivation with ID: " + _changesetId + "...");
-  LOG_VARD(toString());
 
   // VALIDATION
 
@@ -166,7 +166,7 @@ void ChangesetReplacementCreator::create(
 
   // LOAD AND FILTER
 
-  progress.set(_getJobPercentComplete(), "Loading input data...");
+  _progress->set(_getJobPercentComplete(), "Loading input data...");
   QMap<ElementId, long> refIdToVersionMappings; // This is needed during snapping.
   OsmMapPtr refMap = _loadAndFilterRefMap(refIdToVersionMappings);
   OsmMapPtr secMap = _loadAndFilterSecMap();
@@ -189,7 +189,7 @@ void ChangesetReplacementCreator::create(
   // cut the shape of the secondary data out of the reference data; pass in an unknown geometry
   // type since we're replacing all types and that also prevents alpha shapes from trying to cover
   // stragglers, which can be expensive
-  progress.set(_getJobPercentComplete(), "Cutting out features...");
+  _progress->set(_getJobPercentComplete(), "Cutting out features...");
   OsmMapPtr cookieCutRefMap =
     _getCookieCutMap(refMap, secMap, GeometryTypeCriterion::GeometryType::Unknown);
   const int cookieCutSize = cookieCutRefMap->size();
@@ -217,7 +217,7 @@ void ChangesetReplacementCreator::create(
   // are actually needed at some point. This cleaning *probably* still needs to occur after cutting,
   // though, as it seems to get rid of some of the artifacts produced by that process.
 
-  progress.set(_getJobPercentComplete(), "Cleaning data...");
+  _progress->set(_getJobPercentComplete(), "Cleaning data...");
   if (secMap->size() > 0)
   {
     _clean(secMap);
@@ -230,7 +230,7 @@ void ChangesetReplacementCreator::create(
 
   // SNAP BEFORE CHANGESET DERIVATION CROPPING
 
-  progress.set(_getJobPercentComplete(), "Snapping linear features...");
+  _progress->set(_getJobPercentComplete(), "Snapping linear features...");
 
   // Had an idea once here to try to load source IDs for sec data, remap sec IDs to be unique just
   // before the ref and sec have to be combined, and then restore the original sec IDs after the
@@ -265,7 +265,7 @@ void ChangesetReplacementCreator::create(
 
   // PRE-CHANGESET DERIVATION CROP
 
-  progress.set(_getJobPercentComplete(), "Cropping maps for changeset derivation...");
+  _progress->set(_getJobPercentComplete(), "Cropping maps for changeset derivation...");
 
   // If we're conflating linear features with the lenient bounds requirement, copy the
   // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
@@ -285,7 +285,7 @@ void ChangesetReplacementCreator::create(
 
   // SNAP AFTER CHANGESET DERIVATION CROPPING
 
-  progress.set(_getJobPercentComplete(), "Snapping linear features...");
+  _progress->set(_getJobPercentComplete(), "Snapping linear features...");
 
   // The non-strict bounds interpretation way replacement workflow benefits from a second
   // set of snapping runs right before changeset derivation due to there being ways connected to
@@ -310,7 +310,7 @@ void ChangesetReplacementCreator::create(
 
   // CLEANUP
 
-  progress.set(_getJobPercentComplete(), "Cleaning up erroneous features...");
+  _progress->set(_getJobPercentComplete(), "Cleaning up erroneous features...");
 
   // clean up any mistakes introduced
   _cleanup(refMap);
@@ -326,11 +326,11 @@ void ChangesetReplacementCreator::create(
 
   // CHANGESET GENERATION
 
-  progress.set(_getJobPercentComplete(), "Generating changeset...");
+  _progress->set(_getJobPercentComplete(), "Generating changeset...");
   _generateChangeset(refMap, combinedMap);
   _currentTask++;
 
-  progress.set(
+  _progress->set(
     1.0, Progress::JobState::Successful,
     "Derived replacement changeset: ..." + _output.right(_maxFilePrintLength) + " with " +
     StringUtils::formatLargeNumber(_numChanges) + " changes for " +

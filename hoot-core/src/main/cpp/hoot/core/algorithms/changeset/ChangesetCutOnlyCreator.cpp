@@ -57,7 +57,6 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/util/Progress.h>
 
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
@@ -79,6 +78,18 @@ ChangesetReplacementCreatorAbstract()
   _boundsInterpretation = BoundsInterpretation::Lenient;
   _currentChangeDerivationPassIsLinear = false;
   _fullReplacement = false;
+
+  // Every capitalized labeled section of the "create" method (e.g. "DIFF CALCULATION"), except
+  // input validation is being considered a separate step for progress. These steps are multiplied
+  // by the number of per geometry map creation passes (3) to get the total number of tasks. In
+  // addition, there is also one additional task for element ID synchronization and one for
+  // changeset derivation. The number of steps must be updated as you add/remove job steps in the
+  // create logic.
+  const int numTasksPerPass = 5;
+  const int numPasses = 3;
+  _numTotalTasks = numTasksPerPass * numPasses;
+  _numTotalTasks++;  // element ID synchronization
+  _numTotalTasks++; // changeset derivation
 }
 
 void ChangesetCutOnlyCreator::setGeometryFilters(const QStringList& filterClassNames)
@@ -303,6 +314,10 @@ void ChangesetCutOnlyCreator::create(
 
   // DIFF CALCULATION
 
+  _currentTask = 1;
+  _progress.reset(
+    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
+
   // Since data with different geometry types require different settings, we'll calculate a separate
   // pair of before/after maps for each geometry type.
 
@@ -388,7 +403,9 @@ void ChangesetCutOnlyCreator::create(
   // create/delete statements. This must be done with the ref/sec maps separated to avoid ID
   // conflicts.
   // TODO: move this to inside the geometry pass loop?
+  _progress->set(_getJobPercentComplete(), "Synchonizing element IDs...");
   _synchronizeIds(refMaps, conflatedMaps);
+  _currentTask++;
 
   // CHANGESET GENERATION
 
@@ -396,6 +413,7 @@ void ChangesetCutOnlyCreator::create(
 
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
+  _progress->set(_getJobPercentComplete(), "Generating changeset...");
   _changesetCreator->setIncludeReviews(
     ConfigOptions().getChangesetReplacementPassConflateReviews());
   // We have some instances where modify and delete changes are being generated for the same
@@ -405,11 +423,13 @@ void ChangesetCutOnlyCreator::create(
   _changesetCreator->setClean(true);
   _changesetCreator->create(refMaps, conflatedMaps, _output);
   _numChanges = _changesetCreator->getNumTotalChanges();
+  _currentTask++;
 
-  LOG_STATUS(
-    "Derived replacement changeset: ..." << _output.right(_maxFilePrintLength) << " with " <<
-    StringUtils::formatLargeNumber(_numChanges) << " changes in " <<
-    StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+  _progress->set(
+    1.0, Progress::JobState::Successful,
+    "Derived replacement changeset: ..." + _output.right(_maxFilePrintLength) + " with " +
+    StringUtils::formatLargeNumber(_numChanges) + " changes in " +
+    StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
 }
 
 void ChangesetCutOnlyCreator::_processMaps(
@@ -429,6 +449,8 @@ void ChangesetCutOnlyCreator::_processMaps(
   _parseConfigOpts(geometryType);
 
   // DATA LOAD AND INITIAL PREP
+
+  _progress->set(_getJobPercentComplete(), "Loading input data...");
 
   // load the data to replace
   refMap = _loadRefMap(geometryType);
@@ -503,7 +525,11 @@ void ChangesetCutOnlyCreator::_processMaps(
     bothMapsEmpty = true;
   }
 
+  _currentTask++;
+
   // CUT
+
+  _progress->set(_getJobPercentComplete(), "Cutting out features...");
 
   // cut the shape of the secondary data out of the reference data
   OsmMapPtr cookieCutRefMap = _getCookieCutMap(refMap, secMap, geometryType);
@@ -528,30 +554,37 @@ void ChangesetCutOnlyCreator::_processMaps(
   // situation again, we can go back in the history to resurrect the use of the ElementIdRemapper
   // for relations here, which has since been removed from the codebase.
 
-  // Combine the cookie cut ref map back with the secondary map, so we can conflate the two
-  // together if needed.
+  _currentTask++;
+
+  // CLEAN
+
+  _progress->set(_getJobPercentComplete(), "Cleaning data...");
+
+  // TODO: remove this combining
+  // Combine the cookie cut ref map back with the secondary map for cleaning purposes.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
   OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
   secMap.reset();
   LOG_VARD(cookieCutRefMap->size());
 
-  // CLEAN
-
-  // conflate the cookie cut ref map with the sec map if conflation is enabled
+  // clean the data
 
   // TODO: rename var since this map isn't necessary conflated; also rename everything in terms of
   // "toReplace" and "replacement"
   conflatedMap = cookieCutRefMap;
   if (secMapSize > 0)
   {
-
     // This is a little misleading to only clean when the sec map has elements, however a test fails
     // if we don't. May need further investigation.
     _clean(conflatedMap);
     conflatedMap->setName("cleaned-" + GeometryTypeCriterion::typeToString(geometryType));
   }
 
+  _currentTask++;
+
   // SNAP
+
+  _progress->set(_getJobPercentComplete(), "Snapping linear features...");
 
   if (_currentChangeDerivationPassIsLinear)
   {
@@ -658,11 +691,15 @@ void ChangesetCutOnlyCreator::_processMaps(
     _excludeFeaturesFromChangesetDeletion(refMap);
   }
 
+  _currentTask++;
+
   // CLEANUP
 
   // clean up any mistakes introduced
+  _progress->set(_getJobPercentComplete(), "Cleaning up erroneous features...");
   _cleanup(refMap);
   _cleanup(conflatedMap);
+  _currentTask++;
 
   LOG_VART(refMap->getElementCount());
   LOG_VART(conflatedMap->getElementCount());
