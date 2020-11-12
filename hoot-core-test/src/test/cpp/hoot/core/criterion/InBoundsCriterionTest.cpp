@@ -62,7 +62,7 @@ public:
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
     InBoundsCriterion uut(true);
-    uut.setBounds(GeometryUtils::envelopeToPolygon(bounds));
+    uut.setBounds(bounds);
     uut.setOsmMap(map.get());
 
     // both elements completely within the bounding box
@@ -80,7 +80,7 @@ public:
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
     InBoundsCriterion uut(false);
-    uut.setBounds(GeometryUtils::envelopeToPolygon(bounds));
+    uut.setBounds(bounds);
     uut.setOsmMap(map.get());
 
     // node within the bounding box
@@ -99,7 +99,7 @@ public:
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
     InBoundsCriterion uut(true);
-    uut.setBounds(GeometryUtils::envelopeToPolygon(bounds));
+    uut.setBounds(bounds);
     uut.setOsmMap(map.get());
 
     // node completely outside the bounding box
@@ -118,7 +118,7 @@ public:
     OsmMapReaderFactory::read(map, "test-files/ToyTestA.osm", true);
 
     InBoundsCriterion uut(false);
-    uut.setBounds(GeometryUtils::envelopeToPolygon(bounds));
+    uut.setBounds(bounds);
     uut.setOsmMap(map.get());
 
     // both elements completely outside the bounding box

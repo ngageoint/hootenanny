@@ -69,7 +69,8 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, true, true,  _inputPath + "in.osm");
 
-    ImmediatelyConnectedOutOfBoundsWayTagger uut(GeometryUtils::envelopeToPolygon(bounds), true);
+    ImmediatelyConnectedOutOfBoundsWayTagger uut(true);
+    uut.setBounds(bounds);
     uut.apply(map);
 
     const QString outFileName = testName + "-out.osm";
@@ -92,7 +93,8 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, true, true,  _inputPath + "in.osm");
 
-    ImmediatelyConnectedOutOfBoundsWayTagger uut(GeometryUtils::envelopeToPolygon(bounds), false);
+    ImmediatelyConnectedOutOfBoundsWayTagger uut(false);
+    uut.setBounds(bounds);
     uut.apply(map);
 
     const QString outFileName = testName + "-out.osm";

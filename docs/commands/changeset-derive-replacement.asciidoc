@@ -25,8 +25,8 @@ IDs in the secondary data are not retained and those elements treated as complet
                                    See the "Input Data and "Bounds Handling" sections for more detail.
 * +bounds+                       - Boundary over which to do the feature replacement. Can be either a rectangular bounding box of the form: 
                                    minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902" or a closed polygon of the form:
-                                   x1,y1;x2,y2;x3,y3;...; e.g. "-71.4698,42.4866,-71.4657,42.4902". See the ""Bounds Handling" section for 
-                                   more detail.
+                                   x1,y1;x2,y2;x3,y3;...; e.g. "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841". See the 
+                                   "Bounds Handling" section for more detail.
 * +output+                       - Changeset output location; must be a changeset .osc or .osc.sql file.
 * +osmApiDatabaseUrl+            - Target OSM API database where the derived changeset is to be applied, used to maintain element ID 
                                    continuity. 
@@ -94,13 +94,21 @@ GeoJSON output from the Overpass API is not supported as an input to this comman
 
 === Bounds Handling
 
-The handling of the specified replacement bounds is done in a lenient fashion. This makes replacement of gridded task cells possible without
-corrupting reference data. The behavior affects the different feature geometry types thusly:
+The handling of the specified replacement bounds is done in a lenient fashion when replacing one set of data with another. This makes 
+replacement of gridded task cells possible without corrupting reference data. This behavior affects the different feature geometry types thusly:
 
-* Point features: N/A as boundary relationships are only handled in a strict fashion.
+* Point features: N/A as boundary relationships are only handled in a strict fashion where no points outside of the bounds are modified.
 * Linear features either inside or overlapping the specified bounds are completely replaced.
 * Polygon features either inside or overlapping the specified bounds are completely replaced. Polygon features are never split but may be 
   conflated at the specified boundary if conflation is enabled.
+
+Alternatively, when removing data without replacing it with new data (cut only workflow), the handling of the specified replacement bounds is 
+done in a strict fashion. This behavior affects the different feature geometry types thusly:
+
+* Point features: Only point features completely inside the specified bounds are replaced.
+* Linear features: Only sections of linear features within the specified bounds are modified, and they may be cut where they cross the bounds 
+  and optionally joined back up with reference data via way snapping (see "Unconnected Way Snapping" section).
+* Polygon features: Only polygon features completely inside the specified bounds are replaced. Polygon features are never split.
 
 Currently, only rectangular bounding box or closed polygon shapes are supported for the bounds. Support for other geometries may be added going
 forward.

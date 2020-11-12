@@ -67,12 +67,6 @@ public:
 
   virtual std::string getClassName() const override { return className(); }
 
-  /**
-   * Sets the bounds on the nodes that will be removed.
-   */
-  virtual void setBounds(const std::shared_ptr<geos::geom::Geometry>& bounds) override
-  { _bounds = bounds; }
-
   virtual QString getDescription() const override { return "Crops a map"; }
 
   virtual QString getInitStatusMessage() const override;
@@ -96,8 +90,6 @@ private:
 
   friend class MapCropperTest;
 
-  // the boundary at which the data is cropped; see comments in constructor header
-  std::shared_ptr<geos::geom::Geometry> _bounds;
   // if false data outside of the boundary is removed; if true, data inside of the boundary is
   // removed
   bool _invert;
