@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/TaskGrid.h>
+#include <hoot/core/ops/DataQualityMetricTagger.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -45,12 +46,8 @@ class OsmApiDbSqlChangesetApplier;
  * This class can replace data in an OSM API database across multiple AOI's via changeset generation
  * and application. Its primarily meant as a testing harness to support
  * ServiceChangesetReplacementGridTest. However, in theory, with some tweaks it could be used in a
- * production environment if desired.
- *
- * Either an auto node density generated, uniform, or file based input task grid may be used to
- * partition the data replacements. The file based task grid supports one or more bounds input
- * files. Node density calc requires reading in all of the replacement node data, so may not be
- * feasible when replacing extremely large amounts of data.
+ * production environment if desired. Any of the TaskGridGenerator implementations can be used to
+ * create a task grid to pass to this class.
  */
 class ChangesetTaskGridReplacer
 {
@@ -61,7 +58,7 @@ public:
   virtual ~ChangesetTaskGridReplacer() = default;
 
   /**
-   * Replaces data
+   * Replaces data within a task grid cell
    *
    * @param toReplace URL to the data to replace; must be an OSM API database
    * @param replacement URL to the replacement data; must be a Hoot API database
@@ -69,10 +66,12 @@ public:
    */
   void replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
 
-  int getNumOrphanedNodesInOutput() const { return _orphanedNodes; }
-  int getNumDisconnectedWaysInOutput() const { return _disconnectedWays; }
-  int getNumEmptyWaysInOutput() const { return _emptyWays; }
-  int getNumDuplicateElementPairsInOutput() const { return _duplicateElementPairs; }
+  int getNumOrphanedNodesInOutput() const { return _metricTagger.getNumOrphanedNodesInOutput(); }
+  int getNumDisconnectedWaysInOutput() const
+  { return _metricTagger.getNumDisconnectedWaysInOutput(); }
+  int getNumEmptyWaysInOutput() const { return _metricTagger.getNumEmptyWaysInOutput(); }
+  int getNumDuplicateElementPairsInOutput() const
+  { return _metricTagger.getNumDuplicateElementPairsInOutput(); }
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
@@ -132,14 +131,7 @@ private:
   QString _finalOutput;
   // adds tags to features that are suspect as result of the replacement op
   bool _tagQualityIssues;
-  // the number of orphaned nodes found in the final output if _tagQualityIssues=true
-  int _orphanedNodes;
-  // the number of disconnected ways found in the final output if _tagQualityIssues=true
-  int _disconnectedWays;
-  // the number of empty ways found in the final output if _tagQualityIssues=true
-  int _emptyWays;
-  // the number of duplicated elements found in the final output if _tagQualityIssues=true
-  int _duplicateElementPairs;
+  DataQualityMetricTagger _metricTagger;
   // uses diff conflate to calculate the difference between the final replaced data and the original
   // data used for replacement
   bool _calcDiffWithReplacement;

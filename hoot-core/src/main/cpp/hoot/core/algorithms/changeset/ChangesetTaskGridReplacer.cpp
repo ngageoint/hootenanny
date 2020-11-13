@@ -39,14 +39,6 @@
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/criterion/DisconnectedWayCriterion.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/criterion/ElementIdCriterion.h>
-#include <hoot/core/criterion/EmptyWayCriterion.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
-#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/ops/RemoveRoundabouts.h>
@@ -55,7 +47,6 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
-#include <hoot/core/ops/DuplicateElementMarker.h>
 
 namespace hoot
 {
@@ -69,10 +60,6 @@ _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
 _averageChangesetDeriveTime(0.0),
 _tagQualityIssues(false),
-_orphanedNodes(0),
-_disconnectedWays(0),
-_emptyWays(0),
-_duplicateElementPairs(0),
 _calcDiffWithReplacement(false),
 _outputNonConflatable(false)
 {
@@ -424,7 +411,8 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   {
     // tag element with potential data quality issues caused by the replacement operations; If this
     // isn't done after the previous cleaning step, you'll get some element NPE's.
-    _writeQualityIssueTags(map);
+    _metricTagger.setBounds(_taskGridBounds);
+    _metricTagger.apply(map);
   }
 
   // write the full map out
@@ -436,68 +424,6 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
     ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read out in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
-}
-
-void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
-{
-  LOG_STATUS("Tagging features with quality issues...");
-
-  std::shared_ptr<SetTagValueVisitor> tagVis;
-  std::shared_ptr<FilteredVisitor> filteredVis;
-  std::shared_ptr<ElementCriterion> crit;
-
-  // We're only guaranteeing output data quality for the data in the task grid cells actually
-  // replaced. Any data outside of the replacement grid may end up with quality issues that can't be
-  // fixed until its replaced. So, restrict each of these quality checks to be in the replacement
-  // AOI.
-
-  std::shared_ptr<geos::geom::Polygon> boundsGeom =
-    GeometryUtils::envelopeToPolygon(_taskGridBounds);
-
-  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
-  crit.reset(
-    new ElementIdCriterion(
-      ElementType::Node,
-      SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, boundsGeom)));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
-  map->visitRo(*filteredVis);
-  _orphanedNodes = tagVis->getNumFeaturesAffected();
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_orphanedNodes) << " orphaned nodes in output.");
-
-  // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not so
-  // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
-  // replacement bounds.
-  std::shared_ptr<InBoundsCriterion> inBoundsCrit(new InBoundsCriterion(true));
-  inBoundsCrit->setBounds(boundsGeom);
-  inBoundsCrit->setOsmMap(map.get());
-
-  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
-  crit.reset(
-    new ChainCriterion(ElementCriterionPtr(new DisconnectedWayCriterion(map)), inBoundsCrit));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
-  map->visitRo(*filteredVis);
-  _disconnectedWays = tagVis->getNumFeaturesAffected();
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_disconnectedWays) <<
-    " disconnected ways in output.");
-
-  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
-  crit.reset(new ChainCriterion(ElementCriterionPtr(new EmptyWayCriterion()), inBoundsCrit));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
-  map->visitRo(*filteredVis);
-  _emptyWays = tagVis->getNumFeaturesAffected();
-  LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
-
-  DuplicateElementMarker dupeMarker;
-  dupeMarker.setCoordinateComparisonSensitivity(8);
-  dupeMarker.apply(map);
-  _duplicateElementPairs = dupeMarker.getNumFeaturesAffected();
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_duplicateElementPairs) <<
-    " duplicate feature pairs in output.");
-  LOG_STATUS(
-    "Containing way types for duplicate way nodes: " << dupeMarker.getContainingWayTypes());
 }
 
 void ChangesetTaskGridReplacer::_writeNonConflatable(const ConstOsmMapPtr& map,
@@ -538,7 +464,6 @@ void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const 
   conf().set(
     ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
   conf().set(ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(), false);
-  //conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
 
   // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
   // config.
