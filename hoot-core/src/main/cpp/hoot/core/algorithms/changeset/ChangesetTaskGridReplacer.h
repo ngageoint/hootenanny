@@ -146,12 +146,10 @@ private:
   void _initChangesetStats();
   void _printChangesetStats();
 
-  // TODO: move the quality issue tagging and diff gen out to a separate class
+  // TODO: move the diff gen out to a separate class
 
   // writes out all of the ref data; useful for debugging...expensive
   void _getUpdatedData(const QString& outputFile);
-  // tags elements with potential quality issues
-  void _writeQualityIssueTags(OsmMapPtr& map);
   // writes out elements that can't be conflated and therefore, won't show up in a diff between
   // replaced and replacement data; useful for debugging
   void _writeNonConflatable(const ConstOsmMapPtr& map, const QString& outputFile);
