@@ -44,10 +44,6 @@ namespace hoot
 
 /**
  * Derives a set of replacement changes given two map inputs
- *
- * @todo move the input parsing to a separate method and assign the parsed inputs to member
- * variables
- * @todo command needs some input error handling tests
  */
 class ChangesetDeriveReplacementCmd : public BoundedCommand
 {
@@ -264,7 +260,6 @@ public:
     changesetCreator->setChainRetainmentFilters(chainRetainmentFilters);
     changesetCreator->setRetainmentFilters(retainmentFilters);
     changesetCreator->setRetainmentFilterOptions(retainmentFilterOptions);
-    changesetCreator->setConflationEnabled(false);
     changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
     changesetCreator->create(input1, input2, bounds, output);
   }
