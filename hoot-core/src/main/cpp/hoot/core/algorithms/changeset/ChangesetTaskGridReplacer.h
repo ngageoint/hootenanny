@@ -149,10 +149,7 @@ private:
   // TODO: move the diff gen out to a separate class
 
   // writes out all of the ref data; useful for debugging...expensive
-  void _getUpdatedData(const QString& outputFile);
-  // writes out elements that can't be conflated and therefore, won't show up in a diff between
-  // replaced and replacement data; useful for debugging
-  void _writeNonConflatable(const ConstOsmMapPtr& map, const QString& outputFile);
+  void _writeUpdatedData(const QString& outputFile);
   // calcs the output diff
   void _calculateDiffWithOriginalReplacementData(const QString& outputFile);
 };

@@ -45,8 +45,7 @@
 #include <hoot/core/ops/ReplaceRoundabouts.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/core/util/ConflateUtils.h>
 
 namespace hoot
 {
@@ -127,7 +126,7 @@ void ChangesetTaskGridReplacer::replace(
 
     if (!_finalOutput.isEmpty())
     {
-      _getUpdatedData(_finalOutput);
+      _writeUpdatedData(_finalOutput);
       // TODO: move this outside of the replace method
       if (_calcDiffWithReplacement)
       {
@@ -288,7 +287,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   // VERY SLOW
   if (ConfigOptions().getDebugMapsWrite() && changesetNum < taskGridSize)
   {
-    _getUpdatedData(
+    _writeUpdatedData(
       _changesetsOutputDir + "/" + QString::number(taskGridCell.id) + "-replaced-data.osm");
   }
 
@@ -376,7 +375,7 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
         _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY]));
 }
 
-void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
+void ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile)
 {
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getConvertBoundsKey(), "");
@@ -396,17 +395,27 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   emptyRelationRemover.apply(map);
   LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
 
-  // TODO: move this outside of this method and the replace method
   if (_outputNonConflatable)
   {
-    // Output any features that hoot doesn't know how to conflate into their own file, for
-    // debugging purposes.
+    // Output any features that hoot doesn't know how to conflate and, therefore won't show up in a
+    // diff between replaced and replacement data, into their own file for debugging purposes.
     QString nonConflatableOutput = outputFile;
     nonConflatableOutput.replace(".osm", "-non-conflatable.osm");
-    _writeNonConflatable(map, nonConflatableOutput);
+    const int nonConflatableSize = ConflateUtils::writeNonConflatable(map, outputFile);
+    if (nonConflatableSize > 0)
+    {
+      LOG_STATUS(
+        "Non-conflatable data of size: " <<
+        StringUtils::formatLargeNumber(nonConflatableSize) << " written in: " <<
+        StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+    }
+    else
+    {
+      LOG_STATUS("No non-conflatable elements present.");
+    }
+    _subTaskTimer.restart();
   }
 
-  // TODO: move this outside of this method and the replace method
   if (_tagQualityIssues)
   {
     // tag element with potential data quality issues caused by the replacement operations; If this
@@ -423,32 +432,6 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
     "Modified data original size: " << StringUtils::formatLargeNumber(_originalDataSize) <<
     ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read out in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  _subTaskTimer.restart();
-}
-
-void ChangesetTaskGridReplacer::_writeNonConflatable(const ConstOsmMapPtr& map,
-                                                     const QString& outputFile)
-{
-  LOG_STATUS("Writing non-conflatable data to: ..." << outputFile.right(25) << " ...");
-  OsmMapPtr nonConflatableMap(new OsmMap(map));
-  std::shared_ptr<RemoveElementsVisitor> elementRemover(new RemoveElementsVisitor(true));
-  elementRemover->setRecursive(true);
-  std::shared_ptr<ElementCriterion> nonConflatableCrit(
-    new NonConflatableCriterion(nonConflatableMap));
-  elementRemover->addCriterion(nonConflatableCrit);;
-  nonConflatableMap->visitRw(*elementRemover);
-  if (nonConflatableMap->size() > 0)
-  {
-    OsmMapWriterFactory::write(nonConflatableMap, outputFile);
-    LOG_STATUS(
-      "Non-conflatable data of size: " <<
-      StringUtils::formatLargeNumber(nonConflatableMap->size()) << " written in: " <<
-      StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  }
-  else
-  {
-    LOG_STATUS("No non-conflatable elements present.");
-  }
   _subTaskTimer.restart();
 }
 
