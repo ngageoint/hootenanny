@@ -252,11 +252,10 @@ void ChangesetReplacementCreator::create(
   // secondary to reference *and* allowing conflated data to be snapped to either dataset. We only
   // want to snap ways of like types together, so we'll loop through each applicable linear type
   // and snap them separately.
-  //_snapUnconnectedPreChangesetMapCropping(combinedMap);
+  _snapUnconnectedPreChangesetMapCropping(combinedMap);
 
   // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
   // data in the resulting changeset and generate modify statements instead.
-  //
   ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
   wayJoiner.join(combinedMap);
   LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
