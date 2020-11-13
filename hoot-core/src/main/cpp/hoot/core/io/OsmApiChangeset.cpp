@@ -2572,7 +2572,10 @@ LastElementInfo ChangesetInfo::getLastElement()
   //  Iterate backwards to get the last element
   for (int i = (int)ElementType::Relation; i >= (int)ElementType::Node; --i)
   {
-    for (int j = ChangesetType::TypeDelete; j >= ChangesetType::TypeCreate; --j)
+//    for (int j = ChangesetType::TypeDelete; j >= ChangesetType::TypeCreate; --j)
+    //  Temporary reporting fix for UI overpass sync-fix, ignore relation deletes for last element reporting
+    int j = (i == (int)ElementType::Relation) ? ChangesetType::TypeModify : ChangesetType::TypeDelete;
+    for (; j >= ChangesetType::TypeCreate; --j)
     {
       if (_changeset[i][j].size() > 0)
       {

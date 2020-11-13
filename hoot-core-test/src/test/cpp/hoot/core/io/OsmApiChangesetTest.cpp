@@ -45,6 +45,7 @@ class OsmApiChangesetTest : public HootTestFixture
   CPPUNIT_TEST(runXmlChangesetErrorFixTest);
   CPPUNIT_TEST(runXmlChangesetSplitDeleteTest);
   CPPUNIT_TEST(runXmlChangesetModifyAndDeleteTest);
+  CPPUNIT_TEST(runChangesetInfoLastElement);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -282,16 +283,53 @@ public:
     for (ChangesetType type = ChangesetType::TypeCreate; type != ChangesetType::TypeMax; type = static_cast<ChangesetType>(type + 1))
     {
       for (ChangesetElementMap::iterator it = changeset._nodes[type].begin(); it != changeset._nodes[type].end(); ++it)
-        info->add(ElementType::Type::Node, type, it->first);
+        info->add(ElementType::Node, type, it->first);
       for (ChangesetElementMap::iterator it = changeset._ways[type].begin(); it != changeset._ways[type].end(); ++it)
-        info->add(ElementType::Type::Way, type, it->first);
+        info->add(ElementType::Way, type, it->first);
       for (ChangesetElementMap::iterator it = changeset._relations[type].begin(); it != changeset._relations[type].end(); ++it)
-        info->add(ElementType::Type::Relation, type, it->first);
+        info->add(ElementType::Relation, type, it->first);
     }
     //  Compare the changeset XML
     QString change = changeset.getChangesetString(info, 1);
     QString expected = FileUtils::readFully(_inputPath + "ModifyAndDelete-Expected.osc");
     HOOT_STR_EQUALS(expected, change);
+  }
+
+  void runChangesetInfoLastElement()
+  {
+    ChangesetInfo info;
+    LastElementInfo last;
+
+    //  Check for the last element for creates
+    info.clear();
+    info.add(ElementType::Node, ChangesetType::TypeCreate, 1);
+    info.add(ElementType::Way, ChangesetType::TypeCreate, 1);
+    info.add(ElementType::Relation, ChangesetType::TypeCreate, 1);
+    last = info.getLastElement();
+    CPPUNIT_ASSERT_EQUAL(1L, last._id.getId());
+    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, last._id.getType().getEnum());
+    CPPUNIT_ASSERT_EQUAL(ChangesetType::TypeCreate, last._type);
+
+    //  Check for the last element for modifies
+    info.clear();
+    info.add(ElementType::Node, ChangesetType::TypeModify, 1);
+    info.add(ElementType::Way, ChangesetType::TypeModify, 1);
+    info.add(ElementType::Relation, ChangesetType::TypeModify, 1);
+    last = info.getLastElement();
+    CPPUNIT_ASSERT_EQUAL(1L, last._id.getId());
+    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, last._id.getType().getEnum());
+    CPPUNIT_ASSERT_EQUAL(ChangesetType::TypeModify, last._type);
+
+    //  Check for the last element for deletes
+    //  NOTE: For now, the last delete will not return a relation
+    info.clear();
+    info.add(ElementType::Node, ChangesetType::TypeDelete, 1);
+    info.add(ElementType::Way, ChangesetType::TypeDelete, 1);
+    info.add(ElementType::Relation, ChangesetType::TypeDelete, 1);
+    last = info.getLastElement();
+    CPPUNIT_ASSERT_EQUAL(1L, last._id.getId());
+    CPPUNIT_ASSERT_EQUAL(ElementType::Way, last._id.getType().getEnum());
+    CPPUNIT_ASSERT_EQUAL(ChangesetType::TypeDelete, last._type);
   }
 };
 
