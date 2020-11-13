@@ -40,7 +40,6 @@
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/conflate/ConflateUtils.h>
 
 namespace hoot
 {
@@ -53,12 +52,11 @@ _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
 _averageChangesetDeriveTime(0.0),
-_tagQualityIssues(false),
-_outputNonConflatable(false)
+_tagQualityIssues(false)
 {
 }
 
-void ChangesetTaskGridReplacer::replace(
+OsmMapPtr ChangesetTaskGridReplacer::replace(
   const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid)
 {
   if (!toReplace.toLower().startsWith("osmapidb://"))
@@ -118,10 +116,7 @@ void ChangesetTaskGridReplacer::replace(
         StringUtils::millisecondsToDhms(_opTimer.elapsed()));
     }
 
-    if (!_finalOutput.isEmpty())
-    {
-      _writeUpdatedData(_finalOutput);
-    }
+    return _writeUpdatedData(_finalOutput);
   }
   catch (const HootException& e)
   {
@@ -134,6 +129,7 @@ void ChangesetTaskGridReplacer::replace(
   }
 
   LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
+  return OsmMapPtr();
 }
 
 void ChangesetTaskGridReplacer::_initConfig()
@@ -361,7 +357,7 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
         _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY]));
 }
 
-void ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile)
+OsmMapPtr ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile)
 {
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getConvertBoundsKey(), "");
@@ -381,44 +377,28 @@ void ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile)
   emptyRelationRemover.apply(map);
   LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
 
-  if (_outputNonConflatable)
-  {
-    // Output any features that hoot doesn't know how to conflate and, therefore won't show up in a
-    // diff between replaced and replacement data, into their own file for debugging purposes.
-    QString nonConflatableOutput = outputFile;
-    nonConflatableOutput.replace(".osm", "-non-conflatable.osm");
-    const int nonConflatableSize = ConflateUtils::writeNonConflatable(map, outputFile);
-    if (nonConflatableSize > 0)
-    {
-      LOG_STATUS(
-        "Non-conflatable data of size: " <<
-        StringUtils::formatLargeNumber(nonConflatableSize) << " written in: " <<
-        StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-    }
-    else
-    {
-      LOG_STATUS("No non-conflatable elements present.");
-    }
-    _subTaskTimer.restart();
-  }
-
   if (_tagQualityIssues)
   {
-    // tag element with potential data quality issues caused by the replacement operations; If this
+    // Tag element with potential data quality issues caused by the replacement operations. If this
     // isn't done after the previous cleaning step, you'll get some element NPE's.
     _metricTagger.setBounds(_taskGridBounds);
     _metricTagger.apply(map);
   }
 
-  // write the full map out
-  LOG_STATUS("Writing the modified data to: ..." << outputFile.right(25) << "...");
-  OsmMapWriterFactory::write(map, outputFile);
+  if (!outputFile.isEmpty())
+  {
+    // write the full map out
+    LOG_STATUS("Writing the modified data to: ..." << outputFile.right(25) << "...");
+    OsmMapWriterFactory::write(map, outputFile);
+  }
 
   LOG_STATUS(
     "Modified data original size: " << StringUtils::formatLargeNumber(_originalDataSize) <<
     ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read out in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
+
+  return map;
 }
 
 }

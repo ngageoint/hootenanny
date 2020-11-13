@@ -48,34 +48,32 @@ namespace hoot
 
 static const QString USER_EMAIL = "ServiceChangesetReplacementGridTest@hoottestcpp.org";
 static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl().toString();
-// uses diff conflate to calculate the difference between the final replaced data and the original
-// data used for replacement
-static const bool CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT = true;
+// enables diff conflate to calculate the difference between the final replaced data and the
+// original data used for replacement
+static const bool CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT = false;
+// TODO
+static const bool WRITE_NON_CONFLATABLE = false;
 
 /*
  * This test harness allows for testing the Cut and Replace workflow across adjacent task grid
  * cells. By removing the processes of input data retrieval and changeset application via API from
  * the test workflow, bugs can more easily be narrowed down to just those caused by
  * ChangesetReplacementGenerator (most of the time).
- *
- * Its worth noting that both the orphaned node and duplicate elements counts may be a little
- * dubious at this point, but at least they give us a baseline until their accuracy can be improved.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  // TODO: re-enable
-//  CPPUNIT_TEST(orphanedNodes1Test);
-//  CPPUNIT_TEST(orphanedNodes2Test);
-//  CPPUNIT_TEST(droppedNodes1Test);
-//  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
-//  CPPUNIT_TEST(badPolyIdSync1Test);
-//  CPPUNIT_TEST(badPolyIdSync2Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
+  CPPUNIT_TEST(droppedNodes1Test);
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(badPolyIdSync1Test);
+  CPPUNIT_TEST(badPolyIdSync2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
-  CPPUNIT_TEST(github4216UniformTest);
+  //CPPUNIT_TEST(github4216UniformTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
 
   CPPUNIT_TEST_SUITE_END();
@@ -125,7 +123,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -157,7 +154,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setOutputNonConflatable(false);
     const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
 
     // to suppress a SpatialIndexer warning that should be looked into at some point
@@ -199,7 +195,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -239,7 +234,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -275,7 +269,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -311,7 +304,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
       _replacementDataUrl,
@@ -350,18 +342,21 @@ public:
     uut.setWriteFinalOutput(finalOutput);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setOutputNonConflatable(true); // TODO: change back to false
     const TaskGrid taskGrid =
       UniformTaskGridGenerator(
         "-115.1208,36.1550,-115.0280,36.2182", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid();
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGrid);
+    OsmMapPtr outputMap = uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGrid);
 
+    if (WRITE_NON_CONFLATABLE)
+    {
+      _writeNonConflatable(outputMap, finalOutput.replace(".osm", "-non-conflatable.osm"));
+    }
     if (CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT)
     {
-      const QString diffOutput = finalOutput.replace(".osm", "-diff.osm");
-      _writeDiffBetweenReplacedAndReplacement(taskGrid.getBounds(), diffOutput);
+      _writeDiffBetweenReplacedAndReplacement(
+        taskGrid.getBounds(), finalOutput.replace(".osm", "-diff.osm"));
     }
 
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
@@ -399,7 +394,6 @@ public:
     uut.setWriteFinalOutput(finalOutput);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setOutputNonConflatable(false);
     // for cell subset debugging
 //    QList<int> includeIds;
 //    includeIds.append(59);
@@ -410,7 +404,7 @@ public:
         "-115.3528,36.0919,-114.9817,36.3447", 8,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid();
-    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGrid);
+    OsmMapPtr outputMap = uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGrid);
     // for cell subset debugging
 //    uut.replace(
 //      DATA_TO_REPLACE_URL,
@@ -420,10 +414,14 @@ public:
 //        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
 //        .generateTaskGrid());
 
+    if (WRITE_NON_CONFLATABLE)
+    {
+      _writeNonConflatable(outputMap, finalOutput.replace(".osm", "-non-conflatable.osm"));
+    }
     if (CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT)
     {
-      const QString diffOutput = finalOutput.replace(".osm", "-diff.osm");
-      _writeDiffBetweenReplacedAndReplacement(taskGrid.getBounds(), diffOutput);
+      _writeDiffBetweenReplacedAndReplacement(
+        taskGrid.getBounds(), finalOutput.replace(".osm", "-diff.osm"));
     }
 
     CPPUNIT_ASSERT_EQUAL(4, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
@@ -585,6 +583,25 @@ private:
     LOG_STATUS(
       StringUtils::formatLargeNumber(map->size()) << " replacement elements loaded in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+    _subTaskTimer.restart();
+  }
+
+  void _writeNonConflatable(const ConstOsmMapPtr& map, const QString& output)
+  {
+    // Output any features that hoot doesn't know how to conflate and, therefore won't show up in a
+    // diff between replaced and replacement data, into their own file for debugging purposes.
+    const int nonConflatableSize = ConflateUtils::writeNonConflatable(map, output);
+    if (nonConflatableSize > 0)
+    {
+      LOG_STATUS(
+        "Non-conflatable data of size: " <<
+        StringUtils::formatLargeNumber(nonConflatableSize) << " written in: " <<
+        StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
+    }
+    else
+    {
+      LOG_STATUS("No non-conflatable elements present.");
+    }
     _subTaskTimer.restart();
   }
 

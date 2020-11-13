@@ -63,8 +63,9 @@ public:
    * @param toReplace URL to the data to replace; must be an OSM API database
    * @param replacement URL to the replacement data; must be a Hoot API database
    * @param taskGrid the task grid that partitions the individual replacement operations
+   * @return todo
    */
-  void replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
+  OsmMapPtr replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
 
   const DataQualityMetricTagger getOutputMetrics() { return _metricTagger; }
 
@@ -78,7 +79,6 @@ public:
   { _killAfterNumChangesetDerivations = numDerivations; }
   void setWriteFinalOutput(QString output) { _finalOutput = output; }
   void setTagQualityIssues(bool tag) { _tagQualityIssues = tag; }
-  void setOutputNonConflatable(bool output) { _outputNonConflatable = output; }
 
 private:
 
@@ -123,11 +123,10 @@ private:
 
   // optional location to write the final completely replaced ref output
   QString _finalOutput;
+
   // adds tags to features that are suspect as result of the replacement op
   bool _tagQualityIssues;
   DataQualityMetricTagger _metricTagger;
-  // write non-conflatable elements to a separate file
-  bool _outputNonConflatable;
 
   void _initConfig();
 
@@ -138,7 +137,7 @@ private:
   void _printChangesetStats();
 
   // writes out the updated data
-  void _writeUpdatedData(const QString& outputFile);
+  OsmMapPtr _writeUpdatedData(const QString& outputFile);
 };
 
 }

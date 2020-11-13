@@ -38,6 +38,10 @@ namespace hoot
 
 /**
  * TODO
+ *
+ * There is likely overlap between this and the integrated JOSM validation. This was primarily
+ * created as a quick way to diagnose C&R output quality and may go away or be merged with other
+ * capability at some point.
  */
 class DataQualityMetricTagger : public OsmMapOperation, public Boundable
 {
