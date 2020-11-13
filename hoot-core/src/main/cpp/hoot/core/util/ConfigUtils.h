@@ -28,6 +28,10 @@
 #ifndef CONFIGUTILS_H
 #define CONFIGUTILS_H
 
+// Hoot
+#include <hoot/core/geometry/GeometryUtils.h>
+
+// Qt
 #include <QStringList>
 
 namespace hoot

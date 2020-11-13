@@ -67,11 +67,11 @@ OsmMapPtr NodeDensityTaskGridGenerator::_getNodeDensityTaskGridInput()
   // changeset derive will overwrite these later, if needed
   if (!_bounds.trimmed().isEmpty())
   {
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), _bounds);
-    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundsKey(), _bounds);
+    conf().set(ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(), false);
     conf().set(
-      ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
-    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+      ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(), true);
   }
 
   // TODO: replace the string truncation lengths with getProgressVarPrintLengthMax

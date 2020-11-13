@@ -273,7 +273,7 @@ function doExport(req, res, hash, input) {
         }
         //if conn is url, write that response to a file
         //handle different flavors of bbox param
-        var bbox_param = 'convert.bounding.box';
+        var bbox_param = 'convert.bounds';
         var bbox = exports.validateBbox(req.query.bbox);
 
         if (input.substring(0,4) === 'http') {

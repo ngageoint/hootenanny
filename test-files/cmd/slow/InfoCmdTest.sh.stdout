@@ -43,9 +43,9 @@ conflate.review.threshold.default
 conflate.stats.types
 conflator.manipulators
 conflator.min.valid.score
-convert.bounding.box
-convert.bounding.box.hoot.api.database
-convert.bounding.box.osm.api.database
+convert.bounds
+convert.bounds.hoot.api.database
+convert.bounds.osm.api.database
 convert.ops
 cookie.cutter.alpha
 cookie.cutter.alpha.shape.buffer
@@ -551,7 +551,7 @@ dataset.
 * Data Type: double
 * Default Value: `0.0`
 
-Value in degrees by which the specified AOI (convert.bounding.box) will be expanded when calculating
+Value in degrees by which the specified AOI (convert.bounds) will be expanded when calculating
 changesets.  Setting this too large with some datasets may greatly increase the changeset
 derivation time.
 
@@ -730,7 +730,7 @@ This is the minimum valid manipulation score in the legacy greedy optimization r
 the value lower will create more (likely overzealous) matches. Setting the value higher will drop
 less confident matches.
 
-=== convert.bounding.box
+=== convert.bounds
 
 * Data Type: string
 * Default Value: ``
@@ -743,26 +743,26 @@ See the documentation for more details.
 Example Usage:
 
 ----
-hoot convert -D convert.bounding.box=106.851,-6.160,107.052,-5.913 input output
+hoot convert -D convert.bounds=106.851,-6.160,107.052,-5.913 input output
 ----
 
-=== convert.bounding.box.hoot.api.database
+=== convert.bounds.hoot.api.database
 
 * Data Type: string
 * Default Value: ``
 
-Same as convert.bounding.box but the resultant bounds filtering is only applied to Hootenanny API
+Same as convert.bounds but the resultant bounds filtering is only applied to Hootenanny API
 database data sources when used with the convert and conflate commands.  This setting takes
-precendence over the convert.bounding.box setting for Hootenanny API database data sources only.
+precendence over the convert.bounds setting for Hootenanny API database data sources only.
 
-=== convert.bounding.box.osm.api.database
+=== convert.bounds.osm.api.database
 
 * Data Type: string
 * Default Value: ``
 
-Same as convert.bounding.box but the resultant bounds filtering is only applied to OSM API database
+Same as convert.bounds but the resultant bounds filtering is only applied to OSM API database
 data sources when used with the convert and conflate commands.  This setting takes precendence over
-the convert.bounding.box setting for OSM API database data sources only.
+the convert.bounds setting for OSM API database data sources only.
 
 === convert.ops
 

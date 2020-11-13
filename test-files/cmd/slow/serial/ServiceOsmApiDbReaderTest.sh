@@ -37,7 +37,7 @@ scripts/database/CleanAndInitializeOsmApiDb.sh
 
 hoot convert --warn $HOOT_OPTS test-files/DcGisRoads.osm $DB_URL
 
-hoot convert --warn $HOOT_OPTS -D convert.bounding.box=-77.04,38.8916,-77.03324,38.8958 $OSM_API_DB_URL $OUTPUT_DIR/output2.osm
+hoot convert --warn $HOOT_OPTS -D convert.bounds=-77.04,38.8916,-77.03324,38.8958 $OSM_API_DB_URL $OUTPUT_DIR/output2.osm
 hoot diff $HOOT_OPTS test-files/cmd/slow/serial/ServiceOsmApiDbReaderTest/output2.osm $OUTPUT_DIR/output2.osm
 
 

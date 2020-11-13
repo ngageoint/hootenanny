@@ -78,9 +78,8 @@ _isFile(false),
 _isWeb(false),
 _numRead(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
-_bounds(GeometryUtils::envelopeFromConfigString(ConfigOptions().getConvertBoundingBox())),
 _keepImmediatelyConnectedWaysOutsideBounds(
-  ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds()),
+  ConfigOptions().getConvertBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
 _missingNodeCount(0),
 _missingWayCount(0),
 _addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
@@ -194,6 +193,24 @@ void OsmJsonReader::read(const OsmMapPtr& map)
 {
   LOG_DEBUG("Reading map...");
 
+  LOG_VART(_isFile);
+  if (!_bounds)
+  {
+    // If we're doing a web pull, ensure a rectangular bounds from the config. See a related note in
+    // OsmApiReader::read.
+    if (!_isFile && !ConfigOptions().getConvertBounds().trimmed().isEmpty() &&
+        !GeometryUtils::isEnvelopeString(ConfigOptions().getConvertBounds()))
+    {
+      throw IllegalArgumentException(
+        "OsmJsonReader does not support a non-rectangular bounds for reading over HTTP.");
+    }
+    _bounds = GeometryUtils::boundsFromString(ConfigOptions().getConvertBounds());
+  }
+  if (_bounds)
+  {
+    LOG_VART(_bounds);
+  }
+
   _map = map;
   _map->appendSource(_url);
   if (_isFile)
@@ -213,9 +230,17 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   LOG_VARD(_map->getElementCount());
 
   // See related note in OsmXmlReader::read.
-  if (!_bounds.isNull())
+  if (_bounds.get())
   {
-    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    if (!_isFile)
+    {
+      IoUtils::cropToBounds(
+        _map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
+    }
+    else
+    {
+      IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    }
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 }
@@ -225,9 +250,17 @@ void OsmJsonReader::_readToMap()
   _parseOverpassJson();
   LOG_VARD(_map->getElementCount());
 
-  if (!_bounds.isNull())
+  if (_bounds.get())
   {
-    IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    if (!_isFile)
+    {
+      IoUtils::cropToBounds(
+        _map, *(_bounds->getEnvelopeInternal()), _keepImmediatelyConnectedWaysOutsideBounds);
+    }
+    else
+    {
+      IoUtils::cropToBounds(_map, _bounds, _keepImmediatelyConnectedWaysOutsideBounds);
+    }
     LOG_VARD(StringUtils::formatLargeNumber(_map->getElementCount()));
   }
 }
@@ -326,7 +359,7 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _coordGridSize = opts.getReaderHttpBboxMaxSize();
   _threadCount = opts.getReaderHttpBboxThreadCount();
-  setBounds(GeometryUtils::envelopeFromConfigString(opts.getConvertBoundingBox()));
+  setBounds(GeometryUtils::boundsFromString(opts.getConvertBounds()));
   setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
 }
 
@@ -1015,8 +1048,20 @@ void OsmJsonReader::_readFromHttp()
     urlQuery.removeQueryItem("srsname");
   urlQuery.addQueryItem("srsname", "EPSG:4326");
   _sourceUrl.setQuery(urlQuery);
+  geos::geom::Envelope env;
+  if (!_bounds)
+  {
+    // If no bounds was set, the read method still expects an empty one.
+    env = geos::geom::Envelope();
+  }
+  else
+  {
+    // Use the envelope of the boundsto throw away any non-retangular bounds that may have been
+    // passed.
+    env = *(_bounds->getEnvelopeInternal());
+  }
   //  Spin up the threads
-  beginRead(_sourceUrl, _bounds);
+  beginRead(_sourceUrl, env);
   //  Iterate all of the XML results
   while (hasMoreResults())
   {

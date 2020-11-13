@@ -36,6 +36,7 @@
 #include <hoot/core/util/OsmApiUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/ReportMissingElementsVisitor.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QBuffer>
@@ -70,11 +71,10 @@ OsmApiReader::~OsmApiReader()
 void OsmApiReader::setConfiguration(const Settings& conf)
 {
   ConfigOptions configOptions(conf);
-  //  Get the bounds of the query
-  setBounds(GeometryUtils::envelopeFromConfigString(configOptions.getConvertBoundingBox()));
   setMaxThreads(configOptions.getReaderHttpBboxThreadCount());
   setCoordGridSize(configOptions.getReaderHttpBboxMaxSize());
   setMaxGridSize(configOptions.getReaderHttpBboxMaxDownloadSize());
+  setBounds(GeometryUtils::boundsFromString(configOptions.getConvertBounds()));
 }
 
 void OsmApiReader::setUseDataSourceIds(bool /*useDataSourceIds*/)
@@ -116,6 +116,16 @@ void OsmApiReader::read(const OsmMapPtr& map)
   LOG_VART(_keepStatusTag);
   LOG_VART(_preserveAllTags);
 
+  // If a non-rectangular bounds was passed in from the config, we'll catch it here. If it is passed
+  // in from setBounds, we'll silently disregard by using the envelope of the bounds only.
+  if (!ConfigOptions().getConvertBounds().trimmed().isEmpty() &&
+      !GeometryUtils::isEnvelopeString(ConfigOptions().getConvertBounds()))
+  {
+    throw IllegalArgumentException(
+      "OsmApiReader does not support a non-rectangular bounds: " +
+      ConfigOptions().getConvertBounds());
+  }
+
   //  Reusing the reader for multiple reads has two options, the first is the
   //  default where the reader is reset and duplicates error out.  The second
   //  is where duplicates are ignored in the same dataset and across datasets
@@ -132,8 +142,9 @@ void OsmApiReader::read(const OsmMapPtr& map)
   _map = map;
   _map->appendSource(_url);
 
-  //  Spin up the threads
-  beginRead(_url, _bounds);
+  //  Spin up the threads. Use the envelope of the boundsto throw away any non-retangular bounds
+  // that may have been  passed.
+  beginRead(_url, *(_bounds->getEnvelopeInternal()));
 
   //  Iterate all of the XML results
   while (hasMoreResults())

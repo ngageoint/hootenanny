@@ -60,6 +60,7 @@ class ChangesetReplacementCreatorTest : public HootTestFixture
   CPPUNIT_TEST(runInvalidFilterConfigOptsTest);
   CPPUNIT_TEST(runConvertOpsTest);
   CPPUNIT_TEST(runFullReplacmentWithRetainmentFilterTest);
+  CPPUNIT_TEST(runInvalidBoundsTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -142,8 +143,8 @@ public:
     try
     {
       changesetCreator.create(
-        "test-files/cmd/quick/ConvertGeoNames.geonames", "test2.osm", geos::geom::Envelope(),
-        "out.osm");
+        "test-files/cmd/quick/ConvertGeoNames.geonames", "test2.osm",
+        geos::geom::Envelope(0, 0, 0, 0), "out.osm");
     }
     catch (const HootException& e)
     {
@@ -160,7 +161,8 @@ public:
     ChangesetCutOnlyCreator changesetCreator;
     try
     {
-      changesetCreator.create("test1.geojson", "test2.osm", geos::geom::Envelope(), "out.osm");
+      changesetCreator.create(
+        "test1.geojson", "test2.osm", geos::geom::Envelope(0, 0, 0, 0), "out.osm");
     }
     catch (const HootException& e)
     {
@@ -213,7 +215,8 @@ public:
       QStringList(QString::fromStdString(DuplicateNodeRemover::className())));
     try
     {
-      changesetCreator.create("test1.osm", "test2.osm", geos::geom::Envelope(), "out.osm");
+      changesetCreator.create(
+        "test1.osm", "test2.osm", geos::geom::Envelope(0, 0, 0, 0), "out.osm");
     }
     catch (const HootException& e)
     {
@@ -234,7 +237,8 @@ public:
       QStringList(QString::fromStdString(TagCriterion::className())));
     try
     {
-      changesetCreator.create("test1.osm", "test2.osm", geos::geom::Envelope(), "out.osm");
+      changesetCreator.create(
+        "test1.osm", "test2.osm", geos::geom::Envelope(0, 0, 0, 0), "out.osm");
     }
     catch (const HootException& e)
     {
@@ -243,6 +247,41 @@ public:
     CPPUNIT_ASSERT_EQUAL(
       QString("Both full reference data replacement and a reference data retainment filter may not "
               "be specified for replacement changeset derivation.").toStdString(),
+      exceptionMsg.toStdString());
+  }
+
+  void runInvalidBoundsTest()
+  {
+    // This is just doing null checks. GeometryUtilsTest goes into more detail on validation of
+    // these bounds from string.
+
+    QString exceptionMsg;
+    ChangesetCutOnlyCreator changesetCreator;
+
+    try
+    {
+      changesetCreator.create(
+        "test1.osm", "test2.osm", std::shared_ptr<geos::geom::Polygon>(), "out.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Invalid replacement bounds passed to changeset replacement derivation.").toStdString(),
+      exceptionMsg.toStdString());
+
+    try
+    {
+      changesetCreator.create(
+        "test1.osm", "test2.osm", geos::geom::Envelope(), "out.osm");
+    }
+    catch (const HootException& e)
+    {
+      exceptionMsg = e.what();
+    }
+    CPPUNIT_ASSERT_EQUAL(
+      QString("Invalid replacement bounds passed to changeset replacement derivation.").toStdString(),
       exceptionMsg.toStdString());
   }
 };

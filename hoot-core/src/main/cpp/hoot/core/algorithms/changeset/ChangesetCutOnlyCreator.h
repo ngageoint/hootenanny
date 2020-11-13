@@ -137,6 +137,13 @@ public:
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output);
 
+  /**
+   * @see ChangesetReplacement
+   */
+  virtual void create(
+    const QString& input1, const QString& input2,
+    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output);
+
   virtual int getNumChanges() const { return _numChanges; }
 
   virtual void setFullReplacement(const bool full) { _fullReplacement = full; }
@@ -183,7 +190,7 @@ protected:
   QString _output;
 
   // the AOI over which the replacement is being performed
-  QString _replacementBounds;
+  std::shared_ptr<geos::geom::Polygon> _replacementBounds;
 
   // determines how strict the handling of the bounds is during replacement
   BoundsInterpretation _boundsInterpretation;
@@ -357,14 +364,6 @@ protected:
    * Copies all ways that are tagged with MetadataTags::HootConnectedWayOutsideBounds() out of a map
    */
   OsmMapPtr _getImmediatelyConnectedOutOfBoundsWays(const ConstOsmMapPtr& map) const;
-
-  /*
-   * Performs cropping to prepare a map for changeset derivation. This is potentially different
-   * cropping than done during initial load and cookie cutting.
-   */
-  void _cropMapForChangesetDerivation(
-    OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
-    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName);
 
   /*
    * Snaps unnconnected ways with a map to each other

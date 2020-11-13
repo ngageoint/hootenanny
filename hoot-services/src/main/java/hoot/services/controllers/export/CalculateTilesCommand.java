@@ -62,7 +62,7 @@ class CalculateTilesCommand extends ExportCommand {
         // be very expensive for large datasets
         if (params.getBounds() != null) {
             BoundingBox bounds = new BoundingBox(params.getBounds());
-            options.add("convert.bounding.box=" + bounds.getMinLon() + "," + bounds.getMinLat() + ","
+            options.add("convert.bounds=" + bounds.getMinLon() + "," + bounds.getMinLat() + ","
                     + bounds.getMaxLon() + "," + bounds.getMaxLat());
         }
         List<String> hootOptions = toHootOptions(options);

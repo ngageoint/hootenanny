@@ -170,7 +170,7 @@ void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry,
   if (stragglers.size() > 0)
   {
     LOG_DEBUG("Adding " << stragglers.size() << " point stragglers to alpha shape.");
-    //  Merge the stragglers geomotries
+    //  Merge the stragglers geometries
     GeometryPtr merged = GeometryUtils::mergeGeometries(stragglers, *geometry->getEnvelopeInternal());
     //  Join the original geometry with the stragglers geometry
     geometry.reset(geometry->Union(merged.get()));

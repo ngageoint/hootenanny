@@ -41,6 +41,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -193,23 +194,24 @@ void IoUtils::saveMap(const OsmMapPtr& map, const QString& path)
 void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
                            const bool keepConnectedOobWays)
 {
+  cropToBounds(map, GeometryUtils::envelopeToPolygon(bounds), keepConnectedOobWays);
+}
+
+void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
+                           const bool keepConnectedOobWays)
+{
   LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
   LOG_VARD(keepConnectedOobWays);
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
-  // We can get more precise bounds intersection calcs for ways when passing in a geometry here
-  // instead of an envelope.
-//  std::shared_ptr<geos::geom::Geometry> boundsGeom(
-//    geos::geom::GeometryFactory::getDefaultInstance()->toGeometry(&bounds));
-//  MapCropper cropper(boundsGeom);
-  MapCropper cropper(bounds);
-
+  MapCropper cropper;
+  cropper.setBounds(bounds);
   cropper.setKeepEntireFeaturesCrossingBounds(
-    ConfigOptions().getConvertBoundingBoxKeepEntireFeaturesCrossingBounds());
+    ConfigOptions().getConvertBoundsKeepEntireFeaturesCrossingBounds());
   const bool strictBoundsHandling =
-    ConfigOptions().getConvertBoundingBoxKeepOnlyFeaturesInsideBounds();
+    ConfigOptions().getConvertBoundsKeepOnlyFeaturesInsideBounds();
   cropper.setKeepOnlyFeaturesInsideBounds(strictBoundsHandling);
-  cropper.setRemoveMissingElements(ConfigOptions().getConvertBoundingBoxRemoveMissingElements());
+  cropper.setRemoveMissingElements(ConfigOptions().getConvertBoundsRemoveMissingElements());
 
   // If we want to keep ways that are outside of the crop bounds but connected to a way that's
   // inside the bounds, we need to tag them before cropping and then tell the cropper to leave
@@ -219,7 +221,8 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
   {
     // The two cropper config opts above will always be opposite of one another, so we'll just
     // determine bounds strictness off of one of them.
-    ImmediatelyConnectedOutOfBoundsWayTagger tagger(bounds, strictBoundsHandling);
+    ImmediatelyConnectedOutOfBoundsWayTagger tagger(strictBoundsHandling);
+    tagger.setBounds(bounds);
     LOG_INFO(tagger.getInitStatusMessage());
     tagger.apply(map);
     LOG_DEBUG(tagger.getCompletedStatusMessage());

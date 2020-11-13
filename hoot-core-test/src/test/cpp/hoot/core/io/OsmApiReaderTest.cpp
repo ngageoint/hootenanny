@@ -35,6 +35,7 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/OsmApiUtils.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 //  Run tests against a local test server
 #define RUN_LOCAL_TEST_SERVER

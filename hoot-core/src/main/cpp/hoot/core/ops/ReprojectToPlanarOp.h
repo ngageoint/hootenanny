@@ -29,7 +29,6 @@
 #define __REPROJECT_TO_PLANAR_OP_H__
 
 // hoot
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
@@ -38,10 +37,8 @@ namespace hoot
 /**
  * If not already reprojected, reprojects the given map to a custom planar projection. See
  * MapProjector::reprojectToPlanar
- *
- * This is compatible with fourpass.
  */
-class ReprojectToPlanarOp : public OsmMapOperation, public Serializable
+class ReprojectToPlanarOp : public OsmMapOperation
 {
 public:
 
@@ -53,10 +50,6 @@ public:
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual std::string getClassName() const { return className(); }
-
-  virtual void readObject(QDataStream& is);
-
-  virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const { return "Reprojects to a custom planar projection"; }
 

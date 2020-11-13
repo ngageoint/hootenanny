@@ -29,6 +29,7 @@
 
 //GEOS
 #include <geos/geom/Envelope.h>
+#include <geos/geom/Polygon.h>
 
 // Qt
 #include <QString>
@@ -38,6 +39,12 @@ namespace hoot
 
 /**
  * Interface for classes generating changesets where one dataset replaces another
+ *
+ * The interface supports a Polygon geometry instead of any geometry as input due to the fact the
+ * convert.bounds option string has to be set by the creators at the beginning of the replacement
+ * operation, and there only exist sa string parsing implementation for Polygon. Its possible for
+ * this support additional geometry types at some point going forward, but there's no need for it
+ * currently.
  */
 class ChangesetReplacement
 {
@@ -67,12 +74,27 @@ public:
    * support Boundable
    * @param input2 the source data file path for the changeset to get replacement features from;
    * must support Boundable
-   * @param bounds the bounds over which features are to be replaced
+   * @param bounds the rectangular bounds over which features are to be replaced
    * @param output the changeset file output location
    */
   virtual void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) = 0;
+
+  /**
+   * Creates a changeset that replaces features in the first input with features from the second
+   * input
+   *
+   * @param input1 the target data file path for the changeset in which to replace features; must
+   * support Boundable
+   * @param input2 the source data file path for the changeset to get replacement features from;
+   * must support Boundable
+   * @param bounds the bounds over which features are to be replaced
+   * @param output the changeset file output location
+   */
+  virtual void create(
+    const QString& input1, const QString& input2,
+    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) = 0;
 
   virtual int getNumChanges() const = 0;
 

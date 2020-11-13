@@ -52,7 +52,6 @@
 #include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
-//#include <hoot/core/criterion/RoundaboutCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
@@ -370,7 +369,10 @@ void ChangesetCutOnlyCreator::_printJobDescription() const
   str += "Deriving replacement output changeset:";
   str += "\nBeing replaced: ..." + _input1.right(_maxFilePrintLength);
   str += "\nReplacing with ..." + _input2.right(_maxFilePrintLength);
-  str += "\nAt Bounds: " + _replacementBounds;
+  str +=
+    "\nAt Bounds: " +
+    GeometryUtils::polygonToString(_replacementBounds)
+      .right(ConfigOptions().getProgressVarPrintLengthMax() * 2);
   str += "\nOutput Changeset: ..." + _output.right(_maxFilePrintLength);
   LOG_STATUS(str);
 
@@ -395,13 +397,23 @@ void ChangesetCutOnlyCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
-  LOG_VARD(input1);
-  LOG_VARD(input2);
-  LOG_VARD(GeometryUtils::envelopeToConfigString(bounds));
-  LOG_VARD(output);
+  create(input1, input2, GeometryUtils::envelopeToPolygon(bounds), output);
+}
 
+void ChangesetCutOnlyCreator::create(
+  const QString& input1, const QString& input2,
+  const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output)
+{
   QElapsedTimer timer;
   timer.start();
+
+  LOG_VARD(input1);
+  LOG_VARD(input2);
+  if (bounds)
+  {
+    LOG_VARD(GeometryUtils::polygonToString(bounds));
+  }
+  LOG_VARD(output);
 
   // INPUT VALIDATION AND SETUP
 
@@ -410,12 +422,7 @@ void ChangesetCutOnlyCreator::create(
   _input2 = input2;
   _input2Map.reset();
   _output = output;
-  //_replacementBounds = bounds;
-  // TODO: It makes more sense to store the bounds and then just convert it to a string as needed.
-  // The default string stores six decimal places, which should be fine for a bounds. Strangely,
-  // when I store the bounds or try to increase the precision of the bounds string, I'm getting a
-  // lot of test output issues...needs to be looked into.
-  _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
+  _replacementBounds = bounds;
   _validateInputs();
   _setGlobalOpts();
   _printJobDescription();
@@ -509,20 +516,8 @@ void ChangesetCutOnlyCreator::create(
   // some duplicated features that need to be cleaned up before we generate the changesets. This
   // is kind of a band-aid :-(
 
-  // UPDATE 8/17/20: This de-duplication appears no longer necessary after applying the ID
-  // synchronization just after it. More testing needs to happen before verifying that, though.
-
-  // If we have the maps for only one geometry type, then there isn't a possibility of duplication
-  // created by the replacement operation.
-//  if (refMaps.size() > 1)
-//  {
-//    // Not completely sure at this point if we need to dedupe ref maps. Doing so breaks the
-//    // roundabouts test and adds an extra relation to the out of spec test when we do intra-map
-//    // de-duping. Mostly worried that not doing so could break the overlapping only replacement
-//    // (non-full) scenario...we'll see...
-//    //_dedupeMaps(refMaps);
-//    _dedupeMaps(conflatedMaps);
-//  }
+  // UPDATE 8/17/20: Feature de-duplication appears no longer necessary after applying the ID
+  // synchronization below.
 
   // Synchronize IDs between the two maps in order to cut down on unnecessary changeset
   // create/delete statements. This must be done with the ref/sec maps separated to avoid ID
@@ -762,15 +757,10 @@ void ChangesetCutOnlyCreator::_processMaps(
     immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
   }
 
-  // Crop the original ref and conflated maps appropriately for changeset derivation.
-  _cropMapForChangesetDerivation(
-    refMap, _boundsOpts.changesetRefKeepEntireCrossingBounds,
-    _boundsOpts.changesetRefKeepOnlyInsideBounds, _changesetId +
-    "-ref-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
-  _cropMapForChangesetDerivation(
-    conflatedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
-    _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId +
-    "-sec-" + GeometryTypeCriterion::typeToString(geometryType) + "-cropped-for-changeset");
+  // Used to do an additional round of cropping here to prepare for changeset derivation. After the
+  // change to support polygon bounds it was found it wasn't needed anymore when only cutting data,
+  // and actually had negative effects on the output. So, removing it completely for cut only. Its
+  // worth noting that we may end up needing it again as we expand the cut only tests cases.
 
   if (_boundsInterpretation == BoundsInterpretation::Lenient &&
       _currentChangeDerivationPassIsLinear)
@@ -844,6 +834,12 @@ void ChangesetCutOnlyCreator::_processMaps(
 
 void ChangesetCutOnlyCreator::_validateInputs()
 {
+  if (!_replacementBounds)
+  {
+    throw IllegalArgumentException(
+      "Invalid replacement bounds passed to changeset replacement derivation.");
+  }
+
   // Fail if the reader that supports either input doesn't implement Boundable.
   std::shared_ptr<Boundable> boundable =
     std::dynamic_pointer_cast<Boundable>(OsmMapReaderFactory::createReader(_input1));
@@ -901,11 +897,14 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
+  // This is kind of klunky to set this here, imo. However, its currently the only way to get this
+  // bounds to the readers.
+  conf().set(
+    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
 
   // For this being enabled to have any effect,
-  // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
-  conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  // convert.bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.
+  conf().set(ConfigOptions::getConvertBoundsTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
@@ -925,7 +924,7 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
     QString::fromStdString(RemoveMissingElementsVisitor::className()));
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
-  conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
+  conf().set(ConfigOptions::getConvertBoundsRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
   conf().set(ConfigOptions::getLogWarningsForMissingElementsKey(), false);
 
@@ -1258,13 +1257,13 @@ OsmMapPtr ChangesetCutOnlyCreator::_loadInputMap(
   OsmMapPtr& cachedMap)
 {
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(),
+    ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(),
     keepEntireFeaturesCrossingBounds);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(),
+    ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(),
    keepOnlyFeaturesInsideBounds);
   conf().set(
-    ConfigOptions::getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBoundsKey(),
+    ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(),
     keepImmediatelyConnectedWaysOutsideBounds);
 
 
@@ -1296,8 +1295,8 @@ OsmMapPtr ChangesetCutOnlyCreator::_loadInputMap(
     {
       // Clear out the bounding box param temporarily, so that we can read the full map here. Kind
       // of kludgy, but there is no access to it from here via IoUtils::loadMap.
-      const QString bbox = conf().getString(ConfigOptions::getConvertBoundingBoxKey());
-      conf().set(ConfigOptions::getConvertBoundingBoxKey(), "");
+      const QString bbox = conf().getString(ConfigOptions::getConvertBoundsKey());
+      conf().set(ConfigOptions::getConvertBoundsKey(), "");
 
       LOG_STATUS("Loading map from: ..." << inputUrl.right(_maxFilePrintLength) << "...");
       cachedMap.reset(new OsmMap());
@@ -1305,15 +1304,13 @@ OsmMapPtr ChangesetCutOnlyCreator::_loadInputMap(
       IoUtils::loadMap(cachedMap, inputUrl, useFileIds, status);
 
       // Restore it back to original.
-      conf().set(ConfigOptions::getConvertBoundingBoxKey(), bbox);
+      conf().set(ConfigOptions::getConvertBoundsKey(), bbox);
     }
     LOG_STATUS(
       "Copying map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<
       " from: " << cachedMap->getName() << "...");
     map.reset(new OsmMap(cachedMap));
-    IoUtils::cropToBounds(
-      map, GeometryUtils::envelopeFromConfigString(_replacementBounds),
-      keepImmediatelyConnectedWaysOutsideBounds);
+    IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
   }
 
   if (warnOnZeroVersions)
@@ -1424,10 +1421,15 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
   // strict/lenient bounds in here by changing some of the initial crop related opts set in
   // _parseConfigOpts...not sure.
 
+  LOG_DEBUG(
+    "Calculating the cutting of replacement data area out of data to be replaced for geometry: " <<
+    GeometryTypeCriterion::typeToString(geometryType) << "...");
   LOG_VARD(_fullReplacement);
   LOG_VARD(_boundsInterpretationToString(_boundsInterpretation));
   LOG_VARD(_currentChangeDerivationPassIsLinear);
+  LOG_VARD(doughMap->getName());
   LOG_VARD(doughMap->size());
+  LOG_VARD(cutterMap->getName());
   LOG_VARD(cutterMap->size());
   OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-dough-map-input");
   OsmMapWriterFactory::writeDebugMap(cutterMap, _changesetId + "-cutter-map-input");
@@ -1510,11 +1512,12 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
       else if (_fullReplacement && _boundsInterpretation != BoundsInterpretation::Lenient )
       {
         // With the strict bounds interpretation, full replacement, and an empty secondary map,
-        // we want simply the rectangular replacement bounds cut out. No need to use the cookie
-        // cutter here. Just use the map cropper.
+        // we want simply to cut the replacement bounds out, since we can't calc an alpha shape off
+        // of no replacement data. No need to use the cookie cutter here if no alpha shape is
+        // involved. Just use the map cropper.
         LOG_DEBUG(
           "Nothing in cutter map. Full replacement with strict bounds enabled, so cropping out " <<
-          "the rectangular bounds area of the dough map to be the map after cutting: " <<
+          "the bounds area of the dough map to be the map after cutting: " <<
           doughMap->getName() << "...");
         OsmMapPtr cookieCutMap(new OsmMap(doughMap));
         mapName = "cookie-cut";
@@ -1523,7 +1526,8 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
           mapName += "-" + GeometryTypeCriterion::typeToString(geometryType);
         }
         cookieCutMap->setName(mapName);
-        MapCropper cropper(GeometryUtils::envelopeFromConfigString(_replacementBounds));
+        MapCropper cropper;
+        cropper.setBounds(_replacementBounds);
         cropper.setRemoveSuperflousFeatures(false);
         cropper.setKeepEntireFeaturesCrossingBounds(false);
         cropper.setKeepOnlyFeaturesInsideBounds(false);
@@ -1542,8 +1546,8 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
         // If the sec map is empty and we're not doing full replacement, there's nothing in the sec
         // to overlap with the ref, so leave the ref untouched.
         LOG_DEBUG(
-          "Nothing in cutter map for linear features. Full replacement not enabled, so returning the "
-          "entire dough map as the map after cutting: " << doughMap->getName() << "...");
+          "Nothing in cutter map for linear features. Full replacement not enabled, so returning "
+          "the entire dough map as the map after cutting: " << doughMap->getName() << "...");
         OsmMapWriterFactory::writeDebugMap(doughMap, _changesetId + "-cookie-cut");
         // copy here to avoid changing the ref map passed in as the dough map input
         return OsmMapPtr(new OsmMap(doughMap));
@@ -1579,8 +1583,8 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
       // replaced.
       LOG_DEBUG("Using dough map: " << doughMap->getName() << " as cutter shape map...");
       cutterMapToUse = doughMap;
-      // TODO: riverbank test fails with missing POIs without this and the single point test has
-      // extra POIs in output without this; explain
+      // riverbank test fails with missing POIs without this and the single point test has
+      // extra POIs in output without this; why?
       cookieCutterAlphaShapeBuffer = 10.0;
     }
     else
@@ -1609,7 +1613,7 @@ OsmMapPtr ChangesetCutOnlyCreator::_getCookieCutMap(
     }
   }
 
-  // Found that if a map only has a couple points or less, generating an alpha shape from them may
+  // Found that if a map only has less than a few points, generating an alpha shape from them may
   // not be possible (or at least don't know how to yet). So instead, go through the points in the
   // map and replace them with small square shaped polys...from that we can generate the alpha
   // shape.
@@ -1852,36 +1856,6 @@ OsmMapPtr ChangesetCutOnlyCreator::_getImmediatelyConnectedOutOfBoundsWays(
   return connectedWays;
 }
 
-void ChangesetCutOnlyCreator::_cropMapForChangesetDerivation(
-  OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
-  const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName)
-{
-  if (map->size() == 0)
-  {
-    LOG_DEBUG("Skipping cropping empty map: " << map->getName() << "...");
-    return;
-  }
-
-  LOG_INFO("Cropping map: " << map->getName() << " for changeset derivation...");
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  LOG_VARD(keepEntireFeaturesCrossingBounds);
-  LOG_VARD(keepOnlyFeaturesInsideBounds);
-
-  MapCropper cropper(GeometryUtils::envelopeFromConfigString(_replacementBounds));
-  cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);
-  cropper.setKeepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds);
-  // We're not going to remove missing elements, as we want to have as minimal of an impact on
-  // the resulting changeset as possible.
-  cropper.setRemoveMissingElements(false);
-  cropper.apply(map);
-  LOG_DEBUG(cropper.getCompletedStatusMessage());
-
-  MemoryUsageChecker::getInstance().check();
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
-  LOG_DEBUG("Cropped map: " << map->getName() << " size: " << map->size());
-}
-
 void ChangesetCutOnlyCreator::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map)
 {
   LOG_INFO(
@@ -1922,7 +1896,7 @@ void ChangesetCutOnlyCreator::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& m
   // bounds.
 
   std::shared_ptr<InBoundsCriterion> boundsCrit(new InBoundsCriterion(_boundsOpts.inBoundsStrict));
-  boundsCrit->setBounds(GeometryUtils::envelopeFromConfigString(_replacementBounds));
+  boundsCrit->setBounds(_replacementBounds);
   boundsCrit->setOsmMap(map.get());
   std::shared_ptr<NotCriterion> notInBoundsCrit(new NotCriterion(boundsCrit));
   std::shared_ptr<ChainCriterion> elementCrit(

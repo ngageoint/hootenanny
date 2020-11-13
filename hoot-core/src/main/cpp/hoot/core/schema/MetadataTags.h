@@ -221,7 +221,7 @@ public:
   inline static const QString HootSnapped()             { return "hoot:snapped"; }
 
   /**
-   * Identifies ways outside of convert.bounding.box that are immediately connected to other ways
+   * Identifies ways outside of convert.bounds that are immediately connected to other ways
    * within the bounds
    */
   inline static const QString HootConnectedWayOutsideBounds() { return "hoot:connected_way"; }

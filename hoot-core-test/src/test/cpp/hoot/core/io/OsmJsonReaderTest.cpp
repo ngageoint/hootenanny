@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -32,6 +32,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QDir>
@@ -343,9 +344,6 @@ public:
   {
     // Try hitting the network to get some data...
 
-    // needed to suppress map crop missing element warnings
-    DisableLog dl;
-
     OsmMapPtr pMap;
     const QString overpassHost = ConfigOptions().getOverpassApiHost();
     QString urlNodes = "http://" + overpassHost + "/api/interpreter?data=[out:json];node(35.20,-120.59,35.21,-120.58);out;";
@@ -619,8 +617,8 @@ public:
     uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
 
     // set cropping up for strict bounds handling
-    conf().set(ConfigOptions::getConvertBoundingBoxKeepEntireFeaturesCrossingBoundsKey(), false);
-    conf().set(ConfigOptions::getConvertBoundingBoxKeepOnlyFeaturesInsideBoundsKey(), true);
+    conf().set(ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(), true);
 
     OsmMapPtr map(new OsmMap());
     uut.open(_inputPath + "runBoundsLeaveConnectedOobWaysTest-in.json");

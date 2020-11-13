@@ -60,11 +60,6 @@ public:
   virtual bool isSatisfied(const ConstElementPtr& e) const;
 
   /**
-   * @see Boundable
-   */
-  virtual void setBounds(const geos::geom::Envelope& bounds);
-
-  /**
    * @see Configurable
    */
   virtual void setConfiguration(const Settings& conf);
@@ -88,12 +83,10 @@ public:
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 
-
 private:
 
-  std::shared_ptr<const geos::geom::Geometry> _boundsGeom;
   ConstOsmMapPtr _map;
-  std::shared_ptr<ElementToGeometryConverter> _ElementToGeometryConverter;
+  std::shared_ptr<ElementToGeometryConverter> _elementConverter;
   // If false, the element can cross the bounds and still be considered within bounds.
   bool _mustCompletelyContain;
 };

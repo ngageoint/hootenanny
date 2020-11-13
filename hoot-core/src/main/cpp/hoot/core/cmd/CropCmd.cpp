@@ -69,14 +69,16 @@ public:
     timer.start();
     QString in = args[0];
     QString out = args[1];
-    _env.reset(new Envelope(GeometryUtils::envelopeFromConfigString(args[2])));
 
     BoundedCommand::runSimple(args);
+
+    _env = GeometryUtils::boundsFromString(args[2]);
 
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, in, true);
 
-    MapCropper cropper(*_env);
+    MapCropper cropper;
+    cropper.setBounds(_env);
     cropper.setConfiguration(Settings::getInstance());
     cropper.apply(map);
 
@@ -89,12 +91,13 @@ public:
 
 protected:
 
-  std::shared_ptr<Envelope> _env;
+  std::shared_ptr<geos::geom::Geometry> _env;
 
   virtual void _writeBoundsFile() override
   {
     OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(*_env), ConfigOptions().getBoundsOutputFile());
+      GeometryUtils::createMapFromBounds(*(_env->getEnvelopeInternal())),
+      ConfigOptions().getBoundsOutputFile());
   }
 };
 

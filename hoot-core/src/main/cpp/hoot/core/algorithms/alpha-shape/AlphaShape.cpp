@@ -315,7 +315,7 @@ GeometryPtr AlphaShape::toGeometry()
     " faces...");
 
   // create a vector of all faces
-  vector<GeometryPtr> faces, temp;
+  vector<GeometryPtr> faces;
   Envelope e;
   double preUnionArea = 0.0;
   double alpha = -1;

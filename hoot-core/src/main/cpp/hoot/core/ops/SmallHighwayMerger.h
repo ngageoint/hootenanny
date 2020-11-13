@@ -47,7 +47,7 @@ class NodeToWayMap;
 /**
  * Merge any ludicrously small ways that have essentially the same attributes. Things like `UUID`
  * are ignored. See `small.highway.merger.threshold` for setting the threshold value. Searches for
- * itty bitty ways that connect end to end. For some reason some files provide little  way segments
+ * itty bitty ways that connect end to end. For some reason some files provide little way segments
  * of 2m or less in length. Silliness. If:
  *   - the attributes are essentially identical
  *   - there are only two ways meeting (not an intersection)
@@ -73,7 +73,8 @@ public:
   /**
    * Remove parts of ways that are duplicates.
    */
-  static void mergeWays(std::shared_ptr<OsmMap> map, Meters threshold);
+  static void mergeWays(std::shared_ptr<OsmMap> map,
+                        const Meters threshold = ConfigOptions().getSmallHighwayMergerThreshold());
 
   virtual QString getInitStatusMessage() const { return "Merging very small roads..."; }
 

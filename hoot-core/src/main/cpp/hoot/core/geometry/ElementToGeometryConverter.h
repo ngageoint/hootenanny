@@ -85,7 +85,7 @@ public:
    * @note the default spatial reference used is WGS84
    */
   ElementToGeometryConverter(const ConstElementProviderPtr& provider,
-                   const bool logWarningsForMissingElements = true);
+                             const bool logWarningsForMissingElements = true);
 
   /**
    * Calculate the length of the given way in meters. The projection must be planar.

@@ -60,8 +60,6 @@ public:
 
   virtual bool isSupported(const QString& urlStr) override;
 
-  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
-
   void setBoundingBox(const QString& bbox);
   void setOverrideBoundingBox(const QString& bbox);
   void setReturnNodesOnly(const bool returnNodesOnly)
@@ -76,7 +74,8 @@ public:
   /**
    * Determines whether the reader should use the element id's from the file being read
    */
-  virtual void setUseDataSourceIds(bool useDataSourceIds) override { _useDataSourceIds = useDataSourceIds; }
+  virtual void setUseDataSourceIds(bool useDataSourceIds) override
+  { _useDataSourceIds = useDataSourceIds; }
 
   void setUserEmail(const QString& email) { _email = email; }
 
@@ -130,8 +129,7 @@ protected:
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
 
-  geos::geom::Envelope _bounds;
-  geos::geom::Envelope _overrideBounds; // this will override _bounds
+  std::shared_ptr<geos::geom::Geometry> _overrideBounds; // this will override _bounds
   // controls use of _readByBounds2 vs the default _readByBounds
   bool _readFullThenCropOnBounded;
 
@@ -173,7 +171,6 @@ protected:
                           QSet<QString>& additionalNodeIds, long& nodeCount, long& wayCount);
   void _updateMetadataOnElement(ElementPtr element);
 
-  static bool _isValidBounds(const geos::geom::Envelope& bounds);
   bool _hasBounds();
 
 private:

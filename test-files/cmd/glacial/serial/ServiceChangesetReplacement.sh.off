@@ -15,9 +15,9 @@ set -e
 # 2  - ref input file path
 # 3  - sec input file path - (use "test-files/Empty.osm" for cut only; that's hackish, but we already use the existing of an empty second 
 #                            input to determine whether generate the second input via perturbation)
-# 4  - replacement aoi - what section is being replaced; e.g. "-71.4698,42.4866,-71.4657,42.4902"
-# 5  - crop aoi - an initial aoi to crop both datasets down to in order to save processing time; use a global bounds to bypass cropping: 
-#                 "-180,-90,180,90" 
+# 4  - replacement aoi - what section is being replaced; matches convert.bounds format
+# 5  - crop aoi - an initial rectangular aoi to crop both datasets down to in order to save processing time; matches convert.bounds 
+#                 rectangular envelope format only use a global bounds to bypass cropping completely: "-180,-90,180,90" 
 # 6  - geometry filters - what types of geometries are being replaced?; delimited ElementCriterion class name list; leave empty to bypass
 # 7  - replacement filters - what types of features are we removing?; delimited ElementCriterion class name list; leave empty to bypass
 # 8  - chain replacement filters together (logical AND)?; true or false
@@ -180,10 +180,10 @@ HOOT_EMAIL="${TEST_NAME}@hoottestcpp.org"
 # big of a deal for now. 
 
 # debug.maps.remove.missing.elements=false is useful for debugging but it can make output unviewable in JOSM.
-# convert.bounding.box.remove.missing.elements=false ensures that we don't drop any missing elements except when writing out our debug maps.
+# convert.bounds.remove.missing.elements=false ensures that we don't drop any missing elements except when writing out our debug maps.
 
 LOG_LEVEL="--warn"
-GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounding.box.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=false -D element.hash.visitor.non.metadata.ignore.keys=note $EXTRA_PARAMS -D log.class.filter= "
+GENERAL_OPTS="-C UnifyingAlgorithm.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false -D convert.bounds.remove.missing.elements=false -D log.warnings.for.missing.elements=false -D debug.maps.write=false -D debug.maps.remove.missing.elements=false -D element.hash.visitor.non.metadata.ignore.keys=note $EXTRA_PARAMS -D log.class.filter= "
 # Holding onto missing child element refs does not work yet with cropping, so disable it when cropping is specified.
 # TODO: bug issue creation pending. 
 # TODO: This needs to be only added for the initial write and not all convert ops in the script.

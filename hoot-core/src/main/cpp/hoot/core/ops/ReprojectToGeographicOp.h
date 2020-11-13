@@ -29,7 +29,6 @@
 #define __REPROJECT_TO_GEOGRAPHIC_OP_H__
 
 // hoot
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 namespace hoot
@@ -41,7 +40,7 @@ namespace hoot
  *
  * This is compatible with fourpass.
  */
-class ReprojectToGeographicOp : public OsmMapOperation, public Serializable
+class ReprojectToGeographicOp : public OsmMapOperation
 {
 public:
 
@@ -53,10 +52,6 @@ public:
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
   virtual std::string getClassName() const { return className(); }
-
-  virtual void readObject(QDataStream& is);
-
-  virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const
   { return "Reprojects to a geographic projection"; }

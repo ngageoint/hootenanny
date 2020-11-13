@@ -7,9 +7,9 @@ left here for references purposes only.
 
 The +big-cookie-cut+ command reads in a OSM input file as the 'cutter-shape'
 and removes the cookie cutter shape from the contents of the 'dough' file. The
-resulting geometries are written to 'output'.  You may be able to use the
-generate-alpha-shape command to generate a polygon using alpha shapes (see the
-generate-alpha-shape command for more details).  big-cookie-cut is an alternative to
+resulting geometries are written to 'output'.  You may be able to use the alpha-shape 
+command to generate a polygon using alpha shapes (see the alpha-shape command for more details).  
+big-cookie-cut is an alternative to
 the cookie-cut command that can handle arbitrarily large input files (dough)
 by cutting the data using a Four Pass operation.
 

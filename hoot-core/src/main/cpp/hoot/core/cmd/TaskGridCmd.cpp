@@ -106,7 +106,7 @@ public:
     }
     else
     {
-      if (GeometryUtils::isEnvelopeConfigString(input))
+      if (GeometryUtils::isEnvelopeString(input))
       {
         bounds = input;
       }

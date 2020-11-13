@@ -58,8 +58,8 @@ class CookieCutterTest : public HootTestFixture
 public:
 
   CookieCutterTest()
-    : HootTestFixture("test-files/conflate/",
-                      "test-output/conflate/")
+    : HootTestFixture("test-files/conflate/CookieCutterTest/",
+                      "test-output/conflate/CookieCutterTest/")
   {
     setResetType(ResetAll);
   }

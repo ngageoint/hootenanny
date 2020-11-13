@@ -28,6 +28,9 @@
 #ifndef IOUTILS_H
 #define IOUTILS_H
 
+// GEOS
+#include <geos/geom/Geometry.h>
+
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
@@ -124,6 +127,17 @@ public:
    * connected to a way within the bounds will be kept
    */
   static void cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
+                           const bool keepConnectedOobWays = false);
+
+  /**
+   * Crops a map to a given bounds
+   *
+   * @param map the map to crop
+   * @param bounds the bounds to crop to
+   * @param keepConnectedOobWays if true any way falling outside of the bounds but directly
+   * connected to a way within the bounds will be kept
+   */
+  static void cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
                            const bool keepConnectedOobWays = false);
 
   /**

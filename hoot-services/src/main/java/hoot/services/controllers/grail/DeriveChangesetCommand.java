@@ -49,8 +49,8 @@ class DeriveChangesetCommand extends GrailCommand {
         }
 
         if (params.getBounds() != null) {
-            //Add TASK_BBOX as a convert.bounding.box
-            options.add("convert.bounding.box=" + params.getBounds());
+            //Add TASK_BBOX as a convert.bounds
+            options.add("convert.bounds=" + params.getBounds());
         }
 
         List<String> hootOptions = toHootOptions(options);

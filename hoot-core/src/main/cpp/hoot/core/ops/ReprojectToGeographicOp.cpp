@@ -44,14 +44,4 @@ void ReprojectToGeographicOp::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-void ReprojectToGeographicOp::readObject(QDataStream& /*is*/)
-{
-  // no parameters to read
-}
-
-void ReprojectToGeographicOp::writeObject(QDataStream& /*os*/) const
-{
-  // no parameters to write
-}
-
 }

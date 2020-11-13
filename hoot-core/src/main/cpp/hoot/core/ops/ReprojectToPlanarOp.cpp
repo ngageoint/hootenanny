@@ -44,12 +44,4 @@ void ReprojectToPlanarOp::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-void ReprojectToPlanarOp::readObject(QDataStream& /*is*/)
-{
-}
-
-void ReprojectToPlanarOp::writeObject(QDataStream& /*os*/) const
-{
-}
-
 }

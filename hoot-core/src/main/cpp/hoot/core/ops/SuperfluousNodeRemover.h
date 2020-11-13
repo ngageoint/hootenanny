@@ -33,7 +33,6 @@
 
 // Hoot
 #include <hoot/core/util/Units.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/elements/Tags.h>
@@ -62,8 +61,7 @@ class OsmMap;
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
  * with no nodes.
  */
-class SuperfluousNodeRemover : public OsmMapOperation, public Serializable, public Boundable,
-  public Configurable
+class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public Configurable
 {
 public:
 
@@ -87,8 +85,9 @@ public:
    * @param e bounds within which to remove nodes
    * @return the number of superfluous nodes removed
    */
-  static long removeNodes(std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
-                          const geos::geom::Envelope& e = geos::geom::Envelope());
+  static long removeNodes(
+    std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
+    const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
 
   /**
    * Counts superfluous nodes in a map without removing them
@@ -100,7 +99,7 @@ public:
    */
   static long countSuperfluousNodes(
     std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
-    const geos::geom::Envelope& e = geos::geom::Envelope());
+    const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
 
   /**
    * Collects superfluous nodes from a map without removing them
@@ -112,15 +111,12 @@ public:
    */
   static std::set<long> collectSuperfluousNodeIds(
     std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags = false,
-    const geos::geom::Envelope& e = geos::geom::Envelope());
+    const std::shared_ptr<geos::geom::Geometry>& bounds = std::shared_ptr<geos::geom::Geometry>());
 
   /**
    * @see Configurable
    */
   virtual void setConfiguration(const Settings& conf);
-
-  virtual void readObject(QDataStream& is);
-  virtual void writeObject(QDataStream& os) const;
 
   virtual QString getDescription() const { return "Removes all nodes not part of a way"; }
 
@@ -131,13 +127,10 @@ public:
 
   std::set<long> getSuperfluousNodeIds() const { return _superfluousNodeIds; }
 
-  virtual void setBounds(const geos::geom::Envelope& bounds);
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
   void setRemoveNodes(bool remove) { _removeNodes = remove; }
 
 protected:
-
-  geos::geom::Envelope _bounds;
 
   // turning this off is useful for debugging the existence of orphaned nodes
   bool _removeNodes;
