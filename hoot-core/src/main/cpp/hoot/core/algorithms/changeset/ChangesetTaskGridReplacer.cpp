@@ -39,13 +39,8 @@
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
-#include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/ops/RemoveRoundabouts.h>
-#include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/util/ConflateUtils.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 namespace hoot
 {
@@ -59,7 +54,6 @@ _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
 _averageChangesetDeriveTime(0.0),
 _tagQualityIssues(false),
-_calcDiffWithReplacement(false),
 _outputNonConflatable(false)
 {
 }
@@ -127,14 +121,6 @@ void ChangesetTaskGridReplacer::replace(
     if (!_finalOutput.isEmpty())
     {
       _writeUpdatedData(_finalOutput);
-      // TODO: move this outside of the replace method
-      if (_calcDiffWithReplacement)
-      {
-        // Calculate a diff between the data we just replaced and the original replacement data to
-        // aid in finding any errors during the replacement process.
-        const QString diffOutput = _finalOutput.replace(".osm", "-diff.osm");
-        _calculateDiffWithOriginalReplacementData(diffOutput);
-      }
     }
   }
   catch (const HootException& e)
@@ -432,89 +418,6 @@ void ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile)
     "Modified data original size: " << StringUtils::formatLargeNumber(_originalDataSize) <<
     ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read out in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  _subTaskTimer.restart();
-}
-
-void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const QString& outputFile)
-{
-  // We only want to calculate the diff out to the task grid bounds, b/c that's the data that was
-  // actually replaced.
-  conf().set(
-    ConfigOptions::getConvertBoundsKey(),
-    GeometryUtils::envelopeToString(_taskGridBounds));
-  // use lenient bounds
-  conf().set(ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
-  conf().set(
-    ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
-  conf().set(ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(), false);
-
-  // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
-  // config.
-  conf().set(
-    ConfigOptions::getRubberSheetElementCriteriaKey(),
-    ConfigOptions().getConflateRubberSheetElementCriteria());
-  // don't remove/replace roundabouts during diff conflate
-  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
-  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
-  if (preConflateOps.contains(removeRoundaboutsClassName))
-  {
-    preConflateOps.removeAll(removeRoundaboutsClassName);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
-  }
-  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
-  const QString replaceRoundaboutsClassName =
-    QString::fromStdString(ReplaceRoundabouts::className());
-  if (postConflateOps.contains(replaceRoundaboutsClassName))
-  {
-    postConflateOps.removeAll(replaceRoundaboutsClassName);
-    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
-  }
-
-  LOG_STATUS(
-    "Loading replacement data for diff calc from: ..." << _replacementUrl.right(25) << "...");
-  OsmMapPtr diffMap(new OsmMap());
-  IoUtils::loadMap(diffMap, _replacementUrl, true, Status::Unknown1);
-  const int replacementMapSize = diffMap->size();
-  LOG_STATUS(
-    "Replacement data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  _subTaskTimer.restart();
-
-  const QString replacedDataUrl = _dataToReplaceUrl;
-  LOG_STATUS("Loading replaced data for diff calc from: ..." << replacedDataUrl.right(25) << "...");
-  IoUtils::loadMap(diffMap, replacedDataUrl, false, Status::Unknown2);
-  LOG_STATUS(
-    "Replaced data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  _subTaskTimer.restart();
-
-  // had to do this cleaning to get the relations to behave
-  RemoveMissingElementsVisitor missingElementRemover;
-  diffMap->visitRw(missingElementRemover);
-  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
-
-  LOG_STATUS(
-    "Calculating the diff between replaced data of size: " <<
-    StringUtils::formatLargeNumber(diffMap->size() - replacementMapSize) <<
-    " and replacement data of size: " << StringUtils::formatLargeNumber(replacementMapSize)  <<
-    "...");
-  NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
-  DiffConflator diffGen;
-  diffGen.apply(diffMap);
-  NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
-  LOG_STATUS(
-    "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << " (skipped " <<
-    StringUtils::formatLargeNumber(diffGen.getNumUnconflatableElementsDiscarded()) <<
-    " unconflatable)");
-  _subTaskTimer.restart();
-
-  LOG_STATUS(
-    "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " to: ..." << outputFile.right(25) << "...");
-  IoUtils::saveMap(diffMap, outputFile);
-  LOG_STATUS(
-    "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
 }
 

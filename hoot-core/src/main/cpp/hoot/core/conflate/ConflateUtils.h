@@ -25,32 +25,44 @@
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "ConflateUtils.h"
+#ifndef CONFLATE_UTILS_H
+#define CONFLATE_UTILS_H
 
 // Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/criterion/NonConflatableCriterion.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString& outputFile)
+/**
+ * TODO
+ */
+class ConflateUtils
 {
-  LOG_STATUS("Writing non-conflatable data to: ..." << outputFile.right(25) << " ...");
-  OsmMapPtr nonConflatableMap(new OsmMap(map));
-  std::shared_ptr<RemoveElementsVisitor> elementRemover(new RemoveElementsVisitor(true));
-  elementRemover->setRecursive(true);
-  std::shared_ptr<ElementCriterion> nonConflatableCrit(
-    new NonConflatableCriterion(nonConflatableMap));
-  elementRemover->addCriterion(nonConflatableCrit);;
-  nonConflatableMap->visitRw(*elementRemover);
-  if (nonConflatableMap->size() > 0)
-  {
-    OsmMapWriterFactory::write(nonConflatableMap, outputFile);
-  }
-  return nonConflatableMap->size();
-}
+
+public:
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @param outputFile
+   * @return
+   */
+  static int writeNonConflatable(const ConstOsmMapPtr& map, const QString& outputFile);
+
+  /**
+   * TODO
+   *
+   * @param mapUrl1
+   * @param mapUrl2
+   * @param bounds
+   * @param outputFile
+   */
+  static void writeDiff(const QString& mapUrl1, const QString& mapUrl2,
+                        const geos::geom::Envelope& bounds, const QString& outputFile);
+};
 
 }
+
+#endif // CONFLATE_UTILS_H

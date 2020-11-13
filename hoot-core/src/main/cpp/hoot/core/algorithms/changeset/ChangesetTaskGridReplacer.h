@@ -66,12 +66,7 @@ public:
    */
   void replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
 
-  int getNumOrphanedNodesInOutput() const { return _metricTagger.getNumOrphanedNodesInOutput(); }
-  int getNumDisconnectedWaysInOutput() const
-  { return _metricTagger.getNumDisconnectedWaysInOutput(); }
-  int getNumEmptyWaysInOutput() const { return _metricTagger.getNumEmptyWaysInOutput(); }
-  int getNumDuplicateElementPairsInOutput() const
-  { return _metricTagger.getNumDuplicateElementPairsInOutput(); }
+  const DataQualityMetricTagger getOutputMetrics() { return _metricTagger; }
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
@@ -83,7 +78,6 @@ public:
   { _killAfterNumChangesetDerivations = numDerivations; }
   void setWriteFinalOutput(QString output) { _finalOutput = output; }
   void setTagQualityIssues(bool tag) { _tagQualityIssues = tag; }
-  void setCalcDiffWithReplacement(bool calcDiff) { _calcDiffWithReplacement = calcDiff; }
   void setOutputNonConflatable(bool output) { _outputNonConflatable = output; }
 
 private:
@@ -107,7 +101,7 @@ private:
   QList<int> _taskCellSkipIds;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues
   bool _reverseTaskGrid;
-  // the are of data being replaced
+  // the area of data being replaced
   geos::geom::Envelope _taskGridBounds;
 
   // derives the replacement changesets
@@ -132,9 +126,6 @@ private:
   // adds tags to features that are suspect as result of the replacement op
   bool _tagQualityIssues;
   DataQualityMetricTagger _metricTagger;
-  // uses diff conflate to calculate the difference between the final replaced data and the original
-  // data used for replacement
-  bool _calcDiffWithReplacement;
   // write non-conflatable elements to a separate file
   bool _outputNonConflatable;
 
@@ -146,12 +137,8 @@ private:
   void _initChangesetStats();
   void _printChangesetStats();
 
-  // TODO: move the diff gen out to a separate class
-
-  // writes out all of the ref data; useful for debugging...expensive
+  // writes out the updated data
   void _writeUpdatedData(const QString& outputFile);
-  // calcs the output diff
-  void _calculateDiffWithOriginalReplacementData(const QString& outputFile);
 };
 
 }

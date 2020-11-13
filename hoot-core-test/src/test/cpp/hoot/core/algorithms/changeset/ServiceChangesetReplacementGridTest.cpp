@@ -41,12 +41,16 @@
 #include <hoot/core/algorithms/changeset/BoundsFileTaskGridGenerator.h>
 #include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
 #include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 namespace hoot
 {
 
 static const QString USER_EMAIL = "ServiceChangesetReplacementGridTest@hoottestcpp.org";
 static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl().toString();
+// uses diff conflate to calculate the difference between the final replaced data and the original
+// data used for replacement
+static const bool CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT = true;
 
 /*
  * This test harness allows for testing the Cut and Replace workflow across adjacent task grid
@@ -56,23 +60,22 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
  *
  * Its worth noting that both the orphaned node and duplicate elements counts may be a little
  * dubious at this point, but at least they give us a baseline until their accuracy can be improved.
- *
- * TODO: run all validation on input before and after
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  CPPUNIT_TEST(orphanedNodes1Test);
-  CPPUNIT_TEST(orphanedNodes2Test);
-  CPPUNIT_TEST(droppedNodes1Test);
-  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
-  CPPUNIT_TEST(badPolyIdSync1Test);
-  CPPUNIT_TEST(badPolyIdSync2Test);
+  // TODO: re-enable
+//  CPPUNIT_TEST(orphanedNodes1Test);
+//  CPPUNIT_TEST(orphanedNodes2Test);
+//  CPPUNIT_TEST(droppedNodes1Test);
+//  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+//  CPPUNIT_TEST(badPolyIdSync1Test);
+//  CPPUNIT_TEST(badPolyIdSync2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
-  //CPPUNIT_TEST(github4216UniformTest);
+  CPPUNIT_TEST(github4216UniformTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
 
   CPPUNIT_TEST_SUITE_END();
@@ -122,7 +125,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -130,10 +132,10 @@ public:
       BoundsFileTaskGridGenerator(
         QStringList(_inputPath + "/orphanedNodes1Test-task-grid.osm")).generateTaskGrid());
 
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(28, uut.getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(28, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -155,7 +157,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
     const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
 
@@ -172,10 +173,10 @@ public:
 
     Log::getInstance().setLevel(logLevel);
 
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(2, uut.getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -198,7 +199,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -208,10 +208,10 @@ public:
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -239,7 +239,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -249,10 +248,10 @@ public:
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(8, uut.getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -276,7 +275,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -286,10 +284,10 @@ public:
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -313,7 +311,6 @@ public:
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
     uut.replace(
       DATA_TO_REPLACE_URL,
@@ -323,10 +320,10 @@ public:
         _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
         .generateTaskGrid());
 
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -349,25 +346,28 @@ public:
     ChangesetTaskGridReplacer uut;
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    QString finalOutput = outDir + "/" + _testName + "-out.osm";
+    uut.setWriteFinalOutput(finalOutput);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false);
-    uut.setOutputNonConflatable(false);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
+    uut.setOutputNonConflatable(true); // TODO: change back to false
+    const TaskGrid taskGrid =
       UniformTaskGridGenerator(
         "-115.1208,36.1550,-115.0280,36.2182", 2,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
+        .generateTaskGrid();
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGrid);
 
-    // TODO: after separating quality issue tagging from replacement, call these directly after
-    // the replacement and before the diff calc
-//    CPPUNIT_ASSERT_EQUAL(0, uut.getNumOrphanedNodesInOutput());
-//    CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
-//    CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-//    CPPUNIT_ASSERT_EQUAL(28, uut.getNumDuplicateElementPairsInOutput());
+    if (CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT)
+    {
+      const QString diffOutput = finalOutput.replace(".osm", "-diff.osm");
+      _writeDiffBetweenReplacedAndReplacement(taskGrid.getBounds(), diffOutput);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(28, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
   }
 
   void northVegasLargeUniformTest()
@@ -395,23 +395,22 @@ public:
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
-    uut.setWriteFinalOutput(outDir + "/" + _testName + "-out.osm");
+    QString finalOutput = outDir + "/" + _testName + "-out.osm";
+    uut.setWriteFinalOutput(finalOutput);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
-    uut.setCalcDiffWithReplacement(false);
     uut.setOutputNonConflatable(false);
     // for cell subset debugging
 //    QList<int> includeIds;
 //    includeIds.append(59);
 //    uut.setTaskCellIncludeIds(includeIds);
     //uut.setKillAfterNumChangesetDerivations(2);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
+    const TaskGrid taskGrid =
       UniformTaskGridGenerator(
         "-115.3528,36.0919,-114.9817,36.3447", 8,
         outDir + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
+        .generateTaskGrid();
+    uut.replace(DATA_TO_REPLACE_URL, _replacementDataUrl, taskGrid);
     // for cell subset debugging
 //    uut.replace(
 //      DATA_TO_REPLACE_URL,
@@ -421,10 +420,16 @@ public:
 //        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
 //        .generateTaskGrid());
 
-    //CPPUNIT_ASSERT_EQUAL(4, uut.getNumOrphanedNodesInOutput());
-    //CPPUNIT_ASSERT_EQUAL(0, uut.getNumDisconnectedWaysInOutput());
-    //CPPUNIT_ASSERT_EQUAL(0, uut.getNumEmptyWaysInOutput());
-    //CPPUNIT_ASSERT_EQUAL(517, uut.getNumDuplicateElementPairsInOutput());
+    if (CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT)
+    {
+      const QString diffOutput = finalOutput.replace(".osm", "-diff.osm");
+      _writeDiffBetweenReplacedAndReplacement(taskGrid.getBounds(), diffOutput);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(4, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(517, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
   }
 
 private:
@@ -581,6 +586,22 @@ private:
       StringUtils::formatLargeNumber(map->size()) << " replacement elements loaded in: " <<
       StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
     _subTaskTimer.restart();
+  }
+
+  void _writeDiffBetweenReplacedAndReplacement(
+    const geos::geom::Envelope& bounds, const QString& output)
+  {
+    // Calculate a diff between the data we just replaced and the original replacement data to
+    // aid in finding any errors during the replacement process. We only want to calculate the
+    // diff out to the task grid bounds, b/c that's the data that was actually replaced.
+    //conf().set(ConfigOptions::getConvertBoundsKey(), GeometryUtils::envelopeToString(bounds));
+    // use a lenient bounds
+    conf().set(ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
+    conf().set(
+      ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+    conf().set(ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(), false);
+    const QString replacedDataUrl = DATA_TO_REPLACE_URL;
+    ConflateUtils::writeDiff(_replacementDataUrl, replacedDataUrl, bounds, output);
   }
 
   void _cleanupDataToReplace()
