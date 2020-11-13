@@ -37,11 +37,7 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/algorithms/changeset/ChangesetTaskGridReplacer.h>
-#include <hoot/core/algorithms/changeset/BoundsFileTaskGridGenerator.h>
-#include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
-#include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
-#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/algorithms/changeset/ChangesetTaskGridConflator.h>
 
 namespace hoot
 {
