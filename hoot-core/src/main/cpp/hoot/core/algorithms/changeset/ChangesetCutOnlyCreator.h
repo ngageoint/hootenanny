@@ -75,6 +75,8 @@ public:
     const QString& input1, const QString& input2,
     const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output);
 
+  virtual int getNumChanges() const { return _numChanges; }
+
   virtual void setGeometryFilters(const QStringList& filterClassNames);
   virtual void setReplacementFilters(const QStringList& filterClassNames);
   virtual void setChainReplacementFilters(const bool chain) { _chainReplacementFilters = chain; }

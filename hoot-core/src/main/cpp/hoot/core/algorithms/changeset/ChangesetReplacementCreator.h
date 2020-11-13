@@ -63,6 +63,12 @@ public:
   virtual void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) override;
+  /**
+   * @see ChangesetReplacement
+   */
+  virtual void create(
+    const QString& input1, const QString& input2,
+    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
 
   /**
    * Creates a changeset that replaces features in the first input with features from the second
