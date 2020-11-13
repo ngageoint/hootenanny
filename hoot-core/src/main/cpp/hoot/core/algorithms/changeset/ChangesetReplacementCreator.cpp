@@ -256,6 +256,7 @@ void ChangesetReplacementCreator::create(
 
   // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
   // data in the resulting changeset and generate modify statements instead.
+  //
   ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
   wayJoiner.join(combinedMap);
   LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
