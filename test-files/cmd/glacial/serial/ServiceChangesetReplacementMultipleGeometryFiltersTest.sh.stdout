@@ -13,7 +13,6 @@ replacement filter options:
 retainment filters: 
 chain retainment filters: 
 retainment filter options: 
-source formats:  xml
 way snap tolerance:  20.0
 existing way node tolerance:  20.0
 extra params: 
