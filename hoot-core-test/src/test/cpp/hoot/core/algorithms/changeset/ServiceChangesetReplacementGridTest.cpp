@@ -70,23 +70,21 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-//  CPPUNIT_TEST(differingTypes1Test);
-//  CPPUNIT_TEST(outOfSpecMixedRelations1Test);
-//  CPPUNIT_TEST(poi1Test);
-//  CPPUNIT_TEST(refFilteredToEmpty1Test);
-//  CPPUNIT_TEST(refSinglePoint1Test);
-//  CPPUNIT_TEST(relationCrop1Test);
-//  CPPUNIT_TEST(riverbank1Test);
-//    CPPUNIT_TEST(roundabouts1Test);
-    CPPUNIT_TEST(secFilteredToEmpty1Test);
-//    CPPUNIT_TEST(secFilteredToEmpty2Test);
-
-//  CPPUNIT_TEST(orphanedNodes1Test);
-//  CPPUNIT_TEST(orphanedNodes2Test);
-//  CPPUNIT_TEST(droppedNodes1Test);
-//  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
-//  CPPUNIT_TEST(badPolyIdSync1Test);
-//  CPPUNIT_TEST(badPolyIdSync2Test);
+  CPPUNIT_TEST(differingTypes1Test);
+  CPPUNIT_TEST(outOfSpecMixedRelations1Test);
+  CPPUNIT_TEST(poi1Test);
+  CPPUNIT_TEST(refFilteredToEmpty1Test);
+  CPPUNIT_TEST(refSinglePoint1Test);
+  CPPUNIT_TEST(relationCrop1Test);
+  CPPUNIT_TEST(riverbank1Test);
+  CPPUNIT_TEST(roundabouts1Test);
+  CPPUNIT_TEST(secFilteredToEmpty1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
+  CPPUNIT_TEST(droppedNodes1Test);
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(badPolyIdSync1Test);
+  CPPUNIT_TEST(badPolyIdSync2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -318,7 +316,7 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+    CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
