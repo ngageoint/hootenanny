@@ -28,8 +28,6 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/io/ObjectInputStream.h>
-#include <hoot/core/io/ObjectOutputStream.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/ops/MapCropper.h>
@@ -67,7 +65,6 @@ class MapCropperTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MapCropperTest);
   CPPUNIT_TEST(runGeometryTest);
-  CPPUNIT_TEST(runSerializationTest);
   CPPUNIT_TEST(runConfigurationTest);
   CPPUNIT_TEST(runMultiPolygonTest);
   CPPUNIT_TEST(runKeepFeaturesOnlyCompletelyInBoundsTest);
@@ -121,7 +118,8 @@ public:
     }
 
     {
-      MapCropper uut(g);
+      MapCropper uut;
+      uut.setBounds(g);
       uut.setInvert(false);
       uut.setRemoveSuperflousFeatures(false);
       uut.apply(map);
@@ -132,38 +130,13 @@ public:
     {
       OsmMapPtr map = genPoints(0);
 
-      MapCropper uut(g);
+      MapCropper uut;
+      uut.setBounds(g);
       uut.setInvert(true);
       uut.setRemoveSuperflousFeatures(false);
       uut.apply(map);
       CPPUNIT_ASSERT_EQUAL(1000 - insideCount, (int)map->getNodes().size());
     }
-  }
-
-  void runSerializationTest()
-  {
-    std::shared_ptr<Geometry> g(geos::io::WKTReader().read(
-      "POLYGON ((-50 0, 0 50, 50 0, 0 -50, 0 0, -50 0))"));
-
-    MapCropper pre(g);
-    pre.setInvert(false);
-    OsmMapPtr mapPre = genPoints(0);
-    pre.apply(mapPre);
-
-    stringstream ss;
-    {
-      ObjectOutputStream oos(ss);
-      oos.writeObject(pre);
-    }
-
-    stringstream ss2(ss.str());
-    ObjectInputStream ois(ss2);
-    std::shared_ptr<OsmMapOperation> post(ois.readObject<OsmMapOperation>());
-    OsmMapPtr mapPost = genPoints(0);
-    post->apply(mapPost);
-
-    // do we get the same result before/after serialization?
-    CPPUNIT_ASSERT_EQUAL(mapPre->getNodes().size(), mapPost->getNodes().size());
   }
 
   void runConfigurationTest()
@@ -173,22 +146,25 @@ public:
 
     settings.set("crop.bounds", "12.462,41.891,12.477,41.898");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS("Env[12.462:12.477,41.891:41.898]", cropper._envelope.toString());
+    HOOT_STR_EQUALS(
+      "Env[12.462:12.477,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set("crop.bounds", "-12.462,41.891,12.477,41.898");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS("Env[-12.462:12.477,41.891:41.898]", cropper._envelope.toString());
+    HOOT_STR_EQUALS(
+      "Env[-12.462:12.477,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set("crop.bounds", "12,41.891,13,41.898");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS("Env[12:13,41.891:41.898]", cropper._envelope.toString());
+    HOOT_STR_EQUALS(
+      "Env[12:13,41.891:41.898]", cropper._bounds->getEnvelopeInternal()->toString());
 
     settings.clear();
     settings.set("crop.bounds", "12,41.891,13.,42");
     cropper.setConfiguration(settings);
-    HOOT_STR_EQUALS("Env[12:13,41.891:42]", cropper._envelope.toString());
+    HOOT_STR_EQUALS("Env[12:13,41.891:42]", cropper._bounds->getEnvelopeInternal()->toString());
   }
 
   void runMultiPolygonTest()
@@ -198,20 +174,22 @@ public:
 
     Envelope env(0.30127,0.345,0.213,0.28154);
 
-    MapCropper uut(env);
+    MapCropper uut;
+    uut.setBounds(env);
     uut.apply(map);
 
-    //compare relations
+    // compare relations
     const RelationMap relations = map->getRelations();
     HOOT_STR_EQUALS(1, relations.size());
-    QString relationStr = "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way(-1556);   Entry: role: inner, eid: Way(-1552); ; tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
+    QString relationStr =
+      "relation(-1592); type: multipolygon; members:   Entry: role: outer, eid: Way(-1556);   Entry: role: inner, eid: Way(-1552); ; tags: landuse = farmland; status: invalid; version: 0; visible: 1; circular error: 15";
     for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
     {
       const RelationPtr& r = it->second;
       HOOT_STR_EQUALS(relationStr, r->toString().replace("\n","; "));
     }
 
-    //compare ways
+    // compare ways
     int count = 0;
     const WayMap ways = map->getWays();
     HOOT_STR_EQUALS(2, ways.size());
@@ -244,7 +222,8 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/" + testFileNameBase + "-bounds.osm");
-    MapCropper uut(bounds);
+    MapCropper uut;
+    uut.setBounds(bounds);
 
     // regular crop output
     map.reset(new OsmMap());
@@ -307,7 +286,8 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/" + testFileNameBase + "-bounds.osm");
-    MapCropper uut(bounds);
+    MapCropper uut;
+    uut.setBounds(bounds);
 
     // regular crop output
     map.reset(new OsmMap());
@@ -370,7 +350,8 @@ public:
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/" + testFileNameBase + "-bounds.osm");
-    MapCropper uut(bounds);
+    MapCropper uut;
+    uut.setBounds(bounds);
 
     // should end up with everything inside of the bounds
     map.reset(new OsmMap());
@@ -407,7 +388,8 @@ public:
       GeometryUtils::createMapFromBounds(bounds),
       _outputPath + "/" + testFileNameBase + "-bounds.osm");
 
-    MapCropper uut(bounds);
+    MapCropper uut;
+    uut.setBounds(bounds);
     map.reset(new OsmMap());
     OsmMapReaderFactory::read(
       map, "test-files/ops/ImmediatelyConnectedOutOfBoundsWayTagger/in.osm", true);

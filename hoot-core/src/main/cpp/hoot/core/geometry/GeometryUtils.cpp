@@ -28,12 +28,12 @@
 #include "GeometryUtils.h"
 
 // GEOS
+#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
-#include <geos/geom/Polygon.h>
 #include <geos/util/IllegalArgumentException.h>
 
 // hoot
@@ -195,28 +195,45 @@ QString GeometryUtils::toConfigString(const Envelope& e)
       arg(e.getMaxY(), 0, 'f', precision);
 }
 
-bool GeometryUtils::isEnvelopeConfigString(const QString& str)
+bool GeometryUtils::isEnvelopeString(const QString& str)
 {
+  Envelope env;
   try
   {
-    GeometryUtils::envelopeFromConfigString(str);
+    env = envelopeFromString(str);
   }
-  catch (const HootException&)
+  catch (const IllegalArgumentException&)
   {
     return false;
   }
-  return true;
+  return !env.isNull();
 }
 
-QString GeometryUtils::envelopeToConfigString(const Envelope& bounds)
+bool GeometryUtils::isPolygonString(const QString& str)
 {
-  return QString::number(bounds.getMinX()) + "," +
-    QString::number(bounds.getMinY()) + "," +
-    QString::number(bounds.getMaxX()) + "," +
-    QString::number(bounds.getMaxY());
+  std::shared_ptr<Polygon> poly;
+  try
+  {
+    poly = polygonFromString(str);
+  }
+  catch (const IllegalArgumentException&)
+  {
+    return false;
+  }
+  return poly.get() != 0;
 }
 
-Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
+QString GeometryUtils::envelopeToString(const Envelope& bounds)
+{
+  LOG_VART(bounds);
+  const int precision = ConfigOptions().getWriterPrecision();
+  return QString::number(bounds.getMinX(), 'g', precision) + "," +
+    QString::number(bounds.getMinY(), 'g', precision) + "," +
+    QString::number(bounds.getMaxX(), 'g', precision) + "," +
+    QString::number(bounds.getMaxY(), 'g', precision);
+}
+
+Envelope GeometryUtils::envelopeFromString(const QString& boundsStr)
 {
   LOG_VART(boundsStr);
   if (boundsStr.trimmed().isEmpty())
@@ -228,18 +245,141 @@ Envelope GeometryUtils::envelopeFromConfigString(const QString& boundsStr)
   const QRegExp boundsRegEx("(-*\\d+\\.*\\d*,){3}-*\\d+\\.*\\d*");
   if (!boundsRegEx.exactMatch(boundsStr))
   {
-    throw HootException(errorMsg);
+    throw IllegalArgumentException(errorMsg);
   }
   const QStringList boundsParts = boundsStr.split(",");
   assert(boundsParts.size() == 4);
   if ((boundsParts.at(2).toDouble() <= boundsParts.at(0).toDouble()) ||
        boundsParts.at(3).toDouble() <= boundsParts.at(1).toDouble())
   {
-    throw HootException(errorMsg);
+    throw IllegalArgumentException(errorMsg);
   }
   return
     Envelope(boundsParts.at(0).toDouble(), boundsParts.at(2).toDouble(),
       boundsParts.at(1).toDouble(), boundsParts.at(3).toDouble());
+}
+
+std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
+  const geos::geom::Envelope& env)
+{
+  LOG_VART(env.isNull());
+  if (env.isNull())
+  {
+    return std::shared_ptr<geos::geom::Polygon>();
+  }
+
+  CoordinateSequence* coordSeq =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(5, 2);
+  coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMinY()), 0);
+  coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMaxY()), 1);
+  coordSeq->setAt(geos::geom::Coordinate(env.getMaxX(), env.getMaxY()), 2);
+  coordSeq->setAt(geos::geom::Coordinate(env.getMaxX(), env.getMinY()), 3);
+  coordSeq->setAt(geos::geom::Coordinate(env.getMinX(), env.getMinY()), 4);
+
+  // an empty set of holes
+  vector<Geometry*>* holes = new vector<Geometry*>();
+  // create the outer line
+  LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
+  std::shared_ptr<Polygon> poly(
+    GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+  LOG_VAR(poly->isValid());
+  return poly;
+}
+
+std::shared_ptr<Polygon> GeometryUtils::polygonFromString(const QString& str)
+{
+  // format: x1,y1;x2,y2;x3,y3...
+
+  // You could make the argument to use something more standardized here for the format, like WKT.
+  // This format is easier to read and parse. If we decide to support geometries other than polys,
+  // then we may need to use a different format.
+
+  LOG_VART(str);
+  if (str.trimmed().isEmpty())
+  {
+    return std::shared_ptr<Polygon>();
+  }
+
+  QStringList coords = str.split(";");
+  LOG_VART(coords.size());
+  if (coords.size() < 3)
+  {
+    throw IllegalArgumentException("Polygon string must have at least three points: " + str);
+  }
+
+  LOG_VART(coords.at(0) != coords.at(coords.size() - 1));
+  if (coords.at(0) != coords.at(coords.size() - 1))
+  {
+    coords.append(coords.at(0));
+  }
+  LOG_VART(coords);
+
+  CoordinateSequence* coordSeq =
+    GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->create(coords.size(), 2);
+  for (int i = 0; i < coords.size(); i++)
+  {
+    const QString coordStr = coords.at(i);
+    const QStringList coordStrs = coordStr.split(",");
+    if (coordStrs.size() != 2)
+    {
+      throw IllegalArgumentException("Invalid polygon coordinate string: " + coordStr);
+    }
+    bool ok = false;
+    const double x = coordStrs.at(0).toDouble(&ok);
+    if (!ok)
+    {
+      throw IllegalArgumentException("Invalid polygon x coordinate value: " + coordStrs.at(0));
+    }
+    const double y = coordStrs.at(1).toDouble(&ok);
+    if (!ok)
+    {
+      throw IllegalArgumentException("Invalid polygon y coordinate value: " + coordStrs.at(1));
+    }
+    coordSeq->setAt(geos::geom::Coordinate(x, y), i);
+  }
+  LOG_VART(coordSeq->size());
+
+  // an empty set of holes
+  vector<Geometry*>* holes = new vector<Geometry*>();
+  // create the outer line
+  LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
+  return std::shared_ptr<Polygon>(
+    GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
+}
+
+QString GeometryUtils::polygonStringToEnvelopeString(const QString& str)
+{
+  return envelopeToString(*(polygonFromString(str)->getEnvelopeInternal()));
+}
+
+QString GeometryUtils::polygonToString(const std::shared_ptr<Polygon>& poly)
+{
+  const int precision = ConfigOptions().getWriterPrecision();
+  geos::geom::CoordinateSequence* coords = poly->getCoordinates();
+  QString str;
+  for (size_t i = 0; i < coords->getSize(); i++)
+  {
+    const geos::geom::Coordinate& coord = coords->getAt(i);
+    str +=
+      QString::number(coord.x, 'g', precision) + "," + QString::number(coord.y, 'g', precision) +
+      ";";
+  }
+  str.chop(1);
+  return str;
+}
+
+std::shared_ptr<geos::geom::Polygon> GeometryUtils::boundsFromString(const QString& str)
+{
+  LOG_VART(str);
+  if (isEnvelopeString(str))
+  {
+    return envelopeToPolygon(envelopeFromString(str));
+  }
+  else
+  {
+    return polygonFromString(str);
+  }
+  return std::shared_ptr<geos::geom::Polygon>();
 }
 
 Geometry* GeometryUtils::validateGeometry(const Geometry* g)
@@ -275,7 +415,6 @@ Geometry* GeometryUtils::validateGeometry(const Geometry* g)
 Geometry* GeometryUtils::validateGeometryCollection(const GeometryCollection *gc)
 {
   Geometry* result = GeometryFactory::getDefaultInstance()->createEmptyGeometry();
-
   for (size_t i = 0; i < gc->getNumGeometries(); i++)
   {
     std::shared_ptr<Geometry> geometry(validateGeometry(gc->getGeometryN(i)));
@@ -424,6 +563,26 @@ ElementId GeometryUtils::createBoundsInMap(const OsmMapPtr& map, const geos::geo
   return bbox->getElementId();
 }
 
+OsmMapPtr GeometryUtils::createMapFromBounds(const std::shared_ptr<geos::geom::Polygon>& bounds)
+{
+  OsmMapPtr boundaryMap(new OsmMap());
+  WayPtr boundsWay(new Way(Status::Unknown1, boundaryMap->createNextWayId()));
+  geos::geom::CoordinateSequence* coords = bounds->getCoordinates();
+  for (size_t i = 0; i < coords->getSize(); i++)
+  {
+    const geos::geom::Coordinate& coord = coords->getAt(i);
+    NodePtr node(
+      new Node(
+        Status::Unknown1,
+        boundaryMap->createNextNodeId(),
+        geos::geom::Coordinate(coord.x, coord.y)));
+    boundaryMap->addNode(node);
+    boundsWay->addNode(node->getId());
+  }
+  boundaryMap->addWay(boundsWay);
+  return boundaryMap;
+}
+
 QList<geos::geom::Envelope> GeometryUtils::readBoundsFile(const QString& input)
 {
   QList<geos::geom::Envelope> boundList;
@@ -497,7 +656,9 @@ QString GeometryUtils::geometryTypeIdToString(const std::shared_ptr<geos::geom::
   return geometryTypeIdToString(geometry->getGeometryTypeId());
 }
 
-std::shared_ptr<geos::geom::Geometry> GeometryUtils::mergeGeometries(std::vector<std::shared_ptr<geos::geom::Geometry>> geometries, const geos::geom::Envelope& envelope)
+std::shared_ptr<geos::geom::Geometry> GeometryUtils::mergeGeometries(
+  std::vector<std::shared_ptr<geos::geom::Geometry>> geometries,
+  const geos::geom::Envelope& envelope)
 {
   std::vector<std::shared_ptr<geos::geom::Geometry>> temp;
   PolygonCompare compare(envelope);

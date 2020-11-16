@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * Generates a task grid from one or more bounds file inputs
+ * Generates a rectangular task grid from one or more rectangular bounds file inputs
  */
 class BoundsFileTaskGridGenerator : public TaskGridGenerator
 {

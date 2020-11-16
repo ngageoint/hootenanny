@@ -36,6 +36,9 @@
 // Standard
 #include <vector>
 
+// GEOS
+#include <geos/geom/Geometry.h>
+
 namespace hoot
 {
 
@@ -67,7 +70,7 @@ public:
    * were registered.
    */
   void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr> &matches,
-    const geos::geom::Envelope &bounds,
+    const std::shared_ptr<geos::geom::Geometry>& bounds,
     std::shared_ptr<const MatchThreshold> threshold = std::shared_ptr<MatchThreshold>()) const;
 
   /**
@@ -116,7 +119,7 @@ private:
   virtual ~MatchFactory() = default;
 
   void _checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
-                                   const geos::geom::Envelope& bounds) const;
+                                   const std::shared_ptr<geos::geom::Geometry>& bounds) const;
   void _setMatchCreators(QStringList matchCreatorsList);
   void _setTagFilter(QString filter) { _tagFilter = filter; }
 

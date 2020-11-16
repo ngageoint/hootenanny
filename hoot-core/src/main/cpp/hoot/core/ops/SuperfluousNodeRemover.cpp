@@ -34,6 +34,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 // Standard
 #include <iostream>
@@ -227,15 +229,16 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
   // Now, let's remove any that aren't in our do not remove list.
 
   _numProcessed = 0;
+  ElementToGeometryConverter elementConverter(map);
   for (NodeMap::const_iterator it = nodesWgs84->begin(); it != nodesWgs84->end(); ++it)
   {
-    const Node* n = it->second.get();
+    ConstNodePtr n = it->second;
     LOG_VART(n->getElementId());
     const long nodeId = n->getId();
     LOG_VART(_usedNodeIds.find(nodeId) == _usedNodeIds.end());
     if (_usedNodeIds.find(nodeId) == _usedNodeIds.end())
     {
-      if (_bounds.isNull() || _bounds.contains(n->getX(), n->getY()))
+      if (!_bounds.get() || _bounds->contains(elementConverter.convertToGeometry(n).get()))
       {
         _superfluousNodeIds.insert(nodeId);
         if (_removeNodes)
@@ -280,13 +283,13 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 
 long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
                                          const bool ignoreInformationTags,
-                                         const geos::geom::Envelope& e)
+                                         const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   SuperfluousNodeRemover nodeRemover;
   nodeRemover.setIgnoreInformationTags(ignoreInformationTags);
-  if (!e.isNull())
+  if (bounds.get())
   {
-    nodeRemover.setBounds(e);
+    nodeRemover.setBounds(bounds);
   }
   LOG_INFO(nodeRemover.getInitStatusMessage());
   nodeRemover.apply(map);
@@ -295,14 +298,15 @@ long SuperfluousNodeRemover::removeNodes(std::shared_ptr<OsmMap>& map,
 }
 
 long SuperfluousNodeRemover::countSuperfluousNodes(
-  std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags, const geos::geom::Envelope& e)
+  std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags,
+  const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   SuperfluousNodeRemover nodeCounter;
   nodeCounter.setIgnoreInformationTags(ignoreInformationTags);
   nodeCounter.setRemoveNodes(false);
-  if (!e.isNull())
+  if (bounds.get())
   {
-    nodeCounter.setBounds(e);
+    nodeCounter.setBounds(bounds);
   }
   QString msg = nodeCounter.getInitStatusMessage().replace("Removing", "Counting");
   LOG_STATUS(msg);
@@ -313,14 +317,15 @@ long SuperfluousNodeRemover::countSuperfluousNodes(
 }
 
 std::set<long> SuperfluousNodeRemover::collectSuperfluousNodeIds(
-  std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags, const geos::geom::Envelope& e)
+  std::shared_ptr<OsmMap>& map, const bool ignoreInformationTags,
+  const std::shared_ptr<geos::geom::Geometry>& bounds)
 {
   SuperfluousNodeRemover nodeIdCollector;
   nodeIdCollector.setIgnoreInformationTags(ignoreInformationTags);
   nodeIdCollector.setRemoveNodes(false);
-  if (!e.isNull())
+  if (bounds.get())
   {
-    nodeIdCollector.setBounds(e);
+    nodeIdCollector.setBounds(bounds);
   }
   QString msg = nodeIdCollector.getInitStatusMessage().replace("Removing", "Collecting");
   LOG_STATUS(msg);
@@ -328,36 +333,6 @@ std::set<long> SuperfluousNodeRemover::collectSuperfluousNodeIds(
   msg = nodeIdCollector.getCompletedStatusMessage().replace("Removed", "Collected");
   LOG_DEBUG(msg);
   return nodeIdCollector.getSuperfluousNodeIds();
-}
-
-void SuperfluousNodeRemover::setBounds(const Envelope &bounds)
-{
-  _bounds = bounds;
-}
-
-void SuperfluousNodeRemover::readObject(QDataStream& is)
-{
-  bool hasBounds;
-  is >> hasBounds;
-  if (hasBounds)
-  {
-    double minx, miny, maxx, maxy;
-    is >> minx >> miny >> maxx >> maxy;
-    _bounds = Envelope(minx, maxx, miny, maxy);
-  }
-}
-
-void SuperfluousNodeRemover::writeObject(QDataStream& os) const
-{
-  if (_bounds.isNull())
-  {
-    os << false;
-  }
-  else
-  {
-    os << true;
-    os << _bounds.getMinX() << _bounds.getMinY() << _bounds.getMaxX() << _bounds.getMaxY();
-  }
 }
 
 }

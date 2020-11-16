@@ -35,16 +35,17 @@
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
 
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/MapUtils.h>
+
+#include <hoot/core/geometry/GeometryUtils.h>
 
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
-//#include <hoot/core/ops/ElementIdRemapper.h>
+#include <hoot/core/ops/MapCropper.h>
 
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 
 // Qt
@@ -56,11 +57,16 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ChangesetReplacement, ChangesetReplacementCreator)
 
 ChangesetReplacementCreator::ChangesetReplacementCreator() :
-ChangesetCutOnlyCreator()
+ChangesetReplacementCreatorAbstract()
 {
   _currentChangeDerivationPassIsLinear = true;
   _boundsInterpretation = BoundsInterpretation::Lenient;
   _fullReplacement = true;
+
+  // Every capitalized labeled section of the "create" method (e.g. "LOAD AND FILTER"), except input
+  // validation is being considered a separate step for progress. The number of tasks per pass must
+  // be updated as you add/remove job steps in the create logic.
+  _numTotalTasks = 8;
 
   _setGlobalOpts();
 }
@@ -126,8 +132,22 @@ void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
+  create(input1, input2, GeometryUtils::envelopeToPolygon(bounds), output);
+}
+
+void ChangesetReplacementCreator::create(
+  const QString& input1, const QString& input2, const std::shared_ptr<geos::geom::Polygon>& bounds,
+  const QString& output)
+{
   QElapsedTimer timer;
   timer.start();
+
+  LOG_INFO("******************************************");
+  _currentTask = 1;
+  _progress.reset(
+    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
+  _progress->set(
+    0.0, "Generating diff maps for changeset derivation with ID: " + _changesetId + "...");
 
   // VALIDATION
 
@@ -136,21 +156,17 @@ void ChangesetReplacementCreator::create(
   _input2 = input2;
   _input2Map.reset();
   _output = output;
-  // TODO: It makes more sense to store the bounds and then just convert it to a string as needed.
-  // The default string stores six decimal places, which should be fine for a bounds. Strangely,
-  // when I store the bounds or try to increase the precision of the bounds string, I'm getting a
-  // lot of test output issues...needs to be looked into.
-  _replacementBounds = GeometryUtils::envelopeToConfigString(bounds);
-  conf().set(ConfigOptions::getConvertBoundingBoxKey(), _replacementBounds);
+  _replacementBounds = bounds;
   _validateInputs();
+  // This is kind of klunky to set this here, imo. However, its currently the only way to get this
+  // bounds to the readers.
+  conf().set(
+    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
   _printJobDescription();
-
-  LOG_INFO("******************************************");
-  LOG_STATUS("Generating diff maps for changeset derivation with ID: " << _changesetId << "...");
-  LOG_VARD(toString());
 
   // LOAD AND FILTER
 
+  _progress->set(_getJobPercentComplete(), "Loading input data...");
   QMap<ElementId, long> refIdToVersionMappings; // This is needed during snapping.
   OsmMapPtr refMap = _loadAndFilterRefMap(refIdToVersionMappings);
   OsmMapPtr secMap = _loadAndFilterSecMap();
@@ -166,23 +182,25 @@ void ChangesetReplacementCreator::create(
     LOG_STATUS("Both maps empty, so skipping data removal...");
     return;
   }
+  _currentTask++;
 
   // CUT
 
   // cut the shape of the secondary data out of the reference data; pass in an unknown geometry
   // type since we're replacing all types and that also prevents alpha shapes from trying to cover
   // stragglers, which can be expensive
+  _progress->set(_getJobPercentComplete(), "Cutting out features...");
   OsmMapPtr cookieCutRefMap =
     _getCookieCutMap(refMap, secMap, GeometryTypeCriterion::GeometryType::Unknown);
   const int cookieCutSize = cookieCutRefMap->size();
   LOG_VARD(cookieCutSize);
   const int dataRemoved = refMapSize - cookieCutSize;
   LOG_VARD(dataRemoved);
-
   // sec map size may have changed after call to _getCookieCutMap
   LOG_STATUS(
     "Replacing " << StringUtils::formatLargeNumber(dataRemoved) << " feature(s) with " <<
     StringUtils::formatLargeNumber(secMap->size()) << " feature(s)...");
+  _currentTask++;
 
   // At one point it was necessary to re-number the relations in the sec map, as they could have ID
   // overlap with those in the cookie cut ref map at this point. It seemed that this was due to the
@@ -199,6 +217,7 @@ void ChangesetReplacementCreator::create(
   // are actually needed at some point. This cleaning *probably* still needs to occur after cutting,
   // though, as it seems to get rid of some of the artifacts produced by that process.
 
+  _progress->set(_getJobPercentComplete(), "Cleaning data...");
   if (secMap->size() > 0)
   {
     _clean(secMap);
@@ -207,17 +226,19 @@ void ChangesetReplacementCreator::create(
   {
     _clean(cookieCutRefMap);
   }
+  _currentTask++;
 
   // SNAP BEFORE CHANGESET DERIVATION CROPPING
 
-  // Had an idea here to try to load source IDs for sec data, remap sec IDs to be unique just before
-  // the ref and sec have to be combined, and then restore the original sec IDs after the snapping
-  // is complete. The idea was to reduce the need for ID synchronization, which doesn't work
-  // perfectly yet (of course, if you're replacing with data from a different data source the ID
-  // sync would happen regardless...just not needed for OSM to OSM replacement). Unfortunately, this
-  // leads to all kinds of duplicate ID errors when the resulting changesets are applied.
-  //ElementIdRemapper secIdRemapper;
-  //secIdRemapper.apply(secMap);
+  _progress->set(_getJobPercentComplete(), "Snapping linear features...");
+
+  // Had an idea once here to try to load source IDs for sec data, remap sec IDs to be unique just
+  // before the ref and sec have to be combined, and then restore the original sec IDs after the
+  // snapping is complete with ElementIdRemapper. The idea was to reduce the need for ID
+  // synchronization, which doesn't work perfectly yet (of course, if you're replacing with data
+  // from a different data source the ID sync would happen regardless...just not needed for OSM to
+  // OSM replacement). Unfortunately, this leads to all kinds of duplicate ID errors when the
+  // resulting changesets are applied.
 
   // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
@@ -240,7 +261,11 @@ void ChangesetReplacementCreator::create(
   LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-after-way-joining");
 
+  _currentTask++;
+
   // PRE-CHANGESET DERIVATION CROP
+
+  _progress->set(_getJobPercentComplete(), "Cropping maps for changeset derivation...");
 
   // If we're conflating linear features with the lenient bounds requirement, copy the
   // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
@@ -256,7 +281,11 @@ void ChangesetReplacementCreator::create(
     combinedMap, _boundsOpts.changesetSecKeepEntireCrossingBounds,
     _boundsOpts.changesetSecKeepOnlyInsideBounds, _changesetId + "-sec-cropped-for-changeset");
 
+  _currentTask++;
+
   // SNAP AFTER CHANGESET DERIVATION CROPPING
+
+  _progress->set(_getJobPercentComplete(), "Snapping linear features...");
 
   // The non-strict bounds interpretation way replacement workflow benefits from a second
   // set of snapping runs right before changeset derivation due to there being ways connected to
@@ -277,9 +306,11 @@ void ChangesetReplacementCreator::create(
     _excludeFeaturesFromChangesetDeletion(refMap);
   }
 
-  //secIdRemapper.restore(combinedMap);
+  _currentTask++;
 
   // CLEANUP
+
+  _progress->set(_getJobPercentComplete(), "Cleaning up erroneous features...");
 
   // clean up any mistakes introduced
   _cleanup(refMap);
@@ -291,16 +322,21 @@ void ChangesetReplacementCreator::create(
   // conflicts.
   _synchronizeIds(refMap, combinedMap);
 
+  _currentTask++;
+
   // CHANGESET GENERATION
 
+  _progress->set(_getJobPercentComplete(), "Generating changeset...");
   _generateChangeset(refMap, combinedMap);
+  _currentTask++;
 
-  LOG_STATUS(
-    "Derived replacement changeset: ..." << _output.right(_maxFilePrintLength) << " with " <<
-    StringUtils::formatLargeNumber(_numChanges) << " changes for " <<
-    StringUtils::formatLargeNumber(refMapSize) << " features to replace and " <<
-    StringUtils::formatLargeNumber(secMapSize)  << " replacement features in " <<
-    StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+  _progress->set(
+    1.0, Progress::JobState::Successful,
+    "Derived replacement changeset: ..." + _output.right(_maxFilePrintLength) + " with " +
+    StringUtils::formatLargeNumber(_numChanges) + " changes for " +
+    StringUtils::formatLargeNumber(refMapSize) + " features to replace and " +
+    StringUtils::formatLargeNumber(secMapSize)  + " replacement features in " +
+    StringUtils::millisecondsToDhms(timer.elapsed()) + " total.");
 }
 
 void ChangesetReplacementCreator::_setGlobalOpts()
@@ -310,8 +346,8 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
 
   // For this being enabled to have any effect,
-  // convert.bounding.box.keep.immediately.connected.ways.outside.bounds must be enabled as well.
-  conf().set(ConfigOptions::getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  // convert.bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.
+  conf().set(ConfigOptions::getConvertBoundsTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
@@ -323,7 +359,7 @@ void ChangesetReplacementCreator::_setGlobalOpts()
 
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
-  conf().set(ConfigOptions::getConvertBoundingBoxRemoveMissingElementsKey(), false);
+  conf().set(ConfigOptions::getConvertBoundsRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
   conf().set(ConfigOptions::getLogWarningsForMissingElementsKey(), false);
 
@@ -513,6 +549,37 @@ void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
   // properly.
   MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
   OsmMapWriterFactory::writeDebugMap(refMap, _changesetId + "-ref-connected-combined");
+}
+
+void ChangesetReplacementCreator::_cropMapForChangesetDerivation(
+  OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
+  const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName)
+{
+  if (map->size() == 0)
+  {
+    LOG_DEBUG("Skipping cropping empty map: " << map->getName() << "...");
+    return;
+  }
+
+  LOG_INFO("Cropping map: " << map->getName() << " for changeset derivation...");
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  LOG_VARD(keepEntireFeaturesCrossingBounds);
+  LOG_VARD(keepOnlyFeaturesInsideBounds);
+
+  MapCropper cropper;
+  cropper.setBounds(_replacementBounds);
+  cropper.setKeepEntireFeaturesCrossingBounds(keepEntireFeaturesCrossingBounds);
+  cropper.setKeepOnlyFeaturesInsideBounds(keepOnlyFeaturesInsideBounds);
+  // We're not going to remove missing elements, as we want to have as minimal of an impact on
+  // the resulting changeset as possible.
+  cropper.setRemoveMissingElements(false);
+  cropper.apply(map);
+  LOG_DEBUG(cropper.getCompletedStatusMessage());
+
+  MemoryUsageChecker::getInstance().check();
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
+  LOG_DEBUG("Cropped map: " << map->getName() << " size: " << map->size());
 }
 
 void ChangesetReplacementCreator::_generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap)

@@ -1,0 +1,56 @@
+test name:  ServiceChangesetReplacementNonRectangularBoundsTest
+source file 1:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
+crop aoi:  -71.4809,42.4808,-71.45688,42.49368
+source file 2:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
+REF_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp
+SEC_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
+replacement aoi:  -71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841
+geometry filters: 
+tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
+replacement filters: 
+chain replacement filters: 
+replacement filter options: 
+retainment filters: 
+chain retainment filters: 
+retainment filter options: 
+source formats:  xml
+way snap tolerance:  5.0
+existing way node tolerance:  0.5
+extra params: 
+
+Cropping the reference dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an osm api db (contains features to be replaced)...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementNonRectangularBoundsTest/ref-perturbed-original.osm (contains features to be replaced)...
+
+
+Cropping the secondary dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementNonRectangularBoundsTest/sec-original.osm (contains features to replace with)...
+
+
+Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementNonRectangularBoundsTest/ref-perturbed-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementNonRectangularBoundsTest/sec-original.osm over: -71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementNonRectangularBoundsTest/ServiceChangesetReplacementNonRectangularBoundsTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
+
+
+Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementNonRectangularBoundsTest/ServiceChangesetReplacementNonRectangularBoundsTest-changeset-xml.osc.sql to the reference data in the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=42.4808, max_lat=42.491551, min_lon=-71.4735879, max_lon=-71.4600171, num_changes=3512
+Node(s) Created: 1,588
+Node(s) Modified: 3
+Node(s) Deleted: 1,585
+Way(s) Created: 167
+Way(s) Modified: 0
+Way(s) Deleted: 169
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+Total Creations: 1,755
+Total Modifications: 3
+Total Deletions: 1,754
+
+Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementNonRectangularBoundsTest-xml-replaced.osm for verification...
+

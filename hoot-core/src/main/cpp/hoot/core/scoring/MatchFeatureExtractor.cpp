@@ -250,10 +250,8 @@ QString MatchFeatureExtractor::getResults(bool useNulls)
 void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
 {
   vector<ConstMatchPtr> matches;
-  Envelope bounds;
-  bounds.setToNull();
   std::shared_ptr<const MatchThreshold> mt(new MatchThreshold(0, 0));
-  _matchFactory->createMatches(map, matches, bounds, mt);
+  _matchFactory->createMatches(map, matches, std::shared_ptr<geos::geom::Geometry>(), mt);
   size_t matchCount = 0;
   for (size_t i = 0; i < matches.size(); i++)
   {

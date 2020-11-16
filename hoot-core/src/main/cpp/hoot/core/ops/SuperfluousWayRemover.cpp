@@ -42,13 +42,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, SuperfluousWayRemover)
 
-SuperfluousWayRemover::SuperfluousWayRemover(const std::shared_ptr<OsmMap>& map) :
-_inputMap(map),
-_numExplicitlyExcluded(0)
-{
-  setConfiguration(conf());
-}
-
 void SuperfluousWayRemover::setConfiguration(const Settings& conf)
 {
   ConfigOptions opts(conf);
@@ -67,24 +60,24 @@ void SuperfluousWayRemover::setConfiguration(const Settings& conf)
   LOG_VARD(_excludeIds.size());
 }
 
-long SuperfluousWayRemover::removeWays(const std::shared_ptr<OsmMap>& map)
+long SuperfluousWayRemover::removeWays(std::shared_ptr<OsmMap>& map)
 {
-  SuperfluousWayRemover wayRemover(map);
+  SuperfluousWayRemover wayRemover;
   LOG_INFO(wayRemover.getInitStatusMessage());
-  wayRemover.removeWays();
+  wayRemover.apply(map);
   LOG_INFO(wayRemover.getCompletedStatusMessage());
   return wayRemover.getNumFeaturesAffected();
 }
 
-void SuperfluousWayRemover::removeWays()
+void SuperfluousWayRemover::_removeWays(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
   _numExplicitlyExcluded = 0;
-  std::shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
+  std::shared_ptr<ElementToRelationMap> e2r = map->getIndex().getElementToRelationMap();
   LOG_VART(e2r->size());
 
   // make a copy of the ways to avoid issues when removing.
-  const WayMap ways = _inputMap->getWays();
+  const WayMap ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
@@ -125,7 +118,7 @@ void SuperfluousWayRemover::removeWays()
     if ((same || w->getTags().size() == 0) && !inRelation)
     {  
       LOG_TRACE("Removing superflous way: " << w->getElementId() << "...");
-      RemoveWayByEid::removeWayFully(_inputMap, w->getId());
+      RemoveWayByEid::removeWayFully(map, w->getId());
       _numAffected++;
     }
   }
@@ -133,7 +126,7 @@ void SuperfluousWayRemover::removeWays()
 
 void SuperfluousWayRemover::apply(std::shared_ptr<OsmMap>& map)
 {
-  removeWays(map);
+  _removeWays(map);
 }
 
 QStringList SuperfluousWayRemover::getCriteria() const

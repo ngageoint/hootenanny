@@ -60,20 +60,10 @@ void WaySplitterOp::apply(std::shared_ptr<OsmMap>& map)
   }
 }
 
-void WaySplitterOp::readObject(QDataStream& is)
-{
-  is >> _maxLength;
-}
-
 void WaySplitterOp::setConfiguration(const Settings& conf)
 {
   _maxLength = ConfigOptions(conf).getWaySplitterMaxLength();
   LOG_VARD(_maxLength);
-}
-
-void WaySplitterOp::writeObject(QDataStream& os) const
-{
-  os << _maxLength;
 }
 
 }

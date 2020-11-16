@@ -155,6 +155,13 @@ public:
   int size() const { return _settings.size(); }
 
   /**
+   * Determines if this instance contains no settings
+   *
+   * @return true if no settings are present; false otherwise
+   */
+  bool isEmpty() const { return _settings.size() == 0; }
+
+  /**
    * Replace individual list entries in the current value of a configuration option with new list
    * entries
    *

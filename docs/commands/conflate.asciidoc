@@ -23,7 +23,7 @@ changeset will be written, instead of an OSM map.
 * +--changeset-stats+ - Displays changeset statistics and may be optionally followed by an output JSON file name. Valid only if the 
                         +--differential+ option is specified and the output format is .osc. If the +--include-tags++ option is specified, tag
                         changeset statistics are also output.
-* +--write-bounds+    - If the `convert.bounding.box` configuration option is specified, optionally outputs a file containing the input bounds.
+* +--write-bounds+    - If the `convert.bounds` configuration option is specified, optionally outputs a file containing the input bounds.
                         The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Feature Filtering

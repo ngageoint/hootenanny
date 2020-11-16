@@ -103,7 +103,6 @@ void OsmGeoJsonWriter::write(const ConstOsmMapPtr& map)
   close();
 }
 
-// Taken directly from OsmXmlWriter.
 QString OsmGeoJsonWriter::toString(const ConstOsmMapPtr& map)
 {
   QBuffer buf;

@@ -32,7 +32,6 @@
 #include <hoot/core/conflate/merging/Merger.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStat.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/Configurable.h>
@@ -61,13 +60,9 @@ class ElementId;
  * that were originally separated from each other.
  *
  * Re-entrant but not thread safe.
- *
- * While this object is serializable it doesn't maintain state across serialization. It simply
- * uses the default configuration. This should probably be made more robust in the future, but
- * works fine for now.
  */
-class UnifyingConflator : public OsmMapOperation, public Serializable, public Boundable,
-  public Configurable, public ProgressReporter
+class UnifyingConflator : public OsmMapOperation, public Boundable, public Configurable,
+  public ProgressReporter
 {
 public:
 
@@ -88,18 +83,12 @@ public:
 
   QList<SingleStat> getStats() const { return _stats; }
 
-  virtual void readObject(QDataStream& /*is*/) override {}
-
-  virtual void setBounds(const geos::geom::Envelope& bounds) override { _bounds = bounds; }
-
   virtual void setConfiguration(const Settings &conf) override;
 
   /**
    * Set the factory to use when creating mergers. This method is likely only useful when testing.
    */
   void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
-
-  virtual void writeObject(QDataStream& /*os*/) const override {}
 
   virtual QString getDescription() const override
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
@@ -116,7 +105,6 @@ public:
 
 private:
 
-  geos::geom::Envelope _bounds;
   const MatchFactory& _matchFactory;
   std::shared_ptr<MatchThreshold> _matchThreshold;
   std::shared_ptr<MergerFactory> _mergerFactory;

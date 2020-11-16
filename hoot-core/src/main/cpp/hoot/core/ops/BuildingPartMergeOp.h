@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
@@ -93,7 +92,7 @@ namespace hoot
  * buildings? Or should we change it only to be more strict and only merge building:part features
  * (if that's possible; or maybe its already doing that)?
  */
-class BuildingPartMergeOp : public OsmMapOperation, public Serializable, public Configurable
+class BuildingPartMergeOp : public OsmMapOperation, public Configurable
 {
 public:
 
@@ -108,9 +107,6 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   virtual std::string getClassName() const { return className(); }
-
-  virtual void readObject(QDataStream& /*is*/) { }
-  virtual void writeObject(QDataStream& /*os*/) const { }
 
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }

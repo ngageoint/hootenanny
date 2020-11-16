@@ -66,7 +66,7 @@ _numNodesRead(0),
 _numWaysRead(0),
 _numRelationsRead(0),
 _keepImmediatelyConnectedWaysOutsideBounds(
-  ConfigOptions().getConvertBoundingBoxKeepImmediatelyConnectedWaysOutsideBounds())
+  ConfigOptions().getConvertBoundsKeepImmediatelyConnectedWaysOutsideBounds())
 {
 }
 
@@ -78,12 +78,12 @@ bool ApiDbReader::isSupported(const QString& urlStr)
 
 void ApiDbReader::setBoundingBox(const QString& bbox)
 {
-  setBounds(GeometryUtils::envelopeFromConfigString(bbox));
+  setBounds(GeometryUtils::boundsFromString(bbox));
 }
 
 void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 {
-  _overrideBounds = GeometryUtils::envelopeFromConfigString(bbox);
+  _overrideBounds = GeometryUtils::boundsFromString(bbox);
 }
 
 void ApiDbReader::initializePartial()
@@ -107,13 +107,12 @@ void ApiDbReader::initializePartial()
 
 bool ApiDbReader::_hasBounds()
 {
-  return _isValidBounds(_bounds) || _isValidBounds(_overrideBounds);
+  return _bounds.get() || _overrideBounds.get();
 }
 
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
 {
   ElementId result;
-  //LOG_VART(_useDataSourceIds);
   if (_useDataSourceIds)
   {
     result = oldId;
@@ -273,17 +272,6 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
   }
 }
 
-bool ApiDbReader::_isValidBounds(const Envelope& bounds)
-{
-  if (bounds.isNull() ||
-      (bounds.getMinX() == -180.0 && bounds.getMinY() == -90.0 && bounds.getMaxX() == 180.0 &&
-       bounds.getMaxY() == 90.0))
-  {
-    return false;
-  }
-  return true;
-}
-
 void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds,
                                      QSet<QString>& wayIds, QSet<QString>& additionalNodeIds,
                                      long& nodeCount, long& wayCount)
@@ -321,7 +309,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     std::shared_ptr<QSqlQuery> wayItr =
       _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
     const bool tagConnectedWays =
-      ConfigOptions().getConvertBoundingBoxTagImmediatelyConnectedOutOfBoundsWays();
+      ConfigOptions().getConvertBoundsTagImmediatelyConnectedOutOfBoundsWays();
     LOG_VART(tagConnectedWays);
     while (wayItr->next())
     {
@@ -575,8 +563,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   // already cropped the way we want them from the start and skip this step completely. That's
   // possibly an optimization to look into doing in the future.
   ConfigOptions conf;
-  if (!conf.getConvertBoundingBoxKeepEntireFeaturesCrossingBounds() ||
-       conf.getConvertBoundingBoxKeepOnlyFeaturesInsideBounds())
+  if (!conf.getConvertBoundsKeepEntireFeaturesCrossingBounds() ||
+       conf.getConvertBoundsKeepOnlyFeaturesInsideBounds())
   { 
     // We've already handled keeping immediately connected oob ways during the query, so don't need
     // to worry about it here.
@@ -605,8 +593,8 @@ void ApiDbReader::read(const OsmMapPtr& map)
   }
   else
   {
-    Envelope bounds;
-    if (!_overrideBounds.isNull())
+    std::shared_ptr<geos::geom::Geometry> bounds;
+    if (_overrideBounds.get())
     {
       bounds = _overrideBounds;
     }
@@ -614,12 +602,15 @@ void ApiDbReader::read(const OsmMapPtr& map)
     {
       bounds = _bounds;
     }
+    // api db bounds reading is based off of quad tiles which only operates on rectangular bounds,
+    // so we have to pass an envelope here. The actual bounds is used to crop down the queried
+    // result later.
     if (!_readFullThenCropOnBounded)
     {
       LOG_DEBUG(
-        "Executing API bounded read query via SQL filtering at bounds " << bounds.toString() <<
+        "Executing API bounded read query via SQL filtering at bounds " << bounds->toString() <<
         "...");
-      _readByBounds(map, bounds);
+      _readByBounds(map, *(bounds->getEnvelopeInternal()));
     }
     else
     {
@@ -630,9 +621,9 @@ void ApiDbReader::read(const OsmMapPtr& map)
       // fact as a runtime performance optimization at the expense of extra memory usage.
 
       LOG_DEBUG(
-        "Executing API bounded read query via read all then crop at bounds " << bounds.toString() <<
-        "...");
-      _readByBounds2(map, bounds);
+        "Executing API bounded read query via read all then crop at bounds " <<
+        bounds->toString() << "...");
+      _readByBounds2(map, *(bounds->getEnvelopeInternal()));
     }
   }
 }

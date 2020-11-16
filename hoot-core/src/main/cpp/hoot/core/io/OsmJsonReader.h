@@ -234,8 +234,6 @@ public:
    */
   virtual void setConfiguration(const Settings& conf) override;
 
-  virtual void setBounds(const geos::geom::Envelope& bounds) { _bounds = bounds; }
-
   void setKeepImmediatelyConnectedWaysOutsideBounds(bool keep)
   { _keepImmediatelyConnectedWaysOutsideBounds = keep; }
   void setLogWarningsForMissingElements(bool log) { _logWarningsForMissingElements = log; }
@@ -274,7 +272,6 @@ protected:
   /** List of JSON strings, one for each HTTP response */
   QStringList _results;
 
-  geos::geom::Envelope _bounds;
   // only valid is _bounds is not null
   bool _keepImmediatelyConnectedWaysOutsideBounds;
 

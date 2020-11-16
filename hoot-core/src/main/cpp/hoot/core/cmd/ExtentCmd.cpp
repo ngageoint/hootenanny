@@ -73,13 +73,15 @@ public:
     }
     LOG_VARD(verbose);
 
+    conf().set(ConfigOptions::getWriterPrecisionKey(), 9);
+
     const QString input = args[0];
     LOG_VARD(input);
     OsmMapPtr map(new OsmMap());
     IoUtils::loadMap(map, input, true, Status::Invalid);
 
     const QString bounds =
-      GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map));
+      GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
     if (verbose)
     {
       cout << "Map extent (minx,miny,maxx,maxy): " << bounds << endl;

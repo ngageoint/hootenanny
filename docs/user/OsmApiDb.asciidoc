@@ -134,7 +134,7 @@ define an output osm file: /tmp/ToyTestA-out.osm
 
 hoot convert osmapidb://hoot:hoottest@localhost:5432/osmapi_test test-output/ToyTestA-out.osm
 
-hoot convert -D convert.bounding.box=-106.5100000,38.3000000,-106.4000000,38.5000000 osmapidb://hoot:hoottest@localhost:5432/osmapi_test test-output/bboxOutput.osm
+hoot convert -D convert.bounds=-106.5100000,38.3000000,-106.4000000,38.5000000 osmapidb://hoot:hoottest@localhost:5432/osmapi_test test-output/bboxOutput.osm
 ------
 
 === Validating Writes to the OpenStreetMap Editing API Database

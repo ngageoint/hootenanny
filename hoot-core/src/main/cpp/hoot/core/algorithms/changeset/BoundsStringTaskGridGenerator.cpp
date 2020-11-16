@@ -36,7 +36,7 @@ namespace hoot
 
 BoundsStringTaskGridGenerator::BoundsStringTaskGridGenerator(
   const QString& bounds, const QString& outputPath) :
-_bounds(GeometryUtils::envelopeFromConfigString(bounds)),
+_bounds(GeometryUtils::envelopeFromString(bounds)),
 _outputPath(outputPath)
 {
 }
@@ -44,7 +44,7 @@ _outputPath(outputPath)
 TaskGrid BoundsStringTaskGridGenerator::generateTaskGrid()
 {
   LOG_INFO(
-    "Generating task grid for bounds: " << GeometryUtils::envelopeToConfigString(_bounds) << "...");
+    "Generating task grid for bounds: " << GeometryUtils::envelopeToString(_bounds) << "...");
 
   TaskGrid taskGrid;
   TaskGrid::TaskGridCell taskGridCell;

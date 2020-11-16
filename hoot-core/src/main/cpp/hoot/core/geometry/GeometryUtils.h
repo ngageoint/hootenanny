@@ -30,6 +30,7 @@
 
 // GEOS
 #include <geos/geom/Envelope.h>
+#include <geos/geom/Polygon.h>
 
 namespace geos
 {
@@ -41,7 +42,6 @@ namespace geos
     class LineString;
     class MultiLineString;
     class MultiPolygon;
-    class Polygon;
   }
 }
 
@@ -110,7 +110,7 @@ public:
    * @param str string to examine
    * @return true if the input represents an envelope; false otherwise
    */
-  static bool isEnvelopeConfigString(const QString& str);
+  static bool isEnvelopeString(const QString& str);
 
   /**
    * Creates a bounds string in the format used in the hoot options config (minx,miny,maxx,maxy)
@@ -120,7 +120,7 @@ public:
    * @return an envelope string
    * @todo This should be replaced by toConfigString.
    */
-  static QString envelopeToConfigString(const geos::geom::Envelope& bounds);
+  static QString envelopeToString(const geos::geom::Envelope& bounds);
 
   /**
    * Converts a bounds in the format used in the hoot options config (minx,miny,maxx,maxy) to an
@@ -128,10 +128,64 @@ public:
    *
    * @param boundsStr bounds string in the format used in the hoot options config to an envelope
    * @return an envelope
+   * @throws if the string is non-empty and an invalid envelope string
    */
-  static geos::geom::Envelope envelopeFromConfigString(const QString& boundsStr);
+  static geos::geom::Envelope envelopeFromString(const QString& boundsStr);
 
-  static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry *g);
+  /**
+   * Determines if a string represents a polygon
+   *
+   * @param str string to examine
+   * @return true if the input represents an polygon; false otherwise
+   */
+  static bool isPolygonString(const QString& str);
+
+  /**
+   * Converts an envelope to a polygon
+   *
+   * @param env the envelope to convert
+   * @return a polygon
+   */
+  static std::shared_ptr<geos::geom::Polygon> envelopeToPolygon(const geos::geom::Envelope& env);
+
+  /**
+   * Parses a polygon from a string
+   *
+   * @param str the string to parse
+   * @return a valid polygon or null if the input string is empty
+   * @throws if the string is non-empty and an invalid polygon string
+   */
+  static std::shared_ptr<geos::geom::Polygon> polygonFromString(const QString& str);
+
+  /**
+   * Converts a polygon to a string representation
+   *
+   * @param poly the polygon to convert
+   * @return a polygon string
+   */
+  static QString polygonToString(const std::shared_ptr<geos::geom::Polygon>& poly);
+
+  /**
+   * Converts either a envelope or polygon bounds string to a polygon
+   *
+   * Currently we're only support polygon here, but the bounds string format could be extended to
+   * support other geometries if needed.
+   *
+   * @param str the string to parse
+   * @return a valid polygon if the input string is a valid envelope or polygon string; a null
+   * object otherwise
+   */
+  static std::shared_ptr<geos::geom::Polygon> boundsFromString(const QString& str);
+
+  /**
+   * Converts a polygon string to an envelope string
+   *
+   * @param str the string to convert
+   * @return an envelope string
+   */
+  static QString polygonStringToEnvelopeString(const QString& str);
+
+  static geos::geom::Geometry* validateGeometry(const geos::geom::Geometry* g);
 
   static geos::geom::Geometry* validateGeometryCollection(const geos::geom::GeometryCollection* gc);
 
@@ -153,6 +207,14 @@ public:
    * @return a bounding box map
    */
   static OsmMapPtr createMapFromBounds(const geos::geom::Envelope& bounds);
+
+  /**
+   * Creates a map representing a single polygon bounds
+   *
+   * @param bounds bounds
+   * @return a bounds map
+   */
+  static OsmMapPtr createMapFromBounds(const std::shared_ptr<geos::geom::Polygon>& bounds);
 
   /**
    * Creates a rectangular map representing multiple bounding boxes
@@ -220,8 +282,8 @@ public:
   /**
    * @brief mergeGeometries Merge a vector of geometries all into one single geometry
    * @param geometries Vector of geos::geom::Geometry pointers that are to be merged together
-   * @param envelope Bounding envelope used for sorting goemetries by distance
-   * @return Single geometry object that contains all goemetries merged (geos::geom::Geometry::union)
+   * @param envelope Bounding envelope used for sorting geometries by distance
+   * @return Single geometry object that contains all geometries merged (geos::geom::Geometry::union)
    */
   static std::shared_ptr<geos::geom::Geometry> mergeGeometries(
     std::vector<std::shared_ptr<geos::geom::Geometry>> geometries,

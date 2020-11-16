@@ -863,12 +863,16 @@ void OgrReaderInternal::_finalizeTranslate()
   _translator.reset();
 }
 
-std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Settings& s,
-  OGRSpatialReference* srs)
+std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(
+  const Settings& s, OGRSpatialReference* srs)
 {
   ConfigOptions co(s);
   std::shared_ptr<Envelope> result;
-  const QString bboxStrRaw = co.getConvertBoundingBox();
+  const QString bboxStrRaw = co.getConvertBounds();
+  if (!bboxStrRaw.trimmed().isEmpty() && !GeometryUtils::isEnvelopeString(bboxStrRaw))
+  {
+    throw IllegalArgumentException("OGR reader only supports rectangular convert bounds.");
+  }
   const bool asWgs84 = co.getOgrReaderBoundingBoxLatlng();
   QString bboxStr;
   QString key;
@@ -884,7 +888,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
 
   if (!asWgs84)
   {
-    result.reset(new Envelope(GeometryUtils::envelopeFromConfigString(bboxStr)));
+    result.reset(new Envelope(GeometryUtils::envelopeFromString(bboxStr)));
   }
   else
   {
@@ -899,7 +903,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
     if (bbox.size() != 4)
     {
       throw HootException(
-        QString("Error parsing %1 (%2)").arg(co.getConvertBoundingBoxKey()).arg(bboxStr));
+        QString("Error parsing %1 (%2)").arg(co.getConvertBoundsKey()).arg(bboxStr));
     }
 
     bool ok;
@@ -910,7 +914,7 @@ std::shared_ptr<Envelope> OgrReaderInternal::getBoundingBoxFromConfig(const Sett
       if (!ok)
       {
         throw HootException(
-          QString("Error parsing %1 (%2)").arg(co.getConvertBoundingBoxKey()).arg(bboxStr));
+          QString("Error parsing %1 (%2)").arg(co.getConvertBoundsKey()).arg(bboxStr));
       }
     }
 

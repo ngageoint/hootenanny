@@ -28,19 +28,19 @@
 #define CHANGESET_REPLACEMENT_CREATOR_H
 
 // Hoot
-#include <hoot/core/algorithms/changeset/ChangesetCutOnlyCreator.h>
+#include <hoot/core/algorithms/changeset/ChangesetReplacementCreatorAbstract.h>
 
 namespace hoot
 {
 
 /**
- * Single geometry pass version of ChangesetCutOnlyCreator, which solves the bug in handling
- * relations with children of mixed geometry types. This drops support for overlapping only
- * replacement and strict bounds handling, as they are not useful for replacements within a task
- * grid. This temporarily drops support for the additional filters (they were broken anyway), and
- * they will be restored as part of #4267. Eventually this class will be refactored and renamed.
+ * Single geometry pass version of ChangesetReplacement, which solves the bug in handling relations
+ * with children of mixed geometry types. This drops support for overlapping only replacement and
+ * strict bounds handling, as they are not useful for replacements within a task grid. This
+ * temporarily drops support for the additional filters (they were broken anyway), and they will be
+ * restored as part of #4267.
  */
-class ChangesetReplacementCreator : public ChangesetCutOnlyCreator
+class ChangesetReplacementCreator : public ChangesetReplacementCreatorAbstract
 {
 
 public:
@@ -50,11 +50,34 @@ public:
   ChangesetReplacementCreator();
 
   /**
-   * @see ChangesetReplacement
+   * Creates a changeset that replaces features in the first input with features from the second
+   * input
+   *
+   * @param input1 the target data file path for the changeset in which to replace features; must
+   * support Boundable
+   * @param input2 the source data file path for the changeset to get replacement features from;
+   * must support Boundable
+   * @param bounds the rectangular bounds over which features are to be replaced
+   * @param output the changeset file output location
    */
   virtual void create(
     const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
     const QString& output) override;
+
+  /**
+   * Creates a changeset that replaces features in the first input with features from the second
+   * input
+   *
+   * @param input1 the target data file path for the changeset in which to replace features; must
+   * support Boundable
+   * @param input2 the source data file path for the changeset to get replacement features from;
+   * must support Boundable
+   * @param bounds the bounds over which features are to be replaced
+   * @param output the changeset file output location
+   */
+  virtual void create(
+    const QString& input1, const QString& input2,
+    const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
 
   // Currently, this only supports geometry filters (additional filters are broken right now
   // anyway: #4267).
@@ -73,7 +96,7 @@ protected:
 
   ElementCriterionPtr _geometryTypeFilter;
 
-  virtual void _setGlobalOpts();
+  virtual void _setGlobalOpts() override;
 
 private:
 
@@ -83,6 +106,14 @@ private:
   void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap);
   void _snapUnconnectedPostChangesetMapCropping(
     OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays);
+
+  /*
+   * Performs cropping to prepare a map for changeset derivation. This is potentially different
+   * cropping than done during initial load and cookie cutting.
+   */
+  void _cropMapForChangesetDerivation(
+    OsmMapPtr& map, const bool keepEntireFeaturesCrossingBounds,
+    const bool keepOnlyFeaturesInsideBounds, const QString& debugFileName);
 
   void _generateChangeset(OsmMapPtr& refMap, OsmMapPtr& combinedMap);
 };

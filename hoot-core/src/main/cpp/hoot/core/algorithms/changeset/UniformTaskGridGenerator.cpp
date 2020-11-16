@@ -56,7 +56,7 @@ _output(output)
   {
     IoUtils::loadMap(map, inputs.at(i), true, Status::Invalid);
   }
-  _bounds = GeometryUtils::envelopeToConfigString(CalculateMapBoundsVisitor::getGeosBounds(map));
+  _bounds = GeometryUtils::envelopeToString(CalculateMapBoundsVisitor::getGeosBounds(map));
 }
 
 TaskGrid UniformTaskGridGenerator::generateTaskGrid()
@@ -67,7 +67,7 @@ TaskGrid UniformTaskGridGenerator::generateTaskGrid()
 
   TaskGrid taskGrid;
 
-  const geos::geom::Envelope taskGridEnv = GeometryUtils::envelopeFromConfigString(_bounds);
+  const geos::geom::Envelope taskGridEnv = GeometryUtils::envelopeFromString(_bounds);
   const double widthPerCell = taskGridEnv.getWidth() / (double)_gridDimensionSize;
   const double heightPerCell = taskGridEnv.getHeight() / (double)_gridDimensionSize;
 

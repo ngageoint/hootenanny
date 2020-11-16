@@ -138,6 +138,12 @@ void NamedOp::apply(OsmMapPtr& map)
         Factory::getInstance().constructObject<ElementVisitor>(s));
       statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(vis);
 
+      Configurable* c = dynamic_cast<Configurable*>(vis.get());
+      if (_conf != 0 && c != 0)
+      {
+        c->setConfiguration(*_conf);
+      }
+
       if (_progress.getState() == Progress::JobState::Running)
       {
         _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
@@ -150,12 +156,6 @@ void NamedOp::apply(OsmMapPtr& map)
 
       // The ordering of setting the config before the map here seems to make sense, but all
       // ElementVisitors implementing OsmMapConsumer will need to be aware of it.
-
-      Configurable* c = dynamic_cast<Configurable*>(vis.get());
-      if (_conf != 0 && c != 0)
-      {
-        c->setConfiguration(*_conf);
-      }
 
       OsmMapConsumer* mapConsumer = dynamic_cast<OsmMapConsumer*>(vis.get());
       if (mapConsumer)

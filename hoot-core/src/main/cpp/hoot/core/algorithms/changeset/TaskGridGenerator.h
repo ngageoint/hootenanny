@@ -40,7 +40,7 @@ namespace hoot
 {
 
 /**
- * Allows for creating a task grid for performing distributed map operations
+ * Allows for creating a rectangular task grid for performing distributed map operations
  */
 class TaskGridGenerator
 {

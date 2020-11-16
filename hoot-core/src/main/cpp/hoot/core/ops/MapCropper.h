@@ -34,7 +34,6 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
@@ -50,17 +49,8 @@ class Way;
 /**
  * Provides a clean crop at the edges of the map rather than the ragged crop you get from Osmosis.
  * As a result, it introduces new nodes into the data and may split ways up into multiple ways.
- *
- * In the class, outside and inside are referenced. Outside refers to a geometry that is wholly
- * outside the region that will be kept. Inside refers to a geometry that is at least partially
- * inside the region that will be kept.
- *
- * This class works with four pass conflation (used in Hadoop only) as long as all data, bounds and
- * crop geometry are in WGS84. If the data before this operation is in a planar projection then it
- * should be reprojected using ReprojectToGeographicOp.
  */
-class MapCropper : public OsmMapOperation, public Serializable, public Boundable,
-  public Configurable
+class MapCropper : public OsmMapOperation, public Boundable, public Configurable
 {
 public:
 
@@ -69,8 +59,6 @@ public:
   static std::string className() { return "hoot::MapCropper"; }
 
   MapCropper();
-  MapCropper(const geos::geom::Envelope& envelope);
-  MapCropper(const std::shared_ptr<const geos::geom::Geometry>& g);
   virtual ~MapCropper() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
@@ -78,16 +66,6 @@ public:
   virtual void setConfiguration(const Settings& conf) override;
 
   virtual std::string getClassName() const override { return className(); }
-
-  virtual void readObject(QDataStream& is) override;
-
-  /**
-   * Sets the bounds on the nodes that will be removed.
-   */
-  virtual void setBounds(const geos::geom::Envelope& bounds) override;
-  virtual void setBounds(const std::shared_ptr<const geos::geom::Geometry>& g);
-
-  virtual void writeObject(QDataStream& os) const override;
 
   virtual QString getDescription() const override { return "Crops a map"; }
 
@@ -97,7 +75,8 @@ public:
   {
     return
       "Cropped " + StringUtils::formatLargeNumber(_numAffected) + " / " +
-      StringUtils::formatLargeNumber(_numProcessed) + " elements"; }
+      StringUtils::formatLargeNumber(_numProcessed) + " elements";
+  }
 
   void setInvert(bool invert);
   void setKeepEntireFeaturesCrossingBounds(bool keep);
@@ -111,10 +90,9 @@ private:
 
   friend class MapCropperTest;
 
-  geos::geom::Envelope _envelope;
-  std::shared_ptr<const geos::geom::Geometry> _envelopeG;
+  // if false data outside of the boundary is removed; if true, data inside of the boundary is
+  // removed
   bool _invert;
-  geos::geom::Envelope _nodeBounds;
   // If true, won't split apart features straddling the specified bounds.
   bool _keepEntireFeaturesCrossingBounds;
   // If true, will only keep features falling completely inside the specified bounds. This overrides

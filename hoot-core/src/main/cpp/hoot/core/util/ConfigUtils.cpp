@@ -31,7 +31,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
-#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {
@@ -39,9 +38,9 @@ namespace hoot
 bool ConfigUtils::boundsOptionEnabled()
 {
   return
-    !conf().get(ConfigOptions::getConvertBoundingBoxKey()).toString().trimmed().isEmpty() ||
-    !conf().get(ConfigOptions::getConvertBoundingBoxHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
-    !conf().get(ConfigOptions::getConvertBoundingBoxOsmApiDatabaseKey()).toString().trimmed().isEmpty();
+    !conf().get(ConfigOptions::getConvertBoundsKey()).toString().trimmed().isEmpty() ||
+    !conf().get(ConfigOptions::getConvertBoundsHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
+    !conf().get(ConfigOptions::getConvertBoundsOsmApiDatabaseKey()).toString().trimmed().isEmpty();
 }
 
 void ConfigUtils::checkForTagValueTruncationOverride()

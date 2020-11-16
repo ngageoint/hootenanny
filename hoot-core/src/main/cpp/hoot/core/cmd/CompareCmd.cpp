@@ -192,7 +192,7 @@ public:
     OsmMapPtr result(new OsmMap());
     IoUtils::loadMap(result, p, false);
 
-    SuperfluousWayRemover(result).removeWays();
+    SuperfluousWayRemover().removeWays(result);
     // drop everything that isn't a highway.
     KeepHighwaysVisitor keepHighways;
     result->visitRw(keepHighways);

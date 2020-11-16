@@ -44,10 +44,6 @@ namespace hoot
 
 /**
  * Derives a set of replacement changes given two map inputs
- *
- * @todo move the input parsing to a separate method and assign the parsed inputs to member
- * variables
- * @todo command needs some input error handling tests
  */
 class ChangesetDeriveReplacementCmd : public BoundedCommand
 {
@@ -73,15 +69,6 @@ public:
   void run(QStringList& args)
   {
     // process optional params
-
-    // TODO: eventually this check can go away
-    if (args.contains("--full-replacement"))
-    {
-      LOG_WARN(
-        "All replacements are now done fully over the replacement bounds, so the " <<
-        "--full-replacement option need no longer be specified to " << getName());
-      args.removeAll("--full-replacement");
-    }
 
     QStringList geometryFilters;
     if (args.contains("--geometry-filters"))
@@ -149,52 +136,9 @@ public:
     }
     LOG_VARD(retainmentFilterOptions);
 
-    // TODO: eventually this check can go away
-    if (args.contains("--strict-bounds"))
-    {
-      LOG_WARN(
-        "Bounds handling is now determined automatically by the replacement workflow selected, " <<
-        "so the --full-replacement option need no longer be specified to " << getName());
-      args.removeAll("--strict-bounds");
-    }
-
     bool printStats = false;
     QString outputStatsFile;
     processStatsParams(args, printStats, outputStatsFile);
-
-    if (args.contains("--disable-way-snapping"))
-    {
-      LOG_WARN("--disable-way-snapping no longer supported by " << getName());
-      args.removeAll("--disable-way-snapping");
-    }
-
-    // TODO: eventually this check can go away
-    if (args.contains("--conflate"))
-    {
-      LOG_WARN("--conflate option is no longer supported by  " << getName() << ".");
-      args.removeAll("--conflate");
-    }
-    if (args.contains("--disable-conflation"))
-    {
-      LOG_WARN("The --disable-conflation option is no longer supported by " << getName() << ".");
-      args.removeAll("--disable-conflation");
-    }
-
-    // TODO: eventually this check can go away
-    if (args.contains("--disable-cleaning"))
-    {
-      LOG_WARN(
-        "Cleaning now done on an as-needed basis, so the --disable-cleaning option is no " <<
-        "longer supported by " << getName());
-      args.removeAll("--disable-cleaning");
-    }
-
-    // TODO: eventually this check can go away
-    if (args.contains("--disable-oob-way-handling"))
-    {
-      LOG_WARN("The --disable-oob-way-handling option is no longer supported by " << getName());
-      args.removeAll("--disable-oob-way-handling");
-    }
 
     // command workflow identification and input param error checking
 
@@ -206,7 +150,8 @@ public:
     int outputIndex = 3;
     int osmApiDbUrlIndex = 4;
     LOG_VARD(args[2]);
-    if (!GeometryUtils::isEnvelopeConfigString(args[2].trimmed()))
+    if (!GeometryUtils::isEnvelopeString(args[2].trimmed()) &&
+        !GeometryUtils::isPolygonString(args[2].trimmed()))
     {
       input2Index = -1;
       boundsIndex = 1;
@@ -224,7 +169,7 @@ public:
     // do this here to get the --write-bounds param removed from args before the param error
     // checking and non-optional param parsing
     const QString boundsStr = args[boundsIndex].trimmed();
-    conf().set(ConfigOptions::getConvertBoundingBoxKey(), boundsStr);
+    conf().set(ConfigOptions::getConvertBoundsKey(), boundsStr);
     BoundedCommand::runSimple(args);
 
     LOG_VARD(args);
@@ -257,8 +202,15 @@ public:
       input2 = args[input2Index].trimmed();
       LOG_VARD(input1);
     }
-    const geos::geom::Envelope bounds = GeometryUtils::envelopeFromConfigString(boundsStr);
-    LOG_VARD(bounds);
+    std::shared_ptr<geos::geom::Polygon> bounds =
+      std::dynamic_pointer_cast<geos::geom::Polygon>(
+        GeometryUtils::boundsFromString(boundsStr));
+    if (!bounds)
+    {
+      throw IllegalArgumentException(
+        "Invalid replacement bounds passed to changeset replacement derivation.");
+    }
+    LOG_VARD(bounds->toString());
     const QString output = args[outputIndex].trimmed();
     LOG_VARD(output);
     QString osmApiDbUrl;
@@ -308,7 +260,6 @@ public:
     changesetCreator->setChainRetainmentFilters(chainRetainmentFilters);
     changesetCreator->setRetainmentFilters(retainmentFilters);
     changesetCreator->setRetainmentFilterOptions(retainmentFilterOptions);
-    changesetCreator->setConflationEnabled(false);
     changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
     changesetCreator->create(input1, input2, bounds, output);
   }

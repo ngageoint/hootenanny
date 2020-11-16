@@ -199,7 +199,7 @@ hoot info --filters
 
 The +--formats+ option prints out supported data formats. 
 
-The --input-bounded sub-option prints out input formats that support bounded reads with the `convert.bounding.box` configuration option.
+The --input-bounded sub-option prints out input formats that support bounded reads with the `convert.bounds` configuration option.
 
 ==== Usage
 

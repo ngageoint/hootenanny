@@ -49,15 +49,13 @@ int BoundedCommand::runSimple(QStringList& args)
 void BoundedCommand::_writeBoundsFile()
 {
   ConfigOptions opts;
-  // We could rename convert.bounding.box to something more generic now that we use it in so many
-  // places.
   // TODO: We aren't dealing with the osm/hoot api db reader version of bounding box, which could
   // eventually cause a problem.
-  const QString boundsStr = opts.getConvertBoundingBox().trimmed();
+  QString boundsStr = opts.getConvertBounds().trimmed();
   if (!boundsStr.isEmpty())
   {
     OsmMapWriterFactory::write(
-      GeometryUtils::createMapFromBounds(GeometryUtils::envelopeFromConfigString(boundsStr)),
+      GeometryUtils::createMapFromBounds(GeometryUtils::boundsFromString(boundsStr)),
       opts.getBoundsOutputFile());
   }
 }

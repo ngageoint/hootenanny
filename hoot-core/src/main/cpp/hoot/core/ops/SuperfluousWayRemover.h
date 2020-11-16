@@ -54,22 +54,19 @@ public:
   static std::string className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover() = default;
-  SuperfluousWayRemover(const std::shared_ptr<OsmMap>& map);
   virtual ~SuperfluousWayRemover() = default;
 
-  void apply(std::shared_ptr<OsmMap>& map);
+  /**
+   * @see OsmMapOperation
+   */
+  virtual void apply(std::shared_ptr<OsmMap>& map);
 
   /**
    * Splits all the ways in the input map and returns the resulting map.
    *
    * @return the number of ways removed
    */
-  static long removeWays(const std::shared_ptr<OsmMap>& map);
-
-  /**
-   * TODO
-   */
-  void removeWays();
+  static long removeWays(std::shared_ptr<OsmMap>& map);
 
   /**
    * @see Configurable
@@ -93,12 +90,12 @@ public:
 
 private:
 
-  std::shared_ptr<OsmMap> _inputMap;
-
   // ways with these IDs will never be removed
   QSet<long> _excludeIds;
   // the number of ways that explicitly weren't removed due to configuration
   int _numExplicitlyExcluded;
+
+  void _removeWays(std::shared_ptr<OsmMap>& map);
 };
 
 }

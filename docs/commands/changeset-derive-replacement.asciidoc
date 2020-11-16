@@ -23,10 +23,13 @@ IDs in the secondary data are not retained and those elements treated as complet
 * +input2+                       - Map input with the features to be used for replacement; may be any supported input format that also supports 
                                    bounded reading (e.g. OSM file); leave empty to cut data out of input1 while adding no replacement data. 
                                    See the "Input Data and "Bounds Handling" sections for more detail.
-* +bounds+                       - Boundary over which to do the feature replacement of the form: minx,miny,maxx,maxy; 
-                                   e.g. "-71.4698,42.4866,-71.4657,42.4902" See the ""Bounds Handling" section for more detail.
+* +bounds+                       - Boundary over which to do the feature replacement. Can be either a rectangular bounding box of the form: 
+                                   minx,miny,maxx,maxy; e.g. "-71.4698,42.4866,-71.4657,42.4902" or a closed polygon of the form:
+                                   x1,y1;x2,y2;x3,y3;...; e.g. "-71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841". See the 
+                                   "Bounds Handling" section for more detail.
 * +output+                       - Changeset output location; must be a changeset .osc or .osc.sql file.
-* +osmApiDatabaseUrl+            - Target OSM API database where the derived changeset is to be applied, used to maintain element ID continuity. 
+* +osmApiDatabaseUrl+            - Target OSM API database where the derived changeset is to be applied, used to maintain element ID 
+                                   continuity. 
                                    Required only if the changeset output format is .osc.sql. 
 * +--geometry-filters+           - Optional criteria used to control the geometry type of the features that are replaced. When this option is
                                    omitted, features of all geometry types are replaced by features of a like geometry type. See the 
@@ -45,7 +48,7 @@ IDs in the secondary data are not retained and those elements treated as complet
                                    "Retainment Filtering" section for more detail.
 * +--stats+                      - Displays changeset statistics and may be optionally followed by an output JSON file name to write the 
                                    statistics to.
-* +--write-bounds+               - If the +convert.bounding.box+ configuration option is specified, outputs a file containing the specified 
+* +--write-bounds+               - If the +convert.bounds+ configuration option is specified, outputs a file containing the specified 
                                    input bounds. The location of the file is controlled via the +bounds.output.file+ configuration option.
 
 === Usage
@@ -68,7 +71,8 @@ The high level workflow for the command looks like the following:
 * Load the input 2 secondary map (data you are using as replacement) at the specified bounds
 * Filter the secondary map based on geometry and/or other filters (optional)
 * Cut data out of the reference map for each feature geometry type being replaced. If performing full replacement, the shape cut out covers the 
-  entire specified bounds. If performing overlapping only replacement, the shape cut out is the shape of the secondary data used for replacement.
+  entire specified bounds. If performing overlapping only replacement, the shape cut out is the shape of the secondary data used for 
+  replacement.
 * Combine the cut out reference data back with the replacement data from the secondary map
 * Snap replacement linear features that are disconnected at the specified bounds seam back to the reference data
 * Derive a difference changeset between the new map with replacement data added and the original reference map with removed data
@@ -90,13 +94,24 @@ GeoJSON output from the Overpass API is not supported as an input to this comman
 
 === Bounds Handling
 
-The handling of the specified replacement bounds is done in a lenient fashion. This makes replacement of gridded task cells possible without
-corrupting reference data. The behavior affects the different feature geometry types thusly:
+The handling of the specified replacement bounds is done in a lenient fashion when replacing one set of data with another. This makes 
+replacement of gridded task cells possible without corrupting reference data. This behavior affects the different feature geometry types thusly:
 
-* Point features: N/A as boundary relationships are only handled in a strict fashion.
+* Point features: N/A as boundary relationships are only handled in a strict fashion where no points outside of the bounds are modified.
 * Linear features either inside or overlapping the specified bounds are completely replaced.
 * Polygon features either inside or overlapping the specified bounds are completely replaced. Polygon features are never split but may be 
   conflated at the specified boundary if conflation is enabled.
+
+Alternatively, when removing data without replacing it with new data (cut only workflow), the handling of the specified replacement bounds is 
+done in a strict fashion. This behavior affects the different feature geometry types thusly:
+
+* Point features: Only point features completely inside the specified bounds are replaced.
+* Linear features: Only sections of linear features within the specified bounds are modified, and they may be cut where they cross the bounds 
+  and optionally joined back up with reference data via way snapping (see "Unconnected Way Snapping" section).
+* Polygon features: Only polygon features completely inside the specified bounds are replaced. Polygon features are never split.
+
+Currently, only rectangular bounding box or closed polygon shapes are supported for the bounds. Support for other geometries may be added going
+forward.
 
 ==== Out of Bounds Connected Ways
 
@@ -180,7 +195,7 @@ If you are using this command with file based data sources and in conjunction wi
 following configuration options to properly manage references to missing child elements (`changeset-derive-replacment` sets these options 
 automatically internally for itself):
 
-* +convert.bounding.box.remove.missing.elements+=false
+* +convert.bounds.remove.missing.elements+=false
 * +map.reader.add.child.refs.when.missing+=true
 * +log.warnings.for.missing.elements+=false
 

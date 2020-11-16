@@ -30,7 +30,6 @@
 // Hoot
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/elements/Relation.h>
-#include <hoot/core/io/Serializable.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 
@@ -45,7 +44,7 @@ class OsmMap;
  * Goes through all building relations and updates the outline of the building by taking the union
  * of all the building parts.
  */
-class BuildingOutlineUpdateOp : public OsmMapOperation, public Serializable
+class BuildingOutlineUpdateOp : public OsmMapOperation
 {
 public:
 
@@ -57,10 +56,6 @@ public:
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   virtual std::string getClassName() const { return className(); }
-
-  virtual void readObject(QDataStream& /*is*/) { }
-
-  virtual void writeObject(QDataStream& /*os*/) const { }
 
   virtual QString getInitStatusMessage() const
   { return "Updating building outlines..."; }
