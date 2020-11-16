@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * General utilities to be used with conflation
  */
 class ConflateUtils
 {
@@ -43,24 +43,24 @@ class ConflateUtils
 public:
 
   /**
-   * TODO
+   * Writes any data that cannot be conflated
    *
-   * @param map
-   * @param outputFile
-   * @return
+   * @param map the map to examine
+   * @param output the URL to write the data to
+   * @return the number of features written
    */
-  static int writeNonConflatable(const ConstOsmMapPtr& map, const QString& outputFile);
+  static int writeNonConflatable(const ConstOsmMapPtr& map, const QString& output);
 
   /**
-   * TODO
+   * Writes the differential between to maps
    *
-   * @param mapUrl1
-   * @param mapUrl2
-   * @param bounds
-   * @param outputFile
+   * @param mapUrl1 map 1 URL
+   * @param mapUrl2 map 2 URL
+   * @param bounds the area over which to calculate the differential
+   * @param output the URL to write the data to
    */
   static void writeDiff(const QString& mapUrl1, const QString& mapUrl2,
-                        const geos::geom::Envelope& bounds, const QString& outputFile);
+                        const geos::geom::Envelope& bounds, const QString& output);
 };
 
 }

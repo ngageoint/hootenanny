@@ -63,7 +63,7 @@ public:
    * @param toReplace URL to the data to replace; must be an OSM API database
    * @param replacement URL to the replacement data; must be a Hoot API database
    * @param taskGrid the task grid that partitions the individual replacement operations
-   * @return todo
+   * @return a map with replaced data
    */
   OsmMapPtr replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
 

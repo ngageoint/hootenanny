@@ -37,7 +37,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Calculates select data quality metrics for a map and tags features with issues
  *
  * There is likely overlap between this and the integrated JOSM validation. This was primarily
  * created as a quick way to diagnose C&R output quality and may go away or be merged with other
@@ -53,22 +53,22 @@ public:
   virtual ~DataQualityMetricTagger() = default;
 
   /**
-   * TODO
+   * Calculates select data quality metrics for a map and tags features with issues
    */
   virtual void apply(OsmMapPtr& map);
 
   virtual std::string getClassName() const { return className(); }
 
   virtual QString getInitStatusMessage() const
-  { return "TODO..."; }
+  { return "Calculating data quality metrics..."; }
 
   virtual QString getCompletedStatusMessage() const
   {
-    return "TODO";
+    return "Calculated data quality metrics.";
   }
 
   virtual QString getDescription() const
-  { return "TODO"; }
+  { return "Calculates select data quality metrics for a map and tags features with issues"; }
 
   int getNumOrphanedNodesInOutput() const { return _orphanedNodes; }
   int getNumDisconnectedWaysInOutput() const { return _disconnectedWays; }

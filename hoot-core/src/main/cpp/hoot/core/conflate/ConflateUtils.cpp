@@ -46,9 +46,9 @@
 namespace hoot
 {
 
-int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString& outputFile)
+int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString& output)
 {
-  LOG_STATUS("Writing non-conflatable data to: ..." << outputFile.right(25) << " ...");
+  LOG_STATUS("Writing non-conflatable data to: ..." << output.right(25) << " ...");
   OsmMapPtr nonConflatableMap(new OsmMap(map));
   std::shared_ptr<RemoveElementsVisitor> elementRemover(new RemoveElementsVisitor(true));
   elementRemover->setRecursive(true);
@@ -58,13 +58,13 @@ int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString&
   nonConflatableMap->visitRw(*elementRemover);
   if (nonConflatableMap->size() > 0)
   {
-    OsmMapWriterFactory::write(nonConflatableMap, outputFile);
+    OsmMapWriterFactory::write(nonConflatableMap, output);
   }
   return nonConflatableMap->size();
 }
 
 void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
-                              const geos::geom::Envelope& bounds, const QString& outputFile)
+                              const geos::geom::Envelope& bounds, const QString& output)
 {
   QElapsedTimer timer;
   timer.start();
@@ -139,8 +139,8 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
 
   LOG_STATUS(
     "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " to: ..." << outputFile.right(25) << "...");
-  IoUtils::saveMap(diffMap, outputFile);
+    " to: ..." << output.right(25) << "...");
+  IoUtils::saveMap(diffMap, output);
   LOG_STATUS(
     "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
     " in: " << StringUtils::millisecondsToDhms(timer.elapsed()));
