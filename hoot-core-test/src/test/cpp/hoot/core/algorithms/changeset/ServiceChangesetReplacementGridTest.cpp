@@ -74,7 +74,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(poi1Test);
   CPPUNIT_TEST(refFilteredToEmpty1Test);
   CPPUNIT_TEST(refSinglePoint1Test);
-//    CPPUNIT_TEST(relationCrop1Test);
+  CPPUNIT_TEST(relationCrop1Test);
 //    CPPUNIT_TEST(riverbank1Test);
 //    CPPUNIT_TEST(roundabouts1Test);
 //    CPPUNIT_TEST(secFilteredToEmpty1Test);
@@ -312,6 +312,42 @@ public:
       _replacementDataUrl,
       BoundsStringTaskGridGenerator(
         "52.938359,32.727214,53.769359,32.853214", _outputPath + "/" + taskGridFileName)
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void relationCrop1Test()
+  {
+    // Tests to make sure cropping of relations doesn't leave behind missing relation member
+    // references.
+
+    _testName = "relationCrop1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
+    conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 5.0);
+    conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 0.5);
+
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsStringTaskGridGenerator(
+        "7.910156,5.003394,7.998047,5.090946", _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
