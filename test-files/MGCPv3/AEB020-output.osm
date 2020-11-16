@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-25.49292616677" minlon="153.13344432732" maxlat="-25.48599365287" maxlon="153.14836175575"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4928922407999998" lon="153.1335772145399972"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4927915626800008" lon="153.1399037636599871"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4859936528700004" lon="153.1397711401100139"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4860941572400002" lon="153.1334443273200066"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4929261667700011" lon="153.1420352066199939"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4928254886999994" lon="153.1483617557499883"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4860275807400001" lon="153.1482291322300000"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4861280851200007" lon="153.1419023194000033"/>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-5"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="source" v="mgcp:aeb020"/>
+        <tag k="undergrowth:density" v="40"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:17.420Z"/>
+        <tag k="name" v="Scrub"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{f5d18b0b-cdf3-418f-9392-23bb16d443ac}"/>
+        <tag k="natural" v="scrub"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="source" v="mgcp:aeb020"/>
+        <tag k="undergrowth:density" v="40"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:17.353Z"/>
+        <tag k="name" v="Heath"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{dc04b9cd-a7a1-433a-8aec-19cdc6203e72}"/>
+        <tag k="natural" v="heath"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

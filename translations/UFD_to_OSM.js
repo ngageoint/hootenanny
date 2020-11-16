@@ -467,7 +467,7 @@ ufd = {
     ['BFC','79','amenity','rescue'], // Rescue
     ['BFC','Rescue','amenity','rescue'], // Rescue
     ['BFC','82','man_made','lighthouse'], // Lighthouse
-    ['BFC','','man_made','lighthouse'], // Lighthouse
+    ['BFC','Lighthouse','man_made','lighthouse'], // Lighthouse
     ['BFC','83','power','plant'],
     ['BFC','Power Generation','power','plant'],
     ['BFC','84','industrial','filtration_plant'], // Filtration Plant

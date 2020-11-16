@@ -30,6 +30,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/changeset/TaskGrid.h>
+#include <hoot/core/ops/DataQualityMetricTagger.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -45,12 +46,8 @@ class OsmApiDbSqlChangesetApplier;
  * This class can replace data in an OSM API database across multiple AOI's via changeset generation
  * and application. Its primarily meant as a testing harness to support
  * ServiceChangesetReplacementGridTest. However, in theory, with some tweaks it could be used in a
- * production environment if desired.
- *
- * Either an auto node density generated, uniform, or file based input task grid may be used to
- * partition the data replacements. The file based task grid supports one or more bounds input
- * files. Node density calc requires reading in all of the replacement node data, so may not be
- * feasible when replacing extremely large amounts of data.
+ * production environment if desired. Any of the TaskGridGenerator implementations can be used to
+ * create a task grid to pass to this class.
  */
 class ChangesetTaskGridReplacer
 {
@@ -61,18 +58,16 @@ public:
   virtual ~ChangesetTaskGridReplacer() = default;
 
   /**
-   * Replaces data
+   * Replaces data within a task grid cell
    *
    * @param toReplace URL to the data to replace; must be an OSM API database
    * @param replacement URL to the replacement data; must be a Hoot API database
    * @param taskGrid the task grid that partitions the individual replacement operations
+   * @return a map with replaced data
    */
-  void replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
+  OsmMapPtr replace(const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid);
 
-  int getNumOrphanedNodesInOutput() const { return _orphanedNodes; }
-  int getNumDisconnectedWaysInOutput() const { return _disconnectedWays; }
-  int getNumEmptyWaysInOutput() const { return _emptyWays; }
-  int getNumDuplicateElementPairsInOutput() const { return _duplicateElementPairs; }
+  const DataQualityMetricTagger getOutputMetrics() { return _metricTagger; }
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
@@ -84,8 +79,6 @@ public:
   { _killAfterNumChangesetDerivations = numDerivations; }
   void setWriteFinalOutput(QString output) { _finalOutput = output; }
   void setTagQualityIssues(bool tag) { _tagQualityIssues = tag; }
-  void setCalcDiffWithReplacement(bool calcDiff) { _calcDiffWithReplacement = calcDiff; }
-  void setOutputNonConflatable(bool output) { _outputNonConflatable = output; }
 
 private:
 
@@ -108,7 +101,7 @@ private:
   QList<int> _taskCellSkipIds;
   // swap the order in which the task grid cells; useful for testing adjacency replacement issues
   bool _reverseTaskGrid;
-  // the are of data being replaced
+  // the area of data being replaced
   geos::geom::Envelope _taskGridBounds;
 
   // derives the replacement changesets
@@ -130,21 +123,10 @@ private:
 
   // optional location to write the final completely replaced ref output
   QString _finalOutput;
+
   // adds tags to features that are suspect as result of the replacement op
   bool _tagQualityIssues;
-  // the number of orphaned nodes found in the final output if _tagQualityIssues=true
-  int _orphanedNodes;
-  // the number of disconnected ways found in the final output if _tagQualityIssues=true
-  int _disconnectedWays;
-  // the number of empty ways found in the final output if _tagQualityIssues=true
-  int _emptyWays;
-  // the number of duplicated elements found in the final output if _tagQualityIssues=true
-  int _duplicateElementPairs;
-  // uses diff conflate to calculate the difference between the final replaced data and the original
-  // data used for replacement
-  bool _calcDiffWithReplacement;
-  // write non-conflatable elements to a separate file
-  bool _outputNonConflatable;
+  DataQualityMetricTagger _metricTagger;
 
   void _initConfig();
 
@@ -154,17 +136,8 @@ private:
   void _initChangesetStats();
   void _printChangesetStats();
 
-  // TODO: move the quality issue tagging and diff gen out to a separate class
-
-  // writes out all of the ref data; useful for debugging...expensive
-  void _getUpdatedData(const QString& outputFile);
-  // tags elements with potential quality issues
-  void _writeQualityIssueTags(OsmMapPtr& map);
-  // writes out elements that can't be conflated and therefore, won't show up in a diff between
-  // replaced and replacement data; useful for debugging
-  void _writeNonConflatable(const ConstOsmMapPtr& map, const QString& outputFile);
-  // calcs the output diff
-  void _calculateDiffWithOriginalReplacementData(const QString& outputFile);
+  // writes out the updated data
+  OsmMapPtr _writeUpdatedData(const QString& outputFile);
 };
 
 }

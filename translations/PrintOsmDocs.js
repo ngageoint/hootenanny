@@ -28,7 +28,7 @@
 /*
    PrintOsmDocs.js
 
-   This file "hijacks" either the "initialize" or the "translateToOsm" function 
+   This file "hijacks" either the "initialize" or the "translateToOsm" function
    to print out documentation.
 
    This is the default translation file for hoot print-docs
@@ -185,7 +185,7 @@ function finalize()
 
 // We are not using this any more.
 function translateToOsm(attrs, layerName, geometryType)
-{ 
+{
   return null;
 }
 
@@ -237,11 +237,11 @@ function createLookup(tagList, one2one, source)
       if (tagList[tagShort][hValue])
       {
         // Same tag and attribute so update the source of the tag
-        if (tagList[tagShort][hValue]['src'].indexOf(source) == -1 || tagList[tagShort][hValue]['src'].indexOf(row[0]) == -1)  
+        if (tagList[tagShort][hValue]['src'].indexOf(source) == -1 || tagList[tagShort][hValue]['src'].indexOf(row[0]) == -1)
         {
           tsrc = tagList[tagShort][hValue]['src'] + ', ' + row[1] + ':' + source;
 
-          if (row[0] !== 'F_CODE') 
+          if (row[0] !== 'F_CODE')
           {
             tsrc = tagList[tagShort][hValue]['src'] + ', ' + row[0] + ':' + source;
             tagList[tagShort][hValue]['desc'] = desc;
@@ -299,7 +299,7 @@ function createBiasedLookup(tagList, one2one, source)
 
     if (tagList[tagShort][hValue])
     {
-      if (tagList[tagShort][hValue]['src'].indexOf(source) == -1 || tagList[tagShort][hValue]['src'].indexOf(attr) == -1)  
+      if (tagList[tagShort][hValue]['src'].indexOf(source) == -1 || tagList[tagShort][hValue]['src'].indexOf(attr) == -1)
       {
         tsrc = tagList[tagShort][hValue]['src'] + ', ' + attr + ':' + source;
         tagList[tagShort][hValue]['src'] = tsrc;
@@ -518,7 +518,7 @@ function dumpCsvTags(tagList)
       value = tagList[shortTag][val]['value'];
       desc = tagList[shortTag][val]['desc'];
       source = tagList[shortTag][val]['src'].replace(/,/g,';');
-            
+
       print('"' + tag + '","' + value + '","' + desc + '","' + source + '"');
     }
   }
@@ -1426,10 +1426,10 @@ function attrLookupTable()
     'UTY3':'Accessible Utility Type [3]',
     'UUC':'Utility Facility Type',
     'VAL':'Value - A Generic Value',
-    'VAV':'Variation Anomaly Value',
-    'VAVC':'Magnetic Variation Anomaly <interval closure>',
-    'VAVL':'Magnetic Variation Anomaly <lower value>',
-    'VAVU':'Magnetic Variation Anomaly <upper value>',
+    'VAV':'Local Variation Anomaly Value',
+    'VAVC':'Local Magnetic Variation Anomaly <interval closure>',
+    'VAVL':'Local Magnetic Variation Anomaly <lower value>',
+    'VAVU':'Local Magnetic Variation Anomaly <upper value>',
     'VCA':'Void Collection Attribute/Void Collection Reason',
     'VCA1':'Void Collection Reason [1]',
     'VCA2':'Void Collection Reason [2]',

@@ -1189,9 +1189,9 @@ dnc.rules = {
     // TRE - Tree Category
     // ['TRE','0','wood','unknown'], // Unknown
     ['TRE','0',undefined,undefined], // Unknown
-    ['TRE','1','wood','deciduous'], // Deciduous
-    ['TRE','2','wood','evergreen'], // Evergreen
-    ['TRE','3','wood','mixed'], // Mixed
+    ['TRE','1','leaf_cycle','deciduous'], // Deciduous
+    ['TRE','2','leaf_cycle','evergreen'], // Evergreen
+    ['TRE','3','leaf_cycle','mixed'], // Mixed
 
 
     // TMC - Top Mark Characteristic

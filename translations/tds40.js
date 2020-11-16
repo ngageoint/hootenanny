@@ -284,8 +284,7 @@ tds40 = {
           if (val in transMap)
           {
             notUsed[transMap[val][1]] = transMap[val][2];
-            // Debug:
-            // print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+            hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
           }
 
           hoot.logDebug('Validate: Dropping ' + val + ' = ' + attrs[val] + ' from ' + attrs.F_CODE);
@@ -720,6 +719,14 @@ tds40 = {
       }
     } // End in attrs loop
 
+    // Undergrowth Density in Thicket & Swamp
+    if (attrs.DMBL && (attrs.DMBL == attrs.DMBU))
+    {
+      tags['undergrowth:density'] = attrs.DMBL;
+      delete attrs.DMBU;
+      delete attrs.DMBL;
+    }
+
     // Drop all of the XXX Closure default values IFF the associated attributes are not set
     // Doing this after the main cleaning loop so all of the -999999 values are
     // already gone and we can just check for existance
@@ -795,6 +802,26 @@ tds40 = {
           // print('Memo: Add: ' + i + ' = ' + tTags[i]);
           if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
           tags[i] = tTags[i];
+
+          // Now check if this is a synonym etc. If so, remove the other tag.
+          if (i in tds40.fcodeLookupOut) // tag -> FCODE table
+          {
+            if (tags[i] in tds40.fcodeLookupOut[i])
+            {
+              var row = tds40.fcodeLookupOut[i][tags[i]];
+
+              // Now find the "real" tag that comes frm the FCode
+              if (row[1] in tds40.fcodeLookup['F_CODE'])
+              {
+                var row2 = tds40.fcodeLookup['F_CODE'][row[1]];
+                // If the tags match, delete it
+                if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
+                {
+                  delete tags[row2[0]];
+                }
+              }
+            }
+          }
         }
       }
 
@@ -1409,7 +1436,6 @@ tds40 = {
         ['t.natural == "desert" && t.surface','t.desert_surface = t.surface; delete t.surface'],
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
-        ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
         ['t.power == "pole"','t["cable:type"] = "power";t["tower:shape"] = "pole"'],
         ['t.power == "tower"','t["cable:type"] = "power"; t.pylon = "yes"; delete t.power'],
         ['t.power == "line"','t["cable:type"] = "power", t.cable = "yes"; delete t.power'],
@@ -1796,15 +1822,17 @@ tds40 = {
       for (var col in tags)
       {
         var value = tags[col];
-        if (col in tds40.fcodeLookup)
+        if (col in tds40.fcodeLookup && (value in tds40.fcodeLookup[col]))
         {
-          if (value in tds40.fcodeLookup[col])
-          {
             var row = tds40.fcodeLookup[col][value];
             attrs.F_CODE = row[1];
             // Debug
             // print('FCODE: Got ' + attrs.F_CODE);
-          }
+        }
+        else if (col in tds40.fcodeLookupOut && (value in tds40.fcodeLookupOut[col]))
+        {
+          var row = tds40.fcodeLookupOut[col][value];
+          attrs.F_CODE = row[1];
         }
       }
     } // End find F_CODE
@@ -2265,6 +2293,17 @@ tds40 = {
       break;
     } // End Wetlands
 
+    // Undergrowth Density is not in Brush (EB070)
+    if (attrs.F_CODE !== 'EB070' || notUsedTags['undergrowth:density'])
+    {
+      if (!(attrs.DMBL || attrs.DMBU))
+      {
+        attrs.DMBU = notUsedTags['undergrowth:density'];
+        attrs.DMBL = notUsedTags['undergrowth:density'];
+        delete notUsedTags['undergrowth:density'];
+      }
+    }
+
   }, // End applyToTdsPostProcessing
 
   // #####################################################################################################
@@ -2324,6 +2363,10 @@ tds40 = {
       fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds40.rules.fcodeOne2oneIn);
 
       tds40.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+
+      // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
+      // translation to an FCode
+      tds40.fcodeLookupOut = translate.createBackwardsLookup(tds40.rules.fcodeOne2oneOut);
       // Debug
       // translate.dumpOne2OneLookup(tds40.fcodeLookup);
     }
@@ -2456,30 +2499,6 @@ tds40 = {
     // Debug:
     if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
-    // Use the FCODE to add some tags
-    if (attrs.F_CODE)
-    {
-        var ftag = tds40.fcodeLookup['F_CODE'][attrs.F_CODE];
-        if (ftag)
-        {
-            if (!tags[ftag[0]])
-            {
-                tags[ftag[0]] = ftag[1];
-            }
-            else
-            {
-                // Debug
-                hoot.logDebug('Tried to replace: ' + ftag[0] + '=' + tags[ftag[0]] + '  with ' + ftag[1]);
-            }
-            // Debug: Dump out the tags from the FCODE
-            // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
-        }
-        else
-        {
-            hoot.logTrace('Translation for F_CODE ' + attrs.F_CODE + ' not found');
-        }
-    }
-
     // The Nuke Option: If we have a relation, drop the feature and carry on
     if (tags['building:part']) return null;
 
@@ -2492,9 +2511,14 @@ tds40 = {
     if (tds40.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Export
-      fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds40.rules.fcodeOne2oneOut);
+      // fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds40.rules.fcodeOne2oneOut);
 
       tds40.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+
+      // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
+      // translation to an FCode
+      tds40.fcodeLookupOut = translate.createBackwardsLookup(tds40.rules.fcodeOne2oneOut);
+
       // Debug
       // translate.dumpOne2OneLookup(tds40.fcodeLookup);
     }
@@ -2545,13 +2569,6 @@ tds40 = {
     // Debug
     if (tds40.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
-    // If we have unused tags, add them to the memo field
-    if (Object.keys(notUsedTags).length > 0 && tds40.configOut.OgrNoteExtra == 'attribute')
-    {
-      var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-      attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
-    }
-
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
     // push the feature to o2s layer
@@ -2576,6 +2593,13 @@ tds40 = {
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           tds40.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
+
+          // If we have unused tags, add them to the memo field
+          if (Object.keys(notUsedTags).length > 0 && tds40.configOut.OgrNoteExtra == 'attribute')
+          {
+            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
+          }
 
           // Now set the FCSubtype
           // NOTE: If we export to shapefile, GAIT _will_ complain about this

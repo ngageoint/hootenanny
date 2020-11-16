@@ -1,0 +1,3123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326" schema="TDSv40">
+    <bounds minlat="-25.48013833250663" minlon="153.0711096159979" maxlat="-25.34891749599503" maxlon="153.21576567431"/>
+    <node visible="true" id="-322" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760491738068836" lon="153.1569020100675118">
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.576Z"/>
+        <tag k="uuid" v="{0d2229c6-e6f1-476b-8904-34a9c4cda37b}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:transportation_station_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="public_transport" v="station"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-321" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3620022145142556" lon="153.1343801890209875">
+        <tag k="underground" v="no"/>
+        <tag k="name" v="Train Station"/>
+        <tag k="public_transport" v="station"/>
+        <tag k="transport:type:2" v="bus"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.575Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="railway_transport"/>
+        <tag k="uuid" v="{6928c36d-69a3-43f4-ab53-4e1ac7e2ffba}"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="addr:full" v="Another Station"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="Above Ground"/>
+        <tag k="shelter:type" v="bomb"/>
+        <tag k="source" v="tdsv40:transportation_station_p"/>
+        <tag k="condition" v="functional"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="railway" v="station"/>
+        <tag k="transport:type" v="railway"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="sawtoothed"/>
+        <tag k="building:multi_unit" v="yes"/>
+    </node>
+    <node visible="true" id="-320" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3552987319437761" lon="153.1343801890209875">
+        <tag k="underground" v="yes"/>
+        <tag k="name" v="Station"/>
+        <tag k="transport:type:2" v="bus"/>
+        <tag k="public_transport" v="station"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.575Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{9e5f2b36-e9e5-4e61-8ccb-bffb08256dd9}"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="addr:full" v="A Station. Station Street"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="Underground Station"/>
+        <tag k="shelter:type" v="bomb"/>
+        <tag k="source" v="tdsv40:transportation_station_p"/>
+        <tag k="condition" v="functional"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="transport:type" v="underground_railway"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="flat"/>
+        <tag k="building:multi_unit" v="no"/>
+    </node>
+    <node visible="true" id="-319" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061774357934915" lon="153.1570106137423295"/>
+    <node visible="true" id="-318" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3940299541435799" lon="153.1570980056966107"/>
+    <node visible="true" id="-317" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4060991655330568" lon="153.0873909989088588"/>
+    <node visible="true" id="-316" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831416" lon="153.0874783908631684"/>
+    <node visible="true" id="-315" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4063613413960070" lon="153.0780400597970470"/>
+    <node visible="true" id="-314" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3942138597460847" lon="153.0781274517513566"/>
+    <node visible="true" id="-313" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061865574873735" lon="153.0918479885789623"/>
+    <node visible="true" id="-312" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3940390758374583" lon="153.0919353805332719"/>
+    <node visible="true" id="-311" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4062739494416903" lon="153.0727091505837620"/>
+    <node visible="true" id="-310" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3941264677917715" lon="153.0727965425381001"/>
+    <node visible="true" id="-309" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244269" lon="153.0955184506601938"/>
+    <node visible="true" id="-308" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3937768999745153" lon="153.0956058426144750"/>
+    <node visible="true" id="-307" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4063613413960070" lon="153.0827592253301077"/>
+    <node visible="true" id="-306" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3942138597460882" lon="153.0828466172844173"/>
+    <node visible="true" id="-305" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3756797764289352" lon="153.1634894436132868">
+        <tag k="man_made" v="tower"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.565Z"/>
+        <tag k="uuid" v="{0bf75068-c554-4863-9c65-7f1e049364ac}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:tower_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-304" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670759346808197" lon="153.1601997394154751">
+        <tag k="guyed" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.565Z"/>
+        <tag k="height" v="57"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="tower"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{d8fae562-b5ce-4529-92e4-dd209f69ee31}"/>
+        <tag k="tower:shape" v="truss"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="design" v="a-frame"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="communication:radio_broadcast" v="yes"/>
+        <tag k="note" v="Another Tower"/>
+        <tag k="material" v="aluminium"/>
+        <tag k="source" v="tdsv40:tower_p"/>
+        <tag k="condition" v="functional"/>
+        <tag k="ele:max" v="304.98230000000001"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+    </node>
+    <node visible="true" id="-303" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3677672298368933" lon="153.1793969750691815">
+        <tag k="guyed" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.564Z"/>
+        <tag k="height" v="59"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="tower"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{8dde26f8-3143-4d7a-b021-65dade3722da}"/>
+        <tag k="tower:shape" v="truss"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="design" v="a-frame"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="tower:type" v="industrial"/>
+        <tag k="material" v="metal"/>
+        <tag k="source" v="tdsv40:tower_p"/>
+        <tag k="condition" v="functional"/>
+        <tag k="ele:max" v="306.32649999"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="communication:television" v="yes"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="flat_with_parapet"/>
+    </node>
+    <node visible="true" id="-302" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615511146127020" lon="153.1794467435805132">
+        <tag k="guyed" v="yes"/>
+        <tag k="name" v="Barad Dur"/>
+        <tag k="height:object" v="500"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.563Z"/>
+        <tag k="height" v="50"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="tower"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{3df8f982-d64a-4196-83d0-2c6c01dc6ec9}"/>
+        <tag k="tower:shape" v="mast"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="design" v="t-frame"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="communication:radio_broadcast" v="yes"/>
+        <tag k="note" v="Don't take the ring here"/>
+        <tag k="supported" v="yes"/>
+        <tag k="tower:type" v="guard"/>
+        <tag k="roof:shape:2" v="flat_with_parapet"/>
+        <tag k="material" v="masonry"/>
+        <tag k="source" v="tdsv40:tower_p"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="ele:max" v="782.60809999000003"/>
+        <tag k="tower:type:2" v="observation"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="conical"/>
+    </node>
+    <node visible="true" id="-301" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553501507543295" lon="153.1796251043605821">
+        <tag k="man_made" v="tower"/>
+        <tag k="material" v="wood"/>
+        <tag k="tower:type" v="communication"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.563Z"/>
+        <tag k="uuid" v="{59302be3-1415-48eb-96cc-c3d482af34e1}"/>
+        <tag k="communication:cellular_phone" v="yes"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="design" v="i-frame"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:tower_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="tower:shape" v="pole"/>
+        <tag k="light:obstacle" v="yes"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-300" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3493632724132105" lon="153.1798619156940617">
+        <tag k="guyed" v="no"/>
+        <tag k="name" v="Tower 1"/>
+        <tag k="height:object" v="10"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.562Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="man_made" v="tower"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{18021657-b6e6-4b01-b5a4-41329def51d5}"/>
+        <tag k="tower:shape" v="truss"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="design" v="a-frame"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="supported" v="no"/>
+        <tag k="tower:type" v="observation"/>
+        <tag k="material" v="metal"/>
+        <tag k="source" v="tdsv40:tower_p"/>
+        <tag k="condition" v="construction"/>
+        <tag k="communication:cellular_phone" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="domed"/>
+    </node>
+    <node visible="true" id="-299" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4593470571199987" lon="153.1543476756600057"/>
+    <node visible="true" id="-298" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4596209023799993" lon="153.1611718977299859"/>
+    <node visible="true" id="-297" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4527745839099993" lon="153.1575323126199919"/>
+    <node visible="true" id="-296" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4592101342600010" lon="153.1654180803500083"/>
+    <node visible="true" id="-295" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4529115140999984" lon="153.1690576654600022"/>
+    <node visible="true" id="-294" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4527745839099993" lon="153.1632949890399971"/>
+    <node visible="true" id="-293" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4614008813899986" lon="153.2121260892000123"/>
+    <node visible="true" id="-292" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4551023758900001" lon="153.2157656743100063"/>
+    <node visible="true" id="-291" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4549654481899985" lon="153.2100029978900011"/>
+    <node visible="true" id="-290" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4600316691099984" lon="153.1709532826999975"/>
+    <node visible="true" id="-289" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4603055128099989" lon="153.1777775047700061"/>
+    <node visible="true" id="-288" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4534592332900012" lon="153.1741379196699882"/>
+    <node visible="true" id="-287" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4598947470200017" lon="153.1820236873900001"/>
+    <node visible="true" id="-286" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4535961626900011" lon="153.1856632724999940"/>
+    <node visible="true" id="-285" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4534592332900012" lon="153.1799005960799889"/>
+    <node visible="true" id="-284" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607162771999995" lon="153.1862698700199985"/>
+    <node visible="true" id="-283" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609901193399999" lon="153.1930940920900071"/>
+    <node visible="true" id="-282" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4541438787600001" lon="153.1894545069800131"/>
+    <node visible="true" id="-281" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4605793558900011" lon="153.1973402747100010"/>
+    <node visible="true" id="-280" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4542808073899991" lon="153.2009798598199950"/>
+    <node visible="true" id="-279" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4541438787600001" lon="153.1952171833999898"/>
+    <node visible="true" id="-278" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4613324211500007" lon="153.2015864573399995"/>
+    <node visible="true" id="-277" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4616062618900010" lon="153.2084106794100080"/>
+    <node visible="true" id="-276" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4547600563600014" lon="153.2047710943000141"/>
+    <node visible="true" id="-275" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4482558004099992" lon="153.1581389101399964">
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="content" v="silage"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.553Z"/>
+        <tag k="uuid" v="{10a5246e-415f-4b1d-9c12-4c15ab1c10b4}"/>
+        <tag k="source" v="tdsv40:storage_tank_p"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-274" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4483927357299997" lon="153.1651147815900060">
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="content" v="water"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.552Z"/>
+        <tag k="uuid" v="{11489fd2-31fe-40f1-9417-6c4e2fa2194f}"/>
+        <tag k="source" v="tdsv40:storage_tank_p"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-273" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4485296709000011" lon="153.1710291073900123">
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="content" v="petroleum"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.552Z"/>
+        <tag k="uuid" v="{12449bc4-c059-4270-8d72-134fcf54291d}"/>
+        <tag k="source" v="tdsv40:storage_tank_p"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-272" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4486666059199997" lon="153.1760335369100119">
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="content" v="petroleum"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.552Z"/>
+        <tag k="uuid" v="{127b406c-964f-4403-a275-40f096adcabe}"/>
+        <tag k="source" v="tdsv40:storage_tank_p"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-271" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4245744247385659" lon="153.1629238369618804"/>
+    <node visible="true" id="-270" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4105742590785653" lon="153.1630803203818800"/>
+    <node visible="true" id="-269" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4105058179585654" lon="153.1566708559418828"/>
+    <node visible="true" id="-268" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244922219985661" lon="153.1565601416818936"/>
+    <node visible="true" id="-267" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061014703970187" lon="153.1479936409872096"/>
+    <node visible="true" id="-266" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3921013047370181" lon="153.1481501244072092"/>
+    <node visible="true" id="-265" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3920328636170183" lon="153.1417406599672120"/>
+    <node visible="true" id="-264" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4060192676570189" lon="153.1416299457072228"/>
+    <node visible="true" id="-263" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4247552979735012" lon="153.1739982921687897"/>
+    <node visible="true" id="-262" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4107532595826342" lon="153.1741547755892157"/>
+    <node visible="true" id="-261" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4106848093113484" lon="153.1677453111527143"/>
+    <node visible="true" id="-260" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4246730842377175" lon="153.1676345968936062"/>
+    <node visible="true" id="-259" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3888216059666583" lon="153.1481867669244252"/>
+    <node visible="true" id="-258" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3748195675757913" lon="153.1483432503448512"/>
+    <node visible="true" id="-257" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3747511173045055" lon="153.1419337859083498"/>
+    <node visible="true" id="-256" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3887393922308746" lon="153.1418230716492417"/>
+    <node visible="true" id="-255" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760170345997267" lon="153.1705357409823023">
+        <tag k="building" v="shed"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.540Z"/>
+        <tag k="uuid" v="{0b5a6bf6-341e-4d5e-9cdc-1467e4e5eed0}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:shed_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-254" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674131928516111" lon="153.1725601743348193">
+        <tag k="name" v="Another Shed"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.539Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="emergency_operations"/>
+        <tag k="uuid" v="{7cc3f7a2-845b-441e-a89f-d6939fb0f5f0}"/>
+        <tag k="building" v="shed"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="raw_material" v="no_raw_material"/>
+        <tag k="addr:full" v="In a garden"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="product" v="consumer_goods"/>
+        <tag k="by_product" v="no_byproduct"/>
+        <tag k="roof:shape:2" v="with_minaret"/>
+        <tag k="material" v="concrete"/>
+        <tag k="source" v="tdsv40:shed_p"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="flat"/>
+    </node>
+    <node visible="true" id="-253" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617991846666371" lon="153.1727598307532787">
+        <tag k="name" v="Another Garden Shed"/>
+        <tag k="construction" v="shed"/>
+        <tag k="material:vertical:2" v="wood"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.539Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use:2" v="meeting_place"/>
+        <tag k="use" v="warehouse"/>
+        <tag k="uuid" v="{b202f179-5156-4769-a5a0-031bb3468d10}"/>
+        <tag k="building" v="construction"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="raw_material" v="plant_material"/>
+        <tag k="addr:full" v="Jason's Backyard"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="In the backyard"/>
+        <tag k="product" v="coffee"/>
+        <tag k="by_product" v="slag"/>
+        <tag k="material" v="aluminium"/>
+        <tag k="source" v="tdsv40:shed_p"/>
+        <tag k="product:2" v="aircraft"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="with_smokestack"/>
+    </node>
+    <node visible="true" id="-252" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4064996385290982" lon="153.1754344259749701"/>
+    <node visible="true" id="-251" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3945269407878129" lon="153.1753470340206604"/>
+    <node visible="true" id="-250" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244269" lon="153.1037332943659237"/>
+    <node visible="true" id="-249" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831452" lon="153.1036459024116141"/>
+    <node visible="true" id="-248" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528504" lon="153.1172790472848817"/>
+    <node visible="true" id="-247" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115615" lon="153.1171916553305721"/>
+    <node visible="true" id="-246" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528504" lon="153.1083650679446464"/>
+    <node visible="true" id="-245" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115615" lon="153.1082776759903084"/>
+    <node visible="true" id="-244" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528468" lon="153.1207747254575224"/>
+    <node visible="true" id="-243" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115615" lon="153.1206873335032128"/>
+    <node visible="true" id="-242" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244269" lon="153.0994510886044111"/>
+    <node visible="true" id="-241" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831452" lon="153.0993636966501299"/>
+    <node visible="true" id="-240" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4055748138071706" lon="153.1129094495690879"/>
+    <node visible="true" id="-239" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3936021160658782" lon="153.1128220576147783"/>
+    <node visible="true" id="-238" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4078116271233476" lon="153.1616898707166285"/>
+    <node visible="true" id="-237" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3929909377165544" lon="153.1616898707166285"/>
+    <node visible="true" id="-236" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814261" lon="153.1250590974901797"/>
+    <node visible="true" id="-235" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746257" lon="153.1250590974901797"/>
+    <node visible="true" id="-234" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3909535114443727" lon="153.0917627628958257"/>
+    <node visible="true" id="-233" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3761328220375830" lon="153.0917627628958257"/>
+    <node visible="true" id="-232" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814332" lon="153.0875679490886512"/>
+    <node visible="true" id="-231" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746364" lon="153.0875679490886512"/>
+    <node visible="true" id="-230" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814368" lon="153.1332739411958812"/>
+    <node visible="true" id="-229" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746364" lon="153.1332739411958812"/>
+    <node visible="true" id="-228" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3912156873073265" lon="153.1034732847741395"/>
+    <node visible="true" id="-227" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3763949979005297" lon="153.1034732847741395"/>
+    <node visible="true" id="-226" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906039436271129" lon="153.0723617490376682"/>
+    <node visible="true" id="-225" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757832542203197" lon="153.0723617490376682"/>
+    <node visible="true" id="-224" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906913355814332" lon="153.1207768917286955"/>
+    <node visible="true" id="-223" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3758706461746364" lon="153.1207768917286955"/>
+    <node visible="true" id="-222" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3907787275357393" lon="153.0956080088857050"/>
+    <node visible="true" id="-221" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3759580381289496" lon="153.0956080088857050"/>
+    <node visible="true" id="-220" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3907787275357393" lon="153.0828487835555336"/>
+    <node visible="true" id="-219" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3759580381289567" lon="153.0828487835555336"/>
+    <node visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1170190376930691"/>
+    <node visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832627" lon="153.1170190376930691"/>
+    <node visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1290791273887066"/>
+    <node visible="true" id="-215" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832627" lon="153.1290791273887066"/>
+    <node visible="true" id="-214" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3910409033986966" lon="153.0993658629212746"/>
+    <node visible="true" id="-213" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3762202139918998" lon="153.0993658629212746"/>
+    <node visible="true" id="-212" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3910409033986859" lon="153.1080176663985526"/>
+    <node visible="true" id="-211" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3762202139918962" lon="153.1080176663985526"/>
+    <node visible="true" id="-210" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3906039436271058" lon="153.0780422260681917"/>
+    <node visible="true" id="-209" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3757832542203161" lon="153.0780422260681917"/>
+    <node visible="true" id="-208" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3908661194900560" lon="153.1126494399773321"/>
+    <node visible="true" id="-207" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3760454300832663" lon="153.1126494399773321"/>
+    <node visible="true" id="-206" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054936234769109" lon="153.1653961250270868"/>
+    <node visible="true" id="-205" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054936234769109" lon="153.1655709089357345"/>
+    <node visible="true" id="-204" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3950941738649618" lon="153.1657456928443537"/>
+    <node visible="true" id="-203" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210955916261980" lon="153.0912362448987381"/>
+    <node visible="true" id="-202" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210955916261980" lon="153.0914110288073573"/>
+    <node visible="true" id="-201" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4106961420136308" lon="153.0915858127160334"/>
+    <node visible="true" id="-200" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4211829819587720" lon="153.0774283161168796"/>
+    <node visible="true" id="-199" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4211829819587720" lon="153.0776031000254420"/>
+    <node visible="true" id="-198" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4107835323468230" lon="153.0777778839340897"/>
+    <node visible="true" id="-197" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210955916261980" lon="153.0866918632743534"/>
+    <node visible="true" id="-196" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210955916261980" lon="153.0868666471829727"/>
+    <node visible="true" id="-195" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4106961420136308" lon="153.0870414310915919"/>
+    <node visible="true" id="-194" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210082012936383" lon="153.0952562747972650"/>
+    <node visible="true" id="-193" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4210082012936383" lon="153.0954310587058842"/>
+    <node visible="true" id="-192" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4106087516804315" lon="153.0956058426145603"/>
+    <node visible="true" id="-191" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4211829819587720" lon="153.0722721908121855"/>
+    <node visible="true" id="-190" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4211829819587720" lon="153.0724469747208332"/>
+    <node visible="true" id="-189" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4107835323468230" lon="153.0726217586294524"/>
+    <node visible="true" id="-188" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4208334206284654" lon="153.0824096575128408"/>
+    <node visible="true" id="-187" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4208334206284654" lon="153.0825844414214885"/>
+    <node visible="true" id="-186" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104339710140401" lon="153.0827592253301361"/>
+    <node visible="true" id="-185" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3756419372329312" lon="153.1764667880736681">
+        <tag k="pylon" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.505Z"/>
+        <tag k="uuid" v="{09e52823-d8af-4217-b6d9-93cf311b6195}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:pylon_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-184" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495773578195163" lon="153.1729240297067918">
+        <tag k="guyed" v="no"/>
+        <tag k="name" v="Fibre Optic"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.504Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{be171f7c-b9f1-47b6-8fcc-455508f11621}"/>
+        <tag k="tower:shape" v="pole"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="cable:type:2" v="load_bearing"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="cable:type" v="fibre-optic"/>
+        <tag k="note" v="Google Fibre"/>
+        <tag k="material" v="fibreglass"/>
+        <tag k="source" v="tdsv40:pylon_p"/>
+        <tag k="condition" v="construction"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="pylon" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+    </node>
+    <node visible="true" id="-183" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3559408969122906" lon="153.1729478316758275">
+        <tag k="name" v="Power Cable"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.504Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{64c05490-22b9-44d1-8fb9-7a3130c08f9b}"/>
+        <tag k="tower:shape" v="mast"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="design" v="t-frame"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="cable:type" v="power"/>
+        <tag k="note" v="Excel Energy"/>
+        <tag k="material" v="steel"/>
+        <tag k="source" v="tdsv40:pylon_p"/>
+        <tag k="power" v="tower"/>
+        <tag k="condition" v="functional"/>
+        <tag k="light:obstacle" v="yes"/>
+        <tag k="pylon" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+    </node>
+    <node visible="true" id="-182" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3756344686923896" lon="153.1828488876220433">
+        <tag k="building" v="hut"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.500Z"/>
+        <tag k="uuid" v="{09ac9b8a-e8fb-4796-8e1d-ef544550aedd}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:hut_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-181" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3671571362670178" lon="153.1669716498629157">
+        <tag k="building" v="hut"/>
+        <tag k="social_facility" v="shelter"/>
+        <tag k="amenity" v="social_facility"/>
+        <tag k="name" v="The Hut"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.500Z"/>
+        <tag k="uuid" v="{9beacdca-869f-4188-b894-5ab18e6a4fe3}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:hut_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="addr:full" v="Third village from the left"/>
+        <tag k="social_facility:for" v="refugee"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-180" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617150742330502" lon="153.1667106484875376">
+        <tag k="name" v="Clinic of some sort"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.499Z"/>
+        <tag k="uuid" v="{aad37b05-3771-44b8-ace3-3f7933d18890}"/>
+        <tag k="note" v="Yes, a memo"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:hut_p"/>
+        <tag k="abandoned:building" v="hut"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="addr:full" v="In a field"/>
+        <tag k="use:2" v="religious_activities"/>
+        <tag k="use" v="leprosy_care"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-179" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3559810354979049" lon="153.1666839561039239">
+        <tag k="building" v="hut"/>
+        <tag k="name" v="Holiday House"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.499Z"/>
+        <tag k="uuid" v="{5a9c3bdc-49b6-44c9-ba88-81c6b10104fb}"/>
+        <tag k="note" v="On the beach"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:hut_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="use" v="vacation_cottage"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-178" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498229434480358" lon="153.1669064749711140">
+        <tag k="building" v="construction"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.498Z"/>
+        <tag k="uuid" v="{21962f08-469a-4714-9080-e7362841c21f}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:hut_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="addr:full" v="On a hill"/>
+        <tag k="use" v="agriculture"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="construction" v="hut"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-177" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4430559554487559" lon="153.1554646313412604"/>
+    <node visible="true" id="-175" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4432229129679754" lon="153.1681534028019485"/>
+    <node visible="true" id="-174" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4290315238343148" lon="153.1683203603211609"/>
+    <node visible="true" id="-173" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4291984813535308" lon="153.1552976738220480"/>
+    <node visible="true" id="-172" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465385" lon="153.1043567070678648"/>
+    <node visible="true" id="-171" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196899" lon="153.1043567070678648"/>
+    <node visible="true" id="-170" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749391833" lon="153.1152383821503520"/>
+    <node visible="true" id="-169" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1155784344966264"/>
+    <node visible="true" id="-168" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1050368117605558"/>
+    <node visible="true" id="-167" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465385" lon="153.1218694029037124"/>
+    <node visible="true" id="-166" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196899" lon="153.1218694029037124"/>
+    <node visible="true" id="-165" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749392010" lon="153.1327510779861996"/>
+    <node visible="true" id="-164" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1330911303324740"/>
+    <node visible="true" id="-163" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.1225495075963750"/>
+    <node visible="true" id="-162" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607697472831163" lon="153.1369916769997133"/>
+    <node visible="true" id="-160" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609367048023358" lon="153.1496804484604013"/>
+    <node visible="true" id="-159" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4467453156686751" lon="153.1498474059796138"/>
+    <node visible="true" id="-158" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4469122731878912" lon="153.1368247194805008"/>
+    <node visible="true" id="-157" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3832074149299203" lon="153.1564881754041494">
+        <tag k="facility" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.489Z"/>
+        <tag k="uuid" v="{093f327f-1070-4ca6-a938-3d74cc3ca2b9}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:facility_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-156" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3496945658681376" lon="153.1480090525794253">
+        <tag k="name" v="Brick Works"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.489Z"/>
+        <tag k="height" v="2"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="facility" v="yes"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="manufacturing"/>
+        <tag k="man_made" v="works"/>
+        <tag k="uuid" v="{c484012c-333d-4ae9-b995-8f2190be07fd}"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="raw_material" v="clay"/>
+        <tag k="addr:full" v="A Street"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="by_product:2" v="cinders"/>
+        <tag k="note" v="Brick Works Memo"/>
+        <tag k="product" v="brick"/>
+        <tag k="raw_material:2" v="plant_material"/>
+        <tag k="by_product" v="ash"/>
+        <tag k="operator" v="military"/>
+        <tag k="source" v="tdsv40:facility_p"/>
+        <tag k="condition" v="construction"/>
+    </node>
+    <node visible="true" id="-155" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553218837283119" lon="153.1477128779552004">
+        <tag k="name" v="Religious Facility"/>
+        <tag k="material:vertical:2" v="stone"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.488Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="facility" v="yes"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{f9f1e2e7-7699-4dd7-8271-586970f42122}"/>
+        <tag k="building" v="mosque"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="addr:full" v="Yet another Street"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="Big Facility"/>
+        <tag k="religion" v="muslim"/>
+        <tag k="communication:mobile_phone" v="yes"/>
+        <tag k="material" v="prestressed_concrete"/>
+        <tag k="source" v="tdsv40:facility_p"/>
+        <tag k="condition" v="functional"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+    </node>
+    <node visible="true" id="-154" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670715207815647" lon="153.1480533459777291">
+        <tag k="material" v="stone"/>
+        <tag k="name" v="Unknown Facility"/>
+        <tag k="facility" v="yes"/>
+        <tag k="height" v="1"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.487Z"/>
+        <tag k="uuid" v="{cf031628-1b2d-47e5-a715-d567ee5c4963}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:facility_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="communication:mobile_phone" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-153" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495512104446377" lon="153.1531984712063377">
+        <tag k="material" v="steel"/>
+        <tag k="name" v="Health Care Facility"/>
+        <tag k="facility" v="yes"/>
+        <tag k="height" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.486Z"/>
+        <tag k="uuid" v="{2e21028a-196a-4abc-9235-e92296942756}"/>
+        <tag k="communication:cellular_phone" v="yes"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:facility_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="construction"/>
+        <tag k="use" v="healthcare"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-152" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616748649023123" lon="153.1478155630082654">
+        <tag k="material" v="mud-based_construction"/>
+        <tag k="amenity" v="school"/>
+        <tag k="name" v="Education Facility"/>
+        <tag k="facility" v="yes"/>
+        <tag k="height" v="2"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.486Z"/>
+        <tag k="uuid" v="{964ac67b-8ae1-4320-8a68-f804510d076b}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:facility_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="use" v="education"/>
+        <tag k="operator" v="private"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-151" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498177361501256" lon="153.1602973097869267">
+        <tag k="name" v="Airport Control Tower"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.482Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="air_traffic_control"/>
+        <tag k="man_made" v="tower"/>
+        <tag k="uuid" v="{65322290-34e9-4b36-90d0-0cf930ec8142}"/>
+        <tag k="control_tower" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="addr:full" v="On the left of the airfield"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="Yes it is"/>
+        <tag k="tower:type" v="observation"/>
+        <tag k="roof:shape:2" v="with_steeple"/>
+        <tag k="material" v="brick"/>
+        <tag k="source" v="tdsv40:control_tower_p"/>
+        <tag k="condition" v="functional"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="transport:type" v="air"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="pyramidal"/>
+    </node>
+    <node visible="true" id="-150" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3832208864663471" lon="153.1628278514775445">
+        <tag k="control_tower" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.482Z"/>
+        <tag k="uuid" v="{0922a751-b140-4653-8cfc-c994d8ce8329}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:control_tower_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-149" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616463209064165" lon="153.1602430413191769">
+        <tag k="name" v="Transport Tower"/>
+        <tag k="transport:type:2" v="road"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.481Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="air_transport"/>
+        <tag k="uuid" v="{a941263e-ca69-413d-9148-b2550cd5256d}"/>
+        <tag k="control_tower" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="addr:full" v="The other side of the airfield"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source" v="tdsv40:control_tower_p"/>
+        <tag k="condition" v="functional"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="light:obstacle" v="yes"/>
+        <tag k="transport:type" v="air"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="semi-cylindrical"/>
+    </node>
+    <node visible="true" id="-148" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3554990691362221" lon="153.1600891370858903">
+        <tag k="control_tower" v="yes"/>
+        <tag k="material" v="iron"/>
+        <tag k="name" v="Emergency Tower"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.481Z"/>
+        <tag k="uuid" v="{12d8e91e-46d3-4ef4-b66d-fea61c12aa20}"/>
+        <tag k="note" v="A good tower"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:control_tower_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="roof:shape" v="sawtoothed"/>
+        <tag k="condition" v="construction"/>
+        <tag k="use" v="emergency_operations"/>
+        <tag k="transport:type" v="inland_waterway"/>
+        <tag k="material:vertical:2" v="prestressed_concrete"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-146" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4061709624542829" lon="153.1700220079567600"/>
+    <node visible="true" id="-144" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3946352244845706" lon="153.1700220079567600"/>
+    <node visible="true" id="-143" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4049630701269500" lon="153.1248521338741000"/>
+    <node visible="true" id="-141" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3934273321572448" lon="153.1248521338741000"/>
+    <node visible="true" id="-140" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4049839618693873" lon="153.1290469476812177"/>
+    <node visible="true" id="-138" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3934482238996928" lon="153.1290469476812177"/>
+    <node visible="true" id="-137" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4051587457780350" lon="153.1333291534427303"/>
+    <node visible="true" id="-135" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3936230078083227" lon="153.1333291534427303"/>
+    <node visible="true" id="-134" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4430184274690063" lon="153.1730975101325214"/>
+    <node visible="true" id="-133" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4431884536421755" lon="153.1730975101325214"/>
+    <node visible="true" id="-132" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4436985321616653" lon="153.1839791852149233"/>
+    <node visible="true" id="-131" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4290762812696194" lon="153.1843192375612830"/>
+    <node visible="true" id="-130" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4290762812696336" lon="153.1737776148251555"/>
+    <node visible="true" id="-129" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465385" lon="153.0871840635784338"/>
+    <node visible="true" id="-128" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4604152964196899" lon="153.0871840635784338"/>
+    <node visible="true" id="-127" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609253749392010" lon="153.0980657386608925"/>
+    <node visible="true" id="-126" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.0984057910071670"/>
+    <node visible="true" id="-125" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4463031240471516" lon="153.0878641682710963"/>
+    <node visible="true" id="-124" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4600752440733764" lon="153.0725618126863594"/>
+    <node visible="true" id="-123" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4602452702465385" lon="153.0725618126863594"/>
+    <node visible="true" id="-122" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607553487660212" lon="153.0834434877688182"/>
+    <node visible="true" id="-121" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4461330978740001" lon="153.0837835401151210"/>
+    <node visible="true" id="-120" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4461330978739930" lon="153.0732419173790220"/>
+    <node visible="true" id="-119" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4780980184286605" lon="153.1206792196915671"/>
+    <node visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4782680446018368" lon="153.1206792196915671"/>
+    <node visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4787781231213373" lon="153.1315608947739975"/>
+    <node visible="true" id="-116" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4641558722292984" lon="153.1319009471203003"/>
+    <node visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4641558722292878" lon="153.1213593243842581"/>
+    <node visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4782680446018368" lon="153.1029964976825966"/>
+    <node visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4784380707750024" lon="153.1029964976825966"/>
+    <node visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4789481492944958" lon="153.1138781727650553"/>
+    <node visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4643258984024499" lon="153.1142182251113582"/>
+    <node visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4643258984024499" lon="153.1036766023752875"/>
+    <node visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4769078352165081" lon="153.0717116818205454"/>
+    <node visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4770778613896951" lon="153.0717116818205454"/>
+    <node visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4775879399091778" lon="153.0825933569029758"/>
+    <node visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4629656890171425" lon="153.0829334092493355"/>
+    <node visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4629656890171496" lon="153.0723917865132080"/>
+    <node visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4765677828702160" lon="153.0866739850588942"/>
+    <node visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4767378090433745" lon="153.0866739850588942"/>
+    <node visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4772478875628536" lon="153.0975556601413530"/>
+    <node visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4626256366708184" lon="153.0978957124876558"/>
+    <node visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4626256366708184" lon="153.0873540897515852"/>
+    <node visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4794582278139750" lon="153.1361516014494271"/>
+    <node visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4796282539871441" lon="153.1361516014494271"/>
+    <node visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4801383325066340" lon="153.1470332765318290"/>
+    <node visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816145880" lon="153.1473733288781887"/>
+    <node visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4655160816146022" lon="153.1368317061420612"/>
+    <node visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3828092892705186" lon="153.1696593985248001">
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.464Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="uuid" v="{079234b2-d394-43be-ba0e-cfa026788660}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3673729849577185" lon="153.1418234399279754">
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.464Z"/>
+        <tag k="landuse" v="commercial"/>
+        <tag k="uuid" v="{ba0c8a94-7f45-4628-b15d-4dfb2ad3d1ca}"/>
+        <tag k="note" v="No More Information"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="building:density" v="moderate"/>
+        <tag k="operator" v="military"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3619701421581674" lon="153.1419407639083943">
+        <tag k="name" v="Industrial Estate"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.463Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="uuid" v="{7b0243f4-29f8-40af-85f6-85e3d923f37e}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="use" v="manufacturing"/>
+        <tag k="building:density" v="dense"/>
+        <tag k="operator" v="public"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3555007213724899" lon="153.1417852005552049">
+        <tag k="name" v="Residential Area"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.463Z"/>
+        <tag k="landuse" v="residential"/>
+        <tag k="uuid" v="{af7324fd-6e0b-4347-8072-5978df62dddb}"/>
+        <tag k="note" v="Lots of houses"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._army"/>
+        <tag k="source" v="tdsv40:built-up_area_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="building:density" v="sparse"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498269825651583" lon="153.1418447358927040">
+        <tag k="name" v="Religious BUA"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.462Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="uuid" v="{6921f190-e551-465e-868c-2aaf4e0534ef}"/>
+        <tag k="security:resource_owner" v="AUS"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="defence_imagery_and_geospatial_organisation_(australia)"/>
+        <tag k="source" v="tdsv40:built-up_area_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="construction"/>
+        <tag k="use" v="religious_activities"/>
+        <tag k="operator" v="private"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3832105357953814" lon="153.1752433790204577">
+        <tag k="building:superstructure" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.458Z"/>
+        <tag k="uuid" v="{0770748d-7961-439b-afa8-3db918a97609}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_superstructure_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building:superstructure:type" v="minaret"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670881444417802" lon="153.1529877321243305">
+        <tag k="building:superstructure" v="yes"/>
+        <tag k="height" v="9"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.457Z"/>
+        <tag k="length" v="2"/>
+        <tag k="uuid" v="{04876e5f-f7c8-4836-8910-a7c35212a064}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="2"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_superstructure_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building:superstructure:type" v="minaret"/>
+        <tag k="ele:max" v="197"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3617221313676175" lon="153.1530528459964557">
+        <tag k="building:superstructure" v="yes"/>
+        <tag k="height" v="8"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.453Z"/>
+        <tag k="length" v="2"/>
+        <tag k="uuid" v="{4c2a2cf3-9dda-4a11-8f85-fde7797b92e6}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="2"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_superstructure_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building:superstructure:type" v="minaret"/>
+        <tag k="ele:max" v="194"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3556276313675930" lon="153.1532276663120342">
+        <tag k="building:superstructure" v="yes"/>
+        <tag k="height" v="13"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.453Z"/>
+        <tag k="length" v="3"/>
+        <tag k="uuid" v="{91b5cd10-c9a9-4573-983f-cd7eb41afbf5}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_superstructure_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building:superstructure:type" v="minaret"/>
+        <tag k="ele:max" v="198"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4611034992302336" lon="153.1561427633882317"/>
+    <node visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4612704567494568" lon="153.1688315348489198"/>
+    <node visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4470790676157996" lon="153.1689984923681322"/>
+    <node visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4472460251350157" lon="153.1559758058690193"/>
+    <node visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4241056323766337" lon="153.1003510491280508"/>
+    <node visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242725898958604" lon="153.1130398205887388"/>
+    <node visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4100812007621961" lon="153.1132067781079513"/>
+    <node visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102481582814121" lon="153.1001840916088383"/>
+    <node visible="true" id="-75" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4416183282124386" lon="153.1374167548776200"/>
+    <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4417852857316618" lon="153.1501055263383080"/>
+    <node visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4275938965980046" lon="153.1502724838575205"/>
+    <node visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4277608541172206" lon="153.1372497973584075"/>
+    <node visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1165035355785449"/>
+    <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690224" lon="153.1291923070392329"/>
+    <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102512269353582" lon="153.1293592645584454"/>
+    <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545778" lon="153.1163365780593324"/>
+    <node visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4409382235197938" lon="153.1052818081497833"/>
+    <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4411051810390099" lon="153.1179705796104713"/>
+    <node visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4269137919053527" lon="153.1181375371296838"/>
+    <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4270807494245723" lon="153.1051148506305708"/>
+    <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4407060294528407" lon="153.0888604530666726"/>
+    <node visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4408760556259956" lon="153.0888604530666726"/>
+    <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4413861341454854" lon="153.0997421281491597"/>
+    <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267638832534573" lon="153.1000821804954626"/>
+    <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267638832534573" lon="153.0895405577593351"/>
+    <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4405981711734626" lon="153.1210942422539745"/>
+    <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4407651286926786" lon="153.1337830137146625"/>
+    <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4265737395590214" lon="153.1339499712338750"/>
+    <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4267406970782446" lon="153.1209272847347620"/>
+    <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4242756585497993" lon="153.1358865193191434"/>
+    <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4244426160690118" lon="153.1485752907798314"/>
+    <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4102512269353582" lon="153.1487422482990439"/>
+    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4104181844545742" lon="153.1357195617999309"/>
+    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4399180664808178" lon="153.0712765735171388"/>
+    <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4400850240000302" lon="153.0839653449778268"/>
+    <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4258936348663731" lon="153.0841323024970393"/>
+    <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4260605923855891" lon="153.0711096159979263"/>
+    <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3830270195731771" lon="153.1813644355934230">
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.366Z"/>
+        <tag k="uuid" v="{05c95d85-aaa1-41ef-814d-87bc3c887d45}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3497234289403721" lon="153.1276267620594069">
+        <tag k="name" v="Mission"/>
+        <tag k="denomination" v="protestant"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.365Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="religious_activities"/>
+        <tag k="uuid" v="{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}"/>
+        <tag k="building" v="mission"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="We are on a Mission"/>
+        <tag k="religion" v="christian"/>
+        <tag k="shelter:type" v="fallout"/>
+        <tag k="building:manufactured" v="yes"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+    </node>
+    <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3675801195806976" lon="153.1278579166307736">
+        <tag k="name" v="A Mosque"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.365Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="islamic_prayer_hall"/>
+        <tag k="uuid" v="{fd5605a3-70b6-492b-896a-6bdb2e5e439c}"/>
+        <tag k="building" v="mosque"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="addr:full" v="Third building on the Left"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="Memo"/>
+        <tag k="religion" v="muslim"/>
+        <tag k="shelter:type" v="storm"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="condition" v="functional"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="with_minaret"/>
+    </node>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674189250628750" lon="153.1087615499867809">
+        <tag k="name" v="Abandoned Hospital"/>
+        <tag k="building:manufactured" v="yes"/>
+        <tag k="height" v="35"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.364Z"/>
+        <tag k="uuid" v="{5995970c-4266-429f-ae1e-5146a77eafee}"/>
+        <tag k="note" v="Closed for a long time"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="abandoned:building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="addr:full" v="Left of Main Street"/>
+        <tag k="use" v="healthcare"/>
+        <tag k="operator" v="public"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3668293056664318" lon="153.0800777400005188">
+        <tag k="name" v="A Barn"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.363Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="raising_animals"/>
+        <tag k="uuid" v="{26cb3035-d35e-4b09-aeba-ec27be6a0bb1}"/>
+        <tag k="building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="addr:full" v="On another Street"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="This is a barn"/>
+        <tag k="product" v="milk"/>
+        <tag k="communication:mobile_phone" v="yes"/>
+        <tag k="material" v="brick"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="condition" v="functional"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="with_steeple"/>
+    </node>
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674807106049265" lon="153.1213093558860976">
+        <tag k="name" v="Healthcare - Hospital"/>
+        <tag k="construction" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.362Z"/>
+        <tag k="height" v="60"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="healthcare"/>
+        <tag k="uuid" v="{b14e13c0-5ea4-4b04-8ce9-422e15b3037e}"/>
+        <tag k="building" v="construction"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="addr:full" v="On a Street"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="attached" v="no"/>
+        <tag k="shelter:type" v="bomb"/>
+        <tag k="building:manufactured" v="yes"/>
+        <tag k="operator" v="private"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="building:levels" v="1"/>
+    </node>
+    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553182080778896" lon="153.0879616358091653">
+        <tag k="building" v="yes"/>
+        <tag k="amenity" v="community_centre"/>
+        <tag k="material" v="adobe_brick"/>
+        <tag k="name" v="Community Centre"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.362Z"/>
+        <tag k="uuid" v="{97c3c816-d0cc-4416-a906-7ff94d1feeba}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495215100153075" lon="153.1088703282009078">
+        <tag k="name" v="Police Station"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.361Z"/>
+        <tag k="height" v="71"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{ada3fb8e-d49a-412a-a427-1df9fdbdde9b}"/>
+        <tag k="building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="amenity" v="police"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="shelter:type" v="storm"/>
+        <tag k="material" v="glass"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="light:obstacle" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="pitched"/>
+        <tag k="building:levels" v="1"/>
+    </node>
+    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3619384587453567" lon="153.1277678478489861">
+        <tag k="building" v="pagoda"/>
+        <tag k="religion" v="buddhist"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="name" v="Place of Worship"/>
+        <tag k="building:manufactured" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.360Z"/>
+        <tag k="uuid" v="{3cdd04f4-a468-4dfe-a564-7e0369a9832b}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="communication:television" v="yes"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3674952930392728" lon="153.1026673876897632">
+        <tag k="name" v="Metal Products"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.360Z"/>
+        <tag k="height" v="50"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="metal_product_manufacturing"/>
+        <tag k="uuid" v="{ada332ac-aeec-428c-8011-5241c94f4b8e}"/>
+        <tag k="building" v="industrial"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="by_product:2" v="slag"/>
+        <tag k="product" v="consumer_goods"/>
+        <tag k="by_product" v="scrap-metal"/>
+        <tag k="shelter:type" v="storm"/>
+        <tag k="material" v="adobe_brick"/>
+        <tag k="operator" v="military"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="building:levels" v="1"/>
+        <tag k="building:multi_unit" v="no"/>
+    </node>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3496817114895805" lon="153.1146748585752277">
+        <tag k="building" v="yes"/>
+        <tag k="amenity" v="prison"/>
+        <tag k="name" v="Prison"/>
+        <tag k="building:manufactured" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.359Z"/>
+        <tag k="uuid" v="{25fa4462-4fc9-4f15-8193-faafd0891f5f}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="operator" v="military"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3610064800120689" lon="153.0721254206466995">
+        <tag k="building" v="yes"/>
+        <tag k="attached" v="yes"/>
+        <tag k="material" v="plant_material"/>
+        <tag k="building:levels" v="2"/>
+        <tag k="shop" v="pet"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.358Z"/>
+        <tag k="uuid" v="{e68c306d-bd66-4a9c-896c-3a313a9c0a64}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="communication:television" v="yes"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="operator" v="military"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="shelter:type" v="fallout"/>
+    </node>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553774147008184" lon="153.1025475564638327">
+        <tag k="building" v="mosque"/>
+        <tag k="religion" v="muslim"/>
+        <tag k="material" v="wood"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="name" v="Public Order"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.357Z"/>
+        <tag k="uuid" v="{375f559b-1f8b-47c0-ad34-7f0df3e6a60e}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="roof:shape" v="with_minaret"/>
+        <tag k="use" v="public_order"/>
+        <tag k="light:obstacle" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3615447051822720" lon="153.0878782272478418">
+        <tag k="building" v="school"/>
+        <tag k="material" v="glass"/>
+        <tag k="name" v="Education"/>
+        <tag k="building:levels" v="3"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.357Z"/>
+        <tag k="uuid" v="{38816f81-a5bc-4fff-954f-29423f09b76b}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="roof:shape" v="pitched"/>
+        <tag k="use" v="education"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3672986354791234" lon="153.0949535372358810">
+        <tag k="name" v="Secondary Education"/>
+        <tag k="isced:level" v="2,3"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.356Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{08b347f2-0039-4bde-a17d-a456214f56e1}"/>
+        <tag k="building" v="school"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="material" v="metal"/>
+        <tag k="building:manufactured" v="no"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="condition" v="functional"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="building:levels" v="2"/>
+        <tag k="building:multi_unit" v="no"/>
+    </node>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3614914656853827" lon="153.1024525270879906">
+        <tag k="building" v="yes"/>
+        <tag k="amenity" v="restaurant"/>
+        <tag k="name" v="Restaurant"/>
+        <tag k="building:levels" v="6"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.355Z"/>
+        <tag k="uuid" v="{3baf263f-4c66-4640-8a48-e98aeba77678}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="communication:television" v="yes"/>
+        <tag k="operator" v="public"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3491402811469726" lon="153.0799969741597408">
+        <tag k="name" v="Two FFN &amp; OTH"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.354Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use:2" v="video games"/>
+        <tag k="use" v="confectionry_manufacturing"/>
+        <tag k="uuid" v="{34788650-9dc2-45b0-95ee-42f28c23f8f4}"/>
+        <tag k="building" v="industrial"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="product" v="bamboo"/>
+        <tag k="shelter:type" v="fallout"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="operator" v="public"/>
+        <tag k="communication:cellular_phone" v="yes"/>
+        <tag k="light:obstacle" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="building:levels" v="6"/>
+    </node>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3495625892536758" lon="153.1345447000032323">
+        <tag k="building" v="yes"/>
+        <tag k="material" v="adobe_brick"/>
+        <tag k="name" v="Wind tunnel"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.354Z"/>
+        <tag k="uuid" v="{4c26fa83-efc1-41a7-9568-768a390e6e54}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="use" v="wind_tunnel"/>
+        <tag k="light:obstacle" v="yes"/>
+        <tag k="operator" v="public"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551316776950806" lon="153.1146594080182126">
+        <tag k="building" v="construction"/>
+        <tag k="name" v="Government Office"/>
+        <tag k="building:manufactured" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.353Z"/>
+        <tag k="uuid" v="{9a518e65-127b-4f23-8d5f-38990fd6d667}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="roof:shape" v="pitched"/>
+        <tag k="light:obstacle" v="yes"/>
+        <tag k="operator" v="public"/>
+        <tag k="office" v="government"/>
+        <tag k="construction" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3675899762107733" lon="153.1150252476068090">
+        <tag k="building" v="yes"/>
+        <tag k="attached" v="yes"/>
+        <tag k="name" v="Hotel"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.353Z"/>
+        <tag k="uuid" v="{cdde649e-ab52-416b-aa26-6188d3641214}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="tourism" v="hotel"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3672681783417282" lon="153.0874559630275087">
+        <tag k="name" v="Dairy"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.352Z"/>
+        <tag k="height" v="75"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{815aac0f-05fd-41b2-9881-65311103dbee}"/>
+        <tag k="building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="product" v="milk"/>
+        <tag k="attached" v="yes"/>
+        <tag k="shelter:type" v="fallout"/>
+        <tag k="material" v="plant_material"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="crop" v="dairy"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="building:levels" v="1"/>
+        <tag k="building:multi_unit" v="yes"/>
+    </node>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3550302953478948" lon="153.0723200037824938">
+        <tag k="name" v="Residential House"/>
+        <tag k="material:vertical:2" v="smoke"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.351Z"/>
+        <tag k="material:vertical:3" v="mirrors"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="residential"/>
+        <tag k="uuid" v="{31a7d704-3216-44d3-a71c-0fb3ccf1e44f}"/>
+        <tag k="building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="4 x OTH fields"/>
+        <tag k="communication:mobile_phone" v="yes"/>
+        <tag k="attached" v="no"/>
+        <tag k="roof:shape:2" v="pyramidal"/>
+        <tag k="material" v="aerogel"/>
+        <tag k="building:manufactured" v="yes"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="roof:shape:3" v="gargoyles"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="condition" v="functional"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="domed"/>
+        <tag k="building:levels" v="1"/>
+    </node>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551807571406620" lon="153.0951226492241517">
+        <tag k="building" v="yes"/>
+        <tag k="amenity" v="pharmacy"/>
+        <tag k="material" v="metal"/>
+        <tag k="building:levels" v="1"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.350Z"/>
+        <tag k="uuid" v="{1435a737-6a0c-431a-a964-be06ddb6122d}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494846154866629" lon="153.0878450789861631">
+        <tag k="attached" v="no"/>
+        <tag k="name" v="Higher Education"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.350Z"/>
+        <tag k="uuid" v="{440884fb-8904-4333-9319-57451ac9fa38}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="demolished:building" v="university"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="roof:shape" v="flat"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="communication:mobile_phone" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3550383186147137" lon="153.1276526628350609">
+        <tag k="building" v="cathedral"/>
+        <tag k="attached" v="yes"/>
+        <tag k="religion" v="christian"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="material" v="wood"/>
+        <tag k="name" v="Place of Worship"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.349Z"/>
+        <tag k="uuid" v="{c9e03c34-8ab5-4f9c-b31f-5f4d316bc61d}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="denomination" v="roman_catholic"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616567836886837" lon="153.1208365965246685">
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.349Z"/>
+        <tag k="uuid" v="{4ac17181-16e9-4be0-bd7b-8cc68bbeea59}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="use" v="water_transport"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="shelter:type" v="storm"/>
+    </node>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3498783690497547" lon="153.1208289567668146">
+        <tag k="building" v="yes"/>
+        <tag k="attached" v="yes"/>
+        <tag k="amenity" v="fuel"/>
+        <tag k="material" v="metal"/>
+        <tag k="name" v="Petrol Sale"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.348Z"/>
+        <tag k="uuid" v="{cd706b59-6f0f-467b-8ff7-2bc5b22a8cea}"/>
+        <tag k="communication:cellular_phone" v="yes"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building:multi_unit" v="yes"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3494637213724694" lon="153.1025694301153521">
+        <tag k="name" v="Power Plant"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.347Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="power_generation"/>
+        <tag k="uuid" v="{09528206-90f4-4cbe-a616-1e5fb200d5ee}"/>
+        <tag k="building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="product" v="electric_power"/>
+        <tag k="by_product" v="cinders"/>
+        <tag k="attached" v="no"/>
+        <tag k="material" v="wood"/>
+        <tag k="building:manufactured" v="yes"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="product:2" v="desalinated_water"/>
+        <tag k="condition" v="functional"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="flat_with_parapet"/>
+    </node>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3611844643170983" lon="153.0799760067764055">
+        <tag k="building" v="yes"/>
+        <tag k="name" v="Agriculture"/>
+        <tag k="building:levels" v="6"/>
+        <tag k="product" v="fruit"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.347Z"/>
+        <tag k="uuid" v="{c9c1f4eb-32d4-438d-8c4b-1efabe1f0548}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="use" v="agriculture"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3616393883537619" lon="153.1089323707840606">
+        <tag k="building" v="yes"/>
+        <tag k="amenity" v="fire_station"/>
+        <tag k="material" v="adobe_brick"/>
+        <tag k="name" v="Fire Station"/>
+        <tag k="building:levels" v="5"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.346Z"/>
+        <tag k="uuid" v="{19ab50f6-8ce7-4edd-892b-a59887739903}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="roof:shape" v="with_steeple"/>
+        <tag k="operator" v="private"/>
+        <tag k="communication:mobile_phone" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="shelter:type" v="storm"/>
+    </node>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3493432503869869" lon="153.0951127672499581">
+        <tag k="building" v="industrial"/>
+        <tag k="material" v="wood"/>
+        <tag k="name" v="Whiskey Distillery"/>
+        <tag k="building:levels" v="4"/>
+        <tag k="product" v="oil"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.345Z"/>
+        <tag k="uuid" v="{8b735764-25eb-4d52-b732-6c69ed0cd206}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="use" v="petroleum_and_coal_product_manufacturing"/>
+        <tag k="operator" v="private"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3618249391992521" lon="153.1146985551249315">
+        <tag k="name" v="Palace"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.344Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="palace"/>
+        <tag k="uuid" v="{ac05fed0-e5d2-40ea-9916-b979e1e2ff49}"/>
+        <tag k="building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="attached" v="yes"/>
+        <tag k="building:manufactured" v="yes"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="operator" v="private"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="pitched"/>
+        <tag k="building:levels" v="1"/>
+        <tag k="building:multi_unit" v="no"/>
+    </node>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3553177696351213" lon="153.1206011880129552">
+        <tag k="building" v="yes"/>
+        <tag k="attached" v="yes"/>
+        <tag k="name" v="Paper Mill"/>
+        <tag k="building:levels" v="1"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.344Z"/>
+        <tag k="uuid" v="{5f4211f0-ea5a-44df-8cd9-675bfdf37d00}"/>
+        <tag k="communication:cellular_phone" v="yes"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="use" v="paper_mill"/>
+        <tag k="operator" v="public"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3671464342120636" lon="153.0722121036109797">
+        <tag k="name" v="Bank"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.343Z"/>
+        <tag k="height" v="21"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{af4e3199-44c2-477d-bb18-758584294df8}"/>
+        <tag k="building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="amenity" v="bank"/>
+        <tag k="addr:full" v="On Main Street"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="attached" v="yes"/>
+        <tag k="shelter:type" v="storm"/>
+        <tag k="material" v="wood"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="pitched"/>
+        <tag k="building:levels" v="1"/>
+    </node>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3554041820521228" lon="153.1088747435583457">
+        <tag k="attached" v="no"/>
+        <tag k="name" v="Sawmill"/>
+        <tag k="building:levels" v="2"/>
+        <tag k="height" v="25"/>
+        <tag k="product" v="explosive"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.342Z"/>
+        <tag k="uuid" v="{5dc03ed7-7f8b-4006-a53f-40f4267664c8}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="demolished:building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="craft" v="sawmilling"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3613204972742423" lon="153.0951367304635085">
+        <tag k="building" v="yes"/>
+        <tag k="attached" v="yes"/>
+        <tag k="material" v="metal"/>
+        <tag k="name" v="Hostel"/>
+        <tag k="building:levels" v="1"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.341Z"/>
+        <tag k="uuid" v="{01e8c028-8afb-4c30-88e4-fed176b8fd9a}"/>
+        <tag k="communication:cellular_phone" v="yes"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="tourism" v="hostel"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="roof:shape" v="pitched"/>
+        <tag k="operator" v="military"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3489174959950319" lon="153.0723523212778048">
+        <tag k="building" v="yes"/>
+        <tag k="attached" v="no"/>
+        <tag k="amenity" v="embassy"/>
+        <tag k="name" v="Embassy"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.340Z"/>
+        <tag k="uuid" v="{fb58f307-c7ed-4023-90d2-535b440bb474}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="diplomatic" v="embassy"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="roof:shape" v="with_cupola"/>
+        <tag k="building:multi_unit" v="yes"/>
+        <tag k="operator" v="private"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3551910609763276" lon="153.0798897137994459">
+        <tag k="name" v="Electronic manufacturing &amp; repair"/>
+        <tag k="construction" v="industrial"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.339Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="electronic_equipment_manufacturing"/>
+        <tag k="uuid" v="{20599e44-9357-4b09-bc43-f3b5f7c47ac9}"/>
+        <tag k="shelter:type:2" v="tornado"/>
+        <tag k="building" v="construction"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="repair" v="electronic_equipment"/>
+        <tag k="shelter:type" v="bomb"/>
+        <tag k="material" v="adobe_brick"/>
+        <tag k="building:manufactured" v="no"/>
+        <tag k="source" v="tdsv40:building_p"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="building:multi_unit" v="yes"/>
+    </node>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3830093579980307" lon="153.1866849690848085">
+        <tag k="building" v="hangar"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.334Z"/>
+        <tag k="uuid" v="{02e80255-eb75-4f39-ba4c-d955cb5fe617}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:aircraft_hangar_p"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </node>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3670669453471085" lon="153.1348088644270433">
+        <tag k="name" v="My Hanger"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.333Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use:2" v="warehouse"/>
+        <tag k="use" v="cargo_handling"/>
+        <tag k="uuid" v="{c253da4d-f6d4-41e1-a7ad-8bb6ea55d8f8}"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="hangar:type" v="underground"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="Take a Memo"/>
+        <tag k="abandoned:building" v="hangar"/>
+        <tag k="attached" v="no"/>
+        <tag k="material" v="metal"/>
+        <tag k="source" v="tdsv40:aircraft_hangar_p"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="pyramidal"/>
+    </node>
+    <way visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-318"/>
+        <nd ref="-319"/>
+        <tag k="highway" v="path"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.571Z"/>
+        <tag k="uuid" v="{0c499734-9e93-419f-9b43-eb748d019f00}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:trail_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-316"/>
+        <nd ref="-317"/>
+        <tag k="seasonal" v="winter"/>
+        <tag k="highway" v="path"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.571Z"/>
+        <tag k="uuid" v="{9ecbc68c-79c6-4318-bab0-9942bcdc58fe}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="in_tunnel" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:trail_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="location" v="underground"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-314"/>
+        <nd ref="-315"/>
+        <tag k="layer" v="-1"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="highway" v="path"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.570Z"/>
+        <tag k="uuid" v="{fa9cb0b5-6c5f-4353-874f-be27ecb5a9e5}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="in_tunnel" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:trail_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="location" v="underground"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="on_bridge" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-312"/>
+        <nd ref="-313"/>
+        <tag k="layer" v="-1"/>
+        <tag k="seasonal" v="winter"/>
+        <tag k="highway" v="path"/>
+        <tag k="name" v="Short"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.570Z"/>
+        <tag k="uuid" v="{da1025eb-d540-4a47-900d-3687d3cd0e37}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:trail_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="highway:through_route" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-310"/>
+        <nd ref="-311"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="name" v="Big"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.569Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{389f4414-8e8c-45a7-9935-3401c2eaf29d}"/>
+        <tag k="layer" v="1"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="on_bridge" v="yes"/>
+        <tag k="highway:through_route" v="yes"/>
+        <tag k="highway" v="path"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="location" v="surface"/>
+        <tag k="source" v="tdsv40:trail_c"/>
+        <tag k="in_tunnel" v="no"/>
+        <tag k="condition" v="damaged"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+    </way>
+    <way visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-308"/>
+        <nd ref="-309"/>
+        <tag k="layer" v="0"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="highway" v="path"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.569Z"/>
+        <tag k="uuid" v="{2728cc25-56fa-487f-801b-0d56bdacf98a}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:trail_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="location" v="surface"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-306"/>
+        <nd ref="-307"/>
+        <tag k="layer" v="0"/>
+        <tag k="highway" v="path"/>
+        <tag k="name" v="Long"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.568Z"/>
+        <tag k="uuid" v="{39d182e1-6088-4185-a1c4-7fc58b9c002c}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="in_tunnel" v="no"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="defence_imagery_and_geospatial_organisation_(australia)"/>
+        <tag k="source" v="tdsv40:trail_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="highway:through_route" v="no"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="on_bridge" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-297"/>
+        <nd ref="-298"/>
+        <nd ref="-299"/>
+        <nd ref="-297"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="content" v="silage"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.559Z"/>
+        <tag k="uuid" v="{128252cc-d3f2-4bdb-ba3d-dbe2dc69fef2}"/>
+        <tag k="source" v="tdsv40:storage_tank_s"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-294"/>
+        <nd ref="-295"/>
+        <nd ref="-296"/>
+        <nd ref="-294"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="content" v="water"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.558Z"/>
+        <tag k="uuid" v="{13389c28-59ac-4d20-9c29-d34fe8f84cc6}"/>
+        <tag k="source" v="tdsv40:storage_tank_s"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-291"/>
+        <nd ref="-292"/>
+        <nd ref="-293"/>
+        <nd ref="-291"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="name" v="with Building = storage_tank"/>
+        <tag k="content" v="manure"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.558Z"/>
+        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
+        <tag k="source" v="tdsv40:storage_tank_s"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-288"/>
+        <nd ref="-289"/>
+        <nd ref="-290"/>
+        <nd ref="-288"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="content" v="petroleum"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.558Z"/>
+        <tag k="uuid" v="{1339103f-9a67-4dc1-aa67-b590b33b3000}"/>
+        <tag k="source" v="tdsv40:storage_tank_s"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-285"/>
+        <nd ref="-286"/>
+        <nd ref="-287"/>
+        <nd ref="-285"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="content" v="petroleum"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.557Z"/>
+        <tag k="uuid" v="{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}"/>
+        <tag k="source" v="tdsv40:storage_tank_s"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-282"/>
+        <nd ref="-283"/>
+        <nd ref="-284"/>
+        <nd ref="-282"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="content" v="slurry"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.557Z"/>
+        <tag k="uuid" v="{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}"/>
+        <tag k="source" v="tdsv40:storage_tank_s"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-279"/>
+        <nd ref="-280"/>
+        <nd ref="-281"/>
+        <nd ref="-279"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="content" v="manure"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.556Z"/>
+        <tag k="uuid" v="{149e733e-626f-45db-bfcc-56ad12de425a}"/>
+        <tag k="source" v="tdsv40:storage_tank_s"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-276"/>
+        <nd ref="-277"/>
+        <nd ref="-278"/>
+        <nd ref="-276"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="name" v="with Building = yes"/>
+        <tag k="content" v="silage"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.556Z"/>
+        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
+        <tag k="source" v="tdsv40:storage_tank_s"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-268"/>
+        <nd ref="-269"/>
+        <nd ref="-270"/>
+        <nd ref="-271"/>
+        <nd ref="-268"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.548Z"/>
+        <tag k="uuid" v="{0bb7eed1-542a-4317-a83f-0bb8e9074c9a}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:stadium_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="stadium"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-264"/>
+        <nd ref="-265"/>
+        <nd ref="-266"/>
+        <nd ref="-267"/>
+        <nd ref="-264"/>
+        <tag k="name" v="Broncos Stadium"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.548Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use:2" v="religious_activities"/>
+        <tag k="use" v="sports_amusement_and_recreation"/>
+        <tag k="uuid" v="{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}"/>
+        <tag k="building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="note:oth" v="(MCC:adobe_brick)"/>
+        <tag k="leisure" v="stadium"/>
+        <tag k="cover:type" v="moveable"/>
+        <tag k="addr:full" v="Downtown Denver"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="note" v="Go watch the Broncos"/>
+        <tag k="source" v="tdsv40:stadium_s"/>
+        <tag k="condition" v="functional"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="domed"/>
+    </way>
+    <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-260"/>
+        <nd ref="-261"/>
+        <nd ref="-262"/>
+        <nd ref="-263"/>
+        <nd ref="-260"/>
+        <tag k="building" v="shed"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.544Z"/>
+        <tag k="uuid" v="{0b9811ee-4e0d-43a9-9798-465458776db5}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:shed_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-256"/>
+        <nd ref="-257"/>
+        <nd ref="-258"/>
+        <nd ref="-259"/>
+        <nd ref="-256"/>
+        <tag k="name" v="The Shed"/>
+        <tag k="material:vertical:2" v="mud-based_construction"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.543Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="agriculture"/>
+        <tag k="use:2" v="meeting_place"/>
+        <tag k="uuid" v="{627c4c65-2a14-4c7f-b8b9-9b799fe12f4f}"/>
+        <tag k="building" v="shed"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="raw_material" v="gold"/>
+        <tag k="addr:full" v="Downtown DC"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="by_product:2" v="no_byproduct"/>
+        <tag k="note" v="Where else would you be?"/>
+        <tag k="product" v="biodiesel"/>
+        <tag k="raw_material:2" v="tobacco"/>
+        <tag k="by_product" v="radioactive_material"/>
+        <tag k="roof:shape:2" v="with_turret"/>
+        <tag k="material" v="adobe_brick"/>
+        <tag k="source" v="tdsv40:shed_s"/>
+        <tag k="product:2" v="wine"/>
+        <tag k="condition" v="functional"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="sawtoothed"/>
+    </way>
+    <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-251"/>
+        <nd ref="-252"/>
+        <tag k="highway" v="road"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.535Z"/>
+        <tag k="uuid" v="{02a15efc-6f77-4485-b274-89215bb4b2f3}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:road_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-249"/>
+        <nd ref="-250"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="name" v="Main"/>
+        <tag k="construction" v="motorway"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.535Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{c87f3ed7-5656-4f80-b556-5b85df1cb9be}"/>
+        <tag k="ref:road:class:2" v="local"/>
+        <tag k="ref:road:class" v="primary"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="on_bridge" v="yes"/>
+        <tag k="highway:through_route" v="yes"/>
+        <tag k="highway" v="construction"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="ref:road:type" v="motorway"/>
+        <tag k="lanes" v="2"/>
+        <tag k="location" v="surface"/>
+        <tag k="source" v="tdsv40:road_c"/>
+        <tag k="in_tunnel" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+    </way>
+    <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-247"/>
+        <nd ref="-248"/>
+        <tag k="seasonal" v="not_winter"/>
+        <tag k="name" v="back"/>
+        <tag k="construction" v="secondary"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.534Z"/>
+        <tag k="is_divided" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{632db716-7256-4b2c-b27d-593bf9a2093e}"/>
+        <tag k="layer" v="0"/>
+        <tag k="ref:road:class" v="local"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="on_bridge" v="no"/>
+        <tag k="highway" v="construction"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="median" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="ref:road:type" v="street"/>
+        <tag k="lanes" v="1"/>
+        <tag k="ref" v="470"/>
+        <tag k="location" v="surface"/>
+        <tag k="operator" v="public"/>
+        <tag k="source" v="tdsv40:road_c"/>
+        <tag k="in_tunnel" v="no"/>
+        <tag k="feature_configuration" v="same"/>
+        <tag k="road:runway" v="no"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+    </way>
+    <way visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-245"/>
+        <nd ref="-246"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.533Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{68d0dd28-6b60-468a-b33c-eaa663675dc8}"/>
+        <tag k="layer" v="0"/>
+        <tag k="ref:road:class" v="secondary"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="surface" v="compacted"/>
+        <tag k="highway" v="primary"/>
+        <tag k="median" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="ref:road:type" v="road"/>
+        <tag k="lanes" v="2"/>
+        <tag k="location" v="underground"/>
+        <tag k="source" v="tdsv40:road_c"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+    </way>
+    <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-243"/>
+        <nd ref="-244"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.533Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{f0ecd77e-fdac-4deb-bd9c-d4f84dad328c}"/>
+        <tag k="layer" v="0"/>
+        <tag k="ref:road:class" v="local"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="surface" v="wood"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="median" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="ref:road:type" v="street"/>
+        <tag k="lanes" v="1"/>
+        <tag k="location" v="surface"/>
+        <tag k="source" v="tdsv40:road_c"/>
+        <tag k="operator" v="military"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+    </way>
+    <way visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-241"/>
+        <nd ref="-242"/>
+        <tag k="seasonal" v="Spring"/>
+        <tag k="name" v="Sesame"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.532Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{1432b382-1299-4aa7-af5f-c89e3c15234d}"/>
+        <tag k="layer" v="0"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="ref:road:type" v="road"/>
+        <tag k="note" v="Big Bird is here"/>
+        <tag k="lanes" v="1"/>
+        <tag k="ref" v="25"/>
+        <tag k="location" v="surface"/>
+        <tag k="source" v="tdsv40:road_c"/>
+        <tag k="in_tunnel" v="no"/>
+        <tag k="condition" v="functional"/>
+        <tag k="road:runway" v="yes"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+    </way>
+    <way visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-239"/>
+        <nd ref="-240"/>
+        <tag k="seasonal" v="winter"/>
+        <tag k="name" v="Beach"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.532Z"/>
+        <tag k="is_divided" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{d9d0703d-83d7-4874-ac98-1b323e5de301}"/>
+        <tag k="layer" v="0"/>
+        <tag k="ref:road:class" v="primary"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="surface" v="Jello"/>
+        <tag k="on_bridge" v="no"/>
+        <tag k="highway" v="trunk"/>
+        <tag k="oneway" v="no"/>
+        <tag k="median" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="ref:road:type" v="road"/>
+        <tag k="lanes" v="1"/>
+        <tag k="ref" v="1"/>
+        <tag k="location" v="surface"/>
+        <tag k="operator" v="private"/>
+        <tag k="source" v="tdsv40:road_c"/>
+        <tag k="condition" v="damaged"/>
+        <tag k="feature_configuration" v="different"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+    </way>
+    <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-237"/>
+        <nd ref="-238"/>
+        <tag k="waterway" v="river"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.528Z"/>
+        <tag k="uuid" v="{0aae9176-488f-4b64-9e57-ccf37ccf053a}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-235"/>
+        <nd ref="-236"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway" v="river"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.527Z"/>
+        <tag k="uuid" v="{0b2a16ac-0689-4388-a422-3945de4ceeaf}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-233"/>
+        <nd ref="-234"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="water:sink:type" v="unknown"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.527Z"/>
+        <tag k="uuid" v="{e3fe79cc-cd87-4e44-9d76-62086136bb95}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="waterway:bottom" v="clay_and_silt"/>
+        <tag k="covered" v="no"/>
+        <tag k="tidal" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-231"/>
+        <nd ref="-232"/>
+        <tag k="intermittent" v="dry"/>
+        <tag k="waterway" v="stream"/>
+        <tag k="water:sink:type" v="unknown"/>
+        <tag k="name" v="Nile"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.526Z"/>
+        <tag k="uuid" v="{93522adb-ba0c-4e44-9faa-ac6d2370741b}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="covered" v="no"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-229"/>
+        <nd ref="-230"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="waterway" v="river"/>
+        <tag k="water:sink:type" v="disappearing"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.525Z"/>
+        <tag k="uuid" v="{db8db081-3262-434e-9772-e6ff47df657c}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="covered" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-227"/>
+        <nd ref="-228"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway" v="river"/>
+        <tag k="water:sink:type" v="unknown"/>
+        <tag k="name" v="Murray"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.525Z"/>
+        <tag k="uuid" v="{5a1b64e8-d713-41fd-bd7e-252120ef275a}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="covered" v="no"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="navigation" v="no"/>
+    </way>
+    <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-225"/>
+        <nd ref="-226"/>
+        <tag k="intermittent" v="dry"/>
+        <tag k="waterway" v="river"/>
+        <tag k="water:sink:type" v="disappearing"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.524Z"/>
+        <tag k="uuid" v="{b710f27a-0366-4a3b-805d-e111a52c971c}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="waterway:bottom" v="bedrock"/>
+        <tag k="covered" v="no"/>
+        <tag k="tidal" v="no"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-223"/>
+        <nd ref="-224"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway" v="yes"/>
+        <tag k="water:sink:type" v="unknown"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.523Z"/>
+        <tag k="uuid" v="{0cb16bc6-3c09-482f-b31a-8144b1fb7430}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="tidal" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-221"/>
+        <nd ref="-222"/>
+        <tag k="waterway" v="yes"/>
+        <tag k="water:sink:type" v="unknown"/>
+        <tag k="name" v="Covered Drain test"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.523Z"/>
+        <tag k="uuid" v="{e0e597a8-f2fd-4982-b3f0-2dc6ffdea549}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="waterway:bottom" v="sand_and_gravel"/>
+        <tag k="covered" v="yes"/>
+        <tag k="tidal" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="navigation" v="yes"/>
+    </way>
+    <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-219"/>
+        <nd ref="-220"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="waterway" v="gorge"/>
+        <tag k="water:sink:type" v="not_applicable"/>
+        <tag k="name" v="Mighty"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.522Z"/>
+        <tag k="uuid" v="{6f588533-90a0-4928-b7b3-3e452d1144ab}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="covered" v="no"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-217"/>
+        <nd ref="-218"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway" v="braided_stream"/>
+        <tag k="water:sink:type" v="unknown"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.521Z"/>
+        <tag k="uuid" v="{ec56c1bd-cd9c-482b-9a0d-95a24282e305}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="waterway:bottom" v="clay_and_silt"/>
+        <tag k="covered" v="no"/>
+        <tag k="tidal" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-215"/>
+        <nd ref="-216"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="waterway" v="river"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.519Z"/>
+        <tag k="uuid" v="{48124b31-53ab-4ca1-a965-8480943dfb7d}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="covered" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-213"/>
+        <nd ref="-214"/>
+        <tag k="intermittent" v="no"/>
+        <tag k="waterway" v="river"/>
+        <tag k="water:sink:type" v="not_applicable"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.518Z"/>
+        <tag k="uuid" v="{2e82fbdf-171f-4a1e-ae7a-6cbe5a0922c7}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="covered" v="no"/>
+        <tag k="tidal" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-211"/>
+        <nd ref="-212"/>
+        <tag k="waterway" v="river"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.518Z"/>
+        <tag k="uuid" v="{aea98498-70b6-4beb-9395-63f768f4f29e}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="waterway:bottom" v="sand_and_gravel"/>
+        <tag k="covered" v="no"/>
+        <tag k="tidal" v="no"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-209"/>
+        <nd ref="-210"/>
+        <tag k="intermittent" v="dry"/>
+        <tag k="waterway" v="river"/>
+        <tag k="water:sink:type" v="not_applicable"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.517Z"/>
+        <tag k="uuid" v="{5653d95b-3b19-4b75-8571-4c67c4597227}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="covered" v="no"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="wadi" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-207"/>
+        <nd ref="-208"/>
+        <tag k="waterway" v="braided_stream"/>
+        <tag k="water:sink:type" v="dissipating"/>
+        <tag k="name" v="Amazon"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.516Z"/>
+        <tag k="uuid" v="{7eddcdf0-3e83-4658-88b5-c4da67b9bf82}"/>
+        <tag k="note" v="Very long river"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="3"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:river_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="waterway:bottom" v="bedrock"/>
+        <tag k="covered" v="no"/>
+        <tag k="tidal" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="navigation" v="yes_operational"/>
+    </way>
+    <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-204"/>
+        <nd ref="-205"/>
+        <nd ref="-206"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.512Z"/>
+        <tag k="uuid" v="{09f74b4b-6af8-438d-9475-ed7dec4fbe95}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="railway" v="rail"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:railway_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-201"/>
+        <nd ref="-202"/>
+        <nd ref="-203"/>
+        <tag k="name" v="Big Train"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.512Z"/>
+        <tag k="uuid" v="{2df4f57e-69bd-468a-9113-35434c475dc9}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="railway" v="construction"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:railway_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="location" v="surface"/>
+        <tag k="construction" v="rail"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-198"/>
+        <nd ref="-199"/>
+        <nd ref="-200"/>
+        <tag k="gauge" v="3"/>
+        <tag k="electrified" v="rail"/>
+        <tag k="abandoned:railway" v="funicular"/>
+        <tag k="name" v="Choo Choo Train"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.511Z"/>
+        <tag k="uuid" v="{18ab8349-3fb0-48eb-917b-49995b451fc5}"/>
+        <tag k="gauge:type" v="broad"/>
+        <tag k="note" v="A very long train"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:railway_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="location" v="surface"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-195"/>
+        <nd ref="-196"/>
+        <nd ref="-197"/>
+        <tag k="gauge" v="4"/>
+        <tag k="electrified" v="no"/>
+        <tag k="demolished:railway" v="rail"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.510Z"/>
+        <tag k="uuid" v="{c0041728-2262-4969-bd62-4ca3607af853}"/>
+        <tag k="gauge:type" v="standard"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:railway_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="railway:in_road" v="yes"/>
+        <tag k="railway:track" v="monorail"/>
+        <tag k="location" v="surface"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-192"/>
+        <nd ref="-193"/>
+        <nd ref="-194"/>
+        <tag k="gauge" v="2"/>
+        <tag k="electrified" v="unknown"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.510Z"/>
+        <tag k="uuid" v="{711b42ac-132c-44e5-8ecb-3f39451c41da}"/>
+        <tag k="gauge:type" v="narrow"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="railway" v="carline"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:railway_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="location" v="surface"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-189"/>
+        <nd ref="-190"/>
+        <nd ref="-191"/>
+        <tag k="gauge" v="1"/>
+        <tag k="electrified" v="no"/>
+        <tag k="name" v="Santa Train"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.509Z"/>
+        <tag k="uuid" v="{cbcf9671-3825-46a9-8ef0-f1676648b43e}"/>
+        <tag k="gauge:type" v="narrow"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="arrangement" v="single"/>
+        <tag k="railway" v="construction"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:railway_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="location" v="surface"/>
+        <tag k="construction" v="logging"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-186"/>
+        <nd ref="-187"/>
+        <nd ref="-188"/>
+        <tag k="gauge" v="2"/>
+        <tag k="electrified" v="contact_line"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.508Z"/>
+        <tag k="uuid" v="{c650708f-0984-4c35-a971-8154879af68f}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="railway" v="automated_transit_system"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:railway_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="railway:in_road" v="separated"/>
+        <tag k="location" v="surface"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-173"/>
+        <nd ref="-174"/>
+        <nd ref="-175"/>
+        <nd ref="-177"/>
+        <nd ref="-173"/>
+        <tag k="area" v="yes"/>
+        <tag k="facility" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.495Z"/>
+        <tag k="uuid" v="{09561dbe-032a-42dd-9b17-beed2fa15be0}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:facility_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-168"/>
+        <nd ref="-169"/>
+        <nd ref="-170"/>
+        <nd ref="-171"/>
+        <nd ref="-172"/>
+        <nd ref="-168"/>
+        <tag k="name" v="Factory"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.494Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="facility" v="yes"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="manufacturing"/>
+        <tag k="man_made" v="works"/>
+        <tag k="uuid" v="{ae014362-8c96-46b2-8149-d377ed03f334}"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="raw_material" v="aluminium"/>
+        <tag k="addr:full" v="Yes it does"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="by_product:2" v="radioactive_material"/>
+        <tag k="note" v="Big Factory"/>
+        <tag k="product" v="radioactive_material"/>
+        <tag k="raw_material:2" v="radioactive_material"/>
+        <tag k="raw_material:3" v="plastic"/>
+        <tag k="by_product" v="scrap-metal"/>
+        <tag k="material" v="adobe_brick"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="source" v="tdsv40:facility_s"/>
+        <tag k="product:2" v="explosive"/>
+        <tag k="communication:microwave_radio_relay" v="yes"/>
+        <tag k="condition" v="construction"/>
+        <tag k="product:3" v="ammunition"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+    </way>
+    <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-163"/>
+        <nd ref="-164"/>
+        <nd ref="-165"/>
+        <nd ref="-166"/>
+        <nd ref="-167"/>
+        <nd ref="-163"/>
+        <tag k="area" v="yes"/>
+        <tag k="name" v="HealthCare"/>
+        <tag k="facility" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.494Z"/>
+        <tag k="uuid" v="{8f97a17a-a3df-40b4-9dc0-71228b65bf0a}"/>
+        <tag k="note" v="Hospital"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:facility_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="use" v="healthcare"/>
+        <tag k="operator" v="military"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-158"/>
+        <nd ref="-159"/>
+        <nd ref="-160"/>
+        <nd ref="-162"/>
+        <nd ref="-158"/>
+        <tag k="area" v="yes"/>
+        <tag k="facility" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.493Z"/>
+        <tag k="uuid" v="{998eb9e9-e6a0-4284-8aac-d4cc94e9a352}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="25"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:facility_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="operator" v="private"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-144"/>
+        <nd ref="-146"/>
+        <tag k="highway" v="track"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.476Z"/>
+        <tag k="uuid" v="{088f49df-66ba-4e69-a955-dc7e0a7a574e}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:cart_track_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-141"/>
+        <nd ref="-143"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="highway" v="track"/>
+        <tag k="name" v="Dirt"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.476Z"/>
+        <tag k="uuid" v="{38bb77aa-444e-49aa-9585-1d56253f7b6e}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:cart_track_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="width:minimum_traveled_way" v="3"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-138"/>
+        <nd ref="-140"/>
+        <tag k="layer" v="0"/>
+        <tag k="name" v="Jinglemoney"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.475Z"/>
+        <tag k="uuid" v="{275a5223-4adb-497d-9ba6-edac1dca6b6f}"/>
+        <tag k="note" v="What a trail"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="in_tunnel" v="no"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:cart_track_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="width:minimum_traveled_way" v="2.5"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="abandoned:highway" v="track"/>
+    </way>
+    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-135"/>
+        <nd ref="-137"/>
+        <tag k="layer" v="0"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="highway" v="track"/>
+        <tag k="name" v="Kokoda"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.475Z"/>
+        <tag k="uuid" v="{af12e7c5-c4b9-4db9-a11b-fe53910c9e0d}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:cart_track_c"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-130"/>
+        <nd ref="-131"/>
+        <nd ref="-132"/>
+        <nd ref="-133"/>
+        <nd ref="-134"/>
+        <nd ref="-130"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.472Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="uuid" v="{0843d412-a3ca-492f-82cc-09ae667f9f1d}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-125"/>
+        <nd ref="-126"/>
+        <nd ref="-127"/>
+        <nd ref="-128"/>
+        <nd ref="-129"/>
+        <nd ref="-125"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.471Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="uuid" v="{e76b27ae-22e0-43b0-b269-ca024bc2ca03}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="operator" v="military"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-120"/>
+        <nd ref="-121"/>
+        <nd ref="-122"/>
+        <nd ref="-123"/>
+        <nd ref="-124"/>
+        <nd ref="-120"/>
+        <tag k="name" v="Defence"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.470Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="uuid" v="{c5d722af-c570-42de-8ac6-4abea5a4983f}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="use" v="military"/>
+        <tag k="building:density" v="moderate"/>
+        <tag k="operator" v="joint_military_civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-115"/>
+        <nd ref="-116"/>
+        <nd ref="-117"/>
+        <nd ref="-118"/>
+        <nd ref="-119"/>
+        <nd ref="-115"/>
+        <tag k="name" v="Religious"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.470Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="uuid" v="{8dedb86f-3331-41ef-bd39-63c5a809eabe}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="use" v="religious_activities"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-110"/>
+        <nd ref="-111"/>
+        <nd ref="-112"/>
+        <nd ref="-113"/>
+        <nd ref="-114"/>
+        <nd ref="-110"/>
+        <tag k="name" v="Residential"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.469Z"/>
+        <tag k="landuse" v="residential"/>
+        <tag k="uuid" v="{0d490002-2c16-4659-8311-7b7c8b59b48e}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="damaged"/>
+        <tag k="building:density" v="sparse"/>
+        <tag k="operator" v="public"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-105"/>
+        <nd ref="-106"/>
+        <nd ref="-107"/>
+        <nd ref="-108"/>
+        <nd ref="-109"/>
+        <nd ref="-105"/>
+        <tag k="name" v="Residential"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.469Z"/>
+        <tag k="landuse" v="residential"/>
+        <tag k="uuid" v="{4c076d27-3ef4-4ad3-9137-920b4278ce6c}"/>
+        <tag k="note" v="Small suburb"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="building:density" v="sparse"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-100"/>
+        <nd ref="-101"/>
+        <nd ref="-102"/>
+        <nd ref="-103"/>
+        <nd ref="-104"/>
+        <nd ref="-100"/>
+        <tag k="name" v="Utilities"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.468Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="uuid" v="{932b5e3e-f9a8-481d-9c6f-cdf9786bad19}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="use" v="utilities"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-95"/>
+        <nd ref="-96"/>
+        <nd ref="-97"/>
+        <nd ref="-98"/>
+        <nd ref="-99"/>
+        <nd ref="-95"/>
+        <tag k="name" v="Manufacturing"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.468Z"/>
+        <tag k="landuse" v="built_up_area"/>
+        <tag k="uuid" v="{843565f8-09e3-4f5b-9039-3f5341bd0841}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:built-up_area_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="use" v="manufacturing"/>
+        <tag k="building:density" v="dense"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-81"/>
+        <nd ref="-82"/>
+        <nd ref="-83"/>
+        <nd ref="-85"/>
+        <nd ref="-81"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.449Z"/>
+        <tag k="uuid" v="{073147b2-6bff-481e-87da-39adf0562a88}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="25"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-76"/>
+        <nd ref="-77"/>
+        <nd ref="-78"/>
+        <nd ref="-80"/>
+        <nd ref="-76"/>
+        <tag k="building" v="yes"/>
+        <tag k="attached" v="yes"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="name" v="Place of Worship"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.448Z"/>
+        <tag k="uuid" v="{e8cbc330-a431-4cf6-adcf-73a9c8f10fe9}"/>
+        <tag k="communication:cellular_phone" v="yes"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="25"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="operator" v="private"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-71"/>
+        <nd ref="-72"/>
+        <nd ref="-73"/>
+        <nd ref="-75"/>
+        <nd ref="-71"/>
+        <tag k="name" v="Petroleum Facility"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.448Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="use" v="petroleum_refining"/>
+        <tag k="uuid" v="{a7694937-07d8-437b-8a03-384b8a3b7369}"/>
+        <tag k="building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="raw_material" v="oil"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="product" v="petroleum"/>
+        <tag k="raw_material:2" v="petroleum_and/or_natural_gas"/>
+        <tag k="by_product" v="ash"/>
+        <tag k="shelter:type" v="storm"/>
+        <tag k="material" v="prestressed_concrete"/>
+        <tag k="operator" v="public"/>
+        <tag k="source" v="tdsv40:building_s"/>
+        <tag k="width" v="25"/>
+        <tag k="condition" v="damaged"/>
+        <tag k="navigation:landmark" v="yes"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="building:multi_unit" v="yes"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-66"/>
+        <nd ref="-67"/>
+        <nd ref="-68"/>
+        <nd ref="-70"/>
+        <nd ref="-66"/>
+        <tag k="building" v="construction"/>
+        <tag k="amenity" v="prison"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.447Z"/>
+        <tag k="uuid" v="{7a025070-c136-4e11-8e67-ef14135d50d6}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="25"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="operator" v="civilian"/>
+        <tag k="construction" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-61"/>
+        <nd ref="-62"/>
+        <nd ref="-63"/>
+        <nd ref="-65"/>
+        <nd ref="-61"/>
+        <tag k="name" v="Place of Worship"/>
+        <tag k="denomination" v="sunni"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.446Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{c57bcb46-fabf-46f1-a3e6-2e77f4f5c32d}"/>
+        <tag k="building" v="mosque"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="religion" v="muslim"/>
+        <tag k="communication:mobile_phone" v="yes"/>
+        <tag k="attached" v="no"/>
+        <tag k="shelter:type" v="storm"/>
+        <tag k="material" v="stone"/>
+        <tag k="source" v="tdsv40:building_s"/>
+        <tag k="width" v="25"/>
+        <tag k="condition" v="functional"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="roof:shape" v="with_minaret"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-56"/>
+        <nd ref="-57"/>
+        <nd ref="-58"/>
+        <nd ref="-59"/>
+        <nd ref="-60"/>
+        <nd ref="-56"/>
+        <tag k="building" v="monastery"/>
+        <tag k="religion" v="buddhist"/>
+        <tag k="amenity" v="place_of_worship"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.445Z"/>
+        <tag k="uuid" v="{eea2047e-4a2d-449e-9def-8d1bc1765166}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="condition" v="functional"/>
+        <tag k="use" v="Hobbit Hole"/>
+        <tag k="light:obstacle" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-51"/>
+        <nd ref="-52"/>
+        <nd ref="-53"/>
+        <nd ref="-55"/>
+        <nd ref="-51"/>
+        <tag k="building" v="yes"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.444Z"/>
+        <tag k="uuid" v="{b9745971-a030-4956-ba12-1bcd926f0f78}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="25"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="source" v="tdsv40:building_s"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="building:multi_unit" v="yes"/>
+        <tag k="operator" v="military"/>
+        <tag k="navigation:landmark" v="no"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-46"/>
+        <nd ref="-47"/>
+        <nd ref="-48"/>
+        <nd ref="-50"/>
+        <nd ref="-46"/>
+        <tag k="area" v="yes"/>
+        <tag k="name" v="Barracks"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.444Z"/>
+        <tag k="uuid" v="{f9f1e2e7-7699-4dd7-8271-586970f42122}"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="width" v="25"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="source" v="tdsv40:building_s"/>
+        <tag k="abandoned:building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="light:obstacle" v="yes"/>
+        <tag k="operator" v="military"/>
+        <tag k="communication:mobile_phone" v="yes"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-41"/>
+        <nd ref="-42"/>
+        <nd ref="-43"/>
+        <nd ref="-45"/>
+        <nd ref="-41"/>
+        <tag k="name" v="Bank"/>
+        <tag k="source:ingest:datetime" v="2019-10-23T18:34:12.370Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="security:resource_owner" v="USA"/>
+        <tag k="uuid" v="{69d80b50-1eb2-4fe6-8db6-ea346395b285}"/>
+        <tag k="building" v="yes"/>
+        <tag k="security:dissemination_control:non_ic" v="DS"/>
+        <tag k="amenity" v="bank"/>
+        <tag k="addr:full" v="Left side of the street"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="attached" v="no"/>
+        <tag k="shelter:type" v="bomb"/>
+        <tag k="material" v="wood"/>
+        <tag k="source" v="tdsv40:building_s"/>
+        <tag k="width" v="25"/>
+        <tag k="condition" v="destroyed"/>
+        <tag k="attribution" v="u.s._national_geospatial-intelligence_agency_(nga)"/>
+        <tag k="building:multi_unit" v="no"/>
+    </way>
+</osm>
