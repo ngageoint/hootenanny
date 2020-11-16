@@ -122,7 +122,7 @@ OsmMapPtr ChangesetTaskGridReplacer::replace(
   {
     LOG_ERROR(
       "Entire task grid cell replacement operation partially completed with error while " <<
-      " replacing task grid cell number: " << _currentTaskGridCellId << ", " <<
+      "replacing task grid cell number: " << _currentTaskGridCellId << ", " <<
       _numChangesetsDerived << " / " << taskGrid.size() <<
       " cells replaced, time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()) <<
       "; Error: " << e.getWhat());
