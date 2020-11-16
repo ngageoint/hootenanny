@@ -41,7 +41,12 @@
 #include <hoot/core/algorithms/changeset/BoundsFileTaskGridGenerator.h>
 #include <hoot/core/algorithms/changeset/NodeDensityTaskGridGenerator.h>
 #include <hoot/core/algorithms/changeset/UniformTaskGridGenerator.h>
+#include <hoot/core/algorithms/changeset/BoundsStringTaskGridGenerator.h>
 #include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 
 namespace hoot
 {
@@ -64,12 +69,13 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  CPPUNIT_TEST(orphanedNodes1Test);
-  CPPUNIT_TEST(orphanedNodes2Test);
-  CPPUNIT_TEST(droppedNodes1Test);
-  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
-  CPPUNIT_TEST(badPolyIdSync1Test);
-  CPPUNIT_TEST(badPolyIdSync2Test);
+  CPPUNIT_TEST(differingTypes1Test);
+//  CPPUNIT_TEST(orphanedNodes1Test);
+//  CPPUNIT_TEST(orphanedNodes2Test);
+//  CPPUNIT_TEST(droppedNodes1Test);
+//  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+//  CPPUNIT_TEST(badPolyIdSync1Test);
+//  CPPUNIT_TEST(badPolyIdSync2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -100,6 +106,44 @@ public:
   {
     _cleanupDataToReplace();
     _cleanupReplacementData();
+  }
+
+  void differingTypes1Test()
+  {
+    // This tests replacement changeset generation where the reference map includes feature types
+    // not found in the secondary map. In that respect it is similar to
+    // ServiceChangesetReplacementSecFilteredToEmptyTest, except the feature types involved are
+    // different.
+
+    _testName = "differingTypes1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
+    conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 5.0);
+    conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
+
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsStringTaskGridGenerator(
+        "11.361053,8.507705,11.363033,8.509146", _outputPath + "/" + taskGridFileName)
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
   void orphanedNodes1Test()
@@ -523,6 +567,12 @@ private:
       _subTaskTimer.restart();
     }
 
+    // add a tag specifying this is the to replace data, so we can see it in the output
+    SetTagValueVisitor addTagVis("note", "Source 1");
+    NotCriterion addTagCrit(std::shared_ptr<WayNodeCriterion>(new WayNodeCriterion(map)));
+    FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
+    map->visitRw(deleteExcludeTagVis);
+
     // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
     // for this data.
 
@@ -574,6 +624,12 @@ private:
       }
       _subTaskTimer.restart();
     }
+
+    // add a tag specifying this is the to replace data, so we can see it in the output
+    SetTagValueVisitor addTagVis("note", "Source 2");
+    NotCriterion addTagCrit(std::shared_ptr<WayNodeCriterion>(new WayNodeCriterion(map)));
+    FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);
+    map->visitRw(deleteExcludeTagVis);
 
     // TODO: after separating quality issue tagging from replacement, grab starting quality metrics
     // for this data.

@@ -215,7 +215,6 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     return;
   }
 
-  const QString boundsStr = GeometryUtils::toString(taskGridCell.bounds);
   QFile changesetFile(
     _changesetsOutputDir + "/changeset-cell-" +
     StringUtils::padFrontOfNumberStringWithZeroes(taskGridCell.id, 3) + ".osc.sql");
@@ -247,7 +246,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     "Applying changeset: " << changesetNum << " / " <<
     StringUtils::formatLargeNumber(taskGridSize) << " with " <<
     StringUtils::formatLargeNumber(numChanges) << " changes for task grid cell: " <<
-    taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeFromString(boundsStr) <<
+    taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeToString(taskGridCell.bounds) <<
     ", from file: ..." << changesetFile.fileName().right(25) << "...");
 
   _changesetApplier->write(changesetFile);
