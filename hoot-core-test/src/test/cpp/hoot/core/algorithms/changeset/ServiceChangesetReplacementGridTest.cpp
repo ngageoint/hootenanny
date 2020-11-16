@@ -63,7 +63,8 @@ static const bool WRITE_NON_CONFLATABLE = false;
  * This test harness allows for testing the Cut and Replace workflow across adjacent task grid
  * cells. By removing the processes of input data retrieval and changeset application via API from
  * the test workflow, bugs can more easily be narrowed down to just those caused by
- * ChangesetReplacementGenerator (most of the time).
+ * ChangesetReplacementGenerator (most of the time). This test class can also be used for simple
+ * single bounds replacement by generating a task grid of size = 1.
  */
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
@@ -75,7 +76,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(refFilteredToEmpty1Test);
   CPPUNIT_TEST(refSinglePoint1Test);
   CPPUNIT_TEST(relationCrop1Test);
-//    CPPUNIT_TEST(riverbank1Test);
+  CPPUNIT_TEST(riverbank1Test);
 //    CPPUNIT_TEST(roundabouts1Test);
 //    CPPUNIT_TEST(secFilteredToEmpty1Test);
 //    CPPUNIT_TEST(secFilteredToEmpty2Test);
@@ -354,6 +355,41 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void riverbank1Test()
+  {
+    // This tests replacement of water features.
+
+    _testName = "riverbank1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
+    conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 5.0);
+    conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 0.5);
+
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsStringTaskGridGenerator(
+        "130.31148,33.2521,130.3163,33.2588", _outputPath + "/" + taskGridFileName)
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
