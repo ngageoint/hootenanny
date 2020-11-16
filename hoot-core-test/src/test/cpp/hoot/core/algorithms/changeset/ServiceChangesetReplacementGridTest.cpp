@@ -77,7 +77,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(refSinglePoint1Test);
   CPPUNIT_TEST(relationCrop1Test);
   CPPUNIT_TEST(riverbank1Test);
-//    CPPUNIT_TEST(roundabouts1Test);
+    CPPUNIT_TEST(roundabouts1Test);
 //    CPPUNIT_TEST(secFilteredToEmpty1Test);
 //    CPPUNIT_TEST(secFilteredToEmpty2Test);
 
@@ -390,6 +390,53 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void roundabouts1Test()
+  {
+    /* Tests to see if we're handling roundabouts during conflate correctly in the replacement
+     * changeset workflow. Roundabouts within the replacement AOI in the output (1 of 2 for this
+     * test) should remain connected to roads that were feeding them from the input.
+
+       Note that there are a ton of duplicated and unnconnected roads in the ref input whose
+       creation must have been the result of a mistake while processing the original source data.
+       This causes dropped feature problems in the output after recent changes made to C&R to
+       prevent unnecessary create/delete changeset statements by preserving ref IDs. The data should
+       probably eventually be cleaned up, which will be tedious (de-duplicate commmand isn't
+       removing all the dupes). In the meantime, however, the replacement AOI was shrunk to just
+       cover one of the roundabouts where the dropped feature problem doesn't occur.
+     */
+
+    _testName = "roundabouts1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
+    conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 5.0);
+    conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 0.5);
+
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsStringTaskGridGenerator(
+        "-89.6219483,20.9953,-89.6199,20.9979", _outputPath + "/" + taskGridFileName)
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    // This number is extremely high due to dupes in the input. See comment above.
+    CPPUNIT_ASSERT_EQUAL(538, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 

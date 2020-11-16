@@ -4,14 +4,15 @@ set -e
 # This script tests the replacement changeset generation workflow for various geometry types. It is called from the 
 # ServiceChangesetReplacement*.sh tests. 
 #
-# UPDATE 11/16/20: Going forward, its best to write these types of tests as part of ServiceChangesetReplacementGridTest rather than use this 
-# test. There are still a few test remaining that need to use this script, however.
-#
 # All resultant changesets are written back to an OSM API database, as that allows for ease of visual inspection of the changes and makes 
 # debugging easier.
 #
 # Pay close attention to the modify change counts, as you can end up with output that looks correct but isn't due to ways being deleted and 
 # re-created when they should have been modified.
+#
+# UPDATE 11/16/20: Going forward, its best to write these types of tests as part of ServiceChangesetReplacementGridTest rather than use this 
+# test. If you need to synthesize replacement data with perty (e.g. ServiceChangesetReplacementBuildingTest.sh), however, then you will need 
+# to use this script.
 
 # Input Parameters (see changeset-derive-replacement command doc for more detail):
 # 1  - test name
