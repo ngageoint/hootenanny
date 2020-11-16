@@ -43,7 +43,7 @@ describe('TranslationServer', function () {
         assert.equal(tags["FFN"], "931");
         assert.equal(tags["SDP"], "Tdh");
         assert.equal(tags["FCODE"], "AL015");
-        assert.equal(tags["TXT"], "<OSM>{\"denomination\":\"protestant\",\"source:date\":\"03/10/2014\"}</OSM>");
+        assert.equal(tags["TXT"], "<OSM>{\"denomination\":\"protestant\",\"source:date\":\"03/10/2014\",\"religion\":\"christian\"}</OSM>");
 
         var osm_xml = server.handleInputs({
             osm: mgcp_xml,
