@@ -56,7 +56,7 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
 // enables diff conflate to calculate the difference between the final replaced data and the
 // original data used for replacement
 static const bool CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT = false;
-// TODO
+// If true, unconflatable data for certain tests is output to its own file.
 static const bool WRITE_NON_CONFLATABLE = false;
 
 /*
