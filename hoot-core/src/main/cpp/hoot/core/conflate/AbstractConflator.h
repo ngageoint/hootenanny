@@ -22,11 +22,11 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef CONFLATOR_H
-#define CONFLATOR_H
+#ifndef ABSTRACT_CONFLATOR_H
+#define ABSTRACT_CONFLATOR_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -38,15 +38,15 @@ namespace hoot
  * TODO: This is going to be a high level class to remove complexity from ConflateCmd and make that
  * logic callable elsewhere.
  */
-class Conflator
+class AbstractConflator
 {
 
 public:
 
-  Conflator();
+  AbstractConflator();
 
 };
 
 }
 
-#endif // CONFLATOR_H
+#endif // ABSTRACT_CONFLATOR_H
