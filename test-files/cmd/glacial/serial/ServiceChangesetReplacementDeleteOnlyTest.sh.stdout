@@ -1,5 +1,5 @@
 test name:  ServiceChangesetReplacementDeleteOnlyTest
-source file 1:  test-files/cmd/glacial/serial/ServiceChangesetReplacementSecFilteredToEmptyTest/input1.osm
+source file 1:  test-files/algorithms/changeset/ServiceChangesetReplacementGridTest/secFilteredToEmpty1Test-Input1.osm
 crop aoi:  -180,-90,180,90
 source file 2:  test-files/Empty.osm
 REF_CONVERT_OPS:  hoot::SetTagValueVisitor
@@ -13,12 +13,11 @@ replacement filter options:
 retainment filters: 
 chain retainment filters: 
 retainment filter options: 
-source formats:  xml
 way snap tolerance:  45.0
 existing way node tolerance:  45.0
 extra params: 
 
-Writing the reference dataset from: test-files/cmd/glacial/serial/ServiceChangesetReplacementSecFilteredToEmptyTest/input1.osm to an osm api db (contains features to be replaced)...
+Writing the reference dataset from: test-files/algorithms/changeset/ServiceChangesetReplacementGridTest/secFilteredToEmpty1Test-Input1.osm to an osm api db (contains features to be replaced)...
 
  setval 
 --------

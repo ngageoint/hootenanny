@@ -257,7 +257,7 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
   ElementCriterionPtr unnconnectedWayNodeCrit =
     _createFeatureCriterion(_wayToSnapCriterionClassName, QStringList());
 
-  // create needed geospatial indexes for surrounding feature searches; If the way node reuse option
+  // Create needed geospatial indexes for surrounding feature searches. If the way node reuse option
   // was turned off, then no need to index way nodes.
   if (wayNodeToSnapToCrit)
   {
@@ -690,7 +690,6 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
     if (wayNodeToSnapToId != nodeToSnap->getId())
     {
       NodePtr wayNodeToSnapTo = _map->getNode(wayNodeToSnapToId);
-      // not exactly sure what could cause this, but it has happened
       if (!wayNodeToSnapTo)
       {
         LOG_TRACE(
@@ -703,11 +702,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
       // Compare all the ways that a contain the neighbor and all the ways that contain our input
       // node. If there's overlap, then we pass b/c we don't want to try to snap the input way
       // node to a way its already on.
-      if (!WayUtils::nodesAreContainedInTheSameWay(wayNodeToSnapToId, nodeToSnap->getId(), _map) /*&&
-          // I don't think this distance check is necessary...leaving here disabled for the time
-          // being just in case. See similar check in _snapUnconnectedNodeToWay
-          Distance::euclidean(wayNodeToSnapTo->toCoordinate(), nodeToSnap->toCoordinate()) <=
-            _maxNodeReuseDistance*/)
+      if (!WayUtils::nodesAreContainedInTheSameWay(wayNodeToSnapToId, nodeToSnap->getId(), _map))
       {
         // If a minimum type match score was specified, we need to do a type comparison. If the
         // type similarity falls below the configured score, don't snap the ways together.
@@ -754,7 +749,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         LOG_TRACE(
           "Snapping way node: " << nodeToSnap->getId() << " to way node: " << wayNodeToSnapToId);
 
-        // Add the optional custom tag for tracking purposes.
+        // Add this optional custom tag for tracking purposes.
         if (_markSnappedNodes)
         {
           wayNodeToSnapTo->getTags().set(MetadataTags::HootSnapped(), "snapped_to_way_node");
@@ -767,8 +762,9 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         {
           _reviewSnappedWay(nodeToSnap->getId());
         }
-        // get the snapped to way so we can retain the parent id; size should be equal to 1;
-        // this could be optimized, since we're doing way containing way node checks already above
+        // Get the snapped to way so we can retain the parent id. The size should be equal to 1.
+        // Maybe this could be optimized, since we're doing way containing way node checks already
+        // above?
         const std::set<long>& waysContainingWayNodeToSnapTo =
           _map->getIndex().getNodeToWayMap()->getWaysByNode(wayNodeToSnapToId);
         LOG_TRACE(waysContainingWayNodeToSnapTo.size());
@@ -776,7 +772,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         _snappedToWay = _map->getWay(*waysContainingWayNodeToSnapTo.begin());
         LOG_VART(_snappedToWay);
 
-        // skip the actual snapping if we're only marking ways that could be snapped
+        // Skip the actual snapping if we're only marking ways that could be snapped.
         if (!_markOnly)
         {
           // merge the tags
@@ -785,8 +781,6 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
               wayNodeToSnapTo->getTags(), nodeToSnap->getTags(), ElementType::Node));
 
           // Replace the snapped node with the node we snapped it to.
-          // TODO: Should we also set the status of the snapped node to that of the way it was
-          // snapped to?
           LOG_TRACE(
             "Replacing " << nodeToSnap->getElementId() << " with " <<
             wayNodeToSnapTo->getElementId());
@@ -818,7 +812,6 @@ void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped)
 {
   std::set<long> owningWayIds =
     WayUtils::getContainingWayIdsByNodeId(idOfNodeBeingSnapped, _map);
-  // assert(wayIds.size() == 1);
   const long owningWayId = *owningWayIds.begin();
   _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), "snapped_way");
 }
@@ -827,7 +820,6 @@ void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped)
 {
   std::set<long> owningWayIds =
     WayUtils::getContainingWayIdsByNodeId(idOfNodeBeingSnapped, _map);
-  // assert(wayIds.size() == 1); // This seems a little suspect...
   const long owningWayId = *owningWayIds.begin();
   _reviewMarker.mark(
     _map, _map->getWay(owningWayId), "Potentially snappable unconnected way",
@@ -977,16 +969,15 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
         shortestDistanceFromNodeToSnapToWayCoord, _snapToWayDiscretizationSpacing, _map);
 
     // This check of the calculated distance being less than the allowed snap distance should not
-    // be necessary, but it is for now.  For some reason, neighbors are occasionally being
-    // returned at longer distances away than expected.
+    // be necessary, but it is for now. For some reason, neighbors are occasionally being returned
+    // at longer distances away than expected.
     // TODO: This may have been fixed with the addition of distance sorting in
     // SpatialIndexer...check.
-    if (/*shortestDistance != DBL_MAX &&*/
-        shortestDistanceFromNodeToSnapToWayCoord <= _maxSnapDistance)
+    if (shortestDistanceFromNodeToSnapToWayCoord <= _maxSnapDistance)
     {
-      // snap the node to the way
+      // Snap the node to the way.
 
-      // figure out where on the target way to insert our node being snapped
+      // Figure out where on the target way to insert our node being snapped.
       const int nodeToSnapInsertIndex = _getNodeToSnapWayInsertIndex(nodeToSnap, wayToSnapTo);
       if (nodeToSnapInsertIndex == -1)
       {
@@ -1006,7 +997,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
           ") and inserting at index: " << nodeToSnapInsertIndex);
       }
 
-      // Add the optional custom tag for tracking purposes.
+      // Add this optional custom tag for tracking purposes.
       if (_markSnappedNodes)
       {
         nodeToSnap->getTags().set(MetadataTags::HootSnapped(), "snapped_to_way");
@@ -1020,14 +1011,14 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
         _reviewSnappedWay(nodeToSnap->getId());
       }
 
-      // skip the actual snapping if we're only marking ways that could be snapped
+      // Skip the actual snapping if we're only marking ways that could be snapped.
       if (!_markOnly)
       {
-        // move the snapped node to the closest way coord
+        // Move the snapped node to the closest way coord.
         nodeToSnap->setX(closestWayToSnapToCoord.x);
         nodeToSnap->setY(closestWayToSnapToCoord.y);
 
-        // add the snapped node as a way node on the target way
+        // Add the snapped node as a way node on the target way.
         QList<long> wayNodeIdsToSnapToList =
           QList<long>::fromVector(QVector<long>::fromStdVector(wayNodeIdsToSnapTo));
         wayNodeIdsToSnapToList.insert(nodeToSnapInsertIndex, nodeToSnap->getId());

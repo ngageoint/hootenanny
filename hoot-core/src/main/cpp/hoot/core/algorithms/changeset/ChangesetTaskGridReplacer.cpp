@@ -39,23 +39,7 @@
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/criterion/DisconnectedWayCriterion.h>
-#include <hoot/core/visitors/SetTagValueVisitor.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
-#include <hoot/core/criterion/ElementIdCriterion.h>
-#include <hoot/core/criterion/EmptyWayCriterion.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
-#include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/ops/RemoveRoundabouts.h>
-#include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/ops/NamedOp.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/criterion/NonConflatableCriterion.h>
-#include <hoot/core/ops/DuplicateElementMarker.h>
 
 namespace hoot
 {
@@ -68,17 +52,11 @@ _killAfterNumChangesetDerivations(-1),
 _numChangesetsDerived(0),
 _totalChangesetDeriveTime(0.0),
 _averageChangesetDeriveTime(0.0),
-_tagQualityIssues(false),
-_orphanedNodes(0),
-_disconnectedWays(0),
-_emptyWays(0),
-_duplicateElementPairs(0),
-_calcDiffWithReplacement(false),
-_outputNonConflatable(false)
+_tagQualityIssues(false)
 {
 }
 
-void ChangesetTaskGridReplacer::replace(
+OsmMapPtr ChangesetTaskGridReplacer::replace(
   const QString& toReplace, const QString& replacement, const TaskGrid& taskGrid)
 {
   if (!toReplace.toLower().startsWith("osmapidb://"))
@@ -138,30 +116,20 @@ void ChangesetTaskGridReplacer::replace(
         StringUtils::millisecondsToDhms(_opTimer.elapsed()));
     }
 
-    if (!_finalOutput.isEmpty())
-    {
-      _getUpdatedData(_finalOutput);
-      // TODO: move this outside of the replace method
-      if (_calcDiffWithReplacement)
-      {
-        // Calculate a diff between the data we just replaced and the original replacement data to
-        // aid in finding any errors during the replacement process.
-        const QString diffOutput = _finalOutput.replace(".osm", "-diff.osm");
-        _calculateDiffWithOriginalReplacementData(diffOutput);
-      }
-    }
+    return _writeUpdatedData(_finalOutput);
   }
   catch (const HootException& e)
   {
     LOG_ERROR(
       "Entire task grid cell replacement operation partially completed with error while " <<
-      " replacing task grid cell number: " << _currentTaskGridCellId << ", " <<
+      "replacing task grid cell number: " << _currentTaskGridCellId << ", " <<
       _numChangesetsDerived << " / " << taskGrid.size() <<
       " cells replaced, time elapsed: " << StringUtils::millisecondsToDhms(_opTimer.elapsed()) <<
       "; Error: " << e.getWhat());
   }
 
   LOG_STATUS("Average changeset derive time: " << _averageChangesetDeriveTime << " seconds.");
+  return OsmMapPtr();
 }
 
 void ChangesetTaskGridReplacer::_initConfig()
@@ -247,7 +215,6 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     return;
   }
 
-  const QString boundsStr = GeometryUtils::toString(taskGridCell.bounds);
   QFile changesetFile(
     _changesetsOutputDir + "/changeset-cell-" +
     StringUtils::padFrontOfNumberStringWithZeroes(taskGridCell.id, 3) + ".osc.sql");
@@ -279,7 +246,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
     "Applying changeset: " << changesetNum << " / " <<
     StringUtils::formatLargeNumber(taskGridSize) << " with " <<
     StringUtils::formatLargeNumber(numChanges) << " changes for task grid cell: " <<
-    taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeFromString(boundsStr) <<
+    taskGridCell.id << ", over bounds: " << GeometryUtils::envelopeToString(taskGridCell.bounds) <<
     ", from file: ..." << changesetFile.fileName().right(25) << "...");
 
   _changesetApplier->write(changesetFile);
@@ -301,7 +268,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   // VERY SLOW
   if (ConfigOptions().getDebugMapsWrite() && changesetNum < taskGridSize)
   {
-    _getUpdatedData(
+    _writeUpdatedData(
       _changesetsOutputDir + "/" + QString::number(taskGridCell.id) + "-replaced-data.osm");
   }
 
@@ -389,7 +356,7 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
         _changesetStats[OsmApiDbSqlChangesetApplier::TOTAL_DELETE_KEY]));
 }
 
-void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
+OsmMapPtr ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile)
 {
   // clear this out so we get all the data back
   conf().set(ConfigOptions::getConvertBoundsKey(), "");
@@ -409,205 +376,28 @@ void ChangesetTaskGridReplacer::_getUpdatedData(const QString& outputFile)
   emptyRelationRemover.apply(map);
   LOG_STATUS(emptyRelationRemover.getCompletedStatusMessage());
 
-  // TODO: move this outside of this method and the replace method
-  if (_outputNonConflatable)
-  {
-    // Output any features that hoot doesn't know how to conflate into their own file, for
-    // debugging purposes.
-    QString nonConflatableOutput = outputFile;
-    nonConflatableOutput.replace(".osm", "-non-conflatable.osm");
-    _writeNonConflatable(map, nonConflatableOutput);
-  }
-
-  // TODO: move this outside of this method and the replace method
   if (_tagQualityIssues)
   {
-    // tag element with potential data quality issues caused by the replacement operations; If this
+    // Tag element with potential data quality issues caused by the replacement operations. If this
     // isn't done after the previous cleaning step, you'll get some element NPE's.
-    _writeQualityIssueTags(map);
+    _metricTagger.setBounds(_taskGridBounds);
+    _metricTagger.apply(map);
   }
 
-  // write the full map out
-  LOG_STATUS("Writing the modified data to: ..." << outputFile.right(25) << "...");
-  OsmMapWriterFactory::write(map, outputFile);
+  if (!outputFile.isEmpty())
+  {
+    // write the full map out
+    LOG_STATUS("Writing the modified data to: ..." << outputFile.right(25) << "...");
+    OsmMapWriterFactory::write(map, outputFile);
+  }
 
   LOG_STATUS(
     "Modified data original size: " << StringUtils::formatLargeNumber(_originalDataSize) <<
     ", current size: " << StringUtils::formatLargeNumber(map->size()) << ", read out in: " <<
     StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
   _subTaskTimer.restart();
-}
 
-void ChangesetTaskGridReplacer::_writeQualityIssueTags(OsmMapPtr& map)
-{
-  LOG_STATUS("Tagging features with quality issues...");
-
-  std::shared_ptr<SetTagValueVisitor> tagVis;
-  std::shared_ptr<FilteredVisitor> filteredVis;
-  std::shared_ptr<ElementCriterion> crit;
-
-  // We're only guaranteeing output data quality for the data in the task grid cells actually
-  // replaced. Any data outside of the replacement grid may end up with quality issues that can't be
-  // fixed until its replaced. So, restrict each of these quality checks to be in the replacement
-  // AOI.
-
-  std::shared_ptr<geos::geom::Polygon> boundsGeom =
-    GeometryUtils::envelopeToPolygon(_taskGridBounds);
-
-  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootSuperfluous(), "yes"));
-  crit.reset(
-    new ElementIdCriterion(
-      ElementType::Node,
-      SuperfluousNodeRemover::collectSuperfluousNodeIds(map, false, boundsGeom)));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
-  map->visitRo(*filteredVis);
-  _orphanedNodes = tagVis->getNumFeaturesAffected();
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_orphanedNodes) << " orphaned nodes in output.");
-
-  // SuperfluousNodeRemover took in a bounds above, but the remaining quality checks do not so
-  // combine their criteria with an InBoundsCriterion to make sure we only count elements within the
-  // replacement bounds.
-  std::shared_ptr<InBoundsCriterion> inBoundsCrit(new InBoundsCriterion(true));
-  inBoundsCrit->setBounds(boundsGeom);
-  inBoundsCrit->setOsmMap(map.get());
-
-  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
-  crit.reset(
-    new ChainCriterion(ElementCriterionPtr(new DisconnectedWayCriterion(map)), inBoundsCrit));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
-  map->visitRo(*filteredVis);
-  _disconnectedWays = tagVis->getNumFeaturesAffected();
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_disconnectedWays) <<
-    " disconnected ways in output.");
-
-  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootEmptyWay(), "yes"));
-  crit.reset(new ChainCriterion(ElementCriterionPtr(new EmptyWayCriterion()), inBoundsCrit));
-  filteredVis.reset(new FilteredVisitor(crit, tagVis));
-  map->visitRo(*filteredVis);
-  _emptyWays = tagVis->getNumFeaturesAffected();
-  LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
-
-  DuplicateElementMarker dupeMarker;
-  dupeMarker.setCoordinateComparisonSensitivity(8);
-  dupeMarker.apply(map);
-  _duplicateElementPairs = dupeMarker.getNumFeaturesAffected();
-  LOG_STATUS(
-    "Tagged " << StringUtils::formatLargeNumber(_duplicateElementPairs) <<
-    " duplicate feature pairs in output.");
-  LOG_STATUS(
-    "Containing way types for duplicate way nodes: " << dupeMarker.getContainingWayTypes());
-}
-
-void ChangesetTaskGridReplacer::_writeNonConflatable(const ConstOsmMapPtr& map,
-                                                     const QString& outputFile)
-{
-  LOG_STATUS("Writing non-conflatable data to: ..." << outputFile.right(25) << " ...");
-  OsmMapPtr nonConflatableMap(new OsmMap(map));
-  std::shared_ptr<RemoveElementsVisitor> elementRemover(new RemoveElementsVisitor(true));
-  elementRemover->setRecursive(true);
-  std::shared_ptr<ElementCriterion> nonConflatableCrit(
-    new NonConflatableCriterion(nonConflatableMap));
-  elementRemover->addCriterion(nonConflatableCrit);;
-  nonConflatableMap->visitRw(*elementRemover);
-  if (nonConflatableMap->size() > 0)
-  {
-    OsmMapWriterFactory::write(nonConflatableMap, outputFile);
-    LOG_STATUS(
-      "Non-conflatable data of size: " <<
-      StringUtils::formatLargeNumber(nonConflatableMap->size()) << " written in: " <<
-      StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  }
-  else
-  {
-    LOG_STATUS("No non-conflatable elements present.");
-  }
-  _subTaskTimer.restart();
-}
-
-void ChangesetTaskGridReplacer::_calculateDiffWithOriginalReplacementData(const QString& outputFile)
-{
-  // We only want to calculate the diff out to the task grid bounds, b/c that's the data that was
-  // actually replaced.
-  conf().set(
-    ConfigOptions::getConvertBoundsKey(),
-    GeometryUtils::envelopeToString(_taskGridBounds));
-  // use lenient bounds
-  conf().set(ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
-  conf().set(
-    ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
-  conf().set(ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(), false);
-  //conf().set(ConfigOptions::getDifferentialTreatReviewsAsMatchesKey(), false);
-
-  // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
-  // config.
-  conf().set(
-    ConfigOptions::getRubberSheetElementCriteriaKey(),
-    ConfigOptions().getConflateRubberSheetElementCriteria());
-  // don't remove/replace roundabouts during diff conflate
-  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
-  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
-  if (preConflateOps.contains(removeRoundaboutsClassName))
-  {
-    preConflateOps.removeAll(removeRoundaboutsClassName);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
-  }
-  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
-  const QString replaceRoundaboutsClassName =
-    QString::fromStdString(ReplaceRoundabouts::className());
-  if (postConflateOps.contains(replaceRoundaboutsClassName))
-  {
-    postConflateOps.removeAll(replaceRoundaboutsClassName);
-    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
-  }
-
-  LOG_STATUS(
-    "Loading replacement data for diff calc from: ..." << _replacementUrl.right(25) << "...");
-  OsmMapPtr diffMap(new OsmMap());
-  IoUtils::loadMap(diffMap, _replacementUrl, true, Status::Unknown1);
-  const int replacementMapSize = diffMap->size();
-  LOG_STATUS(
-    "Replacement data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  _subTaskTimer.restart();
-
-  const QString replacedDataUrl = _dataToReplaceUrl;
-  LOG_STATUS("Loading replaced data for diff calc from: ..." << replacedDataUrl.right(25) << "...");
-  IoUtils::loadMap(diffMap, replacedDataUrl, false, Status::Unknown2);
-  LOG_STATUS(
-    "Replaced data loaded in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  _subTaskTimer.restart();
-
-  // had to do this cleaning to get the relations to behave
-  RemoveMissingElementsVisitor missingElementRemover;
-  diffMap->visitRw(missingElementRemover);
-  LOG_STATUS(missingElementRemover.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(diffMap, "task-grid-replacer-diff-input");
-
-  LOG_STATUS(
-    "Calculating the diff between replaced data of size: " <<
-    StringUtils::formatLargeNumber(diffMap->size() - replacementMapSize) <<
-    " and replacement data of size: " << StringUtils::formatLargeNumber(replacementMapSize)  <<
-    "...");
-  NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
-  DiffConflator diffGen;
-  diffGen.apply(diffMap);
-  NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
-  LOG_STATUS(
-    "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " features in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()) << " (skipped " <<
-    StringUtils::formatLargeNumber(diffGen.getNumUnconflatableElementsDiscarded()) <<
-    " unconflatable)");
-  _subTaskTimer.restart();
-
-  LOG_STATUS(
-    "Writing the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " to: ..." << outputFile.right(25) << "...");
-  IoUtils::saveMap(diffMap, outputFile);
-  LOG_STATUS(
-    "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
-    " in: " << StringUtils::millisecondsToDhms(_subTaskTimer.elapsed()));
-  _subTaskTimer.restart();
+  return map;
 }
 
 }

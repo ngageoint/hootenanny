@@ -40,7 +40,10 @@ namespace hoot
 
 /**
  * Uses the node density of a map to create a task grid made up of potentially irregularly sized
- * rectangles
+ * rectangles.
+ *
+ * Node density calc requires reading in all of the replacement node data, so may not be feasible
+ * when replacing extremely large amounts of data.
  */
 class NodeDensityTaskGridGenerator : public TaskGridGenerator
 {

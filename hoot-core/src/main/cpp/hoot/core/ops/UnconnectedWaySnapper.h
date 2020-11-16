@@ -44,7 +44,7 @@ namespace hoot
 /**
  * This class is set up to snap an unconnected way endpoint node to another way, using custom
  * element input criteria to determine which types of ways should be snapped and what type of ways
- * they should be snapped to.  However, as of 3/21/19, this has only ever been tested with roads.
+ * they should be snapped to.
  *
  * The main impetus in creating this class was to make the road output of Differential Conflation
  * using the Network Algorithm (with rubber sheeting as a pre conflate op) better by snapping
@@ -82,7 +82,7 @@ public:
   virtual ~UnconnectedWaySnapper() = default;
 
   /**
-   * @see OsmMapOperation
+   * Snaps unconnected ways in the input to each other
    */
   virtual void apply(OsmMapPtr& map);
 
