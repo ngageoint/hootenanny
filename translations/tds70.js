@@ -251,107 +251,54 @@ tds70 = {
 
     if (attrList != undefined)
     {
-      // The code is duplicated but it is quicker than doing the "if" on each iteration
-      if (tds70.configOut.OgrDebugDumpvalidate == 'true')
+      for (var val in attrs)
       {
-        	    for (var val in attrs)
-        	    {
-            	    if (attrList.indexOf(val) == -1)
+        if (attrList.indexOf(val) == -1)
+        {
+          if (val in othList)
           {
-            if (val in othList)
-            {
-              //Debug:
-              // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
-              delete othList[val];
-            }
-
-            if (val in transMap)
-            {
-              notUsed[transMap[val][1]] = transMap[val][2];
-              // Debug:
-              // print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
-            }
-
-            hoot.logWarn('Validate: Dropping ' + val + ' = ' + attrs[val] + ' from ' + attrs.F_CODE);
-            delete attrs[val];
-
-            // Since we deleted the attribute, Skip the text check
-            continue;
+            //Debug:
+            // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
+            delete othList[val];
           }
 
-          // Now check the length of the text fields
-          // We need more info from the customer about this: What to do if it is too long
-          if (val in tds70.rules.txtLength)
+          if (val in transMap)
           {
-            if (attrs[val].length > tds70.rules.txtLength[val])
-            {
-              // First try splitting the attribute and grabbing the first value
-              var tStr = attrs[val].split(';');
-              if (tStr[0].length <= tds70.rules.txtLength[val])
-              {
-                attrs[val] = tStr[0];
-              }
-              else
-              {
-                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds70.rules.txtLength[val] + ' characters.');
-                // Still too long. Chop to the maximum length.
-                attrs[val] = tStr[0].substring(0,tds70.rules.txtLength[val]);
-              }
-            } // End text attr length > max length
-
-            // It's text fo skip the next test
-            continue;
-          } // End in txtLength
-        } // End attrs loop
-      }
-      else
-      {
-        	    for (var val in attrs)
-        	    {
-            	    if (attrList.indexOf(val) == -1)
-          {
-            if (val in othList)
-            {
-              //Debug:
-              // print('Validate: Dropping OTH: ' + val + '  (' + othList[val] + ')');
-              delete othList[val];
-            }
-
-            delete attrs[val];
-
-            // Since we deleted the attribute, Skip the text check
-            continue;
+            notUsed[transMap[val][1]] = transMap[val][2];
+            hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
           }
 
-          // Now check the length of the text fields
-          // We need more info from the customer about this: What to do if it is too long
-          if (val in tds70.rules.txtLength)
-          {
-            if (attrs[val].length > tds70.rules.txtLength[val])
-            {
-              // First try splitting the attribute and grabbing the first value
-              var tStr = attrs[val].split(';');
-              if (tStr[0].length <= tds70.rules.txtLength[val])
-              {
-                attrs[val] = tStr[0];
-              }
-              else
-              {
-                hoot.logWarn('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds70.rules.txtLength[val] + ' characters.');
-                // Still too long. Chop to the maximum length.
-                attrs[val] = tStr[0].substring(0,tds70.rules.txtLength[val]);
-              }
-            } // End text attr length > max length
+          hoot.logDebug('Validate: Dropping ' + val + ' = ' + attrs[val] + ' from ' + attrs.F_CODE);
+          delete attrs[val];
+          // Since we deleted the attribute, Skip the text check
+          continue;
+        }
 
-            // It's text fo skip the next test
-            continue;
-          } // End in txtLength
-        	    } // End attrs loop
-      }
+        // Now check the length of the text fields
+        // We need more info from the customer about this: What to do if it is too long
+        if (val in tds70.rules.txtLength)
+        {
+          if (attrs[val].length > tds70.rules.txtLength[val])
+          {
+            // First try splitting the attribute and grabbing the first value
+            var tStr = attrs[val].split(';');
+            if (tStr[0].length <= tds70.rules.txtLength[val])
+            {
+              attrs[val] = tStr[0];
+            }
+            else
+            {
+              hoot.logDebug('Validate: Attribute ' + val + ' is ' + attrs[val].length + ' characters long. Truncating to ' + tds70.rules.txtLength[val] + ' characters.');
+              // Still too long. Chop to the maximum length.
+              attrs[val] = tStr[0].substring(0,tds70.rules.txtLength[val]);
+            }
+          } // End text attr length > max length
+        } // End in txtLength
+      } // End attrs loop
     }
     else
     {
-      hoot.logTrace('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
+      hoot.logDebug('Validate: No attrList for ' + attrs.F_CODE + ' ' + geometryType);
     } // End Drop attrs
 
     // Repack the OTH field
@@ -404,7 +351,7 @@ tds70 = {
           // Set the offending enumerated value to the default value
           attrs[enumName] = feature.columns[i].defValue;
 
-          hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
+          hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting ' + enumName + ' to its default value (' + feature.columns[i].defValue + ')');
 
           attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,othVal,';');
         }
@@ -413,7 +360,7 @@ tds70 = {
           // Set the offending enumerated value to the "other" value
           attrs[enumName] = '999';
 
-          hoot.logTrace('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
+          hoot.logDebug('Validate: Enumerated Value: ' + attrValue + ' not found in ' + enumName + ' Setting OTH and ' + enumName + ' to Other (999)');
 
           attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
         }
@@ -1092,28 +1039,28 @@ tds70 = {
       break;
 
       // Add defaults for common features
-      case 'AP020':
-        if (! tags.junction) tags.junction = 'yes';
-        break;
+    case 'AP020':
+      if (! tags.junction) tags.junction = 'yes';
+      break;
 
-      case 'AQ040':
-        if (! tags.bridge) tags.bridge = 'yes';
-        break;
+    case 'AQ040':
+      if (! tags.bridge) tags.bridge = 'yes';
+      break;
 
-      case 'BH140':
-        if (! tags.waterway) tags.waterway = 'river';
-        break;
+    case 'BH140':
+      if (! tags.waterway) tags.waterway = 'river';
+      break;
 
       // Tidal Water
-      case 'BA040':
-        tags.natural = 'water';
-        break;
+    case 'BA040':
+      tags.natural = 'water';
+      break;
 
       // BH082 - Inland Water
-      case 'BH082':
-        // This leaves us with just "natural=water"
-        if (tags.water == 'undifferentiated_water_body') delete tags.water;
-        break;
+    case 'BH082':
+      // This leaves us with just "natural=water"
+      if (tags.water == 'undifferentiated_water_body') delete tags.water;
+      break;
     } // End switch F_CODE
 
     // Fix up lifestyle tags.
@@ -1128,7 +1075,7 @@ tds70 = {
     {
       if (tags.condition == 'construction')
       {
-        //                 if (tags.highway && attrs.F_CODE == 'AP030')
+        // if (tags.highway && attrs.F_CODE == 'AP030')
         if (tags.highway)
         {
           tags.construction = tags.highway;
@@ -1287,50 +1234,50 @@ tds70 = {
     {
       switch (tags[typ])
       {
-        case undefined: // Break early if no value
-          break;
+      case undefined: // Break early if no value
+        break;
 
-        case 'construction':
-          if (tags.construction)
-          {
-            tags[typ] = tags.construction;
-            delete tags.construction;
-          }
-          else
-          {
-            tags[typ] = cycleList[typ];
-          }
-          tags.condition = 'construction';
-          break;
-
-        case 'proposed':
-          if (tags.proposed)
-          {
-            tags[typ] = tags.proposed;
-            delete tags.proposed;
-          }
-          else
-          {
-            tags[typ] = cycleList[typ];
-          }
-          tags.condition = 'proposed';
-          break;
-
-        case 'abandoned':
-        case 'disused':
+      case 'construction':
+        if (tags.construction)
+        {
+          tags[typ] = tags.construction;
+          delete tags.construction;
+        }
+        else
+        {
           tags[typ] = cycleList[typ];
-          tags.condition = 'abandoned';
-          break;
+        }
+        tags.condition = 'construction';
+        break;
 
-        case 'destroyed':
+      case 'proposed':
+        if (tags.proposed)
+        {
+          tags[typ] = tags.proposed;
+          delete tags.proposed;
+        }
+        else
+        {
           tags[typ] = cycleList[typ];
-          tags.condition = 'destroyed';
-          break;
+        }
+        tags.condition = 'proposed';
+        break;
 
-        case 'demolished':
-          tags[typ] = cycleList[typ];
-          tags.condition = 'dismantled';
-          break;
+      case 'abandoned':
+      case 'disused':
+        tags[typ] = cycleList[typ];
+        tags.condition = 'abandoned';
+        break;
+
+      case 'destroyed':
+        tags[typ] = cycleList[typ];
+        tags.condition = 'destroyed';
+        break;
+
+      case 'demolished':
+        tags[typ] = cycleList[typ];
+        tags.condition = 'dismantled';
+        break;
       }
     } // End cycleList
 
@@ -2019,8 +1966,8 @@ tds70 = {
 
     if (tags['is_in:country'] && !tags['addr:country'])
     {
-        tags['addr:country'] = tags['is_in:country'];
-        delete tags['is_in:country'];
+      tags['addr:country'] = tags['is_in:country'];
+      delete tags['is_in:country'];
     }
 
     // Product vs substance vs resource.  Sigh...
@@ -2283,10 +2230,10 @@ tds70 = {
       if (attrs[ge4attr[i]])
       {
         // First, try the 2char country code
-        var urn = translate.convertCountryCode('c2','urn',attrs[ge4attr[i]])
+        var urn = translate.convertCountryCode('c2','urn',attrs[ge4attr[i]]);
 
         // If nothing, try searching all of the fields to get a match
-        if (urn == '') urn = translate.findCountryCode('urn',attrs[ge4attr[i]])
+        if (urn == '') urn = translate.findCountryCode('urn',attrs[ge4attr[i]]);
 
         if (urn !== '')
         {
@@ -2305,7 +2252,7 @@ tds70 = {
     if (notUsedTags['source.imagery.datetime'])
     {
       attrs.ZI001_SDV = notUsedTags['source.imagery.datetime'];
-      delete notUsedTags['source.imagery.datetime']
+      delete notUsedTags['source.imagery.datetime'];
     }
 
     // Amusement Parks
@@ -2356,8 +2303,8 @@ tds70 = {
 
     if (!attrs.ZI001_SDP && notUsedTags['source:imagery'])
     {
-       attrs.ZI001_SDP = notUsedTags['source:imagery'];
-       delete notUsedTags['source:imagery'];
+      attrs.ZI001_SDP = notUsedTags['source:imagery'];
+      delete notUsedTags['source:imagery'];
     }
 
   }, // End applyToTdsPostProcessing
@@ -2417,30 +2364,6 @@ tds70 = {
       // translate.dumpOne2OneLookup(tds70.fcodeLookup);
     }
 
-    // Use the FCODE to add some tags.
-    if (attrs.F_CODE)
-    {
-      var ftag = tds70.fcodeLookup['F_CODE'][attrs.F_CODE];
-      if (ftag)
-      {
-        if (!tags[ftag[0]])
-        {
-          tags[ftag[0]] = ftag[1];
-        }
-        else
-        {
-          // Debug
-          print('Tried to replace: ' + ftag[0] + '=' + tags[ftag[0]] + '  with ' + ftag[1]);
-        }
-        // Debug: Dump out the tags from the FCODE
-        // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
-      }
-      else
-      {
-        hoot.logTrace('Translation for F_CODE ' + attrs.F_CODE + ' not found');
-      }
-    }
-
     if (tds70.lookup == undefined)
     {
       // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the
@@ -2471,7 +2394,7 @@ tds70 = {
     // pre processing
     tds70.applyToOsmPreProcessing(attrs, layerName, geometryType);
 
-    // Use the FCODE to add some tags.
+    // Use the FCODE to add some tags
     if (attrs.F_CODE)
     {
       var ftag = tds70.fcodeLookup['F_CODE'][attrs.F_CODE];
@@ -2652,13 +2575,6 @@ tds70 = {
     // Debug
     if (tds70.configOut.getOgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
-    // If we have unused tags, add them to the memo field.
-    if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
-    {
-      var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-      attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
-    }
-
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
     // push the feature to o2s layer
@@ -2743,6 +2659,13 @@ tds70 = {
           // Validate attrs: remove all that are not supposed to be part of a feature
           tds70.validateAttrs(geometryType,returnData[i]['attrs'], notUsedTags,transMap);
 
+          // If we have unused tags, add them to the memo field.
+          if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
+          {
+            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
+          }
+
           // Now set the FCSubtype.
           // NOTE: If we export to shapefile, GAIT _will_ complain about this
           if (tds70.configOut.OgrEsriFcsubtype == 'true')
@@ -2782,6 +2705,13 @@ tds70 = {
 
         returnData.push({attrs: extraFeature, tableName: extraName});
       } // End notUsedTags
+
+    // If we have unused tags, add them to the memo field.
+    if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
+    {
+      var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+      attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
+    }
 
       // Look for Review tags and push them to a review layer if found
       if (tags['hoot:review:needs'] == 'yes')

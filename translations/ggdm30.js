@@ -237,7 +237,6 @@ ggdm30 = {
   // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
   //                feature, checking values and populateing the OTH field
   validateAttrs: function(geometryType,attrs,notUsed,transMap) {
-
     // First, use the lookup table to quickly drop all attributes that are not part of the feature
     // This is quicker than going through the Schema due to the way the Schema is arranged
     var attrList = ggdmAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
@@ -266,9 +265,7 @@ ggdm30 = {
           if (val in transMap)
           {
             notUsed[transMap[val][1]] = transMap[val][2];
-            // Debug:
-            // print('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
-            // print('Validate: Dropping ' + val + ' = ' + attrs[val] + ' from ' + attrs.F_CODE);
+            hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
           }
 
           // Debug:
@@ -690,9 +687,29 @@ ggdm30 = {
         var tTags = JSON.parse(tObj.tags);
         for (i in tTags)
         {
-          if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+          if (tags[tTags[i]]) hoot.logDebug('Unpacking ZI006_MEM, overwriteing ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
           tags[i] = tTags[i];
-        }
+
+          // Now check if this is a synonym etc. If so, remove the other tag.
+          if (i in ggdm30.fcodeLookupOut) // tag -> FCODE table
+          {
+            if (tags[i] in ggdm30.fcodeLookupOut[i])
+            {
+              var row = ggdm30.fcodeLookupOut[i][tags[i]];
+
+              // Now find the "real" tag that comes frm the FCode
+              if (row[1] in ggdm30.fcodeLookup['F_CODE'])
+              {
+                var row2 = ggdm30.fcodeLookup['F_CODE'][row[1]];
+                // If the tags match, delete it
+                if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
+                {
+                  delete tags[row2[0]];
+                }
+              }
+            }
+          }
+        } // End nTags
       }
 
       if (tObj.text && tObj.text !== '')
@@ -1252,7 +1269,6 @@ ggdm30 = {
         ['t.natural == "desert" && t.surface','t.desert_surface = t.surface; delete t.surface'],
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
-        ['t.natural == "wood"','t.landuse = "forest"; delete t.natural'],
         ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
         ['t.power == "tower"','t["cable:type"] = "power"'],
         ['t.power == "line"','t["cable:type"] = "power"; t.cable = "yes"; delete t.power'],
@@ -1571,15 +1587,19 @@ ggdm30 = {
       for (var col in tags)
       {
         var value = tags[col];
-        if (col in ggdm30.fcodeLookup)
+        if (col in ggdm30.fcodeLookup && (value in ggdm30.fcodeLookup[col]))
         {
-          if (value in ggdm30.fcodeLookup[col])
-          {
-            var row = ggdm30.fcodeLookup[col][value];
-            attrs.F_CODE = row[1];
-            // Debug
-            //print('FCODE: Got ' + attrs.F_CODE);
-          }
+          var row = ggdm30.fcodeLookup[col][value];
+          attrs.F_CODE = row[1];
+          // Debug
+          //print('FCODE: Got ' + attrs.F_CODE);
+        }
+        else if (col in ggdm30.fcodeLookupOut && (value in ggdm30.fcodeLookupOut[col]))
+        {
+          var row = ggdm30.fcodeLookupOut[col][value];
+          attrs.F_CODE = row[1];
+          // Debug
+          //print('FCODE: Got ' + attrs.F_CODE);
         }
       }
     } // End find F_CODE
@@ -2192,9 +2212,12 @@ ggdm30 = {
 
       ggdm30.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
       // Debug
-      //             print('Start Dump FCODE:');
-      //             translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
-      //             print('End Dump FCODE:');
+      // print('Start Dump FCODE:');
+      // translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
+      // print('End Dump FCODE:');
+      // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
+      // translation to an FCode
+      ggdm30.fcodeLookupOut = translate.createBackwardsLookup(ggdm30.rules.fcodeOne2oneOut);
     }
 
     if (ggdm30.lookup == undefined)
@@ -2320,9 +2343,14 @@ ggdm30 = {
     if (ggdm30.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Export
-      fcodeCommon.one2one.push.apply(fcodeCommon.one2one,ggdm30.rules.fcodeOne2oneOut);
+      // fcodeCommon.one2one.push.apply(fcodeCommon.one2one,ggdm30.rules.fcodeOne2oneOut);
 
       ggdm30.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+
+      // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
+      // translation to an FCode
+      ggdm30.fcodeLookupOut = translate.createBackwardsLookup(ggdm30.rules.fcodeOne2oneOut);
+
       // Debug
       // translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
     }
@@ -2390,13 +2418,6 @@ ggdm30 = {
     // Debug
     if (ggdm30.config.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
-    // If we have unused tags, add them to the memo field
-    if (Object.keys(notUsedTags).length > 0 && ggdm30.config.OgrNoteExtra == 'attribute')
-    {
-      var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-      attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
-    }
-
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
     // push the feature to o2s layer
@@ -2421,6 +2442,23 @@ ggdm30 = {
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           ggdm30.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
+
+          // If we have unused tags, add them to the memo field
+          if (Object.keys(notUsedTags).length > 0 && ggdm30.config.OgrNoteExtra == 'attribute')
+          {
+            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+
+            // there is always one.....
+            // ZI031 (Dataset) has MEM instead of ZI006_MEM.  Why???????
+            if (returnData[i]['attrs']['F_CODE'] == 'ZI031')
+            {
+              returnData[i]['attrs']['MEM'] = translate.appendValue(returnData[i]['attrs']['MEM'],tStr,';');
+            }
+            else
+            {
+              returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
+            }
+          }
 
           // Now set the FCSubtype
           // NOTE: If we export to shapefile, GAIT _will_ complain about this

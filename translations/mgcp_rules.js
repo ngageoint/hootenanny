@@ -148,9 +148,8 @@ mgcp.rules = {
     ['F_CODE','DB090','embankment','levee'],
     ['F_CODE','DB090','embankment','mound'], // Embankment
     ['F_CODE','DB090','man_made','dyke'],
-    ['F_CODE','EB020','natural','brush'], // Thicket
     ['F_CODE','EB020','natural','heath'], // Thicket
-    ['F_CODE','EB020','natural','thicket'], // Thicket
+    ['F_CODE','EC030','natural','wood'], // Trees
     ['F_CODE','ED010','natural','wetland'], // Marsh
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
     ['F_CODE','FA015','man_made','shooting_range'], // Firing Range
@@ -1138,9 +1137,9 @@ mgcp.rules = {
     // TRE - Foliage Type
     // ['TRE','0','wood','unknown'], // Unknown
     ['TRE','0',undefined,undefined], // Unknown
-    ['TRE','1','wood','deciduous'], // Deciduous
-    ['TRE','2','wood','evergreen'], // Evergreen
-    ['TRE','3','wood','mixed'], // Mixed
+    ['TRE','1','leaf_cycle','deciduous'], // Deciduous
+    ['TRE','2','leaf_cycle','evergreen'], // Evergreen
+    ['TRE','3','leaf_cycle','mixed'], // Mixed
 
     // TRS - Transportation System Type: See BH070 Ford
     // ['TRS','0','transport:type','unknown'],
@@ -2288,6 +2287,11 @@ mgcp.rules = {
     ['FFN','850','amenity','kindergarten'],
     ['FFN','850','amenity','college'],
     ['FFN','850','amenity','university'],
+
+    // TRE - Foliage Type
+    ['TRE','1','wood','deciduous'], // Deciduous
+    ['TRE','2','wood','evergreen'], // Evergreen
+    ['TRE','3','wood','mixed'], // Mixed
 
       ], // End one2oneOut
 

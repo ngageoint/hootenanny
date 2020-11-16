@@ -104,6 +104,7 @@ tds61.rules = {
     ['F_CODE','DB090','embankment','levee'],
     ['F_CODE','DB090','embankment','divider'],
     ['F_CODE','EB070','natural','heath'], // Brush
+    ['F_CODE','EC015','natural','wood'], // Trees
     ['F_CODE','ED010','natural','wetland'], // Marsh
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
     ['F_CODE','FA015','man_made','shooting_range'], // Firing Range
@@ -2893,10 +2894,10 @@ tds61.rules = {
 
     // TRE - Foliage Type
     // ['TRE','-999999',undefined,undefined], // No Information
-    ['TRE','1','wood','deciduous'], // Deciduous
-    ['TRE','2','wood','evergreen'], // Evergreen
-    ['TRE','3','wood','mixed'], // Mixed
-    ['TRE','999','wood','other'], // Other
+    ['TRE','1','leaf_cycle','deciduous'], // Deciduous
+    ['TRE','2','leaf_cycle','evergreen'], // Evergreen
+    ['TRE','3','leaf_cycle','mixed'], // Mixed
+    ['TRE','999','leaf_cycle','other'], // Other
 
     // TRP - Transportation Route Protection Structure Type
     // ['TRP','-999999',undefined,undefined], // No Information
@@ -3929,7 +3930,7 @@ tds61.rules = {
     ['ZSAX_RS0','TS','security:classification','TS'],
 
     // OTH Filler.  These are to build OTH values
-    ['RTY','999','highway','other'],
+    // ['RTY','999','highway','other'],
     ['FFN','999','amenity','other'],
     ['FFN','999','building','other'],
     ['FFN','999','camp:type','other'],
@@ -4076,6 +4077,13 @@ tds61.rules = {
 
     // Added to give something for the OTH value to use
     ['ZI016_ROC','999','surface','other'], // Other
+
+    // TRE - Foliage Type
+    // ['TRE','-999999',undefined,undefined], // No Information
+    ['TRE','1','wood','deciduous'], // Deciduous
+    ['TRE','2','wood','evergreen'], // Evergreen
+    ['TRE','3','wood','mixed'], // Mixed
+    ['TRE','999','wood','other'], // Other
 
   ], // End one2oneOut
 

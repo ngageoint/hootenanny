@@ -78,6 +78,6 @@ function translateToOgr(tags, elementType, geometryType)
     delete tags.tags;
   }
 
-  return mgcp.toMgcp(tags, elementType, geometryType);
+  return mgcp.toOgr(tags, elementType, geometryType);
 
 } // End of translateToOgr

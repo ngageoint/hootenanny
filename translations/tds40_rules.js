@@ -43,7 +43,6 @@ tds40.rules = {
   // Note: These get swapped around before being used
   fcodeOne2oneOut : [
     // ['F_CODE','EA010','landuse','farm'], // Alt version of "landuse=farmland"
-    // ['F_CODE','EC015','natural','wood'], // Alt version of Forest
     ['F_CODE','AA010','landuse','quarry'], // Extraction Mine
     ['F_CODE','AA054','man_made','petroleum_well'], // Non-Water Well
     ['F_CODE','AD010','power','station'], // Electric Power Station, Power Plant
@@ -105,6 +104,7 @@ tds40.rules = {
     ['F_CODE','DB090','embankment','levee'],
     ['F_CODE','DB090','embankment','divider'],
     ['F_CODE','EB070','natural','heath'], // Brush
+    ['F_CODE','EC015','natural','wood'], // Alt version of Forest
     ['F_CODE','ED010','natural','wetland'], // Marsh
     ['F_CODE','ED010','wetland','reedbed'], // Marsh
     ['F_CODE','FA015','man_made','shooting_range'], // Firing Range
@@ -2778,10 +2778,10 @@ tds40.rules = {
 
     // TRE - Foliage Type
     // ['TRE','-999999',undefined,undefined], // No Information
-    ['TRE','1','wood','deciduous'], // Deciduous
-    ['TRE','2','wood','evergreen'], // Evergreen
-    ['TRE','3','wood','mixed'], // Mixed
-    ['TRE','999','wood','other'], // Other
+    ['TRE','1','leaf_cycle','deciduous'], // Deciduous
+    ['TRE','2','leaf_cycle','evergreen'], // Evergreen
+    ['TRE','3','leaf_cycle','mixed'], // Mixed
+    ['TRE','999','leaf_cycle','other'], // Other
 
     // TRP - Transportation Route Protection Structure Type
     // ['TRP','-999999',undefined,undefined], // No Information
@@ -4137,6 +4137,13 @@ tds40.rules = {
     ['FFN','640','shop','bureau_de_change'], // Financial Services
     ['FFN','760','amenity','office'], // Business and Personal Support Services
     ['FFN','815','building','palace'], // Palace
+
+    // TRE - Foliage Type
+    // ['TRE','-999999',undefined,undefined], // No Information
+    ['TRE','1','wood','deciduous'], // Deciduous
+    ['TRE','2','wood','evergreen'], // Evergreen
+    ['TRE','3','wood','mixed'], // Mixed
+    ['TRE','999','wood','other'], // Other
 
   ], // End one2oneOut
 
