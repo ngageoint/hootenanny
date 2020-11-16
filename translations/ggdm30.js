@@ -622,8 +622,15 @@ ggdm30 = {
 
     } // End in attrs loop
 
-    // Drop all of the XXX Closure default values IFF the associated attributes are
-    // not set
+    // Undergrowth Density in Thicket & Swamp
+    if (attrs.DMBL && (attrs.DMBL == attrs.DMBU))
+    {
+      tags['undergrowth:density'] = attrs.DMBL;
+      delete attrs.DMBU;
+      delete attrs.DMBL;
+    }
+
+    // Drop all of the XXX Closure default values IF the associated attributes are not set
     // Doing this after the main cleaning loop so all of the -999999 values are
     // already gone and we can just check for existance
     for (var i in ggdm30.rules.closureList)
@@ -888,10 +895,6 @@ ggdm30 = {
     } // End crossing_point
 
     // Military fixes
-
-
-
-
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
     if ((attrs.F_CODE == 'AL013' || attrs.F_CODE == 'AH055') && !(tags.building))
@@ -1300,7 +1303,6 @@ ggdm30 = {
       if (ggdm30.tdsPreRules[i][0](tags)) ggdm30.tdsPreRules[i][1](tags,attrs);
     }
 
-
     // Fix Keeps and Martello Towers
     if (tags.defensive)
     {
@@ -1308,7 +1310,6 @@ ggdm30 = {
       delete tags['tower:type'];
       delete tags.man_made;
     }
-
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
@@ -1324,7 +1325,6 @@ ggdm30 = {
 
       delete tags.barrier; // Take away the walls...
     }
-
 
     // going out on a limb and processing OSM specific tags:
     // - Building == a thing,
@@ -2150,6 +2150,17 @@ ggdm30 = {
     // BA010 - Land Water Boundary has a different code for 'glacier' then the SLT list has
     // This gets swapped to "SHO" during export
     if (attrs.F_CODE == 'BA010' && attrs.SLT == '17') attrs.SLT = '8';
+
+    // Undergrowth Density in Thicket & Swamp
+    if (attrs.F_CODE == 'EB020' || attrs.F_CODE =='ED020')
+    {
+      if (notUsedTags['undergrowth:density'] && !(attrs.DMBL || attrs.DMBU))
+      {
+        attrs.DMBU = notUsedTags['undergrowth:density'];
+        attrs.DMBL = notUsedTags['undergrowth:density'];
+        delete notUsedTags['undergrowth:density'];
+      }
+    }
 
   }, // End applyToOgrPostProcessing
 

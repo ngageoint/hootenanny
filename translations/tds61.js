@@ -704,6 +704,14 @@ tds61 = {
 
     } // End in attrs loop
 
+    // Undergrowth Density in Thicket & Swamp
+    if (attrs.DMBL && (attrs.DMBL == attrs.DMBU))
+    {
+      tags['undergrowth:density'] = attrs.DMBL;
+      delete attrs.DMBU;
+      delete attrs.DMBL;
+    }
+
     // Drop all of the XXX Closure default values IFF the associated attributes are not set
     // Doing this after the main cleaning loop so all of the -999999 values are
     // already gone and we can just check for existance
@@ -2382,6 +2390,16 @@ tds61 = {
       break;
     } // End Wetlands
 
+    // Undergrowth Density in is not in Brush (EB070)
+    if (attrs.F_CODE !== 'EB070' && notUsedTags['undergrowth:density'])
+    {
+      if (!(attrs.DMBL || attrs.DMBU))
+      {
+        attrs.DMBU = notUsedTags['undergrowth:density'];
+        attrs.DMBL = notUsedTags['undergrowth:density'];
+        delete notUsedTags['undergrowth:density'];
+      }
+    }
   }, // End applyToTdsPostProcessing
 
   // #####################################################################################################

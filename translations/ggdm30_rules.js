@@ -405,8 +405,8 @@ ggdm30.rules = {
     'TSCL':'tree:spacing:lower', // Tree Spacing <lower value>
     'TSCU':'tree:spacing:upper', // Tree Spacing <upper value>
     'UBC':'bridge:under_clearance', // Underbridge Clearance
-    'VAVL':'magnetic_variation:lower', // Magnetic Variation Anomaly <lower value>
-    'VAVU':'magnetic_variation:upper', // Magnetic Variation Anomaly <upper value>
+    'VAVL':'local:magnetic_variation:lower', // Magnetic Variation Anomaly <lower value>
+    'VAVU':'local:magnetic_variation:upper', // Magnetic Variation Anomaly <upper value>
     'VCO':'safe_clearance:open', // Vertical Clearance, Open
     'VCS':'safe_clearance:vertical', // Vertical Clearance, Safe
     'VEC':'vehicle_capacity', // Vehicle Capacity
@@ -3360,7 +3360,7 @@ ggdm30.rules = {
     ['MEL','3','healthcare:speciality','cardiology'], // Cardiology
     ['MEL','4','healthcare:speciality','critical_care'], // Critical Care
     ['MEL','5','healthcare:speciality','diagnostic_imaging'], // Diagnostic Imaging
-    ['MEL','6','healthcare:speciality','ear,_nose_and_throat'], // Ear, Nose and Throat
+    ['MEL','6','healthcare:speciality','ear_nose_and_throat'], // Ear, Nose and Throat
     ['MEL','7','healthcare:speciality','surgery'], // General Surgery
     ['MEL','8','healthcare:speciality','gynaecology'], // Gynaecology
     ['MEL','9','healthcare:speciality','maternity'], // Maternity
@@ -4815,14 +4815,14 @@ ggdm30.rules = {
     // UTY3 - Accessible Utility Type [3]
 
     // VAVC - Magnetic Variation Anomaly <interval closure>
-    ['VAVC','2','magnetic_variation:closure','open_interval'], // Open Interval
-    ['VAVC','3','magnetic_variation:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
-    ['VAVC','4','magnetic_variation:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
-    ['VAVC','5','magnetic_variation:closure','closed_interval'], // Closed Interval
-    ['VAVC','6','magnetic_variation:closure','greater-than_semi-interval'], // Greater-than Semi-interval
-    ['VAVC','7','magnetic_variation:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
-    ['VAVC','8','magnetic_variation:closure','less-than_semi-interval'], // Less-than Semi-interval
-    ['VAVC','9','magnetic_variation:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
+    ['VAVC','2','local:magnetic_variation:closure','open_interval'], // Open Interval
+    ['VAVC','3','local:magnetic_variation:closure','greater-than_or_equal_to_less-than_interval'], // Greater-than-or-equal to Less-than Interval
+    ['VAVC','4','local:magnetic_variation:closure','greater-than_to_less-than_or_equal_interval'], // Greater-than to Less-than-or-equal Interval
+    ['VAVC','5','local:magnetic_variation:closure','closed_interval'], // Closed Interval
+    ['VAVC','6','local:magnetic_variation:closure','greater-than_semi-interval'], // Greater-than Semi-interval
+    ['VAVC','7','local:magnetic_variation:closure','greater-than_or_equal_semi-interval'], // Greater-than or Equal Semi-interval
+    ['VAVC','8','local:magnetic_variation:closure','less-than_semi-interval'], // Less-than Semi-interval
+    ['VAVC','9','local:magnetic_variation:closure','less-than_or_equal_semi-interval'], // Less-than or Equal Semi-interval
 
     // VCA - Void Collection Reason
     // ['VCA','-999999',undefined,undefined], // No Information
