@@ -441,426 +441,111 @@
     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3517526462786282" lon="38.9471839081031064"/>
     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3520899901002785" lon="38.9471887720957426"/>
     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3478471992508823" lon="38.9464530468503369"/>
-    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3505759155164387" lon="38.9472000000000023">
-        <tag k="REF1" v="00001b"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868555965" lon="38.9456408874364897">
-        <tag k="REF1" v="00001c"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3528999868535898" lon="38.9449636831581856">
-        <tag k="REF1" v="00001d"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3528999868535898" lon="38.9432708296145336">
-        <tag k="REF1" v="00001e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3528582381870891" lon="38.9427999999999912">
-        <tag k="REF1" v="00001f"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868556001" lon="38.9464255742614256">
-        <tag k="REF1" v="000020"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868555965" lon="38.9467979692979327">
-        <tag k="REF1" v="000022"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868555965" lon="38.9460598669937568">
-        <tag k="REF1" v="000025"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3478718771265257" lon="38.9472000000000023">
-        <tag k="REF1" v="000029"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868555965" lon="38.9471644143320148">
-        <tag k="REF1" v="00002b"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3520934315058621" lon="38.9427999999999912">
-        <tag k="REF1" v="00002d"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3509044325670825" lon="38.9472000000000023">
-        <tag k="REF1" v="00002e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868555965" lon="38.9432054173983317">
-        <tag k="REF1" v="000030"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3519308187564683" lon="38.9427999999999912">
-        <tag k="REF1" v="000031"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3491275267197764" lon="38.9472000000000023">
-        <tag k="REF1" v="000032"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3478362881096349" lon="38.9472000000000023">
-        <tag k="REF1" v="000034"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3482707016350322" lon="38.9472000000000023">
-        <tag k="REF1" v="000036"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3488110194255771" lon="38.9427999999999912">
-        <tag k="REF1" v="000038"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3492735708714427" lon="38.9427999999999912">
-        <tag k="REF1" v="00003a"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3498074456783637" lon="38.9427999999999912">
-        <tag k="REF1" v="00003c"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3494259899117615" lon="38.9472000000000023">
-        <tag k="REF1" v="00003e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3528999868535934" lon="38.9443183453038628">
-        <tag k="REF1" v="000040"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3487898394577282" lon="38.9472000000000023">
-        <tag k="REF1" v="000041"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3528999868535898" lon="38.9436954960659136">
-        <tag k="REF1" v="000043"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3491212120746336" lon="38.9427999999999912">
-        <tag k="REF1" v="000045"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3506986541074220" lon="38.9427999999999912">
-        <tag k="REF1" v="000046"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3516597712215379" lon="38.9427999999999912">
-        <tag k="REF1" v="000047"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3512312551396271" lon="38.9427999999999912">
-        <tag k="REF1" v="000049"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="970" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3523060868538508" lon="38.9440497000000008">
-        <tag k="REF1" v="000005"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="971" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3518618868540333" lon="38.9435232000000013">
-        <tag k="REF1" v="000007"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="972" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3515672868541557" lon="38.9431741000000002">
-        <tag k="REF1" v="000009"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1160" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3524085868537661" lon="38.9432576000000026">
-        <tag k="REF1" v="000001"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1161" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3524102868537859" lon="38.9437842999999972">
-        <tag k="REF1" v="000002"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1162" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3522411868538846" lon="38.9442152000000021">
-        <tag k="REF1" v="000003"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1163" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3521061868538915" lon="38.9444647999999987">
-        <tag k="REF1" v="000004"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1164" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3521145868539275" lon="38.9446246999999985">
-        <tag k="REF1" v="000006"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1165" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3521471868538875" lon="38.9447498999999979">
-        <tag k="REF1" v="000008"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1166" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3522661868538357" lon="38.9450732000000031">
-        <tag k="REF1" v="00000a"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1167" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3526968868536997" lon="38.9458686999999983">
-        <tag k="REF1" v="00000b"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1785" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3517865868540486" lon="38.9429483999999988">
-        <tag k="REF1" v="000014"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1801" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3506347868544850" lon="38.9430584999999994">
-        <tag k="REF1" v="000028"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="1805" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3490129868551541" lon="38.9431346000000005">
-        <tag k="REF1" v="00002f"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="4308" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3501019868546980" lon="38.9430446000000003">
-        <tag k="REF1" v="000021"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="4309" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3504830868545525" lon="38.9434410000000000">
-        <tag k="REF1" v="000024"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="4310" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3508416868544284" lon="38.9438421999999917">
-        <tag k="REF1" v="000027"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="4311" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3511659868542978" lon="38.9440758000000002">
-        <tag k="REF1" v="00002a"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="4312" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3513344868542383" lon="38.9438773999999981">
-        <tag k="REF1" v="00002c"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="5716" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3525060868537384" lon="38.9432529999999986">
-        <tag k="REF1" v="000051"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="5723" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3491951868550522" lon="38.9464570000000023">
-        <tag k="REF1" v="000052"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6119" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3496685868548717" lon="38.9467196999999956">
-        <tag k="REF1" v="000053"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6120" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3497773868548499" lon="38.9465702999999976">
-        <tag k="REF1" v="000054"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6121" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3508093868544044" lon="38.9466139000000027">
-        <tag k="REF1" v="000055"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6122" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3512183868542653" lon="38.9466135999999921">
-        <tag k="REF1" v="000056"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6123" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3516767868540800" lon="38.9466133000000028">
-        <tag k="REF1" v="000057"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6124" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3520397868539309" lon="38.9464590999999984">
-        <tag k="REF1" v="000059"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6152" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3528189868536522" lon="38.9442274999999967">
-        <tag k="REF1" v="000062"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6187" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3497036868548395" lon="38.9430603999999931">
-        <tag k="REF1" v="00000c"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6200" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3491797868550783" lon="38.9431222999999989">
-        <tag k="REF1" v="00000d"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6239" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3487039868552717" lon="38.9431539999999998">
-        <tag k="REF1" v="000023"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6240" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3487306868552604" lon="38.9430344000000019">
-        <tag k="REF1" v="000026"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6247" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3490991868551117" lon="38.9431292000000013">
-        <tag k="REF1" v="000033"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6248" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3491367868550928" lon="38.9434895999999995">
-        <tag k="REF1" v="000035"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6249" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3491614868550457" lon="38.9437916999999985">
-        <tag k="REF1" v="000037"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6250" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3492475868550429" lon="38.9439873999999975">
-        <tag k="REF1" v="000039"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6251" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3492926868550015" lon="38.9443277000000023">
-        <tag k="REF1" v="00003b"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6252" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3493378868549915" lon="38.9447063000000000">
-        <tag k="REF1" v="00003d"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6253" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3493747868550034" lon="38.9449317999999991">
-        <tag k="REF1" v="00003f"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6317" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3486986868552737" lon="38.9461717000000007">
-        <tag k="REF1" v="000058"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6345" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3484274868553801" lon="38.9460049999999924">
-        <tag k="REF1" v="000061"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6346" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3482646868554369" lon="38.9463332999999921">
-        <tag k="REF1" v="000063"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6347" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3481234868554726" lon="38.9466182000000032">
-        <tag k="REF1" v="000064"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6348" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3479800868555394" lon="38.9469072999999995">
-        <tag k="REF1" v="000065"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6349" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3478415868556279" lon="38.9471866000000020">
-        <tag k="REF1" v="000066"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="6358" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3494460868549467" lon="38.9465993000000026">
-        <tag k="REF1" v="000067"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="7039" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3511213868542864" lon="38.9436328000000032">
-        <tag k="REF1" v="000050"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="7996" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3479440868555592" lon="38.9431949000000017">
-        <tag k="REF1" v="000048"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="7997" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3482810868554065" lon="38.9431706000000020">
-        <tag k="REF1" v="00004a"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="7998" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3483081868554194" lon="38.9431685999999999">
-        <tag k="REF1" v="00004b"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="7999" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3494563868549534" lon="38.9430984999999978">
-        <tag k="REF1" v="00004c"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8000" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3497698868548547" lon="38.9430502000000018">
-        <tag k="REF1" v="00004d"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8001" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3504899868545692" lon="38.9430155999999954">
-        <tag k="REF1" v="00004e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8002" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3507537868544279" lon="38.9431926000000033">
-        <tag k="REF1" v="00004f"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8921" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3494042868549574" lon="38.9460700999999929">
-        <tag k="REF1" v="00000e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8922" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3496849868548786" lon="38.9455206000000018">
-        <tag k="REF1" v="00000f"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8923" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3498358868547982" lon="38.9453932999999992">
-        <tag k="REF1" v="000010"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8924" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3499867868547515" lon="38.9449602999999982">
-        <tag k="REF1" v="000011"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8925" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3500288868547496" lon="38.9448329000000015">
-        <tag k="REF1" v="000012"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8926" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3499797868547674" lon="38.9446836999999917">
-        <tag k="REF1" v="000013"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8927" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3499165868547767" lon="38.9445308999999966">
-        <tag k="REF1" v="000015"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8928" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3499586868547482" lon="38.9443853000000004">
-        <tag k="REF1" v="000016"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8929" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3498884868548124" lon="38.9441343000000018">
-        <tag k="REF1" v="000017"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8930" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3498358868547999" lon="38.9437921999999972">
-        <tag k="REF1" v="000018"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8931" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3497200868548553" lon="38.9436066999999895">
-        <tag k="REF1" v="000019"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="8932" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3497761868548146" lon="38.9433883000000023">
-        <tag k="REF1" v="00001a"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="9814" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3482442868554241" lon="38.9439972999999995">
-        <tag k="REF1" v="00005b"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="9815" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3481916868554542" lon="38.9446468000000010">
-        <tag k="REF1" v="00005c"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="9816" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3481755868554437" lon="38.9447913999999926">
-        <tag k="REF1" v="00005d"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="9817" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3481937868554699" lon="38.9450071999999992">
-        <tag k="REF1" v="00005e"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="9818" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3481331868554864" lon="38.9456022000000033">
-        <tag k="REF1" v="00005f"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="9819" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3480937868554967" lon="38.9458113999999966">
-        <tag k="REF1" v="000060"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="9922" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3521910868538924" lon="38.9429385999999980">
-        <tag k="REF1" v="000042"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="9923" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3523428868538137" lon="38.9431747000000001">
-        <tag k="REF1" v="000044"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="10963" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3479456868555477" lon="38.9461423999999994">
-        <tag k="REF1" v="00005a"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="10992" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3478201868556017" lon="38.9464369000000019">
-        <tag k="REF1" v="000068"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="11002" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3524675868537699" lon="38.9432009000000008">
-        <tag k="REF1" v="000000"/>
-        <tag k="error:circular" v="15"/>
-    </node>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3505759155164387" lon="38.9472000000000023"/>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868555965" lon="38.9456408874364897"/>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3528999868535898" lon="38.9449636831581856"/>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3528999868535898" lon="38.9432708296145336"/>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3528582381870891" lon="38.9427999999999912"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868556001" lon="38.9464255742614256"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868555965" lon="38.9467979692979327"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868555965" lon="38.9460598669937568"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3478718771265257" lon="38.9472000000000023"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868555965" lon="38.9471644143320148"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3520934315058621" lon="38.9427999999999912"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3509044325670825" lon="38.9472000000000023"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3477999868555965" lon="38.9432054173983317"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3519308187564683" lon="38.9427999999999912"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3491275267197764" lon="38.9472000000000023"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3478362881096349" lon="38.9472000000000023"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3482707016350322" lon="38.9472000000000023"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3488110194255771" lon="38.9427999999999912"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3492735708714427" lon="38.9427999999999912"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3498074456783637" lon="38.9427999999999912"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3494259899117615" lon="38.9472000000000023"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3528999868535934" lon="38.9443183453038628"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3487898394577282" lon="38.9472000000000023"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3528999868535898" lon="38.9436954960659136"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3491212120746336" lon="38.9427999999999912"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3506986541074220" lon="38.9427999999999912"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3516597712215379" lon="38.9427999999999912"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3512312551396271" lon="38.9427999999999912"/>
+    <node visible="true" id="970" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3523060868538508" lon="38.9440497000000008"/>
+    <node visible="true" id="971" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3518618868540333" lon="38.9435232000000013"/>
+    <node visible="true" id="972" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3515672868541557" lon="38.9431741000000002"/>
+    <node visible="true" id="1160" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3524085868537661" lon="38.9432576000000026"/>
+    <node visible="true" id="1161" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3524102868537859" lon="38.9437842999999972"/>
+    <node visible="true" id="1162" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3522411868538846" lon="38.9442152000000021"/>
+    <node visible="true" id="1163" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3521061868538915" lon="38.9444647999999987"/>
+    <node visible="true" id="1164" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3521145868539275" lon="38.9446246999999985"/>
+    <node visible="true" id="1165" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3521471868538875" lon="38.9447498999999979"/>
+    <node visible="true" id="1166" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3522661868538357" lon="38.9450732000000031"/>
+    <node visible="true" id="1167" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3526968868536997" lon="38.9458686999999983"/>
+    <node visible="true" id="1785" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3517865868540486" lon="38.9429483999999988"/>
+    <node visible="true" id="1801" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3506347868544850" lon="38.9430584999999994"/>
+    <node visible="true" id="1805" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3490129868551541" lon="38.9431346000000005"/>
+    <node visible="true" id="4308" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3501019868546980" lon="38.9430446000000003"/>
+    <node visible="true" id="4309" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3504830868545525" lon="38.9434410000000000"/>
+    <node visible="true" id="4310" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3508416868544284" lon="38.9438421999999917"/>
+    <node visible="true" id="4311" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3511659868542978" lon="38.9440758000000002"/>
+    <node visible="true" id="4312" timestamp="2019-01-28T17:16:06Z" version="1" changeset="9829" lat="15.3513344868542383" lon="38.9438773999999981"/>
+    <node visible="true" id="5716" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3525060868537384" lon="38.9432529999999986"/>
+    <node visible="true" id="5723" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3491951868550522" lon="38.9464570000000023"/>
+    <node visible="true" id="6119" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3496685868548717" lon="38.9467196999999956"/>
+    <node visible="true" id="6120" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3497773868548499" lon="38.9465702999999976"/>
+    <node visible="true" id="6121" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3508093868544044" lon="38.9466139000000027"/>
+    <node visible="true" id="6122" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3512183868542653" lon="38.9466135999999921"/>
+    <node visible="true" id="6123" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3516767868540800" lon="38.9466133000000028"/>
+    <node visible="true" id="6124" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3520397868539309" lon="38.9464590999999984"/>
+    <node visible="true" id="6152" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3528189868536522" lon="38.9442274999999967"/>
+    <node visible="true" id="6187" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3497036868548395" lon="38.9430603999999931"/>
+    <node visible="true" id="6200" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3491797868550783" lon="38.9431222999999989"/>
+    <node visible="true" id="6239" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3487039868552717" lon="38.9431539999999998"/>
+    <node visible="true" id="6240" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3487306868552604" lon="38.9430344000000019"/>
+    <node visible="true" id="6247" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3490991868551117" lon="38.9431292000000013"/>
+    <node visible="true" id="6248" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3491367868550928" lon="38.9434895999999995"/>
+    <node visible="true" id="6249" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3491614868550457" lon="38.9437916999999985"/>
+    <node visible="true" id="6250" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3492475868550429" lon="38.9439873999999975"/>
+    <node visible="true" id="6251" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3492926868550015" lon="38.9443277000000023"/>
+    <node visible="true" id="6252" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3493378868549915" lon="38.9447063000000000"/>
+    <node visible="true" id="6253" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3493747868550034" lon="38.9449317999999991"/>
+    <node visible="true" id="6317" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3486986868552737" lon="38.9461717000000007"/>
+    <node visible="true" id="6345" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3484274868553801" lon="38.9460049999999924"/>
+    <node visible="true" id="6346" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3482646868554369" lon="38.9463332999999921"/>
+    <node visible="true" id="6347" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3481234868554726" lon="38.9466182000000032"/>
+    <node visible="true" id="6348" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3479800868555394" lon="38.9469072999999995"/>
+    <node visible="true" id="6349" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3478415868556279" lon="38.9471866000000020"/>
+    <node visible="true" id="6358" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3494460868549467" lon="38.9465993000000026"/>
+    <node visible="true" id="7039" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3511213868542864" lon="38.9436328000000032"/>
+    <node visible="true" id="7996" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3479440868555592" lon="38.9431949000000017"/>
+    <node visible="true" id="7997" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3482810868554065" lon="38.9431706000000020"/>
+    <node visible="true" id="7998" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3483081868554194" lon="38.9431685999999999"/>
+    <node visible="true" id="7999" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3494563868549534" lon="38.9430984999999978"/>
+    <node visible="true" id="8000" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3497698868548547" lon="38.9430502000000018"/>
+    <node visible="true" id="8001" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3504899868545692" lon="38.9430155999999954"/>
+    <node visible="true" id="8002" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3507537868544279" lon="38.9431926000000033"/>
+    <node visible="true" id="8921" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3494042868549574" lon="38.9460700999999929"/>
+    <node visible="true" id="8922" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3496849868548786" lon="38.9455206000000018"/>
+    <node visible="true" id="8923" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3498358868547982" lon="38.9453932999999992"/>
+    <node visible="true" id="8924" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3499867868547515" lon="38.9449602999999982"/>
+    <node visible="true" id="8925" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3500288868547496" lon="38.9448329000000015"/>
+    <node visible="true" id="8926" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3499797868547674" lon="38.9446836999999917"/>
+    <node visible="true" id="8927" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3499165868547767" lon="38.9445308999999966"/>
+    <node visible="true" id="8928" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3499586868547482" lon="38.9443853000000004"/>
+    <node visible="true" id="8929" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3498884868548124" lon="38.9441343000000018"/>
+    <node visible="true" id="8930" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3498358868547999" lon="38.9437921999999972"/>
+    <node visible="true" id="8931" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3497200868548553" lon="38.9436066999999895"/>
+    <node visible="true" id="8932" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3497761868548146" lon="38.9433883000000023"/>
+    <node visible="true" id="9814" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3482442868554241" lon="38.9439972999999995"/>
+    <node visible="true" id="9815" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3481916868554542" lon="38.9446468000000010"/>
+    <node visible="true" id="9816" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3481755868554437" lon="38.9447913999999926"/>
+    <node visible="true" id="9817" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3481937868554699" lon="38.9450071999999992"/>
+    <node visible="true" id="9818" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3481331868554864" lon="38.9456022000000033"/>
+    <node visible="true" id="9819" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3480937868554967" lon="38.9458113999999966"/>
+    <node visible="true" id="9922" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3521910868538924" lon="38.9429385999999980"/>
+    <node visible="true" id="9923" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3523428868538137" lon="38.9431747000000001"/>
+    <node visible="true" id="10963" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3479456868555477" lon="38.9461423999999994"/>
+    <node visible="true" id="10992" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3478201868556017" lon="38.9464369000000019"/>
+    <node visible="true" id="11002" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829" lat="15.3524675868537699" lon="38.9432009000000008"/>
     <way visible="true" id="-292" timestamp="2019-01-28T17:16:52Z" version="1">
         <nd ref="-483"/>
         <nd ref="-484"/>
@@ -985,7 +670,6 @@
         <nd ref="-28"/>
         <tag k="highway" v="secondary"/>
         <tag k="source:datetime" v="2015-12-01T21:43:46.000Z"/>
-        <tag k="REF1" v="000069"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-162" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1902,7 +1586,6 @@
         <tag k="highway" v="secondary"/>
         <tag k="hoot:split_parent_id" v="-26"/>
         <tag k="source:datetime" v="2015-12-01T21:43:46.000Z;2019-01-28T17:16:52Z"/>
-        <tag k="REF1" v="000069"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1910,24 +1593,15 @@
         <nd ref="1162"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-12-01T23:04:35.000Z"/>
-        <tag k="REF1" v="00006a"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-25"/>
         <nd ref="5716"/>
         <nd ref="11002"/>
-        <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2014-06-29T14:38:05.000Z"/>
-        <tag k="REF1" v="00006b"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="11002"/>
         <nd ref="-24"/>
         <tag k="highway" v="residential"/>
-        <tag k="source:datetime" v="2014-06-29T14:37:50.000Z"/>
-        <tag k="REF1" v="00006c"/>
+        <tag k="source:datetime" v="2014-06-29T14:38:05.000Z;2014-06-29T14:37:50.000Z"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1937,7 +1611,6 @@
         <nd ref="6347"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2014-06-29T14:37:34.000Z"/>
-        <tag k="REF1" v="00006d"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1945,7 +1618,6 @@
         <nd ref="6348"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:37.000Z"/>
-        <tag k="REF1" v="00006e"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1954,7 +1626,6 @@
         <nd ref="6346"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2014-06-29T14:38:22.000Z"/>
-        <tag k="REF1" v="00006f"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1963,7 +1634,6 @@
         <nd ref="-20"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2014-01-09T20:36:19.000Z"/>
-        <tag k="REF1" v="000070"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1975,7 +1645,6 @@
         <nd ref="5716"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-12-01T17:18:39.000Z"/>
-        <tag k="REF1" v="000071"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1984,7 +1653,6 @@
         <nd ref="6122"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-06-29T14:37:44.000Z"/>
-        <tag k="REF1" v="000072"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2011,7 +1679,6 @@
         <nd ref="4312"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-12-01T21:43:47.000Z"/>
-        <tag k="REF1" v="000073"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2024,7 +1691,6 @@
         <nd ref="4310"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-12-01T21:43:47.000Z"/>
-        <tag k="REF1" v="000074"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2032,7 +1698,6 @@
         <nd ref="6358"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-06-29T14:38:24.000Z"/>
-        <tag k="REF1" v="000075"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2044,7 +1709,6 @@
         <nd ref="-13"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:57.000Z"/>
-        <tag k="REF1" v="000076"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2053,7 +1717,6 @@
         <nd ref="-12"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:56.000Z"/>
-        <tag k="REF1" v="000077"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2062,7 +1725,6 @@
         <nd ref="-11"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T17:33:35.000Z"/>
-        <tag k="REF1" v="000078"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2070,7 +1732,6 @@
         <nd ref="-10"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T17:33:34.000Z"/>
-        <tag k="REF1" v="000079"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2078,7 +1739,6 @@
         <nd ref="-9"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T17:33:34.000Z"/>
-        <tag k="REF1" v="00007a"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2086,7 +1746,6 @@
         <nd ref="-8"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:57.000Z"/>
-        <tag k="REF1" v="00007b"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2095,7 +1754,6 @@
         <nd ref="1161"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-06-29T14:38:13.000Z"/>
-        <tag k="REF1" v="00007c"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2103,7 +1761,6 @@
         <nd ref="-6"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:57.000Z"/>
-        <tag k="REF1" v="00007d"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2111,7 +1768,6 @@
         <nd ref="5716"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-06-29T14:38:20.000Z"/>
-        <tag k="REF1" v="00007e"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2119,7 +1775,6 @@
         <nd ref="-4"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T21:43:46.000Z"/>
-        <tag k="REF1" v="00007f"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2127,7 +1782,6 @@
         <nd ref="-3"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T21:43:46.000Z"/>
-        <tag k="REF1" v="000080"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2135,7 +1789,6 @@
         <nd ref="1785"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T21:43:45.000Z"/>
-        <tag k="REF1" v="000081"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2145,7 +1798,6 @@
         <nd ref="-1"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T23:04:36.000Z"/>
-        <tag k="REF1" v="000082"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="162" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2162,7 +1814,6 @@
         <nd ref="1167"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T20:35:32.000Z"/>
-        <tag k="REF1" v="000084"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="752" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2177,7 +1828,6 @@
         <nd ref="1160"/>
         <tag k="highway" v="unclassified"/>
         <tag k="source:datetime" v="2015-12-01T23:04:35.000Z"/>
-        <tag k="REF1" v="000087"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="1112" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2197,7 +1847,6 @@
         <nd ref="1167"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2012-01-21T23:43:57.000Z"/>
-        <tag k="REF1" v="000083"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="1137" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829">
@@ -2211,7 +1860,6 @@
         <nd ref="6253"/>
         <tag k="highway" v="living_street"/>
         <tag k="source:datetime" v="2015-12-01T17:33:35.000Z"/>
-        <tag k="REF1" v="000086"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="1714" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829">
@@ -2239,7 +1887,6 @@
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2014-12-29T16:09:27.000Z"/>
         <tag k="surface" v="ground"/>
-        <tag k="REF1" v="000085"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="1927" timestamp="2019-01-28T17:16:07Z" version="1" changeset="9829">
@@ -2255,7 +1902,6 @@
         <nd ref="9819"/>
         <tag k="highway" v="residential"/>
         <tag k="source:datetime" v="2015-12-01T01:19:13.000Z"/>
-        <tag k="REF1" v="000088"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>

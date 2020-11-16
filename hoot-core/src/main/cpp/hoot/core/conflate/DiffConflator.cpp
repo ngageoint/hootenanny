@@ -61,6 +61,7 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // standard
 #include <algorithm>
@@ -249,6 +250,12 @@ void DiffConflator::apply(OsmMapPtr& map)
       "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
       " reference elements...");
   }
+
+  QStringList tagKeysToRemove;
+  tagKeysToRemove.append(MetadataTags::Ref1());
+  tagKeysToRemove.append(MetadataTags::Ref2());
+  RemoveTagsVisitor tagRemover(tagKeysToRemove);
+  map->visitRw(tagRemover);
 }
 
 long DiffConflator::_snapSecondaryRoadsBackToRef()
