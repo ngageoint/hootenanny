@@ -11,8 +11,8 @@ set -e
 # re-created when they should have been modified.
 #
 # UPDATE 11/16/20: Going forward, its best to write these types of tests as part of ServiceChangesetReplacementGridTest rather than use this 
-# test. If you need to synthesize replacement data with perty (e.g. ServiceChangesetReplacementBuildingTest.sh), however, then you will need 
-# to use this script.
+# test. If you need to synthesize replacement data with perty (e.g. ServiceChangesetReplacementBuildingTest.sh) or want to test something 
+# specific in the CLI, however, then you will need to use this script.
 
 # Input Parameters (see changeset-derive-replacement command doc for more detail):
 # 1  - test name

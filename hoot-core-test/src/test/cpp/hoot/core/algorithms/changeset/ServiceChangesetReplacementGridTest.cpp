@@ -70,23 +70,23 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  CPPUNIT_TEST(differingTypes1Test);
-  CPPUNIT_TEST(outOfSpecMixedRelations1Test);
-  CPPUNIT_TEST(poi1Test);
-  CPPUNIT_TEST(refFilteredToEmpty1Test);
-  CPPUNIT_TEST(refSinglePoint1Test);
-  CPPUNIT_TEST(relationCrop1Test);
-  CPPUNIT_TEST(riverbank1Test);
-    CPPUNIT_TEST(roundabouts1Test);
-//    CPPUNIT_TEST(secFilteredToEmpty1Test);
+//  CPPUNIT_TEST(differingTypes1Test);
+//  CPPUNIT_TEST(outOfSpecMixedRelations1Test);
+//  CPPUNIT_TEST(poi1Test);
+//  CPPUNIT_TEST(refFilteredToEmpty1Test);
+//  CPPUNIT_TEST(refSinglePoint1Test);
+//  CPPUNIT_TEST(relationCrop1Test);
+//  CPPUNIT_TEST(riverbank1Test);
+//    CPPUNIT_TEST(roundabouts1Test);
+    CPPUNIT_TEST(secFilteredToEmpty1Test);
 //    CPPUNIT_TEST(secFilteredToEmpty2Test);
 
-  CPPUNIT_TEST(orphanedNodes1Test);
-  CPPUNIT_TEST(orphanedNodes2Test);
-  CPPUNIT_TEST(droppedNodes1Test);
-  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
-  CPPUNIT_TEST(badPolyIdSync1Test);
-  CPPUNIT_TEST(badPolyIdSync2Test);
+//  CPPUNIT_TEST(orphanedNodes1Test);
+//  CPPUNIT_TEST(orphanedNodes2Test);
+//  CPPUNIT_TEST(droppedNodes1Test);
+//  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+//  CPPUNIT_TEST(badPolyIdSync1Test);
+//  CPPUNIT_TEST(badPolyIdSync2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -437,6 +437,45 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     // This number is extremely high due to dupes in the input. See comment above.
     CPPUNIT_ASSERT_EQUAL(538, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void secFilteredToEmpty1Test()
+  {
+    /*
+     * This tests replacement changeset generation with inputs that result in an empty secondary map
+     * after filtering when generating the points changeset. Its using full replacement, so the
+     * points in the reference dataset should get deleted.
+     */
+
+    _testName = "secFilteredToEmpty1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
+    conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 5.0);
+    conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 5.0);
+
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsStringTaskGridGenerator(
+        "29.031372,1.345701,29.036865,1.351193", _outputPath + "/" + taskGridFileName)
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
