@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+# set -e
 
 mkdir -p test-output/cmd/slow/translation/
 
@@ -32,7 +32,7 @@ function checkMgcpV3 {
     #echo $IN  $OUT
     compareFiles $OUT test-files/MGCPv3/$1-output.osm
     # Uncomment this to update what we compare with.
-    #cp $OUT test-files/MGCPv3/$1-output.osm
+    # cp $OUT test-files/MGCPv3/$1-outputX.osm
     # Export as TRDv4
     OUT4=test-output/cmd/slow/translation/$1
     rm -rf $OUT4
@@ -57,4 +57,12 @@ checkMgcpV3 LBH140
 checkMgcpV3 PAL015
 # Bridge Lines
 checkMgcpV3 LAQ040
+# Tree Areas
+checkMgcpV3 AEC030
+# Scrub Areas
+checkMgcpV3 AEB020
+#  Storage Tank Areas
+checkMgcpV3 AAM070
+#  Storage Tank Points
+checkMgcpV3 PAM070
 

@@ -34,7 +34,7 @@ COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
 hoot convert $HOOT_OPT -D schema.translation.script=$TRANS $inputDir/*.shp $outputDir/new_GGDMv30.osm  # > tmp/GGDM30_to_OSM.txt
 
 # Uncomment this to update the OSM file if you edit the shapefiles or the translation file.
-#cp $outputDir/new_GGDMv30.osm $inputDir/GGDMv30.osm
+# cp $outputDir/new_GGDMv30.osm $inputDir/GGDMv30X.osm
 
 # Compare the new and old OSM files
 # NOTE: ZI031 DATASET_S does not have a UUID (UFI) but it gets one on import which screws up the test

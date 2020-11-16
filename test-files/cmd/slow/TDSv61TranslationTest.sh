@@ -26,7 +26,7 @@ COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
 hoot convert $HOOT_OPT -D schema.translation.script=$TRANS $inputDir/*.shp $outputDir/new_TDSv61.osm # > tmp/TDSv61_to_OSM.txt
 
 # Uncomment this to update the OSM file if you edit the shapefiles or the translation file.
-#cp $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm
+# cp $outputDir/new_TDSv61.osm $inputDir/TDSv61X.osm
 
 # compareFiles. Test taken from MGCP test
 hoot diff  -C Testing.conf $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm || diff $outputDir/new_TDSv61.osm $inputDir/TDSv61.osm

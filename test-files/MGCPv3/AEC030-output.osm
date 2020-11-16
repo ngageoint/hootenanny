@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-25.50223652215" minlon="153.07243680133" maxlat="-25.48620972621" maxlon="153.13074616373"/>
+    <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5022365221499996" lon="153.0985409161500002"/>
+    <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5021358518899994" lon="153.1048674652699901"/>
+    <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4953384706900010" lon="153.1047348417600062"/>
+    <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4954389672799984" lon="153.0984080289300096"/>
+    <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5021284999299986" lon="153.0725696885000104"/>
+    <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5020278295499985" lon="153.0788962376699942"/>
+    <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4952304422299996" lon="153.0787636141199926"/>
+    <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4953309389400005" lon="153.0724368013300136"/>
+    <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5022365221499996" lon="153.1156555960899937"/>
+    <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5021358518899994" lon="153.1219821452500014"/>
+    <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4953384706900010" lon="153.1218495216999997"/>
+    <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4954389672799984" lon="153.1155227088700030"/>
+    <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5021284999299986" lon="153.1070384145500043"/>
+    <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5020278295499985" lon="153.1133649637199881"/>
+    <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4952304422299996" lon="153.1132323401699864"/>
+    <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4953309389400005" lon="153.1069055273800075"/>
+    <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4932163321199994" lon="153.0897732084800111"/>
+    <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4931156542699995" lon="153.0960997576499949"/>
+    <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4863177627599988" lon="153.0959671340899888"/>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4864182668599994" lon="153.0896403213000099"/>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4932163321199994" lon="153.1158641191699985"/>
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4931156542699995" lon="153.1221906683400107"/>
+    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4863177627599988" lon="153.1220580447800046"/>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4864182668599994" lon="153.1157312319899972"/>
+    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4932163321199994" lon="153.0987494392300050"/>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4931156542699995" lon="153.1050759883999888"/>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4863177627599988" lon="153.1049433648400111"/>
+    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4864182668599994" lon="153.0986165520099860"/>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5022365221499996" lon="153.0895646854000063"/>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5021358518899994" lon="153.0958912345600140"/>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4953384706900010" lon="153.0957586110100124"/>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4954389672799984" lon="153.0894317981799873"/>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5021821515300005" lon="153.1242110914799923"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5020814812099985" lon="153.1305376406500045"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4952840969199990" lon="153.1304050171000029"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4953845935700016" lon="153.1240782042999911"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4931083017599995" lon="153.0811560269899871"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4930076238400005" lon="153.0874825761100055"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4862097262099994" lon="153.0873499525999932"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4863102304400009" lon="153.0810231397699965"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4931619573900008" lon="153.1244196145999865"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4930612795400009" lon="153.1307461637300094"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4862633849399991" lon="153.1306135402199970"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4863638891000015" lon="153.1242867273900004"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5021284999299986" lon="153.0809475038599885"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.5020278295499985" lon="153.0872740530300007"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4952304422299996" lon="153.0871414294799990"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4953309389400005" lon="153.0808146166899917"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4931083017599995" lon="153.1072469376800029"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4930076238400005" lon="153.1135734868400107"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4862097262099994" lon="153.1134408632900090"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4863102304400009" lon="153.1071140504600123"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4931083017599995" lon="153.0727782116200046"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4930076238400005" lon="153.0791047607499991"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4862097262099994" lon="153.0789721372399868"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4863102304400009" lon="153.0726453244099901"/>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-53"/>
+        <nd ref="-54"/>
+        <nd ref="-55"/>
+        <nd ref="-56"/>
+        <nd ref="-53"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.354Z"/>
+        <tag k="leaf_cycle" v="mixed"/>
+        <tag k="name" v="Mixed 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{baa999b1-fa79-4c02-a1f4-f046fb0ecfe7}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="natural" v="wood"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-49"/>
+        <nd ref="-50"/>
+        <nd ref="-51"/>
+        <nd ref="-52"/>
+        <nd ref="-49"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.353Z"/>
+        <tag k="name" v="Wood 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{6236db9f-363c-4b42-891b-6cd126c3be91}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="natural" v="wood"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-45"/>
+        <nd ref="-46"/>
+        <nd ref="-47"/>
+        <nd ref="-48"/>
+        <nd ref="-45"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.353Z"/>
+        <tag k="leaf_cycle" v="semi_evergreen"/>
+        <tag k="name" v="Semi E 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{b3089d36-8096-46f0-884e-063e4b51fc71}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="natural" v="wood"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-41"/>
+        <nd ref="-42"/>
+        <nd ref="-43"/>
+        <nd ref="-44"/>
+        <nd ref="-41"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.353Z"/>
+        <tag k="leaf_cycle" v="semi_deciduous"/>
+        <tag k="name" v="Semi D 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{bb2ccaaf-3937-46e6-9e0a-da88a1ddc6e9}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="natural" v="wood"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-37"/>
+        <nd ref="-38"/>
+        <nd ref="-39"/>
+        <nd ref="-40"/>
+        <nd ref="-37"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.352Z"/>
+        <tag k="leaf_cycle" v="evergreen"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="name" v="EverG 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{52cfa9ad-19a5-4e7c-b77b-36b0021203d3}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-33"/>
+        <nd ref="-34"/>
+        <nd ref="-35"/>
+        <nd ref="-36"/>
+        <nd ref="-33"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.352Z"/>
+        <tag k="leaf_cycle" v="semi_evergreen"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="name" v="Semi E 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{1b10f766-44bb-466d-97ee-a0557acd14a8}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-29"/>
+        <nd ref="-30"/>
+        <nd ref="-31"/>
+        <nd ref="-32"/>
+        <nd ref="-29"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.352Z"/>
+        <tag k="leaf_cycle" v="mixed"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="name" v="Mixed 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{6e15e51a-bf56-4b93-97b6-e66dbbb9ec93}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-25"/>
+        <nd ref="-26"/>
+        <nd ref="-27"/>
+        <nd ref="-28"/>
+        <nd ref="-25"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.351Z"/>
+        <tag k="leaf_cycle" v="evergreen"/>
+        <tag k="name" v="EverG 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{a75d229a-075b-4532-becf-168c329e4310}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="natural" v="wood"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-21"/>
+        <nd ref="-22"/>
+        <nd ref="-23"/>
+        <nd ref="-24"/>
+        <nd ref="-21"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.351Z"/>
+        <tag k="name" v="Wood 40%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{4ba8cf79-ef94-4d7c-80c4-e09d5912168f}"/>
+        <tag k="canopy_cover" v="40"/>
+        <tag k="natural" v="wood"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-17"/>
+        <nd ref="-18"/>
+        <nd ref="-19"/>
+        <nd ref="-20"/>
+        <nd ref="-17"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.350Z"/>
+        <tag k="leaf_cycle" v="deciduous"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="name" v="Decid 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{0e39d522-742d-486f-9247-c8e960054ded}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="-14"/>
+        <nd ref="-15"/>
+        <nd ref="-16"/>
+        <nd ref="-13"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.350Z"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="name" v="Forest 40%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{b74a3f2a-d4b7-40bb-9c12-c97c65ffe51b}"/>
+        <tag k="canopy_cover" v="40"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="-12"/>
+        <nd ref="-9"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11600.6"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.350Z"/>
+        <tag k="leaf_cycle" v="deciduous"/>
+        <tag k="name" v="Decid 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{7935f7e4-e2cd-4718-b659-626e391d00ad}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="natural" v="wood"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-5"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.349Z"/>
+        <tag k="leaf_cycle" v="semi_deciduous"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="name" v="Semi D 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{c79f688a-9fb4-4240-972a-90f8e363c60f}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-4"/>
+        <nd ref="-1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="feature_area" v="11599.8"/>
+        <tag k="source" v="mgcp:aec030"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:15.289Z"/>
+        <tag k="landuse" v="forest"/>
+        <tag k="name" v="Forest 80%"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="uuid" v="{03d65d49-0955-48cf-ab0f-419604718d78}"/>
+        <tag k="canopy_cover" v="80"/>
+        <tag k="width" v="98.9"/>
+        <tag k="angle" v="179.0"/>
+        <tag k="length" v="117.7"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>

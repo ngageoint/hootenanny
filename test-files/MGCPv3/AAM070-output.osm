@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-25.46160626189" minlon="153.15434767566" maxlat="-25.45277458391" maxlon="153.21576567431"/>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4593470571199987" lon="153.1543476756600057"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4596209023799993" lon="153.1611718977299859"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4527745839099993" lon="153.1575323126199919"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4592101342600010" lon="153.1654180803500083"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4529115140999984" lon="153.1690576654600022"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4527745839099993" lon="153.1632949890399971"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4614008813899986" lon="153.2121260892000123"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4551023758900001" lon="153.2157656743100063"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4549654481899985" lon="153.2100029978900011"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4600316691099984" lon="153.1709532826999975"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4603055128099989" lon="153.1777775047700061"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4534592332900012" lon="153.1741379196699882"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4598947470200017" lon="153.1820236873900001"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4535961626900011" lon="153.1856632724999940"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4534592332900012" lon="153.1799005960799889"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4607162771999995" lon="153.1862698700199985"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4609901193399999" lon="153.1930940920900071"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4541438787600001" lon="153.1894545069800131"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4605793558900011" lon="153.1973402747100010"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4542808073899991" lon="153.2009798598199950"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4541438787600001" lon="153.1952171833999898"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4613324211500007" lon="153.2015864573399995"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4616062618900010" lon="153.2084106794100080"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4547600563600014" lon="153.2047710943000141"/>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-22"/>
+        <nd ref="-23"/>
+        <nd ref="-24"/>
+        <nd ref="-22"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.494Z"/>
+        <tag k="content" v="silage"/>
+        <tag k="uuid" v="{128252cc-d3f2-4bdb-ba3d-dbe2dc69fef2}"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19"/>
+        <nd ref="-20"/>
+        <nd ref="-21"/>
+        <nd ref="-19"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.494Z"/>
+        <tag k="content" v="water"/>
+        <tag k="uuid" v="{13389c28-59ac-4d20-9c29-d34fe8f84cc6}"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-16"/>
+        <nd ref="-17"/>
+        <nd ref="-18"/>
+        <nd ref="-16"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.494Z"/>
+        <tag k="content" v="manure"/>
+        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="building" v="storage_tank"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="-14"/>
+        <nd ref="-15"/>
+        <nd ref="-13"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.493Z"/>
+        <tag k="content" v="fuel"/>
+        <tag k="uuid" v="{1339103f-9a67-4dc1-aa67-b590b33b3000}"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-10"/>
+        <nd ref="-11"/>
+        <nd ref="-12"/>
+        <nd ref="-10"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.493Z"/>
+        <tag k="content" v="oil"/>
+        <tag k="uuid" v="{14093e3a-29da-41e5-a13f-e8e43ef5d9cc}"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="-8"/>
+        <nd ref="-9"/>
+        <nd ref="-7"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.493Z"/>
+        <tag k="content" v="slurry"/>
+        <tag k="uuid" v="{143203aa-06b0-49b2-9fcd-98c0f89e2fcb}"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-4"/>
+        <nd ref="-5"/>
+        <nd ref="-6"/>
+        <nd ref="-4"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.492Z"/>
+        <tag k="content" v="manure"/>
+        <tag k="uuid" v="{149e733e-626f-45db-bfcc-56ad12de425a}"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="-1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source" v="mgcp:aam070"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:19.431Z"/>
+        <tag k="content" v="silage"/>
+        <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
+        <tag k="man_made" v="storage_tank"/>
+        <tag k="condition" v="functional"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+</osm>
