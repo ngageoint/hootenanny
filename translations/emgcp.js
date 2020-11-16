@@ -35,7 +35,7 @@ emgcp = {
     {
         var mgcpData = [];
 
-        mgcpData = mgcp.toMgcp(tags, elementType, geometryType);
+        mgcpData = mgcp.toOgr(tags, elementType, geometryType);
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
 //         if (config.getOgrDebugDumptags() == 'true')

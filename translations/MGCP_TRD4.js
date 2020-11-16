@@ -69,7 +69,7 @@ function translateAttributes(attrs, layerName, geometryType)
 // translateToOgr - takes 'tags' + geometry and returns 'attrs' + layername
 function translateToOgr(tags, elementType, geometryType)
 {
-    return mgcp.toMgcp(tags, elementType, geometryType)
+    return mgcp.toOgr(tags, elementType, geometryType)
 
 } // End of translateToOgr
 

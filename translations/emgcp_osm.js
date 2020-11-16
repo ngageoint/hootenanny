@@ -198,5 +198,5 @@ exports.toOSM = emgcp_osm.toOSM;
     exports.EnglishtoOSM = emgcp_osm.toOSM;
     exports.RawtoOSM = mgcp.toOsm;
     exports.OSMtoEnglish = emgcp.toEnglish;
-    exports.OSMtoRaw = mgcp.toMgcp;
+    exports.OSMtoRaw = mgcp.toOgr;
 }

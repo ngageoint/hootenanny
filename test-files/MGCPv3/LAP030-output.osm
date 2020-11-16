@@ -1,138 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528468" lon="153.1207747254575224"/>
-    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115615" lon="153.1206873335032128"/>
+    <bounds minlat="-25.40592438162443" minlon="153.0993636966501" maxlat="-25.39351472411157" maxlon="153.1207747254575"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528504" lon="153.1207747254575224"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115651" lon="153.1206873335032128"/>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528504" lon="153.1172790472848817"/>
-    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115615" lon="153.1171916553305721"/>
-    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4055748138071706" lon="153.1129094495690879"/>
-    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3936021160658782" lon="153.1128220576147783"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115651" lon="153.1171916553305721"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4055748138071671" lon="153.1129094495690879"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3936021160658818" lon="153.1128220576147783"/>
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4054874218528504" lon="153.1083650679446464"/>
-    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115615" lon="153.1082776759903084"/>
-    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244269" lon="153.1037332943659237"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3935147241115651" lon="153.1082776759903368"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244305" lon="153.1037332943659237"/>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831452" lon="153.1036459024116141"/>
-    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244269" lon="153.0994510886044111"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.4059243816244305" lon="153.0994510886044395"/>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="-25.3939516838831452" lon="153.0993636966501299"/>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>
         <nd ref="-12"/>
-        <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2016-11-04T19:29:25.359Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
         <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.402Z"/>
         <tag k="location" v="surface"/>
-        <tag k="seasonal" v="no"/>
         <tag k="median" v="no"/>
         <tag k="uuid" v="{1c214fc8-c843-44b0-b6f4-cdd8649bc5a0}"/>
-        <tag k="source" v="mgcp:lap030"/>
         <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="tertiary"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="lanes" v="1"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="width" v="4"/>
         <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
         <nd ref="-10"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source" v="mgcp:lap030"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="construction" v="tertiary"/>
-        <tag k="name" v="back"/>
-        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
         <tag k="seasonal" v="not_winter"/>
         <tag k="source:name" v="imagery_(other)"/>
-        <tag k="surface" v="paved"/>
-        <tag k="median" v="yes"/>
-        <tag k="width" v="4"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2016-11-04T19:29:25.358Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="construction"/>
-        <tag k="uuid" v="{1b54f920-9fd6-4247-9e4b-8081f12d8125}"/>
-        <tag k="location" v="surface"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="name" v="back"/>
+        <tag k="construction" v="tertiary"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{1b54f920-9fd6-4247-9e4b-8081f12d8125}"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="width" v="4"/>
+        <tag k="median" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.401Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="highway" v="construction"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-8"/>
-        <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source" v="mgcp:lap030"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="condition" v="damaged"/>
-        <tag k="name" v="Beach"/>
-        <tag k="lanes" v="1"/>
-        <tag k="seasonal" v="winter"/>
-        <tag k="source:name" v="imagery_(other)"/>
         <tag k="surface" v="earth"/>
-        <tag k="median" v="yes"/>
-        <tag k="width" v="4"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="source:ingest:datetime" v="2016-11-04T19:29:25.358Z"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="uuid" v="{1b39a7bf-7ac1-4ec8-b7ad-6c2db72e7cb4}"/>
-        <tag k="location" v="surface"/>
+        <tag k="seasonal" v="winter"/>
+        <tag k="condition" v="damaged"/>
+        <tag k="source:name" v="imagery_(other)"/>
         <tag k="error:circular" v="28.65"/>
+        <tag k="name" v="Beach"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="lanes" v="1"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="uuid" v="{1b39a7bf-7ac1-4ec8-b7ad-6c2db72e7cb4}"/>
+        <tag k="width:minimum_traveled_way" v="4"/>
+        <tag k="width" v="4"/>
+        <tag k="median" v="yes"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.401Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="highway" v="motorway"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-6"/>
-        <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2016-11-04T19:29:25.358Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
         <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
+        <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source" v="mgcp:lap030"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.401Z"/>
         <tag k="location" v="underground"/>
-        <tag k="seasonal" v="fair"/>
         <tag k="median" v="no"/>
         <tag k="uuid" v="{1a9f676d-5ffa-4776-9712-2fa11078036e}"/>
-        <tag k="source" v="mgcp:lap030"/>
         <tag k="source:accuracy:horizontal" v="25"/>
-        <tag k="source:accuracy:horizontal:category" v="accurate"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="lanes" v="2"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="surface" v="unpaved"/>
+        <tag k="lanes" v="2"/>
+        <tag k="seasonal" v="fair"/>
+        <tag k="width" v="4"/>
         <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-4"/>
-        <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2016-11-04T19:29:25.358Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
-        <tag k="construction" v="primary"/>
         <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="location" v="overground"/>
-        <tag k="seasonal" v="no"/>
-        <tag k="uuid" v="{19ee9b5c-6011-4093-a2a7-a304d62381db}"/>
-        <tag k="source" v="mgcp:lap030"/>
-        <tag k="name" v="Main"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source" v="mgcp:lap030"/>
         <tag k="highway" v="construction"/>
-        <tag k="lanes" v="2"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.400Z"/>
+        <tag k="location" v="overground"/>
+        <tag k="name" v="Main"/>
+        <tag k="uuid" v="{19ee9b5c-6011-4093-a2a7-a304d62381db}"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="surface" v="paved"/>
+        <tag k="lanes" v="2"/>
+        <tag k="seasonal" v="no"/>
+        <tag k="construction" v="primary"/>
+        <tag k="width" v="4"/>
         <tag k="error:circular" v="28.65"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-2"/>
-        <tag k="width" v="4"/>
-        <tag k="source:ingest:datetime" v="2016-11-04T19:29:25.357Z"/>
-        <tag k="source:name" v="imagery_(other)"/>
         <tag k="width:minimum_traveled_way" v="4"/>
-        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
-        <tag k="condition" v="functional"/>
-        <tag k="location" v="surface"/>
-        <tag k="uuid" v="{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}"/>
-        <tag k="source" v="mgcp:lap030"/>
-        <tag k="name" v="Sesame"/>
-        <tag k="source:accuracy:horizontal" v="25"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
+        <tag k="source:name" v="imagery_(other)"/>
+        <tag k="source" v="mgcp:lap030"/>
         <tag k="highway" v="road"/>
+        <tag k="source:ingest:datetime" v="2020-11-16T15:34:05.399Z"/>
+        <tag k="location" v="surface"/>
+        <tag k="name" v="Sesame"/>
+        <tag k="uuid" v="{54698b56-a6c0-454d-a77f-fbc9a92cb6e6}"/>
+        <tag k="source:accuracy:horizontal" v="25"/>
+        <tag k="source:accuracy:horizontal:evaluation" v="emc_product_specification"/>
         <tag k="lanes" v="1"/>
+        <tag k="width" v="4"/>
+        <tag k="condition" v="functional"/>
         <tag k="error:circular" v="28.65"/>
     </way>
 </osm>

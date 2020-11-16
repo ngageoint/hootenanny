@@ -76,7 +76,7 @@ mgcp = {
 
   // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
   //        feature
-  validateAttrs: function(geometryType,attrs) {
+  validateAttrs: function(geometryType,attrs,notUsed,transMap) {
     var attrList = mgcp.AttrLookup[geometryType.toString().charAt(0) + attrs.FCODE];
 
     if (attrList != undefined)
@@ -85,6 +85,12 @@ mgcp = {
       {
         if (attrList.indexOf(val) == -1)
         {
+          if (val in transMap)
+          {
+            notUsed[transMap[val][1]] = transMap[val][2];
+            hoot.logDebug('Validate: Re-Adding ' + transMap[val][1] + ' = ' + transMap[val][2] + ' to notUsed');
+          }
+
           hoot.logDebug('Validate: Dropping ' + val + ' from ' + attrs.FCODE);
           delete attrs[val];
 
@@ -581,7 +587,6 @@ mgcp = {
       tags.operator = tags.controlling_authority;
       delete tags.controlling_authority;
     }
-
   }, // End of applyToOsmPreProcessing
 
   // Post Processing: Lots of cleanup
@@ -599,9 +604,29 @@ mgcp = {
         {
           // Debug
           // print('Memo: Add: ' + i + ' = ' + tTags[i]);
-          if (tags[tTags[i]]) hoot.logWarn('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+          if (tags[tTags[i]]) hoot.logDebug('Unpacking TXT, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
           tags[i] = tTags[i];
-        }
+
+          // Now check if this is a synonym etc. If so, remove the other tag.
+          if (i in mgcp.fcodeLookupOut) // tag -> FCODE table
+          {
+            if (tags[i] in mgcp.fcodeLookupOut[i])
+            {
+              var row = mgcp.fcodeLookupOut[i][tags[i]];
+
+              // Now find the "real" tag that comes frm the FCode
+              if (row[1] in mgcp.fcodeLookup['F_CODE'])
+              {
+                var row2 = mgcp.fcodeLookup['F_CODE'][row[1]];
+                // If the tags match, delete it
+                if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
+                {
+                  delete tags[row2[0]];
+                }
+              }
+            }
+          }
+        } // End nTags
       }
 
       if (tObj.text !== '')
@@ -1149,7 +1174,6 @@ mgcp = {
       ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
       ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'disappearing'; delete t.natural"],
       ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
-      ["t.natural == 'wood'","t.landuse = 'forest'"],
       ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
       //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
       ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
@@ -1470,13 +1494,15 @@ mgcp = {
       for (var col in tags)
       {
         var value = tags[col];
-        if (col in mgcp.fcodeLookup)
+        if (col in mgcp.fcodeLookup && (value in mgcp.fcodeLookup[col]))
         {
-          if (value in mgcp.fcodeLookup[col])
-          {
-            var row = mgcp.fcodeLookup[col][value];
-            attrs.F_CODE = row[1];
-          }
+          var row = mgcp.fcodeLookup[col][value];
+          attrs.F_CODE = row[1];
+        }
+        else if (col in mgcp.fcodeLookupOut && (value in mgcp.fcodeLookupOut[col]))
+        {
+          var row = mgcp.fcodeLookupOut[col][value];
+          attrs.F_CODE = row[1];
         }
       }
     }
@@ -1926,6 +1952,22 @@ mgcp = {
         // hoot.logTrace('TRD3 feature EA010 changed to TRD4 EA040 - some data has been dropped');
         break;
 
+      case 'EC030': // Trees
+        switch (tags.leaf_cycle)
+        {
+          case undefined: // Break early
+            break;
+
+          case 'semi_deciduous':
+            attrs.TRE = '1'; // Deciduous
+            break;
+
+          case 'semi_evergreen':
+            attrs.TRE = '2'; // Evergreen
+            break;
+        }
+        break;
+
       case 'ED030': // Mangrove Swamp
         if (! attrs.TID) attrs.TID = '1001'; // Tidal
         break;
@@ -2061,6 +2103,10 @@ mgcp = {
 
       mgcp.fcodeLookup = translate.createLookup(mgcp.rules.fcodeOne2oneV4);
 
+      // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
+      // translation to an FCode
+      mgcp.fcodeLookupOut = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneOut);
+
       // Debug:
       // translate.dumpOne2OneLookup(mgcp.fcodeLookup);
     }
@@ -2169,7 +2215,7 @@ mgcp = {
 
   // This gets called by translateToOGR and is where the main work gets done
   // We get Tags and return Attrs and a tableName
-  toMgcp : function(tags, elementType, geometryType)
+  toOgr : function(tags, elementType, geometryType)
   {
     var tableName = '';
     var returnData = []; // The array of features to return
@@ -2210,15 +2256,20 @@ mgcp = {
     if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'In tags: ');
 
     // Set up the fcode translation rules
+
     if (mgcp.fcodeLookup == undefined)
     {
+
       // Order is important:
       // First the MGCPv4 FCODES, then the common ones. This ensures that the common ones don't
       // stomp on the V4 ones
-      mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneOut);
+      // mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneOut);
       mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
-
       mgcp.fcodeLookup = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneV4);
+
+      // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
+      // translation to an FCode
+      mgcp.fcodeLookupOut = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneOut);
 
       // Debug
       // translate.dumpOne2OneLookup(mgcp.fcodeLookup);
@@ -2264,14 +2315,6 @@ mgcp = {
     // Debug
     if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
 
-    // If we have unused tags, add them to the TXT field
-    // NOTE: We are not checking if this is longer than 255 characters
-    if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'attribute')
-    {
-      var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-      attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
-    }
-
     // Set the tablename: [P,A,L]<fcode>
     // tableName = geometryType.toString().substring(0,1) + attrs.F_CODE;
     tableName = geometryType.toString().charAt(0) + attrs.F_CODE;
@@ -2299,7 +2342,15 @@ mgcp = {
         if (mgcp.layerNameLookup[gFcode.toUpperCase()])
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
-          mgcp.validateAttrs(geometryType,returnData[i]['attrs']);
+          mgcp.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
+
+          // If we have unused tags, add them to the TXT field
+          // NOTE: We are not checking if this is longer than 255 characters
+          if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'attribute')
+          {
+            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
+          }
 
           returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];
         }
@@ -2415,6 +2466,6 @@ mgcp = {
 
     return returnData;
 
-  } // End of toMgcp
+  } // End of toOgr
 
 } // End of mgcp

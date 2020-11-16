@@ -22,7 +22,7 @@
         <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.965Z"/>
         <tag k="building" v="hut"/>
         <tag k="uuid" v="{1514e475-0a8b-450d-8138-af8623cbdd56}"/>
-        <tag k="source" v="ggdmv30:hut_p"/>
+        <tag k="source" v="me"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -32,7 +32,7 @@
         <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.974Z"/>
         <tag k="waterway" v="river"/>
         <tag k="uuid" v="{16006a93-ad6c-451e-b5ae-b530e6c5427a}"/>
-        <tag k="source" v="ggdmv30:river_c"/>
+        <tag k="source" v="me"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -43,7 +43,7 @@
         <nd ref="-9"/>
         <tag k="source:ingest:datetime" v="2017-12-18T20:47:56.971Z"/>
         <tag k="uuid" v="{162abddf-bb8a-470a-8986-afdf5a171d45}"/>
-        <tag k="source" v="ggdmv30:orchard_s"/>
+        <tag k="source" v="me"/>
         <tag k="landuse" v="orchard"/>
         <tag k="source:accuracy:horizontal:category" v="accurate"/>
         <tag k="error:circular" v="15"/>
