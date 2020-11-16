@@ -70,6 +70,16 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
   CPPUNIT_TEST(differingTypes1Test);
+  CPPUNIT_TEST(outOfSpecMixedRelations1Test);
+//    CPPUNIT_TEST(poi1Test);
+//    CPPUNIT_TEST(refFilteredToEmpty1Test);
+//    CPPUNIT_TEST(refSinglePoint1Test);
+//    CPPUNIT_TEST(relationCrop1Test);
+//    CPPUNIT_TEST(riverbank1Test);
+//    CPPUNIT_TEST(roundabouts1Test);
+//    CPPUNIT_TEST(secFilteredToEmpty1Test);
+//    CPPUNIT_TEST(secFilteredToEmpty2Test);
+
   CPPUNIT_TEST(orphanedNodes1Test);
   CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(droppedNodes1Test);
@@ -143,6 +153,63 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void outOfSpecMixedRelations1Test()
+  {
+    /*
+     * This test ensures that features belonging to relations that are not part of the OSM spec are
+     * not dropped. There also shouldn't be any duplicated features in the output which can happen
+     * when features belonging to relations are separated by geometry during processing.
+
+       This also tests handling of relations whose members are missing from the input. The
+       secondary input file has one way relation member commented out (unfortunately this makes it
+       unreadable in JOSM, so you'll have to temporarily uncomment it to view the input files
+       there). Any relations in the output owning the commented out member should be tagged with
+       the 'hoot::missing_child' tag after the changeset is applied.
+
+       The main one to check here is the large unlabeled green way that is inside the shop=mall way
+       named "The Forum Shops at Caesars". That way may get unncessarily duplicated due to
+       belonging to multiple relations. Drag it slightly to ensure a duplicate isn't hidden
+       underneath of it. Also, make sure it is still connected to all the shop polys it should be.
+
+       Output issues:
+       1. There is a poorly snapped untyped way belonging to a multilinestring relation between
+          "LVB Burger" and "Rhumber".
+      */
+
+    // This is needed to suppress some missing element warning messages.
+    DisableLog dl;
+
+    _testName = "outOfSpecMixedRelations1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
+    conf().set(ConfigOptions::getSnapUnconnectedWaysExistingWayNodeToleranceKey(), 5.0);
+    conf().set(ConfigOptions::getSnapUnconnectedWaysSnapToleranceKey(), 0.5);
+
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsStringTaskGridGenerator(
+        "-115.184767,36.031262,-115.048556,36.14796", _outputPath + "/" + taskGridFileName)
+        .generateTaskGrid());
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -260,8 +327,8 @@ public:
     // Neither should be dropped from the output due to being in a relation with members of mixed
     // geometry types.
 
-    // This is needed to suppress some ElementToGeometryConverter warnings messages that should eventually be
-    // looked into.
+    // This is needed to suppress some ElementToGeometryConverter warning messages that should
+    // eventually be looked into.
     DisableLog dl;
 
     _testName = "droppedPointPolyRelationMembers1Test";
