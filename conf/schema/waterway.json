@@ -76,14 +76,19 @@
             "type=river",
             "river_type=*",
             "river_flow=*",
-            "FlowDir=*"  
+            "FlowDir=*",
+            "waterway=wadi"  
         ],
         "geometries": [
             "linestring"
         ],
         "isA": "waterway",
         "name": "waterway=river",
-        "objectType": "tag"
+        "objectType": "tag",
+        "similarTo": {
+            "name": "waterway=stream",
+            "weight": 0.7
+        }
     },
     {
         "geometries": [
@@ -101,18 +106,10 @@
             "linestring"
         ],
         "aliases": [
-            "type=stream" 
+            "type=stream"
         ],
         "isA": "waterway",
         "name": "waterway=stream",
-        "objectType": "tag"
-    },
-    {
-        "geometries": [
-            "linestring"
-        ],
-        "isA": "waterway",
-        "name": "waterway=wadi",
         "objectType": "tag"
     },
     {

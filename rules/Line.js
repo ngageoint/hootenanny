@@ -16,7 +16,7 @@ exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.line"));
-exports.tagThreshold = parseFloat(hoot.get("generic.line.tag.threshold"));
+exports.typeThreshold = parseFloat(hoot.get("generic.line.type.threshold"));
 exports.baseFeatureType = "Line";
 exports.geometryType = "line";
 
@@ -112,7 +112,7 @@ exports.matchScore = function(map, e1, e2)
 
   // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
   // look for an explicit type mismatch. Otherwise, move on to the geometry comparison.
-  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.tagThreshold);
+  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
   hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
   if (!typeScorePassesThreshold)
   {

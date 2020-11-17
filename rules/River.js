@@ -18,6 +18,7 @@ exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default")
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 exports.nameThreshold = parseFloat(hoot.get("waterway.name.threshold"));
+exports.typeThreshold = parseFloat(hoot.get("waterway.type.threshold"));
 
 // This is needed for disabling superfluous conflate ops. In the future, it may also
 // be used to replace exports.isMatchCandidate (see #3047). 
@@ -105,27 +106,6 @@ exports.isWholeGroup = function()
 {
   return false;
 };
-
-function explicitTypeMismatch(e1, e2)
-{
-  hoot.trace("Processing type...");
-
-  var tags1 = e1.getTags();
-  var tags2 = e2.getTags();
-
-  // This isn't foolproof as there could be other untranslated river identifying tags involved.
-  var waterway1 = tags1.get("waterway");
-  var waterway2 = tags2.get("waterway");
-  if (waterway1 != 'undefined' && waterway1 != null && waterway1 != '' && 
-      waterway2 != 'undefined' && waterway2 != null && waterway2 != '' && 
-      waterway1 != waterway2)
-  {
-    hoot.trace("Explict type mismatch: " + waterway1 + ", " + waterway2);
-    return true;
-  }
-
-  return false;
-}
 
 function nameMismatch(map, e1, e2)
 {
@@ -238,13 +218,16 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
   hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
   
-  // This type and name checks are mostly here to help cull down the potential matches and avoid 
-  // costly geometric comparisons for long features. The geometric comparison itself is fairly
-  // accurate.
-  if (explicitTypeMismatch(e1, e2))
+  // If both features have types and they aren't just generic types, let's do a detailed type comparison and 
+  // look for an explicit type mismatch.
+  var typeScorePassesThreshold = !explicitTypeMismatch(e1, e2, exports.typeThreshold);
+  hoot.trace("typeScorePassesThreshold: " + typeScorePassesThreshold);
+  if (!typeScorePassesThreshold)
   {
     return result;
   }
+  hoot.trace("mostSpecificType(e1): " + mostSpecificType(e1));
+  hoot.trace("mostSpecificType(e2): " + mostSpecificType(e2));
   if (nameMismatch(map, e1, e2))
   {
     return result;
