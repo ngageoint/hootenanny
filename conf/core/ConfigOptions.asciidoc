@@ -297,7 +297,7 @@ input sizes.
 Areas that do not match and have a percentage overlap at or above this value will be marked for
 review.
 
-=== area.tag.threshold
+=== area.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
@@ -758,7 +758,7 @@ this list is empty, no circular error will be parsed from input features and a t
 Name similarity threshold (0.0 to 1.0) at or above which an collection relation feature is
 considered to have a name match.
 
-=== collection.relation.tag.threshold
+=== collection.relation.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
@@ -1388,7 +1388,7 @@ Sets that maximum angle that is still considered a generic line match. Units in 
 
 The way subline matcher to use when determining matching sublines with generic line conflation.
 
-=== generic.line.tag.threshold
+=== generic.line.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
@@ -1396,7 +1396,7 @@ The way subline matcher to use when determining matching sublines with generic l
 Tag similarity threshold (0.0 to 1.0) at or above which an linear element not conflatable by
 specific Hootenanny conflation routines is considered to have similar tags.
 
-=== generic.point.tag.threshold
+=== generic.point.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
@@ -1404,7 +1404,7 @@ specific Hootenanny conflation routines is considered to have similar tags.
 Tag similarity threshold (0.0 to 1.0) at or above which an point element not conflatable by
 specific Hootenanny conflation routines is considered to have similar tags.
 
-=== generic.point.polygon.tag.threshold
+=== generic.point.polygon.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
@@ -1412,7 +1412,7 @@ specific Hootenanny conflation routines is considered to have similar tags.
 Tag similarity threshold (0.0 to 1.0) at or above which a pair of point and polygon elements not
 conflatable by specific Hootenanny conflation routines is considered to have similar tags.
 
-=== generic.polygon.tag.threshold
+=== generic.polygon.type.threshold
 
 * Data Type: double
 * Default Value: `0.8`
@@ -5155,6 +5155,14 @@ See `rubber.sheet.ref`.  Used during waterway conflation.
 * Default Value: `hoot::MaximalSublineMatcher`
 
 The way subline matcher to use when determining matching sublines.
+
+=== waterway.type.threshold
+
+* Data Type: double
+* Default Value: `0.7`
+
+Tag similarity threshold (0.0 to 1.0) at or above which a waterway element is considered to have
+similar tags.
 
 === way.angle.sample.distance
 

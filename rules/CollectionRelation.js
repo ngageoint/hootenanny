@@ -16,7 +16,7 @@ exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
 exports.searchRadius = parseFloat(hoot.get("search.radius.collection.relation"));
-exports.tagThreshold = parseFloat(hoot.get("collection.relation.tag.threshold"));
+exports.typeThreshold = parseFloat(hoot.get("collection.relation.type.threshold"));
 exports.nameThreshold = parseFloat(hoot.get("collection.relation.name.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "CollectionRelation";
@@ -85,7 +85,7 @@ function typeMismatch(e1, e2)
     hoot.trace("admin_level mismatch");
     return true;
   }
-  else if ((type1 == "multipolygon" || type1 == "multilineString") && explicitTypeMismatch(e1, e2, exports.tagThreshold))
+  else if ((type1 == "multipolygon" || type1 == "multilineString") && explicitTypeMismatch(e1, e2, exports.typeThreshold))
   {
     hoot.trace("multipoly/multilinestring type mismatch");
     return true;
