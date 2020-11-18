@@ -282,7 +282,7 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
   std::shared_ptr<Polygon> poly(
     GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
-  LOG_VAR(poly->isValid());
+  LOG_VART(poly->isValid());
   return poly;
 }
 
