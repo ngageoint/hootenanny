@@ -136,6 +136,7 @@ hoot-core/src/test/resources/nohup.out
 nohup.out
 /lib
 docs/node_modules/
+translations-nodejs/node_modules/
 **/buildInfo.json/**
 */buildInfo.json/*
 **/buildInfo.json/*.*

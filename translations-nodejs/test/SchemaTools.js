@@ -1,6 +1,7 @@
-
 var assert = require('assert');
-var st = require('../SchemaTools.js');
+
+var HOOT_HOME = process.env.HOOT_HOME;
+var st = require(HOOT_HOME + '/translations/SchemaTools.js');
 
 describe('schema', function() {
     it('implicitly pick the right to OSM tag', function() {

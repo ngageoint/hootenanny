@@ -1,5 +1,7 @@
 var assert = require("assert")
-var translation  = require("../translation_assistant.js");
+
+var HOOT_HOME = process.env.HOOT_HOME;
+var translation  = require(HOOT_HOME + "/translations/translation_assistant.js");
 
 var mapping = {"test": {
     "CITY": "IGNORED",

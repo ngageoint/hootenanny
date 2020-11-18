@@ -117,7 +117,7 @@ licenses:
 
 translations-test: build
 ifneq ($(shell which mocha),)
-	cd translations; npm install && npm test
+	cd translations-nodejs/test; npm install && npm test
 else
 	@echo Skipping mocha tests
 endif
