@@ -1,4 +1,0 @@
-
-asdfa
-
-foo is bad.

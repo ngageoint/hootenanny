@@ -85,7 +85,7 @@ translationServerPort=8094
 translationServerThreadCount=0
 
 # Translation Server Script in scripts folder
-translationServerScript=/translations/TranslationServer.js
+translationServerScript=/translations-nodejs/TranslationServer.js
 
 # Ingest size threshold
 ingestSizeThreshold=200000000

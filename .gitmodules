@@ -5,3 +5,6 @@
 	path = hoot-ui-2x
 	url = https://github.com/ngageoint/hootenanny-ui.git
 	branch = hoot2x
+[submodule "translations"]
+	path = translations
+	url = git@github.com:ngageoint/hootenanny-translate.git
