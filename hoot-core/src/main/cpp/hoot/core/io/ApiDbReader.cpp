@@ -362,7 +362,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
 
 void ApiDbReader::_fullRead(OsmMapPtr map)
 {
-  LOG_STATUS("Executing API full read query...");
+  LOG_DEBUG("Executing API full read query...");
   for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
   {
     if (_returnNodesOnly && ctr != ElementType::Node)
