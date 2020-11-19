@@ -688,14 +688,6 @@ whose source elements do not exist or encountered relation having references to 
 elements do not exist will have a custom tag added to them to signal that the feature may require
 manual cleanup.
 
-=== changeset.replacement.pass.conflate.reviews
-
-* Data Type: bool
-* Default Value: `false`
-
-If enabled and conflation is also enabled during changeset replacement derivation, conflate review
-relations will be written.
-
 === changeset.replacement.snap.exclude.types
 
 * Data Type: list

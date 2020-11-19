@@ -231,7 +231,7 @@ void ElementStreamer::stream(const QStringList& inputs, const QString& out,
   for (int i = 0; i < inputs.size(); i++)
   {
     const QString in = inputs.at(i);
-    const QString message = "Streaming data conversion from " + in + " to " + out + "...";
+    const QString message = "Streaming data conversion from ..." + in + " to ..." + out + "...";
     // Always check for a valid task weight and that the job was set to running. Otherwise, this is
     // just an empty progress object, and we shouldn't log progress.
     if (progress.getTaskWeight() != 0.0 && progress.getState() == Progress::JobState::Running)
