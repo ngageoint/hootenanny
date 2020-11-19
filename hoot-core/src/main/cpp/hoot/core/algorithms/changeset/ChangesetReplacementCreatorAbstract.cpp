@@ -304,8 +304,9 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
     map.reset(new OsmMap(cachedMap));
     //IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
   }
-  // This is a temp C&R only fix for #4375 to prevent pulling down too much data. Still working on
-  // a more permanent fix.
+  // This is a temp C&R only fix for #4375 to prevent pulling down too much data. Some how the
+  // changes from #4361 caused ApiDbReader to bring back more data for certain C&R pulls despite none
+  // of the reader tests failing. Still working on a more permanent fix for this.
   IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
 
   if (warnOnZeroVersions)
