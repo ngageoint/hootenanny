@@ -78,11 +78,29 @@ bool ApiDbReader::isSupported(const QString& urlStr)
 
 void ApiDbReader::setBoundingBox(const QString& bbox)
 {
+  // TODO: explain
+//  if (GeometryUtils::isEnvelopeString(bbox))
+//  {
+//    _boundsAsEnvelope = GeometryUtils::envelopeFromString(bbox);
+//  }
+//  else
+//  {
+//    setBounds(GeometryUtils::boundsFromString(bbox));
+//  }
   setBounds(GeometryUtils::boundsFromString(bbox));
 }
 
 void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 {
+  // TODO: explain
+//  if (GeometryUtils::isEnvelopeString(bbox))
+//  {
+//    _overrideBoundsAsEnvelope = GeometryUtils::envelopeFromString(bbox);
+//  }
+//  else
+//  {
+//    _overrideBounds = GeometryUtils::boundsFromString(bbox);
+//  }
   _overrideBounds = GeometryUtils::boundsFromString(bbox);
 }
 
@@ -107,7 +125,9 @@ void ApiDbReader::initializePartial()
 
 bool ApiDbReader::_hasBounds()
 {
-  return _bounds.get() || _overrideBounds.get();
+  return
+    _bounds.get() || _overrideBounds.get()/* || !_boundsAsEnvelope.isNull() ||
+    !_overrideBoundsAsEnvelope.isNull()*/;
 }
 
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
@@ -360,7 +380,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
 
 void ApiDbReader::_fullRead(OsmMapPtr map)
 {
-  LOG_DEBUG("Executing API full read query...");
+  LOG_STATUS("Executing API full read query...");
   for (int ctr = ElementType::Node; ctr != ElementType::Unknown; ctr++)
   {
     if (_returnNodesOnly && ctr != ElementType::Node)
@@ -556,6 +576,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   LOG_VART(boundedWayCount);
   LOG_VART(boundedRelationCount);
 
+  // TODO: explain
   // The default behavior of the db bounded read is to return the entirety of features found
   // within the bounds, even if sections of those features exist outside the bounds. Only run the
   // crop operation if the crop related options are different than the default behavior. Clearly, it
@@ -565,10 +586,15 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   ConfigOptions conf;
   if (!conf.getConvertBoundsKeepEntireFeaturesCrossingBounds() ||
        conf.getConvertBoundsKeepOnlyFeaturesInsideBounds())
-  { 
+//  if ((_boundsAsEnvelope.isNull() && _overrideBoundsAsEnvelope.isNull()) ||
+//       !conf.getConvertBoundsKeepEntireFeaturesCrossingBounds() ||
+//       conf.getConvertBoundsKeepOnlyFeaturesInsideBounds())
+  {
     // We've already handled keeping immediately connected oob ways during the query, so don't need
     // to worry about it here.
     IoUtils::cropToBounds(map, _bounds);
+    //IoUtils::cropToBounds(
+      //map, _bounds, conf.getConvertBoundsKeepImmediatelyConnectedWaysOutsideBounds());
   }
 
   LOG_VARD(map->getNodes().size());
@@ -593,24 +619,36 @@ void ApiDbReader::read(const OsmMapPtr& map)
   }
   else
   {
-    std::shared_ptr<geos::geom::Geometry> bounds;
-    if (_overrideBounds.get())
-    {
-      bounds = _overrideBounds;
-    }
-    else
-    {
-      bounds = _bounds;
-    }
     // api db bounds reading is based off of quad tiles which only operates on rectangular bounds,
     // so we have to pass an envelope here. The actual bounds is used to crop down the queried
     // result later.
+    geos::geom::Envelope bounds;
+    //LOG_VARD(_overrideBoundsAsEnvelope.isNull());
+    //LOG_VARD(_boundsAsEnvelope.isNull());
+    LOG_VARD(_overrideBounds.get());
+    LOG_VARD(_bounds.get());
+    /*if (!_overrideBoundsAsEnvelope.isNull())
+    {
+      bounds = _overrideBoundsAsEnvelope;
+    }
+    else if (!_boundsAsEnvelope.isNull())
+    {
+      bounds = _boundsAsEnvelope;
+    }
+    else */if (_overrideBounds.get())
+    {
+      bounds = *(_overrideBounds->getEnvelopeInternal());
+    }
+    else
+    {
+      bounds = *(_bounds->getEnvelopeInternal());
+    }
     if (!_readFullThenCropOnBounded)
     {
       LOG_DEBUG(
-        "Executing API bounded read query via SQL filtering at bounds " << bounds->toString() <<
-        "...");
-      _readByBounds(map, *(bounds->getEnvelopeInternal()));
+        "Executing API bounded read query via SQL filtering at bounds: ..." <<
+        GeometryUtils::envelopeToString(bounds).right(50) << "...");
+      _readByBounds(map, bounds);
     }
     else
     {
@@ -621,16 +659,16 @@ void ApiDbReader::read(const OsmMapPtr& map)
       // fact as a runtime performance optimization at the expense of extra memory usage.
 
       LOG_DEBUG(
-        "Executing API bounded read query via read all then crop at bounds " <<
-        bounds->toString() << "...");
-      _readByBounds2(map, *(bounds->getEnvelopeInternal()));
+        "Executing API bounded read query via read all then crop at bounds: ..." <<
+        GeometryUtils::envelopeToString(bounds).right(50) << "...");
+      _readByBounds2(map, bounds);
     }
   }
 }
 
 void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
 {
-  //This method could possibly be replaced by the _readBounds method set to a global extent.
+  // This method could possibly be replaced by the _readBounds method set to a global extent.
 
   long elementCount = 0;
 
@@ -638,8 +676,8 @@ void ApiDbReader::_read(OsmMapPtr map, const ElementType& elementType)
   std::shared_ptr<QSqlQuery> elementResultsIterator =
     _getDatabase()->selectAllElements(elementType);
 
-  //need to check isActive, rather than next() here b/c resultToElement actually calls next() and
-  //it will always return an extra null node at the end (see comments in _resultToElement)
+  // Need to check isActive, rather than next() here b/c resultToElement actually calls next() and
+  // it will always return an extra null node at the end (see comments in _resultToElement).
   while (elementResultsIterator->isActive())
   {
     std::shared_ptr<Element> element =

@@ -200,7 +200,7 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const geos::geom::Envelope& bounds,
 void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geometry>& bounds,
                            const bool keepConnectedOobWays)
 {
-  LOG_INFO("Applying bounds filtering to input data: " << bounds << "...");
+  LOG_INFO("Applying bounds filtering to input data: " << bounds->toString() << "...");
   LOG_VARD(keepConnectedOobWays);
   LOG_VARD(StringUtils::formatLargeNumber(map->getElementCount()));
 
