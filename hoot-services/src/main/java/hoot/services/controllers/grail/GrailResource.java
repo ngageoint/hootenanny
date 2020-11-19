@@ -29,7 +29,7 @@ package hoot.services.controllers.grail;
 import static hoot.services.HootProperties.CHANGESETS_FOLDER;
 import static hoot.services.HootProperties.CHANGESET_OPTIONS;
 import static hoot.services.HootProperties.GRAIL_OVERPASS_LABEL;
-import static hoot.services.HootProperties.GRAIL_OVERPASS_STATS_QUERY;
+import static hoot.services.HootProperties.GRAIL_OVERPASS_QUERY;
 import static hoot.services.HootProperties.GRAIL_RAILS_LABEL;
 import static hoot.services.HootProperties.HOME_FOLDER;
 import static hoot.services.HootProperties.HOOTAPI_DB_URL;
@@ -769,11 +769,11 @@ public class GrailResource {
         // Get grail overpass query from the file and store it in a string
         String overpassQuery;
         if (customQuery == null || customQuery.equals("")) {
-            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_STATS_QUERY);
+            File overpassQueryFile = new File(HOME_FOLDER, GRAIL_OVERPASS_QUERY);
             try {
                 overpassQuery = FileUtils.readFileToString(overpassQueryFile, "UTF-8");
             } catch(Exception exc) {
-                String msg = "Failed to poll overpass for stats query. Couldn't read overpass query file: " + overpassQueryFile.getName();
+                String msg = "Failed to poll overpass for query. Couldn't read overpass query file: " + overpassQueryFile.getName();
                 throw new WebApplicationException(exc, Response.serverError().entity(msg).build());
             }
         } else {
@@ -782,10 +782,10 @@ public class GrailResource {
             if (overpassQuery.contains("out:xml")) {
                 overpassQuery = overpassQuery.replace("out:xml", "out:json");
             }
-
-            // first line that lists columns which are counts for each feature type
-            overpassQuery = overpassQuery.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
         }
+
+        // first line that lists columns which are counts for each feature type
+        overpassQuery = overpassQuery.replace("[out:json]", "[out:csv(::count, ::\"count:nodes\", ::\"count:ways\", ::\"count:relations\")]");
 
         // overpass query can have multiple "out *" lines so need to replace all
         overpassQuery = overpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
