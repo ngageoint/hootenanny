@@ -302,8 +302,11 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
       "Copying map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<
       " from: " << cachedMap->getName() << "...");
     map.reset(new OsmMap(cachedMap));
-    IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
+    //IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
   }
+  // This is a temp C&R only fix for #4375 to prevent pulling down too much data. Still working on
+  // a more permanent fix.
+  IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
 
   if (warnOnZeroVersions)
   {
