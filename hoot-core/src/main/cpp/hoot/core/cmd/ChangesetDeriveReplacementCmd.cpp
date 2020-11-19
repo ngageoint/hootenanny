@@ -253,24 +253,16 @@ public:
     changesetCreator->setRetainmentFilterOptions(retainmentFilterOptions);
     changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
 
-    // TODO: explain
-//    if (GeometryUtils::isEnvelopeString(boundsStr))
-//    {
-//      changesetCreator->create(
-//        input1, input2, GeometryUtils::envelopeFromString(boundsStr), output);
-//    }
-//    else
-//    {
-      std::shared_ptr<geos::geom::Polygon> bounds =
-        std::dynamic_pointer_cast<geos::geom::Polygon>(
-          GeometryUtils::boundsFromString(boundsStr));
-      if (!bounds)
-      {
-        throw IllegalArgumentException(
-          "Invalid replacement bounds passed to changeset replacement derivation.");
-      }
-      changesetCreator->create(input1, input2, bounds, output);
-    //}
+    std::shared_ptr<geos::geom::Polygon> bounds =
+      std::dynamic_pointer_cast<geos::geom::Polygon>(
+        GeometryUtils::boundsFromString(boundsStr));
+    if (!bounds)
+    {
+      throw IllegalArgumentException(
+        "Invalid replacement bounds passed to changeset replacement derivation.");
+    }
+
+    changesetCreator->create(input1, input2, bounds, output);
   }
 
   void processStatsParams(QStringList& args, bool& printStats, QString& outputStatsFile)

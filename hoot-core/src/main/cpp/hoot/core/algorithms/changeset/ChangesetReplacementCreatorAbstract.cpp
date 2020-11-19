@@ -87,7 +87,7 @@ namespace hoot
 const QString ChangesetReplacementCreatorAbstract::JOB_SOURCE = "ChangesetDeriveReplacement";
 
 ChangesetReplacementCreatorAbstract::ChangesetReplacementCreatorAbstract() :
-_maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 2),
+_maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 1.5),
 _geometryFiltersSpecified(false),
 _chainReplacementFilters(false),
 _chainRetainmentFilters(false),
@@ -304,9 +304,12 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
       "Copying map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<
       " from: " << cachedMap->getName() << "...");
     map.reset(new OsmMap(cachedMap));
-    IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
   }
-  //IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
+  // Formerly, we let ApiDbReader do the cropping and only if the crop options here were different
+  // than the default. However, its been found that the way ApiDbReader returns relations can result
+  // in returning far more data than needed, so now we crop after load regardless of the input
+  // format.
+  IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
   LOG_STATUS(
     "Loaded " << mapName << " map from: ..." << inputUrl.right(_maxFilePrintLength) << " with " <<
     StringUtils::formatLargeNumber(map->size()) << " features...");

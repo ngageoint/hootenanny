@@ -44,7 +44,7 @@ class BoundedCommand : public BaseCommand
 {
 public:
 
-  BoundedCommand() = default;
+  BoundedCommand();
   virtual ~BoundedCommand() = default;
 
   virtual int runSimple(QStringList& args) override;
@@ -52,6 +52,11 @@ public:
 protected:
 
   virtual void _writeBoundsFile();
+
+private:
+
+  // can be useful for debugging
+  bool _writeInternalEnvelope;
 };
 
 }

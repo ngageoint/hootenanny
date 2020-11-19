@@ -78,29 +78,11 @@ bool ApiDbReader::isSupported(const QString& urlStr)
 
 void ApiDbReader::setBoundingBox(const QString& bbox)
 {
-  // TODO: explain
-//  if (GeometryUtils::isEnvelopeString(bbox))
-//  {
-//    _boundsAsEnvelope = GeometryUtils::envelopeFromString(bbox);
-//  }
-//  else
-//  {
-//    setBounds(GeometryUtils::boundsFromString(bbox));
-//  }
   setBounds(GeometryUtils::boundsFromString(bbox));
 }
 
 void ApiDbReader::setOverrideBoundingBox(const QString& bbox)
 {
-  // TODO: explain
-//  if (GeometryUtils::isEnvelopeString(bbox))
-//  {
-//    _overrideBoundsAsEnvelope = GeometryUtils::envelopeFromString(bbox);
-//  }
-//  else
-//  {
-//    _overrideBounds = GeometryUtils::boundsFromString(bbox);
-//  }
   _overrideBounds = GeometryUtils::boundsFromString(bbox);
 }
 
@@ -576,7 +558,6 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   LOG_VART(boundedWayCount);
   LOG_VART(boundedRelationCount);
 
-  // TODO: explain
   // The default behavior of the db bounded read is to return the entirety of features found
   // within the bounds, even if sections of those features exist outside the bounds. Only run the
   // crop operation if the crop related options are different than the default behavior. Clearly, it
@@ -586,16 +567,11 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   ConfigOptions conf;
   if (!conf.getConvertBoundsKeepEntireFeaturesCrossingBounds() ||
        conf.getConvertBoundsKeepOnlyFeaturesInsideBounds())
-//  if ((_boundsAsEnvelope.isNull() && _overrideBoundsAsEnvelope.isNull()) ||
-//       !conf.getConvertBoundsKeepEntireFeaturesCrossingBounds() ||
-//       conf.getConvertBoundsKeepOnlyFeaturesInsideBounds())
   {
     // We've already handled keeping immediately connected oob ways during the query, so don't need
     // to worry about it here.
     IoUtils::cropToBounds(map, _bounds);
-    //IoUtils::cropToBounds(
-      //map, _bounds, conf.getConvertBoundsKeepImmediatelyConnectedWaysOutsideBounds());
-  }
+   }
 
   LOG_VARD(map->getNodes().size());
   LOG_VARD(map->getWays().size());
@@ -623,19 +599,9 @@ void ApiDbReader::read(const OsmMapPtr& map)
     // so we have to pass an envelope here. The actual bounds is used to crop down the queried
     // result later.
     geos::geom::Envelope bounds;
-    //LOG_VARD(_overrideBoundsAsEnvelope.isNull());
-    //LOG_VARD(_boundsAsEnvelope.isNull());
     LOG_VARD(_overrideBounds.get());
     LOG_VARD(_bounds.get());
-    /*if (!_overrideBoundsAsEnvelope.isNull())
-    {
-      bounds = _overrideBoundsAsEnvelope;
-    }
-    else if (!_boundsAsEnvelope.isNull())
-    {
-      bounds = _boundsAsEnvelope;
-    }
-    else */if (_overrideBounds.get())
+    if (_overrideBounds.get())
     {
       bounds = *(_overrideBounds->getEnvelopeInternal());
     }

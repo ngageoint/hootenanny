@@ -414,8 +414,7 @@ void ChangesetCutOnlyCreator::create(
   // Derive a changeset between the ref and conflated maps that replaces ref features with
   // secondary features within the bounds and write it out.
   _progress->set(_getJobPercentComplete(), "Generating changeset...");
-  _changesetCreator->setIncludeReviews(
-    ConfigOptions().getChangesetReplacementPassConflateReviews());
+  _changesetCreator->setIncludeReviews(false);
   // We have some instances where modify and delete changes are being generated for the same
   // element, which causes error during changeset application. Eventually, we should eliminate their
   // causes, but for now we'll activate changeset cleaning to get rid of the delete statements.
