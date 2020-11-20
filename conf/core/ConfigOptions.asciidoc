@@ -297,13 +297,21 @@ input sizes.
 Areas that do not match and have a percentage overlap at or above this value will be marked for
 review.
 
-=== area.type.threshold
+=== area.type.match.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
 Tag similarity threshold (0.0 to 1.0) at or above which an area feature is considered to have
-similar tags. This setting is helpful due to the loose definition of Area in Hootenanny.
+similar tags during matching.
+
+=== area.type.overlap.review.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an area feature is considered to have
+similar tags when determining overlap reviews.
 
 === arff.writer.precision
 

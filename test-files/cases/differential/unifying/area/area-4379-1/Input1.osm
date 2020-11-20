@@ -292,21 +292,10 @@
     <tag k='intermittent' v='yes' />
     <tag k='length' v='141.3' />
     <tag k='natural' v='water' />
-    <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='ufd:lake_pond_a' />
-    <tag k='source:datetime' v='2020-09-24T12:48:02Z' />
-    <tag k='source:imagery' v='DigitalGlobe' />
-    <tag k='source:imagery:earliestDate' v='2020-03-12 00:00:00' />
-    <tag k='source:imagery:id' v='deb1e1fb1c5960a39e8909791b361d75' />
-    <tag k='source:imagery:latestDate' v='2020-03-12 00:00:00' />
-    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
-    <tag k='source:imagery:mosaic' v='yes' />
-    <tag k='source:imagery:sensor' v='Multiple' />
-    <tag k='source:ingest:datetime' v='2020-09-24T12:46:26.573Z' />
-    <tag k='uuid' v='{07b9539c-a0f5-462f-b313-cdc8431fa3ba}' />
     <tag k='water' v='lake' />
     <tag k='water:type' v='fresh' />
     <tag k='width' v='73.3' />
+    <tag k='note' v='1' />
   </way>
   <way id='-8330240' action='modify' visible='true'>
     <nd ref='-16166287' />
@@ -331,12 +320,9 @@
     <tag k='ele' v='0' />
     <tag k='intermittent' v='yes' />
     <tag k='natural' v='water' />
-    <tag k='source' v='ufd:lake_pond_a' />
-    <tag k='source:datetime' v='2020-09-24T12:48:02Z' />
-    <tag k='source:ingest:datetime' v='2020-09-24T12:46:26.545Z' />
-    <tag k='uuid' v='{bd4b94bb-912a-45cb-926d-ace10c0f1f33}' />
     <tag k='water' v='lake' />
     <tag k='water:type' v='fresh' />
+    <tag k='note' v='2' />
   </way>
   <way id='-8330241' action='modify' visible='true'>
     <nd ref='-16166305' />
@@ -404,12 +390,9 @@
     <tag k='ele' v='0' />
     <tag k='intermittent' v='yes' />
     <tag k='natural' v='water' />
-    <tag k='source' v='ufd:lake_pond_a' />
-    <tag k='source:datetime' v='2020-09-24T12:48:02Z' />
-    <tag k='source:ingest:datetime' v='2020-09-24T12:46:26.512Z' />
-    <tag k='uuid' v='{280ba0dc-49e9-40a6-b51c-24485d805d00}' />
     <tag k='water' v='lake' />
     <tag k='water:type' v='fresh' />
+    <tag k='note' v='3' />
   </way>
   <way id='-8330242' action='modify' visible='true'>
     <nd ref='-16166366' />
@@ -451,21 +434,10 @@
     <tag k='intermittent' v='yes' />
     <tag k='length' v='56.2' />
     <tag k='natural' v='water' />
-    <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='ufd:lake_pond_a' />
-    <tag k='source:datetime' v='2020-09-24T12:48:02Z' />
-    <tag k='source:imagery' v='DigitalGlobe' />
-    <tag k='source:imagery:earliestDate' v='2020-03-12 00:00:00' />
-    <tag k='source:imagery:id' v='deb1e1fb1c5960a39e8909791b361d75' />
-    <tag k='source:imagery:latestDate' v='2020-03-12 00:00:00' />
-    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
-    <tag k='source:imagery:mosaic' v='yes' />
-    <tag k='source:imagery:sensor' v='Multiple' />
-    <tag k='source:ingest:datetime' v='2020-09-24T12:46:26.505Z' />
-    <tag k='uuid' v='{72019d60-d70e-4a13-9586-e6c48553a203}' />
     <tag k='water' v='lake' />
     <tag k='water:type' v='fresh' />
     <tag k='width' v='27.9' />
+    <tag k='note' v='4' />
   </way>
   <way id='-8330243' action='modify' visible='true'>
     <nd ref='-16166398' />
@@ -489,12 +461,9 @@
     <tag k='ele' v='0' />
     <tag k='intermittent' v='yes' />
     <tag k='natural' v='water' />
-    <tag k='source' v='ufd:lake_pond_a' />
-    <tag k='source:datetime' v='2020-09-24T12:48:02Z' />
-    <tag k='source:ingest:datetime' v='2020-09-24T12:46:26.496Z' />
-    <tag k='uuid' v='{af57bd23-3a09-4fde-9035-1d48c09c9fc4}' />
     <tag k='water' v='lake' />
     <tag k='water:type' v='fresh' />
+    <tag k='note' v='5' />
   </way>
   <way id='-8330244' action='modify' visible='true'>
     <nd ref='-16166415' />
@@ -545,11 +514,8 @@
     <tag k='ele' v='0' />
     <tag k='intermittent' v='yes' />
     <tag k='natural' v='water' />
-    <tag k='source' v='ufd:lake_pond_a' />
-    <tag k='source:datetime' v='2020-09-24T12:48:02Z' />
-    <tag k='source:ingest:datetime' v='2020-09-24T12:46:26.512Z' />
-    <tag k='uuid' v='{8627c391-f7a2-4cf8-b90e-8db3cabcf89b}' />
     <tag k='water' v='lake' />
     <tag k='water:type' v='fresh' />
+    <tag k='note' v='6' />
   </way>
 </osm>

@@ -100,8 +100,8 @@ exports.matchScore = function(map, e1, e2)
     return result;
   }
 
-  // These geometry rules were derived by using training data in Weka with the
-  // REPTree model w/ maxDepth set to 3. Note: This was taken directly from Building.js.
+  // These geometry rules were derived by using training data in Weka with the REPTree model w/ maxDepth set to 3. 
+  // Note: This was taken directly from Building.js and may require tweaking.
 
   var geometryMatch = false;
   var geometryReview = false;

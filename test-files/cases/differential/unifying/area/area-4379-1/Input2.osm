@@ -80,16 +80,8 @@
     <tag k='feature_area' v='1457.0' />
     <tag k='landuse' v='reservoir' />
     <tag k='length' v='63.4' />
-    <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='Bing' />
-    <tag k='source:imagery' v='DigitalGlobe' />
-    <tag k='source:imagery:earliestDate' v='2020-03-12 00:00:00' />
-    <tag k='source:imagery:id' v='deb1e1fb1c5960a39e8909791b361d75' />
-    <tag k='source:imagery:latestDate' v='2020-03-12 00:00:00' />
-    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
-    <tag k='source:imagery:mosaic' v='yes' />
-    <tag k='source:imagery:sensor' v='Multiple' />
     <tag k='width' v='31.1' />
+    <tag k='note' v='7' />
   </way>
   <way id='-8330033' action='modify' visible='true'>
     <nd ref='-16163654' />
@@ -139,15 +131,7 @@
     <tag k='feature_area' v='51025.8' />
     <tag k='landuse' v='reservoir' />
     <tag k='length' v='430.9' />
-    <tag k='security:classification' v='UNCLASSIFIED' />
-    <tag k='source' v='bing' />
-    <tag k='source:imagery' v='DigitalGlobe' />
-    <tag k='source:imagery:earliestDate' v='2020-03-12 00:00:00' />
-    <tag k='source:imagery:id' v='deb1e1fb1c5960a39e8909791b361d75' />
-    <tag k='source:imagery:latestDate' v='2020-03-12 00:00:00' />
-    <tag k='source:imagery:layerName' v='Maxar Basemap +Vivid' />
-    <tag k='source:imagery:mosaic' v='yes' />
-    <tag k='source:imagery:sensor' v='Multiple' />
     <tag k='width' v='167.8' />
+    <tag k='note' v='8' />
   </way>
 </osm>
