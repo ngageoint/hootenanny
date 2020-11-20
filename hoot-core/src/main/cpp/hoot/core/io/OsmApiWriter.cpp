@@ -856,7 +856,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
       _changesetCountMutex.lock();
       _changesetCount++;
       //  Keep track of the last element information
-      if (!last._id.isNull())
+      if (last.isValid())
       {
         _lastElement = last;
         last = LastElementInfo();
