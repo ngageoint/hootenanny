@@ -165,6 +165,8 @@ private:
 
   bool _textIsTranslatable(const QString& text) const;
   bool _textIsEnglish(const QString& text) const;
+  /** Timeout for HTTP requests in seconds */
+  int _timeout;
 };
 
 }

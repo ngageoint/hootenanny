@@ -115,6 +115,8 @@ private:
   HootNetworkRequest _getLoginRequest(const QString& requestToken, const QString& verifier,
                                       QUrl& loginUrl) const;
   long _parseLoginResponse(const QString& response) const;
+  /** Timeout for HTTP requests in seconds */
+  int _timeout;
 };
 
 }

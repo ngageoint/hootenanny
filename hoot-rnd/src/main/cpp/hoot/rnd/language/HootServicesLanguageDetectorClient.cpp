@@ -66,7 +66,8 @@ _undetectableWords(0),
 _minConfidence(LanguageDetectionConfidenceLevel::Level::None),
 _cacheHits(0),
 _cacheSize(0),
-_cacheMaxSize(0)
+_cacheMaxSize(0),
+_timeout(500)
 {
 }
 
@@ -221,7 +222,7 @@ QString HootServicesLanguageDetectorClient::detect(const QString& text)
   try
   {
     request.networkRequest(
-      url, headers, QNetworkAccessManager::Operation::PostOperation,
+      url, _timeout, headers, QNetworkAccessManager::Operation::PostOperation,
       _getRequestData(text).toUtf8());
   }
   catch (const HootException& e)

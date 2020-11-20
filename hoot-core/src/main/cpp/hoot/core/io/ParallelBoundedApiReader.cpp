@@ -52,7 +52,8 @@ ParallelBoundedApiReader::ParallelBoundedApiReader(bool useOsmApiBboxFormat, boo
     _useOsmApiBboxFormat(useOsmApiBboxFormat),
     _addProjection(addProjection),
     _continueRunning(true),
-    _filenumber(0)
+    _filenumber(0),
+    _timeout(500)
 {
 }
 
@@ -201,7 +202,7 @@ void ParallelBoundedApiReader::_process()
 
       HootNetworkRequest request;
       LOG_VART(url);
-      request.networkRequest(url);
+      request.networkRequest(url, _timeout);
       //  Check the HTTP status code and result
       int status = request.getHttpStatus();
       QString result = QString::fromUtf8(request.getResponseContent().data());

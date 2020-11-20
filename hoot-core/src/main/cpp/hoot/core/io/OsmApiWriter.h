@@ -438,6 +438,8 @@ private:
   QString _errorMessage;
   /** Enable throttling for API uploads through CGImap (instead of the rails port) */
   bool _throttleCgiMap;
+  /** Timeout for writer */
+  int _timeout;
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */

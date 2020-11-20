@@ -74,7 +74,8 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
     _apiId(0),
     _threadsCanExit(false),
-    _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap())
+    _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap()),
+    _timeout(ConfigOptions().getChangesetApidbTimeout())
 {
   _changesets.push_back(changeset);
   if (isSupported(url))
@@ -103,7 +104,8 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
     _apiId(0),
     _threadsCanExit(false),
-    _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap())
+    _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap()),
+    _timeout(ConfigOptions().getChangesetApidbTimeout())
 {
   if (isSupported(url))
     _url = url;
@@ -633,6 +635,7 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
   _debugOutput = options.getChangesetApidbWriterDebugOutput();
   _debugOutputPath = options.getChangesetApidbWriterDebugOutputPath();
   _throttleCgiMap = options.getChangesetApidbWritersThrottleCgimap();
+  _timeout = options.getChangesetApidbTimeout();
 }
 
 bool OsmApiWriter::isSupported(const QUrl &url)
@@ -658,7 +661,7 @@ bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
   {
     QUrl capabilities = _url;
     capabilities.setPath(OsmApiEndpoints::API_PATH_CAPABILITIES);
-    request->networkRequest(capabilities);
+    request->networkRequest(capabilities, _timeout);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     QString printableUrl = capabilities.toString(QUrl::RemoveUserInfo);
     HootNetworkRequest::removeIpFromUrlString(printableUrl, capabilities);
@@ -682,7 +685,7 @@ bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
   {
     QUrl permissions = _url;
     permissions.setPath(OsmApiEndpoints::API_PATH_PERMISSIONS);
-    request->networkRequest(permissions);
+    request->networkRequest(permissions, _timeout);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     success = _parsePermissions(responseXml);
   }
@@ -706,7 +709,7 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request)
     QString bboxQuery = GeometryUtils::toConfigString(envelope);
     query.addQueryItem("bbox", bboxQuery);
     map.setQuery(query);
-    request->networkRequest(map);
+    request->networkRequest(map, _timeout);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     QRegExp regex("generator=(\"|')CGImap", Qt::CaseInsensitive);
     cgimap = responseXml.contains(regex);
@@ -818,7 +821,7 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
     headers[QNetworkRequest::ContentTypeHeader] = HootNetworkUtils::CONTENT_TYPE_XML;
     headers[QNetworkRequest::ContentLengthHeader] = content.length();
 
-    request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, content);
+    request->networkRequest(changeset, _timeout, QNetworkAccessManager::Operation::PutOperation, content);
 
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     http_status = request->getHttpStatus();
@@ -912,7 +915,7 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
     headers[QNetworkRequest::ContentTypeHeader] = HootNetworkUtils::CONTENT_TYPE_XML;
     headers[QNetworkRequest::ContentLengthHeader] = content.length();
 
-    request->networkRequest(change, headers, QNetworkAccessManager::Operation::PostOperation, content);
+    request->networkRequest(change, _timeout, headers, QNetworkAccessManager::Operation::PostOperation, content);
 
     info->response = QString::fromUtf8(request->getResponseContent().data());
     info->status = request->getHttpStatus();
@@ -1055,7 +1058,7 @@ QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& 
   {
     QUrl get = _url;
     get.setPath(endpoint);
-    request->networkRequest(get);
+    request->networkRequest(get, _timeout);
     if (request->getHttpStatus() == HttpResponseCode::HTTP_OK)
       return QString::fromUtf8(request->getResponseContent().data());
     else

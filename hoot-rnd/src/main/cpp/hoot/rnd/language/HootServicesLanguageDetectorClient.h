@@ -134,6 +134,8 @@ private:
 
   QString _getCountsStr(const QString& title, const QMap<QString, int>& data) const;
   QString _getUnvailableLangNamesStr() const;
+  /** Timeout for HTTP requests in seconds */
+  int _timeout;
 };
 
 }

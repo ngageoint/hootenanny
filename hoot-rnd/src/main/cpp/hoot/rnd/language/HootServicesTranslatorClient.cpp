@@ -74,7 +74,8 @@ _untranslatableWords(0),
 _numDetectionsMade(0),
 _cacheHits(0),
 _cacheMaxSize(-1),
-_cacheSize(0)
+_cacheSize(0),
+_timeout(500)
 {
 }
 
@@ -351,7 +352,7 @@ QString HootServicesTranslatorClient::translate(const QString& text)
   try
   {
     request.networkRequest(
-      url, headers, QNetworkAccessManager::Operation::PostOperation,
+      url, _timeout, headers, QNetworkAccessManager::Operation::PostOperation,
       _getRequestData(text).toUtf8());
   }
   catch (const HootException& e)
