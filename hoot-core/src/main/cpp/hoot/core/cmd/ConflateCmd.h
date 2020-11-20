@@ -78,6 +78,7 @@ private:
   bool _filterOps;
 
   void _updateConfigOptionsForAttributeConflation();
+  void _updateConfigOptionsForDifferentialConflation();
   void _disableRoundaboutRemoval();
   void _checkForTagValueTruncationOverride();
 
