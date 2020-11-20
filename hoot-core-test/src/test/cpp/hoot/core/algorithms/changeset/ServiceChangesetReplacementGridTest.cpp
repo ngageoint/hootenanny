@@ -90,6 +90,7 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 
   //CPPUNIT_TEST(github4216UniformTest);
   //CPPUNIT_TEST(northVegasLargeUniformTest);
+  //CPPUNIT_TEST(auditionTest); // use this for trying out new aois
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -803,6 +804,40 @@ public:
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(517, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+  }
+
+  void auditionTest()
+  {
+    _testName = "auditionTest";
+    const QString rootDir = "/home/vagrant/hoot/tmp/Task5";
+    const QString outDir = rootDir + "/" + _testName;
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/debug.osm");
+    QDir(outDir).removeRecursively();
+    QDir().mkpath(outDir);;
+    _prepInput(
+      rootDir + "/NOME_bd410c.osm",
+      rootDir + "/OSM_bd410c.osm"/*,
+      "-115.0317,36.2456,-114.9747,36.2870",
+      outDir*/);
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(outDir);
+    QString finalOutput = outDir + "/" + _testName + "-out.osm";
+    uut.setWriteFinalOutput(finalOutput);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    // for cell subset debugging
+//    QList<int> includeIds;
+//    includeIds.append(59);
+//    uut.setTaskCellIncludeIds(includeIds);
+    //uut.setKillAfterNumChangesetDerivations(2);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-22.587891,63.995235,-22.543945,64.014498", 1,
+        outDir + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
   }
 
 private:

@@ -141,7 +141,7 @@
         "objectType": "tag"
     },
     {
-        "geometries": ["node", "area"],
+        "geometries": ["area"],
         "categories": ["multiuse"],
         "isA": "natural",
         "name": "natural=water",

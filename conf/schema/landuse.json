@@ -181,10 +181,8 @@
         "isA": "landuse",
         "name": "landuse=reservoir",
         "objectType": "tag",
-        "similarTo": {
-            "name": "man_made=water_works",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "man_made=water_works", "weight": 0.9 },
+        "similarTo": { "name": "water=lake", "weight": 0.9 }
     },
     {
         "geometries": [
