@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -46,7 +47,9 @@ public:
   static std::string className() { return "hoot::ElementIdRemapper"; }
 
   ElementIdRemapper();
-  ElementIdRemapper(const Status& statusFilter);
+  ElementIdRemapper(const ElementCriterionPtr& remapFilter);
+  ElementIdRemapper(
+    const ElementCriterionPtr& remapFilter, const ElementCriterionPtr& restoreFilter);
   virtual ~ElementIdRemapper() = default;
 
   /**
@@ -86,7 +89,8 @@ private:
 
   QMap<ElementId, ElementId> _originalToRemappedElementIds;
   // TODO
-  Status _statusFilter;
+  ElementCriterionPtr _remapFilter;
+  ElementCriterionPtr _restoreFilter;
   int _restoredIds;
 };
 

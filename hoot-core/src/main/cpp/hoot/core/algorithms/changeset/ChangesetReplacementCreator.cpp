@@ -32,8 +32,10 @@
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
+#include <hoot/core/criterion/StatusCriterion.h>
 
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/MapUtils.h>
@@ -135,8 +137,6 @@ void ChangesetReplacementCreator::create(
 {
   // This is kind of klunky to set this here, imo. However, its currently the only way to get this
   // bounds to the readers.
-  // TODO: explain
-  //conf().set(ConfigOptions::getConvertBoundsKey(), GeometryUtils::envelopeToString(bounds));
   create(input1, input2, GeometryUtils::envelopeToPolygon(bounds), output);
 }
 
@@ -165,12 +165,8 @@ void ChangesetReplacementCreator::create(
   _validateInputs();
   // This is kind of klunky to set this here, imo. However, its currently the only way to get this
   // bounds to the readers.
-  // TODO: explain
-  //if (conf().getString(ConfigOptions::getConvertBoundsKey()).trimmed().isEmpty())
-  //{
-    conf().set(
-      ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
-  //}
+  conf().set(
+    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
   _printJobDescription();
 
   // LOAD AND FILTER
@@ -241,10 +237,16 @@ void ChangesetReplacementCreator::create(
   // from a different data source the ID sync would have to happen regardless...just wouldn't be
   // needed for OSM to OSM replacement). Unfortunately, this has lead to all kinds of duplicate ID
   // errors when the resulting changesets are applied.
-  //ElementIdRemapper secIdRemapper(Status::Unknown2);
-  //LOG_INFO(secIdRemapper.getInitStatusMessage());
-  //secIdRemapper.apply(secMap);
-  //LOG_INFO(secIdRemapper.getCompletedStatusMessage());
+//  ElementIdRemapper secIdRemapper(
+//    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+//    ElementCriterionPtr(
+//      new ChainCriterion(
+//        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+//        ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)))));
+//  LOG_INFO(secIdRemapper.getInitStatusMessage());
+//  secIdRemapper.apply(secMap);
+//  LOG_INFO(secIdRemapper.getCompletedStatusMessage());
+//  OsmMapWriterFactory::writeDebugMap(secMap, _changesetId + "-sec-after-id-remapping");
 
   // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
@@ -266,9 +268,6 @@ void ChangesetReplacementCreator::create(
   wayJoiner.join(combinedMap);
   LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-after-way-joining");
-
-  //secIdRemapper.restore(combinedMap);
-  //LOG_INFO(secIdRemapper.getRestoreCompletedStatusMessage());
 
   _currentTask++;
 
@@ -306,6 +305,10 @@ void ChangesetReplacementCreator::create(
   _snapUnconnectedPostChangesetMapCropping(
     refMap, combinedMap, immediatelyConnectedOutOfBoundsWays);
   immediatelyConnectedOutOfBoundsWays.reset();
+
+//  secIdRemapper.restore(combinedMap);
+//  LOG_INFO(secIdRemapper.getRestoreCompletedStatusMessage());
+//  OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-combined-after-id-restoring");
 
   if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
   {

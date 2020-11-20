@@ -35,13 +35,21 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, ElementIdRemapper)
 
 ElementIdRemapper::ElementIdRemapper() :
-_statusFilter(Status::Invalid),
 _restoredIds(0)
 {
 }
 
-ElementIdRemapper::ElementIdRemapper(const Status& statusFilter) :
-_statusFilter(statusFilter),
+ElementIdRemapper::ElementIdRemapper(const ElementCriterionPtr& remapFilter) :
+_remapFilter(remapFilter),
+_restoreFilter(remapFilter),
+_restoredIds(0)
+{
+}
+
+ElementIdRemapper::ElementIdRemapper(
+  const ElementCriterionPtr& remapFilter, const ElementCriterionPtr& restoreFilter) :
+_remapFilter(remapFilter),
+_restoreFilter(restoreFilter),
 _restoredIds(0)
 {
 }
@@ -60,8 +68,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement ||
-        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
+    if (!currentElement || (_remapFilter && !_remapFilter->isSatisfied(currentElement)))
     {
       continue;
     }
@@ -85,8 +92,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement ||
-        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
+    if (!currentElement || (_remapFilter && !_remapFilter->isSatisfied(currentElement)))
     {
       continue;
     }
@@ -110,8 +116,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement ||
-        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
+    if (!currentElement || (_remapFilter && !_remapFilter->isSatisfied(currentElement)))
     {
       continue;
     }
@@ -137,6 +142,10 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   LOG_INFO("Restoring original element IDs for: " << map->getName() << "...");
 
   _restoredIds = 0;
+  if (!_restoreFilter)
+  {
+    _restoreFilter = _remapFilter;
+  }
 
   // TODO: make this more generic, if possible; use ElementIterator?
 
@@ -144,8 +153,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement ||
-        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
+    if (!currentElement || (_restoreFilter && !_restoreFilter->isSatisfied(currentElement)))
     {
       continue;
     }
@@ -169,8 +177,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement ||
-        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
+    if (!currentElement || (_restoreFilter && !_restoreFilter->isSatisfied(currentElement)))
     {
       continue;
     }
@@ -194,8 +201,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement ||
-        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
+    if (!currentElement || (_restoreFilter && !_restoreFilter->isSatisfied(currentElement)))
     {
       continue;
     }
