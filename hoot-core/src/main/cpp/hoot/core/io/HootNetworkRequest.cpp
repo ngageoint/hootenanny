@@ -71,26 +71,26 @@ void HootNetworkRequest::setOAuthKeys(const QString& consumer_key, const QString
   _useOAuth = true;
 }
 
-bool HootNetworkRequest::networkRequest(const QUrl& url, QNetworkAccessManager::Operation http_op,
-                                        const QByteArray& data, int timeout)
+bool HootNetworkRequest::networkRequest(const QUrl& url, int timeout,
+                                        QNetworkAccessManager::Operation http_op, const QByteArray& data)
 {
   //  Call the actually network request function with empty headers map
-  return _networkRequest(url, QMap<QNetworkRequest::KnownHeaders, QVariant>(), http_op, data, timeout);
+  return _networkRequest(url, timeout, QMap<QNetworkRequest::KnownHeaders, QVariant>(), http_op, data);
 }
 
-bool HootNetworkRequest::networkRequest(const QUrl& url,
+bool HootNetworkRequest::networkRequest(const QUrl& url, int timeout,
                                         const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                                         QNetworkAccessManager::Operation http_op,
-                                        const QByteArray& data, int timeout)
+                                        const QByteArray& data)
 {
   //  Simple passthrough function for consistency
-  return _networkRequest(url, headers, http_op, data, timeout);
+  return _networkRequest(url, timeout, headers, http_op, data);
 }
 
-bool HootNetworkRequest::_networkRequest(const QUrl& url,
+bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
                                          const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                                          QNetworkAccessManager::Operation http_op,
-                                         const QByteArray& data, int timeout)
+                                         const QByteArray& data)
 {
   QUrl tempUrl(url);
   //  Reset status

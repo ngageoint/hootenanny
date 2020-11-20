@@ -51,6 +51,7 @@ namespace hoot
 {
 
 HootServicesLoginManager::HootServicesLoginManager()
+  : _timeout(500)
 {
 }
 
@@ -90,7 +91,7 @@ QString HootServicesLoginManager::getRequestToken(QString& authUrlStr)
   try
   {
     LOG_VART(_getRequestTokenUrl());
-    requestTokenRequest.networkRequest(_getRequestTokenUrl());
+    requestTokenRequest.networkRequest(_getRequestTokenUrl(), _timeout);
   }
   catch (const HootException& e)
   {
@@ -133,7 +134,7 @@ long HootServicesLoginManager::verifyUserAndLogin(const QString& requestToken,
   HootNetworkRequest loginRequest = _getLoginRequest(requestToken, verifier, loginUrl);
   try
   {
-    loginRequest.networkRequest(loginUrl.toString());
+    loginRequest.networkRequest(loginUrl.toString(), _timeout);
   }
   catch (const HootException& e)
   {
@@ -231,7 +232,7 @@ bool HootServicesLoginManager::logout(const QString& userName, const QString& ac
   HootNetworkRequest logoutRequest;
   try
   {
-    logoutRequest.networkRequest(_getLogoutUrl());
+    logoutRequest.networkRequest(_getLogoutUrl(), _timeout);
   }
   catch (const HootException& e)
   {

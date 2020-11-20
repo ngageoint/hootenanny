@@ -214,6 +214,14 @@ public:
    */
   long getTotalDeleteCount()    { return _nodes[TypeDelete].size() + _ways[TypeDelete].size() + _relations[TypeDelete].size(); }
   /**
+   * @brief getNode/Way/RelationCountByType
+   * @param type Changeset type (create/modify/delete)
+   * @return number of nodes/ways/relations created/modified/deleted in the changeset
+   */
+  long getNodeCountByType(ChangesetType type) { return _nodes[type].size(); }
+  long getWayCountByType(ChangesetType type) { return _ways[type].size(); }
+  long getRelationCountByType(ChangesetType type) { return _relations[type].size(); }
+  /**
    * @brief getProcessedCount
    * @return Number of elements processed so far
    */
