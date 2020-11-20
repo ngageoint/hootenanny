@@ -70,6 +70,7 @@ public:
   const DataQualityMetricTagger getOutputMetrics() { return _metricTagger; }
 
   void setOriginalDataSize(int size) { _originalDataSize = size; }
+  void setJobName(const QString& name) { _jobName = name; }
   void setReverseTaskGrid(bool reverse) { _reverseTaskGrid = reverse; }
   void setTaskCellIncludeIds(const QList<int>& ids) { _taskCellIncludeIds = ids; }
   void setTaskCellSkipIds(const QList<int>& ids) { _taskCellSkipIds = ids; }
@@ -77,7 +78,7 @@ public:
   { _changesetsOutputDir = dir; }
   void setKillAfterNumChangesetDerivations(int numDerivations)
   { _killAfterNumChangesetDerivations = numDerivations; }
-  void setWriteFinalOutput(QString output) { _finalOutput = output; }
+  void setWriteFinalOutput(const QString& output) { _finalOutput = output; }
   void setTagQualityIssues(bool tag) { _tagQualityIssues = tag; }
 
 private:
@@ -93,6 +94,9 @@ private:
   int _originalDataSize;
   // replacement data; must be hootapidb://
   QString _replacementUrl;
+
+  // useful for identifying test output files when multiple tests are run at once
+  QString _jobName;
 
   // allows for including the processing of any grid cell with an "id" tag value in this ID list
   QList<int> _taskCellIncludeIds;

@@ -135,6 +135,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -192,6 +193,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -228,6 +230,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -264,6 +267,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -300,6 +304,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -336,6 +341,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -371,6 +377,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -417,6 +424,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -457,6 +465,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -496,6 +505,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -527,6 +537,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -568,6 +579,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -607,6 +619,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -642,6 +655,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -677,6 +691,7 @@ public:
     uut.setChangesetsOutputDir(_outputPath);
     const QString outFile = _testName + "-out.osm";
     const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(outFull);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -715,6 +730,7 @@ public:
     //uut.setKillAfterNumChangesetDerivations(2);
     uut.setChangesetsOutputDir(outDir);
     QString finalOutput = outDir + "/" + _testName + "-out.osm";
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(finalOutput);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -767,6 +783,7 @@ public:
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
     QString finalOutput = outDir + "/" + _testName + "-out.osm";
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(finalOutput);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -823,6 +840,7 @@ public:
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(outDir);
     QString finalOutput = outDir + "/" + _testName + "-out.osm";
+    uut.setJobName(_testName);
     uut.setWriteFinalOutput(finalOutput);
     uut.setOriginalDataSize(_originalDataSize);
     uut.setTagQualityIssues(true);
@@ -932,7 +950,7 @@ private:
       _subTaskTimer.restart();
     }
 
-    // add a tag specifying this is the to replace data, so we can see it in the output
+    // Add a tag specifying this is the to replace data, so we can see it in the output.
     SetTagValueVisitor addTagVis("note", "Source 1");
     NotCriterion addTagCrit(std::shared_ptr<WayNodeCriterion>(new WayNodeCriterion(map)));
     FilteredVisitor deleteExcludeTagVis(addTagCrit, addTagVis);

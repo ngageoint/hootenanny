@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-//#include <hoot/core/ops/IdSwapOp.h>
 
 namespace hoot
 {
@@ -36,6 +35,13 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, ElementIdRemapper)
 
 ElementIdRemapper::ElementIdRemapper() :
+_statusFilter(Status::Invalid),
+_restoredIds(0)
+{
+}
+
+ElementIdRemapper::ElementIdRemapper(const Status& statusFilter) :
+_statusFilter(statusFilter),
 _restoredIds(0)
 {
 }
@@ -54,25 +60,24 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement)
+    if (!currentElement ||
+        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
     {
       continue;
     }
-    LOG_VARD(currentElement->getElementId());
+    LOG_VART(currentElement->getElementId());
     ElementPtr newElement(currentElement->clone());
     const ElementId newElementId =
       ElementId(ElementType::Node, IdGenerator::getInstance()->createNodeId());
     newElement->setId(newElementId.getId());
-    LOG_VARD(newElement->getElementId());
+    LOG_VART(newElement->getElementId());
     _originalToRemappedElementIds[newElementId] = currentElement->getElementId();
-    LOG_DEBUG("Adding element: " << newElement->getElementId() << "...");
+    LOG_TRACE("Adding element: " << newElement->getElementId() << "...");
     map->addElement(newElement);
-    LOG_DEBUG(
+    LOG_TRACE(
       "Replacing element " << currentElement->getElementId() << " with " <<
       newElement->getElementId() << "...");
     map->replace(currentElement, newElement);
-    //IdSwapOp idSwapper(currentElement->getElementId(), newElement->getElementId());
-    //idSwapper.apply(map);
     _numAffected++;
   }
 
@@ -80,25 +85,24 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement)
+    if (!currentElement ||
+        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
     {
       continue;
     }
-    LOG_VARD(currentElement->getElementId());
+    LOG_VART(currentElement->getElementId());
     ElementPtr newElement(currentElement->clone());
     const ElementId newElementId =
       ElementId(ElementType::Way, IdGenerator::getInstance()->createWayId());
     newElement->setId(newElementId.getId());
-    LOG_VARD(newElement->getElementId());
+    LOG_VART(newElement->getElementId());
     _originalToRemappedElementIds[newElementId] = currentElement->getElementId();
-    LOG_DEBUG("Adding element: " << newElement->getElementId() << "...");
+    LOG_TRACE("Adding element: " << newElement->getElementId() << "...");
     map->addElement(newElement);
-    LOG_DEBUG(
+    LOG_TRACE(
       "Replacing element " << currentElement->getElementId() << " with " <<
       newElement->getElementId() << "...");
     map->replace(currentElement, newElement);
-    //IdSwapOp idSwapper(currentElement->getElementId(), newElement->getElementId());
-    //idSwapper.apply(map);
     _numAffected++;
   }
 
@@ -106,26 +110,24 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement)
+    if (!currentElement ||
+        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
     {
       continue;
     }
-    // TODO: change to trace
-    LOG_VARD(currentElement->getElementId());
+    LOG_VART(currentElement->getElementId());
     ElementPtr newElement(currentElement->clone());
     const ElementId newElementId =
       ElementId(ElementType::Relation, IdGenerator::getInstance()->createRelationId());
     newElement->setId(newElementId.getId());
-    LOG_VARD(newElement->getElementId());
+    LOG_VART(newElement->getElementId());
     _originalToRemappedElementIds[newElementId] = currentElement->getElementId();
-    LOG_DEBUG("Adding element: " << newElement->getElementId() << "...");
+    LOG_TRACE("Adding element: " << newElement->getElementId() << "...");
     map->addElement(newElement);
-    LOG_DEBUG(
+    LOG_TRACE(
       "Replacing element " << currentElement->getElementId() << " with " <<
       newElement->getElementId() << "...");
     map->replace(currentElement, newElement);
-    //IdSwapOp idSwapper(currentElement->getElementId(), newElement->getElementId());
-   // idSwapper.apply(map);
     _numAffected++;
   }
 }
@@ -142,24 +144,23 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement)
+    if (!currentElement ||
+        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
     {
       continue;
     }
     const ElementId originalElementId =
       _originalToRemappedElementIds[currentElement->getElementId()];
-    if (!originalElementId.isNull())
+    if (!originalElementId.isNull() && !map->containsElement(originalElementId))
     {
       ElementPtr originalElement(currentElement->clone());
       originalElement->setId(originalElementId.getId());
-      LOG_DEBUG("Adding element: " << originalElement->getElementId() << "...");
+      LOG_TRACE("Adding element: " << originalElement->getElementId() << "...");
       map->addElement(originalElement);
-      LOG_DEBUG(
+      LOG_TRACE(
         "Replacing element " << currentElement->getElementId() << " with " <<
         originalElement->getElementId() << "...");
       map->replace(currentElement, originalElement);
-      //IdSwapOp idSwapper(currentElement->getElementId(), originalElement->getElementId());
-      //idSwapper.apply(map);
       _restoredIds++;
     }
   }
@@ -168,13 +169,14 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement)
+    if (!currentElement ||
+        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
     {
       continue;
     }
     const ElementId originalElementId =
       _originalToRemappedElementIds[currentElement->getElementId()];
-    if (!originalElementId.isNull())
+    if (!originalElementId.isNull() && !map->containsElement(originalElementId))
     {
       ElementPtr originalElement(currentElement->clone());
       originalElement->setId(originalElementId.getId());
@@ -184,8 +186,6 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
         "Replacing element " << currentElement->getElementId() << " with " <<
         originalElement->getElementId() << "...");
       map->replace(currentElement, originalElement);
-      //IdSwapOp idSwapper(currentElement->getElementId(), originalElement->getElementId());
-      //idSwapper.apply(map);
       _restoredIds++;
     }
   }
@@ -194,25 +194,24 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementPtr currentElement = it->second;
-    if (!currentElement)
+    if (!currentElement ||
+        (_statusFilter != Status::Invalid && currentElement->getStatus() != _statusFilter))
     {
       continue;
     }
     LOG_VARD(currentElement->getElementId());
     const ElementId originalElementId =
       _originalToRemappedElementIds[currentElement->getElementId()];
-    if (!originalElementId.isNull())
+    if (!originalElementId.isNull() && !map->containsElement(originalElementId))
     {
       ElementPtr originalElement(currentElement->clone());
       originalElement->setId(originalElementId.getId());
-      LOG_DEBUG("Adding element: " << originalElement->getElementId() << "...");
+      LOG_TRACE("Adding element: " << originalElement->getElementId() << "...");
       map->addElement(originalElement);
-      LOG_DEBUG(
+      LOG_TRACE(
         "Replacing element " << currentElement->getElementId() << " with " <<
         originalElement->getElementId() << "...");
       map->replace(currentElement, originalElement);
-      //IdSwapOp idSwapper(currentElement->getElementId(), originalElement->getElementId());
-      //idSwapper.apply(map);
       _restoredIds++;
     }
   }

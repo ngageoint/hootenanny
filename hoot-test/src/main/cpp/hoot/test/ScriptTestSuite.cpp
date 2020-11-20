@@ -75,7 +75,7 @@ TestSuite(dir.toStdString())
         {
           if (!hideDisableTests)
           {
-            LOG_WARN("Disabling: " << fi.filePath());
+            LOG_INFO("Disabling: " << fi.filePath());
           }
           ignore = true;
         }

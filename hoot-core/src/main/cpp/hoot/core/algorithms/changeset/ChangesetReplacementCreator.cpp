@@ -42,6 +42,7 @@
 
 #include <hoot/core/io/OsmMapWriterFactory.h>
 
+#include <hoot/core/ops/ElementIdRemapper.h>
 #include <hoot/core/ops/MapCropper.h>
 
 #include <hoot/core/util/ConfigOptions.h>
@@ -233,13 +234,17 @@ void ChangesetReplacementCreator::create(
 
   _progress->set(_getJobPercentComplete(), "Snapping linear features...");
 
-  // Had an idea once here to try to load source IDs for sec data, remap sec IDs to be unique just
+  // Had an idea here to try to load source IDs for sec data, remap sec IDs to be unique just
   // before the ref and sec have to be combined, and then restore the original sec IDs after the
   // snapping is complete with ElementIdRemapper. The idea was to reduce the need for ID
   // synchronization, which doesn't work perfectly yet (of course, if you're replacing with data
   // from a different data source the ID sync would have to happen regardless...just wouldn't be
-  // needed for OSM to OSM replacement). Unfortunately, this leads to all kinds of duplicate ID
+  // needed for OSM to OSM replacement). Unfortunately, this has lead to all kinds of duplicate ID
   // errors when the resulting changesets are applied.
+  //ElementIdRemapper secIdRemapper(Status::Unknown2);
+  //LOG_INFO(secIdRemapper.getInitStatusMessage());
+  //secIdRemapper.apply(secMap);
+  //LOG_INFO(secIdRemapper.getCompletedStatusMessage());
 
   // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
@@ -261,6 +266,9 @@ void ChangesetReplacementCreator::create(
   wayJoiner.join(combinedMap);
   LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
   OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-after-way-joining");
+
+  //secIdRemapper.restore(combinedMap);
+  //LOG_INFO(secIdRemapper.getRestoreCompletedStatusMessage());
 
   _currentTask++;
 
@@ -464,7 +472,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
   // the reference data. Data from the two maps will have to be combined during snapping.
   OsmMapPtr secMap =
     _loadInputMap(
-      "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+      "sec", _input2, false/*true*/, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
       _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
   MemoryUsageChecker::getInstance().check();
 

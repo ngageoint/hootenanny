@@ -46,6 +46,7 @@ public:
   static std::string className() { return "hoot::ElementIdRemapper"; }
 
   ElementIdRemapper();
+  ElementIdRemapper(const Status& statusFilter);
   virtual ~ElementIdRemapper() = default;
 
   /**
@@ -70,8 +71,13 @@ public:
     return "Remapped " + StringUtils::formatLargeNumber(_numAffected) + " element IDs.";
   }
 
+  QString getRestoreCompletedStatusMessage() const
+  {
+    return "Restored " + StringUtils::formatLargeNumber(_restoredIds) + " element IDs.";
+  }
+
   virtual QString getDescription() const
-  { return "Remaps element IDs and restores original IDs"; }
+  { return "Remaps element IDs and is capable of restoring the IDs"; }
 
   QMap<ElementId, ElementId> getIdMappings() const { return _originalToRemappedElementIds; }
   int getNumRestoredIds() const { return _restoredIds; }
@@ -79,6 +85,8 @@ public:
 private:
 
   QMap<ElementId, ElementId> _originalToRemappedElementIds;
+  // TODO
+  Status _statusFilter;
   int _restoredIds;
 };
 
