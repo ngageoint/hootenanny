@@ -237,6 +237,7 @@ void ChangesetReplacementCreator::create(
   // from a different data source the ID sync would have to happen regardless...just wouldn't be
   // needed for OSM to OSM replacement). Unfortunately, this has lead to all kinds of duplicate ID
   // errors when the resulting changesets are applied.
+//  ElementIdRemapper secIdRemapper(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
 //  ElementIdRemapper secIdRemapper(
 //    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
 //    ElementCriterionPtr(

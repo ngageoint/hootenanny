@@ -47,6 +47,7 @@
 #include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/io/OsmApiDbSqlChangesetApplier.h>
 
 namespace hoot
 {
@@ -70,7 +71,14 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
+  // TODO: re-enable
+  CPPUNIT_TEST(badPolyIdSync1Test);
+  CPPUNIT_TEST(badPolyIdSync2Test);
   CPPUNIT_TEST(differingTypes1Test);
+  CPPUNIT_TEST(droppedNodes1Test);
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
   CPPUNIT_TEST(outOfSpecMixedRelations1Test);
   CPPUNIT_TEST(poi1Test);
   CPPUNIT_TEST(refFilteredToEmpty1Test);
@@ -79,12 +87,6 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(riverbank1Test);
   CPPUNIT_TEST(roundabouts1Test);
   CPPUNIT_TEST(secFilteredToEmpty1Test);
-  CPPUNIT_TEST(orphanedNodes1Test);
-  CPPUNIT_TEST(orphanedNodes2Test);
-  CPPUNIT_TEST(droppedNodes1Test);
-  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
-  CPPUNIT_TEST(badPolyIdSync1Test);
-  CPPUNIT_TEST(badPolyIdSync2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -116,6 +118,104 @@ public:
   {
     _cleanupDataToReplace();
     _cleanupReplacementData();
+  }
+
+  void badPolyIdSync1Test()
+  {
+    // part of github 4297 - The landuse=residential poly surrounding Flanagan Drive should not be
+    // corrupted in the output. Before this fix, skipped element ID synchronizations were causing
+    // the upper right node to drop out and mangle the poly.
+
+    _testName = "badPolyIdSync1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.2434,36.3022,-115.2317,36.3136", 1,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(123L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(51L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(80L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(63L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(3L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void badPolyIdSync2Test()
+  {
+    // part of github 4297 - The longer surface parking poly in the output should match that in the
+    // replacement data. Before this fix, skipped element ID synchronizations were causing the lower
+    // right section to be truncated.
+
+    _testName = "badPolyIdSync2Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.2822,36.2226,-115.2779,36.2261", 1,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(2533L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(184L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(66L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(26L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(3L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
   void differingTypes1Test()
@@ -150,10 +250,226 @@ public:
         "11.361053,8.507705,11.363033,8.509146", _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(10L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void droppedNodes1Test()
+  {
+    // part of github 4228 - None of the highway=street_lamp features near Edmundo Escobedo Sr.
+    // Middle School (Westmost building) should get dropped in the output.
+
+    _testName = "droppedNodes1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.3274,36.2640,-115.3106,36.2874", 2,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(2228L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(742L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(603L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(255L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(16L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(6L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void droppedPointPolyRelationMembers1Test()
+  {
+    // part of github 4228 - The POI, Desert Shores, belongs in a relation with a landuse poly.
+    // Neither should be dropped from the output due to being in a relation with members of mixed
+    // geometry types.
+
+    // This is needed to suppress some ElementToGeometryConverter warning messages that should
+    // eventually be looked into.
+    DisableLog dl;
+
+    _testName = "droppedPointPolyRelationMembers1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.3064,36.1867,-115.2136,36.2498", 2,
+        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
+        .generateTaskGrid());
+
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(18456L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(1525L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(2682L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(343L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(307L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(48L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(27L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void orphanedNodes1Test()
+  {
+    // VGI 1622 - This tests that orphaned nodes are not left behind after two adjoining, successive
+    // grid cell replacements with some data overlapping due to using the lenient bounds
+    // interpretation. The road "Hot Springs Drive" should remain snapped to connecting roads and no
+    // orphaned nodes should be hidden underneath it. Other roads to check in the are include
+    // "Santa Barbara Drive".
+
+    _testName = "orphanedNodes1Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      BoundsFileTaskGridGenerator(
+        QStringList(_inputPath + "/orphanedNodes1Test-task-grid.osm")).generateTaskGrid());
+
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(732L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(106L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(94L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(75L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(28, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
+  }
+
+  void orphanedNodes2Test()
+  {
+    // github 4216; similar to orphanedNodes1Test - There should be no orphaned nodes in the
+    // output.
+
+    _testName = "orphanedNodes2Test";
+    _prepInput(
+      _inputPath + "/" + _testName + "-Input1.osm",
+      _inputPath + "/" + _testName + "-Input2.osm",
+      "");
+
+    ChangesetTaskGridReplacer uut;
+    uut.setChangesetsOutputDir(_outputPath);
+    const QString outFile = _testName + "-out.osm";
+    const QString outFull = _outputPath + "/" + outFile;
+    uut.setJobName(_testName);
+    uut.setWriteFinalOutput(outFull);
+    uut.setOriginalDataSize(_originalDataSize);
+    uut.setTagQualityIssues(true);
+    const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
+
+    // to suppress a SpatialIndexer warning that should be looked into at some point
+    Log::WarningLevel logLevel = Log::getInstance().getLevel();
+    Log::getInstance().setLevel(Log::Error);
+
+    uut.replace(
+      DATA_TO_REPLACE_URL,
+      _replacementDataUrl,
+      UniformTaskGridGenerator(
+        "-115.0793,36.1832,-115.0610,36.1986", 2, _outputPath + "/" + taskGridFileName)
+        .generateTaskGrid());
+
+    Log::getInstance().setLevel(logLevel);
+
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(18416L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(608L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(2852L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(479L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(57L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(12L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(17L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+    CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -208,10 +524,23 @@ public:
         "-115.184767,36.031262,-115.048556,36.14796", _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(433L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(245L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(185L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(136L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(25L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(9L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -245,10 +574,23 @@ public:
         "-122.43204,37.7628,-122.4303457,37.76437", _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(6L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -282,10 +624,23 @@ public:
         "-77.114735,38.884001,-77.112229,38.885158", _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(544L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(143L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(22L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -319,10 +674,23 @@ public:
         "52.938359,32.727214,53.769359,32.853214", _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(2187L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(294L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(494L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(96L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -356,10 +724,23 @@ public:
         "7.910156,5.003394,7.998047,5.090946", _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(16001L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(1333L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(2450L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(97L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(25L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -392,10 +773,23 @@ public:
         "130.31148,33.2521,130.3163,33.2588", _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(4136L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(345L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(679L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(60L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -439,11 +833,24 @@ public:
         "-89.6219483,20.9953,-89.6199,20.9979", _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(15L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(518L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(30L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(73L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     // This number is extremely high due to dupes in the input. See comment above.
     CPPUNIT_ASSERT_EQUAL(538, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -480,233 +887,23 @@ public:
         "29.031372,1.345701,29.036865,1.351193", _outputPath + "/" + taskGridFileName)
         .generateTaskGrid());
 
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
-    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
-  }
-
-  void orphanedNodes1Test()
-  {
-    // VGI 1622 - This tests that orphaned nodes are not left behind after two adjoining, successive
-    // grid cell replacements with some data overlapping due to using the lenient bounds
-    // interpretation. The road "Hot Springs Drive" should remain snapped to connecting roads and no
-    // orphaned nodes should be hidden underneath it. Other roads to check in the are include
-    // "Santa Barbara Drive".
-
-    _testName = "orphanedNodes1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(_outputPath);
-    const QString outFile = _testName + "-out.osm";
-    const QString outFull = _outputPath + "/" + outFile;
-    uut.setJobName(_testName);
-    uut.setWriteFinalOutput(outFull);
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      BoundsFileTaskGridGenerator(
-        QStringList(_inputPath + "/orphanedNodes1Test-task-grid.osm")).generateTaskGrid());
-
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(28, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
-    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
-  }
-
-  void orphanedNodes2Test()
-  {
-    // github 4216; similar to orphanedNodes1Test - There should be no orphaned nodes in the
-    // output.
-
-    _testName = "orphanedNodes2Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(_outputPath);
-    const QString outFile = _testName + "-out.osm";
-    const QString outFull = _outputPath + "/" + outFile;
-    uut.setJobName(_testName);
-    uut.setWriteFinalOutput(outFull);
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    const QString taskGridFileName = _testName + "-" + "taskGridBounds.osm";
-
-    // to suppress a SpatialIndexer warning that should be looked into at some point
-    Log::WarningLevel logLevel = Log::getInstance().getLevel();
-    Log::getInstance().setLevel(Log::Error);
-
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.0793,36.1832,-115.0610,36.1986", 2, _outputPath + "/" + taskGridFileName)
-        .generateTaskGrid());
-
-    Log::getInstance().setLevel(logLevel);
-
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
-    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
-  }
-
-  void droppedNodes1Test()
-  {
-    // part of github 4228 - None of the highway=street_lamp features near Edmundo Escobedo Sr.
-    // Middle School (Westmost building) should get dropped in the output.
-
-    _testName = "droppedNodes1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(_outputPath);
-    const QString outFile = _testName + "-out.osm";
-    const QString outFull = _outputPath + "/" + outFile;
-    uut.setJobName(_testName);
-    uut.setWriteFinalOutput(outFull);
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.3274,36.2640,-115.3106,36.2874", 2,
-        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
+    const QMap<QString, long> changesetStats = uut.getChangesetStats();
+    //LOG_WARN(_testName + ": " << changesetStats);
+    CPPUNIT_ASSERT_EQUAL(1975L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(1443L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(297L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(297L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+    CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+    CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
 
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
     CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
-    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
-  }
 
-  void droppedPointPolyRelationMembers1Test()
-  {
-    // part of github 4228 - The POI, Desert Shores, belongs in a relation with a landuse poly.
-    // Neither should be dropped from the output due to being in a relation with members of mixed
-    // geometry types.
-
-    // This is needed to suppress some ElementToGeometryConverter warning messages that should
-    // eventually be looked into.
-    DisableLog dl;
-
-    _testName = "droppedPointPolyRelationMembers1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(_outputPath);
-    const QString outFile = _testName + "-out.osm";
-    const QString outFull = _outputPath + "/" + outFile;
-    uut.setJobName(_testName);
-    uut.setWriteFinalOutput(outFull);
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.3064,36.1867,-115.2136,36.2498", 2,
-        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
-
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
-    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
-  }
-
-  void badPolyIdSync1Test()
-  {
-    // part of github 4297 - The landuse=residential poly surrounding Flanagan Drive should not be
-    // corrupted in the output. Before this fix, skipped element ID synchronizations were causing
-    // the upper right node to drop out and mangle the poly.
-
-    _testName = "badPolyIdSync1Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(_outputPath);
-    const QString outFile = _testName + "-out.osm";
-    const QString outFull = _outputPath + "/" + outFile;
-    uut.setJobName(_testName);
-    uut.setWriteFinalOutput(outFull);
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.2434,36.3022,-115.2317,36.3136", 1,
-        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
-
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
-    HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
-  }
-
-  void badPolyIdSync2Test()
-  {
-    // part of github 4297 - The longer surface parking poly in the output should match that in the
-    // replacement data. Before this fix, skipped element ID synchronizations were causing the lower
-    // right section to be truncated.
-
-    _testName = "badPolyIdSync2Test";
-    _prepInput(
-      _inputPath + "/" + _testName + "-Input1.osm",
-      _inputPath + "/" + _testName + "-Input2.osm",
-      "");
-    conf().set(ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/debug.osm");
-
-    ChangesetTaskGridReplacer uut;
-    uut.setChangesetsOutputDir(_outputPath);
-    const QString outFile = _testName + "-out.osm";
-    const QString outFull = _outputPath + "/" + outFile;
-    uut.setJobName(_testName);
-    uut.setWriteFinalOutput(outFull);
-    uut.setOriginalDataSize(_originalDataSize);
-    uut.setTagQualityIssues(true);
-    uut.replace(
-      DATA_TO_REPLACE_URL,
-      _replacementDataUrl,
-      UniformTaskGridGenerator(
-        "-115.2822,36.2226,-115.2779,36.2261", 1,
-        _outputPath + "/" + _testName + "-" + "taskGridBounds.osm")
-        .generateTaskGrid());
-
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
     HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
   }
 
@@ -896,6 +1093,7 @@ private:
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false); 
     // leave enabled for debugging only
+    // TODO: change back
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 

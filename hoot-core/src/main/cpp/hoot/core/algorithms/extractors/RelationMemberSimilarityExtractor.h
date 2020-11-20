@@ -31,6 +31,7 @@
 #include <hoot/core/algorithms/extractors/FeatureExtractorBase.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/OsmMap.h>
+
 namespace hoot
 {
 
