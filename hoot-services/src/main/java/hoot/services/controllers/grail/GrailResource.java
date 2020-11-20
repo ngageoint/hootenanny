@@ -754,6 +754,29 @@ public class GrailResource {
         return Response.ok(jobInfo.toJSONString()).build();
     }
 
+    @GET
+    @Path("/getChangesetOptions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOptions() {
+        JSONObject template;
+        JSONParser parser = new JSONParser();
+        try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, CHANGESET_OPTIONS))) {
+            template = (JSONObject) parser.parse(fileReader);
+        }
+        catch (Exception e) {
+            String msg = "Error getting changeset options!  Cause: " + e.getMessage();
+            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
+        }
+        return Response.ok(template).build();
+    }
+
+    @GET
+    @Path("/getDefaultOverpassQuery")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getDefaultOverpassQuery() {
+        return Response.ok(PullOverpassCommand.getDefaultOverpassQuery()).build();
+    }
+
     @POST
     @Path("/overpassStats")
     @Produces(MediaType.APPLICATION_JSON)
@@ -1148,29 +1171,6 @@ public class GrailResource {
         }
 
         return statCounts;
-    }
-
-    @GET
-    @Path("/getChangesetOptions")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getOptions() {
-        JSONObject template;
-        JSONParser parser = new JSONParser();
-        try (FileReader fileReader = new FileReader(new File(HOME_FOLDER, CHANGESET_OPTIONS))) {
-            template = (JSONObject) parser.parse(fileReader);
-        }
-        catch (Exception e) {
-            String msg = "Error getting changeset options!  Cause: " + e.getMessage();
-            throw new WebApplicationException(e, Response.serverError().entity(msg).build());
-        }
-        return Response.ok(template).build();
-    }
-
-    @GET
-    @Path("/getDefaultOverpassQuery")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getDefaultOverpassQuery() {
-        return Response.ok(PullOverpassCommand.getDefaultOverpassQuery()).build();
     }
 
 }
