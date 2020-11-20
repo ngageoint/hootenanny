@@ -56,6 +56,7 @@ AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer
 
 OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
 {
+  LOG_DEBUG("Generating map...");
   OsmMapWriterFactory::writeDebugMap(inputMap, "alpha-shape-input-map");
 
   std::shared_ptr<Geometry> cutterShape = generateGeometry(inputMap);
@@ -70,9 +71,8 @@ OsmMapPtr AlphaShapeGenerator::generateMap(OsmMapPtr inputMap)
   OsmMapPtr result;
   result.reset(new OsmMap(inputMap->getProjection()));
   result->appendSource(inputMap->getSource());
-  // add the resulting alpha shape for debugging.
-  GeometryToElementConverter(result).convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
-  OsmMapWriterFactory::writeDebugMap(result, "alpha-shape-result-map");
+  GeometryToElementConverter(result)
+    .convertGeometryToElement(cutterShape.get(), Status::Invalid, -1);
 
   const RelationMap& rm = result->getRelations();
   for (RelationMap::const_iterator it = rm.begin(); it != rm.end(); ++it)
@@ -127,8 +127,8 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
   }
   cutterShape.reset(cutterShape->buffer(_buffer));
 
-  // See _coverStragglers description. This is an add-on behavior that is separate from the Alpha
-  // Shape algorithm itself.
+  // See _coverStragglers description. This is an add-on behavior that is separate from the original
+  // Alpha Shape algorithm.
   if (_manuallyCoverSmallPointClusters)
   {
     _coverStragglers(cutterShape, inputMap);

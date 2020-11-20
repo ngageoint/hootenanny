@@ -226,13 +226,14 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
   }
   for (size_t i = 0; i < randomized.size(); i++)
   {
-    if (i % 10000 == 0)
+    if (i % ConfigOptions().getTaskStatusUpdateInterval() == 0)
     {
-      PROGRESS_TRACE("Progress: " << i << " of " << randomized.size() - 1 << "          ");
+      PROGRESS_INFO(
+        "Added " << StringUtils::formatLargeNumber(i) << " / " <<
+        StringUtils::formatLargeNumber(randomized.size() - 1) << " points.");
     }
     _pDelauneyTriangles->insert(randomized[i].first, randomized[i].second);
   }
-  LOG_TRACE("Progress: " << randomized.size() - 1 << " of " << randomized.size() - 1 << "          ");
   LOG_VARD(_pDelauneyTriangles->getFaces().size());
 }
 
@@ -392,7 +393,6 @@ GeometryPtr AlphaShape::toGeometry()
   }
 
   LOG_DEBUG("Joining " << StringUtils::formatLargeNumber(faces.size()) << " faces...");
-
   GeometryPtr result = GeometryUtils::mergeGeometries(faces, e);
 
   LOG_DEBUG("Creating output geometry...");

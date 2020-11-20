@@ -35,6 +35,12 @@
 namespace hoot
 {
 
+BoundedCommand::BoundedCommand() :
+BaseCommand(),
+_writeInternalEnvelope(false)
+{
+}
+
 int BoundedCommand::runSimple(QStringList& args)
 {
   if (args.contains("--write-bounds"))
@@ -57,6 +63,16 @@ void BoundedCommand::_writeBoundsFile()
     OsmMapWriterFactory::write(
       GeometryUtils::createMapFromBounds(GeometryUtils::boundsFromString(boundsStr)),
       opts.getBoundsOutputFile());
+
+    if (_writeInternalEnvelope && GeometryUtils::isEnvelopeString(boundsStr))
+    {
+      QString outputFile = opts.getBoundsOutputFile();
+      outputFile = outputFile.replace(".osm", "-envelope-internal.osm");
+      OsmMapWriterFactory::write(
+        GeometryUtils::createMapFromBounds(
+          *(GeometryUtils::boundsFromString(boundsStr)->getEnvelopeInternal())),
+        outputFile);
+    }
   }
 }
 

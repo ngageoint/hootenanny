@@ -87,7 +87,7 @@ namespace hoot
 const QString ChangesetReplacementCreatorAbstract::JOB_SOURCE = "ChangesetDeriveReplacement";
 
 ChangesetReplacementCreatorAbstract::ChangesetReplacementCreatorAbstract() :
-_maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 2),
+_maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 1.5),
 _geometryFiltersSpecified(false),
 _chainReplacementFilters(false),
 _chainRetainmentFilters(false),
@@ -161,7 +161,7 @@ void ChangesetReplacementCreatorAbstract::_printJobDescription() const
   str += "\nBeing replaced: ..." + _input1.right(_maxFilePrintLength);
   str += "\nReplacing with ..." + _input2.right(_maxFilePrintLength);
   str +=
-    "\nAt Bounds: " +
+    "\nAt Bounds: ..." +
     GeometryUtils::polygonToString(_replacementBounds)
       .right(ConfigOptions().getProgressVarPrintLengthMax() * 2);
   str += "\nOutput Changeset: ..." + _output.right(_maxFilePrintLength);
@@ -258,7 +258,6 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
     ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(),
     keepImmediatelyConnectedWaysOutsideBounds);
 
-
   if (warnOnZeroVersions)
   {
     // We want to alert the user to the fact their ref versions *could* be being populated
@@ -283,6 +282,9 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
   {
     // File inputs always have to read in completely before cropping. Rather than read the file
     // completely for each processing pass, we'll read it once and crop it down as needed per pass.
+    // Note that this is only important if the implementation is running separate cutting passes
+    // per geometry type, like ChangesetCutOnlyCreator. For single geometry pass implementations
+    // this doesn't optimize anything and just results in an extra map copy.
     if (!cachedMap)
     {
       // Clear out the bounding box param temporarily, so that we can read the full map here. Kind
@@ -302,8 +304,15 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
       "Copying map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<
       " from: " << cachedMap->getName() << "...");
     map.reset(new OsmMap(cachedMap));
-    IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
   }
+  // Formerly, we let ApiDbReader do the cropping and only if the crop options here were different
+  // than the default. However, its been found that the way ApiDbReader returns relations can result
+  // in returning far more data than needed, so now we crop after load regardless of the input
+  // format.
+  IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
+  LOG_STATUS(
+    "Loaded " << mapName << " map from: ..." << inputUrl.right(_maxFilePrintLength) << " with " <<
+    StringUtils::formatLargeNumber(map->size()) << " features...");
 
   if (warnOnZeroVersions)
   {
