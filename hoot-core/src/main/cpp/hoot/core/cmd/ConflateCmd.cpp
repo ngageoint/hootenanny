@@ -64,6 +64,7 @@
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
+#include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
 
 // Standard
 #include <fstream>
@@ -88,8 +89,6 @@ HOOT_FACTORY_REGISTER(Command, ConflateCmd)
 
 ConflateCmd::ConflateCmd() :
 _numTotalTasks(0),
-// TODO: We can probably remove this as an option now and do it by default, since it hasn't caused
-// any problems.
 _filterOps(ConfigOptions().getConflateRemoveSuperfluousOps())
 {
 }
@@ -289,6 +288,10 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     _updateConfigOptionsForAttributeConflation();
   }
+  if (isDiffConflate)
+  {
+    _updateConfigOptionsForDifferentialConflation();
+  }
   if (isDiffConflate || isAttributeConflate)
   {
     _disableRoundaboutRemoval();
@@ -477,7 +480,7 @@ int ConflateCmd::runSimple(QStringList& args)
   currentTask++;
 
   if (ConfigOptions().getConflatePostOps().size() > 0)
-  {
+  {  
     // apply any user specified post-conflate operations
     LOG_STATUS("Running post-conflate operations...");
     QElapsedTimer timer;
@@ -689,22 +692,12 @@ void ConflateCmd::_disableRoundaboutRemoval()
   // If the work for #3442 is done, then we could handle this removal in AttributeConflation.conf
   // add DifferentialConflation.conf instead of doing it here.
 
-  QStringList preConflateOps = ConfigOptions().getConflatePreOps();
-  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
-  if (preConflateOps.contains(removeRoundaboutsClassName))
-  {
-    preConflateOps.removeAll(removeRoundaboutsClassName);
-    conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
-  }
-
-  QStringList postConflateOps = ConfigOptions().getConflatePostOps();
-  const QString replaceRoundaboutsClassName =
-    QString::fromStdString(ReplaceRoundabouts::className());
-  if (postConflateOps.contains(replaceRoundaboutsClassName))
-  {
-    postConflateOps.removeAll(replaceRoundaboutsClassName);
-    conf().set(ConfigOptions::getConflatePostOpsKey(), postConflateOps);
-  }
+  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getConflatePreOpsKey(),
+    QString::fromStdString(RemoveRoundabouts::className()));
+  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getConflatePostOpsKey(),
+    QString::fromStdString(ReplaceRoundabouts::className()));
 }
 
 void ConflateCmd::_updateConfigOptionsForAttributeConflation()
@@ -726,6 +719,17 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
     conf().set(
       ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
   }
+}
+
+void ConflateCmd::_updateConfigOptionsForDifferentialConflation()
+{
+  // This is for custom adjustments to config opts that must be done for Differential Conflation.
+
+  // The list option removal being done here could be made obsolete by handling it in the JSON
+  // config instead with custom syntax (#3442).
+  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getConflatePostOpsKey(),
+    QString::fromStdString(RoadCrossingPolyReviewMarker::className()));
 }
 
 }
