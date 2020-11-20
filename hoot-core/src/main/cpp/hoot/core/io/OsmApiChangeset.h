@@ -70,6 +70,12 @@ struct LastElementInfo
     : _id(), _version(-1), _type(ChangesetType::TypeMax) { }
   LastElementInfo(ElementId id, long version, ChangesetType type)
     : _id(id), _version(version), _type(type) { }
+  bool isValid()
+  {
+    return !(_type == ChangesetType::TypeMax ||
+             _id.getType().getEnum() == ElementType::Max ||
+             _id.getId() == -std::numeric_limits<int>::max());
+  }
   ElementId _id;
   long _version;
   ChangesetType _type;
@@ -489,6 +495,21 @@ private:
    * @param all List of all elements in the changeset (_allNodes/_allWays/_allRelations)
    */
   void insertElement(const ChangesetElementPtr& element, ChangesetType type, ChangesetTypeMap& elementMap, ChangesetElementMap& all);
+
+  bool fixPlaceholderFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+                             long member_id, ElementType::Type member_type,
+                             long element_id, ElementType::Type element_type);
+  bool fixRelationFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+                          long element_id,
+                          long member_id, ElementType::Type member_type);
+  bool fixElementGoneDeletedFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+                                    long element_id, ElementType::Type element_type);
+  bool fixMultiElementFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+                              long element_id, ElementType::Type element_type,
+                              const std::vector<long>& member_ids, ElementType::Type member_type);
+  bool fixChangesetDeletePreconditionFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+                                             long element_id, ElementType::Type element_type,
+                                             const std::vector<long>& member_ids, ElementType::Type member_type);
   /** Sorted map of all nodes, original node ID and a pointer to the element object */
   ChangesetElementMap _allNodes;
   /** Sorted map of all ways, original node ID and a pointer to the element object */

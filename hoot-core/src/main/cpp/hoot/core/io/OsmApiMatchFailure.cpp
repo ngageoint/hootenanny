@@ -47,7 +47,7 @@ OsmApiMatchFailure::OsmApiMatchFailure()
       QRegularExpression::CaseInsensitiveOption),
     //  Precondition failed: Node 55 is still used by ways 123
     _deletePreconditionFailure(
-      "Precondition failed: (Node|Way|Relation) (-?[0-9]+) is still used by (node|way|relation)s ((-?[0-9]+,?)+)",
+      "Precondition failed: (?:The )?(Node|Way|Relation) (-?[0-9]+) is (?:still )?used (?:by|in) (node|way|relation)s ((-?[0-9]+,?)+)",
       QRegularExpression::CaseInsensitiveOption),
     //  Version mismatch: Provided 2, server had: 1 of Node 4869875616
     _conflictVersionFailure(
@@ -150,6 +150,7 @@ bool OsmApiMatchFailure::matchesChangesetDeletePreconditionFailure(
     std::vector<long>& member_ids, ElementType::Type& member_type) const
 {
   //  Precondition failed: Node 55 is still used by ways 123
+  //  Precondition failed: The relation 2203673 is used in relations 1590286,1897938
   QRegularExpressionMatch match = _deletePreconditionFailure.match(hint);
   if (match.hasMatch())
   {
