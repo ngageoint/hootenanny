@@ -274,9 +274,18 @@ bool OsmApiWriter::apply()
   _stats.append(SingleStat("Total Nodes in Changeset", _changeset.getTotalNodeCount()));
   _stats.append(SingleStat("Total Ways in Changeset", _changeset.getTotalWayCount()));
   _stats.append(SingleStat("Total Relations in Changeset", _changeset.getTotalRelationCount()));
-  _stats.append(SingleStat("Total Elements Created", _changeset.getTotalCreateCount()));
+  _stats.append(SingleStat(" Total Elements Created", _changeset.getTotalCreateCount()));
+  _stats.append(SingleStat("          Nodes Created", _changeset.getNodeCountByType(ChangesetType::TypeCreate)));
+  _stats.append(SingleStat("           Ways Created", _changeset.getWayCountByType(ChangesetType::TypeCreate)));
+  _stats.append(SingleStat("      Relations Created", _changeset.getRelationCountByType(ChangesetType::TypeCreate)));
   _stats.append(SingleStat("Total Elements Modified", _changeset.getTotalModifyCount()));
-  _stats.append(SingleStat("Total Elements Deleted", _changeset.getTotalDeleteCount()));
+  _stats.append(SingleStat("         Nodes Modified", _changeset.getNodeCountByType(ChangesetType::TypeModify)));
+  _stats.append(SingleStat("          Ways Modified", _changeset.getWayCountByType(ChangesetType::TypeModify)));
+  _stats.append(SingleStat("     Relations Modified", _changeset.getRelationCountByType(ChangesetType::TypeModify)));
+  _stats.append(SingleStat(" Total Elements Deleted", _changeset.getTotalDeleteCount()));
+  _stats.append(SingleStat("          Nodes Deleted", _changeset.getNodeCountByType(ChangesetType::TypeDelete)));
+  _stats.append(SingleStat("           Ways Deleted", _changeset.getWayCountByType(ChangesetType::TypeDelete)));
+  _stats.append(SingleStat("      Relations Deleted", _changeset.getRelationCountByType(ChangesetType::TypeDelete)));
   _stats.append(SingleStat("Total Errors", _changeset.getFailedCount()));
   //  Return successfully
   return success;
@@ -844,7 +853,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
   {
     QUrl changeset = _url;
     changeset.setPath(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(changeset_id));
-    request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation);
+    request->networkRequest(changeset, _timeout, QNetworkAccessManager::Operation::PutOperation);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     switch (request->getHttpStatus())
     {
