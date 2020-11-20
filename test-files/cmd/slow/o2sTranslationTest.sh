@@ -20,7 +20,7 @@ HOOT_OPT="--warn -C Testing.conf"
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
-#HOOT_OPT="--info -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
+# HOOT_OPT="--info -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 
 ##### Start Tests #####
 # Export files
@@ -32,7 +32,7 @@ hoot diff -C Testing.conf $outputDir/tds40.osm $tds40File || diff $outputDir/tds
 
 echo
 echo "### TDSv61 ###"
-hoot convert $HOOT_OPT -D schema.translation.script=$TRANS_TDS61 -D ogr.thematic.structure=false $inputFile $outputDir/tds61.shp 
+hoot convert $HOOT_OPT -D schema.translation.script=$TRANS_TDS61 -D ogr.thematic.structure=false $inputFile $outputDir/tds61.shp
 hoot convert --debug -C Testing.conf -D schema.translation.script=$TRANS_TDS61 $outputDir/tds61/HUT_P.shp $outputDir/tds61/o2s_*.shp $outputDir/tds61/ORCHARD_S.shp $outputDir/tds61/RIVER_C.shp $outputDir/tds61.osm
 
 hoot diff -C Testing.conf $outputDir/tds61.osm $inputFile || diff $outputDir/tds61.osm $inputFile

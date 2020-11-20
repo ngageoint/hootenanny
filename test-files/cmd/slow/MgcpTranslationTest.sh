@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -e
+set -e
 
 mkdir -p test-output/cmd/slow/translation/
 
@@ -23,7 +23,7 @@ compareFiles test-output/cmd/slow/translation/MgcpTranslated.osm test-files/tran
 # Mattj Oct 13
 
 # LOTS of debug output
-#CONFIG="-D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
+# CONFIG="-C Testing.conf -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 
 function checkMgcpV3 {
     OUT=test-output/cmd/slow/translation/Mgcpv3_$1.osm
