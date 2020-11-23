@@ -38,6 +38,7 @@
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 
+#include <hoot/core/elements/CommonElementIdFinder.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/MapUtils.h>
 
@@ -74,6 +75,7 @@ ChangesetReplacementCreatorAbstract()
   // validation is being considered a separate step for progress. The number of tasks per pass must
   // be updated as you add/remove job steps in the create logic.
   _numTotalTasks = 8;
+  //_numTotalTasks = 9;
 
   _setGlobalOpts();
 }
@@ -197,6 +199,10 @@ void ChangesetReplacementCreator::create(
     LOG_STATUS("Both maps empty, so skipping data removal...");
     return;
   }
+
+  // TODO: explain
+  //_syncVersions(refMap, secMap);
+
   _currentTask++;
 
   // CUT
@@ -436,6 +442,28 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   LOG_VART(_boundsOpts.inBoundsStrict);
 }
 
+void ChangesetReplacementCreator::_syncVersions(const OsmMapPtr& refMap, const OsmMapPtr& secMap)
+{
+  LOG_STATUS("Synchronizing element versions...");
+
+  const QSet<ElementId> idsInCommon = CommonElementIdFinder::findCommonElementIds(refMap, secMap);
+  int ctr = 0;
+  for ( QSet<ElementId>::const_iterator itr = idsInCommon.begin(); itr != idsInCommon.end(); ++itr)
+  {
+    ConstElementPtr refElement = refMap->getElement(*itr);
+    assert(refElement);
+    ElementPtr secElement = secMap->getElement(*itr);
+    assert(secElement);
+    if (refElement->getVersion() > secElement->getVersion())
+    {
+      secElement->setVersion(refElement->getVersion());
+      ctr++;
+    }
+  }
+
+  LOG_INFO("Synchronized " << ctr << " element versions.");
+}
+
 void ChangesetReplacementCreator::_setTrueReplacementBounds()
 {
   LOG_STATUS(
@@ -561,6 +589,10 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
     _loadInputMap(
       "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
       _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
+/*  OsmMapPtr secMap =
+    _loadInputMap(
+      "sec", _input2, true, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+      _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map)*/;
 
   _removeMetadataTags(secMap);
 

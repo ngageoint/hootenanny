@@ -85,12 +85,12 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(secFilteredToEmpty1Test);
 
   // multiple cell tests
-  //CPPUNIT_TEST(badPolyIdSync1Test);
-  //CPPUNIT_TEST(badPolyIdSync2Test);
-  //CPPUNIT_TEST(droppedNodes1Test);
-  //CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
-  //CPPUNIT_TEST(orphanedNodes1Test);
-  //CPPUNIT_TEST(orphanedNodes2Test);
+  CPPUNIT_TEST(badPolyIdSync1Test);
+  CPPUNIT_TEST(badPolyIdSync2Test);
+  CPPUNIT_TEST(droppedNodes1Test);
+  CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
+  CPPUNIT_TEST(orphanedNodes1Test);
+  CPPUNIT_TEST(orphanedNodes2Test);
 
   // ENABLE THESE TESTS FOR DEBUGGING ONLY
 
@@ -580,7 +580,7 @@ public:
       "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon1.osm",
       "test-files/cmd/glacial/PoiPolygonConflateStandaloneTest/PoiPolygon2.osm",
       "-122.43384,37.76069,-122.42742,37.76869",
-      _outputPath + "/" + _testName);
+      _outputPath);
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
     OsmMapWriterFactory::resetDebugMapCount();
