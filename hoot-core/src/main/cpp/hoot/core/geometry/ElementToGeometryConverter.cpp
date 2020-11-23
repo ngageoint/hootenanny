@@ -40,7 +40,7 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/geometry/MultiPolygonCreator.h>
+#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
@@ -160,7 +160,7 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
   LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_MULTIPOLYGON)
   {
-    return MultiPolygonCreator(_constProvider, e).createMultipolygon();
+    return RelationToMultiPolygonConverter(_constProvider, e).createMultipolygon();
   }
   else if (gid == GEOS_MULTILINESTRING)
   {

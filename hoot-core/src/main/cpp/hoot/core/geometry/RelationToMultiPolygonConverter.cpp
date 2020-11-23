@@ -56,7 +56,7 @@ namespace hoot
 
 int RelationToMultiPolygonConverter::logWarnCount = 0;
 
-RelationToMultiPolygonConverter::MultiPolygonCreator(
+RelationToMultiPolygonConverter::RelationToMultiPolygonConverter(
   const ConstElementProviderPtr& provider, const ConstRelationPtr& r) :
 _provider(provider),
 _r(r)
@@ -219,7 +219,8 @@ std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() 
       if (r && (r->isMultiPolygon() || AreaCriterion().isSatisfied(r)))
       {
         LOG_VART(r->getElementId());
-        std::shared_ptr<Geometry> child(MultiPolygonCreator(_provider, r).createMultipolygon());
+        std::shared_ptr<Geometry> child(
+          RelationToMultiPolygonConverter(_provider, r).createMultipolygon());
         try
         {
           result.reset(result->Union(child.get()));
