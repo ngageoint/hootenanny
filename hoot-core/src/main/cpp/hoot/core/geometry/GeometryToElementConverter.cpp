@@ -140,8 +140,8 @@ NodePtr GeometryToElementConverter::convertPointToNode(
   return _createNode(map, Coordinate(point->getX(), point->getY()), s, circularError);
 }
 
-WayPtr GeometryToElementConverter::convertLineStringToWay(const LineString* ls,
-  const OsmMapPtr& map, Status s, double circularError)
+WayPtr GeometryToElementConverter::convertLineStringToWay(
+  const LineString* ls, const OsmMapPtr& map, Status s, double circularError)
 {
   LOG_TRACE("Converting line string to way...");
 

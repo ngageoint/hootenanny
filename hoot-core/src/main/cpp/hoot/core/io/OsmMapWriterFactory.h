@@ -87,6 +87,11 @@ public:
                             std::shared_ptr<OGRSpatialReference> spatRef, const QString& title = "",
                             NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
+  /**
+   * TODO
+   */
+  static void resetDebugMapCount() { _debugMapCount = 1; }
+
 private:
 
   static unsigned int _debugMapCount;

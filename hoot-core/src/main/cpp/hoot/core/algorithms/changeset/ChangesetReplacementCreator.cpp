@@ -55,6 +55,9 @@
 // Qt
 #include <QElapsedTimer>
 
+// GEOS
+#include <geos/algorithm/ConvexHull.h>
+
 namespace hoot
 {
 
@@ -70,7 +73,7 @@ ChangesetReplacementCreatorAbstract()
   // Every capitalized labeled section of the "create" method (e.g. "LOAD AND FILTER"), except input
   // validation is being considered a separate step for progress. The number of tasks per pass must
   // be updated as you add/remove job steps in the create logic.
-  _numTotalTasks = 8/*9*/;
+  _numTotalTasks = 8;
 
   _setGlobalOpts();
 }
@@ -490,13 +493,16 @@ void ChangesetReplacementCreator::_setTrueReplacementBounds()
   // Set the unioned shape as the true replacement bounds against which the data will be re-read.
   if (boundsGeomType == "MultiPolygon")
   {
-    trueBounds.reset(trueBounds->getBoundary());
+    // Convert multipolys to just a single outer boundary poly.
+    trueBounds.reset(geos::algorithm::ConvexHull(trueBounds->getBoundary()).getConvexHull());
     LOG_VARD(trueBounds->getGeometryType());
-    //assert(trueBounds->getGeometryType() == "Polygon");
+    assert(trueBounds->getGeometryType() == "Polygon");
   }
   _replacementBounds = std::dynamic_pointer_cast<geos::geom::Polygon>(trueBounds);
   conf().set(
     ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
+  OsmMapWriterFactory::writeDebugMap(
+    GeometryUtils::createMapFromBounds(_replacementBounds), _changesetId + "-true-bounds");
 
   LOG_STATUS(
     "Calculated true replacement bounds: ..." <<
@@ -553,7 +559,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
   // the reference data. Data from the two maps will have to be combined during snapping.
   OsmMapPtr secMap =
     _loadInputMap(
-      "sec", _input2, false/*true*/, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+      "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
       _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
 
   _removeMetadataTags(secMap);
