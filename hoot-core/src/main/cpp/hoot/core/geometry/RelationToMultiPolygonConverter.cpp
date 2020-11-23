@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "MultiPolygonCreator.h"
+#include "RelationToMultiPolygonConverter.h"
 
 // geos
 #include <geos/algorithm/CGAlgorithms.h>
@@ -54,9 +54,9 @@ using namespace std;
 namespace hoot
 {
 
-int MultiPolygonCreator::logWarnCount = 0;
+int RelationToMultiPolygonConverter::logWarnCount = 0;
 
-MultiPolygonCreator::MultiPolygonCreator(
+RelationToMultiPolygonConverter::MultiPolygonCreator(
   const ConstElementProviderPtr& provider, const ConstRelationPtr& r) :
 _provider(provider),
 _r(r)
@@ -64,7 +64,7 @@ _r(r)
   LOG_VART(_r.get());
 }
 
-Geometry* MultiPolygonCreator::_addHoles(
+Geometry* RelationToMultiPolygonConverter::_addHoles(
   vector<LinearRing*>& outers, vector<LinearRing*>& inners) const
 {
   // TODO: change back to trace
@@ -164,7 +164,7 @@ Geometry* MultiPolygonCreator::_addHoles(
   return gf.createMultiPolygon(polygons);
 }
 
-void MultiPolygonCreator::_addWayToSequence(
+void RelationToMultiPolygonConverter::_addWayToSequence(
   ConstWayPtr w, CoordinateSequence& cs, bool reversed) const
 {
   size_t start = 0;
@@ -185,7 +185,7 @@ void MultiPolygonCreator::_addWayToSequence(
   }
 }
 
-std::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
+std::shared_ptr<Geometry> RelationToMultiPolygonConverter::createMultipolygon() const
 {
   LOG_TRACE("Creating multipolygon...");
 
@@ -237,7 +237,8 @@ std::shared_ptr<Geometry> MultiPolygonCreator::createMultipolygon() const
   return result;
 }
 
-QString MultiPolygonCreator::_findRelationship(LinearRing* ring1, LinearRing* ring2) const
+QString RelationToMultiPolygonConverter::_findRelationship(LinearRing* ring1,
+                                                           LinearRing* ring2) const
 {
   QString result = "";
 
@@ -265,9 +266,9 @@ QString MultiPolygonCreator::_findRelationship(LinearRing* ring1, LinearRing* ri
   return result;
 }
 
-void MultiPolygonCreator::_classifyRings(std::vector<LinearRing*>& noRole,
-                                         std::vector<LinearRing*>& inners,
-                                         std::vector<LinearRing*>& outers) const
+void RelationToMultiPolygonConverter::_classifyRings(
+  std::vector<LinearRing*>& noRole, std::vector<LinearRing*>& inners,
+  std::vector<LinearRing*>& outers) const
 {
   // Empty == nothing else to do
   if (noRole.size() == 0)
@@ -392,7 +393,8 @@ void MultiPolygonCreator::_classifyRings(std::vector<LinearRing*>& noRole,
   }
 }
 
-void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing*>& rings) const
+void RelationToMultiPolygonConverter::_createRings(
+  const QString& role, vector<LinearRing*>& rings) const
 {
   LOG_TRACE("Creating rings for role: " << role << "...");
 
@@ -453,7 +455,7 @@ void MultiPolygonCreator::_createRings(const QString& role, vector<LinearRing*>&
   }
 }
 
-void MultiPolygonCreator::_createRingsFromPartials(
+void RelationToMultiPolygonConverter::_createRingsFromPartials(
   const vector<ConstWayPtr>& partials, vector<LinearRing*>& rings) const
 {
   LOG_TRACE("Creating rings from partials...");
@@ -494,7 +496,7 @@ void MultiPolygonCreator::_createRingsFromPartials(
   }
 }
 
-void MultiPolygonCreator::_createSingleRing(
+void RelationToMultiPolygonConverter::_createSingleRing(
   const vector<ConstWayPtr>& partials, vector<LinearRing*>& rings) const
 {
   LOG_TRACE("Creating single ring...");
@@ -532,7 +534,7 @@ void MultiPolygonCreator::_createSingleRing(
   }
 }
 
-bool MultiPolygonCreator::_isValidInner(LinearRing* innerRing) const
+bool RelationToMultiPolygonConverter::_isValidInner(LinearRing* innerRing) const
 {
   if (innerRing->getNumPoints() > 0 && innerRing->getNumPoints() < 4)
   {
@@ -550,7 +552,8 @@ bool MultiPolygonCreator::_isValidInner(LinearRing* innerRing) const
   return true;
 }
 
-deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayPtr>& partials) const
+deque<ConstWayPtr> RelationToMultiPolygonConverter::_orderWaysForRing(
+  const vector<ConstWayPtr>& partials) const
 {
   LOG_TRACE("Ordering ways for ring...");
 
@@ -644,7 +647,7 @@ deque<ConstWayPtr> MultiPolygonCreator::_orderWaysForRing(const vector<ConstWayP
   return result;
 }
 
-LinearRing* MultiPolygonCreator::_toLinearRing(const ConstWayPtr& w) const
+LinearRing* RelationToMultiPolygonConverter::_toLinearRing(const ConstWayPtr& w) const
 {
   LOG_TRACE("Converting " << w->getElementId() << " to linear ring...");
 

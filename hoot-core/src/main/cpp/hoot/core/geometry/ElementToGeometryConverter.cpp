@@ -69,8 +69,8 @@ namespace hoot
 
 int ElementToGeometryConverter::logWarnCount = 0;
 
-ElementToGeometryConverter::ElementToGeometryConverter(const ConstElementProviderPtr& provider,
-                                   const bool logWarningsForMissingElements) :
+ElementToGeometryConverter::ElementToGeometryConverter(
+  const ConstElementProviderPtr& provider, const bool logWarningsForMissingElements) :
 _constProvider(provider),
 _spatialReference(provider->getProjection()),
 _requireAreaForPolygonConversion(true),
@@ -183,7 +183,8 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const Re
   return convertToGeometry((ConstRelationPtr)r);
 }
 
-std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(const ConstWayPtr& w) const
+std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
+  const ConstWayPtr& w) const
 {
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();

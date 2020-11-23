@@ -325,6 +325,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
   OsmMapWriterFactory::writeDebugMap(
     map, _changesetId + "-" + map->getName() + "-after-cropped-load");
 
+  MemoryUsageChecker::getInstance().check();
+
   return map;
 }
 

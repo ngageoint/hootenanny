@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef MULTIPOLYGONCREATOR_H
-#define MULTIPOLYGONCREATOR_H
+#ifndef RELATION_TO_MULTIPOLYGON_CONVERTER_H
+#define RELATION_TO_MULTIPOLYGON_CONVERTER_H
 
 // hoot
 #include <hoot/core/elements/ElementProvider.h>
@@ -65,15 +65,16 @@ namespace hoot
  *
  * See Redmine #2115 for additional details
  */
-class MultiPolygonCreator
+class RelationToMultiPolygonConverter
 {
 public:
 
-  static std::string className() { return "hoot::MultiPolygonCreator"; }
+  static std::string className() { return "hoot::RelationToMultiPolygonConverter"; }
 
   static int logWarnCount;
 
-  MultiPolygonCreator(const ConstElementProviderPtr& provider, const ConstRelationPtr& r);
+  RelationToMultiPolygonConverter(
+    const ConstElementProviderPtr& provider, const ConstRelationPtr& r);
 
   /**
    * Create and return a multipolygon. If the multipolygon contains gross errors then an empty
@@ -130,4 +131,4 @@ private:
 
 }
 
-#endif // MULTIPOLYGONCREATOR_H
+#endif // RELATION_TO_MULTIPOLYGON_CONVERTER_H

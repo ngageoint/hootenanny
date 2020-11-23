@@ -326,7 +326,8 @@ public:
 
     // This is needed to suppress some ElementToGeometryConverter warning messages that should
     // eventually be looked into.
-    DisableLog dl;
+     // TODO: re-enable
+    //DisableLog dl;
 
     _testName = "droppedPointPolyRelationMembers1Test";
     _prepInput(
@@ -497,7 +498,8 @@ public:
       */
 
     // This is needed to suppress some missing element warning messages.
-    DisableLog dl;
+    // TODO: re-enable
+    //DisableLog dl;
 
     _testName = "outOfSpecMixedRelations1Test";
     _prepInput(

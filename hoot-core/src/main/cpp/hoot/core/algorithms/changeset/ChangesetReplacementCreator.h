@@ -100,6 +100,8 @@ protected:
 
 private:
 
+  void _setTrueReplacementBounds();
+
   OsmMapPtr _loadAndFilterRefMap(QMap<ElementId, long>& refIdToVersionMappings);
   OsmMapPtr _loadAndFilterSecMap();
 
