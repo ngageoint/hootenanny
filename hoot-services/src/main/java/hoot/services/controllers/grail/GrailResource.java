@@ -380,7 +380,7 @@ public class GrailResource {
         Users user = Users.fromRequest(request);
         advancedUserCheck(user);
 
-        List<Long> tasks = DbUtils.getTimeoutTasks();
+        List<Long> tasks = DbUtils.getTimeoutTasks(projectId);
 
         return Response.ok(tasks).build();
     }
