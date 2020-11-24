@@ -168,7 +168,7 @@ ElementMergeServerPort=8096
 ElementMergeServerThreadCount=0
 
 # Element merge Server Script in scripts folder
-ElementMergeServerScript=/translations/ElementMergeServer.js
+ElementMergeServerScript=/translations-nodejs/ElementMergeServer.js
 
 # LANGUAGE TRANSLATION/DETECTION
 
