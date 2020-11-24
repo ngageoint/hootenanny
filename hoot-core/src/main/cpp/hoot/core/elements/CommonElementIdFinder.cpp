@@ -53,13 +53,13 @@ QSet<ElementId> CommonElementIdFinder::findCommonElementIds(
 QSet<ElementId> CommonElementIdFinder::findElementIdsInFirstAndNotSecond(
   const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
-  _findElementIdDiff(map1, map2, true);
+  return _findElementIdDiff(map1, map2, true);
 }
 
 QSet<ElementId> CommonElementIdFinder::findElementIdsInSecondAndNotFirst(
   const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
-  _findElementIdDiff(map1, map2, false);
+  return _findElementIdDiff(map1, map2, false);
 }
 
 QSet<ElementId> CommonElementIdFinder::_findElementIdDiff(
