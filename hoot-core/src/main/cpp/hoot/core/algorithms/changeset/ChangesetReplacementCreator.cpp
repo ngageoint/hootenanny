@@ -256,7 +256,12 @@ void ChangesetReplacementCreator::create(
   // errors when the resulting changesets are applied.
 
   // see #4376
-//  ElementIdRemapper secIdRemapper(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
+//  ElementIdRemapper secIdRemapper(
+//    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+//    ElementCriterionPtr(
+//      new ChainCriterion(
+//        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+//        ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)))));
 //  LOG_INFO(secIdRemapper.getInitStatusMessage());
 //  secIdRemapper.apply(secMap);
 //  LOG_INFO(secIdRemapper.getCompletedStatusMessage());
