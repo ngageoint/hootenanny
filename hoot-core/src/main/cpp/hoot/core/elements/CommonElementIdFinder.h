@@ -53,6 +53,31 @@ public:
    * @return
    */
   static QSet<ElementId> findCommonElementIds(const OsmMapPtr& map1, const OsmMapPtr& map2);
+
+  /**
+   * TODO
+   *
+   * @param map1
+   * @param map2
+   * @return
+   */
+  static QSet<ElementId> findElementIdsInFirstAndNotSecond(
+    const OsmMapPtr& map1, const OsmMapPtr& map2);
+
+  /**
+   * TODO
+   *
+   * @param map1
+   * @param map2
+   * @return
+   */
+  static QSet<ElementId> findElementIdsInSecondAndNotFirst(
+    const OsmMapPtr& map1, const OsmMapPtr& map2);
+
+private:
+
+  static QSet<ElementId> _findElementIdDiff(
+    const OsmMapPtr& map1, const OsmMapPtr& map2, const bool keepIdsFromMap1);
 };
 
 }

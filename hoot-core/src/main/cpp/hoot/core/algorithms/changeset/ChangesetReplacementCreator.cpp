@@ -75,6 +75,7 @@ ChangesetReplacementCreatorAbstract()
   // validation is being considered a separate step for progress. The number of tasks per pass must
   // be updated as you add/remove job steps in the create logic.
   _numTotalTasks = 8;
+  // see #4376
   //_numTotalTasks = 9;
 
   _setGlobalOpts();
@@ -177,7 +178,7 @@ void ChangesetReplacementCreator::create(
 
   // CALCULATE TRUE REPLACEMENT BOUNDS
 
-  // TODO: explain
+  // see #4376
 //  _setTrueReplacementBounds();
 //  _currentTask++;
 
@@ -200,8 +201,8 @@ void ChangesetReplacementCreator::create(
     return;
   }
 
-  // TODO: explain
-  //_syncVersions(refMap, secMap);
+  // see #4376
+  //_syncInputVersions(refMap, secMap);
 
   _currentTask++;
 
@@ -253,12 +254,8 @@ void ChangesetReplacementCreator::create(
   // from a different data source the ID sync would have to happen regardless...just wouldn't be
   // needed for OSM to OSM replacement). Unfortunately, this has lead to all kinds of duplicate ID
   // errors when the resulting changesets are applied.
-//  ElementIdRemapper secIdRemapper(
-//    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-//    ElementCriterionPtr(
-//      new ChainCriterion(
-//        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-//        ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)))));
+
+  // see #4376
 //  ElementIdRemapper secIdRemapper(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
 //  LOG_INFO(secIdRemapper.getInitStatusMessage());
 //  secIdRemapper.apply(secMap);
@@ -323,6 +320,7 @@ void ChangesetReplacementCreator::create(
     refMap, combinedMap, immediatelyConnectedOutOfBoundsWays);
   immediatelyConnectedOutOfBoundsWays.reset();
 
+  // see #4376
 //  secIdRemapper.restore(combinedMap);
 //  LOG_INFO(secIdRemapper.getRestoreCompletedStatusMessage());
 //  OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-combined-after-id-restoring");
@@ -442,11 +440,13 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   LOG_VART(_boundsOpts.inBoundsStrict);
 }
 
-void ChangesetReplacementCreator::_syncVersions(const OsmMapPtr& refMap, const OsmMapPtr& secMap)
+void ChangesetReplacementCreator::_syncInputVersions(const OsmMapPtr& refMap,
+                                                     const OsmMapPtr& secMap)
 {
-  LOG_STATUS("Synchronizing element versions...");
+  LOG_STATUS("Synchronizing elements...");
 
   const QSet<ElementId> idsInCommon = CommonElementIdFinder::findCommonElementIds(refMap, secMap);
+
   int ctr = 0;
   for ( QSet<ElementId>::const_iterator itr = idsInCommon.begin(); itr != idsInCommon.end(); ++itr)
   {
@@ -462,6 +462,27 @@ void ChangesetReplacementCreator::_syncVersions(const OsmMapPtr& refMap, const O
   }
 
   LOG_INFO("Synchronized " << ctr << " element versions.");
+
+  // Had an idea here to try to pull down missing elements based on what was in both input maps to
+  // start with. This isn't useful, however, b/c in the production enviroment this code will only
+  // have access to a subset of the input data from either source and may not be able to retrieve
+  // the missing elements.
+
+//  const QSet<ElementId> idsIn1AndNotIn2 =
+//    CommonElementIdFinder::findElementIdsInFirstAndNotSecond(map1, map2);
+//  const QSet<ElementId> idsIn2AndNotIn1 =
+//    CommonElementIdFinder::findElementIdsInSecondAndNotFirst(map1, map2);
+
+//  // Read in idsIn1AndNotIn2 from the sec map input and add to the sec map.
+
+
+//  // Read in idsIn2AndNotIn1 from the ref map input and add to the ref map.
+
+
+//  LOG_INFO(
+//    "Synchronized " << idsIn1AndNotIn2.size() << " elements in ref dataset and not in sec dataset.");
+//  LOG_INFO(
+//    "Synchronized " << idsIn2AndNotIn1.size() << " elements in sec dataset and not in ref dataset.");
 }
 
 void ChangesetReplacementCreator::_setTrueReplacementBounds()
@@ -582,17 +603,17 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterRefMap(
 
 OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
 {
-  // load the data that we're replacing with;
-  // TODO: update comment We don't keep source IDs here to avoid conflict with
+  // load the data that we're replacing with; We don't keep source IDs here to avoid conflict with
   // the reference data. Data from the two maps will have to be combined during snapping.
   OsmMapPtr secMap =
     _loadInputMap(
       "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
       _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
-/*  OsmMapPtr secMap =
-    _loadInputMap(
-      "sec", _input2, true, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
-      _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map)*/;
+  // see #4376
+//  OsmMapPtr secMap =
+//    _loadInputMap(
+//      "sec", _input2, true, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+//      _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
 
   _removeMetadataTags(secMap);
 

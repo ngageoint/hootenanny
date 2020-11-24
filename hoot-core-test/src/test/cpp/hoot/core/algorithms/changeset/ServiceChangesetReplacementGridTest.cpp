@@ -71,8 +71,6 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
 
-  // TODO: re-enable
-
   // single cell tests
   CPPUNIT_TEST(differingTypes1Test);
   CPPUNIT_TEST(outOfSpecMixedRelations1Test);
@@ -85,8 +83,8 @@ class ServiceChangesetReplacementGridTest : public HootTestFixture
   CPPUNIT_TEST(secFilteredToEmpty1Test);
 
   // multiple cell tests
-  CPPUNIT_TEST(badPolyIdSync1Test);
-  CPPUNIT_TEST(badPolyIdSync2Test);
+/*  //CPPUNIT_TEST(badPolyIdSync1Test);
+  //CPPUNIT_TEST(badPolyIdSync2Test)*/;
   CPPUNIT_TEST(droppedNodes1Test);
   CPPUNIT_TEST(droppedPointPolyRelationMembers1Test);
   CPPUNIT_TEST(orphanedNodes1Test);
@@ -1144,7 +1142,6 @@ private:
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
     // leave enabled for debugging only
-    // TODO: change back
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 

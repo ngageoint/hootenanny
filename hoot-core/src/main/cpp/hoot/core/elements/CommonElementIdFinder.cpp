@@ -29,6 +29,8 @@
 
 // Hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/util/CollectionUtils.h>
 
 namespace hoot
 {
@@ -46,6 +48,39 @@ QSet<ElementId> CommonElementIdFinder::findCommonElementIds(
     }
   }
   return idsInCommon;
+}
+
+QSet<ElementId> CommonElementIdFinder::findElementIdsInFirstAndNotSecond(
+  const OsmMapPtr& map1, const OsmMapPtr& map2)
+{
+  _findElementIdDiff(map1, map2, true);
+}
+
+QSet<ElementId> CommonElementIdFinder::findElementIdsInSecondAndNotFirst(
+  const OsmMapPtr& map1, const OsmMapPtr& map2)
+{
+  _findElementIdDiff(map1, map2, false);
+}
+
+QSet<ElementId> CommonElementIdFinder::_findElementIdDiff(
+  const OsmMapPtr& map1, const OsmMapPtr& map2, const bool keepIdsFromMap1)
+{
+  UniqueElementIdVisitor idVis1;
+  map1->visitRo(idVis1);
+  QSet<ElementId> ids1 = CollectionUtils::stdSetToQSet(idVis1.getElementSet());
+
+  UniqueElementIdVisitor idVis2;
+  map2->visitRo(idVis2);
+  QSet<ElementId> ids2 = CollectionUtils::stdSetToQSet(idVis2.getElementSet());
+
+  if (keepIdsFromMap1)
+  {
+    return ids2.subtract(ids1);
+  }
+  else
+  {
+    return ids1.subtract(ids2);
+  }
 }
 
 }
