@@ -132,6 +132,10 @@ void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
 {
+  // This is kind of klunky to set this here, imo. However, its currently the only way to get this
+  // bounds to the readers.
+  // TODO: explain
+  //conf().set(ConfigOptions::getConvertBoundsKey(), GeometryUtils::envelopeToString(bounds));
   create(input1, input2, GeometryUtils::envelopeToPolygon(bounds), output);
 }
 
@@ -160,8 +164,12 @@ void ChangesetReplacementCreator::create(
   _validateInputs();
   // This is kind of klunky to set this here, imo. However, its currently the only way to get this
   // bounds to the readers.
-  conf().set(
-    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
+  // TODO: explain
+  //if (conf().getString(ConfigOptions::getConvertBoundsKey()).trimmed().isEmpty())
+  //{
+    conf().set(
+      ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
+  //}
   _printJobDescription();
 
   // LOAD AND FILTER
@@ -202,13 +210,6 @@ void ChangesetReplacementCreator::create(
     StringUtils::formatLargeNumber(secMap->size()) << " feature(s)...");
   _currentTask++;
 
-  // At one point it was necessary to re-number the relations in the sec map, as they could have ID
-  // overlap with those in the cookie cut ref map at this point. It seemed that this was due to the
-  // fact that relations in the two maps had been added independently of each other during cropping.
-  // However, after some refactoring this doesn't seem to be the case anymore. If we run into this
-  // situation again, we can go back in the history to resurrect the use of the ElementIdRemapper
-  // for relations here.
-
   // CLEAN
 
   // It seems unnecessary to need to clean the data after replacement. However, without the
@@ -236,9 +237,9 @@ void ChangesetReplacementCreator::create(
   // before the ref and sec have to be combined, and then restore the original sec IDs after the
   // snapping is complete with ElementIdRemapper. The idea was to reduce the need for ID
   // synchronization, which doesn't work perfectly yet (of course, if you're replacing with data
-  // from a different data source the ID sync would happen regardless...just not needed for OSM to
-  // OSM replacement). Unfortunately, this leads to all kinds of duplicate ID errors when the
-  // resulting changesets are applied.
+  // from a different data source the ID sync would have to happen regardless...just wouldn't be
+  // needed for OSM to OSM replacement). Unfortunately, this leads to all kinds of duplicate ID
+  // errors when the resulting changesets are applied.
 
   // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);

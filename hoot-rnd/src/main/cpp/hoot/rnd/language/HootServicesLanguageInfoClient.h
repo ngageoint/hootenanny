@@ -48,7 +48,7 @@ public:
 
   static std::string className() { return "hoot::HootServicesLanguageInfoClient"; }
 
-  HootServicesLanguageInfoClient() : _useCookies(true) { }
+  HootServicesLanguageInfoClient() : _useCookies(true), _timeout(500) { }
   virtual ~HootServicesLanguageInfoClient() = default;
 
   virtual void setConfiguration(const Settings& conf);
@@ -91,6 +91,8 @@ private:
   static QString _getTranslatorsUrl();
 
   QString _getAvailableLanguagesRequestData(const QStringList& apps);
+  /** Timeout for HTTP requests in seconds */
+  int _timeout;
 };
 
 }

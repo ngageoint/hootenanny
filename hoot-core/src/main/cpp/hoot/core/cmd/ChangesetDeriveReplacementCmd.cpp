@@ -202,15 +202,6 @@ public:
       input2 = args[input2Index].trimmed();
       LOG_VARD(input1);
     }
-    std::shared_ptr<geos::geom::Polygon> bounds =
-      std::dynamic_pointer_cast<geos::geom::Polygon>(
-        GeometryUtils::boundsFromString(boundsStr));
-    if (!bounds)
-    {
-      throw IllegalArgumentException(
-        "Invalid replacement bounds passed to changeset replacement derivation.");
-    }
-    LOG_VARD(bounds->toString());
     const QString output = args[outputIndex].trimmed();
     LOG_VARD(output);
     QString osmApiDbUrl;
@@ -261,6 +252,16 @@ public:
     changesetCreator->setRetainmentFilters(retainmentFilters);
     changesetCreator->setRetainmentFilterOptions(retainmentFilterOptions);
     changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
+
+    std::shared_ptr<geos::geom::Polygon> bounds =
+      std::dynamic_pointer_cast<geos::geom::Polygon>(
+        GeometryUtils::boundsFromString(boundsStr));
+    if (!bounds)
+    {
+      throw IllegalArgumentException(
+        "Invalid replacement bounds passed to changeset replacement derivation.");
+    }
+
     changesetCreator->create(input1, input2, bounds, output);
   }
 

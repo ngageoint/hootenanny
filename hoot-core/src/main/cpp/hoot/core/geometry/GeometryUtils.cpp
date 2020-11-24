@@ -43,6 +43,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/geometry/PolygonCompare.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/util/StringUtils.h>
 
 // Qt
 #include <QString>
@@ -282,7 +283,7 @@ std::shared_ptr<geos::geom::Polygon> GeometryUtils::envelopeToPolygon(
   LinearRing* outer = GeometryFactory::getDefaultInstance()->createLinearRing(coordSeq);
   std::shared_ptr<Polygon> poly(
     GeometryFactory::getDefaultInstance()->createPolygon(outer, holes));
-  LOG_VAR(poly->isValid());
+  LOG_VART(poly->isValid());
   return poly;
 }
 
@@ -660,16 +661,20 @@ std::shared_ptr<geos::geom::Geometry> GeometryUtils::mergeGeometries(
   std::vector<std::shared_ptr<geos::geom::Geometry>> geometries,
   const geos::geom::Envelope& envelope)
 {
+  LOG_DEBUG("Merging " << StringUtils::formatLargeNumber(geometries.size()) << " geometries...");
+
   std::vector<std::shared_ptr<geos::geom::Geometry>> temp;
   PolygonCompare compare(envelope);
-  //  Combine the stragglers two at a time
+  //  Combine the geometries two at a time
+  int ctr = 0;
+  const int startingGeometriesSize = geometries.size();
   while (geometries.size() > 1)
   {
     // Sort polygons using the Hilbert value. This increases the chances that nearby polygons will
     // be merged early and speed up the union process.
     sort(geometries.begin(), geometries.end(), compare);
 
-    LOG_TRACE("Remaining stragglers: " << geometries.size());
+    LOG_TRACE("Remaining geometries: " << geometries.size());
     temp.resize(0);
     temp.reserve(geometries.size() / 2 + 1);
     // Merge pairs at a time. This makes the join faster.
@@ -712,6 +717,14 @@ std::shared_ptr<geos::geom::Geometry> GeometryUtils::mergeGeometries(
       }
 
       temp.push_back(g);
+
+      ctr++;
+      if (ctr % ConfigOptions().getTaskStatusUpdateInterval() == 0)
+      {
+        PROGRESS_INFO(
+          "Merged " << StringUtils::formatLargeNumber(ctr) << " / " <<
+          StringUtils::formatLargeNumber(startingGeometriesSize) << " geometries.");
+      }
     }
     // If there are an odd number of entries, just add the last one.
     if (geometries.size() % 2 == 1)
@@ -719,7 +732,7 @@ std::shared_ptr<geos::geom::Geometry> GeometryUtils::mergeGeometries(
 
     geometries = temp;
   }
-  //  Return the
+  //  return the merged geometry
   return geometries[0];
 }
 

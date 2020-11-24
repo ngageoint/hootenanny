@@ -15,7 +15,9 @@ exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
 exports.searchRadius = parseFloat(hoot.get("search.radius.area"));
-exports.typeThreshold = parseFloat(hoot.get("area.type.threshold"));
+exports.typeThreshold = parseFloat(hoot.get("area.type.match.threshold"));
+var overlapReviewThreshold = parseFloat(hoot.get("area.overlap.review.threshold"));
+var overlapReviewTypeThreshold = parseFloat(hoot.get("area.type.overlap.review.threshold"));
 exports.experimental = true;
 exports.baseFeatureType = "Area";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
@@ -192,18 +194,15 @@ exports.matchScore = function(map, e1, e2)
 
   // Here, we're attempting to handle the many to one scenario for diff conflate and will mark 
   // this as a review which will cause these features to drop out of the diff in the default 
-  // config. Keeping the type matching strict for this until there is a reason to do otherwie. 
-  // The original test scenario for this involved only landuse=residential.
-  hoot.trace("mostSpecificType(e1): " + mostSpecificType(e1));
-  hoot.trace("mostSpecificType(e2): " + mostSpecificType(e2));
-  if (mostSpecificType(e1) == mostSpecificType(e2))
+  // config. See tests area-3978-1 and area-4379-1.
+  var typeScore = getTypeScore(e1, e2, true);
+  if (typeScore >= overlapReviewTypeThreshold)
   {
     if (smallerOverlap == -1) // don't calc it if it already has been
     {
       smallerOverlap = smallerOverlapExtractor.extract(map, e1, e2);
       hoot.trace("smallerOverlap: " + smallerOverlap);
     }
-    var overlapReviewThreshold = parseFloat(hoot.get("area.overlap.review.threshold"));
     if (smallerOverlap >= overlapReviewThreshold)
     {
       hoot.trace("review");

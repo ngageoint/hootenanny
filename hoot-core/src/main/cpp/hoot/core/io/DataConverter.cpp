@@ -225,7 +225,7 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
 
   _progress.set(
     0.0,
-    "Converting " + inputs.join(", ").right(_printLengthMax) + " to " +
+    "Converting ..." + inputs.join(", ").right(_printLengthMax) + " to ..." +
     output.right(_printLengthMax) + "...");
 
   // Due to the custom multithreading available for OGR reading, the fact that both OGR reading and

@@ -89,7 +89,6 @@ public final class HootProperties {
     public static final String EXPORT_SIZE_THRESHOLD;
     public static final String HTTP_TIMEOUT;
     public static final String GRAIL_OVERPASS_QUERY;
-    public static final String GRAIL_OVERPASS_STATS_QUERY;
     public static final String GRAIL_CONNECTED_WAYS_QUERY;
     public static final String OSMAPI_DB_NAME;
     public static final String MAP_QUERY_DIMENSIONS;
@@ -239,7 +238,6 @@ public final class HootProperties {
         GRAIL_RAILS_LABEL =  getProperty("grailRailsLabel");
         GRAIL_OVERPASS_LABEL = getProperty("grailOverpassLabel");
         GRAIL_OVERPASS_QUERY = getProperty("grailOverpassQueryPath");
-        GRAIL_OVERPASS_STATS_QUERY = getProperty("grailOverpassStatsQueryPath");
         GRAIL_CONNECTED_WAYS_QUERY = getProperty("grailConnectedWaysQueryPath");
         MAP_QUERY_DIMENSIONS = getProperty("mapQueryDimensions");
         MAP_QUERY_AREA_DEGREES = getProperty("maxQueryAreaDegrees");

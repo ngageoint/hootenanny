@@ -392,16 +392,8 @@ public:
 
     //quick check to see if the element counts are off...consult the test output for more detail
 
-    //All but two of the seven nodes should be returned.  There are five nodes outside of the
-    //requested bounds, one of them is referenced by a way within the bounds and the other three by a
-    //relation within the bounds.  The nodes not returned is outside of the requested bounds and not
-    //reference by any other element.
     CPPUNIT_ASSERT_EQUAL(6, (int)map->getNodes().size());
-    //Two of the five ways should be returned.  The ways not returned contain nodes
-    //that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(4, (int)map->getWays().size());
-    //Two of the six relations should be returned.  The relations not returned contain all
-    //members that are out of bounds.
     CPPUNIT_ASSERT_EQUAL(3, (int)map->getRelations().size());
 
     // Verify timestamps look OK

@@ -67,27 +67,27 @@ public:
   /**
    * @brief networkRequest Function to make the actual request
    * @param url URL for the request
+   * @param timeout Timeout in seconds to block waiting for the reply
    * @param http_op HTTP operation (GET, POST, or PUT), GET is default
    * @param data POST data as a QByteArray
-   * @param timeout Timeout in seconds to block waiting for the reply, default to 5 minutes
    * @return success
    */
-  bool networkRequest(const QUrl& url,
+  bool networkRequest(const QUrl& url, int timeout,
     QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
-    const QByteArray& data = QByteArray(), int timeout = 300);
+    const QByteArray& data = QByteArray());
   /**
    * @brief networkRequest Function to make the actual request
    * @param url URL for the request
+   * @param timeout Timeout in seconds to block waiting for the reply
    * @param headers collection of known headers to set on the request
    * @param http_op HTTP operation (GET, POST, or PUT), GET is default
    * @param data POST data as a QByteArray
-   * @param timeout Timeout in seconds to block waiting for the reply, default to 5 minutes
    * @return success
    */
-  bool networkRequest(const QUrl& url,
+  bool networkRequest(const QUrl& url, int timeout,
     const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
     QNetworkAccessManager::Operation http_op = QNetworkAccessManager::Operation::GetOperation,
-    const QByteArray& data = QByteArray(), int timeout = 300);
+    const QByteArray& data = QByteArray());
   /**
    * @brief getResponseContent
    * @return HTTP response content
@@ -142,14 +142,15 @@ private:
   /**
    * @brief _networkRequest Function to make the actual request
    * @param url URL for the request
+   * @param timeout Timeout in seconds to block waiting for the reply
    * @param headers collection of known headers to set on the request
    * @param http_op HTTP operation (GET, POST, or PUT), GET is default
    * @param data POST data as a QByteArray
-   * @param timeout Timeout in seconds to block waiting for the reply
    * @return success
    */
-  bool _networkRequest(const QUrl& url, const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
-                       QNetworkAccessManager::Operation http_op, const QByteArray& data, int timeout);
+  bool _networkRequest(const QUrl& url, int timeout,
+                       const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
+                       QNetworkAccessManager::Operation http_op, const QByteArray& data);
   /**
    * @brief _blockOnReply Function to turn Qt asynchronous networking calls to synchronous
    * @param reply Pointer to the network reply object to wait on

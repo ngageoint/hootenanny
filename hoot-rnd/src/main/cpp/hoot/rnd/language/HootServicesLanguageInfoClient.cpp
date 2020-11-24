@@ -118,7 +118,7 @@ std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::get
  }
  try
  {
-   request.networkRequest(url);
+   request.networkRequest(url, _timeout);
  }
  catch (const HootException& e)
  {
@@ -163,7 +163,7 @@ std::shared_ptr<boost::property_tree::ptree> HootServicesLanguageInfoClient::get
   try
   {
     request.networkRequest(
-      url, headers, QNetworkAccessManager::Operation::PostOperation,
+      url, _timeout, headers, QNetworkAccessManager::Operation::PostOperation,
       _getAvailableLanguagesRequestData(apps).toUtf8());
   }
   catch (const HootException& e)

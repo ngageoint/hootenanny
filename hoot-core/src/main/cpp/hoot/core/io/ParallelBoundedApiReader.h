@@ -179,6 +179,8 @@ protected:
   int _filenumber;
   /** Mutex guarding the file number */
   std::mutex _filenumberMutex;
+  /** HTTP timeout in seconds */
+  int _timeout;
 };
 
 }
