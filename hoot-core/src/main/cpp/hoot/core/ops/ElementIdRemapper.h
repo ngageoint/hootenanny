@@ -87,10 +87,14 @@ public:
 
 private:
 
+  // the mappings; needed for restoring the original ids
   QMap<ElementId, ElementId> _originalToRemappedElementIds;
-  // TODO
+  // optional filter that determines which elements have their IDs remapped
   ElementCriterionPtr _remapFilter;
+  // optional filter that determines which elements have their IDs restored; if this is null, the
+  // _remapFilter is used to determine what is restored
   ElementCriterionPtr _restoreFilter;
+  // the restored ID count
   int _restoredIds;
 };
 

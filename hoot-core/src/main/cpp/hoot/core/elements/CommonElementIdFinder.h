@@ -35,7 +35,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Finds element IDs in common between two maps, as well as other functionality.
  */
 class CommonElementIdFinder
 {
@@ -46,30 +46,30 @@ public:
   ~CommonElementIdFinder() = default;
 
   /**
-   * TODO
+   * Finds a collection of element IDs in common between two maps
    *
-   * @param map1
-   * @param map2
-   * @return
+   * @param map1 the first map to examine
+   * @param map2 the second map to examine
+   * @return a collection of element IDs
    */
   static QSet<ElementId> findCommonElementIds(const OsmMapPtr& map1, const OsmMapPtr& map2);
 
   /**
-   * TODO
+   * Finds a collection of element IDs that are in the first map but not in the second map
    *
-   * @param map1
-   * @param map2
-   * @return
+   * @param map1 the first map to examine
+   * @param map2 the second map to examine
+   * @return a collection of element IDs
    */
   static QSet<ElementId> findElementIdsInFirstAndNotSecond(
     const OsmMapPtr& map1, const OsmMapPtr& map2);
 
   /**
-   * TODO
+   * Finds a collection of element IDs in that are in the second map but not in the first map
    *
-   * @param map1
-   * @param map2
-   * @return
+   * @param map1 the first map to examine
+   * @param map2 the second map to examine
+   * @return a collection of element IDs
    */
   static QSet<ElementId> findElementIdsInSecondAndNotFirst(
     const OsmMapPtr& map1, const OsmMapPtr& map2);

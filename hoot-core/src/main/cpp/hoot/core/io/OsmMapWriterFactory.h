@@ -88,7 +88,7 @@ public:
                             NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
   /**
-   * TODO
+   * Reset the debug map count for output file naming purposes; useful in unit tests that
    */
   static void resetDebugMapCount() { _debugMapCount = 1; }
 

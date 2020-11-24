@@ -135,7 +135,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -186,7 +185,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -238,7 +236,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -291,7 +288,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -337,8 +333,7 @@ public:
 
     // This is needed to suppress some ElementToGeometryConverter warning messages that should
     // eventually be looked into.
-     // TODO: re-enable
-    //DisableLog dl;
+    DisableLog dl;
 
     _testName = "droppedPointPolyRelationMembers1Test";
     _prepInput(
@@ -347,7 +342,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -400,7 +394,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -448,7 +441,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -517,8 +509,7 @@ public:
       */
 
     // This is needed to suppress some missing element warning messages.
-    // TODO: re-enable
-    //DisableLog dl;
+    DisableLog dl;
 
     _testName = "outOfSpecMixedRelations1Test";
     _prepInput(
@@ -527,7 +518,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -581,7 +571,6 @@ public:
       _outputPath);
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -634,7 +623,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -687,7 +675,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -740,7 +727,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -792,7 +778,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -855,7 +840,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -912,7 +896,6 @@ public:
       "");
     conf().set(
       ConfigOptions::getDebugMapsFilenameKey(), _outputPath + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
 
     ChangesetTaskGridReplacer uut;
     uut.setChangesetsOutputDir(_outputPath);
@@ -963,7 +946,6 @@ public:
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
     _prepInput(
@@ -1011,7 +993,6 @@ public:
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
     const QString outDir = rootDir + "/" + _testName;
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);
     _prepInput(
@@ -1074,7 +1055,6 @@ public:
     const QString rootDir = "/home/vagrant/hoot/tmp/Task28";
     const QString outDir = rootDir + "/" + _testName;
     conf().set(ConfigOptions::getDebugMapsFilenameKey(), outDir + "/" + _testName + "-debug.osm");
-    OsmMapWriterFactory::resetDebugMapCount();
     QDir(outDir).removeRecursively();
     QDir().mkpath(outDir);;
     _prepInput(

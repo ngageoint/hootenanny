@@ -67,7 +67,6 @@ _r(r)
 Geometry* RelationToMultiPolygonConverter::_addHoles(
   vector<LinearRing*>& outers, vector<LinearRing*>& inners) const
 {
-  // TODO: change back to trace
   LOG_TRACE("Adding holes...");
 
   const GeometryFactory& gf = *GeometryFactory::getDefaultInstance();

@@ -43,6 +43,7 @@
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/util/ConfPath.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -229,6 +230,8 @@ void TestUtils::resetBasic()
   UuidHelper::resetRepeatableKey();
   //  Reset the pseudo random number generator seed
   Tgs::Random::instance()->seed();
+  // Reset the debug map count used to name output files
+  OsmMapWriterFactory::resetDebugMapCount();
 }
 
 void TestUtils::resetEnvironment(const QStringList confs)
