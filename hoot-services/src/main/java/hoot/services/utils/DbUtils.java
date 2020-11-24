@@ -851,14 +851,15 @@ NOT EXISTS
         return foundId;
     }
 
-    public static List<Long> getTimeoutTasks() {
+    public static List<Long> getTimeoutTasks(String projectId) {
         List<String> list = createQuery()
             .select(Expressions.stringTemplate("tags->'taskInfo'"))
             .from(jobStatus)
-            .where(Expressions.booleanTemplate("exist(tags,'timeout')"))
+            .where(Expressions.booleanTemplate("exist(tags,'timeout')")
+                    .and(Expressions.booleanTemplate("tags->'taskInfo' like 'taskingManager:" + projectId + "%'")))
             .fetch();
 
-        String patternString = "taskingManager:([0-9]*)_([0-9]*)";
+        String patternString = String.format("taskingManager:%s_([0-9]*)", projectId);
         Pattern pattern = Pattern.compile(patternString);
         List<Long> taskList = new ArrayList<>();
         for (String taskTag: list) {
@@ -866,7 +867,7 @@ NOT EXISTS
             boolean found = matcher.find();
             long taskId = -1;
             if (found) {
-                taskId = Long.parseLong(matcher.group(2));
+                taskId = Long.parseLong(matcher.group(1));
             }
 
             taskList.add(taskId);

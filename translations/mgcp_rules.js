@@ -172,7 +172,7 @@ mgcp.rules = {
     ], // End fcodeOne2oneOut
 
     // One2one rules for Text attributes
-    txtBiased : {
+    txtBiasedV4 : {
     'CCN':'source:copyright', // Commercial Copyright Notice
     'IKO':'icao',  // ICAO Identifier
     'NA2':'alt_name',  // Touristic Name
@@ -198,7 +198,7 @@ mgcp.rules = {
 
 
     // One2one rules for Number attributes
-    numBiased : {
+    numBiasedV4 : {
     'AOO':'angle',  // Angle of Orientation
     'DMB':'undergrowth:density',  // Undergrowth Density
     'DMT':'canopy_cover',  // Canopy Cover
@@ -2294,8 +2294,13 @@ mgcp.rules = {
     ['TRE','3','wood','mixed'], // Mixed
 
       ], // End one2oneOut
-
     // ##### End of One2One Rules #####
+
+    // Stuff to be ignored or that gets swapped later
+    // This is taken from OSM pre processing and a few things added.
+    ignoreList : ['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'],
+    // ##### End of ignoreList #####
+
     // ##### Start of txtLength #####
     // This list is for validateing the lengths of text attributes prior to export
     txtLength : {

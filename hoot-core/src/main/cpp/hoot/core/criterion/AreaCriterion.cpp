@@ -49,7 +49,6 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
   bool result = false;
 
   // don't process if a node
-  //LOG_VART(elementType);
   if (elementType == ElementType::Node)
   {
     return false;

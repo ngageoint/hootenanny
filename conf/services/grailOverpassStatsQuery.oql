@@ -1,7 +1,0 @@
-[out:csv(::count, ::"count:nodes", ::"count:ways", ::"count:relations")];
-(
-  node({{bbox}});
-  <;
-);
-(._;>;);
-out count;

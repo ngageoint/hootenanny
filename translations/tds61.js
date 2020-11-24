@@ -574,75 +574,6 @@ tds61 = {
     }
   },
 
-  // Untangle TDS attributes & OSM tags
-  // Some people have been editing OSM files and inserting TDS attributes
-  untangleAttributes: function (attrs, tags)
-  {
-    // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag
-    // We need to unpack this before we can do anything
-    if (attrs.other_tags)
-    {
-      var tList = attrs.other_tags.split('","');
-
-      delete attrs.other_tags;
-
-      for (var val in tList)
-      {
-        vList = tList[val].split('"=>"');
-
-        attrs[vList[0].replace('"','')] = vList[1].replace('"','');
-
-        // Debug
-        //print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
-      }
-    }
-
-    for (var col in attrs)
-    {
-      // Sort out FCODE funkyness:  f_CODE, F_Code etc
-      var tKey = col.toLowerCase();
-      tKey = tKey.replace(/\s/g, '').replace(/_/g, '');
-
-      if (tKey == 'fcode' && col !== 'F_CODE')
-      {
-        attrs.F_CODE = attrs[col];
-        delete attrs[col];
-        continue;
-      }
-
-      // Check for an FCODE as a tag
-      if (col in tds61.fcodeLookup['F_CODE'])
-      {
-        attrs.F_CODE = col;
-        delete attrs[col];
-        continue;
-      }
-
-      // Stuff to be ignored or that gets swapped later - See applyToOsmPreProcessing
-      if (~tds61.rules.ignoreList.indexOf(col)) continue;
-
-      // Look for Attributes
-      if (col in tds61.rules.numBiased) continue;
-
-      if (col in tds61.rules.txtBiased) continue;
-
-      if (col in tds61.lookup) continue;
-
-      // Drop the "GEOM" attribute
-      if (col == 'GEOM')
-      {
-        delete attrs[col];
-        continue;
-      }
-
-      // Not an Attribute so push it to the tags object
-      tags[col] = attrs[col];
-      delete attrs[col];
-    }
-
-  }, // End untangleAttributes
-
-
   // #####################################################################################################
   // ##### Start of the xxToOsmxx Block #####
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
@@ -681,15 +612,6 @@ tds61 = {
       {
         delete attrs[col];
         continue;
-      }
-
-      // Push the attribute to upper case - if needed
-      var c = col.toUpperCase();
-      if (c !== col)
-      {
-        attrs[c] = attrs[col];
-        delete attrs[col];
-        col = c; // For the rest of this loop iteration
       }
 
       // Now see if we need to swap attr names
@@ -2478,13 +2400,9 @@ tds61 = {
       tds61.lookup = translate.createLookup(tds61.rules.one2one);
     }
 
-    // A little cleaning before we try to untangle stuff
-    delete attrs.SHAPE_Length;
-    delete attrs.SHAPE_Area;
-
     // Untangle TDS attributes & OSM tags
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import
-    tds61.untangleAttributes(attrs, tags);
+    translate.untangleAttributes(attrs,tags,tds61);
 
     // Debug:
     if (tds61.configIn.OgrDebugDumptags == 'true')

@@ -297,13 +297,21 @@ input sizes.
 Areas that do not match and have a percentage overlap at or above this value will be marked for
 review.
 
-=== area.type.threshold
+=== area.type.match.threshold
 
 * Data Type: double
 * Default Value: `0.8`
 
 Tag similarity threshold (0.0 to 1.0) at or above which an area feature is considered to have
-similar tags. This setting is helpful due to the loose definition of Area in Hootenanny.
+similar tags during matching.
+
+=== area.type.overlap.review.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an area feature is considered to have
+similar tags when determining overlap reviews.
 
 === arff.writer.precision
 
@@ -551,6 +559,13 @@ This value is used when splitting a changeset into smaller pieces.
 
 NOTE: This is different to `changeset.max.size` which is the maximum number of elements that the
 database can handle in a single changeset.
+
+=== changeset.apidb.timeout
+
+* Data Type: int
+* Default Value: `500`
+
+Timeout for HTTP requests for `changeset-apply` operations in number of seconds
 
 === changeset.apidb.writer.debug.output
 

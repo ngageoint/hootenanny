@@ -71,7 +71,7 @@ class ApplyChangesetCommand extends GrailCommand {
         substitutionMap.put("HOOT_OPTIONS", hootOptions);
         substitutionMap.put("DEBUG_LEVEL", debugLevel);
 
-        String command = "hoot.bin changeset-apply --${DEBUG_LEVEL} ${HOOT_OPTIONS} ${OSC_FILE} ${API_URL} --stats --progress";
+        String command = "hoot.bin changeset-apply --${DEBUG_LEVEL} -C ApplyChangeset.conf ${HOOT_OPTIONS} ${OSC_FILE} ${API_URL} --stats --progress";
 
         super.configureCommand(command, substitutionMap, caller);
     }

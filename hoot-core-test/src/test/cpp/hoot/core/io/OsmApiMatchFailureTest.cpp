@@ -164,6 +164,22 @@ public:
       CPPUNIT_ASSERT_EQUAL(expected_way_ids[i], ids[i]);
     CPPUNIT_ASSERT_EQUAL(ElementType::Way, type2);
 
+    //  Test multi relation failure with relation ID
+    id = 0;
+    ids.clear();
+    type = ElementType::Unknown;
+    type2 = ElementType::Unknown;
+    hint = "Precondition failed: The relation 220 is used in relations 159,189";
+    found = failureCheck.matchesChangesetDeletePreconditionFailure(hint, id, type, ids, type2);
+    std::vector<long> expected_deleted_relation_ids { 159, 189 };
+    CPPUNIT_ASSERT_EQUAL(true, found);
+    CPPUNIT_ASSERT_EQUAL(220L, id);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, type);
+    CPPUNIT_ASSERT_EQUAL(expected_deleted_relation_ids.size(), ids.size());
+    for (int i = 0; i < (int)ids.size(); ++i)
+      CPPUNIT_ASSERT_EQUAL(expected_deleted_relation_ids[i], ids[i]);
+    CPPUNIT_ASSERT_EQUAL(ElementType::Relation, type2);
+
     //  Test relation failure with empty string
     id = 0;
     id2 = 0;

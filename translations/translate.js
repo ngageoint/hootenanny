@@ -1463,6 +1463,7 @@ translate = {
     return values;
   }, // End overrideValues
 
+
   getMaxAsString: function(value1, value2) {
     var maxVal;
     var val1 = parseInt(value1);
@@ -1478,6 +1479,86 @@ translate = {
 
     return maxVal + '';
   },
+
+  // Untangle TDS attributes & OSM tags.
+  // Some people have been editing OSM files and inserting TDS attributes
+  untangleAttributes: function (attrs, tags, spec)
+  {
+    // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
+    // We need to unpack this before we can do anything.
+    if (attrs.other_tags)
+    {
+      var tList = attrs.other_tags.split('","');
+
+      delete attrs.other_tags;
+
+      for (var val in tList)
+      {
+        vList = tList[val].split('"=>"');
+
+        attrs[vList[0].replace('"','')] = vList[1].replace('"','');
+
+        // Debug
+        //print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+      }
+    }
+
+    for (var col in attrs)
+    {
+      // Sort out FCODE funkyness:  f_CODE, F_Code etc
+      var tKey = col.toUpperCase();
+      tKey = tKey.replace(/\s/g, '').replace(/_/g, '');
+
+      if (tKey == 'FCODE' && col !== 'F_CODE')
+      {
+        attrs.F_CODE = attrs[col];
+        delete attrs[col];
+        continue;
+      }
+
+      // Check for an FCODE as a tag
+      if (col in spec.fcodeLookup['F_CODE'] || tKey in spec.fcodeLookup['F_CODE'] )
+      {
+        attrs.F_CODE = col;
+        delete attrs[col];
+        continue;
+      }
+
+      // Reuse tKey but don't remove spaces, underscores etc
+      tKey = col.toUpperCase();
+
+      // Drop the "GEOM" attribute
+      if (tKey == 'GEOM' || tKey == 'SHAPE_LENGTH' || tKey == 'SHAPE_AREA')
+      {
+        delete attrs[col];
+        continue;
+      }
+
+      // See if the tag is a valid TDS attribute
+      if (~spec.rules.ignoreList.indexOf(col) ||
+          col in spec.rules.numBiased ||
+          col in spec.rules.txtBiased ||
+          col in spec.lookup)
+      {
+        continue;
+      }
+
+      // Same but looking for lowercase attributes
+      if (~spec.rules.ignoreList.indexOf(tKey) ||
+          tKey in spec.rules.numBiased ||
+          tKey in spec.rules.txtBiased ||
+          tKey in spec.lookup)
+      {
+        attrs[tKey] = attrs[col];
+        delete attrs[col];
+        continue;
+      }
+
+      // Not an Attribute so push it to the tags object
+      tags[col] = attrs[col];
+      delete attrs[col];
+    }
+  }, // End attributeUntangle
 
 
   // Converting country codes to names to URN's

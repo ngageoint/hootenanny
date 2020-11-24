@@ -414,6 +414,25 @@ void XmlChangeset::fixMalformedInput()
         failRelation(relation_id, true);
     }
   }
+  //  Self referencing relations aren't able to be created
+  for (ChangesetElementMap::iterator it = _relations[TypeCreate].begin(); it != _relations[TypeCreate].end(); ++it)
+  {
+    ChangesetRelationPtr relation(std::dynamic_pointer_cast<ChangesetRelation>(it->second));
+    std::stack<int> remove_members;
+    for (int i = 0; i < relation->getMemberCount(); ++i)
+    {
+      ChangesetRelationMember& m = relation->getMember(i);
+      //  Remove any self-referencing relation
+      if (m.isRelation() && relation->id() == m.getRef())
+        remove_members.push(i);
+    }
+    //  Remove any member marked for deletion
+    while (!remove_members.empty())
+    {
+      relation->removeMember(remove_members.top());
+      remove_members.pop();
+    }
+  }
   //  Output the error file if there are errors
   writeErrorFile();
 }
@@ -786,8 +805,8 @@ void XmlChangeset::moveOrRemoveWay(const ChangesetInfoPtr& source, const Changes
 
 bool XmlChangeset::moveWay(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetWay* way, bool failing)
 {
-  //  Don't worry about the contents of a delete operation
-  if (type != ChangesetType::TypeDelete)
+  //  Don't worry about the contents of a delete operation, unless it is failing
+  if (type != ChangesetType::TypeDelete || failing)
   {
     //  Iterate all of the nodes that exist in the changeset and move them
     for (int i = 0; i < way->getNodeCount(); ++i)
@@ -999,8 +1018,8 @@ void XmlChangeset::moveOrRemoveRelation(const ChangesetInfoPtr& source, const Ch
 
 bool XmlChangeset::moveRelation(const ChangesetInfoPtr& source, const ChangesetInfoPtr& destination, ChangesetType type, ChangesetRelation* relation, bool failing)
 {
-  //  Don't worry about the contents of a delete operation
-  if (type != ChangesetType::TypeDelete)
+  //  Don't worry about the contents of a delete operation, unless it is failing
+  if (type != ChangesetType::TypeDelete || failing)
   {
     //  Iterate all of the members that exist in the changeset and move them
     for (int i = 0; i < relation->getMemberCount(); ++i)
@@ -1267,7 +1286,7 @@ bool XmlChangeset::canSend(ChangesetRelation* relation)
       {
         //  Special case, node doesn't exist in changeset, it may in database, send it
         if (member.getRef() > 0 && _allNodes.find(member.getRef()) == _allNodes.end())
-          return true;
+          continue;
         //  If the node exists in the list and
         //  it hasn't been sent yet and
         //  it can't be sent yet
@@ -1283,7 +1302,7 @@ bool XmlChangeset::canSend(ChangesetRelation* relation)
       {
         //  Special case, way doesn't exist in changeset, it may in database, send it
         if (member.getRef() > 0 && _allWays.find(member.getRef()) == _allWays.end())
-          return true;
+          continue;
         //  Check if the way exists and can't be sent
         else if (_allWays.find(member.getRef()) != _allWays.end() &&
             !isSent(_allWays[member.getRef()].get()) &&
@@ -1296,10 +1315,7 @@ bool XmlChangeset::canSend(ChangesetRelation* relation)
       {
         //  Special case, relation doesn't exist in changeset, it may in database, send it
         if (member.getRef() > 0 && _allRelations.find(member.getRef()) == _allRelations.end())
-          return true;
-        //  Special case, relation has a member relation that is itself, send it
-        else if (member.getRef() == relation->id())
-          return true;
+          continue;
         //  Check if the relation exists and can't be sent
         else if (_allRelations.find(member.getRef()) != _allWays.end() &&
             !isSent(_allRelations[member.getRef()].get()) &&
@@ -1337,19 +1353,15 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
          changeset->size() < (size_t)_maxPushSize &&
          hasElementsToSend())
   {
-    /**
-     *  Changesets are created by first adding nodes, then ways, and
-     *  finally relations. In testing this order was found to be 4%-7%
-     *  faster than any other interpolation of the ordering of nodes,
-     *  ways, and relations.  BUT deleting must go in the opposite order
-     *  so we'll do relations, ways, and finally nodes.
-     */
-    //  Start with the relations
-    addRelations(changeset, type);
-    //  Break out of the loop once the changeset is big enough
-    if (changeset->size() >= (size_t)_maxPushSize)
-      continue;
-    //  Then the ways
+    //  Deleting relations must come before deleting ways and nodes
+    if (type == ChangesetType::TypeDelete)
+    {
+      addRelations(changeset, type);
+      //  Break out of the loop once the changeset is big enough
+      if (changeset->size() >= (size_t)_maxPushSize)
+        continue;
+    }
+    //  Creating and modifying ways is first, deleting ways comes after relations
     addWays(changeset, type);
     //  Break out of the loop once the changeset is big enough
     if (changeset->size() >= (size_t)_maxPushSize)
@@ -1359,6 +1371,15 @@ bool XmlChangeset::calculateChangeset(ChangesetInfoPtr& changeset)
     //  Break out of the loop once the changeset is big enough
     if (changeset->size() >= (size_t)_maxPushSize)
       continue;
+    //  Creating and modifying relations can be last after everything else is created
+    if (type != ChangesetType::TypeDelete)
+    {
+      //  Start with the relations
+      addRelations(changeset, type);
+      //  Break out of the loop once the changeset is big enough
+      if (changeset->size() >= (size_t)_maxPushSize)
+        continue;
+    }
     //  Go to the next type and loop back around
     type = static_cast<ChangesetType>(type + 1);
   }
@@ -1411,207 +1432,36 @@ ChangesetInfoPtr XmlChangeset::splitChangeset(const ChangesetInfoPtr& changeset,
     //   Placeholder node not found for reference -145213 in way -5687
     if (_failureCheck.matchesPlaceholderFailure(splitHint, member_id, member_type, element_id, element_type))
     {
-      //  Use the type and id to split the changeset
-      for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-      {
-        if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
-        {
-          if (element_type == ElementType::Way)
-          {
-            ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[element_id].get());
-            //  Add the way to the split and remove from the changeset
-            if (current_type == ChangesetType::TypeCreate)
-            {
-              //  Move all nodes to be created with this way to the split
-              moveWay(changeset, split, (ChangesetType)current_type, way, true);
-            }
-            else
-            {
-              split->add(element_type, (ChangesetType)current_type, way->id());
-              changeset->remove(element_type, (ChangesetType)current_type, way->id());
-            }
-            split->setError();
-            return split;
-          }
-          else if (element_type == ElementType::Relation)
-          {
-            ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
-            //  Add the relation to the split and remove from the changeset
-            split->add(element_type, (ChangesetType)current_type, relation->id());
-            changeset->remove(element_type, (ChangesetType)current_type, relation->id());
-            //  If one element doesn't exist, fail the relation
-            split->setError();
-            return split;
-          }
-        }
-      }
+      if (fixPlaceholderFailure(changeset, split, member_id, member_type, element_id, element_type))
+        return split;
     }
     //  See if the hint is something like:
     //   Relation with id  cannot be saved due to Relation with id 1707699
     else if (_failureCheck.matchesRelationFailure(splitHint, element_id, member_id, member_type))
     {
-      if (element_id != 0)
-      {
-        //  If there is a relation id, move just that relation to the split
-        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-        {
-          if (changeset->contains(ElementType::Relation, (ChangesetType)current_type, element_id))
-          {
-            ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
-            //  Add the relation to the split and remove from the changeset
-            split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
-            changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
-            return split;
-          }
-        }
-      }
-      else
-      {
-        //  If no relation id is found, move all relations that contain the id/type combination to the split
-        for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-        {
-          for (ChangesetElementMap::iterator it = _relations[current_type].begin(); it != _relations[current_type].end(); ++it)
-          {
-            ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
-            //  Make sure that the changeset contains this relation and this relation contains the problematic element
-            if (relation->hasMember(member_type, member_id) &&
-                changeset->contains(ElementType::Relation, (ChangesetType)current_type, relation->id()))
-            {
-              //  Add the relation to the split and remove from the changeset
-              split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
-              changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
-              return split;
-            }
-          }
-        }
-      }
+      if (fixRelationFailure(changeset, split, element_id, member_id, member_type))
+        return split;
     }
     //  See if the hint is something like:
     //   Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible.
     else if (_failureCheck.matchesMultiElementFailure(splitHint, element_id, element_type, member_ids, member_type))
     {
-      //  If there is a relation id, move just that relation to the split
-      for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-      {
-        if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
-        {
-          if (element_type == ElementType::Way)
-          {
-            ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[element_id].get());
-            //  Add the way to the split and remove from the changeset
-            if (current_type == ChangesetType::TypeCreate)
-            {
-              moveWay(changeset, split, (ChangesetType)current_type, way, true);
-              split->setError();
-            }
-            else
-            {
-              split->add(element_type, (ChangesetType)current_type, way->id());
-              changeset->remove(element_type, (ChangesetType)current_type, way->id());
-            }
-            return split;
-          }
-          else if (element_type == ElementType::Relation)
-          {
-            ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
-            //  Add the relation to the split and remove from the changeset
-            split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
-            changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
-            split->setError();
-            return split;
-          }
-        }
-      }
+      if (fixMultiElementFailure(changeset, split, element_id, element_type, member_ids, member_type))
+        return split;
     }
     //  See if the hint is something like:
     //   Changeset precondition failed: Precondition failed: Node 5 is still used by ways 67,91
     else if (_failureCheck.matchesChangesetDeletePreconditionFailure(splitHint, element_id, element_type, member_ids, member_type))
     {
-      //  In this case the node 5 cannot be deleted because ways 67 and 91 are still using it.  Ways 67 and 91
-      //  must be modified or deleted first here we figure out how to make that happen
-      for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
-      {
-        if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
-        {
-          //  Remove the offending change from this changeset
-          split->add(element_type, (ChangesetType)current_type, element_id);
-          changeset->remove(element_type, (ChangesetType)current_type, element_id);
-          //  Try to add the blocking element to the split changeset
-          for (int blocking_type = ChangesetType::TypeCreate; blocking_type != ChangesetType::TypeMax; ++blocking_type)
-          {
-            if (member_type == ElementType::Way)
-            {
-              for (size_t i = 0; i < member_ids.size(); ++i)
-              {
-                //  Add the way to the split so that they can be processed together
-                if (_allWays.find(member_ids[i]) != _allWays.end())
-                {
-                  ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[member_ids[i]].get());
-                  moveWay(changeset, split, (ChangesetType)blocking_type, way);
-                }
-              }
-            }
-            else if (member_type == ElementType::Relation)
-            {
-              for (size_t i = 0; i < member_ids.size(); ++i)
-              {
-                //  Add the relation to the split so that they can be processed together
-                if (_allRelations.find(member_ids[i]) != _allRelations.end())
-                {
-                  ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[member_ids[i]].get());
-                  moveRelation(changeset, split, (ChangesetType)blocking_type, relation);
-                }
-              }
-            }
-          }
-          //  Don't send the element again if the blocking elements aren't in the split
-          if (split->size() != member_ids.size() + 1) //  +1 includes element reported
-          {
-            if (split->size() != 1)
-            {
-              //  When some of the containing elements but not all are present,
-              //  move the element to a new changeset info object to fail it
-              ChangesetInfoPtr failing(new ChangesetInfo());
-              failing->add(element_type, (ChangesetType)current_type, element_id);
-              split->remove(element_type, (ChangesetType)current_type, element_id);
-              //  Fail only the element, but not the other elements in split
-              failing->setError();
-              failChangeset(failing);
-            }
-            else
-              split->setError();
-          }
-          //  Split out the offending element and the associated blocking element if possible
-          return split;
-        }
-      }
+      if (fixChangesetDeletePreconditionFailure(changeset, split, element_id, element_type, member_ids, member_type))
+        return split;
     }
     //  See if the hint is something like:
     //   The node with the id 12345 has already been deleted
     else if (_failureCheck.matchesElementGoneDeletedFailure(splitHint, element_id, element_type))
     {
-      //  This should only occur for deletes
-      if (changeset->contains(element_type, ChangesetType::TypeDelete, element_id))
-      {
-        //  Get the element from the correct element map
-        ChangesetElement* element = NULL;
-        if (element_type == ElementType::Node)
-          element = _allNodes[element_id].get();
-        else if (element_type == ElementType::Way)
-          element = _allWays[element_id].get();
-        else if (element_type == ElementType::Relation)
-          element = _allRelations[element_id].get();
-        //  If it was found, update the status to finalized because it doesn't need to be deleted twice
-        if (element)
-        {
-          changeset->remove(element_type, ChangesetType::TypeDelete, element->id());
-          element->setStatus(ChangesetElement::Finalized);
-          _processedCount++;
-          //  Return an empty split so that the rest of the changeset is just pushed back
-          //  on the work queue to continue on
-          return split;
-        }
-      }
+      if (fixElementGoneDeletedFailure(changeset, split, element_id, element_type))
+        return split;
     }
   }
   //  Split the changeset in half (approximately)
@@ -1839,6 +1689,9 @@ void XmlChangeset::updateElement(ChangesetTypeMap& map, long old_id, long new_id
 
 void XmlChangeset::updateLastElement(LastElementInfo& last)
 {
+  //  Validate the last element first
+  if (!last.isValid())
+    return;
   //  Update the ID if it is negative
   ElementType::Type type = last._id.getType().getEnum();
   long id  = last._id.getId();
@@ -2428,6 +2281,274 @@ void XmlChangeset::insertElement(const ChangesetElementPtr& element, ChangesetTy
     elementMap[type][element->id()] = element;
     all[element->id()] = element;
   }
+}
+
+bool XmlChangeset::fixPlaceholderFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+                                         long /*member_id*/, ElementType::Type /*member_type*/,
+                                         long element_id, ElementType::Type element_type)
+{
+  //   Placeholder node not found for reference -145213 in way -5687
+  //  Use the type and id to split the changeset
+  for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+  {
+    if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
+    {
+      if (element_type == ElementType::Way)
+      {
+        ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[element_id].get());
+        //  Add the way to the split and remove from the changeset
+        if (current_type == ChangesetType::TypeCreate)
+        {
+          //  Move all nodes to be created with this way to the split
+          moveWay(changeset, split, (ChangesetType)current_type, way, true);
+        }
+        else
+        {
+          split->add(element_type, (ChangesetType)current_type, way->id());
+          changeset->remove(element_type, (ChangesetType)current_type, way->id());
+        }
+        split->setError();
+        return true;
+      }
+      else if (element_type == ElementType::Relation)
+      {
+        ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
+        //  Add the relation to the split and remove from the changeset
+        split->add(element_type, (ChangesetType)current_type, relation->id());
+        changeset->remove(element_type, (ChangesetType)current_type, relation->id());
+        //  If one element doesn't exist, fail the relation
+        split->setError();
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool XmlChangeset::fixRelationFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+                                      long element_id,
+                                      long member_id, ElementType::Type member_type)
+{
+  //   Relation with id  cannot be saved due to Relation with id 1707699
+  if (element_id != 0)
+  {
+    //  If there is a relation id, move just that relation to the split
+    for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+    {
+      if (changeset->contains(ElementType::Relation, (ChangesetType)current_type, element_id))
+      {
+        ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
+        //  Add the relation to the split and remove from the changeset
+        split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
+        changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
+        return true;
+      }
+    }
+  }
+  else
+  {
+    //  If no relation id is found, move all relations that contain the id/type combination to the split
+    for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+    {
+      for (ChangesetElementMap::iterator it = _relations[current_type].begin(); it != _relations[current_type].end(); ++it)
+      {
+        ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(it->second.get());
+        //  Make sure that the changeset contains this relation and this relation contains the problematic element
+        if (relation->hasMember(member_type, member_id) &&
+            changeset->contains(ElementType::Relation, (ChangesetType)current_type, relation->id()))
+        {
+          //  Add the relation to the split and remove from the changeset
+          split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
+          changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+bool XmlChangeset::fixElementGoneDeletedFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& /*split*/,
+                                                long element_id, ElementType::Type element_type)
+{
+  //   The node with the id 12345 has already been deleted
+  //  This should only occur for deletes
+  if (changeset->contains(element_type, ChangesetType::TypeDelete, element_id))
+  {
+    //  Get the element from the correct element map
+    ChangesetElement* element = NULL;
+    if (element_type == ElementType::Node)
+      element = _allNodes[element_id].get();
+    else if (element_type == ElementType::Way)
+      element = _allWays[element_id].get();
+    else if (element_type == ElementType::Relation)
+      element = _allRelations[element_id].get();
+    //  If it was found, update the status to finalized because it doesn't need to be deleted twice
+    if (element)
+    {
+      changeset->remove(element_type, ChangesetType::TypeDelete, element->id());
+      element->setStatus(ChangesetElement::Finalized);
+      _processedCount++;
+      //  Return an empty split so that the rest of the changeset is just pushed back
+      //  on the work queue to continue on
+      return true;
+    }
+  }
+  return false;
+}
+
+bool XmlChangeset::fixMultiElementFailure(ChangesetInfoPtr changeset, ChangesetInfoPtr& split,
+                                          long element_id, ElementType::Type element_type,
+                                          const std::vector<long>& /*member_ids*/, ElementType::Type /*member_type*/)
+{
+  //   Relation with id -2 requires the relations with id in 1707148,1707249, which either do not exist, or are not visible.
+  //  If there is a relation id, move just that relation to the split
+  for (int current_type = ChangesetType::TypeCreate; current_type != ChangesetType::TypeMax; ++current_type)
+  {
+    if (changeset->contains(element_type, (ChangesetType)current_type, element_id))
+    {
+      if (element_type == ElementType::Way)
+      {
+        ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[element_id].get());
+        //  Creates and deletes of ways need to include any created or deleted nodes too
+        if (current_type != ChangesetType::TypeModify)
+        {
+          moveWay(changeset, split, (ChangesetType)current_type, way, true);
+          split->setError();
+        }
+        else
+        {
+          split->add(element_type, (ChangesetType)current_type, way->id());
+          changeset->remove(element_type, (ChangesetType)current_type, way->id());
+        }
+        return true;
+      }
+      else if (element_type == ElementType::Relation)
+      {
+        ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get());
+        //  Add the relation to the split and remove from the changeset
+        //  Creates and modifies the relation can just be moved to the error changeset
+        if (ChangesetType::TypeDelete != (ChangesetType)current_type)
+        {
+          split->add(ElementType::Relation, (ChangesetType)current_type, relation->id());
+          changeset->remove(ElementType::Relation, (ChangesetType)current_type, relation->id());
+        }
+        else
+        {
+          //  Deletes require that the members are moved over to the failed changeset too
+          moveRelation(changeset, split, (ChangesetType)current_type, relation, true);
+        }
+        split->setError();
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool XmlChangeset::fixChangesetDeletePreconditionFailure(ChangesetInfoPtr changeset,
+                                                         ChangesetInfoPtr& split,
+                                                         long element_id,
+                                                         ElementType::Type element_type,
+                                                         const std::vector<long>& member_ids,
+                                                         ElementType::Type member_type)
+{
+  //   Changeset precondition failed: Precondition failed: Node 5 is still used by ways 67,91
+  //  In this case the node 5 cannot be deleted because ways 67 and 91 are still using it.  Ways 67 and 91
+  //  must be modified or deleted first here we figure out how to make that happen
+  //  This error can only be triggered if the element is being deleted
+  const ChangesetType type = ChangesetType::TypeDelete;
+  if (changeset->contains(element_type, type, element_id))
+  {
+    ChangesetInfoPtr temp_split(new ChangesetInfo());
+    //  Add the offending change from the temp changeset
+    temp_split->add(element_type, type, element_id);
+    //  Check if the blocking element is part of this changeset, it could be
+    //  modified to no longer include this element or be deleted itself (creates aren't valid here)
+    for (int blocking_type = ChangesetType::TypeModify; blocking_type != ChangesetType::TypeMax; ++blocking_type)
+    {
+      //  Try to add the blocking element to the split changeset
+      if (member_type == ElementType::Way)
+      {
+        for (size_t i = 0; i < member_ids.size(); ++i)
+        {
+          //  Add the way to the split so that they can be processed together
+          if (_ways[blocking_type].find(member_ids[i]) != _ways[blocking_type].end())
+          {
+            ChangesetWay* way = dynamic_cast<ChangesetWay*>(_allWays[member_ids[i]].get());
+            //  If the way is in this changeset, move it, if it isn't but it can be sent,
+            //  add it, and if neither are true, fail the element in the split
+            if (changeset->contains(member_type, (ChangesetType)blocking_type, way->id()))
+              moveWay(changeset, temp_split, (ChangesetType)blocking_type, way);
+            else if (canSend(way))
+              addWay(temp_split, (ChangesetType)blocking_type, way);
+          }
+        }
+      }
+      else if (member_type == ElementType::Relation)
+      {
+        for (size_t i = 0; i < member_ids.size(); ++i)
+        {
+          //  Add the relation to the split so that they can be processed together
+          if (_relations[blocking_type].find(member_ids[i]) != _relations[blocking_type].end())
+          {
+            ChangesetRelation* relation = dynamic_cast<ChangesetRelation*>(_allRelations[member_ids[i]].get());
+            //  If the way is in this changeset, move it, if it isn't but it can be sent,
+            //  add it, and if neither are true, fail the element in the split
+            if (changeset->contains(member_type, (ChangesetType)blocking_type, relation->id()))
+              moveRelation(changeset, temp_split, (ChangesetType)blocking_type, relation);
+            else if (canSend(relation))
+              addRelation(temp_split, (ChangesetType)blocking_type, relation);
+          }
+        }
+      }
+    }
+    //  Don't send the element again if the blocking elements aren't in the split
+    if (temp_split->size() != member_ids.size() + 1) //  +1 includes element reported
+    {
+      ChangesetInfoPtr failing(new ChangesetInfo());
+      //  Move the offending element (and its children if applicable) to the error changeset
+      switch(element_type)
+      {
+      case ElementType::Node:
+        moveNode(changeset, failing, type, dynamic_cast<ChangesetNode*>(_allNodes[element_id].get()), true);
+        break;
+      case ElementType::Way:
+        moveWay(changeset, failing, type, dynamic_cast<ChangesetWay*>(_allWays[element_id].get()), true);
+        break;
+      case ElementType::Relation:
+        moveRelation(changeset, failing, type, dynamic_cast<ChangesetRelation*>(_allRelations[element_id].get()), true);
+        break;
+      default:
+        break;
+      }
+      failing->setError();
+      //  When only one element was found in this changeset, return the failing changeset
+      if (temp_split->size() == 1)
+      {
+        split = failing;
+        return true;
+      }
+      else
+      {
+        //  When some of the containing elements but not all are present, fail the original
+        failChangeset(failing);
+        temp_split->remove(element_type, type, element_id);
+        split = temp_split;
+        return true;
+      }
+    }
+    else
+    {
+      //  The temporary split has everthing to make this work (all parent elements)
+      split = temp_split;
+      //  Remove the original from the changeset so it isn't duplicated
+      changeset->remove(element_type, type, element_id);
+    }
+    //  Split out the offending element and the associated blocking element if possible
+    return true;
+  }
+  return false;
 }
 
 ChangesetInfo::ChangesetInfo()

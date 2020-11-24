@@ -74,7 +74,8 @@ OsmApiWriter::OsmApiWriter(const QUrl &url, const QString &changeset)
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
     _apiId(0),
     _threadsCanExit(false),
-    _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap())
+    _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap()),
+    _timeout(ConfigOptions().getChangesetApidbTimeout())
 {
   _changesets.push_back(changeset);
   if (isSupported(url))
@@ -103,7 +104,8 @@ OsmApiWriter::OsmApiWriter(const QUrl& url, const QList<QString>& changesets)
     _debugOutputPath(ConfigOptions().getChangesetApidbWriterDebugOutputPath()),
     _apiId(0),
     _threadsCanExit(false),
-    _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap())
+    _throttleCgiMap(ConfigOptions().getChangesetApidbWritersThrottleCgimap()),
+    _timeout(ConfigOptions().getChangesetApidbTimeout())
 {
   if (isSupported(url))
     _url = url;
@@ -272,9 +274,18 @@ bool OsmApiWriter::apply()
   _stats.append(SingleStat("Total Nodes in Changeset", _changeset.getTotalNodeCount()));
   _stats.append(SingleStat("Total Ways in Changeset", _changeset.getTotalWayCount()));
   _stats.append(SingleStat("Total Relations in Changeset", _changeset.getTotalRelationCount()));
-  _stats.append(SingleStat("Total Elements Created", _changeset.getTotalCreateCount()));
+  _stats.append(SingleStat(" Total Elements Created", _changeset.getTotalCreateCount()));
+  _stats.append(SingleStat("          Nodes Created", _changeset.getNodeCountByType(ChangesetType::TypeCreate)));
+  _stats.append(SingleStat("           Ways Created", _changeset.getWayCountByType(ChangesetType::TypeCreate)));
+  _stats.append(SingleStat("      Relations Created", _changeset.getRelationCountByType(ChangesetType::TypeCreate)));
   _stats.append(SingleStat("Total Elements Modified", _changeset.getTotalModifyCount()));
-  _stats.append(SingleStat("Total Elements Deleted", _changeset.getTotalDeleteCount()));
+  _stats.append(SingleStat("         Nodes Modified", _changeset.getNodeCountByType(ChangesetType::TypeModify)));
+  _stats.append(SingleStat("          Ways Modified", _changeset.getWayCountByType(ChangesetType::TypeModify)));
+  _stats.append(SingleStat("     Relations Modified", _changeset.getRelationCountByType(ChangesetType::TypeModify)));
+  _stats.append(SingleStat(" Total Elements Deleted", _changeset.getTotalDeleteCount()));
+  _stats.append(SingleStat("          Nodes Deleted", _changeset.getNodeCountByType(ChangesetType::TypeDelete)));
+  _stats.append(SingleStat("           Ways Deleted", _changeset.getWayCountByType(ChangesetType::TypeDelete)));
+  _stats.append(SingleStat("      Relations Deleted", _changeset.getRelationCountByType(ChangesetType::TypeDelete)));
   _stats.append(SingleStat("Total Errors", _changeset.getFailedCount()));
   //  Return successfully
   return success;
@@ -633,6 +644,7 @@ void OsmApiWriter::setConfiguration(const Settings& conf)
   _debugOutput = options.getChangesetApidbWriterDebugOutput();
   _debugOutputPath = options.getChangesetApidbWriterDebugOutputPath();
   _throttleCgiMap = options.getChangesetApidbWritersThrottleCgimap();
+  _timeout = options.getChangesetApidbTimeout();
 }
 
 bool OsmApiWriter::isSupported(const QUrl &url)
@@ -658,7 +670,7 @@ bool OsmApiWriter::queryCapabilities(HootNetworkRequestPtr request)
   {
     QUrl capabilities = _url;
     capabilities.setPath(OsmApiEndpoints::API_PATH_CAPABILITIES);
-    request->networkRequest(capabilities);
+    request->networkRequest(capabilities, _timeout);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     QString printableUrl = capabilities.toString(QUrl::RemoveUserInfo);
     HootNetworkRequest::removeIpFromUrlString(printableUrl, capabilities);
@@ -682,7 +694,7 @@ bool OsmApiWriter::validatePermissions(HootNetworkRequestPtr request)
   {
     QUrl permissions = _url;
     permissions.setPath(OsmApiEndpoints::API_PATH_PERMISSIONS);
-    request->networkRequest(permissions);
+    request->networkRequest(permissions, _timeout);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     success = _parsePermissions(responseXml);
   }
@@ -706,7 +718,7 @@ bool OsmApiWriter::usingCgiMap(HootNetworkRequestPtr request)
     QString bboxQuery = GeometryUtils::toConfigString(envelope);
     query.addQueryItem("bbox", bboxQuery);
     map.setQuery(query);
-    request->networkRequest(map);
+    request->networkRequest(map, _timeout);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     QRegExp regex("generator=(\"|')CGImap", Qt::CaseInsensitive);
     cgimap = responseXml.contains(regex);
@@ -818,7 +830,7 @@ long OsmApiWriter::_createChangeset(HootNetworkRequestPtr request,
     headers[QNetworkRequest::ContentTypeHeader] = HootNetworkUtils::CONTENT_TYPE_XML;
     headers[QNetworkRequest::ContentLengthHeader] = content.length();
 
-    request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation, content);
+    request->networkRequest(changeset, _timeout, QNetworkAccessManager::Operation::PutOperation, content);
 
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     http_status = request->getHttpStatus();
@@ -841,7 +853,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
   {
     QUrl changeset = _url;
     changeset.setPath(QString(OsmApiEndpoints::API_PATH_CLOSE_CHANGESET).arg(changeset_id));
-    request->networkRequest(changeset, QNetworkAccessManager::Operation::PutOperation);
+    request->networkRequest(changeset, _timeout, QNetworkAccessManager::Operation::PutOperation);
     QString responseXml = QString::fromUtf8(request->getResponseContent().data());
     switch (request->getHttpStatus())
     {
@@ -856,7 +868,7 @@ void OsmApiWriter::_closeChangeset(HootNetworkRequestPtr request, long changeset
       _changesetCountMutex.lock();
       _changesetCount++;
       //  Keep track of the last element information
-      if (!last._id.isNull())
+      if (last.isValid())
       {
         _lastElement = last;
         last = LastElementInfo();
@@ -912,7 +924,7 @@ OsmApiWriter::OsmApiFailureInfoPtr OsmApiWriter::_uploadChangeset(HootNetworkReq
     headers[QNetworkRequest::ContentTypeHeader] = HootNetworkUtils::CONTENT_TYPE_XML;
     headers[QNetworkRequest::ContentLengthHeader] = content.length();
 
-    request->networkRequest(change, headers, QNetworkAccessManager::Operation::PostOperation, content);
+    request->networkRequest(change, _timeout, headers, QNetworkAccessManager::Operation::PostOperation, content);
 
     info->response = QString::fromUtf8(request->getResponseContent().data());
     info->status = request->getHttpStatus();
@@ -1055,7 +1067,7 @@ QString OsmApiWriter::_getElement(HootNetworkRequestPtr request, const QString& 
   {
     QUrl get = _url;
     get.setPath(endpoint);
-    request->networkRequest(get);
+    request->networkRequest(get, _timeout);
     if (request->getHttpStatus() == HttpResponseCode::HTTP_OK)
       return QString::fromUtf8(request->getResponseContent().data());
     else

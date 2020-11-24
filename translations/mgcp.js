@@ -333,75 +333,6 @@ mgcp = {
 
   // ##### Start of the xxToOsmxx Block #####
 
-  // Untangle MGCP attributes & OSM tags
-  // Some people have been editing OSM files and inserting MGCP attributes
-  untangleAttributes: function (attrs, tags)
-  {
-    // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag
-    // We need to unpack this before we can do anything
-    if (attrs.other_tags)
-    {
-      var tList = attrs.other_tags.split('","');
-
-      delete attrs.other_tags;
-
-      for (var val in tList)
-      {
-        vList = tList[val].split('"=>"');
-
-        attrs[vList[0].replace('"','')] = vList[1].replace('"','');
-
-        // Debug
-        //print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
-      }
-    }
-
-    for (var col in attrs)
-    {
-      // Sort out FCODE funkyness:  f_CODE, F_Code etc
-      var tKey = col.toLowerCase();
-      tKey = tKey.replace(/\s/g, '').replace(/_/g, '');;
-
-      if (tKey == 'fcode' && col !== 'F_CODE')
-      {
-        attrs.F_CODE = attrs[col];
-        delete attrs[col];
-        continue;
-      }
-
-      // Check for an FCODE as a tag
-      if (col in mgcp.fcodeLookup['F_CODE'])
-      {
-        attrs.F_CODE = col;
-        delete attrs[col];
-        continue;
-      }
-
-      // Stuff to be ignored or that gets swapped later - See applyToOsmPreProcessing
-      if (['FCODE','error_circ','CPYRT_NOTE','SRC_INFO','SRC_DATE','SMC'].indexOf(col) > -1) continue;
-
-      // Look for Attributes
-      if (col in mgcp.numLookup) continue;
-
-      if (col in mgcp.txtLookup) continue;
-
-      if (col in mgcp.lookup) continue;
-
-      // Drop the "GEOM" attribute
-      if (col == 'GEOM')
-      {
-        delete attrs[col];
-        continue;
-      }
-
-      // Not an Attribute so push it to the tags object
-      tags[col] = attrs[col];
-      delete attrs[col];
-    }
-
-  }, // End attribute attributeUntangle
-
-
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
   {
     // Drop the FCSUBTYPE since we don't use it
@@ -440,15 +371,6 @@ mgcp = {
         // debug: Comment this out to leave all of the No Info stuff in for testing
         delete attrs[col];
         continue;
-      }
-
-      // Push the attribute to upper case - if needed
-      var c = col.toUpperCase();
-      if (c !== col)
-      {
-        attrs[c] = attrs[col];
-        delete attrs[col];
-        col = c; // For the rest of this loop iteration
       }
 
       // Sort out units - if needed
@@ -2121,29 +2043,24 @@ mgcp = {
       mgcp.lookup = translate.createLookup(mgcp.rules.one2one);
     }
 
-    if (mgcp.txtLookup == undefined)
+    if (mgcp.rules.txtBiased == undefined)
     {
-      mgcp.txtLookup = {};
+      mgcp.rules.txtBiased = {};
       // Add the MGCPv3.0 specific attributes to the v4.0/common attribute table
-      for (var i in mgcp.rules.txtBiased) mgcp.txtLookup[i] = mgcp.rules.txtBiased[i];
-      for (var i in mgcp.rules.txtBiasedV3) mgcp.txtLookup[i] = mgcp.rules.txtBiasedV3[i];
+      for (var i in mgcp.rules.txtBiasedV4) mgcp.rules.txtBiased[i] = mgcp.rules.txtBiasedV4[i];
+      for (var i in mgcp.rules.txtBiasedV3) mgcp.rules.txtBiased[i] = mgcp.rules.txtBiasedV3[i];
     }
 
-    if (mgcp.numLookup == undefined)
+    if (mgcp.rules.numBiased == undefined)
     {
-      mgcp.numLookup = {};
-      for (var i in mgcp.rules.numBiased) mgcp.numLookup[i] = mgcp.rules.numBiased[i];
-      for (var i in mgcp.rules.numBiasedV3) mgcp.numLookup[i] = mgcp.rules.numBiasedV3[i];
+      mgcp.rules.numBiased = {};
+      for (var i in mgcp.rules.numBiasedV4) mgcp.rules.numBiased[i] = mgcp.rules.numBiasedV4[i];
+      for (var i in mgcp.rules.numBiasedV3) mgcp.rules.numBiased[i] = mgcp.rules.numBiasedV3[i];
     }
-
-
-    // A little cleaning before we try to untangle stuff
-    delete attrs.SHAPE_Length;
-    delete attrs.SHAPE_Area;
 
     // Untangle MGCP attributes & OSM tags
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import
-    mgcp.untangleAttributes(attrs, tags);
+    translate.untangleAttributes(attrs,tags,mgcp);
 
     // Debug:
     if (mgcp.configIn.OgrDebugDumptags == 'true')
@@ -2168,7 +2085,7 @@ mgcp = {
         else
         {
           // Debug
-          print('Tried to replace: ' + ftag[0] + '=' + tags[ftag[0]] + '  with ' + ftag[1]);
+          hoot.logWarn('Tried to replace: ' + ftag[0] + '=' + tags[ftag[0]] + '  with ' + ftag[1]);
         }
         // Debug: Dump out the tags from the FCODE
         // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
@@ -2187,8 +2104,8 @@ mgcp = {
 
     // apply the simple number and text biased rules
     // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM
-    translate.numToOSM(notUsedAttrs, tags, mgcp.numLookup);
-    translate.txtToOSM(notUsedAttrs, tags,  mgcp.txtLookup);
+    translate.numToOSM(notUsedAttrs, tags, mgcp.rules.numBiased);
+    translate.txtToOSM(notUsedAttrs, tags,  mgcp.rules.txtBiased);
 
     // one 2 one
     translate.applyOne2One(notUsedAttrs, tags, mgcp.lookup, {'k':'v'},[]);
@@ -2302,8 +2219,8 @@ mgcp = {
     if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
 
     // apply the simple number and text biased rules
-    translate.numToOgr(attrs, notUsedTags, mgcp.rules.numBiased,mgcp.rules.intList,transMap);
-    translate.txtToOgr(attrs, notUsedTags,  mgcp.rules.txtBiased,transMap);
+    translate.numToOgr(attrs, notUsedTags, mgcp.rules.numBiasedV4,mgcp.rules.intList,transMap);
+    translate.txtToOgr(attrs, notUsedTags,  mgcp.rules.txtBiasedV4,transMap);
 
     // one 2 one
     translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, transMap);
