@@ -202,7 +202,7 @@ void ChangesetReplacementCreator::create(
   }
 
   // see #4376
-  //_syncInputVersions(refMap, secMap);
+  _syncInputVersions(refMap, secMap);
 
   _currentTask++;
 
@@ -256,16 +256,16 @@ void ChangesetReplacementCreator::create(
   // errors when the resulting changesets are applied.
 
   // see #4376
-//  ElementIdRemapper secIdRemapper(
-//    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-//    ElementCriterionPtr(
-//      new ChainCriterion(
-//        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-//        ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)))));
-//  LOG_INFO(secIdRemapper.getInitStatusMessage());
-//  secIdRemapper.apply(secMap);
-//  LOG_INFO(secIdRemapper.getCompletedStatusMessage());
-//  OsmMapWriterFactory::writeDebugMap(secMap, _changesetId + "-sec-after-id-remapping");
+  ElementIdRemapper secIdRemapper(
+    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+    ElementCriterionPtr(
+      new ChainCriterion(
+        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+        ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)))));
+  LOG_INFO(secIdRemapper.getInitStatusMessage());
+  secIdRemapper.apply(secMap);
+  LOG_INFO(secIdRemapper.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(secMap, _changesetId + "-sec-after-id-remapping");
 
   // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
@@ -326,9 +326,9 @@ void ChangesetReplacementCreator::create(
   immediatelyConnectedOutOfBoundsWays.reset();
 
   // see #4376
-//  secIdRemapper.restore(combinedMap);
-//  LOG_INFO(secIdRemapper.getRestoreCompletedStatusMessage());
-//  OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-combined-after-id-restoring");
+  secIdRemapper.restore(combinedMap);
+  LOG_INFO(secIdRemapper.getRestoreCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-combined-after-id-restoring");
 
   if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
   {
@@ -610,15 +610,15 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
 {
   // load the data that we're replacing with; We don't keep source IDs here to avoid conflict with
   // the reference data. Data from the two maps will have to be combined during snapping.
-  OsmMapPtr secMap =
-    _loadInputMap(
-      "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
-      _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
-  // see #4376
 //  OsmMapPtr secMap =
 //    _loadInputMap(
-//      "sec", _input2, true, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+//      "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
 //      _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
+  // see #4376
+  OsmMapPtr secMap =
+    _loadInputMap(
+      "sec", _input2, true, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+      _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
 
   _removeMetadataTags(secMap);
 

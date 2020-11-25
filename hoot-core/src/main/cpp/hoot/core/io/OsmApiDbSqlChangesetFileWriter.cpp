@@ -229,19 +229,15 @@ void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
 
-  // We only grab and assign a new id if we have a new element with a negative id, since we'll be
-  // writing this directly to the database and negative ids aren't allowed.
+  // We always remap IDs for create statements to mimic the behavior of creation via public OSM API.
+  // and avoid issuing a create statement for an existing element ID. We can't simply set negative
+  // IDs here, as there's no remapping procedure in OsmApiDbSqlChangesetApplier to change them to
+  // positive and negative IDs aren't allowed in the db. Arguably, we could move the remapping to
+  // OsmApiDbSqlChangesetApplier, but that would make debugging more difficult when viewing a
+  // changeset file with mismatching IDs compared to what was actually written to the db.
   LOG_TRACE("ID before: " << changeElement->getElementId());
-  long id;
-  if (changeElement->getId() < 0)
-  {
-    id = _db.getNextId(element->getElementType().getEnum());
-    _remappedIds[changeElement->getElementId()] = ElementId(changeElement->getElementType(), id);
-  }
-  else
-  {
-    id = changeElement->getId();
-  }
+  const long id = _db.getNextId(element->getElementType().getEnum());
+  _remappedIds[changeElement->getElementId()] = ElementId(changeElement->getElementType(), id);
   LOG_TRACE("ID after: " << ElementId(changeElement->getElementType(), id));
 
   changeElement->setId(id);
@@ -274,7 +270,7 @@ void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
       _createRelationMembers(std::dynamic_pointer_cast<const Relation>(changeElement));
       break;
     default:
-      //node
+      // node
       break;
   }
 }

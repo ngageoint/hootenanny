@@ -3,23 +3,23 @@
     <create>
         <node id="-1" version="0" lat="36.0446989852555006" lon="-115.0356715999999864"/>
         <node id="-2" version="0" lat="36.0445588852547090" lon="-115.0357530999999938"/>
-        <node id="-3" version="0" lat="36.0440883852515057" lon="-115.0373038999999977"/>
-        <node id="-4" version="0" lat="36.0440809852514334" lon="-115.0371976999999930"/>
-        <node id="-5" version="0" lat="36.0440812852515151" lon="-115.0372493999999932"/>
-        <node id="-6" version="0" lat="36.0440926852514849" lon="-115.0371482999999984"/>
-        <node id="-7" version="0" lat="36.0421198852382858" lon="-115.0365670000000051">
-            <tag k="noexit" v="yes"/>
-        </node>
-        <node id="-8" version="0" lat="36.0430928852447821" lon="-115.0365884999999935"/>
-        <node id="-9" version="0" lat="36.0458668852633650" lon="-115.0350129999999922"/>
-        <node id="-10" version="0" lat="36.0451688852587040" lon="-115.0353229999999911"/>
-        <node id="-11" version="0" lat="36.0446458852551004" lon="-115.0357110000000063"/>
-        <node id="-12" version="0" lat="36.0444328852538405" lon="-115.0358140000000020"/>
-        <node id="-13" version="0" lat="36.0440938852515274" lon="-115.0358759999999876"/>
-        <node id="-14" version="0" lat="36.0440899852514818" lon="-115.0366002000000094"/>
-        <node id="-15" version="0" lat="36.0441128220869658" lon="-115.0373297339083507">
+        <node id="-3" version="0" lat="36.0440938852515274" lon="-115.0358759999999876"/>
+        <node id="-4" version="0" lat="36.0440899852514818" lon="-115.0366002000000094"/>
+        <node id="-5" version="0" lat="36.0441128220869658" lon="-115.0373297339083507">
             <tag k="highway" v="turning_circle"/>
         </node>
+        <node id="-6" version="0" lat="36.0440883852515057" lon="-115.0373038999999977"/>
+        <node id="-7" version="0" lat="36.0440809852514334" lon="-115.0371976999999930"/>
+        <node id="-8" version="0" lat="36.0440812852515151" lon="-115.0372493999999932"/>
+        <node id="-9" version="0" lat="36.0440926852514849" lon="-115.0371482999999984"/>
+        <node id="-10" version="0" lat="36.0458668852633650" lon="-115.0350129999999922"/>
+        <node id="-11" version="0" lat="36.0451688852587040" lon="-115.0353229999999911"/>
+        <node id="-12" version="0" lat="36.0446458852551004" lon="-115.0357110000000063"/>
+        <node id="-13" version="0" lat="36.0444328852538405" lon="-115.0358140000000020"/>
+        <node id="-14" version="0" lat="36.0421198852382858" lon="-115.0365670000000051">
+            <tag k="noexit" v="yes"/>
+        </node>
+        <node id="-15" version="0" lat="36.0430928852447821" lon="-115.0365884999999935"/>
     </create>
     <delete>
         <node id="374912" version="1" lat="36.0440119911731855" lon="-115.0365719999999925"/>
@@ -35,26 +35,27 @@
     </delete>
     <create>
         <way id="-1" version="0">
-            <nd ref="501720"/>
-            <nd ref="510740"/>
+            <nd ref="-5"/>
+            <nd ref="-6"/>
             <nd ref="-8"/>
-            <tag k="tiger:tlid" v="201929809:201929813"/>
-            <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+            <nd ref="-7"/>
+            <nd ref="-9"/>
+            <nd ref="-4"/>
+            <nd ref="-3"/>
             <tag k="highway" v="residential"/>
-            <tag k="name" v="Anorak Avenue"/>
-            <tag k="tiger:separated" v="no"/>
+            <tag k="name" v="Lilac Echo Avenue"/>
             <tag k="tiger:name_type" v="Ave"/>
-            <tag k="source:datetime" v="2010-03-27T21:27:08Z"/>
+            <tag k="source:datetime" v="2018-02-18T01:07:42Z"/>
             <tag k="tiger:cfcc" v="A41"/>
             <tag k="tiger:county" v="Clark, NV"/>
-            <tag k="tiger:name_base" v="Anorak"/>
+            <tag k="tiger:name_base" v="Lilac Echo"/>
             <tag k="tiger:reviewed" v="no"/>
         </way>
         <way id="-2" version="0">
-            <nd ref="-14"/>
-            <nd ref="-8"/>
+            <nd ref="-4"/>
+            <nd ref="-15"/>
             <nd ref="404517"/>
-            <nd ref="-7"/>
+            <nd ref="-14"/>
             <tag k="highway" v="residential"/>
             <tag k="name" v="Teller Street"/>
             <tag k="tiger:name_type" v="St"/>
@@ -65,34 +66,17 @@
             <tag k="tiger:reviewed" v="no"/>
         </way>
         <way id="-3" version="0">
-            <nd ref="-15"/>
-            <nd ref="-3"/>
-            <nd ref="-5"/>
-            <nd ref="-4"/>
-            <nd ref="-6"/>
-            <nd ref="-14"/>
-            <nd ref="-13"/>
-            <tag k="highway" v="residential"/>
-            <tag k="name" v="Lilac Echo Avenue"/>
-            <tag k="tiger:name_type" v="Ave"/>
-            <tag k="source:datetime" v="2018-02-18T01:07:42Z"/>
-            <tag k="tiger:cfcc" v="A41"/>
-            <tag k="tiger:county" v="Clark, NV"/>
-            <tag k="tiger:name_base" v="Lilac Echo"/>
-            <tag k="tiger:reviewed" v="no"/>
-        </way>
-        <way id="-4" version="0">
             <nd ref="-3"/>
             <nd ref="510740"/>
-            <nd ref="-13"/>
+            <nd ref="-3"/>
             <nd ref="510741"/>
-            <nd ref="-12"/>
+            <nd ref="-13"/>
             <nd ref="-2"/>
-            <nd ref="-11"/>
+            <nd ref="-12"/>
             <nd ref="-1"/>
-            <nd ref="-10"/>
+            <nd ref="-11"/>
             <nd ref="368231"/>
-            <nd ref="-9"/>
+            <nd ref="-10"/>
             <nd ref="482109"/>
             <tag k="highway" v="residential"/>
             <tag k="name" v="Bailey Island Drive"/>
@@ -101,6 +85,22 @@
             <tag k="tiger:cfcc" v="A41"/>
             <tag k="tiger:county" v="Clark, NV"/>
             <tag k="tiger:name_base" v="Bailey Island"/>
+            <tag k="tiger:reviewed" v="no"/>
+        </way>
+        <way id="-4" version="0">
+            <nd ref="501720"/>
+            <nd ref="510740"/>
+            <nd ref="-15"/>
+            <tag k="tiger:tlid" v="201929809:201929813"/>
+            <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+            <tag k="highway" v="residential"/>
+            <tag k="name" v="Anorak Avenue"/>
+            <tag k="tiger:separated" v="no"/>
+            <tag k="tiger:name_type" v="Ave"/>
+            <tag k="source:datetime" v="2010-03-27T21:27:08Z"/>
+            <tag k="tiger:cfcc" v="A41"/>
+            <tag k="tiger:county" v="Clark, NV"/>
+            <tag k="tiger:name_base" v="Anorak"/>
             <tag k="tiger:reviewed" v="no"/>
         </way>
     </create>

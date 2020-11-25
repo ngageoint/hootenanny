@@ -156,7 +156,7 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
         const QStringList captures = regex.capturedTexts();
         if (pos > -1)
         {
-          //first capture is the whole string...skip it
+          // first capture is the whole string...skip it
           for (int i = 1; i < 5; i++)
           {
             const QString oldCoordStr = captures.at(i);
@@ -286,8 +286,8 @@ bool OsmApiDbSqlChangesetApplier::conflictExistsInTarget(const QString& boundsSt
     LOG_VARD(changesetBounds.toString());
     if (changesetBounds.intersects(bounds))
     {
-      //logging as info instead of error since I couldn't get the log output disabled in the test
-      //with the log disabler
+      // logging as info instead of error since I couldn't get the log output disabled in the test
+      // with the log disabler
       LOG_INFO(
         "Conflict exists at bounds " << changesetBounds.toString() << "for input bounds " <<
         boundsStr << " and input time " << timeStr);
