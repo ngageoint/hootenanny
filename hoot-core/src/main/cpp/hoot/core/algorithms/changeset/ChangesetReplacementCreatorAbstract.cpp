@@ -325,6 +325,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
   OsmMapWriterFactory::writeDebugMap(
     map, _changesetId + "-" + map->getName() + "-after-cropped-load");
 
+  MemoryUsageChecker::getInstance().check();
+
   return map;
 }
 
@@ -868,6 +870,8 @@ void ChangesetReplacementCreatorAbstract::_cleanup(OsmMapPtr& map)
 
   // get out of orthographic
   MapProjector::projectToWgs84(map);
+
+  OsmMapWriterFactory::writeDebugMap(map, _changesetId + "-" + map->getName() + "-after-cleanup");
 }
 
 void ChangesetReplacementCreatorAbstract::_synchronizeIds(

@@ -132,6 +132,7 @@ NodePtr HootApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& 
     node->setStatus(_status);
   }
 
+  LOG_VART(node->getElementId());
   LOG_VART(node->getStatus());
   LOG_VART(node->getVersion());
 

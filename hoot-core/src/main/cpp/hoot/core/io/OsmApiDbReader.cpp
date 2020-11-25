@@ -148,12 +148,13 @@ NodePtr OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& m
   // possibly set a new remapped ID on the way.
   _parseAndSetTagsOnElement(ElementId(ElementType::Node, rawId), node);
   _updateMetadataOnElement(node);
-  //we want the reader's status to always override any existing status
+  // We want the reader's status to always override any existing status.
   if (!_keepStatusTag && _status != Status::Invalid)
   {
     node->setStatus(_status);
   }
 
+  LOG_VART(node->getElementId());
   LOG_VART(node->getStatus());
   LOG_VART(node->getVersion());
 

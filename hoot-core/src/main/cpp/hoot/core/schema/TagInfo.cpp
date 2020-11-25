@@ -126,15 +126,6 @@ QString TagInfo::_getInfo(const QString& input)
       while (iterator->hasNext())
       {
         std::shared_ptr<Element> e = iterator->next();
-
-//        // Interesting problem: If there are no elements in the file, e == 0
-//        // Need to look at the ElementIterator.cpp file to fix this.
-//        if (e == 0)
-//        {
-//          LOG_WARN("No features in: " + input + " " + layer);
-//          break;
-//        }
-
         _parseElement(e, result);
 
         numElementsProcessed++;
@@ -160,9 +151,9 @@ QString TagInfo::_getInfo(const QString& input)
   }
   else
   {
-    //At this time, the only unstreamable readers are the JSON readers.  If this capability is
-    //needed for JSON data, then either those readers can implement PartialOsmMapReader or the
-    //needed readed code can be manually added to this class.
+    // At this time, the only unstreamable readers are the JSON readers.  If this capability is
+    // needed for JSON data, then either those readers can implement PartialOsmMapReader or the
+    // needed readed code can be manually added to this class.
 
     if (!OsmMapReaderFactory::hasElementInputStream(inputInfo))
     {

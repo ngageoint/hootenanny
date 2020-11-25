@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -46,6 +47,9 @@ public:
   static std::string className() { return "hoot::ElementIdRemapper"; }
 
   ElementIdRemapper();
+  ElementIdRemapper(const ElementCriterionPtr& remapFilter);
+  ElementIdRemapper(
+    const ElementCriterionPtr& remapFilter, const ElementCriterionPtr& restoreFilter);
   virtual ~ElementIdRemapper() = default;
 
   /**
@@ -70,15 +74,27 @@ public:
     return "Remapped " + StringUtils::formatLargeNumber(_numAffected) + " element IDs.";
   }
 
+  QString getRestoreCompletedStatusMessage() const
+  {
+    return "Restored " + StringUtils::formatLargeNumber(_restoredIds) + " element IDs.";
+  }
+
   virtual QString getDescription() const
-  { return "Remaps element IDs and restores original IDs"; }
+  { return "Remaps element IDs and is capable of restoring the IDs"; }
 
   QMap<ElementId, ElementId> getIdMappings() const { return _originalToRemappedElementIds; }
   int getNumRestoredIds() const { return _restoredIds; }
 
 private:
 
+  // the mappings; needed for restoring the original ids
   QMap<ElementId, ElementId> _originalToRemappedElementIds;
+  // optional filter that determines which elements have their IDs remapped
+  ElementCriterionPtr _remapFilter;
+  // optional filter that determines which elements have their IDs restored; if this is null, the
+  // _remapFilter is used to determine what is restored
+  ElementCriterionPtr _restoreFilter;
+  // the restored ID count
   int _restoredIds;
 };
 

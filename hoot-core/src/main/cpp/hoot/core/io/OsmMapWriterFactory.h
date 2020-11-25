@@ -87,6 +87,11 @@ public:
                             std::shared_ptr<OGRSpatialReference> spatRef, const QString& title = "",
                             NetworkMatcherPtr matcher = NetworkMatcherPtr());
 
+  /**
+   * Reset the debug map count for output file naming purposes; useful in unit tests that
+   */
+  static void resetDebugMapCount() { _debugMapCount = 1; }
+
 private:
 
   static unsigned int _debugMapCount;

@@ -40,6 +40,7 @@
 #include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/UuidHelper.h>
 
 namespace hoot
 {
@@ -74,6 +75,11 @@ OsmMapPtr ChangesetTaskGridReplacer::replace(
   _dataToReplaceUrl = toReplace;
   _replacementUrl = replacement;
   _initChangesetStats();
+
+  if (_jobName.trimmed().isEmpty())
+  {
+    _jobName = "job-" + UuidHelper::createUuid().toString();
+  }
 
   _initConfig();
   _taskGridBounds = taskGrid.getBounds();
@@ -164,6 +170,10 @@ void ChangesetTaskGridReplacer::_replaceEntireTaskGrid(const TaskGrid& taskGrid)
   _changesetCreator.reset(
     Factory::getInstance().constructObject<ChangesetReplacement>(
       ConfigOptions().getChangesetReplacementImplementation()));
+//  _changesetCreator.reset(
+//    Factory::getInstance().constructObject<ChangesetReplacement>(
+//      QString("hoot::ChangesetCutOnlyCreator")));
+  //_changesetCreator->setBoundsInterpretation(ChangesetReplacement::BoundsInterpretation::Strict);
   _changesetCreator->setChangesetOptions(true, "", _dataToReplaceUrl);
   LOG_VARD(_changesetCreator->toString());
 
@@ -216,7 +226,7 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   }
 
   QFile changesetFile(
-    _changesetsOutputDir + "/changeset-cell-" +
+    _changesetsOutputDir + "/" + _jobName + "-changeset-cell-" +
     StringUtils::padFrontOfNumberStringWithZeroes(taskGridCell.id, 3) + ".osc.sql");
 
   QString msg =

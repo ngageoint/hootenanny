@@ -40,7 +40,7 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/geometry/MultiPolygonCreator.h>
+#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
@@ -69,8 +69,8 @@ namespace hoot
 
 int ElementToGeometryConverter::logWarnCount = 0;
 
-ElementToGeometryConverter::ElementToGeometryConverter(const ConstElementProviderPtr& provider,
-                                   const bool logWarningsForMissingElements) :
+ElementToGeometryConverter::ElementToGeometryConverter(
+  const ConstElementProviderPtr& provider, const bool logWarningsForMissingElements) :
 _constProvider(provider),
 _spatialReference(provider->getProjection()),
 _requireAreaForPolygonConversion(true),
@@ -160,7 +160,7 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
   LOG_VART(GeometryUtils::geometryTypeIdToString(gid));
   if (gid == GEOS_MULTIPOLYGON)
   {
-    return MultiPolygonCreator(_constProvider, e).createMultipolygon();
+    return RelationToMultiPolygonConverter(_constProvider, e).createMultipolygon();
   }
   else if (gid == GEOS_MULTILINESTRING)
   {
@@ -183,7 +183,8 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(const Re
   return convertToGeometry((ConstRelationPtr)r);
 }
 
-std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(const ConstWayPtr& w) const
+std::shared_ptr<LineString> ElementToGeometryConverter::convertToLineString(
+  const ConstWayPtr& w) const
 {
   const std::vector<long>& ids = w->getNodeIds();
   int size = ids.size();

@@ -39,7 +39,7 @@ namespace hoot
  * The original reason for needing this class in addition to its parent was for the relation role
  * comparison. Now that role is part of the relation hash created by ElementHashVisitor, it seems
  * like we wouldn't need this class. However, note the call to getRole() in
- * CollectionRelationMerger...so at this time, this class is needed.
+ * CollectionRelationMerger...so at this time, so this class is needed.
  *
  * @see ElementComparison
  */
@@ -73,7 +73,6 @@ inline uint qHash(const RelationMemberComparison& memberComp)
   }
   return qHash(memberComp.toHashString());
 }
-
 
 }
 

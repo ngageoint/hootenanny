@@ -197,7 +197,7 @@ public:
       {
         LOG_WARN(
           "refNode: " << std::fixed << std::setprecision(15) << refNode->getX() << ", " <<
-          refNode->getY() << " testNode: " << testNode->getX() << ", " << testNode->getY());
+          refNode->getY() << "; testNode: " << testNode->getX() << ", " << testNode->getY());
       }
       _matches = false;
       _errorCount++;

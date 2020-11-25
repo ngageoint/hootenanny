@@ -586,7 +586,8 @@ void MapProjector::project(const std::shared_ptr<OsmMap>& map,
 }
 
 void MapProjector::project(const std::shared_ptr<Geometry>& g,
-  const std::shared_ptr<OGRSpatialReference>& srs1, const std::shared_ptr<OGRSpatialReference>& srs2)
+  const std::shared_ptr<OGRSpatialReference>& srs1,
+  const std::shared_ptr<OGRSpatialReference>& srs2)
 {
   OGRCoordinateTransformation* t(OGRCreateCoordinateTransformation(srs1.get(), srs2.get()));
 

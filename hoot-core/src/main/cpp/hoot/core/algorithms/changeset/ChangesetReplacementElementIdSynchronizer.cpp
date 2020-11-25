@@ -36,6 +36,7 @@
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/algorithms/extractors/RelationMemberSimilarityExtractor.h>
 
 namespace hoot
 {
@@ -108,6 +109,8 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(
     "Updated " <<
     StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized() - numTotalIdsSyncedBefore) <<
     " nearly identical way nodes in second map.");
+
+  // TODO: try RelationMemberSimilarityExtractor?
 }
 
 void ChangesetReplacementElementIdSynchronizer::_syncElementIds(

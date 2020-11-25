@@ -286,7 +286,7 @@ public:
           args.removeAll(outputStatsFile);
         }
       }
-        args.removeAll("--stats");
+      args.removeAll("--stats");
     }
     LOG_VARD(printStats);
     LOG_VARD(outputStatsFile);

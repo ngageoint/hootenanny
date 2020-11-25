@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/TestUtils.h>
-#include <hoot/core/geometry/MultiPolygonCreator.h>
+#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 
 using namespace geos::geom;
@@ -39,9 +39,9 @@ using namespace std;
 namespace hoot
 {
 
-class MultiPolygonCreatorTest : public HootTestFixture
+class RelationToMultiPolygonConverterTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(MultiPolygonCreatorTest);
+  CPPUNIT_TEST_SUITE(RelationToMultiPolygonConverterTest);
   CPPUNIT_TEST(runBadOuterRingsTest);
   CPPUNIT_TEST(runMultiPolygonExample1Test);
   CPPUNIT_TEST(runMultiPolygonExample7Test);
@@ -55,7 +55,8 @@ public:
   void addPoint(OsmMapPtr map, WayPtr w, double x, double y)
   {
     // use a node factory so nodes w/ the same coordinates get the same ids
-    NodePtr n = f.createNode(map->shared_from_this(), Coordinate(x, y), Status::Unknown1,
+    NodePtr n =
+      f.createNode(map->shared_from_this(), Coordinate(x, y), Status::Unknown1,
       w->getCircularError());
     map->addNode(n);
     w->addNode(n->getId());
@@ -93,7 +94,7 @@ public:
     addPoint(map, w, 13, 5);
     uut->addElement(MetadataTags::RoleOuter(), w);
 
-    std::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
+    std::shared_ptr<Geometry> g = RelationToMultiPolygonConverter(map, uut).createMultipolygon();
 
     CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((13.0000000000000000 5.0000000000000000, 8.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 9.0000000000000000, 13.0000000000000000 5.0000000000000000)))"),
                          g->toString());
@@ -127,7 +128,7 @@ public:
     closeWay(w);
     uut->addElement(MetadataTags::RoleInner(), w);
 
-    std::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
+    std::shared_ptr<Geometry> g = RelationToMultiPolygonConverter(map, uut).createMultipolygon();
 
     CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((8.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 9.0000000000000000, 13.0000000000000000 5.0000000000000000, 8.0000000000000000 2.0000000000000000), (9.0000000000000000 5.0000000000000000, 7.0000000000000000 6.0000000000000000, 8.0000000000000000 8.0000000000000000, 10.0000000000000000 7.0000000000000000, 9.0000000000000000 5.0000000000000000)))"),
                          g->toString());
@@ -170,7 +171,7 @@ public:
     closeWay(w);
     uut->addElement(MetadataTags::RoleOuter(), w);
 
-    std::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
+    std::shared_ptr<Geometry> g = RelationToMultiPolygonConverter(map, uut).createMultipolygon();
 
     CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((9.0000000000000000 1.0000000000000000, 2.0000000000000000 6.0000000000000000, 6.0000000000000000 12.0000000000000000, 13.0000000000000000 11.0000000000000000, 14.0000000000000000 4.0000000000000000, 9.0000000000000000 1.0000000000000000), (10.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 7.0000000000000000, 10.0000000000000000 2.0000000000000000)), ((9.0000000000000000 5.0000000000000000, 7.0000000000000000 6.0000000000000000, 8.0000000000000000 7.0000000000000000, 10.0000000000000000 7.0000000000000000, 9.0000000000000000 5.0000000000000000)))"),
                          g->toString());
@@ -212,7 +213,7 @@ public:
     closeWay(w);
     uut->addElement(MetadataTags::RoleInner(), w);
 
-    std::shared_ptr<Geometry> g = MultiPolygonCreator(map, uut).createMultipolygon();
+    std::shared_ptr<Geometry> g = RelationToMultiPolygonConverter(map, uut).createMultipolygon();
 
     CPPUNIT_ASSERT_EQUAL(string("MULTIPOLYGON (((5.0000000000000000 6.0000000000000000, 8.0000000000000000 11.0000000000000000, 12.0000000000000000 9.0000000000000000, 13.0000000000000000 5.0000000000000000, 8.0000000000000000 2.0000000000000000, 5.0000000000000000 6.0000000000000000), (7.0000000000000000 6.0000000000000000, 8.0000000000000000 8.0000000000000000, 10.0000000000000000 7.0000000000000000, 9.0000000000000000 5.0000000000000000, 7.0000000000000000 6.0000000000000000)))"),
                          g->toString());
@@ -220,6 +221,6 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MultiPolygonCreatorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RelationToMultiPolygonConverterTest, "quick");
 
 }

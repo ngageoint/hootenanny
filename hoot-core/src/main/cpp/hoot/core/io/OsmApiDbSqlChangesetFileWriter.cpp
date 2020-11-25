@@ -321,12 +321,14 @@ QString OsmApiDbSqlChangesetFileWriter::_getUpdateValuesWayOrRelationStr(ConstEl
 
 void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr element)
 {
+  LOG_TRACE("Writing update for: " << element->getElementId() << "...");
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
 
   // If another parsed change previously modified the element with this id, we want to get the
   // modified version.
   const long currentVersion = changeElement->getVersion();
+  LOG_VART(currentVersion);
   if (currentVersion < 1)
   {
     throw HootException(
@@ -334,8 +336,10 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
       element->getElementId().toString());
   }
   const long newVersion = currentVersion + 1;
+  LOG_VART(newVersion);
 
   changeElement->setVersion(newVersion);
+  LOG_VART(changeElement->getVersion());
   changeElement->setChangeset(_changesetId);
   changeElement->setVisible(true);
   LOG_TRACE("Updating: " << changeElement->getElementId());
@@ -348,12 +352,12 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
   commentStr += "*/\n";
   _outputSql.write((commentStr).toUtf8());
 
-  //<element-name> table contains all version of all elements of that type in a history, so insert
-  //into that table.
+  // <element-name> table contains all version of all elements of that type in a history, so insert
+  // into that table.
   _outputSql.write(
     ("INSERT INTO " + elementTypeStr + "s (" + elementTypeStr + "_id, " +
      _getInsertValuesStr(changeElement)).toUtf8());
-  //current_<element-name> contains the single latest version of the element, so update that record
+  // current_<element-name> contains the single latest version of the element, so update that record
   _outputSql.write(
     ("UPDATE current_" + elementTypeStr + "s SET " + _getUpdateValuesStr(changeElement)).toUtf8());
 

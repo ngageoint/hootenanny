@@ -102,7 +102,7 @@ void ConflateCaseTestSuite::loadDir(const QString& dir, QStringList confs)
     if (ignore)
     {
       if (!_hideDisableTests)
-        LOG_WARN("Disabling: " + path);
+        LOG_INFO("Disabling: " + path);
     }
     else
     {
