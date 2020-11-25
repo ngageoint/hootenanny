@@ -146,7 +146,7 @@ std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(
   }
   else
   {
-    // we don't recognize this geometry type.
+    // we don't recognize this geometry type
     LOG_TRACE("Returning empty geometry...");
     std::shared_ptr<Geometry> g(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
     return g;

@@ -76,9 +76,17 @@ bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     throw IllegalArgumentException("No map set on InBoundsCriterion.");
   }
+  if (!e)
+  {
+    return false;
+  }
 
   LOG_VART(e->getElementId());
   std::shared_ptr<geos::geom::Geometry> geom = _elementConverter->convertToGeometry(e);
+  if (!geom)
+  {
+    return false;
+  }
   LOG_VART(geom->toString());
   if (_mustCompletelyContain)
   {
