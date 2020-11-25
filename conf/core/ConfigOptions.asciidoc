@@ -691,7 +691,7 @@ cutting and replacing data.
 ** `hoot::DualHighwaySplitter`
 ** `hoot::RemoveInvalidMultilineStringMembersVisitor`
 
-The map operations used by replacement changeset generation.
+The map cleaning operations used by replacement changeset generation.
 
 === changeset.replacement.mark.elements.with.missing.children
 

@@ -59,7 +59,6 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
 static const bool CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT = false;
 // If true, unconflatable data for certain tests is output to its own file.
 static const bool WRITE_NON_CONFLATABLE = false;
-// TODO: change back to false
 // allows for bypassing some of the metric asserts so you view their values
 static const bool DISPLAY_METRICS_ONLY = false;
 
@@ -73,8 +72,6 @@ static const bool DISPLAY_METRICS_ONLY = false;
 class ServiceChangesetReplacementGridTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ServiceChangesetReplacementGridTest);
-
-  // TODO: re-enable
 
   // single cell tests
   CPPUNIT_TEST(badPolyIdSync1Test);
@@ -1244,11 +1241,8 @@ public:
 private:
 
   QString _testName;
-
   QElapsedTimer _subTaskTimer;
-
   QString _replacementDataUrl;
-
   // original size of the data to be replaced; TODO: remove this?
   int _originalDataSize;
 
@@ -1279,7 +1273,6 @@ private:
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
     // leave enabled for debugging only
-    // TODO: disable
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 
