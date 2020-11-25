@@ -107,7 +107,7 @@ private:
 
   /*
    * For any element in the sec dataset with a lower version than the corresponding element in the
-   * ref dataset, updates the version of the sec element; see #4376
+   * ref dataset, updates the version of the sec element.
    */
   void _syncInputVersions(const OsmMapPtr& refMap, const OsmMapPtr& secMap);
 

@@ -59,7 +59,7 @@ static const QString DATA_TO_REPLACE_URL = ServicesDbTestUtils::getOsmApiDbUrl()
 static const bool CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT = false;
 // If true, unconflatable data for certain tests is output to its own file.
 static const bool WRITE_NON_CONFLATABLE = false;
-// allows for bypassing some of the metric asserts so you view their values
+// allows for bypassing the metric asserts so you can view their values for update purposes
 static const bool DISPLAY_METRICS_ONLY = false;
 
 /*
@@ -157,28 +157,29 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(123L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(51L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(80L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(63L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(3L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+      CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -217,14 +218,20 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(2533L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(184L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
@@ -234,11 +241,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(3L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -281,14 +283,20 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(10L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
@@ -298,11 +306,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -340,28 +343,29 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
-      CPPUNIT_ASSERT_EQUAL(2228L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      CPPUNIT_ASSERT_EQUAL(2230L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(742L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(603L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(255L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(16L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(6L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+      CPPUNIT_ASSERT_EQUAL(10L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -404,28 +408,29 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(18456L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(1525L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(2682L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(343L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(307L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(48L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(27L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+      CPPUNIT_ASSERT_EQUAL(279L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(27L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(46L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -464,14 +469,20 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(28, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(732L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(106L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
@@ -481,11 +492,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(28, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -530,28 +536,29 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(18416L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(608L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(2852L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(479L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(57L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(12L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(17L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+      CPPUNIT_ASSERT_EQUAL(40L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(17L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(12L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -613,28 +620,29 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
-      CPPUNIT_ASSERT_EQUAL(433L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      CPPUNIT_ASSERT_EQUAL(434L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(245L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(246L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(185L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(136L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(25L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(9L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -676,14 +684,20 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(6L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
@@ -693,11 +707,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -738,14 +747,20 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(544L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
@@ -755,11 +770,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -800,14 +810,20 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(2187L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(294L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
@@ -817,11 +833,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -862,14 +873,20 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(16001L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(1333L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
@@ -879,11 +896,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(25L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -923,14 +935,20 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(4136L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(345L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
@@ -940,11 +958,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -995,14 +1008,21 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      // This number is extremely high due to dupes in the input. See comment above.
+      CPPUNIT_ASSERT_EQUAL(538, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(15L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(518L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
@@ -1012,12 +1032,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      // This number is extremely high due to dupes in the input. See comment above.
-      CPPUNIT_ASSERT_EQUAL(538, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -1061,14 +1075,20 @@ public:
     const QMap<QString, long> changesetStats = uut.getChangesetStats();
     if (DISPLAY_METRICS_ONLY)
     {
-      LOG_WARN(_testName + ": " << changesetStats);
       LOG_VARW(uut.getOutputMetrics().getNumOrphanedNodesInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumEmptyWaysInOutput());
       LOG_VARW(uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
+      LOG_WARN(_testName + ": " << changesetStats);
     }
     else
     {
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
+      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+
       CPPUNIT_ASSERT_EQUAL(1975L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(1443L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
@@ -1078,11 +1098,6 @@ public:
       CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
-
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-      CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
@@ -1260,7 +1275,7 @@ private:
   {
     conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
     conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
-    conf().set(ConfigOptions::getDebugMapsRemoveMissingElementsKey(), true/*false*/);
+    conf().set(ConfigOptions::getDebugMapsRemoveMissingElementsKey(), true);
     conf().set(ConfigOptions::getApiDbEmailKey(), USER_EMAIL);
     conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), true);
     conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), true);
@@ -1271,7 +1286,7 @@ private:
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false/*true*/);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 
   void _loadDataToReplaceDb(

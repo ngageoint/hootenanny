@@ -25,9 +25,9 @@ DELETE FROM way_tags WHERE way_id = 2;
 DELETE FROM current_way_nodes WHERE way_id=2;
 DELETE FROM current_relation_members WHERE member_type = 'Way' AND member_id = 2;
 UPDATE current_ways SET changeset_id=1, visible=false, version=2 WHERE id=2;
-/* create node 6*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (6, 46, -127, 1, true, (now() at time zone 'utc'), 1789569706, 1);
-INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (6, 46, -127, 1, true, (now() at time zone 'utc'), 1789569706, 1);
+/* create node 1*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 46, -127, 1, true, (now() at time zone 'utc'), 1789569706, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (1, 46, -127, 1, true, (now() at time zone 'utc'), 1789569706, 1);
 /* delete relation 1*/
 INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (1, 1, false, (now() at time zone 'utc'), 2);
 DELETE FROM current_relation_tags WHERE relation_id = 1;
@@ -42,9 +42,9 @@ DELETE FROM way_tags WHERE way_id = 4;
 DELETE FROM current_way_nodes WHERE way_id=4;
 DELETE FROM current_relation_members WHERE member_type = 'Way' AND member_id = 4;
 UPDATE current_ways SET changeset_id=1, visible=false, version=2 WHERE id=4;
-/* create node 11*/
-INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (11, 57, -30, 1, true, (now() at time zone 'utc'), 1789569706, 1);
-INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (11, 57, -30, 1, true, (now() at time zone 'utc'), 1789569706, 1);
+/* create node 2*/
+INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (2, 57, -30, 1, true, (now() at time zone 'utc'), 1789569706, 1);
+INSERT INTO current_nodes (id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (2, 57, -30, 1, true, (now() at time zone 'utc'), 1789569706, 1);
 /* modify way 5*/
 INSERT INTO ways (way_id, changeset_id, visible, "timestamp", version) VALUES (5, 1, true, (now() at time zone 'utc'), 2);
 UPDATE current_ways SET changeset_id=1, visible=true, "timestamp"=(now() at time zone 'utc'), version=2 WHERE id=5;
@@ -58,15 +58,15 @@ INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (5, 12, 1, 
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (5, 12, 1);
 INSERT INTO way_nodes (way_id, node_id, version, sequence_id) VALUES (5, 13, 1, 2);
 INSERT INTO current_way_nodes (way_id, node_id, sequence_id) VALUES (5, 13, 2);
-/* create relation 2*/
-INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (2, 1, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_relations (id, changeset_id, visible, "timestamp", version) VALUES (2, 1, true, (now() at time zone 'utc'), 1);
-INSERT INTO current_relation_tags (relation_id, k, v) VALUES (2, 'key2', 'value2');
-INSERT INTO relation_tags (relation_id, k, v, version) VALUES (2, 'key2', 'value2', 1);
-INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (2, 'Node', 14, 'role1', 1, 1);
-INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (2, 'Node', 14, 'role1', 1);
-INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (2, 'Way', 6, 'role2', 1, 2);
-INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (2, 'Way', 6, 'role2', 2);
+/* create relation 1*/
+INSERT INTO relations (relation_id, changeset_id, visible, "timestamp", version) VALUES (1, 1, true, (now() at time zone 'utc'), 1);
+INSERT INTO current_relations (id, changeset_id, visible, "timestamp", version) VALUES (1, 1, true, (now() at time zone 'utc'), 1);
+INSERT INTO current_relation_tags (relation_id, k, v) VALUES (1, 'key2', 'value2');
+INSERT INTO relation_tags (relation_id, k, v, version) VALUES (1, 'key2', 'value2', 1);
+INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (1, 'Node', 14, 'role1', 1, 1);
+INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (1, 'Node', 14, 'role1', 1);
+INSERT INTO relation_members (relation_id, member_type, member_id, member_role, version, sequence_id) VALUES (1, 'Way', 6, 'role2', 1, 2);
+INSERT INTO current_relation_members (relation_id, member_type, member_id, member_role, sequence_id) VALUES (1, 'Way', 6, 'role2', 2);
 /* delete node 16*/
 INSERT INTO nodes (node_id, latitude, longitude, changeset_id, visible, "timestamp", tile, version) VALUES (16, -43, -6, 1, false, (now() at time zone 'utc'), 1073741823, 2);
 DELETE FROM current_node_tags WHERE node_id = 16;
