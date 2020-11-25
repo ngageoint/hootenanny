@@ -178,7 +178,8 @@ void ChangesetReplacementCreator::create(
 
   // CALCULATE TRUE REPLACEMENT BOUNDS
 
-  // see #4376
+  // This was an so far unsuccessful attempt to prevent duplicate way creation by synchronizing the
+  // replacement bounds with data returned by queries; see #4376
 //  _setTrueReplacementBounds();
 //  _currentTask++;
 
@@ -201,6 +202,8 @@ void ChangesetReplacementCreator::create(
     return;
   }
 
+  // TODO: explain
+  // Ensure that sec data has the correct element versions.
   _syncInputVersions(refMap, secMap);
 
   _currentTask++;
@@ -252,10 +255,11 @@ void ChangesetReplacementCreator::create(
   // snapping, we'll restore only the original sec relation IDs which will prevent unnecessary
   // create/delete statements to be generated for relations when modify statements are more
   // appropriate. Eventually, we may be able to restore IDs for sec nodes/ways as well.
+  //ElementIdRemapper secIdRemapper(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
   ElementIdRemapper secIdRemapper(
-    // All secondary data IDs are remapped.
+    // All secondary data IDs are remapped to avoid conflict with ref IDs in the combined map.
     ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-    // Only secondary relation IDs are later restored.
+    // Only secondary relation IDs are later restored to the combined map.
     ElementCriterionPtr(
       new ChainCriterion(
         ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
@@ -465,27 +469,6 @@ void ChangesetReplacementCreator::_syncInputVersions(const OsmMapPtr& refMap,
   }
 
   LOG_INFO("Synchronized " << ctr << " element versions.");
-
-  // Had an idea here to try to pull down missing elements based on what was in both input maps to
-  // start with. This isn't useful, however, b/c in the production enviroment this code will only
-  // have access to a subset of the input data from either source and may not be able to retrieve
-  // the missing elements.
-
-//  const QSet<ElementId> idsIn1AndNotIn2 =
-//    CommonElementIdFinder::findElementIdsInFirstAndNotSecond(map1, map2);
-//  const QSet<ElementId> idsIn2AndNotIn1 =
-//    CommonElementIdFinder::findElementIdsInSecondAndNotFirst(map1, map2);
-
-//  // Read in idsIn1AndNotIn2 from the sec map input and add to the sec map.
-
-
-//  // Read in idsIn2AndNotIn1 from the ref map input and add to the ref map.
-
-
-//  LOG_INFO(
-//    "Synchronized " << idsIn1AndNotIn2.size() << " elements in ref dataset and not in sec dataset.");
-//  LOG_INFO(
-//    "Synchronized " << idsIn2AndNotIn1.size() << " elements in sec dataset and not in ref dataset.");
 }
 
 void ChangesetReplacementCreator::_setTrueReplacementBounds()
