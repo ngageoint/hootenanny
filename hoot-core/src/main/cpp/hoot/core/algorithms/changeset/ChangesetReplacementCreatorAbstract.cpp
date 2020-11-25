@@ -296,7 +296,6 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
       cachedMap.reset(new OsmMap());
       cachedMap->setName(mapName);
       IoUtils::loadMap(cachedMap, inputUrl, useFileIds, status);
-      //IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
       // Restore it back to original.
       conf().set(ConfigOptions::getConvertBoundsKey(), bbox);
     }
