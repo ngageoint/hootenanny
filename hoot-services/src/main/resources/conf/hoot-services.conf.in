@@ -85,7 +85,7 @@ translationServerPort=8094
 translationServerThreadCount=0
 
 # Translation Server Script in scripts folder
-translationServerScript=/translations-nodejs/TranslationServer.js
+translationServerScript=/translations/TranslationServer.js
 
 # Ingest size threshold
 ingestSizeThreshold=200000000
@@ -165,7 +165,7 @@ ElementMergeServerPort=8096
 ElementMergeServerThreadCount=0
 
 # Element merge Server Script in scripts folder
-ElementMergeServerScript=/translations-nodejs/ElementMergeServer.js
+ElementMergeServerScript=/translations/ElementMergeServer.js
 
 # LANGUAGE TRANSLATION/DETECTION
 
