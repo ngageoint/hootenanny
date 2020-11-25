@@ -93,6 +93,10 @@ void ImmediatelyConnectedOutOfBoundsWayTagger::apply(OsmMapPtr& map)
           if (directlyConnectedWayIds.find(connectedWayId) == directlyConnectedWayIds.end())
           {
             WayPtr connectedWay = map->getWay(connectedWayId);
+            if (!connectedWay)
+            {
+              continue;
+            }
 
             // and its *not* within the bounds
             LOG_VART(_boundsChecker.isSatisfied(connectedWay));
