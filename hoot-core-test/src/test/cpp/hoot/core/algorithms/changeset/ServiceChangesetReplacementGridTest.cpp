@@ -375,8 +375,7 @@ public:
 
     // This is needed to suppress some ElementToGeometryConverter warning messages that should
     // eventually be looked into.
-    // TODO: re-enable
-    //DisableLog dl;
+    DisableLog dl;
 
     _testName = "droppedPointPolyRelationMembers1Test";
     _prepInput(
@@ -582,8 +581,7 @@ public:
       */
 
     // This is needed to suppress some missing element warning messages.
-    // TODO: re-enable
-    //DisableLog dl;
+    DisableLog dl;
 
     _testName = "outOfSpecMixedRelations1Test";
     _prepInput(
@@ -1262,7 +1260,7 @@ private:
   {
     conf().set(ConfigOptions::getWriterIncludeDebugTagsKey(), true);
     conf().set(ConfigOptions::getUuidHelperRepeatableKey(), true);
-    conf().set(ConfigOptions::getDebugMapsRemoveMissingElementsKey(), true);
+    conf().set(ConfigOptions::getDebugMapsRemoveMissingElementsKey(), true/*false*/);
     conf().set(ConfigOptions::getApiDbEmailKey(), USER_EMAIL);
     conf().set(ConfigOptions::getHootapiDbWriterCreateUserKey(), true);
     conf().set(ConfigOptions::getHootapiDbWriterOverwriteMapKey(), true);
@@ -1273,7 +1271,7 @@ private:
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
     // leave enabled for debugging only
-    conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
+    conf().set(ConfigOptions::getDebugMapsWriteKey(), false/*true*/);
   }
 
   void _loadDataToReplaceDb(
