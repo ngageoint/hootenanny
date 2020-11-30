@@ -132,16 +132,18 @@ protected:
    * @return True if the server should continue to listen for connections, false to stop
    */
   virtual bool respond(HttpConnection::HttpConnectionPtr& connection);
-  /** Read the HTTP headers from the request and return them, called by the overridden respond() function */
-  std::string read_request_headers(HttpConnection::HttpConnectionPtr& connection);
-  /** Read the HTTP body (after reading the request headers, called by the overridden respond() function */
-  std::string read_request_body(const std::string& headers, HttpConnection::HttpConnectionPtr& connection);
+  /** Parset the headers and body of the HTTP request */
+  void parse_request(HttpConnection::HttpConnectionPtr& connection);
   /** Write the response back to the requestor, called by the overridden respond() function */
   void write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response);
   /** Get the value of the interupt flag */
   bool get_interupt() { return _interupt; }
   /** Shutdown the thread but don't wait on it */
   void stop();
+  /** Headers string */
+  std::string _headers;
+  /** Message body string */
+  std::string _body;
 
 private:
   /** Function that starts the server listening and accepting connections */

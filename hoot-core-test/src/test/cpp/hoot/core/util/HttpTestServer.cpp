@@ -76,15 +76,22 @@ std::string HttpResponse::get_status_text()
   //  Convert the HTTP status code to status text
   switch (_status)
   {
-  case HttpResponseCode::HTTP_OK:                 return "OK";
-  case HttpResponseCode::HTTP_BAD_REQUEST:        return "Bad Request";
-  case HttpResponseCode::HTTP_NOT_FOUND:          return "Not Found";
-  case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED: return "Method Not Allowed";
-  case HttpResponseCode::HTTP_CONFLICT:           return "Conflict";
-  default:                                        return "Unknown Status";
+  case HttpResponseCode::HTTP_OK:                     return "OK";
+  case HttpResponseCode::HTTP_BAD_REQUEST:            return "Bad Request";
+  case HttpResponseCode::HTTP_UNAUTHORIZED:           return "Unauthorized";
+  case HttpResponseCode::HTTP_NOT_FOUND:              return "Not Found";
+  case HttpResponseCode::HTTP_METHOD_NOT_ALLOWED:     return "Method Not Allowed";
+  case HttpResponseCode::HTTP_CONFLICT:               return "Conflict";
+  case HttpResponseCode::HTTP_GONE:                   return "Gone";
+  case HttpResponseCode::HTTP_PRECONDITION_FAILED:    return "Precondition Failed";
+  case HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR:  return "Internal Server Error";
+  case HttpResponseCode::HTTP_BAD_GATEWAY:            return "Bad Gateway";
+  case HttpResponseCode::HTTP_SERVICE_UNAVAILABLE:    return "Service Unavailable";
+  case HttpResponseCode::HTTP_GATEWAY_TIMEOUT:        return "Gateway Timeout";
+  case HttpResponseCode::HTTP_BANDWIDTH_EXCEEDED:     return "Bandwidth Limit Exceeded";
+  default:                                            return "Unknown Status";
   }
 }
-
 
 HttpTestServer::HttpTestServer(int port)
   : _port(port),
@@ -171,8 +178,8 @@ void HttpTestServer::handle_accept(HttpConnection::HttpConnectionPtr new_connect
 
 bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
 {
-  //  Read the HTTP request, and ignore them
-  read_request_headers(connection);
+  //  Read the HTTP request
+  parse_request(connection);
   //  Respond with HTTP 200 OK
   HttpResponse response(HttpResponseCode::HTTP_OK);
   //  Write out the response
@@ -181,22 +188,49 @@ bool HttpTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
   return !_interupt;
 }
 
-std::string HttpTestServer::read_request_headers(HttpConnection::HttpConnectionPtr& connection)
+void HttpTestServer::parse_request(HttpConnection::HttpConnectionPtr &connection)
 {
+  //  Reset headers and body
+  _headers.clear();
+  _body.clear();
   //  Read the HTTP request headers
-  boost::asio::streambuf buf;
-  boost::asio::read_until(connection->socket(), buf, "\r\n\r\n");
-  return boost::asio::buffer_cast<const char*>(buf.data());
-}
-
-std::string HttpTestServer::read_request_body(const std::string& headers, HttpConnection::HttpConnectionPtr& connection)
-{
-  //  Parse the headers to get the content length
+  boost::asio::streambuf stream_buf;
+  size_t bytes_read = boost::asio::read_until(connection->socket(), stream_buf, "\r\n\r\n");
+  std::string headers = boost::asio::buffer_cast<const char*>(stream_buf.data());
+  std::string::size_type pos = headers.find("\r\n\r\n");
+  if (pos == std::string::npos)
+  {
+    //  Throw some error here
+  }
+  //  Parse the content length
   long content_length = parse_content_length(headers);
+  if (content_length == 0)
+  {
+    _headers = headers;
+    return;
+  }
+  //  Create a buffer for the entire contents
   std::vector<char> buf(content_length + 1, 0);
-  //  Read the HTTP request body
-  boost::asio::read(connection->socket(), boost::asio::buffer(buf, content_length));
-  return buf.data();
+  //  When only the headers are read, read all of the contents
+  if (headers.length() == bytes_read)
+  {
+    //  Set the headers
+    _headers = headers;
+    //  Read the HTTP request body
+    boost::asio::read(connection->socket(), boost::asio::buffer(buf, content_length));
+    _body = buf.data();
+  }
+  else
+  {
+    //  Headers (for some reason) contains part of the body already read
+    //  copy that section to the body
+    _body = headers.substr(pos + 4);
+    long read_length = content_length - (headers.length() - pos - 4);
+    boost::asio::read(connection->socket(), boost::asio::buffer(buf, read_length));
+    _body.append(buf.data());
+    //  Finally update the headers
+    _headers = headers.substr(0, pos);
+  }
 }
 
 void HttpTestServer::write_response(HttpConnection::HttpConnectionPtr& connection, const std::string& response)

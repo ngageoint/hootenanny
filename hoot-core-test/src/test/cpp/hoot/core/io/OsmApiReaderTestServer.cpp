@@ -37,12 +37,11 @@ namespace hoot
 
 bool SimpleReaderTestServer::respond(HttpConnection::HttpConnectionPtr& connection)
 {
-  //  Read the HTTP request headers
-  std::string headers = read_request_headers(connection);
-  std::string message = "";
+  //  Read the HTTP request
+  parse_request(connection);
   //  Reply with ToyTestA.osm or with an HTTP 404 error
   HttpResponsePtr response;
-  if (headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos)
+  if (_headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos)
     response.reset(new HttpResponse(HttpResponseCode::HTTP_OK, FileUtils::readFully("test-files/ToyTestA.osm").toStdString()));
   else
     response.reset(new HttpResponse(HttpResponseCode::HTTP_NOT_FOUND));
@@ -55,13 +54,13 @@ bool GeographicSplitReaderTestServer::respond(HttpConnection::HttpConnectionPtr&
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
-  //  Read the HTTP request headers
-  std::string headers = read_request_headers(connection);
+  //  Read the HTTP request
+  parse_request(connection);
   HttpResponsePtr response;
   //  Reply with some split up parts of ToyTestA.osm or with an HTTP 404 error
-  if (headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos && _current < _max)
+  if (_headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos && _current < _max)
   {
-    response = get_sequence_response(headers);
+    response = get_sequence_response(_headers);
     //  After the fourth section, shutdown the test server
     if (_current == _max)
       continue_processing = false;
@@ -103,13 +102,13 @@ bool ElementSplitReaderTestServer::respond(HttpConnection::HttpConnectionPtr& co
 {
   //  Stop processing by setting this to false
   bool continue_processing = true;
-  //  Read the HTTP request headers
-  std::string headers = read_request_headers(connection);
+  //  Read the HTTP request
+  parse_request(connection);
   HttpResponsePtr response;
   //  Reply with some split up parts of ToyTestA.osm or with an HTTP 404 error
-  if (headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos && _current < _max)
+  if (_headers.find(OsmApiEndpoints::API_PATH_MAP) != std::string::npos && _current < _max)
   {
-    response = get_sequence_response(headers);
+    response = get_sequence_response(_headers);
     //  After the fourth section, shutdown the test server
     if (_current == _max)
       continue_processing = false;
