@@ -26,4 +26,4 @@ echo "Tunnel or bridge count (should be zero): " $TB_COUNT
 hoot db-delete $HOOT_OPTS -D api.db.email=$HOOT_EMAIL $DB_URL/HootApiDbEmptyTagTest
 
 # Delete the user
-PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
