@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-set -x
-
 source $HOOT_HOME/conf/database/DatabaseConfig.sh
 export PSQL_DB_AUTH="-h $DB_HOST -p $DB_PORT -U $DB_USER"
 export HOOT_EMAIL="ServiceHootApiDbConflateTest@hoottestcpp.org"
