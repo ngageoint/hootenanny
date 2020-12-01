@@ -239,6 +239,18 @@ protected:
   bool respond(HttpConnection::HttpConnectionPtr &connection) override;
 };
 
+class TimeoutTestServer : public HttpTestServer
+{
+public:
+  /** Constructor */
+  TimeoutTestServer(int port) : HttpTestServer(port) { }
+
+protected:
+  /** respond() function that waits 5 seconds before responding to simulate a timeout
+   */
+  bool respond(HttpConnection::HttpConnectionPtr &connection) override;
+};
+
 class OsmApiSampleRequestResponse
 {
 public:

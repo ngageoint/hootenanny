@@ -27,6 +27,7 @@
 
 //  hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/io/OsmApiWriter.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/FileUtils.h>
@@ -61,6 +62,7 @@ class OsmApiWriterTest : public HootTestFixture
   CPPUNIT_TEST(runChangesetVersionFailureTest);
   CPPUNIT_TEST(runElementGoneTest);
   CPPUNIT_TEST(runChangesetSplitDeleteTest);
+  CPPUNIT_TEST(runTimeoutTest);
 #endif
   /* These tests are for local testing and require additional resources to complete */
 #ifdef RUN_LOCAL_OSM_API_SERVER
@@ -93,6 +95,7 @@ public:
   const int PORT_FAIL_VERSION =     9808;
   const int PORT_ELEMENT_GONE =     9809;
   const int PORT_DELETE_SPLIT =     9810;
+  const int PORT_TIMEOUT =          9811;
 
   OsmApiWriterTest()
     : HootTestFixture("test-files/io/OsmChangesetElementTest/",
@@ -704,6 +707,37 @@ public:
 #endif
   }
 
+  void runTimeoutTest()
+  {
+#ifdef  RUN_LOCAL_TEST_SERVER
+    //  Setup the test
+    QUrl osm;
+    osm.setUrl(LOCAL_TEST_API_URL.arg(PORT_TIMEOUT));
+    osm.setUserInfo(TEST_USER_INFO);
+
+    //  Kick off the timeout test server
+    TimeoutTestServer server(PORT_TIMEOUT);
+    server.start();
+
+    HootNetworkRequest request;
+    //  Set the timeout to 1 second
+    bool success = request.networkRequest(osm, 1);
+
+    QString error = request.getErrorString();
+    int status = request.getHttpStatus();
+    const QByteArray& response = request.getResponseContent();
+
+    //  Wait for the test server to finish
+    server.shutdown();
+
+    //  Check the results
+    CPPUNIT_ASSERT(success == false);
+    CPPUNIT_ASSERT_EQUAL(-1 * (int)QNetworkReply::TimeoutError, status);
+    HOOT_STR_EQUALS(QString("HTTP Request to %1 timed-out.").arg(osm.toString(QUrl::RemoveUserInfo)), error);
+    HOOT_STR_EQUALS("", response.toStdString());
+#endif
+  }
+
   void checkStats(QList<SingleStat> stats,
                   int nodes, int ways, int relations,
                   int created, int modified, int deleted,
@@ -736,6 +770,9 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "slow");
+//  Don't run the tests in parallel when dealing with a local OSM API server
+#ifdef RUN_LOCAL_OSM_API_SERVER
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OsmApiWriterTest, "serial");
+#endif
 
 }

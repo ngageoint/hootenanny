@@ -49,13 +49,15 @@ namespace hoot
 {
 
 HootNetworkRequest::HootNetworkRequest()
-  : _useOAuth(false)
+  : _useOAuth(false),
+    _timedOut(false)
 {
 }
 
 HootNetworkRequest::HootNetworkRequest(const QString& consumer_key, const QString& consumer_secret,
                                        const QString& request_token, const QString& request_secret)
-  : _useOAuth(true)
+  : _useOAuth(true),
+    _timedOut(false)
 {
   setOAuthKeys(consumer_key, consumer_secret, request_token, request_secret);
 }
@@ -97,6 +99,7 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   _status = 0;
   _content.clear();
   _error.clear();
+  _timedOut = false;
   //  Do HTTP request
   std::shared_ptr<QNetworkAccessManager> pNAM(new QNetworkAccessManager());
   QNetworkRequest request(url);
@@ -133,6 +136,9 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
   //  Setup the OAuth header on the request object
   if (_useOAuth && _consumer && _tokenRequest)
     _setOAuthHeader(http_op, request);
+  //  Setup timeout
+  QEventLoop loop;
+  QTimer timeoutTimer;
   //  Call the correct function on the network access manager
   QNetworkReply* reply = NULL;
   switch (http_op)
@@ -150,19 +156,48 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
     return false;
     break;
   }
-  //  Wait for finished signal from reply object
-  _blockOnReply(reply, timeout);
+  //  Start the timer
+  timeoutTimer.start(timeout * 1000);
+  //  Connect the timeout lambda
+  QObject::connect(&timeoutTimer, &QTimer::timeout, [&]()
+  {
+    //  Stop the timer first so the lambda isn't called again
+    timeoutTimer.stop();
+    //  Set the timed out flag before aborting the reply
+    _timedOut = true;
+    //  Abort will trigger QNetworkAccessManager::finished()
+    reply->abort();
+    //  Set the status to negative TimeoutError, negative so that it doesn't
+    //  collide with HTTP status numbers
+    _status = -1 * (int)QNetworkReply::TimeoutError;
+    _error = QString("HTTP Request to %1 timed-out.").arg(tempUrl.toString(QUrl::RemoveUserInfo));
+    //  Exit with a non-zero status
+    loop.exit(_status);
+  });
+  //  Connect the finished lambda
+//  QObject::connect(pNAM.get(), &QNetworkAccessManager::finished, [&]()
+  QObject::connect(reply, &QNetworkReply::finished, [&]()
+  {
+    //  The finished signal is emitted when the reply is aborted in the
+    //  timeout lambda, so don't do anything
+    if (!_timedOut)
+    {
+      //  Stop the timer
+      timeoutTimer.stop();
+      _timedOut = false;
+      //  Exit with a zero status
+      loop.exit();
+    }
+  });
+  //  Actually run the event loop waiting for either lambda to exit the loop
+  if (loop.exec() != 0)
+    return false;
+  //  Read all of the data
+  _content = reply->readAll();
   //  Get the status and content of the reply if available
   _status = _getHttpResponseCode(reply);
-  //  According to the documention this shouldn't ever happen
-  if (reply == NULL)
-  {
-    throw HootException(QString("Network request error: GET/POST/PUT request failed to create reply object."));
-    return false;
-  }
-  _content = reply->readAll();
   //  Check error status on our reply
-  if (QNetworkReply::NoError != reply->error())
+  if (_status == 0 && QNetworkReply::NoError != reply->error())
   {
     _error = reply->errorString();
     //  Remove authentication information if present
@@ -171,40 +206,11 @@ bool HootNetworkRequest::_networkRequest(const QUrl& url, int timeout,
     //  Replace the IP address in the error string with <host-ip>
     HootNetworkRequest::removeIpFromUrlString(_error, request.url());
     //  Negate the connection error as the status
-    if (_status == 0)
-      _status = -1 * (int)reply->error();
+    _status = -1 * (int)reply->error();
     return false;
   }
-
   //  return successfully
   return true;
-}
-
-void HootNetworkRequest::_blockOnReply(QNetworkReply* reply, int timeout)
-{
-  if (reply != NULL)
-  {
-    QTimer timer;
-    //  Qt code to force the use of QNetworkReply to be synchronous
-    QEventLoop loop;
-    QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-    QObject::connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
-    //  Start the timer (convert seconds to miliseconds)
-    timer.start(timeout * 1000);
-    loop.exec();
-    //  Cleanup the timer
-    if (timer.isActive())
-    {
-      //  Reply is finished and the timer is still active, stop the timer
-      timer.stop();
-    }
-    else
-    {
-      //  Timer timed-out, disconnect the reply signal and abort
-      QObject::disconnect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-      reply->abort();
-    }
-  }
 }
 
 int HootNetworkRequest::_getHttpResponseCode(QNetworkReply* reply)

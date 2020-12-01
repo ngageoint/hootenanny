@@ -152,13 +152,9 @@ private:
                        const QMap<QNetworkRequest::KnownHeaders, QVariant>& headers,
                        QNetworkAccessManager::Operation http_op, const QByteArray& data);
   /**
-   * @brief _blockOnReply Function to turn Qt asynchronous networking calls to synchronous
-   * @param reply Pointer to the network reply object to wait on
-   * @param timeout Timeout in seconds to block waiting for the reply
-   */
-  void _blockOnReply(QNetworkReply* reply, int timeout);
-  /**
    * @brief _getHttpResponseCode Get the HTTP response code from the response object
+   *   negative response codes mean there was a socket connection error and not an HTTP error
+   *   see QNetworkReply::NetworkError enumeration for values
    * @param reply Network reply object
    * @return HTTP response code as an integer instead of a string
    */
@@ -185,6 +181,8 @@ private:
   std::shared_ptr<OAuth::Consumer> _consumer;
   /** OAuth 1.0 request token object */
   std::shared_ptr<OAuth::Token> _tokenRequest;
+  /** Flag set when the timer times out */
+  bool _timedOut;
 };
 
 typedef std::shared_ptr<HootNetworkRequest> HootNetworkRequestPtr;
