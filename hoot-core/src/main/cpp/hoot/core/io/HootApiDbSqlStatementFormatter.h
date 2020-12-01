@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/io/ApiDbSqlStatementFormatter.h>
 #include <hoot/core/io/HootApiDb.h>
 
 // Qt
@@ -42,20 +43,17 @@ namespace hoot
 
 static const QString HOOTAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT =
   "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\t%10\n";
-static const QString HOOTAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
-static const QString HOOTAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\t\\N\n";
+static const QString HOOTAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t%7\t\\N\n";
+static const QString HOOTAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t%4\t\\N\n";
 static const QString HOOTAPIDB_CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
-static const QString HOOTAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\t\\N\n";
+static const QString HOOTAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t%4\t\\N\n";
 static const QString HOOTAPIDB_CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\n";
 
 /**
  * Converts OSM elements and their children into executable Postgres SQL COPY statements against an
  * Hootenanny API database
- *
- * It may be possible to reduce duplicated code by sharing some with
- * OsmApiDbSqlStatementFormatter.
  */
-class HootApiDbSqlStatementFormatter
+class HootApiDbSqlStatementFormatter : public ApiDbSqlStatementFormatter
 {
 
 public:
@@ -63,14 +61,18 @@ public:
   HootApiDbSqlStatementFormatter(const QString& delimiter, const long mapId);
 
   QString nodeToSqlString(const ConstNodePtr& node, const long nodeId, const long changesetId,
-                               const bool validate = false);
-  QString wayToSqlString(const long wayId, const long changesetId, const Tags& tags);
+                          const long version, const bool validate = false);
+  QString wayToSqlString(const long wayId, const long changesetId,
+                         const Tags& tags, const long version);
   QString wayNodeToSqlString(const long wayId, const long wayNodeId,
-                                  const unsigned int wayNodeIndex);
-  QString relationToSqlString(const long relationId, const long changesetId, const Tags& tags);
+                             const unsigned int wayNodeIndex);
+  QString relationToSqlString(const long relationId, const long changesetId,
+                              const Tags& tags,
+                              const long version);
   QString relationMemberToSqlString(const long relationId, const long memberId,
-                                         const RelationData::Entry& member,
-                                         const unsigned int memberSequenceIndex);
+                                    const RelationData::Entry& member,
+                                    const unsigned int memberSequenceIndex,
+                                    const unsigned long version);
   QString changesetToSqlString(const long changesetId, const long changesetUserId,
                                const long numChangesInChangeset,
                                const geos::geom::Envelope& changesetBounds);
@@ -134,14 +136,15 @@ public:
     return "";
   }
 
+protected:
+
+  void _initOutputFormatStrings(const QString& delimiter) override;
+
 private:
 
-  QMap<QString, QString> _outputFormatStrings;
-  QString _dateString;\
   int _precision;
   long _mapId;
 
-  void _initOutputFormatStrings(const QString& delimiter);
   QString _toTagsString(const Tags& tags);
 };
 

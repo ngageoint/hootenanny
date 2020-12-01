@@ -278,6 +278,15 @@ Invalid relation members will cause a warning to be logged.  You should enable t
 are loading data that has not been previously validated in another OSM API database.  Enabling this
 setting may cause writing to an OSM API database to occur more slowly.
 
+=== apidb.bulk.inserter.use.source.version
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, the OSM/Hootenanny API database bulk inserter will use the version number provided in the
+source data for all elements.  For most purposes using the supplied version is desired but in some
+testing cases defaulting all versions to `1` simplifies tests and is therefore more desirable.
+
 === apidb.reader.read.full.then.crop.on.bounded
 
 * Data Type: bool
