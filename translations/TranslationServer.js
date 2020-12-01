@@ -571,7 +571,7 @@ var searchSchema = function(options) {
             limitLeft = limitLeft - descMatches.length;
 
             // if no partial exact fcode or desc matches
-            // use fuzzy matches (Levenshtein) on desc
+            // use fuzzy matches (Lein code) on desc
             if (result.length === 0) {
                 // make sure only matching on those
                 // - valid geometry
