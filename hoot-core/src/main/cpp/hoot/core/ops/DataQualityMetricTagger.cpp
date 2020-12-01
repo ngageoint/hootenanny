@@ -37,6 +37,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/EmptyWayCriterion.h>
 #include <hoot/core/criterion/ElementIdCriterion.h>
+#include <hoot/core/criterion/WayEndNodeCriterion.h>
 
 namespace hoot
 {
@@ -47,7 +48,8 @@ DataQualityMetricTagger::DataQualityMetricTagger() :
 _orphanedNodes(0),
 _disconnectedWays(0),
 _emptyWays(0),
-_duplicateElementPairs(0)
+_duplicateElementPairs(0),
+_numWayEndNodes(0)
 {
 }
 
@@ -98,6 +100,15 @@ void DataQualityMetricTagger::apply(OsmMapPtr& map)
   map->visitRo(*filteredVis);
   _emptyWays = tagVis->getNumFeaturesAffected();
   LOG_STATUS("Tagged " << StringUtils::formatLargeNumber(_emptyWays) << " empty ways in output.");
+
+  tagVis.reset(new SetTagValueVisitor(MetadataTags::HootWayEndNode(), "yes"));
+  crit.reset(
+    new ChainCriterion(ElementCriterionPtr(new WayEndNodeCriterion(map, false)), inBoundsCrit));
+  filteredVis.reset(new FilteredVisitor(crit, tagVis));
+  map->visitRo(*filteredVis);
+  _numWayEndNodes = tagVis->getNumFeaturesAffected();
+  LOG_STATUS(
+    "Tagged " << StringUtils::formatLargeNumber(_numWayEndNodes) << " way end nodes in output.");
 
   DuplicateElementMarker dupeMarker;
   dupeMarker.setCoordinateComparisonSensitivity(8);

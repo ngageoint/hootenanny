@@ -358,6 +358,11 @@ bool Way::isFirstAndLastNode(const long nodeId) const
   return nodeId == getFirstNodeId() && nodeId == getLastNodeId();
 }
 
+bool Way::isEndNode(const long nodeId) const
+{
+  return nodeId == getFirstNodeId() || nodeId == getLastNodeId();
+}
+
 void Way::replaceNode(long oldId, long newId)
 {
   // Note: Noticed that duplicate way nodes were being introduced here when called by

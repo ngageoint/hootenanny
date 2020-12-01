@@ -206,6 +206,11 @@ public:
   inline static const QString HootDisconnected()        { return "hoot:disconnected"; }
 
   /**
+   * Used to identify way end nodes for debugging purposes
+   */
+  inline static const QString HootWayEndNode()        { return "hoot:way_end_node"; }
+
+  /**
    * Used to identify empty ways for debugging purposes
    */
   inline static const QString HootEmptyWay()            { return "hoot:empty:way"; }

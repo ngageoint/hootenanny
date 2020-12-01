@@ -154,6 +154,14 @@ public:
   bool isFirstAndLastNode(const long nodeId) const;
 
   /**
+   * TODO
+   *
+   * @param nodeId
+   * @return
+   */
+  bool isEndNode(const long nodeId) const;
+
+  /**
    * @brief isSimpleLoop - checks to see if the way starts and ends at the same
    *                       node. If it does, return true.
    * @return true if the way starts and ends at the same node

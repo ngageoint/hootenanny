@@ -101,11 +101,6 @@ protected:
 private:
 
   /*
-   * Calculates the replacement bounds as the union of the ref and sec maps; see #4376
-   */
-  void _setTrueReplacementBounds();
-
-  /*
    * For any element in the sec dataset with a lower version than the corresponding element in the
    * ref dataset, updates the version of the sec element.
    */

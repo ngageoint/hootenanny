@@ -27,7 +27,6 @@
 #include "ChangesetReplacementCreator.h"
 
 // Hoot
-#include <hoot/core/algorithms/alpha-shape/AlphaShapeGenerator.h>
 #include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
 
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
@@ -56,9 +55,6 @@
 // Qt
 #include <QElapsedTimer>
 
-// GEOS
-#include <geos/algorithm/ConvexHull.h>
-
 namespace hoot
 {
 
@@ -75,8 +71,6 @@ ChangesetReplacementCreatorAbstract()
   // validation is being considered a separate step for progress. The number of tasks per pass must
   // be updated as you add/remove job steps in the create logic.
   _numTotalTasks = 8;
-  // see #4376
-  //_numTotalTasks = 9;
 
   _setGlobalOpts();
 }
@@ -176,13 +170,6 @@ void ChangesetReplacementCreator::create(
     ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
   _printJobDescription();
 
-  // CALCULATE TRUE REPLACEMENT BOUNDS
-
-  // This was an so far unsuccessful attempt to prevent duplicate way creation by synchronizing the
-  // replacement bounds with data returned by queries; see #4376
-//  _setTrueReplacementBounds();
-//  _currentTask++;
-
   // LOAD AND FILTER
 
   _progress->set(_getJobPercentComplete(), "Loading input data...");
@@ -255,15 +242,15 @@ void ChangesetReplacementCreator::create(
   // snapping, we'll restore only the original sec relation IDs which will prevent unnecessary
   // create/delete statements to be generated for relations when modify statements are more
   // appropriate. Eventually, we may be able to restore IDs for sec nodes/ways as well.
-  //ElementIdRemapper secIdRemapper(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
-  ElementIdRemapper secIdRemapper(
-    // All secondary data IDs are remapped to avoid conflict with ref IDs in the combined map.
-    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-    // Only secondary relation IDs are later restored to the combined map.
-    ElementCriterionPtr(
-      new ChainCriterion(
-        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-        ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)))));
+  ElementIdRemapper secIdRemapper(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
+//  ElementIdRemapper secIdRemapper(
+//    // All secondary data IDs are remapped to avoid conflict with ref IDs in the combined map.
+//    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+//    // Only secondary relation IDs are later restored to the combined map.
+//    ElementCriterionPtr(
+//      new ChainCriterion(
+//        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+//        ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)))));
   LOG_INFO(secIdRemapper.getInitStatusMessage());
   secIdRemapper.apply(secMap);
   LOG_INFO(secIdRemapper.getCompletedStatusMessage());
@@ -469,79 +456,6 @@ void ChangesetReplacementCreator::_syncInputVersions(const OsmMapPtr& refMap,
   }
 
   LOG_INFO("Synchronized " << ctr << " element versions.");
-}
-
-void ChangesetReplacementCreator::_setTrueReplacementBounds()
-{
-  LOG_STATUS(
-    "Calculating true replacement bounds from input replacement bounds: ..." <<
-    GeometryUtils::polygonToString(_replacementBounds).right(_maxFilePrintLength) << "...");
-
-  // Load both maps together.
-  OsmMapPtr refMap =
-    _loadInputMap(
-     "ref", _input1, true, Status::Unknown1, _boundsOpts.loadRefKeepEntireCrossingBounds,
-     _boundsOpts.loadRefKeepOnlyInsideBounds,
-     _boundsOpts.loadRefKeepImmediateConnectedWaysOutsideBounds, true, _input1Map);
-  LOG_VARD(MapProjector::toWkt(refMap->getProjection()));
-  OsmMapPtr secMap =
-    _loadInputMap(
-      "sec", _input2, false, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
-      _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
-  LOG_VARD(MapProjector::toWkt(secMap->getProjection()));
-  MapUtils::combineMaps(refMap, secMap, false);
-  secMap.reset();
-  OsmMapPtr boundsCalcMap = refMap;
-  LOG_VARD(MapProjector::toWkt(boundsCalcMap->getProjection()));
-  LOG_VARD(boundsCalcMap->size());
-
-  // Calculate their combined covering shape.
-  AlphaShapeGenerator alphaShapeGenerator(
-    ConfigOptions().getCookieCutterAlpha(), ConfigOptions().getCookieCutterAlphaShapeBuffer());
-  alphaShapeGenerator.setManuallyCoverSmallPointClusters(false);
-  std::shared_ptr<geos::geom::Geometry> trueBounds;
-  try
-  {
-    trueBounds = alphaShapeGenerator.generateGeometry(boundsCalcMap);
-  }
-  catch (const HootException& e)
-  {
-    if (e.getWhat().contains("Alpha Shape area is zero"))
-    {
-      QString errorMsg = "No cut shape generated from secondary data";
-      errorMsg +=
-        ". Is your secondary data empty or have you filtered it to be empty? error: " + e.getWhat();
-      LOG_ERROR(errorMsg);
-    }
-    throw;
-  }
-  const std::string boundsGeomType = trueBounds->getGeometryType();
-  LOG_VARD(boundsGeomType);
-  if (boundsGeomType != "Polygon" && boundsGeomType != "MultiPolygon")
-  {
-    throw HootException("Unexpected true bounds geometry type: " + boundsGeomType);
-  }
-  MapProjector::project(
-    trueBounds, boundsCalcMap->getProjection(), MapProjector::createWgs84Projection());
-  boundsCalcMap.reset();
-
-  // Set the unioned shape as the true replacement bounds against which the data will be re-read.
-  if (boundsGeomType == "MultiPolygon")
-  {
-    // Convert multipolys to just a single outer boundary poly.
-    trueBounds.reset(geos::algorithm::ConvexHull(trueBounds->getBoundary()).getConvexHull());
-    LOG_VARD(trueBounds->getGeometryType());
-    assert(trueBounds->getGeometryType() == "Polygon");
-  }
-  _replacementBounds = std::dynamic_pointer_cast<geos::geom::Polygon>(trueBounds);
-  conf().set(
-    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
-  OsmMapWriterFactory::writeDebugMap(
-    GeometryUtils::createMapFromBounds(_replacementBounds), _changesetId + "-true-bounds");
-
-  LOG_STATUS(
-    "Calculated true replacement bounds: ..." <<
-    GeometryUtils::polygonToString(_replacementBounds).right(_maxFilePrintLength));
 }
 
 OsmMapPtr ChangesetReplacementCreator::_loadAndFilterRefMap(
