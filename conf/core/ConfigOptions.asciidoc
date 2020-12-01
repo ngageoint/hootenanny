@@ -703,6 +703,13 @@ whose source elements do not exist or encountered relation having references to 
 elements do not exist will have a custom tag added to them to signal that the feature may require
 manual cleanup.
 
+=== changeset.replacement.retain.replacing.data.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === changeset.replacement.snap.exclude.types
 
 * Data Type: list

@@ -236,25 +236,29 @@ void ChangesetReplacementCreator::create(
 
   _progress->set(_getJobPercentComplete(), "Snapping linear features...");
 
-  // We loaded both the input to replace and replacement datasets with their source IDs. Now, we
-  // need to combine some data from both datasets to perform way snapping. To avoid element ID
-  // conflicts within the same map, we'll remap all the sec IDs to temporary IDs. After the
-  // snapping, we'll restore only the original sec relation IDs which will prevent unnecessary
-  // create/delete statements to be generated for relations when modify statements are more
-  // appropriate. Eventually, we may be able to restore IDs for sec nodes/ways as well.
-  ElementIdRemapper secIdRemapper(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
-//  ElementIdRemapper secIdRemapper(
-//    // All secondary data IDs are remapped to avoid conflict with ref IDs in the combined map.
-//    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-//    // Only secondary relation IDs are later restored to the combined map.
-//    ElementCriterionPtr(
-//      new ChainCriterion(
-//        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
-//        ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)))));
-  LOG_INFO(secIdRemapper.getInitStatusMessage());
-  secIdRemapper.apply(secMap);
-  LOG_INFO(secIdRemapper.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(secMap, _changesetId + "-sec-after-id-remapping");
+  //ElementIdRemapper secIdRemapper(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
+  ElementIdRemapper secIdRemapper(
+    // All secondary data IDs are remapped to avoid conflict with ref IDs in the combined map.
+    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+    // Only secondary relation IDs are later restored to the combined map.
+    ElementCriterionPtr(
+      new ChainCriterion(
+        ElementCriterionPtr(new StatusCriterion(Status::Unknown2)),
+        ElementCriterionPtr(new ElementTypeCriterion(ElementType::Relation)))));
+  if (ConfigOptions().getChangesetReplacementRetainReplacingDataIds())
+  {
+    // TODO: update
+    // We loaded both the input to replace and replacement datasets with their source IDs. Now, we
+    // need to combine some data from both datasets to perform way snapping. To avoid element ID
+    // conflicts within the same map, we'll remap all the sec IDs to temporary IDs. After the
+    // snapping, we'll restore only the original sec relation IDs which will prevent unnecessary
+    // create/delete statements to be generated for relations when modify statements are more
+    // appropriate. Eventually, we may be able to restore IDs for sec nodes/ways as well.
+    LOG_INFO(secIdRemapper.getInitStatusMessage());
+    secIdRemapper.apply(secMap);
+    LOG_INFO(secIdRemapper.getCompletedStatusMessage());
+    OsmMapWriterFactory::writeDebugMap(secMap, _changesetId + "-sec-after-id-remapping");
+  }
 
   // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
@@ -314,10 +318,13 @@ void ChangesetReplacementCreator::create(
     refMap, combinedMap, immediatelyConnectedOutOfBoundsWays);
   immediatelyConnectedOutOfBoundsWays.reset();
 
-  // Restore the remapped relation IDs.
-  secIdRemapper.restore(combinedMap);
-  LOG_INFO(secIdRemapper.getRestoreCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-combined-after-id-restoring");
+  if (ConfigOptions().getChangesetReplacementRetainReplacingDataIds())
+  {
+    // Restore the remapped relation IDs.
+    secIdRemapper.restore(combinedMap);
+    LOG_INFO(secIdRemapper.getRestoreCompletedStatusMessage());
+    OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-combined-after-id-restoring");
+  }
 
   if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
   {
@@ -505,9 +512,11 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
 {
   // load the data that we're replacing with; We keep source IDs here initially and later remap some
   // of them to avoid conflict when this map needs to be combined with data from the ref map.
+  // TODO: update comment
+  const bool retainIds = ConfigOptions().getChangesetReplacementRetainReplacingDataIds();
   OsmMapPtr secMap =
     _loadInputMap(
-      "sec", _input2, true, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
+      "sec", _input2, retainIds, Status::Unknown2, _boundsOpts.loadSecKeepEntireCrossingBounds,
       _boundsOpts.loadSecKeepOnlyInsideBounds, false, true, _input2Map);
 
   _removeMetadataTags(secMap);

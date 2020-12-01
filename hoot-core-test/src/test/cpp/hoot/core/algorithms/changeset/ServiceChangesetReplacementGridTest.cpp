@@ -173,7 +173,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(25, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(23, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(123L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -238,7 +238,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(39, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(18, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(2533L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -371,7 +371,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(160, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(101, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(2230L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -394,7 +394,7 @@ public:
     // geometry types.
 
     // This is needed to suppress some ElementToGeometryConverter warning messages that should
-    // eventually be looked into.e
+    // eventually be looked into.
     DisableLog dl;
 
     _testName = "droppedPointPolyRelationMembers1Test";
@@ -440,7 +440,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(1124, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(986, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(18456L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -505,7 +505,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(28, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(21, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(15, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(732L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -576,7 +576,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(791, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(229, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(18416L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -664,7 +664,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(113, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(73, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(434L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -800,7 +800,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(57, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(10, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(544L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -868,7 +868,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(100, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(96, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(2187L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -935,7 +935,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(1145, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(419, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(16001L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -1150,7 +1150,7 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(260, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(5, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(1975L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
@@ -1179,6 +1179,10 @@ public:
     // TODO: update to 15 for node/way changes
     // duplicate pairs: 17
     // way end nodes: ?
+
+    LOG_VARW(CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT);
+    LOG_VARW(WRITE_NON_CONFLATABLE);
+    LOG_VARW(DISPLAY_METRICS_ONLY);
 
     _testName = "github4216UniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -1234,6 +1238,10 @@ public:
     // duplicate pairs: 427
     // way end nodes: ?
     // unconflatable: 772*
+
+    LOG_VARW(CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT);
+    LOG_VARW(WRITE_NON_CONFLATABLE);
+    LOG_VARW(DISPLAY_METRICS_ONLY);
 
     _testName = "northVegasLargeUniformTest";
     const QString rootDir = "/home/vagrant/hoot/tmp/4158";
@@ -1358,6 +1366,7 @@ private:
     conf().set(ConfigOptions::getApidbReaderReadFullThenCropOnBoundedKey(), false);
     conf().set(ConfigOptions::getLogWarningsForEmptyInputMapsKey(), false);
     // leave enabled for debugging only
+    // TODO: disable
     conf().set(ConfigOptions::getDebugMapsWriteKey(), false);
   }
 

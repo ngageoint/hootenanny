@@ -73,12 +73,13 @@ bool WayEndNodeCriterion::isSatisfied(const ConstElementPtr& e) const
     return false;
   }
 
-  // Otherwise, return true if this node is the end node of any way that contains it.
+  // Otherwise, return true if this node is the end node of any way that contains it and that way
+  // isn't a closed poly.
   for (std::set<long>::const_iterator itr = containingWayIds.begin(); itr != containingWayIds.end();
        ++itr)
   {
     ConstWayPtr way = _map->getWay(*itr);
-    if (way && way->isEndNode(e->getId()))
+    if (way && !way->isClosedArea() && way->isEndNode(e->getId()))
     {
       return true;
     }

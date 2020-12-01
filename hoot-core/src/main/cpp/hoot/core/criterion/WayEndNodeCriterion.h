@@ -34,6 +34,9 @@
 namespace hoot
 {
 
+/*
+ * TODO: false positive with this: service=driveway in refSinglePointTest, Northern corner
+ */
 class WayEndNodeCriterion : public WayNodeCriterion
 {
 
