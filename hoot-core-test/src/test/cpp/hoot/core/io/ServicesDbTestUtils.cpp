@@ -319,7 +319,7 @@ OsmMapPtr ServicesDbTestUtils::createServiceTestMap()
   r1->addElement("w1", w1->getElementId());
   r1->setTag("note", "r1");
   map->addRelation(r1);
-  RelationPtr r2(new Relation(Status::Unknown1, 2, -1.0, ""));
+  RelationPtr r2(new Relation(Status::Unknown1, 2, -1.0));
   r2->addElement("n2", n2->getElementId());
   map->addRelation(r2);
 
