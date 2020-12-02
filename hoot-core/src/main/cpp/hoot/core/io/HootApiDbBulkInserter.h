@@ -92,13 +92,17 @@ protected:
   virtual void _createRelationOutputFiles();
 
   virtual void _writeChangeset();
-  virtual void _writeRelation(const unsigned long relationDbId, const Tags& tags);
+  virtual void _writeRelation(const unsigned long relationDbId, const Tags& tags,
+                              const unsigned long version);
   virtual void _writeRelationMember(const unsigned long sourceRelationDbId,
-                            const RelationData::Entry& member,
-                            const unsigned long memberDbId,
-                            const unsigned int memberSequenceIndex) override;
-  virtual void _writeWay(const unsigned long wayDbId, const Tags& tags);
-  virtual void _writeWayNodes(const unsigned long wayId, const std::vector<long>& wayNodeIds) override;
+                                    const RelationData::Entry& member,
+                                    const unsigned long memberDbId,
+                                    const unsigned int memberSequenceIndex,
+                                    const unsigned long version) override;
+  virtual void _writeWay(const unsigned long wayDbId, const Tags& tags, const unsigned long version);
+  virtual void _writeWayNodes(const unsigned long wayId,
+                              const std::vector<long>& wayNodeIds,
+                              const unsigned long version) override;
   virtual void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId) override;
 
   virtual void _writeCombinedSqlFile();

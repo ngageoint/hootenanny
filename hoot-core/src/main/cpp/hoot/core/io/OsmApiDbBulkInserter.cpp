@@ -830,7 +830,8 @@ void OsmApiDbBulkInserter::writePartial(const ConstNodePtr& node)
   _writeNode(node, nodeDbId);
   _writeTags(node->getTags(), ElementType::Node, nodeDbId,
     _outputSections[ApiDb::getCurrentNodeTagsTableName()],
-    _outputSections[ApiDb::getNodeTagsTableName()]);
+    _outputSections[ApiDb::getNodeTagsTableName()],
+    node->getVersion());
   _writeStats.nodesWritten++;
   _writeStats.nodeTagsWritten += node->getTags().size();
   _incrementChangesInChangeset();
@@ -875,11 +876,12 @@ void OsmApiDbBulkInserter::writePartial(const ConstWayPtr& way)
     tags.set(MetadataTags::HootId(), QString::number(wayDbId));
   }
 
-  _writeWay(wayDbId);
-  _writeWayNodes(wayDbId, way->getNodeIds());
+  _writeWay(wayDbId, way->getVersion());
+  _writeWayNodes(wayDbId, way->getNodeIds(), way->getVersion());
   _writeTags(way->getTags(), ElementType::Way, wayDbId,
     _outputSections[ApiDb::getCurrentWayTagsTableName()],
-    _outputSections[ApiDb::getWayTagsTableName()]);
+    _outputSections[ApiDb::getWayTagsTableName()],
+    way->getVersion());
   _writeStats.waysWritten++;
   _writeStats.wayTagsWritten += way->getTags().size();
   _writeStats.wayNodesWritten += way->getNodeIds().size();
@@ -924,11 +926,14 @@ void OsmApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   if (relation->getType() != "")
     tags["type"] = relation->getType();
 
-  _writeRelation(relationDbId);
-  _writeRelationMembers(relation, relationDbId);
+  long version = relation->getVersion();
+
+  _writeRelation(relationDbId, version);
+  _writeRelationMembers(relation, relationDbId, version);
   _writeTags(tags, ElementType::Relation, relationDbId,
     _outputSections[ApiDb::getCurrentRelationTagsTableName()],
-    _outputSections[ApiDb::getRelationTagsTableName()]);
+    _outputSections[ApiDb::getRelationTagsTableName()],
+    version);
   _writeStats.relationsWritten++;
   _writeStats.relationTagsWritten += relation->getTags().size();
   _writeStats.relationMembersWritten += relation->getMembers().size();
@@ -1130,7 +1135,8 @@ void OsmApiDbBulkInserter::_writeTags(const Tags& tags,
                                       const ElementType::Type& elementType,
                                       const unsigned long dbId,
                                       const std::shared_ptr<QFile>& currentTableFile,
-                                      const std::shared_ptr<QFile>& historicalTableFile)
+                                      const std::shared_ptr<QFile>& historicalTableFile,
+                                      const unsigned long version)
 {
   LOG_TRACE("Writing tags to stream...");
 
@@ -1140,7 +1146,7 @@ void OsmApiDbBulkInserter::_writeTags(const Tags& tags,
     QString value = it.value().trimmed();
     if (!value.isEmpty())
     {
-      const QStringList tagSqlStrs = _sqlFormatter->tagToSqlStrings(dbId, elementType, key, value);
+      const QStringList tagSqlStrs = _sqlFormatter->tagToSqlStrings(dbId, elementType, key, value, version);
       currentTableFile->write(tagSqlStrs[0].toUtf8());
       historicalTableFile->write(tagSqlStrs[1].toUtf8());
     }
@@ -1162,18 +1168,20 @@ void OsmApiDbBulkInserter::_createWayOutputFiles()
   _createOutputFile(ApiDb::getWayNodesTableName(), wayNodeSqlHeaders[1]);
 }
 
-void OsmApiDbBulkInserter::_writeWay(const unsigned long wayDbId)
+void OsmApiDbBulkInserter::_writeWay(const unsigned long wayDbId,
+                                     const unsigned long version)
 {
   LOG_TRACE("Writing way to stream...");
 
   const QStringList waySqlStrs =
-    _sqlFormatter->wayToSqlStrings(wayDbId, _changesetData.currentChangesetId);
+    _sqlFormatter->wayToSqlStrings(wayDbId, _changesetData.currentChangesetId, version);
   _outputSections[ApiDb::getCurrentWaysTableName()]->write(waySqlStrs[0].toUtf8());
   _outputSections[ApiDb::getWaysTableName()]->write(waySqlStrs[1].toUtf8());
 }
 
 void OsmApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
-                                          const std::vector<long>& wayNodeIds)
+                                          const std::vector<long>& wayNodeIds,
+                                          const unsigned long version)
 {
   LOG_TRACE("Writing way nodes to stream...");
 
@@ -1197,7 +1205,7 @@ void OsmApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
     }
 
     const QStringList wayNodeSqlStrs =
-      _sqlFormatter->wayNodeToSqlStrings(dbWayId, wayNodeIdVal, wayNodeIndex);
+      _sqlFormatter->wayNodeToSqlStrings(dbWayId, wayNodeIdVal, wayNodeIndex, version);
     _outputSections[ApiDb::getCurrentWayNodesTableName()]->write(wayNodeSqlStrs[0].toUtf8());
     _outputSections[ApiDb::getWayNodesTableName()]->write(wayNodeSqlStrs[1].toUtf8());
 
@@ -1223,18 +1231,19 @@ void OsmApiDbBulkInserter::_createRelationOutputFiles()
   _createOutputFile(ApiDb::getRelationMembersTableName(),relationMemberSqlHeaders[1]);
 }
 
-void OsmApiDbBulkInserter::_writeRelation(const unsigned long relationDbId)
+void OsmApiDbBulkInserter::_writeRelation(const unsigned long relationDbId, const unsigned long version)
 {
   LOG_TRACE("Writing relation to stream...");
 
   const QStringList relationSqlStrs =
-    _sqlFormatter->relationToSqlStrings(relationDbId, _changesetData.currentChangesetId);
+    _sqlFormatter->relationToSqlStrings(relationDbId, _changesetData.currentChangesetId, version);
   _outputSections[ApiDb::getCurrentRelationsTableName()]->write(relationSqlStrs[0].toUtf8());
   _outputSections[ApiDb::getRelationsTableName()]->write(relationSqlStrs[1].toUtf8());
 }
 
 void OsmApiDbBulkInserter::_writeRelationMembers(const ConstRelationPtr& relation,
-                                                 const unsigned long dbRelationId)
+                                                 const unsigned long dbRelationId,
+                                                 const unsigned long version)
 {
   LOG_TRACE("Writing relation members to stream...");
 
@@ -1272,12 +1281,12 @@ void OsmApiDbBulkInserter::_writeRelationMembers(const ConstRelationPtr& relatio
     if (!_validateData)
     {
       unsigned long memberIdVal = std::abs(memberElementId.getId());
-      _writeRelationMember(dbRelationId, *it, memberIdVal, memberSequenceIndex);
+      _writeRelationMember(dbRelationId, *it, memberIdVal, memberSequenceIndex, version);
     }
     else if (knownElementMap && knownElementMap->contains(memberElementId.getId()))
     {
       _writeRelationMember(
-        dbRelationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex);
+        dbRelationId, *it, knownElementMap->at(memberElementId.getId()), memberSequenceIndex, version);
     }
     else
     {
@@ -1299,11 +1308,12 @@ void OsmApiDbBulkInserter::_writeRelationMembers(const ConstRelationPtr& relatio
 void OsmApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelationDbId,
                                                 const RelationData::Entry& member,
                                                 const unsigned long memberDbId,
-                                                const unsigned int memberSequenceIndex)
+                                                const unsigned int memberSequenceIndex,
+                                                const unsigned long version)
 {
   const QStringList relationMemberSqlStrs =
     _sqlFormatter->relationMemberToSqlStrings(
-      sourceRelationDbId, memberDbId, member, memberSequenceIndex);
+      sourceRelationDbId, memberDbId, member, memberSequenceIndex, version);
   _outputSections[ApiDb::getCurrentRelationMembersTableName()]->write(
     relationMemberSqlStrs[0].toUtf8());
   _outputSections[ApiDb::getRelationMembersTableName()]->write(relationMemberSqlStrs[1].toUtf8());
@@ -1379,7 +1389,7 @@ void OsmApiDbBulkInserter::_checkUnresolvedReferences(const ConstElementPtr& ele
 
       _writeRelationMember(
         relationRef->second.sourceDbRelationId, relationRef->second.relationMemberData,
-        elementDbId, relationRef->second.relationMemberSequenceId);
+        elementDbId, relationRef->second.relationMemberSequenceId, element->getVersion());
 
       // Remove entry from unresolved list
       _unresolvedRefs.unresolvedRelationRefs->erase(relationRef);

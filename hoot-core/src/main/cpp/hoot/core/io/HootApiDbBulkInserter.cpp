@@ -468,8 +468,8 @@ void HootApiDbBulkInserter::writePartial(const ConstWayPtr& way)
   //increment the changeset counter before writing the element in order to stay in sync with
   //HootApiDb
   _incrementChangesInChangeset();
-  _writeWay(wayDbId, way->getTags());
-  _writeWayNodes(wayDbId, way->getNodeIds());
+  _writeWay(wayDbId, way->getTags(), way->getVersion());
+  _writeWayNodes(wayDbId, way->getNodeIds(), way->getVersion());
   _writeStats.waysWritten++;
   _writeStats.wayTagsWritten += way->getTags().size();
   _writeStats.wayNodesWritten += way->getNodeIds().size();
@@ -515,8 +515,8 @@ void HootApiDbBulkInserter::writePartial(const ConstRelationPtr& relation)
   //  increment the changeset counter before writing the element in order to stay in sync with
   //  HootApiDb
   _incrementChangesInChangeset();
-  _writeRelation(relationDbId, tags);
-  _writeRelationMembers(relation, relationDbId);
+  _writeRelation(relationDbId, tags, relation->getVersion());
+  _writeRelationMembers(relation, relationDbId, relation->getVersion());
   _writeStats.relationsWritten++;
   _writeStats.relationTagsWritten += relation->getTags().size();
   _writeStats.relationMembersWritten += relation->getMembers().size();
@@ -567,7 +567,7 @@ void HootApiDbBulkInserter::_writeNode(const ConstNodePtr& node, const unsigned 
   LOG_TRACE("Writing node to stream...");
   _outputSections[HootApiDb::getCurrentNodesTableName(_database.getMapId())]->write(
     _sqlFormatter->nodeToSqlString(
-      node, nodeDbId, _changesetData.currentChangesetId, _validateData).toUtf8());
+      node, nodeDbId, _changesetData.currentChangesetId, node->getVersion(), _validateData).toUtf8());
 }
 
 void HootApiDbBulkInserter::_createWayOutputFiles()
@@ -580,15 +580,16 @@ void HootApiDbBulkInserter::_createWayOutputFiles()
     HootApiDbSqlStatementFormatter::getWayNodeSqlHeaderString(_database.getMapId()));
 }
 
-void HootApiDbBulkInserter::_writeWay(const unsigned long wayDbId, const Tags& tags)
+void HootApiDbBulkInserter::_writeWay(const unsigned long wayDbId, const Tags& tags, const unsigned long version)
 {
   LOG_TRACE("Writing way to stream...");
   _outputSections[HootApiDb::getCurrentWaysTableName(_database.getMapId())]->write(
-    _sqlFormatter->wayToSqlString(wayDbId, _changesetData.currentChangesetId, tags).toUtf8());
+    _sqlFormatter->wayToSqlString(wayDbId, _changesetData.currentChangesetId, tags, version).toUtf8());
 }
 
 void HootApiDbBulkInserter::_writeWayNodes(const unsigned long dbWayId,
-                                          const std::vector<long>& wayNodeIds)
+                                           const std::vector<long>& wayNodeIds,
+                                           const unsigned long /*version*/)
 {
   LOG_TRACE("Writing way nodes to stream...");
 
@@ -628,21 +629,23 @@ void HootApiDbBulkInserter::_createRelationOutputFiles()
     HootApiDbSqlStatementFormatter::getRelationMemberSqlHeaderString(_database.getMapId()));
 }
 
-void HootApiDbBulkInserter::_writeRelation(const unsigned long relationDbId, const Tags& tags)
+void HootApiDbBulkInserter::_writeRelation(const unsigned long relationDbId, const Tags& tags,
+                                           const unsigned long version)
 {
   LOG_TRACE("Writing relation to stream...");
   _outputSections[HootApiDb::getCurrentRelationsTableName(_database.getMapId())]->write(
-    _sqlFormatter->relationToSqlString(relationDbId, _changesetData.currentChangesetId, tags).toUtf8());
+    _sqlFormatter->relationToSqlString(relationDbId, _changesetData.currentChangesetId, tags, version).toUtf8());
 }
 
 void HootApiDbBulkInserter::_writeRelationMember(const unsigned long sourceRelationDbId,
                                                  const RelationData::Entry& member,
                                                  const unsigned long memberDbId,
-                                                 const unsigned int memberSequenceIndex)
+                                                 const unsigned int memberSequenceIndex,
+                                                 const unsigned long version)
 {
   _outputSections[HootApiDb::getCurrentRelationMembersTableName(_database.getMapId())]->write(
     _sqlFormatter->relationMemberToSqlString(
-      sourceRelationDbId, memberDbId, member, memberSequenceIndex).toUtf8());
+      sourceRelationDbId, memberDbId, member, memberSequenceIndex, version).toUtf8());
   _writeStats.relationMembersWritten++;
 }
 

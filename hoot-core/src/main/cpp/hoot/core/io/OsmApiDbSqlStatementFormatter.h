@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBSQLSTATEMENTFORMATTER_H
 #define OSMAPIDBSQLSTATEMENTFORMATTER_H
@@ -31,6 +31,7 @@
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/io/ApiDbSqlStatementFormatter.h>
 
 // Qt
 #include <QMap>
@@ -43,30 +44,30 @@ namespace hoot
 
 static const QString OSMAPIDB_CHANGESETS_OUTPUT_FORMAT_STRING_DEFAULT =
   "%1\t%2\t%3\t%4\t%5\t%6\t%7\t%8\t%9\n";
-static const QString OSMAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\n";
+static const QString OSMAPIDB_CURRENT_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t%5\t%6\t%7\n";
 static const QString OSMAPIDB_HISTORICAL_NODES_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\tt\t%5\t%6\t1\t\\N\n";
-static const QString OSMAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\n";
-static const QString OSMAPIDB_HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\tt\t\\N\n";
+  "%1\t%2\t%3\t%4\tt\t%5\t%6\t%7\t\\N\n";
+static const QString OSMAPIDB_CURRENT_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t%4\n";
+static const QString OSMAPIDB_HISTORICAL_WAYS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t\\N\n";
 static const QString OSMAPIDB_CURRENT_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
-static const QString OSMAPIDB_HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t1\t%3\n";
-static const QString OSMAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t1\n";
-static const QString OSMAPIDB_HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\tt\t\\N\n";
+static const QString OSMAPIDB_HISTORICAL_WAY_NODES_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\n";
+static const QString OSMAPIDB_CURRENT_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\tt\t%4\n";
+static const QString OSMAPIDB_HISTORICAL_RELATIONS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\tt\t\\N\n";
 static const QString OSMAPIDB_CURRENT_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\t%5\n";
 static const QString OSMAPIDB_HISTORICAL_RELATION_MEMBERS_OUTPUT_FORMAT_STRING_DEFAULT =
-  "%1\t%2\t%3\t%4\t1\t%5\n";
+  "%1\t%2\t%3\t%4\t%5\t%6\n";
 static const QString OSMAPIDB_CURRENT_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\n";
-static const QString OSMAPIDB_HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t1\n";
+static const QString OSMAPIDB_HISTORICAL_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\n";
 //for whatever strange reason, the historical node tags table column order in the API datbase
 //is different than the other historical tags tables; this makes a difference when using the
 //offline loader, since it is sensitive to ordering
-static const QString OSMAPIDB_HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t1\t%2\t%3\n";
+static const QString OSMAPIDB_HISTORICAL_NODE_TAGS_OUTPUT_FORMAT_STRING_DEFAULT = "%1\t%2\t%3\t%4\n";
 
 /**
  * Converts OSM elements and their children into executable Postgres SQL COPY statements against an
  * OSM API database
  */
-class OsmApiDbSqlStatementFormatter
+class OsmApiDbSqlStatementFormatter : public ApiDbSqlStatementFormatter
 {
 
 public:
@@ -75,15 +76,15 @@ public:
 
   QStringList nodeToSqlStrings(const ConstNodePtr& node, const long nodeId, const long changesetId,
                                const bool validate = false);
-  QStringList wayToSqlStrings(const long wayId, const long changesetId);
+  QStringList wayToSqlStrings(const long wayId, const long changesetId, const long version);
   QStringList wayNodeToSqlStrings(const long wayId, const long wayNodeId,
-                                  const unsigned int wayNodeIndex);
-  QStringList relationToSqlStrings(const long relationId, const long changesetId);
+                                  const unsigned int wayNodeIndex, const long version);
+  QStringList relationToSqlStrings(const long relationId, const long changesetId, const long version);
   QStringList relationMemberToSqlStrings(const long relationId, const long memberId,
                                          const RelationData::Entry& member,
-                                         const unsigned int memberSequenceIndex);
+                                         const unsigned int memberSequenceIndex, const unsigned int version);
   QStringList tagToSqlStrings(const long elementId, const ElementType& elementType,
-                              const QString& tagKey, const QString& tagValue);
+                              const QString& tagKey, const QString& tagValue, const long version);
   QString changesetToSqlString(const long changesetId, const long changesetUserId,
                                const long numChangesInChangeset,
                                const geos::geom::Envelope& changesetBounds);
@@ -202,12 +203,9 @@ public:
     return QStringList();
   }
 
-private:
+protected:
 
-  QMap<QString, QString> _outputFormatStrings;
-  QString _dateString;
-
-  void _initOutputFormatStrings(const QString& delimiter);
+  void _initOutputFormatStrings(const QString& delimiter) override;
 };
 
 }

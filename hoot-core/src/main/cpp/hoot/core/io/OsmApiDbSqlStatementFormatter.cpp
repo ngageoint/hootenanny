@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbSqlStatementFormatter.h"
 
@@ -43,8 +43,6 @@ namespace hoot
 OsmApiDbSqlStatementFormatter::OsmApiDbSqlStatementFormatter(const QString& delimiter)
 {
   _initOutputFormatStrings(delimiter);
-  //let's just do this once at the beginning, since it could be expensive
-  _dateString = QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz");
 }
 
 void OsmApiDbSqlStatementFormatter::_initOutputFormatStrings(const QString& delimiter)
@@ -165,6 +163,7 @@ QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& 
   }
   const QString changesetIdStr = QString::number(changesetId);
   const QString tileNumberString(QString::number(ApiDb::tileForPoint(node->getY(), node->getX())));
+  const QString versionString = _useSourceVersion ? QString::number(node->getVersion()) : "1";
 
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getCurrentNodesTableName()].arg(
@@ -173,7 +172,8 @@ QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& 
       nodeXNanodegreesStr,
       changesetIdStr,
       _dateString,
-      tileNumberString));
+      tileNumberString,
+      versionString));
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getNodesTableName()].arg(
       nodeIdStr,
@@ -181,63 +181,74 @@ QStringList OsmApiDbSqlStatementFormatter::nodeToSqlStrings(const ConstNodePtr& 
       nodeXNanodegreesStr,
       changesetIdStr,
       _dateString,
-      tileNumberString));
+      tileNumberString,
+      versionString));
 
   return sqlStrs;
 }
 
-QStringList OsmApiDbSqlStatementFormatter::wayToSqlStrings(const long wayId, const long changesetId)
+QStringList OsmApiDbSqlStatementFormatter::wayToSqlStrings(const long wayId, const long changesetId, const long version)
 {
   QStringList sqlStrs;
+  long ver = _useSourceVersion ? version : 1;
 
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getCurrentWaysTableName()]
       .arg(wayId)
       .arg(changesetId)
-      .arg(_dateString));
+      .arg(_dateString)
+      .arg(ver));
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getWaysTableName()]
       .arg(wayId)
       .arg(changesetId)
-      .arg(_dateString));
+      .arg(_dateString)
+      .arg(ver));
 
   return sqlStrs;
 }
 
 QStringList OsmApiDbSqlStatementFormatter::wayNodeToSqlStrings(const long wayId,
                                                                const long wayNodeId,
-                                                               const unsigned int wayNodeIndex)
+                                                               const unsigned int wayNodeIndex,
+                                                               const long version)
 {
   QStringList sqlStrs;
+  long ver = _useSourceVersion ? version : 1;
 
   const QString wayIdStr(QString::number(wayId));
   const QString wayNodeIdStr(QString::number(wayNodeId));
   const QString wayNodeIndexStr(QString::number(wayNodeIndex));
+  const QString wayVersion(QString::number(ver));
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getCurrentWayNodesTableName()]
       .arg(wayIdStr, wayNodeIdStr, wayNodeIndexStr));
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getWayNodesTableName()]
-      .arg(wayIdStr, wayNodeIdStr, wayNodeIndexStr));
+      .arg(wayIdStr, wayNodeIdStr, wayVersion, wayNodeIndexStr));
 
   return sqlStrs;
 }
 
 QStringList OsmApiDbSqlStatementFormatter::relationToSqlStrings(const long relationId,
-                                                                const long changesetId)
+                                                                const long changesetId,
+                                                                const long version)
 {
   QStringList sqlStrs;
+  long ver = _useSourceVersion ? version : 1;
 
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getCurrentRelationsTableName()]
       .arg(relationId)
       .arg(changesetId)
-      .arg(_dateString));
+      .arg(_dateString)
+      .arg(ver));
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getRelationsTableName()]
       .arg(relationId)
       .arg(changesetId)
-      .arg(_dateString));
+      .arg(_dateString)
+      .arg(ver));
 
   return sqlStrs;
 }
@@ -245,14 +256,17 @@ QStringList OsmApiDbSqlStatementFormatter::relationToSqlStrings(const long relat
 QStringList OsmApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long relationId,
                                                                       const long memberId,
                                                                       const RelationData::Entry& member,
-                                                                      const unsigned int memberSequenceIndex)
+                                                                      const unsigned int memberSequenceIndex,
+                                                                      const unsigned int version)
 {
   QStringList sqlStrs;
+  long ver = _useSourceVersion ? version : 1;
 
   const QString relationIdStr(QString::number(relationId));
   const QString memberIdStr(QString::number(memberId));
   const QString memberType = member.getElementId().getType().toString();
   const QString memberSequenceIndexStr(QString::number(memberSequenceIndex));
+  const QString versionStr(QString::number(ver));
   QString memberRole = escapeCopyToData(member.getRole());
   //handle empty data; this is needed for pg_bulkload
   if (memberRole.trimmed().isEmpty())
@@ -265,7 +279,7 @@ QStringList OsmApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long
       .arg(relationIdStr, memberType, memberIdStr, memberRole, memberSequenceIndexStr));
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getRelationMembersTableName()]
-      .arg(relationIdStr, memberType, memberIdStr, memberRole, memberSequenceIndexStr));
+      .arg(relationIdStr, memberType, memberIdStr, memberRole, versionStr, memberSequenceIndexStr));
 
   return sqlStrs;
 }
@@ -273,15 +287,18 @@ QStringList OsmApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long
 QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
                                                            const ElementType& elementType,
                                                            const QString& tagKey,
-                                                           const QString& tagValue)
+                                                           const QString& tagValue,
+                                                           const long version)
 {
   QStringList sqlStrs;
+  long ver = _useSourceVersion ? version : 1;
 
   const QString elementIdStr = QString::number(elementId);
   QString key = escapeCopyToData(tagKey);
   LOG_VART(key);
   QString value = escapeCopyToData(tagValue);
   LOG_VART(value);
+  QString versionStr = QString::number(ver);
 
   //all three of them are the same for current
   QString currentSql =
@@ -289,13 +306,17 @@ QStringList OsmApiDbSqlStatementFormatter::tagToSqlStrings(const long elementId,
       .arg(elementIdStr, key, value);
   sqlStrs.append(currentSql);
   //all three of them are not the same for historical
-  QString historicalFormatString = _outputFormatStrings[ApiDb::getWayTagsTableName()];
+  QString historicalSql;
   if (elementType == ElementType::Node)
   {
     //see explanation for this silliness in the header file
-    historicalFormatString = _outputFormatStrings[ApiDb::getNodeTagsTableName()];
+    historicalSql = _outputFormatStrings[ApiDb::getNodeTagsTableName()].arg(elementIdStr, versionStr, key, value);
   }
-  QString historicalSql = historicalFormatString.arg(elementIdStr, key, value);
+  else
+  {
+    //way and relation strings are the same
+    historicalSql = _outputFormatStrings[ApiDb::getWayTagsTableName()].arg(elementIdStr, key, value, versionStr);
+  }
   sqlStrs.append(historicalSql);
 
   return sqlStrs;
@@ -330,10 +351,10 @@ QStringList OsmApiDbSqlStatementFormatter::elementToSqlStrings(const ConstElemen
       return nodeToSqlStrings(std::dynamic_pointer_cast<const Node>(element), elementId, changesetId);
 
     case ElementType::Way:
-      return wayToSqlStrings(elementId, changesetId);
+      return wayToSqlStrings(elementId, changesetId, element->getVersion());
 
     case ElementType::Relation:
-      return relationToSqlStrings(elementId, changesetId);
+      return relationToSqlStrings(elementId, changesetId, element->getVersion());
 
     default:
       throw HootException("Unsupported element member type.");
