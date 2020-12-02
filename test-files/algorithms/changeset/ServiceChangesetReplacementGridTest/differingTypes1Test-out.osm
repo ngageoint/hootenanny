@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="8.508490500000001" minlon="11.3621884" maxlat="8.509304999999999" maxlon="11.3628841"/>
-    <node visible="true" id="6096477414" timestamp="2020-12-01T19:43:44Z" version="1" changeset="1" lat="8.5089886000000003" lon="11.3626974000000001">
+    <node visible="true" id="6096477414" timestamp="2020-12-02T22:09:17Z" version="1" changeset="1" lat="8.5089886000000003" lon="11.3626974000000001">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="6096477414"/>
     </node>
-    <node visible="true" id="6096477416" timestamp="2020-12-01T19:43:44Z" version="1" changeset="1" lat="8.5084905000000006" lon="11.3621884000000009">
+    <node visible="true" id="6096477416" timestamp="2020-12-02T22:09:17Z" version="1" changeset="1" lat="8.5084905000000006" lon="11.3621884000000009">
         <tag k="hoot:way_end_node" v="yes"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="6096477416"/>
     </node>
-    <node visible="true" id="6096477420" timestamp="2020-12-01T19:43:44Z" version="1" changeset="1" lat="8.5086863000000008" lon="11.3623595000000002">
+    <node visible="true" id="6096477420" timestamp="2020-12-02T22:09:17Z" version="1" changeset="1" lat="8.5086863000000008" lon="11.3623595000000002">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="6096477420"/>
     </node>
-    <node visible="true" id="6096477433" timestamp="2020-12-01T19:43:44Z" version="1" changeset="2" lat="8.5093049999999995" lon="11.3628841000000005">
+    <node visible="true" id="6096477433" timestamp="2020-12-02T22:09:18Z" version="1" changeset="2" lat="8.5093049999999995" lon="11.3628841000000005">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="6096477433"/>
     </node>
-    <way visible="true" id="649671735" timestamp="2020-12-01T19:43:44Z" version="1" changeset="2">
+    <way visible="true" id="649671735" timestamp="2020-12-02T22:09:18Z" version="1" changeset="2">
         <nd ref="6096477433"/>
         <nd ref="6096477414"/>
         <nd ref="6096477420"/>

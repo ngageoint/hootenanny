@@ -101,6 +101,7 @@ public:
   virtual void setRetainmentFilters(const QStringList& filterClassNames) = 0;
   virtual void setChainRetainmentFilters(const bool chain) = 0;
   virtual void setRetainmentFilterOptions(const QStringList& optionKvps) = 0;
+  virtual void setEnableWaySnapping(const bool enable) = 0;
   virtual void setChangesetId(const QString& id) = 0;
 
   /**
