@@ -189,8 +189,9 @@ void ChangesetReplacementCreator::create(
     return;
   }
 
-  // TODO: explain
-  // Ensure that sec data has the correct element versions.
+  // As replacement data is added to the ref db, the ref db will have its own versions of the
+  // elements added. Doing this makes sure that if we replace an overlapping element more than once
+  // that we have the correct version for it when doing so.
   _syncInputVersions(refMap, secMap);
 
   _currentTask++;
@@ -260,7 +261,8 @@ void ChangesetReplacementCreator::create(
     OsmMapWriterFactory::writeDebugMap(secMap, _changesetId + "-sec-after-id-remapping");
   }
 
-  // Combine the cookie cut ref map back with the secondary map, which is needed for way snapping.
+  // Combine the cookie cut ref map back with the secondary map, which is needed to generate the
+  // diff and for way snapping.
   MapUtils::combineMaps(cookieCutRefMap, secMap, false);
   OsmMapWriterFactory::writeDebugMap(cookieCutRefMap, _changesetId + "-combined-before-conflation");
   secMap.reset();

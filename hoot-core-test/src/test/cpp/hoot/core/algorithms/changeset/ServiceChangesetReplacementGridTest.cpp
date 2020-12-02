@@ -1216,7 +1216,7 @@ public:
     if (CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT)
     {
       _writeDiffBetweenReplacedAndReplacement(
-        taskGrid.getBounds(), finalOutput.replace(".osm", "-diff.osm"));
+        taskGrid.getBounds(), finalOutput.replace("-non-conflatable.osm", "-diff.osm"));
     }
   }
 
@@ -1292,7 +1292,7 @@ public:
     if (CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT)
     {
       _writeDiffBetweenReplacedAndReplacement(
-        taskGrid.getBounds(), finalOutput.replace(".osm", "-diff.osm"));
+        taskGrid.getBounds(), finalOutput.replace("-non-conflatable.osm", "-diff.osm"));
     }
   }
 
