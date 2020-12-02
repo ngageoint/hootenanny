@@ -712,6 +712,19 @@ whose source elements do not exist or encountered relation having references to 
 elements do not exist will have a custom tag added to them to signal that the feature may require
 manual cleanup.
 
+=== changeset.replacement.retain.replacing.data.ids
+
+* Data Type: bool
+* Default Value: `true`
+
+If true, replacement changesets will preserve the IDs of the elements used for replacement.
+Generally, this is preferred when like datasets are being replaced with each other (e.g. replacing
+public OSM with public OSM) that may have corresponding element IDs. Enabling this allows for modify
+changeset statements to be generated appropriately in favor of create/delete statement for matching
+elements between the datasets. If a replacement is being done against two dissimilar datasets which
+may have ID conflicts for elements that are different from each other, then disabling this setting
+may be desirable.
+
 === changeset.replacement.snap.exclude.types
 
 * Data Type: list

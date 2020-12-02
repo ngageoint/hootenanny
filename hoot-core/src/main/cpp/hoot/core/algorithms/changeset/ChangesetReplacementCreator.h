@@ -39,6 +39,11 @@ namespace hoot
  * strict bounds handling, as they are not useful for replacements within a task grid. This
  * temporarily drops support for the additional filters (they were broken anyway), and they will be
  * restored as part of #4267.
+ *
+ * TODO: After recent element ID preservation improvements, it may be that way snapping only needs
+ * to occur when the linear replacement data is very different from the data being replaced in
+ * order to stitch ways at the replacement boundary seam...need to investigate. If so, then we
+ * may change back to making way snapping optional and have the option disabled by default.
  */
 class ChangesetReplacementCreator : public ChangesetReplacementCreatorAbstract
 {
@@ -99,11 +104,6 @@ protected:
   virtual void _setGlobalOpts() override;
 
 private:
-
-  /*
-   * Calculates the replacement bounds as the union of the ref and sec maps; see #4376
-   */
-  void _setTrueReplacementBounds();
 
   /*
    * For any element in the sec dataset with a lower version than the corresponding element in the

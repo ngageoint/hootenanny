@@ -279,7 +279,8 @@ void ChangesetTaskGridReplacer::_replaceTaskGridCell(
   if (ConfigOptions().getDebugMapsWrite() && changesetNum < taskGridSize)
   {
     _writeUpdatedData(
-      _changesetsOutputDir + "/" + QString::number(taskGridCell.id) + "-replaced-data.osm");
+      _changesetsOutputDir + "/" + _jobName + "-" + QString::number(taskGridCell.id) +
+      "-replaced-data.osm");
   }
 
   if (changesetNum < taskGridSize)

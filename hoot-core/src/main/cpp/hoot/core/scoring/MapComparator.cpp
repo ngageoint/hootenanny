@@ -84,7 +84,7 @@ public:
    * Defaults to 5cm threshold
    */
   CompareVisitor(
-    std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime, int errorLimit = 10,
+    std::shared_ptr<OsmMap> refMap, bool ignoreUUID, bool useDateTime, int errorLimit = 5,
     Meters threshold = 0.05)
     : _refMap(refMap),
       _threshold(threshold),
@@ -119,9 +119,8 @@ public:
       testTags.set("uuid", "None");
     }
 
-    // By default, hoot will usually set these tags when ingesting a file
-    // this can cause problems when comparing files during testing, so we
-    // have the option to ignore it here.
+    // By default, hoot will usually set these tags when ingesting a file this can cause problems
+    // when comparing files during testing, so we have the option to ignore it here.
     if (!_useDateTime)
     {
       refTags.set(MetadataTags::SourceIngestDateTime(), "None");  // Wipe out the ingest datetime
@@ -135,7 +134,7 @@ public:
     {
       _matches = false;
       _errorCount++;
-      if (_errorCount <= 10)
+      if (_errorCount <= _errorLimit)
       {
         LOG_WARN(
           "Tags do not match (ref: " << refElement->getElementId() << ", test: " <<
@@ -146,7 +145,7 @@ public:
         keys.removeDuplicates();
         keys.sort();
 
-        if (_errorCount < 10)
+        if (_errorCount < _errorLimit)
         {
           for (int i = 0; i < keys.size(); i++)
           {
@@ -161,7 +160,9 @@ public:
       }
       return;
     }
-    //CHECK_MSG(refTags == testTags, "Tags do not match: " << refTags.toString() << " vs. " << testTags.toString());
+    //CHECK_MSG(
+    // refTags == testTags, "Tags do not match: " << refTags.toString() << " vs. " <<
+    // testTags.toString());
 
     CHECK_DOUBLE(refElement->getCircularError(), e->getCircularError(), _threshold);
     CHECK_MSG(refElement->getStatus() == e->getStatus(),
@@ -193,7 +194,7 @@ public:
 
     if (GeometryUtils::haversine(refNode->toCoordinate(), testNode->toCoordinate()) > _threshold)
     {
-      if (_errorCount <= 10)
+      if (_errorCount <= _errorLimit)
       {
         LOG_WARN(
           "refNode: " << std::fixed << std::setprecision(15) << refNode->getX() << ", " <<
@@ -262,7 +263,7 @@ private:
 MapComparator::MapComparator():
   _ignoreUUID(false),
   _useDateTime(false),
-  _errorLimit(10)
+  _errorLimit(ConfigOptions().getLogWarnMessageLimit())
 {
 }
 
@@ -336,7 +337,6 @@ void MapComparator::_printIdDiff(
     idsIn2AndNotIn1Limited = idsIn2AndNotIn1;
   }
 
-  //map.comparator.print.full.mismatch.elements.on.map.size.diff
   const bool printFullElements =
     ConfigOptions().getMapComparatorPrintFullMismatchElementsOnMapSizeDiff();
   if (idsIn1AndNotIn2Limited.size() > 0)

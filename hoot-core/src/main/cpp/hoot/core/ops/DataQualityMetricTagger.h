@@ -70,10 +70,11 @@ public:
   virtual QString getDescription() const
   { return "Calculates select data quality metrics for a map and tags features with issues"; }
 
-  int getNumOrphanedNodesInOutput() const { return _orphanedNodes; }
-  int getNumDisconnectedWaysInOutput() const { return _disconnectedWays; }
-  int getNumEmptyWaysInOutput() const { return _emptyWays; }
-  int getNumDuplicateElementPairsInOutput() const { return _duplicateElementPairs; }
+  int getNumOrphanedNodes() const { return _orphanedNodes; }
+  int getNumDisconnectedWays() const { return _disconnectedWays; }
+  int getNumEmptyWays() const { return _emptyWays; }
+  int getNumDuplicateElementPairs() const { return _duplicateElementPairs; }
+  int getNumWayEndNodes() const { return _numWayEndNodes; }
 
 private:
 
@@ -85,6 +86,9 @@ private:
   int _emptyWays;
   // the number of duplicated elements found in the final output if _tagQualityIssues=true
   int _duplicateElementPairs;
+  // Monitoring this stat can be useful in determining if determining if the number of disconnected
+  // ways have been incorrectly increased by a changeset.
+  int _numWayEndNodes;
 };
 
 }

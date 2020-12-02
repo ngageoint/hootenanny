@@ -121,10 +121,10 @@ public:
 //        taskGrid.getBounds(), finalOutput.replace(".osm", "-diff.osm"));
 //    }
 
-//    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodesInOutput());
-//    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWaysInOutput());
-//    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWaysInOutput());
-//    CPPUNIT_ASSERT_EQUAL(28, uut.getOutputMetrics().getNumDuplicateElementPairsInOutput());
+//    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumOrphanedNodes());
+//    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
+//    CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
+//    CPPUNIT_ASSERT_EQUAL(28, uut.getOutputMetrics().getNumDuplicateElementPairs());
 //  }
 
 private:
