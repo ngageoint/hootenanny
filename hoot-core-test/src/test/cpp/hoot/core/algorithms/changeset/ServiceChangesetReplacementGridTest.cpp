@@ -459,8 +459,8 @@ public:
       CPPUNIT_ASSERT_EQUAL(189L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(156L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(281L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(27L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(46L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(24L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(48L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
 
       HOOT_FILE_EQUALS(_inputPath + "/" + outFile, outFull);
     }
