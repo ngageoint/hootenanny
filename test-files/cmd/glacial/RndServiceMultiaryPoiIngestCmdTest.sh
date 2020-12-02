@@ -192,4 +192,4 @@ echo ""
 hoot db-delete $HOOT_OPTS "$HOOT_DB_URL/MultiaryIngest-ReferenceLayer"
 
 # Delete the user
-PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME  -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

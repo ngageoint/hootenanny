@@ -41,4 +41,4 @@ hoot db-delete $HOOT_OPTS $DB_URL/$input
 rm -rf $outputfolder
 
 # Delete the user
-PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='test@test.com';" > /dev/null
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME  -c "DELETE FROM users WHERE email='test@test.com';" > /dev/null

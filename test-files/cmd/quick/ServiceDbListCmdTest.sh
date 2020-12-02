@@ -21,4 +21,4 @@ hoot db-delete --warn $CONFIG -D api.db.email=$HOOT_EMAIL $HOOT_DB_URL/DbListMap
 hoot db-delete --warn $CONFIG -D api.db.email=$HOOT_EMAIL $HOOT_DB_URL/DbListMapsCmdTest2
 
 # Delete the user
-PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

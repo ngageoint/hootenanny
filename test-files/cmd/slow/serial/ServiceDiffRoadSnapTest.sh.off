@@ -82,4 +82,4 @@ hoot diff $GENERAL_OPTS $GOLD_DIR/out.osm $OUTPUT_DIR/out.osm
 hoot db-delete $GENERAL_OPTS $DB_OPTS $SEC_DB_INPUT $HOOT_DB_URL/$TEST_NAME-sec
 
 # Delete the user
-PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
