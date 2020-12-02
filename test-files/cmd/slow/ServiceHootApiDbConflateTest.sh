@@ -61,4 +61,4 @@ psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name fro
 psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d $DB_NAME -c "select display_name from maps;" | grep -qw DcTigerRoads-ServiceHootApiDbConflateTest && echo "Error: db-delete did not remove DcTigerRoads-ServiceHootApiDbConflateTest dataset"
 
 # Delete the user
-PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

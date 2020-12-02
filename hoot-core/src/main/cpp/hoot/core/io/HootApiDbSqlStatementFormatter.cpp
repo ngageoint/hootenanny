@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootApiDbSqlStatementFormatter.h"
 
@@ -39,11 +39,9 @@ namespace hoot
 {
 
 HootApiDbSqlStatementFormatter::HootApiDbSqlStatementFormatter(const QString& delimiter,
-                                                               const long mapId) :
-//let's just do this once at the beginning, since it could be expensive
-_dateString(QDateTime::currentDateTime().toUTC().toString("yyyy-MM-dd hh:mm:ss.zzz")),
-_precision(ConfigOptions().getWriterPrecision()),
-_mapId(mapId)
+                                                               const long mapId)
+  : _precision(ConfigOptions().getWriterPrecision()),
+    _mapId(mapId)
 {
   _initOutputFormatStrings(delimiter);
 }
@@ -110,7 +108,8 @@ QString HootApiDbSqlStatementFormatter::_toTagsString(const Tags& tags)
 }
 
 QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node, const long nodeId,
-                                                        const long changesetId, const bool validate)
+                                                        const long changesetId, const long version,
+                                                        const bool validate)
 {
   const QString nodeIdStr = QString::number(nodeId);
   if (validate)
@@ -132,6 +131,7 @@ QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node
   }
   const QString changesetIdStr = QString::number(changesetId);
   const QString tileNumberString(QString::number(ApiDb::tileForPoint(node->getY(), node->getX())));
+  long ver = _useSourceVersion ? version : 1;
 
   QString nodeStr =
     _outputFormatStrings[HootApiDb::getCurrentNodesTableName(_mapId)]
@@ -140,7 +140,8 @@ QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node
       .arg(QString::number(node->getX(), 'g', _precision))
       .arg(changesetIdStr)
       .arg(_dateString)
-      .arg(tileNumberString);
+      .arg(tileNumberString)
+      .arg(ver);
   if (node->getTags().size() > 0)
   {
     nodeStr.replace(
@@ -151,13 +152,15 @@ QString HootApiDbSqlStatementFormatter::nodeToSqlString(const ConstNodePtr& node
 }
 
 QString HootApiDbSqlStatementFormatter::wayToSqlString(const long wayId, const long changesetId,
-                                                            const Tags& tags)
+                                                       const Tags& tags, const long version)
 {
+  long ver = _useSourceVersion ? version : 1;
   QString wayStr =
     _outputFormatStrings[HootApiDb::getCurrentWaysTableName(_mapId)]
       .arg(wayId)
       .arg(changesetId)
-      .arg(_dateString);
+      .arg(_dateString)
+      .arg(ver);
   if (tags.size() > 0)
   {
     wayStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
@@ -167,8 +170,8 @@ QString HootApiDbSqlStatementFormatter::wayToSqlString(const long wayId, const l
 }
 
 QString HootApiDbSqlStatementFormatter::wayNodeToSqlString(const long wayId,
-                                                               const long wayNodeId,
-                                                               const unsigned int wayNodeIndex)
+                                                           const long wayNodeId,
+                                                           const unsigned int wayNodeIndex)
 {
   const QString wayIdStr(QString::number(wayId));
   const QString wayNodeIdStr(QString::number(wayNodeId));
@@ -179,14 +182,17 @@ QString HootApiDbSqlStatementFormatter::wayNodeToSqlString(const long wayId,
 }
 
 QString HootApiDbSqlStatementFormatter::relationToSqlString(const long relationId,
-                                                                 const long changesetId,
-                                                                 const Tags& tags)
+                                                            const long changesetId,
+                                                            const Tags& tags,
+                                                            const long version)
 {
+  long ver = _useSourceVersion ? version : 1;
   QString relationStr =
     _outputFormatStrings[HootApiDb::getCurrentRelationsTableName(_mapId)]
       .arg(relationId)
       .arg(changesetId)
-      .arg(_dateString);
+      .arg(_dateString)
+      .arg(ver);
   if (tags.size() > 0)
   {
     relationStr.replace("\\N", OsmApiDbSqlStatementFormatter::escapeCopyToData(_toTagsString(tags)));
@@ -196,9 +202,10 @@ QString HootApiDbSqlStatementFormatter::relationToSqlString(const long relationI
 }
 
 QString HootApiDbSqlStatementFormatter::relationMemberToSqlString(const long relationId,
-                                                                       const long memberId,
-                                                                       const RelationData::Entry& member,
-                                                                       const unsigned int memberSequenceIndex)
+                                                                  const long memberId,
+                                                                  const RelationData::Entry& member,
+                                                                  const unsigned int memberSequenceIndex,
+                                                                  const unsigned long /*version*/)
 {
   const QString relationIdStr(QString::number(relationId));
   const QString memberIdStr(QString::number(memberId));
@@ -244,13 +251,13 @@ QString HootApiDbSqlStatementFormatter::elementToSqlString(const ConstElementPtr
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
-      return nodeToSqlString(std::dynamic_pointer_cast<const Node>(element), elementId, changesetId);
+      return nodeToSqlString(std::dynamic_pointer_cast<const Node>(element), elementId, changesetId, element->getVersion());
 
     case ElementType::Way:
-      return wayToSqlString(elementId, changesetId, element->getTags());
+      return wayToSqlString(elementId, changesetId, element->getTags(), element->getVersion());
 
     case ElementType::Relation:
-      return relationToSqlString(elementId, changesetId, element->getTags());
+      return relationToSqlString(elementId, changesetId, element->getTags(), element->getVersion());
 
     default:
       throw HootException("Unsupported element member type.");

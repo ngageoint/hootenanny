@@ -232,19 +232,28 @@ protected:
   virtual void _createRelationOutputFiles();
 
   virtual void _writeChangeset();
-  virtual void _writeRelation(const unsigned long relationDbId);
+  virtual void _writeRelation(const unsigned long relationDbId,
+                              const unsigned long version);
   void _writeRelationMembers(const ConstRelationPtr& relation,
-                             const unsigned long dbRelationId);
+                             const unsigned long dbRelationId,
+                             const unsigned long version);
   virtual void _writeRelationMember(const unsigned long sourceRelationDbId,
-                            const RelationData::Entry& member,
-                            const unsigned long memberDbId,
-                            const unsigned int memberSequenceIndex);
-  virtual void _writeWay(const unsigned long wayDbId);
-  virtual void _writeWayNodes(const unsigned long wayId, const std::vector<long>& wayNodeIds);
-  virtual void _writeNode(const ConstNodePtr& node, const unsigned long nodeDbId);
+                                    const RelationData::Entry& member,
+                                    const unsigned long memberDbId,
+                                    const unsigned int memberSequenceIndex,
+                                    const unsigned long version);
+  virtual void _writeWay(const unsigned long wayDbId,
+                         const unsigned long version);
+  virtual void _writeWayNodes(const unsigned long wayId,
+                              const std::vector<long>& wayNodeIds,
+                              const unsigned long version);
+  virtual void _writeNode(const ConstNodePtr& node,
+                          const unsigned long nodeDbId);
   virtual void _writeTags(const Tags& tags, const ElementType::Type& elementType,
-                  const unsigned long dbId, const std::shared_ptr<QFile>& currentTableFile,
-                  const std::shared_ptr<QFile>& historicalTableFile);
+                          const unsigned long dbId,
+                          const std::shared_ptr<QFile>& currentTableFile,
+                          const std::shared_ptr<QFile>& historicalTableFile,
+                          const unsigned long version);
 
   virtual void _incrementChangesInChangeset();
 
