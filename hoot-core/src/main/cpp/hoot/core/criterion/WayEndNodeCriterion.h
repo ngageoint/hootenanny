@@ -35,7 +35,10 @@ namespace hoot
 {
 
 /*
- * TODO: false positive with this: service=driveway in refSinglePointTest, Northern corner
+ * Identifies way end nodes, which are end way nodes of non-closed poly ways that may or may not
+ * be shared among more than one way.
+ *
+ * TODO: fix false positive with this: service=driveway in refSinglePointTest, Northern corner
  */
 class WayEndNodeCriterion : public WayNodeCriterion
 {

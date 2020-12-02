@@ -146,18 +146,18 @@ public:
   bool isOneWay() const;
 
   /**
-   * Determines if a node ID represents the start and end node
+   * Determines if a node ID represents the first and last node
    *
    * @param nodeId ID of the node to search for
-   * @return true if the node ID maps to the start and end node; false otherwise
+   * @return true if the node ID maps to the first and last node; false otherwise
    */
   bool isFirstAndLastNode(const long nodeId) const;
 
   /**
-   * TODO
+   * Determines if a node ID represents and end node
    *
-   * @param nodeId
-   * @return
+   * @param nodeId ID of the node to search for
+   * @return true if the node ID maps to the an end node; false otherwise
    */
   bool isEndNode(const long nodeId) const;
 
