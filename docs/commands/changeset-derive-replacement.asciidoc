@@ -14,9 +14,9 @@ The feature replacement algorithm used by this command allows for avoiding unnec
 undesirable and also stitching up seams in the data when features must be clipped. The output changeset file can be applied directly to an 
 OSM API database via SQL or via the Rails Port API with the +changeset-apply+ command. 
 
-Generally, the reference data is sourced from an authoritative data store, such as an OSM API database, and the secondary data is source from
+Generally, the reference data is sourced from an authoritative data store, such as an OSM API database, and the secondary data is sourced from
 some non-authoritative data store containing superior data for enrichment. Element IDs in the reference dataset are retained, while element 
-IDs in the secondary data are not retained and those elements treated as completely new data in relation to the reference data store. 
+IDs in the secondary data may or may not be retained depending on the configuration (see `changeset.replacement.retain.replacing.data.ids`).
 
 * +input1+                       - Map input with features to replace; may be any supported input format that also supports bounded reading 
                                    (e.g. OSM file). See the "Input Data and "Bounds Handling" sections for more detail.

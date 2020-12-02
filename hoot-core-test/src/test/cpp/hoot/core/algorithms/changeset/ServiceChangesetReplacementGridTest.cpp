@@ -175,12 +175,12 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(23, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(123L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(51L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(80L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(63L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(90L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(33L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(20L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(38L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(42L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(21L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -240,12 +240,12 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(18, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(2533L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(184L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(66L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(26L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2502L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(28L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(152L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(55L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(11L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(15L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(3L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -327,6 +327,12 @@ public:
   {
     // part of github 4228 - None of the highway=street_lamp features near Edmundo Escobedo Sr.
     // Middle School (Westmost building) should get dropped in the output.
+    //
+    // Note the distortion of the Northern part of "North Hualapai Way" just outside of the
+    // replacement bounds caused by a large movement of one of the road nodes between datasets.
+    // Presumably, the road would be repaired by replacing a cell adjacent and North of cell #3.
+    //
+    // TODO: The boundary relation, "Las Vegas" loses a member. Needs fixed.
 
     _testName = "droppedNodes1Test";
     _prepInput(
@@ -373,12 +379,12 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(101, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(2230L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(742L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(603L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(255L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2057L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(175L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(585L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(447L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(158L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(99L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(10L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -392,6 +398,10 @@ public:
     // part of github 4228 - The POI, Desert Shores, belongs in a relation with a landuse poly.
     // Neither should be dropped from the output due to being in a relation with members of mixed
     // geometry types.
+    //
+    // Note, the unlabeled way that crosses the replacement bounds toward the top middle used to
+    // be part of an admin boundary relation but is no longer...not sure if that should be fixed or
+    // if replacing the adjacent cell would fix it.
 
     // This is needed to suppress some ElementToGeometryConverter warning messages that should
     // eventually be looked into.
@@ -442,12 +452,12 @@ public:
       CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(986, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(18456L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(1525L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(2682L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(343L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(17643L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(663L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(746L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2495L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(189L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(156L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(279L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(27L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(46L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -507,12 +517,12 @@ public:
       CPPUNIT_ASSERT_EQUAL(28, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(15, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(732L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(106L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(94L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(75L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(727L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(101L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(5L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(29L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(65L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(10L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -525,6 +535,10 @@ public:
   {
     // github 4216; similar to orphanedNodes1Test - There should be no orphaned nodes in the
     // output.
+    //
+    // Note the distortion of "Judson Avenue" near "East Lake Mead Boulevard" just outside of the
+    // replacement bounds caused by a large movement of one of the road nodes between datasets.
+    // Presumably, the road would be repaired by replacing a cell adjacent and North of cell #1.
 
     _testName = "orphanedNodes2Test";
     _prepInput(
@@ -576,14 +590,14 @@ public:
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumDisconnectedWays());
       CPPUNIT_ASSERT_EQUAL(0, uut.getOutputMetrics().getNumEmptyWays());
       CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
-      CPPUNIT_ASSERT_EQUAL(229, uut.getOutputMetrics().getNumWayEndNodes());
+      CPPUNIT_ASSERT_EQUAL(228, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(18416L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(608L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(2852L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(479L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(17892L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(537L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(171L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2503L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(349L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(130L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(40L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(17L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(12L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -666,9 +680,9 @@ public:
       CPPUNIT_ASSERT_EQUAL(1, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(73, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(434L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(433L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(246L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(245L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(185L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(136L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
@@ -803,11 +817,11 @@ public:
       CPPUNIT_ASSERT_EQUAL(10, uut.getOutputMetrics().getNumWayEndNodes());
 
       CPPUNIT_ASSERT_EQUAL(544L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(143L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(22L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(123L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(20L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(2L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -821,6 +835,10 @@ public:
     // This tests that alpha shape generation doesn't fail if the ref map gets filtered down to a
     // single POI during geometry filtering. Since geometry filtering no longer occurs, unless the
     // workflow is cut only, this test could possibly be removed.
+    //
+    // Note, there are some highway=trunk roads in the lower right hand corner that appear to be
+    // duplicated in the output. This is due to the fact that the input data has different IDs for
+    // some of what appear to be the same roads across input datasets.
 
     _testName = "refSinglePoint1Test";
     _prepInput(
@@ -870,12 +888,12 @@ public:
       CPPUNIT_ASSERT_EQUAL(8, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(96, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(2187L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(294L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(494L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(1L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(96L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(1941L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(240L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(56L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(418L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(77L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(20L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -1003,12 +1021,12 @@ public:
       CPPUNIT_ASSERT_EQUAL(2, uut.getOutputMetrics().getNumDuplicateElementPairs());
       CPPUNIT_ASSERT_EQUAL(94, uut.getOutputMetrics().getNumWayEndNodes());
 
-      CPPUNIT_ASSERT_EQUAL(4136L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(345L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(679L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
-      CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
-      CPPUNIT_ASSERT_EQUAL(60L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(3855L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(281L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(64L, changesetStats[OsmApiDbSqlChangesetApplier::NODE_DELETE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(655L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_CREATE_KEY]);
+      CPPUNIT_ASSERT_EQUAL(24L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_MODIFY_KEY]);
+      CPPUNIT_ASSERT_EQUAL(36L, changesetStats[OsmApiDbSqlChangesetApplier::WAY_DELETE_KEY]);
       CPPUNIT_ASSERT_EQUAL(4L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_CREATE_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_MODIFY_KEY]);
       CPPUNIT_ASSERT_EQUAL(0L, changesetStats[OsmApiDbSqlChangesetApplier::RELATION_DELETE_KEY]);
@@ -1172,12 +1190,16 @@ public:
   {
     // larger AOI version of orphanedNodes2Test; good intermediately sized test dataset
 
-    // TODO: update to 2 for node/way changes
-    // orphaned nodes: 0
+    // 4 changesets
+    // ? changes
+    // avg derivation: ?s,
+    // total time: ?min?s
+    // ~? changes/min
+    // diff between replacement: ?
+    // orphaned nodes: 2
     // disconnected ways: 0
     // empty ways: 0
-    // TODO: update to 15 for node/way changes
-    // duplicate pairs: 17
+    // duplicate pairs: 15
     // way end nodes: ?
 
     LOG_VARW(CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT);
@@ -1222,22 +1244,20 @@ public:
 
   void northVegasLargeUniformTest()
   {
-    // whole northern half of city - 64 changesets, ~33.3M changes, avg derivation: 36s,
-    // total time: 55min9s, ~604k changes/min, diff between replacement: 6.3k (1hr21m)
+    // whole northern half of city
 
-    // node/way/relation id retention
-
-    // ~30.3M changes, avg derivation: 36s,
-    // total time: 54min16s, ~558k changes/min, diff between replacement: ?
-
-    // TODO: update to 48 for node/way changes
-    // orphaned nodes: 4
+    // 64 changesets
+    // ~30.3M changes
+    // avg derivation: 36s,
+    // total time: 54min16s
+    // ~558k changes/min
+    // diff between replacement: 6.3k
+    // orphaned nodes: 48 // TODO: work on this one
     // disconnected ways: 0
     // empty ways: 0
-    // TODO: update to 408 for node/way changes
-    // duplicate pairs: 427
+    // duplicate pairs: 408
     // way end nodes: ?
-    // unconflatable: 772*
+    // unconflatable: 2.7k
 
     LOG_VARW(CALC_DIFF_BETWEEN_REPLACED_AND_REPLACEMENT);
     LOG_VARW(WRITE_NON_CONFLATABLE);

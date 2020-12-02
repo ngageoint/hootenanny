@@ -230,8 +230,6 @@ void TestUtils::resetBasic()
   UuidHelper::resetRepeatableKey();
   //  Reset the pseudo random number generator seed
   Tgs::Random::instance()->seed();
-  // Reset the debug map count used to name output files
-  OsmMapWriterFactory::resetDebugMapCount();
 }
 
 void TestUtils::resetEnvironment(const QStringList confs)
@@ -279,6 +277,9 @@ void TestUtils::resetEnvironment(const QStringList confs)
   }
   //  Reset the pseudo random number generator seed
   Tgs::Random::instance()->seed();
+
+  // Reset the debug map count used to name output files
+  OsmMapWriterFactory::resetDebugMapCount();
 }
 
 QString TestUtils::toQuotedString(QString str)

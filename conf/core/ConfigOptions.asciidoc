@@ -708,7 +708,13 @@ manual cleanup.
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+If true, replacement changesets will preserve the IDs of the elements used for replacement.
+Generally, this is preferred when like datasets are being replaced with each other (e.g. replacing
+public OSM with public OSM) that may have corresponding element IDs. Enabling this allows for modify
+changeset statements to be generated appropriately in favor of create/delete statement for matching
+elements between the datasets. If a replacement is being done against two dissimilar datasets which
+may have ID conflicts for elements that are different from each other, then disabling this setting
+may be desirable.
 
 === changeset.replacement.snap.exclude.types
 
