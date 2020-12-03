@@ -58,7 +58,8 @@ fi
 scripts/database/CleanAndInitializeOsmApiDb.sh
 
 # write ref to osmapidb
-# There's a mix of positive/negative IDs in the source file, so let's treat this like an authoritative data store and give it all positive IDs.
+# There's a mix of positive/negative IDs in the input ref source files, so let's treat this like an authoritative data store and give it all 
+# positive IDs.
 hoot convert -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator $GENERAL_OPTS $DB_OPTS $REF_INPUT $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
   hoot convert -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $OSM_API_DB_URL $OUTPUT_DIR/ref-original.osm
@@ -81,7 +82,7 @@ if [ "$NUM_STEPS" == "2" ]; then
 else
   # run diff conflate to osm w/ road snapping; retain both sets of IDs during conflate
   hoot conflate $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true -D differential.snap.unconnected.roads=true -D snap.unconnected.ways.snap.tolerance=10.0 $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/diff.osm --differential
-  # TODO: comment
+  # generate a changeset between the original ref data and the diff calculated in the previous step
   hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/diff.osm $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
   if [ "$DEBUG" == "true" ]; then
     hoot changeset-derive $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/diff.osm $OUTPUT_DIR/diff.osc
