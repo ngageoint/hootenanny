@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osmChange version="0.6" generator="hootenanny">
-    <create>
-        <way id="-1" version="0">
-            <nd ref="49"/>
-            <nd ref="51"/>
-            <nd ref="52"/>
-            <nd ref="53"/>
-            <tag k="highway" v="residential"/>
-            <tag k="name" v="road 3"/>
-        </way>
-    </create>
     <delete>
         <way id="82" version="1">
             <nd ref="49"/>
@@ -20,4 +10,14 @@
             <tag k="name" v="road 2"/>
         </way>
     </delete>
+    <create>
+        <way id="-1" version="0">
+            <nd ref="49"/>
+            <nd ref="51"/>
+            <nd ref="52"/>
+            <nd ref="53"/>
+            <tag k="highway" v="residential"/>
+            <tag k="name" v="road 3"/>
+        </way>
+    </create>
 </osmChange>

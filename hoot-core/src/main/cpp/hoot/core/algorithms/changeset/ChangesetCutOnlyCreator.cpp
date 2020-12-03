@@ -27,7 +27,6 @@
 #include "ChangesetCutOnlyCreator.h"
 
 // Hoot
-#include <hoot/core/algorithms/ReplacementSnappedWayJoiner.h>
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
@@ -85,7 +84,7 @@ ChangesetReplacementCreatorAbstract()
   // addition, there is also one additional task for element ID synchronization and one for
   // changeset derivation. The number of steps must be updated as you add/remove job steps in the
   // create logic.
-  const int numTasksPerPass = 5;
+  const int numTasksPerPass = 4;
   const int numPasses = 3;
   _numTotalTasks = numTasksPerPass * numPasses;
   _numTotalTasks++;  // element ID synchronization
@@ -581,107 +580,8 @@ void ChangesetCutOnlyCreator::_processMaps(
 
   _currentTask++;
 
-  // SNAP
+  // CLEANUP
 
-  _progress->set(_getJobPercentComplete(), "Snapping linear features...");
-
-  if (_currentChangeDerivationPassIsLinear)
-  {
-    // Snap secondary features back to reference features if dealing with linear features where
-    // ref features may have been cut along the bounds. We're being lenient here by snapping
-    // secondary to reference *and* allowing conflated data to be snapped to either dataset. We only
-    // want to snap ways of like types together, so we'll loop through each applicable linear type
-    // and snap them separately.
-
-    LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-    QStringList snapWayStatuses("Input2");
-    snapWayStatuses.append("Conflated");
-    QStringList snapToWayStatuses("Input1");
-    snapToWayStatuses.append("Conflated");
-    for (int i = 0; i < linearFilterClassNames.size(); i++)
-    {
-      _snapUnconnectedWays(
-        conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
-        _changesetId + "-conflated-snapped-sec-to-ref-1");
-    }
-
-    // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
-    // data in the resulting changeset and generate modify statements instead.
-    ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
-    wayJoiner.join(conflatedMap);
-    LOG_VART(MapProjector::toWkt(conflatedMap->getProjection()));
-  }
-
-  OsmMapPtr immediatelyConnectedOutOfBoundsWays;
-  if (_boundsInterpretation == BoundsInterpretation::Lenient &&
-      _currentChangeDerivationPassIsLinear)
-  {
-    // If we're conflating linear features with the lenient bounds requirement, copy the
-    // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
-    // crop in preparation for changeset derivation. If we don't introduce them back during
-    // changeset derivation, they may not end up being snapped back to the replacement data.
-    immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
-  }
-
-  // Used to do an additional round of cropping here to prepare for changeset derivation. After the
-  // change to support polygon bounds it was found it wasn't needed anymore when only cutting data,
-  // and actually had negative effects on the output. So, removing it completely for cut only. Its
-  // worth noting that we may end up needing it again as we expand the cut only tests cases.
-
-  if (_boundsInterpretation == BoundsInterpretation::Lenient &&
-      _currentChangeDerivationPassIsLinear)
-  {
-    // The non-strict bounds interpretation way replacement workflow benefits from a second
-    // set of snapping runs right before changeset derivation due to there being ways connected to
-    // replacement ways that fall completely outside of the replacement bounds. However, joining
-    // after this snapping caused changeset errors with some datasets and hasn't seem to be needed
-    // so far...so skipping it. Note that we're being as lenient as possible with the snapping
-    // here, allowing basically anything to join to anything else, which *could* end up causing
-    // problems...we'll go with it for now.
-
-    QStringList snapWayStatuses("Input2");
-    snapWayStatuses.append("Conflated");
-    snapWayStatuses.append("Input1");
-    QStringList snapToWayStatuses("Input1");
-    snapToWayStatuses.append("Conflated");
-    snapToWayStatuses.append("Input2");
-    LOG_VARD(linearFilterClassNames);
-
-    // Snap anything that can be snapped per feature type.
-    LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-    for (int i = 0; i < linearFilterClassNames.size(); i++)
-    {
-      _snapUnconnectedWays(
-        conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i), false,
-       _changesetId + "-conflated-snapped-sec-to-ref-2");
-    }
-
-    // combine the conflated map with the immediately connected out of bounds ways
-    MapUtils::combineMaps(conflatedMap, immediatelyConnectedOutOfBoundsWays, true);
-    OsmMapWriterFactory::writeDebugMap(
-      conflatedMap, _changesetId + "-conflated-connected-combined");
-
-    // Snap the connected ways to other ways in the conflated map. Mark the ways that were
-    // snapped, as we'll need that info in the next step.
-    LOG_INFO("Snapping unconnected ways to each other in replacement map...");
-    for (int i = 0; i < linearFilterClassNames.size(); i++)
-    {
-      _snapUnconnectedWays(
-        conflatedMap, snapWayStatuses, snapToWayStatuses, linearFilterClassNames.at(i),
-        true, _changesetId + "-conflated-snapped-immediately-connected-out-of-bounds");
-    }
-
-    // remove any ways that weren't snapped
-    _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(conflatedMap);
-
-    // Copy the connected ways back into the ref map as well, so the changeset will derive
-    // properly.
-    MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
-    OsmMapWriterFactory::writeDebugMap(
-      conflatedMap, _changesetId + "-ref-connected-combined");
-
-    immediatelyConnectedOutOfBoundsWays.reset();
-  }
   if (!ConfigOptions().getChangesetReplacementAllowDeletingReferenceFeaturesOutsideBounds())
   {
     // If we're not allowing the changeset deriver to generate delete statements for reference
@@ -690,14 +590,11 @@ void ChangesetCutOnlyCreator::_processMaps(
     _excludeFeaturesFromChangesetDeletion(refMap);
   }
 
-  _currentTask++;
-
-  // CLEANUP
-
   // clean up any mistakes introduced
   _progress->set(_getJobPercentComplete(), "Cleaning up erroneous features...");
   _cleanup(refMap);
   _cleanup(conflatedMap);
+
   _currentTask++;
 
   LOG_VART(refMap->getElementCount());
@@ -759,6 +656,9 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   _boundsOpts.loadRefKeepOnlyInsideBounds = false;
   _boundsOpts.cookieCutKeepOnlyInsideBounds = false;
   _boundsOpts.changesetRefKeepOnlyInsideBounds = false;
+
+  // Always override there here as we don't support this for cut only.
+  _enableWaySnapping = false;
 }
 
 void ChangesetCutOnlyCreator::_parseConfigOpts(
