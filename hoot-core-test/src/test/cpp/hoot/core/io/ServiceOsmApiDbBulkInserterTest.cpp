@@ -205,7 +205,7 @@ public:
     reader.close();
   }
 
-  void verifyDatabaseOutputOfflineValidateOff()
+  void verifyDatabaseOutputOfflineWithCustomStartingIds()
   {
     OsmApiDbReader reader;
     OsmMapPtr map(new OsmMap());
