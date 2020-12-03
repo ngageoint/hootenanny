@@ -61,7 +61,7 @@ bool WayEndNodeCriterion::isSatisfied(const ConstElementPtr& e) const
     return false;
   }
   // Passing the WayNodeCriterion check tells us this element is a node.
-  assert(e->getElementType() == node);
+  assert(e->getElementType() == ElementType::Node);
 
   // Get all the ways this node belongs to.
   const std::set<long> containingWayIds = WayUtils::getContainingWayIdsByNodeId(e->getId(), _map);
