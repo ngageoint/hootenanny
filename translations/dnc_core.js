@@ -225,7 +225,7 @@ dnc = {
       translate.txtToOgr(newFeatures[i]['attrs'], notUsedTags, dnc.rules.txtBiased,transMap);
 
       // one 2 one
-    print('manyFeatures applyOne2One');
+      // print('manyFeatures applyOne2One');
       translate.applyOne2One(notUsedTags, newFeatures[i]['attrs'], dnc.lookup, dnc.fcodeLookup,transMap);
 
       // post processing

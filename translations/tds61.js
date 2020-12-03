@@ -601,7 +601,7 @@ tds61 = {
       attrValue = attrValue.replace(/\s/g, '');
 
       // Wipe out the useless values
-      if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
+      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
       {
         delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
         continue;
@@ -1172,7 +1172,7 @@ tds61 = {
       if (tags.operator == 'military' || tags.operator == '')
       {
         // Debug
-        print('Bunker: drop man_made. military = ' + tags.military);
+        // print('Bunker: drop man_made. military = ' + tags.military);
         tags.military = 'bunker';
         delete tags.man_made;
       }

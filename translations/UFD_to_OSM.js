@@ -58,7 +58,7 @@ ufd = {
     ['F_CODE','AT020','man_made','radar_station'], // Early Warning Radar Site - NFDD AT045
     ['F_CODE','AT030','power','line'], // Power Transmission Line - NFDD AT005
     ['F_CODE','AT040','pylon','yes'], // Power Transmission Pylon - NFDD AT042
-    ['F_CODE','AT050','landuse','facility'], // Communication Building - No Code
+    ['F_CODE','AT050','use','communications'], // Communication Building - No Code
     ['F_CODE','AT060','cable:type','communication'], // // Telephone Line/Telegraph Line - NFDD AT005
     ['F_CODE','AT070','pylon','yes'], // Telephone-Telegraph Pylon/Pole - NFDD AT042
     ['F_CODE','AT080','tower:type','communication'], // Communication Tower - NFDD AL241
@@ -995,8 +995,8 @@ ufd = {
     ['GTC','Tollgate','barrier','toll_booth'], // Tollgate
     ['GTC','2','barrier','crossing'], // Crossing
     ['GTC','Crossing','barrier','crossing'], // Crossing
-    ['GTC','999','barrier','other'], // Other
-    ['GTC','Other','barrier','other'], // Other
+    ['GTC','999','barrier','gate'], // Other
+    ['GTC','Other','barrier','gate'], // Other
 
     // GUG - Guyed or Unguyed Category
     // ['GUG','0','guyed','unknown'], // Unknown
@@ -1913,7 +1913,7 @@ ufd = {
     // RRC - Railway Use
     ['RRC','-32768',undefined,undefined], // Null
     ['RRC','-999999',undefined,undefined],
-    ['RRC','0','railway','yes'],
+    ['RRC','0','railway','rail'],
     ['RRC','2','railway','carline'],
     ['RRC','3','railway','monorail'],
     ['RRC','6','railway','subway'],
@@ -1921,7 +1921,7 @@ ufd = {
     ['RRC','11','railway','rapid_transit'],
     ['RRC','14','railway','tram'],
     ['RRC','15','railway','funicular'],
-    ['RRC','16','railway','yes'],
+    ['RRC','16','railway','rail'],
     ['RRC','17','usage','branch'], // Branch Line
     ['RRC','18','usage','main'], // Main Line/Branch Line
     ['RRC','21','railway:in_road','yes'], // Railroad in Road
@@ -1929,7 +1929,7 @@ ufd = {
     ['RRC','32','railway','automated_transit_system'],
     ['RRC','33','railway','longhaul'],
     ['RRC','999','railway','other'],
-    ['RRC','Unknown','railway','yes'],
+    ['RRC','Unknown','railway','rail'],
     ['RRC','Car-Line','railway','carline'],
     ['RRC','Monorail','railway','monorail'],
     ['RRC','Subway','railway','subway'],
@@ -1937,7 +1937,7 @@ ufd = {
     ['RRC','Rapid Transit Route - Rail','railway','rapid_transit'],
     ['RRC','Tram','railway','tram'],
     ['RRC','Funicular','railway','funicular'],
-    ['RRC','Main Line','railway','yes'],
+    ['RRC','Main Line','railway','rail'],
     ['RRC','Branch Line','usage','branch'], // Branch Line
     ['RRC','Main Line/Branch Line','usage','main'], // Main Line/Branch Line
     ['RRC','Railroad in Road','railway:in_road','yes'], // Railroad in Road
@@ -3271,7 +3271,7 @@ ufd = {
       attrValue = attrValue.replace(/\s/g, '');
 
       // Wipe out the useless values
-      if (attrs[col] == '' || attrValue in ufd.ignoreList || attrs[col] in ufd.ignoreList)
+      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ufd.ignoreList || attrs[col] in ufd.ignoreList)
       {
         delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
         continue;
@@ -3503,9 +3503,6 @@ ufd = {
     translate.fixConstruction(tags, 'highway');
     translate.fixConstruction(tags, 'railway');
 
-    // Fix up the 'surface' values for buildings
-    if (attrs.F_CODE == 'AL015' && tags.surface == 'unknown') delete tags.surface;
-
     // Add 'building = yes' to amenities if we don't already have one
     // if (tags.amenity && !(tags.building))
     // {
@@ -3520,12 +3517,6 @@ ufd = {
       // print('Added building to military'); // debug
       if (tags.military !== 'range' && tags.military !== 'installation' ) tags.building = 'yes';
     }
-
-    // Add tags if we have Null attributes
-    if (attrs.F_CODE == 'AL015' && !(tags.building)) tags.building = 'yes';
-    if (attrs.F_CODE == 'BH140' && !(tags.waterway)) tags.waterway = 'river';
-    if (attrs.F_CODE == 'AQ040' && !(tags.bridge)) tags.bridge = 'yes';
-    if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
 
     // If we have a Tower, Add a man_made tag
     if (tags['tower:type']) tags.man_made = 'tower';
@@ -3581,12 +3572,32 @@ ufd = {
     // Misc F_CODE fixes
     switch (attrs.F_CODE)
     {
-    case undefined: // Break early if no value
-      break;
+      case undefined: // Break early if no value
+        break;
 
-    // Amusement Park Attractions
-    // Artificial Mountain can be in multiple F_CODES
-    case'AK020':
+      case 'AA050': // Well
+        switch (tags.product)
+        {
+          case undefined: // Break early, Unknown product
+            break;
+
+          case 'gas': // Unknown product
+          case 'oil': // Unknown product
+            tags.man_made = 'petroleum_well';
+            tags.substance = tags.product;
+            delete tags.product;
+            break;
+
+          case 'water': // Unknown product
+            tags.man_made = 'water_well';
+            delete tags.product;
+            break;
+        }
+        break;
+
+      // Amusement Park Attractions
+      // Artificial Mountain can be in multiple F_CODES
+      case'AK020':
         if (tags.shape)
         {
           tags.attraction = tags.shape;
@@ -3594,62 +3605,93 @@ ufd = {
         }
         break;
 
-    case 'AT020': // EW Radar Site
-        tags['radar:use'] = 'early_warning';
+      case 'AL015': // Building
+        if (!tags.building) tags.building = 'yes';
+        // Fix up the 'surface' values for buildings
+        if (tags.surface == 'unknown') delete tags.surface;
         break;
 
-     case 'AA050': // Well
-        switch (tags.product)
+      case 'AL045': // Complex Outline. Going with landuse for this
+        if (tags.building = 'residential') delete tags.building; // Goes with landuse == residential
+        break;
+
+      case 'AQ040': // Bridge/Viaduct
+        if (tags['bridge:structure'] == 'viaduct')
         {
-            case undefined: // Break early, Unknown product
-                break;
+          tags.bridge = 'viaduct';
+        }
+        else
+        {
+          tags.bridge = 'yes';
+        }
 
-            case 'gas': // Unknown product
-            case 'oil': // Unknown product
-                tags.man_made = 'petroleum_well';
-                tags.substance = tags.product;
-                delete tags.product;
-                break;
+        switch (tags['transport:type'])
+        {
+          case 'road':
+            tags.highway = 'road';
+            break;
 
-            case 'water': // Unknown product
-                tags.man_made = 'water_well';
-                delete tags.product;
-                break;
+          case 'railway':
+            tags.railway = 'rail;'
+            break;
+
+          case 'road_and_railway':
+            tags.highway = 'road';
+            tags.railway = 'rail';
+            break;
+
+          case 'pedestrian':
+            tags.highway = 'pedestrian';
+            break;
+
+          default:  // Guessing it is probably a road
+            tags.highway = 'road';
         }
         break;
 
-    case 'FA020': // Armistice Line
-      tags.historic='armistice_line';
-      break;
+      case 'AT020': // EW Radar Site
+        tags['radar:use'] = 'early_warning';
+        break;
 
-    case 'FA001': // Administrative Area
-    case 'FA000': // Administrative Boundary
-      switch (attrs.USG)
-      {
-        case undefined: // Break early if no value
-          break;
+      case 'BH140': // River/Stream
+        if (geometryType == 'Area')
+        {
+          tags.waterway = 'river_bank';
+        }
+        else
+        {
+          tags.waterway = 'river';
+        }
+        break;
 
-        case '26': // 1st order
-        case 'Primary/1st Order':
-          tags.admin_level = '4';
-          break;
+      case 'FA020': // Armistice Line
+        tags.historic='armistice_line';
+        break;
 
-        case '30': // 2nd order
-        case 'Secondary/2nd Order':
-          tags.admin_level = '6';
-          break;
+      case 'FA001': // Administrative Area
+      case 'FA000': // Administrative Boundary
+        switch (attrs.USG)
+        {
+          case undefined: // Break early if no value
+            break;
 
-        case '31': // 3rd order
-        case 'Tertiary/3rd Order':
-          tags.admin_level = '8';
-          break;
-      }
-      break;
+          case '26': // 1st order
+          case 'Primary/1st Order':
+            tags.admin_level = '4';
+            break;
 
-    case 'AL045': // Complex Outline. Going with landuse for this
-      if (tags.building = 'residential') delete tags.building; // Goes with landuse == residential
+          case '30': // 2nd order
+          case 'Secondary/2nd Order':
+            tags.admin_level = '6';
+            break;
 
-      break;
+          case '31': // 3rd order
+          case 'Tertiary/3rd Order':
+            tags.admin_level = '8';
+            break;
+        }
+        break;
+
     } // End case F_CODE
 
     // Handle update sources that are not in the spec list
