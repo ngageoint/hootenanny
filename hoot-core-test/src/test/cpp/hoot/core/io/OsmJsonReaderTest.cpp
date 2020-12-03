@@ -54,7 +54,6 @@ class OsmJsonReaderTest : public HootTestFixture
   CPPUNIT_TEST(runBoundsLeaveConnectedOobWaysTest);
   CPPUNIT_TEST(elementTypeUnorderedTest);
   CPPUNIT_TEST(elementTypeUnorderedMissingTest);
-  // TODO: add duplicates test
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -633,8 +632,6 @@ public:
   {
     // This should load the elements even though child elements come after their parents.
 
-    // TODO: we need some relations in the test input
-
     QString testFileName;
     OsmJsonReader uut;
     OsmMapPtr map;
@@ -666,8 +663,6 @@ public:
   {
     // There is one node referenced by a way that doesn't exist in the file (id=2442180398). That
     // node should not be present in the output way.
-
-    // TODO: we need some relations and way refs in the test input
 
     // The default behavior is to log missing elements as warnings, and we don't want to see that in
     // this test;

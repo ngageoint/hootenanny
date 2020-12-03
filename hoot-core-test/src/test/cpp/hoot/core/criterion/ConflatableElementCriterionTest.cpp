@@ -35,7 +35,6 @@ namespace hoot
 class ConflatableElementCriterionTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ConflatableElementCriterionTest);
-  // TODO: need ignoreGenericConflators=true test
   CPPUNIT_TEST(runBasicTest);
   CPPUNIT_TEST_SUITE_END();
 

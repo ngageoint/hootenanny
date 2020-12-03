@@ -41,7 +41,6 @@ class OsmXmlChangesetFileWriterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(OsmXmlChangesetFileWriterTest);
   CPPUNIT_TEST(runSimpleTest);
-  // TODO: add a test for multiple changeset provider inputs
   CPPUNIT_TEST_SUITE_END();
 
 public:
