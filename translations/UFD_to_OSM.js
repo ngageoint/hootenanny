@@ -3622,7 +3622,6 @@ ufd = {
         }
         else
         {
-          print('Setting Bridge');
           tags.bridge = 'yes';
         }
 
@@ -3657,7 +3656,6 @@ ufd = {
       case 'BH140': // River/Stream
         if (geometryType == 'Area')
         {
-          print('Waterway Area');
           tags.waterway = 'river_bank';
         }
         else
@@ -3804,12 +3802,6 @@ function translateToOsm(attrs, layerName, geometryType)
   if (ufd.configIn.OgrDebugDumptags == 'true')
   {
     translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
-
-    if (tags.name == ' ')
-    {
-      print('Name = space');
-    }
-
     translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
     print('');
   }
