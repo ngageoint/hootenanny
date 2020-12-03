@@ -601,7 +601,7 @@ tds61 = {
       attrValue = attrValue.replace(/\s/g, '');
 
       // Wipe out the useless values
-      if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
+      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
       {
         delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
         continue;

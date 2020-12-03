@@ -366,7 +366,7 @@ mgcp = {
 
       // Wipe out the useless values
       // if (attrs[col] == '-32768' || attrValue == 'unk' || attrValue == 'n_a' || attrValue == 'noinformation' || attrs[col] == '')
-      if (attrs[col] == '' || attrValue in ignoreList || attrs[col] in ignoreList)
+      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
       {
         // debug: Comment this out to leave all of the No Info stuff in for testing
         delete attrs[col];
