@@ -63,11 +63,12 @@ public:
   /**
    * Determines how many numbers two vectors have in common
    *
+   * Clearly, with some work, this could be genericized via templating for more generic use if
+   * ever needed.
+   *
    * @param collection1 first collection to examine
    * @param collection2 second collection to examine
    * @return the number of numbers in common
-   * @todo Clearly, with some work, this could be genericized via templating for more generic use if
-   * ever needed.
    */
   static int numVectorItemsInCommon(const std::vector<long>& collection1,
                                     const std::vector<long>& collection2);

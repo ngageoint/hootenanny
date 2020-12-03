@@ -223,7 +223,7 @@ QSet<QString> AddressNormalizer::_normalizeAddressIntersection(const QString& ad
   }
   LOG_VART(streetPluralTypes);
 
-  // remove any plural suffixes found; TODO: may not need all of this here
+  // remove any plural suffixes found; we may not need all of this here...
   if (StringUtils::endsWithAny(firstIntersectionPart.trimmed(), streetPluralTypes))
   {
     firstIntersectionPart.chop(1);

@@ -112,9 +112,8 @@ TaskGrid UniformTaskGridGenerator::generateTaskGrid()
 
   if (!_output.trimmed().isEmpty())
   {
-    // write out task grid to file
-    // TODO: There are some differences between how geojson files are written by this class and
-    // NodeDensityTaskGridGenerator that may have to be dealt with at some point.
+    // write out task grid to file; There are some differences between how geojson files are written
+    // by this class and NodeDensityTaskGridGenerator that may have to be dealt with at some point.
     OsmMapWriterFactory::write(GeometryUtils::createMapFromBoundsCollection(boundaries), _output);
   }
 

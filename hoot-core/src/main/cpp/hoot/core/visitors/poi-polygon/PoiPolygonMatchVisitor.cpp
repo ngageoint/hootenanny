@@ -244,7 +244,7 @@ std::shared_ptr<Tgs::HilbertRTree>& PoiPolygonMatchVisitor::_getPolyIndex()
   {
     LOG_INFO("Creating POI/Polygon feature index...");
 
-    // TODO: tune this? - see #3054
+    // tune this? - see #3054
     std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
     _polyIndex.reset(new Tgs::HilbertRTree(mps, 2));
 

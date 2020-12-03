@@ -50,8 +50,8 @@ namespace hoot
  * A thin C++ style wrapper for a small subset of GLPK.
  * http://www.gnu.org/software/glpk/
  *
- * @todo It would be nice if we could get better progress logging out of this class, but that
- * may not be possible.
+ * It would be nice if we could get better progress logging out of this class, but that may not be
+ * possible.
  */
 class IntegerProgrammingSolver
 {

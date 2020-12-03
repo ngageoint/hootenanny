@@ -92,14 +92,6 @@ double ExactTagDifferencer::diff(const ConstOsmMapPtr& /*map*/, const ConstEleme
     "Returning exact tag match for " << e1->getElementId() << " and " << e2->getElementId() <<
     "...");
   return 0;
-
-  // TODO: Possibly, the above could be replaced with this below but still need to sort through test
-  // failures caused by the change.
-//  if (e1->getTags().hasSameNonMetadataTags(e2->getTags()))
-//  {
-//    return 0.0;
-//  }
-//  return 1.0;
 }
 
 }

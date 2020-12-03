@@ -79,8 +79,8 @@ void OsmApiDbReader::open(const QString& urlStr)
 void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
                                                const ElementPtr& element)
 {
-  // TODO: We should see if these tags can be read out at the same time the element itself is read
-  // out...
+  // If performance here is ever a problem, we should see if these tags can be read out at the same
+  // time the element itself is read out.
 
   QStringList tags;
   std::shared_ptr<QSqlQuery> tagItr;
@@ -180,7 +180,8 @@ WayPtr OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map
       resultIterator.value(ApiDb::WAYS_VERSION).toLongLong(),
       dt.toMSecsSinceEpoch() / 1000));
 
-  // TODO: Try reading these out in batch at the same time the element results are read
+  // If performance here is ever a problem, try reading these out in batch at the same time the
+  // element results are read
   vector<long> nodeIds = _database->selectNodeIdsForWay(wayId);
   for (size_t i = 0; i < nodeIds.size(); i++)
   {
@@ -223,7 +224,8 @@ RelationPtr OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator, c
       resultIterator.value(ApiDb::RELATIONS_VERSION).toLongLong(),
       dt.toMSecsSinceEpoch() / 1000));
 
-  // TODO: These could be read out in batch at the same time the element results are read.
+  // If performance here is ever a problem, these could be read out in batch at the same time the
+  // element results are read.
   vector<RelationData::Entry> members = _database->selectMembersForRelation(relationId);
   for (size_t i = 0; i < members.size(); ++i)
   {

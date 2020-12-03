@@ -471,7 +471,7 @@ void UnconnectedWaySnapper::_createFeatureIndex(const ElementCriterionPtr& featu
 {
   LOG_DEBUG("Creating feature index of type: " << elementType << "...");
 
-  // TODO: tune these indexes? - see #3054
+  // tune these indexes? - see #3054
   std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
   featureIndex.reset(new Tgs::HilbertRTree(mps, 2));
   std::shared_ptr<SpatialIndexer> spatialIndexer;

@@ -308,7 +308,6 @@ WayLocation WayLocation::move(Meters distance) const
     }
 
     ConstNodePtr n = _map->getNode(_way->getNodeId(result.getSegmentIndex() + 1));
-    // TODO: change back to trace
     LOG_VART(n.get());
     if (!n)
     {

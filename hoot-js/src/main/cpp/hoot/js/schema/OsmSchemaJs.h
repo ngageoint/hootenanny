@@ -67,7 +67,7 @@ private:
   // Even thoughthe logic for some of these methods have been moved from OsmSchema to criterion,
   // decided to leave this interface intact, as it will be simpler to access from js.
 
-  // TODO: All of these methods can go away if #3047 is completed.
+  // All of these methods can go away if #3047 is completed.
   static void isArea(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPoint(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isPolygon(const v8::FunctionCallbackInfo<v8::Value>& args);

@@ -88,7 +88,7 @@ MultiaryClusterAlgorithm::ClusterList MultiaryHierarchicalClusterAlgorithm::calc
 
     if (cl->isValid())
     {
-      // TODO: Do we need to update the replaced vector?
+      // Do we need to update the replaced vector?
       MultiaryClusterPtr newCluster = _mergeCache->merge(cl->a, cl->b);
 
       // update the connected links in all clusters to reflect the latest merger
