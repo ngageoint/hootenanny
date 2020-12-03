@@ -11,11 +11,6 @@ SHELL=/bin/bash
 
 .PHONY: clean-ccache
 
-# If you're adding another schema file be sure and update the archive target
-# too.
-# NOTE: This is the list that gets deleted in "make clean"
-SCHEMA_FILES=translations/tds61_schema.js translations/tds61_full_schema.js translations/etds61_rules.js translations/etds61_osm_rules.js translations/tds40_schema.js translations/tds40_full_schema.js translations/etds40_rules.js translations/etds40_osm_rules.js translations/mgcp_schema.js translations/emgcp_rules.js translations/emgcp_osm_rules.js translations/ggdm30_schema.js translations/ggdm30_full_schema.js translations/eggdm30_rules.js translations/eggdm30_osm_rules.js translations/tds70_schema.js translations/tds70_full_schema.js translations/etds70_rules.js translations/etds70_osm_rules.js
-
 -include Makefile.inc
 
 default: build
@@ -51,8 +46,6 @@ clean: Makefile.qmake ui-clean services-clean clean-coverage
 	rm -f translations/config.js
 	rm -f conf/core/ConfigOptions.json
 	rm -f conf/services/conflationTypeGroups.json
-	rm -f translations/*.pyc
-	rm -f $(SCHEMA_FILES)
 	rm -f hoot-core/src/main/cpp/hoot/core/HootConfig.h
 	# The following bits are due to moving files in git. Since the Output.osm
 	# file is written to the test-files/cases/**/ directory git won't remove
@@ -117,7 +110,7 @@ licenses:
 
 translations-test: build
 ifneq ($(shell which mocha),)
-	cd translations/test; npm install && npm test
+	cd translations-nodejs/test; npm install && npm test
 else
 	@echo Skipping mocha tests
 endif
@@ -151,125 +144,6 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 	/bin/sed -r -e 's/^(#[ \t]*define) /\1 TGS_/' config.h >> tgs/src/main/cpp/tgs/TgsConfig.h
 	echo "#endif" >> tgs/src/main/cpp/tgs/TgsConfig.h
 
-# We now have different versions of the NFDD Schema that are built from Excel files:
-# LTDSv40.csv.gz - Local TDS v4.0
-# SUTDSv40.csv.gz - Specialized Urban TDS v4.0
-# TDSv40.csv.gz - Full TDS v4.0
-# The default is to use the LTDSv40 file so we can append to existing LTDS templates
-#
-# The MGCP schema is built from an XML file
-#
-# The Macro's are for Jason :-)
-
-##### MGCP
-# Build the MGCP schema
-translations/mgcp_schema.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.5_20190208.xml.gz
-	mkdir -p $(@D)
-	$^ > $@ || (rm -f $@ ; exit -1)
-
-# Build the MGCP  "To English" rules
-translations/emgcp_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.5_20190208.xml.gz
-	mkdir -p $(@D)
-	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
-
-# Build the MGCP "From English" rules
-translations/emgcp_osm_rules.js: scripts/schema/ConvertMGCPSchema_XML.py conf/translations/MGCP_FeatureCatalogue_TRD4_v4.5_20190208.xml.gz
-	mkdir -p $(@D)
-	$< --fromenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
-#	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
-
-#### TDSv40
-translations/tds40_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
-	mkdir -p $(@D)
-	$^ > $@ || (rm -f $@ ; exit -1)
-
-translations/tds40_full_schema.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
-	mkdir -p $(@D)
-	$< --fullschema $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
-
-# Build the TDS40 "To English" rules
-# This need to be full TDS so we have access to the full range of attributes
-translations/etds40_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
-	mkdir -p $(@D)
-	$< --toenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
-
-# Build the TDS40 "From English" rules
-translations/etds40_osm_rules.js: scripts/schema/ConvertTDSv40Schema.py conf/translations/TDSv40.csv.gz
-	mkdir -p $(@D)
-	$< --fromenglish $(word 2,$^) > $@ || (rm -f $@ ; exit -1)
-#	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
-
-#### TDSv61
-# TDSv61 is built from the TDSv60 spec with NGA's extensions
-translations/tds61_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
-	mkdir -p $(@D)
-	$< $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
-
-# TDSv61 full schema is built from the TDSv60 spec with NGA's extensions.
-# This one has all of the Text Enumerations
-translations/tds61_full_schema.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
-	mkdir -p $(@D)
-	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
-
-# Build the TDS61 "To English" rules
-translations/etds61_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
-	mkdir -p $(@D)
-	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
-
-# Build the TDS61 "From English" rules
-translations/etds61_osm_rules.js: scripts/schema/ConvertTDSv61Schema.py conf/translations/TDSv60.csv.gz conf/translations/TDS_NGAv01.csv.gz
-	mkdir -p $(@D)
-	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
-
-#### TDSv70
-# TDSv70 schema is built from an XML file made from a sample FGDB
-#translations/tds70_schema.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz conf/translations/TDSv70.xml.gz
-translations/tds70_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
-	mkdir -p $(@D)
-	$^ > $@ || (rm -f $@ ; exit -1)
-
-# TDSv70 full schema is built from an XML file made from a sample FGDB
-# This one has all of the Text Enumerations
-#translations/tds70_full_schema.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
-translations/tds70_full_schema.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
-	mkdir -p $(@D)
-	$< --fullschema $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
-
-# Build the TDS70 "To English" rules
-#translations/etds70_rules.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
-translations/etds70_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
-	mkdir -p $(@D)
-	$< --toenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
-
-# Build the TDS70 "From English" rules
-#translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema_XML.py conf/translations/TDSv70.xml.gz
-translations/etds70_osm_rules.js: scripts/schema/ConvertTDSv70Schema.py conf/translations/TDSv70_Features.csv.gz conf/translations/TDSv70_Values.csv.gz
-	mkdir -p $(@D)
-	$< --fromenglish $(word 2,$^) $(word 3,$^) > $@ || (rm -f $@ ; exit -1)
-
-#### GGDMv30
-# GGDMv30 is built from the GGDMv30 spec with additional layers and values files
-translations/ggdm30_schema.js: scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
-	mkdir -p $(@D)
-	$< $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
-
-# GGDMv30 full schema
-# This one has all of the Text Enumerations
-translations/ggdm30_full_schema.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
-	mkdir -p $(@D)
-	$< --fullschema $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
-
-# Build the GGDMv30 "To English" rules
-translations/eggdm30_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
-	mkdir -p $(@D)
-	$< --toenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
-
-# Build the GGDMv30 "From English" rules
-translations/eggdm30_osm_rules.js:  scripts/schema/ConvertGGDMv30Schema.py conf/translations/GGDM30_Features.csv.gz conf/translations/GGDM30_Layers.csv.gz conf/translations/GGDM30_Values.csv.gz
-	mkdir -p $(@D)
-	$< --fromenglish $(word 2,$^) $(word 3,$^) $(word 4,$^) > $@ || (rm -f $@ ; exit -1)
-
-
 # Build osmapi db
 osmapidb:
 ifeq ($(BUILD_SERVICES),services)
@@ -277,7 +151,8 @@ ifeq ($(BUILD_SERVICES),services)
 endif
 
 # Build automatically generated JS files
-js-make: $(SCHEMA_FILES) translations/config.js
+js-make: translations/config.js
+	cd $$HOOT_HOME/translations && $(MAKE) -f Makefile
 
 # Only PoiModel.rf is being generated this way at this time. The older .arff
 # files don't have the precision to recreate the exact model. That is a
