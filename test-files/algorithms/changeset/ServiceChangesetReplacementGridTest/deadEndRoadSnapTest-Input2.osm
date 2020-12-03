@@ -1,0 +1,1404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="36.03429" minlon="-115.0471" maxlat="36.0393" maxlon="-115.043"/>
+    <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0370033986568572" lon="-115.0471000000000004"/>
+    <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0364299056336677" lon="-115.0471000000000004"/>
+    <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0389998824670457" lon="-115.0471000000000004"/>
+    <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0359877648745552" lon="-115.0471000000000004"/>
+    <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0350423512187561" lon="-115.0471000000000004"/>
+    <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0345788908565154" lon="-115.0471000000000004"/>
+    <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0342899999999986" lon="-115.0470529612885713"/>
+    <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0468959528812860"/>
+    <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0344851062928484" lon="-115.0430000000000064"/>
+    <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0460336273729212"/>
+    <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0457646592676042"/>
+    <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0430000000000064"/>
+    <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0455613469138143"/>
+    <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0380393028978716" lon="-115.0430000000000064"/>
+    <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0430000000000064"/>
+    <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0455613469138143"/>
+    <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0380393028978716" lon="-115.0430000000000064"/>
+    <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0342899999999986" lon="-115.0468515549978434"/>
+    <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0467317109608132"/>
+    <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0462172299899635"/>
+    <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0456784840819608"/>
+    <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0342899999999986" lon="-115.0467160000000035"/>
+    <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0342899999999986" lon="-115.0443583118626947"/>
+    <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0342899999999986" lon="-115.0456607622464844"/>
+    <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0344441604677073" lon="-115.0471000000000004"/>
+    <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0377396801549352" lon="-115.0430000000000064"/>
+    <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0470569176954712"/>
+    <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0444268760563347"/>
+    <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0378735065085536" lon="-115.0430000000000064"/>
+    <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0392999999999972" lon="-115.0442433101639352"/>
+    <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0380715914014260" lon="-115.0430000000000064"/>
+    <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0370590374000770" lon="-115.0430000000000064"/>
+    <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0342899999999986" lon="-115.0469986682399224"/>
+    <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0388441287054135" lon="-115.0471000000000004"/>
+    <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0372448762220898" lon="-115.0430000000000064"/>
+    <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0346717920278650" lon="-115.0471000000000004"/>
+    <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0342899999999986" lon="-115.0466299102057945"/>
+    <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0342899999999986" lon="-115.0461449080876122"/>
+    <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.0369189928571387" lon="-115.0471000000000004"/>
+    <node visible="true" id="137355579" timestamp="2020-10-12T16:10:15Z" version="8" changeset="16880" lat="36.0392404999999982" lon="-115.0468982999999952">
+        <tag k="crossing:barrier" v="double_half"/>
+        <tag k="crossing:light" v="yes"/>
+        <tag k="railway" v="level_crossing"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="crossing:bell" v="yes"/>
+    </node>
+    <node visible="true" id="137355582" timestamp="2020-10-12T16:10:15Z" version="4" changeset="16880" lat="36.0385613999999990" lon="-115.0450876999999963"/>
+    <node visible="true" id="959136647" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0372866000000016" lon="-115.0468903999999952">
+        <tag k="power" v="pole"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="959136669" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0385770999999977" lon="-115.0468429000000015">
+        <tag k="power" v="pole"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="959136693" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0373400000000004" lon="-115.0437035000000066">
+        <tag k="power" v="pole"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="959136706" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0360204999999993" lon="-115.0469326000000052">
+        <tag k="power" v="pole"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="959136728" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0348134999999985" lon="-115.0469800000000049">
+        <tag k="power" v="pole"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="959136750" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0379695000000027" lon="-115.0452698999999939">
+        <tag k="power" v="pole"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="1455284953" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0344898000000029" lon="-115.0433249000000018"/>
+    <node visible="true" id="1455284958" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345155999999989" lon="-115.0441146999999944"/>
+    <node visible="true" id="1455284960" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0344635000000011" lon="-115.0449602999999996"/>
+    <node visible="true" id="1455284961" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0344635000000011" lon="-115.0464599999999962"/>
+    <node visible="true" id="1572513415" timestamp="2020-10-12T16:10:16Z" version="3" changeset="16880" lat="36.0344456999999991" lon="-115.0470447000000007"/>
+    <node visible="true" id="2135737337" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343145000000007" lon="-115.0467160000000035"/>
+    <node visible="true" id="2135737338" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343167999999991" lon="-115.0455163000000027"/>
+    <node visible="true" id="2135737340" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343190000000035" lon="-115.0456152999999944"/>
+    <node visible="true" id="2135737341" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343213000000020" lon="-115.0460499999999939"/>
+    <node visible="true" id="2135737342" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343224000000006" lon="-115.0454187999999931"/>
+    <node visible="true" id="2135737343" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343245999999979" lon="-115.0450663000000020">
+        <tag k="error:circular" v="15"/>
+        <tag k="noexit" v="yes"/>
+    </node>
+    <node visible="true" id="2135737344" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343303000000006" lon="-115.0453380000000010"/>
+    <node visible="true" id="2135737345" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343303000000006" lon="-115.0457002999999929"/>
+    <node visible="true" id="2135737346" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343324999999979" lon="-115.0461042999999961"/>
+    <node visible="true" id="2135737347" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343336999999977" lon="-115.0463258999999994"/>
+    <node visible="true" id="2135737348" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343336999999977" lon="-115.0467007000000024"/>
+    <node visible="true" id="2135737349" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343359000000021" lon="-115.0460221000000018"/>
+    <node visible="true" id="2135737350" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343382000000005" lon="-115.0462423000000030"/>
+    <node visible="true" id="2135737351" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343403999999978" lon="-115.0452377000000013"/>
+    <node visible="true" id="2135737352" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343414999999965" lon="-115.0461767999999978"/>
+    <node visible="true" id="2135737353" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343471999999991" lon="-115.0450885999999997"/>
+    <node visible="true" id="2135737354" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343471999999991" lon="-115.0451651999999996"/>
+    <node visible="true" id="2135737355" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343494000000035" lon="-115.0457741000000027"/>
+    <node visible="true" id="2135737356" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343494000000035" lon="-115.0466741999999982"/>
+    <node visible="true" id="2135737357" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343506000000033" lon="-115.0464317999999935"/>
+    <node visible="true" id="2135737358" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343517000000020" lon="-115.0451206000000042"/>
+    <node visible="true" id="2135737359" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343517000000020" lon="-115.0464958999999965"/>
+    <node visible="true" id="2135737360" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343517000000020" lon="-115.0465557999999930"/>
+    <node visible="true" id="2135737361" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343607000000006" lon="-115.0466267999999985"/>
+    <node visible="true" id="2135737362" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343707999999978" lon="-115.0459859000000051"/>
+    <node visible="true" id="2135737363" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343753000000007" lon="-115.0458409999999958"/>
+    <node visible="true" id="3073555931" timestamp="2020-10-12T16:10:16Z" version="4" changeset="16880" lat="36.0344521999999969" lon="-115.0468400000000031"/>
+    <node visible="true" id="3564588518" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0379204999999985" lon="-115.0430757999999969"/>
+    <node visible="true" id="3564588520" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0381162999999987" lon="-115.0431171999999975"/>
+    <node visible="true" id="3564588521" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0381859000000020" lon="-115.0432509000000039"/>
+    <node visible="true" id="3564588522" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0382790000000028" lon="-115.0434005000000042"/>
+    <node visible="true" id="3564588523" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0384012000000027" lon="-115.0438383999999985"/>
+    <node visible="true" id="3564588524" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0385093000000012" lon="-115.0439906000000008"/>
+    <node visible="true" id="3564588525" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0385852000000000" lon="-115.0438307000000009"/>
+    <node visible="true" id="3564588526" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0386303000000012" lon="-115.0441136999999969"/>
+    <node visible="true" id="3564588529" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0386997000000022" lon="-115.0439683999999971"/>
+    <node visible="true" id="3564588530" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0387223000000034" lon="-115.0441945000000032"/>
+    <node visible="true" id="3564588531" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0387993000000009" lon="-115.0440583999999973"/>
+    <node visible="true" id="3564588532" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0388518000000033" lon="-115.0442819000000014"/>
+    <node visible="true" id="3564588533" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0389610000000005" lon="-115.0443374999999975"/>
+    <node visible="true" id="3564588534" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0390048000000007" lon="-115.0441497999999996"/>
+    <node visible="true" id="3564588535" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0390767000000025" lon="-115.0443850999999995"/>
+    <node visible="true" id="3564588536" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0391762000000000" lon="-115.0444088999999934"/>
+    <node visible="true" id="3564588537" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0392757999999986" lon="-115.0444248000000016"/>
+    <node visible="true" id="3564588538" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0392830999999987" lon="-115.0442345000000017"/>
+    <node visible="true" id="4874857353" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0344887999999983" lon="-115.0466930999999988"/>
+    <node visible="true" id="4874857354" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0346492999999981" lon="-115.0466916999999967"/>
+    <node visible="true" id="4874857358" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0346764000000022" lon="-115.0470068999999995"/>
+    <node visible="true" id="4874857359" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0346796999999981" lon="-115.0469693999999947"/>
+    <node visible="true" id="4874857360" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0346807999999967" lon="-115.0468943000000053"/>
+    <node visible="true" id="4874857361" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343348000000034" lon="-115.0469908000000032"/>
+    <node visible="true" id="4874857362" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343413000000012" lon="-115.0467493999999959"/>
+    <node visible="true" id="4942127172" timestamp="2020-10-12T16:10:16Z" version="3" changeset="16880" lat="36.0391817000000003" lon="-115.0467371000000014">
+        <tag k="crossing:barrier" v="double_half"/>
+        <tag k="crossing:light" v="yes"/>
+        <tag k="railway" v="level_crossing"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="crossing:bell" v="yes"/>
+    </node>
+    <node visible="true" id="4942129425" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0382728000000014" lon="-115.0469444000000010"/>
+    <node visible="true" id="4954196355" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0344635000000011" lon="-115.0456551000000047"/>
+    <node visible="true" id="4954196356" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343249000000014" lon="-115.0456599999999980"/>
+    <node visible="true" id="4954196367" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0344588999999971" lon="-115.0443659000000025"/>
+    <node visible="true" id="4954198971" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0344635000000011" lon="-115.0459876999999977"/>
+    <node visible="true" id="4954198972" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0355071999999979" lon="-115.0459938999999991"/>
+    <node visible="true" id="4954198973" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0355148000000014" lon="-115.0455716000000024"/>
+    <node visible="true" id="4954198974" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0354724000000033" lon="-115.0468175000000031"/>
+    <node visible="true" id="4981949033" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0343396000000027" lon="-115.0468484000000018"/>
+    <node visible="true" id="4981949034" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345974999999967" lon="-115.0459917000000019"/>
+    <node visible="true" id="4981949036" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0346802999999980" lon="-115.0469276999999977"/>
+    <node visible="true" id="4981949037" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0346741999999978" lon="-115.0470413000000036"/>
+    <node visible="true" id="4981949044" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345791000000020" lon="-115.0469345000000061"/>
+    <node visible="true" id="4981949045" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0348390999999992" lon="-115.0469238000000018"/>
+    <node visible="true" id="4981949046" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0353694000000004" lon="-115.0469010000000054"/>
+    <node visible="true" id="4981949047" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0355744000000016" lon="-115.0469010000000054"/>
+    <node visible="true" id="4981949048" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0357012999999995" lon="-115.0469398999999981"/>
+    <node visible="true" id="4981949049" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0359116999999998" lon="-115.0470121999999975"/>
+    <node visible="true" id="4981949050" timestamp="2020-10-12T16:10:16Z" version="2" changeset="16880" lat="36.0369742000000031" lon="-115.0467941999999937"/>
+    <node visible="true" id="4981949052" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345950999999971" lon="-115.0444253000000003"/>
+    <node visible="true" id="4981949053" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345786000000032" lon="-115.0468378000000058"/>
+    <node visible="true" id="4981949054" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345823999999979" lon="-115.0466282000000007"/>
+    <node visible="true" id="4981949055" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345974999999967" lon="-115.0462475000000069"/>
+    <node visible="true" id="4981949056" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345974999999967" lon="-115.0457751999999942"/>
+    <node visible="true" id="4981949057" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345974999999967" lon="-115.0454426000000012"/>
+    <node visible="true" id="4981949058" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345974999999967" lon="-115.0447477999999961"/>
+    <node visible="true" id="4981949068" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0345797000000019" lon="-115.0470435000000009"/>
+    <node visible="true" id="5260333553" timestamp="2020-10-12T16:10:16Z" version="1" changeset="16880" lat="36.0389578999999998" lon="-115.0469880999999930"/>
+    <node visible="true" id="5260333602" timestamp="2020-10-12T16:10:16Z" version="4" changeset="16880" lat="36.0370005999999989" lon="-115.0470107000000013"/>
+    <node visible="true" id="5260334336" timestamp="2020-10-12T16:10:16Z" version="4" changeset="16880" lat="36.0369158999999968" lon="-115.0470133999999973"/>
+    <node visible="true" id="5353731695" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0392032000000029" lon="-115.0456839000000002"/>
+    <node visible="true" id="5353731696" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0391946000000019" lon="-115.0457777000000021"/>
+    <node visible="true" id="5353731697" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0391374000000013" lon="-115.0458007000000009"/>
+    <node visible="true" id="5355859839" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0392198999999991" lon="-115.0457578000000041"/>
+    <node visible="true" id="5355859840" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0392123999999967" lon="-115.0458162000000044"/>
+    <node visible="true" id="5365149155" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0378436000000022" lon="-115.0463766999999962"/>
+    <node visible="true" id="5365149156" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0378349000000000" lon="-115.0460628999999955"/>
+    <node visible="true" id="5365149157" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0375745999999992" lon="-115.0460790000000060"/>
+    <node visible="true" id="5365149158" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0374965000000032" lon="-115.0459878000000060"/>
+    <node visible="true" id="5365149159" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0374813000000032" lon="-115.0457329999999985"/>
+    <node visible="true" id="5365149160" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0372471000000019" lon="-115.0457250000000045"/>
+    <node visible="true" id="5365149161" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0372535999999997" lon="-115.0461889999999983"/>
+    <node visible="true" id="5365149162" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0374205999999973" lon="-115.0463847999999984"/>
+    <node visible="true" id="5365149163" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0377046999999990" lon="-115.0452126999999933"/>
+    <node visible="true" id="5365149164" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0370778999999999" lon="-115.0452475000000021"/>
+    <node visible="true" id="5365149165" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0370626999999999" lon="-115.0448157000000009"/>
+    <node visible="true" id="5365149166" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0376917000000034" lon="-115.0448049999999967"/>
+    <node visible="true" id="5365149167" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0370930999999999" lon="-115.0447056999999944"/>
+    <node visible="true" id="5365149168" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0370843999999977" lon="-115.0442953000000017"/>
+    <node visible="true" id="5365149169" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0364575999999985" lon="-115.0443302000000045"/>
+    <node visible="true" id="5365149170" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0364738999999972" lon="-115.0447218000000049"/>
+    <node visible="true" id="5365149171" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0366246000000032" lon="-115.0457437000000027"/>
+    <node visible="true" id="5365149172" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0366355000000027" lon="-115.0462078000000048"/>
+    <node visible="true" id="5365149173" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0364793000000034" lon="-115.0464062000000069"/>
+    <node visible="true" id="5365149174" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0360324999999975" lon="-115.0464170000000053"/>
+    <node visible="true" id="5365149175" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0360238000000024" lon="-115.0461219000000028"/>
+    <node visible="true" id="5365149176" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0363145000000031" lon="-115.0461085000000026"/>
+    <node visible="true" id="5365149177" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0363816999999997" lon="-115.0460120000000046"/>
+    <node visible="true" id="5365149178" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0363773999999992" lon="-115.0457490999999948"/>
+    <node visible="true" id="5365149179" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0368978999999996" lon="-115.0449203000000011"/>
+    <node visible="true" id="5365149180" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0368479999999991" lon="-115.0448827999999963"/>
+    <node visible="true" id="5365149181" timestamp="2020-10-12T16:10:17Z" version="2" changeset="16880" lat="36.0362397000000030" lon="-115.0449028000000027"/>
+    <node visible="true" id="5365149182" timestamp="2020-10-12T16:10:17Z" version="2" changeset="16880" lat="36.0383218999999997" lon="-115.0467668000000003"/>
+    <node visible="true" id="5365149183" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0383054999999999" lon="-115.0464304000000055"/>
+    <node visible="true" id="5365149184" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0379823999999971" lon="-115.0455800999999951"/>
+    <node visible="true" id="5365149185" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0369253000000000" lon="-115.0456066999999933"/>
+    <node visible="true" id="5365149186" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0371102000000008" lon="-115.0456020999999964"/>
+    <node visible="true" id="5365149187" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0371234999999999" lon="-115.0464438000000058"/>
+    <node visible="true" id="5365149188" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0372363000000036" lon="-115.0465403999999978"/>
+    <node visible="true" id="5365149189" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0381537000000023" lon="-115.0465135000000032"/>
+    <node visible="true" id="5365149190" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0381514999999979" lon="-115.0463043000000027"/>
+    <node visible="true" id="5365149191" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0382589999999965" lon="-115.0463079000000022"/>
+    <node visible="true" id="5365149192" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0379064999999983" lon="-115.0463096999999948"/>
+    <node visible="true" id="5365149193" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0379109000000000" lon="-115.0465205999999938"/>
+    <node visible="true" id="5365149194" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0381793000000030" lon="-115.0460982000000030"/>
+    <node visible="true" id="5365149195" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0379032000000024" lon="-115.0461032000000046"/>
+    <node visible="true" id="5365149196" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0378945000000002" lon="-115.0458859000000018"/>
+    <node visible="true" id="5365149197" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0380971000000017" lon="-115.0458818999999977"/>
+    <node visible="true" id="5365149198" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0375985000000014" lon="-115.0458899000000059"/>
+    <node visible="true" id="5365149199" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0375896999999981" lon="-115.0455900000000042"/>
+    <node visible="true" id="5365149200" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0377785000000017" lon="-115.0458875000000063"/>
+    <node visible="true" id="5365149201" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0377687000000009" lon="-115.0455855000000014"/>
+    <node visible="true" id="5365149202" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0371073999999965" lon="-115.0454098999999957"/>
+    <node visible="true" id="5365149203" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0371616999999986" lon="-115.0453774000000067"/>
+    <node visible="true" id="5365149204" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0378552999999968" lon="-115.0453530000000057"/>
+    <node visible="true" id="5365149205" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0369437000000019" lon="-115.0460661000000044"/>
+    <node visible="true" id="5365149206" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0367771000000019" lon="-115.0460704999999990"/>
+    <node visible="true" id="5365149207" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0367771000000019" lon="-115.0463917000000009"/>
+    <node visible="true" id="5365149208" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0367128999999977" lon="-115.0465279000000010"/>
+    <node visible="true" id="5365149209" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0359912999999992" lon="-115.0465441999999996"/>
+    <node visible="true" id="5365149210" timestamp="2020-10-12T16:10:17Z" version="2" changeset="16880" lat="36.0359818000000018" lon="-115.0456274000000008"/>
+    <node visible="true" id="5365149211" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0367655000000013" lon="-115.0456101999999987"/>
+    <node visible="true" id="5365149212" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0359817000000007" lon="-115.0459467000000018"/>
+    <node visible="true" id="5365149213" timestamp="2020-10-12T16:10:17Z" version="2" changeset="16880" lat="36.0362638000000004" lon="-115.0459390999999982"/>
+    <node visible="true" id="5365149214" timestamp="2020-10-12T16:10:17Z" version="2" changeset="16880" lat="36.0362577000000002" lon="-115.0456219999999945"/>
+    <node visible="true" id="5365149215" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0367508000000001" lon="-115.0451110999999997"/>
+    <node visible="true" id="5365149216" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0362460999999996" lon="-115.0451314000000025"/>
+    <node visible="true" id="5365149217" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0360915999999989" lon="-115.0456245999999965"/>
+    <node visible="true" id="5365149218" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0360785000000021" lon="-115.0451436000000029"/>
+    <node visible="true" id="5365149219" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0364237000000003" lon="-115.0456175000000059"/>
+    <node visible="true" id="5365149220" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0364120999999997" lon="-115.0451247000000023"/>
+    <node visible="true" id="5365149221" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0366044000000016" lon="-115.0456116999999949"/>
+    <node visible="true" id="5365149222" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0365913999999989" lon="-115.0451175000000035"/>
+    <node visible="true" id="5425935817" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0342947999999978" lon="-115.0461449000000016"/>
+    <node visible="true" id="5425935824" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16880" lat="36.0342953999999978" lon="-115.0466298999999992"/>
+    <node visible="true" id="5524838587" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0359863999999988" lon="-115.0470104000000049"/>
+    <node visible="true" id="5524838598" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0350430000000017" lon="-115.0470325999999943"/>
+    <node visible="true" id="5524839450" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0371175000000008" lon="-115.0460666999999972"/>
+    <node visible="true" id="5524839768" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0371773000000033" lon="-115.0445794999999976"/>
+    <node visible="true" id="5524839769" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0375840000000025" lon="-115.0445749000000006"/>
+    <node visible="true" id="5524839770" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0371285000000015" lon="-115.0442228000000000"/>
+    <node visible="true" id="5524839771" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0374495000000010" lon="-115.0442201000000040"/>
+    <node visible="true" id="5524839772" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0376447000000013" lon="-115.0447350999999969"/>
+    <node visible="true" id="5524839773" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0377195000000015" lon="-115.0447659000000016"/>
+    <node visible="true" id="5524839774" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0378560999999991" lon="-115.0450783999999942"/>
+    <node visible="true" id="5524839775" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0370981000000015" lon="-115.0442079999999976"/>
+    <node visible="true" id="5524839776" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0364094999999978" lon="-115.0442280999999980"/>
+    <node visible="true" id="5524839777" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0363540999999969" lon="-115.0442924999999974"/>
+    <node visible="true" id="5524839778" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0363693999999981" lon="-115.0448985999999962"/>
+    <node visible="true" id="5973844892" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0373799999999989" lon="-115.0470018999999979"/>
+    <node visible="true" id="5973844893" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0376602999999989" lon="-115.0467869000000007"/>
+    <node visible="true" id="5973844894" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0377982999999986" lon="-115.0469767999999959"/>
+    <node visible="true" id="5973844895" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0373166999999981" lon="-115.0467004000000060">
+        <tag k="highway" v="bus_stop"/>
+        <tag k="public_transport" v="platform"/>
+        <tag k="bus" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="5973844896" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0345127000000005" lon="-115.0470440999999937"/>
+    <node visible="true" id="5973844897" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0344490000000022" lon="-115.0469424000000060"/>
+    <node visible="true" id="5973844898" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0345196000000030" lon="-115.0469192000000049"/>
+    <node visible="true" id="5973844899" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0344841000000002" lon="-115.0468967000000049"/>
+    <node visible="true" id="5973844900" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0345812999999993" lon="-115.0466890000000006"/>
+    <node visible="true" id="5973844901" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0346520000000012" lon="-115.0469295999999986">
+        <tag k="highway" v="crossing"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="5973844902" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0343396000000027" lon="-115.0468484000000018"/>
+    <node visible="true" id="5973844904" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0369754000000029" lon="-115.0469501000000037"/>
+    <node visible="true" id="5973844905" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0369457999999980" lon="-115.0469144999999997"/>
+    <node visible="true" id="5973844906" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0368939999999967" lon="-115.0468850000000032"/>
+    <node visible="true" id="5973844907" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0368343000000024" lon="-115.0468776999999960"/>
+    <node visible="true" id="5973844908" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0365916000000013" lon="-115.0468738000000002"/>
+    <node visible="true" id="5973844909" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0364255000000000" lon="-115.0468027000000006"/>
+    <node visible="true" id="5973844910" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0375277999999994" lon="-115.0469930000000005"/>
+    <node visible="true" id="5973844911" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0373681000000019" lon="-115.0469238000000018"/>
+    <node visible="true" id="5973844912" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0371005000000011" lon="-115.0469309000000067"/>
+    <node visible="true" id="5973844913" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0370733000000030" lon="-115.0469290999999998"/>
+    <node visible="true" id="5973844914" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0370490000000032" lon="-115.0469166999999970"/>
+    <node visible="true" id="5973844915" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0370131999999970" lon="-115.0468893000000037"/>
+    <node visible="true" id="5973844916" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0369888999999972" lon="-115.0468548000000055"/>
+    <node visible="true" id="5973844917" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0370869999999996" lon="-115.0469106999999980"/>
+    <node visible="true" id="5973844918" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0370841000000013" lon="-115.0469468000000006"/>
+    <node visible="true" id="5973844919" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0384857000000025" lon="-115.0467065999999932"/>
+    <node visible="true" id="5973844920" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0384865999999988" lon="-115.0468166999999937"/>
+    <node visible="true" id="5973844921" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0390579999999972" lon="-115.0466787999999951"/>
+    <node visible="true" id="5973844922" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0390607000000003" lon="-115.0467957999999982"/>
+    <node visible="true" id="5973844927" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0386233999999988" lon="-115.0467021999999986"/>
+    <node visible="true" id="5973844928" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0386243000000022" lon="-115.0468122000000051"/>
+    <node visible="true" id="6324014341" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0349655999999996" lon="-115.0464225000000056"/>
+    <node visible="true" id="6324014342" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0349654999999984" lon="-115.0463385999999986"/>
+    <node visible="true" id="6324014343" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0349653999999973" lon="-115.0463316999999961"/>
+    <node visible="true" id="6324014344" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0349829999999969" lon="-115.0462894000000063"/>
+    <node visible="true" id="6324014345" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0350251999999998" lon="-115.0462875999999994"/>
+    <node visible="true" id="6324014346" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0350259000000008" lon="-115.0462959999999981"/>
+    <node visible="true" id="6324014347" timestamp="2020-10-12T16:10:17Z" version="2" changeset="16881" lat="36.0351554000000007" lon="-115.0462921999999963"/>
+    <node visible="true" id="6324014348" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0351532000000034" lon="-115.0463936999999959"/>
+    <node visible="true" id="6324014349" timestamp="2020-10-12T16:10:17Z" version="2" changeset="16881" lat="36.0352037999999979" lon="-115.0463952000000063"/>
+    <node visible="true" id="6324014350" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0352025999999981" lon="-115.0464889999999940"/>
+    <node visible="true" id="6324014351" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0351661999999990" lon="-115.0464889999999940"/>
+    <node visible="true" id="6324014352" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0351633000000007" lon="-115.0464261000000050"/>
+    <node visible="true" id="6324014353" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0350773999999987" lon="-115.0464250999999933"/>
+    <node visible="true" id="6324014354" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0350774999999999" lon="-115.0464944000000003"/>
+    <node visible="true" id="6324014355" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0350353999999982" lon="-115.0464925999999934"/>
+    <node visible="true" id="6324014356" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0350368000000003" lon="-115.0464242999999982"/>
+    <node visible="true" id="6324014357" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0349661999999995" lon="-115.0463488999999981"/>
+    <node visible="true" id="6324014358" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0349543000000025" lon="-115.0463493999999969"/>
+    <node visible="true" id="6324014359" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0349543000000025" lon="-115.0463388000000009"/>
+    <node visible="true" id="6324014360" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0349823000000029" lon="-115.0463309000000010"/>
+    <node visible="true" id="6732439518" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0390404999999987" lon="-115.0455625999999967"/>
+    <node visible="true" id="7042981074" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0350425999999970" lon="-115.0459927999999934"/>
+    <node visible="true" id="7042981075" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0350419999999971" lon="-115.0461654000000067"/>
+    <node visible="true" id="7042981076" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0353299000000007" lon="-115.0461774000000048"/>
+    <node visible="true" id="7042981077" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0353250000000003" lon="-115.0465274999999963"/>
+    <node visible="true" id="7042981078" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0347986000000020" lon="-115.0465271000000058"/>
+    <node visible="true" id="7042981079" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0348028000000014" lon="-115.0461707000000047"/>
+    <node visible="true" id="7042981080" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0353341000000000" lon="-115.0463179000000054"/>
+    <node visible="true" id="7042981081" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0354935000000012" lon="-115.0463180999999935"/>
+    <node visible="true" id="7042981082" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0353318000000016" lon="-115.0465157999999946"/>
+    <node visible="true" id="7042981083" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0353154000000018" lon="-115.0465329000000025"/>
+    <node visible="true" id="7042981084" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0353185999999965" lon="-115.0461717000000021"/>
+    <node visible="true" id="7042988585" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0353356999999974" lon="-115.0461879000000067"/>
+    <node visible="true" id="7042988586" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0348114000000024" lon="-115.0461666000000065"/>
+    <node visible="true" id="7042988587" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0347956999999965" lon="-115.0461812000000066"/>
+    <node visible="true" id="7042988588" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0347937000000016" lon="-115.0465162999999933"/>
+    <node visible="true" id="7042988589" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0348052000000010" lon="-115.0465355000000045"/>
+    <node visible="true" id="7042988590" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0348383999999982" lon="-115.0459922999999947"/>
+    <node visible="true" id="7042988591" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0347701999999970" lon="-115.0455608999999981"/>
+    <node visible="true" id="7042988592" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0347767000000019" lon="-115.0449459999999959"/>
+    <node visible="true" id="7042988593" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0347706000000017" lon="-115.0455634000000060"/>
+    <node visible="true" id="7042988594" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0358348000000035" lon="-115.0455805999999939"/>
+    <node visible="true" id="7042988595" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0358325999999991" lon="-115.0458011999999997"/>
+    <node visible="true" id="7042988596" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0355153000000001" lon="-115.0458018000000067"/>
+    <node visible="true" id="7042988597" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0358382000000006" lon="-115.0457904999999954"/>
+    <node visible="true" id="7042988598" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0358230000000006" lon="-115.0458043999999944"/>
+    <node visible="true" id="7042988599" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0358240999999992" lon="-115.0455749999999995"/>
+    <node visible="true" id="7042988600" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0358400000000003" lon="-115.0455927000000003"/>
+    <node visible="true" id="7042988601" timestamp="2020-10-12T16:10:17Z" version="1" changeset="16881" lat="36.0345974999999967" lon="-115.0449512999999939"/>
+    <node visible="true" id="7616369284" timestamp="2020-10-12T16:10:18Z" version="1" changeset="16881" lat="36.0386361999999991" lon="-115.0465925999999968"/>
+    <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="5260333602"/>
+        <nd ref="-39"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-09T03:26:37Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="fixme" v="name"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-37"/>
+        <nd ref="5260333553"/>
+        <nd ref="-38"/>
+        <nd ref="-37"/>
+        <tag k="source:datetime" v="2017-12-02T16:48:40Z"/>
+        <tag k="landuse" v="residential"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-36"/>
+        <nd ref="5524838587"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="5524838598"/>
+        <nd ref="-35"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4981949068"/>
+        <nd ref="-34"/>
+        <tag k="tiger:name_type" v="Pky"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2019-09-13T10:17:50Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="tiger:name_base" v="Wigwam"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="Wigwam Parkway"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="1572513415"/>
+        <nd ref="-33"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2019-08-14T10:55:24Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base" v="Stephanie"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="name" v="South Stephanie Street"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-32"/>
+        <nd ref="137355579"/>
+        <nd ref="4942129425"/>
+        <nd ref="5973844894"/>
+        <nd ref="5973844910"/>
+        <nd ref="5973844892"/>
+        <nd ref="5260333602"/>
+        <nd ref="5260334336"/>
+        <nd ref="5524838587"/>
+        <nd ref="4981949049"/>
+        <nd ref="5524838598"/>
+        <nd ref="4981949068"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-11-27T20:12:32Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base" v="Stephanie"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="North Stephanie Street"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-31"/>
+        <nd ref="1455284953"/>
+        <nd ref="1455284958"/>
+        <tag k="oneway" v="no"/>
+        <tag k="note" v="from Bing"/>
+        <tag k="source:datetime" v="2020-09-22T02:13:12Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="Wigwam Parkway"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-29"/>
+        <nd ref="5355859839"/>
+        <nd ref="5355859840"/>
+        <nd ref="-30"/>
+        <tag k="source:datetime" v="2018-01-23T04:10:48Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-26"/>
+        <nd ref="6732439518"/>
+        <nd ref="-27"/>
+        <nd ref="-28"/>
+        <nd ref="-26"/>
+        <tag k="source:datetime" v="2019-10-18T10:35:33Z"/>
+        <tag k="landuse" v="industrial"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-23"/>
+        <nd ref="6732439518"/>
+        <nd ref="-24"/>
+        <nd ref="-25"/>
+        <nd ref="-23"/>
+        <tag k="source:datetime" v="2019-10-18T10:35:33Z"/>
+        <tag k="man_made" v="works"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-22"/>
+        <nd ref="4981949033"/>
+        <nd ref="3073555931"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:53Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base" v="Stephanie"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="name" v="North Stephanie Street"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4981949053"/>
+        <nd ref="4954198974"/>
+        <nd ref="5973844909"/>
+        <nd ref="4981949050"/>
+        <nd ref="5973844893"/>
+        <nd ref="5365149182"/>
+        <nd ref="4942127172"/>
+        <nd ref="-21"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2019-12-15T04:02:16Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base" v="Stephanie"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="North Stephanie Street"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-19"/>
+        <nd ref="5353731695"/>
+        <nd ref="5353731696"/>
+        <nd ref="5353731697"/>
+        <nd ref="-20"/>
+        <nd ref="-19"/>
+        <tag k="source:datetime" v="2018-01-22T03:09:48Z"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-18"/>
+        <nd ref="2135737337"/>
+        <nd ref="2135737348"/>
+        <nd ref="2135737356"/>
+        <nd ref="2135737361"/>
+        <nd ref="2135737360"/>
+        <nd ref="2135737359"/>
+        <nd ref="2135737357"/>
+        <nd ref="2135737347"/>
+        <nd ref="2135737350"/>
+        <nd ref="2135737352"/>
+        <nd ref="2135737346"/>
+        <nd ref="2135737341"/>
+        <nd ref="2135737349"/>
+        <nd ref="2135737362"/>
+        <nd ref="2135737363"/>
+        <nd ref="2135737355"/>
+        <nd ref="2135737345"/>
+        <nd ref="4954196356"/>
+        <nd ref="2135737340"/>
+        <nd ref="2135737338"/>
+        <nd ref="2135737342"/>
+        <nd ref="2135737344"/>
+        <nd ref="2135737351"/>
+        <nd ref="2135737354"/>
+        <nd ref="2135737358"/>
+        <nd ref="2135737353"/>
+        <nd ref="2135737343"/>
+        <tag k="review" v="no"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2017-07-06T07:14:37Z"/>
+        <tag k="highway" v="footway"/>
+        <tag k="footway" v="sidewalk"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-17"/>
+        <nd ref="4954196367"/>
+        <tag k="source:datetime" v="2018-01-27T03:15:10Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-16"/>
+        <nd ref="4954196356"/>
+        <nd ref="4954196355"/>
+        <tag k="source:datetime" v="2018-02-21T05:28:04Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-15"/>
+        <nd ref="1572513415"/>
+        <tag k="tiger:name_type" v="Pky"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2019-08-14T10:55:24Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="tiger:name_base" v="Wigwam"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="Wigwam Parkway"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-13"/>
+        <nd ref="137355579"/>
+        <nd ref="4942127172"/>
+        <nd ref="137355582"/>
+        <nd ref="-14"/>
+        <tag k="source:datetime" v="2018-12-03T17:35:50Z"/>
+        <tag k="tiger:cfcc" v="B11"/>
+        <tag k="embankment" v="yes"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="operator" v="Union Pacific Railroad"/>
+        <tag k="tiger:name_base" v="Union Pacific Railroad"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="railway" v="rail"/>
+        <tag k="maxspeed" v="10 mph"/>
+        <tag k="usage" v="branch"/>
+        <tag k="owner" v="Union Pacific Railroad"/>
+        <tag k="name" v="BMI Branch"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="electrified" v="no"/>
+    </way>
+    <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-11"/>
+        <nd ref="3564588518"/>
+        <nd ref="3564588523"/>
+        <nd ref="3564588524"/>
+        <nd ref="3564588526"/>
+        <nd ref="3564588530"/>
+        <nd ref="3564588532"/>
+        <nd ref="3564588533"/>
+        <nd ref="3564588535"/>
+        <nd ref="3564588536"/>
+        <nd ref="3564588537"/>
+        <nd ref="-12"/>
+        <tag k="source:datetime" v="2019-02-15T21:57:16Z"/>
+        <tag k="tiger:cfcc" v="B11"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="service" v="spur"/>
+        <tag k="operator" v="Union Pacific Railroad"/>
+        <tag k="tiger:name_base" v="Union Pacific Railroad"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="railway" v="rail"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="electrified" v="no"/>
+    </way>
+    <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-9"/>
+        <nd ref="3564588520"/>
+        <nd ref="3564588521"/>
+        <nd ref="3564588522"/>
+        <nd ref="3564588525"/>
+        <nd ref="3564588529"/>
+        <nd ref="3564588531"/>
+        <nd ref="3564588534"/>
+        <nd ref="3564588538"/>
+        <nd ref="-10"/>
+        <tag k="source:datetime" v="2015-06-01T23:09:36Z"/>
+        <tag k="fence_type" v="chain_link"/>
+        <tag k="barrier" v="fence"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-7"/>
+        <nd ref="959136728"/>
+        <nd ref="959136706"/>
+        <nd ref="959136647"/>
+        <nd ref="959136669"/>
+        <nd ref="959136750"/>
+        <nd ref="959136693"/>
+        <nd ref="-8"/>
+        <tag k="note" v="6*single; 3*double"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:52Z"/>
+        <tag k="power" v="line"/>
+        <tag k="layer" v="3"/>
+        <tag k="wires" v="double;single"/>
+        <tag k="cables" v="9"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="7616369284"/>
+        <nd ref="-6"/>
+        <tag k="source:datetime" v="2020-06-12T18:39:05Z"/>
+        <tag k="waterway" v="drain"/>
+        <tag k="layer" v="-1"/>
+        <tag k="tunnel" v="culvert"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-5"/>
+        <nd ref="7616369284"/>
+        <tag k="source:datetime" v="2020-06-12T18:39:05Z"/>
+        <tag k="waterway" v="drain"/>
+        <tag k="intermittent" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4874857358"/>
+        <nd ref="4981949037"/>
+        <nd ref="-4"/>
+        <tag k="source:datetime" v="2017-09-21T19:56:59Z"/>
+        <tag k="road_marking" v="solid_stop_line"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="5425935817"/>
+        <nd ref="-2"/>
+        <nd ref="-3"/>
+        <nd ref="5425935824"/>
+        <nd ref="5425935817"/>
+        <tag k="source:datetime" v="2018-02-21T05:28:02Z"/>
+        <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="-1"/>
+        <nd ref="5260334336"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-09T03:26:37Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="fixme" v="name"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="176279356" timestamp="2020-10-12T16:10:18Z" version="15" changeset="16881">
+        <nd ref="5973844896"/>
+        <nd ref="1572513415"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:52Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base" v="Stephanie"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="name" v="South Stephanie Street"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="495751257" timestamp="2020-10-12T16:10:19Z" version="4" changeset="16881">
+        <nd ref="4874857354"/>
+        <nd ref="4874857353"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:53Z"/>
+        <tag k="road_marking" v="solid_stop_line"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="495751260" timestamp="2020-10-12T16:10:19Z" version="4" changeset="16881">
+        <nd ref="4874857360"/>
+        <nd ref="4874857359"/>
+        <tag k="modifier" v="left"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:53Z"/>
+        <tag k="road_marking" v="solid_stop_line"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="495751261" timestamp="2020-10-12T16:10:19Z" version="4" changeset="16881">
+        <nd ref="4874857362"/>
+        <nd ref="5973844902"/>
+        <nd ref="4874857361"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:53Z"/>
+        <tag k="road_marking" v="solid_stop_line"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="503990241" timestamp="2020-10-12T16:10:19Z" version="7" changeset="16881">
+        <nd ref="3073555931"/>
+        <nd ref="4981949053"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:52Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base" v="Stephanie"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="North Stephanie Street"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="505487166" timestamp="2020-10-12T16:10:19Z" version="3" changeset="16881">
+        <nd ref="4954198972"/>
+        <nd ref="7042981074"/>
+        <nd ref="7042988590"/>
+        <nd ref="4981949034"/>
+        <tag k="source:datetime" v="2019-12-09T04:56:07Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="505487167" timestamp="2020-10-12T16:10:19Z" version="2" changeset="16881">
+        <nd ref="4954198974"/>
+        <nd ref="7042981081"/>
+        <nd ref="4954198972"/>
+        <nd ref="7042988596"/>
+        <nd ref="4954198973"/>
+        <tag k="source:datetime" v="2019-12-09T04:56:07Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="508880755" timestamp="2020-10-12T16:10:19Z" version="3" changeset="16881">
+        <nd ref="4981949049"/>
+        <nd ref="4981949048"/>
+        <nd ref="4981949047"/>
+        <nd ref="4981949046"/>
+        <nd ref="4981949045"/>
+        <nd ref="4981949036"/>
+        <nd ref="5973844901"/>
+        <nd ref="4981949044"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:52Z"/>
+        <tag k="highway" v="secondary_link"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="508880757" timestamp="2020-10-12T16:10:19Z" version="3" changeset="16881">
+        <nd ref="1455284958"/>
+        <nd ref="4981949052"/>
+        <nd ref="4981949058"/>
+        <nd ref="7042988601"/>
+        <nd ref="4981949057"/>
+        <nd ref="4981949056"/>
+        <nd ref="4981949034"/>
+        <nd ref="4981949055"/>
+        <nd ref="4981949054"/>
+        <nd ref="5973844900"/>
+        <nd ref="4981949053"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="note" v="from Bing"/>
+        <tag k="source:datetime" v="2019-12-09T04:56:07Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="Wigwam Parkway"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="508880758" timestamp="2020-10-12T16:10:19Z" version="4" changeset="16881">
+        <nd ref="5973844897"/>
+        <nd ref="3073555931"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="note" v="from Bing"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:52Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Wigwam Parkway"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="508880760" timestamp="2020-10-12T16:10:19Z" version="3" changeset="16881">
+        <nd ref="4981949044"/>
+        <nd ref="4981949068"/>
+        <tag k="tiger:name_type" v="Pky"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:53Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="tiger:name_base" v="Wigwam"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="Wigwam Parkway"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163176" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149155"/>
+        <nd ref="5365149156"/>
+        <nd ref="5365149157"/>
+        <nd ref="5365149158"/>
+        <nd ref="5365149159"/>
+        <nd ref="5365149160"/>
+        <nd ref="5365149161"/>
+        <nd ref="5365149162"/>
+        <nd ref="5365149155"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:18Z"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163177" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149163"/>
+        <nd ref="5365149164"/>
+        <nd ref="5365149165"/>
+        <nd ref="5365149166"/>
+        <nd ref="5365149163"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:18Z"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163178" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149167"/>
+        <nd ref="5365149168"/>
+        <nd ref="5365149169"/>
+        <nd ref="5365149170"/>
+        <nd ref="5365149167"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:18Z"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163179" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149171"/>
+        <nd ref="5365149172"/>
+        <nd ref="5365149173"/>
+        <nd ref="5365149174"/>
+        <nd ref="5365149175"/>
+        <nd ref="5365149176"/>
+        <nd ref="5365149177"/>
+        <nd ref="5365149178"/>
+        <nd ref="5365149171"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:18Z"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163180" timestamp="2020-10-12T16:10:19Z" version="2" changeset="16881">
+        <nd ref="4981949050"/>
+        <nd ref="5365149205"/>
+        <nd ref="5365149185"/>
+        <nd ref="5365149179"/>
+        <nd ref="5365149180"/>
+        <nd ref="5524839778"/>
+        <nd ref="5365149181"/>
+        <nd ref="5365149216"/>
+        <tag k="source:datetime" v="2018-04-03T09:19:16Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163181" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149182"/>
+        <nd ref="5365149183"/>
+        <nd ref="5365149191"/>
+        <nd ref="5365149194"/>
+        <nd ref="5365149197"/>
+        <nd ref="5365149184"/>
+        <nd ref="5365149201"/>
+        <nd ref="5365149199"/>
+        <nd ref="5365149186"/>
+        <nd ref="5365149185"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:18Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163182" timestamp="2020-10-12T16:10:19Z" version="2" changeset="16881">
+        <nd ref="5365149186"/>
+        <nd ref="5524839450"/>
+        <nd ref="5365149187"/>
+        <nd ref="5365149188"/>
+        <nd ref="5365149193"/>
+        <nd ref="5365149189"/>
+        <nd ref="5365149190"/>
+        <nd ref="5365149191"/>
+        <tag k="source:datetime" v="2018-04-03T09:19:16Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163184" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149190"/>
+        <nd ref="5365149192"/>
+        <nd ref="5365149193"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:18Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163185" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149194"/>
+        <nd ref="5365149195"/>
+        <nd ref="5365149192"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:18Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163186" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149195"/>
+        <nd ref="5365149196"/>
+        <nd ref="5365149197"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:18Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163187" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149196"/>
+        <nd ref="5365149200"/>
+        <nd ref="5365149198"/>
+        <nd ref="5365149199"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:19Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163188" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149200"/>
+        <nd ref="5365149201"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:19Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163189" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149186"/>
+        <nd ref="5365149202"/>
+        <nd ref="5365149203"/>
+        <nd ref="5365149204"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:19Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163190" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149205"/>
+        <nd ref="5365149206"/>
+        <nd ref="5365149207"/>
+        <nd ref="5365149208"/>
+        <nd ref="5365149209"/>
+        <nd ref="5365149212"/>
+        <nd ref="5365149210"/>
+        <nd ref="5365149217"/>
+        <nd ref="5365149214"/>
+        <nd ref="5365149219"/>
+        <nd ref="5365149221"/>
+        <nd ref="5365149211"/>
+        <nd ref="5365149185"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:19Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163191" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149206"/>
+        <nd ref="5365149211"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:19Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163192" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149212"/>
+        <nd ref="5365149213"/>
+        <nd ref="5365149214"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:19Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163193" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149211"/>
+        <nd ref="5365149215"/>
+        <nd ref="5365149222"/>
+        <nd ref="5365149220"/>
+        <nd ref="5365149216"/>
+        <nd ref="5365149214"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:19Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163194" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149217"/>
+        <nd ref="5365149218"/>
+        <nd ref="5365149216"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:19Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163195" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149219"/>
+        <nd ref="5365149220"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:19Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="556163196" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149221"/>
+        <nd ref="5365149222"/>
+        <tag k="source:datetime" v="2018-01-27T03:48:19Z"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="575874202" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5524839450"/>
+        <nd ref="5365149205"/>
+        <tag k="source:datetime" v="2018-04-03T09:18:37Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="575874244" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5524839769"/>
+        <nd ref="5524839768"/>
+        <tag k="source:datetime" v="2018-04-03T09:18:39Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="575874245" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149204"/>
+        <nd ref="5524839774"/>
+        <nd ref="5524839773"/>
+        <nd ref="5524839772"/>
+        <nd ref="5524839769"/>
+        <nd ref="5524839771"/>
+        <nd ref="5524839770"/>
+        <tag k="source:datetime" v="2018-04-03T09:18:39Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="575874246" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5524839778"/>
+        <nd ref="5524839777"/>
+        <nd ref="5524839776"/>
+        <nd ref="5524839775"/>
+        <tag k="source:datetime" v="2018-04-03T09:18:39Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722866" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="4981949044"/>
+        <nd ref="5973844898"/>
+        <nd ref="5973844899"/>
+        <nd ref="3073555931"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:49Z"/>
+        <tag k="highway" v="secondary_link"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722867" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="3073555931"/>
+        <nd ref="1455284961"/>
+        <nd ref="4954198971"/>
+        <nd ref="4954196355"/>
+        <nd ref="1455284960"/>
+        <nd ref="4954196367"/>
+        <nd ref="1455284958"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="note" v="from Bing"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:49Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="Wigwam Parkway"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722869" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="1572513415"/>
+        <nd ref="5973844897"/>
+        <tag k="tiger:name_type" v="Pky"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:49Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="highway" v="tertiary"/>
+        <tag k="tiger:name_base" v="Wigwam"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="Wigwam Parkway"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722870" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="4981949053"/>
+        <nd ref="4981949044"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="note" v="from Bing"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:49Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="Wigwam Parkway"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722872" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="4981949068"/>
+        <nd ref="5973844896"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:50Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="tiger:name_base" v="Stephanie"/>
+        <tag k="tiger:county" v="Clark, NV"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="name" v="North Stephanie Street"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722873" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5973844909"/>
+        <nd ref="5973844908"/>
+        <nd ref="5973844907"/>
+        <nd ref="5973844906"/>
+        <nd ref="5973844905"/>
+        <nd ref="5973844904"/>
+        <nd ref="5260333602"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:50Z"/>
+        <tag k="highway" v="residential"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722874" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5973844910"/>
+        <nd ref="5973844911"/>
+        <nd ref="5973844912"/>
+        <nd ref="5973844913"/>
+        <nd ref="5973844914"/>
+        <nd ref="5973844915"/>
+        <nd ref="5973844916"/>
+        <nd ref="4981949050"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:50Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722875" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5973844917"/>
+        <nd ref="5973844918"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:50Z"/>
+        <tag k="road_marking" v="solid_stop_line"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722876" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5973844919"/>
+        <nd ref="5973844920"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:50Z"/>
+        <tag k="road_marking" v="solid_stop_line"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722877" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5973844921"/>
+        <nd ref="5973844922"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:50Z"/>
+        <tag k="road_marking" v="solid_stop_line"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="632722880" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5973844927"/>
+        <nd ref="5973844928"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:50Z"/>
+        <tag k="road_marking" v="solid_stop_line"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="675282020" timestamp="2020-10-12T16:10:19Z" version="3" changeset="16881">
+        <nd ref="6324014341"/>
+        <nd ref="6324014357"/>
+        <nd ref="6324014358"/>
+        <nd ref="6324014359"/>
+        <nd ref="6324014342"/>
+        <nd ref="6324014343"/>
+        <nd ref="6324014360"/>
+        <nd ref="6324014344"/>
+        <nd ref="6324014345"/>
+        <nd ref="6324014346"/>
+        <nd ref="6324014347"/>
+        <nd ref="6324014348"/>
+        <nd ref="6324014349"/>
+        <nd ref="6324014350"/>
+        <nd ref="6324014351"/>
+        <nd ref="6324014352"/>
+        <nd ref="6324014353"/>
+        <nd ref="6324014354"/>
+        <nd ref="6324014355"/>
+        <nd ref="6324014356"/>
+        <nd ref="6324014341"/>
+        <tag k="takeaway" v="yes"/>
+        <tag k="brand:wikidata" v="Q7285144"/>
+        <tag k="source:datetime" v="2020-01-01T13:51:08Z"/>
+        <tag k="drive_through" v="yes"/>
+        <tag k="building" v="yes"/>
+        <tag k="brand:wikipedia" v="en:Raising Cane's Chicken Fingers"/>
+        <tag k="amenity" v="fast_food"/>
+        <tag k="official_name" v="Raising Cane's Chicken Fingers"/>
+        <tag k="brand" v="Raising Cane's"/>
+        <tag k="cuisine" v="chicken"/>
+        <tag k="name" v="Raising Cane's"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="753810363" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="7042981074"/>
+        <nd ref="7042981075"/>
+        <tag k="source:datetime" v="2019-12-09T04:56:07Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="753810364" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="7042981075"/>
+        <nd ref="7042981084"/>
+        <nd ref="7042981076"/>
+        <nd ref="7042988585"/>
+        <nd ref="7042981080"/>
+        <nd ref="7042981082"/>
+        <nd ref="7042981077"/>
+        <nd ref="7042981083"/>
+        <nd ref="7042988589"/>
+        <nd ref="7042981078"/>
+        <nd ref="7042988588"/>
+        <nd ref="7042988587"/>
+        <nd ref="7042981079"/>
+        <nd ref="7042988586"/>
+        <nd ref="7042981075"/>
+        <tag k="source:datetime" v="2019-12-09T04:56:07Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="753810365" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="7042981080"/>
+        <nd ref="7042981081"/>
+        <tag k="source:datetime" v="2019-12-09T04:56:07Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="753810366" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="7042988590"/>
+        <nd ref="7042988593"/>
+        <nd ref="7042988591"/>
+        <nd ref="7042988592"/>
+        <tag k="source:datetime" v="2019-12-09T04:56:07Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="753810367" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="7042988593"/>
+        <nd ref="4954198973"/>
+        <nd ref="7042988599"/>
+        <nd ref="7042988594"/>
+        <nd ref="7042988600"/>
+        <nd ref="7042988597"/>
+        <nd ref="7042988595"/>
+        <nd ref="7042988598"/>
+        <nd ref="7042988596"/>
+        <tag k="source:datetime" v="2019-12-09T04:56:07Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <way visible="true" id="753810368" timestamp="2020-10-12T16:10:19Z" version="1" changeset="16881">
+        <nd ref="5365149181"/>
+        <nd ref="7042988592"/>
+        <nd ref="7042988601"/>
+        <tag k="source:datetime" v="2019-12-09T04:56:07Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+    </way>
+    <relation visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
+        <member type="way" ref="-24" role=""/>
+        <member type="way" ref="-25" role=""/>
+        <tag k="source:datetime" v="2019-09-13T10:17:50Z"/>
+        <tag k="highway" v="service"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="multilinestring"/>
+    </relation>
+    <relation visible="true" id="7919958" timestamp="2020-10-12T16:10:20Z" version="17" changeset="16881">
+        <member type="way" ref="-9" role=""/>
+        <tag k="source:datetime" v="2018-12-17T14:41:07Z"/>
+        <tag k="route" v="railway"/>
+        <tag k="operator" v="Union Pacific Railroad"/>
+        <tag k="name" v="BMI Branch"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="route"/>
+    </relation>
+    <relation visible="true" id="8799241" timestamp="2020-10-12T16:10:20Z" version="1" changeset="16881">
+        <member type="way" ref="508880755" role="from"/>
+        <member type="node" ref="4981949044" role="via"/>
+        <member type="way" ref="508880760" role="to"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:50Z"/>
+        <tag k="restriction" v="no_right_turn"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="restriction"/>
+    </relation>
+    <relation visible="true" id="8799242" timestamp="2020-10-12T16:10:20Z" version="1" changeset="16881">
+        <member type="way" ref="176279356" role="from"/>
+        <member type="node" ref="1572513415" role="via"/>
+        <member type="way" ref="632722869" role="to"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:50Z"/>
+        <tag k="restriction" v="no_left_turn"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="restriction"/>
+    </relation>
+    <relation visible="true" id="8799243" timestamp="2020-10-12T16:10:20Z" version="1" changeset="16881">
+        <member type="way" ref="508880757" role="from"/>
+        <member type="way" ref="632722870" role="via"/>
+        <member type="way" ref="632722866" role="to"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:51Z"/>
+        <tag k="restriction" v="no_left_turn"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="restriction"/>
+    </relation>
+    <relation visible="true" id="8799244" timestamp="2020-10-12T16:10:20Z" version="1" changeset="16881">
+        <member type="way" ref="503990241" role="from"/>
+        <member type="way" ref="632722870" role="via"/>
+        <member type="way" ref="632722866" role="to"/>
+        <tag k="source:datetime" v="2018-10-11T04:25:51Z"/>
+        <tag k="restriction" v="no_u_turn"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="restriction"/>
+    </relation>
+    <relation visible="true" id="9053186" timestamp="2020-10-12T16:10:20Z" version="16" changeset="16881">
+        <member type="way" ref="-15" role="forward"/>
+        <member type="way" ref="503990241" role="forward"/>
+        <member type="way" ref="-16" role="forward"/>
+        <tag k="source:datetime" v="2020-07-16T19:15:13Z"/>
+        <tag k="route" v="bus"/>
+        <tag k="ref" v="115"/>
+        <tag k="public_transport:version" v="1"/>
+        <tag k="operator" v="Regional Transportation Commission of Southern Nevada"/>
+        <tag k="network" v="RTC"/>
+        <tag k="name" v="RTC 115 Nellis/Stephanie"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="route"/>
+    </relation>
+    <relation visible="true" id="10411379" timestamp="2020-10-12T16:10:20Z" version="1" changeset="16881">
+        <member type="way" ref="-15" role="from"/>
+        <tag k="source:datetime" v="2019-12-15T04:02:16Z"/>
+        <tag k="restriction" v="no_left_turn"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="type" v="restriction"/>
+    </relation>
+</osm>
