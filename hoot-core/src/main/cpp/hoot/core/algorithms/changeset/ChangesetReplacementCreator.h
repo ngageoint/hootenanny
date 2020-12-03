@@ -114,6 +114,32 @@ private:
   OsmMapPtr _loadAndFilterRefMap(QMap<ElementId, long>& refIdToVersionMappings);
   OsmMapPtr _loadAndFilterSecMap();
 
+  /*
+   * Copies all ways that are tagged with MetadataTags::HootConnectedWayOutsideBounds() out of a map
+   */
+  OsmMapPtr _getImmediatelyConnectedOutOfBoundsWays(const ConstOsmMapPtr& map) const;
+
+  /*
+   * Snaps unnconnected ways with a map to each other
+   *
+   * @param map the map to snap ways within
+   * @param snapWayStatuses the statuses the ways being snapped must have
+   * @param snapToWayStatuses the statuses the ways being snapped to must have
+   * @param typeCriterionClassName optional filter criteria that snapped/snapped to ways must have
+   * @param markSnappedWays if true, snapped ways are marked with a custom metadata tag
+   * @param debugFileName name prefix for any debug map files generated during snapping
+   */
+  void _snapUnconnectedWays(
+    OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
+    const QString& typeCriterionClassName, const bool markSnappedWays,
+    const QString& debugFileName);
+
+  /*
+   * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
+   * MetadataTags::HootSnapped()=snapped_way tags
+   */
+  void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
+
   void _snapUnconnectedPreChangesetMapCropping(OsmMapPtr& combinedMap);
   void _snapUnconnectedPostChangesetMapCropping(
     OsmMapPtr& refMap, OsmMapPtr& combinedMap, OsmMapPtr& immediatelyConnectedOutOfBoundsWays);

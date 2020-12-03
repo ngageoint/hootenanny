@@ -13,6 +13,7 @@ replacement filter options:
 retainment filters: 
 chain retainment filters: 
 retainment filter options: 
+enable way snapping:  --enable-way-snapping
 way snap tolerance:  45.0
 existing way node tolerance:  45.0
 extra params: 
@@ -37,19 +38,19 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementDeleteOnlyTest/ServiceChangesetReplacementDeleteOnlyTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=1.340927, max_lat=1.356503, min_lon=29.023305, max_lon=29.0368787, num_changes=1831
-Node(s) Created: 18
-Node(s) Modified: 12
-Node(s) Deleted: 1,516
-Way(s) Created: 5
-Way(s) Modified: 18
-Way(s) Deleted: 260
+Changeset Details: min_lat=1.340927, max_lat=1.351193, min_lon=29.031372, max_lon=29.0368787, num_changes=1843
+Node(s) Created: 21
+Node(s) Modified: 0
+Node(s) Deleted: 1,519
+Way(s) Created: 23
+Way(s) Modified: 0
+Way(s) Deleted: 278
 Relation(s) Created: 1
 Relation(s) Modified: 0
 Relation(s) Deleted: 1
-Total Creations: 24
-Total Modifications: 30
-Total Deletions: 1,777
+Total Creations: 45
+Total Modifications: 0
+Total Deletions: 1,798
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementDeleteOnlyTest-xml-replaced.osm for verification...
 

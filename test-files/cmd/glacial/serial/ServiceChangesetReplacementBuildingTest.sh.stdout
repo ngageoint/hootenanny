@@ -13,6 +13,7 @@ replacement filter options:
 retainment filters: 
 chain retainment filters: 
 retainment filter options: 
+enable way snapping: 
 way snap tolerance:  5.0
 existing way node tolerance:  0.5
 extra params: 

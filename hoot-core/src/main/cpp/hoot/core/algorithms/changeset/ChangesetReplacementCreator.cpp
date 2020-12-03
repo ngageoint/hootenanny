@@ -34,8 +34,12 @@
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 #include <hoot/core/elements/CommonElementIdFinder.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -47,10 +51,13 @@
 
 #include <hoot/core/ops/ElementIdRemapper.h>
 #include <hoot/core/ops/MapCropper.h>
+#include <hoot/core/ops/UnconnectedWaySnapper.h>
 
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -66,11 +73,6 @@ ChangesetReplacementCreatorAbstract()
   _currentChangeDerivationPassIsLinear = true;
   _boundsInterpretation = BoundsInterpretation::Lenient;
   _fullReplacement = true;
-
-  // Every capitalized labeled section of the "create" method (e.g. "LOAD AND FILTER"), except input
-  // validation is being considered a separate step for progress. The number of tasks per pass must
-  // be updated as you add/remove job steps in the create logic.
-  _numTotalTasks = 8;
 
   _setGlobalOpts();
 }
@@ -170,6 +172,15 @@ void ChangesetReplacementCreator::create(
     ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
   _printJobDescription();
 
+  // Every capitalized labeled section of the "create" method (e.g. "LOAD AND FILTER"), except input
+  // validation is being considered a separate step for progress. The number of tasks per pass must
+  // be updated as you add/remove job steps in the create logic.
+  _numTotalTasks = 9;
+  if (!_enableWaySnapping)
+  {
+    _numTotalTasks -= 2;
+  }
+
   // LOAD AND FILTER
 
   _progress->set(_getJobPercentComplete(), "Loading input data...");
@@ -218,7 +229,7 @@ void ChangesetReplacementCreator::create(
 
   // It seems unnecessary to need to clean the data after replacement. However, without the
   // cleaning, the output can become mangled in strange ways. The cleaning ops have been reduced
-  // down to only those needed, but its probably worth to determine exactly why the remaining ops
+  // down to only those needed, but its probably worth determining exactly why the remaining ops
   // are actually needed at some point. This cleaning *probably* still needs to occur after cutting,
   // though, as it seems to get rid of some of the artifacts produced by that process.
 
@@ -233,9 +244,9 @@ void ChangesetReplacementCreator::create(
   }
   _currentTask++;
 
-  // SNAP BEFORE CHANGESET DERIVATION CROPPING
+  // COMBINE
 
-  _progress->set(_getJobPercentComplete(), "Snapping linear features...");
+  _progress->set(_getJobPercentComplete(), "Combining maps...");
 
   // This remapper will remap the IDs of all the sec elements.
   ElementIdRemapper secIdRemapper(ElementCriterionPtr(new StatusCriterion(Status::Unknown2)));
@@ -258,31 +269,49 @@ void ChangesetReplacementCreator::create(
   LOG_VARD(cookieCutRefMap->size());
   OsmMapPtr combinedMap = cookieCutRefMap; // rename to reflect the state of the dataset
 
-  // Snap secondary features back to reference features if dealing with linear features where
-  // ref features may have been cut along the bounds. We're being lenient here by snapping
-  // secondary to reference *and* allowing conflated data to be snapped to either dataset. We only
-  // want to snap ways of like types together, so we'll loop through each applicable linear type
-  // and snap them separately.
-  _snapUnconnectedPreChangesetMapCropping(combinedMap);
-
-  // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
-  // data in the resulting changeset and generate modify statements instead.
-  ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
-  wayJoiner.join(combinedMap);
-  LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-after-way-joining");
-
   _currentTask++;
+
+  // SNAP BEFORE CHANGESET DERIVATION CROPPING
+
+  /* After recent element ID preservation improvements, way snapping only needs to occur only when
+   * the linear replacement data is very different from the data being replaced in order to stitch
+   * ways at the replacement boundary seam.
+   */
+   if (_enableWaySnapping)
+   {
+    _progress->set(_getJobPercentComplete(), "Snapping linear features...");
+
+    // Snap secondary features back to reference features if dealing with linear features where
+    // ref features may have been cut along the bounds. We're being lenient here by snapping
+    // secondary to reference *and* allowing conflated data to be snapped to either dataset. We only
+    // want to snap ways of like types together, so we'll loop through each applicable linear type
+    // and snap them separately.
+    _snapUnconnectedPreChangesetMapCropping(combinedMap);
+
+    // After snapping, perform joining to prevent unnecessary create/delete statements for the ref
+    // data in the resulting changeset and generate modify statements instead.
+    ReplacementSnappedWayJoiner wayJoiner(refIdToVersionMappings);
+    wayJoiner.join(combinedMap);
+    LOG_VART(MapProjector::toWkt(combinedMap->getProjection()));
+    OsmMapWriterFactory::writeDebugMap(combinedMap, _changesetId + "-after-way-joining");
+
+    _currentTask++;
+  }
 
   // PRE-CHANGESET DERIVATION CROP
 
   _progress->set(_getJobPercentComplete(), "Cropping maps for changeset derivation...");
 
-  // If we're conflating linear features with the lenient bounds requirement, copy the
-  // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
-  // crop in preparation for changeset derivation. If we don't introduce them back during
-  // changeset derivation, they may not end up being snapped back to the replacement data.
-  OsmMapPtr immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
+  // get these before the next cropping
+  OsmMapPtr immediatelyConnectedOutOfBoundsWays;
+  if (_enableWaySnapping)
+  {
+    // If we're conflating linear features with the lenient bounds requirement, copy the
+    // immediately connected out of bounds ref ways to a new temp map. We'll lose those ways once we
+    // crop in preparation for changeset derivation. If we don't introduce them back during
+    // changeset derivation, they may not end up being snapped back to the replacement data.
+    immediatelyConnectedOutOfBoundsWays = _getImmediatelyConnectedOutOfBoundsWays(refMap);
+  }
 
   // Crop the original ref and conflated maps appropriately for changeset derivation.
   _cropMapForChangesetDerivation(
@@ -296,18 +325,27 @@ void ChangesetReplacementCreator::create(
 
   // SNAP AFTER CHANGESET DERIVATION CROPPING
 
-  _progress->set(_getJobPercentComplete(), "Snapping linear features...");
+  if (_enableWaySnapping)
+  {
+    _progress->set(_getJobPercentComplete(), "Snapping linear features...");
 
-  // The non-strict bounds interpretation way replacement workflow benefits from a second
-  // set of snapping runs right before changeset derivation due to there being ways connected to
-  // replacement ways that fall completely outside of the replacement bounds. However, joining
-  // after this snapping caused changeset errors with some datasets and hasn't seem to be needed
-  // so far...so skipping it. Note that we're being as lenient as possible with the snapping
-  // here, allowing basically anything to join to anything else, which *could* end up causing
-  // problems...we'll go with it for now.
-  _snapUnconnectedPostChangesetMapCropping(
-    refMap, combinedMap, immediatelyConnectedOutOfBoundsWays);
-  immediatelyConnectedOutOfBoundsWays.reset();
+    // The non-strict bounds interpretation way replacement workflow benefits from a second
+    // set of snapping runs right before changeset derivation due to there being ways connected to
+    // replacement ways that fall completely outside of the replacement bounds. However, joining
+    // after this snapping caused changeset errors with some datasets and hasn't seem to be needed
+    // so far...so skipping it. Note that we're being as lenient as possible with the snapping
+    // here, allowing basically anything to join to anything else, which *could* end up causing
+    // problems...we'll go with it for now.
+    _snapUnconnectedPostChangesetMapCropping(
+        refMap, combinedMap, immediatelyConnectedOutOfBoundsWays);
+    immediatelyConnectedOutOfBoundsWays.reset();
+
+    _currentTask++;
+  }
+
+  // CLEANUP
+
+  _progress->set(_getJobPercentComplete(), "Cleaning up erroneous features...");
 
   if (ConfigOptions().getChangesetReplacementRetainReplacingDataIds())
   {
@@ -324,12 +362,6 @@ void ChangesetReplacementCreator::create(
     // tag that will cause the deriver to skip deleting them.
     _excludeFeaturesFromChangesetDeletion(refMap);
   }
-
-  _currentTask++;
-
-  // CLEANUP
-
-  _progress->set(_getJobPercentComplete(), "Cleaning up erroneous features...");
 
   // clean up any mistakes introduced
   _cleanup(refMap);
@@ -592,6 +624,89 @@ void ChangesetReplacementCreator::_snapUnconnectedPostChangesetMapCropping(
   // properly.
   MapUtils::combineMaps(refMap, immediatelyConnectedOutOfBoundsWays, true);
   OsmMapWriterFactory::writeDebugMap(refMap, _changesetId + "-ref-connected-combined");
+}
+
+void ChangesetReplacementCreator::_snapUnconnectedWays(
+  OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
+  const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
+{
+  LOG_DEBUG(
+    "Snapping ways for map: " << map->getName() << ", with filter type: " <<
+    typeCriterionClassName << ", snap way statuses: " << snapWayStatuses <<
+    ", snap to way statuses: " << snapToWayStatuses << " ...");
+
+  UnconnectedWaySnapper lineSnapper;
+  lineSnapper.setConfiguration(conf());
+  // override some of the default config
+  lineSnapper.setSnapToWayStatuses(snapToWayStatuses);
+  lineSnapper.setSnapWayStatuses(snapWayStatuses);
+  lineSnapper.setMarkSnappedWays(markSnappedWays);
+  // TODO: Do we need a way to derive the way node crit from the input feature filter crit?
+  lineSnapper.setWayNodeToSnapToCriterionClassName(
+    QString::fromStdString(WayNodeCriterion::className()));
+  lineSnapper.setWayToSnapCriterionClassName(typeCriterionClassName);
+  lineSnapper.setWayToSnapToCriterionClassName(typeCriterionClassName);
+  // This prevents features of different types snapping to each other that shouldn't do so.
+  // Arbitrarily picking a score here...may require further tweaking.
+  lineSnapper.setMinTypeMatchScore(0.8);
+  // Here, we're excluding things unlikely to ever need to be snapped to each other. Arguably, this
+  // list could be made part of UnconnectedWaySnapper's config instead.
+  lineSnapper.setTypeExcludeKvps(ConfigOptions().getChangesetReplacementSnapExcludeTypes());
+  lineSnapper.apply(map);
+  LOG_DEBUG(lineSnapper.getCompletedStatusMessage());
+
+  MapProjector::projectToWgs84(map);   // snapping works in planar
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  MemoryUsageChecker::getInstance().check();
+  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
+}
+
+OsmMapPtr ChangesetReplacementCreator::_getImmediatelyConnectedOutOfBoundsWays(
+  const ConstOsmMapPtr& map) const
+{
+  const QString outputMapName = "connected-ways";
+  LOG_INFO(
+    "Copying immediately connected out of bounds ways from: " << map->getName() <<
+    " to new map: " << outputMapName << "...");
+
+  std::shared_ptr<ChainCriterion> copyCrit(
+    new ChainCriterion(
+      std::shared_ptr<WayCriterion>(new WayCriterion()),
+      std::shared_ptr<TagKeyCriterion>(
+        new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
+  OsmMapPtr connectedWays = MapUtils::getMapSubset(map, copyCrit);
+  connectedWays->setName(outputMapName);
+  LOG_VART(MapProjector::toWkt(connectedWays->getProjection()));
+  MemoryUsageChecker::getInstance().check();
+  OsmMapWriterFactory::writeDebugMap(connectedWays, _changesetId + "-connected-ways");
+  return connectedWays;
+}
+
+void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(
+  OsmMapPtr& map)
+{
+  LOG_INFO(
+    "Removing any immediately connected ways that were not previously snapped in: " <<
+    map->getName() << "...");
+
+  RemoveElementsVisitor removeVis;
+  removeVis.addCriterion(ElementCriterionPtr(new WayCriterion()));
+  removeVis.addCriterion(
+    ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds())));
+  removeVis.addCriterion(
+    ElementCriterionPtr(
+      new NotCriterion(
+        std::shared_ptr<TagCriterion>(
+          new TagCriterion(MetadataTags::HootSnapped(), "snapped_way")))));
+  removeVis.setChainCriteria(true);
+  removeVis.setRecursive(true);
+  map->visitRw(removeVis);
+  LOG_DEBUG(removeVis.getCompletedStatusMessage());
+
+  MemoryUsageChecker::getInstance().check();
+  LOG_VART(MapProjector::toWkt(map->getProjection()));
+  OsmMapWriterFactory::writeDebugMap(
+    map, _changesetId + "-" + map->getName() + "-unsnapped-removed");
 }
 
 void ChangesetReplacementCreator::_cropMapForChangesetDerivation(

@@ -30,9 +30,11 @@ set -e
 # 10 - retainment filters - what types of features are we keeping?; delimited ElementCriterion class name list; leave empty to bypass
 # 11 - chain retainment filters together (logical AND)?; true or false
 # 12 - retainment filter options - semicolon delimited list of config opts to be applied to the retainment filters only; leave empty to bypass
-# 13 - way snap tolerance (m) - how far can we snap ways to other ways?; leave empty to specify 0.0m
-# 14 - way snap node tolerance (m) - how far can we snap way nodes directly to other way nodes?; leave empty to specify 0.0m
-# 15 - extra params; anything extra params or config options you want to pass in for a custom config; applied to all commands
+# 13 - way snapping - snap unconnected ways between replacement data and data being replaced?; may be useful if linear data varies greatly 
+#                     between the two
+# 14 - way snap tolerance (m) - how far can we snap ways to other ways?; leave empty to specify 0.0m
+# 15 - way snap node tolerance (m) - how far can we snap way nodes directly to other way nodes?; leave empty to specify 0.0m
+# 16 - extra params; anything extra params or config options you want to pass in for a custom config; applied to all commands
 
 # PROCESS INPUTS
 
@@ -135,21 +137,29 @@ else
 fi
 echo "retainment filter options: " $RETAINMENT_FILTER_OPTIONS
 
-if [ "${13}" == "" ]; then
+ENABLE_WAY_SNAPPING=${13}
+if [ "$ENABLE_WAY_SNAPPING" == "true" ]; then
+  ENABLE_WAY_SNAPPING="--enable-way-snapping"
+else
+  ENABLE_WAY_SNAPPING=""
+fi
+echo "enable way snapping: " $ENABLE_WAY_SNAPPING
+
+if [ "${14}" == "" ]; then
   WAY_SNAP_TOLERANCE="0.0"
 else
-  WAY_SNAP_TOLERANCE=${13}
+  WAY_SNAP_TOLERANCE=${14}
 fi
 echo "way snap tolerance: " $WAY_SNAP_TOLERANCE
 
-if [ "${14}" == "" ]; then
+if [ "${15}" == "" ]; then
   EXISTING_WAY_NODE_TOLERANCE="0.0"
 else
-  EXISTING_WAY_NODE_TOLERANCE=${14}
+  EXISTING_WAY_NODE_TOLERANCE=${15}
 fi
 echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE
 
-EXTRA_PARAMS=${15}
+EXTRA_PARAMS=${16}
 echo "extra params: " $EXTRA_PARAMS
 
 # SET UP TEST FILES
@@ -241,9 +251,9 @@ echo ""
 echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_XML that replaces features in the reference dataset with those from a secondary dataset..."
 echo ""
 if [ "$SOURCE_FILE_2" == "test-files/Empty.osm" ]; then
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS $ENABLE_WAY_SNAPPING --write-bounds
 else
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS --write-bounds
+  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS $ENABLE_WAY_SNAPPING --write-bounds
 fi
 
 # CHANGESET APPLICATION

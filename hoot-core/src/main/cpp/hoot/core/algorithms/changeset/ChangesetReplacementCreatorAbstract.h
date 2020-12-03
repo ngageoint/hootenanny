@@ -136,6 +136,7 @@ public:
   virtual void setFullReplacement(const bool full) { _fullReplacement = full; }
   virtual void setBoundsInterpretation(const BoundsInterpretation& interpretation)
   { _boundsInterpretation = interpretation; }
+  virtual void setEnableWaySnapping(const bool enable) { _enableWaySnapping = enable; }
   virtual void setChangesetId(const QString& id) { _changesetId = id; }
 
   virtual QString toString() const override
@@ -208,6 +209,8 @@ protected:
   // Configuration options to pass to the filters in _retainmentFilter.
   Settings _retainmentFilterOptions;
 
+  bool _enableWaySnapping;
+
   // helpful to name the debug map files when doing successive replacements
   QString _changesetId;
   // handles changeset generation and output
@@ -269,31 +272,6 @@ protected:
    */
   OsmMapPtr _getCookieCutMap(OsmMapPtr doughMap, OsmMapPtr cutterMap,
                              const GeometryTypeCriterion::GeometryType& geometryType);
-  /*
-   * Copies all ways that are tagged with MetadataTags::HootConnectedWayOutsideBounds() out of a map
-   */
-  OsmMapPtr _getImmediatelyConnectedOutOfBoundsWays(const ConstOsmMapPtr& map) const;
-
-  /*
-   * Snaps unnconnected ways with a map to each other
-   *
-   * @param map the map to snap ways within
-   * @param snapWayStatuses the statuses the ways being snapped must have
-   * @param snapToWayStatuses the statuses the ways being snapped to must have
-   * @param typeCriterionClassName optional filter criteria that snapped/snapped to ways must have
-   * @param markSnappedWays if true, snapped ways are marked with a custom metadata tag
-   * @param debugFileName name prefix for any debug map files generated during snapping
-   */
-  void _snapUnconnectedWays(
-    OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
-    const QString& typeCriterionClassName, const bool markSnappedWays,
-    const QString& debugFileName);
-
-  /*
-   * Removes all ways from the map with both MetadataTags::HootConnectedWayOutsideBounds() and
-   * MetadataTags::HootSnapped()=snapped_way tags
-   */
-  void _removeUnsnappedImmediatelyConnectedOutOfBoundsWays(OsmMapPtr& map);
 
   /*
    * Excludes all features within the specified bounds from deletion during changeset derivation

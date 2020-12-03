@@ -39,6 +39,9 @@ class Settings;
 
 /**
  * This is the cut only version of C&R.
+ *
+ * TODO: Some of the simplification that has been applied to ChangesetReplacementCreator can also
+ * probably be applied to this class.
  */
 class ChangesetCutOnlyCreator : public ChangesetReplacementCreatorAbstract
 {
