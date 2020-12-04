@@ -50,7 +50,7 @@ LOG_LEVEL="--warn"
 LOG_FILTER=""
 if [ "$DEBUG" == "true" ]; then
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter=DiffConflator;UnconnectedWaySnapper"
+  LOG_FILTER="-D log.class.filter=UnconnectedWaySnapper"
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh

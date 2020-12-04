@@ -80,7 +80,9 @@ _snapToWayStatuses(QStringList(Status(Status::Unknown1).toString())),
 _minTypeMatchScore(-1.0),
 _numSnappedToWays(0),
 _numSnappedToWayNodes(0),
-_taskStatusUpdateInterval(1000)
+_taskStatusUpdateInterval(1000),
+// This could be very expensive, so leave it disabled by default.
+_writePerSnapDebugMap(false)
 {
 }
 
@@ -326,7 +328,8 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
           {
             assert(_snappedToWay);
             LOG_TRACE(
-              "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId());
+              "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId() <<
+              " from " << unconnectedEndNode->getElementId());
 
             // retain the parent id of the snapped to way; See related notes in WayJoinerAdvanced
             const long pid = _getPid(_snappedToWay);
@@ -352,11 +355,14 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
             // haven't any direct evidence of that being necessary for proper snapping yet. If it
             // is needed, that would likely slow things down a lot.
 
-            // This could be very expensive, so leave it disabled by default.
-//            OsmMapWriterFactory::writeDebugMap(
-//              _map,
-//              "UnconnectedWaySnapper-after-snap-#" +
-//                QString::number(_numSnappedToWays + _numSnappedToWayNodes));
+            if (_writePerSnapDebugMap)
+            {
+              OsmMapWriterFactory::writeDebugMap(
+                _map,
+                "after-snap-" + wayToSnap->getElementId().toString() + "-" +
+                unconnectedEndNode->getElementId().toString() + "-" +
+                _snappedToWay->getElementId().toString());
+            }
           }
         }
 
@@ -792,9 +798,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
           LOG_TRACE(
             "Replacing " << nodeToSnap->getElementId() << " with " <<
             wayNodeToSnapTo->getElementId());
-          ReplaceElementOp elementReplacer(
-            nodeToSnap->getElementId(), wayNodeToSnapTo->getElementId(), true);
-          elementReplacer.apply(_map);
+          ReplaceElementOp(
+            nodeToSnap->getElementId(), wayNodeToSnapTo->getElementId(), true).apply(_map);
         }
 
         _snappedWayNodeIds.append(nodeToSnap->getId());

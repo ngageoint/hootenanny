@@ -204,6 +204,7 @@ private:
   OsmMapPtr _map;
   Settings _conf;
   ReviewMarker _reviewMarker;
+  bool _writePerSnapDebugMap;
 
   /*
    * The radius around the end node to look for ways to snap to.

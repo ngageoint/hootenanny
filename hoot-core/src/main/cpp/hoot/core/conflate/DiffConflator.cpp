@@ -64,6 +64,7 @@
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/ops/WayJoinerOp.h>
 
 // standard
 #include <algorithm>
@@ -223,7 +224,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
   {
-    // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
+    // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
     // anymore.
     _numSnappedWays = _snapSecondaryRoadsBackToRef();
@@ -238,16 +239,14 @@ void DiffConflator::apply(OsmMapPtr& map)
     _removeMatches(Status::Unknown1);
     MemoryUsageChecker::getInstance().check();
 
-    // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed
-    // to properly generate the changeset and keep sec ways snapped in the final output.
-
     LOG_INFO("\tRemoving all reference elements...");
 
-    ElementCriterionPtr removeCrit(new TagKeyCriterion(MetadataTags::Ref1()));
-//    ElementCriterionPtr refCrit(new TagKeyCriterion(MetadataTags::Ref1()));
-//    ElementCriterionPtr notSnappedCrit(
-//      NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
-//    ElementCriterionPtr removeCrit(ChainCriterionPtr(new ChainCriterion(refCrit, notSnappedCrit)));
+    // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed
+    // to properly generate the changeset and keep sec ways snapped in the final output.
+    ElementCriterionPtr refCrit(new TagKeyCriterion(MetadataTags::Ref1()));
+    ElementCriterionPtr notSnappedCrit(
+      NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
+    ElementCriterionPtr removeCrit(ChainCriterionPtr(new ChainCriterion(refCrit, notSnappedCrit)));
 
     RemoveElementsVisitor removeRef1Visitor;
     removeRef1Visitor.setRecursive(true);
@@ -277,13 +276,27 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
 {
   UnconnectedWaySnapper roadSnapper;
   roadSnapper.setConfiguration(conf());
-  // The ref snapped features must be marked to prevent their removal before changeset generation.
-//  roadSnapper.setMarkSnappedNodes(true);
-//  roadSnapper.setMarkSnappedWays(true);
+  // The ref snapped features must be marked to prevent their removal before changeset generation
+  // later on.
+  roadSnapper.setMarkSnappedNodes(true);
+  roadSnapper.setMarkSnappedWays(true);
   LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
+
+  // Since way splitting was done as part of the conflate pre ops previously run and we've now
+  // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
+  // If not, some ref linear data may incorrectly drop out of the diff.
+  // TODO: we may be able to remove way joining from conflate post ops when snapping done to prevent
+  // it from happening an extra time
+  WayJoinerOp wayJoiner;
+  wayJoiner.setConfiguration(conf());
+  LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
+  wayJoiner.apply(_pMap);
+  LOG_INFO("\t" << wayJoiner.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-way-joining");
+
   return roadSnapper.getNumFeaturesAffected();
 }
 
@@ -300,8 +313,8 @@ void DiffConflator::_removeMatches(const Status& status)
     _intraDatasetElementIdsPopulated = true;
   }
 
-//  ElementCriterionPtr notSnappedCrit(
-//    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
+  ElementCriterionPtr notSnappedCrit(
+    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
 
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
@@ -333,8 +346,9 @@ void DiffConflator::_removeMatches(const Status& status)
 
         if (e1 &&
             e1->getStatus() == status &&
-            // TODO: explain
-            //(status != Status::Unknown1 || notSnappedCrit->isSatisfied(e1)) &&
+            // We don't want to remove any ref snapped ways here. They need to be included in the
+            // resulting diff in order to be properly updated in the final output.
+            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e1)) &&
             // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
             // these to be removed from the diff output.
             !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
@@ -345,8 +359,9 @@ void DiffConflator::_removeMatches(const Status& status)
         }
         if (e2 &&
             e2->getStatus() == status &&
-            // see comment above
-            //(status != Status::Unknown1 || notSnappedCrit->isSatisfied(e2)) &&
+            // see related comment above
+            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e2)) &&
+            // see related comment above
             !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
              _intraDatasetMatchOnlyElementIds.contains(pit->second)))
         {
