@@ -5237,7 +5237,7 @@ This option can use the following implementations:
 * `hoot::WayJoinerAdvanced`           - has some additional features compared to the default
                                         implementation; currently used by Attribute Conflation and
                                         conflation done during Cut and Replace
-* `hoot::ReplacementSnappedWayJoiner` - has way joining feature specific to Cut and Replace
+* `hoot::ReplacementSnappedWayJoiner` - has way joining features specific to Cut and Replace
 
 === way.joiner.advanced.strict.name.match
 
