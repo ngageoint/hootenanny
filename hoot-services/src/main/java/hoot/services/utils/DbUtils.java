@@ -841,7 +841,7 @@ NOT EXISTS
         return jobId;
     }
 
-    public static String getJobBbox(String jobId) {
+    public static String getJobBounds(String jobId) {
         String foundId = createQuery()
             .select(Expressions.stringTemplate("tags->'bbox'"))
             .from(jobStatus)

@@ -44,7 +44,7 @@ import hoot.services.models.db.Users;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GrailParams {
 
-    @JsonProperty("BBOX")
+    @JsonProperty("bounds")
     private String bounds;
 
     @JsonProperty("APPLY_TAGS")
@@ -71,7 +71,7 @@ public class GrailParams {
     @JsonProperty("pushUrl")
     private String pushUrl;
 
-    @JsonProperty("maxBBoxSize")
+    @JsonProperty("maxBoundsSize")
     private Double maxSize;
 
     @JsonProperty("customQuery")
@@ -109,7 +109,7 @@ public class GrailParams {
         this.parentId = params.getParentId();
         this.pullUrl = params.getPullUrl();
         this.pushUrl = params.getPushUrl();
-        this.maxSize = params.getMaxBBoxSize();
+        this.maxSize = params.getMaxBoundsSize();
         this.customQuery = params.getCustomQuery();
         this.advancedOptions = params.getAdvancedOptions();
         this.taskInfo = params.getTaskInfo();
@@ -234,11 +234,11 @@ public class GrailParams {
         this.pullUrl = pullUrl;
     }
 
-    public Double getMaxBBoxSize() {
+    public Double getMaxBoundsSize() {
         return (this.maxSize == null) ? 0.25 : maxSize;
     }
 
-    public void setMaxBBoxSize(Double maxSize) {
+    public void setMaxBoundsSize(Double maxSize) {
         this.maxSize = maxSize;
     }
 
@@ -285,7 +285,7 @@ public class GrailParams {
     @Override
     public String toString() {
         return "GrailParams{" +
-                "BBOX='" + bounds + '\'' +
+                "bounds='" + bounds + '\'' +
                 ", USER_ID='" + user.getDisplayName() + '\'' +
                 ", input1='" + input1 + '\'' +
                 ", input2='" + input2 + '\'' +
@@ -293,7 +293,7 @@ public class GrailParams {
                 ", parentId='" + parentId + '\'' +
                 ", pushUrl='" + pushUrl + '\'' +
                 ", pullUrl='" + pullUrl + '\'' +
-                ", maxBBoxSize='" + maxSize + '\'' +
+                ", maxBoundsSize='" + maxSize + '\'' +
                 '}';
     }
 }

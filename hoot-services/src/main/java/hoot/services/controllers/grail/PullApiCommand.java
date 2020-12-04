@@ -121,7 +121,7 @@ public class PullApiCommand implements InternalCommand {
             } else {
                 BoundingBox boundingBox = new BoundingBox(params.getBounds());
                 double bboxArea = boundingBox.getArea();
-                double maxBboxArea = params.getMaxBBoxSize();
+                double maxBboxArea = params.getMaxBoundsSize();
 
                 if (bboxArea > maxBboxArea) {
                     String errorMsg = "The bounding box area (" + bboxArea + ") is too large for OSM API. It must be less than " + maxBboxArea + " degrees";
