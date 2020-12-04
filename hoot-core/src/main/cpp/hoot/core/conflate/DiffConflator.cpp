@@ -65,6 +65,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/ops/WayJoinerOp.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // standard
 #include <algorithm>
@@ -288,14 +289,18 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   // Since way splitting was done as part of the conflate pre ops previously run and we've now
   // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
   // If not, some ref linear data may incorrectly drop out of the diff.
-  // TODO: we may be able to remove way joining from conflate post ops when snapping done to prevent
-  // it from happening an extra time
   WayJoinerOp wayJoiner;
   wayJoiner.setConfiguration(conf());
   LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
   wayJoiner.apply(_pMap);
   LOG_INFO("\t" << wayJoiner.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-way-joining");
+
+  // No point in running way joining a second time in post conflate ops since we already did it here
+  // (configured by default), so let's remove it.
+  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getConflatePostOpsKey(),
+    QString::fromStdString(WayJoinerOp::className()));
 
   return roadSnapper.getNumFeaturesAffected();
 }
