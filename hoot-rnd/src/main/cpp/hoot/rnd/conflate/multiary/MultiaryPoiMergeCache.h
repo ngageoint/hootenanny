@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYPOIMERGECACHE_H
 #define MULTIARYPOIMERGECACHE_H
@@ -47,11 +47,12 @@ class MergerCreator;
  * At this point the class assumes you are merging nodes, but it could be easily expanded to support
  * the other element types.
  *
- * @todo At this point merges are not cached.
+ * At this point merges are not cached.
  */
 class MultiaryPoiMergeCache
 {
 public:
+
   /**
    * @param map Map that contains the elements to be merged.
    * @param matchCreator

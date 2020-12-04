@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTEGERPROGRAMMINGSOLVER_H
 #define INTEGERPROGRAMMINGSOLVER_H
@@ -50,8 +50,8 @@ namespace hoot
  * A thin C++ style wrapper for a small subset of GLPK.
  * http://www.gnu.org/software/glpk/
  *
- * @todo It would be nice if we could get better progress logging out of this class, but that
- * may not be possible.
+ * It would be nice if we could get better progress logging out of this class, but that may not be
+ * possible.
  */
 class IntegerProgrammingSolver
 {

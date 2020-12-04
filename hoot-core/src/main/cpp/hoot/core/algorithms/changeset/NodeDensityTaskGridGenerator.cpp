@@ -54,7 +54,7 @@ _randomSeed(-1)
   _boundsCalc.setMaxNumTries(3);
   _boundsCalc.setMaxTimePerAttempt(300);
   _boundsCalc.setPixelSizeRetryReductionFactor(10);
-  _boundsCalc.setSlop(0.1); // TODO: make this configurable?
+  _boundsCalc.setSlop(0.1);
 }
 
 TaskGrid NodeDensityTaskGridGenerator::generateTaskGrid()

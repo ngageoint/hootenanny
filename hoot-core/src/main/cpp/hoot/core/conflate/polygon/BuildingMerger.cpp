@@ -116,7 +116,6 @@ _manyToManyMatch(false),
 _useChangedReview(ConfigOptions().getBuildingChangedReview()),
 _changedReviewIouThreshold(ConfigOptions().getBuildingChangedReviewIouThreshold())
 {
-  // TODO: change back to trace
   LOG_VART(_pairs);
 }
 

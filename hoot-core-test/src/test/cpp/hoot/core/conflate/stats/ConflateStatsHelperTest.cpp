@@ -97,8 +97,6 @@ public:
         "Percentage of Number of Total Map 2 Features Not Matched With Map 1 Features", statsToUpdate),
       1e-1);
 
-    // TODO: add length/area stats?
-
     statsToUpdate.clear();
     statsToUpdate.append(SingleStat("Some Stat 1", 0.0));
     statsToUpdate.append(SingleStat("Some Stat 2", 0.0));

@@ -51,7 +51,7 @@ QString ElementComparer::toHashString(const ConstElementPtr& e) const
 
   ElementHashVisitor hashVis;
   hashVis.setOsmMap(_map.get());
-  // TODO: This doesn't seem right, but its been working this way for awhile now...remove later?
+  // This doesn't seem right, but its been working this way for awhile now...remove later?
   hashVis.setIncludeCircularError(true);
   return hashVis.toHashString(e);
 }
@@ -111,7 +111,7 @@ void ElementComparer::_setHash(ElementPtr element) const
   // Set the hoot hash tag here if it doesn't exist.
   ElementHashVisitor hashVis;
   hashVis.setOsmMap(_map.get());
-  // TODO: This doesn't seem right, but its been working this way for awhile now...remove later?
+  // This doesn't seem right, but its been working this way for awhile now...remove later?
   hashVis.setIncludeCircularError(true);
   if (!element->getTags().contains(MetadataTags::HootHash()))
   {

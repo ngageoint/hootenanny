@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiaryHierarchicalClusterAlgorithm.h"
 
@@ -88,7 +88,7 @@ MultiaryClusterAlgorithm::ClusterList MultiaryHierarchicalClusterAlgorithm::calc
 
     if (cl->isValid())
     {
-      // TODO: Do we need to update the replaced vector?
+      // Do we need to update the replaced vector?
       MultiaryClusterPtr newCluster = _mergeCache->merge(cl->a, cl->b);
 
       // update the connected links in all clusters to reflect the latest merger

@@ -109,8 +109,6 @@ void ChangesetReplacementElementIdSynchronizer::synchronize(
     "Updated " <<
     StringUtils::formatLargeNumber(getNumTotalFeatureIdsSynchronized() - numTotalIdsSyncedBefore) <<
     " nearly identical way nodes in second map.");
-
-  // TODO: try RelationMemberSimilarityExtractor?
 }
 
 void ChangesetReplacementElementIdSynchronizer::_syncElementIds(

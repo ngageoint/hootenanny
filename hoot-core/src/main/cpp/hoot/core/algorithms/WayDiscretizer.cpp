@@ -60,7 +60,6 @@ _way(way)
     throw IllegalArgumentException("Empty way passed to WayDiscretizer.");
   }
   ConstNodePtr lastNode = _map->getNode(nodeIds[0]);
-  // TODO: change back to trace
   LOG_VART(lastNode.get());
   if (!lastNode)
   {

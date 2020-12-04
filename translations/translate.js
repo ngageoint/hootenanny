@@ -512,6 +512,17 @@ translate = {
           tAttrib = col.slice(0,-1);
         }
 
+        // Handle funky stuff like:
+        // building=yes
+        // building2 = yes
+        if (inTags[tAttrib] && (inTags[tAttrib] == inTags[col]))
+        {
+          // Debug
+          // print('Got same tag values for ' + tAttrib + ' and ' + col);
+          delete inTags[col];
+          continue;
+        }
+
         if (tAttrib in lookup)
         {
           if (value in lookup[tAttrib])

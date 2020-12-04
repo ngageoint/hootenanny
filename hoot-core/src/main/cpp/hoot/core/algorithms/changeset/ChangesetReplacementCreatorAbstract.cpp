@@ -616,8 +616,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
     "Generating cutter shape map from: " << cutterMapToUse->getName() << " of size: " <<
     StringUtils::formatLargeNumber(cutterMapToUse->size()) << "...");
 
-  // TODO: Alpha shape generation and cookie cutting for line features is our current bottleneck for
-  // C&R. Not sure yet if anything else can be done to improve the performance. Turning off covering
+  // Alpha shape generation and cookie cutting for line features is our current bottleneck for C&R.
+  // Not sure yet if anything else can be done to improve the performance. Turning off covering
   // stragglers can help a lot in certain situations for alpha shape generation. For cookie cutting,
   // cropping specifically can slow, especially with node removal.
 

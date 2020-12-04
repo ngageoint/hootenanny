@@ -52,7 +52,6 @@ class ElementComparerTest : public HootTestFixture
   CPPUNIT_TEST(runRelationDifferentMemberRolesTest);
   CPPUNIT_TEST(runRelationDifferentTagsTest);
   CPPUNIT_TEST(runRelationDifferentVersionsTest);
-  // TODO: need tests for _ignoreElementId=true and _ignoreVersion=true
   CPPUNIT_TEST_SUITE_END();
 
 public:

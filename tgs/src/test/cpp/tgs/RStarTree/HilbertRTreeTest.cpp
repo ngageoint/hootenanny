@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Standard Includes
@@ -125,7 +125,6 @@ public:
   void test1()
   {
     std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
-    // @todo fix me.
     RStarTree uut(mps, 2);
     int maxChildCount = uut.getRoot()->getMaxChildCount();
 
