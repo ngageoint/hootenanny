@@ -1,0 +1,19 @@
+ setval 
+--------
+      1
+(1 row)
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=11.9904914, max_lat=11.993906, min_lon=8.535214, max_lon=8.5444777, num_changes=45
+Node(s) Created: 19
+Node(s) Modified: 19
+Node(s) Deleted: 0
+Way(s) Created: 5
+Way(s) Modified: 2
+Way(s) Deleted: 0
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+Total Creations: 24
+Total Modifications: 21
+Total Deletions: 0
