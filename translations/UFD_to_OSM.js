@@ -3628,6 +3628,7 @@ ufd = {
         switch (tags['transport:type'])
         {
           case 'road':
+          default:  // Guessing it is probably a road
             tags.highway = 'road';
             break;
 
@@ -3643,9 +3644,38 @@ ufd = {
           case 'pedestrian':
             tags.highway = 'pedestrian';
             break;
+        }
+        break;
 
+      case 'AQ130': // Tunnel
+        switch (tags['transport:type'])
+        {
+          case 'road':
           default:  // Guessing it is probably a road
             tags.highway = 'road';
+            break;
+
+          case 'railway':
+            tags.railway = 'rail;'
+            break;
+
+          case 'road_and_railway':
+            tags.highway = 'road';
+            tags.railway = 'rail';
+            break;
+
+          case 'pedestrian':
+          case 'portage':
+            tags.highway = 'pedestrian';
+            break;
+
+          case 'canal':
+            tags.waterway = 'canal';
+            break;
+
+          case 'aqueduct':
+            tags.historic = 'aqueduct';
+            break;
         }
         break;
 
