@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Scores two elements or clusters using a provided MatchCreator for the scoring.
  *
- * @todo At this point scores are not cached.
+ * At this point scores are not cached.
  */
 class MultiaryScoreCache
 {

@@ -53,8 +53,8 @@ class ElementInputStream;
  * Use of OsmFileSorter by this class can be eliminated by swapping it for
  * ExternalMergeElementSorter.  See #2622
  *
- * TODO: 9/12/18 - I believe that there is a critical bug in that hoot api db data sources aren't
- * be sorted before changeset derivation.  It was originally believed all results were coming back
+ * 9/12/18 - I believe that there is a critical bug in that hoot api db data sources aren't
+ * being sorted before changeset derivation.  It was originally believed all results were coming back
  * completely sorted by ID from the db, but I don't believe that's the case (see
  * ApiDb::selectElements).  It may not be a hard fix to hook the db data source up to
  * ExternalMergeElementSorter or make the results come back sorted by ID, but given this code is

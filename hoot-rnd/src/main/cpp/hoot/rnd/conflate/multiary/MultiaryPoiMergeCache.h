@@ -47,11 +47,12 @@ class MergerCreator;
  * At this point the class assumes you are merging nodes, but it could be easily expanded to support
  * the other element types.
  *
- * @todo At this point merges are not cached.
+ * At this point merges are not cached.
  */
 class MultiaryPoiMergeCache
 {
 public:
+
   /**
    * @param map Map that contains the elements to be merged.
    * @param matchCreator

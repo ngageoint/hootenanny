@@ -131,7 +131,7 @@ void ConflateStatsHelper::_addRefAsGroundTruthStats(QList<SingleStat>& statsToUp
     // These stats will only exist for feature types whose size are determined by the corresponding
     // measurement type, as set in CalculateStatsOp.
 
-    // TODO: There may be a way to combine the following two code blocks into a single one.
+    // There may be a way to combine the following two code blocks into a single one.
     if (hasSingleStat("Total Meters of " + featureType + "s", _input1Stats) &&
         hasSingleStat("Total Meters of " + featureType + "s", _input2Stats) &&
         hasSingleStat("Meters of Conflated " + featureType + "s", _outputStats) &&

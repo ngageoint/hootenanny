@@ -29,8 +29,7 @@ IDs in the secondary data may or may not be retained depending on the configurat
                                    "Bounds Handling" section for more detail.
 * +output+                       - Changeset output location; must be a changeset .osc or .osc.sql file.
 * +osmApiDatabaseUrl+            - Target OSM API database where the derived changeset is to be applied, used to maintain element ID 
-                                   continuity. 
-                                   Required only if the changeset output format is .osc.sql. 
+                                   continuity. Required only if the changeset output format is .osc.sql. 
 * +--geometry-filters+           - Optional criteria used to control the geometry type of the features that are replaced. When this option is
                                    omitted, features of all geometry types are replaced by features of a like geometry type. See the 
                                    "Geometry Filtering" section for more detail.
@@ -46,6 +45,10 @@ IDs in the secondary data may or may not be retained depending on the configurat
                                    "Retainment Filtering" section for more detail.
 * +--retainment-filter-options+  - Optional configuration options for the filters specified in +--retainment-filters+. See the 
                                    "Retainment Filtering" section for more detail.
+* +--enable-way-snapping+        - Optionally snap unconnected ways in the replacement data to the data being replaced. This is generally used
+                                   to smooth out ways at the edge of the replacement boundary when the dataset used for replacement has very 
+                                   different linear data than the data being replaced. This option is ignored when using the cut only 
+                                   replacement workflow (no second input).
 * +--stats+                      - Displays changeset statistics and may be optionally followed by an output JSON file name to write the 
                                    statistics to.
 * +--write-bounds+               - If the +convert.bounds+ configuration option is specified, outputs a file containing the specified 
@@ -54,7 +57,7 @@ IDs in the secondary data may or may not be retained depending on the configurat
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--stats filename] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--enable-way-snapping] [--stats filename] [--write-bounds]
 --------------------------------------
 
 === Examples

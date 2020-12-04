@@ -125,7 +125,6 @@ public:
   void test1()
   {
     std::shared_ptr<MemoryPageStore> mps(new MemoryPageStore(2048));
-    // @todo fix me.
     RStarTree uut(mps, 2);
     int maxChildCount = uut.getRoot()->getMaxChildCount();
 

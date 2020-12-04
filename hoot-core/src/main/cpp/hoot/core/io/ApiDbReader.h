@@ -130,9 +130,7 @@ protected:
   Tgs::BigMap<long, long> _wayIdMap;
 
   // TODO: explain
-  //geos::geom::Envelope _boundsAsEnvelope;
   std::shared_ptr<geos::geom::Geometry> _overrideBounds; // this will override _bounds
-  //geos::geom::Envelope _overrideBoundsAsEnvelope;
   // controls use of _readByBounds2 vs the default _readByBounds
   bool _readFullThenCropOnBounded;
 

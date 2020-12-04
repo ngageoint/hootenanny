@@ -421,7 +421,7 @@ function isSpecificallyConflatable(map, e, geometryTypeFilter)
   return hoot.OsmSchema.isSpecificallyConflatable(map, e, geometryTypeFilter);
 }
 
-// TODO: All of these 'is*' methods can go away if #3047 is completed.
+// All of these 'is*' methods can go away if #3047 is completed.
 
 /**
  * Returns true if the specified element is an area element. The approach used

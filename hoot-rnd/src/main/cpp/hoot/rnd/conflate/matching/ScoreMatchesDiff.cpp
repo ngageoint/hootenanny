@@ -163,7 +163,7 @@ void ScoreMatchesDiff::calculateDiff(const QString& input1, const QString& input
   LOG_VARD(_newlyCorrect.size());
 
   // for newly wrong/correct, compare actual to expected to group match changes by type
-  // TODO: is sending in expected2/actual2 right here?
+  // Is sending in expected2/actual2 correct here?
 
   _newlyWrongMatchSwitches = _getMatchScoringDiff(_newlyWrong, expected2, actual2);
   _newlyCorrectMatchSwitches = _getMatchScoringDiff(_newlyCorrect, expected2, actual2);

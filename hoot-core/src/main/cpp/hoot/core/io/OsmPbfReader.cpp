@@ -1196,7 +1196,6 @@ void OsmPbfReader::read(const OsmMapPtr& map)
   map->visitRw(v);
 }
 
-// TODO: make the partial reader handle dir inputs?
 bool OsmPbfReader::isSupported(const QString& urlStr)
 {
   QFileInfo fileInfo(urlStr);

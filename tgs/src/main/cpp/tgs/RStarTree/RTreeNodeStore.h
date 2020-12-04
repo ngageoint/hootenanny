@@ -43,7 +43,7 @@ namespace Tgs
  * The NodeStore provides a way of persistently storing and efficiently accessing nodes in a
  * tree.
  *
- * @todo At some point an intelligent caching mechanism should be added.
+ * At some point an intelligent caching mechanism should be added.
  */
 class TGS_EXPORT RTreeNodeStore
 {

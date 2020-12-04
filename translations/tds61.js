@@ -1172,7 +1172,7 @@ tds61 = {
       if (tags.operator == 'military' || tags.operator == '')
       {
         // Debug
-        print('Bunker: drop man_made. military = ' + tags.military);
+        // print('Bunker: drop man_made. military = ' + tags.military);
         tags.military = 'bunker';
         delete tags.man_made;
       }

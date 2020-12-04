@@ -38,9 +38,7 @@
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
 
 #include <hoot/core/elements/MapUtils.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -61,7 +59,6 @@
 #include <hoot/core/ops/RecursiveSetTagValueOp.h>
 #include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/ops/SuperfluousNodeRemover.h>
-#include <hoot/core/ops/UnconnectedWaySnapper.h>
 
 #include <hoot/core/util/Boundable.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -91,6 +88,7 @@ _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 1.5),
 _geometryFiltersSpecified(false),
 _chainReplacementFilters(false),
 _chainRetainmentFilters(false),
+_enableWaySnapping(false),
 _changesetId("1"),
 _numChanges(0),
 _numTotalTasks(-1),
@@ -149,6 +147,12 @@ void ChangesetReplacementCreatorAbstract::_printJobDescription() const
     retainmentFiltersStr += "not ";
   }
   retainmentFiltersStr += "specified";
+  QString waySnappingStr = "is ";
+  if (!_enableWaySnapping)
+  {
+    waySnappingStr += "not ";
+  }
+  waySnappingStr += "enabled";
   QString cropDbInputOnReadStr = "is ";
   if (!ConfigOptions().getApidbReaderReadFullThenCropOnBounded())
   {
@@ -173,6 +177,7 @@ void ChangesetReplacementCreatorAbstract::_printJobDescription() const
   str += "\nGeometry filters: " + geometryFiltersStr;
   str += "\nReplacement filter: " + replacementFiltersStr;
   str += "\nRetainment filter: " + retainmentFiltersStr;
+  str += "\nWay snapping: " + waySnappingStr;
   str += "\nCropping database inputs after read: " + cropDbInputOnReadStr;
   LOG_INFO(str);
 }
@@ -611,8 +616,8 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_getCookieCutMap(
     "Generating cutter shape map from: " << cutterMapToUse->getName() << " of size: " <<
     StringUtils::formatLargeNumber(cutterMapToUse->size()) << "...");
 
-  // TODO: Alpha shape generation and cookie cutting for line features is our current bottleneck for
-  // C&R. Not sure yet if anything else can be done to improve the performance. Turning off covering
+  // Alpha shape generation and cookie cutting for line features is our current bottleneck for C&R.
+  // Not sure yet if anything else can be done to improve the performance. Turning off covering
   // stragglers can help a lot in certain situations for alpha shape generation. For cookie cutting,
   // cropping specifically can slow, especially with node removal.
 
@@ -731,89 +736,6 @@ void ChangesetReplacementCreatorAbstract::_addChangesetDeleteExclusionTags(OsmMa
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(
     map, _changesetId + "-" + map->getName() + "-after-delete-exclusion-tagging-1");
-}
-
-void ChangesetReplacementCreatorAbstract::_snapUnconnectedWays(
-  OsmMapPtr& map, const QStringList& snapWayStatuses, const QStringList& snapToWayStatuses,
-  const QString& typeCriterionClassName, const bool markSnappedWays, const QString& debugFileName)
-{
-  LOG_DEBUG(
-    "Snapping ways for map: " << map->getName() << ", with filter type: " <<
-    typeCriterionClassName << ", snap way statuses: " << snapWayStatuses <<
-    ", snap to way statuses: " << snapToWayStatuses << " ...");
-
-  UnconnectedWaySnapper lineSnapper;
-  lineSnapper.setConfiguration(conf());
-  // override some of the default config
-  lineSnapper.setSnapToWayStatuses(snapToWayStatuses);
-  lineSnapper.setSnapWayStatuses(snapWayStatuses);
-  lineSnapper.setMarkSnappedWays(markSnappedWays);
-  // TODO: Do we need a way to derive the way node crit from the input feature filter crit?
-  lineSnapper.setWayNodeToSnapToCriterionClassName(
-    QString::fromStdString(WayNodeCriterion::className()));
-  lineSnapper.setWayToSnapCriterionClassName(typeCriterionClassName);
-  lineSnapper.setWayToSnapToCriterionClassName(typeCriterionClassName);
-  // This prevents features of different types snapping to each other that shouldn't do so.
-  // Arbitrarily picking a score here...may require further tweaking.
-  lineSnapper.setMinTypeMatchScore(0.8);
-  // Here, we're excluding things unlikely to ever need to be snapped to each other. Arguably, this
-  // list could be made part of UnconnectedWaySnapper's config instead.
-  lineSnapper.setTypeExcludeKvps(ConfigOptions().getChangesetReplacementSnapExcludeTypes());
-  lineSnapper.apply(map);
-  LOG_DEBUG(lineSnapper.getCompletedStatusMessage());
-
-  MapProjector::projectToWgs84(map);   // snapping works in planar
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(map, debugFileName);
-}
-
-OsmMapPtr ChangesetReplacementCreatorAbstract::_getImmediatelyConnectedOutOfBoundsWays(
-  const ConstOsmMapPtr& map) const
-{
-  const QString outputMapName = "connected-ways";
-  LOG_INFO(
-    "Copying immediately connected out of bounds ways from: " << map->getName() <<
-    " to new map: " << outputMapName << "...");
-
-  std::shared_ptr<ChainCriterion> copyCrit(
-    new ChainCriterion(
-      std::shared_ptr<WayCriterion>(new WayCriterion()),
-      std::shared_ptr<TagKeyCriterion>(
-        new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds()))));
-  OsmMapPtr connectedWays = MapUtils::getMapSubset(map, copyCrit);
-  connectedWays->setName(outputMapName);
-  LOG_VART(MapProjector::toWkt(connectedWays->getProjection()));
-  MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(connectedWays, _changesetId + "-connected-ways");
-  return connectedWays;
-}
-
-void ChangesetReplacementCreatorAbstract::_removeUnsnappedImmediatelyConnectedOutOfBoundsWays(
-  OsmMapPtr& map)
-{
-  LOG_INFO(
-    "Removing any immediately connected ways that were not previously snapped in: " <<
-    map->getName() << "...");
-
-  RemoveElementsVisitor removeVis;
-  removeVis.addCriterion(ElementCriterionPtr(new WayCriterion()));
-  removeVis.addCriterion(
-    ElementCriterionPtr(new TagKeyCriterion(MetadataTags::HootConnectedWayOutsideBounds())));
-  removeVis.addCriterion(
-    ElementCriterionPtr(
-      new NotCriterion(
-        std::shared_ptr<TagCriterion>(
-          new TagCriterion(MetadataTags::HootSnapped(), "snapped_way")))));
-  removeVis.setChainCriteria(true);
-  removeVis.setRecursive(true);
-  map->visitRw(removeVis);
-  LOG_DEBUG(removeVis.getCompletedStatusMessage());
-
-  MemoryUsageChecker::getInstance().check();
-  LOG_VART(MapProjector::toWkt(map->getProjection()));
-  OsmMapWriterFactory::writeDebugMap(
-    map, _changesetId + "-" + map->getName() + "-unsnapped-removed");
 }
 
 void ChangesetReplacementCreatorAbstract::_excludeFeaturesFromChangesetDeletion(OsmMapPtr& map)

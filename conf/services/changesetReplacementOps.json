@@ -2,6 +2,13 @@
   "name": "ChangesetReplacement",
   "label": "ChangesetReplacement",
   "members": [
-
+    {
+      "description": "Enables the snapping of unconnected ways before changeset derivation.",
+      "default": "false",
+      "input": "checkbox",
+      "type": "bool",
+      "id": "enableWaySnapping",
+      "label": "Enable way snapping"
+    }
   ]
 }

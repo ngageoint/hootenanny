@@ -50,7 +50,6 @@ class SetTagValueVisitorTest : public HootTestFixture
   CPPUNIT_TEST(runFilterTest);
   CPPUNIT_TEST(runOverwriteDisabledTest);
   CPPUNIT_TEST(runNegatedFilterTest);
-  // TODO: chained filter test
   CPPUNIT_TEST_SUITE_END();
 
 public:

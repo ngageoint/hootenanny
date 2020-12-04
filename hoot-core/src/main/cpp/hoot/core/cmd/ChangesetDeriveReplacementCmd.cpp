@@ -136,6 +136,14 @@ public:
     }
     LOG_VARD(retainmentFilterOptions);
 
+    bool enableWaySnapping = false;
+    if (args.contains("--enable-way-snapping"))
+    {
+      enableWaySnapping = true;
+      args.removeAll("--enable-way-snapping");
+    }
+    LOG_VARD(enableWaySnapping);
+
     bool printStats = false;
     QString outputStatsFile;
     processStatsParams(args, printStats, outputStatsFile);
@@ -251,6 +259,7 @@ public:
     changesetCreator->setChainRetainmentFilters(chainRetainmentFilters);
     changesetCreator->setRetainmentFilters(retainmentFilters);
     changesetCreator->setRetainmentFilterOptions(retainmentFilterOptions);
+    changesetCreator->setEnableWaySnapping(enableWaySnapping);
     changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
 
     std::shared_ptr<geos::geom::Polygon> bounds =

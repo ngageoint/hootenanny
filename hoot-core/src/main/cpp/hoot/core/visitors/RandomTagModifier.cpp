@@ -70,8 +70,7 @@ void RandomTagModifier::setConfiguration(const Settings& conf)
   }
 
   _exemptTagKeys = configOptions.getRandomTagModifierExemptTagKeys();
-  // hardcode adding REF1/REF2 here since they aren't metadata tags; TODO: should they
-  // be?
+  // hardcode adding REF1/REF2 here since they aren't metadata tags; should they be?
   _exemptTagKeys.append(MetadataTags::Ref1());
   _exemptTagKeys.append(MetadataTags::Ref2());
 
