@@ -46,32 +46,32 @@ http://localhost:8094/translateTo?key=fcode&value=AL015&geom=Point&translation=M
 ___
 
 key | The tag key for the feature to translate.
---- | --- 
+--- | ---
 _required_ | **Example: fcode**
 ___
 
 value | The tag value for the feature to translate.
---- | --- 
+--- | ---
 _required_ | **Example: AL015**
 ___
 
 idelem | The tag key for the feature to translate. _[deprecated]_
---- | --- 
+--- | ---
 _required_ | **Example: fcode**
 ___
 
 idval | The tag value for the feature to translate. _[deprecated]_
---- | --- 
+--- | ---
 _required_ | **Example: AL015**
 ___
 
 geom | The geometry type for the feature to translate.
---- | --- 
+--- | ---
 _required_ | **Example: Point**
 ___
 
 translation | The attribute schema to translate OSM tags to.
---- | --- 
+--- | ---
 _required_ | **Example: TDSv61**
 ___
 
@@ -123,7 +123,7 @@ ___
     .
     .
   ]
-}    
+}
 ```
 ___
 ## POST /translateTo
@@ -134,7 +134,7 @@ http://localhost:8094/translateTo?translation=TDSv61
 ### Parameters
 ___
 translation | The attribute schema to translate OSM tags to.
---- | --- 
+--- | ---
 _required_ | **Example: TDSv61**
 ___
 
@@ -168,12 +168,12 @@ http://localhost:8094/translateFrom?fcode=AL013&translation=TDSv61
 ### Parameters
 ___
 fcode | The feature code to translate to OSM.
---- | --- 
+--- | ---
 _required_ | **Example: AL013**
 ___
 
 translation | The attribute schema to translate to OSM tags.
---- | --- 
+--- | ---
 _required_ | **Example: TDSv61**
 ___
 
@@ -196,7 +196,7 @@ http://localhost:8094/translateFrom?translation=MGCP
 ### Parameters
 ___
 translation | The attribute schema to translate OSM tags from.
---- | --- 
+--- | ---
 _required_ | **Example: TDSv61**
 ___
 
@@ -237,34 +237,35 @@ ___
 ```
 ___
 ## GET /schema
+Provides a search interface for features defined in the translated schema.  First looks for exact partial FCODE matches and then partial description matches up to the response limit.  If no exact partial matches are found will use the Lein code distance to identify fuzzy matches.  When traditional fuzzy matches still do not return anything, try to use 'near by keys' (on the qwerty keyboard) as the lead character in string to find matches.  The motivation here is to catch things like 'vuilding' instead of building (as the Lein code fuzzy match assumes the first letter is correct).
 
 ### URL
-http://localhost:8094/schema?geometry=point&translation=MGCP&searchstr=Buil&maxlevdst=20&limit=12
+http://localhost:8094/schema?geometry=point&translation=MGCP&searchstr=Buil&maxleindst=20&limit=12
 
 ### Parameters
 ___
 geometry | The geometry of the feature.
---- | --- 
+--- | ---
 _required_ | **Example: line**
 
 ___
 translation | The attribute schema name.
---- | --- 
+--- | ---
 _required_ | **Example: TDSv61**
 
 ___
 searchStr | The string used to search feature types and feature codes in this schema.
---- | --- 
+--- | ---
 _required_ | **Example: Building**
 
 ___
-maxlevdst | The maximum levenshtein distance to determine a fuzzy match.
---- | --- 
-_optional_ | **Example: 20**
+maxleindst | The maximum Lein code distance to determine a fuzzy match.
+--- | ---
+_optional_ | **Example: 200**
 
 ___
 limit | The maximum number of matches to return.
---- | --- 
+--- | ---
 _optional_ | **Example: 12**
 ___
 
