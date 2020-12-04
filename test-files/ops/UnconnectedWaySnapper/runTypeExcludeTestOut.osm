@@ -4,7 +4,7 @@
     <node visible="true" id="-2403" timestamp="2020-05-14T05:31:33Z" version="1" user="ssange" uid="10208970" lat="36.1308219187039512" lon="-115.2956278576304783">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2403"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-2402" timestamp="2019-12-10T05:33:53Z" version="1" user="vatsomya" uid="10327363" lat="36.1373583000000025" lon="-115.2930959000000115">
         <tag k="hoot:status" v="2"/>
@@ -469,7 +469,7 @@
     <node visible="true" id="-2293" timestamp="2019-01-17T22:38:18Z" version="1" user="TheDutchMan13" uid="1330847" lat="36.1330025183289649" lon="-115.2904905745849646">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2293"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-2292" timestamp="2019-01-17T22:38:18Z" version="1" user="TheDutchMan13" uid="1330847" lat="36.1370236999999932" lon="-115.2980022999999790">
         <tag k="hoot:status" v="2"/>
@@ -518,7 +518,7 @@
     <node visible="true" id="-2284" timestamp="2018-07-18T19:25:23Z" version="1" user="WayneSchlegel" uid="548288" lat="36.1360363739258119" lon="-115.2877963995422022">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2284"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -531,7 +531,7 @@
     <node visible="true" id="-2282" timestamp="2018-07-18T19:25:23Z" version="1" user="WayneSchlegel" uid="548288" lat="36.1396144983756571" lon="-115.2878398740224100">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2282"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -732,7 +732,7 @@
     <node visible="true" id="-2234" timestamp="2018-07-18T19:25:51Z" version="2" user="WayneSchlegel" uid="548288" lat="36.1332438243129133" lon="-115.2880203346531829">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2234"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -927,7 +927,7 @@
     <node visible="true" id="-2186" timestamp="2017-05-11T18:38:55Z" version="1" user="optimalnode" uid="2302485" lat="36.1414003605177996" lon="-115.2978686995072479">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2186"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-2185" timestamp="2017-05-11T18:38:55Z" version="1" user="optimalnode" uid="2302485" lat="36.1411578000000020" lon="-115.2980232999999828">
         <tag k="hoot:status" v="2"/>
@@ -952,7 +952,7 @@
     <node visible="true" id="-2180" timestamp="2017-05-11T18:38:55Z" version="1" user="optimalnode" uid="2302485" lat="36.1412018518476827" lon="-115.2981851454704838">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2180"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-2179" timestamp="2017-05-11T18:24:53Z" version="1" user="optimalnode" uid="2302485" lat="36.1410050999999939" lon="-115.2980516999999878">
         <tag k="hoot:status" v="2"/>
@@ -1009,7 +1009,7 @@
     <node visible="true" id="-2166" timestamp="2017-05-11T18:24:53Z" version="1" user="optimalnode" uid="2302485" lat="36.1410671895398536" lon="-115.2981792203076878">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2166"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-2165" timestamp="2016-12-25T05:44:48Z" version="1" user="Tom_Holland" uid="574654" lat="36.1392790000000090" lon="-115.2876368000000014">
         <tag k="hoot:status" v="2"/>
@@ -1926,7 +1926,7 @@
     <node visible="true" id="-1937" timestamp="2016-12-24T21:15:26Z" version="1" user="Tom_Holland" uid="574654" lat="36.1414003042209657" lon="-115.2935370835973288">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1937"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-1936" timestamp="2016-12-24T21:15:26Z" version="1" user="Tom_Holland" uid="574654" lat="36.1412437999999909" lon="-115.2930738999999960">
         <tag k="hoot:status" v="2"/>
@@ -2403,7 +2403,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-1810"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-1809" timestamp="2017-05-11T18:58:58Z" version="3" user="optimalnode" uid="2302485" lat="36.1373576000000014" lon="-115.3012425999999806">
@@ -2426,7 +2426,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-1805"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-1804" timestamp="2009-09-25T13:43:15Z" version="2" user="woodpeck_fixbot" uid="147510" lat="36.1346909999999824" lon="-115.3038240000000059">
@@ -2553,7 +2553,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-1768"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-1767" timestamp="2018-07-18T19:25:47Z" version="3" user="WayneSchlegel" uid="548288" lat="36.1367479999999972" lon="-115.3052815000000066">
@@ -3340,7 +3340,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-1547"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-1546" timestamp="2017-05-11T18:58:57Z" version="3" user="optimalnode" uid="2302485" lat="36.1401246000000071" lon="-115.2998319000000009">
@@ -3547,7 +3547,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-1485"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-1484" timestamp="2018-08-31T09:49:42Z" version="3" user="TheDutchMan13" uid="1330847" lat="36.1317960000000014" lon="-115.3013480000000186">
@@ -3928,7 +3928,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-1384"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-1383" timestamp="2017-05-11T18:58:58Z" version="3" user="optimalnode" uid="2302485" lat="36.1355350000000044" lon="-115.3053645000000103">
@@ -3995,7 +3995,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-1363"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-1362" timestamp="2018-07-18T19:25:39Z" version="3" user="WayneSchlegel" uid="548288" lat="36.1354114999999965" lon="-115.3036603999999841">
@@ -4540,7 +4540,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-1226"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-1225" timestamp="2018-07-18T19:25:36Z" version="3" user="WayneSchlegel" uid="548288" lat="36.1343609999999913" lon="-115.2920361000000042">
@@ -4635,7 +4635,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-1203"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-1202" timestamp="2017-05-11T18:58:58Z" version="3" user="optimalnode" uid="2302485" lat="36.1347555999999912" lon="-115.3057634000000036">
@@ -5259,7 +5259,7 @@
     <node visible="true" id="-1043" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1410317412475592" lon="-115.2876362279157121">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1043"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-1042" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2878102502587012">
         <tag k="hoot:status" v="2"/>
@@ -5272,7 +5272,7 @@
     <node visible="true" id="-1037" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1367352314404542" lon="-115.2876000000000261">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1037"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-1036" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1409277930864121" lon="-115.2875999999999976">
         <tag k="hoot:status" v="2"/>
@@ -5297,7 +5297,7 @@
     <node visible="true" id="-1031" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1414003611013754" lon="-115.2977378802653874">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1031"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-1030" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999917" lon="-115.2972556470107151">
         <tag k="hoot:status" v="2"/>
@@ -5314,7 +5314,7 @@
     <node visible="true" id="-1027" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1301389999999998" lon="-115.2949420000000060">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1027"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-1026" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1408937952901752" lon="-115.2875999999999976">
         <tag k="hoot:status" v="2"/>
@@ -5327,12 +5327,12 @@
     <node visible="true" id="-1024" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1359975459878200" lon="-115.2876000000429002">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1024"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-1022" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1414003604843188" lon="-115.2978753526213751">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1022"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-1021" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999831" lon="-115.2980507493044797">
         <tag k="hoot:status" v="2"/>
@@ -5341,7 +5341,7 @@
     <node visible="true" id="-1020" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2981939395017577">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1020"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-1019" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999831" lon="-115.2985458331687170">
         <tag k="hoot:status" v="2"/>
@@ -5350,7 +5350,7 @@
     <node visible="true" id="-1014" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1414000000000044" lon="-115.2975354076860697">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1014"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-1006" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2961755106122439">
         <tag k="hoot:status" v="2"/>
@@ -5359,32 +5359,32 @@
     <node visible="true" id="-1003" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413619999999938" lon="-115.2929769999999934">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1003"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-1000" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2907086878306728">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1000"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-996" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413878126042860" lon="-115.2929314831318379">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-996"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-980" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1352497732793623" lon="-115.2875999999999976">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-980"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-974" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1414000000000044" lon="-115.2920210921985813">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-974"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-973" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1414000000000044" lon="-115.2920210921985813">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-973"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-972" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2934105818622186">
         <tag k="hoot:status" v="2"/>
@@ -5393,7 +5393,7 @@
     <node visible="true" id="-971" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1332576703113801" lon="-115.2876000000000545">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-971"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-970" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1346892360438190" lon="-115.2875999999999976">
         <tag k="hoot:status" v="2"/>
@@ -5402,7 +5402,7 @@
     <node visible="true" id="-969" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1364433348273835" lon="-115.2876000000000261">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-969"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-968" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1367372943638188" lon="-115.2875999999999976">
         <tag k="hoot:status" v="2"/>
@@ -5411,7 +5411,7 @@
     <node visible="true" id="-967" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1376626491465700" lon="-115.2876000000367895">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-967"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-966" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1378980978479234" lon="-115.2875999999999976">
         <tag k="hoot:status" v="2"/>
@@ -5420,7 +5420,7 @@
     <node visible="true" id="-965" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1392827390742326" lon="-115.2875999999999976">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-965"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-964" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1395114764705809" lon="-115.2875999999999976">
         <tag k="hoot:status" v="2"/>
@@ -5429,12 +5429,12 @@
     <node visible="true" id="-963" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2970501382347095">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-963"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-962" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1301031283679066" lon="-115.2970502652778890">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-962"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-961" timestamp="2016-02-03T00:24:48Z" version="1" lat="36.1331921000000023" lon="-115.3024721999999969">
         <tag k="hoot:status" v="1"/>
@@ -5507,7 +5507,7 @@
     <node visible="true" id="-944" timestamp="2016-02-03T00:24:48Z" version="1" lat="36.1334996000000004" lon="-115.3025003999999996">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-944"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-943" timestamp="2016-02-03T00:24:48Z" version="1" lat="36.1401728000000162" lon="-115.3020652999999953">
         <tag k="hoot:status" v="1"/>
@@ -5520,12 +5520,12 @@
     <node visible="true" id="-941" timestamp="2016-02-03T00:24:48Z" version="1" lat="36.1405686999999958" lon="-115.3011431999999843">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-941"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-940" timestamp="2016-02-03T00:24:48Z" version="1" lat="36.1407549000000046" lon="-115.3024275999999873">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-940"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-939" timestamp="2016-02-03T00:24:48Z" version="1" lat="36.1411913000000027" lon="-115.3019062000000048">
         <tag k="hoot:status" v="1"/>
@@ -5574,7 +5574,7 @@
     <node visible="true" id="-928" timestamp="2016-02-03T00:24:48Z" version="1" lat="36.1333088000000018" lon="-115.3025022999999862">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-928"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-927" timestamp="2016-02-03T00:24:48Z" version="1" lat="36.1404270000000096" lon="-115.3023924000000164">
         <tag k="hoot:status" v="1"/>
@@ -5820,7 +5820,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-878"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-877" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1358579999999989" lon="-115.2926109999999937">
@@ -5847,7 +5847,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-872"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-871" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1362059999999872" lon="-115.2997249999999809">
@@ -5910,7 +5910,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-857"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-856" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1365319999999954" lon="-115.3023519999999849">
@@ -5968,7 +5968,7 @@
     <node visible="true" id="-843" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1301389999999998" lon="-115.2949420000000060">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-843"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -5976,7 +5976,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-842"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-841" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1366349999999983" lon="-115.3032809999999984">
@@ -6079,7 +6079,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-817"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-816" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1388750000000059" lon="-115.2934300000000007">
@@ -6094,7 +6094,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-814"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-813" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1384880000000024" lon="-115.3055619999999806">
@@ -6105,7 +6105,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-812"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-811" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1364859999999908" lon="-115.2918470000000042">
@@ -6128,14 +6128,14 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-807"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-806" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1395190000000071" lon="-115.2967019999999820">
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-806"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-805" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1317969999999917" lon="-115.3004209999999858">
@@ -6161,7 +6161,7 @@
     <node visible="true" id="-800" timestamp="2016-02-02T18:17:35Z" version="1" lat="36.1315859999999915" lon="-115.2943329999999804">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-800"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -6209,7 +6209,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-789"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-788" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1321769999999987" lon="-115.2895929999999964">
@@ -6288,7 +6288,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-770"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-769" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1385450000000077" lon="-115.3038430000000005">
@@ -6331,7 +6331,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-760"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-759" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1393249999999995" lon="-115.3034070000000071">
@@ -6354,7 +6354,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-755"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-754" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1363129999999941" lon="-115.3052169999999990">
@@ -6385,7 +6385,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-748"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-747" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1411220000000029" lon="-115.3029160000000104">
@@ -6400,7 +6400,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-745"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-744" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1338060000000070" lon="-115.2929939999999789">
@@ -6547,7 +6547,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-709"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-708" timestamp="2016-02-02T18:17:28Z" version="1" lat="36.1322589999999906" lon="-115.3041970000000020">
@@ -6557,7 +6557,7 @@
     <node visible="true" id="-707" timestamp="2016-02-02T18:17:28Z" version="1" lat="36.1331270000000018" lon="-115.3041710000000108">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-707"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-706" timestamp="2016-02-02T18:17:28Z" version="1" lat="36.1327700000000007" lon="-115.2877969999999976">
         <tag k="hoot:status" v="1"/>
@@ -6579,7 +6579,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-702"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-701" timestamp="2016-02-02T18:17:28Z" version="1" lat="36.1322070000000011" lon="-115.2962890000000016">
@@ -6593,7 +6593,7 @@
     <node visible="true" id="-699" timestamp="2016-02-02T18:17:28Z" version="1" lat="36.1304179999999988" lon="-115.2933989999999795">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-699"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-698" timestamp="2016-02-02T18:17:28Z" version="1" lat="36.1315409999999915" lon="-115.3039789999999840">
         <tag k="hoot:status" v="1"/>
@@ -6619,14 +6619,14 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-693"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-692" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1303680000000043" lon="-115.3012570000000068">
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-692"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-691" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1303679999999972" lon="-115.3003610000000094">
@@ -6636,7 +6636,7 @@
     <node visible="true" id="-690" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1305580000000006" lon="-115.2931759999999883">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-690"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -6644,7 +6644,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-689"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-688" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1310819999999993" lon="-115.3003909999999905">
@@ -6654,7 +6654,7 @@
     <node visible="true" id="-687" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1304870000000093" lon="-115.2921989999999965">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-687"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -6681,20 +6681,20 @@
     <node visible="true" id="-681" timestamp="2016-02-02T18:17:34Z" version="1" lat="36.1301130000000086" lon="-115.2922530000000023">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-681"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-680" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1305669999999850" lon="-115.2949349999999953">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-680"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-679" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1345760000000027" lon="-115.2946160000000049">
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-679"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-678" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1380750000000006" lon="-115.3047420000000045">
@@ -6717,13 +6717,13 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-674"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-673" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1312860000000100" lon="-115.2950220000000172">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-673"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-672" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1305660000000088" lon="-115.2892909999999915">
         <tag k="hoot:status" v="1"/>
@@ -6733,7 +6733,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-671"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-670" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1312259999999981" lon="-115.2936349999999948">
@@ -6760,7 +6760,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-665"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-664" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1372110000000006" lon="-115.2918949999999825">
@@ -6783,7 +6783,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-660"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-659" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1353900000000010" lon="-115.2979330000000004">
@@ -6794,7 +6794,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-658"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-657" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1381580000000042" lon="-115.2933450000000022">
@@ -7101,7 +7101,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-582"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-581" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1352899999999977" lon="-115.2898930000000064">
@@ -7116,7 +7116,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-579"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-578" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1400850000000062" lon="-115.2932530000000071">
@@ -7131,7 +7131,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-576"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-575" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1335759999999908" lon="-115.2913029999999850">
@@ -7194,7 +7194,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-561"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-560" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1363210000000024" lon="-115.2988560000000007">
@@ -7241,14 +7241,14 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-550"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-549" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1402580000000100" lon="-115.2950770000000063">
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-549"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-548" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1401309999999967" lon="-115.2951089999999965">
@@ -7287,14 +7287,14 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-540"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-539" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1329369999999983" lon="-115.3032630000000012">
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-539"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-538" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1329300000000018" lon="-115.3031809999999808">
@@ -7316,7 +7316,7 @@
     <node visible="true" id="-534" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1336810000000028" lon="-115.2902359999999931">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-534"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -7372,7 +7372,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-521"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-520" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1309169999999966" lon="-115.2890610000000038">
@@ -7389,7 +7389,7 @@
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-518"/>
         <tag k="source:datetime" v="2013-04-08T04:02:01.000Z"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-517" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1383769999999984" lon="-115.3023129999999838">
@@ -7400,7 +7400,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-516"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-515" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1347430000000003" lon="-115.2960819999999984">
@@ -7411,7 +7411,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-514"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-513" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1393399999999900" lon="-115.3048169999999857">
@@ -7421,7 +7421,7 @@
     <node visible="true" id="-512" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1306530000000095" lon="-115.2932839999999857">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-512"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-511" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1349680000000006" lon="-115.3063230000000203">
         <tag k="hoot:status" v="1"/>
@@ -7543,7 +7543,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-482"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-481" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1308189999999954" lon="-115.2923529999999914">
@@ -7621,7 +7621,7 @@
     <node visible="true" id="-463" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1328639999999979" lon="-115.3006170000000026">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-463"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-462" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1326689999999999" lon="-115.3008269999999840">
         <tag k="hoot:status" v="1"/>
@@ -7651,14 +7651,14 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-456"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-455" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1401639999999986" lon="-115.2989869999999968">
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-455"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-454" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1396939999999987" lon="-115.2989679999999879">
@@ -7673,7 +7673,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-452"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-451" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1346709999999902" lon="-115.2979019999999934">
@@ -7720,7 +7720,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-441"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-440" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1364440000000045" lon="-115.3007829999999956">
@@ -7803,7 +7803,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-421"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-420" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1357339999999922" lon="-115.3010960000000154">
@@ -7846,7 +7846,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-411"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-410" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1412189999999995" lon="-115.2990329999999943">
@@ -7857,7 +7857,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-409"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-408" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1375539999999944" lon="-115.2997189999999819">
@@ -7887,7 +7887,7 @@
     <node visible="true" id="-402" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1328919999999911" lon="-115.2987059999999957">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-402"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-401" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1323050000000094" lon="-115.2986810000000020">
         <tag k="hoot:status" v="1"/>
@@ -7912,7 +7912,7 @@
     <node visible="true" id="-396" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1301259999999971" lon="-115.2889640000000071">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-396"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -7920,7 +7920,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-395"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-394" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1380309999999980" lon="-115.2914959999999809">
@@ -7942,7 +7942,7 @@
     <node visible="true" id="-390" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1328760000000102" lon="-115.2995859999999908">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-390"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-389" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1323049999999952" lon="-115.2995619999999946">
         <tag k="hoot:status" v="1"/>
@@ -7952,7 +7952,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-388"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-387" timestamp="2016-02-02T18:17:33Z" version="1" lat="36.1370539999999991" lon="-115.2963309999999950">
@@ -8134,7 +8134,7 @@
     <node visible="true" id="-343" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1304720000000046" lon="-115.2940990000000028">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-343"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-342" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1303689999999946" lon="-115.3021710000000155">
         <tag k="hoot:status" v="1"/>
@@ -8168,7 +8168,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-335"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-334" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1349999999999980" lon="-115.3009859999999804">
@@ -8191,7 +8191,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-330"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-329" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1393720000000016" lon="-115.2981050000000067">
@@ -8270,7 +8270,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-311"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-310" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1413499999999956" lon="-115.2967780000000033">
@@ -8345,7 +8345,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-293"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-292" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1339960000000033" lon="-115.2961439999999982">
@@ -8416,7 +8416,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-276"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-275" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1402590000000004" lon="-115.2959679999999878">
@@ -8495,7 +8495,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-257"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-256" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1342579999999955" lon="-115.3011249999999990">
@@ -8646,7 +8646,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-220"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-219" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1381480000000010" lon="-115.2904809999999998">
@@ -8721,14 +8721,14 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-202"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-201" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1376989999999907" lon="-115.3053890000000052">
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-201"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-200" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1377490000000066" lon="-115.3047109999999975">
@@ -9001,14 +9001,14 @@
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-134"/>
         <tag k="source:datetime" v="2013-04-08T04:02:01.000Z"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-133" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1403150000000011" lon="-115.2941339999999855">
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-133"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-132" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1401719999999997" lon="-115.2941699999999940">
@@ -9022,7 +9022,7 @@
     <node visible="true" id="-130" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1305310000000048" lon="-115.2899489999999787">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-130"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -9270,7 +9270,7 @@
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="hoot:id" v="-69"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="-68" timestamp="2016-02-02T18:17:32Z" version="1" lat="36.1303689999999946" lon="-115.3030519999999797">
@@ -9288,7 +9288,7 @@
     <node visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2945391111111348">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-65"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2907086878306728">
         <tag k="hoot:status" v="1"/>
@@ -9297,17 +9297,17 @@
     <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1366216325203169" lon="-115.3065999999999889">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-63"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1350188256880713" lon="-115.3065999999999889">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-62"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2895416600790526">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-61"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2929099923663898">
         <tag k="hoot:status" v="1"/>
@@ -9320,32 +9320,32 @@
     <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.3047366075949469">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-58"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.3027422040816106">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-57"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2879147246790268">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-56"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2885863134328304">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-55"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2981939395017577">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-54"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1373685937500113" lon="-115.3065999999999889">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-53"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1410242669902857" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
@@ -9354,52 +9354,52 @@
     <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.3026530487804990">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-51"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.3008729068322822">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-50"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1302371143572643" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-49"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2959364465753396">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-48"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1315249743589675" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-47"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2977064785046650">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-46"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1304321862416131" lon="-115.3065999999999889">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-45"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1334719725548936" lon="-115.3065999999999889">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-44"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1327659297520682" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-43"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1373348208598770" lon="-115.3065999999999889">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-42"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1352497732793623" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
@@ -9408,27 +9408,27 @@
     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999831" lon="-115.2950497766059499">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-40"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2926814322580640">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-39"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1321502487961368" lon="-115.3065999999999889">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-38"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1384294810543665" lon="-115.3065999999999889">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-37"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.3003494999999958">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-36"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1410242669902857" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
@@ -9445,7 +9445,7 @@
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1406902092256814" lon="-115.3065999999999889">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-32"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2970501382347095">
         <tag k="hoot:status" v="1"/>
@@ -9458,12 +9458,12 @@
     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.3061086459074573">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-29"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.3062137287066093">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-28"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1346885999999969" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
@@ -9492,47 +9492,47 @@
     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1387670714285747" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-21"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1371649436619791" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-20"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2998882704778225">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-19"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2903432631578795">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-18"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1320971109550584" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-17"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1414000000000044" lon="-115.3011599088471684">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-16"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2945025833333403">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-15"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999831" lon="-115.2968032475247355">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-14"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.3021604804469291">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-13"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2879331458206167">
         <tag k="hoot:status" v="1"/>
@@ -9541,7 +9541,7 @@
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1410242669902857" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-11"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2875999999999976">
         <tag k="hoot:status" v="1"/>
@@ -9566,17 +9566,17 @@
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2910111764705903">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-5"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2913664999999952">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-4"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1300999999999988" lon="-115.2906022307692524">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-3"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1414000000000044" lon="-115.2930073999999934">
         <tag k="hoot:status" v="1"/>
@@ -9585,7 +9585,7 @@
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1413999999999902" lon="-115.2990410339425438">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <way visible="true" id="-488" timestamp="2020-05-14T05:31:33Z" version="1" user="ssange" uid="10208970">
         <nd ref="-2403"/>
@@ -9594,7 +9594,7 @@
         <tag k="highway" v="service"/>
         <tag k="hoot:id" v="-488"/>
         <tag k="source:datetime" v="2020-05-14T05:31:33Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-487" timestamp="2019-12-10T05:33:53Z" version="1" user="vatsomya" uid="10327363">
@@ -9835,7 +9835,7 @@
         <tag k="hoot:id" v="-477"/>
         <tag k="source:datetime" v="2019-01-17T22:38:20Z"/>
         <tag k="surface" v="asphalt"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-476" timestamp="2019-01-17T22:38:20Z" version="1" user="TheDutchMan13" uid="1330847">
@@ -9863,7 +9863,7 @@
         <tag k="hoot:id" v="-475"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2018-10-22T01:28:31Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="access" v="private"/>
@@ -9908,7 +9908,7 @@
         <tag k="name" v="High Sail Court"/>
         <tag k="hoot:id" v="-472"/>
         <tag k="source:datetime" v="2018-07-18T19:25:32Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-471" timestamp="2018-07-18T19:25:32Z" version="1" user="WayneSchlegel" uid="548288">
@@ -10139,7 +10139,7 @@
         <tag k="service" v="parking_aisle"/>
         <tag k="hoot:id" v="-457"/>
         <tag k="source:datetime" v="2019-01-17T22:38:26Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-456" timestamp="2017-09-21T19:59:07Z" version="2" user="pflier" uid="3637514">
@@ -10262,7 +10262,7 @@
         <tag k="hoot:id" v="-444"/>
         <tag k="building" v="house"/>
         <tag k="source:datetime" v="2017-05-11T18:38:59Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-443" timestamp="2017-05-11T18:38:59Z" version="1" user="optimalnode" uid="2302485">
@@ -10277,7 +10277,7 @@
         <tag k="hoot:id" v="-443"/>
         <tag k="building" v="house"/>
         <tag k="source:datetime" v="2017-05-11T18:38:59Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-442" timestamp="2017-05-11T18:24:53Z" version="1" user="optimalnode" uid="2302485">
@@ -10300,7 +10300,7 @@
         <tag k="hoot:id" v="-442"/>
         <tag k="building" v="house"/>
         <tag k="source:datetime" v="2017-05-11T18:24:53Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-441" timestamp="2016-12-24T21:15:30Z" version="1" user="Tom_Holland" uid="574654">
@@ -10351,7 +10351,7 @@
         <tag k="hoot:id" v="-439"/>
         <tag k="source:datetime" v="2017-02-10T01:43:10Z"/>
         <tag k="natural" v="water"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-438" timestamp="2017-02-10T01:43:10Z" version="2" user="DirtyDp" uid="5215575">
@@ -10373,7 +10373,7 @@
         <tag k="hoot:id" v="-438"/>
         <tag k="source:datetime" v="2017-02-10T01:43:10Z"/>
         <tag k="natural" v="water"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-437" timestamp="2017-02-10T01:43:11Z" version="2" user="DirtyDp" uid="5215575">
@@ -10393,7 +10393,7 @@
         <tag k="hoot:id" v="-437"/>
         <tag k="source:datetime" v="2017-02-10T01:43:11Z"/>
         <tag k="natural" v="water"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-436" timestamp="2017-02-10T01:43:11Z" version="2" user="DirtyDp" uid="5215575">
@@ -10413,7 +10413,7 @@
         <tag k="hoot:id" v="-436"/>
         <tag k="source:datetime" v="2017-02-10T01:43:11Z"/>
         <tag k="natural" v="water"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-435" timestamp="2017-06-01T17:30:11Z" version="2" user="TheDutchMan13" uid="1330847">
@@ -10491,7 +10491,7 @@
         <tag k="hoot:id" v="-432"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:29:15Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10510,7 +10510,7 @@
         <tag k="hoot:id" v="-431"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:28:33Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10561,7 +10561,7 @@
         <tag k="hoot:id" v="-429"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:28:08Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10601,7 +10601,7 @@
         <tag k="hoot:id" v="-427"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:27:27Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -10620,7 +10620,7 @@
         <tag k="hoot:id" v="-426"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:27:20Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10662,7 +10662,7 @@
         <tag k="hoot:id" v="-424"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:26:34Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10683,7 +10683,7 @@
         <tag k="hoot:id" v="-423"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:26:27Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10732,7 +10732,7 @@
         <tag k="hoot:id" v="-421"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:26:20Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10749,7 +10749,7 @@
         <tag k="hoot:id" v="-420"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:26:14Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10767,7 +10767,7 @@
         <tag k="hoot:id" v="-419"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:26:10Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10785,7 +10785,7 @@
         <tag k="hoot:id" v="-418"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:26:09Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10821,7 +10821,7 @@
         <tag k="hoot:id" v="-416"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:25:10Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10876,7 +10876,7 @@
         <tag k="hoot:id" v="-413"/>
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2017-06-01T17:24:56Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -10896,7 +10896,7 @@
         <tag k="hoot:id" v="-412"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:24:46Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10937,7 +10937,7 @@
         <tag k="hoot:id" v="-410"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:24:35Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -10978,7 +10978,7 @@
         <tag k="hoot:id" v="-408"/>
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2017-06-01T17:23:41Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11019,7 +11019,7 @@
         <tag k="hoot:id" v="-406"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:23:30Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11055,7 +11055,7 @@
         <tag k="hoot:id" v="-404"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:23:21Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -11095,7 +11095,7 @@
         <tag k="hoot:id" v="-402"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:23:01Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11113,7 +11113,7 @@
         <tag k="hoot:id" v="-401"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:22:55Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11168,7 +11168,7 @@
         <tag k="hoot:id" v="-398"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:22:00Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11199,7 +11199,7 @@
         <tag k="hoot:id" v="-396"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:21:57Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11215,7 +11215,7 @@
         <tag k="hoot:id" v="-395"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:21:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11250,7 +11250,7 @@
         <tag k="hoot:id" v="-393"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:21:47Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Ln"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -11303,7 +11303,7 @@
         <tag k="hoot:id" v="-390"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:21:28Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11319,7 +11319,7 @@
         <tag k="hoot:id" v="-389"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:21:27Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11337,7 +11337,7 @@
         <tag k="hoot:id" v="-388"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:21:24Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Way"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -11354,7 +11354,7 @@
         <tag k="hoot:id" v="-387"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:21:23Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11371,7 +11371,7 @@
         <tag k="hoot:id" v="-386"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:21:17Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11393,7 +11393,7 @@
         <tag k="hoot:id" v="-385"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:21:16Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11411,7 +11411,7 @@
         <tag k="hoot:id" v="-384"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:21:03Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Way"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -11428,7 +11428,7 @@
         <tag k="hoot:id" v="-383"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:21:02Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11465,7 +11465,7 @@
         <tag k="hoot:id" v="-381"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:20:50Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Cv"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -11484,7 +11484,7 @@
         <tag k="hoot:id" v="-380"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:20:48Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -11525,7 +11525,7 @@
         <tag k="hoot:id" v="-378"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:20:45Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Way"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -11547,7 +11547,7 @@
         <tag k="hoot:id" v="-377"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:20:42Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11563,7 +11563,7 @@
         <tag k="hoot:id" v="-376"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:20:41Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11580,7 +11580,7 @@
         <tag k="hoot:id" v="-375"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:20:33Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11676,7 +11676,7 @@
         <tag k="hoot:id" v="-371"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:12:14Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11722,7 +11722,7 @@
         <tag k="hoot:id" v="-368"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:18:48Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11738,7 +11738,7 @@
         <tag k="hoot:id" v="-367"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:18:47Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11781,7 +11781,7 @@
         <tag k="hoot:id" v="-365"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:18:15Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -11822,7 +11822,7 @@
         <tag k="hoot:id" v="-363"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:17:47Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11873,7 +11873,7 @@
         <tag k="hoot:id" v="-360"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:17:40Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11893,7 +11893,7 @@
         <tag k="hoot:id" v="-359"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:17:40Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11913,7 +11913,7 @@
         <tag k="hoot:id" v="-358"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:17:38Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -11933,7 +11933,7 @@
         <tag k="hoot:id" v="-357"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:17:29Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Br"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -12008,7 +12008,7 @@
         <tag k="hoot:id" v="-353"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:16:58Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12045,7 +12045,7 @@
         <tag k="hoot:id" v="-351"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:16:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12063,7 +12063,7 @@
         <tag k="hoot:id" v="-350"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:16:46Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Cv"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -12082,7 +12082,7 @@
         <tag k="hoot:id" v="-349"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:16:26Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12098,7 +12098,7 @@
         <tag k="hoot:id" v="-348"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:16:19Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12148,7 +12148,7 @@
         <tag k="hoot:id" v="-345"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2018-08-31T09:49:46Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12250,7 +12250,7 @@
         <tag k="hoot:id" v="-340"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:15:06Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12333,7 +12333,7 @@
         <tag k="hoot:id" v="-336"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:14:32Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12354,7 +12354,7 @@
         <tag k="hoot:id" v="-335"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:14:24Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12372,7 +12372,7 @@
         <tag k="hoot:id" v="-334"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:14:11Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12388,7 +12388,7 @@
         <tag k="hoot:id" v="-333"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:14:05Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12428,7 +12428,7 @@
         <tag k="hoot:id" v="-331"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:13:37Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12478,7 +12478,7 @@
         <tag k="hoot:id" v="-329"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:13:24Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12497,7 +12497,7 @@
         <tag k="hoot:id" v="-328"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T23:26:26Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12515,7 +12515,7 @@
         <tag k="hoot:id" v="-327"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:12:56Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -12542,7 +12542,7 @@
         <tag k="hoot:id" v="-326"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:12:48Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12560,7 +12560,7 @@
         <tag k="hoot:id" v="-325"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:12:44Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12580,7 +12580,7 @@
         <tag k="hoot:id" v="-324"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:12:26Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12598,7 +12598,7 @@
         <tag k="hoot:id" v="-323"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:12:25Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Run"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -12615,7 +12615,7 @@
         <tag k="hoot:id" v="-322"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:11:59Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12652,7 +12652,7 @@
         <tag k="hoot:id" v="-320"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:11:46Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12817,7 +12817,7 @@
         <tag k="hoot:id" v="-311"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:10:41Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -12837,7 +12837,7 @@
         <tag k="hoot:id" v="-310"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:10:11Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12854,7 +12854,7 @@
         <tag k="hoot:id" v="-309"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:10:09Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12870,7 +12870,7 @@
         <tag k="hoot:id" v="-308"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:10:00Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -12930,7 +12930,7 @@
         <tag k="hoot:id" v="-305"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:09:19Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Cv"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -12978,7 +12978,7 @@
         <tag k="hoot:id" v="-303"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:08:33Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13026,7 +13026,7 @@
         <tag k="hoot:id" v="-301"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:08:10Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13076,7 +13076,7 @@
         <tag k="hoot:id" v="-298"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:07:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13132,7 +13132,7 @@
         <tag k="hoot:id" v="-296"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:07:37Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13162,7 +13162,7 @@
         <tag k="hoot:id" v="-295"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:07:33Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13196,7 +13196,7 @@
         <tag k="hoot:id" v="-293"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:07:18Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13219,7 +13219,7 @@
         <tag k="hoot:id" v="-292"/>
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2017-06-01T17:07:02Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13310,7 +13310,7 @@
         <tag k="hoot:id" v="-288"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:06:34Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13327,7 +13327,7 @@
         <tag k="hoot:id" v="-287"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:06:26Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13343,7 +13343,7 @@
         <tag k="hoot:id" v="-286"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:06:05Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13471,7 +13471,7 @@
         <tag k="hoot:id" v="-280"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:05:15Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13508,7 +13508,7 @@
         <tag k="addr:postcode" v="89117"/>
         <tag k="hoot:id" v="-278"/>
         <tag k="source:datetime" v="2016-12-23T04:48:55Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="phone" v="17022563299"/>
         <tag k="gnis:state_id" v="32"/>
         <tag k="addr:housenumber" v="2720"/>
@@ -13525,7 +13525,7 @@
         <tag k="name" v="South Grand Canyon Drive"/>
         <tag k="hoot:id" v="-277"/>
         <tag k="source:datetime" v="2019-08-07T23:02:09Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="error:circular" v="15"/>
@@ -13547,7 +13547,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="surface" v="asphalt"/>
         <tag k="source:datetime" v="2019-01-17T22:38:25Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13591,7 +13591,7 @@
         <tag k="hoot:id" v="-275"/>
         <tag k="surface" v="asphalt"/>
         <tag k="source:datetime" v="2019-01-17T09:58:37Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="error:circular" v="15"/>
@@ -13703,7 +13703,7 @@
         <tag k="name" v="Lakes Estates"/>
         <tag k="hoot:id" v="-274"/>
         <tag k="source:datetime" v="2019-02-15T16:49:22Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-273" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13722,7 +13722,7 @@
         <tag k="landuse" v="residential"/>
         <tag k="hoot:id" v="-273"/>
         <tag k="source:datetime" v="2018-07-18T19:25:31Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-272" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13755,7 +13755,7 @@
         <tag k="landuse" v="residential"/>
         <tag k="hoot:id" v="-272"/>
         <tag k="source:datetime" v="2018-07-18T19:25:31Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-271" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13766,7 +13766,7 @@
         <tag k="name" v="Island View Court"/>
         <tag k="hoot:id" v="-271"/>
         <tag k="source:datetime" v="2018-07-18T19:25:32Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-270" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13813,7 +13813,7 @@
         <tag k="tiger:name_type" v="Way"/>
         <tag k="surface" v="asphalt"/>
         <tag k="source:datetime" v="2019-01-17T22:38:20Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13830,7 +13830,7 @@
         <tag k="hoot:id" v="-269"/>
         <tag k="building" v="house"/>
         <tag k="source:datetime" v="2017-05-11T18:38:59Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-268" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13845,7 +13845,7 @@
         <tag k="hoot:id" v="-268"/>
         <tag k="building" v="house"/>
         <tag k="source:datetime" v="2017-05-11T18:39:00Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-267" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -13870,7 +13870,7 @@
         <tag k="hoot:id" v="-267"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2018-07-18T19:25:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13886,7 +13886,7 @@
         <tag k="hoot:id" v="-266"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:05:43Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13908,7 +13908,7 @@
         <tag k="hoot:id" v="-265"/>
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2010-03-27T22:59:35Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13929,7 +13929,7 @@
         <tag k="tiger:name_direction_prefix" v="S"/>
         <tag k="surface" v="asphalt"/>
         <tag k="source:datetime" v="2019-01-17T22:38:25Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13943,7 +13943,7 @@
         <nd ref="-1251"/>
         <nd ref="-1252"/>
         <nd ref="-17"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:name_type_1" v="Ave"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -13971,7 +13971,7 @@
         <tag k="hoot:id" v="-262"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:08:49Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -13992,7 +13992,7 @@
         <tag k="hoot:id" v="-261"/>
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2017-06-01T17:09:43Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14008,7 +14008,7 @@
         <tag k="hoot:id" v="-260"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2018-08-31T09:49:45Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14030,7 +14030,7 @@
         <tag k="hoot:id" v="-259"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:10:15Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14047,7 +14047,7 @@
         <tag k="hoot:id" v="-258"/>
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2017-06-01T17:10:42Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14066,7 +14066,7 @@
         <tag k="hoot:id" v="-257"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:11:08Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:name_type_1" v="Ln"/>
         <tag k="tiger:county" v="Clark, NV"/>
@@ -14104,7 +14104,7 @@
         <tag k="tiger:name_type" v="Way"/>
         <tag k="surface" v="asphalt"/>
         <tag k="source:datetime" v="2019-01-17T22:38:25Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14116,7 +14116,7 @@
         <nd ref="-1375"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-254"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-253" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -14126,7 +14126,7 @@
         <nd ref="-3"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-253"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-252" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -14138,7 +14138,7 @@
         <tag k="hoot:id" v="-252"/>
         <tag k="source:datetime" v="2016-12-24T21:15:31Z"/>
         <tag k="lanes" v="2"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="access" v="private"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -14151,7 +14151,7 @@
         <tag k="hoot:id" v="-251"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:13:07Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14175,7 +14175,7 @@
         <tag k="hoot:id" v="-250"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:13:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14190,7 +14190,7 @@
         <tag k="name" v="Otter Creek Court"/>
         <tag k="hoot:id" v="-249"/>
         <tag k="source:datetime" v="2016-12-24T21:05:43Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="access" v="private"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -14204,7 +14204,7 @@
         <tag k="hoot:id" v="-248"/>
         <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2017-06-01T17:15:33Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14223,7 +14223,7 @@
         <tag k="hoot:id" v="-247"/>
         <tag k="tiger:name_type" v="Rd"/>
         <tag k="source:datetime" v="2010-03-27T21:00:30Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14239,7 +14239,7 @@
         <tag k="name" v="Beaver Creek Court"/>
         <tag k="hoot:id" v="-246"/>
         <tag k="source:datetime" v="2016-12-24T21:05:43Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="access" v="private"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -14252,7 +14252,7 @@
         <tag k="hoot:id" v="-245"/>
         <tag k="source:datetime" v="2018-08-31T09:49:46Z"/>
         <tag k="lanes" v="2"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="access" v="private"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -14266,7 +14266,7 @@
         <tag k="hoot:id" v="-244"/>
         <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2017-06-01T17:18:07Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14283,7 +14283,7 @@
         <tag k="hoot:id" v="-243"/>
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2017-06-01T17:18:49Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14300,7 +14300,7 @@
         <tag k="hoot:id" v="-242"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2019-12-09T09:20:31Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14321,7 +14321,7 @@
         <tag k="hoot:id" v="-241"/>
         <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2017-06-01T17:20:19Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14339,7 +14339,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="surface" v="asphalt"/>
         <tag k="source:datetime" v="2019-12-10T12:51:04Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14355,7 +14355,7 @@
         <tag k="hoot:id" v="-239"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2017-06-01T17:20:50Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14375,7 +14375,7 @@
         <tag k="hoot:id" v="-238"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:21:34Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14392,7 +14392,7 @@
         <tag k="hoot:id" v="-237"/>
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2017-06-01T17:21:43Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14408,7 +14408,7 @@
         <tag k="hoot:id" v="-236"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:21:45Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14428,7 +14428,7 @@
         <tag k="hoot:id" v="-235"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:21:55Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14451,7 +14451,7 @@
         <tag k="hoot:id" v="-234"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:24:36Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14467,7 +14467,7 @@
         <tag k="hoot:id" v="-233"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:22:58Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14484,7 +14484,7 @@
         <tag k="hoot:id" v="-232"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:23:37Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14506,7 +14506,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="surface" v="asphalt"/>
         <tag k="source:datetime" v="2019-01-17T22:38:25Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14522,7 +14522,7 @@
         <tag k="hoot:id" v="-230"/>
         <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2017-06-01T17:23:50Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14544,7 +14544,7 @@
         <tag k="hoot:id" v="-229"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:24:21Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14560,7 +14560,7 @@
         <tag k="hoot:id" v="-228"/>
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2017-06-01T17:24:26Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14579,7 +14579,7 @@
         <tag k="hoot:id" v="-227"/>
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2017-06-01T17:24:56Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14598,7 +14598,7 @@
         <tag k="hoot:id" v="-226"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:35:19Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14614,7 +14614,7 @@
         <tag k="hoot:id" v="-225"/>
         <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2017-06-01T17:27:27Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14635,7 +14635,7 @@
         <tag k="hoot:id" v="-224"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2017-06-01T17:28:38Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -14655,7 +14655,7 @@
         <tag k="hoot:id" v="-223"/>
         <tag k="source:datetime" v="2016-12-24T21:15:30Z"/>
         <tag k="lanes" v="1"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="access" v="private"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -14675,7 +14675,7 @@
         <tag k="hoot:id" v="-222"/>
         <tag k="source:datetime" v="2016-12-24T21:15:30Z"/>
         <tag k="lanes" v="1"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="access" v="private"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -14687,7 +14687,7 @@
         <tag k="hoot:id" v="-221"/>
         <tag k="source:datetime" v="2016-12-24T21:15:30Z"/>
         <tag k="lanes" v="2"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="access" v="private"/>
         <tag k="error:circular" v="15"/>
     </way>
@@ -14811,7 +14811,7 @@
         <nd ref="-971"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-220"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-219" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -14919,7 +14919,7 @@
         <nd ref="-969"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-219"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-218" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -14944,7 +14944,7 @@
         <nd ref="-967"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-218"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-217" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -14988,7 +14988,7 @@
         <nd ref="-965"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-217"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-216" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -15003,7 +15003,7 @@
         <tag k="tiger:name_type" v="Rd"/>
         <tag k="tiger:name_direction_prefix" v="S"/>
         <tag k="source:datetime" v="2018-06-01T15:28:55Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:name_base" v="Fort Apache"/>
@@ -15021,7 +15021,7 @@
         <tag k="tiger:name_type" v="Rd"/>
         <tag k="tiger:name_direction_prefix" v="S"/>
         <tag k="source:datetime" v="2018-06-01T15:28:55Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:name_base" v="Fort Apache"/>
@@ -15044,6 +15044,7 @@
         <tag k="hoot:id" v="-214"/>
         <tag k="source:datetime" v="2013-04-08T04:02:01.000Z"/>
         <tag k="leisure" v="park"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-213" timestamp="2016-02-03T08:44:04Z" version="1">
@@ -15064,6 +15065,7 @@
         <tag k="hoot:id" v="-213"/>
         <tag k="source:datetime" v="2013-04-08T04:02:01.000Z"/>
         <tag k="leisure" v="park"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-212" timestamp="2016-02-03T08:44:04Z" version="1">
@@ -15082,6 +15084,7 @@
         <tag k="hoot:id" v="-212"/>
         <tag k="source:datetime" v="2013-04-08T04:02:00.000Z"/>
         <tag k="leisure" v="park"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-211" timestamp="2016-02-03T08:44:04Z" version="1">
@@ -15100,6 +15103,7 @@
         <tag k="hoot:id" v="-211"/>
         <tag k="source:datetime" v="2013-04-08T04:02:00.000Z"/>
         <tag k="leisure" v="park"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-210" timestamp="2016-02-03T08:27:53Z" version="1">
@@ -15185,6 +15189,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:43:09.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15195,6 +15200,7 @@
         <nd ref="-415"/>
         <nd ref="-871"/>
         <nd ref="-872"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -15268,6 +15274,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:39:44.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15305,6 +15312,7 @@
         <nd ref="-309"/>
         <nd ref="-1027"/>
         <nd ref="-843"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -15341,6 +15349,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T21:37:28.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15392,6 +15401,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:35:23.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15407,23 +15417,24 @@
         <nd ref="-832"/>
         <nd ref="-1805"/>
         <nd ref="-833"/>
-        <tag k="tiger:tlid" v="201918800:201918801"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Wooden Pier Way"/>
-        <tag k="tiger:zip_left" v="89117"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-198"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="source:datetime" v="2007-11-27T18:26:36.000Z"/>
-        <tag k="tiger:zip_right" v="89117"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Wooden Pier Way"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2007-11-27T18:26:36.000Z"/>
+        <tag k="tiger:zip_left" v="89117"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Wooden Pier"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:tlid" v="201918800:201918801"/>
+        <tag k="hoot:id" v="-198"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-197" timestamp="2016-02-03T05:53:03Z" version="1">
         <nd ref="-656"/>
@@ -15477,6 +15488,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:34:43.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15498,6 +15510,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:34:28.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15520,6 +15533,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T21:34:18.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15542,6 +15556,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T21:34:17.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15582,6 +15597,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:31:26.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15639,6 +15655,7 @@
     <way visible="true" id="-188" timestamp="2016-02-03T05:53:03Z" version="1">
         <nd ref="-799"/>
         <nd ref="-800"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -15677,6 +15694,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:30:09.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15727,6 +15745,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:29:42.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15777,6 +15796,7 @@
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2010-03-27T21:27:35.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15822,6 +15842,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:26:44.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15853,6 +15874,7 @@
     <way visible="true" id="-179" timestamp="2016-02-03T05:53:03Z" version="1">
         <nd ref="-526"/>
         <nd ref="-755"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -15915,6 +15937,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:25:02.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15936,6 +15959,7 @@
         <tag k="hoot:id" v="-176"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:24:41.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -15995,23 +16019,24 @@
         <nd ref="-558"/>
         <nd ref="-298"/>
         <nd ref="-709"/>
-        <tag k="tiger:tlid" v="201891241:201936005"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Abalone Way"/>
-        <tag k="tiger:zip_left" v="89117"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-173"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="source:datetime" v="2007-11-27T17:32:44.000Z"/>
-        <tag k="tiger:zip_right" v="89117"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Abalone Way"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2007-11-27T17:32:44.000Z"/>
+        <tag k="tiger:zip_left" v="89117"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Abalone"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:tlid" v="201891241:201936005"/>
+        <tag k="hoot:id" v="-173"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-172" timestamp="2016-02-03T05:53:03Z" version="1">
         <nd ref="-698"/>
@@ -16047,6 +16072,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T21:21:32.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16067,6 +16093,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:21:15.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16099,6 +16126,7 @@
     <way visible="true" id="-168" timestamp="2016-02-03T05:53:03Z" version="1">
         <nd ref="-683"/>
         <nd ref="-699"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Ln"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -16165,6 +16193,7 @@
     <way visible="true" id="-165" timestamp="2016-02-03T05:53:03Z" version="1">
         <nd ref="-693"/>
         <nd ref="-207"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -16198,6 +16227,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:19:36.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16208,6 +16238,7 @@
         <nd ref="-476"/>
         <nd ref="-690"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Way"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -16242,6 +16273,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:19:25.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16252,23 +16284,24 @@
         <nd ref="-345"/>
         <nd ref="-510"/>
         <nd ref="-687"/>
-        <tag k="tiger:tlid" v="201918736:201918737"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Elk Grove Way"/>
-        <tag k="tiger:zip_left" v="89117"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-161"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="source:datetime" v="2007-11-27T17:24:34.000Z"/>
-        <tag k="tiger:zip_right" v="89117"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Elk Grove Way"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2007-11-27T17:24:34.000Z"/>
+        <tag k="tiger:zip_left" v="89117"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Elk Grove"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:tlid" v="201918736:201918737"/>
+        <tag k="hoot:id" v="-161"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-160" timestamp="2016-02-03T05:53:03Z" version="1">
         <nd ref="-681"/>
@@ -16279,27 +16312,29 @@
         <nd ref="-685"/>
         <nd ref="-686"/>
         <nd ref="-308"/>
-        <tag k="tiger:tlid" v="201964714:201901362:201901364:201918713"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Country Scene Way"/>
-        <tag k="tiger:zip_left" v="89117"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-160"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="source:datetime" v="2007-11-27T17:24:24.000Z"/>
-        <tag k="tiger:zip_right" v="89117"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Country Scene Way"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2007-11-27T17:24:24.000Z"/>
+        <tag k="tiger:zip_left" v="89117"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Country Scene"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:tlid" v="201964714:201901362:201901364:201918713"/>
+        <tag k="hoot:id" v="-160"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-159" timestamp="2016-02-03T05:53:03Z" version="1">
         <nd ref="-306"/>
         <nd ref="-680"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Way"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -16334,6 +16369,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:18:25.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16368,6 +16404,7 @@
     <way visible="true" id="-156" timestamp="2016-02-03T05:53:03Z" version="1">
         <nd ref="-525"/>
         <nd ref="-674"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Cv"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -16391,6 +16428,7 @@
     <way visible="true" id="-155" timestamp="2016-02-03T05:53:03Z" version="1">
         <nd ref="-586"/>
         <nd ref="-673"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -16443,6 +16481,7 @@
         <nd ref="-669"/>
         <nd ref="-670"/>
         <nd ref="-671"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Way"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -16482,6 +16521,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:17:05.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16502,6 +16542,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:17:02.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16523,6 +16564,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T21:16:34.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16629,6 +16671,7 @@
         <tag k="hoot:id" v="-146"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:12:14.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16691,6 +16734,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:10:11.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16711,6 +16755,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T21:10:09.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16747,6 +16792,7 @@
         <nd ref="-569"/>
         <nd ref="-1547"/>
         <nd ref="-570"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -16809,6 +16855,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:06:50.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16875,6 +16922,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:06:32.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16899,6 +16947,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:06:29.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16923,6 +16972,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:06:17.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -16934,6 +16984,7 @@
         <nd ref="-537"/>
         <nd ref="-538"/>
         <nd ref="-539"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Br"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -16982,6 +17033,7 @@
         <nd ref="-532"/>
         <nd ref="-533"/>
         <nd ref="-534"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -17041,6 +17093,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:04:00.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17082,6 +17135,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:03:34.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17091,6 +17145,7 @@
     <way visible="true" id="-125" timestamp="2016-02-03T05:52:55Z" version="1">
         <nd ref="-515"/>
         <nd ref="-516"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Cv"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -17114,6 +17169,7 @@
     <way visible="true" id="-124" timestamp="2016-02-03T05:52:55Z" version="1">
         <nd ref="-513"/>
         <nd ref="-514"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -17147,6 +17203,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:01:19.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17198,6 +17255,7 @@
         <nd ref="-507"/>
         <nd ref="-1485"/>
         <nd ref="-508"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -17322,6 +17380,7 @@
     <way visible="true" id="-115" timestamp="2016-02-03T05:52:55Z" version="1">
         <nd ref="-336"/>
         <nd ref="-482"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -17432,6 +17491,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T23:30:42.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17446,23 +17506,24 @@
         <nd ref="-460"/>
         <nd ref="-461"/>
         <nd ref="-157"/>
-        <tag k="tiger:tlid" v="201891254:201891255"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Coral Way"/>
-        <tag k="tiger:zip_left" v="89117"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-110"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="source:datetime" v="2007-11-27T15:11:43.000Z"/>
-        <tag k="tiger:zip_right" v="89117"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Coral Way"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2007-11-27T15:11:43.000Z"/>
+        <tag k="tiger:zip_left" v="89117"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Coral"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:tlid" v="201891254:201891255"/>
+        <tag k="hoot:id" v="-110"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-109" timestamp="2016-02-03T05:52:55Z" version="1">
         <nd ref="-151"/>
@@ -17480,6 +17541,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T23:29:28.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17500,6 +17562,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T23:29:06.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17549,6 +17612,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T23:27:28.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17608,6 +17672,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T23:26:35.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17626,6 +17691,7 @@
         <tag k="hoot:id" v="-103"/>
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T23:26:26.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17635,6 +17701,7 @@
     <way visible="true" id="-102" timestamp="2016-02-03T05:52:55Z" version="1">
         <nd ref="-408"/>
         <nd ref="-409"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -17663,6 +17730,7 @@
         <nd ref="-406"/>
         <nd ref="-1384"/>
         <nd ref="-407"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -17685,6 +17753,7 @@
     <way visible="true" id="-100" timestamp="2016-02-03T05:52:55Z" version="1">
         <nd ref="-401"/>
         <nd ref="-402"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
         <tag k="error:circular" v="15"/>
@@ -17722,6 +17791,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T23:23:00.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17731,6 +17801,7 @@
     <way visible="true" id="-98" timestamp="2016-02-03T05:52:55Z" version="1">
         <nd ref="-389"/>
         <nd ref="-390"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Run"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -17765,6 +17836,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T23:21:26.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -17813,6 +17885,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T23:20:40.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18009,6 +18082,7 @@
     <way visible="true" id="-86" timestamp="2016-02-03T05:52:55Z" version="1">
         <nd ref="-343"/>
         <nd ref="-307"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Ct"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -18046,6 +18120,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T23:14:41.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18067,6 +18142,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T23:14:33.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18116,6 +18192,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T23:14:02.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18178,6 +18255,7 @@
     <way visible="true" id="-79" timestamp="2016-02-03T05:52:55Z" version="1">
         <nd ref="-292"/>
         <nd ref="-293"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Cv"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -18247,6 +18325,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T23:08:51.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18304,6 +18383,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T23:07:35.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18364,6 +18444,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T23:06:25.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18427,6 +18508,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T23:05:35.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18461,6 +18543,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T23:05:26.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18499,6 +18582,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T23:04:38.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18526,6 +18610,7 @@
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2010-03-27T23:03:47.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18643,23 +18728,24 @@
         <nd ref="-140"/>
         <nd ref="-141"/>
         <nd ref="-142"/>
-        <tag k="tiger:tlid" v="201918799:201918592"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Cliff View Way"/>
-        <tag k="tiger:zip_left" v="89117"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-62"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="source:datetime" v="2007-11-27T12:47:48.000Z"/>
-        <tag k="tiger:zip_right" v="89117"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Cliff View Way"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2007-11-27T12:47:48.000Z"/>
+        <tag k="tiger:zip_left" v="89117"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Cliff View"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:tlid" v="201918799:201918592"/>
+        <tag k="hoot:id" v="-62"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-61" timestamp="2016-02-03T05:52:55Z" version="1">
         <nd ref="-131"/>
@@ -18676,6 +18762,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T23:01:51.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18685,23 +18772,24 @@
     <way visible="true" id="-60" timestamp="2016-02-03T05:52:54Z" version="1">
         <nd ref="-130"/>
         <nd ref="-121"/>
-        <tag k="tiger:tlid" v="201964744"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Autumn Heights Way"/>
-        <tag k="tiger:zip_left" v="89117"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-60"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="source:datetime" v="2007-11-27T12:40:00.000Z"/>
-        <tag k="tiger:zip_right" v="89117"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Autumn Heights Way"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2007-11-27T12:40:00.000Z"/>
+        <tag k="tiger:zip_left" v="89117"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Autumn Heights"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:tlid" v="201964744"/>
+        <tag k="hoot:id" v="-60"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-59" timestamp="2016-02-03T05:52:54Z" version="1">
         <nd ref="-123"/>
@@ -18847,6 +18935,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T22:57:00.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18891,6 +18980,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T23:28:25.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18912,6 +19002,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T23:32:26.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18933,6 +19024,7 @@
         <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2010-03-27T23:33:50.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18951,6 +19043,7 @@
         <tag k="hoot:id" v="-49"/>
         <tag k="tiger:name_type" v="Rd"/>
         <tag k="source:datetime" v="2010-03-27T21:00:30.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18971,6 +19064,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:00:39.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -18993,6 +19087,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:01:23.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19015,6 +19110,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:02:47.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19036,6 +19132,7 @@
         <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2010-03-27T21:07:55.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19057,6 +19154,7 @@
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2010-03-27T21:10:16.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19119,6 +19217,7 @@
         <tag k="tiger:name_type" v="Way"/>
         <tag k="source:datetime" v="2014-03-25T20:24:24.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19132,23 +19231,24 @@
         <nd ref="-2180"/>
         <nd ref="-1020"/>
         <nd ref="-54"/>
-        <tag k="tiger:tlid" v="201891463:201891466"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Quail Roost Way"/>
-        <tag k="tiger:zip_left" v="89117"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-42"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="source:datetime" v="2007-11-27T17:13:19.000Z"/>
-        <tag k="tiger:zip_right" v="89117"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
+        <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Quail Roost Way"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2007-11-27T17:13:19.000Z"/>
+        <tag k="tiger:zip_left" v="89117"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Quail Roost"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:tlid" v="201891463:201891466"/>
+        <tag k="hoot:id" v="-42"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-500"/>
@@ -19169,6 +19269,7 @@
         <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2010-03-27T21:15:23.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19185,6 +19286,7 @@
         <tag k="hoot:id" v="-40"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2015-06-05T19:51:21.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19205,6 +19307,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T21:17:42.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19229,6 +19332,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:20:05.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19239,23 +19343,24 @@
         <nd ref="-49"/>
         <nd ref="-696"/>
         <nd ref="-697"/>
-        <tag k="tiger:tlid" v="201890830:201890831"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Beluga Way"/>
-        <tag k="tiger:zip_left" v="89117"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-37"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="source:datetime" v="2007-11-27T17:29:37.000Z"/>
-        <tag k="tiger:zip_right" v="89117"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Beluga Way"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2007-11-27T17:29:37.000Z"/>
+        <tag k="tiger:zip_left" v="89117"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Beluga"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:tlid" v="201890830:201890831"/>
+        <tag k="hoot:id" v="-37"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-444"/>
@@ -19271,6 +19376,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:20:43.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19295,6 +19401,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:21:25.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19317,6 +19424,7 @@
         <tag k="hoot:id" v="-34"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:24:36.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19337,6 +19445,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:24:49.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19358,6 +19467,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2014-01-11T04:45:01.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19385,6 +19495,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2012-12-13T22:48:23.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19405,6 +19516,7 @@
         <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2010-03-27T21:27:54.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19432,6 +19544,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:29:08.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19452,6 +19565,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T21:29:19.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19475,6 +19589,7 @@
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2010-03-27T21:30:45.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19493,6 +19608,7 @@
         <tag k="hoot:id" v="-26"/>
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:35:19.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19513,6 +19629,7 @@
         <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2010-03-27T21:38:00.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19538,6 +19655,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T21:41:34.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19575,6 +19693,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2014-01-11T07:19:42.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19595,6 +19714,7 @@
         <tag k="tiger:name_direction_prefix" v="S"/>
         <tag k="source:datetime" v="2012-12-13T22:47:44.000Z"/>
         <tag k="tiger:zip_right" v="89147"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19614,6 +19734,7 @@
         <tag k="tiger:name_direction_prefix" v="S"/>
         <tag k="source:datetime" v="2012-12-13T22:47:52.000Z"/>
         <tag k="tiger:zip_right" v="89147"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19656,6 +19777,7 @@
         <tag k="name" v="South Grand Canyon Drive"/>
         <tag k="hoot:id" v="-19"/>
         <tag k="source:datetime" v="2015-12-23T00:44:29.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="error:circular" v="15"/>
@@ -19690,6 +19812,7 @@
         <nd ref="-879"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-18"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -19712,6 +19835,7 @@
         <nd ref="-25"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-17"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -19727,6 +19851,7 @@
         <nd ref="-23"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-16"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -19756,6 +19881,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T22:57:21.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19776,6 +19902,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T22:58:55.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19797,6 +19924,7 @@
         <tag k="hoot:id" v="-13"/>
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2010-03-27T22:59:35.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19810,44 +19938,46 @@
         <nd ref="-273"/>
         <nd ref="-274"/>
         <nd ref="-17"/>
-        <tag k="tiger:tlid" v="201890839"/>
-        <tag k="tiger:name_base_1" v="Anchor Point"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name_1" v="Anchor Point Avenue"/>
-        <tag k="name" v="Anchor Point Road"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-12"/>
-        <tag k="tiger:name_type" v="Rd"/>
-        <tag k="source:datetime" v="2010-03-27T23:08:45.000Z"/>
-        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Ave"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Anchor Point Road"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2010-03-27T23:08:45.000Z"/>
+        <tag k="tiger:name_type" v="Rd"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
+        <tag k="name_1" v="Anchor Point Avenue"/>
         <tag k="tiger:name_base" v="Anchor Point"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_base_1" v="Anchor Point"/>
+        <tag k="tiger:tlid" v="201890839"/>
+        <tag k="hoot:id" v="-12"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-233"/>
         <nd ref="-16"/>
-        <tag k="tiger:tlid" v="201891465:201891467"/>
-        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Shady Pond Way"/>
-        <tag k="tiger:zip_left" v="89117"/>
-        <tag k="tiger:separated" v="no"/>
-        <tag k="hoot:id" v="-11"/>
-        <tag k="tiger:name_type" v="Way"/>
-        <tag k="source:datetime" v="2007-11-27T13:24:12.000Z"/>
-        <tag k="tiger:zip_right" v="89117"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
+        <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Shady Pond Way"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:separated" v="no"/>
+        <tag k="source:datetime" v="2007-11-27T13:24:12.000Z"/>
+        <tag k="tiger:zip_left" v="89117"/>
+        <tag k="tiger:name_type" v="Way"/>
+        <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Shady Pond"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:tlid" v="201891465:201891467"/>
+        <tag k="hoot:id" v="-11"/>
+        <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
+        <tag k="highway" v="residential"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-304"/>
@@ -19868,6 +19998,7 @@
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2010-03-27T23:13:00.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19888,6 +20019,7 @@
         <tag k="tiger:name_type" v="Ct"/>
         <tag k="source:datetime" v="2010-03-27T23:13:08.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19914,6 +20046,7 @@
         <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2010-03-27T23:14:51.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19946,6 +20079,7 @@
         <tag k="landuse" v="residential"/>
         <tag k="hoot:id" v="-7"/>
         <tag k="source:datetime" v="2014-03-25T20:24:34.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -19963,6 +20097,7 @@
         <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2010-03-27T23:16:18.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>
@@ -19973,6 +20108,7 @@
         <nd ref="-4"/>
         <nd ref="-355"/>
         <nd ref="-356"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:name_type_1" v="Ln"/>
         <tag k="tiger:zip_right" v="89117"/>
         <tag k="hoot:status" v="1"/>
@@ -19998,6 +20134,7 @@
         <nd ref="-397"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-4"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -20007,6 +20144,7 @@
         <nd ref="-3"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-3"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -20045,6 +20183,7 @@
         <tag k="tiger:name_type" v="Cir"/>
         <tag k="source:datetime" v="2010-03-27T23:25:27.000Z"/>
         <tag k="tiger:zip_right" v="89117"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Clark, NV"/>
         <tag k="tiger:reviewed" v="no"/>

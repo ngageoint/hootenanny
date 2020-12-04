@@ -1,0 +1,536 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-813668' action='modify' visible='true' lat='11.99167000027' lon='8.53681299992' />
+  <node id='-813669' action='modify' visible='true' lat='11.99171649972' lon='8.53697850036' />
+  <node id='-813670' action='modify' visible='true' lat='11.99193149974' lon='8.53773300008' />
+  <node id='-813671' action='modify' visible='true' lat='11.99197349988' lon='8.53787999966' />
+  <node id='-813672' action='modify' visible='true' lat='11.99224449978' lon='8.53881599966' />
+  <node id='-813673' action='modify' visible='true' lat='11.99331050038' lon='8.53849950035' />
+  <node id='-813674' action='modify' visible='true' lat='11.99282799971' lon='8.53864749998' />
+  <node id='-813675' action='modify' visible='true' lat='11.99226399978' lon='8.53888450012' />
+  <node id='-813676' action='modify' visible='true' lat='11.99243300038' lon='8.53945949966' />
+  <node id='-813677' action='modify' visible='true' lat='11.99342350019' lon='8.5388949997' />
+  <node id='-813678' action='modify' visible='true' lat='11.99346350024' lon='8.53903900005' />
+  <node id='-813679' action='modify' visible='true' lat='11.99346400026' lon='8.5391030003' />
+  <node id='-813680' action='modify' visible='true' lat='11.99344350022' lon='8.53914949975' />
+  <node id='-813681' action='modify' visible='true' lat='11.9933954998' lon='8.53918899977' />
+  <node id='-813682' action='modify' visible='true' lat='11.99331000036' lon='8.53921450005' />
+  <node id='-813683' action='modify' visible='true' lat='11.99270600038' lon='8.53938649989' />
+  <node id='-813684' action='modify' visible='true' lat='11.99312750003' lon='8.5378570004' />
+  <node id='-813685' action='modify' visible='true' lat='11.99262650031' lon='8.53801000026' />
+  <node id='-813686' action='modify' visible='true' lat='11.99292599974' lon='8.53716950017' />
+  <node id='-813687' action='modify' visible='true' lat='11.99237300031' lon='8.53734300008' />
+  <node id='-813688' action='modify' visible='true' lat='11.99281600006' lon='8.53679550001' />
+  <node id='-813689' action='modify' visible='true' lat='11.99273700001' lon='8.53654200001' />
+  <node id='-813690' action='modify' visible='true' lat='11.99222299969' lon='8.53667349978' />
+  <node id='-813691' action='modify' visible='true' lat='11.99254950036' lon='8.53589099967' />
+  <node id='-813692' action='modify' visible='true' lat='11.99220399971' lon='8.53598550043' />
+  <node id='-813693' action='modify' visible='true' lat='11.9920129999' lon='8.53601650006' />
+  <node id='-813694' action='modify' visible='true' lat='11.99244099985' lon='8.53552299979' />
+  <node id='-813695' action='modify' visible='true' lat='11.99235899967' lon='8.53525049981' />
+  <node id='-813696' action='modify' visible='true' lat='11.99193099972' lon='8.53536749981' />
+  <node id='-813697' action='modify' visible='true' lat='11.99322299994' lon='8.53645749971' />
+  <node id='-813698' action='modify' visible='true' lat='11.99311450033' lon='8.53600400038' />
+  <node id='-813699' action='modify' visible='true' lat='11.9932804999' lon='8.53666999962' />
+  <node id='-813700' action='modify' visible='true' lat='11.99370399964' lon='8.53834949973' />
+  <node id='-813701' action='modify' visible='true' lat='11.9936555001' lon='8.53812650024' />
+  <node id='-813702' action='modify' visible='true' lat='11.99356100024' lon='8.53776000042' />
+  <node id='-813703' action='modify' visible='true' lat='11.99342250015' lon='8.53716750008' />
+  <node id='-813704' action='modify' visible='true' lat='11.99383000005' lon='8.53624950001' />
+  <node id='-813705' action='modify' visible='true' lat='11.9941169998' lon='8.5368514999' />
+  <node id='-813706' action='modify' visible='true' lat='11.99429099973' lon='8.53723200036' />
+  <node id='-813707' action='modify' visible='true' lat='11.99431800008' lon='8.53730850029' />
+  <node id='-813708' action='modify' visible='true' lat='11.99433449994' lon='8.53738450019' />
+  <node id='-813709' action='modify' visible='true' lat='11.99433199982' lon='8.53744850045' />
+  <node id='-813710' action='modify' visible='true' lat='11.9943119998' lon='8.53752400033' />
+  <node id='-813711' action='modify' visible='true' lat='11.99427399985' lon='8.53760200033' />
+  <node id='-813712' action='modify' visible='true' lat='11.99387100015' lon='8.53817449975' />
+  <node id='-813713' action='modify' visible='true' lat='11.99375650026' lon='8.53830849964' />
+  <node id='-813714' action='modify' visible='true' lat='11.99374499973' lon='8.53606949981' />
+  <node id='-813715' action='modify' visible='true' lat='11.99359299992' lon='8.53840549961' />
+  <node id='-813716' action='modify' visible='true' lat='11.99346800045' lon='8.53845300001' />
+  <node id='-813717' action='modify' visible='true' lat='11.99130899981' lon='8.53556900011' />
+  <node id='-813718' action='modify' visible='true' lat='11.99150299976' lon='8.53623800038' />
+  <node id='-813719' action='modify' visible='true' lat='11.99157450036' lon='8.53647549964' />
+  <node id='-813720' action='modify' visible='true' lat='11.9913109999' lon='8.53652500013' />
+  <node id='-813721' action='modify' visible='true' lat='11.9912069996' lon='8.53654450013' />
+  <node id='-813722' action='modify' visible='true' lat='11.99115800004' lon='8.53656900036' />
+  <node id='-813723' action='modify' visible='true' lat='11.99091100034' lon='8.53680050024' />
+  <node id='-813724' action='modify' visible='true' lat='11.99073100014' lon='8.53696699983' />
+  <node id='-813725' action='modify' visible='true' lat='11.99055450009' lon='8.53693700024' />
+  <node id='-813726' action='modify' visible='true' lat='11.99050150034' lon='8.53719250033' />
+  <node id='-813727' action='modify' visible='true' lat='11.99053149993' lon='8.53733949992' />
+  <node id='-813728' action='modify' visible='true' lat='11.99078299984' lon='8.53740800038' />
+  <way id='-232123' action='modify' visible='true'>
+    <nd ref='-813668' />
+    <nd ref='-813669' />
+    <nd ref='-813670' />
+    <nd ref='-813671' />
+    <nd ref='-813672' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='primary' />
+    <tag k='highway:through_route' v='yes' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:42.393Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{40bae019-51ca-45e9-9d1a-00b12dc653f3}' />
+    <tag k='width:minimum_traveled_way' v='5' />
+  </way>
+  <way id='-232124' action='modify' visible='true'>
+    <nd ref='-813673' />
+    <nd ref='-813674' />
+    <nd ref='-813672' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.997Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{5259144b-dede-4902-b2ce-445a7c55d0e5}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232125' action='modify' visible='true'>
+    <nd ref='-813672' />
+    <nd ref='-813675' />
+    <nd ref='-813676' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='primary' />
+    <tag k='highway:through_route' v='yes' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:41.652Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{fca89405-501f-4486-a131-33eea8736054}' />
+    <tag k='width:minimum_traveled_way' v='5' />
+  </way>
+  <way id='-232126' action='modify' visible='true'>
+    <nd ref='-813673' />
+    <nd ref='-813677' />
+    <nd ref='-813678' />
+    <nd ref='-813679' />
+    <nd ref='-813680' />
+    <nd ref='-813681' />
+    <nd ref='-813682' />
+    <nd ref='-813683' />
+    <nd ref='-813676' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.998Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{3fe0ad2c-de75-494b-a20d-7fd7f0fda8d7}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232127' action='modify' visible='true'>
+    <nd ref='-813673' />
+    <nd ref='-813684' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.997Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{51d88bd8-0042-4b50-9f69-ee887eef413f}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232128' action='modify' visible='true'>
+    <nd ref='-813684' />
+    <nd ref='-813685' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:40.016Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{5f7c8d88-8186-438c-938e-3174ddbf3b5a}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232129' action='modify' visible='true'>
+    <nd ref='-813684' />
+    <nd ref='-813686' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.971Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{19506463-50b4-44cc-acf1-115094d127ff}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232130' action='modify' visible='true'>
+    <nd ref='-813686' />
+    <nd ref='-813687' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.970Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{30a94653-1147-4c39-8aed-70a014a26a9f}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232131' action='modify' visible='true'>
+    <nd ref='-813686' />
+    <nd ref='-813688' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:40.037Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{8817e103-21ea-49f6-856d-a04af7768d5a}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232132' action='modify' visible='true'>
+    <nd ref='-813688' />
+    <nd ref='-813689' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.971Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{523be283-56eb-4483-9b55-ef20b45762fd}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232133' action='modify' visible='true'>
+    <nd ref='-813689' />
+    <nd ref='-813690' />
+    <nd ref='-813668' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.971Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{20576c7c-15a9-4efb-ba9e-176cf2f5ff46}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232134' action='modify' visible='true'>
+    <nd ref='-813689' />
+    <nd ref='-813691' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:40.004Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{7b37afe8-7fcd-4afd-906e-70bef72ef5d7}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232135' action='modify' visible='true'>
+    <nd ref='-813691' />
+    <nd ref='-813692' />
+    <nd ref='-813693' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:40.038Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{f3ef3ce3-e005-4523-bf11-0caeecf481ec}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232136' action='modify' visible='true'>
+    <nd ref='-813691' />
+    <nd ref='-813694' />
+    <nd ref='-813695' />
+    <nd ref='-813696' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:40.063Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{1c975a4f-ecfa-4aad-b05b-eb5ca0c1343d}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232137' action='modify' visible='true'>
+    <nd ref='-813697' />
+    <nd ref='-813698' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:40.017Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{4b2dfd22-32f4-40f7-8462-1e2a81f80a42}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232138' action='modify' visible='true'>
+    <nd ref='-813699' />
+    <nd ref='-813688' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.921Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{2bb77606-eb59-4810-bc1c-f8b447d23cb5}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232139' action='modify' visible='true'>
+    <nd ref='-813700' />
+    <nd ref='-813701' />
+    <nd ref='-813702' />
+    <nd ref='-813703' />
+    <nd ref='-813699' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.998Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{2b1885ce-fc06-4f48-81d6-6f9332015dc4}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232140' action='modify' visible='true'>
+    <nd ref='-813704' />
+    <nd ref='-813705' />
+    <nd ref='-813706' />
+    <nd ref='-813707' />
+    <nd ref='-813708' />
+    <nd ref='-813709' />
+    <nd ref='-813710' />
+    <nd ref='-813711' />
+    <nd ref='-813712' />
+    <nd ref='-813713' />
+    <nd ref='-813700' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.999Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{55036d3d-d06a-4c1d-bfd3-775f9914257b}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232141' action='modify' visible='true'>
+    <nd ref='-813697' />
+    <nd ref='-813704' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:40.010Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{d96a14eb-9a39-4ab4-b1a1-0745d699e430}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232142' action='modify' visible='true'>
+    <nd ref='-813714' />
+    <nd ref='-813704' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.998Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{87e62276-a639-4c1d-856d-c50fa65d6d79}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232143' action='modify' visible='true'>
+    <nd ref='-813700' />
+    <nd ref='-813715' />
+    <nd ref='-813716' />
+    <nd ref='-813673' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.998Z' />
+    <tag k='surface' v='paved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{65a0b74d-5c90-410c-94d3-2759fa2a87b5}' />
+    <tag k='width:minimum_traveled_way' v='6.5' />
+  </way>
+  <way id='-232144' action='modify' visible='true'>
+    <nd ref='-813717' />
+    <nd ref='-813718' />
+    <nd ref='-813719' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='primary' />
+    <tag k='highway:through_route' v='yes' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:42.191Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{d2dc5b7f-5af3-4fe9-858e-f7f3b93b2eab}' />
+    <tag k='width:minimum_traveled_way' v='5' />
+  </way>
+  <way id='-232145' action='modify' visible='true'>
+    <nd ref='-813719' />
+    <nd ref='-813720' />
+    <nd ref='-813721' />
+    <nd ref='-813722' />
+    <nd ref='-813723' />
+    <nd ref='-813724' />
+    <nd ref='-813725' />
+    <nd ref='-813726' />
+    <nd ref='-813727' />
+    <nd ref='-813728' />
+    <nd ref='-813723' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='1' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:39.306Z' />
+    <tag k='surface' v='unpaved' />
+    <tag k='transport:type' v='road' />
+    <tag k='uuid' v='{c1ed92f0-f604-4d67-bd5c-188d44a2619b}' />
+    <tag k='width:minimum_traveled_way' v='2.5' />
+  </way>
+  <way id='-232146' action='modify' visible='true'>
+    <nd ref='-813719' />
+    <nd ref='-813668' />
+    <tag k='condition' v='functional' />
+    <tag k='divider:width' v='0' />
+    <tag k='highway' v='primary' />
+    <tag k='highway:through_route' v='yes' />
+    <tag k='lanes' v='2' />
+    <tag k='location' v='surface' />
+    <tag k='median' v='no' />
+    <tag k='seasonal' v='no' />
+    <tag k='source' v='ufd:road_l' />
+    <tag k='source:accuracy:horizontal:category' v='accurate' />
+    <tag k='source:ingest:datetime' v='2020-09-24T12:46:42.222Z' />
+    <tag k='surface' v='paved' />
+    <tag k='uuid' v='{38216855-ddca-4b08-bad0-66a64ce4180f}' />
+    <tag k='width:minimum_traveled_way' v='5' />
+  </way>
+</osm>

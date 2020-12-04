@@ -222,6 +222,17 @@ public:
 
   /**
    * Identifies features snapped with UnconnectedWaySnapper
+   *
+   * values in use:
+   *
+   * to_way_node_source - source way node or way containing the source way node snapped to an
+   *                      existing way node on another target way
+   * to_way_node_target - existing target way node or way containing the existing target way node
+   *                      that a source feature was snapped to
+   * to_way_source      - source way node or way containing the source way node snapped to an
+   *                      newly added way node on another target way
+   * to_way_target      - newly added target way node or way containing the newly added target way
+   *                      node that a source feature was snapped to
    */
   inline static const QString HootSnapped()             { return "hoot:snapped"; }
 
