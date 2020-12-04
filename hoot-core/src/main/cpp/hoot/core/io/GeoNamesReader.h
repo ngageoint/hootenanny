@@ -79,7 +79,7 @@ private:
   bool _useDataSourceIds;
 
   QStringList _columns, _mil_columns;
-  QList<int> _convertColumns, _mil_convertColumns;
+//  QList<int> _convertColumns, _mil_convertColumns;
   QFile _fp;
   Status _status;
   QHash<QString, QString> _strings;
