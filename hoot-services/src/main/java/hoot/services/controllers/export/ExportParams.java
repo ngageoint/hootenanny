@@ -52,7 +52,7 @@ public class ExportParams {
     @JsonProperty("inputtype")
     private String inputType;
 
-    @JsonProperty("TASK_BBOX")
+    @JsonProperty("bounds")
     private String bounds;
 
     @JsonProperty("USER_ID")

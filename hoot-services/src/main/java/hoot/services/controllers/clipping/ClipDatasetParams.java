@@ -37,7 +37,7 @@ public class ClipDatasetParams {
     @JsonProperty("OUTPUT_NAME")
     private String outputName;
 
-    @JsonProperty("BBOX")
+    @JsonProperty("bounds")
     private String bounds;
 
     @JsonProperty("FOLDER_ID")

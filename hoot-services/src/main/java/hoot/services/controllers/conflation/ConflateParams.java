@@ -62,7 +62,7 @@ public class ConflateParams {
     @JsonProperty("COLLECT_STATS")
     private Boolean collectStats;
 
-    @JsonProperty("TASK_BBOX")
+    @JsonProperty("bounds")
     private String bounds;
 
     @JsonProperty("CONFLATION_TYPE")
