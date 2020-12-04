@@ -35,10 +35,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -112,25 +117,6 @@ class PullOverpassCommand implements InternalCommand {
     /**
      * Returns the overpass query, with the expected output format set to json
      * @param bbox
-     * @return
-     */
-    static String getOverpassUrl(String bbox) {
-        return getOverpassUrl(bbox, "json");
-    }
-
-    /**
-     * Returns the overpass query, with the expected output format set to json
-     * @param bbox
-     * @param outputFormat if set to 'xml' then the output of the returned query, when run, will be xml. json is the default if non xml is specified
-     * @return
-     */
-    static String getOverpassUrl(String bbox, String outputFormat) {
-        return getOverpassUrl(PUBLIC_OVERPASS_URL, bbox, outputFormat, null);
-    }
-
-    /**
-     * Returns the overpass query, with the expected output format set to json
-     * @param bbox
      * @param outputFormat if set to 'xml' then the output of the returned query, when run, will be xml. json is the default if non xml is specified
      * @param query optional custom overpass query
      *
@@ -148,7 +134,14 @@ class PullOverpassCommand implements InternalCommand {
 
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
         if (bbox != null) {
-            overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+            // polygon contains coordinates separated by ';'
+            if (bbox.contains(";")) {
+                // We need to reverse the coordinates from lon,lat to lat,long for overpass
+                String polyBounds = PullOverpassCommand.boundsToOverpassPolyString(bbox);
+                overpassQuery = overpassQuery.replace("{{bbox}}", "poly:\"" + polyBounds + "\"");
+            } else {
+                overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+            }
         }
 
         if (outputFormat.equals("xml") && overpassQuery.contains("out:json")) {
@@ -167,7 +160,18 @@ class PullOverpassCommand implements InternalCommand {
     static InputStream getOverpassInputStream(String url) throws IOException {
         InputStream inputStream;
         if ("https://overpass-api.de/api/interpreter".equalsIgnoreCase(replaceSensitiveData(PUBLIC_OVERPASS_URL))) {
-            inputStream = new URL(url).openStream();
+            String[] splitUrl = url.split("(?=data)"); // prevents removal of 'data' text
+            URL urlReq = new URL(splitUrl[0]);
+            HttpURLConnection connection = (HttpURLConnection) urlReq.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+
+            // Just a safety check but splitUrl[1] should be the query data
+            if (splitUrl.length == 2) {
+                connection.getOutputStream().write(splitUrl[1].getBytes(StandardCharsets.UTF_8));
+            }
+
+            inputStream = connection.getInputStream();
         } else { // add no cert checker if using a public mirror
             inputStream = GrailResource.getUrlInputStreamWithNullHostnameVerifier(url);
         }
@@ -185,5 +189,13 @@ class PullOverpassCommand implements InternalCommand {
         }
 
         return overpassQuery;
+    }
+
+    // Overpass poly requires the coordinates to be in lat,long instead of the long,lat that we use everywhere else
+    static String boundsToOverpassPolyString(String bounds) {
+        // We need to reverse the coordinates from lon,lat to lat,long for overpass
+        List<String> lonLatCoords = Arrays.asList(bounds.split("([,;])"));
+        Collections.reverse(lonLatCoords);
+        return lonLatCoords.toString().replaceAll("[\\[\\],]", ""); // removes brackets and commas
     }
 }
