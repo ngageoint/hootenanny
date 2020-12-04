@@ -62,6 +62,8 @@
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 // standard
 #include <algorithm>
@@ -236,32 +238,48 @@ void DiffConflator::apply(OsmMapPtr& map)
     _removeMatches(Status::Unknown1);
     MemoryUsageChecker::getInstance().check();
 
-    // Now remove input1 elements
+    // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed
+    // to properly generate the changeset and keep sec ways snapped in the final output.
+
     LOG_INFO("\tRemoving all reference elements...");
-    const int mapSizeBefore = _pMap->size();
-    ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
+
+    ElementCriterionPtr removeCrit(new TagKeyCriterion(MetadataTags::Ref1()));
+//    ElementCriterionPtr refCrit(new TagKeyCriterion(MetadataTags::Ref1()));
+//    ElementCriterionPtr notSnappedCrit(
+//      NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
+//    ElementCriterionPtr removeCrit(ChainCriterionPtr(new ChainCriterion(refCrit, notSnappedCrit)));
+
     RemoveElementsVisitor removeRef1Visitor;
     removeRef1Visitor.setRecursive(true);
-    removeRef1Visitor.addCriterion(pTagKeyCrit);
+    removeRef1Visitor.addCriterion(removeCrit);
+    const int mapSizeBefore = _pMap->size();
     _pMap->visitRw(removeRef1Visitor);
     MemoryUsageChecker::getInstance().check();
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
+
     LOG_DEBUG(
       "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
       " reference elements...");
   }
 
-  QStringList tagKeysToRemove;
-  tagKeysToRemove.append(MetadataTags::Ref1());
-  tagKeysToRemove.append(MetadataTags::Ref2());
-  RemoveTagsVisitor tagRemover(tagKeysToRemove);
-  map->visitRw(tagRemover);
+  if (!ConfigOptions().getWriterIncludeDebugTags())
+  {
+    QStringList tagKeysToRemove;
+    tagKeysToRemove.append(MetadataTags::Ref1());
+    tagKeysToRemove.append(MetadataTags::Ref2());
+    tagKeysToRemove.append(MetadataTags::HootSnapped());
+    RemoveTagsVisitor tagRemover(tagKeysToRemove);
+    map->visitRw(tagRemover);
+  }
 }
 
 long DiffConflator::_snapSecondaryRoadsBackToRef()
 {
   UnconnectedWaySnapper roadSnapper;
   roadSnapper.setConfiguration(conf());
+  // The ref snapped features must be marked to prevent their removal before changeset generation.
+//  roadSnapper.setMarkSnappedNodes(true);
+//  roadSnapper.setMarkSnappedWays(true);
   LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
@@ -281,6 +299,9 @@ void DiffConflator::_removeMatches(const Status& status)
     _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
     _intraDatasetElementIdsPopulated = true;
   }
+
+//  ElementCriterionPtr notSnappedCrit(
+//    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
 
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
@@ -310,7 +331,10 @@ void DiffConflator::_removeMatches(const Status& status)
           e2 = _pMap->getElement(pit->second);
         }
 
-        if (e1 && e1->getStatus() == status &&
+        if (e1 &&
+            e1->getStatus() == status &&
+            // TODO: explain
+            //(status != Status::Unknown1 || notSnappedCrit->isSatisfied(e1)) &&
             // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
             // these to be removed from the diff output.
             !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
@@ -319,7 +343,10 @@ void DiffConflator::_removeMatches(const Status& status)
           LOG_TRACE("Removing element involved in match: " << pit->first << "...");
           RecursiveElementRemover(pit->first).apply(_pMap);
         }
-        if (e2 && e2->getStatus() == status &&
+        if (e2 &&
+            e2->getStatus() == status &&
+            // see comment above
+            //(status != Status::Unknown1 || notSnappedCrit->isSatisfied(e2)) &&
             !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
              _intraDatasetMatchOnlyElementIds.contains(pit->second)))
         {

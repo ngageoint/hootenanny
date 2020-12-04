@@ -303,7 +303,7 @@ private:
    */
   bool _snapClosestEndpointToWay(const WayPtr& disconnected, const WayPtr& connectTo);
 
-  void _markSnappedWay(const long idOfNodeBeingSnapped);
+  void _markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode);
   void _reviewSnappedWay(const long idOfNodeBeingSnapped);
 
   /*

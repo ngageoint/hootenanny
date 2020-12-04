@@ -752,11 +752,11 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         // Add this optional custom tag for tracking purposes.
         if (_markSnappedNodes)
         {
-          wayNodeToSnapTo->getTags().set(MetadataTags::HootSnapped(), "snapped_to_way_node");
+          wayNodeToSnapTo->getTags().set(MetadataTags::HootSnapped(), "to_way_node_source");
         }
         if (_markSnappedWays)
         {
-          _markSnappedWay(nodeToSnap->getId());
+          _markSnappedWay(nodeToSnap->getId(), true);
         }
         if (_reviewSnappedWays)
         {
@@ -770,6 +770,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         LOG_TRACE(waysContainingWayNodeToSnapTo.size());
         assert(waysContainingWayNodeToSnapTo.size() > 0);
         _snappedToWay = _map->getWay(*waysContainingWayNodeToSnapTo.begin());
+        _snappedToWay->getTags().set(MetadataTags::HootSnapped(), "to_way_node_target");
         LOG_VART(_snappedToWay);
 
         // Skip the actual snapping if we're only marking ways that could be snapped.
@@ -808,11 +809,12 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
   return false;
 }
 
-void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped)
+void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode)
 {
   std::set<long> owningWayIds =
     WayUtils::getContainingWayIdsByNodeId(idOfNodeBeingSnapped, _map);
   const long owningWayId = *owningWayIds.begin();
+  const QString tagVal = toWayNode ? "to_way_node_source" : "to_way_source";
   _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), "snapped_way");
 }
 
@@ -1000,11 +1002,11 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
       // Add this optional custom tag for tracking purposes.
       if (_markSnappedNodes)
       {
-        nodeToSnap->getTags().set(MetadataTags::HootSnapped(), "snapped_to_way");
+        nodeToSnap->getTags().set(MetadataTags::HootSnapped(), "to_way_source");
       }
       if (_markSnappedWays)
       {
-        _markSnappedWay(nodeToSnap->getId());
+        _markSnappedWay(nodeToSnap->getId(), false);
       }
       if (_reviewSnappedWays)
       {
@@ -1026,6 +1028,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
         LOG_VART(wayToSnapTo->getNodeIds());
       }
       _snappedToWay = wayToSnapTo;
+      _snappedToWay->getTags().set(MetadataTags::HootSnapped(), "to_way_target");
       LOG_VART(_snappedToWay);
 
       return true;
