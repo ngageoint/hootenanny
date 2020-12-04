@@ -1116,6 +1116,26 @@ tds70 = {
     if (tags['error:circular']) delete tags['error:circular'];
     if (tags['hoot:status']) delete tags['hoot:status'];
 
+    // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
+    // We need to unpack this before we can do anything.
+    // Adding this because we might not be reading from OSM
+    if (tags.other_tags)
+    {
+      var tList = tags.other_tags.split('","');
+
+      delete tags.other_tags;
+
+      for (var val in tList)
+      {
+        vList = tList[val].split('"=>"');
+
+        tags[vList[0].replace('"','')] = vList[1].replace('"','');
+
+        // Debug
+        // print('val: ' + tList[val] + '  vList[0] = ' + vList[0] + '  vList[1] = ' + vList[1]);
+      }
+    }
+
     // Initial cleanup
     for (var i in tags)
     {
@@ -2623,13 +2643,6 @@ tds70 = {
 
         returnData.push({attrs: extraFeature, tableName: extraName});
       } // End notUsedTags
-
-    // If we have unused tags, add them to the memo field.
-    if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
-    {
-      var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-      attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
-    }
 
       // Look for Review tags and push them to a review layer if found
       if (tags['hoot:review:needs'] == 'yes')

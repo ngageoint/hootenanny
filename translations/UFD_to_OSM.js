@@ -3628,7 +3628,6 @@ ufd = {
         switch (tags['transport:type'])
         {
           case 'road':
-          default:  // Guessing it is probably a road
             tags.highway = 'road';
             break;
 
@@ -3644,6 +3643,9 @@ ufd = {
           case 'pedestrian':
             tags.highway = 'pedestrian';
             break;
+
+          default:  // Guessing it is probably a road
+            tags.highway = 'road';
         }
         break;
 
@@ -3832,6 +3834,12 @@ function translateToOsm(attrs, layerName, geometryType)
   if (ufd.configIn.OgrDebugDumptags == 'true')
   {
     translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+
+    if (tags.name == ' ')
+    {
+      print('Name = space');
+    }
+
     translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
     print('');
   }
