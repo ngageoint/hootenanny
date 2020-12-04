@@ -1,9 +1,9 @@
 20:16:22.637 INFO  ...hoot/core/io/DataConverter.cpp( 184) Converting test-files/cmd/quick/ConvertGeoNames.geonames to /dev/stdout...
 20:16:22.640 INFO  ...ot/core/io/ElementStreamer.cpp( 132) Unable to stream I/O due to: hoot::TranslationOp
 20:16:22.642 INFO  ...ore/io/OsmMapReaderFactory.cpp( 168) Loading map from test-files/cmd/quick/ConvertGeoNames.geonames...
-20:16:22.644 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/GeoNames.js
-20:16:22.657 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/GeoNames.js
-20:16:22.665 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/GeoNames.js
+20:16:22.644 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/GeoNames_to_OSM.js
+20:16:22.657 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/GeoNames_to_OSM.js
+20:16:22.665 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/GeoNames_to_OSM.js
 20:16:22.674 INFO  ...ore/io/OsmMapWriterFactory.cpp( 129) Writing map to /dev/stdout...
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">

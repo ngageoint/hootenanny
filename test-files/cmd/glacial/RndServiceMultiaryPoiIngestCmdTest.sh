@@ -27,7 +27,7 @@ FINAL_OUTPUT=$OUTPUT_DIR/allCountries-geonames-output.osm
 CHANGESET_OUTPUT=$OUTPUT_DIR/allCountries-geonames-changeset.spark.1
 CHANGESET_ADD_OUTPUT=$OUTPUT_DIR/allCountries-geonames-changeset-add.spark.1
 CHANGESET_DELETE_OUTPUT=$OUTPUT_DIR/allCountries-geonames-changeset-delete.spark.1
-TRANSLATION_SCRIPT=translations/GeoNames.js
+TRANSLATION_SCRIPT=translations/GeoNames_to_OSM
 
 echo ""
 echo "MULTIARY INGEST - DELETING REFERENCE LAYER..."

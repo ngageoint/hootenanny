@@ -162,7 +162,7 @@ against the Levenshtein distance algorithm for POI name comparisons, four
 countries were selected from the http://download.geonames.org/export/dump/[Geonames]
 dataset.  The four countries used were United States, Argentina, Afghanistan,
 and Russia.  Each test file was first converted to OSM using the +hoot convert+
-command and the +$HOOT_HOME/translations/GeoNames.js+ translation script.  The
+command and the +$HOOT_HOME/translations/GeoNames_to_OSM.js+ translation script.  The
 resulting OSM file was then loaded into a +hoot::OsmMap+ object.  Any nodes with
 only the +name+ tag were ignored and then those with the +alt_name+ tag had
 their alternate names compared one-by-one against the +name+ tag using both

@@ -20,7 +20,7 @@ multiary-poi-ingest (newInput) (translationScript) (referenceOutput) (changesetO
 ==== Examples
 
 --------------------------------------
-hoot multiary-poi-ingest newData.geonames translations/GeoNames.js hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1
+hoot multiary-poi-ingest newData.geonames translations/GeoNames_to_OSM.js hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1
 
 hoot multiary-poi-ingest planet.osm.pbf translations/OSM_Ingest.js hootapidb://hoot:hoottest@localhost:5432/hoot/ReferenceLayer changeset.spark.1
 --------------------------------------

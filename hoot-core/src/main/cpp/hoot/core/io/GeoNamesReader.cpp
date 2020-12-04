@@ -48,6 +48,7 @@ _maxSaveMemoryStrings(ConfigOptions().getGeonamesReaderStringCacheSize()),
 _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
 _useDataSourceIds(false)
 {
+  // Geonames.org column names
   _columns << "geonameid";
   _columns << "name";
   _columns << "asciiname";
@@ -68,7 +69,50 @@ _useDataSourceIds(false)
   _columns << "timezone";
   _columns << "modification_date";
 
-  _convertColumns << 1 << 3 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 18;
+  // Commenting this out for a while.  I'm not sure what it was supposed to do
+//  _convertColumns << 1 << 3 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 18;
+
+  // Geonames.nga.mil column names
+  // https://geonames.nga.mil/gns/html/gis_countryfiles.html
+  _mil_columns << "region_font_code"; // RC
+  _mil_columns << "ufi";
+  _mil_columns << "uni";
+  _mil_columns << "latitude";
+  _mil_columns << "longitude";
+  _mil_columns << "dms_latitude"; // DMS_LAT
+  _mil_columns << "dms_longitude"; // DMS_LONG
+  _mil_columns << "mgrs";
+  _mil_columns << "jog";
+  _mil_columns << "feature_class"; // FC
+  _mil_columns << "feature_code"; // DSG
+  _mil_columns << "populated_place_code"; // PC
+  _mil_columns << "primary_geopolitical_code"; // CC1
+  _mil_columns << "admin1_code"; // ADM1
+  _mil_columns << "population"; // POP - not populated
+  _mil_columns << "elevation"; // ELEV - not populated
+  _mil_columns << "admin2_code"; // CC2
+  _mil_columns << "name_type"; // NT
+  _mil_columns << "language_code"; // LC
+  _mil_columns << "short_name"; // SHORT_FORM
+  _mil_columns << "generic_name"; // GENERIC
+  _mil_columns << "sort_name_reading_order"; // SORT_NAME_RO
+  _mil_columns << "full_name_reading_order"; // FULL_NAME_RO
+  _mil_columns << "full_name_reading_order_no_diacritics"; // FULL_NAME_ND_RO
+  _mil_columns << "sort_name_reversed_generic"; // SORT_NAME_RG
+  _mil_columns << "full_name_reversed_generic"; // FULL_NAME_RG
+  _mil_columns << "full_name_reversed_generic_no_diacritics"; // FULL_NAME_ND_RO
+  _mil_columns << "note"; // NOTE
+  _mil_columns << "modification_date"; // MODIFY_DATE
+  _mil_columns << "display_scale"; // DISPLAY
+  _mil_columns << "name_rank"; // NAME_RANK
+  _mil_columns << "name_link"; // NAME_LINK
+  _mil_columns << "transliteration_code"; // TRANSL_CODE
+  _mil_columns << "name_modification_date"; // NM_MODIFY_DATE
+  _mil_columns << "effective_date"; // F_EFCTV_DDT
+  _mil_columns << "termination_date"; // F_TERM_DT
+
+//  _mil_convertColumns << 1 << 3 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 18;
+
 }
 
 void GeoNamesReader::close()
@@ -110,6 +154,27 @@ void GeoNamesReader::open(const QString& url)
   {
     throw HootException("Error opening file for reading: " + url);
   }
+
+  // Now figure out what type of Geonames file we have
+  QString line = QString::fromUtf8(_fp.readLine().constData());
+  QStringList fields;
+  fields.append(line.split('\t'));
+
+  if (_mil_columns.size() == fields.size())
+  {
+    _GEONAMESID = 1;  // UFI Field
+    _LATITUDE = 3;
+    _LONGITUDE = 4;
+
+    _columns = _mil_columns;
+//    _convertColumns = _mil_convertColumns;
+  }
+  else
+  {
+    // Reset the text file since we do not have a header line with Geonames.Org
+    _fp.seek(0);
+  }
+
 }
 
 ElementPtr GeoNamesReader::readNextElement()

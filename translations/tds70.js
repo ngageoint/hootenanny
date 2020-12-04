@@ -2293,6 +2293,9 @@ tds70 = {
       tds70.rules.one2one.push.apply(tds70.rules.one2one,tds70.rules.one2oneIn);
 
       tds70.lookup = translate.createLookup(tds70.rules.one2one);
+
+      // Debug
+      // translate.dumpOne2OneLookup(tds70.lookup);
     }
 
     // Untangle TDS attributes & OSM tags.

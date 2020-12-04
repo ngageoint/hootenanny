@@ -148,7 +148,7 @@ public:
     {
       DataConverter converter;
       // any file with a supported translation file that's known to exist
-      converter.setTranslation("translations/GeoNames.js");
+      converter.setTranslation("translations/GeoNames_to_OSM.js");
       QStringList cols;
       cols.append("Test1");
       cols.append("Test2");
