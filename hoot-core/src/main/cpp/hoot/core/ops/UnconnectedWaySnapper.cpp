@@ -721,7 +721,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
                   wayToSnapTags, containingWay->getTags(), _minTypeMatchScore))
             {
               LOG_TRACE(
-                "Explicit type mismatch between containing way " << containingWay->getElementId() <<
+                "Explicit type mismatch between containing way: " << containingWay->getElementId() <<
                 " with type: " << schema.getFirstType(containingWay->getTags(), true) <<
                 " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
                 " for minimum match score: " << _minTypeMatchScore << ". Skipping snap.");
@@ -729,7 +729,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
             else
             {
               LOG_TRACE(
-                "Type match between containing way " << containingWay->getElementId() <<
+                "Type match between containing way: " << containingWay->getElementId() <<
                 " with type: " << schema.getFirstType(containingWay->getTags(), true) <<
                 " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
                 " for minimum match score: " << _minTypeMatchScore << ". Proceeding with snap.");
@@ -743,6 +743,13 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
           {
             continue;
           }
+        }
+        else
+        {
+          LOG_TRACE(
+            "Skipping type matching between ways containin way nodes: " <<
+            (*wayNodesToSnapToItr).getId() << " and " << nodeToSnap->getId() <<
+            ", since no minimum type score set...");
         }
 
         // Snap the input way node to the nearest way node neighbor we found.
@@ -815,7 +822,7 @@ void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, con
     WayUtils::getContainingWayIdsByNodeId(idOfNodeBeingSnapped, _map);
   const long owningWayId = *owningWayIds.begin();
   const QString tagVal = toWayNode ? "to_way_node_source" : "to_way_source";
-  _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), "snapped_way");
+  _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), tagVal);
 }
 
 void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped)
@@ -854,10 +861,17 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
     // If the type similarity falls below the configured score, don't snap the ways together.
     if (!wayToSnapTags.isEmpty())
     {
-      if (schema.explicitTypeMismatch(wayToSnapTags, wayToSnapTo->getTags(), _minTypeMatchScore))
+      if (_minTypeMatchScore == -1.0)
       {
         LOG_TRACE(
-          "Explicit type mismatch between way to snap to " << wayToSnapTo->getElementId() <<
+          "Skipping type matching between way to snap to: " << wayToSnapTo->getElementId() <<
+          " and way to snap, since no minimum type score set...");
+      }
+      else if (
+        schema.explicitTypeMismatch(wayToSnapTags, wayToSnapTo->getTags(), _minTypeMatchScore))
+      {
+        LOG_TRACE(
+          "Explicit type mismatch between way to snap to: " << wayToSnapTo->getElementId() <<
           " with type: " << schema.getFirstType(wayToSnapTo->getTags(), true) <<
           " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
           " for minimum match score: " << _minTypeMatchScore << ". Snapping skipped.");
@@ -866,7 +880,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
       else
       {
         LOG_TRACE(
-          "Type match between way to snap to " << wayToSnapTo->getElementId() <<
+          "Type match between way to snap to: " << wayToSnapTo->getElementId() <<
           " with type: " << schema.getFirstType(wayToSnapTo->getTags(), true) <<
           " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
           " for minimum match score: " << _minTypeMatchScore << ". Proceeding with snap...");
