@@ -257,14 +257,6 @@ private:
    */
   QList<ElementId> _getNearbyFeaturesToSnapTo(const ConstNodePtr& node,
                                               const ElementType& elementType) const;
-  /*
-   * Determines where in a way to snap an unconnected end node
-   *
-   * @param nodeToSnap the node being snapped
-   * @param snapToWay the way being snapped to
-   * @return a way node index
-   */
-  int _getNodeToSnapWayInsertIndex(const NodePtr& nodeToSnap, const ConstWayPtr& snapToWay) const;
 
   /*
    * Attempts to snap an unconnected way end node to another way node

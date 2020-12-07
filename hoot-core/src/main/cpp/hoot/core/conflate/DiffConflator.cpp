@@ -297,7 +297,7 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-way-joining");
 
   // No point in running way joining a second time in post conflate ops since we already did it here
-  // (configured by default), so let's remove it.
+  // (its configured in post ops by default), so let's remove it.
   ConfigUtils::removeListOpEntry(
     ConfigOptions::getConflatePostOpsKey(),
     QString::fromStdString(WayJoinerOp::className()));

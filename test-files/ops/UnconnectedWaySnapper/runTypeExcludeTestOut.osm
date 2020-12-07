@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="36.13009999999999" minlon="-115.3066" maxlat="36.14140036110138" maxlon="-115.2876"/>
-    <node visible="true" id="-2403" timestamp="2020-05-14T05:31:33Z" version="1" user="ssange" uid="10208970" lat="36.1308219187039512" lon="-115.2956278576304783">
+    <node visible="true" id="-2403" timestamp="2020-05-14T05:31:33Z" version="1" user="ssange" uid="10208970" lat="36.1308251373398335" lon="-115.2956279685670751">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2403"/>
         <tag k="hoot:snapped" v="to_way_source"/>
@@ -528,10 +528,9 @@
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
-    <node visible="true" id="-2282" timestamp="2018-07-18T19:25:23Z" version="1" user="WayneSchlegel" uid="548288" lat="36.1396144983756571" lon="-115.2878398740224100">
+    <node visible="true" id="-2282" timestamp="2018-07-18T19:25:23Z" version="1" user="WayneSchlegel" uid="548288" lat="36.1396119999999925" lon="-115.2879927000000038">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2282"/>
-        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="noexit" v="yes"/>
         <tag k="error:circular" v="15"/>
     </node>
@@ -729,7 +728,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2235"/>
     </node>
-    <node visible="true" id="-2234" timestamp="2018-07-18T19:25:51Z" version="2" user="WayneSchlegel" uid="548288" lat="36.1332438243129133" lon="-115.2880203346531829">
+    <node visible="true" id="-2234" timestamp="2018-07-18T19:25:51Z" version="2" user="WayneSchlegel" uid="548288" lat="36.1332422208588184" lon="-115.2880105285000667">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2234"/>
         <tag k="hoot:snapped" v="to_way_source"/>
@@ -924,7 +923,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2187"/>
     </node>
-    <node visible="true" id="-2186" timestamp="2017-05-11T18:38:55Z" version="1" user="optimalnode" uid="2302485" lat="36.1414003605177996" lon="-115.2978686995072479">
+    <node visible="true" id="-2186" timestamp="2017-05-11T18:38:55Z" version="1" user="optimalnode" uid="2302485" lat="36.1414003605044272" lon="-115.2978713654661505">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-2186"/>
         <tag k="hoot:snapped" v="to_way_source"/>
@@ -1923,7 +1922,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1938"/>
     </node>
-    <node visible="true" id="-1937" timestamp="2016-12-24T21:15:26Z" version="1" user="Tom_Holland" uid="574654" lat="36.1414003042209657" lon="-115.2935370835973288">
+    <node visible="true" id="-1937" timestamp="2016-12-24T21:15:26Z" version="1" user="Tom_Holland" uid="574654" lat="36.1414003044419800" lon="-115.2935442202088296">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1937"/>
         <tag k="hoot:snapped" v="to_way_source"/>
@@ -5329,7 +5328,7 @@
         <tag k="hoot:id" v="-1024"/>
         <tag k="hoot:snapped" v="to_way_source"/>
     </node>
-    <node visible="true" id="-1022" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1414003604843188" lon="-115.2978753526213751">
+    <node visible="true" id="-1022" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1414003605044272" lon="-115.2978713654661505">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-1022"/>
         <tag k="hoot:snapped" v="to_way_source"/>
@@ -5399,7 +5398,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-970"/>
     </node>
-    <node visible="true" id="-969" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1364433348273835" lon="-115.2876000000000261">
+    <node visible="true" id="-969" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1364428181984749" lon="-115.2876000000000261">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-969"/>
         <tag k="hoot:snapped" v="to_way_source"/>
@@ -5408,7 +5407,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-968"/>
     </node>
-    <node visible="true" id="-967" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1376626491465700" lon="-115.2876000000367895">
+    <node visible="true" id="-967" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1376594292637989" lon="-115.2876000000368180">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-967"/>
         <tag k="hoot:snapped" v="to_way_source"/>
@@ -9903,12 +9902,11 @@
         <nd ref="-2283"/>
         <nd ref="-1830"/>
         <nd ref="-2282"/>
-        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="High Sail Court"/>
         <tag k="hoot:id" v="-472"/>
         <tag k="source:datetime" v="2018-07-18T19:25:32Z"/>
-        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-471" timestamp="2018-07-18T19:25:32Z" version="1" user="WayneSchlegel" uid="548288">
@@ -19072,8 +19070,8 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-399"/>
         <nd ref="-1003"/>
+        <nd ref="-399"/>
         <nd ref="-996"/>
         <nd ref="-60"/>
         <tag k="tiger:tlid" v="201890990"/>
@@ -19096,8 +19094,8 @@
     </way>
     <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-317"/>
-        <nd ref="-974"/>
         <nd ref="-973"/>
+        <nd ref="-974"/>
         <nd ref="-59"/>
         <tag k="tiger:tlid" v="201890985"/>
         <tag k="tiger:source" v="tiger_import_dch_v0.6_20070813"/>
@@ -19196,8 +19194,8 @@
         <nd ref="-622"/>
         <nd ref="-623"/>
         <nd ref="-624"/>
-        <nd ref="-625"/>
         <nd ref="-2293"/>
+        <nd ref="-625"/>
         <nd ref="-626"/>
         <nd ref="-627"/>
         <nd ref="-628"/>
@@ -19226,9 +19224,9 @@
     </way>
     <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-324"/>
-        <nd ref="-635"/>
         <nd ref="-2166"/>
         <nd ref="-2180"/>
+        <nd ref="-635"/>
         <nd ref="-1020"/>
         <nd ref="-54"/>
         <tag k="tiger:upload_uuid" v="bulk_upload.pl-fa98df75-5974-4c49-9081-f3ca4b3c7383"/>
@@ -19524,8 +19522,8 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-41"/>
         <nd ref="-980"/>
+        <nd ref="-41"/>
         <nd ref="-777"/>
         <nd ref="-778"/>
         <nd ref="-779"/>
@@ -19702,8 +19700,8 @@
     </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-634"/>
-        <nd ref="-963"/>
         <nd ref="-962"/>
+        <nd ref="-963"/>
         <nd ref="-31"/>
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="secondary"/>
@@ -19722,8 +19720,8 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-30"/>
         <nd ref="-1014"/>
+        <nd ref="-30"/>
         <nd ref="-323"/>
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="secondary"/>
@@ -19801,10 +19799,10 @@
         <nd ref="-901"/>
         <nd ref="-900"/>
         <nd ref="-27"/>
-        <nd ref="-26"/>
         <nd ref="-971"/>
-        <nd ref="-884"/>
+        <nd ref="-26"/>
         <nd ref="-2234"/>
+        <nd ref="-884"/>
         <nd ref="-883"/>
         <nd ref="-882"/>
         <nd ref="-881"/>
@@ -19830,8 +19828,8 @@
         <nd ref="-891"/>
         <nd ref="-917"/>
         <nd ref="-890"/>
-        <nd ref="-1037"/>
         <nd ref="-24"/>
+        <nd ref="-1037"/>
         <nd ref="-25"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-17"/>
@@ -20056,15 +20054,14 @@
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-12"/>
         <nd ref="-312"/>
-        <nd ref="-1024"/>
-        <nd ref="-967"/>
-        <nd ref="-2282"/>
         <nd ref="-11"/>
+        <nd ref="-967"/>
+        <nd ref="-1024"/>
         <nd ref="-10"/>
         <nd ref="-9"/>
         <nd ref="-921"/>
-        <nd ref="-2403"/>
         <nd ref="-920"/>
+        <nd ref="-2403"/>
         <nd ref="-919"/>
         <nd ref="-918"/>
         <nd ref="-8"/>
@@ -20072,8 +20069,8 @@
         <nd ref="-6"/>
         <nd ref="-1022"/>
         <nd ref="-2186"/>
-        <nd ref="-1937"/>
         <nd ref="-1031"/>
+        <nd ref="-1937"/>
         <nd ref="-12"/>
         <tag k="hoot:status" v="1"/>
         <tag k="landuse" v="residential"/>
