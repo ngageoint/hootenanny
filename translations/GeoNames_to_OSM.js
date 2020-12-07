@@ -39,12 +39,14 @@ geonames = {
     // Text rules
     txtRules : {
       'country_code':'addr:country',
-      'primary_geopolitical_code':'addr:country',
+      'secondary_country_code':'addr:country:2',
       'jog':'jog_sheet',
       'mgrs':'mgrs',
       'name':'name',
       'full_name_reading_order':'name',
       'transliteration_code':'name:transliteration_code',
+      'short_name':'short_name',
+      'sort_name_reading_order':'sorting_name',
     }, // End txtRules
 
     // Number rules
@@ -57,11 +59,22 @@ geonames = {
 
     // lookup table in the internal JSON structure
     lookup : {
-      '': {
-        '':['',''],
+      'name_type': {
+        'C':['name:type','conventional'],
+        'N':['name:type','approved'],
+        'D':['name:type','unverified'],
+        'P':['name:type','provisional'],
+        'VA':['name:type','anglicized_variant'],
+        'V':['name:type','variant'],
+        'NS':['name:type','non-roman_script'],
+        'VS':['name:type','variant_non-roman_script'],
       },
 
     }, // End lookup
+
+    // Display scales
+    scaleList : {'1':[1,25999],'2':[26000,67999],'3':[68000,150999],'4':[151000,225999],'5':[226000,325999],
+                 '6':[326000,425999],'7':[426000,625000],'8':[626000,999999],'9':[1000000,5000000]},
 
     // The mapping between the GeoNames feature code and OSM+
     one2many : {
@@ -795,6 +808,22 @@ geonames = {
     return nameOut;
   },
 
+  // Convert from FIPS to ISO country codes
+  // NOTE: We may have a list:  code1,code2 etc
+  convertCountryCodeList : function (codeString)
+  {
+    var tCodeList = [];
+    codeString.split(',').forEach( function(code) {
+      var isoCode = '';
+      isoCode = translate.convertCountryCode('fips','c2',code);
+
+      // Sanity check.....
+      if (isoCode !== '') tCodeList.push(isoCode);
+    });
+
+    return tCodeList.join();
+  },
+
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
   {
     // List of data values to drop/ignore
@@ -837,6 +866,17 @@ geonames = {
     {
       tags.source = 'geonames.nga.mil';
       tags.uuid = 'geonames.nga.mil:' + attrs.ufi;
+
+      // Convert country codes from fips to iso
+      if (tags['addr:country'])
+      {
+        tags['addr:country'] = geonames.convertCountryCodeList(tags['addr:country']);
+      }
+
+      if (tags['addr:country:2'])
+      {
+        tags['addr:country:2'] = geonames.convertCountryCodeList(tags['addr:country:2']);
+      }
     }
     else
     {
@@ -849,6 +889,34 @@ geonames = {
     {
       tags.ele = tags['ele:dem'];
       delete tags['ele:dem'];
+    }
+
+    // Look at language for the names
+    if (attrs.language_code)
+    {
+      var langTwo = '';
+      langTwo = translate.findLanguage2Code(attrs.language_code);
+
+      if (langTwo !== '')
+      {
+        tags['name:' + langTwo] = tags.name;
+      }
+    } // End language
+
+    // Scale
+    if (attrs.display_scale)
+    {
+      tags['cartographic_scale:lower'] = 5000000;
+      tags['cartographic_scale:upper'] = 1;
+
+      attrs['display_scale'].split(',').forEach( function(scale) {
+        // Sanity check.....
+        if (scale in geonames.scaleList)
+        {
+          if (geonames.scaleList[scale][0] < tags['cartographic_scale:lower']) tags['cartographic_scale:lower'] = geonames.scaleList[scale][0];
+          if (geonames.scaleList[scale][1] > tags['cartographic_scale:upper']) tags['cartographic_scale:upper'] = geonames.scaleList[scale][1];
+        }
+      });
     }
 
   }, // End applyToOsmPostProcessing
