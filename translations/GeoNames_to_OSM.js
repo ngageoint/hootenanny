@@ -844,6 +844,13 @@ geonames = {
       tags.uuid = 'GeoNames.org:' + attrs.geonameid;
     }
 
+    // Some datasets have dem but not elevation.
+    if (tags['ele:dem'] && ! tags.ele)
+    {
+      tags.ele = tags['ele:dem'];
+      delete tags['ele:dem'];
+    }
+
   }, // End applyToOsmPostProcessing
 
 }; // End of geonames
