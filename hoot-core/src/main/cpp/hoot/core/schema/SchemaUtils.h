@@ -50,14 +50,6 @@ public:
    * @return true if at least one feature has a type recognized by the schema; false otherwise
    */
   static bool anyElementsHaveType(const ConstOsmMapPtr& map);
-
-  /**
-   * Determines if all elements in a map have a type recognized by the schema
-   *
-   * @param map the map to examine
-   * @return true if all features have a type recognized by the schema; false otherwise
-   */
-  static bool allElementsHaveType(const ConstOsmMapPtr& map);
 };
 
 }

@@ -49,26 +49,6 @@ class ElementGeometryUtils
 public:
 
   /**
-   * Returns the distance between two elements
-   *
-   * @param element1 the first element to measure distance from
-   * @param element2 the second element to measure distance from
-   * @param map map owning the input elements
-   * @return the distance between the two elements or -1.0 if the distance could not be calculated
-   */
-  static double getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2,
-                            ConstOsmMapPtr map);
-
-  /**
-   * Calculates the area of an element
-   *
-   * @param element the feature to calculate the area of
-   * @param map map owning the input element
-   * @return the area of the feature or -1.0 if the area could not be calculated
-   */
-  static double getArea(const ConstElementPtr& element, ConstOsmMapPtr map);
-
-  /**
    * Determines two elements have a geometric relationship
    *
    * @param element1 the first element to examine

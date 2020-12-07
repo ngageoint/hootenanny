@@ -351,25 +351,6 @@ bool WayUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long node
   return commonNodesBetweenWayGroups.size() != 0;
 }
 
-bool WayUtils::nodesAreContainedInTheExactSameWays(
-  const long nodeId1, const long nodeId2, const ConstOsmMapPtr& map)
-{
-  const std::set<long>& waysContainingNode1 =
-    map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId1);
-  LOG_VART(waysContainingNode1);
-
-  const std::set<long>& waysContainingNode2 =
-    map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId2);
-  LOG_VART(waysContainingNode2);
-
-  return waysContainingNode1 == waysContainingNode2;
-}
-
-int WayUtils::getNumberOfWaysContainingNode(const long nodeId, const ConstOsmMapPtr& map)
-{
-  return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size();
-}
-
 bool WayUtils::nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map)
 {
   return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 0;
@@ -391,27 +372,6 @@ bool WayUtils::nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMa
   return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 1;
 }
 
-std::set<long> WayUtils::getIntersectingWayIds(const long wayId, const OsmMapPtr& map)
-{
-  std::set<long> intersectingWayIds;
-  ConstWayPtr way = map->getWay(wayId);
-  if (way)
-  {
-    std::vector<long> nearbyWayIds = map->getIndex().findWays(way->getEnvelopeInternal(map));
-    for (std::vector<long>::const_iterator it = nearbyWayIds.begin(); it != nearbyWayIds.end();
-         ++it)
-    {
-      const long otherWayId = *it;
-      ConstWayPtr otherWay = map->getWay(otherWayId);
-      if (otherWay && way->hasSharedNode(*otherWay))
-      {
-        intersectingWayIds.insert(otherWayId);
-      }
-    }
-  }
-  return intersectingWayIds;
-}
-
 std::vector<WayPtr> WayUtils::getIntersectingWays(const long wayId, const OsmMapPtr& map)
 {
   std::vector<WayPtr> intersectingWays;
@@ -431,22 +391,6 @@ std::vector<WayPtr> WayUtils::getIntersectingWays(const long wayId, const OsmMap
     }
   }
   return intersectingWays;
-}
-
-bool WayUtils::wayIntersectsWithWayHavingKvp(
-  const long wayId, const QString& kvp, const OsmMapPtr& map)
-{
-  const std::set<long> intersectingWayIds = getIntersectingWayIds(wayId, map);
-  for (std::set<long>::const_iterator it = intersectingWayIds.begin();
-       it != intersectingWayIds.end(); ++it)
-  {
-    ConstWayPtr intersectingWay = map->getWay(*it);
-    if (intersectingWay && intersectingWay->getTags().hasKvp(kvp))
-    {
-      return true;
-    }
-  }
-  return false;
 }
 
 bool WayUtils::nodeContainedByWaySharingNodesWithAnotherWay(

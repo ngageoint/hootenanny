@@ -65,24 +65,6 @@ public:
   static bool mapIsPointsOnly(const OsmMapPtr& map);
 
   /**
-   * Splits a map into two separate maps according to element status
-   *
-   * @param sourceMap the map to split
-   * @param unknown1Map the map to output with Unknown1 status
-   * @param unknown2Map the map to output with Unknown2 status
-   */
-  static void splitMapByStatus(OsmMapPtr& sourceMap, OsmMapPtr& unknown1Map,
-                               OsmMapPtr& unknown2Map);
-
-  /**
-   * TODO
-   *
-   * @param map
-   * @todo Should we have something like reader.include.debug.tags instead of this?
-   */
-  static void dropMetadataTags(const OsmMapPtr& map);
-
-  /**
    * Combines two maps into one; throwOutDupes ignores any elements in the second map with the ID
    * as an element in the first map
    *

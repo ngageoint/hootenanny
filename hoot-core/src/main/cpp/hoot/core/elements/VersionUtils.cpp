@@ -64,14 +64,4 @@ bool VersionUtils::checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& ma
   return false;
 }
 
-std::set<ElementId> VersionUtils::getIdsOfElementsWithVersionLessThanOne(const OsmMapPtr& map)
-{
-  AttributeValueCriterion attrCrit(
-    ElementAttributeType(ElementAttributeType::Version), 1, NumericComparisonType::LessThan);
-  UniqueElementIdVisitor idSetVis;
-  FilteredVisitor filteredVis(attrCrit, idSetVis);
-  map->visitRo(filteredVis);
-  return idSetVis.getElementSet();
-}
-
 }

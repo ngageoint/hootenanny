@@ -60,31 +60,6 @@ QString RelationMemberUtils::getRelationMembersDetailedString(const ConstRelatio
   return str;
 }
 
-long RelationMemberUtils::getFirstWayIdFromRelation(
-  const ConstRelationPtr& relation, const OsmMapPtr& map)
-{
-  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  QSet<long> wayMemberIds;
-  for (size_t i = 0; i < relationMembers.size(); i++)
-  {
-    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    if (member->getElementType() == ElementType::Way)
-    {
-      wayMemberIds.insert(member->getId());
-    }
-  }
-  LOG_VART(wayMemberIds);
-  if (wayMemberIds.size() > 0)
-  {
-    return wayMemberIds.toList().at(0);
-  }
-  else
-  {
-    return 0;
-  }
-}
-
-
 bool RelationMemberUtils::isMemberOfRelation(const ConstOsmMapPtr& map, const ElementId& childId)
 {
   const std::set<ElementId> parentIds = map->getParents(childId);
@@ -294,49 +269,6 @@ bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
        it != containingRelations.end(); ++it)
   {
     if (criterion.isSatisfied(*it))
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool RelationMemberUtils::membersHaveHomogenousGeometryType(
-  const ConstRelationPtr& relation, const ConstOsmMapPtr& map,
-  const GeometryTypeCriterion::GeometryType& geometryType)
-{
-  GeometryTypeCriterion::GeometryType firstType = GeometryTypeCriterion::GeometryType::Unknown;
-  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  for (size_t i = 0; i < relationMembers.size(); i++)
-  {
-    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    const GeometryTypeCriterion::GeometryType currentType =
-      ElementGeometryUtils::geometryTypeForElement(member);
-    if (firstType == GeometryTypeCriterion::GeometryType::Unknown)
-    {
-      firstType = currentType;
-    }
-    else if (currentType != firstType)
-    {
-      return false;
-    }
-    if (geometryType != GeometryTypeCriterion::GeometryType::Unknown && geometryType != currentType)
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool RelationMemberUtils::hasMemberWithGeometryType(
-  const ConstRelationPtr& relation, const ConstOsmMapPtr& map,
-  const GeometryTypeCriterion::GeometryType& geometryType)
-{
-  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  for (size_t i = 0; i < relationMembers.size(); i++)
-  {
-    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    if (ElementGeometryUtils::geometryTypeForElement(member) == geometryType)
     {
       return true;
     }

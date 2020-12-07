@@ -75,15 +75,6 @@ public:
                                          const ConstOsmMapPtr& map);
 
   /**
-   * Determines if one element a child of another; e.g. way node or relation memeber
-   *
-   * @param parent the parent element
-   * @param memberId the element ID of the child
-   * @return true if parent has the element with memberId as a child; false otherwise
-   */
-  static bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
-
-  /**
    * Determines if an element is contained by any way or relation in a map
    *
    * @param elementId the ID of the element to search for

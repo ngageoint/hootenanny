@@ -57,15 +57,6 @@ public:
                                                   const ConstOsmMapPtr& map);
 
   /**
-   * Returns the first way ID from a set of relation members
-   *
-   * @param relation relation to check way ID for
-   * @param map map owning the relation
-   * @return a way ID
-   */
-  static long getFirstWayIdFromRelation(const ConstRelationPtr& relation, const OsmMapPtr& map);
-
-  /**
    * Determines if an element is a member of a relation
    *
    * @param map map owning the input element
@@ -167,33 +158,6 @@ public:
    */
   static std::vector<ConstRelationPtr> getContainingRelations(
     const ConstOsmMapPtr& map, const ElementId& childId);
-
-  /**
-   * Detemines if a relation has members all with the same geometry type
-   *
-   * @param relation the relation to examine
-   * @param map the map owning the relation
-   * @param geometryType optional geometry type filter
-   * @return if no geometry type is specified, returns true if all member elements have the same
-   * geometry type and false otherwise; if a geometry type is specified, returns true if all
-   * member elements have the specified geometry type and false otherwise
-   */
-  static bool membersHaveHomogenousGeometryType(
-    const ConstRelationPtr& relation, const ConstOsmMapPtr& map,
-    const GeometryTypeCriterion::GeometryType& geometryType =
-      GeometryTypeCriterion::GeometryType::Unknown);
-
-  /**
-   * Determines if a relation has any member with a specified geometry type
-   *
-   * @param relation the relation to examine
-   * @param map the map owning the relation
-   * @param geometryType geometry type filter
-   * @return true if the relation has any member with the specified geometry type; false otherwise
-   */
-  static bool hasMemberWithGeometryType(
-    const ConstRelationPtr& relation, const ConstOsmMapPtr& map,
-    const GeometryTypeCriterion::GeometryType& geometryType);
 
   /**
    * Counts the number of way nodes in way members belonging to a relation

@@ -61,26 +61,6 @@ bool MapUtils::mapIsPointsOnly(const OsmMapPtr& map)
       ElementVisitorPtr(new ElementCountVisitor()), map) == (int)map->getElementCount();
 }
 
-void MapUtils::splitMapByStatus(
-  OsmMapPtr& sourceMap, OsmMapPtr& unknown1Map, OsmMapPtr& unknown2Map)
-{
-  RemoveUnknown1Visitor remove1Vis;
-  RemoveUnknown2Visitor remove2Vis;
-  unknown1Map.reset(new OsmMap(sourceMap));
-  unknown1Map->visitRw(remove2Vis);
-  unknown2Map.reset(new OsmMap(sourceMap));
-  unknown2Map->visitRw(remove1Vis);
-}
-
-void MapUtils::dropMetadataTags(const OsmMapPtr& map)
-{
-  RemoveTagsVisitor tagRemover(QStringList("hoot:*"));
-  tagRemover.setOsmMap(map.get());
-  LOG_INFO(tagRemover.getInitStatusMessage());
-  map->visitRw(tagRemover);
-  LOG_DEBUG(tagRemover.getCompletedStatusMessage());
-}
-
 void MapUtils::combineMaps(OsmMapPtr& map1, OsmMapPtr& map2, const bool throwOutDupes)
 {
   LOG_VART(map1.get());

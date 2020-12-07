@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CollectionUtils.h"
@@ -33,15 +33,5 @@
 
 namespace hoot
 {
-
-int CollectionUtils::numVectorItemsInCommon(const std::vector<long>& collection1,
-                                            const std::vector<long>& collection2)
-{
-  QSet<long> coll1AsSet =
-    QList<long>::fromVector(QVector<long>::fromStdVector(collection1)).toSet();
-  QSet<long> coll2AsSet =
-    QList<long>::fromVector(QVector<long>::fromStdVector(collection2)).toSet();
-  return coll1AsSet.intersect(coll2AsSet).size();
-}
 
 }
