@@ -80,7 +80,9 @@ _snapToWayStatuses(QStringList(Status(Status::Unknown1).toString())),
 _minTypeMatchScore(-1.0),
 _numSnappedToWays(0),
 _numSnappedToWayNodes(0),
-_taskStatusUpdateInterval(1000)
+_taskStatusUpdateInterval(1000),
+// This could be very expensive, so leave it disabled by default.
+_writePerSnapDebugMap(false)
 {
 }
 
@@ -326,7 +328,8 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
           {
             assert(_snappedToWay);
             LOG_TRACE(
-              "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId());
+              "Snapped " << wayToSnap->getElementId() << " to " << _snappedToWay->getElementId() <<
+              " from " << unconnectedEndNode->getElementId());
 
             // retain the parent id of the snapped to way; See related notes in WayJoinerAdvanced
             const long pid = _getPid(_snappedToWay);
@@ -352,11 +355,14 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
             // haven't any direct evidence of that being necessary for proper snapping yet. If it
             // is needed, that would likely slow things down a lot.
 
-            // This could be very expensive, so leave it disabled by default.
-//            OsmMapWriterFactory::writeDebugMap(
-//              _map,
-//              "UnconnectedWaySnapper-after-snap-#" +
-//                QString::number(_numSnappedToWays + _numSnappedToWayNodes));
+            if (_writePerSnapDebugMap)
+            {
+              OsmMapWriterFactory::writeDebugMap(
+                _map,
+                "after-snap-" + wayToSnap->getElementId().toString() + "-" +
+                unconnectedEndNode->getElementId().toString() + "-" +
+                _snappedToWay->getElementId().toString());
+            }
           }
         }
 
@@ -721,7 +727,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
                   wayToSnapTags, containingWay->getTags(), _minTypeMatchScore))
             {
               LOG_TRACE(
-                "Explicit type mismatch between containing way " << containingWay->getElementId() <<
+                "Explicit type mismatch between containing way: " << containingWay->getElementId() <<
                 " with type: " << schema.getFirstType(containingWay->getTags(), true) <<
                 " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
                 " for minimum match score: " << _minTypeMatchScore << ". Skipping snap.");
@@ -729,7 +735,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
             else
             {
               LOG_TRACE(
-                "Type match between containing way " << containingWay->getElementId() <<
+                "Type match between containing way: " << containingWay->getElementId() <<
                 " with type: " << schema.getFirstType(containingWay->getTags(), true) <<
                 " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
                 " for minimum match score: " << _minTypeMatchScore << ". Proceeding with snap.");
@@ -744,6 +750,13 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
             continue;
           }
         }
+        else
+        {
+          LOG_TRACE(
+            "Skipping type matching between ways containin way nodes: " <<
+            (*wayNodesToSnapToItr).getId() << " and " << nodeToSnap->getId() <<
+            ", since no minimum type score set...");
+        }
 
         // Snap the input way node to the nearest way node neighbor we found.
         LOG_TRACE(
@@ -752,11 +765,11 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         // Add this optional custom tag for tracking purposes.
         if (_markSnappedNodes)
         {
-          wayNodeToSnapTo->getTags().set(MetadataTags::HootSnapped(), "snapped_to_way_node");
+          wayNodeToSnapTo->getTags().set(MetadataTags::HootSnapped(), "to_way_node_source");
         }
         if (_markSnappedWays)
         {
-          _markSnappedWay(nodeToSnap->getId());
+          _markSnappedWay(nodeToSnap->getId(), true);
         }
         if (_reviewSnappedWays)
         {
@@ -770,6 +783,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
         LOG_TRACE(waysContainingWayNodeToSnapTo.size());
         assert(waysContainingWayNodeToSnapTo.size() > 0);
         _snappedToWay = _map->getWay(*waysContainingWayNodeToSnapTo.begin());
+        _snappedToWay->getTags().set(MetadataTags::HootSnapped(), "to_way_node_target");
         LOG_VART(_snappedToWay);
 
         // Skip the actual snapping if we're only marking ways that could be snapped.
@@ -784,9 +798,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
           LOG_TRACE(
             "Replacing " << nodeToSnap->getElementId() << " with " <<
             wayNodeToSnapTo->getElementId());
-          ReplaceElementOp elementReplacer(
-            nodeToSnap->getElementId(), wayNodeToSnapTo->getElementId(), true);
-          elementReplacer.apply(_map);
+          ReplaceElementOp(
+            nodeToSnap->getElementId(), wayNodeToSnapTo->getElementId(), true).apply(_map);
         }
 
         _snappedWayNodeIds.append(nodeToSnap->getId());
@@ -808,12 +821,13 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
   return false;
 }
 
-void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped)
+void UnconnectedWaySnapper::_markSnappedWay(const long idOfNodeBeingSnapped, const bool toWayNode)
 {
   std::set<long> owningWayIds =
     WayUtils::getContainingWayIdsByNodeId(idOfNodeBeingSnapped, _map);
   const long owningWayId = *owningWayIds.begin();
-  _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), "snapped_way");
+  const QString tagVal = toWayNode ? "to_way_node_source" : "to_way_source";
+  _map->getWay(owningWayId)->getTags().set(MetadataTags::HootSnapped(), tagVal);
 }
 
 void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped)
@@ -852,10 +866,17 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
     // If the type similarity falls below the configured score, don't snap the ways together.
     if (!wayToSnapTags.isEmpty())
     {
-      if (schema.explicitTypeMismatch(wayToSnapTags, wayToSnapTo->getTags(), _minTypeMatchScore))
+      if (_minTypeMatchScore == -1.0)
       {
         LOG_TRACE(
-          "Explicit type mismatch between way to snap to " << wayToSnapTo->getElementId() <<
+          "Skipping type matching between way to snap to: " << wayToSnapTo->getElementId() <<
+          " and way to snap, since no minimum type score set...");
+      }
+      else if (
+        schema.explicitTypeMismatch(wayToSnapTags, wayToSnapTo->getTags(), _minTypeMatchScore))
+      {
+        LOG_TRACE(
+          "Explicit type mismatch between way to snap to: " << wayToSnapTo->getElementId() <<
           " with type: " << schema.getFirstType(wayToSnapTo->getTags(), true) <<
           " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
           " for minimum match score: " << _minTypeMatchScore << ". Snapping skipped.");
@@ -864,7 +885,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
       else
       {
         LOG_TRACE(
-          "Type match between way to snap to " << wayToSnapTo->getElementId() <<
+          "Type match between way to snap to: " << wayToSnapTo->getElementId() <<
           " with type: " << schema.getFirstType(wayToSnapTo->getTags(), true) <<
           " and way to snap with type: " << schema.getFirstType(wayToSnapTags, true) <<
           " for minimum match score: " << _minTypeMatchScore << ". Proceeding with snap...");
@@ -1000,11 +1021,11 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
       // Add this optional custom tag for tracking purposes.
       if (_markSnappedNodes)
       {
-        nodeToSnap->getTags().set(MetadataTags::HootSnapped(), "snapped_to_way");
+        nodeToSnap->getTags().set(MetadataTags::HootSnapped(), "to_way_source");
       }
       if (_markSnappedWays)
       {
-        _markSnappedWay(nodeToSnap->getId());
+        _markSnappedWay(nodeToSnap->getId(), false);
       }
       if (_reviewSnappedWays)
       {
@@ -1026,6 +1047,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
         LOG_VART(wayToSnapTo->getNodeIds());
       }
       _snappedToWay = wayToSnapTo;
+      _snappedToWay->getTags().set(MetadataTags::HootSnapped(), "to_way_target");
       LOG_VART(_snappedToWay);
 
       return true;

@@ -3649,6 +3649,38 @@ ufd = {
         }
         break;
 
+      case 'AQ130': // Tunnel
+        switch (tags['transport:type'])
+        {
+          case 'road':
+          default:  // Guessing it is probably a road
+            tags.highway = 'road';
+            break;
+
+          case 'railway':
+            tags.railway = 'rail;'
+            break;
+
+          case 'road_and_railway':
+            tags.highway = 'road';
+            tags.railway = 'rail';
+            break;
+
+          case 'pedestrian':
+          case 'portage':
+            tags.highway = 'pedestrian';
+            break;
+
+          case 'canal':
+            tags.waterway = 'canal';
+            break;
+
+          case 'aqueduct':
+            tags.historic = 'aqueduct';
+            break;
+        }
+        break;
+
       case 'AT020': // EW Radar Site
         tags['radar:use'] = 'early_warning';
         break;
@@ -3802,6 +3834,12 @@ function translateToOsm(attrs, layerName, geometryType)
   if (ufd.configIn.OgrDebugDumptags == 'true')
   {
     translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+
+    if (tags.name == ' ')
+    {
+      print('Name = space');
+    }
+
     translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
     print('');
   }

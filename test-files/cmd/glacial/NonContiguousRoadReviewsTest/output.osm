@@ -11866,6 +11866,7 @@
         <tag k="highway" v="primary"/>
         <tag k="ref" v="RN6"/>
         <tag k="source:datetime" v="2016-04-11T14:26:31Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="junction" v="roundabout"/>
         <tag k="error:circular" v="15"/>
     </way>

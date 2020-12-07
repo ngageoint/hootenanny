@@ -62,6 +62,10 @@
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/ops/WayJoinerOp.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // standard
 #include <algorithm>
@@ -221,7 +225,7 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
   {
-    // Let's try to snap disconnected ref2 roads back to ref1 roads.  This has to done before
+    // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
     // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
     // anymore.
     _numSnappedWays = _snapSecondaryRoadsBackToRef();
@@ -236,36 +240,68 @@ void DiffConflator::apply(OsmMapPtr& map)
     _removeMatches(Status::Unknown1);
     MemoryUsageChecker::getInstance().check();
 
-    // Now remove input1 elements
     LOG_INFO("\tRemoving all reference elements...");
-    const int mapSizeBefore = _pMap->size();
-    ElementCriterionPtr pTagKeyCrit(new TagKeyCriterion(MetadataTags::Ref1()));
+
+    // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed
+    // to properly generate the changeset and keep sec ways snapped in the final output.
+    ElementCriterionPtr refCrit(new TagKeyCriterion(MetadataTags::Ref1()));
+    ElementCriterionPtr notSnappedCrit(
+      NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
+    ElementCriterionPtr removeCrit(ChainCriterionPtr(new ChainCriterion(refCrit, notSnappedCrit)));
+
     RemoveElementsVisitor removeRef1Visitor;
     removeRef1Visitor.setRecursive(true);
-    removeRef1Visitor.addCriterion(pTagKeyCrit);
+    removeRef1Visitor.addCriterion(removeCrit);
+    const int mapSizeBefore = _pMap->size();
     _pMap->visitRw(removeRef1Visitor);
     MemoryUsageChecker::getInstance().check();
     OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
+
     LOG_DEBUG(
       "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
       " reference elements...");
   }
 
-  QStringList tagKeysToRemove;
-  tagKeysToRemove.append(MetadataTags::Ref1());
-  tagKeysToRemove.append(MetadataTags::Ref2());
-  RemoveTagsVisitor tagRemover(tagKeysToRemove);
-  map->visitRw(tagRemover);
+  if (!ConfigOptions().getWriterIncludeDebugTags())
+  {
+    QStringList tagKeysToRemove;
+    tagKeysToRemove.append(MetadataTags::Ref1());
+    tagKeysToRemove.append(MetadataTags::Ref2());
+    tagKeysToRemove.append(MetadataTags::HootSnapped());
+    RemoveTagsVisitor tagRemover(tagKeysToRemove);
+    map->visitRw(tagRemover);
+  }
 }
 
 long DiffConflator::_snapSecondaryRoadsBackToRef()
 {
   UnconnectedWaySnapper roadSnapper;
   roadSnapper.setConfiguration(conf());
+  // The ref snapped features must be marked to prevent their removal before changeset generation
+  // later on.
+  roadSnapper.setMarkSnappedNodes(true);
+  roadSnapper.setMarkSnappedWays(true);
   LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
   roadSnapper.apply(_pMap);
   LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
+
+  // Since way splitting was done as part of the conflate pre ops previously run and we've now
+  // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
+  // If not, some ref linear data may incorrectly drop out of the diff.
+  WayJoinerOp wayJoiner;
+  wayJoiner.setConfiguration(conf());
+  LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
+  wayJoiner.apply(_pMap);
+  LOG_INFO("\t" << wayJoiner.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-way-joining");
+
+  // No point in running way joining a second time in post conflate ops since we already did it here
+  // (configured by default), so let's remove it.
+  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getConflatePostOpsKey(),
+    QString::fromStdString(WayJoinerOp::className()));
+
   return roadSnapper.getNumFeaturesAffected();
 }
 
@@ -281,6 +317,9 @@ void DiffConflator::_removeMatches(const Status& status)
     _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
     _intraDatasetElementIdsPopulated = true;
   }
+
+  ElementCriterionPtr notSnappedCrit(
+    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
 
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
@@ -310,7 +349,11 @@ void DiffConflator::_removeMatches(const Status& status)
           e2 = _pMap->getElement(pit->second);
         }
 
-        if (e1 && e1->getStatus() == status &&
+        if (e1 &&
+            e1->getStatus() == status &&
+            // We don't want to remove any ref snapped ways here. They need to be included in the
+            // resulting diff in order to be properly updated in the final output.
+            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e1)) &&
             // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
             // these to be removed from the diff output.
             !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
@@ -319,7 +362,11 @@ void DiffConflator::_removeMatches(const Status& status)
           LOG_TRACE("Removing element involved in match: " << pit->first << "...");
           RecursiveElementRemover(pit->first).apply(_pMap);
         }
-        if (e2 && e2->getStatus() == status &&
+        if (e2 &&
+            e2->getStatus() == status &&
+            // see related comment above
+            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e2)) &&
+            // see related comment above
             !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
              _intraDatasetMatchOnlyElementIds.contains(pit->second)))
         {
