@@ -2277,6 +2277,7 @@
         <tag k="hoot:id" v="-25"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-24" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2296,6 +2297,7 @@
         <tag k="hoot:id" v="-24"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-23" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2324,6 +2326,7 @@
         <tag k="hoot:id" v="-23"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-22" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2365,6 +2368,7 @@
         <tag k="hoot:id" v="-20"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-19" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2391,6 +2395,7 @@
         <tag k="hoot:id" v="-18"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-17" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2417,6 +2422,7 @@
         <tag k="hoot:id" v="-16"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-15" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2437,6 +2443,7 @@
         <tag k="highway" v="living_street"/>
         <tag k="hoot:id" v="-14"/>
         <tag k="source:datetime" v="2015-12-01T21:36:19.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2459,6 +2466,7 @@
         <tag k="highway" v="living_street"/>
         <tag k="hoot:id" v="-13"/>
         <tag k="source:datetime" v="2015-12-01T21:36:19.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2490,6 +2498,7 @@
         <tag k="highway" v="living_street"/>
         <tag k="hoot:id" v="-10"/>
         <tag k="source:datetime" v="2015-12-01T21:36:19.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2500,6 +2509,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-9"/>
         <tag k="source:datetime" v="2015-12-01T21:36:20.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2514,6 +2524,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:id" v="-8"/>
         <tag k="source:datetime" v="2015-12-01T21:36:20.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2553,6 +2564,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-5"/>
         <tag k="source:datetime" v="2015-12-01T21:36:20.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2566,6 +2578,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-4"/>
         <tag k="source:datetime" v="2011-11-27T07:24:23.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2611,6 +2624,7 @@
         <tag k="ref" v="P-2"/>
         <tag k="hoot:id" v="-1"/>
         <tag k="source:datetime" v="2015-12-01T23:23:45.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <relation visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">

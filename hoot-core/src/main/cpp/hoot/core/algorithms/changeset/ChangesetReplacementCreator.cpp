@@ -696,8 +696,7 @@ void ChangesetReplacementCreator::_removeUnsnappedImmediatelyConnectedOutOfBound
   removeVis.addCriterion(
     ElementCriterionPtr(
       new NotCriterion(
-        std::shared_ptr<TagCriterion>(
-          new TagCriterion(MetadataTags::HootSnapped(), "snapped_way")))));
+        std::shared_ptr<TagKeyCriterion>(new TagKeyCriterion(MetadataTags::HootSnapped())))));
   removeVis.setChainCriteria(true);
   removeVis.setRecursive(true);
   map->visitRw(removeVis);

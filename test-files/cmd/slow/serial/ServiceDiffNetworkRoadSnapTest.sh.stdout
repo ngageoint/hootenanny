@@ -4,16 +4,16 @@
 (1 row)
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=15.3478249, max_lat=15.3529463, min_lon=38.9427886, max_lon=38.9472101, num_changes=534
+Changeset Details: min_lat=15.3478, max_lat=15.3529463, min_lon=38.9427886, max_lon=38.9472101, num_changes=633
 Node(s) Created: 440
-Node(s) Modified: 0
+Node(s) Modified: 82
 Node(s) Deleted: 0
-Way(s) Created: 94
-Way(s) Modified: 0
+Way(s) Created: 95
+Way(s) Modified: 16
 Way(s) Deleted: 0
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 534
-Total Modifications: 0
+Total Creations: 535
+Total Modifications: 98
 Total Deletions: 0

@@ -4604,7 +4604,8 @@ the existing way node instead of adding the way endpoint node as a new way node 
 
 If true, no ways will be actually snapped and any way that would have been snapped otherwise with
 the current configuration will be marked depending upon the enablement of
-+snap.unconnected.ways.mark.snapped.ways+ and +snap.unconnected.ways.review.snapped.ways+.
++snap.unconnected.ways.mark.snapped.ways+ and +snap.unconnected.ways.review.snapped.ways+. Useful
+for debugging purposes.
 
 === snap.unconnected.ways.mark.snapped.nodes
 
@@ -4612,7 +4613,7 @@ the current configuration will be marked depending upon the enablement of
 * Default Value: `false`
 
 If true, all way nodes snapped by the Unconnected Way Snapper to another way or way node will be
-marked with a custom tag.  Useful for debugging purposes.
+marked with a custom tag. Useful for debugging purposes.
 
 === snap.unconnected.ways.mark.snapped.ways
 
@@ -4620,7 +4621,7 @@ marked with a custom tag.  Useful for debugging purposes.
 * Default Value: `false`
 
 If true, all ways snapped by the Unconnected Way Snapper to another way or way node will be
-marked with a custom tag.  Useful for debugging purposes.
+marked with a custom tag. Useful for debugging purposes.
 
 === snap.unconnected.ways.minimum.type.match.score
 
@@ -4645,7 +4646,7 @@ correct any snaps made.
 * Default Value: `hoot::WayCriterion`
 
 Optional criterion class to filter the types of ways being snapped to.  An example would be:
-hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as targets for
+hoot::HighwayCriterion. If no criterion is specified, then all ways are considered as targets for
 way snapping.
 
 === snap.unconnected.ways.snap.to.way.node.criterion
@@ -4654,8 +4655,8 @@ way snapping.
 * Default Value: `hoot::WayNodeCriterion`
 
 Optional criterion class to filter the types of way nodes being snapped to.  An example would be:
-hoot::HighwayWayNodeCriterion.  If no criterion is specified, then all ways are considered as
-targets for way snapping.  This option is only used if snap.unconnected.ways.reuse.way.nodes is
+hoot::HighwayWayNodeCriterion. If no criterion is specified, then all ways are considered as
+targets for way snapping. This option is only used if snap.unconnected.ways.reuse.way.nodes is
 enabled.
 
 === snap.unconnected.ways.snap.to.way.statuses
@@ -4664,7 +4665,7 @@ enabled.
 * Default Value:
 ** `Input1`
 
-Statuses of ways or way nodes being snapped to.  Valid values are 'Input1', 'Input2', or 'Conflated'.
+Statuses of ways or way nodes being snapped to. Valid values are 'Input1', 'Input2', or 'Conflated'.
 Specify 'Input1' to snap secondary ways to reference ways or 'Input2' to snap reference ways to
 secondary ways. You may add multiple statuses and separate them with a semicolon. For example, to
 snap to both reference and conflated ways use: 'Input1;Conflated'.
@@ -4683,8 +4684,8 @@ section of the neighboring way.
 * Data Type: string
 * Default Value: `hoot::WayCriterion`
 
-Optional criterion class to filter the types of ways being snapped.  An example would be:
-hoot::HighwayCriterion.  If no criterion is specified, then all ways are considered as sources for
+Optional criterion class to filter the types of ways being snapped. An example would be:
+hoot::HighwayCriterion. If no criterion is specified, then all ways are considered as sources for
 way snapping.
 
 === snap.unconnected.ways.snap.way.statuses
@@ -4693,7 +4694,7 @@ way snapping.
 * Default Value:
 ** `Input2`
 
-Statuses of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'.  Specify
+Statuses of ways being snapped.  Valid values are 'Input1', 'Input2', or 'Conflated'. Specify
 'Input1' to snap reference ways to secondary ways or 'Input2' to snap secondary ways to reference
 ways. You may add multiple statuses and separate them with a semicolon. For example, to snap both
 reference and conflated ways use: 'Input1;Conflated'.
@@ -5237,7 +5238,7 @@ This option can use the following implementations:
 * `hoot::WayJoinerAdvanced`           - has some additional features compared to the default
                                         implementation; currently used by Attribute Conflation and
                                         conflation done during Cut and Replace
-* `hoot::ReplacementSnappedWayJoiner` - has way joining feature specific to Cut and Replace
+* `hoot::ReplacementSnappedWayJoiner` - has way joining features specific to Cut and Replace
 
 === way.joiner.advanced.strict.name.match
 

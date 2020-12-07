@@ -3990,6 +3990,7 @@
         <tag k="name" v="Homestead Boulevard"/>
         <tag k="hoot:id" v="-88"/>
         <tag k="source:datetime" v="2019-03-19T20:19:12Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="junction" v="roundabout"/>
         <tag k="error:circular" v="15"/>
     </way>

@@ -4,7 +4,7 @@
     <node visible="true" id="-325" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3724740675608142" lon="38.9103397271485179">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-325"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-324" timestamp="1970-01-01T00:00:00Z" version="1" lat="15.3750359933783134" lon="38.9090171091303887">
         <tag k="hoot:status" v="2"/>
@@ -13,12 +13,12 @@
     <node visible="true" id="-323" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3733547080652659" lon="38.9138599927814255">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-323"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-322" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3731334724910038" lon="38.9149266196154571">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-322"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-321" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3729232190945027" lon="38.9143163395483000">
         <tag k="hoot:status" v="2"/>
@@ -47,7 +47,7 @@
     <node visible="true" id="-315" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3778215947438159" lon="38.9147979410750935">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-315"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-314" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3776914113507690" lon="38.9147774198356871">
         <tag k="hoot:status" v="2"/>
@@ -108,7 +108,7 @@
     <node visible="true" id="-300" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3754521404197870" lon="38.9092661167834564">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-300"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-299" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3726460792703623" lon="38.9151606401893844">
         <tag k="hoot:status" v="2"/>
@@ -125,17 +125,17 @@
     <node visible="true" id="-295" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3738260994979878" lon="38.9152982247079606">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-295"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-293" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3753862677324769" lon="38.9154127559193768">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-293"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-292" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3761296578840305" lon="38.9154872753487098">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-292"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-291" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3772826375605529" lon="38.9156685508957381">
         <tag k="hoot:status" v="2"/>
@@ -180,17 +180,17 @@
     <node visible="true" id="-281" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3771070126874179" lon="38.9151632365907929">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-281"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-280" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3772256496673929" lon="38.9151199511150026">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-280"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-279" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3757743486182274" lon="38.9146005811952662">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-279"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-278" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3754779073043863" lon="38.9146451715146853">
         <tag k="hoot:status" v="2"/>
@@ -223,7 +223,7 @@
     <node visible="true" id="-271" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3742834521159040" lon="38.9145070597580798">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-271"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-270" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3745883820081968" lon="38.9145848318419141">
         <tag k="hoot:status" v="2"/>
@@ -264,7 +264,7 @@
     <node visible="true" id="-261" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3738601057653828" lon="38.9146550606643871">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-261"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-260" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3741472520302587" lon="38.9097614544495087">
         <tag k="hoot:status" v="2"/>
@@ -301,7 +301,7 @@
     <node visible="true" id="-252" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3761605438079965" lon="38.9119237011416814">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-252"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-251" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3759976842072756" lon="38.9115348723617913">
         <tag k="hoot:status" v="2"/>
@@ -322,7 +322,7 @@
     <node visible="true" id="-245" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3733249916542398" lon="38.9129123205243204">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-245"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-244" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3759958084997770" lon="38.9109473250100848">
         <tag k="hoot:status" v="2"/>
@@ -355,7 +355,7 @@
     <node visible="true" id="-237" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3754396308023384" lon="38.9129911597224023">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-237"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-236" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3755077098939950" lon="38.9129831410317522">
         <tag k="hoot:status" v="2"/>
@@ -376,7 +376,7 @@
     <node visible="true" id="-232" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3757989793816492" lon="38.9128529636901703">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-232"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-231" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3769872300403101" lon="38.9119295419473801">
         <tag k="hoot:status" v="2"/>
@@ -397,7 +397,7 @@
     <node visible="true" id="-227" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3767614000280108" lon="38.9134114712920294">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-227"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-226" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3769843190589928" lon="38.9126149866221240">
         <tag k="hoot:status" v="2"/>
@@ -422,7 +422,7 @@
     <node visible="true" id="-221" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3765936886242400" lon="38.9118674272591250">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-221"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-220" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3764363565657245" lon="38.9146900630215740">
         <tag k="hoot:status" v="2"/>
@@ -503,32 +503,32 @@
     <node visible="true" id="-201" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3760609969307360" lon="38.9119665983263161">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-201"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-200" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3754167635075873" lon="38.9124097575401748">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-200"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-198" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3747322496206458" lon="38.9138189753372075">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-198"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-197" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3742662364017892" lon="38.9138406582271088">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-197"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-196" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3741563384827238" lon="38.9138321282321655">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-196"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-195" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3739936018462942" lon="38.9109935757860583">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-195"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-194" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3750270482954807" lon="38.9106751981576551">
         <tag k="hoot:status" v="2"/>
@@ -537,12 +537,12 @@
     <node visible="true" id="-193" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3757887541167939" lon="38.9103596929020910">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-193"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-192" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3732607239925461" lon="38.9126896315196262">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-192"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-191" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3736800868454306" lon="38.9127071999999998">
         <tag k="hoot:status" v="2"/>
@@ -583,12 +583,12 @@
     <node visible="true" id="-182" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3767316134093370" lon="38.9111719375900549">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-182"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-181" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3765122878186560" lon="38.9125410466643658">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-181"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-180" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3764545529344527" lon="38.9138277272635662">
         <tag k="hoot:status" v="2"/>
@@ -685,22 +685,22 @@
     <node visible="true" id="-157" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3762310576806112" lon="38.9106666180438410">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-157"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-156" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3762475503370677" lon="38.9106795902715632">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-156"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-155" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3765810604867248" lon="38.9109419118069297">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-155"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-154" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3726648028048825" lon="38.9109120786094991">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-154"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-153" timestamp="2019-01-28T17:16:50Z" version="1" lat="15.3744572571830069" lon="38.9125861714632180">
         <tag k="hoot:status" v="2"/>
@@ -709,17 +709,17 @@
     <node visible="true" id="-152" timestamp="2019-01-28T17:16:51Z" version="1" lat="15.3775615917877015" lon="38.9164644385815350">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-152"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-151" timestamp="2019-01-28T17:16:51Z" version="1" lat="15.3725753581215461" lon="38.9159622118605952">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-151"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-150" timestamp="2019-01-28T17:16:51Z" version="1" lat="15.3769462952292741" lon="38.9104450156691755">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-150"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-149" timestamp="2019-01-28T17:16:51Z" version="1" lat="15.3740280788201069" lon="38.9125165493836249">
         <tag k="hoot:status" v="2"/>
@@ -788,7 +788,7 @@
     <node visible="true" id="-133" timestamp="2019-01-28T17:16:51Z" version="1" lat="15.3741851034651358" lon="38.9145723677837623">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-133"/>
-        <tag k="hoot:snapped" v="snapped_to_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
     </node>
     <node visible="true" id="-132" timestamp="2019-01-28T17:16:51Z" version="1" lat="15.3762273564946668" lon="38.9123126185535213">
         <tag k="hoot:status" v="2"/>
@@ -1065,7 +1065,7 @@
     <node visible="true" id="-64" timestamp="2019-01-28T17:16:07Z" version="1" lat="15.3754280000000012" lon="38.9126384999999999">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-64"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-63" timestamp="2019-01-28T17:16:07Z" version="1" lat="15.3737583000000040" lon="38.9138073000000020">
         <tag k="hoot:status" v="1"/>
@@ -1130,7 +1130,7 @@
     <node visible="true" id="-48" timestamp="2019-01-28T17:16:07Z" version="1" lat="15.3771704999999983" lon="38.9129256000000012">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-48"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-47" timestamp="2019-01-28T17:16:07Z" version="1" lat="15.3774756000000021" lon="38.9131679999999918">
         <tag k="hoot:status" v="1"/>
@@ -1155,7 +1155,7 @@
     <node visible="true" id="-42" timestamp="2019-01-28T17:16:07Z" version="1" lat="15.3765626999999974" lon="38.9101527999999988">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-42"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-41" timestamp="2019-01-28T17:16:07Z" version="1" lat="15.3754173000000023" lon="38.9092382999999984">
         <tag k="hoot:status" v="1"/>
@@ -1236,7 +1236,7 @@
     <node visible="true" id="-22" timestamp="2019-01-28T17:16:06Z" version="1" lat="15.3745588000000009" lon="38.9153805999999918">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-22"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-21" timestamp="2019-01-28T17:16:06Z" version="1" lat="15.3739724999999954" lon="38.9153147000000033">
         <tag k="hoot:status" v="1"/>
@@ -1249,7 +1249,7 @@
     <node visible="true" id="-19" timestamp="2019-01-28T17:16:06Z" version="1" lat="15.3733304000000075" lon="38.9152162999999973">
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-19"/>
-        <tag k="hoot:snapped" v="snapped_to_way_node"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
     </node>
     <node visible="true" id="-18" timestamp="2019-01-28T17:16:06Z" version="1" lat="15.3727426000000005" lon="38.9150805000000020">
         <tag k="hoot:status" v="1"/>
@@ -1331,7 +1331,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-119"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1362,7 +1362,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-116"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1372,7 +1372,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-115"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-114" timestamp="2019-01-28T17:16:51Z" version="1">
@@ -1382,7 +1382,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-114"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-113" timestamp="2019-01-28T17:16:51Z" version="1">
@@ -1398,7 +1398,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-113"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-112" timestamp="2019-01-28T17:16:51Z" version="1">
@@ -1420,7 +1420,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-111"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-110" timestamp="2019-01-28T17:16:51Z" version="1">
@@ -1442,7 +1442,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-109"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-108" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1452,7 +1452,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-108"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-107" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1462,7 +1462,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-107"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-106" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1491,7 +1491,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-104"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-103" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1510,7 +1510,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-102"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-101" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1535,7 +1535,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-100"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-99" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1568,7 +1568,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-97"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-96" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1601,7 +1601,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-94"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-93" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1619,7 +1619,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-93"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-92" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1638,7 +1638,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-91"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-90" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1657,7 +1657,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-89"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-88" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1668,7 +1668,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-88"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-87" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1685,7 +1685,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-87"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-86" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1706,7 +1706,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-85"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-84" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1719,7 +1719,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-84"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-83" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1730,7 +1730,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-83"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-82" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1767,7 +1767,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-79"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-78" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1777,7 +1777,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-78"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-77" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1799,7 +1799,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-76"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-75" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1819,7 +1819,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-74"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-73" timestamp="2019-01-28T17:16:51Z" version="1">
@@ -1829,7 +1829,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-73"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-72" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1839,7 +1839,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-72"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-71" timestamp="2019-01-28T17:16:51Z" version="1">
@@ -1863,7 +1863,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-70"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-69" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -1873,7 +1873,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-69"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-68" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -2081,7 +2081,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-49"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-48" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -2157,7 +2157,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-41"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-40" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -2186,7 +2186,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-38"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-37" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -2196,7 +2196,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-37"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-36" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -2207,7 +2207,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-36"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-35" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -2252,7 +2252,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-32"/>
         <tag k="source:datetime" v="2019-01-28T17:16:52Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-31" timestamp="2019-01-28T17:16:52Z" version="1">
@@ -2322,7 +2322,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-26"/>
         <tag k="source:datetime" v="2019-01-28T17:16:51Z"/>
-        <tag k="hoot:snapped" v="snapped_way"/>
+        <tag k="hoot:snapped" v="to_way_node_source"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-25" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2338,6 +2338,7 @@
         <tag k="hoot:id" v="-25"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-24" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2361,6 +2362,7 @@
         <tag k="hoot:id" v="-24"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-23" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2395,6 +2397,7 @@
         <tag k="hoot:id" v="-23"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-22" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2437,6 +2440,7 @@
         <tag k="hoot:id" v="-20"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-19" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2464,6 +2468,7 @@
         <tag k="hoot:id" v="-18"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-17" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2493,6 +2498,7 @@
         <tag k="hoot:id" v="-16"/>
         <tag k="source:datetime" v="2019-01-28T17:16:07Z"/>
         <tag k="surface" v="dirt"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-15" timestamp="2019-01-28T17:16:07Z" version="1">
@@ -2513,6 +2519,7 @@
         <tag k="highway" v="living_street"/>
         <tag k="hoot:id" v="-14"/>
         <tag k="source:datetime" v="2015-12-01T21:36:19.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2538,6 +2545,7 @@
         <tag k="highway" v="living_street"/>
         <tag k="hoot:id" v="-13"/>
         <tag k="source:datetime" v="2015-12-01T21:36:19.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2572,6 +2580,7 @@
         <tag k="highway" v="living_street"/>
         <tag k="hoot:id" v="-10"/>
         <tag k="source:datetime" v="2015-12-01T21:36:19.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2583,6 +2592,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-9"/>
         <tag k="source:datetime" v="2015-12-01T21:36:20.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2599,6 +2609,7 @@
         <tag k="highway" v="unclassified"/>
         <tag k="hoot:id" v="-8"/>
         <tag k="source:datetime" v="2015-12-01T21:36:20.000Z"/>
+        <tag k="hoot:snapped" v="to_way_node_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2643,6 +2654,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-5"/>
         <tag k="source:datetime" v="2015-12-01T21:36:20.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2660,6 +2672,7 @@
         <tag k="highway" v="residential"/>
         <tag k="hoot:id" v="-4"/>
         <tag k="source:datetime" v="2011-11-27T07:24:23.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -2707,6 +2720,7 @@
         <tag k="ref" v="P-2"/>
         <tag k="hoot:id" v="-1"/>
         <tag k="source:datetime" v="2015-12-01T23:23:45.000Z"/>
+        <tag k="hoot:snapped" v="to_way_target"/>
         <tag k="error:circular" v="15"/>
     </way>
 </osm>
