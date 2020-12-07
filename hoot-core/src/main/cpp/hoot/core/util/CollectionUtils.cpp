@@ -34,14 +34,4 @@
 namespace hoot
 {
 
-int CollectionUtils::numVectorItemsInCommon(const std::vector<long>& collection1,
-                                            const std::vector<long>& collection2)
-{
-  QSet<long> coll1AsSet =
-    QList<long>::fromVector(QVector<long>::fromStdVector(collection1)).toSet();
-  QSet<long> coll2AsSet =
-    QList<long>::fromVector(QVector<long>::fromStdVector(collection2)).toSet();
-  return coll1AsSet.intersect(coll2AsSet).size();
-}
-
 }

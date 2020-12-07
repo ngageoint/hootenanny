@@ -220,15 +220,6 @@ void StringUtils::removeAll(QStringList& input, const QStringList& toRemove)
   }
 }
 
-void StringUtils::removeAll(QString& input, const QStringList& toRemove,
-                            Qt::CaseSensitivity caseSensitivity)
-{
-  for (int i = 0; i < toRemove.size(); i++)
-  {
-    input.remove(toRemove.at(i), caseSensitivity);
-  }
-}
-
 void StringUtils::removeLastIndexOf(QString& input, const QStringList& toRemove,
                                     Qt::CaseSensitivity caseSensitivity)
 {
@@ -248,19 +239,6 @@ bool StringUtils::containsAny(const QStringList& input, const QStringList& toCom
   for (int i = 0; i < toCompare.size(); i++)
   {
     if (input.contains(toCompare.at(i), caseSensitivity))
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool StringUtils::startsWithAny(const QString& input, const QStringList& toCompare,
-                                Qt::CaseSensitivity caseSensitivity)
-{
-  for (int i = 0; i < toCompare.size(); i++)
-  {
-    if (input.startsWith(toCompare.at(i), caseSensitivity))
     {
       return true;
     }
@@ -295,19 +273,6 @@ QString StringUtils::endsWithAnyAsStr(const QString& input, const QStringList& t
   return "";
 }
 
-bool StringUtils::bisectsAny(const QString& input, const QStringList& toCompare,
-                             Qt::CaseSensitivity caseSensitivity)
-{
-  for (int i = 0; i < toCompare.size(); i++)
-  {
-    if (input.split(toCompare.at(i), QString::SkipEmptyParts, caseSensitivity).size() == 2)
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
 bool StringUtils::bisectsAny(const QString& input, const QList<QRegExp>& toCompare)
 {
   for (int i = 0; i < toCompare.size(); i++)
@@ -318,22 +283,6 @@ bool StringUtils::bisectsAny(const QString& input, const QList<QRegExp>& toCompa
     }
   }
   return false;
-}
-
-QStringList StringUtils::splitOnAny(const QString& input, const QStringList& tokenList,
-                                    const int numOutputTokens,
-                                    Qt::CaseSensitivity caseSensitivity)
-{
-  for (int i = 0; i < tokenList.size(); i++)
-  {
-    const QStringList inputParts =
-      input.split(tokenList.at(i), QString::SkipEmptyParts, caseSensitivity);
-    if (inputParts.size() == numOutputTokens)
-    {
-      return inputParts;
-    }
-  }
-  return QStringList();
 }
 
 QStringList StringUtils::splitOnAny(const QString& input, const QList<QRegExp>& tokenList,
@@ -370,13 +319,6 @@ void StringUtils::replaceLastIndexOf(QString& input, const QString& strToReplace
   }
 }
 
-void StringUtils::splitAndRemoveAtIndex(QString& input, const QString& splitToken, const int index)
-{
-  QStringList tokens = input.split(splitToken);
-  LOG_VART(tokens);
-  input = StringUtils::_splitAndRemoveAtIndex(tokens, index, splitToken);
-}
-
 void StringUtils::splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp, const int index)
 {
   QStringList tokens = input.split(splitExp);
@@ -393,17 +335,6 @@ QString StringUtils::_splitAndRemoveAtIndex(QStringList& input, const int index,
   }
   LOG_VART(input);
   return input.join(separator);
-}
-
-QString StringUtils::splitAndGetAtIndex(
-  const QString& input, const QString& splitToken, const int index)
-{
-  QStringList tokens = input.split(splitToken);
-  if (index < tokens.size())
-  {
-    return tokens.at(index);
-  }
-  return "";
 }
 
 QString StringUtils::splitAndGetAtIndex(

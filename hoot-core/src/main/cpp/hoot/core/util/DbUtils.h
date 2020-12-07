@@ -61,8 +61,6 @@ public:
    */
   static long getRowCount(const QSqlDatabase& database, const QString& tableName);
 
-  static QStringList getConstraintsForTable(const QSqlDatabase& database, const QString& tableName);
-
   /**
    * Disables all existing database constraints on the specified table
    *

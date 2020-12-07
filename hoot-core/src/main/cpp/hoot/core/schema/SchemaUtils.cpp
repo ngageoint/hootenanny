@@ -44,17 +44,4 @@ bool SchemaUtils::anyElementsHaveType(const ConstOsmMapPtr& map)
       std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) > 0;
 }
 
-bool SchemaUtils::allElementsHaveType(const ConstOsmMapPtr& map)
-{
-  const int elementsWithNoInfoCount =
-    (int)FilteredVisitor::getStat(
-       std::shared_ptr<NoInformationCriterion>(new NoInformationCriterion()),
-       std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map);
-  const int elementsWithTypeCount =
-    (int)FilteredVisitor::getStat(
-       std::shared_ptr<HasTypeCriterion>(new HasTypeCriterion()),
-       std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map);
-  return (elementsWithTypeCount - elementsWithNoInfoCount) == (int)map->size();
-}
-
 }

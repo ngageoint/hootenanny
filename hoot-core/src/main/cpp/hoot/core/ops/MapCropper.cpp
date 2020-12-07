@@ -198,7 +198,6 @@ void MapCropper::apply(OsmMapPtr& map)
 {
   LOG_DEBUG("Cropping ways...");
   LOG_VARD(map->size());
-  LOG_VART(ElementIdUtils::allElementIdsPositive(map));
 
   if (!_bounds)
   {
@@ -444,7 +443,6 @@ void MapCropper::apply(OsmMapPtr& map)
 
   LOG_VARD(_numAffected);
   LOG_VARD(map->size());
-  LOG_VART(ElementIdUtils::allElementIdsPositive(map));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysInBounds));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysOutOfBounds));
   LOG_VARD(StringUtils::formatLargeNumber(_numWaysCrossingThreshold));

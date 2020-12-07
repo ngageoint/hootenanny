@@ -199,17 +199,6 @@ public:
     const long nodeId, const ConstOsmMapPtr& map);
 
   /**
-   * Determines if two nodes are contained in exactly the same set of ways
-   *
-   * @param nodeId1 ID of the first node to examine
-   * @param nodeId2 ID of the second node to examine
-   * @param map map containing the nodes with the input node IDs
-   * @return true if both nodes are contained in exactly the same set of ways; false otherwise
-   */
-  static bool nodesAreContainedInTheExactSameWays(
-    const long nodeId1, const long nodeId2, const ConstOsmMapPtr& map);
-
-  /**
    * Determines if a specified node is contained by a way, given a list of way IDs
    *
    * @param nodeId the ID of the node to search for
@@ -230,15 +219,6 @@ public:
   static bool nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map);
 
   /**
-   * Determines how many ways contain a particular node
-   *
-   * @param nodeId ID of the node to search for
-   * @param map map containing the node
-   * @return the number of ways containing the given node
-   */
-  static int getNumberOfWaysContainingNode(const long nodeId, const ConstOsmMapPtr& map);
-
-  /**
    * Determines if a node is contained by more than one way in a map
    *
    * @param nodeId the ID of the node to search for
@@ -248,15 +228,6 @@ public:
   static bool nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMapPtr& map);
 
   /**
-   * Determines the IDs of ways intersecting an input way
-   *
-   * @param wayId the ID of the way to find intersecting ways for
-   * @param map the map containing the input and potentially intersecting ways
-   * @return a collection of way IDs
-   */
-  static std::set<long> getIntersectingWayIds(const long wayId, const OsmMapPtr& map);
-
-  /**
    * Determines the ways intersecting an input way
    *
    * @param wayId the ID of the way to find intersecting ways for
@@ -264,17 +235,6 @@ public:
    * @return a collection of ways
    */
   static std::vector<WayPtr> getIntersectingWays(const long wayId, const OsmMapPtr& map);
-
-  /**
-   * Determines if any way intersects with another having a specified tag
-   *
-   * @param wayId ID of the way to search intersecting ways for
-   * @param kvp tag (k=v) the intersecting way must have
-   * @param map the map containing the input and potentially intersecting ways
-   * @return true if an intersecting way with the specified tag is found; false otherwise
-   */
-  static bool wayIntersectsWithWayHavingKvp(const long wayId, const QString& kvp,
-                                            const OsmMapPtr& map);
 
   /**
    * This determines if a node belongs to a way that shares any nodes with another way.
