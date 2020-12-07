@@ -315,8 +315,8 @@ long WayUtils::closestWayNodeInsertIndex(
     return -1;
   }
 
-  // if the closest index way location is after the node's way location we want to insert before
-  // the index, so return the index
+  // If the closest index way location is after the node's way location we want to insert before
+  // the index, so return the index.
   LOG_VART(closestNodeLoc >= nodeLoc);
   if (closestNodeLoc >= nodeLoc)
   {
@@ -324,8 +324,8 @@ long WayUtils::closestWayNodeInsertIndex(
   }
   else
   {
-    // otherwise, if the closest index way location is before the node's way location we want to
-    // insert after the index, so return the index + 1
+    // Otherwise, if the closest index way location is before the node's way location we want to
+    // insert after the index, so return the index + 1.
     return closestWayNodeIndex + 1;
   }
 }

@@ -358,9 +358,9 @@ public:
     writer.setIsDebugMap(true);
     writer.write(map, _outputPath + testName +  + "Out.osm");
 
-    CPPUNIT_ASSERT_EQUAL(161L, uut.getNumFeaturesAffected());
+    CPPUNIT_ASSERT_EQUAL(160L, uut.getNumFeaturesAffected());
     CPPUNIT_ASSERT_EQUAL(123L, uut.getNumSnappedToWayNodes());
-    CPPUNIT_ASSERT_EQUAL(38L, uut.getNumSnappedToWays());
+    CPPUNIT_ASSERT_EQUAL(37L, uut.getNumSnappedToWays());
     HOOT_FILE_EQUALS(_inputPath + testName +  + "Out.osm", _outputPath + testName +  + "Out.osm");
   }
 };

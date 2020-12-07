@@ -588,80 +588,6 @@ QList<ElementId> UnconnectedWaySnapper::_getNearbyFeaturesToSnapTo(
   return neighborIds;
 }
 
-int UnconnectedWaySnapper::_getNodeToSnapWayInsertIndex(const NodePtr& nodeToSnap,
-                                                        const ConstWayPtr& wayToSnapTo) const
-{
-  LOG_TRACE(
-    "Calculating way snap insert index for: " << nodeToSnap->getElementId() << " going into: " <<
-    wayToSnapTo->getElementId() << "...");
-
-  // find the closest way node on snap target way to our node being snapped
-  const std::vector<long>& wayToSnapToNodeIds = wayToSnapTo->getNodeIds();
-  const int indexOfClosestWayNodeId =
-    wayToSnapTo->getNodeIndex(WayUtils::closestWayNodeIdToNode(nodeToSnap, wayToSnapTo, _map));
-  LOG_VART(wayToSnapToNodeIds);
-  LOG_VART(indexOfClosestWayNodeId);
-
-  int indexOfSecondClosestWayNodeId = -1;
-  if (indexOfClosestWayNodeId == 0)
-  {
-    assert(wayToSnapToNodeIds.size() >= 2);
-    indexOfSecondClosestWayNodeId = 1;
-  }
-  else if (indexOfClosestWayNodeId == (int)(wayToSnapToNodeIds.size() - 1))
-  {
-    assert(wayToSnapToNodeIds.size() >= 2);
-    indexOfSecondClosestWayNodeId = wayToSnapToNodeIds.size() - 2;
-  }
-  else
-  {
-    // For ways of length > 2, try both the way node before and after the closest way node to see
-    // which is closer to it.
-    const int wayNodeBeforeIndex = indexOfClosestWayNodeId - 1;
-    const long wayNodeBeforeId = wayToSnapTo->getNodeId(wayNodeBeforeIndex);
-    NodePtr wayNodeBefore = _map->getNode(wayNodeBeforeId);
-    const int wayNodeAfterIndex = indexOfClosestWayNodeId + 1;
-    const long wayNodeAfterId = wayToSnapTo->getNodeId(wayNodeAfterIndex);
-    NodePtr wayNodeAfter = _map->getNode(wayNodeAfterId);
-    LOG_VART(wayNodeBeforeIndex);
-    LOG_VART(wayNodeBeforeId);
-    LOG_VART(wayNodeAfterIndex);
-    LOG_VART(wayNodeAfterId);
-
-    if (!wayNodeBefore || !wayNodeAfter)
-    {
-      return -1;
-    }
-
-    // determine the second closest way node to our node being snapped
-    const double distFromBeforeWayNodeToNodeToSnap =
-      Distance::euclidean(wayNodeBefore->toCoordinate(), nodeToSnap->toCoordinate());
-    const double distFromAfterWayNodeToNodeToSnap =
-      Distance::euclidean(wayNodeAfter->toCoordinate(), nodeToSnap->toCoordinate());
-    if (distFromBeforeWayNodeToNodeToSnap < distFromAfterWayNodeToNodeToSnap)
-    {
-      indexOfSecondClosestWayNodeId = wayNodeBeforeIndex;
-    }
-    else
-    {
-      indexOfSecondClosestWayNodeId = wayNodeAfterIndex;
-    }
-  }
-  LOG_VART(indexOfSecondClosestWayNodeId);
-
-  //  Our way node snap index either takes the place of the nearest, pushing it to the right, or
-  //  it is right after the closest way node.
-  int nodeToSnapInsertIndex = indexOfClosestWayNodeId;
-  assert(indexOfSecondClosestWayNodeId != indexOfClosestWayNodeId);
-  if (indexOfSecondClosestWayNodeId > indexOfClosestWayNodeId)
-  {
-    nodeToSnapInsertIndex++;
-  }
-
-  LOG_VART(nodeToSnapInsertIndex);
-  return nodeToSnapInsertIndex;
-}
-
 bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToSnap,
                                                           const Tags& wayToSnapTags)
 {
@@ -999,7 +925,8 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,
       // Snap the node to the way.
 
       // Figure out where on the target way to insert our node being snapped.
-      const int nodeToSnapInsertIndex = _getNodeToSnapWayInsertIndex(nodeToSnap, wayToSnapTo);
+      const long nodeToSnapInsertIndex =
+        WayUtils::closestWayNodeInsertIndex(nodeToSnap, wayToSnapTo, _map);
       if (nodeToSnapInsertIndex == -1)
       {
         return false;

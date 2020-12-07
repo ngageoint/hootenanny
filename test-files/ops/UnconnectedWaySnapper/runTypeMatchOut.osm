@@ -5396,7 +5396,7 @@
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-970"/>
     </node>
-    <node visible="true" id="-969" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1364393040255720" lon="-115.2876000000000261">
+    <node visible="true" id="-969" timestamp="1970-01-01T00:00:00Z" version="1" lat="36.1364387873966635" lon="-115.2876000000000261">
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-969"/>
         <tag k="hoot:snapped" v="to_way_source"/>
@@ -19135,8 +19135,8 @@
         <nd ref="-622"/>
         <nd ref="-623"/>
         <nd ref="-624"/>
-        <nd ref="-625"/>
         <nd ref="-2293"/>
+        <nd ref="-625"/>
         <nd ref="-626"/>
         <nd ref="-627"/>
         <nd ref="-628"/>
@@ -19652,8 +19652,8 @@
         <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="-30"/>
         <nd ref="-1014"/>
+        <nd ref="-30"/>
         <nd ref="-323"/>
         <tag k="hoot:status" v="1"/>
         <tag k="highway" v="secondary"/>
@@ -19731,8 +19731,8 @@
         <nd ref="-901"/>
         <nd ref="-900"/>
         <nd ref="-27"/>
-        <nd ref="-26"/>
         <nd ref="-971"/>
+        <nd ref="-26"/>
         <nd ref="-884"/>
         <nd ref="-883"/>
         <nd ref="-882"/>
@@ -19758,8 +19758,8 @@
         <nd ref="-891"/>
         <nd ref="-917"/>
         <nd ref="-890"/>
-        <nd ref="-1037"/>
         <nd ref="-24"/>
+        <nd ref="-1037"/>
         <nd ref="-25"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-17"/>
@@ -19984,8 +19984,8 @@
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-12"/>
         <nd ref="-312"/>
-        <nd ref="-967"/>
         <nd ref="-11"/>
+        <nd ref="-967"/>
         <nd ref="-10"/>
         <nd ref="-9"/>
         <nd ref="-921"/>
