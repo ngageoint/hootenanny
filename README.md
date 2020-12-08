@@ -13,18 +13,15 @@ _Conflation_:
 
 [Hootenanny](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Introduction.asciidoc) is an open source map data conflation tool developed with machine learning techniques to facilitate automated and semi-automated conflation of critical Foundation GEOINT features in the topographic domain. **In short, it merges multiple maps into a single seamless map.**
 
-Hootenanny conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key/value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature.
-
-# Goals
+## Goals
 * Automatically combine geospatial features for decision making
 * Allow for reviewing and manually resolving features which cannot be automatically matched with sufficient certainty
 * Maintain geometry and attribute provenance for combined features
 * Create up-to-date routable transportation networks from multiple sources
 
-# When To Use
-No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to combine them manually yourself, given you are looking for a perfect result and want to avoid any potential time spent configuring software options to get the best conflated output. 
+Hootenanny conflation occurs at the dataset level, where the user’s workflow determines the best reference dataset, source content, geometry, and attributes to transfer to the output map.  Hootenanny's internal processing leverages the key/value pair structure of OpenStreetMap (OSM) for improved utility and applicability to broader user groups.  Normalized attributes can be used to aid in feature matching, and OSM’s free tagging system allows the map to include an unlimited number of attributes describing each feature.
 
-For larger datasets, however, Hootenanny is a valuable tool that can be utilized standalone or as an inital step in conjunction with a crowd sourced [mapping campaign](https://tasks.hotosm.org/) to add new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which often end up being flagged for human review so that they may be manually corrected.
+No automated map conflation technology is perfect. If you are conflating a relatively small number of features, you may be best served to combine them manually yourself, given you are looking for a perfect result and want to avoid any potential time spent configuring software options to get the best conflated output. For larger datasets, however, Hootenanny is a valuable tool that can be utilized standalone or as an inital step in conjunction with a crowd sourced [mapping campaign](https://tasks.hotosm.org/) to add new data into your dataset. You will find that the conflation automation provided by Hootenanny saves effort overall, and that most inaccuracies in the conflated output are a small subset of the input data which often end up being flagged for human review so that they may be manually corrected.
 
 # Conflatable Feature Types
 
@@ -93,21 +90,11 @@ Hootenanny has several [available filters](https://github.com/ngageoint/hootenan
 
 # Feature Validation and Cleaning
 
-Hootenanny performs no data validation reporting of its own, but JOSM validation routines may be [invoked via Hootenanny](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc) during processing of data.
+Hootenanny performs no data validation reporting of its own, but JOSM validation routines may be [invoked via Hootenanny](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc) during batch processing of data.
 
 Hootenanny has a variety of map cleaning capabilities to automatically correct erroneous data. Some of them are invoked automatically during a conflation job, however, you may also [run them separately](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/clean.asciidoc). In addition to its own built-in cleaning operations, Hootenanny is also [integrated](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidationAndCleaning.asciidoc) with the auto-fix capabilities of [JOSM](https://josm.openstreetmap.de/). 
 
 **NOTE:** As of 3/19/20 the cleaning/validation integration with JOSM is only available in the Vagrant version of Hootenanny. It will be added to the RPM version of Hootenanny at a later date.
-
-# Scalability
-Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of Hootenanny supported a map-reduce 
-architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance 
-costs to support the seldomly used capability. So, some of the conflation algorithms are actually capable of supporting distributed 
-computing, if you want to try and go that route and revive the capability. However, such capabilities are likely out of date with the rest of the codebase and may have limitations as far as the feature types they can conflate. 
-
-Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the 
-density of the data being conflated and the RAM available on the machine. Beyond that, new conflation algorithms and/or parallelization of
-existing algorithms would need to be developed to handle very large quantities of map data.
 
 # Configuration
 
@@ -154,8 +141,8 @@ hoot.saveMap(map, "output.osm");
 
 # Feature Summary
 
-In addition to conflating map data, Hootenanny also provides these capabilities:
-* [Add missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features implicitly based on their name
+In addition to conflating map data, Hootenanny also provides these supporting capabilities:
+* [Add missing type tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/ImplicitTypeTagging.asciidoc) to features implicitly based on their name (experimental)
 * [Align two maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/align.asciidoc) more closely with each other
 * [Apply data transformation operations](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations) to a map
 * [Calculate the geospatial extent](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/extent.asciidoc) of a map
@@ -164,9 +151,9 @@ In addition to conflating map data, Hootenanny also provides these capabilities:
 * [Convert maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc) between [different geodata formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
 * [Create a covering shape](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/alpha-shape.asciidoc) that minimally covers all features in a map
 * [Crop a map](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop.asciidoc) to a geospatial extent
-* [De-duplicate features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#remove-intra-map-duplicates-within-a-single-map) within a single map or across two maps or simply [find duplicate features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#mark-exact-duplicate-features-within-a-map)
-* [Derive changesets between maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive.asciidoc) and [push](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-apply.asciidoc) them to the OpenStreetMap API
-* [Detect spoken languages](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) in a map's tag data
+* [De-duplicate features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#remove-intra-map-duplicates-within-a-single-map) within a single map or across two maps or simply [find duplicate features] in a map (experimental)(https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#mark-exact-duplicate-features-within-a-map)
+* [Derive changesets between maps](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive.asciidoc) and [push](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-apply.asciidoc) through the OpenStreetMap API
+* [Detect spoken languages](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) in a map's tag data (experimental)
 * [Explore tag data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/TagExploration.asciidoc)
 * [Filter a subset of features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureFiltering.asciidoc) before conflation based on tag content and schema relationships
 * [Find street intersections by name](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#find-street-intersection-locations-in-a-map-by-street-name)
@@ -175,19 +162,29 @@ In addition to conflating map data, Hootenanny also provides these capabilities:
 * [Grab a random section of data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/crop-random.asciidoc) from a map for testing against
 * [Identify street intersection locations](https://github.com/ngageoint/hootenanny/blob/master/docs/user/IdentifyRoadIntersections.asciidoc) in a map
 * [Locate phone numbers](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LocatePhoneNumbers.asciidoc) geographically
-* [Replace data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive-replacement.asciidoc) completely within a bounding box via changeset
+* [Replace or remove data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-derive-replacement.asciidoc) completely within a bounding box via changeset and [push](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/changeset-apply.asciidoc) the changes through the OpenStreetMap API
 * [Perturb map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/perturb.asciidoc) for testing purposes
 * [Plot node density](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/plot-node-density.asciidoc)
 * [Process map postal address data](https://github.com/ngageoint/hootenanny/blob/master/docs/user/PostalAddressUtilities.asciidoc)
 * [Simplify ways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#simplify-ways-in-a-map-by-removing-unnecessary-nodes-from-them) by removing unnecessary nodes
-* [Snap unconnected ways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SnapUnconnectedWays.asciidoc) to neighboring ways by type
+* [Snap unconnected ways](https://github.com/ngageoint/hootenanny/blob/master/docs/user/SnapUnconnectedWays.asciidoc) to neighboring ways
 * [Sort map data](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/sort.asciidoc)
 * [Split](https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#split-a-map-into-multiple-maps-corresponding-to-irregular-shaped-tiles-produced-above) a map into tiles
 * [Translate feature tags](https://github.com/ngageoint/hootenanny/blob/master/docs/user/Hootenanny-id.asciidoc#translations) using standardized or user defined [schemas](https://github.com/ngageoint/hootenanny#tag-schemas)
-* [Translate feature tags to English](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc)
+* [Translate feature tags to English](https://github.com/ngageoint/hootenanny/blob/master/docs/user/LanguageTranslation.asciidoc) (experimental)
 * [Validate features](https://github.com/ngageoint/hootenanny/blob/master/docs/user/FeatureValidation.asciidoc)
 
 # [Supported Data Formats](https://github.com/ngageoint/hootenanny/tree/master/docs/user/SupportedDataFormats.asciidoc)
+
+# Scalability
+Hootenanny currently does not strive to conflate data at the global level. An earlier implementation of Hootenanny supported a map-reduce 
+architecture that was capable of global conflation for some data types but was shelved due to general lack of interest and the maintenance 
+costs to support the seldomly used capability. So, some of the conflation algorithms are actually capable of supporting distributed 
+computing, if you want to try and go that route and revive the capability. However, such capabilities are likely out of date with the rest of the codebase and may have limitations as far as the feature types they can conflate. 
+
+Hootenanny generally can scale well running on a single machine from the larger city level up to the smaller country level, depending on the 
+density of the data being conflated and the RAM available on the machine. Beyond that, new conflation algorithms and/or parallelization of
+existing algorithms would need to be developed to handle very large quantities of map data.
 
 # Documentation
 * [Included as a PDF with each release](https://github.com/ngageoint/hootenanny/releases)
@@ -197,11 +194,10 @@ In addition to conflating map data, Hootenanny also provides these capabilities:
   * [Algorithms Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyAlgorithms.asciidoc)
   * [Algorithm Detail Slides](https://github.com/ngageoint/hootenanny/wiki/Conflation-Algorithm-Slides)
   * [Developer's Guide](https://github.com/ngageoint/hootenanny/blob/master/docs/HootenannyDeveloperGuide.asciidoc)
-* When running the Hootenanny VM look for the PDF documentation included in 'hoot/docs' 
-
-# Installation
+* On the Hootenanny VM look for the PDF documentation included in 'hoot/docs' 
 * [Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/user/VAGRANT.md) to launch a virtual machine
 * [Instructions](https://github.com/ngageoint/hootenanny/blob/master/docs/install/HootenannyInstall.asciidoc) for an RPM based installation
+* [CLI](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/HootCommandLineReference.asciidoc) and [examples](https://github.com/ngageoint/hootenanny/tree/master/docs/user/CommandLineExamples.asciidoc)
 
 # Support
 * [FAQ](https://github.com/ngageoint/hootenanny/wiki/Frequently-Asked-Questions)
