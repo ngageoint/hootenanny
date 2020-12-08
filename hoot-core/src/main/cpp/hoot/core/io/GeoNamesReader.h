@@ -78,8 +78,7 @@ private:
   Meters _defaultCircularError;
   bool _useDataSourceIds;
 
-  QStringList _columns, _mil_columns;
-//  QList<int> _convertColumns, _mil_convertColumns;
+  QStringList _columns;
   QFile _fp;
   Status _status;
   QHash<QString, QString> _strings;
