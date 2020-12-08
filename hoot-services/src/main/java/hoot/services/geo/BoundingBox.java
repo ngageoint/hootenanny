@@ -110,8 +110,7 @@ public class BoundingBox {
         return result;
     }
 
-    public BoundingBox() {
-    }
+    public BoundingBox() {}
 
     public BoundingBox(double minLon, double minLat, double maxLon, double maxLat)  {
         validateAndSetCoords(minLon, minLat, maxLon, maxLat);

@@ -506,15 +506,18 @@ NOT EXISTS
     }
 
     /**
-     * Check to see if the map contains the tag bbox and return it, else null
+     * Check to see if the map contains the tag bounds or bbox and return it, else null
      * @param mapId
-     * @return bbox string for the map, null if doesnt exist
+     * @return bounds string for the map, null if doesnt exist
      */
-    public static String getMapBbox(long mapId) {
+    public static String getMapBounds(long mapId) {
         Map<String, String> tags = getMapsTableTags(mapId);
-        String bbox = tags.get("bbox");
+        String bounds = tags.get("bounds");
+        if (bounds == null) {
+            bounds = tags.get("bbox");
+        }
 
-        return bbox;
+        return bounds;
     }
 
     /**
@@ -843,10 +846,18 @@ NOT EXISTS
 
     public static String getJobBounds(String jobId) {
         String foundId = createQuery()
-            .select(Expressions.stringTemplate("tags->'bbox'"))
+            .select(Expressions.stringTemplate("tags->'bounds'"))
             .from(jobStatus)
             .where(jobStatus.jobId.eq(jobId))
             .fetchFirst();
+
+        if (foundId == null) {
+            foundId = createQuery()
+                .select(Expressions.stringTemplate("tags->'bbox'"))
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchFirst();
+        }
 
         return foundId;
     }

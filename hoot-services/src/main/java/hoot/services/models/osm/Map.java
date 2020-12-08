@@ -648,8 +648,8 @@ public class Map extends Maps {
             }
             mapLayer.setGrailMerged(tags.get("grailMerged") != null && tags.get("grailMerged").equals("true"));
             mapLayer.setGrailReference(tags.get("grailReference") != null && tags.get("grailReference").equals("true"));
-            //add bbox if used to create layer
-            if (tags.get("bbox") != null) mapLayer.setBbox(tags.get("bbox"));
+            //add bounds if used to create layer
+            if (tags.get("bounds") != null) mapLayer.setBounds(tags.get("bounds"));
             mapLayerList.add(mapLayer);
         }
 

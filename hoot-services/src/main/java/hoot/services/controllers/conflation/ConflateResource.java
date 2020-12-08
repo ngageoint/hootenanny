@@ -120,7 +120,7 @@ public class ConflateResource {
             Command[] workflow = { conflateCommand, updateTagsCommand, setFolderCommand };
 
             Map<String, Object> jobStatusTags = new HashMap<>();
-            jobStatusTags.put("bbox", params.getBounds());
+            jobStatusTags.put("bounds", params.getBounds());
             jobStatusTags.put("input1", params.getInput1());
             jobStatusTags.put("input2", params.getInput2());
             jobStatusTags.put("taskInfo", params.getTaskInfo());

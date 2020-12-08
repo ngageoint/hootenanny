@@ -217,8 +217,10 @@ public class GrailResource {
      * POST hoot-services/grail/createchangeset
      *
      * {
-     *   //The upper left (UL) and lower right (LR) of the bounding box to clip the dataset
-     *   "bounds" : "{"LR":[-77.04813267598544,38.89292259454q727],"UL":[-77.04315011486628,38.89958152667718]}",
+     *   //Can be in the form of 4 points or multiple points
+     *   "bounds": "-77.279039,39.177650,-77.275970,39.178958",
+     *   OR
+     *   "bounds": "-77.283282,39.185101;-77.291479,39.172060;-77.279806,39.166770;-77.267661,39.181209;-77.283282,39.185101"
      * }
      *
      * @param reqParams
@@ -357,7 +359,7 @@ public class GrailResource {
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
-        jobStatusTags.put("bbox", reqParams.getBounds());
+        jobStatusTags.put("bounds", reqParams.getBounds());
         jobStatusTags.put("parentId", reqParams.getParentId());
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
         jobStatusTags.put("deriveType", deriveType);
@@ -640,7 +642,7 @@ public class GrailResource {
             }
 
             Map<String, Object> jobStatusTags = new HashMap<>();
-            jobStatusTags.put("bbox", reqParams.getBounds());
+            jobStatusTags.put("bounds", reqParams.getBounds());
             jobStatusTags.put("parentId", reqParams.getParentId());
             jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
@@ -717,7 +719,7 @@ public class GrailResource {
 
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();
-        tags.put("bbox", params.getBounds());
+        tags.put("bounds", params.getBounds());
         if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
@@ -733,7 +735,7 @@ public class GrailResource {
         workflow.add(cleanFolders);
 
         Map<String, Object> jobStatusTags = new HashMap<>();
-        jobStatusTags.put("bbox", bounds);
+        jobStatusTags.put("bounds", bounds);
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
@@ -939,7 +941,7 @@ public class GrailResource {
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
-        jobStatusTags.put("bbox", reqParams.getBounds());
+        jobStatusTags.put("bounds", reqParams.getBounds());
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
@@ -1013,7 +1015,7 @@ public class GrailResource {
             // Set map tags marking dataset as eligible for derive changeset
             Map<String, String> tags = new HashMap<>();
             tags.put("grailReference", "true");
-            tags.put("bbox", params.getBounds());
+            tags.put("bounds", params.getBounds());
             if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
             InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
             workflow.add(setMapTags);

@@ -116,13 +116,13 @@ class PullOverpassCommand implements InternalCommand {
 
     /**
      * Returns the overpass query, with the expected output format set to json
-     * @param bbox
+     * @param bounds
      * @param outputFormat if set to 'xml' then the output of the returned query, when run, will be xml. json is the default if non xml is specified
      * @param query optional custom overpass query
      *
      * @return overpass query url
      */
-    static String getOverpassUrl(String overpassUrl, String bbox, String outputFormat, String query) {
+    static String getOverpassUrl(String overpassUrl, String bounds, String outputFormat, String query) {
         // Get grail overpass query from the file and store it in a string
         String overpassQuery;
 
@@ -133,14 +133,14 @@ class PullOverpassCommand implements InternalCommand {
         }
 
         //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
-        if (bbox != null) {
+        if (bounds != null) {
             // polygon contains coordinates separated by ';'
-            if (bbox.contains(";")) {
+            if (bounds.contains(";")) {
                 // We need to reverse the coordinates from lon,lat to lat,long for overpass
-                String polyBounds = PullOverpassCommand.boundsToOverpassPolyString(bbox);
+                String polyBounds = PullOverpassCommand.boundsToOverpassPolyString(bounds);
                 overpassQuery = overpassQuery.replace("{{bbox}}", "poly:\"" + polyBounds + "\"");
             } else {
-                overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bbox).toOverpassString());
+                overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(bounds).toOverpassString());
             }
         }
 

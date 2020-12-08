@@ -74,8 +74,10 @@ public class ClipDatasetResource {
      * POST hoot-services/job/clipdataset/execute
      *
      * {
-     *   //The upper left (UL) and lower right (LR) of the bounding box to clip the dataset
-     *   "BBOX" : "{"LR":[-77.04813267598544,38.89292259454q727],"UL":[-77.04315011486628,38.89958152667718]}",
+     *   //Can be in the form of 4 points or multiple points
+     *   "bounds": "-77.279039,39.177650,-77.275970,39.178958",
+     *   OR
+     *   "bounds": "-77.283282,39.185101;-77.291479,39.172060;-77.279806,39.166770;-77.267661,39.181209;-77.283282,39.185101"
      *
      *   //The name of the dataset to be clipped
      *   "INPUT_NAME" : "DcRoads",
