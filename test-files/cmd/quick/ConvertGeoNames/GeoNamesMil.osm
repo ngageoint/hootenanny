@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="-39.333333" minlon="130" maxlat="-10.282136" maxlon="153.534091"/>
+    <node visible="true" id="-2201743" timestamp="1970-01-01T00:00:00Z" version="1" lat="-10.2821359999999995" lon="142.1588729999999998">
+        <tag k="addr:country" v="AU,PG"/>
+        <tag k="mgrs" v="54LXP2690463164"/>
+        <tag k="sorting_name" v="TORRESSTRAIT"/>
+        <tag k="source" v="geonames.nga.mil"/>
+        <tag k="name:uuid" v="-3047322"/>
+        <tag k="name" v="Torres Strait"/>
+        <tag k="uuid" v="geonames.nga.mil:-2201743"/>
+        <tag k="name:en" v="Torres Strait"/>
+        <tag k="cartographic_scale:upper" v="325999"/>
+        <tag k="natural" v="strait"/>
+        <tag k="name:type" v="approved"/>
+        <tag k="jog_sheet" v="SC54-12"/>
+        <tag k="cartographic_scale:lower" v="1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1602923" timestamp="1970-01-01T00:00:00Z" version="1" lat="-26.5000000000000000" lon="153.0000000000000000">
+        <tag k="addr:country" v="AU"/>
+        <tag k="mgrs" v="56JNR0000068942"/>
+        <tag k="sorting_name" v="SUNSHINECOAST"/>
+        <tag k="source" v="geonames.nga.mil"/>
+        <tag k="name:uuid" v="-2265316"/>
+        <tag k="name" v="Sunshine Coast"/>
+        <tag k="uuid" v="geonames.nga.mil:-1602923"/>
+        <tag k="cartographic_scale:upper" v="325999"/>
+        <tag k="name:type" v="approved"/>
+        <tag k="jog_sheet" v="SG56-10"/>
+        <tag k="poi" v="coast"/>
+        <tag k="cartographic_scale:lower" v="1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1601081" timestamp="1970-01-01T00:00:00Z" version="1" lat="-33.0833330000000032" lon="149.6999999999999886">
+        <tag k="addr:country" v="AU"/>
+        <tag k="mgrs" v="55HGD5202336232"/>
+        <tag k="sorting_name" v="SOFALA"/>
+        <tag k="source" v="geonames.nga.mil"/>
+        <tag k="name:uuid" v="-2263302"/>
+        <tag k="name" v="Sofala"/>
+        <tag k="uuid" v="geonames.nga.mil:-1601081"/>
+        <tag k="cartographic_scale:upper" v="325999"/>
+        <tag k="name:type" v="approved"/>
+        <tag k="jog_sheet" v="SI55-08"/>
+        <tag k="place" v="populated"/>
+        <tag k="cartographic_scale:lower" v="1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1563951" timestamp="1970-01-01T00:00:00Z" version="1" lat="-26.7833329999999989" lon="148.4333330000000046">
+        <tag k="addr:country" v="AU"/>
+        <tag k="mgrs" v="55JFL4248936759"/>
+        <tag k="sorting_name" v="CANBERRA"/>
+        <tag k="source" v="geonames.nga.mil"/>
+        <tag k="name:uuid" v="-2222748"/>
+        <tag k="name" v="Canberra"/>
+        <tag k="uuid" v="geonames.nga.mil:-1563951"/>
+        <tag k="cartographic_scale:upper" v="325999"/>
+        <tag k="name:type" v="approved"/>
+        <tag k="jog_sheet" v="SG55-11"/>
+        <tag k="place" v="farm"/>
+        <tag k="cartographic_scale:lower" v="1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1506369" timestamp="1970-01-01T00:00:00Z" version="1" lat="-39.0000000000000000" lon="130.0000000000000000">
+        <tag k="mgrs" v="52HEB8659382748"/>
+        <tag k="sorting_name" v="GREATAUSTRALIANBIGHT"/>
+        <tag k="source" v="geonames.nga.mil"/>
+        <tag k="name:uuid" v="9343272"/>
+        <tag k="name" v="Great Australian Bight"/>
+        <tag k="uuid" v="geonames.nga.mil:-1506369"/>
+        <tag k="name:en" v="Great Australian Bight"/>
+        <tag k="cartographic_scale:upper" v="5000000"/>
+        <tag k="addr:country:2" v="AU"/>
+        <tag k="natural" v="bight"/>
+        <tag k="name:type" v="approved"/>
+        <tag k="jog_sheet" v="SJ52-11"/>
+        <tag k="cartographic_scale:lower" v="1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="-1506331" timestamp="1970-01-01T00:00:00Z" version="1" lat="-39.3333330000000032" lon="145.5000000000000000">
+        <tag k="mgrs" v="55HCS7072145159"/>
+        <tag k="sorting_name" v="BASSSTRAIT"/>
+        <tag k="source" v="geonames.nga.mil"/>
+        <tag k="name:uuid" v="9324489"/>
+        <tag k="name" v="Bass Strait"/>
+        <tag k="uuid" v="geonames.nga.mil:-1506331"/>
+        <tag k="name:en" v="Bass Strait"/>
+        <tag k="cartographic_scale:upper" v="5000000"/>
+        <tag k="addr:country:2" v="AU"/>
+        <tag k="natural" v="strait"/>
+        <tag k="name:type" v="approved"/>
+        <tag k="jog_sheet" v="SJ55-14"/>
+        <tag k="cartographic_scale:lower" v="1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="11422498" timestamp="1970-01-01T00:00:00Z" version="1" lat="-33.0901989999999984" lon="149.6929020000000037">
+        <tag k="addr:country" v="AU"/>
+        <tag k="mgrs" v="55HGD5134135487"/>
+        <tag k="sorting_name" v="SOFALACEMETERY"/>
+        <tag k="source" v="geonames.nga.mil"/>
+        <tag k="name:uuid" v="13488264"/>
+        <tag k="name" v="Sofala Cemetery"/>
+        <tag k="landuse" v="cemetery"/>
+        <tag k="uuid" v="geonames.nga.mil:11422498"/>
+        <tag k="name:en" v="Sofala Cemetery"/>
+        <tag k="cartographic_scale:upper" v="325999"/>
+        <tag k="name:type" v="approved"/>
+        <tag k="jog_sheet" v="SI55-08"/>
+        <tag k="cartographic_scale:lower" v="1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+    <node visible="true" id="14512062" timestamp="1970-01-01T00:00:00Z" version="1" lat="-28.6363060000000011" lon="153.5340909999999894">
+        <tag k="addr:country" v="AU"/>
+        <tag k="mgrs" v="56JNP5220232191"/>
+        <tag k="sorting_name" v="POSSUMCREEK"/>
+        <tag k="source" v="geonames.nga.mil"/>
+        <tag k="name:uuid" v="18830335"/>
+        <tag k="name" v="Possum Creek"/>
+        <tag k="uuid" v="geonames.nga.mil:14512062"/>
+        <tag k="name:en" v="Possum Creek"/>
+        <tag k="cartographic_scale:upper" v="150999"/>
+        <tag k="waterway" v="river"/>
+        <tag k="addr:country:2" v="AU"/>
+        <tag k="name:type" v="variant"/>
+        <tag k="jog_sheet" v="SH56-03"/>
+        <tag k="cartographic_scale:lower" v="1"/>
+        <tag k="error:circular" v="15"/>
+    </node>
+</osm>

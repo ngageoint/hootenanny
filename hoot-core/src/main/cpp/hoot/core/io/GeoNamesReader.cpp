@@ -91,7 +91,6 @@ void GeoNamesReader::open(const QString& url)
   QStringList fields;
   fields.append(line.split('\t'));
 
-//  if (_mil_columns.size() == fields.size())
   if (fields.size() == 36)
   {
     _GEONAMESID = 1;  // UFI Field
