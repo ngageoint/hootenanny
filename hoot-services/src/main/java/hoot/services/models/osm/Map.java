@@ -650,6 +650,7 @@ public class Map extends Maps {
             mapLayer.setGrailReference(tags.get("grailReference") != null && tags.get("grailReference").equals("true"));
             //add bounds if used to create layer
             if (tags.get("bounds") != null) mapLayer.setBounds(tags.get("bounds"));
+            if (tags.get("bounds") == null && tags.get("bbox") != null) mapLayer.setBounds(tags.get("bbox"));
             mapLayerList.add(mapLayer);
         }
 
