@@ -68,14 +68,14 @@ exports.calculateSearchRadius = function(map)
     hoot.debug("Using specified search radius for waterway conflation: " + exports.searchRadius);
   }
 
-  // We need to configure the maximal subline matcher to not have runaway recursion when 
-  // matching sublines. This is done based on the total length of all rivers in the input data.
-  // This isn't the best place to put this, but there's nowhere convenient in the C++ to do it, 
-  // and this is the only exported method that takes in a map and runs before the matching, 
-  // so it will do.
   var maxRecursions = -1;
   if (hoot.get("waterway.maximal.subline.auto.optimize") === 'true')
   {
+    // We need to configure the maximal subline matcher to not have runaway recursion when 
+    // matching sublines. This is done based on the total length of all rivers in the input data.
+    // This isn't the best place to put this logic, but there really isn't anywhere convenient in 
+    // the C++ to do it, and this is the only exported method that takes in a map and runs before 
+    // the matching.
     maxRecursions = getRiverMaxSublineRecursions(map);
   }
   hoot.debug("maxRecursions: " + maxRecursions);
@@ -96,7 +96,21 @@ exports.isMatchCandidate = function(map, e)
   hoot.trace("e: " + e.getElementId());
   hoot.trace("isLinearWaterway: " + isLinearWaterway(e));
 
-  return isLinearWaterway(e);
+  var isRiver = isLinearWaterway(e);
+  if (!isRiver)
+  {
+    return false;
+  }
+
+  // TODO: explain
+  var bounds = String(hoot.get("convert.bounds")).trim();
+  hoot.trace("bounds: " + bounds);
+  if (bounds !== 'undefined' && bounds !== null && bounds !== '')
+  {
+    return haveGeometricRelationship(e, bounds, "intersects", map);
+  }
+  
+  return true;
 };
 
 /**

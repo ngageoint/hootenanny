@@ -29,8 +29,10 @@
 
 // Hoot
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -52,16 +54,41 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   int riverCount = 0;
   double totalRiverLength = 0.0;
   const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
+  LOG_VARD(MapProjector::toWkt(map->getProjection()));
+
+  // TODO: explain
+  std::shared_ptr<InBoundsCriterion> boundsCrit;
+  const QString boundsStr = ConfigOptions().getConvertBounds().trimmed();
+  LOG_VARD(boundsStr);
+  if (!boundsStr.isEmpty())
+  {
+    boundsCrit.reset(new InBoundsCriterion(false));
+    std::shared_ptr<geos::geom::Geometry> bounds = GeometryUtils::boundsFromString(boundsStr);
+    // TODO:
+    if (!MapProjector::isGeographic(map))
+    {
+      std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
+      srs84->SetWellKnownGeogCS("WGS84");
+      MapProjector::project(bounds, srs84, map->getProjection());
+    }
+    boundsCrit->setBounds(bounds);
+    boundsCrit->setOsmMap(map.get());
+  }
 
   // Get the total length of all the rivers in the dataset.
-  ElementToGeometryConverter measurer(map);
+  // TODO: add a filter to LengthOfWaysVisitor and use it here instead of this
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& way = it->second;
-    if (LinearWaterwayCriterion().isSatisfied(way))
+    LOG_VART(LinearWaterwayCriterion().isSatisfied(way));
+    if (boundsCrit)
     {
-      totalRiverLength += measurer.calculateLength(way);
+      LOG_VART(boundsCrit->isSatisfied(way));
+    }
+    if (LinearWaterwayCriterion().isSatisfied(way) && (!boundsCrit || boundsCrit->isSatisfied(way)))
+    { 
+      totalRiverLength += ElementGeometryUtils::calculateLength(way, map);
       riverCount++;
     }
 
@@ -75,6 +102,7 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   }
   LOG_VARD(riverCount);
   LOG_VARD(totalRiverLength);
+
   if (riverCount == 0 || totalRiverLength == 0.0)
   {
     return -1;
@@ -86,24 +114,31 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   // a non-linear function instead). The default values were determined empirically and may need
   // tweaking.
 
-  LOG_VARD(_minRiverLengthScalingValue);
-  LOG_VARD(_maxRiverLengthScalingValue);
-  LOG_VARD(_minIterationsScalingValue);
-  LOG_VARD(_maxIterationsScalingValue);
-
   int maxRecursions = -1;
   if (totalRiverLength < _minRiverLengthScalingValue)
   {
     // For smaller amounts of rivers, let MaximalSubline determine the limit.
+    LOG_DEBUG(
+      "Total river length: " << totalRiverLength << " less than minimum scaling value: " <<
+      _minRiverLengthScalingValue << ". Allowing unlimited recursions.");
     maxRecursions = -1;
   }
   else if (totalRiverLength >= _maxRiverLengthScalingValue)
   {
     // Cap the reduction of recursions for large amounts of rivers.
     maxRecursions = _minIterationsScalingValue;
+    LOG_DEBUG(
+      "Total river length: " << totalRiverLength << " greater than or equal to maximum scaling " <<
+      "value of: " << _maxRiverLengthScalingValue << ". " << "Using maximum recursion value: " <<
+      maxRecursions);
   }
   else
   {
+    LOG_VARD(_minRiverLengthScalingValue);
+    LOG_VARD(_maxRiverLengthScalingValue);
+    LOG_VARD(_minIterationsScalingValue);
+    LOG_VARD(_maxIterationsScalingValue);
+
     // In between, we return a value that for river length is linearly scaled from min up to max,
     // and for recursions, scaled from max down to min (technically, recursions are scaled down to
     // zero, but the min case is handled separately, so doesn't matter). We may end up needing a
@@ -114,9 +149,10 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
       std::round(
         ((double)_maxIterationsScalingValue / _maxRiverLengthScalingValue) *
         (_maxRiverLengthScalingValue - totalRiverLength));
+    LOG_DEBUG(
+      "Using maximum recursion value of: " << maxRecursions << " for total river length: " <<
+      totalRiverLength);
   }
-
-  LOG_VARD(maxRecursions);
   return maxRecursions;
 }
 

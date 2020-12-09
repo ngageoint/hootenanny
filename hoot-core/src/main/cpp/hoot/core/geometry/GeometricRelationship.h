@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Enumeration mirroring the types of geometric comparisons availabe from geos::geom::Geometry
  *
- * Helpful link visually explaining the relationship:
+ * Helpful link visually explaining the relationships:
  *
  * https://gis.stackexchange.com/questions/217444/understanding-join-attributes-by-location-in-qgis
  */
@@ -54,6 +54,7 @@ public:
     Covers,
     Crosses,
     DisjointWith,
+    Equals,
     Intersects,
     IsWithin,
     Overlaps,
@@ -80,6 +81,8 @@ public:
       return "Crosses";
     case GeometricRelationship::DisjointWith:
       return "DisjointWith";
+    case GeometricRelationship::Equals:
+      return "Equals";
     case GeometricRelationship::Intersects:
       return "Intersects";
     case GeometricRelationship::IsWithin:
@@ -111,6 +114,10 @@ public:
     else if (typeString == "disjointWith")
     {
       return DisjointWith;
+    }
+    else if (typeString == "equals")
+    {
+      return Equals;
     }
     else if (typeString == "intersects")
     {

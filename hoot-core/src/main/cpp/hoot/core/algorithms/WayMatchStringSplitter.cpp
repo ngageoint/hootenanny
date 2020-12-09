@@ -29,7 +29,7 @@
 // hoot
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/io/OsmJsonWriter.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/util/Log.h>
 
 using namespace std;
@@ -80,8 +80,6 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
                                        QList<WayMatchStringMerger::SublineMappingPtr> mappings)
 {
   LOG_TRACE(QString("Splitting way %1...").arg((int)wn));
-
-  ElementToGeometryConverter ec(map);
 
   QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> wayMapping =
     _buildWayIndex(wn, map, mappings);
@@ -134,7 +132,7 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
     int c = 0;
     WayPtr w = splits[c++];
     // if this isn't empty
-    if (w && ec.calculateLength(w) > 0.0)
+    if (w && ElementGeometryUtils::calculateLength(w, map) > 0.0)
     {
       newWays.append(w);
       replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
@@ -153,7 +151,7 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
 
       w = splits[c++];
       // if this isn't empty
-      if (w && ec.calculateLength(w) > 0.0)
+      if (w && ElementGeometryUtils::calculateLength(w, map) > 0.0)
       {
         // only the last split should be non-empty
         if (i != sm.size() - 1 && discontiguous == false)

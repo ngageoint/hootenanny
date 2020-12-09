@@ -51,7 +51,6 @@ namespace hoot
 class ElementToGeometryConverterTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(ElementToGeometryConverterTest);
-  CPPUNIT_TEST(calculateLengthTest);
   CPPUNIT_TEST(convertToGeometryTest);
   CPPUNIT_TEST(convertToLinestringTest);
   CPPUNIT_TEST(convertToPolygonTest);
@@ -59,30 +58,6 @@ class ElementToGeometryConverterTest : public HootTestFixture
   CPPUNIT_TEST_SUITE_END();
 
 public:
-
-  void calculateLengthTest()
-  {
-    OsmMapPtr map(new OsmMap());
-    MapProjector::projectToPlanar(map);
-    QList<NodePtr> nodes;
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0,  0.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1, 10.0, 10.0));
-    nodes.push_back(TestUtils::createNode(map, Status::Unknown1,  0.0, 10.0));
-    WayPtr way = TestUtils::createWay(map, nodes);
-    ElementToGeometryConverter ec(map);
-
-    //  Check the length of a way
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(30.0, ec.calculateLength(way), 1e-3);
-
-    //  The length of a node should be 0 (error)
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, ec.calculateLength(map->getNode(way->getNodeId(0))), 1e-3);
-
-    //  The length of an area should be 0 (error)
-    way->addNode(way->getNodeId(0));
-    way->setTag("building", "yes");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, ec.calculateLength(way), 1e-3);
-  }
 
   void convertToGeometryTest()
   {

@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENT_TO_GEOMETRY_CONVERTER_JS_H
-#define ELEMENT_TO_GEOMETRY_CONVERTER_JS_H
+#ifndef ELEMENT_GEOMETRY_UTILS_JS_H
+#define ELEMENT_GEOMETRY_UTILS_JS_H
 
 //  Hoot
 #include <hoot/js/HootBaseJs.h>
@@ -33,21 +33,22 @@
 namespace hoot
 {
 
-class ElementToGeometryConverterJs : public HootBaseJs
+class ElementGeometryUtilsJs : public HootBaseJs
 {
 public:
 
  static void Init(v8::Handle<v8::Object> target);
 
- virtual ~ElementToGeometryConverterJs() = default;
+ virtual ~ElementGeometryUtilsJs() = default;
 
 private:
 
-  ElementToGeometryConverterJs() = default;
+  ElementGeometryUtilsJs() = default;
 
   static void calculateLength(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void haveGeometricRelationship(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 }
 
-#endif // ELEMENT_TO_GEOMETRY_CONVERTER_JS_H
+#endif // ELEMENT_GEOMETRY_UTILS_JS_H

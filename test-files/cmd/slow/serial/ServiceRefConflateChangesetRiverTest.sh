@@ -30,8 +30,8 @@ LOG_LEVEL="--warn"
 LOG_FILTER=""
 if [ "$DEBUG" == "true" ]; then
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter=River.js;RiverMaximalSublineSettingOptimizer;HighwaySnapMerger;ScriptMatchCreator;ScriptMergerCreator;UnifyingConflator;HighwaySnapMergerJs;MultipleSublineMatcherSnapMerger;SublineStringMatcherJs "
-  #LOG_FILTER="-D log.class.filter= "
+  #LOG_FILTER="-D log.class.filter=River.js;RiverMaximalSublineSettingOptimizer;HighwaySnapMerger;ScriptMatchCreator;ScriptMergerCreator;UnifyingConflator;HighwaySnapMergerJs;MultipleSublineMatcherSnapMerger;SublineStringMatcherJs;ElementGeometryUtilsJs;ElementGeometryUtils;HootLib.js "
+  LOG_FILTER="-D log.class.filter= "
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
@@ -48,6 +48,9 @@ hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate
 
 # generate a changeset between the original ref data and the diff calculated in the previous step
 hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/out.osm $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
+if [ "$DEBUG" == "true" ]; then
+  hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/diff.osm $OUTPUT_DIR/diff.osc
+fi
 
 # apply changeset back to ref
 echo "Applying changeset..."

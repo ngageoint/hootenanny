@@ -86,6 +86,7 @@ void OsmMapJs::Init(Handle<Object> target)
       FunctionTemplate::New(current, visit));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setIdGenerator"),
       FunctionTemplate::New(current, setIdGenerator));
+  // TODO: move these to a RelationMemberUtilsJs class
   tpl->PrototypeTemplate()->Set(
     String::NewFromUtf8(current, "isMemberOfRelationType"),
     FunctionTemplate::New(current, isMemberOfRelationType));

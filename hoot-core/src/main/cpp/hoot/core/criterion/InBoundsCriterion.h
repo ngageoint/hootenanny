@@ -43,6 +43,9 @@
 namespace hoot
 {
 
+/*
+ * @todo genericize this to use GeometricRelationShip?
+ */
 class InBoundsCriterion : public ElementCriterion, public Boundable, public ConstOsmMapConsumer,
   public Configurable
 {

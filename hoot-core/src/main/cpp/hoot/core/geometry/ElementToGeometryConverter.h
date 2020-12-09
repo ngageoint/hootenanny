@@ -88,11 +88,6 @@ public:
                              const bool logWarningsForMissingElements = true);
 
   /**
-   * Calculate the length of the given way in meters. The projection must be planar.
-   */
-  Meters calculateLength(const ConstElementPtr& e) const;
-
-  /**
    * Converts the given element to a geos geometry object. The tags are used with OsmSchema to
    * determine the geometry type.
    */
@@ -133,8 +128,9 @@ public:
 
 protected:
 
-  ConstElementProviderPtr                 _constProvider;
+  ConstElementProviderPtr _constProvider;
   std::shared_ptr<OGRSpatialReference>  _spatialReference;
+
   // if true, conversions to polys require that the source element be classifiable in the schema as
   // an area
   bool _requireAreaForPolygonConversion;

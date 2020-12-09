@@ -559,3 +559,11 @@ function getRiverMaxSublineRecursions(map)
 {
   return hoot.RiverMaximalSublineSettingOptimizer.getFindBestMatchesMaxRecursions(map);
 }
+
+/*
+ * TODO
+ */
+function haveGeometricRelationship(e, bounds, relationship, map)
+{
+  return hoot.ElementGeometryUtils.haveGeometricRelationship(e, bounds, relationship, map);
+}
