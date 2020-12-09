@@ -26,7 +26,7 @@ type-tagger-rules --create-raw (inputs) (translations) (output)
 ==== Examples
 
 --------------------------------------
-hoot type-tagger-rules --create-raw "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames.js" \
+hoot type-tagger-rules --create-raw "myInput.osm.pbf;myInput.geonames" "translations/OSM_Ingest.js;translations/GeoNames_to_OSM.js" \
 myRules.implicitTagRules
 --------------------------------------
 

@@ -41,35 +41,10 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapReader, GeoNamesReader)
 
 GeoNamesReader::GeoNamesReader() :
-_GEONAMESID(0),
-_LATITUDE(4),
-_LONGITUDE(5),
 _maxSaveMemoryStrings(ConfigOptions().getGeonamesReaderStringCacheSize()),
 _defaultCircularError(ConfigOptions().getCircularErrorDefaultValue()),
 _useDataSourceIds(false)
-{
-  _columns << "geonameid";
-  _columns << "name";
-  _columns << "asciiname";
-  _columns << "alternatenames";
-  _columns << "latitude";
-  _columns << "longitude";
-  _columns << "feature_class";
-  _columns << "feature_code";
-  _columns << "country_code";
-  _columns << "cc2";
-  _columns << "admin1_code";
-  _columns << "admin2_code";
-  _columns << "admin3_code";
-  _columns << "admin4_code";
-  _columns << "population";
-  _columns << "elevation";
-  _columns << "dem";
-  _columns << "timezone";
-  _columns << "modification_date";
-
-  _convertColumns << 1 << 3 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 18;
-}
+{}
 
 void GeoNamesReader::close()
 {
@@ -110,6 +85,88 @@ void GeoNamesReader::open(const QString& url)
   {
     throw HootException("Error opening file for reading: " + url);
   }
+
+  // Now figure out what type of Geonames file we have
+  QString line = QString::fromUtf8(_fp.readLine().constData());
+  QStringList fields;
+  fields.append(line.split('\t'));
+
+  if (fields.size() == 36)
+  {
+    _GEONAMESID = 1;  // UFI Field
+    _LATITUDE = 3;
+    _LONGITUDE = 4;
+
+    // Geonames.nga.mil column names
+    // https://geonames.nga.mil/gns/html/gis_countryfiles.html
+    _columns << "region_font_code"; // RC
+    _columns << "ufi";
+    _columns << "uni";
+    _columns << "latitude";
+    _columns << "longitude";
+    _columns << "dms_latitude"; // DMS_LAT
+    _columns << "dms_longitude"; // DMS_LONG
+    _columns << "mgrs";
+    _columns << "jog";
+    _columns << "feature_class"; // FC
+    _columns << "feature_code"; // DSG
+    _columns << "populated_place_code"; // PC
+    _columns << "country_code"; // CC1
+    _columns << "admin1_code"; // ADM1
+    _columns << "population"; // POP - not populated
+    _columns << "elevation"; // ELEV - not populated
+    _columns << "secondary_country_code"; // CC2
+    _columns << "name_type"; // NT
+    _columns << "language_code"; // LC
+    _columns << "short_name"; // SHORT_FORM
+    _columns << "generic_name"; // GENERIC
+    _columns << "sort_name_reading_order"; // SORT_NAME_RO
+    _columns << "full_name_reading_order"; // FULL_NAME_RO
+    _columns << "full_name_reading_order_no_diacritics"; // FULL_NAME_ND_RO
+    _columns << "sort_name_reversed_generic"; // SORT_NAME_RG
+    _columns << "full_name_reversed_generic"; // FULL_NAME_RG
+    _columns << "full_name_reversed_generic_no_diacritics"; // FULL_NAME_ND_RO
+    _columns << "note"; // NOTE
+    _columns << "modification_date"; // MODIFY_DATE
+    _columns << "display_scale"; // DISPLAY
+    _columns << "name_rank"; // NAME_RANK
+    _columns << "name_link"; // NAME_LINK
+    _columns << "transliteration_code"; // TRANSL_CODE
+    _columns << "name_modification_date"; // NM_MODIFY_DATE
+    _columns << "effective_date"; // F_EFCTV_DDT
+    _columns << "termination_date"; // F_TERM_DT
+  }
+  else
+  {
+    // Reset the text file since we do not have a header line with Geonames.Org
+    _fp.seek(0);
+
+    _GEONAMESID = 0;
+    _LATITUDE = 4;
+    _LONGITUDE = 5;
+
+    // Geonames.org column names
+    _columns << "geonameid";
+    _columns << "name";
+    _columns << "asciiname";
+    _columns << "alternatenames";
+    _columns << "latitude";
+    _columns << "longitude";
+    _columns << "feature_class";
+    _columns << "feature_code";
+    _columns << "country_code";
+    _columns << "cc2";
+    _columns << "admin1_code";
+    _columns << "admin2_code";
+    _columns << "admin3_code";
+    _columns << "admin4_code";
+    _columns << "population";
+    _columns << "elevation";
+    _columns << "dem";
+    _columns << "timezone";
+    _columns << "modification_date";
+  }
+
 }
 
 ElementPtr GeoNamesReader::readNextElement()

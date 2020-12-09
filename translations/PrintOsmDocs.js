@@ -40,7 +40,7 @@ tds40 = {};
 tds61 = {};
 mgcp = {};
 ggdm30 = {};
-geonames = {};
+//geonames = {};
 // ufd = {}
 // dnc = {}
 // utp = {}
@@ -53,7 +53,7 @@ hoot.require('tds61_rules');
 hoot.require('mgcp_rules');
 hoot.require('ggdm30_rules');
 // hoot.require('ufd_rules')
-hoot.require('geonames_rules');
+//hoot.require('geonames_rules');
 hoot.require('fcode_common');
 hoot.require('config');
 
@@ -114,7 +114,7 @@ function initialize()
   createLookup(tagList, tds61.rules.one2oneIn, 'TDS61');
   createLookup(tagList, mgcp.rules.one2one, 'MGCP');
   createLookup(tagList, mgcp.rules.one2oneIn, 'MGCP');
-  createLookup(tagList, geonames.rules.one2one, 'GeoNames');
+//  createLookup(tagList, geonames.rules.one2one, 'GeoNames');
 
   // createLookup(tagList, ufd.rules.one2one, 'UFD');
   // createLookup(tagList, utp.rules.one2one, 'UTP');

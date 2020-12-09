@@ -26,17 +26,102 @@
  */
 
 /*
-    GeoNames rules
+    Geonames conversion script
+        GeoNames -> OSM
 
-    These have been taken from the featureCOdes.txt file found at:
-    http://download.geonames.org/export/dump/featureCodes_en.txt
+  Converts both geonames.org and geonames.nga.mil files to OSM
 */
 
+hoot.require('translate');
+hoot.require('config');
 
-geonames.rules = {
+geonames = {
+    // Text rules
+    txtRules : {
+      'country_code':'addr:country',
+      'secondary_country_code':'addr:country:2',
+      'jog':'jog_sheet',
+      'mgrs':'mgrs',
+      'name':'name',
+      'full_name_reading_order':'name',
+      'transliteration_code':'name:transliteration_code',
+      'short_name':'short_name',
+      'sort_name_reading_order':'sorting_name',
+    }, // End txtRules
+
+    // Number rules
+    numRules : {
+      'elevation':'ele',
+      'dem':'ele:dem',
+      'population':'population',
+      'uni':'name:uuid',
+    }, // End numRules
+
+    // lookup table in the internal JSON structure
+    lookup : {
+      'name_type': {
+        'C':['name:type','conventional'],
+        'N':['name:type','approved'],
+        'D':['name:type','unverified'],
+        'P':['name:type','provisional'],
+        'VA':['name:type','anglicized_variant'],
+        'V':['name:type','variant'],
+        'NS':['name:type','non-roman_script'],
+        'VS':['name:type','variant_non-roman_script'],
+      },
+
+    }, // End lookup
+
+    // Display scales
+    scaleList : {'1':[1,25999],'2':[26000,67999],'3':[68000,150999],'4':[151000,225999],'5':[226000,325999],
+                 '6':[326000,425999],'7':[426000,625000],'8':[626000,999999],'9':[1000000,5000000]},
 
     // The mapping between the GeoNames feature code and OSM+
-    one2one : {
+    one2many : {
+        'ADMS':{'place':'administrative','administrative':'school_district'}, // School District
+        'RGNC':{'poi':'cultural_region'},
+        'PPLCD':{'capital':'yes'},
+        'RDIN':{'junction':'yes'},
+        'AIRG':{'aeroway':'hangar'},
+        'AIRT':{'aeroway':'terminal'},
+        'BLDA':{'building':'apartments'},
+        'CTYD':{'man_made':'court_yard'},
+        'ESTB':{'landuse':'orchard','crop':'bananas'},
+        'ESTC':{'landuse':'farmyard','crop':'cotton'},
+        'ESTSL':{'landuse':'orchard','crop':'sisal'},
+        'FIN':{'office':'financial_services'},
+        'FIRE':{'amenity':'fire_station'},
+        'FNT':{'amenity':'fountain'},
+        'FYT':{'amenity':'ferry_terminal'},
+        'GARG':{'amenity':'parking','parking':'garage'},
+        'LGHSE':{'building':'longhouse'},
+        'LIB':{'amenity':'library'},
+        'MNDT':{'industrial':'mine','product':'diatomaceous_earth'},
+        'MNNI':{'industrial':'mine','product':'nickel'},
+        'MNPB':{'industrial':'mine','product':'lead'},
+        'MNPL':{'industrial':'mine','mine:type':'placer'},
+        'MNSN':{'industrial':'mine','product':'tin'},
+        'PRNC':{'amenity':'prison_camp'},
+        'PSN':{'power':'plant','plant:source':'nuclear','landuse':'industrial'},
+        'PSS':{'power':'substation'},
+        'PSW':{'power':'plant','plant:source':'wind'},
+        'RYDQ':{'abandoned:railway':'yard'},
+        'SHOPC':{'shop':'mall'},
+        'STMGS':{'man_made':'gauging_station'},
+        'SUBS':{'railway':'station','station':'subway'},
+        'SUBW':{'railway':'subway'},
+        'SYG':{'amenity':'place_of_worship','religion':'jewish'},
+        'TOLL':{'barrier':'toll_booth'},
+        'BNCU':{'geological':'undersea_bench'},
+        'FRKU':{'geological':'undersea_fork'},
+        'FRSU':{'geological':'undersea_fork'},
+        'MDVU':{'geological':'undersea_median_valley'},
+        'MTSU':{'geological':'undersea_mountains'},
+        'PLFU':{'geological':'undersea_platform'},
+        'RAVU':{'geological':'undersea_ravine'},
+        'RMPU':{'geological':'undersea_ramp'},
+        'RNGU':{'geological':'undersea_range'},
+        'GROVE':{'natural':'wood'},
         'ADM1H':{'poi':'historical_first-order_administrative_division'}, //  historical first-order administrative division: a former first-order administrative division
         'ADM1':{'poi':'first-order_administrative_division'}, //  first-order administrative division: a primary administrative division of a country, such as a state in the United States
         'ADM2H':{'poi':'historical_second-order_administrative_division'}, //  historical second-order administrative division: a former second-order administrative division
@@ -705,6 +790,190 @@ geonames.rules = {
         'ZNF':{'place':'free_trade_zone'}, //  free trade zone: an area, usually a section of a port, where goods may be received and shipped free of customs duty and of most customs regulations
         'ZN':{'poi':'zone'}, //  zone:
         'ZOO':{'tourism':'zoo'}, //  zoo: a zoological garden or park where wild animals are kept for exhibition
-    } // End of classRules
+    }, // End of one2many
 
-} // End of geonames.rules
+
+  // Process the Alt Names
+  // In the spec, these are "varchar(8000)". We are just passing them through but we could
+  // split them if needed.
+  processAltName : function (nameIn)
+  {
+    var nameOut = '';
+
+    if (nameIn !== '')
+    {
+      nameOut = nameIn.split(',').join(';');
+    }
+
+    return nameOut;
+  },
+
+  // Convert from FIPS to ISO country codes
+  // NOTE: We may have a list:  code1,code2 etc
+  convertCountryCodeList : function (codeString)
+  {
+    var tCodeList = [];
+    codeString.split(',').forEach( function(code) {
+      var isoCode = '';
+      isoCode = translate.convertCountryCode('fips','c2',code);
+
+      // Sanity check.....
+      if (isoCode !== '') tCodeList.push(isoCode);
+    });
+
+    return tCodeList.join();
+  },
+
+  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  {
+    // List of data values to drop/ignore
+    var ignoreList = { '-999999.0':1,'-9999':1,'noinformation':1,'unknown':1 };
+
+    // This is a handy loop. We use it to:
+    // 1) Remove all of the "No Information" and -999999 fields
+    for (var col in attrs)
+    {
+      // slightly ugly but we would like to account for: 'No Information','noInformation' etc
+      // First, push to lowercase
+      var attrValue = attrs[col].toString().toLowerCase();
+
+      // Get rid of the spaces in the text
+      attrValue = attrValue.replace(/\s/g, '');
+
+      // Wipe out the useless values
+      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
+      {
+        delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
+        continue;
+      }
+    } // End in attrs loop
+
+    // Why put a population of zero?
+    if (attrs.population == '0') delete attrs.population;
+
+    // Transliteration values
+    if (attrs.transliteration_code == 'NOT_TRANSLITERATED') delete attrs.transliteration_code;
+
+  }, // End of applyToOsmPreProcessing
+
+  applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
+  {
+    // Names
+    if (attrs.alternatenames) tags.alt_name = geonames.processAltName(attrs.alternatenames);
+
+    // Metadata based on the input file type
+    if (tags.mgrs)
+    {
+      tags.source = 'geonames.nga.mil';
+      tags.uuid = 'geonames.nga.mil:' + attrs.ufi;
+
+      // Convert country codes from fips to iso
+      if (tags['addr:country'])
+      {
+        tags['addr:country'] = geonames.convertCountryCodeList(tags['addr:country']);
+      }
+
+      if (tags['addr:country:2'])
+      {
+        tags['addr:country:2'] = geonames.convertCountryCodeList(tags['addr:country:2']);
+      }
+    }
+    else
+    {
+      tags.source = 'geonames';
+      tags.uuid = 'GeoNames.org:' + attrs.geonameid;
+    }
+
+    // Some datasets have dem but not elevation.
+    if (tags['ele:dem'] && ! tags.ele)
+    {
+      tags.ele = tags['ele:dem'];
+      delete tags['ele:dem'];
+    }
+
+    // Look at language for the names
+    if (attrs.language_code)
+    {
+      var langTwo = '';
+      langTwo = translate.findLanguage2Code(attrs.language_code);
+
+      if (langTwo !== '')
+      {
+        tags['name:' + langTwo] = tags.name;
+      }
+    } // End language
+
+    // Scale
+    if (attrs.display_scale)
+    {
+      tags['cartographic_scale:lower'] = 5000000;
+      tags['cartographic_scale:upper'] = 1;
+
+      attrs['display_scale'].split(',').forEach( function(scale) {
+        // Sanity check.....
+        if (scale in geonames.scaleList)
+        {
+          if (geonames.scaleList[scale][0] < tags['cartographic_scale:lower']) tags['cartographic_scale:lower'] = geonames.scaleList[scale][0];
+          if (geonames.scaleList[scale][1] > tags['cartographic_scale:upper']) tags['cartographic_scale:upper'] = geonames.scaleList[scale][1];
+        }
+      });
+    }
+
+  }, // End applyToOsmPostProcessing
+
+}; // End of geonames
+
+
+// toOsm - Translate Attrs to Tags
+function translateToOsm(attrs, layerName, geometryType)
+{
+    tags = {};  // The final output Tag list
+
+
+    // Setup config variables. We could do this in initialize() but some things don't call it :-(
+    // Doing this so we don't have to keep calling into Hoot core
+    if (geonames.configIn == undefined)
+    {
+      geonames.configIn = {};
+      geonames.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
+
+      // Get any changes
+      geonames.toChange = hoot.Settings.get('schema.translation.override');
+    }
+
+    if (geonames.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
+
+
+    geonames.applyToOsmPreProcessing(attrs, layerName, geometryType);
+
+    // apply the simple number and text  rules
+    translate.numToOSM(attrs, tags, geonames.numRules);
+    translate.txtToOSM(attrs, tags, geonames.txtRules);
+
+    // Feature Code
+    if (geonames.one2many[attrs.feature_code])
+    {
+      for (i in geonames.one2many[attrs.feature_code]) tags[i] = geonames.one2many[attrs.feature_code][i];
+
+      // If it's just a POI, add "poi=yes"
+      if (tags['poi:type']) tags.poi = 'yes';
+    }
+
+    translate.applyOne2OneQuiet(attrs, tags, geonames.lookup,{'k':'v'});
+
+    geonames.applyToOsmPostProcessing(attrs, tags, layerName, geometryType);
+
+    // Debug:
+    if (geonames.configIn.OgrDebugDumptags == 'true')
+    {
+      // translate.debugOutput(notUsedAttrs,layerName,geometryType,'','Not used: ');
+      translate.debugOutput(tags,layerName,geometryType,'','Out tags: ');
+      print('');
+    }
+
+    // Override tag values if appropriate
+    translate.overrideValues(tags,geonames.toChange);
+
+
+    return tags;
+}; // End of translateToOsm

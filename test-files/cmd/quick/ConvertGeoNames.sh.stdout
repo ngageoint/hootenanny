@@ -1,123 +1,14 @@
-20:16:22.637 INFO  ...hoot/core/io/DataConverter.cpp( 184) Converting test-files/cmd/quick/ConvertGeoNames.geonames to /dev/stdout...
-20:16:22.640 INFO  ...ot/core/io/ElementStreamer.cpp( 132) Unable to stream I/O due to: hoot::TranslationOp
-20:16:22.642 INFO  ...ore/io/OsmMapReaderFactory.cpp( 168) Loading map from test-files/cmd/quick/ConvertGeoNames.geonames...
-20:16:22.644 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/GeoNames.js
-20:16:22.657 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/GeoNames.js
-20:16:22.665 INFO  ...chema/JavaScriptTranslator.cpp( 239) Loading translation script: /home/vagrant/hoot/translations/GeoNames.js
-20:16:22.674 INFO  ...ore/io/OsmMapWriterFactory.cpp( 129) Writing map to /dev/stdout...
-<?xml version="1.0" encoding="UTF-8"?>
-<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="29.04518" minlon="25.58912" maxlat="30.9579" maxlon="34.87893"/>
-    <node visible="true" id="293683" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1234800000000007" lon="34.7174499999999995">
-        <tag k="addr:country" v="EG"/>
-        <tag k="source" v="geonames"/>
-        <tag k="name" v="Wādī ar Rudayḩī"/>
-        <tag k="ele" v="454"/>
-        <tag k="uuid" v="GeoNames.org:293683"/>
-        <tag k="alt_name" v="Wadi ar Rudayhi;Wadi el Rideihi;Wādī ar Rudayḩī;wdy ʼ-rdyhy;ודי א-רדיהי"/>
-        <tag k="waterway" v="river"/>
-        <tag k="wadi" v="yes"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="293900" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.6862400000000015" lon="34.4035099999999971">
-        <tag k="addr:country" v="EG"/>
-        <tag k="source" v="geonames"/>
-        <tag k="name" v="Wādī al Judayrāt"/>
-        <tag k="ele" v="302"/>
-        <tag k="uuid" v="GeoNames.org:293900"/>
-        <tag k="alt_name" v="Nahal Qadesh Barnea`;Naẖal Qadesh Barnea‘;Wadi al Judayrat;Wadi al Qudayrat;Wadi el Qudeirat;Wādī al Judayrāt;Wādī al Qudayrāt"/>
-        <tag k="waterway" v="river"/>
-        <tag k="wadi" v="yes"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="294386" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.3890500000000010" lon="34.5279600000000002">
-        <tag k="addr:country" v="EG"/>
-        <tag k="source" v="geonames"/>
-        <tag k="name" v="Wādī Maghārah"/>
-        <tag k="ele" v="611"/>
-        <tag k="uuid" v="GeoNames.org:294386"/>
-        <tag k="alt_name" v="Wadi Maghara;Wadi Magharah;Wadi Makra`a;Wadi Maqra`a;Wādī Maghāra;Wādī Maghārah;Wādī Makra‘a;Wādī Maqra‘a;wdy mqrʻh;ודי מקרעה"/>
-        <tag k="waterway" v="river"/>
-        <tag k="wadi" v="yes"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="294428" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.9578999999999986" lon="34.3657299999999992">
-        <tag k="addr:country" v="EG"/>
-        <tag k="source" v="geonames"/>
-        <tag k="name" v="Naẖal Lavan"/>
-        <tag k="ele" v="172"/>
-        <tag k="uuid" v="GeoNames.org:294428"/>
-        <tag k="alt_name" v="Nahal Lavan;Naẖal Lavan;Wadi al Abyad;Wadi el Abiad;Wâdi el Abiad;Wādī al Abyaḑ;nhl lbn;נחל לבן"/>
-        <tag k="waterway" v="river"/>
-        <tag k="wadi" v="yes"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="294618" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.0369400000000013" lon="34.7175000000000011">
-        <tag k="addr:country" v="EG"/>
-        <tag k="source" v="geonames"/>
-        <tag k="name" v="Wādī al Juraynāt"/>
-        <tag k="ele" v="495"/>
-        <tag k="uuid" v="GeoNames.org:294618"/>
-        <tag k="alt_name" v="Jureinat;Jureināt;Wadi Gureinat;Wadi al Juraynat;Wadi el Gerainat;Wadi el Gireinat;Wādī al Juraynāt;Wādī el Gireināt"/>
-        <tag k="waterway" v="river"/>
-        <tag k="wadi" v="yes"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="294761" timestamp="1970-01-01T00:00:00Z" version="1" lat="29.6431800000000010" lon="34.8789299999999969">
-        <tag k="addr:country" v="EG"/>
-        <tag k="source" v="geonames"/>
-        <tag k="name" v="Har H̱izqiyyahu"/>
-        <tag k="ele" v="831"/>
-        <tag k="uuid" v="GeoNames.org:294761"/>
-        <tag k="alt_name" v="Har Hizkiyyahu;Har Hizqiyyahu;Har H̱izkiyyahu;Har H̱izqiyyahu;hr hzqyhw;הר חזקיהו"/>
-        <tag k="natural" v="mountain"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="294868" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.5083400000000005" lon="34.5270399999999995">
-        <tag k="addr:country" v="EG"/>
-        <tag k="source" v="geonames"/>
-        <tag k="name" v="Ra’s Kharūf"/>
-        <tag k="ele" v="881"/>
-        <tag k="uuid" v="GeoNames.org:294868"/>
-        <tag k="alt_name" v="Har Harif;Har H̱arif;Jebel Kharuf;Ra's Kharuf;Ras Kharuf;Ra’s Kharūf;Rās Kharūf;rs h'rwp;רס ח’רוף"/>
-        <tag k="natural" v="mountain"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="295764" timestamp="1970-01-01T00:00:00Z" version="1" lat="30.1270300000000013" lon="34.7050399999999968">
-        <tag k="addr:country" v="EG"/>
-        <tag k="source" v="geonames"/>
-        <tag k="name" v="Wādī Abū ‘Urqān"/>
-        <tag k="ele" v="460"/>
-        <tag k="uuid" v="GeoNames.org:295764"/>
-        <tag k="alt_name" v="Abu `Urjan;Abū ‘Urjān;Wadi Abu Urgan;Wadi Abu Urgân;Wadi Abu `Urgan;Wadi Abu `Urjan;Wadi Abu `Urqan;Wādī Abū ‘Urgān;Wādī Abū ‘Urjān;Wādī Abū ‘Urqān;wdy ʼbw ʻrgn;wdy ʼbw ʻrqn;ודי אבו ערגן;ודי אבו ערקן"/>
-        <tag k="waterway" v="river"/>
-        <tag k="wadi" v="yes"/>
-        <tag k="intermittent" v="yes"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="345949" timestamp="1970-01-01T00:00:00Z" version="1" lat="29.1563599999999994" lon="25.5891200000000012">
-        <tag k="addr:country" v="EG"/>
-        <tag k="source" v="geonames"/>
-        <tag k="name" v="‘Ayn ash Shifā’"/>
-        <tag k="ele" v="-14"/>
-        <tag k="uuid" v="GeoNames.org:345949"/>
-        <tag k="alt_name" v="Ain el Shafa;Tatararat;Tatarat;Tâtarât;`Ain Shafa;`Ain el-Shifa;`Ain esh Shifa;`Ayn ash Shifa';‘Ain esh Shifa;‘Ayn ash Shifā’;‘Aîn Shafa;‘Aîn el-Shifa"/>
-        <tag k="natural" v="spring"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-    <node visible="true" id="345950" timestamp="1970-01-01T00:00:00Z" version="1" lat="29.0451799999999984" lon="33.2565200000000019">
-        <tag k="addr:country" v="EG"/>
-        <tag k="source" v="geonames"/>
-        <tag k="name" v="Jabal Nakhl"/>
-        <tag k="ele" v="610"/>
-        <tag k="uuid" v="GeoNames.org:345950"/>
-        <tag k="alt_name" v="Gebel Nukhl;Gebel Nukhul;Jabal Nakhl"/>
-        <tag k="natural" v="mountain"/>
-        <tag k="error:circular" v="15"/>
-    </node>
-</osm>
+21:57:18.358 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from .../test-files/cmd/quick/ConvertGeoNames/GeoNames.osm...
+21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.360 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+21:57:18.361 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 10 elements from input in: 00:00.
+21:57:18.361 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from .../hoot3/test-output/cmd/quick/GeoNames/GeoNames.osm...
+21:57:18.361 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.361 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.361 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.361 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.361 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.361 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.361 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.361 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.362 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.362 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.362 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+21:57:18.362 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 10 elements from input in: 00:00.
+21:57:18.362 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
+21:57:18.986 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...st-files/cmd/quick/ConvertGeoNames/GeoNamesMil.osm...
+21:57:18.988 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.988 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.988 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.988 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.988 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.988 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.988 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.989 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.989 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.989 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.989 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.989 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.989 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.989 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.990 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+21:57:18.990 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 8 elements from input in: 00:00.
+21:57:18.990 INFO   ...ore/io/OsmMapReaderFactory.cpp( 171) Loading map from ...ot3/test-output/cmd/quick/GeoNames/GeoNamesMil.osm...
+21:57:18.991 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.991 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.991 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.991 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.991 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.991 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.991 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.991 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.992 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.992 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.992 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.992 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.992 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.992 INFO   .../hoot/core/io/OsmXmlReader.cpp( 890) Read 0 elements from input.        21:57:18.993 INFO   .../hoot/core/io/OsmXmlReader.cpp( 476) 	Reporting missing elements...
+21:57:18.993 INFO   ...ore/io/OsmMapReaderFactory.cpp( 215) Read 8 elements from input in: 00:00.
+21:57:18.993 STATUS .../cpp/hoot/core/cmd/DiffCmd.cpp( 145) Map difference calculated in 00:00 total.
