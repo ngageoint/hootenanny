@@ -286,5 +286,20 @@
                 "weight": 0.8
             }
         ]
+    },
+    {
+        "geometries": [
+            "linestring",
+            "area"
+        ],
+        "isA": "railway",
+        "name": "railway=construction",
+        "objectType": "tag",
+        "similarTo": [
+            {
+                "name": "railway=rail",
+                "weight": 0.8
+            }
+        ]
     }
 ]
