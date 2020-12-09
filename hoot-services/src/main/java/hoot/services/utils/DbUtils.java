@@ -28,7 +28,6 @@ package hoot.services.utils;
 
 
 import static hoot.services.HootProperties.CHANGESETS_FOLDER;
-import static hoot.services.models.db.QCurrentRelations.currentRelations;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
@@ -45,7 +44,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -318,8 +316,6 @@ public class DbUtils {
         return childrenFolders;
     }
 
-
-
     public static List<Tuple> getMapsForUser(Users user) {
 
         // return empty list if user is null
@@ -348,25 +344,25 @@ public class DbUtils {
         return mapLayerRecords;
     }
 
-/*
- * --Deletes folders that are empty (no child datasets or folders)
-DELETE
-FROM folders f
-WHERE
-NOT EXISTS
-    (
-    SELECT  NULL
-    FROM    folder_map_mappings fmm
-    WHERE   f.id = fmm.folder_id
-    )
-AND
-NOT EXISTS
-    (
-    SELECT  NULL
-    FROM    folders f2
-    WHERE   f.id = f2.parent_id
-    );
- */
+    /*
+     * --Deletes folders that are empty (no child datasets or folders)
+    DELETE
+    FROM folders f
+    WHERE
+    NOT EXISTS
+        (
+        SELECT  NULL
+        FROM    folder_map_mappings fmm
+        WHERE   f.id = fmm.folder_id
+        )
+    AND
+    NOT EXISTS
+        (
+        SELECT  NULL
+        FROM    folders f2
+        WHERE   f.id = f2.parent_id
+        );
+     */
     public static void deleteEmptyFolders() {
         QFolders folders2 = new QFolders("folders2");
         BooleanExpression isEmpty = new SQLQuery<>().from(folderMapMappings).where(folderMapMappings.folderId.eq(folders.id)).notExists()
@@ -512,24 +508,7 @@ NOT EXISTS
      */
     public static String getMapBounds(long mapId) {
         Map<String, String> tags = getMapsTableTags(mapId);
-        String bounds = tags.get("bounds");
-        if (bounds == null) {
-            bounds = tags.get("bbox");
-        }
-
-        return bounds;
-    }
-
-    /**
-     * Retrieves the maps reference layer id
-     * @param mapId
-     * @return reference layer id
-     */
-    public static Long getMergedReference(long mapId) {
-        Map<String, String> tags = getMapsTableTags(mapId);
-        String referenceId = tags.get("input1");
-
-        return Long.parseLong(referenceId);
+        return tags.get("bounds") != null ? tags.get("bounds") : tags.get("bbox");
     }
 
     /**
@@ -558,19 +537,6 @@ NOT EXISTS
                 .set(folderMapMappings.folderId, folderId)
                 .execute();
         }
-    }
-
-    /**
-     * Gets the parent folder id for the specified map
-     *
-     * @param mapId map id which we are retrieving the parent for
-     */
-    public static Long getParentFolder(Long mapId) {
-        return createQuery()
-            .select(folderMapMappings.folderId)
-            .from(folderMapMappings)
-            .where(folderMapMappings.mapId.eq(mapId))
-            .fetchFirst();
     }
 
     public static Map<String, String> getMapsTableTags(long mapId) {
@@ -618,27 +584,6 @@ NOT EXISTS
         }
     }
 
-    public static List<String> getTablesList(String tablePrefix) throws SQLException {
-        List<String> tables = new ArrayList<>();
-
-        try (Connection conn = getConnection()) {
-            String sql = "SELECT table_name " +
-                    "FROM information_schema.tables " +
-                    "WHERE table_schema='public' AND table_name LIKE " + "'" + tablePrefix.replace('-', '_') + "_%'";
-
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery()) {
-                    while (rs.next()) {
-                        // Retrieve by column name
-                        tables.add(rs.getString("table_name"));
-                    }
-                }
-            }
-        }
-
-        return tables;
-    }
-
     /**
      * Returns the count of tables and sequences
      * this map depends on
@@ -676,14 +621,13 @@ NOT EXISTS
         return count;
     }
 
-/*
-    SELECT id
-    FROM maps
-    WHERE (tags -> 'lastAccessed' IS NULL AND created_at < ts)
-    OR TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') < ts
+    /*
+        SELECT id
+        FROM maps
+        WHERE (tags -> 'lastAccessed' IS NULL AND created_at < ts)
+        OR TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') < ts
 
- */
-
+     */
     private static BooleanExpression getStale(Timestamp ts) {
         return (Expressions.stringTemplate("tags->'lastAccessed'").isNull().and(maps.createdAt.lt(ts)))
                 .or(Expressions.dateTimeTemplate(Timestamp.class, "TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')").lt(ts));
@@ -1190,13 +1134,4 @@ NOT EXISTS
         return elementInfo;
     }
 
-    public static LocalDateTime getJobStartDate(String jobId) {
-        Timestamp startTime = createQuery()
-                .select(commandStatus.start.min())
-                .from(commandStatus)
-                .where(commandStatus.jobId.eq(jobId))
-                .fetchFirst();
-
-        return startTime.toLocalDateTime();
-    }
 }
