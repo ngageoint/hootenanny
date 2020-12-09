@@ -2120,12 +2120,11 @@ tds70 = {
 
       // Fix up RLE
       // If Vertical Relative Location != Surface && Not on a Bridge, Relative Level == NA
-      if ((attrs.LOC && attrs.LOC !== '44') && (attrs.SBB && attrs.SBB == '1000'))
-      {
-        attrs.RLE = '998';
-      }
+      if ((attrs.LOC && attrs.LOC !== '44') && (attrs.SBB && attrs.SBB == '1000')) attrs.RLE = '998';
 
-    }
+      // Road condition
+      if (!attrs.PCF) attrs.PCF = '2'; // Intact
+    } // End AP030 || AQ075
 
     // RLE vs LOC: Need to deconflict this for various features.
     // This is the list of features that can be "Above Surface". Other features use RLE (Relative Level) instead.
@@ -2559,8 +2558,8 @@ tds70 = {
     if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 1: ');
 
     translate.applyTdsOne2One(notUsedTags, attrs, tds70.lookup, tds70.fcodeLookup,transMap);
-
     if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 2: ');
+    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'tags 2: ');
 
     // Post Processing.
     // We send the original list of tags and the list of tags we haven't used yet.
