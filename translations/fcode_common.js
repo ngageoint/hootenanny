@@ -176,6 +176,7 @@ fcodeCommon = {
       ['F_CODE','AN060','service','yard'], // Railway Yard
       ['F_CODE','AN075','railway','turntable'], // Railway Turntable
       ['F_CODE','AN076','railway','roundhouse'], // Roundhouse
+      ['F_CODE','AN080','railway','switch'], // Railway Signal
       ['F_CODE','AN085','railway','signal'], // Railway Signal
       ['F_CODE','AP010','highway','track'], // Cart Track
       ['F_CODE','AP020','junction','yes'], // Road Interchange - See RIT

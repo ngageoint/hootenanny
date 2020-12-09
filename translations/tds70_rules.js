@@ -78,14 +78,18 @@ tds70.rules = {
     ['F_CODE','AP030','highway','unclassified'],
     ['F_CODE','AP030','highway','yes'], // Just in case...
     ['F_CODE','AP040','barrier','lift_gate'], // Gate
-    ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
-    ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
+    // ['F_CODE','AP040','railway','crossing'], // Pedestrian Crossing - See custom rules
+    // ['F_CODE','AP040','railway','level_crossing'], // Level Crossing - See custom rules
     ['F_CODE','AP050','highway','footway'], // Trail
+    ['F_CODE','AQ062','railway','crossing'],
+    ['F_CODE','AQ062','railway','level_crossing'],
+    ['F_CODE','AQ095','man_made','adit'], // Tunnel Mouth
     ['F_CODE','AQ125','amenity','bus_station'],
     ['F_CODE','AQ125','highway','bus_station'], // Transportaion Station
     ['F_CODE','AQ125','highway','bus_stop'], // Transportaion Station
     ['F_CODE','AQ125','public_transport','stop_position'],
     ['F_CODE','AQ125','railway','station'], // Railway Station
+    ['F_CODE','AQ125','railway','halt'], // A type of stop at a Railway Station
     ['F_CODE','AQ141','parking','multi-story'], // Parking Garage
     ['F_CODE','AT042','power','pole'], // OSM
     ['F_CODE','AT042','power','tower'], // OSM
@@ -3750,6 +3754,10 @@ tds70.rules = {
     [undefined,undefined,'man_made','works'], // Works
     ['FFN','2','building','farm'], // Agriculture
 
+    ['FFN','342','railway','engine_shed'],
+    ['FFN','486','railway','crossing_box'],
+    ['FFN','342','railway','workshop'],
+
     ['FFN','827','amenity','embassy'], // Embassy
 
     ['FFN','850','building','school'],
@@ -4752,6 +4760,7 @@ tds70.rules = {
     'PAM080':'StoragePnt', // WATER_TOWER_P
     'PAN075':'TransportationGroundPnt', // RAILWAY_TURNTABLE_P
     'PAN076':'TransportationGroundPnt', // ROUNDHOUSE_P
+    'PAN080':'TransportationGroundPnt', // RAILWAY_SWITCH_P - New
     'PAP020':'TransportationGroundPnt', // ROAD_INTERCHANGE_P
     'PAP033':'TransportationGroundPnt', // ENGINEERED_TURNAROUND_SITE_P
     'PAP040':'TransportationGroundPnt', // GATE_P
@@ -4760,6 +4769,7 @@ tds70.rules = {
     'PAQ045':'TransportationGroundPnt', // BRIDGE_SPAN_P
     'PAQ055':'TransportationGroundPnt', // BRIDGE_TOWER_P
     'PAQ060':'AeronauticPnt', // CONTROL_TOWER_P
+    'PAQ062':'TransportationGroundPnt', // CROSSING_P - New
     'PAQ065':'TransportationGroundPnt', // CULVERT_P
     'PAQ068':'TransportationGroundPnt', // TRANSPORTATION_BLOCK_P
     'PAQ080':'TransportationWaterPnt', // FERRY_STATION_P
