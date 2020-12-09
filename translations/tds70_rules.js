@@ -3713,7 +3713,7 @@ tds70.rules = {
     ['ZSAX_RS0','TS','security:classification','TOP_SECRET'],
 
     // OTH Filler.  These are to build OTH values
-    ['RTY','999','highway','other'],
+    // ['RTY','999','highway','other'],
     ['FFN','999','amenity','other'],
     ['FFN','999','building','other'],
     ['FFN','999','camp:type','other'],
@@ -3737,6 +3737,7 @@ tds70.rules = {
     ['FIC','6','embankment:type','divider'], // Divider
     ['FIC','999','embankment:type','other'], // Other
 
+    // RTY - Roadway Type
     // Funky Road Type attributes from TDSv40
     ['RTY','4','ref:road:type','boulevard'], // Boulevard
     ['RTY','4','ref:road:type','avenue'], // Avenue
