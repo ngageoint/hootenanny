@@ -6,8 +6,8 @@
 
 * File Geodatabase (.gdb)
 * GeoJSON (.geojson file or Overpass query URL) (M1)
-* [geonames.org](https://www.geonames.org/) 
-* [geonames.nga.mil](https://geonames.nga.mil/gns/html/gis_countryfiles.html) (.geonames)
+* link:$$https://www.geonames.org/$$[GeoNames] (.geonames)
+* link:$$https://geonames.nga.mil/gns/html/gis_countryfiles.html$$[Geonames.nga.mil] (.geonames)
 * Hootenanny API Database (hootapidb://)
 * OpenStreetMap API Database (osmapidb://)
 * OpenStreetMap API Web Service (http://)
@@ -46,5 +46,4 @@ Additional data types can be be made importable/exportable using Hootenanny's pl
 The Hootenanny API database format (hootapidb://) is a slightly optimized version of the OSM API database with a different schema than the 
 database used with public OSM (osmapidb://) for use with conflation. The primary difference between the two is that the Hootenanny API database
 allows for multiple feature layers with each one corresponding to a map stored in its own table. The public OSM API database supports a single
-feature layer for the entire world.
-The format is meant for internal use by Hootenanny only.
+feature layer for the entire world. The format is meant for internal use by Hootenanny only.
