@@ -46,7 +46,8 @@ function getRelatedTags(relateToKvp, d) {
     var result = [];
     for (var k in d) {
         var kvp = k + '=' + d[k];
-        // This would need to be updated for features other than POI before it could be used outside of Poi.js.
+        // This would need to be updated for features other than POI before it could be used outside
+        // of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.score(relateToKvp, kvp) > 0) {
                 result.push(kvp);
@@ -78,7 +79,8 @@ function getTagsByCategory(category, d) {
     for (var k in d) {
         var kvp = k + '=' + d[k];
         // if it is not a generic type
-        // This would need to be updated for features other than POI before it could be used outside of Poi.js.
+        // This would need to be updated for features other than POI before it could be used outside
+        // of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.getCategories(kvp).indexOf(category) >= 0) {
                 result.push(kvp);
@@ -386,7 +388,8 @@ function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
 }
 
 /**
- * Another approach to snapping ways, which allows for using multiple subline matchers. See notes in ?
+ * Another approach to snapping ways, which allows for using multiple subline matchers. See related
+   notes in the mergeSets method of River.js.
  */
 function snapWays2(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2)
 {
@@ -394,8 +397,8 @@ function snapWays2(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatch
 }
 
 /**
- * Uses the SearchRadiusCalculator to automatically calculate a search radius based on tie points found
- * in the two input datasets.
+ * Uses the SearchRadiusCalculator to automatically calculate a search radius based on tie points
+   found in the two input datasets.
  *
  * @param map Map that contains the input datasets to be conflated
  * @param rubberSheetRef If true, the source layer will be moved toward the reference layer during

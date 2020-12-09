@@ -395,7 +395,9 @@ double MaximalSubline::_findBestMatchesRecursive(
   if (_findBestMatchesRecursionCount > MAX_RECURSIONS_UPPER_LIMIT ||
       (_maxRecursions != -1 && _findBestMatchesRecursionCount > _maxRecursions))
   {
-    throw RecursiveComplexityException();
+    throw RecursiveComplexityException(
+      "MaximalSubline recursive complexity exceeded at " +
+      QString::number(_findBestMatchesRecursionCount) + " recursions");
   }
   else if (_findBestMatchesRecursionCount %
            (ConfigOptions().getTaskStatusUpdateInterval() * 100) == 0)

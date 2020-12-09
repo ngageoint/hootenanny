@@ -73,7 +73,12 @@ exports.calculateSearchRadius = function(map)
   // This isn't the best place to put this, but there's nowhere convenient in the C++ to do it, 
   // and this is the only exported method that takes in a map and runs before the matching, 
   // so it will do.
-  var maxRecursions = getRiverMaxSublineRecursions(map);
+  var maxRecursions = -1;
+  if (hoot.get("waterway.maximal.subline.auto.optimize") === 'true')
+  {
+    maxRecursions = getRiverMaxSublineRecursions(map);
+  }
+  hoot.debug("maxRecursions: " + maxRecursions);
   sublineMatcher =
     new hoot.MaximalSublineStringMatcher(
       { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
@@ -136,18 +141,19 @@ function geometryMismatch(map, e1, e2)
   hoot.trace("Processing geometry...");
 
   var sublines;
-  // Try matching with our default subline matcher, which may be more accurate, but slower for complex features.
+  // Try matching with our default subline matcher, which may be more accurate, but slower for complex 
+  // features.
   hoot.trace("Extracting sublines with default...");
   sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
-  if (sublines && sublines == "RecursiveComplexityException")
+  if (sublines && String(sublines).indexOf("RecursiveComplexityException") !== -1)
   {
-    // If we receive the specfic string above from the matching routine, we know our subline matcher
-    // hit the cap on the number of recursive calls we allow for it 
-    // (see waterway.maximal.subline.max.recursive.complexity above; A little kludgy, but not sure 
-    // how to handle hoot exceptions in a js script at this point). So, now we'll try a backup matcher
-    // that may be a little less accurate but much faster. Previously tried tweaking the configuration 
-    // of MaximalSublineMatcher for performance instead of using this approach, but it didn't help.
+    // If we receive an error message with "RecursiveComplexityException" from the matching routine, we 
+    // know our subline matcher hit the cap on the number of recursive calls we allow for it (A little 
+    // kludgy, but not sure how to handle hoot exceptions in a js script at this point). So, now we'll 
+    // try a backup matcher that may be a little less accurate but much faster. Previously tried 
+    // tweaking the configuration of MaximalSublineMatcher for performance instead of using this 
+    // approach, but it didn't increase performance.
     hoot.trace("Extracting sublines with Frechet...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);
   }
@@ -160,6 +166,10 @@ function geometryMismatch(map, e1, e2)
 
     var weightedShapeDist = -1;
     hoot.trace("Getting angleHist...");
+    if (!m || !m1 || !m2)
+    {
+      return true;
+    }
     var angleHist = sampledAngleHistogramExtractor.extract(m, m1, m2);
     hoot.trace("angleHist: " + angleHist);
     if (angleHist == 0)
@@ -263,7 +273,7 @@ exports.mergeSets = function(map, pairs, replaced)
   // Feature matching also occurs during the merging phase. Since its not possible to know the 
   // original subline matcher used during matching, pass in both of the possible subline matchers 
   // that could have been used and use the same internal core logic that was used during matching to 
-  // determine which one to use now.
+  // determine which one to use during merging.
   return snapWays2(sublineMatcher, map, pairs, replaced, exports.baseFeatureType, frechetSublineMatcher);
 };
 

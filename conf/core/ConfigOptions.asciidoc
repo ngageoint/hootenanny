@@ -3955,7 +3955,7 @@ duplicate.
 * Data Type: int
 * Default Value: `-1`
 
-A random seed integer passed to the random number generator accessed by map operations and 
+A random seed integer passed to the random number generator accessed by map operations and
 visitors that modify elements randomly (used by PERTY, RandomMapCropper, etc.). to give consistent
 results over multiple runs. A value of -1 will generate a seed based on the time to provide
 pseudo-random results in the output.
@@ -4883,7 +4883,7 @@ key/value pairs with ';' and surround the entire list in double quotes.
 * Default Value: `hoot::OverwriteTag2Merger`
 
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
-depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the 
+depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the
 available mergers.
 
 === tag.merger.overwrite.accumulate.values.keys
