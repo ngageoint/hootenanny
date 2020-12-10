@@ -79,24 +79,31 @@ int HighwaySnapMerger::logWarnCount = 0;
 
 HighwaySnapMerger::HighwaySnapMerger() :
 HighwayMergerAbstract(),
+_removeTagsFromWayMembers(true),
+_markAddedMultilineStringRelations
+  (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations()),
 _matchedBy(HighwayMatch::MATCH_NAME),
 // ENABLE THE OsmMapWriterFactory::writeDebugMap CALLS FOR SMALL DATASETS DURING DEBUGGING ONLY.
 // writes a map file for each road merge
 _writeDebugMaps(true)
 {
+  LOG_VART(_markAddedMultilineStringRelations);
 }
 
 HighwaySnapMerger::HighwaySnapMerger(
   const set<pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
 _removeTagsFromWayMembers(true),
-_markAddedMultilineStringRelations(false),
+_markAddedMultilineStringRelations
+  (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations()),
 _sublineMatcher(sublineMatcher),
 _matchedBy(HighwayMatch::MATCH_NAME),
 // see note above
 _writeDebugMaps(true)
 {
   _pairs = pairs;
+
+  LOG_VART(_markAddedMultilineStringRelations);
   LOG_VART(_pairs);
 }
 
@@ -519,6 +526,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       "Replacing e2 match: " << e2Match->getElementId() << " and e2: " << eid2 <<
       " with scraps2: " << scraps2->getElementId() << "...");
     map->addElement(scraps2);
+    //RelationMemberSwapper::swap(e2Match->getElementId(), scraps2->getElementId(), map, false);
+    //RelationMemberSwapper::swap(eid2, scraps2->getElementId(), map, false);
     ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
     ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
   }
@@ -555,7 +564,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
     // Make the way that we're keeping have membership in whatever relations the way we're removing
     // was in. I *think* this makes sense. This logic may also need to be replicated elsewhere
-    // during merging. TODO: we may be able to combine the following two removals into a single one
+    // during merging.
+    // TODO: we may be able to combine the following two removals into a single one
     RelationMemberSwapper::swap(eid2, eid1, map, false);
 
     // remove reviews e2 is involved in

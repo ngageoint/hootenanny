@@ -50,11 +50,10 @@ HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, E
                                            std::shared_ptr<PartialNetworkMerger> networkMerger) :
 HighwaySnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
 _performBridgeGeometryMerging(
-ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
+  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
 _networkMerger(networkMerger)
 {
   _removeTagsFromWayMembers = false;
-  _markAddedMultilineStringRelations = true;
 }
 
 HighwayTagOnlyMerger::HighwayTagOnlyMerger(
@@ -62,10 +61,9 @@ HighwayTagOnlyMerger::HighwayTagOnlyMerger(
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
 HighwaySnapMerger(pairs, sublineMatcher),
 _performBridgeGeometryMerging(
-ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
+  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
 {
   _removeTagsFromWayMembers = false;
-  _markAddedMultilineStringRelations = true;
 }
 
 void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementPtr element2,

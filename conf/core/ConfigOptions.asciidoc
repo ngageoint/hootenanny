@@ -802,6 +802,13 @@ to have similar tags.
 
 Path to this file.  Only modified during testing the Hootenanny options command.
 
+=== conflate.mark.merge.created.multilinestring.relations
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === conflate.match.building.model
 
 * Data Type: string
@@ -2682,6 +2689,13 @@ value is set to 0 a single polygon using the bounds of the source data is being 
 
 List of tag/value pairs of metatdata tags with default values to be distributed (import) or
 collected (export).
+
+=== multilinestring.relation.collapser.types
+
+* Data Type: list
+* Default Value: ``
+
+TODO
 
 === name.criterion.case.sensitive
 
@@ -5132,6 +5146,13 @@ SampledAngleHistogramExtractor
 
 Automatically calculates the search radius to be used during conflation of waterways using rubber
 sheet tie point distances.
+
+=== waterway.mark.merge.created.multilinestring.relations
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
 
 === waterway.matcher.heading.delta
 

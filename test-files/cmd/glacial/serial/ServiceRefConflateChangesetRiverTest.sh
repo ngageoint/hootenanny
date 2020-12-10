@@ -24,16 +24,16 @@ HOOT_EMAIL="$TEST_NAME@hoottestcpp.org"
 
 GENERAL_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1" 
-CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,CollectionRelation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D convert.bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672 -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"
+CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js -D merger.creators=hoot::ScriptMergerCreator -D convert.bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672 -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false"
 
-DEBUG=false
+DEBUG=true
 LOG_LEVEL="--warn"
 LOG_FILTER=""
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter=River.js;RiverMaximalSublineSettingOptimizer;HighwaySnapMerger;ScriptMatchCreator;ScriptMergerCreator;UnifyingConflator;HighwaySnapMergerJs;MultipleSublineMatcherSnapMerger;SublineStringMatcherJs;ElementGeometryUtilsJs;ElementGeometryUtils;HootLib.js "
+  LOG_FILTER="-D log.class.filter=River.js;RiverMaximalSublineSettingOptimizer;HighwaySnapMerger;ScriptMatchCreator;ScriptMergerCreator;UnifyingConflator;HighwaySnapMergerJs;MultilineStringRelationCollapser "
   #LOG_FILTER="-D log.class.filter= "
 fi
 
@@ -52,7 +52,7 @@ hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate
 # generate a changeset between the original ref data and the diff calculated in the previous step
 hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/out.osm $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
-  hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/diff.osm $OUTPUT_DIR/diff.osc
+  hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/out.osm $OUTPUT_DIR/diff.osc
 fi
 
 # apply changeset back to ref

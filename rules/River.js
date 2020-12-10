@@ -84,6 +84,15 @@ exports.calculateSearchRadius = function(map)
       { "way.matcher.max.angle": hoot.get("waterway.matcher.max.angle"),
         "way.subline.matcher": sublineMatcherName,
         "maximal.subline.max.recursions": maxRecursions });
+
+  // TODO
+  // For some reason if this is added outside of a method, MultilineStringRelationCollapser gets
+  // added to the settings twice, so moving it here.
+  var markMergeMultiLineStringRelations =
+    (hoot.get("waterway.mark.merge.created.multilinestring.relations") === 'true');
+  hoot.set({'conflate.mark.merge.created.multilinestring.relations': markMergeMultiLineStringRelations});
+  hoot.prependToList({'conflate.post.ops': "hoot::MultilineStringRelationCollapser"});
+  hoot.set({'multilinestring.relation.collapser.types': "waterway"});
 }
 
 /**
