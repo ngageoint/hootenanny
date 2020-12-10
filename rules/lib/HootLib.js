@@ -561,9 +561,26 @@ function getRiverMaxSublineRecursions(map)
 }
 
 /*
- * TODO
+ * Determines if an element has a particular geometric relationship with a bounds
  */
 function haveGeometricRelationship(e, bounds, relationship, map)
 {
   return hoot.ElementGeometryUtils.haveGeometricRelationship(e, bounds, relationship, map);
+}
+
+/*
+ * Gets the currently configured convert bounds relationship as a string (see
+   ConfigUtils::getConvertBoundsRelationship())
+ */
+function getConvertBoundsRelationship()
+{
+  var mustContain = (hoot.get("convert.bounds.keep.only.features.inside.bounds") === 'true');
+  if (mustContain)
+  {
+    return "contains";
+  }
+  else
+  {
+    return "intersects";
+  }
 }

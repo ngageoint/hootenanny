@@ -1,11 +1,16 @@
 #!/bin/bash
 set -e
 
-# TODO
+# This tests River Reference Conflation within a bounding box. The original problem leading to the creation of this test was the fact that data
+# read in from an API DB query includes all parent relations for rivers within the bounds and subsequently, all the relation members of those
+# relations. For this test dataset, that added many additional rivers outside of the conflate bounds to input which prevented rivers from 
+# within the bounds from being conflated, as their subline matching was optimized to be less effective in order to reduce overall runtime due 
+# to the large amount of data involved (see RiverMaximalSublineSettingOptimizer). Extra per feature bounds checking has been added to River.js 
+# to prevent this, and this conflate job now runs fairly quickly and properly merges rivers within the bounds.
 
 TEST_NAME=ServiceRefConflateChangesetRiverTest
-GOLD_DIR=test-files/cmd/slow/serial/$TEST_NAME
-OUTPUT_DIR=test-output/cmd/slow/serial/$TEST_NAME
+GOLD_DIR=test-files/cmd/glacial/serial/$TEST_NAME
+OUTPUT_DIR=test-output/cmd/glacial/serial/$TEST_NAME
 rm -rf $OUTPUT_DIR
 mkdir -p $OUTPUT_DIR
 
@@ -23,12 +28,10 @@ CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js -D merger.cre
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false"
 
 DEBUG=false
-if [ "$DEBUG" == "true" ]; then
-  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
-fi
 LOG_LEVEL="--warn"
 LOG_FILTER=""
 if [ "$DEBUG" == "true" ]; then
+  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
   #LOG_FILTER="-D log.class.filter=River.js;RiverMaximalSublineSettingOptimizer;HighwaySnapMerger;ScriptMatchCreator;ScriptMergerCreator;UnifyingConflator;HighwaySnapMergerJs;MultipleSublineMatcherSnapMerger;SublineStringMatcherJs;ElementGeometryUtilsJs;ElementGeometryUtils;HootLib.js "
   LOG_FILTER="-D log.class.filter= "

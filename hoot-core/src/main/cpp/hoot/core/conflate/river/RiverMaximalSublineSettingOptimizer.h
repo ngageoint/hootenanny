@@ -35,7 +35,10 @@ namespace hoot
 {
 
 /**
- * Determines settings to optimize river conflation's use of maximal subline matching
+ * Determines settings to optimize river conflation's use of maximal subline matching. The goal here
+ * is to prevent runaway conflate runtimes from occurring. We use river length as a measure of data
+ * complexity and use that to calculate an upper limit for how many times maximal subline matching
+ * can make recursive calls.
  */
 class RiverMaximalSublineSettingOptimizer
 {

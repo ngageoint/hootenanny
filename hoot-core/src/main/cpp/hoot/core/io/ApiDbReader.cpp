@@ -520,7 +520,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
             additionalNodeIds.insert(QString::number(nodeId));
           }
 
-          //subtract nodeIds from additionalWayNodeIds, so no dupes get added
+          // subtract nodeIds from additionalWayNodeIds, so no dupes get added
           LOG_VART(nodeIds.size());
           LOG_VART(additionalNodeIds.size());
           additionalNodeIds = additionalNodeIds.subtract(nodeIds);

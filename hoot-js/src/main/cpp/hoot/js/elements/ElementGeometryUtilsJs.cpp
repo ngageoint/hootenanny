@@ -89,18 +89,16 @@ void ElementGeometryUtilsJs::haveGeometricRelationship(const FunctionCallbackInf
     Context::Scope context_scope(current->GetCurrentContext());
 
     ConstElementPtr element = toCpp<ConstElementPtr>(args[0]);
-    LOG_VART(element);
     std::shared_ptr<geos::geom::Geometry> bounds =
       GeometryUtils::boundsFromString(toCpp<QString>(args[1]));
-    LOG_VART(bounds);
     const GeometricRelationship relationship =
       GeometricRelationship::fromString(toCpp<QString>(args[2]));
-    LOG_VART(relationship);
     ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[3]);
-    LOG_VART(map.get());
-    // TODO:
+
     if (!MapProjector::isGeographic(map))
     {
+      // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
+      // the bounds.
       std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
       srs84->SetWellKnownGeogCS("WGS84");
       MapProjector::project(bounds, srs84, map->getProjection());

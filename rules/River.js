@@ -102,12 +102,29 @@ exports.isMatchCandidate = function(map, e)
     return false;
   }
 
-  // TODO: explain
+  // When data is read in with a bounds from an API database query, the default behavior is to
+  // return the parent relations and all relation members for any data inside the bounding box
+  // (fully hydrated relations). This can greatly increase the number of rivers that get conflated
+  // outside of the conflate bounds and negatively impact runtime performance. So, here we're doing
+  // an additional bounds intersection check for each feature being conflated.
+  // 
+  // Previously attempted to do an extra round of cropping after database read on the features
+  // inside ConflateCmd (similar to how Cut and Replace works to cull out extra input data; see
+  // ChangesetReplacementCreatorAbstract::_loadInputMap) in order to make the starting conflate 
+  // dataset look as desired, but that had negative effects on the input data. That's unfortunate, 
+  // b/c that would be a more intuitive way for the conflate logic to work. Another thing that was
+  // tried was to make fully hydrating relation optional, but that so far has had negative effects
+  // as well.
+  // 
+  // Note that a change similar to this may need to eventually be added for other conflate data
+  // types (linear or all?). Also, not much work has been done so far to see what impact this change
+  // has on the runtime performance against large datasets when a bounds is used.
+
   var bounds = String(hoot.get("convert.bounds")).trim();
   hoot.trace("bounds: " + bounds);
   if (bounds !== 'undefined' && bounds !== null && bounds !== '')
   {
-    return haveGeometricRelationship(e, bounds, "intersects", map);
+    return haveGeometricRelationship(e, bounds, getConvertBoundsRelationship(), map);
   }
   
   return true;

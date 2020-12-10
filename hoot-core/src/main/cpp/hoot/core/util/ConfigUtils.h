@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/geometry/GeometricRelationship.h>
 
 // Qt
 #include <QStringList>
@@ -58,6 +59,13 @@ public:
    * @return
    */
   static std::shared_ptr<geos::geom::Geometry> getConvertBounds();
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static GeometricRelationship getConvertBoundsRelationship();
 
   /**
    * Removes ApiTruncateTagVisitor from conflate ops if the corresponding config option is

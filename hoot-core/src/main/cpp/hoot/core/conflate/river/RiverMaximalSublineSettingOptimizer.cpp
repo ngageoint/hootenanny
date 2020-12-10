@@ -33,11 +33,14 @@
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
 {
 
 RiverMaximalSublineSettingOptimizer::RiverMaximalSublineSettingOptimizer() :
+// These values were determined empirically against a relatively small number of datasets and may
+// require additional tweaking.
 _minRiverLengthScalingValue(150000.0),
 _maxRiverLengthScalingValue(50000000.0),
 _minIterationsScalingValue(50),
@@ -56,17 +59,22 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   const int statusUpdateInterval = ConfigOptions().getTaskStatusUpdateInterval();
   LOG_VARD(MapProjector::toWkt(map->getProjection()));
 
-  // TODO: explain
+  // If a bounds was specified for the conflate job, need to ensure that all the rivers whose length
+  // we are summing have some porition of them within the bounds. See related note in the
+  // isMatchCandidate method of River.js.
   std::shared_ptr<InBoundsCriterion> boundsCrit;
   const QString boundsStr = ConfigOptions().getConvertBounds().trimmed();
   LOG_VARD(boundsStr);
   if (!boundsStr.isEmpty())
   {
-    boundsCrit.reset(new InBoundsCriterion(false));
+    const GeometricRelationship boundsRelationship = ConfigUtils::getConvertBoundsRelationship();
+    const bool mustContain = true ? (boundsRelationship == GeometricRelationship::Contains) : false;
+    boundsCrit.reset(new InBoundsCriterion(mustContain));
     std::shared_ptr<geos::geom::Geometry> bounds = GeometryUtils::boundsFromString(boundsStr);
-    // TODO:
     if (!MapProjector::isGeographic(map))
     {
+      // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
+      // the bounds.
       std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
       srs84->SetWellKnownGeogCS("WGS84");
       MapProjector::project(bounds, srs84, map->getProjection());
@@ -76,7 +84,7 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   }
 
   // Get the total length of all the rivers in the dataset.
-  // TODO: add a filter to LengthOfWaysVisitor and use it here instead of this
+  // TODO: add a filter option to LengthOfWaysVisitor and use it here instead of this
   const WayMap& ways = map->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {

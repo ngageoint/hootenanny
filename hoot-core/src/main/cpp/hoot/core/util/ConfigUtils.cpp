@@ -64,6 +64,15 @@ std::shared_ptr<geos::geom::Geometry> ConfigUtils::getConvertBounds()
   return std::shared_ptr<geos::geom::Geometry>();
 }
 
+GeometricRelationship ConfigUtils::getConvertBoundsRelationship()
+{
+  if (ConfigOptions().getConvertBoundsKeepOnlyFeaturesInsideBounds())
+  {
+    return GeometricRelationship::Contains;
+  }
+  return GeometricRelationship::Intersects;
+}
+
 void ConfigUtils::checkForTagValueTruncationOverride()
 {
   // Disable tag truncation if the override option is in place.
