@@ -1050,7 +1050,7 @@ public class GrailResource {
         String[] splitUrl = urlString.split("(?=data)"); // prevents removal of 'data' text
         URL url = new URL(splitUrl[0]);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
+        conn.setRequestMethod(urlString.contains(replaceSensitiveData(RAILSPORT_PUSH_URL)) ? "GET" : "POST"); // Need to use GET for rails port
         conn.setDoOutput(true);
 
         if (url.getProtocol().equalsIgnoreCase("https")) {
