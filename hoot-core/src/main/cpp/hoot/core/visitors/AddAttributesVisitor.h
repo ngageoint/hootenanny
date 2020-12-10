@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * Adds one or more attributes to elements.  Only common OSM attributes may be added
+ * Adds one or more attributes to elements. Only common OSM attributes may be added
  * (see ElementAttributeType).
  */
 class AddAttributesVisitor : public MultipleCriterionConsumerVisitor, public Configurable
