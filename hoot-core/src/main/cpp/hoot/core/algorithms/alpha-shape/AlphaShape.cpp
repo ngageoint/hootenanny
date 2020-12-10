@@ -31,6 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/geometry/GeometryMerger.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/StringUtils.h>
@@ -235,6 +236,10 @@ void AlphaShape::insert(const vector<pair<double, double>>& points)
     _pDelauneyTriangles->insert(randomized[i].first, randomized[i].second);
   }
   LOG_VARD(_pDelauneyTriangles->getFaces().size());
+  //  Report the final progress
+  PROGRESS_INFO(
+    "Added " << StringUtils::formatLargeNumber(randomized.size() - 1) << " / " <<
+    StringUtils::formatLargeNumber(randomized.size() - 1) << " points.");
 }
 
 OsmMapPtr AlphaShape::_toOsmMap()
@@ -393,13 +398,14 @@ GeometryPtr AlphaShape::toGeometry()
   }
 
   LOG_DEBUG("Joining " << StringUtils::formatLargeNumber(faces.size()) << " faces...");
-  GeometryPtr result = GeometryUtils::mergeGeometries(faces, e);
+  GeometryPtr result = GeometryMerger().mergeGeometries(faces, e);
 
   LOG_DEBUG("Creating output geometry...");
 
   if (!result || result->isEmpty())
     result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
 
+  LOG_DEBUG("Validating output geometry...");
   //  Validate the resulting geometry
   result.reset(GeometryUtils::validateGeometry(result.get()));
 

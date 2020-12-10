@@ -28,16 +28,18 @@
 #include "AlphaShapeGenerator.h"
 
 // Hoot
-#include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/geometry/GeometryToElementConverter.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/GeometryMerger.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // GEOS
 #include <geos/geom/GeometryFactory.h>
+
+// Standard
+#include <thread>
 
 using namespace geos::geom;
 using namespace std;
@@ -48,7 +50,9 @@ namespace hoot
 AlphaShapeGenerator::AlphaShapeGenerator(const double alpha, const double buffer)
   : _alpha(alpha),
     _buffer(buffer),
-    _manuallyCoverSmallPointClusters(true)
+    _manuallyCoverSmallPointClusters(true),
+    _maxThreads(ConfigOptions().getCookieCutterAlphaShapeMaxThreads()),
+    _working(true)
 {
   LOG_VART(_alpha);
   LOG_VART(_buffer);
@@ -106,14 +110,11 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
   LOG_VART(points.size());
 
   // create a complex geometry representing the alpha shape
-
-  std::shared_ptr<Geometry> cutterShape;
-
   AlphaShape alphaShape(_alpha);
   alphaShape.insert(points);
   try
   {
-    cutterShape = alphaShape.toGeometry();
+    _geometry = alphaShape.toGeometry();
   }
   catch (const IllegalArgumentException& /*e*/)
   {
@@ -121,24 +122,23 @@ std::shared_ptr<Geometry> AlphaShapeGenerator::generateGeometry(OsmMapPtr inputM
       "Failed to generate alpha shape geometry with alpha value of: " <<
       StringUtils::formatLargeNumber(_alpha) << ".");
   }
-  if (!cutterShape)
+  if (!_geometry)
   {
-    cutterShape.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
+    _geometry.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
-  cutterShape.reset(cutterShape->buffer(_buffer));
+  _geometry.reset(_geometry->buffer(_buffer));
 
   // See _coverStragglers description. This is an add-on behavior that is separate from the original
   // Alpha Shape algorithm.
   if (_manuallyCoverSmallPointClusters)
   {
-    _coverStragglers(cutterShape, inputMap);
+    _coverStragglers(inputMap);
   }
 
-  return cutterShape;
+  return _geometry;
 }
 
-void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry,
-                                           const ConstOsmMapPtr& map)
+void AlphaShapeGenerator::_coverStragglers(const ConstOsmMapPtr& map)
 {
   LOG_DEBUG("Covering stragglers...");
 
@@ -146,36 +146,75 @@ void AlphaShapeGenerator::_coverStragglers(std::shared_ptr<Geometry>& geometry,
   // a buffer around it. This can get very slow for fairly large linear datasets. May need a new alg
   // here, if possible, for better performance.
   const NodeMap& nodes = map->getNodes();
-  vector<GeometryPtr> stragglers;
-  int processed = 0;
+  //  Push all nodes onto the work queue
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+    _nodes.push(it->second);
+  //  Start all of the threads
+  std::vector<std::thread> threads;
+  for (int i = 0; i < _maxThreads; ++i)
+    threads.push_back(thread(&AlphaShapeGenerator::_coverStragglersWorker, this));
+  //  Set working to false after starting all threads so that they end once the queue is empty
+  _working = false;
+  //  Wait on all threads to end
+  for (int i = 0; i < _maxThreads; ++i)
+    threads[i].join();
+
+  if (_stragglers.size() > 0)
   {
-    NodePtr node = it->second;
-    GeometryPtr point(
-      GeometryFactory::getDefaultInstance()->createPoint(
-        geos::geom::Coordinate(node->getX(), node->getY())));
-    if (!geometry->contains(point.get()))
-    {
-      LOG_TRACE(
-        "Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");
-      point.reset(point->buffer(_buffer));
-      stragglers.push_back(point);
-    }
-    processed++;
-  }
-
-  LOG_VARD(processed);
-
-
-  if (stragglers.size() > 0)
-  {
-    LOG_DEBUG("Adding " << stragglers.size() << " point stragglers to alpha shape.");
+    LOG_DEBUG("Adding " << StringUtils::formatLargeNumber(_stragglers.size())
+              << " point stragglers to alpha shape.");
     //  Merge the stragglers geometries
-    GeometryPtr merged = GeometryUtils::mergeGeometries(stragglers, *geometry->getEnvelopeInternal());
+    GeometryPtr merged = GeometryMerger().mergeGeometries(_stragglers, *_geometry->getEnvelopeInternal());
     //  Join the original geometry with the stragglers geometry
-    geometry.reset(geometry->Union(merged.get()));
+    _geometry.reset(_geometry->Union(merged.get()));
   }
-  LOG_VART(geometry->getArea());
+  LOG_VART(_geometry->getArea());
+}
+
+void AlphaShapeGenerator::_coverStragglersWorker()
+{
+  //  Make a thread local copy of the geometry because Geometry::contains() is not thread-safe
+  GeometryPtr copy(_geometry->clone());
+  //  Set the initial stack size to int max to enter the loop once and check actual stack size
+  int stack_size = std::numeric_limits<int>::max();
+  //  Keep looping while there is work on the stack
+  while (_working || stack_size > 0)
+  {
+    //  Get the top node off of the stack
+    _nodesMutex.lock();
+    NodePtr node;
+    stack_size = _nodes.size();
+    if (stack_size > 0)
+    {
+      node = _nodes.top();
+      _nodes.pop();
+      --stack_size;
+    }
+    _nodesMutex.unlock();
+    //  Where the node is valid check ::contains()
+    if (node)
+    {
+      GeometryPtr point(
+        GeometryFactory::getDefaultInstance()->createPoint(
+          geos::geom::Coordinate(node->getX(), node->getY())));
+      //  Geometry::contains() is a time consuming function call (and not thread safe
+      //  so all threads need their own `copy`)
+      if (!copy->contains(point.get()))
+      {
+        LOG_TRACE(
+          "Point " << point->toString() << " not covered by alpha shape. Buffering and adding it...");
+        point.reset(point->buffer(_buffer));
+        _stragglersMutex.lock();
+        _stragglers.push_back(point);
+        _stragglersMutex.unlock();
+      }
+    }
+    else
+    {
+      //  Sleep if the node wasn't valid
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+  }
 }
 
 }
