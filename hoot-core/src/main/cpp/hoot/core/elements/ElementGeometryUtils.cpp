@@ -172,57 +172,6 @@ bool ElementGeometryUtils::haveGeometricRelationship(
   return haveRelationship;
 }
 
-double ElementGeometryUtils::getDistance(const ConstElementPtr& element1,
-                                         const ConstElementPtr& element2, ConstOsmMapPtr map)
-{
-  if (!element1 || !element2)
-  {
-    throw IllegalArgumentException("One of the input elements is null.");
-  }
-  LOG_VART(element1->getElementId());
-  LOG_VART(element2->getElementId());
-
-  double distance = -1.0;
-
-  std::shared_ptr<geos::geom::Geometry> element1Geom = _getGeometry(element1, map);
-  std::shared_ptr<geos::geom::Geometry> element2Geom = _getGeometry(element2, map);
-  if (element1Geom && element2Geom)
-  {
-    distance = element1Geom->distance(element2Geom.get());
-    LOG_TRACE(
-      "Calculated distance: " << distance << " for: " << element1->getElementId() <<
-      " and: " << element2->getElementId() << ".");
-  }
-  else
-  {
-    LOG_TRACE(
-      "Unable to calculate distance for: " << element1->getElementId() <<
-      " and: " << element2->getElementId() << ".");
-  }
-
-  return distance;
-}
-
-double ElementGeometryUtils::getArea(const ConstElementPtr& element, ConstOsmMapPtr map)
-{
-  if (!element)
-  {
-    throw IllegalArgumentException("The input element is null.");
-  }
-
-  std::shared_ptr<geos::geom::Geometry> geom = _getGeometry(element, map);
-  double area = -1.0;
-  if (geom)
-  {
-    area = geom->getArea();
-  }
-  else
-  {
-    LOG_TRACE("Unable to calculate area for: " << element->getElementId() << ".");
-  }
-  return area;
-}
-
 std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
   const ConstElementPtr& element, ConstOsmMapPtr map)
 {
