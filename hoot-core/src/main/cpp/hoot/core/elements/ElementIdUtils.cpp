@@ -52,33 +52,4 @@ QSet<ElementId> ElementIdUtils::elementsToElementIds(const std::vector<ElementPt
   return ids;
 }
 
-bool ElementIdUtils::allElementIdsPositive(const ConstOsmMapPtr& map)
-{
-  std::shared_ptr<AttributeValueCriterion> attrCrit(
-    new AttributeValueCriterion(
-      ElementAttributeType(ElementAttributeType::Id), 1, NumericComparisonType::LessThan));
-  return
-    (int)FilteredVisitor::getStat(
-      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) == 0;
-}
-
-bool ElementIdUtils::allElementIdsNegative(const ConstOsmMapPtr& map)
-{
-  std::shared_ptr<AttributeValueCriterion> attrCrit(
-    new AttributeValueCriterion(
-      ElementAttributeType(ElementAttributeType::Id), -1, NumericComparisonType::GreaterThan));
-  return
-    (int)FilteredVisitor::getStat(
-      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) == 0;
-}
-
-bool ElementIdUtils::allIdTagsMatchIds(const ConstOsmMapPtr& map)
-{
-  std::shared_ptr<IdTagMatchesId> idCrit(new IdTagMatchesId());
-  return
-    (int)FilteredVisitor::getStat(
-      idCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) ==
-    (int)map->size();
-}
-
 }

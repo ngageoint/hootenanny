@@ -87,36 +87,4 @@ bool OsmUtils::isChild(const ElementId& elementId, const ConstOsmMapPtr& map)
   return false;
 }
 
-bool OsmUtils::containsMember(const ConstElementPtr& parent, const ElementId& memberId)
-{
-  if (!parent ||
-      (parent->getElementType() != ElementType::Way &&
-       parent->getElementType() != ElementType::Relation))
-  {
-    throw IllegalArgumentException("The parent element is null or of the wrong element type.");
-  }
-  if (parent->getElementType() != ElementType::Way && memberId.getType() != ElementType::Node)
-  {
-    throw IllegalArgumentException("The inputs are of the wrong element type.");
-  }
-  if (parent->getElementType() != ElementType::Relation &&
-      memberId.getType() == ElementType::Unknown)
-  {
-    throw IllegalArgumentException("The inputs are of the wrong element type.");
-  }
-
-  bool containsMember = false;
-  if (parent->getElementType() == ElementType::Way)
-  {
-    containsMember =
-      (std::dynamic_pointer_cast<const Way>(parent))->containsNodeId(memberId.getId());
-  }
-  else
-  {
-    containsMember =
-      (std::dynamic_pointer_cast<const Relation>(parent))->contains(memberId);
-  }
-  return containsMember;
-}
-
 }

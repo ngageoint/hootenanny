@@ -57,38 +57,6 @@ bool TagUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
   return true;
 }
 
-bool TagUtils::allElementsHaveAnyKvp(const QStringList& kvps,
-                                     const std::vector<ElementPtr>& elements)
-{
-
-  for (std::vector<ElementPtr>::const_iterator it = elements.begin(); it != elements.end(); ++it)
-  {
-    ElementPtr element = *it;
-    bool elementHasKvp = false;
-    for (int i = 0; i < kvps.size(); i++)
-    {
-      const QString kvp = kvps.at(i);
-      const QStringList kvpParts = kvp.split("=");
-      if (kvpParts.size() != 2)
-      {
-        throw IllegalArgumentException("Invalid kvp: " + kvp);
-      }
-      const QString key = kvpParts[0];
-      const QString val = kvpParts[1];
-      if (element->getTags()[key] == val)
-      {
-        elementHasKvp = true;
-        break;
-      }
-    }
-    if (!elementHasKvp)
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
 bool TagUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,
                                         const std::vector<ElementPtr>& elements)
 {
@@ -141,17 +109,6 @@ bool TagUtils::allElementsHaveAnyTagKey(const QStringList& tagKeys,
     elements.push_back(map->getElement(*it));
   }
   return allElementsHaveAnyTagKey(tagKeys, elements);
-}
-
-bool TagUtils::allElementsHaveAnyKvp(const QStringList& kvps,
-                                     const std::set<ElementId>& elementIds, OsmMapPtr& map)
-{
-  std::vector<ElementPtr> elements;
-  for (std::set<ElementId>::const_iterator it = elementIds.begin(); it != elementIds.end(); ++it)
-  {
-    elements.push_back(map->getElement(*it));
-  }
-  return allElementsHaveAnyKvp(kvps, elements);
 }
 
 bool TagUtils::anyElementsHaveAnyTagKey(const QStringList& tagKeys,

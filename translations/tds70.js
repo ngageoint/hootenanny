@@ -673,6 +673,54 @@ tds70 = {
   // #####################################################################################################
   applyToOsmPostProcessing : function (attrs, tags, layerName, geometryType)
   {
+    // Unpack the ZI006_MEM field
+    if (tags.note)
+    {
+      var tObj = translate.unpackMemo(tags.note);
+
+      if (tObj.tags !== '')
+      {
+        var tTags = JSON.parse(tObj.tags);
+        for (i in tTags)
+        {
+          // Debug
+          // print('Memo: Add: ' + i + ' = ' + tTags[i]);
+          if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
+          tags[i] = tTags[i];
+        }
+        // Now check if this is a synonym etc. If so, remove the other tag.
+        if (i in tds70.fcodeLookupOut) // tag -> FCODE table
+        {
+          if (tags[i] in tds70.fcodeLookupOut[i])
+          {
+            var row = tds70.fcodeLookupOut[i][tags[i]];
+
+            // Now find the "real" tag that comes frm the FCode
+            if (row[1] in tds70.fcodeLookup['F_CODE'])
+            {
+              var row2 = tds70.fcodeLookup['F_CODE'][row[1]];
+              // If the tags match, delete it
+              if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
+              {
+                delete tags[row2[0]];
+              }
+            }
+          }
+        }
+      }
+
+      if (tObj.text && tObj.text !== '')
+      {
+        tags.note = tObj.text;
+      }
+      else
+      {
+        delete tags.note;
+      }
+    } // End process tags.note
+
+
+
     // Roads
     if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
     {
@@ -1045,31 +1093,6 @@ tds70 = {
     // Putting this on hold
     // if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
     // if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
-
-    // Unpack the ZI006_MEM field
-    if (tags.note)
-    {
-      var tObj = translate.unpackMemo(tags.note);
-
-      if (tObj.tags !== '')
-      {
-        var tTags = JSON.parse(tObj.tags);
-        for (i in tTags)
-        {
-          if (tags[tTags[i]]) hoot.logWarn('Unpacking ZI006_MEM, overwriting ' + i + ' = ' + tags[i] + '  with ' + tTags[i]);
-          tags[i] = tTags[i];
-        }
-      }
-
-      if (tObj.text && tObj.text !== '')
-      {
-        tags.note = tObj.text;
-      }
-      else
-      {
-        delete tags.note;
-      }
-    } // End process tags.note
 
     // Fix up areas
     // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
@@ -1673,14 +1696,15 @@ tds70 = {
       for (var col in tags)
       {
         var value = tags[col];
-        if (col in tds70.fcodeLookup)
+        if (col in tds70.fcodeLookup && (value in tds70.fcodeLookup[col]))
         {
-          if (value in tds70.fcodeLookup[col])
-          {
-            var row = tds70.fcodeLookup[col][value];
-            attrs.F_CODE = row[1];
-            // print('FCODE: Got ' + attrs.F_CODE);
-          }
+          var row = tds70.fcodeLookup[col][value];
+          attrs.F_CODE = row[1];
+        }
+        else if (col in tds70.fcodeLookupOut && (value in tds70.fcodeLookupOut[col]))
+        {
+          var row = tds70.fcodeLookupOut[col][value];
+          attrs.F_CODE = row[1];
         }
       }
     } // End find F_CODE
@@ -2096,12 +2120,11 @@ tds70 = {
 
       // Fix up RLE
       // If Vertical Relative Location != Surface && Not on a Bridge, Relative Level == NA
-      if ((attrs.LOC && attrs.LOC !== '44') && (attrs.SBB && attrs.SBB == '1000'))
-      {
-        attrs.RLE = '998';
-      }
+      if ((attrs.LOC && attrs.LOC !== '44') && (attrs.SBB && attrs.SBB == '1000')) attrs.RLE = '998';
 
-    }
+      // Road condition
+      if (!attrs.PCF) attrs.PCF = '2'; // Intact
+    } // End AP030 || AQ075
 
     // RLE vs LOC: Need to deconflict this for various features.
     // This is the list of features that can be "Above Surface". Other features use RLE (Relative Level) instead.
@@ -2247,6 +2270,26 @@ tds70 = {
       delete notUsedTags['source:imagery'];
     }
 
+    // Custom Railway fixes
+    switch (tags.railway)
+    {
+      case undefined: // Break early
+        break;
+
+      case 'halt':
+        notUsedTags.railway = 'halt';
+        attrs.TRS = '12'; // Railway
+        attrs.FFN = '482'; // Station
+        break;
+
+      case 'crossing_box':
+      case 'engine_shed':
+      case 'workshop':
+        notUsedTags.railway = tags.railway; // Preserving this
+        break;
+
+    }
+
   }, // End applyToTdsPostProcessing
 
   // #####################################################################################################
@@ -2300,6 +2343,12 @@ tds70 = {
       // Add the FCODE rules for Import
       fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds70.rules.fcodeOne2oneIn);
       tds70.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+
+      // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
+      // translation to an FCode
+
+      tds70.fcodeLookupOut = translate.createBackwardsLookup(tds70.rules.fcodeOne2oneOut);
+
       // Debug
       // translate.dumpOne2OneLookup(tds70.fcodeLookup);
     }
@@ -2313,6 +2362,9 @@ tds70 = {
       tds70.rules.one2one.push.apply(tds70.rules.one2one,tds70.rules.one2oneIn);
 
       tds70.lookup = translate.createLookup(tds70.rules.one2one);
+
+      // Debug
+      // translate.dumpOne2OneLookup(tds70.lookup);
     }
 
     // Untangle TDS attributes & OSM tags.
@@ -2439,9 +2491,13 @@ tds70 = {
     if (tds70.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Export
-      fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds70.rules.fcodeOne2oneOut);
-
+      // fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds70.rules.fcodeOne2oneOut);
       tds70.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+
+      // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
+      // translation to an FCode
+      tds70.fcodeLookupOut = translate.createBackwardsLookup(tds70.rules.fcodeOne2oneOut);
+
       // Debug
       // translate.dumpOne2OneLookup(tds70.fcodeLookup);
     }
@@ -2467,6 +2523,7 @@ tds70 = {
       //                 }
       //             }
     } // End tds70.lookup Undefined
+
     // Override values if appropriate
     translate.overrideValues(tags,tds70.toChange);
 
@@ -2498,9 +2555,11 @@ tds70 = {
 
     // one 2 one: we call the version that knows about the OTH field
     // NOTE: This deletes tags as they are used
-    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
+    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 1: ');
 
     translate.applyTdsOne2One(notUsedTags, attrs, tds70.lookup, tds70.fcodeLookup,transMap);
+    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 2: ');
+    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'tags 2: ');
 
     // Post Processing.
     // We send the original list of tags and the list of tags we haven't used yet.
@@ -2508,7 +2567,7 @@ tds70 = {
     tds70.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
 
     // Debug
-    if (tds70.configOut.getOgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');
+    if (tds70.configOut.getOgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 3: ');
 
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and

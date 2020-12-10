@@ -88,35 +88,6 @@ long DbUtils::getRowCount(const QSqlDatabase& database, const QString& tableName
   return result;
 }
 
-QStringList DbUtils::getConstraintsForTable(const QSqlDatabase& database, const QString& tableName)
-{
-  QStringList constraints;
-
-  const QString sql =
-    QString("SELECT c.conname as constraint_name ") +
-    QString("FROM pg_constraint c ") +
-    QString("JOIN pg_class t on c.conrelid = t.oid ") +
-    QString("JOIN pg_namespace n on t.relnamespace = n.oid ") +
-    QString("WHERE t.relname = '%1'")
-      .arg(tableName);
-  QSqlQuery query(database);
-  if (!query.exec(sql))
-  {
-    throw HootException(
-      QString("Error executing constraints query: %1 (%2)")
-        .arg(query.lastError().text())
-        .arg(tableName));
-  }
-
-  while (query.next())
-  {
-    constraints.append(query.value(0).toString());
-  }
-
-  LOG_VARD(constraints);
-  return constraints;
-}
-
 void DbUtils::disableTableConstraints(const QSqlDatabase& database, const QString& tableName)
 {
   _modifyTableConstraints(database, tableName, true);

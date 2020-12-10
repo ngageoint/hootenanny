@@ -55,18 +55,6 @@ public:
                                        const std::vector<ElementPtr>& elements);
 
   /**
-   * Determines if all elements in a specified collection have any tag key/value pair from a
-   * specified set of kvps
-   *
-   * @param kvp the tag key/value pairs to search for
-   * @param elements the elements to examine
-   * @return true if all elements from the input collection of elements contain at least one of the
-   * key/value pairs specified in kvps; false otherwise
-   */
-  static bool allElementsHaveAnyKvp(const QStringList& kvps,
-                                    const std::vector<ElementPtr>& elements);
-
-  /**
    * Determines if any elements in a specified collection have any tag key from a specified set of
    * keys
    *
@@ -102,19 +90,6 @@ public:
    */
   static bool allElementsHaveAnyTagKey(const QStringList& tagKeys,
                                        const std::set<ElementId>& elementIds, OsmMapPtr& map);
-
-  /**
-   * Determines if all elements in a specified collection have any tag key/value pair from a
-   * specified set of kvps
-   *
-   * @param kvp the tag key/value pairs to search for
-   * @param elementIds IDs of the elements to examine
-   * @param map the map containing the elements
-   * @return true if all elements from the input collection of elements contain at least one of the
-   * key/value pairs specified in kvps; false otherwise
-   */
-  static bool allElementsHaveAnyKvp(const QStringList& kvps,
-                                    const std::set<ElementId>& elementIds, OsmMapPtr& map);
 
   /**
    * Determines if any elements in a specified collection have any tag key from a specified set of

@@ -35,7 +35,6 @@
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/conflate/highway/HighwayUtils.h>
-#include <hoot/core/criterion/CriterionUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
@@ -45,6 +44,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/criterion/CriterionUtils.h>
 
 #include <unordered_set>
 #include <vector>
