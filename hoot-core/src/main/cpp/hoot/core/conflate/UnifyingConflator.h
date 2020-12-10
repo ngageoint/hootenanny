@@ -100,6 +100,7 @@ public:
    * Determines if conflation is configured with the Network Roads algorithm
    *
    * @return true if conflation is configured with the Network Roads algorithm; false otherwise
+   * @todo move to ConflateUtils
    */
   static bool isNetworkConflate();
 

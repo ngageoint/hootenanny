@@ -53,6 +53,13 @@ public:
   static bool boundsOptionEnabled();
 
   /**
+   * TODO
+   *
+   * @return
+   */
+  static std::shared_ptr<geos::geom::Geometry> getConvertBounds();
+
+  /**
    * Removes ApiTruncateTagVisitor from conflate ops if the corresponding config option is
    * activated
    */

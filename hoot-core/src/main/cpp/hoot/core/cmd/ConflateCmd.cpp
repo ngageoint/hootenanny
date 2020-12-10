@@ -65,6 +65,7 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Standard
 #include <fstream>
@@ -91,16 +92,6 @@ ConflateCmd::ConflateCmd() :
 _numTotalTasks(0),
 _filterOps(ConfigOptions().getConflateRemoveSuperfluousOps())
 {
-}
-
-void ConflateCmd::printStats(const QList<SingleStat>& stats)
-{
-  QString sep = "\t";
-  cout << "== Stats ==" << endl;
-  for (int i = 0; i < stats.size(); i++)
-  {
-    cout << stats[i].name << sep << stats[i].value << endl;
-  }
 }
 
 int ConflateCmd::runSimple(QStringList& args)

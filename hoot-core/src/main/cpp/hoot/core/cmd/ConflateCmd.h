@@ -65,8 +65,6 @@ public:
   virtual QString getDescription() const override
   { return "Conflates two maps into a single map"; }
 
-  void printStats(const QList<SingleStat>& stats);
-
   virtual int runSimple(QStringList& args) override;
 
   void setFilterOps(bool filter) { _filterOps = filter; }

@@ -92,55 +92,29 @@ UnifyingConflator::~UnifyingConflator()
   _reset();
 }
 
-void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)
+void UnifyingConflator::setConfiguration(const Settings &conf)
 {
-  Tags& tags = e->getTags();
-  tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
-  tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
-  tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
+  _settings = conf;
+
+  _matchThreshold.reset();
+  _mergerFactory.reset();
+  _reset();
 }
 
-void UnifyingConflator::_addReviewAndScoreTags(
-  const OsmMapPtr& map, const std::vector<ConstMatchPtr>& matches)
+void UnifyingConflator::_reset()
 {
-  if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
+  if (_mergerFactory == 0)
   {
-    for (size_t i = 0; i < matches.size(); i++)
-    {
-      ConstMatchPtr m = matches[i];
-      const MatchClassification& mc = m->getClassification();
-      set<pair<ElementId, ElementId>> pairs = m->getMatchPairs();
-      for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-           it != pairs.end(); ++it)
-      {
-        if (mc.getReviewP() > 0.0)
-        {
-          ElementPtr e1 = map->getElement(it->first);
-          ElementPtr e2 = map->getElement(it->second);
-
-          LOG_TRACE(
-            "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() <<
-            "...");
-
-          _addScoreTags(e1, mc);
-          _addScoreTags(e2, mc);
-          e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
-          e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
-        }
-      }
-    }
+    _mergerFactory.reset(new MergerFactory());
+    // register the mark for review merger first so all reviews get tagged before another merger
+    // gets a chance.
+    _mergerFactory->registerCreator(MergerCreatorPtr(new MarkForReviewMergerCreator()));
+    _mergerFactory->registerDefaultCreators();
   }
-}
 
-void UnifyingConflator::_updateProgress(const int currentStep, const QString message)
-{
-  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
-  // just an empty progress object, and we shouldn't log progress.
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
-  {
-    _progress.setFromRelative(
-      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
-  }
+  _e2m.clear();
+  _matches.clear();
+  _mergers.clear();
 }
 
 void UnifyingConflator::apply(OsmMapPtr& map)
@@ -505,31 +479,6 @@ void UnifyingConflator::_replaceElementIds(const vector<pair<ElementId, ElementI
   }
 }
 
-void UnifyingConflator::setConfiguration(const Settings &conf)
-{
-  _settings = conf;
-
-  _matchThreshold.reset();
-  _mergerFactory.reset();
-  _reset();
-}
-
-void UnifyingConflator::_reset()
-{
-  if (_mergerFactory == 0)
-  {
-    _mergerFactory.reset(new MergerFactory());
-    // register the mark for review merger first so all reviews get tagged before another merger
-    // gets a chance.
-    _mergerFactory->registerCreator(MergerCreatorPtr(new MarkForReviewMergerCreator()));
-    _mergerFactory->registerDefaultCreators();
-  }
-
-  _e2m.clear();
-  _matches.clear();
-  _mergers.clear();
-}
-
 void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches)
 {
   for (size_t i = 0; i < matches.size(); i++)
@@ -556,6 +505,57 @@ bool UnifyingConflator::isNetworkConflate()
   return
     ConfigOptions().getMatchCreators().contains(
       QString::fromStdString(NetworkMatchCreator::className()));
+}
+
+void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)
+{
+  Tags& tags = e->getTags();
+  tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
+  tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
+  tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
+}
+
+void UnifyingConflator::_addReviewAndScoreTags(
+  const OsmMapPtr& map, const std::vector<ConstMatchPtr>& matches)
+{
+  if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
+  {
+    for (size_t i = 0; i < matches.size(); i++)
+    {
+      ConstMatchPtr m = matches[i];
+      const MatchClassification& mc = m->getClassification();
+      set<pair<ElementId, ElementId>> pairs = m->getMatchPairs();
+      for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
+           it != pairs.end(); ++it)
+      {
+        if (mc.getReviewP() > 0.0)
+        {
+          ElementPtr e1 = map->getElement(it->first);
+          ElementPtr e2 = map->getElement(it->second);
+
+          LOG_TRACE(
+            "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() <<
+            "...");
+
+          _addScoreTags(e1, mc);
+          _addScoreTags(e2, mc);
+          e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
+          e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
+        }
+      }
+    }
+  }
+}
+
+void UnifyingConflator::_updateProgress(const int currentStep, const QString message)
+{
+  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+  // just an empty progress object, and we shouldn't log progress.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
+  }
 }
 
 }

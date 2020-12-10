@@ -31,6 +31,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 namespace hoot
 {
@@ -41,6 +42,26 @@ bool ConfigUtils::boundsOptionEnabled()
     !conf().get(ConfigOptions::getConvertBoundsKey()).toString().trimmed().isEmpty() ||
     !conf().get(ConfigOptions::getConvertBoundsHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
     !conf().get(ConfigOptions::getConvertBoundsOsmApiDatabaseKey()).toString().trimmed().isEmpty();
+}
+
+std::shared_ptr<geos::geom::Geometry> ConfigUtils::getConvertBounds()
+{
+  QString boundsStr = conf().get(ConfigOptions::getConvertBoundsKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return GeometryUtils::boundsFromString(boundsStr);
+  }
+  boundsStr = conf().get(ConfigOptions::getConvertBoundsHootApiDatabaseKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return GeometryUtils::boundsFromString(boundsStr);
+  }
+  boundsStr = conf().get(ConfigOptions::getConvertBoundsOsmApiDatabaseKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return GeometryUtils::boundsFromString(boundsStr);
+  }
+  return std::shared_ptr<geos::geom::Geometry>();
 }
 
 void ConfigUtils::checkForTagValueTruncationOverride()

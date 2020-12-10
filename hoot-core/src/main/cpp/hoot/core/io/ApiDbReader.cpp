@@ -107,9 +107,7 @@ void ApiDbReader::initializePartial()
 
 bool ApiDbReader::_hasBounds()
 {
-  return
-    _bounds.get() || _overrideBounds.get()/* || !_boundsAsEnvelope.isNull() ||
-    !_overrideBoundsAsEnvelope.isNull()*/;
+  return _bounds.get() || _overrideBounds.get();
 }
 
 ElementId ApiDbReader::_mapElementId(const OsmMap& map, ElementId oldId)
@@ -560,10 +558,10 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
   // The default behavior of the db bounded read is to return the entirety of features found
   // within the bounds, even if sections of those features exist outside the bounds. Only run the
-  // crop operation if the crop related options are different than the default behavior. Clearly, it
-  // would be more efficient to run a different set of initial queries to pull the features back
-  // already cropped the way we want them from the start and skip this step completely. That's
-  // possibly an optimization to look into doing in the future.
+  // crop operation if the crop related options used by the convert command are different than the
+  // default behavior. Clearly, it would be more efficient to run a different set of initial queries
+  // to pull the features back already cropped the way we want them from the start and skip this
+  // step completely. That's possibly an optimization to look into doing in the future.
   ConfigOptions conf;
   if (!conf.getConvertBoundsKeepEntireFeaturesCrossingBounds() ||
        conf.getConvertBoundsKeepOnlyFeaturesInsideBounds())
@@ -596,8 +594,8 @@ void ApiDbReader::read(const OsmMapPtr& map)
   else
   {
     // api db bounds reading is based off of quad tiles which only operates on rectangular bounds,
-    // so we have to pass an envelope here. The actual bounds is used to crop down the queried
-    // result later.
+    // so we have to pass an envelope here. The actual bounds is used to crop down the envelope
+    // queried results later.
     geos::geom::Envelope bounds;
     LOG_VARD(_overrideBounds.get());
     LOG_VARD(_bounds.get());
@@ -618,12 +616,12 @@ void ApiDbReader::read(const OsmMapPtr& map)
     }
     else
     {
-      // The cropped read from db inputs may get slower for very large datasets. The index added
-      // as part of #4192 alleviated this quite a bit but there still can be a runtime performance
-      // difference. Therefore, if we we need to perform a cropped query from a very large dataset,
-      // we can allow the full dataset to be read in from the db input and then crop it after the
-      // fact as a runtime performance optimization at the expense of extra memory usage.
-
+      // The cropped query read from db inputs may get slower for very large datasets. The index
+      // added as part of #4192 alleviated this quite a bit but there still can be a runtime
+      // performance difference. Therefore, if we we need to perform a cropped query from a very
+      // large dataset, we can allow the full dataset to be read in from the db input and then crop
+      // it after the fact as a runtime performance optimization at the expense of extra memory
+      //usage.
       LOG_DEBUG(
         "Executing API bounded read query via read all then crop at bounds: ..." <<
         GeometryUtils::envelopeToString(bounds).right(50) << "...");
@@ -881,9 +879,8 @@ void ApiDbReader::close()
   finalizePartial();
 }
 
-std::shared_ptr<Element> ApiDbReader::_resultToElement(QSqlQuery& resultIterator,
-                                                         const ElementType& elementType,
-                                                         OsmMap& map)
+std::shared_ptr<Element> ApiDbReader::_resultToElement(
+  QSqlQuery& resultIterator, const ElementType& elementType, OsmMap& map)
 {
   assert(resultIterator.isActive());
   //It makes much more sense to have callers call next on the iterator before passing it into this
