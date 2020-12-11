@@ -68,6 +68,9 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
   std::vector<std::thread> threads;
   for (int i = 0; i < _maxThreads; ++i)
     threads.push_back(thread(&GeometryMerger::mergeGeometryThread, this));
+  //  Wait for all threads to become active
+  while (_finishedThreads < _maxThreads)
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
   PolygonCompare compare(envelope);
   //  Combine the geometries two at a time
@@ -124,6 +127,8 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
 
 void GeometryMerger::mergeGeometryThread()
 {
+  //  Increment the thread finished count to indicate this thread is active
+  _finishedThreads++;
   //  Wait to begin work until the producer thread creates some work
   std::unique_lock<std::mutex> lock(_waitMutex);
   _wait.wait(lock);
