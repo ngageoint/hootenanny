@@ -78,14 +78,14 @@ function initialize()
 
 
 // IMPORT
-// translateAttributes - Normally takes 'attrs' and returns OSM 'tags'.  This version
+// translateToOsm - Normally takes 'attrs' and returns OSM 'tags'.  This version
 //    converts OSM+ tags to NFDD "English" Attributes
 //
 // This can be called via the following for testing:
 // hoot convert -D "convert.ops=hoot::SchemaTranslationVisitor"  \
 //      -D schema.translation.script=$HOOT_HOME/translations/OSM_to_englishTDS.js <input>.osm <output>.osm
 //
-function translateAttributes(attrs, layerName, geometryType)
+function translateToOsm(attrs, layerName, geometryType)
 {
   // We use the temp var because etds.toEnglish returns "attrs" and "tableName"
   var output = eggdm30.toEnglish(attrs,layerName,geometryType);
@@ -99,7 +99,7 @@ function translateAttributes(attrs, layerName, geometryType)
   {
     return null;
   }
-} // End of Translate Attributes
+} // End of translateToOsm
 
 
 // EXPORT

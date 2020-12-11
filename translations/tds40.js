@@ -2401,7 +2401,7 @@ tds40 = {
   // This gets called by translateToOGR and is where the main work gets done
   // We get Tags and return Attrs and a tableName
   // This is the main routine to convert _TO_ TDS
-  toTds : function(tags, elementType, geometryType)
+  toOgr : function(tags, elementType, geometryType)
   {
     var tableName = ''; // The final table name
     var returnData = []; // The array of features to return
@@ -2667,6 +2667,6 @@ tds40 = {
 
     return returnData;
 
-  } // End of toTds
+  } // End of toOgr
 
 }; // End of tds40

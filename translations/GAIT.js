@@ -33,8 +33,7 @@
 
 
 // IMPORT
-// translateAttributes - takes 'attrs' and returns OSM 'tags'
-// function translateAttributes(attrs, layerName)
+// translateToOsm - takes 'attrs' and returns OSM 'tags'
 function translateToOsm(attrs, layerName, geometryType)
 {
   tags = {};
@@ -54,6 +53,6 @@ function translateToOsm(attrs, layerName, geometryType)
   tags['gait:source_table'] = attrs.ORIG_TABLE;
 
   return tags;
-} // End of Translate Attributes
+} // End of translateToOsm
 
 

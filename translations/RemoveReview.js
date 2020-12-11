@@ -32,12 +32,12 @@
 //
 
 // IMPORT
-// translateAttributes - takes 'attrs' and returns OSM 'tags'
-function translateAttributes(attrs, layerName, geometryType)
+// translateToOsm - takes 'attrs' and returns OSM 'tags'
+function translateToOsm(attrs, layerName, geometryType)
 {
     if (attrs['hoot:review:uuid']) delete attrs['hoot:review:uuid'];
 
     return attrs;
 
-} // End of Translate Attributes
+} // End of translateToOsm
 

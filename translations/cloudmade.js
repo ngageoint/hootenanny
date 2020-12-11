@@ -29,8 +29,8 @@
 // sub-tree.
 hoot.require("example")
 
-// an optional initialize function that gets called once before any 
-// translateAttribute calls.
+// an optional initialize function that gets called once before any
+// translateToOsm calls.
 function initialize()
 {
     // The print method simply prints the string representation to stdout
@@ -38,7 +38,7 @@ function initialize()
 }
 
 // an optional finalize function that gets called once after all
-// translateAttribute calls.
+// translateToOsm calls.
 function finalize()
 {
     // the debug method prints to stdout when --debug has been specified on
@@ -46,10 +46,10 @@ function finalize()
     debug("Finalizing.");
 }
 
-// A translateAttributes method that is very similar to the python translate 
+// A translateToOsm method that is very similar to the python translate
 // attributes
-function translateAttributes(attrs, layerName, geometryType) 
-{ 
+function translateToOsm(attrs, layerName, geometryType)
+{
     tags = {};
     //print(layerName);
     for (var key in attrs)

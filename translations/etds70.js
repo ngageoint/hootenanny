@@ -37,7 +37,7 @@ etds70 = {
     {
         var tdsData = [];
 
-        tdsData = tds70.toTds(tags, elementType, geometryType)
+        tdsData = tds70.toOgr(tags, elementType, geometryType)
 
         // Debug: Commenting this out to cut down the number of Hoot core calls
 //         if (config.getOgrDebugDumptags() == 'true')
