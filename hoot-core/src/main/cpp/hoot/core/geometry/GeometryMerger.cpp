@@ -63,7 +63,10 @@ GeometryMerger::GeometryMerger()
 GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries, const geos::geom::Envelope& envelope)
 {
   LOG_DEBUG("Merging " << StringUtils::formatLargeNumber(geometries.size()) << " geometries...");
-
+  //  Get the geometry count
+  _geometryCount = geometries.size();
+  //  Update the max threads to speed up smaller datasets
+  _maxThreads = std::min(_maxThreads, static_cast<int>(geometries.size() / 2));
   //  Create and start the threads
   std::vector<std::thread> threads;
   for (int i = 0; i < _maxThreads; ++i)
@@ -74,7 +77,6 @@ GeometryPtr GeometryMerger::mergeGeometries(std::vector<GeometryPtr> geometries,
 
   PolygonCompare compare(envelope);
   //  Combine the geometries two at a time
-  _geometryCount = geometries.size();
   while (geometries.size() > 1)
   {
     // Sort polygons using the Hilbert value. This increases the chances that nearby polygons will

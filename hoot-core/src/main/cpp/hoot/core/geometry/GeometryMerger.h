@@ -66,7 +66,7 @@ private:
    */
   void mergeGeometryThread();
   /** Number of threads to spawn to merge geometry */
-  const int _maxThreads;
+  int _maxThreads;
   /** Atomic flag to tell all worker threads to terminate */
   std::atomic_bool _threadsWorking;
   /** Each round of merging geometries causes a resync of threads waiting for more work, _finishedThreads

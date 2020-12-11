@@ -149,6 +149,8 @@ void AlphaShapeGenerator::_coverStragglers(const ConstOsmMapPtr& map)
   //  Push all nodes onto the work queue
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
     _nodes.push(it->second);
+  //  Minimize the threads needed to either _maxThreads or the node count
+  _maxThreads = std::min(_maxThreads, static_cast<int>(_nodes.size()));
   //  Start all of the threads
   std::vector<std::thread> threads;
   for (int i = 0; i < _maxThreads; ++i)
