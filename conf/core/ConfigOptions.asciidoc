@@ -1124,6 +1124,15 @@ in meters.
 The buffer to add to the alpha shape before cutting by the cookie cutter map operation
 (CookieCutterOp). A negative value will make the shape smaller.  Value in meters.
 
+=== cookie.cutter.alpha.shape.max.threads
+
+* Data Type: int
+* Default Value: `10`
+
+Creating the alpha shape is a time consuming process that is sped up by merging and straggler testing
+in parallel.  This sets the number of processing threads to utilize for processing the alpha shape in
+parallel.  Warning: each thread has some memory overhead
+
 === cookie.cutter.output.crop
 
 * Data Type: bool

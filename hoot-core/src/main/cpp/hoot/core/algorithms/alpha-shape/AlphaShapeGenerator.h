@@ -29,7 +29,11 @@
 #define ALPHASHAPEGENERATOR_H
 
 // Hoot
+#include <hoot/core/algorithms/alpha-shape/AlphaShape.h>
 #include <hoot/core/elements/OsmMap.h>
+
+//  Standard
+#include <mutex>
 
 namespace hoot
 {
@@ -68,29 +72,52 @@ public:
    * @return a geometry containing the alpha shape's points
    */
   std::shared_ptr<geos::geom::Geometry> generateGeometry(OsmMapPtr inputMap);
-
+  /**
+   * @brief setManuallyCoverSmallPointClusters Update the "stragglers" flag
+   * @param cover New value for cover flag
+   */
   void setManuallyCoverSmallPointClusters(bool cover) { _manuallyCoverSmallPointClusters = cover; }
 
 private:
 
-  // tuning parameter used to calculate the alpha shape
+  /** Tuning parameter used to calculate the alpha shape */
   double _alpha;
-  // how far out from the calculated alpha shape the output shape should be buffered
+  /** How far out from the calculated alpha shape the output shape should be buffered */
   double _buffer;
-  // This triggers _coverStragglers (read description).
+  /** Flag to trigger _coverStragglers (read description). */
   bool _manuallyCoverSmallPointClusters;
-  // The maximum number of alpha values retries to. Right now this is hardcoded to 2 as that's all
-  // that has ever been needed.
+  /** The maximum number of alpha values retries to.
+   * Right now this is hardcoded to 2 as that's all that has ever been needed.
+   */
   bool _maxTries;
-
-  /*
-   * This is a bit of hack to the alg, if you will, that will alow for covering small groups of
-   * features when a smaller alpha value is selected. This is desirable in certain situations when
-   * using the alpha shape to feed a tasking grid. Attempts were made to make this change in
-   * AlphaShape itself, but it wasn't feasible due to relying on the buffering of the shape which
+  /**
+   * @brief _coverStragglers This is a bit of hack to the alg, if you will, that will alow for covering
+   * small groups of features when a smaller alpha value is selected. This is desirable in certain
+   * situations when using the alpha shape to feed a tasking grid. Attempts were made to make this
+   * change in AlphaShape itself, but it wasn't feasible due to relying on the buffering of the shape which
    * happens in this class. Its possible that part could be moved to AlphaShape, if needed.
    */
-  void _coverStragglers(std::shared_ptr<geos::geom::Geometry>& geometry, const ConstOsmMapPtr& map);
+  void _coverStragglers(const ConstOsmMapPtr& map);
+  /**
+   * @brief _coverStragglersWorker Thread function to parallelize the expensive call to
+   *  Geometry::contains() that checks if a point in the map isn't covered by the geometry.
+   *  If so the point is buffered in a circular geometry and later merged into the alpha shape.
+   */
+  void _coverStragglersWorker();
+  /** Maximum number of threads to work on straggler identification for covering stragglers */
+  int _maxThreads;
+  /** Alpha shape geometry object */
+  GeometryPtr _geometry;
+  /** Atomic flag to indicate to the worker threads to stop when the queue is empty */
+  std::atomic_bool _working;
+  /** Work queue of nodes to test if they are contained in the alpha shape, testing for stragglers */
+  std::stack<NodePtr> _nodes;
+  /** Mutex for the node stack */
+  std::mutex _nodesMutex;
+  /** Result vector of geometries that are considered stragglers to merge back into the alpha shape */
+  std::vector<GeometryPtr> _stragglers;
+  /** Mutex for the stragglers vector */
+  std::mutex _stragglersMutex;
 };
 
 }
