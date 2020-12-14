@@ -3,10 +3,11 @@ set -e
 
 # This tests River Reference Conflation within a bounding box. The original problem leading to the creation of this test was the fact that data
 # read in from an API DB query includes all parent relations for rivers within the bounds and subsequently, all the relation members of those
-# relations. For this test dataset, that added many additional rivers outside of the conflate bounds to input which prevented rivers from 
+# relations. For this test dataset, that added many additional rivers outside of the conflate bounds to input. This prevented the rivers from 
 # within the bounds from being conflated, as their subline matching was optimized to be less effective in order to reduce overall runtime due 
-# to the large amount of data involved (see RiverMaximalSublineSettingOptimizer). Extra per feature bounds checking has been added to River.js 
-# to prevent this, and this conflate job now runs fairly quickly and properly merges rivers within the bounds.
+# to the large amount of data involved (see RiverMaximalSublineSettingOptimizer). Extra per feature bounds checking has been added to river
+# match candidate checking within River.js to prevent this. After the change, the conflate portion of this test runs in seconds and properly 
+# merges rivers within the bounds.
 
 TEST_NAME=ServiceRefConflateChangesetRiverTest
 GOLD_DIR=test-files/cmd/glacial/serial/$TEST_NAME
@@ -22,19 +23,19 @@ HOOT_DB_URL="hootapidb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
 HOOT_EMAIL="$TEST_NAME@hoottestcpp.org"
 
+# -D convert.bounds.remove.missing.elements=false -D debug.maps.remove.missing.elements=false
 GENERAL_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
-DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1" 
-CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js -D merger.creators=hoot::ScriptMergerCreator -D convert.bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672 -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"
+DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999" 
+CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,CollectionRelation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D convert.bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672 -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false"
 
-DEBUG=true
+DEBUG=false
 LOG_LEVEL="--warn"
 LOG_FILTER=""
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter=River.js;RiverMaximalSublineSettingOptimizer;HighwaySnapMerger;ScriptMatchCreator;ScriptMergerCreator;UnifyingConflator;HighwaySnapMergerJs;MultilineStringRelationCollapser "
-  #LOG_FILTER="-D log.class.filter= "
+  LOG_FILTER="-D log.class.filter= "
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
@@ -47,12 +48,12 @@ SEC_LAYER=$HOOT_DB_URL/$TEST_NAME-sec
 hoot convert $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/sec-load-debug.osm -D reader.use.data.source.ids=true $GENERAL_OPTS $DB_OPTS $GOLD_DIR/Input2.osm $SEC_LAYER
 
 # run ref conflate to osm
-hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/out.osm --write-bounds
+hoot conflate $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true $OSM_API_DB_URL $SEC_LAYER $OUTPUT_DIR/conflated.osm --write-bounds
 
 # generate a changeset between the original ref data and the diff calculated in the previous step
-hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/out.osm $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
+hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/conflated.osm $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
-  hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/out.osm $OUTPUT_DIR/diff.osc
+  hoot changeset-derive $LOG_LEVEL $LOG_FILTER -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS $OSM_API_DB_URL $OUTPUT_DIR/conflated.osm $OUTPUT_DIR/diff.osc
 fi
 
 # apply changeset back to ref

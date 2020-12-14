@@ -85,7 +85,7 @@ _markAddedMultilineStringRelations
 _matchedBy(HighwayMatch::MATCH_NAME),
 // ENABLE THE OsmMapWriterFactory::writeDebugMap CALLS FOR SMALL DATASETS DURING DEBUGGING ONLY.
 // writes a map file for each road merge
-_writeDebugMaps(true)
+_writeDebugMaps(false)
 {
   LOG_VART(_markAddedMultilineStringRelations);
 }
@@ -99,7 +99,7 @@ _markAddedMultilineStringRelations
 _sublineMatcher(sublineMatcher),
 _matchedBy(HighwayMatch::MATCH_NAME),
 // see note above
-_writeDebugMaps(true)
+_writeDebugMaps(false)
 {
   _pairs = pairs;
 
@@ -270,6 +270,15 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // Split the second element and reverse any geometries to make the matches work.
   _splitElement(
     map, match.getSublineString2(), match.getReverseVector2(), replaced, e2, e2Match, scraps2);
+  // Retain relation membership for both features.
+//  if (e2 && scraps2)
+//  {
+//    RelationMemberSwapper::swap(e2->getElementId(), scraps2->getElementId(), map, false);
+//  }
+//  if (e2Match && scraps2)
+//  {
+//    RelationMemberSwapper::swap(e2Match->getElementId(), scraps2->getElementId(), map, false);
+//  }
   if (_writeDebugMaps)
   {
     OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-2" + eidLogString);
@@ -526,8 +535,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
       "Replacing e2 match: " << e2Match->getElementId() << " and e2: " << eid2 <<
       " with scraps2: " << scraps2->getElementId() << "...");
     map->addElement(scraps2);
-    //RelationMemberSwapper::swap(e2Match->getElementId(), scraps2->getElementId(), map, false);
-    //RelationMemberSwapper::swap(eid2, scraps2->getElementId(), map, false);
     ReplaceElementOp(e2Match->getElementId(), scraps2->getElementId(), true).apply(result);
     ReplaceElementOp(eid2, scraps2->getElementId(), true).apply(result);
   }

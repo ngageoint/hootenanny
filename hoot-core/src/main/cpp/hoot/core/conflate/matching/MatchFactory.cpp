@@ -90,8 +90,8 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMat
   }
 }
 
-void MatchFactory::_checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
-                                               const std::shared_ptr<Geometry>& bounds) const
+void MatchFactory::_checkMatchCreatorBoundable(
+  const std::shared_ptr<MatchCreator>& matchCreator, const std::shared_ptr<Geometry>& bounds) const
 {
   if (bounds.get())
   {
@@ -109,13 +109,13 @@ vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
 {
   vector<CreatorDescription> result;
 
-  // get all match creators from the factory
+  // Get all match creators from the factory.
   vector<std::string> names =
     Factory::getInstance().getObjectNamesByBase(MatchCreator::className());
 
   for (size_t i = 0; i < names.size(); i++)
   {
-    // get all names known by this creator.
+    // Get all names known by this creator.
     std::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(names[i]));
 

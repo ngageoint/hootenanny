@@ -47,9 +47,9 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // standard
 #include <algorithm>
@@ -347,6 +347,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
       LOG_DEBUG(msg);
     }
 
+    // We require that each individual merger set the option to mark merge created relations, so
+    // disable this option as each merger is processed.
+    conf().set(ConfigOptions::getConflateMarkMergeCreatedMultilinestringRelationsKey(), false);
+
     merger->apply(map, replaced);
 
     LOG_VART(replaced);
@@ -358,8 +362,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     LOG_VART(merger->getImpactedElementIds());
 
     // WARNING: Enabling this could result in a lot of files being generated.
-    OsmMapWriterFactory::writeDebugMap(
-      map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+    //OsmMapWriterFactory::writeDebugMap(
+      //map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
   }
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
@@ -373,6 +377,14 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
+
+  if (!ConfigOptions().getWriterIncludeDebugTags())
+  {
+    QStringList tagKeysToRemove;
+    tagKeysToRemove.append(MetadataTags::HootMultilineString());
+    RemoveTagsVisitor tagRemover(tagKeysToRemove);
+    map->visitRw(tagRemover);
+  }
 
   LOG_INFO(
     "Applied " << StringUtils::formatLargeNumber(mergerCount) << " mergers in " <<
@@ -498,13 +510,6 @@ void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches,
       LOG_DEBUG(match);
     }
   }
-}
-
-bool UnifyingConflator::isNetworkConflate()
-{
-  return
-    ConfigOptions().getMatchCreators().contains(
-      QString::fromStdString(NetworkMatchCreator::className()));
 }
 
 void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)

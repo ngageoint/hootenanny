@@ -170,6 +170,7 @@ void MergerFactory::registerDefaultCreators()
 
       if (args.size() > 0)
       {
+        // TODO: Is this actually used on any MergerCreators?
         mc->setArguments(args);
       }
     }

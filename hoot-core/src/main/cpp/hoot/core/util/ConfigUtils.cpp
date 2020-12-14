@@ -44,26 +44,6 @@ bool ConfigUtils::boundsOptionEnabled()
     !conf().get(ConfigOptions::getConvertBoundsOsmApiDatabaseKey()).toString().trimmed().isEmpty();
 }
 
-std::shared_ptr<geos::geom::Geometry> ConfigUtils::getConvertBounds()
-{
-  QString boundsStr = conf().get(ConfigOptions::getConvertBoundsKey()).toString().trimmed();
-  if (!boundsStr.isEmpty())
-  {
-    return GeometryUtils::boundsFromString(boundsStr);
-  }
-  boundsStr = conf().get(ConfigOptions::getConvertBoundsHootApiDatabaseKey()).toString().trimmed();
-  if (!boundsStr.isEmpty())
-  {
-    return GeometryUtils::boundsFromString(boundsStr);
-  }
-  boundsStr = conf().get(ConfigOptions::getConvertBoundsOsmApiDatabaseKey()).toString().trimmed();
-  if (!boundsStr.isEmpty())
-  {
-    return GeometryUtils::boundsFromString(boundsStr);
-  }
-  return std::shared_ptr<geos::geom::Geometry>();
-}
-
 GeometricRelationship ConfigUtils::getConvertBoundsRelationship()
 {
   if (ConfigOptions().getConvertBoundsKeepOnlyFeaturesInsideBounds())

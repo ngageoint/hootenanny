@@ -54,16 +54,10 @@ public:
   static bool boundsOptionEnabled();
 
   /**
-   * TODO
+   * Determines which feature bounds checking relationship should be used based on the configured
+   * options for convert bounds
    *
-   * @return
-   */
-  static std::shared_ptr<geos::geom::Geometry> getConvertBounds();
-
-  /**
-   * TODO
-   *
-   * @return
+   * @return a geometric relationship
    */
   static GeometricRelationship getConvertBoundsRelationship();
 

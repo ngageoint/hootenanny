@@ -807,7 +807,8 @@ Path to this file.  Only modified during testing the Hootenanny options command.
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+Marks any multilinestring relations created as a result of merging during conflation with a custom
+tag. Individual mergers must enable this option independently.
 
 === conflate.match.building.model
 
@@ -2704,7 +2705,8 @@ collected (export).
 * Data Type: list
 * Default Value: ``
 
-TODO
+A list of type keys or key/value pairs eligible for moving from multilinestring relations to
+their relation members when using `MultilineStringRelationCollapser`.
 
 === name.criterion.case.sensitive
 
@@ -5161,7 +5163,7 @@ sheet tie point distances.
 * Data Type: bool
 * Default Value: `true`
 
-TODO
+River specific setting which overrides `conflate.mark.merge.created.multilinestring.relations`.
 
 === waterway.matcher.heading.delta
 

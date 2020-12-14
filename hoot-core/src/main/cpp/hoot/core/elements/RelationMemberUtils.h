@@ -150,11 +150,11 @@ public:
     const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion);
 
   /**
-   * Retrieves all relations containing a child element
+   * Retrieves all relations containing a child element as const
    *
    * @param map map the child element belongs to
    * @param childId ID of the child element
-   * @return a collection of relations
+   * @return a collection of const relations
    */
   static std::vector<ConstRelationPtr> getContainingRelations(
     const ConstOsmMapPtr& map, const ElementId& childId);

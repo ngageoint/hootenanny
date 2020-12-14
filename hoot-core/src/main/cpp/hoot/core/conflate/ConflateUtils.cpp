@@ -54,7 +54,7 @@ int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString&
   elementRemover->setRecursive(true);
   std::shared_ptr<ElementCriterion> nonConflatableCrit(
     new NonConflatableCriterion(nonConflatableMap));
-  elementRemover->addCriterion(nonConflatableCrit);;
+  elementRemover->addCriterion(nonConflatableCrit);
   nonConflatableMap->visitRw(*elementRemover);
   if (nonConflatableMap->size() > 0)
   {

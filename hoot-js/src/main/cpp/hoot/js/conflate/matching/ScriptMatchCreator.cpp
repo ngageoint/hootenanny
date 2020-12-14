@@ -870,6 +870,7 @@ void ScriptMatchCreator::createMatches(
   {
     matchType = "PointPolygon";
   }
+
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     matchType << " match candidates and " <<
