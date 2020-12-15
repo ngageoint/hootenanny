@@ -83,6 +83,8 @@ void DataQualityMetricTagger::apply(OsmMapPtr& map)
   std::shared_ptr<InBoundsCriterion> inBoundsCrit(new InBoundsCriterion(true));
   inBoundsCrit->setBounds(_bounds);
   inBoundsCrit->setOsmMap(map.get());
+  // TODO
+  inBoundsCrit->setTreatWayNodesAsPartOfWays(false);
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
   crit.reset(

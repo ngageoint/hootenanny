@@ -122,7 +122,7 @@ public:
     uut.setOsmMap(map.get());
 
     // both elements completely outside the bounding box
-    CPPUNIT_ASSERT(!uut.isSatisfied(map->getNode(-1669783)));
+    CPPUNIT_ASSERT(!uut.isSatisfied(map->getNode(-1669779)));
     CPPUNIT_ASSERT(!uut.isSatisfied(map->getWay(-1669799)));
   }
 };

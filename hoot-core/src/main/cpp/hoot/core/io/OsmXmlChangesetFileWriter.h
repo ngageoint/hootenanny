@@ -75,6 +75,9 @@ public:
   virtual QString getStatsTable(
     const ChangesetStatsFormat& format = ChangesetStatsFormat::Text) const;
 
+  virtual void setMap1List(const QList<ConstOsmMapPtr>& mapList) { _map1List = mapList; }
+  virtual void setMap2List(const QList<ConstOsmMapPtr>& mapList) { _map2List = mapList; }
+
   /**
    * @see ChangesetFileWriter
    */
@@ -83,6 +86,9 @@ public:
   virtual void setConfiguration(const Settings &conf);
 
 private:
+
+  QList<ConstOsmMapPtr> _map1List;
+  QList<ConstOsmMapPtr> _map2List;
 
   /** Settings from the config file */
   int _precision;
@@ -98,7 +104,7 @@ private:
   OsmXmlWriter _invalidCharacterHandler;
 
   QMap<ElementType::Type, long> _newElementIdCtrs;
-  //keeping track of these mappings unfortunately makes this writer memory bound
+  // keeping track of these mappings unfortunately makes this writer memory bound
   QMap<ElementType::Type, QMap<long, long>> _newElementIdMappings;
 
   //  Keep track of the matrix of add, modify, delete for nodes, ways, relations
@@ -106,6 +112,9 @@ private:
 
   // list of metadata tag keys allowed to be written to the changeset
   QStringList _metadataAllowKeys;
+
+  // TODO
+  bool _changesetIgnoreConvertBounds;
 
   /** Helper functions to write nodes, ways, and relations. */
   void _writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous);

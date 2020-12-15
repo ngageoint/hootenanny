@@ -395,6 +395,8 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+  // TODO
+  conf().set(ConfigOptions::getChangesetIgnoreConvertBoundsKey(), true);
 
   // For this being enabled to have any effect,
   // convert.bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.

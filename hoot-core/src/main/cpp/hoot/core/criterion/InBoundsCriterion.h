@@ -35,6 +35,7 @@
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 // GEOS
 #include <geos/geom/Envelope.h>
@@ -55,7 +56,7 @@ public:
 
   InBoundsCriterion();
   InBoundsCriterion(const bool mustCompletelyContain);
-  virtual ~InBoundsCriterion() = default;
+  virtual ~InBoundsCriterion();
 
   /**
    * @see ElementCriterion
@@ -74,6 +75,9 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new InBoundsCriterion()); }
 
+  void setTreatWayNodesAsPartOfWays(const bool treatAsPartOfWays)
+  { _treatWayNodesAsPartOfWays = treatAsPartOfWays; }
+
   /**
    * @see ApiEntityInfo
    */
@@ -90,8 +94,13 @@ private:
 
   ConstOsmMapPtr _map;
   std::shared_ptr<ElementToGeometryConverter> _elementConverter;
+  std::shared_ptr<WayNodeCriterion> _wayNodeCrit;
   // If false, the element can cross the bounds and still be considered within bounds.
   bool _mustCompletelyContain;
+  // TODO
+  bool _treatWayNodesAsPartOfWays;
+
+  bool _nonWayNodeInBounds(const ConstElementPtr& e) const;
 };
 
 }

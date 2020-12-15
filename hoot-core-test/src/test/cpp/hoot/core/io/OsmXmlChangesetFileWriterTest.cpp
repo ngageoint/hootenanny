@@ -55,6 +55,7 @@ public:
   {
     std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     OsmXmlChangesetFileWriter uut;
+    uut.setConfiguration(conf());
     uut.write(_outputPath + "changeset.osc", changesetProvider);
     FileUtils::writeFully(_outputPath + "stats", uut.getStatsTable(ChangesetStatsFormat::Text));
     FileUtils::writeFully(

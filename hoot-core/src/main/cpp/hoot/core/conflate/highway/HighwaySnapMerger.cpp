@@ -270,15 +270,6 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   // Split the second element and reverse any geometries to make the matches work.
   _splitElement(
     map, match.getSublineString2(), match.getReverseVector2(), replaced, e2, e2Match, scraps2);
-  // Retain relation membership for both features.
-//  if (e2 && scraps2)
-//  {
-//    RelationMemberSwapper::swap(e2->getElementId(), scraps2->getElementId(), map, false);
-//  }
-//  if (e2Match && scraps2)
-//  {
-//    RelationMemberSwapper::swap(e2Match->getElementId(), scraps2->getElementId(), map, false);
-//  }
   if (_writeDebugMaps)
   {
     OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-2" + eidLogString);

@@ -47,6 +47,9 @@ namespace hoot
 /**
  * Writes out a set of SQL commands, that when executed, will update the contents of
  * an OSM API database with an OSM changeset.
+ *
+ * This is useful when you want to work with changesets and  don't want a dependency on the OSM API
+ * app. Changesets also apply more quickly due to the lack of HTTP overhead.
  */
 class OsmApiDbSqlChangesetFileWriter : public OsmChangesetFileWriter
 {
@@ -76,6 +79,9 @@ public:
     const ChangesetStatsFormat& /*format = StatisticsFormat::Text*/) const
   { throw NotImplementedException("Changeset statistics not implemented for SQL changesets."); }
 
+  virtual void setMap1List(const QList<ConstOsmMapPtr>& mapList) { _map1List = mapList; }
+  virtual void setMap2List(const QList<ConstOsmMapPtr>& mapList) { _map2List = mapList; }
+
   /**
    * @see ChangesetFileWriter
    */
@@ -89,6 +95,35 @@ public:
   void setOsmApiDbUrl(const QString& url) { _db.open(url); }
 
 private:
+
+  QList<ConstOsmMapPtr> _map1List;
+  QList<ConstOsmMapPtr> _map2List;
+
+  OsmApiDb _db;
+  QFile _outputSql;
+
+  long _changesetId;
+  geos::geom::Envelope _changesetBounds;
+
+  /** Settings from the config file */
+  double _changesetUserId;
+
+  bool _includeDebugTags;
+  bool _includeCircularErrorTags;
+
+  // id mappings for created elements
+  QMap<ElementId, ElementId> _remappedIds;
+
+  // element IDs associated with a changes encountered
+  QList<ElementId> _parsedChangeIds;
+
+  // list of metadata tag keys allowed to be written to the changeset
+  QStringList _metadataAllowKeys;
+
+  // TODO
+  bool _changesetIgnoreConvertBounds;
+
+  friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 
   void _createChangeSet();
   void _updateChangeset(const int numChanges);
@@ -123,30 +158,7 @@ private:
 
   QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
 
-  void setChangesetUserId(long id) { _changesetUserId = id; }
-
-  OsmApiDb _db;
-  QFile _outputSql;
-
-  long _changesetId;
-  geos::geom::Envelope _changesetBounds;
-
-  /** Settings from the config file */
-  double _changesetUserId;
-
-  bool _includeDebugTags;
-  bool _includeCircularErrorTags;
-
-  // id mappings for created elements
-  QMap<ElementId, ElementId> _remappedIds;
-
-  // element IDs associated with a changes encountered
-  QList<ElementId> _parsedChangeIds;
-
-  // list of metadata tag keys allowed to be written to the changeset
-  QStringList _metadataAllowKeys;
-
-  friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
+  void _setChangesetUserId(long id) { _changesetUserId = id; }
 };
 
 }

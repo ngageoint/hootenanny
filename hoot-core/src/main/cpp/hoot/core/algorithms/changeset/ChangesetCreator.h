@@ -144,6 +144,10 @@ private:
   int _numModifyChanges;
   int _numDeleteChanges;
 
+  // TODO
+  QList<ConstOsmMapPtr> _map1List;
+  QList<ConstOsmMapPtr> _map2List;
+
   bool _isSupportedOutputFormat(const QString& format) const;
   bool _inputIsSorted(const QString& input) const;
   bool _inputIsStreamable(const QString& input) const;

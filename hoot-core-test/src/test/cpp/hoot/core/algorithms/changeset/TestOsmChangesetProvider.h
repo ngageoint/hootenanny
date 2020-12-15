@@ -50,6 +50,7 @@ namespace hoot
 class TestOsmChangesetProvider : public ChangesetProvider
 {
 public:
+
   /**
    * Constructor
    *

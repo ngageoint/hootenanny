@@ -86,6 +86,7 @@ public:
    */
   ElementToGeometryConverter(const ConstElementProviderPtr& provider,
                              const bool logWarningsForMissingElements = true);
+  ~ElementToGeometryConverter() = default;
 
   /**
    * Converts the given element to a geos geometry object. The tags are used with OsmSchema to

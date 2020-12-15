@@ -144,7 +144,7 @@ function geometryMismatch(map, e1, e2)
 {
   // This is a little convoluted and may need further adjustment. Edge distance is pretty accurate 
   // for this but gets expensive as the relations get larger. Angle hist is a little less accurate
-  // overall but runs faster and seems to be working ok for the largeer relations. For matching
+  // overall but runs faster and seems to be working ok for the larger relations. For matching
   // of disjointed relations (relations with different but connecting ways) a further check is
   // needed (which also has the potential to be very expensive at O(n^2)) and is only done for the
   // larger relations when the geometry check fails.

@@ -642,6 +642,13 @@ The number of seconds plus or minus for random throttling of the OSM API writer.
 
 The text description that is written to the OSM API database with a changeset.
 
+=== changeset.ignore.convert.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === changeset.hashtags
 
 * Data Type: string

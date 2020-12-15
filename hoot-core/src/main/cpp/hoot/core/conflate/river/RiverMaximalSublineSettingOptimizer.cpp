@@ -62,26 +62,8 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   // If a bounds was specified for the conflate job, need to ensure that all the rivers whose length
   // we are summing have some porition of them within the bounds. See related note in the
   // isMatchCandidate method of River.js.
-  std::shared_ptr<InBoundsCriterion> boundsCrit;
-  const QString boundsStr = ConfigOptions().getConvertBounds().trimmed();
-  LOG_VARD(boundsStr);
-  if (!boundsStr.isEmpty())
-  {
-    const GeometricRelationship boundsRelationship = ConfigUtils::getConvertBoundsRelationship();
-    const bool mustContain = true ? (boundsRelationship == GeometricRelationship::Contains) : false;
-    boundsCrit.reset(new InBoundsCriterion(mustContain));
-    std::shared_ptr<geos::geom::Geometry> bounds = GeometryUtils::boundsFromString(boundsStr);
-    if (!MapProjector::isGeographic(map))
-    {
-      // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
-      // the bounds.
-      std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
-      srs84->SetWellKnownGeogCS("WGS84");
-      MapProjector::project(bounds, srs84, map->getProjection());
-    }
-    boundsCrit->setBounds(bounds);
-    boundsCrit->setOsmMap(map.get());
-  }
+  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getConflateBoundsCrit(map);
+  LOG_VARD(boundsCrit.get());
 
   // Get the total length of all the rivers in the dataset.
   // TODO: add a filter option to LengthOfWaysVisitor and use it here instead of this
@@ -89,12 +71,16 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const WayPtr& way = it->second;
-    LOG_VART(LinearWaterwayCriterion().isSatisfied(way));
-    if (boundsCrit)
+    if (way)
+    {
+      LOG_VART(LinearWaterwayCriterion().isSatisfied(way));
+    }
+    if (boundsCrit && way)
     {
       LOG_VART(boundsCrit->isSatisfied(way));
     }
-    if (LinearWaterwayCriterion().isSatisfied(way) && (!boundsCrit || boundsCrit->isSatisfied(way)))
+    if (way && LinearWaterwayCriterion().isSatisfied(way) &&
+        (!boundsCrit || boundsCrit->isSatisfied(way)))
     { 
       totalRiverLength += ElementGeometryUtils::calculateLength(way, map);
       riverCount++;
@@ -108,6 +94,7 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
         StringUtils::formatLargeNumber(ways.size()) << " ways.");
     }
   }
+  boundsCrit.reset();
   LOG_VARD(riverCount);
   LOG_VARD(totalRiverLength);
 

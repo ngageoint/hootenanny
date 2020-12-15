@@ -606,6 +606,8 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+  // TODO
+  conf().set(ConfigOptions::getChangesetIgnoreConvertBoundsKey(), true);
   // This is kind of klunky to set this here, imo. However, its currently the only way to get this
   // bounds to the readers.
   conf().set(

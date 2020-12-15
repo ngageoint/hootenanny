@@ -31,6 +31,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -38,7 +39,7 @@ namespace hoot
 /**
  * Interface for classes which write changesets to a file
  *
- * There may be some redundancy with this and OsmChangeWriter.
+ * @todo There may be some redundancy with this and OsmChangeWriter.
  */
 class OsmChangesetFileWriter : public Configurable
 {
@@ -88,6 +89,10 @@ public:
    * @see Configurable
    */
   virtual void setConfiguration(const Settings& conf) = 0;
+
+  // TODO: explain
+  virtual void setMap1List(const QList<ConstOsmMapPtr>& /*map*/) {}
+  virtual void setMap2List(const QList<ConstOsmMapPtr>& /*map*/) {}
 };
 
 }

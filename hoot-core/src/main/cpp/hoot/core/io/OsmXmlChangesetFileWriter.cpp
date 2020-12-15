@@ -33,6 +33,8 @@
 #include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
 
 // Qt
 #include <QFile>
@@ -47,12 +49,22 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmXmlChangesetFileWriter)
 
 OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
-_precision(ConfigOptions().getWriterPrecision()),
-_addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
-_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
+_precision(16),
+_addTimestamp(false),
+_includeDebugTags(false),
+_includeCircularErrorTags(false),
+_changesetIgnoreConvertBounds(false)
 {
+}
+
+void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
+{
+  ConfigOptions co(conf);
+  _precision = co.getWriterPrecision();
+  _addTimestamp = co.getChangesetXmlWriterAddTimestamp();
+  _includeDebugTags = co.getWriterIncludeDebugTags();
+  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
+  _changesetIgnoreConvertBounds = co.getChangesetIgnoreConvertBounds();
 }
 
 void OsmXmlChangesetFileWriter::_initStats()
@@ -90,6 +102,10 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
 {  
   LOG_DEBUG("Writing changeset to: " << path << "...");
 
+  LOG_VARD(_map1List.size());
+  LOG_VARD(_map2List.size());
+  assert(_map1List.size() == _map2List.size());
+
   QString filepath = path;
 
   _initIdCounters();
@@ -122,6 +138,28 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
+    // TODO
+    ConstOsmMapPtr map1;
+    ConstOsmMapPtr map2;
+    std::shared_ptr<InBoundsCriterion> boundsCrit1;
+    std::shared_ptr<InBoundsCriterion> boundsCrit2;
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      map1 = _map1List.at(i);
+      LOG_VART(map1.get());
+      map2 = _map2List.at(i);
+      LOG_VART(map2.get());
+
+      if (map1)
+      {
+        boundsCrit1 = ConfigUtils::getConflateBoundsCrit(map1);
+      }
+      if (map2)
+      {
+        boundsCrit2 = ConfigUtils::getConflateBoundsCrit(map2);
+      }
+    }
+
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
     LOG_VARD(changesetProvider->hasMoreChanges());
     while (changesetProvider->hasMoreChanges())
@@ -135,7 +173,6 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       {
         continue;
       }
-
       // When multiple changeset providers are passed in, sometimes multiple changes for the same
       // element may exist as a result of combining their results together, so we're skipping those
       // dupes here. Formerly, we only checked for exact duplicate statements and now we're more
@@ -146,10 +183,36 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       // multiple derivers. You could make the argument to prevent these types of dupes from
       // occurring before outputting this changeset file, but not quite sure how to do that yet, due
       // to the fact that the changeset providers have a streaming interface.
-      if (_parsedChangeIds.contains(_change.getElement()->getElementId()))
+      else if (_parsedChangeIds.contains(_change.getElement()->getElementId()))
       {
         LOG_TRACE("Skipping change for element ID already having change: " << _change << "...");
         continue;
+      }
+      // TODO
+      else if (!_changesetIgnoreConvertBounds && ConfigUtils::boundsOptionEnabled())
+      {
+        std::shared_ptr<InBoundsCriterion> boundsCrit;
+        if (map2 && boundsCrit2 && map2->containsElement(_change.getElement()))
+        {
+          boundsCrit = boundsCrit2;
+        }
+        else if (map1 && boundsCrit1 && map1->containsElement(_change.getElement()))
+        {
+          boundsCrit = boundsCrit1;
+        }
+        else
+        {
+          throw HootException("Element not found in map for bounds check.");
+        }
+        LOG_VART(boundsCrit.get());
+        if (boundsCrit)
+        {
+          LOG_VART(boundsCrit->isSatisfied(_change.getElement()));
+        }
+        if (boundsCrit && !boundsCrit->isSatisfied(_change.getElement()))
+        {
+          continue;
+        }
       }
 
       LOG_VART(Change::changeTypeToString(last));
@@ -439,15 +502,6 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
   }
 
   writer.writeEndElement();
-}
-
-void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
-{
-  ConfigOptions co(conf);
-  _precision = co.getWriterPrecision();
-  _addTimestamp = co.getChangesetXmlWriterAddTimestamp();
-  _includeDebugTags = co.getWriterIncludeDebugTags();
-  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
 }
 
 void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,

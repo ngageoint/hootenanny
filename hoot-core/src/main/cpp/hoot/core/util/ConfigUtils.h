@@ -38,6 +38,8 @@
 namespace hoot
 {
 
+class InBoundsCriterion;
+
 /**
  * Utilities for dealing with hoot config options
  */
@@ -54,12 +56,28 @@ public:
   static bool boundsOptionEnabled();
 
   /**
+   * TODO
+   *
+   * @return
+   */
+  static std::shared_ptr<geos::geom::Geometry> getConvertBounds();
+
+  /**
    * Determines which feature bounds checking relationship should be used based on the configured
    * options for convert bounds
    *
    * @return a geometric relationship
    */
   static GeometricRelationship getConvertBoundsRelationship();
+
+  /**
+   * TODO
+   *
+   * @param map
+   * @return
+   * @todo This causes memory errors.
+   */
+  static std::shared_ptr<InBoundsCriterion> getConflateBoundsCrit(const ConstOsmMapPtr& map);
 
   /**
    * Removes ApiTruncateTagVisitor from conflate ops if the corresponding config option is

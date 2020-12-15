@@ -32,6 +32,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QSqlError>
@@ -46,19 +48,17 @@ HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmApiDbSqlChangesetFileWriter)
 
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter() :
 _changesetId(0),
-_changesetUserId(ConfigOptions().getChangesetUserId()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
-_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
+_includeDebugTags(false),
+_includeCircularErrorTags(false),
+_changesetIgnoreConvertBounds(false)
 {
 }
 
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) :
 _changesetId(0),
-_changesetUserId(ConfigOptions().getChangesetUserId()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
-_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
+_includeDebugTags(false),
+_includeCircularErrorTags(false),
+_changesetIgnoreConvertBounds(false)
 {
   _db.open(url);
 }
@@ -68,18 +68,32 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
   _db.close();
 }
 
-void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
-                                           const ChangesetProviderPtr& changesetProvider)
+void OsmApiDbSqlChangesetFileWriter::setConfiguration(const Settings &conf)
+{
+  ConfigOptions co(conf);
+  _changesetUserId = co.getChangesetUserId();
+  _includeDebugTags = co.getWriterIncludeDebugTags();
+  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
+  _metadataAllowKeys = co.getChangesetMetadataAllowedTagKeys();
+  _changesetIgnoreConvertBounds = co.getChangesetIgnoreConvertBounds();
+}
+
+void OsmApiDbSqlChangesetFileWriter::write(
+  const QString& path, const ChangesetProviderPtr& changesetProvider)
 {
   QList<ChangesetProviderPtr> changesetProviders;
   changesetProviders.append(changesetProvider);
   write(path, changesetProviders);
 }
 
-void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
-                                           const QList<ChangesetProviderPtr>& changesetProviders)
+void OsmApiDbSqlChangesetFileWriter::write(
+  const QString& path, const QList<ChangesetProviderPtr>& changesetProviders)
 {
   LOG_DEBUG("Writing changeset to: " << path << "...");
+
+  LOG_VARD(_map1List.size());
+  LOG_VARD(_map2List.size());
+  assert(_map1List.size() == _map2List.size());
 
   _remappedIds.clear();
   _changesetBounds.init();
@@ -100,6 +114,28 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
       "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
+    // TODO
+    ConstOsmMapPtr map1;
+    ConstOsmMapPtr map2;
+    std::shared_ptr<InBoundsCriterion> boundsCrit1;
+    std::shared_ptr<InBoundsCriterion> boundsCrit2;
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      map1 = _map1List.at(i);
+      LOG_VART(map1.get());
+      map2 = _map2List.at(i);
+      LOG_VART(map2.get());
+
+      if (map1)
+      {
+        boundsCrit1 = ConfigUtils::getConflateBoundsCrit(map1);
+      }
+      if (map2)
+      {
+        boundsCrit2 = ConfigUtils::getConflateBoundsCrit(map2);
+      }
+    }
+
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
     LOG_VART(changesetProvider.get());
     LOG_VART(changesetProvider->hasMoreChanges());
@@ -107,19 +143,48 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
     {
       LOG_TRACE("Reading next SQL change...");
       Change change = changesetProvider->readNextChange();
+      LOG_VART(change.toString());
 
       if (!change.getElement())
       {
         continue;
       }
-
       // See related note in OsmXmlChangesetFileWriter::write.
-      if (_parsedChangeIds.contains(change.getElement()->getElementId()))
+      else if (_parsedChangeIds.contains(change.getElement()->getElementId()))
       {
         LOG_TRACE("Skipping change for element ID already having change: " << change << "...");
         continue;
       }
+      // TODO
+      else if (!_changesetIgnoreConvertBounds && ConfigUtils::boundsOptionEnabled())
+      {
+        std::shared_ptr<InBoundsCriterion> boundsCrit;
+        if (map2 && boundsCrit2 && map2->containsElement(change.getElement()))
+        {
+          boundsCrit = boundsCrit2;
+        }
+        else if (map1 && boundsCrit1 && map1->containsElement(change.getElement()))
+        {
+          boundsCrit = boundsCrit1;
+        }
+        else
+        {
+          //throw HootException(
+          // change.getElement()->getElementId().toString() + " not found in map for bounds check.");
+          LOG_DEBUG(change.getElement()->getElementId() << " not found in map for bounds check.");
+        }
+        LOG_VART(boundsCrit.get());
+        if (boundsCrit)
+        {
+          LOG_VART(boundsCrit->isSatisfied(change.getElement()));
+        }
+        if (boundsCrit && !boundsCrit->isSatisfied(change.getElement()))
+        {
+          continue;
+        }
+      }
 
+      LOG_VART(change.getType());
       switch (change.getType())
       {
         case Change::Create:
@@ -132,8 +197,8 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
           _deleteExistingElement(change.getElement());
           break;
         case Change::Unknown:
-          //see comment in ChangesetDeriver::_nextChange() when
-          //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
+          // see comment in ChangesetDeriver::_nextChange() when
+          // _fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
           break;
         default:
           throw IllegalArgumentException("Unexpected change type.");
@@ -150,6 +215,9 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
         changes++;
       }
     }
+
+    boundsCrit1.reset();
+    boundsCrit2.reset();
   }
 
   _updateChangeset(changes);
@@ -597,10 +665,12 @@ void OsmApiDbSqlChangesetFileWriter::_createWayNodes(ConstWayPtr way)
     // If this was a newly created node its id was remapped when it was created, but the way still
     // has the old way node id.
     ElementId nodeElementId = ElementId(ElementType::Node, nodeIds.at(i));
+    LOG_VART(nodeElementId);
     if (_remappedIds.contains(nodeElementId))
     {
       nodeElementId = _remappedIds[nodeElementId];
     }
+    assert(nodeElementId.getId() > 0);
     LOG_VART(nodeElementId);
 
     QString values =
@@ -631,10 +701,12 @@ void OsmApiDbSqlChangesetFileWriter::_createRelationMembers(ConstRelationPtr rel
     // If the member was a newly created element its id was remapped when it was created, but the
     // relation still has the old element id.
     ElementId memberElementId = member.getElementId();
+    LOG_VART(memberElementId);
     if (_remappedIds.contains(memberElementId))
     {
       memberElementId = _remappedIds[memberElementId];
     }
+    assert(memberElementId.getId() > 0);
     LOG_VART(memberElementId);
 
     QString values =
@@ -683,14 +755,6 @@ void OsmApiDbSqlChangesetFileWriter::_deleteAll(const QString& tableName, const 
       .arg(idFieldName)
       .arg(id))
     .toUtf8());
-}
-
-void OsmApiDbSqlChangesetFileWriter::setConfiguration(const Settings &conf)
-{
-  ConfigOptions co(conf);
-  _changesetUserId = co.getChangesetUserId();
-  _includeDebugTags = co.getWriterIncludeDebugTags();
-  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
 }
 
 }
