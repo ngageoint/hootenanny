@@ -140,7 +140,7 @@ public class PullApiCommand implements InternalCommand {
             FileUtils.copyInputStreamToFile(responseStream, outputFile);
             responseStream.close();
         }
-        catch (IOException ex) {
+        catch (Exception ex) {
             String msg = "Failure to pull data from the OSM API [" + url + "] " + ex.getMessage();
             logger.error(msg);
             throw new WebApplicationException(ex, Response.serverError().entity(ex.getMessage()).build());
