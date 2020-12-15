@@ -918,27 +918,29 @@ public class DbUtils {
     // Sets the specified upload changeset job to a status detail of CONFLICTS
     // if a diff-error.osc file is present in the parent job workspace
     public static void checkConflicted(String jobId, String parentId) {
-        File workDir = new File(CHANGESETS_FOLDER, parentId);
-        File diffError = new File(workDir, "diff-error.osc");
-        File diffRemaining = new File(workDir, "diff-remaining.osc");
-        File[] diffDebugfiles = workDir.listFiles(filter);
-        if (diffError.exists()
-                || diffRemaining.exists()
-                || diffDebugfiles.length > 0
-                ) {
-            // Find the job
-            JobStatus job = createQuery()
-                    .select(jobStatus)
-                    .from(jobStatus)
-                    .where(jobStatus.jobId.eq(jobId))
-                    .fetchFirst();
+        if (parentId != null) {
+            File workDir = new File(CHANGESETS_FOLDER, parentId);
+            File diffError = new File(workDir, "diff-error.osc");
+            File diffRemaining = new File(workDir, "diff-remaining.osc");
+            File[] diffDebugfiles = workDir.listFiles(filter);
+            if (diffError.exists()
+                    || diffRemaining.exists()
+                    || diffDebugfiles.length > 0
+            ) {
+                // Find the job
+                JobStatus job = createQuery()
+                        .select(jobStatus)
+                        .from(jobStatus)
+                        .where(jobStatus.jobId.eq(jobId))
+                        .fetchFirst();
 
-            if(job != null) {
-                createQuery()
-                    .update(jobStatus)
-                    .where(jobStatus.jobId.eq(jobId))
-                    .set(jobStatus.statusDetail, "CONFLICTS")
-                    .execute();
+                if(job != null) {
+                    createQuery()
+                            .update(jobStatus)
+                            .where(jobStatus.jobId.eq(jobId))
+                            .set(jobStatus.statusDetail, "CONFLICTS")
+                            .execute();
+                }
             }
         }
     }
