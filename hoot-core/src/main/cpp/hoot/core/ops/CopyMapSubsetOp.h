@@ -31,6 +31,8 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/criterion/ElementCriterionConsumer.h>
 
 namespace hoot
 {
@@ -40,12 +42,14 @@ namespace hoot
  *
  * TODO: implement OperationStatusInfo
  */
-class CopyMapSubsetOp : public OsmMapOperation
+class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumer,
+  public ElementCriterionConsumer
 {
 public:
 
   static std::string className() { return "hoot::CopyMapSubsetOp"; }
 
+  CopyMapSubsetOp();
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::vector<long>& wayIds);
   CopyMapSubsetOp(const ConstOsmMapPtr& from, ElementId eid);
@@ -59,22 +63,28 @@ public:
    */
   virtual void apply(OsmMapPtr& map);
 
-  void setFrom(const ConstOsmMapPtr& from) { _from = from; }
-  void setEids(const std::set<ElementId>& eids) { _eids = eids; }
+  /**
+   * @see ConstOsmMapConsumer
+   */
+  virtual void setOsmMap(const OsmMap* map) { _from = map->shared_from_this(); }
+
+  /**
+   * @see ElementCriterionConsumer
+   */
+  virtual void addCriterion(const ElementCriterionPtr& crit);
 
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
+  virtual std::string getClassName() const { return className(); }
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 
+  void setEids(const std::set<ElementId>& eids) { _eids = eids; }
   void setCopyChildren(bool copy) { _copyChildren = copy; }
-
-  virtual std::string getClassName() const { return className(); }
 
 private:
 
   std::set<ElementId> _eids;
   ConstOsmMapPtr _from;
-  ElementCriterionPtr _crit;
   // determines whether child elements are copied (way nodes and relation members)
   bool _copyChildren;
   std::set<ElementId> _eidsCopied;

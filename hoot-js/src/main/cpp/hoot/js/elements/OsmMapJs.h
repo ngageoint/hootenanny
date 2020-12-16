@@ -65,6 +65,7 @@ private:
   static void getParents(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void removeElement(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void setIdGenerator(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void copyProjection(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void visit(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationType(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);

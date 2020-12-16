@@ -3,15 +3,10 @@
  * @file
  * @par Hoot JavaScript API
  *
- * The HootLib contains a number of convenience functions for wrapping internal
- * Hootenanny operations. This makes the code a little easier for the
- * non-developer and adds sugar coating, although a little naughty wrapping
- * for the more experienced developer.
- */
-
-/*
- * The comments within this file are used to generate user documentation. Please
- * keep this in mind while adding comments.
+ * The HootLib contains a number of convenience functions for wrapping internal Hootenanny
+ * operations. This makes the code a little easier for the non-developer and adds sugar coating,
+ * although a little naughty wrapping for the more experienced developer.  The comments within this
+ * file are used to generate user documentation. Please keep this in mind while adding comments.
  */
 
 /**
@@ -583,4 +578,15 @@ function getConvertBoundsRelationship()
   {
     return "intersects";
   }
+}
+
+function boundsOptionEnabled()
+{
+  var bounds = getConvertBounds();
+  return bounds !== 'undefined' && bounds !== null && bounds !== '';
+}
+
+function getConvertBounds()
+{
+  return String(hoot.get("convert.bounds")).trim();
 }

@@ -73,10 +73,10 @@ class IdSwap;
  * ways, relations and an index to access them efficiently. It also provides a number of methods
  * for CRUD.
  *
- *  - In the long term it might be nice to remove the OsmIndex circular reference, but I
- *    haven't figured out a good way to do that. Possibly refactor into an OsmMap class
- *    and OsmData class. The OsmMap class maintains pointers to OsmData and an OsmIndex
- *    where neither directly references the other. (?)
+ *  In the long term it might be nice to remove the OsmIndex circular reference, but haven't
+ *  figured out a good way to do that. Possibly refactor into an OsmMap class and OsmData class. The
+ *  OsmMap class maintains pointers to OsmData and an OsmIndex where neither directly references the
+ *  other.
  */
 class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider,
   public ElementIterator

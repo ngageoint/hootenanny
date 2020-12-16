@@ -117,6 +117,11 @@ EdgeDistanceExtractor::EdgeDistanceExtractor(Meters spacing)
   setSpacing(spacing);
 }
 
+void EdgeDistanceExtractor::setConfiguration(const Settings& conf)
+{
+  setSpacing(ConfigOptions(conf).getEdgeDistanceExtractorSpacing());
+}
+
 vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map,
   const std::shared_ptr<const Element>& e) const
 {
@@ -184,11 +189,6 @@ std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(
     result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
   return result;
-}
-
-void EdgeDistanceExtractor::setConfiguration(const Settings& conf)
-{
-  setSpacing(ConfigOptions(conf).getEdgeDistanceExtractorSpacing());
 }
 
 }

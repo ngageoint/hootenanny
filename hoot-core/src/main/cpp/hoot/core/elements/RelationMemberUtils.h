@@ -160,6 +160,16 @@ public:
     const ConstOsmMapPtr& map, const ElementId& childId);
 
   /**
+   * TODO
+   *
+   * @param map
+   * @param childId
+   * @return
+   */
+  static QSet<long> getContainingRelationIds(
+    const ConstOsmMapPtr& map, const ElementId& childId);
+
+  /**
    * Counts the number of way nodes in way members belonging to a relation
    *
    * @param relation the relation containing the way members

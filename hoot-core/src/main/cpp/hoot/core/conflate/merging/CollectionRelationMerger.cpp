@@ -32,20 +32,19 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/elements/RelationMemberComparison.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
 {
 
 CollectionRelationMerger::CollectionRelationMerger() :
-// ONLY ENABLE THIS DURING DEBUGGING
-_writeDebugMaps(false)
+_writeDebugMaps(false) // ONLY ENABLE THIS DURING DEBUGGING
 {
 }
 
 void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
 {
-  // TODO: add bounds support
-
   if (elementId1.getType() != ElementType::Relation ||
       elementId2.getType() != ElementType::Relation)
   {
@@ -64,15 +63,19 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
   relation1->setTags(newTags);
 
   // copy relation 2's members into 1
-  _mergeMembers(relation1, relation2);
+  const bool allMembersCopied = _mergeMembers(relation1, relation2);
+
+  // TODO: not sure this is the right behavior yet...
 
   // replace any references to relation 2 with a ref to relation 1
   LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
   ReplaceElementOp(elementId2, elementId1, true).apply(_map);
-
-  // remove all instances of relation 2
-  LOG_TRACE("Removing " << elementId2 << "...");
-  RemoveRelationByEid(elementId2.getId()).apply(_map);
+  if (allMembersCopied)
+  {
+    // remove all instances of relation 2
+    LOG_TRACE("Removing " << elementId2 << "...");
+    RemoveRelationByEid(elementId2.getId()).apply(_map);
+  }
 
   LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
   if (_writeDebugMaps)
@@ -82,10 +85,14 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
   }
 }
 
-void CollectionRelationMerger::_mergeMembers(
+bool CollectionRelationMerger::_mergeMembers(
   RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
 {
   LOG_TRACE("Merging members...");
+
+  const int numRelationBeingReplacedMembers = relationBeingReplaced->getMemberCount();
+  int numMembersCopied = 0;
+  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getConflateBoundsCrit(_map);
 
   const std::vector<RelationData::Entry> replacingRelationMembers = replacingRelation->getMembers();
   LOG_VART(replacingRelationMembers.size());
@@ -264,17 +271,25 @@ void CollectionRelationMerger::_mergeMembers(
   }
   LOG_VART(replacingRelationMemberComps);
 
-  // Add the relation member.
   std::vector<RelationData::Entry> modifiedMembers;
   for (int i = 0; i < replacingRelationMemberComps.size(); i++)
   {
     const RelationMemberComparison currentMemberFromReplaced = replacingRelationMemberComps[i];
-    modifiedMembers.push_back(
-      RelationData::Entry(
-        currentMemberFromReplaced.getRole(),
-        currentMemberFromReplaced.getElement()->getElementId()));
+    if (!boundsCrit || boundsCrit->isSatisfied(currentMemberFromReplaced.getElement()))
+    {
+      // Add the relation member to the relation we're keeping.
+      modifiedMembers.push_back(
+        RelationData::Entry(
+          currentMemberFromReplaced.getRole(),
+          currentMemberFromReplaced.getElement()->getElementId()));
+      // Remove the member from the relation we may or may not be keeping.
+      relationBeingReplaced->removeElement(currentMemberFromReplaced.getElement()->getElementId());
+      numMembersCopied++;
+    }
   }
   replacingRelation->setMembers(modifiedMembers);
+
+  return numRelationBeingReplacedMembers == numMembersCopied;
 }
 
 }

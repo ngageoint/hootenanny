@@ -50,8 +50,9 @@ public:
   virtual ~CollectionRelationMerger() = default;
 
   /**
-   * Merges the relation with the second element ID into the relation with the first element ID,
-   * updates element references, and removes the relation with the second element ID.
+   * Merges the members from the relation with the second element ID into the relation with the
+   * first element ID, updates element references, and removes the relation with the second element
+   * ID if all of its members are copied over (they may not be if a bounds is present).
    *
    * @param elementId1 ID of the first relation to merge
    * @param elementId2 ID of the second relation to merge
@@ -68,7 +69,10 @@ private:
   OsmMapPtr _map;
   bool _writeDebugMaps;
 
-  void _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
+  /*
+   * Returns true if all members from the second relation were merged into the frist relation
+   */
+  bool _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
 };
 
 }

@@ -67,10 +67,12 @@ void OsmMapJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   tpl->SetClassName(String::NewFromUtf8(current, "OsmMap"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
+
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "clone"),
       FunctionTemplate::New(current, clone));
@@ -86,6 +88,9 @@ void OsmMapJs::Init(Handle<Object> target)
       FunctionTemplate::New(current, visit));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setIdGenerator"),
       FunctionTemplate::New(current, setIdGenerator));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "copyProjection"),
+      FunctionTemplate::New(current, copyProjection));
+
   // TODO: move these to a RelationMemberUtilsJs class
   tpl->PrototypeTemplate()->Set(
     String::NewFromUtf8(current, "isMemberOfRelationType"),
@@ -108,6 +113,7 @@ void OsmMapJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(
     String::NewFromUtf8(current, "isMemberOfRelationSatisfyingCriterion"),
     FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion));
+
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
                                 String::NewFromUtf8(current, OsmMap::className().data()));
 
@@ -125,21 +131,6 @@ Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
   from->_setMap(map);
 
   return scope.Escape(result);
-}
-
-void OsmMapJs::setIdGenerator(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  std::shared_ptr<IdGenerator> idGen =  toCpp<std::shared_ptr<IdGenerator>>(args[0]);
-  if (obj->getMap())
-  {
-    obj->getMap()->setIdGenerator(idGen);
-  }
-
-  args.GetReturnValue().SetUndefined();
 }
 
 Handle<Object> OsmMapJs::create(OsmMapPtr map)
@@ -293,6 +284,37 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
   }
 }
 
+void OsmMapJs::setIdGenerator(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+  if (obj->getMap())
+  {
+    obj->getMap()->setIdGenerator(toCpp<std::shared_ptr<IdGenerator>>(args[0]));
+  }
+
+  args.GetReturnValue().SetUndefined();
+}
+
+void OsmMapJs::copyProjection(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+  if (obj->getMap())
+  {
+    ConstOsmMapPtr mapToCopyFrom = toCpp<ConstOsmMapPtr>(args[0]);
+    obj->getMap()->setProjection(
+      std::shared_ptr<OGRSpatialReference>(
+        new OGRSpatialReference(*mapToCopyFrom->getProjection())));
+  }
+
+  args.GetReturnValue().SetUndefined();
+}
+
 void OsmMapJs::isMemberOfRelationType(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
@@ -373,7 +395,7 @@ void OsmMapJs::getNumRelationMemberNodes(const FunctionCallbackInfo<Value>& args
   ConstOsmMapPtr map = obj->getConstMap();
   ElementId relationId = toCpp<ElementId>(args[0]);
   ConstRelationPtr relation = map->getRelation(relationId.getId());
-  int numNodes = -1;
+  int numNodes = 0;
   if (relation)
   {
     RelationMemberNodeCounter counter;

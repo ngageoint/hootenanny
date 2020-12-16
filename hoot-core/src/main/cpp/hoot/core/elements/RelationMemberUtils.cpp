@@ -34,6 +34,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/util/CollectionUtils.h>
 
 namespace hoot
 {
@@ -254,6 +255,14 @@ std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelations(
     }
   }
   return relations;
+}
+
+QSet<long> RelationMemberUtils::getContainingRelationIds(
+  const ConstOsmMapPtr& map, const ElementId& childId)
+{
+  return
+    CollectionUtils::stdSetToQSet(
+      map->getIndex().getElementToRelationMap()->getRelationByElement(childId));
 }
 
 bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(

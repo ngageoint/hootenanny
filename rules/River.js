@@ -122,7 +122,7 @@ exports.isMatchCandidate = function(map, e)
   // types (linear or all?). Also, not much work has been done so far to see what impact this change
   // has on the runtime performance against large datasets when a bounds is used.
 
-  var bounds = String(hoot.get("convert.bounds")).trim();
+  var bounds = getConvertBounds();
   hoot.trace("bounds: " + bounds);
   if (bounds !== 'undefined' && bounds !== null && bounds !== '')
   {

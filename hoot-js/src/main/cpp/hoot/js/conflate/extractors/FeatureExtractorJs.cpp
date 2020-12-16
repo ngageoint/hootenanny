@@ -65,10 +65,9 @@ void FeatureExtractorJs::extract(const FunctionCallbackInfo<Value>& args)
   ElementJs* e1Js = ObjectWrap::Unwrap<ElementJs>(args[1]->ToObject());
   ElementJs* e2Js = ObjectWrap::Unwrap<ElementJs>(args[2]->ToObject());
 
-  double result = feJs->getFeatureExtractor()->extract(
-        *(mapJs->getConstMap()),
-        e1Js->getConstElement(),
-        e2Js->getConstElement());
+  double result =
+    feJs->getFeatureExtractor()->extract(
+      *(mapJs->getConstMap()), e1Js->getConstElement(), e2Js->getConstElement());
 
   if (result == feJs->getFeatureExtractor()->nullValue())
   {

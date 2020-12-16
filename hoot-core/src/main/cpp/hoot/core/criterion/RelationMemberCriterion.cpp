@@ -35,6 +35,29 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationMemberCriterion)
 
+RelationMemberCriterion::RelationMemberCriterion(ConstOsmMapPtr map) :
+_map(map)
+{
+}
+
+RelationMemberCriterion::RelationMemberCriterion(
+  ConstOsmMapPtr map, const QSet<long>& parentRelationIds) :
+_map(map),
+_parentRelationIds(parentRelationIds)
+{
+}
+
+void RelationMemberCriterion::setConfiguration(const Settings& conf)
+{
+  ConfigOptions opts(conf);
+
+  const QStringList parentRelationIdsStrs = opts.getRelationMemberCriterionParentRelationIds();
+  for (int i = 0 ; i < parentRelationIdsStrs.size(); i++)
+  {
+    _parentRelationIds.insert(ElementId(parentRelationIdsStrs.at(i)).getId());
+  }
+}
+
 bool RelationMemberCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (!_map)
@@ -42,7 +65,16 @@ bool RelationMemberCriterion::isSatisfied(const ConstElementPtr& e) const
     throw HootException("You must set a map before calling: " + toString());
   }
 
-  return RelationMemberUtils::elementContainedByAnyRelation(e->getElementId(), _map);
+  if (_parentRelationIds.isEmpty())
+  {
+    return RelationMemberUtils::elementContainedByAnyRelation(e->getElementId(), _map);
+  }
+  else
+  {
+    return
+      RelationMemberUtils::getContainingRelationIds(
+        _map, e->getElementId()).intersect(_parentRelationIds).size() > 0;
+  }
 }
 
 }

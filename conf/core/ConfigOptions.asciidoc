@@ -4150,6 +4150,14 @@ pre-existing.
 
 Allows for requiring a type tag match when using RelationCriterion.
 
+=== relation.member.criterion.parent.relation.ids
+
+* Data Type: list
+* Default Value:
+** ``
+
+TODO
+
 === relation.with.most.members.op.member.criterion
 
 * Data Type: string

@@ -139,9 +139,38 @@ function nameMismatch(map, e1, e2)
   return false;
 }
 
+function getBoundsSubsetMap(map, e1, e2)
+{
+  var subsetMap = new hoot.OsmMap();
+  subsetMap.copyProjection(map);
+  // relation.member.criterion.parent.relation.ids
+  var relationIdsStr = e1.getElementId().toString() + ";" + e2.getElementId().toString();
+  var relationIdCrit = new hoot.ElementIdCriterion({"element.id.criterion.ids": relationIdsStr});
+  var relationMemberCrit = new hoot.RelationMemberCriterion(map, {"relation.member.criterion.parent.relation.ids": relationIdsStr});
+  var boundsCrit = new hoot.InBoundsCriterion(map, {"in.bounds.criterion.strict": "false", "in.bounds.criterion.bounds": getConvertBounds()});
+  var orCrit = new hoot.OrCriterion(relationIdCrit, relationMemberCrit);
+  var filter = new hoot.ChainCriterion(orCrit, boundsCrit);
+  // In this particular case, the ordering of the constructor params matters.
+  new hoot.CopyMapSubsetOp(map, filter).apply(subsetMap);
+  return subsetMap;
+}
+
 function geometryMismatch(map, e1, e2)
 {
-  // This is a little convoluted and may need further adjustment. Edge distance is pretty accurate 
+  var mapToUse;
+  /*if (boundsOptionEnabled())
+  {
+    // If a conflate bounds was specified, copy the two relations over to a temp map with only their
+    // members which intersect the bounds, since there could be members outside of the bounds due to
+    // how OSM queries work. This makes the geometry calc accurate and potentially more performant.
+    mapToUse = getBoundsSubsetMap(map, e1, e2);
+  }
+  else
+  {*/
+    mapToUse = map;
+  //}
+
+  // This is a little convoluted and may need further adjustment. Edge distance is fairly accurate
   // for this but gets expensive as the relations get larger. Angle hist is a little less accurate
   // overall but runs faster and seems to be working ok for the larger relations. For matching
   // of disjointed relations (relations with different but connecting ways) a further check is
@@ -150,14 +179,13 @@ function geometryMismatch(map, e1, e2)
 
   // Should we be extracting sublines first and passing those to the extractors?
 
-  // TODO: make this bounds aware by temporarily removing relation members outside of the bounds?
-
-  var numRelationMemberNodes = getNumRelationMemberNodes(map, e1.getElementId()) + getNumRelationMemberNodes(map, e2.getElementId());
+  var numRelationMemberNodes = getNumRelationMemberNodes(mapToUse, e1.getElementId()) + getNumRelationMemberNodes(mapToUse, e2.getElementId());
   hoot.trace("numRelationMemberNodes: " + numRelationMemberNodes);
-  if (numRelationMemberNodes < 2000) // Threshold determined off of one dataset...may need tweaking.
+  // This threshold was determined from one test dataset...may need tweaking.
+  if (numRelationMemberNodes < 2000)
   {
     // This can become a fairly expensive check for relations with a lot of total nodes.
-    var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
+    var edgeDist = edgeDistanceExtractor.extract(mapToUse, e1, e2);
     hoot.trace("edgeDist: " + edgeDist);
     if (edgeDist < 0.97)
     { 
@@ -167,11 +195,11 @@ function geometryMismatch(map, e1, e2)
   }
   else
   {
-    var angleHist = angleHistExtractor.extract(map, e1, e2);
+    var angleHist = angleHistExtractor.extract(mapToUse, e1, e2);
     hoot.trace("angleHist: " + angleHist);
     if (angleHist < 0.73)
     { 
-      if (relationsHaveConnectedWayMembers(map, e1.getElementId(), e2.getElementId()))
+      if (relationsHaveConnectedWayMembers(mapToUse, e1.getElementId(), e2.getElementId()))
       {
         hoot.trace("match failed on angleHist: " + angleHist + ", but there are connected ways.");
       }
