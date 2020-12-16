@@ -339,9 +339,11 @@ public class MapResource {
     @GET
     @Path("/{mapId}/{BBox}")
     @Produces(MediaType.TEXT_XML)
-    public Response get(@PathParam("mapId") String mapId, @PathParam("BBox") String BBox,
-            @QueryParam("manualExtent") String manualExtent, @Context HttpServletRequest request,
-                        @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") boolean multiLayerUniqueElementIds) {
+    public Response get(@Context HttpServletRequest request,
+            @PathParam("mapId") String mapId,
+            @PathParam("BBox") String BBox,
+            @QueryParam("manualExtent") String manualExtent,
+            @DefaultValue("false") @QueryParam("multiLayerUniqueElementIds") boolean multiLayerUniqueElementIds) {
 
         Document responseDoc = null;
         logger.debug("Retrieving map data for map with ID: {} and bounds {} ...", mapId, BBox);
@@ -544,10 +546,10 @@ public class MapResource {
                 || (extents.get("maxlon") == null)) {
 
             // check for bbox tag in maps
-            String bboxTag = DbUtils.getMapBbox(Long.parseLong(mapId));
-            if(bboxTag != null) {
+            String boundsTag = DbUtils.getMapBounds(Long.parseLong(mapId));
+            if(boundsTag != null) {
                 //This is how UI sends a bbox `${minx},${miny},${maxx},${maxy}`
-                String[] bboxCoords = bboxTag.split(",");
+                String[] bboxCoords = boundsTag.split(",");
                 ret.put("minlon", Double.parseDouble(bboxCoords[0]));
                 ret.put("maxlon", Double.parseDouble(bboxCoords[2]));
                 ret.put("minlat", Double.parseDouble(bboxCoords[1]));

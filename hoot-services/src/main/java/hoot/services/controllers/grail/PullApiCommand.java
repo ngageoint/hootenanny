@@ -37,8 +37,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
 import java.security.KeyStore;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.WebApplicationException;
@@ -47,10 +50,13 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,12 +103,10 @@ public class PullApiCommand implements InternalCommand {
     private void getApiData() {
         String url = "";
         try {
-            BoundingBox boundingBox = new BoundingBox(params.getBounds());
-
             InputStream responseStream = null;
             // Checks to see the set pull url is for the private overpass url
             if (params.getPullUrl().equals(PRIVATE_OVERPASS_URL)) {
-                url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), boundingBox.toServicesString(), "xml", params.getCustomQuery());
+                url = PullOverpassCommand.getOverpassUrl(replaceSensitiveData(params.getPullUrl()), params.getBounds(), "xml", params.getCustomQuery());
 
                 // if cert path and phrase are specified then we assume to use them for the request
                 // this will have a valid cert so no need to support self-signed
@@ -115,8 +119,9 @@ public class PullApiCommand implements InternalCommand {
                     }
                 }
             } else {
+                BoundingBox boundingBox = new BoundingBox(params.getBounds());
                 double bboxArea = boundingBox.getArea();
-                double maxBboxArea = params.getMaxBBoxSize();
+                double maxBboxArea = params.getMaxBoundsSize();
 
                 if (bboxArea > maxBboxArea) {
                     String errorMsg = "The bounding box area (" + bboxArea + ") is too large for OSM API. It must be less than " + maxBboxArea + " degrees";
@@ -135,7 +140,7 @@ public class PullApiCommand implements InternalCommand {
             FileUtils.copyInputStreamToFile(responseStream, outputFile);
             responseStream.close();
         }
-        catch (IOException ex) {
+        catch (Exception ex) {
             String msg = "Failure to pull data from the OSM API [" + url + "] " + ex.getMessage();
             logger.error(msg);
             throw new WebApplicationException(ex, Response.serverError().entity(ex.getMessage()).build());
@@ -154,7 +159,18 @@ public class PullApiCommand implements InternalCommand {
                 .build();
 
         HttpClient httpClient = HttpClients.custom().setSslcontext(sslContext).build();
-        HttpResponse response = httpClient.execute(new HttpGet(url));
+
+        String[] splitUrl = url.split("data=");
+        HttpPost post = new HttpPost(splitUrl[0]);
+
+        // Just a safety check but splitUrl[1] should be the query data
+        if (splitUrl.length == 2) {
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("data", URLDecoder.decode(splitUrl[1], "UTF-8")));
+            post.setEntity(new UrlEncodedFormEntity(params));
+        }
+
+        HttpResponse response = httpClient.execute(post);
         HttpEntity entity = response.getEntity();
 
         return entity.getContent();
