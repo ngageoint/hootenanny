@@ -36,6 +36,12 @@
 namespace hoot
 {
 
+CollectionRelationMerger::CollectionRelationMerger() :
+// ONLY ENABLE THIS DURING DEBUGGING
+_writeDebugMaps(false)
+{
+}
+
 void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
 {
   // TODO: add bounds support
@@ -69,9 +75,11 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
   RemoveRelationByEid(elementId2.getId()).apply(_map);
 
   LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
-  // ONLY ENABLE THIS DURING DEBUGGING
-  //OsmMapWriterFactory::writeDebugMap(
-    //_map, "CollectionRelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
+  if (_writeDebugMaps)
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "CollectionRelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
+  }
 }
 
 void CollectionRelationMerger::_mergeMembers(

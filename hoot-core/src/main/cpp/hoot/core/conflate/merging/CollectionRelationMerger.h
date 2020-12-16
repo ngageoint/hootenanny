@@ -46,7 +46,7 @@ class CollectionRelationMerger : public OsmMapConsumer
 {
 public:
 
-  CollectionRelationMerger() = default;
+  CollectionRelationMerger();
   virtual ~CollectionRelationMerger() = default;
 
   /**
@@ -65,6 +65,7 @@ public:
 private:
 
   OsmMapPtr _map;
+  bool _writeDebugMaps;
 
   void _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
 };
