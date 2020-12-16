@@ -33,13 +33,8 @@ OTHER_FILES = \
     $$files(../rules/*.js, true) \
     $$files(../conf/schema/*.json, true) \
     $$files(../docs/*.asciidoc, true) \
+    $$files(../conf/core/*.conf, true) \
     ../conf/core/ConfigOptions.asciidoc \
-    ../conf/core/*Conflation.conf \
-    ../conf/core/*Algorithm.conf \
-    ../conf/core/Grail*.conf \
-    ../conf/core/*Export.conf \
-    ../conf/core/*Import.conf \
-    ../conf/core/*Changeset.conf \
     ../scripts/jenkins/Jenkinsfile \
     $$files(../scripts/copyright/*, true) \
     ../sonar-project.properties \
