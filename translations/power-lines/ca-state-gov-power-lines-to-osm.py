@@ -2,11 +2,11 @@
 
 # This translates power line data published by the California State Goverment and obtained from http://www.data.gov.
 
-def translateAttributes(attrs, layerName, geometryType):
+def translateToOsm(attrs, layerName, geometryType):
 
     #print(geometryType)
     if not attrs or geometryType != 'Line': return
-    
+
     if 'Circuit' in attrs:
         numCircuitsStr = attrs['Circuit']
         #fix typo in data
@@ -56,7 +56,7 @@ def translateAttributes(attrs, layerName, geometryType):
 
     if 'Type' in attrs:
         lineType = attrs['Type'].lower()
-        # The inforation in Type will override what was previously assumed to be an overhead line if a different type of line is 
+        # The inforation in Type will override what was previously assumed to be an overhead line if a different type of line is
         # encountered.
         if lineType == 'ug':
             attrs['power'] = 'cable'
