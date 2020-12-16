@@ -38,6 +38,8 @@ namespace hoot
 
 void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
 {
+  // TODO: add bounds support
+
   if (elementId1.getType() != ElementType::Relation ||
       elementId2.getType() != ElementType::Relation)
   {
@@ -58,9 +60,11 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
   // copy relation 2's members into 1
   _mergeMembers(relation1, relation2);
 
+  // replace any references to relation 2 with a ref to relation 1
   LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
   ReplaceElementOp(elementId2, elementId1, true).apply(_map);
 
+  // remove all instances of relation 2
   LOG_TRACE("Removing " << elementId2 << "...");
   RemoveRelationByEid(elementId2.getId()).apply(_map);
 
@@ -81,8 +85,8 @@ void CollectionRelationMerger::_mergeMembers(
     relationBeingReplaced->getMembers();
   LOG_VART(relationBeingReplacedMembers.size());
 
-  // if insertion ever proves too slow with these lists, then we can switch them over to linked
-  // lists
+  // If insertion ever proves too slow with these lists, then we can switch them over to linked
+  // lists.
   QList<RelationMemberComparison> replacingRelationMemberComps;
   for (size_t i = 0; i < replacingRelationMembers.size(); i++)
   {
@@ -116,7 +120,7 @@ void CollectionRelationMerger::_mergeMembers(
     const RelationMemberComparison currentMemberFromReplaced = relationBeingReplacedMemberComps[i];
     LOG_VART(currentMemberFromReplaced);
 
-    // skip copying members our replacing relation already has
+    // Skip copying any members to our target relation that our replacing relation already has.
     if (replacingRelationMemberComps.contains(currentMemberFromReplaced))
     {
       LOG_TRACE(
@@ -126,16 +130,19 @@ void CollectionRelationMerger::_mergeMembers(
       continue;
     }
 
+    // Determine which index in the target relation we want to insert the member from the replacing
+    // relation.
+
     RelationMemberComparison beforeMemberFromReplaced;
     RelationMemberComparison afterMemberFromReplaced;
     if (i != 0)
     {
-      // find the member right before our current member in the relation being replaced
+      // Find the member right before our current member in the relation being replaced.
       beforeMemberFromReplaced = relationBeingReplacedMemberComps[i - 1];
     }
     if (i != relationBeingReplacedMemberComps.size() - 1)
     {
-      // find the member right after our current member in the relation being replaced
+      // Find the member right after our current member in the relation being replaced.
       afterMemberFromReplaced = relationBeingReplacedMemberComps[i + 1];
     }
     if (!beforeMemberFromReplaced.isNull())
@@ -147,14 +154,14 @@ void CollectionRelationMerger::_mergeMembers(
       LOG_VART(afterMemberFromReplaced);
     }
 
-    // use the relation size as the null value for size_t, since it can't be negative like the
-    // not found index coming back from QList will be
+    // Use the relation size as the null value for size_t, since it can't be negative like the
+    // not found index coming back from QList will be.
     int matchingFromReplacingBeforeIndex = relationBeingReplacedMemberComps.size();
     if (!beforeMemberFromReplaced.isNull())
     {
-      // if there was a member directly preceding our current member in the relation being replaced,
-      // see if it exists in the replacing relation; if so record that member's index from the
-      // replacing relation
+      // If there was a member directly preceding our current member in the relation being replaced,
+      // see if it exists in the replacing relation. If so, record that member's index from the
+      // replacing relation.
       const int index = replacingRelationMemberComps.indexOf(beforeMemberFromReplaced);
       if (index != -1)
       {
@@ -164,9 +171,9 @@ void CollectionRelationMerger::_mergeMembers(
     int matchingFromReplacingAfterIndex = relationBeingReplacedMemberComps.size();
     if (!afterMemberFromReplaced.isNull())
     {
-      // if there was a member directly following our current member in the relation being replaced,
-      // see if it exists in the replacing relation; if so record that member's index from the
-      // replacing relation
+      // If there was a member directly following our current member in the relation being replaced,
+      // see if it exists in the replacing relation. If so, record that member's index from the
+      // replacing relation.
       const int index = replacingRelationMemberComps.indexOf(afterMemberFromReplaced);
       if (index != -1)
       {
@@ -187,9 +194,9 @@ void CollectionRelationMerger::_mergeMembers(
     {
       if ((matchingFromReplacingAfterIndex - matchingFromReplacingBeforeIndex) == 1)
       {
-        // if the replacing relation has matching directly preceding/following members for the
+        // If the replacing relation has matching directly preceding/following members for the
         // current member from the relation being replaced and they are consecutive, insert our
-        // current member in between them in the replacing relation
+        // current member in between them in the replacing relation.
         LOG_TRACE(
           "Consecutive directly preceding and following members. Inserting current member: " <<
           currentMemberFromReplaced << " between indexes " <<
@@ -199,9 +206,9 @@ void CollectionRelationMerger::_mergeMembers(
       }
       else
       {
-        // if the replacing relation has matching directly preceding/following members for the
+        // If the replacing relation has matching directly preceding/following members for the
         // current member from the relation being replaced and they are not consecutive,
-        // arbitrarily insert our current member just after the preceding member
+        // arbitrarily insert our current member just after the preceding member.
         LOG_TRACE(
           "Non-consecutive directly preceding and following members. Inserting current member: " <<
           currentMemberFromReplaced << " after index " << matchingFromReplacingBeforeIndex <<
@@ -213,9 +220,9 @@ void CollectionRelationMerger::_mergeMembers(
     else if (matchingFromReplacingAfterIndex == relationBeingReplacedMemberComps.size() &&
              matchingFromReplacingBeforeIndex != relationBeingReplacedMemberComps.size())
     {
-      // if the replacing relation has a matching directly preceding member but not a directly
+      // If the replacing relation has a matching and directly preceding member but not a directly
       // following member, insert our current member from the relation being replaced just after the
-      // preceding member in the replacing relation
+      // preceding member in the replacing relation.
       LOG_TRACE(
         "Directly preceding member only. Inserting current member: " <<
         currentMemberFromReplaced << " after index " <<  matchingFromReplacingBeforeIndex <<
@@ -226,9 +233,9 @@ void CollectionRelationMerger::_mergeMembers(
     else if (matchingFromReplacingAfterIndex != relationBeingReplacedMemberComps.size() &&
              matchingFromReplacingBeforeIndex == relationBeingReplacedMemberComps.size())
     {
-      // if the replacing relation has a matching directly following member but not a directly
+      // If the replacing relation has a matching and directly following member but not a directly
       // preceding member, insert our current member from the relation being replaced just before
-      // the following member in the replacing relation
+      // the following member in the replacing relation.
       LOG_TRACE(
         "Directly following member only. Inserting current member: " <<
         currentMemberFromReplaced << " before index " <<  matchingFromReplacingAfterIndex << "...");
@@ -237,8 +244,9 @@ void CollectionRelationMerger::_mergeMembers(
     }
     else
     {
-      // if the replacing relation has no matching directly preceding/following members, arbitrarily
-      // add the current member from the relation being replacd to the end of the replacing relation
+      // If the replacing relation has no matching directly preceding/following members, arbitrarily
+      // add the current member from the relation being replacd to the end of the replacing
+      // relation.
       LOG_TRACE(
         "No directly preceding or following members. Inserting current member: " <<
         currentMemberFromReplaced << " at the end of the relation...");
@@ -248,6 +256,7 @@ void CollectionRelationMerger::_mergeMembers(
   }
   LOG_VART(replacingRelationMemberComps);
 
+  // Add the relation member.
   std::vector<RelationData::Entry> modifiedMembers;
   for (int i = 0; i < replacingRelationMemberComps.size(); i++)
   {

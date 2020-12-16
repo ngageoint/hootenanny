@@ -32,7 +32,6 @@ var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var angleHistExtractor = new hoot.AngleHistogramExtractor();
 // We may eventually want to try something other than the default name extractor here.
 var nameExtractor = new hoot.NameExtractor();
-
 var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
 
 /**
@@ -149,7 +148,9 @@ function geometryMismatch(map, e1, e2)
   // needed (which also has the potential to be very expensive at O(n^2)) and is only done for the
   // larger relations when the geometry check fails.
 
-  // TODO: Should we be extracting sublines first and passing those to the extractors?
+  // Should we be extracting sublines first and passing those to the extractors?
+
+  // TODO: make this bounds aware by temporarily removing relation members outside of the bounds?
 
   var numRelationMemberNodes = getNumRelationMemberNodes(map, e1.getElementId()) + getNumRelationMemberNodes(map, e2.getElementId());
   hoot.trace("numRelationMemberNodes: " + numRelationMemberNodes);
@@ -172,7 +173,7 @@ function geometryMismatch(map, e1, e2)
     { 
       if (relationsHaveConnectedWayMembers(map, e1.getElementId(), e2.getElementId()))
       {
-        hoot.trace("match failed on angleHist: " + angleHist + " but there are connected ways.");
+        hoot.trace("match failed on angleHist: " + angleHist + ", but there are connected ways.");
       }
       else
       {
@@ -266,7 +267,8 @@ exports.mergePair = function(map, e1, e2)
   e1.setStatusString("conflated");
   if (exports.writeMatchedBy == "true")
   {
-    // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
+    // Technically we should get this key from MetadataTags, but that's not integrated with hoot
+    // yet.
     e1.setTag("hoot:matchedBy", exports.baseFeatureType);
   }
   return e1;

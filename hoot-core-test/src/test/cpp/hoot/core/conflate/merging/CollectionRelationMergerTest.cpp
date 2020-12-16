@@ -47,6 +47,7 @@ class CollectionRelationMergerTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(CollectionRelationMergerTest);
   CPPUNIT_TEST(runTest);
+  // TODO: add bounded test?
   CPPUNIT_TEST_SUITE_END();
 
 public:

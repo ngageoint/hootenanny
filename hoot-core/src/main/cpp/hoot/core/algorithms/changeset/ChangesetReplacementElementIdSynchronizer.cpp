@@ -36,7 +36,6 @@
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/algorithms/extractors/RelationMemberSimilarityExtractor.h>
 
 namespace hoot
 {

@@ -76,6 +76,7 @@ private:
   vector<Coordinate>& _result;
 };
 
+// TODO: move this to its own file and factory register it
 class LinesWaysVisitor : public ElementConstOsmMapVisitor
 {
 public:
@@ -88,7 +89,8 @@ public:
     if (e->getElementType() == ElementType::Way)
     {
       ConstWayPtr w(std::dynamic_pointer_cast<const Way>(e));
-      Geometry* ls = ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->clone();
+      Geometry* ls =
+        ElementToGeometryConverter(_map->shared_from_this()).convertToLineString(w)->clone();
       _lines.push_back(ls);
     }
   }
@@ -106,7 +108,6 @@ _aggregator(a)
 {
   if (!_aggregator)
     _aggregator.reset(new MeanAggregator());
-
   setSpacing(spacing);
 }
 
@@ -120,17 +121,15 @@ vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map,
   const std::shared_ptr<const Element>& e) const
 {
   vector<Coordinate> result;
-
   DiscretizeWaysVisitor v(_spacing, result);
   v.setOsmMap(&map);
   e->visitRo(map, v);
-
   return result;
 }
 
-double EdgeDistanceExtractor::distance(const OsmMap &map,
-                                       const std::shared_ptr<const Element>& target,
-                                       const std::shared_ptr<const Element> &candidate) const
+double EdgeDistanceExtractor::distance(
+  const OsmMap &map, const std::shared_ptr<const Element>& target,
+  const std::shared_ptr<const Element> &candidate) const
 {
   double d1 = _oneDistance(map, target, candidate);
   double d2 = _oneDistance(map, candidate, target);
@@ -142,9 +141,9 @@ string EdgeDistanceExtractor::getName() const
   return (QString("EdgeDistance") + _aggregator->toString()).toStdString();
 }
 
-double EdgeDistanceExtractor::_oneDistance(const OsmMap& map,
-                                           const std::shared_ptr<const Element>& e1,
-                                           const std::shared_ptr<const Element>& e2) const
+double EdgeDistanceExtractor::_oneDistance(
+  const OsmMap& map, const std::shared_ptr<const Element>& e1,
+  const std::shared_ptr<const Element>& e2) const
 {
   vector<Coordinate> points = _discretize(map, e1);
 
@@ -167,11 +166,10 @@ double EdgeDistanceExtractor::_oneDistance(const OsmMap& map,
   return result;
 }
 
-std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(const OsmMap& map,
-  const std::shared_ptr<const Element>& e) const
+std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(
+  const OsmMap& map, const std::shared_ptr<const Element>& e) const
 {
   std::shared_ptr<Geometry> result;
-
   if (e->getElementType() != ElementType::Node)
   {
     //  Create a new vector to pass ownership to multilinestring
@@ -185,7 +183,6 @@ std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(const OsmMap& map,
   {
     result.reset(GeometryFactory::getDefaultInstance()->createEmptyGeometry());
   }
-
   return result;
 }
 
