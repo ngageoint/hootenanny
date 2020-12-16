@@ -59,7 +59,7 @@ import hoot.services.command.InternalCommand;
 
 
 /**
- * Used for pulling connected ways to nodes that fall outside the bbox for a reference layer
+ * Used for pulling connected ways to nodes that fall outside the bounds for a reference layer
  */
 class PullConnectedWaysCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullConnectedWaysCommand.class);

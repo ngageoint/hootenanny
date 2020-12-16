@@ -28,7 +28,6 @@ package hoot.services.utils;
 
 
 import static hoot.services.HootProperties.CHANGESETS_FOLDER;
-import static hoot.services.models.db.QCurrentRelations.currentRelations;
 import static hoot.services.models.db.QFolderMapMappings.folderMapMappings;
 import static hoot.services.models.db.QFolders.folders;
 import static hoot.services.models.db.QJobStatus.jobStatus;
@@ -45,7 +44,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -318,8 +316,6 @@ public class DbUtils {
         return childrenFolders;
     }
 
-
-
     public static List<Tuple> getMapsForUser(Users user) {
 
         // return empty list if user is null
@@ -348,25 +344,25 @@ public class DbUtils {
         return mapLayerRecords;
     }
 
-/*
- * --Deletes folders that are empty (no child datasets or folders)
-DELETE
-FROM folders f
-WHERE
-NOT EXISTS
-    (
-    SELECT  NULL
-    FROM    folder_map_mappings fmm
-    WHERE   f.id = fmm.folder_id
-    )
-AND
-NOT EXISTS
-    (
-    SELECT  NULL
-    FROM    folders f2
-    WHERE   f.id = f2.parent_id
-    );
- */
+    /*
+     * --Deletes folders that are empty (no child datasets or folders)
+    DELETE
+    FROM folders f
+    WHERE
+    NOT EXISTS
+        (
+        SELECT  NULL
+        FROM    folder_map_mappings fmm
+        WHERE   f.id = fmm.folder_id
+        )
+    AND
+    NOT EXISTS
+        (
+        SELECT  NULL
+        FROM    folders f2
+        WHERE   f.id = f2.parent_id
+        );
+     */
     public static void deleteEmptyFolders() {
         QFolders folders2 = new QFolders("folders2");
         BooleanExpression isEmpty = new SQLQuery<>().from(folderMapMappings).where(folderMapMappings.folderId.eq(folders.id)).notExists()
@@ -506,27 +502,13 @@ NOT EXISTS
     }
 
     /**
-     * Check to see if the map contains the tag bbox and return it, else null
+     * Check to see if the map contains the tag bounds or bbox and return it, else null
      * @param mapId
-     * @return bbox string for the map, null if doesnt exist
+     * @return bounds string for the map, null if doesnt exist
      */
-    public static String getMapBbox(long mapId) {
+    public static String getMapBounds(long mapId) {
         Map<String, String> tags = getMapsTableTags(mapId);
-        String bbox = tags.get("bbox");
-
-        return bbox;
-    }
-
-    /**
-     * Retrieves the maps reference layer id
-     * @param mapId
-     * @return reference layer id
-     */
-    public static Long getMergedReference(long mapId) {
-        Map<String, String> tags = getMapsTableTags(mapId);
-        String referenceId = tags.get("input1");
-
-        return Long.parseLong(referenceId);
+        return tags.get("bounds") != null ? tags.get("bounds") : tags.get("bbox");
     }
 
     /**
@@ -555,19 +537,6 @@ NOT EXISTS
                 .set(folderMapMappings.folderId, folderId)
                 .execute();
         }
-    }
-
-    /**
-     * Gets the parent folder id for the specified map
-     *
-     * @param mapId map id which we are retrieving the parent for
-     */
-    public static Long getParentFolder(Long mapId) {
-        return createQuery()
-            .select(folderMapMappings.folderId)
-            .from(folderMapMappings)
-            .where(folderMapMappings.mapId.eq(mapId))
-            .fetchFirst();
     }
 
     public static Map<String, String> getMapsTableTags(long mapId) {
@@ -615,27 +584,6 @@ NOT EXISTS
         }
     }
 
-    public static List<String> getTablesList(String tablePrefix) throws SQLException {
-        List<String> tables = new ArrayList<>();
-
-        try (Connection conn = getConnection()) {
-            String sql = "SELECT table_name " +
-                    "FROM information_schema.tables " +
-                    "WHERE table_schema='public' AND table_name LIKE " + "'" + tablePrefix.replace('-', '_') + "_%'";
-
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                try (ResultSet rs = stmt.executeQuery()) {
-                    while (rs.next()) {
-                        // Retrieve by column name
-                        tables.add(rs.getString("table_name"));
-                    }
-                }
-            }
-        }
-
-        return tables;
-    }
-
     /**
      * Returns the count of tables and sequences
      * this map depends on
@@ -673,14 +621,13 @@ NOT EXISTS
         return count;
     }
 
-/*
-    SELECT id
-    FROM maps
-    WHERE (tags -> 'lastAccessed' IS NULL AND created_at < ts)
-    OR TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') < ts
+    /*
+        SELECT id
+        FROM maps
+        WHERE (tags -> 'lastAccessed' IS NULL AND created_at < ts)
+        OR TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') < ts
 
- */
-
+     */
     private static BooleanExpression getStale(Timestamp ts) {
         return (Expressions.stringTemplate("tags->'lastAccessed'").isNull().and(maps.createdAt.lt(ts)))
                 .or(Expressions.dateTimeTemplate(Timestamp.class, "TO_TIMESTAMP(tags -> 'lastAccessed', 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"')").lt(ts));
@@ -841,12 +788,20 @@ NOT EXISTS
         return jobId;
     }
 
-    public static String getJobBbox(String jobId) {
+    public static String getJobBounds(String jobId) {
         String foundId = createQuery()
-            .select(Expressions.stringTemplate("tags->'bbox'"))
+            .select(Expressions.stringTemplate("tags->'bounds'"))
             .from(jobStatus)
             .where(jobStatus.jobId.eq(jobId))
             .fetchFirst();
+
+        if (foundId == null) {
+            foundId = createQuery()
+                .select(Expressions.stringTemplate("tags->'bbox'"))
+                .from(jobStatus)
+                .where(jobStatus.jobId.eq(jobId))
+                .fetchFirst();
+        }
 
         return foundId;
     }
@@ -963,27 +918,29 @@ NOT EXISTS
     // Sets the specified upload changeset job to a status detail of CONFLICTS
     // if a diff-error.osc file is present in the parent job workspace
     public static void checkConflicted(String jobId, String parentId) {
-        File workDir = new File(CHANGESETS_FOLDER, parentId);
-        File diffError = new File(workDir, "diff-error.osc");
-        File diffRemaining = new File(workDir, "diff-remaining.osc");
-        File[] diffDebugfiles = workDir.listFiles(filter);
-        if (diffError.exists()
-                || diffRemaining.exists()
-                || diffDebugfiles.length > 0
-                ) {
-            // Find the job
-            JobStatus job = createQuery()
-                    .select(jobStatus)
-                    .from(jobStatus)
-                    .where(jobStatus.jobId.eq(jobId))
-                    .fetchFirst();
+        if (parentId != null) {
+            File workDir = new File(CHANGESETS_FOLDER, parentId);
+            File diffError = new File(workDir, "diff-error.osc");
+            File diffRemaining = new File(workDir, "diff-remaining.osc");
+            File[] diffDebugfiles = workDir.listFiles(filter);
+            if (diffError.exists()
+                    || diffRemaining.exists()
+                    || diffDebugfiles.length > 0
+            ) {
+                // Find the job
+                JobStatus job = createQuery()
+                        .select(jobStatus)
+                        .from(jobStatus)
+                        .where(jobStatus.jobId.eq(jobId))
+                        .fetchFirst();
 
-            if(job != null) {
-                createQuery()
-                    .update(jobStatus)
-                    .where(jobStatus.jobId.eq(jobId))
-                    .set(jobStatus.statusDetail, "CONFLICTS")
-                    .execute();
+                if(job != null) {
+                    createQuery()
+                            .update(jobStatus)
+                            .where(jobStatus.jobId.eq(jobId))
+                            .set(jobStatus.statusDetail, "CONFLICTS")
+                            .execute();
+                }
             }
         }
     }
@@ -1179,13 +1136,4 @@ NOT EXISTS
         return elementInfo;
     }
 
-    public static LocalDateTime getJobStartDate(String jobId) {
-        Timestamp startTime = createQuery()
-                .select(commandStatus.start.min())
-                .from(commandStatus)
-                .where(commandStatus.jobId.eq(jobId))
-                .fetchFirst();
-
-        return startTime.toLocalDateTime();
-    }
 }

@@ -180,7 +180,7 @@ public class GrailResource {
         } else {
             APICapabilities railsPortCapabilities = railsOnlineCheck();
 
-            params.setMaxBBoxSize(railsPortCapabilities.getMaxArea());
+            params.setMaxBoundsSize(railsPortCapabilities.getMaxArea());
             params.setPullUrl(RAILSPORT_PULL_URL);
         }
 
@@ -217,8 +217,10 @@ public class GrailResource {
      * POST hoot-services/grail/createchangeset
      *
      * {
-     *   //The upper left (UL) and lower right (LR) of the bounding box to clip the dataset
-     *   "BBOX" : "{"LR":[-77.04813267598544,38.89292259454q727],"UL":[-77.04315011486628,38.89958152667718]}",
+     *   //Can be in the form of 4 points or multiple points
+     *   "bounds": "-77.279039,39.177650,-77.275970,39.178958",
+     *   OR
+     *   "bounds": "-77.283282,39.185101;-77.291479,39.172060;-77.279806,39.166770;-77.267661,39.181209;-77.283282,39.185101"
      * }
      *
      * @param reqParams
@@ -357,7 +359,7 @@ public class GrailResource {
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
-        jobStatusTags.put("bbox", reqParams.getBounds());
+        jobStatusTags.put("bounds", reqParams.getBounds());
         jobStatusTags.put("parentId", reqParams.getParentId());
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
         jobStatusTags.put("deriveType", deriveType);
@@ -372,6 +374,13 @@ public class GrailResource {
         return Response.ok(jobInfo.toJSONString()).build();
     }
 
+    /**
+     * GET hoot-services/grail/gettimeouttasks
+     *
+     * @param request
+     * @param projectId
+     * @return
+     */
     @GET
     @Path("/gettimeouttasks")
     @Produces(MediaType.APPLICATION_JSON)
@@ -386,6 +395,7 @@ public class GrailResource {
     }
 
     /**
+     * GET hoot-services/grail/overpasssynccheck
      *
      * @return
      */
@@ -404,9 +414,9 @@ public class GrailResource {
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(errorMsg).build());
         }
 
-        String bbox = DbUtils.getJobBbox(id);
-        if (bbox == null) {
-            String errorMsg = "Error during overpass sync check! Error retrieving bbox for the task";
+        String bounds = DbUtils.getJobBounds(id);
+        if (bounds == null) {
+            String errorMsg = "Error during overpass sync check! Error retrieving bounds for the task";
             throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(errorMsg).build());
         }
 
@@ -414,7 +424,7 @@ public class GrailResource {
         GrailParams waitParams = new GrailParams();
         waitParams.setUser(user);
         waitParams.setTaskInfo(projectTaskInfo);
-        waitParams.setBounds(bbox);
+        waitParams.setBounds(bounds);
 
         List<Command> workflow = new LinkedList<>();
         workflow.add(grailCommandFactory.build(id, waitParams, "info", WaitOverpassUpdate.class, this.getClass()));
@@ -453,7 +463,7 @@ public class GrailResource {
     /**
      * Retrieve statistics on the specified changeset
      *
-     * GET hoot-services/grail/changesetstats/{jobId}
+     * GET hoot-services/grail/changesetstats/{jobId}/{includeTags}
      *
      * @param jobDir
      *      Internally, this is the directory that the files are kept in.
@@ -632,7 +642,7 @@ public class GrailResource {
             }
 
             Map<String, Object> jobStatusTags = new HashMap<>();
-            jobStatusTags.put("bbox", reqParams.getBounds());
+            jobStatusTags.put("bounds", reqParams.getBounds());
             jobStatusTags.put("parentId", reqParams.getParentId());
             jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
@@ -664,7 +674,7 @@ public class GrailResource {
      * a private OSM instance that has diverged from the public OSM
      * with private changes.
      *
-     * @param reqParams Contains info such as bbox, layerName, and if the
+     * @param reqParams Contains info such as bounds, layerName, and if the
      * user provided one, a custom query for pulling overpass data
      *
      * @return Job ID
@@ -682,7 +692,7 @@ public class GrailResource {
         advancedUserCheck(user);
         reqParams.setUser(user);
 
-        String bbox = reqParams.getBounds();
+        String bounds = reqParams.getBounds();
         String layerName = reqParams.getInput1();
         String jobId = UUID.randomUUID().toString().replace("-", "");
         File workDir = new File(TEMP_OUTPUT_PATH, "grail_" + jobId);
@@ -709,7 +719,7 @@ public class GrailResource {
 
         // Set map tags marking dataset as eligible for derive changeset
         Map<String, String> tags = new HashMap<>();
-        tags.put("bbox", params.getBounds());
+        tags.put("bounds", params.getBounds());
         if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
         InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
         workflow.add(setMapTags);
@@ -725,7 +735,7 @@ public class GrailResource {
         workflow.add(cleanFolders);
 
         Map<String, Object> jobStatusTags = new HashMap<>();
-        jobStatusTags.put("bbox", bbox);
+        jobStatusTags.put("bounds", bounds);
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
@@ -806,8 +816,17 @@ public class GrailResource {
         // overpass query can have multiple "out *" lines so need to replace all
         overpassQuery = overpassQuery.replaceAll("out [\\s\\w]+;", "out count;");
 
-        //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
-        overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(reqParams.getBounds()).toOverpassString());
+        // polygon contains coordinates separated by ';'
+        if (reqParams.getBounds().contains(";")) {
+            // We need to reverse the coordinates from lon,lat to lat,long for overpass
+            String polyBounds = PullOverpassCommand.boundsToOverpassPolyString(reqParams.getBounds());
+            //replace the {{bbox}} from the overpass query with the poly
+            overpassQuery = overpassQuery.replace("{{bbox}}", "poly:\"" + polyBounds + "\"");
+        } else {
+            //replace the {{bbox}} from the overpass query with the actual coordinates and encode the query
+            overpassQuery = overpassQuery.replace("{{bbox}}", new BoundingBox(reqParams.getBounds()).toOverpassString());
+        }
+
         try {
             overpassQuery = URLEncoder.encode(overpassQuery, "UTF-8").replace("+", "%20"); // need to encode url for the get
         } catch (UnsupportedEncodingException ignored) {} // Can be safely ignored because UTF-8 is always supported
@@ -883,7 +902,7 @@ public class GrailResource {
      * a private OSM instance that has diverged from the public OSM
      * with private changes.
      *
-     * @param reqParams Contains info such as bbox, layerName, and if the
+     * @param reqParams Contains info such as bounds, layerName, and if the
      * user provided one, a custom query for pulling overpass data
      *
      * @return Job ID
@@ -922,7 +941,7 @@ public class GrailResource {
         }
 
         Map<String, Object> jobStatusTags = new HashMap<>();
-        jobStatusTags.put("bbox", reqParams.getBounds());
+        jobStatusTags.put("bounds", reqParams.getBounds());
         jobStatusTags.put("taskInfo", reqParams.getTaskInfo());
 
         jobProcessor.submitAsync(new Job(jobId, user.getId(), workflow.toArray(new Command[workflow.size()]), JobType.IMPORT, jobStatusTags));
@@ -996,7 +1015,7 @@ public class GrailResource {
             // Set map tags marking dataset as eligible for derive changeset
             Map<String, String> tags = new HashMap<>();
             tags.put("grailReference", "true");
-            tags.put("bbox", params.getBounds());
+            tags.put("bounds", params.getBounds());
             if (params.getTaskInfo() != null) { tags.put("taskInfo", params.getTaskInfo()); }
             InternalCommand setMapTags = setMapTagsCommandFactory.build(tags, jobId);
             workflow.add(setMapTags);
@@ -1028,8 +1047,11 @@ public class GrailResource {
     //e.g. sudo keytool -import -alias <CertAlias> -keystore /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/lib/security/cacerts -file /tmp/CertFile.der
     public static InputStream getUrlInputStreamWithNullHostnameVerifier(String urlString) throws IOException {
         InputStream inputStream = null;
-        URL url = new URL(urlString);
+        String[] splitUrl = urlString.split("(?=data)"); // prevents removal of 'data' text
+        URL url = new URL(splitUrl[0]);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod(urlString.contains(replaceSensitiveData(RAILSPORT_PUSH_URL)) ? "GET" : "POST"); // Need to use GET for rails port
+        conn.setDoOutput(true);
 
         if (url.getProtocol().equalsIgnoreCase("https")) {
             ((HttpsURLConnection) conn).setHostnameVerifier(new HostnameVerifier() {
@@ -1038,6 +1060,10 @@ public class GrailResource {
                     return true;
                 }
             });
+        }
+        // Just a safety check but splitUrl[1] should be the query data
+        if (splitUrl.length == 2) {
+            conn.getOutputStream().write(splitUrl[1].getBytes(StandardCharsets.UTF_8));
         }
 
         try {

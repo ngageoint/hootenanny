@@ -57,13 +57,17 @@ class CalculateTilesCommand extends ExportCommand {
             options.add("api.db.email=" + user.getEmail());
         }
 
-        // bounding box is optional for this command; if not specified, the
+        // bounding area is optional for this command; if not specified, the
         // command will calculate for the combined extent of all input datasets which, of course, can
         // be very expensive for large datasets
-        if (params.getBounds() != null) {
-            BoundingBox bounds = new BoundingBox(params.getBounds());
-            options.add("convert.bounds=" + bounds.getMinLon() + "," + bounds.getMinLat() + ","
-                    + bounds.getMaxLon() + "," + bounds.getMaxLat());
+        String bounds = params.getBounds();
+        if (bounds != null) {
+            if (!bounds.contains(";")) {
+                BoundingBox bbox = new BoundingBox(bounds);
+                bounds = bbox.getMinLon() + "," + bbox.getMinLat() + "," + bbox.getMaxLon() + "," + bbox.getMaxLat();
+            }
+
+            options.add("convert.bounds=" + bounds);
         }
         List<String> hootOptions = toHootOptions(options);
 

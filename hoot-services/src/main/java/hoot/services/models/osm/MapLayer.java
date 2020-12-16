@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.models.osm;
 
@@ -47,7 +47,7 @@ public class MapLayer {
     private long userId;
     private long folderId;
     private long size;
-    private String bbox;
+    private String bounds;
 
     @JsonIgnore
     public static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -133,11 +133,11 @@ public class MapLayer {
         return this.size;
     }
 
-    public String getBbox() {
-        return bbox;
+    public String getBounds() {
+        return bounds;
     }
 
-    public void setBbox(String bbox) {
-        this.bbox = bbox;
+    public void setBounds(String bounds) {
+        this.bounds = bounds;
     }
 }

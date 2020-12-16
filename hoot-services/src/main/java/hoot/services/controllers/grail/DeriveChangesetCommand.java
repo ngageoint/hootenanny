@@ -49,7 +49,7 @@ class DeriveChangesetCommand extends GrailCommand {
         }
 
         if (params.getBounds() != null) {
-            //Add TASK_BBOX as a convert.bounds
+            //Add bounds as a convert.bounds
             options.add("convert.bounds=" + params.getBounds());
         }
 

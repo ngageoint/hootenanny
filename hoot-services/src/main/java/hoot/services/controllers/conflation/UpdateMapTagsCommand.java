@@ -65,7 +65,7 @@ class UpdateMapTagsCommand implements InternalCommand {
         // add map tags
         tags.put("input1", params.getInput1());
         tags.put("input2", params.getInput2());
-        tags.put("bbox", params.getBounds());
+        tags.put("bounds", params.getBounds());
         tags.put("grailMerged", String.valueOf(DbUtils.grailEligible(Long.parseLong(params.getInput1()))));
         tags.put("taskInfo", params.getTaskInfo());
 
