@@ -50,10 +50,11 @@ public:
   virtual ~CollectionRelationMerger() = default;
 
   /**
-   * Merges two collection relations
+   * Merges the relation with the second element ID into the relation with the first element ID,
+   * updates element references, and removes the relation with the second element ID.
    *
-   * @param elementId1 ID of the first relation to merger
-   * @param elementId2 ID of the second relation to merger
+   * @param elementId1 ID of the first relation to merge
+   * @param elementId2 ID of the second relation to merge
    */
   void merge(const ElementId& elementId1, const ElementId& elementId2);
 
