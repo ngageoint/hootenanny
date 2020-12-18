@@ -121,6 +121,8 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
         + req.params.schema
         + req.params.format
         + req.query.bbox
+        + req.query.crop
+        + req.query.poly
         + req.query.overrideTags;
     var hash = crypto.createHash('sha1').update(params).digest('hex');
     var input = config.datasources[req.params.datasource].conn;
@@ -129,6 +131,26 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
 });
 
 exports.writeExportFile = writeExportFile
+exports.validatePoly = function(poly) {
+    var match = poly.split(';');
+    if (match.length > 1) {
+        match = match.map(function(coord) {
+            return /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(coord).splice(1).map(parseFloat)
+        })
+        if (match.findIndex(function(c) { // if the polygon coordinates are valid
+            return (c[0] >= -180 && c[0] <= 180)
+                && (c[1] >= -90 && c[1] <= 90); 
+        }) !== -1) {
+            if ( // and the first and last coordinate match
+                match[0][0] === match[match.length - 1][0] && 
+                match[0][1] === match[match.length - 1][1]
+            ) {
+                return poly; // return the polygon
+            }
+        }
+    }
+    return null;
+}
 exports.validateBbox = function(bbox) {
     //38.4902,35.7982,38.6193,35.8536
     var regex = /(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*$)/;
@@ -275,6 +297,7 @@ function doExport(req, res, hash, input) {
         //handle different flavors of bbox param
         var bbox_param = 'convert.bounds';
         var bbox = exports.validateBbox(req.query.bbox);
+        var poly = exports.validatePoly(req.query.poly);
 
         if (input.substring(0,4) === 'http') {
             var cert_param = '';
@@ -290,8 +313,12 @@ function doExport(req, res, hash, input) {
 
         //create command and run
         command += 'hoot convert -C NodeExport.conf';
+        var bboxOption = '';
+        if (bbox) bboxOption = ' -D ' + bbox_param + '=' + bbox;
+        if (poly) bboxOption = ' -D ' + bbox_param + '=' + poly;
+        if (bboxOption) command += bboxOption
         if (isFile) {
-            if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
+            if (bboxOption) command += bboxOption
             if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             if (overrideTags) {
                 if (req.params.schema === 'OSM') {
@@ -312,7 +339,7 @@ function doExport(req, res, hash, input) {
             command += ' -D convert.ops=hoot::SchemaTranslationOp';
             command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
             if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
-            if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
+            if (bboxOption) command += bboxOption;
             if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             // Set per schema config options
             if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
@@ -327,6 +354,29 @@ function doExport(req, res, hash, input) {
         //command = 'dd bs=1024 count=1024 if=/dev/urandom of=' + outFile + ' > /dev/null 2>&1';
         console.log(command);
 
+        function zipOutput() {
+            var stream = fs.createWriteStream(outZip);
+            stream.on('close', function() {
+                jobs[hash].status = 'complete';
+                console.log(jobs[hash].id + ' complete');
+            });
+
+            var zip = archiver('zip');
+            zip.on('error', function(err) {
+                throw err;
+            })
+            zip.pipe(stream);
+
+            if (isFile) {
+                zip.file(outFile, { name: output + config.formats[req.params.format]});
+            } else {
+                //Don't include file extension for shapefile
+                var ext = (req.params.format === 'Shapefile') ? '' : config.formats[req.params.format];
+                zip.directory(outDir, output + ext);
+            }
+            zip.finalize();
+        }
+
         //hoot convert -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/TDSv61.js "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''" osm.shp
         var child = exec(command, {cwd: hootHome},
             function(error, stdout, stderr) {
@@ -336,27 +386,31 @@ function doExport(req, res, hash, input) {
                     jobs[hash].status = stderr;
 
                 } else {
-                    var stream = fs.createWriteStream(outZip);
-                    stream.on('close', function() {
-                        jobs[hash].status = 'complete';
-                        console.log(jobs[hash].id + ' complete');
-                    });
+                    // if export specifies cropping to bounds or poly, do so.
+                    if (crop) { 
+                        // if request did not provide a polygon or bounds to
+                        // crop with, then go about zipping the output
+                        var cropShape = poly || bbox || '';
+                        if (cropShape.length) {
+                            var cropCommand = 'hoot crop '
+                            + outFile + ' '
+                            + outFile + ' '
+                            + cropShape
+                            // crop the output of the hoot convert, then write it to a zip
+                            exec(cropCommand, {cwd: hootHome}, function(error, stdout, stderr) {
+                                if (stderr || error) {
+                                    jobs[hash].status = stderr;
+                                } else {
+                                    zipOutput()
+                                }
+                            })
+                        } else {
+                            zipOutput()
+                        }
 
-                    var zip = archiver('zip');
-                    zip.on('error', function(err) {
-                        throw err;
-                    })
-                    zip.pipe(stream);
-
-                    if (isFile) {
-                        zip.file(outFile, { name: output + config.formats[req.params.format]});
                     } else {
-                        //Don't include file extension for shapefile
-                        var ext = (req.params.format === 'Shapefile') ? '' : config.formats[req.params.format];
-                        zip.directory(outDir, output + ext);
+                        zipOutput()
                     }
-                    zip.finalize();
-
                 }
                 //}, 10000); //used to simulate a long request
             }
