@@ -135,7 +135,7 @@ describe("RenderDb Export Server", function() {
             })
         })
         describe("polyQuotes", function(){
-            it('makes sure poly strings for crop/convert command have needed quotes', function() {
+            it('makes sure poly strings for crop command have needed quotes', function() {
                 expect(server.polyQuotes(
                     '-72.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.545'
                 )).to.equal(
