@@ -143,7 +143,7 @@ exports.validatePoly = function(poly) {
     var match = poly.split(';');
 
     function validCoordinates(coordinates) {
-        return match.findIndex(function(c) { // if the polygon coordinates are valid
+        return coordinates.findIndex(function(c) { // if the polygon coordinates are valid
             return (c[0] >= -180 && c[0] <= 180)
                 && (c[1] >= -90 && c[1] <= 90);
         }) !== -1
@@ -155,12 +155,22 @@ exports.validatePoly = function(poly) {
     }
 
     if (match.length > 1) {
-        match = match.map(function(coord) {
-            return /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(coord).splice(1).map(parseFloat)
-        })
+        var coordinates = []
+        for (m of match) {
+            // gather capture groups to add to coordinates array
+            // if we ever don't get a capture, exit early.
+            // this is a way to make sure nothing that isn't a cooridnate can get injected into the hoot command
+            var captures = /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(m);
+            if (captures) {
+                coordinates.push(captures.splice(1).map(parseFloat))
+            } else {
+                return null
+             }
+        }
+
         if (
-            validCoordinates(match) && matchingFirstLast(match) &&
-            noIntersection({ type: 'Polygon', coordinates: [match] })
+            validCoordinates(coordinates) && matchingFirstLast(coordinates) &&
+            noIntersection({ type: 'Polygon', coordinates: [coordinates] })
         ) {
             return poly
         };
