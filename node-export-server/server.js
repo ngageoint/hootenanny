@@ -9,11 +9,13 @@ var config = require('configure');
 var _ = require('lodash');
 var rmdir = require('rimraf');
 var crypto = require('crypto');
+var noIntersection = require('shamos-hoey');
 var done = false;
 var dir;
 var jobs = {};
 var runningStatus = 'running',
     completeStatus = 'complete';
+
 
 // pipes request data to temp file with name that matches posted data format.
 function writeExportFile(req, done) {
@@ -131,6 +133,10 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
 });
 
 exports.writeExportFile = writeExportFile
+// ensures poly string in query params
+//  1. follows structure lon_0,lat_0;...lon_n,lat_n;lon_0,lat_0
+//  2. does not self intersect ()
+//
 exports.validatePoly = function(poly) {
     if (!poly) return null
     var match = poly.split(';');
@@ -146,30 +152,21 @@ exports.validatePoly = function(poly) {
         return coordinates[0][0] === coordinates[coordinates.length - 1][0] &&
                coordinates[0][1] === coordinates[coordinates.length - 1][1]
     }
-    function noSelfIntersection(coordinates) {
-        // get rid of first and last since we know they do/should match
-        var counts = {}
-        for (c of coordinates.slice(1,coordinates.length - 1)) {
-            console.log(c)
-            if (counts[c.join(',')]) {
-                return false
-            } else {
-                counts[c.join(',')] = true
-            }
-        }
-        return true
-    }
 
     if (match.length > 1) {
         match = match.map(function(coord) {
             return /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(coord).splice(1).map(parseFloat)
         })
-        if (validCoordinates(match) && matchingFirstLast(match) && noSelfIntersection(match)) {
-            return poly;
-        }
+        if (
+            validCoordinates(match) && matchingFirstLast(match) &&
+            noIntersection({ type: 'Polygon', coordinates: [match] })
+        ) {
+            return poly
+        };
     }
     return null;
 }
+
 exports.polyToBbox = function(polyString) {
     // create map of lat/lon that is sorted from min<max values
     var coordinates = polyString.split(';').reduce(function(coordsMap, coord, idx) {
