@@ -133,10 +133,11 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
 });
 
 exports.writeExportFile = writeExportFile
+
 // ensures poly string in query params
 //  1. follows structure lon_0,lat_0;...lon_n,lat_n;lon_0,lat_0
-//  2. does not self intersect ()
-//
+//  2. first and last match, meaning its a polygon
+//  3. does not self intersect as deterimed by shamos-hoey alg
 exports.validatePoly = function(poly) {
     if (!poly) return null
     var match = poly.split(';');
@@ -167,8 +168,9 @@ exports.validatePoly = function(poly) {
     return null;
 }
 
+// create object of lat/lon that is sorted from min<max values then
+// use order of list to return first values as min and last as max
 exports.polyToBbox = function(polyString) {
-    // create map of lat/lon that is sorted from min<max values
     var coordinates = polyString.split(';').reduce(function(coordsMap, coord, idx) {
         var pair = /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(coord).splice(1).map(parseFloat)
         if (idx === 0 || coordsMap.lon.indexOf(pair[0]) === -1)
@@ -180,20 +182,20 @@ exports.polyToBbox = function(polyString) {
         return coordsMap;
     }, { lon: [], lat: [] })
 
-    // use order of list to return first values as min and last as max
     return coordinates.lon[0] + ',' +
            coordinates.lat[0] + ',' +
            coordinates.lon[coordinates.lon.length - 1] + ',' +
            coordinates.lat[coordinates.lat.length - 1];
 }
+// hoot requires quotes for convert.bounds so make sure they exist
 exports.polyQuotes = function(polyString) {
     polyString = polyString.trim()
     if (polyString[0] !== '"') polyString = '"' + polyString
     if (polyString[polyString.length - 1] !== '"') polyString = polyString + '"'
     return polyString;
 }
+
 exports.validateBbox = function(bbox) {
-    //38.4902,35.7982,38.6193,35.8536
     var regex = /(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*$)/;
     var match = regex.exec(bbox);
     if (match != null) { //matches pattern
