@@ -134,23 +134,66 @@ exports.writeExportFile = writeExportFile
 exports.validatePoly = function(poly) {
     if (!poly) return null
     var match = poly.split(';');
+
+    function validCoordinates(coordinates) {
+        return match.findIndex(function(c) { // if the polygon coordinates are valid
+            return (c[0] >= -180 && c[0] <= 180)
+                && (c[1] >= -90 && c[1] <= 90);
+        }) !== -1
+    }
+
+    function matchingFirstLast(coordinates) {
+        return coordinates[0][0] === coordinates[coordinates.length - 1][0] &&
+               coordinates[0][1] === coordinates[coordinates.length - 1][1]
+    }
+    function noSelfIntersection(coordinates) {
+        // get rid of first and last since we know they do/should match
+        var counts = {}
+        for (c of coordinates.slice(1,coordinates.length - 1)) {
+            console.log(c)
+            if (counts[c.join(',')]) {
+                return false
+            } else {
+                counts[c.join(',')] = true
+            }
+        }
+        return true
+    }
+
     if (match.length > 1) {
         match = match.map(function(coord) {
             return /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(coord).splice(1).map(parseFloat)
         })
-        if (match.findIndex(function(c) { // if the polygon coordinates are valid
-            return (c[0] >= -180 && c[0] <= 180)
-                && (c[1] >= -90 && c[1] <= 90); 
-        }) !== -1) {
-            if ( // and the first and last coordinate match
-                match[0][0] === match[match.length - 1][0] && 
-                match[0][1] === match[match.length - 1][1]
-            ) {
-                return poly; // return the polygon
-            }
+        if (validCoordinates(match) && matchingFirstLast(match) && noSelfIntersection(match)) {
+            return poly;
         }
     }
     return null;
+}
+exports.polyToBbox = function(polyString) {
+    // create map of lat/lon that is sorted from min<max values
+    var coordinates = polyString.split(';').reduce(function(coordsMap, coord, idx) {
+        var pair = /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(coord).splice(1).map(parseFloat)
+        if (idx === 0 || coordsMap.lon.indexOf(pair[0]) === -1)
+            coordsMap.lon.push(pair[0]);
+        if (idx === 0 || coordsMap.lat.indexOf(pair[1]) === -1)
+            coordsMap.lat.push(pair[1]);
+        coordsMap.lon.sort(function(a,b) { return a - b })
+        coordsMap.lat.sort(function(a,b) { return a - b })
+        return coordsMap;
+    }, { lon: [], lat: [] })
+
+    // use order of list to return first values as min and last as max
+    return coordinates.lon[0] + ',' +
+           coordinates.lat[0] + ',' +
+           coordinates.lon[coordinates.lon.length - 1] + ',' +
+           coordinates.lat[coordinates.lat.length - 1];
+}
+exports.polyQuotes = function(polyString) {
+    polyString = polyString.trim()
+    if (polyString[0] !== '"') polyString = '"' + polyString
+    if (polyString[polyString.length - 1] !== '"') polyString = polyString + '"'
+    return polyString;
 }
 exports.validateBbox = function(bbox) {
     //38.4902,35.7982,38.6193,35.8536
@@ -299,14 +342,13 @@ function doExport(req, res, hash, input) {
         var bbox_param = 'convert.bounds';
         var bbox = exports.validateBbox(req.query.bbox);
         var poly = exports.validatePoly(req.query.poly);
-
         if (input.substring(0,4) === 'http') {
             var cert_param = '';
             if (input.substring(0,5) === 'https' && fs.existsSync(appDir + 'key.pem') && fs.existsSync(appDir + 'cert.pem')) {
                 cert_param = '--private-key=' + appDir + 'key.pem --certificate=' + appDir + 'cert.pem';
             }
             temp_file = outDir + '.osm';
-            command += 'wget -q ' + cert_param + ' -O ' + temp_file + ' ' + input + '?bbox=' + bbox + ' && ';
+            command += 'wget -q ' + cert_param + ' -O ' + temp_file + ' ' + input + '?bbox=' + (poly ? exports.polyToBbox(poly) : bbox) + ' && ';
             input = temp_file;
             //bbox not valid with osm file input source
             bbox = null;
@@ -316,10 +358,9 @@ function doExport(req, res, hash, input) {
         command += 'hoot convert -C NodeExport.conf';
         var bboxOption = '';
         if (bbox) bboxOption = ' -D ' + bbox_param + '=' + bbox;
-        if (poly) bboxOption = ' -D ' + bbox_param + '=' + poly;
+        if (poly) bboxOption = ' -D ' + bbox_param + '=' + exports.polyQuotes(poly);
         if (bboxOption) command += bboxOption
         if (isFile) {
-            if (bboxOption) command += bboxOption
             if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             if (overrideTags) {
                 if (req.params.schema === 'OSM') {
@@ -388,15 +429,21 @@ function doExport(req, res, hash, input) {
 
                 } else {
                     // if export specifies cropping to bounds or poly, do so.
-                    if (crop) { 
+                    if (req.query.crop) {
                         // if request did not provide a polygon or bounds to
                         // crop with, then go about zipping the output
+                        var poly = exports.validatePoly(req.query.poly)
+                        var bbox = exports.validateBbox(req.query.bbox)
+                        if (poly) poly = exports.polyQuotes(poly)
                         var cropShape = poly || bbox || '';
                         if (cropShape.length) {
                             var cropCommand = 'hoot crop '
                             + outFile + ' '
                             + outFile + ' '
                             + cropShape
+
+                            console.log(cropCommand)
+
                             // crop the output of the hoot convert, then write it to a zip
                             exec(cropCommand, {cwd: hootHome}, function(error, stdout, stderr) {
                                 if (stderr || error) {
