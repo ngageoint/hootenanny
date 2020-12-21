@@ -196,6 +196,7 @@ exports.polyQuotes = function(polyString) {
 }
 
 exports.validateBbox = function(bbox) {
+    //38.4902,35.7982,38.6193,35.8536
     var regex = /(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*$)/;
     var match = regex.exec(bbox);
     if (match != null) { //matches pattern
