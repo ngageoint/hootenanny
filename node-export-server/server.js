@@ -391,7 +391,6 @@ function doExport(req, res, hash, input) {
             command += ' -D convert.ops=hoot::SchemaTranslationOp';
             command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
             if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
-            if (bboxOption) command += bboxOption;
             if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             // Set per schema config options
             if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
@@ -442,16 +441,15 @@ function doExport(req, res, hash, input) {
                     if (req.query.crop) {
                         // if request did not provide a polygon or bounds to
                         // crop with, then go about zipping the output
-                        var poly = exports.validatePoly(req.query.poly)
-                        var bbox = exports.validateBbox(req.query.bbox)
-                        if (poly) poly = exports.polyQuotes(poly)
-                        var cropShape = poly || bbox || '';
-                        if (cropShape.length) {
+                        var cropShape = exports.validatePoly(req.query.poly) || exports.validateBbox(req.query.bbox);
+                        if (cropShape) {
                             var cropCommand = 'hoot crop '
                             + outFile + ' '
                             + outFile + ' '
                             + cropShape
-
+                            // following how I saw we logged convert command
+                            // also proved helpful to just see if request handler calling crop or not when crop
+                            // was present.
                             console.log(cropCommand)
 
                             // crop the output of the hoot convert, then write it to a zip
