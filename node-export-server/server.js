@@ -132,6 +132,7 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
 
 exports.writeExportFile = writeExportFile
 exports.validatePoly = function(poly) {
+    if (!poly) return null
     var match = poly.split(';');
     if (match.length > 1) {
         match = match.map(function(coord) {
