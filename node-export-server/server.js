@@ -106,16 +106,6 @@ app.get('/job/:hash', function(req, res) {
         res.status(404).send('Job ' + hash + ' not found.');
     }
 });
-/* return status regardless if job is complete or not */
-app.get('/job/:hash/status', function(req, res) {
-    var hash = req.params.hash;
-    var job = jobs[hash];
-    if (job) {
-        res.send({ id: job.id, status: job.status })
-    } else {
-        res.status(404).send('Job ' + hash + ' not found.');
-    }
-})
 
 /* Post export */
 // export/Overpass/OSM/Shapefile
