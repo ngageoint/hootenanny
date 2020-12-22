@@ -106,6 +106,16 @@ app.get('/job/:hash', function(req, res) {
         res.status(404).send('Job ' + hash + ' not found.');
     }
 });
+/* return status regardless if job is complete or not */
+app.get('/job/:hash/status', function(req, res) {
+    var hash = req.params.hash;
+    var job = jobs[hash];
+    if (job) {
+        res.send({ id: job.id, status: job.status })
+    } else {
+        res.status(404).send('Job ' + hash + ' not found.');
+    }
+})
 
 /* Post export */
 // export/Overpass/OSM/Shapefile
@@ -199,6 +209,7 @@ exports.polyToBbox = function(polyString) {
 }
 // hoot requires quotes for convert.bounds so make sure they exist
 exports.polyQuotes = function(polyString) {
+    if (!polyString) return null
     polyString = polyString.trim()
     if (polyString[0] !== '"') polyString = '"' + polyString
     if (polyString[polyString.length - 1] !== '"') polyString = polyString + '"'
@@ -441,7 +452,7 @@ function doExport(req, res, hash, input) {
                     if (req.query.crop) {
                         // if request did not provide a polygon or bounds to
                         // crop with, then go about zipping the output
-                        var cropShape = exports.validatePoly(req.query.poly) || exports.validateBbox(req.query.bbox);
+                        var cropShape = exports.polyQuotes(exports.validatePoly(req.query.poly)) || exports.validateBbox(req.query.bbox);
                         if (cropShape) {
                             var cropCommand = 'hoot crop '
                             + outFile + ' '
