@@ -9,11 +9,13 @@ var config = require('configure');
 var _ = require('lodash');
 var rmdir = require('rimraf');
 var crypto = require('crypto');
+var noIntersection = require('shamos-hoey');
 var done = false;
 var dir;
 var jobs = {};
 var runningStatus = 'running',
     completeStatus = 'complete';
+
 
 // pipes request data to temp file with name that matches posted data format.
 function writeExportFile(req, done) {
@@ -121,6 +123,8 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
         + req.params.schema
         + req.params.format
         + req.query.bbox
+        + req.query.crop
+        + req.query.poly
         + req.query.overrideTags;
     var hash = crypto.createHash('sha1').update(params).digest('hex');
     var input = config.datasources[req.params.datasource].conn;
@@ -129,6 +133,79 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
 });
 
 exports.writeExportFile = writeExportFile
+
+// ensures poly string in query params
+//  1. follows structure lon_0,lat_0;...lon_n,lat_n;lon_0,lat_0
+//  2. first and last match, meaning its a polygon
+//  3. does not self intersect as deterimed by shamos-hoey alg
+exports.validatePoly = function(poly) {
+    if (!poly) return null
+    var match = poly.split(';');
+
+    function validCoordinates(coordinates) {
+        return coordinates.findIndex(function(c) { // if the polygon coordinates are valid
+            return (c[0] >= -180 && c[0] <= 180)
+                && (c[1] >= -90 && c[1] <= 90);
+        }) !== -1
+    }
+
+    function matchingFirstLast(coordinates) {
+        return coordinates[0][0] === coordinates[coordinates.length - 1][0] &&
+               coordinates[0][1] === coordinates[coordinates.length - 1][1]
+    }
+
+    if (match.length > 1) {
+        var coordinates = []
+        for (m of match) {
+            // gather capture groups to add to coordinates array
+            // if we ever don't get a capture, exit early.
+            // this is a way to make sure nothing that isn't a cooridnate can get injected into the hoot command
+            var captures = /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(m);
+            if (captures) {
+                coordinates.push(captures.splice(1).map(parseFloat))
+            } else {
+                return null
+             }
+        }
+
+        if (
+            validCoordinates(coordinates) && matchingFirstLast(coordinates) &&
+            noIntersection({ type: 'Polygon', coordinates: [coordinates] })
+        ) {
+            return poly
+        };
+    }
+    return null;
+}
+
+// create object of lat/lon that is sorted from min<max values then
+// use order of list to return first values as min and last as max
+exports.polyToBbox = function(polyString) {
+    var coordinates = polyString.split(';').reduce(function(coordsMap, coord, idx) {
+        var pair = /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(coord).splice(1).map(parseFloat)
+        if (idx === 0 || coordsMap.lon.indexOf(pair[0]) === -1)
+            coordsMap.lon.push(pair[0]);
+        if (idx === 0 || coordsMap.lat.indexOf(pair[1]) === -1)
+            coordsMap.lat.push(pair[1]);
+        coordsMap.lon.sort(function(a,b) { return a - b })
+        coordsMap.lat.sort(function(a,b) { return a - b })
+        return coordsMap;
+    }, { lon: [], lat: [] })
+
+    return coordinates.lon[0] + ',' +
+           coordinates.lat[0] + ',' +
+           coordinates.lon[coordinates.lon.length - 1] + ',' +
+           coordinates.lat[coordinates.lat.length - 1];
+}
+// hoot requires quotes for convert.bounds so make sure they exist
+exports.polyQuotes = function(polyString) {
+    if (!polyString) return null
+    polyString = polyString.trim()
+    if (polyString[0] !== '"') polyString = '"' + polyString
+    if (polyString[polyString.length - 1] !== '"') polyString = polyString + '"'
+    return polyString;
+}
+
 exports.validateBbox = function(bbox) {
     //38.4902,35.7982,38.6193,35.8536
     var regex = /(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*$)/;
@@ -275,14 +352,14 @@ function doExport(req, res, hash, input) {
         //handle different flavors of bbox param
         var bbox_param = 'convert.bounds';
         var bbox = exports.validateBbox(req.query.bbox);
-
+        var poly = exports.validatePoly(req.query.poly);
         if (input.substring(0,4) === 'http') {
             var cert_param = '';
             if (input.substring(0,5) === 'https' && fs.existsSync(appDir + 'key.pem') && fs.existsSync(appDir + 'cert.pem')) {
                 cert_param = '--private-key=' + appDir + 'key.pem --certificate=' + appDir + 'cert.pem';
             }
             temp_file = outDir + '.osm';
-            command += 'wget -q ' + cert_param + ' -O ' + temp_file + ' ' + input + '?bbox=' + bbox + ' && ';
+            command += 'wget -q ' + cert_param + ' -O ' + temp_file + ' ' + input + '?bbox=' + (poly ? exports.polyToBbox(poly) : bbox) + ' && ';
             input = temp_file;
             //bbox not valid with osm file input source
             bbox = null;
@@ -290,8 +367,11 @@ function doExport(req, res, hash, input) {
 
         //create command and run
         command += 'hoot convert -C NodeExport.conf';
+        var bboxOption = '';
+        if (bbox) bboxOption = ' -D ' + bbox_param + '=' + bbox;
+        if (poly) bboxOption = ' -D ' + bbox_param + '=' + exports.polyQuotes(poly);
+        if (bboxOption) command += bboxOption
         if (isFile) {
-            if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             if (overrideTags) {
                 if (req.params.schema === 'OSM') {
@@ -312,7 +392,6 @@ function doExport(req, res, hash, input) {
             command += ' -D convert.ops=hoot::SchemaTranslationOp';
             command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
             if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
-            if (bbox) command += ' -D ' + bbox_param + '=' + bbox;
             if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
             // Set per schema config options
             if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
@@ -327,6 +406,29 @@ function doExport(req, res, hash, input) {
         //command = 'dd bs=1024 count=1024 if=/dev/urandom of=' + outFile + ' > /dev/null 2>&1';
         console.log(command);
 
+        function zipOutput() {
+            var stream = fs.createWriteStream(outZip);
+            stream.on('close', function() {
+                jobs[hash].status = 'complete';
+                console.log(jobs[hash].id + ' complete');
+            });
+
+            var zip = archiver('zip');
+            zip.on('error', function(err) {
+                throw err;
+            })
+            zip.pipe(stream);
+
+            if (isFile) {
+                zip.file(outFile, { name: output + config.formats[req.params.format]});
+            } else {
+                //Don't include file extension for shapefile
+                var ext = (req.params.format === 'Shapefile') ? '' : config.formats[req.params.format];
+                zip.directory(outDir, output + ext);
+            }
+            zip.finalize();
+        }
+
         //hoot convert -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/TDSv61.js "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''" osm.shp
         var child = exec(command, {cwd: hootHome},
             function(error, stdout, stderr) {
@@ -336,27 +438,36 @@ function doExport(req, res, hash, input) {
                     jobs[hash].status = stderr;
 
                 } else {
-                    var stream = fs.createWriteStream(outZip);
-                    stream.on('close', function() {
-                        jobs[hash].status = 'complete';
-                        console.log(jobs[hash].id + ' complete');
-                    });
+                    // if export specifies cropping to bounds or poly, do so.
+                    if (req.query.crop) {
+                        // if request did not provide a polygon or bounds to
+                        // crop with, then go about zipping the output
+                        var cropShape = exports.polyQuotes(exports.validatePoly(req.query.poly)) || exports.validateBbox(req.query.bbox);
+                        if (cropShape) {
+                            var cropCommand = 'hoot crop '
+                            + outFile + ' '
+                            + outFile + ' '
+                            + cropShape
+                            // following how I saw we logged convert command
+                            // also proved helpful to just see if request handler calling crop or not when crop
+                            // was present.
+                            console.log(cropCommand)
 
-                    var zip = archiver('zip');
-                    zip.on('error', function(err) {
-                        throw err;
-                    })
-                    zip.pipe(stream);
+                            // crop the output of the hoot convert, then write it to a zip
+                            exec(cropCommand, {cwd: hootHome}, function(error, stdout, stderr) {
+                                if (stderr || error) {
+                                    jobs[hash].status = stderr;
+                                } else {
+                                    zipOutput()
+                                }
+                            })
+                        } else {
+                            zipOutput()
+                        }
 
-                    if (isFile) {
-                        zip.file(outFile, { name: output + config.formats[req.params.format]});
                     } else {
-                        //Don't include file extension for shapefile
-                        var ext = (req.params.format === 'Shapefile') ? '' : config.formats[req.params.format];
-                        zip.directory(outDir, output + ext);
+                        zipOutput()
                     }
-                    zip.finalize();
-
                 }
                 //}, 10000); //used to simulate a long request
             }
