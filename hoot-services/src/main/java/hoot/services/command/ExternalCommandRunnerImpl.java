@@ -114,6 +114,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                 // Had to add because ran into case where same line was processed twice in a row
                 if(!currentOut.equals(currentLine)) {
+                    logger.info("Command stdout: {}", currentLine);
                     currentOut = currentOut.concat(currentLine);
                     commandResult.setStdout(currentOut);
 
@@ -217,6 +218,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         }
         finally {
             try {
+                this.stdout.flush();
+                this.stderr.flush();
+
                 this.stdout.close();
                 this.stderr.close();
             } catch (IOException e) {
