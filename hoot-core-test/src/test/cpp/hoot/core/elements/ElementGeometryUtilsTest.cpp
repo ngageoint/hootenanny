@@ -37,13 +37,6 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 
-//  Geos
-//#include <geos/geom/Coordinate.h>
-//#include <geos/geom/Geometry.h>
-//#include <geos/geom/LineString.h>
-//#include <geos/geom/Polygon.h>
-//using namespace geos::geom;
-
 namespace hoot
 {
 

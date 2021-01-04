@@ -28,9 +28,13 @@
 
 // hoot
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/ConfigUtils.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
+#include <hoot/js/criterion/ElementCriterionJs.h>
 
 using namespace v8;
 
@@ -81,6 +85,10 @@ void SettingsJs::Init(Handle<Object> exports)
                FunctionTemplate::New(current, replaceInList)->GetFunction());
   settings->Set(String::NewFromUtf8(current, "replaceInList"),
                 FunctionTemplate::New(current, replaceInList)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "getConvertBoundsCrit"),
+               FunctionTemplate::New(current, getConvertBoundsCrit)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "getConvertBoundsCrit"),
+                FunctionTemplate::New(current, getConvertBoundsCrit)->GetFunction());
 }
 
 void SettingsJs::get(const FunctionCallbackInfo<Value>& args)
@@ -266,6 +274,19 @@ void SettingsJs::replaceInList(const FunctionCallbackInfo<Value>& args)
     args.GetReturnValue().Set(current->ThrowException(
       Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
   }
+}
+
+void SettingsJs::getConvertBoundsCrit(const FunctionCallbackInfo<Value>& args)
+{
+  // TODO: finish
+
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ElementCriterionPtr boundsCrit = ConfigUtils::getConvertBounds();
+  ElementCriterionJs* obj = new ElementCriterionJs(boundsCrit.get());
+
+  args.GetReturnValue().Set(toV8(settings->getAll()));
 }
 
 }

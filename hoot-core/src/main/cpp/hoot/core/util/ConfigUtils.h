@@ -77,7 +77,7 @@ public:
    * @return
    * @todo This causes memory errors.
    */
-  static std::shared_ptr<InBoundsCriterion> getConflateBoundsCrit(const ConstOsmMapPtr& map);
+  static std::shared_ptr<InBoundsCriterion> getConvertBoundsCrit(const ConstOsmMapPtr& map);
 
   /**
    * Removes ApiTruncateTagVisitor from conflate ops if the corresponding config option is

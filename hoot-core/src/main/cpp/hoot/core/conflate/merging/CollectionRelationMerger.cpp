@@ -92,7 +92,7 @@ bool CollectionRelationMerger::_mergeMembers(
 
   const int numRelationBeingReplacedMembers = relationBeingReplaced->getMemberCount();
   int numMembersCopied = 0;
-  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getConflateBoundsCrit(_map);
+  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getConvertBoundsCrit(_map);
 
   const std::vector<RelationData::Entry> replacingRelationMembers = replacingRelation->getMembers();
   LOG_VART(replacingRelationMembers.size());

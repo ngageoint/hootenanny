@@ -76,7 +76,7 @@ GeometricRelationship ConfigUtils::getConvertBoundsRelationship()
   return GeometricRelationship::Intersects;
 }
 
-std::shared_ptr<InBoundsCriterion> ConfigUtils::getConflateBoundsCrit(const ConstOsmMapPtr& map)
+std::shared_ptr<InBoundsCriterion> ConfigUtils::getConvertBoundsCrit(const ConstOsmMapPtr& map)
 {
   std::shared_ptr<InBoundsCriterion> boundsCrit;
   const QString boundsStr = ConfigOptions().getConvertBounds().trimmed();

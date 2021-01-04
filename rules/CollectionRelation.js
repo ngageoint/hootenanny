@@ -1,5 +1,5 @@
 /**
- * This script conflates collection relations (e.g route, administrative boundary relations, etc.). 
+ * This script conflates collection relations (e.g route, administrative boundary relations, etc.).
  * It is meant to be run after all other matchers.
  */
 
@@ -8,8 +8,8 @@
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches collection relations";
 
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
-// If that ever changes, then the generic score threshold configuration options used below should 
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used.
+// If that ever changes, then the generic score threshold configuration options used below should
 // be replaced with custom score threshold configuration options.
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
@@ -49,7 +49,7 @@ exports.isMatchCandidate = function(map, e)
  * as a group. For now that means if two matches overlap then the whole group
  * will be marked as needing review.
  *
- * If this function returns false the conflation routines will attempt to 
+ * If this function returns false the conflation routines will attempt to
  * pick the best subset of matches that do not conflict.
  */
 exports.isWholeGroup = function()
@@ -73,7 +73,7 @@ function typeMismatch(e1, e2)
   // geometry checks afterward can become very expensive.
 
   if (type1 != type2)
-  {    
+  {
     hoot.trace("type mismatch; type1: " + type1 + "; type2: " + type2);
     hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
     hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
@@ -141,16 +141,18 @@ function nameMismatch(map, e1, e2)
 
 function getBoundsSubsetMap(map, e1, e2)
 {
-  var subsetMap = new hoot.OsmMap();
-  subsetMap.copyProjection(map);
-  // relation.member.criterion.parent.relation.ids
   var relationIdsStr = e1.getElementId().toString() + ";" + e2.getElementId().toString();
   var relationIdCrit = new hoot.ElementIdCriterion({"element.id.criterion.ids": relationIdsStr});
   var relationMemberCrit = new hoot.RelationMemberCriterion(map, {"relation.member.criterion.parent.relation.ids": relationIdsStr});
-  var boundsCrit = new hoot.InBoundsCriterion(map, {"in.bounds.criterion.strict": "false", "in.bounds.criterion.bounds": getConvertBounds()});
+  //var boundsCrit = new hoot.InBoundsCriterion(map, {"in.bounds.criterion.strict": "false", "in.bounds.criterion.bounds": getConvertBounds()});
+  var boundsCrit = hoot.getConvertBoundsCrit();
   var orCrit = new hoot.OrCriterion(relationIdCrit, relationMemberCrit);
   var filter = new hoot.ChainCriterion(orCrit, boundsCrit);
+
+  var subsetMap = new hoot.OsmMap();
+  subsetMap.copyProjection(map);
   // In this particular case, the ordering of the constructor params matters.
+  // TODO: fix this
   new hoot.CopyMapSubsetOp(map, filter).apply(subsetMap);
   return subsetMap;
 }
@@ -158,7 +160,7 @@ function getBoundsSubsetMap(map, e1, e2)
 function geometryMismatch(map, e1, e2)
 {
   var mapToUse;
-  /*if (boundsOptionEnabled())
+  if (boundsOptionEnabled())
   {
     // If a conflate bounds was specified, copy the two relations over to a temp map with only their
     // members which intersect the bounds, since there could be members outside of the bounds due to
@@ -166,9 +168,9 @@ function geometryMismatch(map, e1, e2)
     mapToUse = getBoundsSubsetMap(map, e1, e2);
   }
   else
-  {*/
+  {
     mapToUse = map;
-  //}
+  }
 
   // This is a little convoluted and may need further adjustment. Edge distance is fairly accurate
   // for this but gets expensive as the relations get larger. Angle hist is a little less accurate
@@ -188,7 +190,7 @@ function geometryMismatch(map, e1, e2)
     var edgeDist = edgeDistanceExtractor.extract(mapToUse, e1, e2);
     hoot.trace("edgeDist: " + edgeDist);
     if (edgeDist < 0.97)
-    { 
+    {
       hoot.trace("match failed on edgeDist: " + edgeDist);
       return true;
     }
@@ -198,7 +200,7 @@ function geometryMismatch(map, e1, e2)
     var angleHist = angleHistExtractor.extract(mapToUse, e1, e2);
     hoot.trace("angleHist: " + angleHist);
     if (angleHist < 0.73)
-    { 
+    {
       if (relationsHaveConnectedWayMembers(mapToUse, e1.getElementId(), e2.getElementId()))
       {
         hoot.trace("match failed on angleHist: " + angleHist + ", but there are connected ways.");
@@ -207,7 +209,7 @@ function geometryMismatch(map, e1, e2)
       {
         hoot.trace("match failed on angleHist: " + angleHist);
         return true;
-      }  
+      }
     }
   }
   return false;
@@ -215,8 +217,8 @@ function geometryMismatch(map, e1, e2)
 
 function memberSimilarityMismatch(map, e1, e2)
 {
-  // This hasn't panned out as being useful yet. This is meant to recognize relations with almost 
-  // identical members. We do encounter those, but the other checks (name, geometry) usually help 
+  // This hasn't panned out as being useful yet. This is meant to recognize relations with almost
+  // identical members. We do encounter those, but the other checks (name, geometry) usually help
   // identify them beforehand and makes this check unnecessary.
 
   var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
@@ -235,14 +237,14 @@ function memberSimilarityMismatch(map, e1, e2)
  * - miss
  * - review
  *
- * The scores should always sum to one. If they don't you will be taunted 
+ * The scores should always sum to one. If they don't you will be taunted
  * mercilessly and we'll normalize it anyway. :P
  */
 exports.matchScore = function(map, e1, e2)
 {
   var result = { miss: 1.0 };
 
-  if (e1.getStatusString() == e2.getStatusString()) 
+  if (e1.getStatusString() == e2.getStatusString())
   {
     return result;
   }
@@ -261,8 +263,8 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + tags2.get("note"));
   }
-  
-  // These checks were determined with a very small sample of test data and no model was used, so 
+
+  // These checks were determined with a very small sample of test data and no model was used, so
   // may need further refinement.
 
   if (typeMismatch(e1, e2))

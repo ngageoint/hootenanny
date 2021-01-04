@@ -152,11 +152,11 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
 
       if (map1)
       {
-        boundsCrit1 = ConfigUtils::getConflateBoundsCrit(map1);
+        boundsCrit1 = ConfigUtils::getConvertBoundsCrit(map1);
       }
       if (map2)
       {
-        boundsCrit2 = ConfigUtils::getConflateBoundsCrit(map2);
+        boundsCrit2 = ConfigUtils::getConvertBoundsCrit(map2);
       }
     }
 

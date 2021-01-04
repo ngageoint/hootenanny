@@ -92,6 +92,7 @@ public:
 
 private:
 
+  // This map must be in the same coord sys as the bounds.
   ConstOsmMapPtr _map;
   std::shared_ptr<ElementToGeometryConverter> _elementConverter;
   std::shared_ptr<WayNodeCriterion> _wayNodeCrit;
