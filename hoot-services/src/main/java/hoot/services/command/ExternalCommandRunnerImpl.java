@@ -114,7 +114,6 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                 // Had to add because ran into case where same line was processed twice in a row
                 if(!currentOut.equals(currentLine)) {
-                    logger.info("Command stdout: {}", currentLine);
                     currentOut = currentOut.concat(currentLine);
                     commandResult.setStdout(currentOut);
 
@@ -127,6 +126,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                         // update command status table stdout
                         DbUtils.upsertCommandStatus(commandResult);
+                        logger.info("Command stdout: {}", currentLine);
                     }
                 }
             }
@@ -235,6 +235,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
         if (trackable) {
             DbUtils.completeCommandStatus(commandResult);
+            logger.info("Command completed: {}", obfuscatedCommand);
         }
 
         if (commandResult.failed()) {
