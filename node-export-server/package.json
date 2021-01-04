@@ -8,6 +8,7 @@
     "express": "^4.17.1",
     "lodash": "^4.17.19",
     "rimraf": "^2.7.1",
+    "shamos-hoey": "^1.1.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
