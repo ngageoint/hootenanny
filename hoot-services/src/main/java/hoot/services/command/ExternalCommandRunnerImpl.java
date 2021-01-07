@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.command;
 
@@ -126,6 +126,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
                         // update command status table stdout
                         DbUtils.upsertCommandStatus(commandResult);
+                        logger.info("Command stdout: {}", currentLine);
                     }
                 }
             }
@@ -217,6 +218,9 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
         }
         finally {
             try {
+                this.stdout.flush();
+                this.stderr.flush();
+
                 this.stdout.close();
                 this.stderr.close();
             } catch (IOException e) {
@@ -231,6 +235,7 @@ public class ExternalCommandRunnerImpl implements ExternalCommandRunner {
 
         if (trackable) {
             DbUtils.completeCommandStatus(commandResult);
+            logger.info("Command completed: {}", obfuscatedCommand);
         }
 
         if (commandResult.failed()) {
