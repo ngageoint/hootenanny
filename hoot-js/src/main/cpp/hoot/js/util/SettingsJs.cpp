@@ -283,10 +283,10 @@ void SettingsJs::getConvertBoundsCrit(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  ElementCriterionPtr boundsCrit = ConfigUtils::getConvertBounds();
-  ElementCriterionJs* obj = new ElementCriterionJs(boundsCrit.get());
+  //ElementCriterionPtr boundsCrit = ConfigUtils::getConvertBounds();
+  //ElementCriterionJs* obj = new ElementCriterionJs(boundsCrit.get());
 
-  args.GetReturnValue().Set(toV8(settings->getAll()));
+  //args.GetReturnValue().Set(toV8(settings->getAll()));
 }
 
 }
