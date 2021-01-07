@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
-    <bounds minlat="3.8794559316" minlon="11.50912574427" maxlat="3.880542906360001" maxlon="11.50968595467"/>
-    <node visible="true" id="-18393767" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8794937659600008" lon="11.5091257442699995">
-        <tag k="hoot:status" v="2"/>
+    <bounds minlat="3.8794559316" minlon="11.50912574427" maxlat="3.88054290636" maxlon="11.50968595467"/>
+    <node visible="true" id="-18393767" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8794937659600004" lon="11.5091257442699995">
         <tag k="hoot:id" v="-18393767"/>
-    </node>
-    <node visible="true" id="-18393766" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8795108822100008" lon="11.5091442586100001">
         <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-18393766" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8795108822100004" lon="11.5091442586100001">
         <tag k="hoot:id" v="-18393766"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-18393765" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8794730478499999" lon="11.5091789300399991">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-18393765"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-18393764" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8794559316000004" lon="11.5091604156899994">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-18393764"/>
-    </node>
-    <node visible="true" id="-18393651" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805429063600010" lon="11.5096433196200003">
         <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-18393651" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805429063600001" lon="11.5096433196200003">
         <tag k="hoot:id" v="-18393651"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-18393650" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804737081799998" lon="11.5096859546699992">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-18393650"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-18393649" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8804409880000010" lon="11.5096333130299993">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-18393649"/>
-    </node>
-    <node visible="true" id="-18393611" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805101861799991" lon="11.5095906779699995">
         <tag k="hoot:status" v="2"/>
+    </node>
+    <node visible="true" id="-18393611" timestamp="1970-01-01T00:00:00Z" version="1" lat="3.8805101861800000" lon="11.5095906779699995">
         <tag k="hoot:id" v="-18393611"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <way visible="true" id="-18393568" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-18393611"/>
@@ -39,12 +39,13 @@
         <nd ref="-18393650"/>
         <nd ref="-18393649"/>
         <nd ref="-18393611"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.940Z"/>
-        <tag k="hoot:id" v="-18393568"/>
         <tag k="building" v="yes"/>
-        <tag k="source:imagery:datetime" v="2019-04-03"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-18393568"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.940Z"/>
     </way>
     <way visible="true" id="-18393543" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-18393767"/>
@@ -52,11 +53,12 @@
         <nd ref="-18393765"/>
         <nd ref="-18393764"/>
         <nd ref="-18393767"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.986Z"/>
-        <tag k="hoot:id" v="-18393543"/>
         <tag k="building" v="yes"/>
-        <tag k="source:imagery:datetime" v="2019-04-03"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-18393543"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="source:imagery:datetime" v="2019-04-03"/>
+        <tag k="source:ingest:datetime" v="2020-01-31T19:53:08.986Z"/>
     </way>
 </osm>

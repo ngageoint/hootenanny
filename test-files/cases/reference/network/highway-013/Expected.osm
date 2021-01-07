@@ -2,24 +2,31 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="4.820276872559999" minlon="7.02391697157" maxlat="4.82650963291" maxlon="7.0251186012"/>
     <node visible="true" id="-7222830" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8225903864668611" lon="7.0243332909303637">
+        <tag k="hoot:id" v="-7222830"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-7222823" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8202768725599991" lon="7.0239169715700003">
+        <tag k="hoot:id" v="-7222823"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-7222818" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8265096329099997" lon="7.0251186012000000">
+        <tag k="hoot:id" v="-7222818"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-7222816" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8257505862499990" lon="7.0251078723699987">
+        <tag k="hoot:id" v="-7222816"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-7222814" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8247777223900004" lon="7.0248503803000002">
+        <tag k="hoot:id" v="-7222814"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-7222812" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8231634067600000" lon="7.0244641422000003">
+        <tag k="hoot:id" v="-7222812"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-7222811" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.8213780333499994" lon="7.0240564464299995">
+        <tag k="hoot:id" v="-7222811"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <way visible="true" id="-7222821" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -30,10 +37,12 @@
         <nd ref="-7222814"/>
         <nd ref="-7222816"/>
         <nd ref="-7222818"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="input1"/>
         <tag k="alt_name" v="input2"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-7222821"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="7"/>
+        <tag k="name" v="input1"/>
     </way>
 </osm>

@@ -2,204 +2,271 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="10.4997" minlon="-66.92059999999999" maxlat="10.5029" maxlon="-66.91669999999999"/>
     <node visible="true" id="-92" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4998810231100013" lon="-66.9189074321199939">
+        <tag k="hoot:id" v="-92"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-91" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4998604597799989" lon="-66.9188191467099927">
+        <tag k="hoot:id" v="-91"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-90" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4997972783799991" lon="-66.9185478879700071">
+        <tag k="hoot:id" v="-90"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-89" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5000853238699996" lon="-66.9187692859299972">
+        <tag k="hoot:id" v="-89"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-88" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5004951816999998" lon="-66.9186780643999981">
+        <tag k="hoot:id" v="-88"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-87" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5011153773500006" lon="-66.9185667172800009">
+        <tag k="hoot:id" v="-87"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-86" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5002144495099987" lon="-66.9203518304800014">
+        <tag k="hoot:id" v="-86"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-85" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5001903106799990" lon="-66.9201516782899972">
+        <tag k="hoot:id" v="-85"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-84" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5001468854300004" lon="-66.9199419429599942">
+        <tag k="hoot:id" v="-84"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-83" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5000569472900001" lon="-66.9196014045700025">
+        <tag k="hoot:id" v="-83"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-82" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5000239723099984" lon="-66.9194572242199968">
+        <tag k="hoot:id" v="-82"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-81" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5026311725999975" lon="-66.9202954139200017">
+        <tag k="hoot:id" v="-81"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-80" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5011785931099979" lon="-66.9176940783000020">
+        <tag k="hoot:id" v="-80"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-79" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5009767157099994" lon="-66.9167081692999943">
+        <tag k="hoot:id" v="-79"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-78" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5025108126000006" lon="-66.9179020508999969">
+        <tag k="hoot:id" v="-78"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-77" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5023250189699997" lon="-66.9171032446199803">
+        <tag k="hoot:id" v="-77"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-76" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5028723977399974" lon="-66.9195550650800044">
+        <tag k="hoot:id" v="-76"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-75" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5027733335800004" lon="-66.9191175683799884">
+        <tag k="hoot:id" v="-75"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-74" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5026354579600003" lon="-66.9184036784899945">
+        <tag k="hoot:id" v="-74"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-73" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5020512768699987" lon="-66.9184060968199930">
+        <tag k="hoot:id" v="-73"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-72" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5014790620700023" lon="-66.9185278235199945">
+        <tag k="hoot:id" v="-72"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-71" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5027782611200013" lon="-66.9182588634100028">
+        <tag k="hoot:id" v="-71"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-70" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5026080403400002" lon="-66.9182933376900024">
+        <tag k="hoot:id" v="-70"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-69" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5022517654500014" lon="-66.9182879955099850">
+        <tag k="hoot:id" v="-69"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-68" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5028019984899998" lon="-66.9181629386299903">
+        <tag k="hoot:id" v="-68"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-67" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5025877388799991" lon="-66.9182116356000023">
+        <tag k="hoot:id" v="-67"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-66" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5018439092000015" lon="-66.9179112165300012">
+        <tag k="hoot:id" v="-66"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-65" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5016984065799974" lon="-66.9172775671599993">
+        <tag k="hoot:id" v="-65"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-64" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5016887457600010" lon="-66.9172277782199956">
+        <tag k="hoot:id" v="-64"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-63" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5019573328599982" lon="-66.9184260814800069">
+        <tag k="hoot:id" v="-63"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-62" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5019406905700006" lon="-66.9183505367499976">
+        <tag k="hoot:id" v="-62"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-61" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5014555671500016" lon="-66.9184526182300061">
+        <tag k="hoot:id" v="-61"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-60" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5013612691200020" lon="-66.9185075180800055">
+        <tag k="hoot:id" v="-60"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-59" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5013524818399997" lon="-66.9184683888800009">
+        <tag k="hoot:id" v="-59"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-58" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5014334137999992" lon="-66.9188287745400032">
+        <tag k="hoot:id" v="-58"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-57" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5013709919200000" lon="-66.9185508130999978">
+        <tag k="hoot:id" v="-57"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-56" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5015229450700005" lon="-66.9198194749599935">
+        <tag k="hoot:id" v="-56"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-55" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5008864321500006" lon="-66.9200366815399974">
+        <tag k="hoot:id" v="-55"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-54" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5002040527599974" lon="-66.9202656235199953">
+        <tag k="hoot:id" v="-54"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-53" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5028447813099994" lon="-66.9194331024600046">
+        <tag k="hoot:id" v="-53"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-52" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5022131226899997" lon="-66.9196067043800014">
+        <tag k="hoot:id" v="-52"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-51" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5018042930899984" lon="-66.9197283843299999">
+        <tag k="hoot:id" v="-51"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-50" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5016857529800021" lon="-66.9199025736400017">
+        <tag k="hoot:id" v="-50"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-49" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5016560947599995" lon="-66.9197763657799953">
+        <tag k="hoot:id" v="-49"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-48" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5025904524500007" lon="-66.9201932269999986">
+        <tag k="hoot:id" v="-48"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-47" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5023933489200019" lon="-66.9204466658000001">
+        <tag k="hoot:id" v="-47"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-46" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.5024632862199994" lon="-66.9205040500300044">
+        <tag k="hoot:id" v="-46"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-45" timestamp="2019-01-17T19:50:05Z" version="1" lat="10.5011113656299990" lon="-66.9173657575999954">
+        <tag k="hoot:id" v="-45"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-44" timestamp="2019-01-17T19:50:05Z" version="1" lat="10.5008601733099987" lon="-66.9174064675100055">
+        <tag k="hoot:id" v="-44"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-43" timestamp="2019-01-17T19:50:05Z" version="1" lat="10.5000216885800004" lon="-66.9176102020399810">
+        <tag k="hoot:id" v="-43"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-42" timestamp="2019-01-17T19:50:05Z" version="1" lat="10.5018287567800002" lon="-66.9178452289699948">
+        <tag k="hoot:id" v="-42"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-41" timestamp="2019-01-17T19:50:05Z" version="1" lat="10.5024595645600023" lon="-66.9176817127400057">
+        <tag k="hoot:id" v="-41"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5025802255145120" lon="-66.9205999999999932">
+        <tag k="hoot:id" v="-40"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5023860765049317" lon="-66.9205999999999932">
+        <tag k="hoot:id" v="-39"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5022740980780522" lon="-66.9205999999999932">
+        <tag k="hoot:id" v="-38"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9198328378480340">
+        <tag k="hoot:id" v="-37"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5018478484657400" lon="-66.9205999999999932">
+        <tag k="hoot:id" v="-36"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9181414315535363">
+        <tag k="hoot:id" v="-35"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9182340475983892">
+        <tag k="hoot:id" v="-34"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5028999999999986" lon="-66.9195911270657859">
+        <tag k="hoot:id" v="-33"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5022209583745791" lon="-66.9166999999999916">
+        <tag k="hoot:id" v="-32"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5009748792788962" lon="-66.9166999999999916">
+        <tag k="hoot:id" v="-31"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5029000000000003" lon="-66.9199789801348146">
+        <tag k="hoot:id" v="-30"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.5002515743978755" lon="-66.9205999999999932">
+        <tag k="hoot:id" v="-29"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4997000000000007" lon="-66.9181243895426690">
+        <tag k="hoot:id" v="-28"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4996999999999989" lon="-66.9188525813828505">
+        <tag k="hoot:id" v="-27"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4997000000000007" lon="-66.9176873631122788">
+        <tag k="hoot:id" v="-26"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <way visible="true" id="-75" timestamp="2019-01-17T19:50:06Z" version="1">
@@ -208,27 +275,29 @@
         <nd ref="-44"/>
         <nd ref="-45"/>
         <nd ref="-64"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Sur 4"/>
-        <tag k="source:datetime" v="2015-08-24T16:13:18.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{337b5b66-e2e1-4cb7-83e6-bad10ea5d108};{bd5d6e86-1289-412d-81b9-41087b55e1fd};{95ca7b93-cd09-4c19-a70c-b1ed653fb9ae}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z;2019-01-17T19:50:05.631Z;2019-01-17T19:50:05.672Z"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:id" v="-75"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Sur 4"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-08-24T16:13:18.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z;2019-01-17T19:50:05.631Z;2019-01-17T19:50:05.672Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{337b5b66-e2e1-4cb7-83e6-bad10ea5d108};{bd5d6e86-1289-412d-81b9-41087b55e1fd};{95ca7b93-cd09-4c19-a70c-b1ed653fb9ae}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-49"/>
@@ -240,81 +309,87 @@
         <nd ref="-45"/>
         <nd ref="-79"/>
         <nd ref="-31"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Lecuna"/>
-        <tag k="source:datetime" v="2015-05-11T03:32:46.000Z;2019-01-17T19:50:06Z;2014-06-22T17:21:17.000Z;2014-06-22T17:21:18.000Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="4"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{d420f044-9a4d-4dae-8ab3-3dec2959e07c};{7c809bd2-1b65-4e0e-9713-1e7ddc4f43a7};{95fc9085-85fa-4657-a06e-41cc9b5868db}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.665Z;2019-01-17T19:50:05.668Z"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-60"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="9"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Lecuna"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-05-11T03:32:46.000Z;2019-01-17T19:50:06Z;2014-06-22T17:21:17.000Z;2014-06-22T17:21:18.000Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.665Z;2019-01-17T19:50:05.668Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{d420f044-9a4d-4dae-8ab3-3dec2959e07c};{7c809bd2-1b65-4e0e-9713-1e7ddc4f43a7};{95fc9085-85fa-4657-a06e-41cc9b5868db}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-91"/>
         <nd ref="-27"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Baralt"/>
-        <tag k="source:datetime" v="2015-08-11T15:27:57.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{ddce01c4-a4e6-4e3b-a63f-05da6203a4ed}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.634Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-52"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Baralt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-08-11T15:27:57.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.634Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{ddce01c4-a4e6-4e3b-a63f-05da6203a4ed}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-91"/>
         <nd ref="-89"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Baralt"/>
-        <tag k="source:datetime" v="2014-04-16T16:34:44.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{ddce01c4-a4e6-4e3b-a63f-05da6203a4ed}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.634Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-48"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Baralt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-04-16T16:34:44.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.634Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{ddce01c4-a4e6-4e3b-a63f-05da6203a4ed}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-46" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-70"/>
@@ -323,71 +398,77 @@
         <nd ref="-72"/>
         <nd ref="-60"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Baralt"/>
-        <tag k="source:datetime" v="2015-08-11T15:27:59.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{a13e065e-90dc-4199-a2eb-a12efaf01eba};{e7c51f67-fb91-4865-a8bc-dd68ca0a5ffc}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.659Z;2019-01-17T19:50:05.667Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-46"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Baralt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-08-11T15:27:59.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.659Z;2019-01-17T19:50:05.667Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{a13e065e-90dc-4199-a2eb-a12efaf01eba};{e7c51f67-fb91-4865-a8bc-dd68ca0a5ffc}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-45" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-62"/>
         <nd ref="-69"/>
         <nd ref="-67"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Baralt"/>
-        <tag k="source:datetime" v="2014-04-16T16:03:47.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{c7000abf-95fe-4c00-9be5-00533f4d7ef0}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-45"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Baralt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-04-16T16:03:47.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{c7000abf-95fe-4c00-9be5-00533f4d7ef0}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-43" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-63"/>
         <nd ref="-62"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{7839e6b8-9f99-4b27-96f9-6342a40197de}"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-43"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{7839e6b8-9f99-4b27-96f9-6342a40197de}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-39" timestamp="2019-01-17T19:50:06Z" version="1">
@@ -395,66 +476,72 @@
         <nd ref="-56"/>
         <nd ref="-55"/>
         <nd ref="-54"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.668Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-39"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Sur 8"/>
-        <tag k="uuid" v="{80712126-af56-4518-8afe-f507ca285392}"/>
-        <tag k="source:datetime" v="2013-11-07T21:45:42.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2013-11-07T21:45:42.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.668Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{80712126-af56-4518-8afe-f507ca285392}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-46"/>
         <nd ref="-39"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. San Martín"/>
-        <tag k="source:datetime" v="2015-10-15T16:12:12.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="50"/>
-        <tag k="uuid" v="{4344bc96-c83e-43b2-bb65-7f0d8ab650c2}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.669Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-34"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="name" v="Av. San Martín"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-10-15T16:12:12.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.669Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{4344bc96-c83e-43b2-bb65-7f0d8ab650c2}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-33"/>
         <nd ref="-76"/>
         <nd ref="-53"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
-        <tag k="highway" v="primary_link"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{8ab02c28-530a-43e4-84a8-ac2e44037da9}"/>
-        <tag k="source:datetime" v="2014-12-24T02:49:57.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="primary_link"/>
+        <tag k="hoot:id" v="-29"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-12-24T02:49:57.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{8ab02c28-530a-43e4-84a8-ac2e44037da9}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -465,20 +552,22 @@
         <nd ref="-54"/>
         <nd ref="-86"/>
         <nd ref="-29"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.660Z;2019-01-17T19:50:05.634Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-25"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="7"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Oeste 12"/>
-        <tag k="uuid" v="{7e90f50b-e78f-4a6a-8256-0e1e59279114};{fd83c40a-9c01-4531-b6e7-6c73969725e9}"/>
-        <tag k="source:datetime" v="2014-04-16T14:32:15.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-04-16T14:32:15.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.660Z;2019-01-17T19:50:05.634Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{7e90f50b-e78f-4a6a-8256-0e1e59279114};{fd83c40a-9c01-4531-b6e7-6c73969725e9}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -487,39 +576,43 @@
         <nd ref="-91"/>
         <nd ref="-92"/>
         <nd ref="-82"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.634Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-24"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Oeste 12"/>
-        <tag k="uuid" v="{fd83c40a-9c01-4531-b6e7-6c73969725e9}"/>
-        <tag k="source:datetime" v="2014-04-16T14:32:15.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-04-16T14:32:15.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.634Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{fd83c40a-9c01-4531-b6e7-6c73969725e9}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-47"/>
         <nd ref="-46"/>
         <nd ref="-40"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.670Z;2019-01-17T19:50:05.669Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-20"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="La Amargura"/>
-        <tag k="uuid" v="{028399af-be6d-43cb-b3c3-3a32f9dae08c};{35fb46ac-4c0c-4d19-a3d2-94876d592c26}"/>
-        <tag k="source:datetime" v="2014-11-08T12:50:42.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="oneway" v="no"/>
         <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-11-08T12:50:42.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.670Z;2019-01-17T19:50:05.669Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{028399af-be6d-43cb-b3c3-3a32f9dae08c};{35fb46ac-4c0c-4d19-a3d2-94876d592c26}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -527,138 +620,148 @@
         <nd ref="-47"/>
         <nd ref="-48"/>
         <nd ref="-37"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. San Martín"/>
-        <tag k="source:datetime" v="2015-10-15T16:12:11.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="50"/>
-        <tag k="uuid" v="{6f44fd8f-d8fd-4e57-b362-afb57ca0c781}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.669Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-17"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="name" v="Av. San Martín"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-10-15T16:12:11.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.669Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{6f44fd8f-d8fd-4e57-b362-afb57ca0c781}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34"/>
         <nd ref="-71"/>
         <nd ref="-70"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Baralt"/>
-        <tag k="source:datetime" v="2016-01-14T14:25:09.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{0d03894e-5353-42d2-9f60-0316286dab1b}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-15"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Baralt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2016-01-14T14:25:09.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{0d03894e-5353-42d2-9f60-0316286dab1b}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-67"/>
         <nd ref="-68"/>
         <nd ref="-35"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Baralt"/>
-        <tag k="source:datetime" v="2016-01-14T14:25:09.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{40a71cf9-24ff-42b7-af9f-a80a93b7a29e}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-8"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Baralt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2016-01-14T14:25:09.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{40a71cf9-24ff-42b7-af9f-a80a93b7a29e}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-81"/>
         <nd ref="-46"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. San Martín"/>
-        <tag k="source:datetime" v="2015-10-15T16:12:12.000Z;2014-09-04T14:24:35.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="50"/>
-        <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
-        <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="highway" v="primary"/>
         <tag k="destination" v="San Martín"/>
+        <tag k="foot" v="yes"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-6"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="name" v="Av. San Martín"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-10-15T16:12:12.000Z;2014-09-04T14:24:35.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.661Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{74701b58-570f-40d1-9230-e682fd5f7454}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36"/>
         <nd ref="-50"/>
         <nd ref="-49"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Lecuna"/>
-        <tag k="source:datetime" v="2014-06-22T17:21:17.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="4"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{8bd0e392-a3b6-4f60-80ed-05254da2cb8e}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.668Z"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-4"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Lecuna"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-06-22T17:21:17.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.668Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{8bd0e392-a3b6-4f60-80ed-05254da2cb8e}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-70"/>
@@ -667,22 +770,24 @@
         <nd ref="-41"/>
         <nd ref="-77"/>
         <nd ref="-32"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.666Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:id" v="-2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="6"/>
+        <tag k="lanes" v="3"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="40"/>
         <tag k="name" v="Av. Oeste 8"/>
-        <tag k="uuid" v="{9999fb82-3240-4c16-83c4-777553acb980};{bdf0d568-d4fa-4c77-ad37-c4b60ea708f2}"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
         <tag k="source:datetime" v="2014-09-04T14:24:37.000Z;2019-01-17T19:50:06Z;2014-04-16T18:24:45.000Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.666Z"/>
         <tag k="surface" v="asphalt"/>
         <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="3"/>
+        <tag k="uuid" v="{9999fb82-3240-4c16-83c4-777553acb980};{bdf0d568-d4fa-4c77-ad37-c4b60ea708f2}"/>
         <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="31" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -690,21 +795,23 @@
         <nd ref="-75"/>
         <nd ref="-74"/>
         <nd ref="-70"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
-        <tag k="highway" v="primary"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="name" v="Av. Oeste 8"/>
-        <tag k="uuid" v="{8ab02c28-530a-43e4-84a8-ac2e44037da9}"/>
-        <tag k="source:datetime" v="2014-05-19T20:08:16.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="31"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Oeste 8"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-05-19T20:08:16.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{8ab02c28-530a-43e4-84a8-ac2e44037da9}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="66" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
@@ -712,20 +819,22 @@
         <nd ref="-52"/>
         <nd ref="-51"/>
         <nd ref="-49"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.668Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="66"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Sur 8"/>
-        <tag k="uuid" v="{60cb34a4-b2a7-4427-baa6-7bfd0f871bc1}"/>
-        <tag k="source:datetime" v="2013-11-07T21:45:42.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2013-11-07T21:45:42.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.668Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{60cb34a4-b2a7-4427-baa6-7bfd0f871bc1}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="190" timestamp="2019-01-17T19:50:06Z" version="1">
@@ -734,17 +843,19 @@
         <nd ref="-42"/>
         <nd ref="-66"/>
         <nd ref="-62"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
-        <tag k="highway" v="footway"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{337b5b66-e2e1-4cb7-83e6-bad10ea5d108}"/>
-        <tag k="source:datetime" v="2013-04-18T01:17:18.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="footway"/>
+        <tag k="hoot:id" v="190"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2013-04-18T01:17:18.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.667Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{337b5b66-e2e1-4cb7-83e6-bad10ea5d108}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="192" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
@@ -752,43 +863,47 @@
         <nd ref="-61"/>
         <nd ref="-62"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Baralt"/>
-        <tag k="source:datetime" v="2014-04-16T16:03:47.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{449793a7-7d3a-4607-b9a0-74834a4e876a}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.668Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="192"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Baralt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-04-16T16:03:47.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.668Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{449793a7-7d3a-4607-b9a0-74834a4e876a}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="193" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-42"/>
         <nd ref="-41"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.676Z"/>
-        <tag k="highway" v="footway"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{a439f440-165f-401c-9395-166374e5bdd7}"/>
-        <tag k="source:datetime" v="2013-04-18T01:17:19.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="footway"/>
+        <tag k="hoot:id" v="193"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2013-04-18T01:17:19.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.676Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{a439f440-165f-401c-9395-166374e5bdd7}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="197" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
@@ -797,27 +912,29 @@
         <nd ref="-87"/>
         <nd ref="-60"/>
         <tag k="alt_name" v="Avenida Norte 6"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Baralt"/>
-        <tag k="source:datetime" v="2014-04-16T16:34:44.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{ddce01c4-a4e6-4e3b-a63f-05da6203a4ed};{7600039c-cde1-43ff-894f-ec25be435bb8}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.634Z;2019-01-17T19:50:05.659Z"/>
-        <tag k="sidewalk" v="right"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="197"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Baralt"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="right"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-04-16T16:34:44.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.634Z;2019-01-17T19:50:05.659Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{ddce01c4-a4e6-4e3b-a63f-05da6203a4ed};{7600039c-cde1-43ff-894f-ec25be435bb8}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
 </osm>

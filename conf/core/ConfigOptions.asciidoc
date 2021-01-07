@@ -5433,6 +5433,14 @@ writer.include.debug.tags=true.
 
 Set the output precision when writing. Not honored by all writers.
 
+=== writer.sort.tags.by.key
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, sorts all tag key/value pairs alphabetically when written out.  Not honored by all
+writers.
+
 === writer.text.status
 
 * Data Type: bool

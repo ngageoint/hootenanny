@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmXmlReader.h"
@@ -770,7 +770,7 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
 
           if (_keepStatusTag)  { _element->setTag(key, value); }
         }
-        else if (key == QLatin1String("type") &&
+        else if (key == MetadataTags::RelationType() &&
                  _element->getElementType() == ElementType::Relation)
         {
           RelationPtr r = std::dynamic_pointer_cast<Relation, Element>(_element);
@@ -830,6 +830,28 @@ bool OsmXmlReader::startElement(const QString& /*namespaceURI*/, const QString& 
             LOG_TRACE("setting tag with key: " << key << " and value: " << value);
             _element->setTag(key, value);
           }
+        }
+        else if (key == MetadataTags::HootWayNodeCount())
+        {
+          bool ok;
+          size_t node_count = value.toULong(&ok);
+          if (!ok)
+          {
+            LOG_TRACE("Unable to parse '" << MetadataTags::HootWayNodeCount() << "' tag.");
+          }
+          if (_element->getElementType() == ElementType::Way)
+          {
+            WayPtr w = std::dynamic_pointer_cast<Way, Element>(_element);
+            if (w->getNodeCount() != node_count)
+            {
+              LOG_TRACE("Way node count tag does not equal actual way node count.");
+            }
+          }
+          else
+          {
+            LOG_TRACE(_element->getElementType().toString() << " elements shouldn't contain way node count tag.");
+          }
+          //  In the end, this tag isn't loaded because it is calculated
         }
         else
         {

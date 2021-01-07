@@ -2,15 +2,19 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="4.15886724908" minlon="4.478056938" maxlat="4.1597321216" maxlon="4.478165724999999"/>
     <node visible="true" id="-1017065" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1588672490800001" lon="4.4780569379999999">
+        <tag k="hoot:id" v="-1017065"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-1017064" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1592517771899988" lon="4.4780620590000000">
+        <tag k="hoot:id" v="-1017064"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-1017063" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1594942159199997" lon="4.4781095590000000">
+        <tag k="hoot:id" v="-1017063"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-1017062" timestamp="1970-01-01T00:00:00Z" version="1" lat="4.1597321216000003" lon="4.4781657249999993">
+        <tag k="hoot:id" v="-1017062"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <way visible="true" id="-1017051" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -18,13 +22,15 @@
         <nd ref="-1017063"/>
         <nd ref="-1017064"/>
         <nd ref="-1017065"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="created_by" v="Merkaartor 0.12"/>
-        <tag k="highway" v="unclassified"/>
         <tag k="all_weather" v="yes"/>
-        <tag k="surface" v="paved"/>
-        <tag k="lanes" v="1"/>
-        <tag k="width" v="2.5"/>
+        <tag k="created_by" v="Merkaartor 0.12"/>
         <tag k="error:circular" v="10.08"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:id" v="-1017051"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="lanes" v="1"/>
+        <tag k="surface" v="paved"/>
+        <tag k="width" v="2.5"/>
     </way>
 </osm>

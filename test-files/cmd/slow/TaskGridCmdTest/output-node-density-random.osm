@@ -11,7 +11,7 @@
         <nd ref="2"/>
         <nd ref="4"/>
         <nd ref="1"/>
-        <tag k="task" v="8"/>
         <tag k="node_count" v="505"/>
+        <tag k="task" v="8"/>
     </way>
 </osm>

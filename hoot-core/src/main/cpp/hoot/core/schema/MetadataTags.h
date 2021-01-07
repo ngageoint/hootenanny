@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef METADATA_TAGS_H
@@ -277,9 +277,11 @@ public:
   inline static const QString HootIntersectionStreet1() { return "hoot:intersection:street1"; }
   inline static const QString HootIntersectionStreet2() { return "hoot:intersection:street2"; }
 
+  inline static const QString HootWayNodeCount() { return "hoot:way:node:count"; }
+
 private:
 
-  MetadataTags() { }
+  MetadataTags() = default;
 };
 
 }
