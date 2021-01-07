@@ -2,36 +2,47 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="1.30229889329" minlon="5.79580287884" maxlat="1.303086598" maxlon="5.79763887884"/>
     <node visible="true" id="-306997" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3024800394600000" lon="5.7975921969999993">
+        <tag k="hoot:id" v="-306997"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-306996" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3024062227899997" lon="5.7975219600000001">
+        <tag k="hoot:id" v="-306996"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-306995" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3023484995100001" lon="5.7974649810000001">
+        <tag k="hoot:id" v="-306995"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-306994" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3022988932899997" lon="5.7974048590000002">
+        <tag k="hoot:id" v="-306994"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-306993" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3024245272299999" lon="5.7969219580000004">
+        <tag k="hoot:id" v="-306993"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-306982" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3029854240100001" lon="5.7958888788399996">
+        <tag k="hoot:id" v="-306982"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-306981" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3030865979999997" lon="5.7966368788400002">
+        <tag k="hoot:id" v="-306981"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-306980" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3025884717500000" lon="5.7976388788400000">
+        <tag k="hoot:id" v="-306980"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-306979" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3027800588399996" lon="5.7965850788399997">
+        <tag k="hoot:id" v="-306979"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-306978" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3025256150700000" lon="5.7965420788399999">
+        <tag k="hoot:id" v="-306978"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-306977" timestamp="1970-01-01T00:00:00Z" version="1" lat="1.3027437528400001" lon="5.7958028788400000">
+        <tag k="hoot:id" v="-306977"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <way visible="true" id="-306981" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -42,77 +53,89 @@
         <nd ref="-306996"/>
         <nd ref="-306997"/>
         <nd ref="-306980"/>
-        <tag k="hoot:status" v="2"/>
         <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="name" v="MADR. 5"/>
         <tag k="alt_name" v="MA 6;MA. 5;MAD 5"/>
-        <tag k="surface" v="paved"/>
-        <tag k="lanes" v="2"/>
-        <tag k="width" v="5"/>
         <tag k="error:circular" v="10.08"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:id" v="-306981"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="7"/>
+        <tag k="lanes" v="2"/>
+        <tag k="name" v="MADR. 5"/>
+        <tag k="surface" v="paved"/>
+        <tag k="width" v="5"/>
     </way>
     <way visible="true" id="-306976" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-306977"/>
         <nd ref="-306982"/>
         <nd ref="-306979"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="living_street"/>
-        <tag k="name" v="MA 4"/>
         <tag k="alt_name" v="M 1;MA. 4"/>
-        <tag k="surface" v="paved"/>
-        <tag k="lanes" v="1"/>
-        <tag k="width" v="2.5"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="living_street"/>
+        <tag k="hoot:id" v="-306976"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="1"/>
+        <tag k="name" v="MA 4"/>
+        <tag k="surface" v="paved"/>
+        <tag k="width" v="2.5"/>
     </way>
     <way visible="true" id="-306975" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-306981"/>
         <nd ref="-306979"/>
-        <tag k="source" v="Bing"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="MADRASAH"/>
-        <tag k="surface" v="paved"/>
-        <tag k="lanes" v="2"/>
-        <tag k="width" v="5"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-306975"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="name" v="MADRASAH"/>
+        <tag k="source" v="Bing"/>
+        <tag k="surface" v="paved"/>
+        <tag k="width" v="5"/>
     </way>
     <way visible="true" id="-306974" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-306979"/>
         <nd ref="-306980"/>
-        <tag k="source" v="Bing"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="living_street"/>
-        <tag k="name" v="MADRASAH 2"/>
         <tag k="alt_name" v="MA 4;MA. 3;MAD 3"/>
-        <tag k="surface" v="paved"/>
-        <tag k="lanes" v="1"/>
-        <tag k="width" v="2.5"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="living_street"/>
+        <tag k="hoot:id" v="-306974"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="1"/>
+        <tag k="name" v="MADRASAH 2"/>
+        <tag k="source" v="Bing"/>
+        <tag k="surface" v="paved"/>
+        <tag k="width" v="2.5"/>
     </way>
     <way visible="true" id="-306973" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-306979"/>
         <nd ref="-306978"/>
-        <tag k="source" v="Bing"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="residential"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-306973"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="source" v="Bing"/>
     </way>
     <way visible="true" id="-306972" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-306977"/>
         <nd ref="-306978"/>
-        <tag k="source" v="Bing"/>
-        <tag k="hoot:status" v="3"/>
         <tag k="all_weather" v="yes"/>
-        <tag k="highway" v="living_street"/>
-        <tag k="name" v="MA 6"/>
         <tag k="alt_name" v="M 4;MA. 6"/>
-        <tag k="surface" v="paved"/>
-        <tag k="lanes" v="1"/>
-        <tag k="width" v="2.5"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="living_street"/>
+        <tag k="hoot:id" v="-306972"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="1"/>
+        <tag k="name" v="MA 6"/>
+        <tag k="source" v="Bing"/>
+        <tag k="surface" v="paved"/>
+        <tag k="width" v="2.5"/>
     </way>
 </osm>

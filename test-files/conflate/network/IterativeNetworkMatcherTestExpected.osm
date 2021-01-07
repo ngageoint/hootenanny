@@ -2,1671 +2,2057 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.85199370801001" minlon="-104.90305077439" maxlat="38.85504129245" maxlon="-104.89807204136"/>
     <node visible="true" id="-118" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8527497080999993" lon="-104.8984908956099957">
+        <tag k="hoot:id" v="-118"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-117" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8529984748899935" lon="-104.8984887919900046">
+        <tag k="hoot:id" v="-117"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-116" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543458333899920" lon="-104.8994298766299949">
+        <tag k="hoot:id" v="-116"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-115" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543500363199925" lon="-104.8987579407600066">
+        <tag k="hoot:id" v="-115"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-114" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543479348600016" lon="-104.8990910820799911">
+        <tag k="hoot:id" v="-114"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-113" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543396379600026" lon="-104.8995957495600067">
+        <tag k="hoot:id" v="-113"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-112" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8550288072200019" lon="-104.9000031877999959">
+        <tag k="hoot:id" v="-112"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-111" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8550412924499966" lon="-104.8995936729699991">
+        <tag k="hoot:id" v="-111"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8550141044799915" lon="-104.9003471232799853">
+        <tag k="hoot:id" v="-110"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-109" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546583600699975" lon="-104.8995984011799862">
+        <tag k="hoot:id" v="-109"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-108" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543087192000058" lon="-104.9002964022899960">
+        <tag k="hoot:id" v="-108"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-107" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543082569799978" lon="-104.8999270832099882">
+        <tag k="hoot:id" v="-107"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-106" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546779375199947" lon="-104.9003287339999986">
+        <tag k="hoot:id" v="-106"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-105" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540584969899996" lon="-104.9022343707400040">
+        <tag k="hoot:id" v="-105"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-104" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545911960199959" lon="-104.9018074315099796">
+        <tag k="hoot:id" v="-104"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-103" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542874152900026" lon="-104.9022456164699975">
+        <tag k="hoot:id" v="-103"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-102" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545828732799947" lon="-104.9023399726799965">
+        <tag k="hoot:id" v="-102"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-101" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545786703500013" lon="-104.9030092100099978">
+        <tag k="hoot:id" v="-101"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-100" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545799712199980" lon="-104.9022359479599942">
+        <tag k="hoot:id" v="-100"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-99" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545828732799947" lon="-104.9026731139999953">
+        <tag k="hoot:id" v="-99"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-98" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545445995500103" lon="-104.9022786977100026">
+        <tag k="hoot:id" v="-98"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545911960199959" lon="-104.9014742901799906">
+        <tag k="hoot:id" v="-97"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8544996457999972" lon="-104.9022330982999875">
+        <tag k="hoot:id" v="-96"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545487609200038" lon="-104.9021905263499974">
+        <tag k="hoot:id" v="-95"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545869931000070" lon="-104.9021435275199963">
+        <tag k="hoot:id" v="-94"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-93" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8527442049200005" lon="-104.9015871570699971">
+        <tag k="hoot:id" v="-93"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-92" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8519937080100064" lon="-104.9026515939000035">
+        <tag k="hoot:id" v="-92"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-91" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8527462643199968" lon="-104.9026500222300058">
+        <tag k="hoot:id" v="-91"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-90" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8524897332000023" lon="-104.9024262808100048">
+        <tag k="hoot:id" v="-90"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-89" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8522705787000007" lon="-104.9021880136100009">
+        <tag k="hoot:id" v="-89"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-88" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8524997444099967" lon="-104.9018713228099955">
+        <tag k="hoot:id" v="-88"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8525167032100001" lon="-104.9015837992199920">
+        <tag k="hoot:id" v="-87"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-86" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8522787408699912" lon="-104.9026448782099976">
+        <tag k="hoot:id" v="-86"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-85" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8529862899600005" lon="-104.9026494166700019">
+        <tag k="hoot:id" v="-85"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8529818484499998" lon="-104.9021779400799943">
+        <tag k="hoot:id" v="-84"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-83" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8524928512600027" lon="-104.9021779400799943">
+        <tag k="hoot:id" v="-83"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-82" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8522630510200102" lon="-104.9015905149099979">
+        <tag k="hoot:id" v="-82"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-81" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8524916778500042" lon="-104.9026533058499950">
+        <tag k="hoot:id" v="-81"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-80" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8529769358000010" lon="-104.9023426721699934">
+        <tag k="hoot:id" v="-80"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-79" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8529900105399975" lon="-104.9018255640600046">
+        <tag k="hoot:id" v="-79"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8527360427899993" lon="-104.9021779400799943">
+        <tag k="hoot:id" v="-78"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-77" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8520067829400020" lon="-104.9015938727599888">
+        <tag k="hoot:id" v="-77"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-76" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8520038506999938" lon="-104.9021855693600003">
+        <tag k="hoot:id" v="-76"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-75" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8529847806499973" lon="-104.9015871570699971">
+        <tag k="hoot:id" v="-75"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-74" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8520120129100022" lon="-104.9018625003500063">
+        <tag k="hoot:id" v="-74"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-73" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8520041679599899" lon="-104.9023561035499910">
+        <tag k="hoot:id" v="-73"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-72" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8531837576599912" lon="-104.9013602337099940">
+        <tag k="hoot:id" v="-72"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-71" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533557184600085" lon="-104.9011702853200063">
+        <tag k="hoot:id" v="-71"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532428366100007" lon="-104.8987345419999997">
+        <tag k="hoot:id" v="-70"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532402216699921" lon="-104.8989729489899929">
+        <tag k="hoot:id" v="-69"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-68" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8534158719600029" lon="-104.8982786102399984">
+        <tag k="hoot:id" v="-68"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535730399299908" lon="-104.8980720413599954">
+        <tag k="hoot:id" v="-67"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532376067299907" lon="-104.8984961350199967">
+        <tag k="hoot:id" v="-66"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-65" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8531653102999996" lon="-104.9009175373400069">
+        <tag k="hoot:id" v="-65"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-64" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8530097576200006" lon="-104.9008262254299950">
+        <tag k="hoot:id" v="-64"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-63" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8528186495699899" lon="-104.9007862764599821">
+        <tag k="hoot:id" v="-63"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-62" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8526319854000022" lon="-104.9007976904499913">
+        <tag k="hoot:id" v="-62"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8524186543199903" lon="-104.9008433464099994">
+        <tag k="hoot:id" v="-61"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8522319890999910" lon="-104.9009061233499978">
+        <tag k="hoot:id" v="-60"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8525668211999857" lon="-104.8986765855800058">
+        <tag k="hoot:id" v="-59"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8528283481400081" lon="-104.8986799434299968">
+        <tag k="hoot:id" v="-58"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542597821199962" lon="-104.8997144852099979">
+        <tag k="hoot:id" v="-57"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545785045900018" lon="-104.8997171368399961">
+        <tag k="hoot:id" v="-56"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549614374000001" lon="-104.8997124086299948">
+        <tag k="hoot:id" v="-55"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542288633299862" lon="-104.9004151379500058">
+        <tag k="hoot:id" v="-54"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542284011000021" lon="-104.9000458188699980">
+        <tag k="hoot:id" v="-53"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545980820600008" lon="-104.9004474696599942">
+        <tag k="hoot:id" v="-52"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549342494000030" lon="-104.9004658589300050">
+        <tag k="hoot:id" v="-51"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542659775600043" lon="-104.8995000386100003">
+        <tag k="hoot:id" v="-50"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542701805000021" lon="-104.8988308012799990">
+        <tag k="hoot:id" v="-49"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8542701805000021" lon="-104.8991639425999978">
+        <tag k="hoot:id" v="-48"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8549489521499964" lon="-104.9001219234600057">
+        <tag k="hoot:id" v="-47"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545933830200028" lon="-104.9030507743899960">
+        <tag k="hoot:id" v="-46"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545975859399988" lon="-104.9027146783799935">
+        <tag k="hoot:id" v="-45"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545975859399988" lon="-104.9023815370599948">
+        <tag k="hoot:id" v="-44"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8540732097699930" lon="-104.9022759351200023">
+        <tag k="hoot:id" v="-43"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8543021280200023" lon="-104.9022871808499957">
+        <tag k="hoot:id" v="-42"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545143584800030" lon="-104.9022746626800000">
+        <tag k="hoot:id" v="-41"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546017057599826" lon="-104.9021850918999945">
+        <tag k="hoot:id" v="-40"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546059086899973" lon="-104.9018489958900062">
+        <tag k="hoot:id" v="-39"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8546059086899973" lon="-104.9015158545600030">
+        <tag k="hoot:id" v="-38"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545634736000025" lon="-104.9022320907299815">
+        <tag k="hoot:id" v="-37"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545593122300019" lon="-104.9023202620900008">
+        <tag k="hoot:id" v="-36"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8545946838899923" lon="-104.9022775123400066">
+        <tag k="hoot:id" v="-35"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8527527666700010" lon="-104.9024682050099955">
+        <tag k="hoot:id" v="-34"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8529666731399885" lon="-104.9024672957500002">
+        <tag k="hoot:id" v="-33"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532066980399975" lon="-104.9024666901899963">
+        <tag k="hoot:id" v="-32"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8524991511400017" lon="-104.9024621517300062">
+        <tag k="hoot:id" v="-31"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8522141191700001" lon="-104.9024688674199979">
+        <tag k="hoot:id" v="-30"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8522245790699969" lon="-104.9021733770699853">
+        <tag k="hoot:id" v="-29"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8522298090300069" lon="-104.9019316122399914">
+        <tag k="hoot:id" v="-28"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8522324240099977" lon="-104.9016797738700006">
+        <tag k="hoot:id" v="-27"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8522271940499948" lon="-104.9014111462799832">
+        <tag k="hoot:id" v="-26"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8524834613400003" lon="-104.9014077884300065">
+        <tag k="hoot:id" v="-25"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8527371127400016" lon="-104.9014010727399864">
+        <tag k="hoot:id" v="-24"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8529646137399993" lon="-104.9014044305900057">
+        <tag k="hoot:id" v="-23"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532051887299943" lon="-104.9014044305900057">
+        <tag k="hoot:id" v="-22"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532104186099971" lon="-104.9016428375799990">
+        <tag k="hoot:id" v="-21"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532078036699957" lon="-104.9018812445600020">
+        <tag k="hoot:id" v="-20"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8531973438999927" lon="-104.9021599456900020">
+        <tag k="hoot:id" v="-19"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8529619987900006" lon="-104.9018812445600020">
+        <tag k="hoot:id" v="-18"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8527188080299908" lon="-104.9018812445600020">
+        <tag k="hoot:id" v="-17"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8524965361700012" lon="-104.9018913180999988">
+        <tag k="hoot:id" v="-16"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8527397276999835" lon="-104.9022103133600012">
+        <tag k="hoot:id" v="-15"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8527423426599938" lon="-104.9016126169699845">
+        <tag k="hoot:id" v="-14"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533834540299949" lon="-104.9011869058099791">
+        <tag k="hoot:id" v="-13"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8535406220799899" lon="-104.9009803369300045">
+        <tag k="hoot:id" v="-12"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8530214305399895" lon="-104.8991636728299994">
+        <tag k="hoot:id" v="-11"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533542498300051" lon="-104.8982627651899975">
+        <tag k="hoot:id" v="-10"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8530240454899953" lon="-104.8989252658400062">
+        <tag k="hoot:id" v="-9"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8531970813699985" lon="-104.8984693340700005">
+        <tag k="hoot:id" v="-8"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8530188155899907" lon="-104.8986868588499988">
+        <tag k="hoot:id" v="-7"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8533586395899988" lon="-104.9007548879899900">
+        <tag k="hoot:id" v="-6"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8532030873300087" lon="-104.9006635760800066">
+        <tag k="hoot:id" v="-5"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8530119798000015" lon="-104.9006236271199981">
+        <tag k="hoot:id" v="-4"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8528253161399988" lon="-104.9006350411000028">
+        <tag k="hoot:id" v="-3"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8526119856400101" lon="-104.9006806970599825">
+        <tag k="hoot:id" v="-2"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8524253209299957" lon="-104.9007434739999951">
+        <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <way visible="true" id="-3186" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34"/>
         <nd ref="-85"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:id" v="-3186"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (17) Node(-34) v2: (50) Node(-85) score: 0.353553"/>
         <tag k="hoot:vertex:score" v="0.353553"/>
+        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3185" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34"/>
         <nd ref="-84"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:id" v="-3185"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (17) Node(-34) v2: (47) Node(-84) score: 0.25"/>
         <tag k="hoot:vertex:score" v="0.25"/>
+        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3184" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34"/>
         <nd ref="-83"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:id" v="-3184"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (17) Node(-34) v2: (46) Node(-83) score: 0.25"/>
         <tag k="hoot:vertex:score" v="0.25"/>
+        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3183" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34"/>
         <nd ref="-81"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:id" v="-3183"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (17) Node(-34) v2: (45) Node(-81) score: 0.353553"/>
         <tag k="hoot:vertex:score" v="0.353553"/>
+        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3182" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-32"/>
         <nd ref="-85"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3182"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (14) Node(-32) v2: (50) Node(-85) score: 0.5"/>
         <tag k="hoot:vertex:score" v="0.5"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3181" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-32"/>
         <nd ref="-84"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3181"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (14) Node(-32) v2: (47) Node(-84) score: 0.353553"/>
         <tag k="hoot:vertex:score" v="0.353553"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3180" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-83"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:id" v="-3180"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (22) Node(-30) v2: (46) Node(-83) score: 0.25"/>
         <tag k="hoot:vertex:score" v="0.25"/>
+        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3179" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-81"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:id" v="-3179"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (22) Node(-30) v2: (45) Node(-81) score: 0.353553"/>
         <tag k="hoot:vertex:score" v="0.353553"/>
+        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3178" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-76"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:id" v="-3178"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (22) Node(-30) v2: (49) Node(-76) score: 0.353553"/>
         <tag k="hoot:vertex:score" v="0.353553"/>
+        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3177" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-92"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:id" v="-3177"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (22) Node(-30) v2: (51) Node(-92) score: 0.5"/>
         <tag k="hoot:vertex:score" v="0.5"/>
+        <tag k="hoot:vertex:score12" v="0.25"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3176" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28"/>
         <nd ref="-83"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3176"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (18) Node(-28) v2: (46) Node(-83) score: 0.288675"/>
         <tag k="hoot:vertex:score" v="0.288675"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3175" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28"/>
         <nd ref="-77"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3175"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (18) Node(-28) v2: (44) Node(-77) score: 0.408248"/>
         <tag k="hoot:vertex:score" v="0.408248"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3174" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28"/>
         <nd ref="-76"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3174"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (18) Node(-28) v2: (49) Node(-76) score: 0.408248"/>
         <tag k="hoot:vertex:score" v="0.408248"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3173" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-26"/>
         <nd ref="-77"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3173"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (21) Node(-26) v2: (44) Node(-77) score: 0.5"/>
         <tag k="hoot:vertex:score" v="0.5"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3172" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-26"/>
         <nd ref="-87"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.333333"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3172"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (21) Node(-26) v2: (43) Node(-87) score: 0.408248"/>
         <tag k="hoot:vertex:score" v="0.408248"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.333333"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3171" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-24"/>
         <nd ref="-75"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3171"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (19) Node(-24) v2: (59) Node(-75) score: 0.288675"/>
         <tag k="hoot:vertex:score" v="0.288675"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3170" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-24"/>
         <nd ref="-75"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3170"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (19) Node(-24) v2: (58) Node(-75) score: 0.288675"/>
         <tag k="hoot:vertex:score" v="0.288675"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3169" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-24"/>
         <nd ref="-87"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.333333"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3169"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (19) Node(-24) v2: (43) Node(-87) score: 0.333333"/>
         <tag k="hoot:vertex:score" v="0.333333"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.333333"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3168" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-22"/>
         <nd ref="-75"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3168"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (20) Node(-22) v2: (59) Node(-75) score: 0.288675"/>
         <tag k="hoot:vertex:score" v="0.288675"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3167" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-22"/>
         <nd ref="-75"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3167"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (20) Node(-22) v2: (58) Node(-75) score: 0.288675"/>
         <tag k="hoot:vertex:score" v="0.288675"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3166" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-22"/>
         <nd ref="-71"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3166"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (20) Node(-22) v2: (52) Node(-71) score: 0.408248"/>
         <tag k="hoot:vertex:score" v="0.408248"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3165" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-59"/>
         <nd ref="-118"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3165"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (1) Node(-59) v2: (30) Node(-118) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3164" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-57"/>
         <nd ref="-116"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3164"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (3) Node(-57) v2: (31) Node(-116) score: 0.5"/>
         <tag k="hoot:vertex:score" v="0.5"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3163" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-57"/>
         <nd ref="-113"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3163"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (3) Node(-57) v2: (36) Node(-113) score: 0.5"/>
         <tag k="hoot:vertex:score" v="0.5"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3162" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>
         <nd ref="-84"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3162"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (15) Node(-20) v2: (47) Node(-84) score: 0.288675"/>
         <tag k="hoot:vertex:score" v="0.288675"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3161" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>
         <nd ref="-75"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3161"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (15) Node(-20) v2: (59) Node(-75) score: 0.288675"/>
         <tag k="hoot:vertex:score" v="0.288675"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3160" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>
         <nd ref="-75"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:id" v="-3160"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (15) Node(-20) v2: (58) Node(-75) score: 0.288675"/>
         <tag k="hoot:vertex:score" v="0.288675"/>
+        <tag k="hoot:vertex:score12" v="0.333333"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3159" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-55"/>
         <nd ref="-111"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3159"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (2) Node(-55) v2: (35) Node(-111) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3158" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-84"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.2"/>
+        <tag k="hoot:id" v="-3158"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (16) Node(-17) v2: (47) Node(-84) score: 0.223607"/>
         <tag k="hoot:vertex:score" v="0.223607"/>
+        <tag k="hoot:vertex:score12" v="0.2"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3157" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-83"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.2"/>
+        <tag k="hoot:id" v="-3157"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (16) Node(-17) v2: (46) Node(-83) score: 0.223607"/>
         <tag k="hoot:vertex:score" v="0.223607"/>
+        <tag k="hoot:vertex:score12" v="0.2"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3156" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-75"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.2"/>
+        <tag k="hoot:id" v="-3156"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (16) Node(-17) v2: (59) Node(-75) score: 0.223607"/>
         <tag k="hoot:vertex:score" v="0.223607"/>
+        <tag k="hoot:vertex:score12" v="0.2"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3155" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-75"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.25"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.2"/>
+        <tag k="hoot:id" v="-3155"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (16) Node(-17) v2: (58) Node(-75) score: 0.223607"/>
         <tag k="hoot:vertex:score" v="0.223607"/>
+        <tag k="hoot:vertex:score12" v="0.2"/>
+        <tag k="hoot:vertex:score21" v="0.25"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3154" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-87"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.333333"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.2"/>
+        <tag k="hoot:id" v="-3154"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (16) Node(-17) v2: (43) Node(-87) score: 0.258199"/>
         <tag k="hoot:vertex:score" v="0.258199"/>
+        <tag k="hoot:vertex:score12" v="0.2"/>
+        <tag k="hoot:vertex:score21" v="0.333333"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3153" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-54"/>
         <nd ref="-108"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3153"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (4) Node(-54) v2: (33) Node(-108) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3152" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-51"/>
         <nd ref="-110"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3152"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (5) Node(-51) v2: (34) Node(-110) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3151" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-50"/>
         <nd ref="-116"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3151"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (6) Node(-50) v2: (31) Node(-116) score: 0.5"/>
         <tag k="hoot:vertex:score" v="0.5"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3150" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-50"/>
         <nd ref="-113"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3150"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (6) Node(-50) v2: (36) Node(-113) score: 0.5"/>
         <tag k="hoot:vertex:score" v="0.5"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3149" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-49"/>
         <nd ref="-115"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3149"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (7) Node(-49) v2: (32) Node(-115) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3148" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-12"/>
         <nd ref="-71"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3148"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (23) Node(-12) v2: (52) Node(-71) score: 0.707107"/>
         <tag k="hoot:vertex:score" v="0.707107"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3147" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>
         <nd ref="-69"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3147"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (25) Node(-11) v2: (54) Node(-69) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3146" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-10"/>
         <nd ref="-67"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3146"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (24) Node(-10) v2: (53) Node(-67) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3145" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-46"/>
         <nd ref="-101"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3145"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (8) Node(-46) v2: (42) Node(-101) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3144" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-44"/>
         <nd ref="-102"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3144"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (9) Node(-44) v2: (37) Node(-102) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3143" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-66"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3143"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (0) Node(-7) v2: (29) Node(-66) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3142" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-43"/>
         <nd ref="-105"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3142"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (10) Node(-43) v2: (41) Node(-105) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3141" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-64"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3141"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (26) Node(-5) v2: (55) Node(-64) score: 0.707107"/>
         <tag k="hoot:vertex:score" v="0.707107"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3140" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-41"/>
         <nd ref="-96"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3140"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (11) Node(-41) v2: (38) Node(-96) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3139" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-40"/>
         <nd ref="-94"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3139"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (12) Node(-40) v2: (39) Node(-94) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3138" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-64"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3138"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (27) Node(-3) v2: (55) Node(-64) score: 0.5"/>
         <tag k="hoot:vertex:score" v="0.5"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3137" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-62"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3137"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (27) Node(-3) v2: (56) Node(-62) score: 0.5"/>
         <tag k="hoot:vertex:score" v="0.5"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3136" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-38"/>
         <nd ref="-97"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:id" v="-3136"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (13) Node(-38) v2: (40) Node(-97) score: 1"/>
         <tag k="hoot:vertex:score" v="1"/>
+        <tag k="hoot:vertex:score12" v="1"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3135" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-62"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="0.5"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3135"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (28) Node(-1) v2: (56) Node(-62) score: 0.5"/>
         <tag k="hoot:vertex:score" v="0.5"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="0.5"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3134" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1"/>
         <nd ref="-60"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:vertex:score21" v="1"/>
         <tag k="highway" v="footway"/>
-        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:id" v="-3134"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="hoot:vertex" v="v1: (28) Node(-1) v2: (57) Node(-60) score: 0.707107"/>
         <tag k="hoot:vertex:score" v="0.707107"/>
+        <tag k="hoot:vertex:score12" v="0.5"/>
+        <tag k="hoot:vertex:score21" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3133" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-35"/>
         <nd ref="-100"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="2b30ea3d"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (9) Node(-44) -- Way(-19) -- (12) Node(-40), _portion: 0 }, _end: { _e: (9) Node(-44) -- Way(-19) -- (12) Node(-40), _portion: 1 } }} s2: [1]{{ _start: { _e: (37) Node(-102) -- Way(-50) -- (39) Node(-94), _portion: 0 }, _end: { _e: (37) Node(-102) -- Way(-50) -- (39) Node(-94), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="2b30ea3d"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3133"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3132" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-56"/>
         <nd ref="-109"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="3110cf15"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (2) Node(-55) -- Way(-29) -- (3) Node(-57), _portion: 0 }, _end: { _e: (2) Node(-55) -- Way(-29) -- (3) Node(-57), _portion: 0.887049 } }} s2: [1]{{ _start: { _e: (35) Node(-111) -- Way(-55) -- (36) Node(-113), _portion: 0.115067 }, _end: { _e: (35) Node(-111) -- Way(-55) -- (36) Node(-113), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="3110cf15"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3132"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3131" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-24"/>
         <nd ref="-87"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="0.51077"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="d313d63a"/>
-        <tag k="hoot:edge:score12" v="0.519969"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (20) Node(-22) -- Way(-12) -- (19) Node(-24), _portion: 0.470866 }, _end: { _e: (20) Node(-22) -- Way(-12) -- (19) Node(-24), _portion: 1 } }, { _start: { _e: (19) Node(-24) -- Way(-11) -- (21) Node(-26), _portion: 0 }, _end: { _e: (19) Node(-24) -- Way(-11) -- (21) Node(-26), _portion: 1 } }} s2: [2]{{ _start: { _e: (59) Node(-75) -- Way(-43) -- (43) Node(-87), _portion: 0 }, _end: { _e: (59) Node(-75) -- Way(-43) -- (43) Node(-87), _portion: 1 } }, { _start: { _e: (43) Node(-87) -- Way(-48) -- (44) Node(-77), _portion: 0 }, _end: { _e: (43) Node(-87) -- Way(-48) -- (44) Node(-77), _portion: 0.564986 } }} score: 0.515349"/>
+        <tag k="hoot:edge:id" v="d313d63a"/>
         <tag k="hoot:edge:score" v="0.515349"/>
+        <tag k="hoot:edge:score12" v="0.519969"/>
+        <tag k="hoot:edge:score21" v="0.51077"/>
+        <tag k="hoot:id" v="-3131"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3130" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-83"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="0.335745"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="3f0f649e"/>
-        <tag k="hoot:edge:score12" v="0.338098"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (15) Node(-20) -- Way(-17) -- (16) Node(-17), _portion: 0.462079 }, _end: { _e: (15) Node(-20) -- Way(-17) -- (16) Node(-17), _portion: 1 } }, { _start: { _e: (16) Node(-17) -- Way(-15) -- (18) Node(-28), _portion: 0 }, _end: { _e: (16) Node(-17) -- Way(-15) -- (18) Node(-28), _portion: 1 } }} s2: [2]{{ _start: { _e: (47) Node(-84) -- Way(-45) -- (46) Node(-83), _portion: 0 }, _end: { _e: (47) Node(-84) -- Way(-45) -- (46) Node(-83), _portion: 1 } }, { _start: { _e: (46) Node(-83) -- Way(-41) -- (49) Node(-76), _portion: 0 }, _end: { _e: (46) Node(-83) -- Way(-41) -- (49) Node(-76), _portion: 0.540952 } }} score: 0.336919"/>
+        <tag k="hoot:edge:id" v="3f0f649e"/>
         <tag k="hoot:edge:score" v="0.336919"/>
+        <tag k="hoot:edge:score12" v="0.338098"/>
+        <tag k="hoot:edge:score21" v="0.335745"/>
+        <tag k="hoot:id" v="-3130"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3129" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-66"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="517ddca2"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (0) Node(-7) -- Way(-30) -- (1) Node(-59), _portion: 0.598676 }, _end: { _e: (0) Node(-7) -- Way(-30) -- (1) Node(-59), _portion: 0 } }, { _start: { _e: (0) Node(-7) -- Way(-5) -- (24) Node(-10), _portion: 0 }, _end: { _e: (0) Node(-7) -- Way(-5) -- (24) Node(-10), _portion: 1 } }} s2: [2]{{ _start: { _e: (29) Node(-66) -- Way(-60) -- (30) Node(-118), _portion: 1 }, _end: { _e: (29) Node(-66) -- Way(-60) -- (30) Node(-118), _portion: 0 } }, { _start: { _e: (29) Node(-66) -- Way(-35) -- (53) Node(-67), _portion: 0 }, _end: { _e: (29) Node(-66) -- Way(-35) -- (53) Node(-67), _portion: 0.445494 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="517ddca2"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3129"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3128" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-53"/>
         <nd ref="-107"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="41d95e6f"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (4) Node(-54) -- Way(-28) -- (3) Node(-57), _portion: 0.168641 }, _end: { _e: (4) Node(-54) -- Way(-28) -- (3) Node(-57), _portion: 1 } }} s2: [1]{{ _start: { _e: (33) Node(-108) -- Way(-56) -- (36) Node(-113), _portion: 0 }, _end: { _e: (33) Node(-108) -- Way(-56) -- (36) Node(-113), _portion: 0.814751 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="41d95e6f"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3128"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3127" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-45"/>
         <nd ref="-99"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="42aa2e2f"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (8) Node(-46) -- Way(-24) -- (9) Node(-44), _portion: 0 }, _end: { _e: (8) Node(-46) -- Way(-24) -- (9) Node(-44), _portion: 1 } }} s2: [1]{{ _start: { _e: (42) Node(-101) -- Way(-49) -- (37) Node(-102), _portion: 0 }, _end: { _e: (42) Node(-101) -- Way(-49) -- (37) Node(-102), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="42aa2e2f"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3127"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3126" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
         <nd ref="-79"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="40325aa7"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [3]{{ _start: { _e: (14) Node(-32) -- Way(-18) -- (15) Node(-20), _portion: 0 }, _end: { _e: (14) Node(-32) -- Way(-18) -- (15) Node(-20), _portion: 1 } }, { _start: { _e: (15) Node(-20) -- Way(-13) -- (20) Node(-22), _portion: 0 }, _end: { _e: (15) Node(-20) -- Way(-13) -- (20) Node(-22), _portion: 1 } }, { _start: { _e: (20) Node(-22) -- Way(-6) -- (23) Node(-12), _portion: 0 }, _end: { _e: (20) Node(-22) -- Way(-6) -- (23) Node(-12), _portion: 0.498552 } }} s2: [3]{{ _start: { _e: (50) Node(-85) -- Way(-38) -- (47) Node(-84), _portion: 0.363502 }, _end: { _e: (50) Node(-85) -- Way(-38) -- (47) Node(-84), _portion: 1 } }, { _start: { _e: (47) Node(-84) -- Way(-46) -- (58) Node(-75), _portion: 0 }, _end: { _e: (47) Node(-84) -- Way(-46) -- (58) Node(-75), _portion: 1 } }, { _start: { _e: (58) Node(-75) -- Way(-36) -- (52) Node(-71), _portion: 0 }, _end: { _e: (58) Node(-75) -- Way(-36) -- (52) Node(-71), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="40325aa7"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3126"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3125" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>
         <nd ref="-95"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="f5f15d58"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (12) Node(-40) -- Way(-21) -- (11) Node(-41), _portion: 0 }, _end: { _e: (12) Node(-40) -- Way(-21) -- (11) Node(-41), _portion: 1 } }} s2: [1]{{ _start: { _e: (39) Node(-94) -- Way(-52) -- (38) Node(-96), _portion: 0 }, _end: { _e: (39) Node(-94) -- Way(-52) -- (38) Node(-96), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="f5f15d58"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3125"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3124" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-52"/>
         <nd ref="-106"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="8da1066a"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (4) Node(-54) -- Way(-27) -- (5) Node(-51), _portion: 0.103857 }, _end: { _e: (4) Node(-54) -- Way(-27) -- (5) Node(-51), _portion: 1 } }} s2: [1]{{ _start: { _e: (33) Node(-108) -- Way(-58) -- (34) Node(-110), _portion: 0 }, _end: { _e: (33) Node(-108) -- Way(-58) -- (34) Node(-110), _portion: 0.892651 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="8da1066a"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3124"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3123" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="-63"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="ce3a4095"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [3]{{ _start: { _e: (23) Node(-12) -- Way(-3) -- (26) Node(-5), _portion: 0 }, _end: { _e: (23) Node(-12) -- Way(-3) -- (26) Node(-5), _portion: 1 } }, { _start: { _e: (26) Node(-5) -- Way(-2) -- (27) Node(-3), _portion: 0 }, _end: { _e: (26) Node(-5) -- Way(-2) -- (27) Node(-3), _portion: 1 } }, { _start: { _e: (27) Node(-3) -- Way(-1) -- (28) Node(-1), _portion: 0 }, _end: { _e: (27) Node(-3) -- Way(-1) -- (28) Node(-1), _portion: 1 } }} s2: [3]{{ _start: { _e: (52) Node(-71) -- Way(-33) -- (55) Node(-64), _portion: 0 }, _end: { _e: (52) Node(-71) -- Way(-33) -- (55) Node(-64), _portion: 1 } }, { _start: { _e: (55) Node(-64) -- Way(-32) -- (56) Node(-62), _portion: 0 }, _end: { _e: (55) Node(-64) -- Way(-32) -- (56) Node(-62), _portion: 1 } }, { _start: { _e: (56) Node(-62) -- Way(-31) -- (57) Node(-60), _portion: 0 }, _end: { _e: (56) Node(-62) -- Way(-31) -- (57) Node(-60), _portion: 0.48117 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="ce3a4095"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3123"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3122" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-39"/>
         <nd ref="-104"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="293bfe8a"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (12) Node(-40) -- Way(-22) -- (13) Node(-38), _portion: 0 }, _end: { _e: (12) Node(-40) -- Way(-22) -- (13) Node(-38), _portion: 1 } }} s2: [1]{{ _start: { _e: (39) Node(-94) -- Way(-53) -- (40) Node(-97), _portion: 0 }, _end: { _e: (39) Node(-94) -- Way(-53) -- (40) Node(-97), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="293bfe8a"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3122"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3121" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28"/>
         <nd ref="-76"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="87105e8d"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (21) Node(-26) -- Way(-10) -- (18) Node(-28), _portion: 0.337314 }, _end: { _e: (21) Node(-26) -- Way(-10) -- (18) Node(-28), _portion: 1 } }, { _start: { _e: (18) Node(-28) -- Way(-9) -- (22) Node(-30), _portion: 0 }, _end: { _e: (18) Node(-28) -- Way(-9) -- (22) Node(-30), _portion: 1 } }} s2: [2]{{ _start: { _e: (44) Node(-77) -- Way(-44) -- (49) Node(-76), _portion: 0 }, _end: { _e: (44) Node(-77) -- Way(-44) -- (49) Node(-76), _portion: 1 } }, { _start: { _e: (49) Node(-76) -- Way(-39) -- (51) Node(-92), _portion: 0 }, _end: { _e: (49) Node(-76) -- Way(-39) -- (51) Node(-92), _portion: 0.581006 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="87105e8d"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3121"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3120" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-48"/>
         <nd ref="-114"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="54adcc4c"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (6) Node(-50) -- Way(-26) -- (7) Node(-49), _portion: 0.107279 }, _end: { _e: (6) Node(-50) -- Way(-26) -- (7) Node(-49), _portion: 1 } }} s2: [1]{{ _start: { _e: (31) Node(-116) -- Way(-59) -- (32) Node(-115), _portion: 0 }, _end: { _e: (31) Node(-116) -- Way(-59) -- (32) Node(-115), _portion: 0.890337 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="54adcc4c"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3120"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3119" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-47"/>
         <nd ref="-112"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="8cb60eea"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (5) Node(-51) -- Way(-25) -- (2) Node(-55), _portion: 0.164631 }, _end: { _e: (5) Node(-51) -- Way(-25) -- (2) Node(-55), _portion: 1 } }} s2: [1]{{ _start: { _e: (34) Node(-110) -- Way(-57) -- (35) Node(-111), _portion: 0 }, _end: { _e: (34) Node(-110) -- Way(-57) -- (35) Node(-111), _portion: 0.837387 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="8cb60eea"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3119"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3118" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-87"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="0.327341"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="6e27e4a8"/>
-        <tag k="hoot:edge:score12" v="0.322083"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (15) Node(-20) -- Way(-17) -- (16) Node(-17), _portion: 0.456083 }, _end: { _e: (15) Node(-20) -- Way(-17) -- (16) Node(-17), _portion: 1 } }, { _start: { _e: (16) Node(-17) -- Way(-15) -- (18) Node(-28), _portion: 0 }, _end: { _e: (16) Node(-17) -- Way(-15) -- (18) Node(-28), _portion: 1 } }} s2: [2]{{ _start: { _e: (59) Node(-75) -- Way(-43) -- (43) Node(-87), _portion: 0 }, _end: { _e: (59) Node(-75) -- Way(-43) -- (43) Node(-87), _portion: 1 } }, { _start: { _e: (43) Node(-87) -- Way(-48) -- (44) Node(-77), _portion: 0 }, _end: { _e: (43) Node(-87) -- Way(-48) -- (44) Node(-77), _portion: 0.567967 } }} score: 0.324701"/>
+        <tag k="hoot:edge:id" v="6e27e4a8"/>
         <tag k="hoot:edge:score" v="0.324701"/>
+        <tag k="hoot:edge:score12" v="0.322083"/>
+        <tag k="hoot:edge:score21" v="0.327341"/>
+        <tag k="hoot:id" v="-3118"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3117" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36"/>
         <nd ref="-98"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="c61345f6"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (9) Node(-44) -- Way(-20) -- (11) Node(-41), _portion: 0 }, _end: { _e: (9) Node(-44) -- Way(-20) -- (11) Node(-41), _portion: 1 } }} s2: [1]{{ _start: { _e: (37) Node(-102) -- Way(-54) -- (38) Node(-96), _portion: 0 }, _end: { _e: (37) Node(-102) -- Way(-54) -- (38) Node(-96), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="c61345f6"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3117"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3116" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-42"/>
         <nd ref="-103"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="2a8cf258"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (10) Node(-43) -- Way(-23) -- (11) Node(-41), _portion: 0 }, _end: { _e: (10) Node(-43) -- Way(-23) -- (11) Node(-41), _portion: 1 } }} s2: [1]{{ _start: { _e: (41) Node(-105) -- Way(-51) -- (38) Node(-96), _portion: 0 }, _end: { _e: (41) Node(-105) -- Way(-51) -- (38) Node(-96), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="2a8cf258"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-3116"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3115" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34"/>
         <nd ref="-83"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="0.327341"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="e76ea75b"/>
-        <tag k="hoot:edge:score12" v="0.322083"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (22) Node(-30) -- Way(-8) -- (17) Node(-34), _portion: 0 }, _end: { _e: (22) Node(-30) -- Way(-8) -- (17) Node(-34), _portion: 1 } }, { _start: { _e: (17) Node(-34) -- Way(-7) -- (14) Node(-32), _portion: 0 }, _end: { _e: (17) Node(-34) -- Way(-7) -- (14) Node(-32), _portion: 0.505639 } }} s2: [2]{{ _start: { _e: (46) Node(-83) -- Way(-41) -- (49) Node(-76), _portion: 0.566923 }, _end: { _e: (46) Node(-83) -- Way(-41) -- (49) Node(-76), _portion: 0 } }, { _start: { _e: (47) Node(-84) -- Way(-45) -- (46) Node(-83), _portion: 1 }, _end: { _e: (47) Node(-84) -- Way(-45) -- (46) Node(-83), _portion: 0 } }} score: 0.324701"/>
+        <tag k="hoot:edge:id" v="e76ea75b"/>
         <tag k="hoot:edge:score" v="0.324701"/>
+        <tag k="hoot:edge:score12" v="0.322083"/>
+        <tag k="hoot:edge:score21" v="0.327341"/>
+        <tag k="hoot:id" v="-3115"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-3114" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34"/>
         <nd ref="-81"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="0.51077"/>
         <tag k="highway" v="cycleway"/>
-        <tag k="hoot:edge:id" v="c6e9c3ad"/>
-        <tag k="hoot:edge:score12" v="0.519969"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (22) Node(-30) -- Way(-8) -- (17) Node(-34), _portion: 0 }, _end: { _e: (22) Node(-30) -- Way(-8) -- (17) Node(-34), _portion: 1 } }, { _start: { _e: (17) Node(-34) -- Way(-7) -- (14) Node(-32), _portion: 0 }, _end: { _e: (17) Node(-34) -- Way(-7) -- (14) Node(-32), _portion: 0.513833 } }} s2: [2]{{ _start: { _e: (51) Node(-92) -- Way(-37) -- (45) Node(-81), _portion: 0.447654 }, _end: { _e: (51) Node(-92) -- Way(-37) -- (45) Node(-81), _portion: 1 } }, { _start: { _e: (45) Node(-81) -- Way(-42) -- (50) Node(-85), _portion: 0 }, _end: { _e: (45) Node(-81) -- Way(-42) -- (50) Node(-85), _portion: 1 } }} score: 0.515349"/>
+        <tag k="hoot:edge:id" v="c6e9c3ad"/>
         <tag k="hoot:edge:score" v="0.515349"/>
+        <tag k="hoot:edge:score12" v="0.519969"/>
+        <tag k="hoot:edge:score21" v="0.51077"/>
+        <tag k="hoot:id" v="-3114"/>
+        <tag k="hoot:status" v="0"/>
+        <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-66"/>
         <nd ref="-117"/>
         <nd ref="-118"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2b"/>
         <tag k="error:circular" v="60"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-60"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2b"/>
     </way>
     <way visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-116"/>
         <nd ref="-114"/>
         <nd ref="-115"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2k"/>
         <tag k="error:circular" v="35"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-59"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2k"/>
     </way>
     <way visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-108"/>
         <nd ref="-106"/>
         <nd ref="-110"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2h"/>
         <tag k="error:circular" v="35"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-58"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2h"/>
     </way>
     <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-110"/>
         <nd ref="-112"/>
         <nd ref="-111"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2i"/>
         <tag k="error:circular" v="35"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-57"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2i"/>
     </way>
     <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-108"/>
         <nd ref="-107"/>
         <nd ref="-113"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2g"/>
         <tag k="error:circular" v="35"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-56"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2g"/>
     </way>
     <way visible="true" id="-55" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-111"/>
         <nd ref="-109"/>
         <nd ref="-113"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2j"/>
         <tag k="error:circular" v="35"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-55"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2j"/>
     </way>
     <way visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-102"/>
         <nd ref="-98"/>
         <nd ref="-96"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2e"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-54"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2e"/>
     </way>
     <way visible="true" id="-53" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-94"/>
         <nd ref="-104"/>
         <nd ref="-97"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2c"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-53"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2c"/>
     </way>
     <way visible="true" id="-52" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-94"/>
         <nd ref="-95"/>
         <nd ref="-96"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2b"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-52"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2b"/>
     </way>
     <way visible="true" id="-51" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-105"/>
         <nd ref="-103"/>
         <nd ref="-96"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2a"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-51"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2a"/>
     </way>
     <way visible="true" id="-50" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-102"/>
         <nd ref="-100"/>
         <nd ref="-94"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2d"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-50"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2d"/>
     </way>
     <way visible="true" id="-49" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-101"/>
         <nd ref="-99"/>
         <nd ref="-102"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2f"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-49"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2f"/>
     </way>
     <way visible="true" id="-48" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-87"/>
         <nd ref="-82"/>
         <nd ref="-77"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2a"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-48"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2a"/>
     </way>
     <way visible="true" id="-47" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-81"/>
         <nd ref="-90"/>
         <nd ref="-83"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2j"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-47"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2j"/>
     </way>
     <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-84"/>
         <nd ref="-79"/>
         <nd ref="-75"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2g"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-46"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2g"/>
     </way>
     <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-84"/>
         <nd ref="-78"/>
         <nd ref="-83"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2k"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-45"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2k"/>
     </way>
     <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-77"/>
         <nd ref="-74"/>
         <nd ref="-76"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2b"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-44"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2b"/>
     </way>
     <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-75"/>
         <nd ref="-93"/>
         <nd ref="-87"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2p"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-43"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2p"/>
     </way>
     <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-81"/>
         <nd ref="-91"/>
         <nd ref="-85"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2e"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-42"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2e"/>
     </way>
     <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-83"/>
         <nd ref="-89"/>
         <nd ref="-76"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2i"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-41"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2i"/>
     </way>
     <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-83"/>
         <nd ref="-88"/>
         <nd ref="-87"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2h"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-40"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2h"/>
     </way>
     <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-76"/>
         <nd ref="-73"/>
         <nd ref="-92"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2c"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-39"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2c"/>
     </way>
     <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-85"/>
         <nd ref="-80"/>
         <nd ref="-84"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2f"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-38"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2f"/>
     </way>
     <way visible="true" id="-37" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-92"/>
         <nd ref="-86"/>
         <nd ref="-81"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2d"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-37"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2d"/>
     </way>
     <way visible="true" id="-36" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-75"/>
         <nd ref="-72"/>
         <nd ref="-71"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2l"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-36"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2l"/>
     </way>
     <way visible="true" id="-35" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-66"/>
         <nd ref="-68"/>
         <nd ref="-67"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2a"/>
         <tag k="error:circular" v="60"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-35"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2a"/>
     </way>
     <way visible="true" id="-34" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-69"/>
         <nd ref="-70"/>
         <nd ref="-66"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2c"/>
         <tag k="error:circular" v="60"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-34"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2c"/>
     </way>
     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-71"/>
         <nd ref="-65"/>
         <nd ref="-64"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2m"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-33"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2m"/>
     </way>
     <way visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-64"/>
         <nd ref="-63"/>
         <nd ref="-62"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2n"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-32"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2n"/>
     </way>
     <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-62"/>
         <nd ref="-61"/>
         <nd ref="-60"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
-        <tag k="note" v="2o"/>
         <tag k="error:circular" v="40"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-31"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="2o"/>
     </way>
     <way visible="true" id="-30" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-58"/>
         <nd ref="-59"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1b"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-30"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1b"/>
     </way>
     <way visible="true" id="-29" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-55"/>
         <nd ref="-56"/>
         <nd ref="-57"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1j"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-29"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1j"/>
     </way>
     <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-54"/>
         <nd ref="-53"/>
         <nd ref="-57"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1g"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-28"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1g"/>
     </way>
     <way visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-54"/>
         <nd ref="-52"/>
         <nd ref="-51"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1h"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-27"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1h"/>
     </way>
     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-50"/>
         <nd ref="-48"/>
         <nd ref="-49"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1k"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-26"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1k"/>
     </way>
     <way visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-51"/>
         <nd ref="-47"/>
         <nd ref="-55"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1i"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-25"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1i"/>
     </way>
     <way visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-46"/>
         <nd ref="-45"/>
         <nd ref="-44"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1f"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-24"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1f"/>
     </way>
     <way visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-43"/>
         <nd ref="-42"/>
         <nd ref="-41"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1a"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-23"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1a"/>
     </way>
     <way visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-40"/>
         <nd ref="-39"/>
         <nd ref="-38"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1c"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-22"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1c"/>
     </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-40"/>
         <nd ref="-37"/>
         <nd ref="-41"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1b"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-21"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1b"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-44"/>
         <nd ref="-36"/>
         <nd ref="-41"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1e"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-20"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1e"/>
     </way>
     <way visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-44"/>
         <nd ref="-35"/>
         <nd ref="-40"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1d"/>
         <tag k="error:circular" v="10"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-19"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1d"/>
     </way>
     <way visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-32"/>
         <nd ref="-19"/>
         <nd ref="-20"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1f"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-18"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1f"/>
     </way>
     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>
         <nd ref="-18"/>
         <nd ref="-17"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1k"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-17"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1k"/>
     </way>
     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34"/>
         <nd ref="-15"/>
         <nd ref="-17"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1j"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-16"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1j"/>
     </way>
     <way visible="true" id="-15" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-16"/>
         <nd ref="-28"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1i"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-15"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1i"/>
     </way>
     <way visible="true" id="-14" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
         <nd ref="-14"/>
         <nd ref="-24"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1h"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-14"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1h"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>
         <nd ref="-21"/>
         <nd ref="-22"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1g"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-13"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1g"/>
     </way>
     <way visible="true" id="-12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-22"/>
         <nd ref="-23"/>
         <nd ref="-24"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1p"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-12"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1p"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-24"/>
         <nd ref="-25"/>
         <nd ref="-26"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1a"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-11"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1a"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-26"/>
         <nd ref="-27"/>
         <nd ref="-28"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1b"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-10"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1b"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28"/>
         <nd ref="-29"/>
         <nd ref="-30"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1c"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-9"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1c"/>
     </way>
     <way visible="true" id="-8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="-31"/>
         <nd ref="-34"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1d"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-8"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1d"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-34"/>
         <nd ref="-33"/>
         <nd ref="-32"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1e"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-7"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1e"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-22"/>
         <nd ref="-13"/>
         <nd ref="-12"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1l"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-6"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1l"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
         <nd ref="-8"/>
         <nd ref="-10"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1a"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-5"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1a"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-11"/>
         <nd ref="-9"/>
         <nd ref="-7"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1c"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-4"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1c"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-12"/>
         <nd ref="-6"/>
         <nd ref="-5"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1m"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-3"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1m"/>
     </way>
     <way visible="true" id="-2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
         <nd ref="-4"/>
         <nd ref="-3"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1n"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-2"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1n"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-3"/>
         <nd ref="-2"/>
         <nd ref="-1"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="primary"/>
-        <tag k="note" v="1o"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-1"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="note" v="1o"/>
     </way>
     <relation visible="true" id="-586" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3133" role="visual"/>
         <member type="way" ref="-19" role="string1"/>
         <member type="way" ref="-50" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="2b30ea3d"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (9) Node(-44) -- Way(-19) -- (12) Node(-40), _portion: 0 }, _end: { _e: (9) Node(-44) -- Way(-19) -- (12) Node(-40), _portion: 1 } }} s2: [1]{{ _start: { _e: (37) Node(-102) -- Way(-50) -- (39) Node(-94), _portion: 0 }, _end: { _e: (37) Node(-102) -- Way(-50) -- (39) Node(-94), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="2b30ea3d"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-586"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-585" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3132" role="visual"/>
         <member type="way" ref="-29" role="string1"/>
         <member type="way" ref="-55" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="3110cf15"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (2) Node(-55) -- Way(-29) -- (3) Node(-57), _portion: 0 }, _end: { _e: (2) Node(-55) -- Way(-29) -- (3) Node(-57), _portion: 0.887049 } }} s2: [1]{{ _start: { _e: (35) Node(-111) -- Way(-55) -- (36) Node(-113), _portion: 0.115067 }, _end: { _e: (35) Node(-111) -- Way(-55) -- (36) Node(-113), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="3110cf15"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-585"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-584" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1675,12 +2061,13 @@
         <member type="way" ref="-11" role="string1"/>
         <member type="way" ref="-43" role="string2"/>
         <member type="way" ref="-48" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="0.51077"/>
-        <tag k="hoot:edge:id" v="d313d63a"/>
-        <tag k="hoot:edge:score12" v="0.519969"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (20) Node(-22) -- Way(-12) -- (19) Node(-24), _portion: 0.470866 }, _end: { _e: (20) Node(-22) -- Way(-12) -- (19) Node(-24), _portion: 1 } }, { _start: { _e: (19) Node(-24) -- Way(-11) -- (21) Node(-26), _portion: 0 }, _end: { _e: (19) Node(-24) -- Way(-11) -- (21) Node(-26), _portion: 1 } }} s2: [2]{{ _start: { _e: (59) Node(-75) -- Way(-43) -- (43) Node(-87), _portion: 0 }, _end: { _e: (59) Node(-75) -- Way(-43) -- (43) Node(-87), _portion: 1 } }, { _start: { _e: (43) Node(-87) -- Way(-48) -- (44) Node(-77), _portion: 0 }, _end: { _e: (43) Node(-87) -- Way(-48) -- (44) Node(-77), _portion: 0.564986 } }} score: 0.515349"/>
+        <tag k="hoot:edge:id" v="d313d63a"/>
         <tag k="hoot:edge:score" v="0.515349"/>
+        <tag k="hoot:edge:score12" v="0.519969"/>
+        <tag k="hoot:edge:score21" v="0.51077"/>
+        <tag k="hoot:id" v="-584"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-583" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1689,12 +2076,13 @@
         <member type="way" ref="-15" role="string1"/>
         <member type="way" ref="-45" role="string2"/>
         <member type="way" ref="-41" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="0.335745"/>
-        <tag k="hoot:edge:id" v="3f0f649e"/>
-        <tag k="hoot:edge:score12" v="0.338098"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (15) Node(-20) -- Way(-17) -- (16) Node(-17), _portion: 0.462079 }, _end: { _e: (15) Node(-20) -- Way(-17) -- (16) Node(-17), _portion: 1 } }, { _start: { _e: (16) Node(-17) -- Way(-15) -- (18) Node(-28), _portion: 0 }, _end: { _e: (16) Node(-17) -- Way(-15) -- (18) Node(-28), _portion: 1 } }} s2: [2]{{ _start: { _e: (47) Node(-84) -- Way(-45) -- (46) Node(-83), _portion: 0 }, _end: { _e: (47) Node(-84) -- Way(-45) -- (46) Node(-83), _portion: 1 } }, { _start: { _e: (46) Node(-83) -- Way(-41) -- (49) Node(-76), _portion: 0 }, _end: { _e: (46) Node(-83) -- Way(-41) -- (49) Node(-76), _portion: 0.540952 } }} score: 0.336919"/>
+        <tag k="hoot:edge:id" v="3f0f649e"/>
         <tag k="hoot:edge:score" v="0.336919"/>
+        <tag k="hoot:edge:score12" v="0.338098"/>
+        <tag k="hoot:edge:score21" v="0.335745"/>
+        <tag k="hoot:id" v="-583"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-582" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1703,36 +2091,39 @@
         <member type="way" ref="-5" role="string1"/>
         <member type="way" ref="-60" role="string2"/>
         <member type="way" ref="-35" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="517ddca2"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (0) Node(-7) -- Way(-30) -- (1) Node(-59), _portion: 0.598676 }, _end: { _e: (0) Node(-7) -- Way(-30) -- (1) Node(-59), _portion: 0 } }, { _start: { _e: (0) Node(-7) -- Way(-5) -- (24) Node(-10), _portion: 0 }, _end: { _e: (0) Node(-7) -- Way(-5) -- (24) Node(-10), _portion: 1 } }} s2: [2]{{ _start: { _e: (29) Node(-66) -- Way(-60) -- (30) Node(-118), _portion: 1 }, _end: { _e: (29) Node(-66) -- Way(-60) -- (30) Node(-118), _portion: 0 } }, { _start: { _e: (29) Node(-66) -- Way(-35) -- (53) Node(-67), _portion: 0 }, _end: { _e: (29) Node(-66) -- Way(-35) -- (53) Node(-67), _portion: 0.445494 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="517ddca2"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-582"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-581" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3128" role="visual"/>
         <member type="way" ref="-28" role="string1"/>
         <member type="way" ref="-56" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="41d95e6f"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (4) Node(-54) -- Way(-28) -- (3) Node(-57), _portion: 0.168641 }, _end: { _e: (4) Node(-54) -- Way(-28) -- (3) Node(-57), _portion: 1 } }} s2: [1]{{ _start: { _e: (33) Node(-108) -- Way(-56) -- (36) Node(-113), _portion: 0 }, _end: { _e: (33) Node(-108) -- Way(-56) -- (36) Node(-113), _portion: 0.814751 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="41d95e6f"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-581"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-580" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3127" role="visual"/>
         <member type="way" ref="-24" role="string1"/>
         <member type="way" ref="-49" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="42aa2e2f"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (8) Node(-46) -- Way(-24) -- (9) Node(-44), _portion: 0 }, _end: { _e: (8) Node(-46) -- Way(-24) -- (9) Node(-44), _portion: 1 } }} s2: [1]{{ _start: { _e: (42) Node(-101) -- Way(-49) -- (37) Node(-102), _portion: 0 }, _end: { _e: (42) Node(-101) -- Way(-49) -- (37) Node(-102), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="42aa2e2f"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-580"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-579" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1743,36 +2134,39 @@
         <member type="way" ref="-38" role="string2"/>
         <member type="way" ref="-46" role="string2"/>
         <member type="way" ref="-36" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="40325aa7"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [3]{{ _start: { _e: (14) Node(-32) -- Way(-18) -- (15) Node(-20), _portion: 0 }, _end: { _e: (14) Node(-32) -- Way(-18) -- (15) Node(-20), _portion: 1 } }, { _start: { _e: (15) Node(-20) -- Way(-13) -- (20) Node(-22), _portion: 0 }, _end: { _e: (15) Node(-20) -- Way(-13) -- (20) Node(-22), _portion: 1 } }, { _start: { _e: (20) Node(-22) -- Way(-6) -- (23) Node(-12), _portion: 0 }, _end: { _e: (20) Node(-22) -- Way(-6) -- (23) Node(-12), _portion: 0.498552 } }} s2: [3]{{ _start: { _e: (50) Node(-85) -- Way(-38) -- (47) Node(-84), _portion: 0.363502 }, _end: { _e: (50) Node(-85) -- Way(-38) -- (47) Node(-84), _portion: 1 } }, { _start: { _e: (47) Node(-84) -- Way(-46) -- (58) Node(-75), _portion: 0 }, _end: { _e: (47) Node(-84) -- Way(-46) -- (58) Node(-75), _portion: 1 } }, { _start: { _e: (58) Node(-75) -- Way(-36) -- (52) Node(-71), _portion: 0 }, _end: { _e: (58) Node(-75) -- Way(-36) -- (52) Node(-71), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="40325aa7"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-579"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-578" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3125" role="visual"/>
         <member type="way" ref="-21" role="string1"/>
         <member type="way" ref="-52" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="f5f15d58"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (12) Node(-40) -- Way(-21) -- (11) Node(-41), _portion: 0 }, _end: { _e: (12) Node(-40) -- Way(-21) -- (11) Node(-41), _portion: 1 } }} s2: [1]{{ _start: { _e: (39) Node(-94) -- Way(-52) -- (38) Node(-96), _portion: 0 }, _end: { _e: (39) Node(-94) -- Way(-52) -- (38) Node(-96), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="f5f15d58"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-578"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-577" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3124" role="visual"/>
         <member type="way" ref="-27" role="string1"/>
         <member type="way" ref="-58" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="8da1066a"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (4) Node(-54) -- Way(-27) -- (5) Node(-51), _portion: 0.103857 }, _end: { _e: (4) Node(-54) -- Way(-27) -- (5) Node(-51), _portion: 1 } }} s2: [1]{{ _start: { _e: (33) Node(-108) -- Way(-58) -- (34) Node(-110), _portion: 0 }, _end: { _e: (33) Node(-108) -- Way(-58) -- (34) Node(-110), _portion: 0.892651 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="8da1066a"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-577"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-576" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1783,24 +2177,26 @@
         <member type="way" ref="-33" role="string2"/>
         <member type="way" ref="-32" role="string2"/>
         <member type="way" ref="-31" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="ce3a4095"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [3]{{ _start: { _e: (23) Node(-12) -- Way(-3) -- (26) Node(-5), _portion: 0 }, _end: { _e: (23) Node(-12) -- Way(-3) -- (26) Node(-5), _portion: 1 } }, { _start: { _e: (26) Node(-5) -- Way(-2) -- (27) Node(-3), _portion: 0 }, _end: { _e: (26) Node(-5) -- Way(-2) -- (27) Node(-3), _portion: 1 } }, { _start: { _e: (27) Node(-3) -- Way(-1) -- (28) Node(-1), _portion: 0 }, _end: { _e: (27) Node(-3) -- Way(-1) -- (28) Node(-1), _portion: 1 } }} s2: [3]{{ _start: { _e: (52) Node(-71) -- Way(-33) -- (55) Node(-64), _portion: 0 }, _end: { _e: (52) Node(-71) -- Way(-33) -- (55) Node(-64), _portion: 1 } }, { _start: { _e: (55) Node(-64) -- Way(-32) -- (56) Node(-62), _portion: 0 }, _end: { _e: (55) Node(-64) -- Way(-32) -- (56) Node(-62), _portion: 1 } }, { _start: { _e: (56) Node(-62) -- Way(-31) -- (57) Node(-60), _portion: 0 }, _end: { _e: (56) Node(-62) -- Way(-31) -- (57) Node(-60), _portion: 0.48117 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="ce3a4095"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-576"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-575" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3122" role="visual"/>
         <member type="way" ref="-22" role="string1"/>
         <member type="way" ref="-53" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="293bfe8a"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (12) Node(-40) -- Way(-22) -- (13) Node(-38), _portion: 0 }, _end: { _e: (12) Node(-40) -- Way(-22) -- (13) Node(-38), _portion: 1 } }} s2: [1]{{ _start: { _e: (39) Node(-94) -- Way(-53) -- (40) Node(-97), _portion: 0 }, _end: { _e: (39) Node(-94) -- Way(-53) -- (40) Node(-97), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="293bfe8a"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-575"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-574" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1809,36 +2205,39 @@
         <member type="way" ref="-9" role="string1"/>
         <member type="way" ref="-44" role="string2"/>
         <member type="way" ref="-39" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="87105e8d"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (21) Node(-26) -- Way(-10) -- (18) Node(-28), _portion: 0.337314 }, _end: { _e: (21) Node(-26) -- Way(-10) -- (18) Node(-28), _portion: 1 } }, { _start: { _e: (18) Node(-28) -- Way(-9) -- (22) Node(-30), _portion: 0 }, _end: { _e: (18) Node(-28) -- Way(-9) -- (22) Node(-30), _portion: 1 } }} s2: [2]{{ _start: { _e: (44) Node(-77) -- Way(-44) -- (49) Node(-76), _portion: 0 }, _end: { _e: (44) Node(-77) -- Way(-44) -- (49) Node(-76), _portion: 1 } }, { _start: { _e: (49) Node(-76) -- Way(-39) -- (51) Node(-92), _portion: 0 }, _end: { _e: (49) Node(-76) -- Way(-39) -- (51) Node(-92), _portion: 0.581006 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="87105e8d"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-574"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-573" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3120" role="visual"/>
         <member type="way" ref="-26" role="string1"/>
         <member type="way" ref="-59" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="54adcc4c"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (6) Node(-50) -- Way(-26) -- (7) Node(-49), _portion: 0.107279 }, _end: { _e: (6) Node(-50) -- Way(-26) -- (7) Node(-49), _portion: 1 } }} s2: [1]{{ _start: { _e: (31) Node(-116) -- Way(-59) -- (32) Node(-115), _portion: 0 }, _end: { _e: (31) Node(-116) -- Way(-59) -- (32) Node(-115), _portion: 0.890337 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="54adcc4c"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-573"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-572" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3119" role="visual"/>
         <member type="way" ref="-25" role="string1"/>
         <member type="way" ref="-57" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="8cb60eea"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (5) Node(-51) -- Way(-25) -- (2) Node(-55), _portion: 0.164631 }, _end: { _e: (5) Node(-51) -- Way(-25) -- (2) Node(-55), _portion: 1 } }} s2: [1]{{ _start: { _e: (34) Node(-110) -- Way(-57) -- (35) Node(-111), _portion: 0 }, _end: { _e: (34) Node(-110) -- Way(-57) -- (35) Node(-111), _portion: 0.837387 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="8cb60eea"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-572"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-571" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1847,36 +2246,39 @@
         <member type="way" ref="-15" role="string1"/>
         <member type="way" ref="-43" role="string2"/>
         <member type="way" ref="-48" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="0.327341"/>
-        <tag k="hoot:edge:id" v="6e27e4a8"/>
-        <tag k="hoot:edge:score12" v="0.322083"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (15) Node(-20) -- Way(-17) -- (16) Node(-17), _portion: 0.456083 }, _end: { _e: (15) Node(-20) -- Way(-17) -- (16) Node(-17), _portion: 1 } }, { _start: { _e: (16) Node(-17) -- Way(-15) -- (18) Node(-28), _portion: 0 }, _end: { _e: (16) Node(-17) -- Way(-15) -- (18) Node(-28), _portion: 1 } }} s2: [2]{{ _start: { _e: (59) Node(-75) -- Way(-43) -- (43) Node(-87), _portion: 0 }, _end: { _e: (59) Node(-75) -- Way(-43) -- (43) Node(-87), _portion: 1 } }, { _start: { _e: (43) Node(-87) -- Way(-48) -- (44) Node(-77), _portion: 0 }, _end: { _e: (43) Node(-87) -- Way(-48) -- (44) Node(-77), _portion: 0.567967 } }} score: 0.324701"/>
+        <tag k="hoot:edge:id" v="6e27e4a8"/>
         <tag k="hoot:edge:score" v="0.324701"/>
+        <tag k="hoot:edge:score12" v="0.322083"/>
+        <tag k="hoot:edge:score21" v="0.327341"/>
+        <tag k="hoot:id" v="-571"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-570" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3117" role="visual"/>
         <member type="way" ref="-20" role="string1"/>
         <member type="way" ref="-54" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="c61345f6"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (9) Node(-44) -- Way(-20) -- (11) Node(-41), _portion: 0 }, _end: { _e: (9) Node(-44) -- Way(-20) -- (11) Node(-41), _portion: 1 } }} s2: [1]{{ _start: { _e: (37) Node(-102) -- Way(-54) -- (38) Node(-96), _portion: 0 }, _end: { _e: (37) Node(-102) -- Way(-54) -- (38) Node(-96), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="c61345f6"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-570"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-569" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-3116" role="visual"/>
         <member type="way" ref="-23" role="string1"/>
         <member type="way" ref="-51" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="1"/>
-        <tag k="hoot:edge:id" v="2a8cf258"/>
-        <tag k="hoot:edge:score12" v="1"/>
         <tag k="hoot:edge" v="em: s1: [1]{{ _start: { _e: (10) Node(-43) -- Way(-23) -- (11) Node(-41), _portion: 0 }, _end: { _e: (10) Node(-43) -- Way(-23) -- (11) Node(-41), _portion: 1 } }} s2: [1]{{ _start: { _e: (41) Node(-105) -- Way(-51) -- (38) Node(-96), _portion: 0 }, _end: { _e: (41) Node(-105) -- Way(-51) -- (38) Node(-96), _portion: 1 } }} score: 1"/>
+        <tag k="hoot:edge:id" v="2a8cf258"/>
         <tag k="hoot:edge:score" v="1"/>
+        <tag k="hoot:edge:score12" v="1"/>
+        <tag k="hoot:edge:score21" v="1"/>
+        <tag k="hoot:id" v="-569"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-568" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1885,12 +2287,13 @@
         <member type="way" ref="-7" role="string1"/>
         <member type="way" ref="-41" role="string2"/>
         <member type="way" ref="-45" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="0.327341"/>
-        <tag k="hoot:edge:id" v="e76ea75b"/>
-        <tag k="hoot:edge:score12" v="0.322083"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (22) Node(-30) -- Way(-8) -- (17) Node(-34), _portion: 0 }, _end: { _e: (22) Node(-30) -- Way(-8) -- (17) Node(-34), _portion: 1 } }, { _start: { _e: (17) Node(-34) -- Way(-7) -- (14) Node(-32), _portion: 0 }, _end: { _e: (17) Node(-34) -- Way(-7) -- (14) Node(-32), _portion: 0.505639 } }} s2: [2]{{ _start: { _e: (46) Node(-83) -- Way(-41) -- (49) Node(-76), _portion: 0.566923 }, _end: { _e: (46) Node(-83) -- Way(-41) -- (49) Node(-76), _portion: 0 } }, { _start: { _e: (47) Node(-84) -- Way(-45) -- (46) Node(-83), _portion: 1 }, _end: { _e: (47) Node(-84) -- Way(-45) -- (46) Node(-83), _portion: 0 } }} score: 0.324701"/>
+        <tag k="hoot:edge:id" v="e76ea75b"/>
         <tag k="hoot:edge:score" v="0.324701"/>
+        <tag k="hoot:edge:score12" v="0.322083"/>
+        <tag k="hoot:edge:score21" v="0.327341"/>
+        <tag k="hoot:id" v="-568"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
     <relation visible="true" id="-567" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1899,12 +2302,13 @@
         <member type="way" ref="-7" role="string1"/>
         <member type="way" ref="-37" role="string2"/>
         <member type="way" ref="-42" role="string2"/>
-        <tag k="hoot:status" v="0"/>
-        <tag k="hoot:edge:score21" v="0.51077"/>
-        <tag k="hoot:edge:id" v="c6e9c3ad"/>
-        <tag k="hoot:edge:score12" v="0.519969"/>
         <tag k="hoot:edge" v="em: s1: [2]{{ _start: { _e: (22) Node(-30) -- Way(-8) -- (17) Node(-34), _portion: 0 }, _end: { _e: (22) Node(-30) -- Way(-8) -- (17) Node(-34), _portion: 1 } }, { _start: { _e: (17) Node(-34) -- Way(-7) -- (14) Node(-32), _portion: 0 }, _end: { _e: (17) Node(-34) -- Way(-7) -- (14) Node(-32), _portion: 0.513833 } }} s2: [2]{{ _start: { _e: (51) Node(-92) -- Way(-37) -- (45) Node(-81), _portion: 0.447654 }, _end: { _e: (51) Node(-92) -- Way(-37) -- (45) Node(-81), _portion: 1 } }, { _start: { _e: (45) Node(-81) -- Way(-42) -- (50) Node(-85), _portion: 0 }, _end: { _e: (45) Node(-81) -- Way(-42) -- (50) Node(-85), _portion: 1 } }} score: 0.515349"/>
+        <tag k="hoot:edge:id" v="c6e9c3ad"/>
         <tag k="hoot:edge:score" v="0.515349"/>
+        <tag k="hoot:edge:score12" v="0.519969"/>
+        <tag k="hoot:edge:score21" v="0.51077"/>
+        <tag k="hoot:id" v="-567"/>
+        <tag k="hoot:status" v="0"/>
         <tag k="type" v="match"/>
     </relation>
 </osm>

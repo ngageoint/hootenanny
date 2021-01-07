@@ -63,6 +63,7 @@ _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
 _includePointInWays(false),
 _includeCompatibilityTags(true),
 _includePid(false),
+_sortTags(ConfigOptions().getWriterSortTagsByKey()),
 _osmSchema(ConfigOptions().getMapWriterSchema()),
 _precision(ConfigOptions().getWriterPrecision()),
 _encodingErrorCount(0),
@@ -300,44 +301,41 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
 
   const ElementType type = elementClone->getElementType();
   assert(type != ElementType::Unknown);
-  const Tags& tags = elementClone->getTags();
+  Tags& tags = elementClone->getTags();
 
-  for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
+  if (type == ElementType::Relation)
   {
-    QString key = it.key();
-    QString val = it.value().trimmed();
-    if (val.isEmpty() == false)
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(elementClone);
+    if (relation->getType() != "")
+      tags.insert("type", removeInvalidCharacters(relation->getType()));
+  }
+
+  if (type == ElementType::Way)
+  {
+    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(elementClone);
+    //  Output the PID as a tag if desired for debugging purposes
+    if (_includePid && way->hasPid())
+      tags.insert(MetadataTags::HootSplitParentId(), QString("%1").arg(way->getPid()));
+    //  Output the node count tag if desired for debugging purposes
+    if (_includeDebug)
+      tags.insert(MetadataTags::HootWayNodeCount(), QString("%1").arg(way->getNodeCount()));
+  }
+
+  QList<QString> keys = tags.keys();
+  if (_sortTags)
+    keys.sort();
+
+  for (QList<QString>::iterator it = keys.begin(); it != keys.end(); ++it)
+  {
+    QString key = *it;
+    QString val = tags.get(key).trimmed();
+    if (!val.isEmpty())
     {
       _writer->writeStartElement("tag");
       LOG_VART(key);
       _writer->writeAttribute("k", removeInvalidCharacters(key));
       LOG_VART(val);
       _writer->writeAttribute("v", removeInvalidCharacters(val));
-      _writer->writeEndElement();
-    }
-  }
-
-  if (type == ElementType::Relation)
-  {
-    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(elementClone);
-    if (relation->getType() != "")
-    {
-      _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", "type");
-      _writer->writeAttribute("v", removeInvalidCharacters(relation->getType()));
-      _writer->writeEndElement();
-    }
-  }
-
-  //  Output the PID as a tag if desired for debugging purposes
-  if (_includePid && type == ElementType::Way)
-  {
-    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(elementClone);
-    if (way->hasPid())
-    {
-      _writer->writeStartElement("tag");
-      _writer->writeAttribute("k", MetadataTags::HootSplitParentId());
-      _writer->writeAttribute("v", QString("%1").arg(way->getPid()));
       _writer->writeEndElement();
     }
   }
@@ -570,6 +568,8 @@ void OsmXmlWriter::_overrideDebugSettings()
   _addExportTagsVisitor.overrideDebugSettings();
   //  Include parent ID tag
   _includePid = true;
+  //  Sort the tags by key
+  _sortTags = true;
 }
 
 }

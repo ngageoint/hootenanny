@@ -2,39 +2,51 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="0.00320735725" minlon="-0.0003766650199999997" maxlat="0.00625601899" maxlon="0.0059850847"/>
     <node visible="true" id="-724226" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0046141443100000" lon="0.0016072457300000">
+        <tag k="hoot:id" v="-724226"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-724225" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0046444844100000" lon="0.0008514702700000">
+        <tag k="hoot:id" v="-724225"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-724224" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0049668960300000" lon="0.0002672429200000">
+        <tag k="hoot:id" v="-724224"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-724223" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0057639654600000" lon="-0.0003766650200000">
+        <tag k="hoot:id" v="-724223"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-724222" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0062560189900000" lon="0.0051956993100000">
+        <tag k="hoot:id" v="-724222"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-724220" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0053062438800000" lon="0.0055501363700000">
+        <tag k="hoot:id" v="-724220"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-724218" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0042407229600000" lon="0.0057909797300000">
+        <tag k="hoot:id" v="-724218"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-724216" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0032514137400000" lon="0.0059850847000000">
+        <tag k="hoot:id" v="-724216"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-724214" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0062191150700000" lon="0.0006813779300000">
+        <tag k="hoot:id" v="-724214"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-724212" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0052548516500000" lon="0.0005686718200000">
+        <tag k="hoot:id" v="-724212"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-724210" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0041966664700000" lon="0.0005937176200000">
+        <tag k="hoot:id" v="-724210"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-724208" timestamp="1970-01-01T00:00:00Z" version="1" lat="0.0032073572500000" lon="0.0007878225900000">
+        <tag k="hoot:id" v="-724208"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <way visible="true" id="-724227" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -42,27 +54,33 @@
         <nd ref="-724224"/>
         <nd ref="-724225"/>
         <nd ref="-724226"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-724227"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="4"/>
     </way>
     <way visible="true" id="-724226" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-724216"/>
         <nd ref="-724218"/>
         <nd ref="-724220"/>
         <nd ref="-724222"/>
-        <tag k="source" v="1;2"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
         <tag k="error:circular" v="25"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-724226"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="source" v="1;2"/>
     </way>
     <way visible="true" id="-724224" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-724208"/>
         <nd ref="-724210"/>
         <nd ref="-724212"/>
         <nd ref="-724214"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-724224"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="4"/>
     </way>
 </osm>

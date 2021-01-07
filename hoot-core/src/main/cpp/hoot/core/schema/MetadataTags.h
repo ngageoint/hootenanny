@@ -277,9 +277,11 @@ public:
   inline static const QString HootIntersectionStreet1() { return "hoot:intersection:street1"; }
   inline static const QString HootIntersectionStreet2() { return "hoot:intersection:street2"; }
 
+  inline static const QString HootWayNodeCount() { return "hoot:way:node:count"; }
+
 private:
 
-  MetadataTags() { }
+  MetadataTags() = default;
 };
 
 }

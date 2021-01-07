@@ -71,8 +71,8 @@
         <nd ref="2"/>
         <nd ref="4"/>
         <nd ref="1"/>
-        <tag k="task" v="1"/>
         <tag k="node_count" v="74"/>
+        <tag k="task" v="1"/>
     </way>
     <way visible="true" id="2" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="5"/>
@@ -80,8 +80,8 @@
         <nd ref="6"/>
         <nd ref="8"/>
         <nd ref="5"/>
-        <tag k="task" v="2"/>
         <tag k="node_count" v="682"/>
+        <tag k="task" v="2"/>
     </way>
     <way visible="true" id="3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="9"/>
@@ -89,8 +89,8 @@
         <nd ref="10"/>
         <nd ref="12"/>
         <nd ref="9"/>
-        <tag k="task" v="3"/>
         <tag k="node_count" v="845"/>
+        <tag k="task" v="3"/>
     </way>
     <way visible="true" id="4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="13"/>
@@ -98,8 +98,8 @@
         <nd ref="14"/>
         <nd ref="16"/>
         <nd ref="13"/>
-        <tag k="task" v="4"/>
         <tag k="node_count" v="654"/>
+        <tag k="task" v="4"/>
     </way>
     <way visible="true" id="5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="17"/>
@@ -107,8 +107,8 @@
         <nd ref="18"/>
         <nd ref="20"/>
         <nd ref="17"/>
-        <tag k="task" v="5"/>
         <tag k="node_count" v="280"/>
+        <tag k="task" v="5"/>
     </way>
     <way visible="true" id="6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="21"/>
@@ -116,8 +116,8 @@
         <nd ref="22"/>
         <nd ref="24"/>
         <nd ref="21"/>
-        <tag k="task" v="6"/>
         <tag k="node_count" v="492"/>
+        <tag k="task" v="6"/>
     </way>
     <way visible="true" id="7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="25"/>
@@ -125,8 +125,8 @@
         <nd ref="26"/>
         <nd ref="28"/>
         <nd ref="25"/>
-        <tag k="task" v="7"/>
         <tag k="node_count" v="438"/>
+        <tag k="task" v="7"/>
     </way>
     <way visible="true" id="8" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="29"/>
@@ -134,8 +134,8 @@
         <nd ref="30"/>
         <nd ref="32"/>
         <nd ref="29"/>
-        <tag k="task" v="8"/>
         <tag k="node_count" v="505"/>
+        <tag k="task" v="8"/>
     </way>
     <way visible="true" id="9" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="33"/>
@@ -143,8 +143,8 @@
         <nd ref="34"/>
         <nd ref="36"/>
         <nd ref="33"/>
-        <tag k="task" v="9"/>
         <tag k="node_count" v="318"/>
+        <tag k="task" v="9"/>
     </way>
     <way visible="true" id="10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="37"/>
@@ -152,8 +152,8 @@
         <nd ref="38"/>
         <nd ref="40"/>
         <nd ref="37"/>
-        <tag k="task" v="10"/>
         <tag k="node_count" v="234"/>
+        <tag k="task" v="10"/>
     </way>
     <way visible="true" id="11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="41"/>
@@ -161,8 +161,8 @@
         <nd ref="42"/>
         <nd ref="44"/>
         <nd ref="41"/>
-        <tag k="task" v="11"/>
         <tag k="node_count" v="416"/>
+        <tag k="task" v="11"/>
     </way>
     <way visible="true" id="12" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="45"/>
@@ -170,8 +170,8 @@
         <nd ref="46"/>
         <nd ref="48"/>
         <nd ref="45"/>
-        <tag k="task" v="12"/>
         <tag k="node_count" v="550"/>
+        <tag k="task" v="12"/>
     </way>
     <way visible="true" id="13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="49"/>
@@ -179,8 +179,8 @@
         <nd ref="50"/>
         <nd ref="52"/>
         <nd ref="49"/>
-        <tag k="task" v="13"/>
         <tag k="node_count" v="394"/>
+        <tag k="task" v="13"/>
     </way>
     <way visible="true" id="14" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="53"/>
@@ -188,8 +188,8 @@
         <nd ref="54"/>
         <nd ref="56"/>
         <nd ref="53"/>
-        <tag k="task" v="14"/>
         <tag k="node_count" v="464"/>
+        <tag k="task" v="14"/>
     </way>
     <way visible="true" id="15" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="57"/>
@@ -197,8 +197,8 @@
         <nd ref="58"/>
         <nd ref="60"/>
         <nd ref="57"/>
-        <tag k="task" v="15"/>
         <tag k="node_count" v="502"/>
+        <tag k="task" v="15"/>
     </way>
     <way visible="true" id="16" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="61"/>
@@ -206,7 +206,7 @@
         <nd ref="62"/>
         <nd ref="64"/>
         <nd ref="61"/>
-        <tag k="task" v="16"/>
         <tag k="node_count" v="639"/>
+        <tag k="task" v="16"/>
     </way>
 </osm>

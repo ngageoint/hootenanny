@@ -128,6 +128,7 @@ private:
   bool _includePointInWays;
   bool _includeCompatibilityTags;
   bool _includePid;
+  bool _sortTags;
   QString _osmSchema;
   int _precision;
   std::shared_ptr<QIODevice> _fp;
