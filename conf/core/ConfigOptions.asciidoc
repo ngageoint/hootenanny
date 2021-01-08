@@ -2546,7 +2546,7 @@ file even if the map is empty.
 ** `hoot::ScriptMatchCreator,Line.js`
 ** `hoot::ScriptMatchCreator,Polygon.js`
 ** `hoot::ScriptMatchCreator,PointPolygon.js`
-** `hoot::ScriptMatchCreator,CollectionRelation.js`
+** `hoot::ScriptMatchCreator,Relation.js`
 
 List of match creators to use during conflation. This can modify what features will be conflated
 (e.g. buildings, roads, etc.).  The ordering must match that in merger.creators.

@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "CollectionRelationMerger.h"
+#include "RelationMerger.h"
 
 // hoot
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -36,13 +36,13 @@
 namespace hoot
 {
 
-void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
+void RelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
 {
   if (elementId1.getType() != ElementType::Relation ||
       elementId2.getType() != ElementType::Relation)
   {
     throw IllegalArgumentException(
-      "Element types other than relation were passed to CollectionRelationMerger.");
+      "Element types other than relation were passed to RelationMerger.");
   }
 
   LOG_TRACE("Merging relations " << elementId1 << " and " << elementId2 << "...");
@@ -67,11 +67,10 @@ void CollectionRelationMerger::merge(const ElementId& elementId1, const ElementI
   LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
   // ONLY ENABLE THIS DURING DEBUGGING
   //OsmMapWriterFactory::writeDebugMap(
-    //_map, "CollectionRelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
+    //_map, "RelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
 }
 
-void CollectionRelationMerger::_mergeMembers(
-  RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
+void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
 {
   LOG_TRACE("Merging members...");
 

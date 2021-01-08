@@ -69,7 +69,7 @@ private:
   static void isMemberOfRelationType(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationWithTagKey(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void mergeCollectionRelations(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void mergeRelations(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void getNumRelationMemberNodes(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void relationsHaveConnectedWayMembers(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationSatisfyingCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);

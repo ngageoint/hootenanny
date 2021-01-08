@@ -1,6 +1,6 @@
 /**
- * This script conflates collection relations (e.g route, administrative boundary relations, etc.). 
- * It is meant to be run after all other matchers.
+ * This script conflates "collection" relations (e.g route, administrative boundary relations, etc.). 
+ * Eventually it could be adapted to conflate any relation. It is meant to be run after all other matchers.
  */
 
 "use strict";
@@ -261,7 +261,7 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergePair = function(map, e1, e2)
 {
-  mergeCollectionRelations(map, e1.getElementId(), e2.getElementId());
+  mergeRelations(map, e1.getElementId(), e2.getElementId());
 
   e1.setStatusString("conflated");
   if (exports.writeMatchedBy == "true")

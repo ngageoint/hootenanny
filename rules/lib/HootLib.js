@@ -353,11 +353,11 @@ function removeElement(map, e)
 }
 
 /**
- * Merges two collection relations (e.g. route, admin boundary, etc.)
+ * Merges two relations
  */
-function mergeCollectionRelations(map, elementId1, elementId2)
+function mergeRelations(map, elementId1, elementId2)
 {
-  return map.mergeCollectionRelations(elementId1, elementId2);
+  return map.mergeRelations(elementId1, elementId2);
 }
 
 /**

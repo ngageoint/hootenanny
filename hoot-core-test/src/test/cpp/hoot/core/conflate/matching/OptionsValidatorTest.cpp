@@ -53,7 +53,7 @@ class OptionsValidatorTest : public HootTestFixture
   CPPUNIT_TEST(runValidateSizeUnequalTest);
   CPPUNIT_TEST(runValidateScriptMismatchTest);
   CPPUNIT_TEST(runAutoCorrectGenericTest);
-  CPPUNIT_TEST(runAutoCorrectCollectionRelationTest);
+  CPPUNIT_TEST(runAutoCorrectRelationScriptTest);
   CPPUNIT_TEST(runAutoCorrectMatcherOrderingTest);
   CPPUNIT_TEST(runAutoCorrectSublineMatcherTest);
   CPPUNIT_TEST(runAutoCorrectClassifierTest);
@@ -152,13 +152,13 @@ public:
     HOOT_STR_EQUALS("hoot::ScriptMergerCreator", mergers.at(3).toStdString());
   }
 
-  void runAutoCorrectCollectionRelationTest()
+  void runAutoCorrectRelationScriptTest()
   {
     conf().set("autocorrect.options", "true");
 
     QStringList matchers;
     matchers.append("hoot::ScriptMatchCreator,Area.js");
-    matchers.append("hoot::ScriptMatchCreator,CollectionRelation.js");
+    matchers.append("hoot::ScriptMatchCreator,Relation.js");
     matchers.append("hoot::BuildingMatchCreator");
     conf().set("match.creators", matchers);
     QStringList mergers;
@@ -175,7 +175,7 @@ public:
     LOG_VART(mergers);
     CPPUNIT_ASSERT_EQUAL(0, matchers.indexOf("hoot::ScriptMatchCreator,Area.js"));
     CPPUNIT_ASSERT_EQUAL(1, matchers.indexOf("hoot::BuildingMatchCreator"));
-    CPPUNIT_ASSERT_EQUAL(2, matchers.indexOf("hoot::ScriptMatchCreator,CollectionRelation.js"));
+    CPPUNIT_ASSERT_EQUAL(2, matchers.indexOf("hoot::ScriptMatchCreator,Relation.js"));
     HOOT_STR_EQUALS("hoot::ScriptMergerCreator", mergers.at(0).toStdString());
     CPPUNIT_ASSERT_EQUAL(1, mergers.indexOf("hoot::BuildingMergerCreator"));
     HOOT_STR_EQUALS("hoot::ScriptMergerCreator", mergers.at(2).toStdString());

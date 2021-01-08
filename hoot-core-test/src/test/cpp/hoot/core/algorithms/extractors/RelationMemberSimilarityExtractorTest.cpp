@@ -60,7 +60,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/conflate/merging/CollectionRelationMergerTest/runTestInput.osm", true);
+      map, "test-files/conflate/merging/RelationMergerTest/runTestInput.osm", true);
 
     RelationMemberSimilarityExtractor uut;
     const double score =

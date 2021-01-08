@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef COLLECTION_RELATION_MERGER_H
-#define COLLECTION_RELATION_MERGER_H
+#ifndef RELATION_MERGER_H
+#define RELATION_MERGER_H
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
@@ -35,19 +35,19 @@ namespace hoot
 {
 
 /**
- * Merges collection relations together e.g. routes, administrative boundaries, etc.
+ * Merges like relations together
  *
  * When members within relations do not match between layers, we keep the non-matching members from
  * both layers and attempt to match and combine their containing relations. Since relations may have
  * similar members with different element IDs between reference and secondary layers, the
  * comparisons ignore element IDs and look at the member elements directly.
  */
-class CollectionRelationMerger : public OsmMapConsumer
+class RelationMerger : public OsmMapConsumer
 {
 public:
 
-  CollectionRelationMerger() = default;
-  virtual ~CollectionRelationMerger() = default;
+  RelationMerger() = default;
+  virtual ~RelationMerger() = default;
 
   /**
    * Merges two collection relations
@@ -71,4 +71,4 @@ private:
 
 }
 
-#endif // COLLECTION_RELATION_MERGER_H
+#endif // _RELATION_MERGER_H
