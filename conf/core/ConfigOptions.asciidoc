@@ -860,22 +860,6 @@ a feature contains more than one tag key from this list, only one of the values 
 this list is empty, no circular error will be parsed from input features and a the value defined by
 +circular.error.default.value+ will be used for all features.
 
-=== collection.relation.name.threshold
-
-* Data Type: double
-* Default Value: `0.9`
-
-Name similarity threshold (0.0 to 1.0) at or above which an collection relation feature is
-considered to have a name match.
-
-=== collection.relation.type.threshold
-
-* Data Type: double
-* Default Value: `0.8`
-
-Tag similarity threshold (0.0 to 1.0) at or above which an collection relation feature is considered
-to have similar tags.
-
 === config.options.file
 
 * Data Type: string
@@ -4125,6 +4109,22 @@ pre-existing.
 
 Allows for requiring a type tag match when using RelationCriterion.
 
+=== relation.name.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+Name similarity threshold (0.0 to 1.0) at or above which an collection relation feature is
+considered to have a name match.
+
+=== relation.type.threshold
+
+* Data Type: double
+* Default Value: `0.8`
+
+Tag similarity threshold (0.0 to 1.0) at or above which an collection relation feature is considered
+to have similar tags.
+
 === relation.with.most.members.op.member.criterion
 
 * Data Type: string
@@ -4410,14 +4410,6 @@ Element criterion class which determines which input features are used for searc
 calculation.  An empty value specifies that all input features are to be used.  Conflation routines
 making use of automatic search radius calculation should set this value appropriately.
 
-=== search.radius.collection.relation
-
-* Data Type: double
-* Default Value: `${search.radius.default}`
-
-The search radius, in meters, to use when conflating collection relations. See
-`search.radius.default`.
-
 === search.radius.default
 
 * Data Type: double
@@ -4488,6 +4480,14 @@ the entire input dataset.  See `search.radius.default`.
 * Default Value: `${search.radius.default}`
 
 The search radius, in meters, to use when conflating railways. See `search.radius.default`.
+
+=== search.radius.relation
+
+* Data Type: double
+* Default Value: `${search.radius.default}`
+
+The search radius, in meters, to use when conflating collection relations. See
+`search.radius.default`.
 
 === search.radius.waterway
 

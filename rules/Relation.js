@@ -15,9 +15,9 @@ exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default")
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
-exports.searchRadius = parseFloat(hoot.get("search.radius.collection.relation"));
-exports.typeThreshold = parseFloat(hoot.get("collection.relation.type.threshold"));
-exports.nameThreshold = parseFloat(hoot.get("collection.relation.name.threshold"));
+exports.searchRadius = parseFloat(hoot.get("search.radius.relation"));
+exports.typeThreshold = parseFloat(hoot.get("relation.type.threshold"));
+exports.nameThreshold = parseFloat(hoot.get("relation.name.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "CollectionRelation";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
