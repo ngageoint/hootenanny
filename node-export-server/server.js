@@ -197,7 +197,7 @@ exports.polyToBbox = function(polyString) {
            coordinates.lon[coordinates.lon.length - 1] + ',' +
            coordinates.lat[coordinates.lat.length - 1];
 }
-// hoot requires quotes for convert.bounds so make sure they exist
+// hoot requires quotes for bounds so make sure they exist
 exports.polyQuotes = function(polyString) {
     if (!polyString) return null
     polyString = polyString.trim()
@@ -350,7 +350,7 @@ function doExport(req, res, hash, input) {
         }
         //if conn is url, write that response to a file
         //handle different flavors of bbox param
-        var bbox_param = 'convert.bounds';
+        var bbox_param = 'bounds';
         var bbox = exports.validateBbox(req.query.bbox);
         var poly = exports.validatePoly(req.query.poly);
         if (input.substring(0,4) === 'http') {

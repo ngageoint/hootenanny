@@ -38,9 +38,9 @@ namespace hoot
 bool ConfigUtils::boundsOptionEnabled()
 {
   return
-    !conf().get(ConfigOptions::getConvertBoundsKey()).toString().trimmed().isEmpty() ||
-    !conf().get(ConfigOptions::getConvertBoundsHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
-    !conf().get(ConfigOptions::getConvertBoundsOsmApiDatabaseKey()).toString().trimmed().isEmpty();
+    !conf().get(ConfigOptions::getBoundsKey()).toString().trimmed().isEmpty() ||
+    !conf().get(ConfigOptions::getBoundsHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
+    !conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed().isEmpty();
 }
 
 void ConfigUtils::checkForTagValueTruncationOverride()

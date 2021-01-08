@@ -229,8 +229,8 @@ void HootApiDbReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getApiDbEmail());
-  setBoundingBox(configOptions.getConvertBounds());
-  setOverrideBoundingBox(configOptions.getConvertBoundsHootApiDatabase());
+  setBoundingBox(configOptions.getBounds());
+  setOverrideBoundingBox(configOptions.getBoundsHootApiDatabase());
 }
 
 }

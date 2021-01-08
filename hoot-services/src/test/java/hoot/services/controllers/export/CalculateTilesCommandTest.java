@@ -67,7 +67,7 @@ public class CalculateTilesCommandTest {
 
         List<String> options = new LinkedList<>();
         options.add("api.db.email=test@test.com");
-        options.add("convert.bounds=" + aoi);
+        options.add("bounds=" + aoi);
 
         List<String> hootOptions = new LinkedList<>();
 
@@ -125,7 +125,7 @@ public class CalculateTilesCommandTest {
 
         List<String> options = new LinkedList<>();
         options.add("api.db.email=test@test.com");
-        options.add("convert.bounds=" + aoi);
+        options.add("bounds=" + aoi);
 
         List<String> hootOptions = new LinkedList<>();
 

@@ -1605,12 +1605,12 @@ private:
     // Calculate a diff between the data we just replaced and the original replacement data to
     // aid in finding any errors during the replacement process. We only want to calculate the
     // diff out to the task grid bounds, b/c that's the data that was actually replaced.
-    //conf().set(ConfigOptions::getConvertBoundsKey(), GeometryUtils::envelopeToString(bounds));
+    //conf().set(ConfigOptions::getBoundsKey(), GeometryUtils::envelopeToString(bounds));
     // use a lenient bounds
-    conf().set(ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
+    conf().set(ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(), true);
     conf().set(
-      ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
-    conf().set(ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(), false);
+      ConfigOptions::getBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(), false);
+    conf().set(ConfigOptions::getBoundsKeepOnlyFeaturesInsideBoundsKey(), false);
     const QString replacedDataUrl = DATA_TO_REPLACE_URL;
     ConflateUtils::writeDiff(_replacementDataUrl, replacedDataUrl, bounds, output);
   }

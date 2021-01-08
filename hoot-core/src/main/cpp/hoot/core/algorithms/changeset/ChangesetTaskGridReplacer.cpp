@@ -144,7 +144,7 @@ void ChangesetTaskGridReplacer::_initConfig()
   conf().set(ConfigOptions::getApidbBulkInserterValidateDataKey(), true);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
-  conf().set(ConfigOptions::getConvertBoundsRemoveMissingElementsKey(), false);
+  conf().set(ConfigOptions::getBoundsRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
 }
 
@@ -366,7 +366,7 @@ void ChangesetTaskGridReplacer::_printChangesetStats()
 OsmMapPtr ChangesetTaskGridReplacer::_writeUpdatedData(const QString& outputFile)
 {
   // clear this out so we get all the data back
-  conf().set(ConfigOptions::getConvertBoundsKey(), "");
+  conf().set(ConfigOptions::getBoundsKey(), "");
 
   LOG_STATUS("Reading the modified data out of: ..." << _dataToReplaceUrl.right(25) << "...");
   OsmMapPtr map(new OsmMap());

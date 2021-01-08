@@ -140,8 +140,8 @@ class ConflateCommand extends ExternalCommand {
         }
 
         if (params.getBounds() != null) {
-            //Add bounds as a convert.bounds
-            options.add("convert.bounds=" + params.getBounds());
+            //Add bounds
+            options.add("bounds=" + params.getBounds());
         }
 
         Map<String, Object> substitutionMap = new HashMap<>();

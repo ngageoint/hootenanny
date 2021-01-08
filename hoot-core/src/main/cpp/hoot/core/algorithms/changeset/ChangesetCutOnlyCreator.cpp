@@ -609,11 +609,11 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   // This is kind of klunky to set this here, imo. However, its currently the only way to get this
   // bounds to the readers.
   conf().set(
-    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
+    ConfigOptions::getBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
 
   // For this being enabled to have any effect,
-  // convert.bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.
-  conf().set(ConfigOptions::getConvertBoundsTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  // bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.
+  conf().set(ConfigOptions::getBoundsTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
@@ -633,7 +633,7 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
     QString::fromStdString(RemoveMissingElementsVisitor::className()));
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
-  conf().set(ConfigOptions::getConvertBoundsRemoveMissingElementsKey(), false);
+  conf().set(ConfigOptions::getBoundsRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
   conf().set(ConfigOptions::getLogWarningsForMissingElementsKey(), false);
 

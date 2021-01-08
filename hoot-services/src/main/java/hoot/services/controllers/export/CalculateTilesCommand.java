@@ -67,7 +67,7 @@ class CalculateTilesCommand extends ExportCommand {
                 bounds = bbox.getMinLon() + "," + bbox.getMinLat() + "," + bbox.getMaxLon() + "," + bbox.getMaxLat();
             }
 
-            options.add("convert.bounds=" + bounds);
+            options.add("bounds=" + bounds);
         }
         List<String> hootOptions = toHootOptions(options);
 

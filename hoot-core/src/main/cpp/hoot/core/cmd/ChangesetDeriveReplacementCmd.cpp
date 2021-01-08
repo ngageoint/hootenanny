@@ -177,7 +177,7 @@ public:
     // do this here to get the --write-bounds param removed from args before the param error
     // checking and non-optional param parsing
     const QString boundsStr = args[boundsIndex].trimmed();
-    conf().set(ConfigOptions::getConvertBoundsKey(), boundsStr);
+    conf().set(ConfigOptions::getBoundsKey(), boundsStr);
     BoundedCommand::runSimple(args);
 
     LOG_VARD(args);

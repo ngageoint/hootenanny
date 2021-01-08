@@ -57,7 +57,7 @@ void BoundedCommand::_writeBoundsFile()
   ConfigOptions opts;
   // TODO: We aren't dealing with the osm/hoot api db reader version of bounding box, which could
   // eventually cause a problem.
-  QString boundsStr = opts.getConvertBounds().trimmed();
+  QString boundsStr = opts.getBounds().trimmed();
   if (!boundsStr.isEmpty())
   {
     OsmMapWriterFactory::write(

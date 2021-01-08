@@ -616,8 +616,8 @@ public:
     uut.setKeepImmediatelyConnectedWaysOutsideBounds(true);
 
     // set cropping up for strict bounds handling
-    conf().set(ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(), false);
-    conf().set(ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(), true);
+    conf().set(ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(), false);
+    conf().set(ConfigOptions::getBoundsKeepOnlyFeaturesInsideBoundsKey(), true);
 
     OsmMapPtr map(new OsmMap());
     uut.open(_inputPath + "runBoundsLeaveConnectedOobWaysTest-in.json");
