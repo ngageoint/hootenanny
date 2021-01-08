@@ -174,8 +174,8 @@ public:
       }
     }
 
-    OsmXmlWriter writer;
-    writer.write(map, "tmp/ErrorMap.osm");
+    //OsmXmlWriter writer;
+    //writer.write(map, "tmp/ErrorMap.osm");
 
     tbs::SampleStats statsError(errors);
     tbs::SampleStats statsDeltaError(deltaErrors);
@@ -200,7 +200,6 @@ public:
     }
 
   }
-
 
   void testRegion(const OGREnvelope& env, QString name)
   {

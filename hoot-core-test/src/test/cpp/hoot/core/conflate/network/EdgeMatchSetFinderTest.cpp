@@ -53,9 +53,8 @@ public:
   OsmNetworkPtr network2;
   IndexedEdgeMatchSetPtr matchSet;
 
-  EdgeMatchSetFinderTest()
-    : HootTestFixture("test-files/conflate/network/",
-                      UNUSED_PATH)
+  EdgeMatchSetFinderTest() :
+  HootTestFixture("test-files/conflate/network/", "test-files/conflate/network/")
   {
     setResetType(ResetAll);
   }
@@ -67,7 +66,8 @@ public:
 
     MapProjector::projectToWgs84(copy);
     conf().set(ConfigOptions().getWriterIncludeDebugTagsKey(), true);
-    OsmMapWriterFactory::write(copy, QString("tmp/EdgeMatchSetFinderTest-%1.osm").arg(testNumber));
+    OsmMapWriterFactory::write(
+      copy, QString(_outputPath + "EdgeMatchSetFinderTest-%1.osm").arg(testNumber));
   }
 
   EdgeMatchSetFinderPtr loadTest(int testNumber)
@@ -80,7 +80,7 @@ public:
       false, Status::Unknown1);
     MapProjector::projectToPlanar(map);
 
-    writeDebugMap(map, testNumber);
+    //writeDebugMap(map, testNumber);
 
     OsmNetworkExtractor one;
 
