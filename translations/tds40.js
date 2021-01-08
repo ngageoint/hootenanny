@@ -1218,7 +1218,7 @@ tds40 = {
     // Adding this because we might not be reading from OSM
     if (tags.other_tags)
     {
-      var tList = tags.other_tags.split('","');
+      var tList = tags.other_tags.toString().replace(/\\/g,'').replace(/\"/g,'"').split('","');
 
       delete tags.other_tags;
 
