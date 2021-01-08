@@ -136,6 +136,9 @@ class PullOverpassCommand implements InternalCommand {
         if (bounds != null) {
             // polygon contains coordinates separated by ';'
             if (bounds.contains(";")) {
+                // replace "[bbox:{{bbox}}]" if exists
+                overpassQuery = overpassQuery.replace("[bbox:{{bbox}}]", "");
+
                 // We need to reverse the coordinates from lon,lat to lat,long for overpass
                 String polyBounds = PullOverpassCommand.boundsToOverpassPolyString(bounds);
                 overpassQuery = overpassQuery.replace("{{bbox}}", "poly:\"" + polyBounds + "\"");
