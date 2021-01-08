@@ -1047,6 +1047,15 @@ tds61 = {
     case 'BH140':
       if (! tags.waterway) tags.waterway = 'river';
       break;
+
+    // EC015 - Forest
+    case 'EC015':
+      if (geometryType == 'Line')
+      {
+        delete tags.landuse; // Default EC015 translation
+        tags.natural = 'tree_row';
+      }
+      break;
     } // End switch F_CODE
 
     // Fix lifecycle tags
@@ -1756,6 +1765,13 @@ tds61 = {
       delete tags.highway;
       delete tags.service;
       attrs.F_CODE = 'AQ140'; // Vehicle lot / car park
+    }
+
+    // Tree rows are a special case for EC015
+    if (tags.natural == 'tree_row' && geometryType == 'Line')
+    {
+      attrs.F_CODE = 'EC015'; // Forest
+      delete tags.natural;
     }
 
     // Now use the lookup table to find an FCODE. This is here to stop clashes with the
