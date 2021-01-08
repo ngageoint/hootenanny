@@ -136,7 +136,13 @@ public:
     return _success;
   }
 
-  virtual void endTest(CppUnit::Test* test )
+//  virtual void startTest(CppUnit::Test* test)
+//  {
+//    // for debugging only
+//    cout << "Starting " << test->getName() << endl/* << flush*/;
+//  }
+
+  virtual void endTest(CppUnit::Test* test)
   {
     double elapsed = Tgs::Time::getTime() - _start;
     if (_showTestName)
@@ -163,7 +169,7 @@ public:
     }
   }
 
-  virtual void endTestRun(CppUnit::Test* /*test*/, CppUnit::TestResult* /*eventManager*/ )
+  virtual void endTestRun(CppUnit::Test* /*test*/, CppUnit::TestResult* /*eventManager*/)
   {
     if (_showElapsed)
     {

@@ -88,16 +88,17 @@ public:
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, _outputPath + "LongestCommonNodeStringTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "LongestCommonNodeStringTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "LongestCommonNodeStringTest.osm",
                      _outputPath + "LongestCommonNodeStringTest.osm");
   }
 
-  /*
-   * In this test we add in some non-matching, non-name text tags for two ways, and since strict
-   * matching is *on*, we *should not* see those two ways get merged.
-   */
   void runStrictTagMatchingOnTest()
   {
+    /*
+     * In this test we add in some non-matching, non-name text tags for two ways, and since strict
+     * matching is *on*, we *should not* see those two ways get merged.
+     */
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
@@ -117,24 +118,24 @@ public:
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, _outputPath + "DuplicateWayRemoverStrictTagMatchingOnTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "DuplicateWayRemoverStrictTagMatchingOnTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "DuplicateWayRemoverStrictTagMatchingOnTest.osm",
                      _outputPath + "DuplicateWayRemoverStrictTagMatchingOnTest.osm");
   }
 
-  /*
-   * In this test we add in some non-matching, non-name text tags for two ways, and since strict
-   * matching is *off*, we *should* see those two ways get merged.
-   */
   void runStrictTagMatchingOffTest()
   {
+    /*
+     * In this test we add in some non-matching, non-name text tags for two ways, and since strict
+     * matching is *off*, we *should* see those two ways get merged.
+     */
+
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, "test-files/DcTigerRoads.osm", true, Status::Unknown1);
 
     //create a non matching text tag between two of the ways that will be examined
     map->getWay(
       ElementIdsVisitor::findElementsByTag(
-        map, ElementType::Way, "name", "Constitution Ave NW")[0])->getTags()
-        .set("email", "blah");
+        map, ElementType::Way, "name", "Constitution Ave NW")[0])->getTags().set("email", "blah");
 
     DuplicateWayRemover dupeWayRemover;
     dupeWayRemover.setStrictTagMatching(false);
@@ -147,7 +148,7 @@ public:
     writer.setIncludeCompatibilityTags(false);
     writer.write(map, _outputPath + "DuplicateWayRemoverStrictTagMatchingOffTest.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "DuplicateWayRemoverStrictTagMatchingOffTest.osm",
+    HOOT_FILE_EQUALS(_inputPath + "DuplicateWayRemoverStrictTagMatchingOffTest.osm",
                      _outputPath + "DuplicateWayRemoverStrictTagMatchingOffTest.osm");
   }
 };
