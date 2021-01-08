@@ -301,7 +301,6 @@ public class ConflateCommandTest {
         assertEquals(sortedMatchers[0], "hoot::BuildingMatchCreator");
         assertEquals(sortedMatchers[1], "hoot::HighwayMatchCreator");
         assertEquals(sortedMatchers[5], "hoot::ScriptMatchCreator,Railway.js");
-        assertEquals(sortedMatchers[9], "hoot::ScriptMatchCreator,Relation.js");
 
         Pattern mergerPattern = Pattern.compile("merger\\.creators=([^\\s]+)[,\\]]");
 
@@ -314,7 +313,6 @@ public class ConflateCommandTest {
         assertEquals(sortedMergers[0], "hoot::BuildingMergerCreator");
         assertEquals(sortedMergers[1], "hoot::HighwayMergerCreator");
         assertEquals(sortedMergers[5], "hoot::ScriptMergerCreator");
-        assertEquals(sortedMergers[9], "hoot::ScriptMergerCreator");
 
     }
 
