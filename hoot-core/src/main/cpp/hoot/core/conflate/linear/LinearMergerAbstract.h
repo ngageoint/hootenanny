@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAY_MERGER_ABSTRACT_H
-#define HIGHWAY_MERGER_ABSTRACT_H
+#ifndef LINEAR_MERGER_ABSTRACT_H
+#define LINEAR_MERGER_ABSTRACT_H
 
 // Hoot
 #include <hoot/core/conflate/merging/MergerBase.h>
@@ -76,17 +76,17 @@ private:
 };
 
 /**
- * Base class for road merging
+ * Base class for linear feature merging
  */
-class HighwayMergerAbstract : public MergerBase
+class LinearMergerAbstract : public MergerBase
 {
 
 public:
 
-  static std::string className() { return "hoot::HighwayMergerAbstract"; }
+  static std::string className() { return "hoot::LinearMergerAbstract"; }
 
-  HighwayMergerAbstract() = default;
-  virtual ~HighwayMergerAbstract() = default;
+  LinearMergerAbstract() = default;
+  virtual ~LinearMergerAbstract() = default;
 
   virtual void apply(const OsmMapPtr& map,
                      std::vector<std::pair<ElementId, ElementId>>& replaced) override = 0;
@@ -116,4 +116,4 @@ protected:
 
 }
 
-#endif // HIGHWAY_MERGER_ABSTRACT_H
+#endif // LINEAR_MERGER_ABSTRACT_H

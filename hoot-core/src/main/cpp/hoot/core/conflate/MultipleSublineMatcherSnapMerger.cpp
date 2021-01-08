@@ -38,7 +38,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(Merger, MultipleSublineMatcherSnapMerger)
 
 MultipleSublineMatcherSnapMerger::MultipleSublineMatcherSnapMerger() :
-HighwaySnapMerger()
+LinearSnapMerger()
 {
 }
 
@@ -46,7 +46,7 @@ MultipleSublineMatcherSnapMerger::MultipleSublineMatcherSnapMerger(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher2) :
-HighwaySnapMerger(pairs, sublineMatcher),
+LinearSnapMerger(pairs, sublineMatcher),
 _sublineMatcher2(sublineMatcher2)
 {
   // The subline matchers have already been initialized by the conflate script by this point.

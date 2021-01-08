@@ -28,8 +28,8 @@
 
 // hoot
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
-#include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
+#include <hoot/core/conflate/linear/LinearSnapMerger.h>
+#include <hoot/core/conflate/linear/LinearTagOnlyMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -86,11 +86,11 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
   {
     if (!ConfigOptions().getHighwayMergeTagsOnly())
     {
-      mergers.push_back(MergerPtr(new HighwaySnapMerger(eids, sublineMatcher)));
+      mergers.push_back(MergerPtr(new LinearSnapMerger(eids, sublineMatcher)));
     }
     else
     {
-      mergers.push_back(MergerPtr(new HighwayTagOnlyMerger(eids, sublineMatcher)));
+      mergers.push_back(MergerPtr(new LinearTagOnlyMerger(eids, sublineMatcher)));
     }
     result = true;
   }

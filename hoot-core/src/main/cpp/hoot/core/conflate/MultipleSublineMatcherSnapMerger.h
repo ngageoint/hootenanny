@@ -28,7 +28,7 @@
 #define MULTIPLE_SUBLINE_MATCHER_SNAP_MERGER_H
 
 // Hoot
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#include <hoot/core/conflate/linear/LinearSnapMerger.h>
 
 namespace hoot
 {
@@ -41,7 +41,7 @@ class WaySublineMatchString;
  * This class primarily exists so that we can select a subline matcher based on properties of the
  * input data for runtime performance reasons.
  */
-class MultipleSublineMatcherSnapMerger : public HighwaySnapMerger
+class MultipleSublineMatcherSnapMerger : public LinearSnapMerger
 {
 
 public:
@@ -62,7 +62,7 @@ public:
 protected:
 
   /*
-   * @see HighwaySnapMerger
+   * @see LinearSnapMerger
    */
   virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
 

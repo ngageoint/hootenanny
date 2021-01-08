@@ -27,7 +27,7 @@
 #include "NetworkMergerCreator.h"
 
 // hoot
-#include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
+#include <hoot/core/conflate/linear/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
@@ -116,7 +116,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       {
         mergers.push_back(
           MergerPtr(
-            new HighwayTagOnlyMerger(
+            new LinearTagOnlyMerger(
               pairs,
               std::shared_ptr<PartialNetworkMerger>(
                 new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails())))));
@@ -142,7 +142,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         {
           mergers.push_back(
             MergerPtr(
-              new HighwayTagOnlyMerger(
+              new LinearTagOnlyMerger(
                 larger->getMatchPairs(),
                 std::shared_ptr<PartialNetworkMerger>(
                   new PartialNetworkMerger(
@@ -170,7 +170,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
           {
             mergers.push_back(
               MergerPtr(
-                new HighwayTagOnlyMerger(
+                new LinearTagOnlyMerger(
                   largest->getMatchPairs(),
                   std::shared_ptr<PartialNetworkMerger>(
                     new PartialNetworkMerger(

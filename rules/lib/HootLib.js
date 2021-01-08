@@ -382,7 +382,7 @@ function relationsHaveConnectedWayMembers(map, relationId1, relationId2)
  */
 function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
 {
-  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy);
+  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy);
 }
 
 /**
@@ -390,7 +390,7 @@ function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
  */
 function snapWays2(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2)
 {
-  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2);
+  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2);
 }
 
 /**

@@ -173,7 +173,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       _numExplicitlyExcluded++;
     }
     // There original reason behind adding this is that there a potential bug in
-    // HighwaySnapMerger::_snapEnds that will leave turning circle nodes orphaned from roads.
+    // LinearSnapMerger::_snapEnds that will leave turning circle nodes orphaned from roads.
     // Turning circles are always expected to be a road way node. If its an actual bug, it should
     // eventually be fixed, but this logic will clean them up for the time being. The types we allow
     // to be orphaned are configurable in case we ever need to add others.

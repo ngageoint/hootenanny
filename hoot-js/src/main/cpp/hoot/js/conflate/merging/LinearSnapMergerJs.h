@@ -24,11 +24,11 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAYSNAPMERGERJS_H
-#define HIGHWAYSNAPMERGERJS_H
+#ifndef LINEAR_SNAP_MERGER_JS_H
+#define LINEAR_SNAP_MERGER_JS_H
 
 // hoot
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#include <hoot/core/conflate/linear/LinearSnapMerger.h>
 #include <hoot/js/io/DataConvertJs.h>
 
 // node.js
@@ -45,33 +45,30 @@ namespace hoot
 
 class OsmMapOperation;
 
-/**
- * @todo rename this to SnapMergerJs or MergerJs, as it does more than roads now
- */
-class HighwaySnapMergerJs : public HootBaseJs
+class LinearSnapMergerJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  HighwaySnapMergerPtr getHighwaySnapMerger() { return _ptr; }
+  LinearSnapMergerPtr getLinearSnapMerger() { return _ptr; }
 
-  static v8::Handle<v8::Object> New(const HighwaySnapMergerPtr& ptr);
+  static v8::Handle<v8::Object> New(const LinearSnapMergerPtr& ptr);
 
-  virtual ~HighwaySnapMergerJs() = default;
+  virtual ~LinearSnapMergerJs() = default;
 
 private:
 
-  HighwaySnapMergerJs() = default;
+  LinearSnapMergerJs() = default;
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  HighwaySnapMergerPtr _ptr;
+  LinearSnapMergerPtr _ptr;
   static v8::Persistent<v8::Function> _constructor;
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, HighwaySnapMergerPtr& ptr)
+inline void toCpp(v8::Handle<v8::Value> v, LinearSnapMergerPtr& ptr)
 {
   if (!v->IsObject())
   {
@@ -79,10 +76,10 @@ inline void toCpp(v8::Handle<v8::Value> v, HighwaySnapMergerPtr& ptr)
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  HighwaySnapMergerJs* ptrj = node::ObjectWrap::Unwrap<HighwaySnapMergerJs>(obj);
-  ptr = ptrj->getHighwaySnapMerger();
+  LinearSnapMergerJs* ptrj = node::ObjectWrap::Unwrap<LinearSnapMergerJs>(obj);
+  ptr = ptrj->getLinearSnapMerger();
 }
 
 }
 
-#endif // HIGHWAYSNAPMERGERJS_H
+#endif // LINEAR_SNAP_MERGER_JS_H

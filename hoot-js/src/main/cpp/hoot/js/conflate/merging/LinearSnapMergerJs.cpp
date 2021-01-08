@@ -24,11 +24,11 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "HighwaySnapMergerJs.h"
+#include "LinearSnapMergerJs.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/highway/HighwayTagOnlyMerger.h>
+#include <hoot/core/conflate/linear/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/MultipleSublineMatcherSnapMerger.h>
 
 #include <hoot/js/JsRegistrar.h>
@@ -51,17 +51,17 @@ using namespace v8;
 namespace hoot
 {
 
-HOOT_JS_REGISTER(HighwaySnapMergerJs)
+HOOT_JS_REGISTER(LinearSnapMergerJs)
 
-Persistent<Function> HighwaySnapMergerJs::_constructor;
+Persistent<Function> LinearSnapMergerJs::_constructor;
 
-void HighwaySnapMergerJs::Init(Handle<Object> target)
+void LinearSnapMergerJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, HighwaySnapMerger::className().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, LinearSnapMerger::className().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
@@ -70,34 +70,34 @@ void HighwaySnapMergerJs::Init(Handle<Object> target)
       FunctionTemplate::New(current, apply));
 
   _constructor.Reset(current, tpl->GetFunction());
-  target->Set(String::NewFromUtf8(current, "HighwaySnapMerger"), ToLocal(&_constructor));
+  target->Set(String::NewFromUtf8(current, "LinearSnapMerger"), ToLocal(&_constructor));
 }
 
-Handle<Object> HighwaySnapMergerJs::New(const HighwaySnapMergerPtr& ptr)
+Handle<Object> LinearSnapMergerJs::New(const LinearSnapMergerPtr& ptr)
 {
   Isolate* current = v8::Isolate::GetCurrent();
   EscapableHandleScope scope(current);
 
   Handle<Object> result = ToLocal(&_constructor)->NewInstance();
-  HighwaySnapMergerJs* from = ObjectWrap::Unwrap<HighwaySnapMergerJs>(result);
+  LinearSnapMergerJs* from = ObjectWrap::Unwrap<LinearSnapMergerJs>(result);
   from->_ptr = ptr;
 
   return scope.Escape(result);
 }
 
-void HighwaySnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
+void LinearSnapMergerJs::New(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  HighwaySnapMergerJs* obj = new HighwaySnapMergerJs();
+  LinearSnapMergerJs* obj = new LinearSnapMergerJs();
   // node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
   obj->Wrap(args.This());
 
   args.GetReturnValue().Set(args.This());
 }
 
-void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
+void LinearSnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
@@ -124,11 +124,11 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
 
   // see explanation in ConflateCmd as to why we use this option to identify Attribute Conflation
   const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
-  HighwaySnapMergerPtr snapMerger;
+  LinearSnapMergerPtr snapMerger;
   if (isAttributeConflate)
   {
-    // HighwayTagOnlyMerger inherits from HighwaySnapMerger, so this works.
-    snapMerger.reset(new HighwayTagOnlyMerger(pairs, sublineMatcher));
+    // LinearTagOnlyMerger inherits from LinearSnapMerger, so this works.
+    snapMerger.reset(new LinearTagOnlyMerger(pairs, sublineMatcher));
   }
   else if (matchedBy == "Waterway" || matchedBy == "Line")
   {
@@ -137,7 +137,7 @@ void HighwaySnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    snapMerger.reset(new HighwaySnapMerger(pairs, sublineMatcher));
+    snapMerger.reset(new LinearSnapMerger(pairs, sublineMatcher));
   }
   snapMerger->setMatchedBy(matchedBy);
   // Some attempts were made to use cached subline matches from SublineStringMatcherJst for

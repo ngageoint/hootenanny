@@ -24,7 +24,7 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "HighwaySnapMerger.h"
+#include "LinearSnapMerger.h"
 
 // geos
 #include <geos/geom/CoordinateSequence.h>
@@ -73,12 +73,12 @@ using namespace std;
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(Merger, HighwaySnapMerger)
+HOOT_FACTORY_REGISTER(Merger, LinearSnapMerger)
 
-int HighwaySnapMerger::logWarnCount = 0;
+int LinearSnapMerger::logWarnCount = 0;
 
-HighwaySnapMerger::HighwaySnapMerger() :
-HighwayMergerAbstract(),
+LinearSnapMerger::LinearSnapMerger() :
+LinearMergerAbstract(),
 _matchedBy(HighwayMatch::MATCH_NAME),
 // ENABLE THE OsmMapWriterFactory::writeDebugMap CALLS FOR SMALL DATASETS DURING DEBUGGING ONLY.
 // writes a map file for each road merge
@@ -86,7 +86,7 @@ _writeDebugMaps(false)
 {
 }
 
-HighwaySnapMerger::HighwaySnapMerger(
+LinearSnapMerger::LinearSnapMerger(
   const set<pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
 _removeTagsFromWayMembers(true),
@@ -100,9 +100,9 @@ _writeDebugMaps(false)
   LOG_VART(_pairs);
 }
 
-void HighwaySnapMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
+void LinearSnapMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
 {
-  LOG_TRACE("Applying HighwaySnapMerger...");
+  LOG_TRACE("Applying LinearSnapMerger...");
   LOG_VART(hoot::toString(_pairs));
   LOG_VART(hoot::toString(replaced));
 
@@ -169,7 +169,7 @@ void HighwaySnapMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Eleme
   }
 }
 
-bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtr& map, WayPtr w) const
+bool LinearSnapMerger::_directConnect(const ConstOsmMapPtr& map, WayPtr w) const
 {
   std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
 
@@ -187,21 +187,21 @@ bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtr& map, WayPtr w) cons
   return g->contains(ls.get());
 }
 
-bool HighwaySnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPtr& w) const
+bool LinearSnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPtr& w) const
 {
   return
     (w->getNodeId(0) == node1 && w->getLastNodeId() == node2) ||
     (w->getNodeId(0) == node2 && w->getLastNodeId() == node1);
 }
 
-WaySublineMatchString HighwaySnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
+WaySublineMatchString LinearSnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
 {
-  // Some attempts were made to use cached subline matches pased in from HighwaySnapMergerJs for
+  // Some attempts were made to use cached subline matches pased in from LinearSnapMergerJs for
   // performance reasons, but the results were unstable. See branch 3969b.
   return _sublineMatcher->findMatch(map, e1, e2);
 }
 
-bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   vector<pair<ElementId, ElementId>>& replaced)
 {
   // TODO: This monster method needs to be refactored into smaller parts where possible.
@@ -212,7 +212,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   //LOG_VART(map->getElement(eid2));
   const QString eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
 
-  if (HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced))
+  if (LinearMergerAbstract::_mergePair(map, eid1, eid2, replaced))
   {
     return true;
   }
@@ -221,8 +221,8 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
-  //LOG_TRACE("HighwaySnapMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
-  //LOG_TRACE("HighwaySnapMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
+  //LOG_TRACE("LinearSnapMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
+  //LOG_TRACE("LinearSnapMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
   // If the two elements being merged are identical, then there's no point of going through
   // splitting and trying to match sections of them together. Just set the match equal to the
@@ -251,7 +251,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
     if (_writeDebugMaps)
     {
       OsmMapWriterFactory::writeDebugMap(
-       map, "HighwaySnapMerger-merged-identical-elements" + eidLogString);
+       map, "LinearSnapMerger-merged-identical-elements" + eidLogString);
     }
 
     return false;
@@ -291,14 +291,14 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
                 scraps1);
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-1" + eidLogString);
+    OsmMapWriterFactory::writeDebugMap(map, "LinearSnapMerger-after-split-1" + eidLogString);
   }
   // Split the second element and reverse any geometries to make the matches work.
   _splitElement(map, match.getSublineString2(), match.getReverseVector2(), replaced, e2, e2Match,
                 scraps2);
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-split-2" + eidLogString);
+    OsmMapWriterFactory::writeDebugMap(map, "LinearSnapMerger-after-split-2" + eidLogString);
   }
 
   LOG_VART(e1Match->getElementId());
@@ -324,12 +324,12 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   _removeSpans(result, e1Match, e2Match);
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-remove-spans" + eidLogString);
+    OsmMapWriterFactory::writeDebugMap(map, "LinearSnapMerger-after-remove-spans" + eidLogString);
   }
   _snapEnds(map, e2Match, e1Match);
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-snap-ends" + eidLogString);
+    OsmMapWriterFactory::writeDebugMap(map, "LinearSnapMerger-after-snap-ends" + eidLogString);
   }
 
   if (e1Match)
@@ -366,7 +366,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   LOG_VART(e2->getElementId());
   if (_writeDebugMaps)
   {
-    OsmMapWriterFactory::writeDebugMap(map, "HighwaySnapMerger-after-tag-merging" + eidLogString);
+    OsmMapWriterFactory::writeDebugMap(map, "LinearSnapMerger-after-tag-merging" + eidLogString);
   }
 
   bool swapWayIds = false;
@@ -547,7 +547,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   if (_writeDebugMaps)
   {
     OsmMapWriterFactory::writeDebugMap(
-      map, "HighwaySnapMerger-after-old-way-removal-1" + eidLogString);
+      map, "LinearSnapMerger-after-old-way-removal-1" + eidLogString);
   }
 
   // If there is something left to review against,
@@ -603,7 +603,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   if (_writeDebugMaps)
   {
     OsmMapWriterFactory::writeDebugMap(
-      map, "HighwaySnapMerger-after-old-way-removal-2" + eidLogString);
+      map, "LinearSnapMerger-after-old-way-removal-2" + eidLogString);
   }
 
   if (e1Match)
@@ -652,8 +652,7 @@ bool HighwaySnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Element
   return false;
 }
 
-void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const ElementPtr& e1,
-  const ElementPtr& e2) const
+void LinearSnapMerger::_removeSpans(OsmMapPtr map, const ElementPtr& e1, const ElementPtr& e2) const
 {
   if (e1->getElementType() != e2->getElementType())
   {
@@ -689,7 +688,7 @@ void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const ElementPtr& e1,
   }
 }
 
-void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const
+void LinearSnapMerger::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const
 {
   LOG_TRACE("Removing spans...");
   //LOG_VART(w1);
@@ -734,7 +733,7 @@ void HighwaySnapMerger::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayP
   //LOG_VART(w2);
 }
 
-void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, ElementPtr snapTo) const
+void LinearSnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, ElementPtr snapTo) const
 {
   // TODO: get rid of this and replace with visitors/WaysVisitor
   class WaysVisitor : public ElementOsmMapVisitor
@@ -819,8 +818,8 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, Eleme
   //LOG_VART(snapTo);
 }
 
-void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr middle,
-                                  WayPtr snapTo) const
+void LinearSnapMerger::_snapEnds(
+  const OsmMapPtr& map, WayPtr snapee, WayPtr middle, WayPtr snapTo) const
 {
   NodePtr replacedNode = map->getNode(middle->getNodeId(0));
   NodePtr replacementNode = map->getNode(snapTo->getNodeId(0));
@@ -831,8 +830,8 @@ void HighwaySnapMerger::_snapEnds(const OsmMapPtr& map, WayPtr snapee, WayPtr mi
   _snapEnd(map, snapee, replacedNode, replacementNode);
 }
 
-void HighwaySnapMerger::_snapEnd(const OsmMapPtr& map, WayPtr snapee, NodePtr replacedNode,
-                                 NodePtr replacementNode) const
+void LinearSnapMerger::_snapEnd(
+  const OsmMapPtr& map, WayPtr snapee, NodePtr replacedNode, NodePtr replacementNode) const
 {
   LOG_TRACE(
     "Replacing " << replacedNode->getElementId() << " with " << replacementNode->getElementId() <<
@@ -859,7 +858,7 @@ void HighwaySnapMerger::_snapEnd(const OsmMapPtr& map, WayPtr snapee, NodePtr re
     replacedNode->getElementId(), replacementNode->getElementId(), map, false);
 }
 
-void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
+void LinearSnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineCollection& s,
   const vector<bool>& reverse, vector<pair<ElementId, ElementId>>& replaced,
   const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const
 {
@@ -1023,7 +1022,7 @@ void HighwaySnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColl
   }
 }
 
-void HighwaySnapMerger::_updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap)
+void LinearSnapMerger::_updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap)
 {
   if (!scrap)
     return;

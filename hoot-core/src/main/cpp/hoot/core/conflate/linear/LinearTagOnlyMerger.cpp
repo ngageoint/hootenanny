@@ -24,11 +24,11 @@
  *
  * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "HighwayTagOnlyMerger.h"
+#include "LinearTagOnlyMerger.h"
 
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#include <hoot/core/conflate/linear/LinearSnapMerger.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/CriterionUtils.h>
@@ -44,11 +44,11 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(Merger, HighwayTagOnlyMerger)
+HOOT_FACTORY_REGISTER(Merger, LinearTagOnlyMerger)
 
-HighwayTagOnlyMerger::HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+LinearTagOnlyMerger::LinearTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
                                            std::shared_ptr<PartialNetworkMerger> networkMerger) :
-HighwaySnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
+LinearSnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
 _performBridgeGeometryMerging(
 ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
 _networkMerger(networkMerger)
@@ -57,10 +57,10 @@ _networkMerger(networkMerger)
   _markAddedMultilineStringRelations = true;
 }
 
-HighwayTagOnlyMerger::HighwayTagOnlyMerger(
+LinearTagOnlyMerger::LinearTagOnlyMerger(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
-HighwaySnapMerger(pairs, sublineMatcher),
+LinearSnapMerger(pairs, sublineMatcher),
 _performBridgeGeometryMerging(
 ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
 {
@@ -68,9 +68,9 @@ ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
   _markAddedMultilineStringRelations = true;
 }
 
-void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementPtr element2,
-                                                   ElementPtr& keeper, ElementPtr& toRemove,
-                                                   bool& removeSecondaryElement)
+void LinearTagOnlyMerger::_determineKeeperFeature(
+  ElementPtr element1, ElementPtr element2, ElementPtr& keeper, ElementPtr& toRemove,
+  bool& removeSecondaryElement)
 {
   removeSecondaryElement = true;
   if (element1->getStatus() == Status::Conflated && element2->getStatus() == Status::Conflated)
@@ -98,7 +98,7 @@ void HighwayTagOnlyMerger::_determineKeeperFeature(ElementPtr element1, ElementP
   }
 }
 
-bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   ElementPtr e1 = map->getElement(eid1);
@@ -107,11 +107,11 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   if (!e1 || !e2)
   {
     LOG_TRACE("One element missing.  Marking for review...");
-    return HighwayMergerAbstract::_mergePair(map, eid1, eid2, replaced);
+    return LinearMergerAbstract::_mergePair(map, eid1, eid2, replaced);
   }
 
-  LOG_TRACE("HighwayTagOnlyMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
-  LOG_TRACE("HighwayTagOnlyMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
+  LOG_TRACE("LinearTagOnlyMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
+  LOG_TRACE("LinearTagOnlyMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
   // If just one of the features is a bridge, we want the bridge feature to separate from the road
   // feature its being merged with.  So, use a geometry AND tag merger.
@@ -129,8 +129,8 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
     std::string mergerName;
     if (!_networkMerger)
     {
-      mergerName = HighwaySnapMerger::className();
-      needsReview = HighwaySnapMerger::_mergePair(map, eid1, eid2, replaced);
+      mergerName = LinearSnapMerger::className();
+      needsReview = LinearSnapMerger::_mergePair(map, eid1, eid2, replaced);
     }
     else
     {
@@ -161,16 +161,16 @@ bool HighwayTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Elem
   LOG_VART(elementWithTagsToKeep->getElementId());
   LOG_VART(elementWithTagsToRemove->getElementId());
 //  OsmUtils::logElementDetail(
-//    elementWithTagsToKeep, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToKeep");
+//    elementWithTagsToKeep, map, Log::Trace, "LinearTagOnlyMerger: elementWithTagsToKeep");
 //  OsmUtils::logElementDetail(
-//    elementWithTagsToRemove, map, Log::Trace, "HighwayTagOnlyMerger: elementWithTagsToRemove");
+//    elementWithTagsToRemove, map, Log::Trace, "LinearTagOnlyMerger: elementWithTagsToRemove");
 
   return
     _mergeWays(
       elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, map, replaced);
 }
 
-bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
+bool LinearTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
                                       ElementPtr elementWithTagsToRemove,
                                       const bool removeSecondaryElement, const OsmMapPtr& map,
                                       std::vector<std::pair<ElementId, ElementId>>& replaced)
@@ -185,7 +185,7 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
 
   // TODO: This is ignoring the contents of multilinestring relations.
   // TODO: I think we need to bring information nodes from secondary ways here like we do in ref
-  // with HighwaySnapMerger...not exactly sure why the call in _mergePair to HighwaySnapMerger
+  // with LinearSnapMerger...not exactly sure why the call in _mergePair to LinearSnapMerger
   // doesn't already do this.
 
   // merge the tags
@@ -206,7 +206,7 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
     elementWithTagsToKeep->setTag(MetadataTags::HootMatchedBy(), HighwayMatch::MATCH_NAME);
   }
   LOG_TRACE(
-    "HighwayTagOnlyMerger: keeper element\n" <<
+    "LinearTagOnlyMerger: keeper element\n" <<
     OsmUtils::getElementDetailString(elementWithTagsToKeep, map));
 
   map->getIdSwap()->add(
@@ -224,13 +224,13 @@ bool HighwayTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
   return true;
 }
 
-void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, const OsmMapPtr& map)
+void LinearTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, const OsmMapPtr& map)
 {
   // hope this isn't happening
   assert(!(e1->getElementType() == ElementType::Relation &&
            e2->getElementType() == ElementType::Relation));
 
-  // handle relations coming from HighwaySnapMerger's previous handling of bridges
+  // handle relations coming from LinearSnapMerger's previous handling of bridges
   if (e1->getElementType() == ElementType::Relation ||
       e2->getElementType() == ElementType::Relation)
   {
@@ -268,8 +268,8 @@ void HighwayTagOnlyMerger::_copyTagsToWayMembers(ElementPtr e1, ElementPtr e2, c
   }
 }
 
-bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep,
-                                           ConstElementPtr elementWithTagsToRemove) const
+bool LinearTagOnlyMerger::_conflictExists(
+  ConstElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove) const
 {
   if (TagUtils::nameConflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {
@@ -295,9 +295,8 @@ bool HighwayTagOnlyMerger::_conflictExists(ConstElementPtr elementWithTagsToKeep
   return false;
 }
 
-void HighwayTagOnlyMerger::_handleOneWayStreetReversal(ElementPtr elementWithTagsToKeep,
-                                                       ConstElementPtr elementWithTagsToRemove,
-                                                       const OsmMapPtr& map)
+void LinearTagOnlyMerger::_handleOneWayStreetReversal(
+  ElementPtr elementWithTagsToKeep, ConstElementPtr elementWithTagsToRemove, const OsmMapPtr& map)
 {
   // TODO: This is ignoring the contents of multilinestring relations.
   OneWayCriterion isAOneWayStreet;

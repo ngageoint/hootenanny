@@ -285,7 +285,7 @@ public:
     // Useful for debug
     //OsmXmlWriter writer;
     //writer.setIncludeIds(true);
-    //writer.write(pMap, "/tmp/test.osm");
+    //writer.write(pMap, "tmp/test.osm");
 
     // Test against osm xml
     QString testOsmStr =
