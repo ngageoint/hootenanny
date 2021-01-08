@@ -37,7 +37,9 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/ops/MapCropper.h>
-#include <hoot/core/algorithms/changeset/ChangesetTaskGridConflator.h>
+
+// Qt
+#include <QElapsedTimer>
 
 namespace hoot
 {
