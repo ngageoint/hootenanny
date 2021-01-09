@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "IoUtils.h"
@@ -209,11 +209,11 @@ void IoUtils::cropToBounds(OsmMapPtr& map, const std::shared_ptr<geos::geom::Geo
   MapCropper cropper;
   cropper.setBounds(bounds);
   cropper.setKeepEntireFeaturesCrossingBounds(
-    ConfigOptions().getConvertBoundsKeepEntireFeaturesCrossingBounds());
+    ConfigOptions().getBoundsKeepEntireFeaturesCrossingBounds());
   const bool strictBoundsHandling =
-    ConfigOptions().getConvertBoundsKeepOnlyFeaturesInsideBounds();
+    ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds();
   cropper.setKeepOnlyFeaturesInsideBounds(strictBoundsHandling);
-  cropper.setRemoveMissingElements(ConfigOptions().getConvertBoundsRemoveMissingElements());
+  cropper.setRemoveMissingElements(ConfigOptions().getBoundsRemoveMissingElements());
 
   // If we want to keep ways that are outside of the crop bounds but connected to a way that's
   // inside the bounds, we need to tag them before cropping and then tell the cropper to leave

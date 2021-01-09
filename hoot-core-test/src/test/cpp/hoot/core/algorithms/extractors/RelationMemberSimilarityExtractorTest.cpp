@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -60,7 +60,7 @@ public:
   {
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(
-      map, "test-files/conflate/merging/CollectionRelationMergerTest/runTestInput.osm", true);
+      map, "test-files/conflate/merging/RelationMergerTest/runTestInput.osm", true);
 
     RelationMemberSimilarityExtractor uut;
     const double score =

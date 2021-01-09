@@ -22,9 +22,9 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "HighwayMergerAbstract.h"
+#include "LinearMergerAbstract.h"
 
 // hoot
 #include <hoot/core/conflate/highway/HighwayMatch.h>
@@ -36,10 +36,10 @@ using namespace std;
 namespace hoot
 {
 
-int HighwayMergerAbstract::logWarnCount = 0;
+int LinearMergerAbstract::logWarnCount = 0;
 
-void HighwayMergerAbstract::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1, ElementPtr e2,
-  QString note, QString reviewType)
+void LinearMergerAbstract::_markNeedsReview(
+  const OsmMapPtr &map, ElementPtr e1, ElementPtr e2, QString note, QString reviewType)
 {
   if (!e1 && !e2)
   {
@@ -67,7 +67,8 @@ void HighwayMergerAbstract::_markNeedsReview(const OsmMapPtr &map, ElementPtr e1
   }
 }
 
-bool HighwayMergerAbstract::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+bool LinearMergerAbstract::_mergePair(
+  const OsmMapPtr& map, ElementId eid1, ElementId eid2,
   vector<pair<ElementId, ElementId>>& /*replaced*/)
 {
   OsmMapPtr result = map;
@@ -115,9 +116,9 @@ bool HighwayMergerAbstract::_mergePair(const OsmMapPtr& map, ElementId eid1, Ele
   return false;
 }
 
-QString HighwayMergerAbstract::toString() const
+QString LinearMergerAbstract::toString() const
 {
-  return QString("HighwayMerger, pairs: ") + hoot::toString(_pairs);
+  return QString("LinearMerger, pairs: ") + hoot::toString(_pairs);
 }
 
 }

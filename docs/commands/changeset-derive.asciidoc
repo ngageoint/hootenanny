@@ -20,7 +20,7 @@ dataset and the second should be the newer dataset.
                         Used to maintain element ID continuity with the database target for a derived changeset. 
 * +--stats+           - Displays changeset statistics and may be optionally followed by an output JSON file name to write the statistics to. 
                         Valid when writing the .osc changeset output format only.
-* +--write-bounds+    - If the `convert.bounds` configuration option is specified, optionally outputs a file containing the input bounds.
+* +--write-bounds+    - If the `bounds` configuration option is specified, optionally outputs a file containing the input bounds.
                         The location of the file is controlled via the `bounds.output.file` configuration option.
 
 === Usage

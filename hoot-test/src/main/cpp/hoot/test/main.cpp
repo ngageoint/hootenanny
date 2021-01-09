@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GDAL
@@ -136,7 +136,13 @@ public:
     return _success;
   }
 
-  virtual void endTest(CppUnit::Test* test )
+//  virtual void startTest(CppUnit::Test* test)
+//  {
+//    // for debugging only
+//    cout << "Starting " << test->getName() << endl/* << flush*/;
+//  }
+
+  virtual void endTest(CppUnit::Test* test)
   {
     double elapsed = Tgs::Time::getTime() - _start;
     if (_showTestName)
@@ -163,7 +169,7 @@ public:
     }
   }
 
-  virtual void endTestRun(CppUnit::Test* /*test*/, CppUnit::TestResult* /*eventManager*/ )
+  virtual void endTestRun(CppUnit::Test* /*test*/, CppUnit::TestResult* /*eventManager*/)
   {
     if (_showElapsed)
     {

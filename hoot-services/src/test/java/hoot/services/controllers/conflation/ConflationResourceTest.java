@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.conflation;
 
@@ -69,7 +69,7 @@ public class ConflationResourceTest extends OSMResourceTestAbstract {
         conflateParams.setCollectStats(false);
         conflateParams.setBounds("20,30,40,50");
         conflateParams.setReferenceLayer("1");
-        conflateParams.setAdvancedOptions("-D \"convert.bounds=0,0,0,0\"");
+        conflateParams.setAdvancedOptions("-D \"bounds=0,0,0,0\"");
 
         Response response = target("conflation/execute")
                 .queryParam("DEBUG_LEVEL", "info")

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAY_TAG_ONLY_MERGER_H
-#define HIGHWAY_TAG_ONLY_MERGER_H
+#ifndef LINEAR_TAG_ONLY_MERGER_H
+#define LINEAR_TAG_ONLY_MERGER_H
 
 // Hoot
 #include <hoot/core/conflate/IdSwap.h>
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#include <hoot/core/conflate/linear/LinearSnapMerger.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
 
 namespace hoot
@@ -39,26 +39,26 @@ namespace hoot
  * merges roads together by merging tags only, keeping ref1 tags
  * merges bridges separately from roads; merges tags and optionally geometries for bridges
  *
- * The inheritance from HighwaySnapMerger is to support the geometry merging option for bridges.
+ * The inheritance from LinearSnapMerger is to support the geometry merging option for bridges.
  */
-class HighwayTagOnlyMerger : public HighwaySnapMerger
+class LinearTagOnlyMerger : public LinearSnapMerger
 {
 
 public:
 
-  static std::string className() { return "hoot::HighwayTagOnlyMerger"; }
+  static std::string className() { return "hoot::LinearTagOnlyMerger"; }
 
-  HighwayTagOnlyMerger() = default;
-  HighwayTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-                       const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  LinearTagOnlyMerger() = default;
+  LinearTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
+                      const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   // This is definitely not ideal to be passing a Network Conflation merger in here like this to
   // deal with bridge merging. At the very least, passing in a MergerPtr would be less brittle.
   // Lots of refactoring would likely need to be done to avoid this, however.
-  HighwayTagOnlyMerger(
+  LinearTagOnlyMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     std::shared_ptr<PartialNetworkMerger> networkMerger);
 
-  virtual ~HighwayTagOnlyMerger() = default;
+  virtual ~LinearTagOnlyMerger() = default;
 
   virtual QString getDescription() const
   { return "Merges road tags only with minimal geometry exceptions"; }
@@ -88,8 +88,8 @@ private:
                   std::vector<std::pair<ElementId, ElementId>>& replaced);
 };
 
-typedef std::shared_ptr<HighwayTagOnlyMerger> HighwayTagOnlyMergerPtr;
+typedef std::shared_ptr<LinearTagOnlyMerger> LinearTagOnlyMergerPtr;
 
 }
 
-#endif // HIGHWAY_TAG_ONLY_MERGER_H
+#endif // LINEAR_TAG_ONLY_MERGER_H
