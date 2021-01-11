@@ -143,10 +143,12 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
     var match = poly.split(';');
 
     function validCoordinates(coordinates) {
-        return coordinates.findIndex(function(c) { // if the polygon coordinates are valid
-            return (c[0] >= -180 && c[0] <= 180)
-                && (c[1] >= -90 && c[1] <= 90);
-        }) !== -1
+        for (var c of coordinates) {
+            if (c[0] < -180 || c[0] > 180 || c[1] < -90 || c[1] > 90) {
+                return false;
+            }
+        }
+        return true;
     }
 
     function matchingFirstLast(first, other) {
@@ -154,7 +156,7 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
     }
 
     if (match.length > 1) {
-        var polygons = [], ring = [];
+        var rings = [], ring = [];
         for (m of match) {
             // gather capture groups to add to coordinates array
             // if we ever don't get a capture, exit early.
@@ -163,8 +165,8 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
             if (captures) {
                 var coordinate = captures.splice(1).map(parseFloat);
                 ring.push(coordinate);
-                if (matchingFirstLast(ring[0], coordinate)) {
-                    polygons.push(ring);
+                if (ring.length > 1 && matchingFirstLast(ring[0], coordinate)) {
+                    rings.push(ring);
                     ring = [];
                 }
             } else {
@@ -172,9 +174,12 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
             }
         }
 
-        for (var poly of polygons) {
-            if (!validCoordinates(coordinate) || !matchingFirstLast(coordiate) ||
-                !noIntersection({ type: 'Polygon', coordinates: [coordinates] })
+        // if there is a ring with data, that tells us it's not matching first and last, and so invalid.
+        if (ring.length) return null;
+
+        for (var ring of rings) {
+            if (!validCoordinates(ring) || !matchingFirstLast(ring[0], ring[ring.length - 1]) ||
+                !noIntersection({ type: 'Polygon', coordinates: [ring] })
             ) {
                 return null;
             }
@@ -185,7 +190,7 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
     return null;
 }
 
-exports.isMultipolygon(poly) {
+exports.isMultipolygon = function(poly) {
     var polygons = validatePoly(poly, true);
     return polygons && polygons.length > 1;
 }
@@ -469,6 +474,7 @@ function doExportWork(req, hash, createOutputZip = true) {
                         outZip: outZip,
                         downloadFile: downloadFile
         };
+    }
 }
 function doExport(req, res, hash, input) {
     //Check existing jobs
