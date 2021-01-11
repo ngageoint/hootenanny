@@ -2573,7 +2573,7 @@ tds70 = {
     // NOTE: This deletes tags as they are used
     if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 1: ');
 
-    translate.applyOgrOne2One(notUsedTags, attrs, tds70.lookup, tds70.fcodeLookup,transMap);
+    translate.applyTdsOne2One(notUsedTags, attrs, tds70.lookup, tds70.fcodeLookup,transMap);
     if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 2: ');
     if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'tags 2: ');
 
