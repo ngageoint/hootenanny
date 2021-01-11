@@ -392,10 +392,17 @@ double MaximalSubline::_findBestMatchesRecursive(
 {
   _findBestMatchesRecursionCount++;
   // kick out if we've made too many calls to this
-  if (_findBestMatchesRecursionCount > MAX_RECURSIONS_UPPER_LIMIT ||
-      (_maxRecursions != -1 && _findBestMatchesRecursionCount > _maxRecursions))
+  if (_maxRecursions != -1 && _findBestMatchesRecursionCount > _maxRecursions)
   {
-    throw RecursiveComplexityException();
+    throw RecursiveComplexityException(
+      "MaximalSubline reached configured maximum complexity threshold of : " +
+      QString::number(_maxRecursions));
+  }
+  else if (_findBestMatchesRecursionCount > MAX_RECURSIONS_UPPER_LIMIT)
+  {
+    throw RecursiveComplexityException(
+      "MaximalSubline reached default maximum complexity threshold of : " +
+      QString::number(MAX_RECURSIONS_UPPER_LIMIT));
   }
   else if (_findBestMatchesRecursionCount %
            (ConfigOptions().getTaskStatusUpdateInterval() * 100) == 0)
