@@ -13,9 +13,13 @@ var noIntersection = require('shamos-hoey');
 var done = false;
 var dir;
 var jobs = {};
+var hootHome = process.env['HOOT_HOME'];
+var appDir = hootHome + '/node-export-server/';
 var runningStatus = 'running',
     completeStatus = 'complete';
 
+function getJobs() { return jobs; }
+function getConfig() { return config; }
 
 // pipes request data to temp file with name that matches posted data format.
 function writeExportFile(req, done) {
@@ -241,12 +245,13 @@ exports.validateBbox = function(bbox) {
     return null;
 }
 
-function zipOutput(hash, req, outDir, output, ext, cb) {
+function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
+    var config = getConfig(), jobs = getJobs();
     var stream = fs.createWriteStream(outZip);
     stream.on('close', function() {
         jobs[hash].status = 'complete';
         console.log(jobs[hash].id + ' complete');
-        if (cb) cb()
+        if (cb) cb();
     });
 
     var zip = archiver('zip');
@@ -256,33 +261,32 @@ function zipOutput(hash, req, outDir, output, ext, cb) {
     zip.pipe(stream);
 
     if (isFile) {
-        zip.file(outFile, { name: output + config.formats[req.params.format]});
+        zip.file(outFile, { name: output + config.formats[format]});
     } else {
         //Don't include file extension for shapefile
-        var ext = (req.params.format === 'Shapefile') ? '' : config.formats[req.params.format];
+        var ext = (format === 'Shapefile') ? '' : config.formats[format];
         zip.directory(outDir, output + ext);
     }
     zip.finalize();
 }
 
-function buildCommand(req, isFile, input) {
-    var command = '';
-
-    if (req.query.overrideTags) {
-        if (req.query.overrideTags === 'true') { //if it's true
+function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile) {
+    var command = '', overrideTags = null;
+    if (queryOverrideTags) {
+        if (queryOverrideTags === 'true') { //if it's true
             //use the default overrides from config
             overrideTags = "'" + JSON.stringify(config.tagOverrides) + "'";
         } else { //assume it's json
             //use user submitted overrides
-            overrideTags = "'" + JSON.stringify(JSON.parse(req.query.overrideTags)) + "'";
+            overrideTags = "'" + JSON.stringify(JSON.parse(queryOverrideTags)) + "'";
         }
     }
 
     //if there is a override tags query param
     //handle different flavors of bbox param
     var bbox_param = 'bounds';
-    var bbox = exports.validateBbox(req.query.bbox);
-    var poly = exports.validatePoly(req.query.poly);
+    var bbox = exports.validateBbox(querybbox);
+    var poly = exports.validatePoly(querypoly);
 
     //if conn is url, write that response to a file
     if (input.substring(0,4) === 'http') {
@@ -305,27 +309,27 @@ function buildCommand(req, isFile, input) {
     if (isFile) {
         if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
         if (overrideTags) {
-            if (req.params.schema === 'OSM') {
+            if (paramschema === 'OSM') {
                 command += ' -D convert.ops=hoot::SchemaTranslationOp';
                 command += ' -D translation.script=translations/OSM_Ingest.js';
             }
             command += ' -D schema.translation.override=' + overrideTags;
         }
-        if (req.params.schema !== 'OSM' && config.schemas[req.params.schema] !== '') {
+        if (paramschema !== 'OSM' && getConfig().schemas[paramschema] !== '') {
             command += ' -D convert.ops=hoot::SchemaTranslationOp';
-            command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
+            command += ' -D schema.translation.script=' + getConfig().schemas[paramschema];
             command += ' -D schema.translation.direction=toogr';
             // Set per schema config options
-            if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
+            if (getConfig().schema_options[paramschema]) command += ' -D ' + getConfig().schema_options[paramschema];
         }
     } else {
-        if (req.params.schema === 'OSM') command += ' -D writer.include.debug.tags=true';
+        if (paramschema === 'OSM') command += ' -D writer.include.debug.tags=true';
         command += ' -D convert.ops=hoot::SchemaTranslationOp';
-        command += ' -D schema.translation.script=' + config.schemas[req.params.schema];
+        command += ' -D schema.translation.script=' + getConfig().schemas[paramschema];
         if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
         if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
-        // Set per schema config options
-        if (config.schema_options[req.params.schema]) command += ' -D ' + config.schema_options[req.params.schema];
+        // Set per schema getConfig() options
+        if (getConfig().schema_options[paramschema]) command += ' -D ' + getConfig().schema_options[paramschema];
     }
     command += ' "' + input + '" '
         + outFile
@@ -339,18 +343,33 @@ function buildCommand(req, isFile, input) {
     return command;
 };
 
-function doMerge(req, jobs, hash) {
-    var inputs = jobs.reduce(function(inputs, job) { return inputs += 'export_' + fileNameHash + ' '; }, '');
-    var outDir = getOutDir(req, hash);
-    var command = buildCommand(req, true, inputs)
+function doMerge(req, res, mergeJobs, mergeHash, input) {
+    var jobs = getJobs();
+    var id = uuid.v4();
+    var output = 'export_' + mergeHash;
+    var isFile = req.params.format === 'OSM XML';
+    var outDir = appDir + output;
+    var outFile = outDir + config.formats[req.params.format];
+    if (req.params.format === 'File Geodatabase') outDir = outFile;
+    var outZip = outDir + '.zip';
+    var downloadFile = req.params.datasource.replace(' ', '_')
+        + '_' + req.params.schema.replace(' ', '_')
+        + '_' + req.params.format.replace(' ', '_')
+        + '.zip';
 
+    var ext = config.formats[req.params.format];
+    var inputs = mergeJobs.reduce(function(inputs, jobHash) { return inputs += appDir + 'export_' + jobHash + ext + ' '; }, '');
+    var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, req.query.poly, true, inputs, outDir, outFile);
+    var command = 'hoot convert -C NodeExport.conf ' + inputs + outFile;
     var child = exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
         //setTimeout(function() { //used to simulate a long request
+        console.log(stderr)
+        console.log(error)
         if (stderr || error) {
             //res.send({command: command, stderr: stderr, error: error});
-            jobs[hash].status = stderr;
+            jobs[mergeHash].status = stderr;
         } else {
-            zipOutput(hash, req, outDir, output, ext, function() {
+            zipOutput(mergeHash, req, false, outFile, outZip, function() {
                 inputs.forEach(function(input) {
                     fs.unlink(job.outFile, function(err) {
                         if (err) {
@@ -364,20 +383,28 @@ function doMerge(req, jobs, hash) {
         }
     });
 
-    req.send(hash);
+    jobs[mergeHash] = {
+        id: id,
+        status: runningStatus,
+        process: child,
+        input: input,
+        isFile: isFile,
+        outFile: outFile,
+        outDir: outDir,
+        outZip: outZip,
+        downloadFile: downloadFile
+    };
+
+    res.send(mergeHash);
 }
 
-function getOutDir(req, hash) {
-    var output = 'export_' + hash;
-    var hootHome = process.env['HOOT_HOME'];
+function doExportWork(req, res, hash, poly, input, createOutputZip) {
+    var id = uuid.v4();
+    var output = 'export_' + id;
     var isFile = req.params.format === 'OSM XML';
-    var appDir = hootHome + '/node-export-server/';
-    return appDir + output;
-}
-
-function doExportWork(req, hash, createOutputZip = true) {
-    var outDir = getOutDir(req, hash);
+    var outDir = appDir + output;
     var outFile = outDir + config.formats[req.params.format];
+    console.log("this is the export outfile: " + outFile)
     if (req.params.format === 'File Geodatabase') outDir = outFile;
     var outZip = outDir + '.zip';
     var downloadFile = req.params.datasource.replace(' ', '_')
@@ -388,9 +415,8 @@ function doExportWork(req, hash, createOutputZip = true) {
     //if we have a polygon and it is really a multipolygon,
     //We first need to export & crop data for each polygon ring by calling doExportWork for each ring.
     //Then, we merge their outputs into a single output zip by calling doMerge() when each ring's export work is done.
-    if (exports.validatePoly(req.query.poly) && isMultipolygon(req.query.poly)) {
-        var polygons = validatePoly(poly, true);
-        var jobs = polygons.map(function(poly) {
+    if (exports.isMultipolygon(poly)) {
+        var mergeJobs = exports.validatePoly(poly, true).map(function(poly) {
             var polyString = poly.join(';');
             var params = req.params.datasource
                 + req.params.schema
@@ -400,25 +426,44 @@ function doExportWork(req, hash, createOutputZip = true) {
                 + polyString
                 + req.query.overrideTags;
             var polyHash = crypto.createHash('sha1').update(params).digest('hex');
-            doExportWork(req, polyHash, false);
+            doExportWork(req, res, polyHash, polyString, input, false);
             return polyHash;
         })
 
         setTimeout(function() {
-            var jobsInProgress = false;
-            while (jobsInProgress) {
-                jobsInProgress = jobs.filter(function(hash) {
-                    var job = jobs[hash];
-                    return job ? jobs[hash].status === completeStatus : false;
+            var jobsInProgress = false, progressRetries = 50, counter = 0;
+            while (jobsInProgress || progressRetries === counter) {
+                console.log('multipolygon export jobs in progress...');
+                var jobs = getJobs();
+                jobsInProgress = mergeJobs.filter(function(jobHash) {
+                    var job = jobs[jobHash];
+                    return job ? jobs[jobHash].status === completeStatus : false;
                 }).length < jobs.length;
+                sleep(2000);
+                counter++;
             }
+
+            if (progressRetries === counter) res.status(500);
+
             // merge them all together
-            doMerge(req, jobs, hash);
+            doMerge(req, res, mergeJobs, hash, input);
         }, 0);
 
     } else {
-        var command = buildCommand(req, isFile, input);
-        //hoot convert -D ogr.reader.bounding.box=106.851,-6.160,107.052,-5.913 translations/TDSv61.js "PG:dbname='osmsyria' host='192.168.33.12' port='5432' user='vagrant' password=''" osm.shp
+        var output = 'export_' + id;
+        var isFile = req.params.format === 'OSM XML';
+        var outDir = appDir + output;
+        var outFile = outDir + config.formats[req.params.format];
+        if (req.params.format === 'File Geodatabase') outDir = outFile;
+        var outZip = outDir + '.zip';
+        var downloadFile = req.params.datasource.replace(' ', '_')
+            + '_' + req.params.schema.replace(' ', '_')
+            + '_' + req.params.format.replace(' ', '_')
+            + '.zip';
+
+        var jobs = getJobs();
+        var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, poly,
+            isFile, input, outDir, outFile);
         var child = exec(command, {cwd: hootHome},
             function(error, stdout, stderr) {
                 //setTimeout(function() { //used to simulate a long request
@@ -431,7 +476,7 @@ function doExportWork(req, hash, createOutputZip = true) {
                     if (req.query.crop) {
                         // if request did not provide a polygon or bounds to
                         // crop with, then go about zipping the output
-                        var cropShape = exports.polyQuotes(exports.validatePoly(req.query.poly)) || exports.validateBbox(req.query.bbox);
+                        var cropShape = exports.polyQuotes(exports.validatePoly(poly)) || exports.validateBbox(req.query.bbox);
                         if (cropShape) {
                             var cropCommand = 'hoot crop '
                             + outFile + ' '
@@ -447,15 +492,17 @@ function doExportWork(req, hash, createOutputZip = true) {
                                 if (stderr || error) {
                                     jobs[hash].status = stderr;
                                 } else {
-                                    if (createOutputZip) zipOutput(hash, req, outDir, output, ext)
+                                    if (createOutputZip)
+                                        zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
                                 }
                             })
                         } else {
-                            if (createOutputZip) zipOutput(hash, req, outDir, output, ext)
+                            if (createOutputZip)
+                                zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
                         }
-
                     } else {
-                        if (createOutputZip) zipOutput(hash, req, outDir, output, ext)
+                        if (createOutputZip)
+                            zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
                     }
                 }
                 //}, 10000); //used to simulate a long request
@@ -463,7 +510,7 @@ function doExportWork(req, hash, createOutputZip = true) {
         );
 
         //create new job entry
-        jobs[hash] = {
+        getJobs()[hash] = {
                         id: id,
                         status: runningStatus,
                         process: child,
@@ -474,12 +521,22 @@ function doExportWork(req, hash, createOutputZip = true) {
                         outZip: outZip,
                         downloadFile: downloadFile
         };
+        //return job status
+        //if (job.status !== runningStatus) res.status(500);
+
+        //the poly on req.query will always be the poly specified in query parameters.
+        //so it acts as guide to know if the initial querystring specified a regular polygon or a bbox, OR a multipolygon.
+        //in the case this line is reached when doExportWork is called recursively for a mutlipolygon ring, it is false and
+        //no hash is sent until the doMerge hash gets sent.
+        //in the regular poly / no poly case, this resolves true and we send the hash
+        if (!exports.isMultipolygon(req.query.poly)) res.send(hash);
+
     }
 }
+
 function doExport(req, res, hash, input) {
     //Check existing jobs
     var job = jobs[hash];
-
     if (job) {
         if (job.status === completeStatus) { //if complete, return file
             if (req.method === 'POST') {
@@ -574,10 +631,7 @@ function doExport(req, res, hash, input) {
 
         }
     } else { //if missing, run job
-        doExportWork(req, hash);
-        //return job status
-        //if (job.status !== runningStatus) res.status(500);
-        res.send(hash);
+        doExportWork(req, res, hash, req.query.poly, input, true);
     }
 }
 
