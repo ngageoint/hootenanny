@@ -89,5 +89,64 @@ describe("RenderDb Export Server", function() {
             })
 
         })
+    });
+    describe("Polygon Functions", function() {
+        describe("validatePoly", function(){
+            it('returns null if an empty string', function() {
+                expect(server.validatePoly('')).to.equal(null);
+            })
+            it('ignores any command injection attempts', function() {
+                expect(server.validatePoly(
+                    '-72.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.545;rm *'
+                )).to.eql(null)
+            })
+            it('returns null if any of the coordinates are outside the valid bounds', function() {
+                expect(server.validatePoly(
+                    '-702.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.545'
+                )).to.equal(null);
+            })
+            it('returns null if coordinates are a line', function(){
+                expect(server.validatePoly(
+                    '-72.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.546'
+                )).to.equal(null);
+            })
+            it('returns null if polygon is self intersecting', function() {
+                expect(server.validatePoly(
+                    '-92.20550811768,34.9760037637;'  +
+                    '-92.20825469971,34.78222986237;' +
+                    '-91.82647979736,34.87016067944;' +
+                    '-92.42523468018,34.87241408106;' +
+                    '-92.20550811768,34.9760037637'
+                )).to.equal(null);
+            })
+            it('return input string if a valid polygon', function() {
+                expect(server.validatePoly(
+                    '-72.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.545'
+                )).to.equal(
+                    '-72.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.545'
+                );
+            })
+        })
+        describe("polyToBbox", function(){
+            it('extracts a bounding box from polygon', function() {
+                expect(server.polyToBbox(
+                    '-72.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.545'
+                )).to.eql('-72.471,18.545,-72.4705,18.548')
+            })
+        })
+        describe("polyQuotes", function(){
+            it('makes sure poly strings for crop command have needed quotes', function() {
+                expect(server.polyQuotes(
+                    '-72.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.545'
+                )).to.equal(
+                    '"-72.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.545"'
+                );
+                expect(server.polyQuotes(
+                    '"-72.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.545"'
+                )).to.equal(
+                    '"-72.471,18.545;-72.471,18.548;-72.4705,18.548;-72.4705,18.545;-72.471,18.545"'
+                )
+            })
+        })
     })
 });

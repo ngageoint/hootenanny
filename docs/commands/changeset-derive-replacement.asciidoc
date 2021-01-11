@@ -51,7 +51,7 @@ IDs in the secondary data may or may not be retained depending on the configurat
                                    replacement workflow (no second input).
 * +--stats+                      - Displays changeset statistics and may be optionally followed by an output JSON file name to write the 
                                    statistics to.
-* +--write-bounds+               - If the +convert.bounds+ configuration option is specified, outputs a file containing the specified 
+* +--write-bounds+               - If the +bounds+ configuration option is specified, outputs a file containing the specified
                                    input bounds. The location of the file is controlled via the +bounds.output.file+ configuration option.
 
 === Usage
@@ -198,7 +198,7 @@ If you are using this command with file based data sources and in conjunction wi
 following configuration options to properly manage references to missing child elements (`changeset-derive-replacment` sets these options 
 automatically internally for itself):
 
-* +convert.bounds.remove.missing.elements+=false
+* +bounds.remove.missing.elements+=false
 * +map.reader.add.child.refs.when.missing+=true
 * +log.warnings.for.missing.elements+=false
 

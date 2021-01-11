@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapReaderFactory.h"
 
@@ -185,10 +185,10 @@ void OsmMapReaderFactory::_read(const OsmMapPtr& map,
                                 const std::shared_ptr<OsmMapReader>& reader, const QString& url)
 {
   std::shared_ptr<Boundable> boundable = std::dynamic_pointer_cast<Boundable>(reader);
-  if (!ConfigOptions().getConvertBounds().trimmed().isEmpty() && !boundable.get())
+  if (!ConfigOptions().getBounds().trimmed().isEmpty() && !boundable.get())
   {
     throw IllegalArgumentException(
-      ConfigOptions::getConvertBoundsKey() +
+      ConfigOptions::getBoundsKey() +
       " configuration option used with unsupported reader for data source: " + url);
   }
 

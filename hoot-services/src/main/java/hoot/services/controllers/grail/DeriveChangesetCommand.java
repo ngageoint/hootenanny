@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -49,8 +49,8 @@ class DeriveChangesetCommand extends GrailCommand {
         }
 
         if (params.getBounds() != null) {
-            //Add TASK_BBOX as a convert.bounds
-            options.add("convert.bounds=" + params.getBounds());
+            //Add bounds
+            options.add("bounds=" + params.getBounds());
         }
 
         List<String> hootOptions = toHootOptions(options);

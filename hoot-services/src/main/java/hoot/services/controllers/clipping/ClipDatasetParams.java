@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.clipping;
 
@@ -37,7 +37,7 @@ public class ClipDatasetParams {
     @JsonProperty("OUTPUT_NAME")
     private String outputName;
 
-    @JsonProperty("BBOX")
+    @JsonProperty("bounds")
     private String bounds;
 
     @JsonProperty("FOLDER_ID")

@@ -2,66 +2,87 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="38.8913895" minlon="-77.0551" maxlat="38.89231451948048" maxlon="-77.0544829"/>
     <node visible="true" id="-170910" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921502042379501" lon="-77.0546815243074263">
+        <tag k="hoot:id" v="-170910"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-170907" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915695696683272" lon="-77.0546845212183058">
+        <tag k="hoot:id" v="-170907"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-170865" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8919859999999673" lon="-77.0547249999999906">
+        <tag k="hoot:id" v="-170865"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-170864" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8918999999999997" lon="-77.0547469999999919">
+        <tag k="hoot:id" v="-170864"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-170863" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8918600000000438" lon="-77.0547509999999818">
+        <tag k="hoot:id" v="-170863"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-170862" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8918200000000027" lon="-77.0547499999999843">
+        <tag k="hoot:id" v="-170862"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-170861" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8917799999999687" lon="-77.0547459999999660">
+        <tag k="hoot:id" v="-170861"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-170860" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8917399999999702" lon="-77.0547380000000004">
+        <tag k="hoot:id" v="-170860"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-170859" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8923001140350593" lon="-77.0550999999999959">
+        <tag k="hoot:id" v="-170859"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-170858" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8923145194804789" lon="-77.0550999999999959">
+        <tag k="hoot:id" v="-170858"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-170855" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921170880879785" lon="-77.0544828999999964">
+        <tag k="hoot:id" v="-170855"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-170854" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8913895000000025" lon="-77.0545554078516943">
+        <tag k="hoot:id" v="-170854"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-170853" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8923092998045803" lon="-77.0550999999999959">
+        <tag k="hoot:id" v="-170853"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-153907" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915658981526633" lon="-77.0546824771353158">
+        <tag k="hoot:id" v="-153907"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-153906" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915459058291404" lon="-77.0546690906903819">
+        <tag k="hoot:id" v="-153906"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-153905" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8915042105574287" lon="-77.0546402416848082">
+        <tag k="hoot:id" v="-153905"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-153904" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8914627859062421" lon="-77.0546105867633884">
+        <tag k="hoot:id" v="-153904"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-153903" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8914217219594960" lon="-77.0545801245554713">
+        <tag k="hoot:id" v="-153903"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-15036" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8922220501690603" lon="-77.0550477874796798">
+        <tag k="hoot:id" v="-15036"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-15035" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921495043437417" lon="-77.0546779563510285">
+        <tag k="hoot:id" v="-15035"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-15034" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.8921307105815188" lon="-77.0545648707543194">
+        <tag k="hoot:id" v="-15034"/>
         <tag k="hoot:status" v="1"/>
     </node>
     <way visible="true" id="-13642" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -70,11 +91,13 @@
         <nd ref="-15035"/>
         <nd ref="-170910"/>
         <nd ref="-15036"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="OHIO DR NW"/>
         <tag k="alt_name" v="Rock Crk and Potomac Pkwy NW"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-13642"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="name" v="OHIO DR NW"/>
     </way>
     <way visible="true" id="-13640" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170854"/>
@@ -85,11 +108,13 @@
         <nd ref="-153907"/>
         <nd ref="-170907"/>
         <nd ref="-15036"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
         <tag k="alt_name" v="Rock Crk and Potomac Pkwy NW"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-13640"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="8"/>
+        <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
     </way>
     <way visible="true" id="-13541" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-170910"/>
@@ -100,50 +125,60 @@
         <nd ref="-170861"/>
         <nd ref="-170860"/>
         <nd ref="-170907"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="road"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-13541"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="8"/>
     </way>
     <way visible="true" id="-13540" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15036"/>
         <nd ref="-170859"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Rock Crk and Potomac Pkwy NW"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:id" v="-13540"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Rock Crk and Potomac Pkwy NW"/>
     </way>
     <way visible="true" id="-13539" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15036"/>
         <nd ref="-170858"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="name" v="Rock Crk and Potomac Pkwy NW"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:id" v="-13539"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Rock Crk and Potomac Pkwy NW"/>
     </way>
     <way visible="true" id="-13534" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-15036"/>
         <nd ref="-170853"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="highway" v="road"/>
-        <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
         <tag k="error:circular" v="5"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-13534"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="ROCK CREEK &amp; POTOMAC PKWY NW"/>
     </way>
     <relation visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-13540" role="reviewee"/>
         <member type="way" ref="-13534" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-18"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-13539" role="reviewee"/>
         <member type="way" ref="-13534" role="reviewee"/>
-        <tag k="hoot:review:type" v="Highway"/>
-        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:id" v="-17"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:type" v="Highway"/>
+        <tag k="hoot:status" v="3"/>
         <tag k="type" v="review"/>
     </relation>
 </osm>

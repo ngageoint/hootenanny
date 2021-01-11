@@ -26,6 +26,10 @@
  */
 package hoot.services.geo;
 
+import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -110,8 +114,7 @@ public class BoundingBox {
         return result;
     }
 
-    public BoundingBox() {
-    }
+    public BoundingBox() {}
 
     public BoundingBox(double minLon, double minLat, double maxLon, double maxLat)  {
         validateAndSetCoords(minLon, minLat, maxLon, maxLat);
@@ -124,9 +127,32 @@ public class BoundingBox {
         this.minLon = bounds.getMinLon();
     }
 
-    // bbox = minlon,minlat,maxlon,maxlat
+    // bbox = minlon,minlat,maxlon,maxlat  OR  bbox = x1,y1;x2,y2;x3,y3...x1,y1
     public BoundingBox(String bbox) {
-        String[] bboxParts = bbox.split(",");
+        String bounds = bbox;
+
+        // Get bbox from polygon
+        if (bounds.contains(";")) {
+            Path2D polygon = new Path2D.Double();
+            ArrayList<String> polyCoords = new ArrayList<>(Arrays.asList(bbox.split(";")));
+
+            for (int i = 0; i < polyCoords.size(); i++) {
+                String[] coords = polyCoords.get(i).split(",");
+                double x = Double.parseDouble(coords[0]);
+                double y = Double.parseDouble(coords[1]);
+
+                if (i == 0) {
+                    polygon.moveTo(x, y);
+                } else {
+                    polygon.lineTo(x, y);
+                }
+            }
+
+            Rectangle2D rect = polygon.getBounds2D();
+            bounds = rect.getMinX() + ","  + rect.getMinY() + ","  + rect.getMaxX() + ","  + rect.getMaxY();
+        }
+
+        String[] bboxParts = bounds.split(",");
         validateAndSetCoords(Double.parseDouble(bboxParts[0]), Double.parseDouble(bboxParts[1]),
                 Double.parseDouble(bboxParts[2]), Double.parseDouble(bboxParts[3]));
     }

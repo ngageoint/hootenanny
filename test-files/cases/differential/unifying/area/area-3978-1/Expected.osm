@@ -2,24 +2,24 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="13.125586" minlon="-1.0657033" maxlat="13.126004" maxlon="-1.0652741"/>
     <node visible="true" id="-471427" timestamp="1970-01-01T00:00:00Z" version="1" lat="13.1260040000000000" lon="-1.0655048000000000">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-471427"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-471426" timestamp="1970-01-01T00:00:00Z" version="1" lat="13.1258941999999994" lon="-1.0652740999999999">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-471426"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-471425" timestamp="1970-01-01T00:00:00Z" version="1" lat="13.1256643999999962" lon="-1.0653010000000001">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-471425"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-471424" timestamp="1970-01-01T00:00:00Z" version="1" lat="13.1255860000000002" lon="-1.0655102000000001">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-471424"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-471423" timestamp="1970-01-01T00:00:00Z" version="1" lat="13.1258262999999964" lon="-1.0657033000000000">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="-471423"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <way visible="true" id="-201537" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-471427"/>
@@ -28,9 +28,10 @@
         <nd ref="-471424"/>
         <nd ref="-471423"/>
         <nd ref="-471427"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="landuse" v="residential"/>
-        <tag k="hoot:id" v="-201537"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-201537"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="6"/>
+        <tag k="landuse" v="residential"/>
     </way>
 </osm>

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmJsonReader.h"
@@ -79,7 +79,7 @@ _isWeb(false),
 _numRead(0),
 _statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
 _keepImmediatelyConnectedWaysOutsideBounds(
-  ConfigOptions().getConvertBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
+  ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds()),
 _missingNodeCount(0),
 _missingWayCount(0),
 _addChildRefsWhenMissing(ConfigOptions().getMapReaderAddChildRefsWhenMissing()),
@@ -198,13 +198,13 @@ void OsmJsonReader::read(const OsmMapPtr& map)
   {
     // If we're doing a web pull, ensure a rectangular bounds from the config. See a related note in
     // OsmApiReader::read.
-    if (!_isFile && !ConfigOptions().getConvertBounds().trimmed().isEmpty() &&
-        !GeometryUtils::isEnvelopeString(ConfigOptions().getConvertBounds()))
+    if (!_isFile && !ConfigOptions().getBounds().trimmed().isEmpty() &&
+        !GeometryUtils::isEnvelopeString(ConfigOptions().getBounds()))
     {
       throw IllegalArgumentException(
         "OsmJsonReader does not support a non-rectangular bounds for reading over HTTP.");
     }
-    _bounds = GeometryUtils::boundsFromString(ConfigOptions().getConvertBounds());
+    _bounds = GeometryUtils::boundsFromString(ConfigOptions().getBounds());
   }
   if (_bounds)
   {
@@ -359,7 +359,7 @@ void OsmJsonReader::setConfiguration(const Settings& conf)
   ConfigOptions opts(conf);
   _coordGridSize = opts.getReaderHttpBboxMaxSize();
   _threadCount = opts.getReaderHttpBboxThreadCount();
-  setBounds(GeometryUtils::boundsFromString(opts.getConvertBounds()));
+  setBounds(GeometryUtils::boundsFromString(opts.getBounds()));
   setWarnOnVersionZeroElement(opts.getReaderWarnOnZeroVersionElement());
 }
 

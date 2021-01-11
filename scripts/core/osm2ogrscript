@@ -66,11 +66,11 @@ else ifeq ("$(outputtype)","osm.pbf")
 	mkdir -p "$(outputfolder)"
 	hoot convert $(OSM_OPTS) "$(INPUT_PATH)" "$(OP_OUTPUT)"
 else ifeq ("$(outputtype)","osm_api_db")
-	hoot changeset-derive $(HOOT_OPTS) -D changeset.user.id=$(userid) -D convert.bounds=$(aoi) -D osm.changeset.sql.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
+	hoot changeset-derive $(HOOT_OPTS) -D changeset.user.id=$(userid) -D bounds=$(aoi) -D osm.changeset.sql.writer.generate.new.ids=false "$(OSM_API_DB_URL)" "$(INPUT_PATH)" $(changesetoutput) "$(OSM_API_DB_URL)"
 	hoot changeset-apply $(HOOT_OPTS) $(changesetoutput) "$(OSM_API_DB_URL)" "$(aoi)" "$(changesetsourcedatatimestamp)"
 else ifeq ("$(outputtype)","osc")
 	mkdir -p "$(outputfolder)"
-	hoot changeset-derive $(HOOT_OPTS) -D convert.bounds=$(aoi) -D osm.changeset.sql.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
+	hoot changeset-derive $(HOOT_OPTS) -D bounds=$(aoi) -D osm.changeset.sql.writer.generate.new.ids=false $(input1) $(input2) "$(OP_OUTPUT)"
 else
 	mkdir -p "$(outputfolder)"
 ifeq "$(append)" "true"

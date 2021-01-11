@@ -43,5 +43,7 @@ SOURCES += src/main/cpp/hoot/test/main.cpp \
 
 OTHER_FILES = \
     $$files(../test-files/cmd/*.sh, true) \
+    ../test-files/cmd/slow/serial/ServiceDiffRoadSnapTest.sh.off \
+    ../test-files/cmd/glacial/serial/ServiceChangesetReplacement.sh.off \
     $$files(../scripts/core/*.sh, true) \
     $$files(../scripts/valgrind/*, true) \

@@ -353,11 +353,11 @@ function removeElement(map, e)
 }
 
 /**
- * Merges two collection relations (e.g. route, admin boundary, etc.)
+ * Merges two relations
  */
-function mergeCollectionRelations(map, elementId1, elementId2)
+function mergeRelations(map, elementId1, elementId2)
 {
-  return map.mergeCollectionRelations(elementId1, elementId2);
+  return map.mergeRelations(elementId1, elementId2);
 }
 
 /**
@@ -382,7 +382,7 @@ function relationsHaveConnectedWayMembers(map, relationId1, relationId2)
  */
 function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
 {
-  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy);
+  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy);
 }
 
 /**
@@ -390,7 +390,7 @@ function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
  */
 function snapWays2(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2)
 {
-  return new hoot.HighwaySnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2);
+  return new hoot.LinearSnapMerger().apply(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2);
 }
 
 /**

@@ -890,6 +890,15 @@ mgcp = {
       case 'BA040':
         tags.natural = 'water';
         break;
+
+      // EC030 - Wood
+      case 'EC030':
+        if (geometryType == 'Line')
+        {
+          delete tags.landuse; // Default EC030 translation
+          tags.natural = 'tree_row';
+        }
+        break;
     } // End switch FCODE
 
     // Sort out TRS (Transport Type)
@@ -1427,6 +1436,14 @@ mgcp = {
 
     // Military buildings in MGCP TRD3 have a MFC tag that we need to account for
     if (tags.building && tags.military) attrs.F_CODE = 'AL015';
+
+    // Tree rows are a special case for EC030
+    if (tags.natural == 'tree_row' && geometryType == 'Line')
+    {
+      attrs.F_CODE = 'EC030'; // Wood
+      delete tags.natural;
+    }
+
 
     // Keep looking for an FCODE
     // This uses the fcodeLookup tables that are defined earlier

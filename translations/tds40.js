@@ -949,6 +949,15 @@ tds40 = {
       // This leaves us with just "natural=water"
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
       break;
+
+      // EC015 - Forest
+      case 'EC015':
+        if (geometryType == 'Line')
+        {
+          delete tags.landuse; // Default EC015 translation
+          tags.natural = 'tree_row';
+        }
+        break;
     } // End switch F_CODE
 
     // Road & Railway Crossings
@@ -1755,6 +1764,13 @@ tds40 = {
       delete tags.highway;
       delete tags.service;
       attrs.F_CODE = 'AQ140'; // Vehicle lot / car park
+    }
+
+    // Tree rows are a special case for EC015
+    if (tags.natural == 'tree_row' && geometryType == 'Line')
+    {
+      attrs.F_CODE = 'EC015'; // Forest
+      delete tags.natural;
     }
 
     // Now use the lookup table to find an FCODE. This is here to stop clashes with the

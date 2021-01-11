@@ -64,13 +64,13 @@
             "building.review.matches.other.than.one.to.one": "Review matches that are not one to one"
         }
     },
-    "Collection Relations": {
-        "matcher": "hoot::ScriptMatchCreator,CollectionRelation.js",
+    "Relations": {
+        "matcher": "hoot::ScriptMatchCreator,Relation.js",
         "merger": "hoot::ScriptMergerCreator",
         "members": {
-            "collection.relation.name.threshold": "Name match threshold; 0.0 to 1.0",
-            "search.radius.collection.relation": "Search radius (m); -1 for default",
-            "collection.relation.tag.threshold": "Tag match threshold; 0.0 to 1.0"
+            "relation.name.threshold": "Name match threshold; 0.0 to 1.0",
+            "search.radius.relation": "Search radius (m); -1 for default",
+            "relation.tag.threshold": "Tag match threshold; 0.0 to 1.0"
         }
     },
     "GenericLines": {
