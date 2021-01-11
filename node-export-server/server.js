@@ -139,7 +139,8 @@ exports.writeExportFile = writeExportFile
 //  2. first and last match, meaning its a polygon
 //  3. does not self intersect as deterimed by shamos-hoey alg
 exports.validatePoly = function(poly, returnPolyArray = false) {
-    if (!poly) return null
+    var rings = [], ring = [];
+    if (!poly) return null;
     var match = poly.split(';');
 
     function validCoordinates(coordinates) {
@@ -156,7 +157,6 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
     }
 
     if (match.length > 1) {
-        var rings = [], ring = [];
         for (m of match) {
             // gather capture groups to add to coordinates array
             // if we ever don't get a capture, exit early.
@@ -170,7 +170,7 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
                     ring = [];
                 }
             } else {
-                return null
+                return null;
             }
         }
 
@@ -185,14 +185,14 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
             }
         }
 
-        return returnPolyArray ? polygons : poly;
+        return returnPolyArray ? rings : poly;
     }
     return null;
 }
 
 exports.isMultipolygon = function(poly) {
-    var polygons = validatePoly(poly, true);
-    return polygons && polygons.length > 1;
+    var polygons = exports.validatePoly(poly, true);
+    return polygons !== null && polygons.length > 1;
 }
 
 // create object of lat/lon that is sorted from min<max values then
