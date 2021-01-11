@@ -47,6 +47,8 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementCriterionJs)
 
+Persistent<Function> ElementCriterionJs::_constructor;
+
 void ElementCriterionJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
@@ -72,8 +74,9 @@ void ElementCriterionJs::Init(Handle<Object> target)
       PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, ElementCriterion::className().data()));
 
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+    //Persistent<Function> constructor(current, tpl->GetFunction());
+    _constructor.Reset(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&_constructor/*constructor*/));
   }
 }
 
@@ -92,6 +95,19 @@ void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)
   PopulateConsumersJs::populateConsumers<ElementCriterion>(c, args);
 
   args.GetReturnValue().Set(args.This());
+}
+
+Handle<Object> ElementCriterionJs::New(ElementCriterionPtr c)
+{
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
+
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  ElementCriterionJs* from = ObjectWrap::Unwrap<ElementCriterionJs>(result);
+  from->_c = c;
+  LOG_VART(c);
+
+  return scope.Escape(result);
 }
 
 void ElementCriterionJs::isSatisfied(const FunctionCallbackInfo<Value>& args)

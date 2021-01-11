@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENTCRITERIONJS_H
-#define ELEMENTCRITERIONJS_H
+#ifndef ELEMENT_CRITERION_JS_H
+#define ELEMENT_CRITERION_JS_H
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
@@ -45,19 +45,23 @@ public:
 
   ElementCriterionPtr getCriterion() { return _c; }
 
+  static v8::Handle<v8::Object> New(ElementCriterionPtr c);
+
   virtual ~ElementCriterionJs() = default;
 
 private:
 
-  ElementCriterionJs(ElementCriterion* c) : _c(c) { }
+  ElementCriterionJs() = default;
+  ElementCriterionJs(ElementCriterion* c) : _c(c) {}
 
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void addCriterion(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isSatisfied(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   ElementCriterionPtr _c;
+  static v8::Persistent<v8::Function> _constructor;
 };
 
 }
 
-#endif // ELEMENTCRITERIONJS_H
+#endif // ELEMENT_CRITERION_JS_H

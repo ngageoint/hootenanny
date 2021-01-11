@@ -12,7 +12,7 @@ set -e
 # time caused River Conflation to unnecessarily revert to using lesser algorithms to increase 
 # runtime performance (see #RiverMaximalSublineSettingOptimizer). Extra per feature bounds checking 
 # has been added to river match candidate checking within River.js to prevent this. After that 
-# change, the conflate portion of this test runs in seconds and properly merges rivers within the 
+# change, the conflate portion of this test runs quickly and properly merges rivers within the 
 # bounds.
 
 TEST_NAME=ServiceRefConflateChangesetRiverTest
@@ -33,10 +33,11 @@ LOG_FILTER=""
 # -D bounds.remove.missing.elements=false -D debug.maps.remove.missing.elements=false
 GENERAL_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999" 
-CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,Relation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672 -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"
+# -D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,Relation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator
+CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;;hoot::ScriptMatchCreator,Relation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672 -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false -D bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672"
 
-DEBUG=true
+DEBUG=false
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"

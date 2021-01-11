@@ -284,21 +284,14 @@ void SettingsJs::replaceInList(const FunctionCallbackInfo<Value>& args)
 
 void SettingsJs::getBoundsCrit(const FunctionCallbackInfo<Value>& args)
 {
-  // TODO: finish
-
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
   OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
 
-  //std::shared_ptr<ElementCriterion> boundsCrit =
-    //std::dynamic_pointer_cast<ElementCriterion>(ConfigUtils::getBoundsCrit(mapJs->getConstMap()));
   ElementCriterionPtr boundsCrit = ConfigUtils::getBoundsCrit(mapJs->getConstMap());
-  LOG_VART(boundsCrit);
-  //ElementCriterionJs* obj = new ElementCriterionJs(boundsCrit.get());
-  //LOG_VART(obj);
 
-  //args.GetReturnValue().Set(toV8(settings->getAll()));
+  args.GetReturnValue().Set(ElementCriterionJs::New(boundsCrit));
 }
 
 }

@@ -61,7 +61,6 @@ private:
 
   WaySublineMatchStringPtr _sm;
   static v8::Persistent<v8::Function> _constructor;
-
 };
 
 }
