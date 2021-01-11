@@ -31,14 +31,13 @@
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/geometry/GeometricRelationship.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
 
 // Qt
 #include <QStringList>
 
 namespace hoot
 {
-
-class InBoundsCriterion;
 
 /**
  * Utilities for dealing with hoot config options
@@ -60,15 +59,15 @@ public:
    *
    * @return
    */
-  static std::shared_ptr<geos::geom::Geometry> getConvertBounds();
+  static std::shared_ptr<geos::geom::Geometry> getBounds();
 
   /**
    * Determines which feature bounds checking relationship should be used based on the configured
-   * options for convert bounds
+   * options for bounds
    *
    * @return a geometric relationship
    */
-  static GeometricRelationship getConvertBoundsRelationship();
+  static GeometricRelationship getBoundsRelationship();
 
   /**
    * TODO
@@ -77,7 +76,7 @@ public:
    * @return
    * @todo This causes memory errors.
    */
-  static std::shared_ptr<InBoundsCriterion> getConvertBoundsCrit(const ConstOsmMapPtr& map);
+  static std::shared_ptr<InBoundsCriterion> getBoundsCrit(const ConstOsmMapPtr& map);
 
   /**
    * Removes ApiTruncateTagVisitor from conflate ops if the corresponding config option is

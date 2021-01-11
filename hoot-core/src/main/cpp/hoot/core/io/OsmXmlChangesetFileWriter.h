@@ -114,7 +114,7 @@ private:
   QStringList _metadataAllowKeys;
 
   // TODO
-  bool _changesetIgnoreConvertBounds;
+  bool _changesetIgnoreBounds;
 
   /** Helper functions to write nodes, ways, and relations. */
   void _writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous);

@@ -62,7 +62,7 @@ int RiverMaximalSublineSettingOptimizer::getFindBestMatchesMaxRecursions(
   // If a bounds was specified for the conflate job, need to ensure that all the rivers whose length
   // we are summing have some porition of them within the bounds. See related note in the
   // isMatchCandidate method of River.js.
-  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getConvertBoundsCrit(map);
+  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getBoundsCrit(map);
   LOG_VARD(boundsCrit.get());
 
   // Get the total length of all the rivers in the dataset.

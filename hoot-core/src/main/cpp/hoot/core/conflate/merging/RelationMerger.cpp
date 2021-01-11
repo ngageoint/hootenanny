@@ -85,13 +85,13 @@ void RelationMerger::merge(const ElementId& elementId1, const ElementId& element
   }
 }
 
-void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
+bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
 {
   LOG_TRACE("Merging members...");
 
   const int numRelationBeingReplacedMembers = relationBeingReplaced->getMemberCount();
   int numMembersCopied = 0;
-  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getConvertBoundsCrit(_map);
+  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getBoundsCrit(_map);
 
   const std::vector<RelationData::Entry> replacingRelationMembers = replacingRelation->getMembers();
   LOG_VART(replacingRelationMembers.size());

@@ -3,15 +3,17 @@ set -e
 
 # TODO: update description to include non-river specific issues also fixed
 
-# This tests River Reference Conflation within a bounding box. The original problem leading to the creation of this test was 
-# that the API DB query was changed at one point to read data in that also includes all parent relations for rivers within the 
-# bounds and subsequently, all the relation members of those relations. This caused two basic problems: 1) rivers were being
-# conflated that were completely outside of the conflate bounds, which is misleading and 2) for datasets with large numbers of 
-# long rivers completely outside of the conflate bounds, the increased processing time caused River Conflation to 
-# unnecessarily revert to using lesser algorithms to increase runtime performance 
-# (see #RiverMaximalSublineSettingOptimizer). Extra per feature bounds checking has been added to river match candidate 
-# checking within River.js to prevent this. After that change, the conflate portion of this test runs in seconds and 
-# properly merges rivers within the bounds.
+# This tests River Reference Conflation within a bounding box. The original problem leading to the 
+# creation of this test was that the API DB query was changed at one point to read data in that also 
+# includes all parent relations for rivers within the bounds and subsequently, all the relation 
+# members of those relations. This caused two basic problems: 1) rivers were being conflated that 
+# were completely outside of the conflate bounds, which is misleading and 2) for datasets with 
+# large numbers of long rivers completely outside of the conflate bounds, the increased processing 
+# time caused River Conflation to unnecessarily revert to using lesser algorithms to increase 
+# runtime performance (see #RiverMaximalSublineSettingOptimizer). Extra per feature bounds checking 
+# has been added to river match candidate checking within River.js to prevent this. After that 
+# change, the conflate portion of this test runs in seconds and properly merges rivers within the 
+# bounds.
 
 TEST_NAME=ServiceRefConflateChangesetRiverTest
 GOLD_DIR=test-files/cmd/glacial/serial/$TEST_NAME
@@ -28,19 +30,17 @@ HOOT_EMAIL="$TEST_NAME@hoottestcpp.org"
 LOG_LEVEL="--warn"
 LOG_FILTER=""
 
-# -D convert.bounds.remove.missing.elements=false -D debug.maps.remove.missing.elements=false
+# -D bounds.remove.missing.elements=false -D debug.maps.remove.missing.elements=false
 GENERAL_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999" 
-# -D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,CollectionRelation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator
-CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,CollectionRelation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D convert.bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672 -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false -D convert.bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672"
+CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,Relation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672 -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false -D bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672"
 
 DEBUG=true
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
-  # 
-  LOG_FILTER="-D log.class.filter=CollectionRelation.js;CopyMapSubsetOp;CollectionRelationMerger;InBoundsCriterion "
+  LOG_FILTER="-D log.class.filter=Relation.js;CopyMapSubsetOp;RelationMerger;InBoundsCriterion "
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh

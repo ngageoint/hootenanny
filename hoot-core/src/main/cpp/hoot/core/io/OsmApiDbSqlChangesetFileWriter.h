@@ -121,7 +121,7 @@ private:
   QStringList _metadataAllowKeys;
 
   // TODO
-  bool _changesetIgnoreConvertBounds;
+  bool _changesetIgnoreBounds;
 
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 

@@ -53,7 +53,7 @@ _precision(16),
 _addTimestamp(false),
 _includeDebugTags(false),
 _includeCircularErrorTags(false),
-_changesetIgnoreConvertBounds(false)
+_changesetIgnoreBounds(false)
 {
 }
 
@@ -64,7 +64,7 @@ void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
   _addTimestamp = co.getChangesetXmlWriterAddTimestamp();
   _includeDebugTags = co.getWriterIncludeDebugTags();
   _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
-  _changesetIgnoreConvertBounds = co.getChangesetIgnoreConvertBounds();
+  _changesetIgnoreBounds = co.getChangesetIgnoreBounds();
 }
 
 void OsmXmlChangesetFileWriter::_initStats()
@@ -152,11 +152,11 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
 
       if (map1)
       {
-        boundsCrit1 = ConfigUtils::getConvertBoundsCrit(map1);
+        boundsCrit1 = ConfigUtils::getBoundsCrit(map1);
       }
       if (map2)
       {
-        boundsCrit2 = ConfigUtils::getConvertBoundsCrit(map2);
+        boundsCrit2 = ConfigUtils::getBoundsCrit(map2);
       }
     }
 
@@ -189,7 +189,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         continue;
       }
       // TODO
-      else if (!_changesetIgnoreConvertBounds && ConfigUtils::boundsOptionEnabled())
+      else if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
       {
         std::shared_ptr<InBoundsCriterion> boundsCrit;
         if (map2 && boundsCrit2 && map2->containsElement(_change.getElement()))

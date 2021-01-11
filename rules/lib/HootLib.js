@@ -565,11 +565,11 @@ function haveGeometricRelationship(e, bounds, relationship, map)
 
 /*
  * Gets the currently configured convert bounds relationship as a string (see
-   ConfigUtils::getConvertBoundsRelationship())
+   ConfigUtils::getBoundsRelationship())
  */
-function getConvertBoundsRelationship()
+function getBoundsRelationship()
 {
-  var mustContain = (hoot.get("convert.bounds.keep.only.features.inside.bounds") === 'true');
+  var mustContain = (hoot.get("bounds.keep.only.features.inside.bounds") === 'true');
   if (mustContain)
   {
     return "contains";
@@ -580,13 +580,27 @@ function getConvertBoundsRelationship()
   }
 }
 
+/*
+ * TODO
+ */
 function boundsOptionEnabled()
 {
-  var bounds = getConvertBounds();
+  var bounds = getBounds();
   return bounds !== 'undefined' && bounds !== null && bounds !== '';
 }
 
-function getConvertBounds()
+/*
+ * TODO
+ */
+function getBounds()
 {
-  return String(hoot.get("convert.bounds")).trim();
+  return String(hoot.get("bounds")).trim();
+}
+
+/*
+ * TODO
+ */
+function getBoundsCrit(map)
+{
+  return hoot.getBoundsCrit(map);
 }

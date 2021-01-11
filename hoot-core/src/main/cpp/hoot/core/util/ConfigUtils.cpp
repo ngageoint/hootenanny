@@ -32,9 +32,7 @@
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
-
 
 namespace hoot
 {
@@ -47,19 +45,19 @@ bool ConfigUtils::boundsOptionEnabled()
     !conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed().isEmpty();
 }
 
-std::shared_ptr<geos::geom::Geometry> ConfigUtils::getConvertBounds()
+std::shared_ptr<geos::geom::Geometry> ConfigUtils::getBounds()
 {
-  QString boundsStr = conf().get(ConfigOptions::getConvertBoundsKey()).toString().trimmed();
+  QString boundsStr = conf().get(ConfigOptions::getBoundsKey()).toString().trimmed();
   if (!boundsStr.isEmpty())
   {
     return GeometryUtils::boundsFromString(boundsStr);
   }
-  boundsStr = conf().get(ConfigOptions::getConvertBoundsHootApiDatabaseKey()).toString().trimmed();
+  boundsStr = conf().get(ConfigOptions::getBoundsHootApiDatabaseKey()).toString().trimmed();
   if (!boundsStr.isEmpty())
   {
     return GeometryUtils::boundsFromString(boundsStr);
   }
-  boundsStr = conf().get(ConfigOptions::getConvertBoundsOsmApiDatabaseKey()).toString().trimmed();
+  boundsStr = conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed();
   if (!boundsStr.isEmpty())
   {
     return GeometryUtils::boundsFromString(boundsStr);
@@ -67,23 +65,23 @@ std::shared_ptr<geos::geom::Geometry> ConfigUtils::getConvertBounds()
   return std::shared_ptr<geos::geom::Geometry>();
 }
 
-GeometricRelationship ConfigUtils::getConvertBoundsRelationship()
+GeometricRelationship ConfigUtils::getBoundsRelationship()
 {
-  if (ConfigOptions().getConvertBoundsKeepOnlyFeaturesInsideBounds())
+  if (ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds())
   {
     return GeometricRelationship::Contains;
   }
   return GeometricRelationship::Intersects;
 }
 
-std::shared_ptr<InBoundsCriterion> ConfigUtils::getConvertBoundsCrit(const ConstOsmMapPtr& map)
+std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsCrit(const ConstOsmMapPtr& map)
 {
   std::shared_ptr<InBoundsCriterion> boundsCrit;
-  const QString boundsStr = ConfigOptions().getConvertBounds().trimmed();
+  const QString boundsStr = ConfigOptions().getBounds().trimmed();
   LOG_VARD(boundsStr);
   if (!boundsStr.isEmpty())
   {
-    const GeometricRelationship boundsRelationship = ConfigUtils::getConvertBoundsRelationship();
+    const GeometricRelationship boundsRelationship = ConfigUtils::getBoundsRelationship();
     const bool mustContain = true ? (boundsRelationship == GeometricRelationship::Contains) : false;
     boundsCrit.reset(new InBoundsCriterion(mustContain));
     std::shared_ptr<geos::geom::Geometry> bounds = GeometryUtils::boundsFromString(boundsStr);

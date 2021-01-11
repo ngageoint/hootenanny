@@ -35,6 +35,7 @@
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
 #include <hoot/js/criterion/ElementCriterionJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
 
 using namespace v8;
 
@@ -85,10 +86,10 @@ void SettingsJs::Init(Handle<Object> exports)
                FunctionTemplate::New(current, replaceInList)->GetFunction());
   settings->Set(String::NewFromUtf8(current, "replaceInList"),
                 FunctionTemplate::New(current, replaceInList)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "getConvertBoundsCrit"),
-               FunctionTemplate::New(current, getConvertBoundsCrit)->GetFunction());
-  settings->Set(String::NewFromUtf8(current, "getConvertBoundsCrit"),
-                FunctionTemplate::New(current, getConvertBoundsCrit)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "getBoundsCrit"),
+               FunctionTemplate::New(current, getBoundsCrit)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "getBoundsCrit"),
+                FunctionTemplate::New(current, getBoundsCrit)->GetFunction());
 }
 
 void SettingsJs::get(const FunctionCallbackInfo<Value>& args)
@@ -161,8 +162,9 @@ void SettingsJs::set(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    args.GetReturnValue().Set(current->ThrowException(
-      Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
   }
 }
 
@@ -189,8 +191,9 @@ void SettingsJs::appendToList(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    args.GetReturnValue().Set(current->ThrowException(
-      Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
   }
 }
 
@@ -217,8 +220,9 @@ void SettingsJs::prependToList(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    args.GetReturnValue().Set(current->ThrowException(
-      Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
   }
 }
 
@@ -245,8 +249,9 @@ void SettingsJs::removeFromList(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    args.GetReturnValue().Set(current->ThrowException(
-      Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
   }
 }
 
@@ -271,20 +276,27 @@ void SettingsJs::replaceInList(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    args.GetReturnValue().Set(current->ThrowException(
-      Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
   }
 }
 
-void SettingsJs::getConvertBoundsCrit(const FunctionCallbackInfo<Value>& args)
+void SettingsJs::getBoundsCrit(const FunctionCallbackInfo<Value>& args)
 {
   // TODO: finish
 
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  //ElementCriterionPtr boundsCrit = ConfigUtils::getConvertBounds();
+  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+
+  //std::shared_ptr<ElementCriterion> boundsCrit =
+    //std::dynamic_pointer_cast<ElementCriterion>(ConfigUtils::getBoundsCrit(mapJs->getConstMap()));
+  ElementCriterionPtr boundsCrit = ConfigUtils::getBoundsCrit(mapJs->getConstMap());
+  LOG_VART(boundsCrit);
   //ElementCriterionJs* obj = new ElementCriterionJs(boundsCrit.get());
+  //LOG_VART(obj);
 
   //args.GetReturnValue().Set(toV8(settings->getAll()));
 }

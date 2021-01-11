@@ -50,7 +50,7 @@ OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter() :
 _changesetId(0),
 _includeDebugTags(false),
 _includeCircularErrorTags(false),
-_changesetIgnoreConvertBounds(false)
+_changesetIgnoreBounds(false)
 {
 }
 
@@ -58,7 +58,7 @@ OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) 
 _changesetId(0),
 _includeDebugTags(false),
 _includeCircularErrorTags(false),
-_changesetIgnoreConvertBounds(false)
+_changesetIgnoreBounds(false)
 {
   _db.open(url);
 }
@@ -75,7 +75,7 @@ void OsmApiDbSqlChangesetFileWriter::setConfiguration(const Settings &conf)
   _includeDebugTags = co.getWriterIncludeDebugTags();
   _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
   _metadataAllowKeys = co.getChangesetMetadataAllowedTagKeys();
-  _changesetIgnoreConvertBounds = co.getChangesetIgnoreConvertBounds();
+  _changesetIgnoreBounds = co.getChangesetIgnoreBounds();
 }
 
 void OsmApiDbSqlChangesetFileWriter::write(
@@ -128,11 +128,11 @@ void OsmApiDbSqlChangesetFileWriter::write(
 
       if (map1)
       {
-        boundsCrit1 = ConfigUtils::getConvertBoundsCrit(map1);
+        boundsCrit1 = ConfigUtils::getBoundsCrit(map1);
       }
       if (map2)
       {
-        boundsCrit2 = ConfigUtils::getConvertBoundsCrit(map2);
+        boundsCrit2 = ConfigUtils::getBoundsCrit(map2);
       }
     }
 
@@ -156,7 +156,7 @@ void OsmApiDbSqlChangesetFileWriter::write(
         continue;
       }
       // TODO
-      else if (!_changesetIgnoreConvertBounds && ConfigUtils::boundsOptionEnabled())
+      else if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
       {
         std::shared_ptr<InBoundsCriterion> boundsCrit;
         if (map2 && boundsCrit2 && map2->containsElement(change.getElement()))

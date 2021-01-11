@@ -122,11 +122,11 @@ exports.isMatchCandidate = function(map, e)
   // types (linear or all?). Also, not much work has been done so far to see what impact this change
   // has on the runtime performance against large datasets when a bounds is used.
 
-  var bounds = getConvertBounds();
+  var bounds = getBounds();
   hoot.trace("bounds: " + bounds);
   if (bounds !== 'undefined' && bounds !== null && bounds !== '')
   {
-    return haveGeometricRelationship(e, bounds, getConvertBoundsRelationship(), map);
+    return haveGeometricRelationship(e, bounds, getBoundsRelationship(), map);
   }
   
   return true;

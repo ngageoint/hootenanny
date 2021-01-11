@@ -1031,36 +1031,4 @@ void LinearSnapMerger::_updateScrapParent(const OsmMapPtr& map, long id, const E
   }
 }
 
-bool HighwaySnapMerger::_directConnect(const ConstOsmMapPtr& map, WayPtr w) const
-{
-  std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
-
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-    create(2, 2);
-
-  cs->setAt(map->getNode(w->getNodeId(0))->toCoordinate(), 0);
-  cs->setAt(map->getNode(w->getLastNodeId())->toCoordinate(), 1);
-
-  // create a straight line and buffer it
-  std::shared_ptr<LineString> straight(GeometryFactory::getDefaultInstance()->createLineString(cs));
-  std::shared_ptr<Geometry> g(straight->buffer(w->getCircularError()));
-
-  // is the way in question completely contained in the buffer?
-  return g->contains(ls.get());
-}
-
-bool HighwaySnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPtr& w) const
-{
-  return
-    (w->getNodeId(0) == node1 && w->getLastNodeId() == node2) ||
-    (w->getNodeId(0) == node2 && w->getLastNodeId() == node1);
-}
-
-WaySublineMatchString HighwaySnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
-{
-  // Some attempts were made to use cached subline matches pased in from HighwaySnapMergerJs for
-  // performance reasons, but the results were unstable. See branch 3969b.
-  return _sublineMatcher->findMatch(map, e1, e2);
-}
-
 }
