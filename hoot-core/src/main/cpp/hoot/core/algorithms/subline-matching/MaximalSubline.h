@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXIMALSUBLINE_H
 #define MAXIMALSUBLINE_H
@@ -180,8 +180,9 @@ private:
   // exception once that limit has been reached; only used in select places in the code
   int _maxRecursions;
   int _findBestMatchesRecursionCount;
-  // hard stop at this value
-  static const int MAX_RECURSIONS_UPPER_LIMIT = 1e6;
+  // hard stop at this value; This was determined empirically based on real world data...may still
+  // need some tweaking. Obviously, if it gets too high conflate jobs may get really slow.
+  static const int MAX_RECURSIONS_UPPER_LIMIT = 1e7;
 
   struct SublineScore
   {
