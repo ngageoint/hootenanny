@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BoundedCommand.h"
@@ -57,7 +57,7 @@ void BoundedCommand::_writeBoundsFile()
   ConfigOptions opts;
   // TODO: We aren't dealing with the osm/hoot api db reader version of bounding box, which could
   // eventually cause a problem.
-  QString boundsStr = opts.getConvertBounds().trimmed();
+  QString boundsStr = opts.getBounds().trimmed();
   if (!boundsStr.isEmpty())
   {
     OsmMapWriterFactory::write(

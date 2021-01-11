@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMXMLWRITER_H
 #define OSMXMLWRITER_H
@@ -128,6 +128,7 @@ private:
   bool _includePointInWays;
   bool _includeCompatibilityTags;
   bool _includePid;
+  bool _sortTags;
   QString _osmSchema;
   int _precision;
   std::shared_ptr<QIODevice> _fp;

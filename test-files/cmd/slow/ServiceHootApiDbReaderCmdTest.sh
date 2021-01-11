@@ -20,7 +20,7 @@ hoot convert --warn $CONFIG -D api.db.email=$HOOT_EMAIL -D convert.ops="hoot::Re
 hoot diff --warn $CONFIG test-files/cmd/slow/ServiceHootApiDbReaderTest/output1.osm $OUTPUT_DIR/output1.osm
 
 echo "bounded query"
-hoot convert --warn $CONFIG -D api.db.email=$HOOT_EMAIL -D convert.ops="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" -D convert.bounds=-77.04,38.8916,-77.03324,38.8958 "$HOOT_DB_URL/DcGisRoads-ServiceHootApiDbReaderCmdTest" $OUTPUT_DIR/output2.osm
+hoot convert --warn $CONFIG -D api.db.email=$HOOT_EMAIL -D convert.ops="hoot::RemoveTagsVisitor;hoot::RemoveAttributesVisitor" -D tag.filter.keys="source:datetime" -D remove.attributes.visitor.types="changeset;timestamp" -D bounds=-77.04,38.8916,-77.03324,38.8958 "$HOOT_DB_URL/DcGisRoads-ServiceHootApiDbReaderCmdTest" $OUTPUT_DIR/output2.osm
 hoot diff $CONFIG test-files/cmd/slow/ServiceHootApiDbReaderTest/output2.osm $OUTPUT_DIR/output2.osm
 
 echo "clean up database"

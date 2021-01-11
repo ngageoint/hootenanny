@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ChangesetReplacementCreator.h"
 
@@ -169,7 +169,7 @@ void ChangesetReplacementCreator::create(
   // This is kind of klunky to set this here, imo. However, its currently the only way to get this
   // bounds to the readers.
   conf().set(
-    ConfigOptions::getConvertBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
+    ConfigOptions::getBoundsKey(), GeometryUtils::polygonToString(_replacementBounds));
   _printJobDescription();
 
   // Every capitalized labeled section of the "create" method (e.g. "LOAD AND FILTER"), except input
@@ -399,8 +399,8 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetIgnoreConvertBoundsKey(), true);
 
   // For this being enabled to have any effect,
-  // convert.bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.
-  conf().set(ConfigOptions::getConvertBoundsTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
+  // bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.
+  conf().set(ConfigOptions::getBoundsTagImmediatelyConnectedOutOfBoundsWaysKey(), true);
 
   // will have to see if setting this to false causes problems in the future...
   conf().set(ConfigOptions::getConvertRequireAreaForPolygonKey(), false);
@@ -412,7 +412,7 @@ void ChangesetReplacementCreator::_setGlobalOpts()
 
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
-  conf().set(ConfigOptions::getConvertBoundsRemoveMissingElementsKey(), false);
+  conf().set(ConfigOptions::getBoundsRemoveMissingElementsKey(), false);
   conf().set(ConfigOptions::getMapReaderAddChildRefsWhenMissingKey(), true);
   conf().set(ConfigOptions::getLogWarningsForMissingElementsKey(), false);
 

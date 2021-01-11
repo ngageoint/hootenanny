@@ -2,36 +2,47 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="15.587002" minlon="32.5187526" maxlat="15.5880687" maxlon="32.5208397"/>
     <node visible="true" id="-11" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5880686999999973" lon="32.5207162000000025">
+        <tag k="hoot:id" v="-11"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-10" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5877793999999970" lon="32.5187525999999991">
+        <tag k="hoot:id" v="-10"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-9" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5870020000000000" lon="32.5188759999999988">
+        <tag k="hoot:id" v="-9"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-8" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5872913000000040" lon="32.5208396999999962">
+        <tag k="hoot:id" v="-8"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-7" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5878660000000000" lon="32.5202219000000028">
+        <tag k="hoot:id" v="-7"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-6" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5876814999999986" lon="32.5188869999999994">
+        <tag k="hoot:id" v="-6"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-5" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5871209999999998" lon="32.5189705000000018">
+        <tag k="hoot:id" v="-5"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-4" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5873100999999998" lon="32.5203532000000024">
+        <tag k="hoot:id" v="-4"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-3" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5874400000000009" lon="32.5203425999999922">
+        <tag k="hoot:id" v="-3"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-2" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5874718999999970" lon="32.5204610999999986">
+        <tag k="hoot:id" v="-2"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="-1" timestamp="2017-03-28T20:29:55Z" version="1" user="mustafakamil" uid="2055835" lat="15.5877338000000005" lon="32.5204063999999988">
+        <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="2"/>
     </node>
     <way visible="true" id="-2" timestamp="2017-03-28T20:30:03Z" version="1" user="mustafakamil" uid="2055835">
@@ -40,9 +51,11 @@
         <nd ref="-9"/>
         <nd ref="-10"/>
         <nd ref="-11"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="source:datetime" v="2017-03-28T20:30:03Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-2"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="source:datetime" v="2017-03-28T20:30:03Z"/>
     </way>
     <way visible="true" id="-1" timestamp="2017-03-28T20:30:03Z" version="1" user="mustafakamil" uid="2055835">
         <nd ref="-7"/>
@@ -53,18 +66,21 @@
         <nd ref="-5"/>
         <nd ref="-6"/>
         <nd ref="-7"/>
-        <tag k="hoot:status" v="2"/>
-        <tag k="source:datetime" v="2017-03-28T20:30:03Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-1"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="8"/>
+        <tag k="source:datetime" v="2017-03-28T20:30:03Z"/>
     </way>
     <relation visible="true" id="-1" timestamp="2017-03-28T20:30:10Z" version="1" user="mustafakamil" uid="2055835">
         <member type="way" ref="-1" role="inner"/>
         <member type="way" ref="-2" role="outer"/>
+        <tag k="building" v="yes"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:id" v="-1"/>
         <tag k="hoot:status" v="2"/>
         <tag k="name" v="Building 1"/>
-        <tag k="building" v="yes"/>
         <tag k="source:datetime" v="2017-03-28T20:30:10Z"/>
-        <tag k="error:circular" v="15"/>
         <tag k="type" v="multipolygon"/>
     </relation>
 </osm>

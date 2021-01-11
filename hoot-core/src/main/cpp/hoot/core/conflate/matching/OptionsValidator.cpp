@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OptionsValidator.h"
 
@@ -155,7 +155,7 @@ void OptionsValidator::fixGenericMatcherOrdering()
   // fix matchers/mergers - https://github.com/ngageoint/hootenanny-ui/issues/972,
   // https://github.com/ngageoint/hootenanny-ui/issues/1764
 
-  // At this time we always want the generic matchers at the end, just before CollectionRelation.js,
+  // At this time we always want the generic matchers at the end, just before Relation.js,
   // if they're present. So, don't even check to see if they're in the right order...just move them
   // anyway. There overall order will be maintained, but they'll just be towards the end. We'll
   // assume the corresponding merger for each is in the correct order and move it as well.
@@ -188,17 +188,17 @@ void OptionsValidator::fixGenericMatcherOrdering()
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
 
-  // now move CollectionRelation.js
-  const QString collectionRelationScript = "CollectionRelation.js";
-  if (StringUtils::containsSubstring(matchCreators, collectionRelationScript))
+  // now move Relation.js
+  const QString relationScript = "Relation.js";
+  if (StringUtils::containsSubstring(matchCreators, relationScript))
   {
-    const int collectionRelationIndex =
-      StringUtils::indexOfSubstring(matchCreators, collectionRelationScript);
-    LOG_VART(collectionRelationIndex);
-    if (collectionRelationIndex < (matchCreators.size() - 1))
+    const int relationScriptIndex =
+      StringUtils::indexOfSubstring(matchCreators, relationScript);
+    LOG_VART(relationScriptIndex);
+    if (relationScriptIndex < (matchCreators.size() - 1))
     {
-      matchCreators.move(collectionRelationIndex, matchCreators.size() - 1);
-      mergerCreators.move(collectionRelationIndex, mergerCreators.size() - 1);
+      matchCreators.move(relationScriptIndex, matchCreators.size() - 1);
+      mergerCreators.move(relationScriptIndex, mergerCreators.size() - 1);
       conf().set("match.creators", matchCreators.join(";"));
       conf().set("merger.creators", mergerCreators.join(";"));
       LOG_VART(matchCreators);

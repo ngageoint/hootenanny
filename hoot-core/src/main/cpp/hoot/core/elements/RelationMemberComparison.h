@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATION_MEMBER_COMPARISON_H
 #define RELATION_MEMBER_COMPARISON_H
@@ -39,7 +39,7 @@ namespace hoot
  * The original reason for needing this class in addition to its parent was for the relation role
  * comparison. Now that role is part of the relation hash created by ElementHashVisitor, it seems
  * like we wouldn't need this class. However, note the call to getRole() in
- * CollectionRelationMerger...so for now this class is needed.
+ * RelationMerger...so at this time, so this class is needed.
  *
  * @see ElementComparison
  */

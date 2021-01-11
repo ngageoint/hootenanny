@@ -2,1140 +2,1140 @@
 <osm version="0.6" generator="hootenanny" srs="+epsg:4326">
     <bounds minlat="10.4953" minlon="-66.90266" maxlat="10.4986" maxlon="-66.89794699999999"/>
     <node visible="true" id="-1707" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4969606967081628" lon="-66.8980858001478538">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1707"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-1705" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4974491016364286" lon="-66.8981350034610642">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1705"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-1703" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4966018270344055" lon="-66.8989322499832042">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1703"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-1702" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4966684789968543" lon="-66.8999130454100310">
-        <tag k="hoot:status" v="1"/>
         <tag k="highway" v="motorway_junction"/>
+        <tag k="hoot:id" v="-1702"/>
+        <tag k="hoot:status" v="1"/>
         <tag k="name" v="San Agustín del Norte"/>
         <tag k="ref" v="19-A"/>
-        <tag k="hoot:id" v="-1702"/>
         <tag k="source:datetime" v="2014-09-06T19:28:51.000Z"/>
     </node>
     <node visible="true" id="-1698" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4970356391966728" lon="-66.9015098172667422">
-        <tag k="hoot:status" v="3"/>
         <tag k="hoot:id" v="-1698"/>
+        <tag k="hoot:status" v="3"/>
     </node>
     <node visible="true" id="-1696" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4960253697085815" lon="-66.9010837897166226">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-1696"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-294" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4965255552600016" lon="-66.9022163124700029">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-294"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-293" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966321991699996" lon="-66.9016561960600029">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-293"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-292" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966905865199998" lon="-66.9012790260800045">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-292"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-291" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4967194419199998" lon="-66.9008953271499962">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-291"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-290" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4967125643799974" lon="-66.9005743449900052">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-290"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-289" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966920457700006" lon="-66.9002044356600010">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-289"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-288" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966671838199996" lon="-66.8998970313599983">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-288"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-287" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966261936399974" lon="-66.8994522898200046">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-287"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-286" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966029409599990" lon="-66.8991006614599968">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-286"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-285" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966009892599992" lon="-66.8988055979099983">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-285"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-284" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966118733300000" lon="-66.8985815736800049">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-284"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-283" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966216231299985" lon="-66.8984517497899986">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-283"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-282" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966358509199988" lon="-66.8983223487999936">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-282"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-281" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966545393799997" lon="-66.8981935283599967">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-281"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-280" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966776657499974" lon="-66.8980654453999932">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-280"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-279" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966806536599986" lon="-66.8980505477599934">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-279"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-278" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966990112899996" lon="-66.8979469999999878">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-278"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-277" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4961183409699998" lon="-66.9022581171700068">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-277"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-276" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4961861367399987" lon="-66.9018063572100061">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-276"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-275" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4962462924499995" lon="-66.9013065590699938">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-275"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-274" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4962758852199975" lon="-66.9009832957400050">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-274"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-273" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4962849855000027" lon="-66.9006983957699930">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-273"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-272" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4963099247099994" lon="-66.9004096897500062">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-272"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-271" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4963460312199981" lon="-66.8999643088399978">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-271"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-270" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4963674937399976" lon="-66.8995190268099975">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-270"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-269" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4964042595200002" lon="-66.8991735198899988">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-269"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-268" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4964342904600016" lon="-66.8989168392400018">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-268"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-267" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4964691859899997" lon="-66.8986576595900004">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-267"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-266" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4965177537999974" lon="-66.8982516526500035">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-266"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-265" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4965645345300000" lon="-66.8979469999999878">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-265"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-264" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4972940122799994" lon="-66.8990818915400069">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-264"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-263" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4972619845899970" lon="-66.8988943461300067">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-263"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-262" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4971868237599999" lon="-66.8985026652599970">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-262"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-261" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4971740993299978" lon="-66.8984207946800069">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-261"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-260" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4971642103599976" lon="-66.8983385252700060">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-260"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-259" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4971571688999994" lon="-66.8982559572600053">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-259"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-258" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4971529835200013" lon="-66.8981731912499953">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-258"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-257" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4971516593299992" lon="-66.8980903280699977">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-257"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-256" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4971531979399995" lon="-66.8980074686800066">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-256"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-255" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4971537632699992" lon="-66.8979929326399940">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-255"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-254" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4971585263300007" lon="-66.8979469999999878">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-254"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-253" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4985650466399978" lon="-66.8986611001000000">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-253"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-252" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4985223443700004" lon="-66.8986437803999934">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-252"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-251" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4984803225899999" lon="-66.8986248374099972">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-251"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-250" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4984390417300002" lon="-66.8986042983499942">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-250"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-249" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4983985611399984" lon="-66.8985821927699931">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-249"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-248" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4983589390100001" lon="-66.8985585524399937">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-248"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-247" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4983202322999993" lon="-66.8985334113500016">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-247"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-246" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4982824966700026" lon="-66.8985068056500012">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-246"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-245" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4982457863600001" lon="-66.8984787735799813">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-245"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-244" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4982101541599988" lon="-66.8984493554499977">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-244"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-243" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4981756512799986" lon="-66.8984185935500051">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-243"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-242" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4981423273400001" lon="-66.8983865321200000">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-242"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-241" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4981102302499991" lon="-66.8983532172299959">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-241"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-240" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980794061400022" lon="-66.8983186968000041">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-240"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-239" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980561794799989" lon="-66.8982908470299975">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-239"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-238" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980091004699965" lon="-66.8982382300000040">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-238"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-237" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979638674700002" lon="-66.8981839848499931">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-237"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-236" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979205355899978" lon="-66.8981281776799932">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-236"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-235" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4978791576099990" lon="-66.8980708764700012">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-235"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-234" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4978397839499991" lon="-66.8980121510300023">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-234"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-233" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977995503699990" lon="-66.8979469999999878">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-233"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-232" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973441388099999" lon="-66.8979469999999878">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-232"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-231" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973472980199993" lon="-66.8979612051699917">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-231"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-230" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973568530499985" lon="-66.8979980984800022">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-230"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-229" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973676765100024" lon="-66.8980346323699990">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-229"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-228" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973797552199990" lon="-66.8980707623299935">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-228"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-227" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973930744599979" lon="-66.8981064443500060">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-227"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-226" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974076180099978" lon="-66.8981416349499938">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-226"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-225" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974233681299989" lon="-66.8981762912499960">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-225"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-224" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974403056599996" lon="-66.8982103710399940">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-224"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-223" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974584099400019" lon="-66.8982438327900013">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-223"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-222" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974776589300003" lon="-66.8982766357299994">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-222"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-221" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974980291699982" lon="-66.8983087399099929">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-221"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-220" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975194958399989" lon="-66.8983401061999956">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-220"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-219" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975420327900011" lon="-66.8983706963900033">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-219"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-218" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975656125700016" lon="-66.8984004732100033">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-218"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-217" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975725955900003" lon="-66.8984088960999941">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-217"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-216" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977151716199977" lon="-66.8985644712499976">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-216"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-215" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4983789342400016" lon="-66.8987121958899991">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-215"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-214" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980557712199989" lon="-66.8983983944699929">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-214"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-213" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980061847199977" lon="-66.8983495882200003">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-213"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-212" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979583141299990" lon="-66.8982990631200067">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-212"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-211" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979122177900006" lon="-66.8982468807000004">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-211"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-210" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4978679518399982" lon="-66.8981931045599936">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-210"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-209" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4978255702199998" lon="-66.8981378001999900">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-209"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-208" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977851245599982" lon="-66.8980810350099944">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-208"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-207" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977466641499984" lon="-66.8980228781500017">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-207"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-206" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977278161999976" lon="-66.8979926842300046">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-206"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-205" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977014156699990" lon="-66.8979469999999878">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-205"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-204" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979060636200003" lon="-66.8979469999999878">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-204"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-203" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979235978800016" lon="-66.8979751215899938">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-203"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-202" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979665330799961" lon="-66.8980389297399967">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-202"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-201" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980116459900010" lon="-66.8981011849700025">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-201"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-200" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980588816299996" lon="-66.8981618114499952">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-200"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-199" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4981081824599993" lon="-66.8982207353000007">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-199"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-198" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4981277215599995" lon="-66.8982429745800005">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-198"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-197" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4982180172900001" lon="-66.8983219769200019">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-197"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-196" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4983109866599982" lon="-66.8983977470099944">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-196"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-195" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4984065163999993" lon="-66.8984701925199943">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-195"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-194" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4985044901200020" lon="-66.8985392251900066">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-194"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-193" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4985655291700013" lon="-66.8985797046599941">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-193"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-192" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4985894030699978" lon="-66.8985925448899934">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-192"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-191" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4982779118200007" lon="-66.8987583619200024">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-191"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-190" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4982200921499995" lon="-66.8986946857999811">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-190"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-189" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4981601083800005" lon="-66.8986330874400039">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-189"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-188" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980980336199998" lon="-66.8985736418899961">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-188"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-187" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980339434700003" lon="-66.8985164215600037">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-187"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-186" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979924468799979" lon="-66.8984814478599930">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-186"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-185" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979338934099982" lon="-66.8984224753200039">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-185"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-184" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4978774124499985" lon="-66.8983614739200050">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-184"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-183" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4978230728199975" lon="-66.8982985179600007">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-183"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-182" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977709406999988" lon="-66.8982336841500000">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-182"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-181" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977210796299989" lon="-66.8981670514800015">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-181"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-180" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4976702019799966" lon="-66.8980936891099986">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-180"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-179" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4976396325099994" lon="-66.8980441594499950">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-179"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-178" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4976107923500006" lon="-66.8979935819800033">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-178"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-177" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975863325000009" lon="-66.8979469999999878">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-177"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-176" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979886416799975" lon="-66.8986379866099981">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-176"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-175" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979398743499992" lon="-66.8985984505400069">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-175"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-174" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975203752300015" lon="-66.8982062276299985">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-174"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-173" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4972609674800008" lon="-66.8979469999999878">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-173"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-172" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4969159754600021" lon="-66.8979469999999878">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-172"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-171" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4969668168800006" lon="-66.8981047951799894">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-171"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-170" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4970539977099975" lon="-66.8984253776999935">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-170"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-169" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4972046468099975" lon="-66.8990350387600046">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-169"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-168" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979138786000004" lon="-66.8987390725000068">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-168"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-167" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980115386599984" lon="-66.8988506781099943">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-167"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-166" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4978145000900014" lon="-66.8986508031099874">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-166"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-165" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4983787414899989" lon="-66.8990110065399932">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-165"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-164" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4982239350800004" lon="-66.8988287410700053">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-164"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-163" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4984569345600001" lon="-66.8988036110699937">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-163"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-162" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4983334969600026" lon="-66.8988240382300035">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-162"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-161" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4955907653199993" lon="-66.9021525317999988">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-161"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-160" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4955716818199996" lon="-66.9021487105000006">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-160"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-159" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4955524082200000" lon="-66.9021460350499808">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-159"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-158" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4955330118599974" lon="-66.9021445148199803">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-158"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-157" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4955135604899983" lon="-66.9021441551000038">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-157"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-156" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4954941220699975" lon="-66.9021449571600044">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-156"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-155" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4954747644899999" lon="-66.9021469181899988">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-155"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-154" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4954555553799977" lon="-66.9021500313399997">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-154"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-153" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4954365618499992" lon="-66.9021542857399965">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-153"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-152" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4954178502299964" lon="-66.9021596665199922">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-152"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-151" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4953994859099975" lon="-66.9021661548899971">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-151"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-150" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4953815330300007" lon="-66.9021737281800029">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-150"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-149" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4953640543100004" lon="-66.9021823599299950">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-149"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-148" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4953471108099983" lon="-66.9021920200000011">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-148"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-147" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4953307617000018" lon="-66.9022026746300043">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-147"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-146" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4953150641199997" lon="-66.9022142865999996">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-146"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-145" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4959739620200008" lon="-66.9009545499399962">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-145"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-144" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4959280306299974" lon="-66.9009321611899992">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-144"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-143" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4958813539300007" lon="-66.9009114058000023">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-143"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-142" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4958339887999976" lon="-66.9008923090400032">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-142"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-141" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4957859929299993" lon="-66.9008748941899967">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-141"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-140" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4957374247999997" lon="-66.9008591824500058">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-140"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-139" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4956883435900004" lon="-66.9008451929699959">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-139"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-138" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4956388091000008" lon="-66.9008329427999939">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-138"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-137" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4955276566999984" lon="-66.9008007124700015">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-137"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-136" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4954583077499990" lon="-66.9007799777599956">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-136"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-135" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4953882848899980" lon="-66.9007617011800022">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-135"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-134" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4953176734299998" lon="-66.9007459049900035">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-134"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-133" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4962700263799977" lon="-66.9010472963699954">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-133"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-132" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4958056912499984" lon="-66.9025679482599855">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-132"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-131" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4958359980800005" lon="-66.9024133217100001">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-131"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-130" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4958652051300003" lon="-66.9022966327299997">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-130"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-129" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4958832425599979" lon="-66.9022122862100019">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-129"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-128" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4958903640100001" lon="-66.9021789848799955">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-128"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-127" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4959114440500016" lon="-66.9020605215000046">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-127"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-126" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4959284195800020" lon="-66.9019413869200008">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-126"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-125" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4959412699199994" lon="-66.9018217262899952">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-125"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-124" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4959432879799994" lon="-66.9017984121000069">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-124"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-123" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4960279313800005" lon="-66.9011267369299958">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-123"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-122" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4960190921399974" lon="-66.9009785447500036">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-122"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-121" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979196457599997" lon="-66.9025488747499963">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-121"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-120" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977696920400021" lon="-66.9017350473800008">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-120"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-119" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977218078700005" lon="-66.9014588562699970">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-119"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-118" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977064766999995" lon="-66.9013704279399803">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-118"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-117" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975172582699994" lon="-66.9003151283900053">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-117"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-116" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979151350299986" lon="-66.9025243939500029">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-116"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-115" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4972461277600004" lon="-66.9026599894099974">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-115"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-114" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4971623784400023" lon="-66.9022121940199952">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-114"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-113" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4970543100399976" lon="-66.9016132887300046">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-113"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-112" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4970123355900000" lon="-66.9013806718899957">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-112"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-111" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4969015647500008" lon="-66.9007254838600005">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-111"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-110" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4968865948899985" lon="-66.9006477751899951">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-110"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-109" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4968689501500005" lon="-66.9005706417599981">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-109"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-108" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4968486520300015" lon="-66.9004941775500015">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-108"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-107" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4968257252499981" lon="-66.9004184757300067">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-107"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-106" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4968001977600007" lon="-66.9003436285199911">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-106"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-105" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4967953031299999" lon="-66.9003301835499968">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-105"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-104" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4967135008600021" lon="-66.9000319800299934">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-104"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-103" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4966736602000008" lon="-66.8999771078400016">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-103"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-102" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977457145699979" lon="-66.9015967475500020">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-102"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-101" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4979862840700005" lon="-66.9015477735400026">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-101"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-100" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977592115799983" lon="-66.9016745969899915">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-100"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-99" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4980731694399996" lon="-66.8989307704899971">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-99"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-98" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4982483097799975" lon="-66.8989086649000058">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-98"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-97" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4972986925499985" lon="-66.8992315182200059">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-97"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-96" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973390934099999" lon="-66.8991661363299954">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-96"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-95" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973478783399976" lon="-66.8991494384300012">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-95"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-94" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973577867000003" lon="-66.8991333953999998">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-94"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-93" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973687708999979" lon="-66.8991180842899951">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-93"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-92" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973807782000002" lon="-66.8991035786399948">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-92"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-91" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973937509399988" lon="-66.8990899481100030">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-91"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-90" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974076267900003" lon="-66.8990772581699957">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-90"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-89" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974223391400017" lon="-66.8990655697400030">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-89"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-88" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974378173199980" lon="-66.8990549389800009">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-88"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-87" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974539870000001" lon="-66.8990454169299937">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-87"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-86" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974707705299988" lon="-66.8990370493200004">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-86"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-85" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974880872899963" lon="-66.8990298763399949">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-85"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-84" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975058541300008" lon="-66.8990239324400022">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-84"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-83" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975239857199956" lon="-66.8990192461599946">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-83"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-82" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975423949800017" lon="-66.8990158400099943">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-82"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-81" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975609935100014" lon="-66.8990137303500063">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-81"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-80" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977432723199993" lon="-66.8986003190399998">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-80"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-79" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977239683400008" lon="-66.8985883402699955">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-79"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-78" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4977039965199985" lon="-66.8985775370200031">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-78"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-77" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4976834268800001" lon="-66.8985679471799983">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-77"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-76" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4976623315499982" lon="-66.8985596043700070">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-76"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-75" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4976407844999997" lon="-66.8985525378400041">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-75"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-74" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4976188612799994" lon="-66.8985467723800014">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-74"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-73" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975966387699984" lon="-66.8985423281900040">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-73"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-72" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975741948899977" lon="-66.8985392208600018">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-72"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-71" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975516083400020" lon="-66.8985374612900046">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-71"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-70" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975289583099975" lon="-66.8985370556499959">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-70"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-69" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975063242399980" lon="-66.8985380053599812">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-69"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-68" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974837854799983" lon="-66.8985403070799975">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-68"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-67" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974614210599988" lon="-66.8985439527599794">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-67"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-66" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974393094099998" lon="-66.8985489295900067">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-66"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-65" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974175280600015" lon="-66.8985552201399969">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-65"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-64" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973997838400006" lon="-66.8985664589399960">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-64"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-63" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973831906699981" lon="-66.8985793687899957">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-63"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-62" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973679021499979" lon="-66.8985938301700003">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-62"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-61" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973540598100001" lon="-66.8986097092199969">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-61"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-60" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973417917899976" lon="-66.8986268589300010">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-60"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-59" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973312116699979" lon="-66.8986451205699808">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-59"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-58" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973224173700004" lon="-66.8986643250599968">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-58"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-57" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973154903199983" lon="-66.8986842946400060">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-57"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-56" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973104946299998" lon="-66.8987048444499948">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-56"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-55" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973074765499987" lon="-66.8987257842500043">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-55"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-54" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973064640199976" lon="-66.8987469201999971">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-54"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-53" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973074664100015" lon="-66.8987680566499989">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-53"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-52" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973104744399990" lon="-66.8987889979199934">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-52"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-51" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973154602699985" lon="-66.8988095501800046">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-51"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-50" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973223777499989" lon="-66.8988295231499990">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-50"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-49" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973309210999997" lon="-66.8988466650699820">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-49"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-48" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973408521400007" lon="-66.8988630257099999">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-48"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-47" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973521014100015" lon="-66.8988784906400014">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-47"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-46" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973645902299975" lon="-66.8988929517099820">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-46"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-45" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973782312399972" lon="-66.8989063077499964">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-45"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-44" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4973929290399965" lon="-66.8989184653599978">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-44"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-43" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974085808299993" lon="-66.8989293394899960">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-43"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-42" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974250771200008" lon="-66.8989388540999954">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-42"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-41" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974423025500023" lon="-66.8989469426300047">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-41"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-40" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974601366199991" lon="-66.8989535485099935">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-40"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-39" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974784545999977" lon="-66.8989586255299997">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-39"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-38" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4974971283699983" lon="-66.8989621381799964">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-38"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-37" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975160273199979" lon="-66.8989640618899983">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-37"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-36" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975350192499981" lon="-66.8989643832200045">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-36"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-35" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4975539713399986" lon="-66.8989630999000013">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-35"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-34" timestamp="2019-01-17T19:50:06Z" version="1" lat="10.4976622110699989" lon="-66.8989826400199945">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-34"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999979" lon="-66.8988753224482480">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-33"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-32" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999979" lon="-66.9015157811893317">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-32"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999979" lon="-66.9014250645420958">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-31"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4979393027591037" lon="-66.9026599999999974">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-28"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-27" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4957905455867380" lon="-66.9026599999999974">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-27"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4953000000000003" lon="-66.9007426004998393">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-26"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-25" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4953000000000003" lon="-66.9022314112524441">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-25"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-24" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999962" lon="-66.8989876058872994">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-24"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-23" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999979" lon="-66.8989771105911757">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-23"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-22" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999962" lon="-66.8992280761345768">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-22"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999979" lon="-66.8985977731945383">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-21"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4985999999999962" lon="-66.8986737444705426">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-20"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-19" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4960415504698421" lon="-66.9026599999999974">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-19"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="-18" timestamp="1970-01-01T00:00:00Z" version="1" lat="10.4964387863919075" lon="-66.9026599999999974">
-        <tag k="hoot:status" v="1"/>
         <tag k="hoot:id" v="-18"/>
+        <tag k="hoot:status" v="1"/>
     </node>
     <node visible="true" id="724" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4960977000000018" lon="-66.9008881000000031">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="724"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <node visible="true" id="725" timestamp="2019-01-10T17:16:05Z" version="1" changeset="749" lat="10.4963607999999979" lon="-66.8996161999999970">
-        <tag k="hoot:status" v="2"/>
         <tag k="hoot:id" v="725"/>
+        <tag k="hoot:status" v="2"/>
     </node>
     <way visible="true" id="-3139" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-22"/>
@@ -1145,26 +1145,27 @@
         <nd ref="-175"/>
         <nd ref="-174"/>
         <nd ref="-1705"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="layer" v="-1"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
         <tag k="destination:ref" v="A-01"/>
         <tag k="destination:symbol" v="motorway"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="hoot:id" v="-3139"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Distribuidor: Botánico"/>
-        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2014-09-05T04:44:06.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="hoot:way:node:count" v="7"/>
         <tag k="lanes" v="3"/>
-        <tag k="uuid" v="{0b879342-4f8f-4441-bac0-749e8971415a};{a8119095-4ce1-43b7-821c-e0212cfff2ef}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z;2019-01-17T19:50:05.713Z"/>
+        <tag k="layer" v="-1"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-3139"/>
-        <tag k="highway" v="motorway_link"/>
-        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2014-09-05T04:44:06.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z;2019-01-17T19:50:05.713Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{0b879342-4f8f-4441-bac0-749e8971415a};{a8119095-4ce1-43b7-821c-e0212cfff2ef}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-3135" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1703"/>
@@ -1176,42 +1177,43 @@
         <nd ref="-280"/>
         <nd ref="-279"/>
         <nd ref="-278"/>
-        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="toll" v="no"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="name" v="Autopista: Francisco Fajardo"/>
-        <tag k="ref" v="L-07"/>
-        <tag k="source:datetime" v="2015-12-15T02:06:59.000Z;2015-12-15T02:06:58.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="bicycle" v="no"/>
+        <tag k="bus:lanes" v="no|no|no|yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
+        <tag k="foot" v="no"/>
+        <tag k="hgv:lanes" v="no|no|no|yes"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="hoot:id" v="-3135"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="9"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="90|70|40|40"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="name" v="Autopista: Francisco Fajardo"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="overtaking" v="yes"/>
+        <tag k="ref" v="L-07"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-12-15T02:06:59.000Z;2015-12-15T02:06:58.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.711Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="toll" v="no"/>
+        <tag k="turn:lanes" v="through|through|through|through;slight_right"/>
+        <tag k="uuid" v="{f86f74fc-c5c9-46a2-bcd5-4076e546644c}"/>
         <tag k="way_area" v="-999999"/>
         <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
-        <tag k="maxheight" v="5"/>
-        <tag k="lanes" v="4"/>
-        <tag k="maxspeed" v="90"/>
-        <tag k="bus:lanes" v="no|no|no|yes"/>
-        <tag k="uuid" v="{f86f74fc-c5c9-46a2-bcd5-4076e546644c}"/>
-        <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
-        <tag k="maxspeed:lanes" v="90|70|40|40"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="minspeed" v="40"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="turn:lanes" v="through|through|through|through;slight_right"/>
-        <tag k="foot" v="no"/>
-        <tag k="overtaking" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.711Z"/>
-        <tag k="sidewalk" v="none"/>
-        <tag k="hgv:lanes" v="no|no|no|yes"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-3135"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="maxweight" v="20"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-3134" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-18"/>
@@ -1223,80 +1225,83 @@
         <nd ref="-289"/>
         <nd ref="-103"/>
         <nd ref="-1702"/>
-        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="toll" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Autopista: Francisco Fajardo"/>
-        <tag k="ref" v="L-07"/>
-        <tag k="source:datetime" v="2015-12-15T02:06:59.000Z;2015-12-15T02:06:58.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="bicycle" v="no"/>
+        <tag k="bus:lanes" v="no|no|no|yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
+        <tag k="foot" v="no"/>
+        <tag k="hgv:lanes" v="no|no|no|yes"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="hoot:id" v="-3134"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="9"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="90|70|40|40"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="name" v="Autopista: Francisco Fajardo"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="overtaking" v="yes"/>
+        <tag k="ref" v="L-07"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-12-15T02:06:59.000Z;2015-12-15T02:06:58.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.711Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="toll" v="no"/>
+        <tag k="turn:lanes" v="through|through|through|through;slight_right"/>
+        <tag k="uuid" v="{f86f74fc-c5c9-46a2-bcd5-4076e546644c}"/>
         <tag k="way_area" v="-999999"/>
         <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
-        <tag k="maxheight" v="5"/>
-        <tag k="lanes" v="4"/>
-        <tag k="maxspeed" v="90"/>
-        <tag k="bus:lanes" v="no|no|no|yes"/>
-        <tag k="uuid" v="{f86f74fc-c5c9-46a2-bcd5-4076e546644c}"/>
-        <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
-        <tag k="maxspeed:lanes" v="90|70|40|40"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="minspeed" v="40"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="turn:lanes" v="through|through|through|through;slight_right"/>
-        <tag k="foot" v="no"/>
-        <tag k="overtaking" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.711Z"/>
-        <tag k="sidewalk" v="none"/>
-        <tag k="hgv:lanes" v="no|no|no|yes"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-3134"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="maxweight" v="20"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-3129" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-1698"/>
         <nd ref="-113"/>
         <nd ref="-114"/>
         <nd ref="-115"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="tertiary"/>
+        <tag k="hoot:id" v="-3129"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Este 10 bis"/>
-        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38}"/>
-        <tag k="hoot:id" v="-3129"/>
-        <tag k="source:datetime" v="2015-06-10T00:02:17.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-06-10T00:02:17.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-3125" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1696"/>
         <nd ref="-122"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.644Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{ba18fba0-a24a-4c64-8450-fb6b959dc789}"/>
-        <tag k="hoot:id" v="-3125"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-3125"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.644Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{ba18fba0-a24a-4c64-8450-fb6b959dc789}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-62" timestamp="2019-01-17T19:50:06Z" version="1">
@@ -1308,30 +1313,31 @@
         <nd ref="-118"/>
         <nd ref="-117"/>
         <nd ref="-97"/>
-        <tag k="service" v="drive-through"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Lecuna"/>
-        <tag k="source:datetime" v="2014-12-01T08:26:38.000Z;2014-09-04T15:01:21.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{9c369f56-06a5-41c8-8f12-a57e98565cfc}"/>
-        <tag k="destination:lanes" v="Bellas Artes;San Bernardino;Los Caobos;Plaza Venezuela|Los Caobos;Plaza Venezuela;Chuao;Los Ruices|Chuao;Los Ruices"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
+        <tag k="destination:lanes" v="Bellas Artes;San Bernardino;Los Caobos;Plaza Venezuela|Los Caobos;Plaza Venezuela;Chuao;Los Ruices|Chuao;Los Ruices"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="turn:lanes" v="left;through|through;slight_right|slight_right"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-62"/>
         <tag k="highway" v="primary"/>
+        <tag k="hoot:id" v="-62"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="8"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Lecuna"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="service" v="drive-through"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-12-01T08:26:38.000Z;2014-09-04T15:01:21.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="turn:lanes" v="left;through|through;slight_right|slight_right"/>
+        <tag k="uuid" v="{9c369f56-06a5-41c8-8f12-a57e98565cfc}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-56" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1703"/>
@@ -1339,43 +1345,44 @@
         <nd ref="-287"/>
         <nd ref="-288"/>
         <nd ref="-1702"/>
-        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="toll" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Autopista: Francisco Fajardo"/>
-        <tag k="ref" v="L-07"/>
-        <tag k="source:datetime" v="2015-12-15T02:06:57.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="no"/>
-        <tag k="maxheight" v="5"/>
-        <tag k="lanes" v="4"/>
-        <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
-        <tag k="maxspeed" v="90"/>
-        <tag k="bus:lanes" v="no|no|no|yes"/>
-        <tag k="uuid" v="{f86f74fc-c5c9-46a2-bcd5-4076e546644c}"/>
-        <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="maxspeed:lanes" v="90|70|40|40"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
-        <tag k="minspeed" v="40"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="bus:lanes" v="no|no|no|yes"/>
         <tag k="cycleway" v="no"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="turn:lanes" v="through|through|through|through;slight_right"/>
+        <tag k="destination:lanes" v="San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao|San Agustín;Centro;La Paz;Antímano;Caricuao;Parque Central"/>
         <tag k="foot" v="no"/>
-        <tag k="overtaking" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.711Z"/>
-        <tag k="sidewalk" v="none"/>
         <tag k="hgv:lanes" v="no|no|no|yes"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-56"/>
         <tag k="highway" v="motorway"/>
+        <tag k="hoot:id" v="-56"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="90|70|40|40"/>
         <tag k="maxweight" v="20"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="name" v="Autopista: Francisco Fajardo"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="overtaking" v="yes"/>
+        <tag k="ref" v="L-07"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-12-15T02:06:57.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.711Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="toll" v="no"/>
+        <tag k="turn:lanes" v="through|through|through|through;slight_right"/>
+        <tag k="uuid" v="{f86f74fc-c5c9-46a2-bcd5-4076e546644c}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-52" timestamp="2019-01-10T17:16:06Z" version="1">
         <nd ref="-129"/>
@@ -1388,154 +1395,160 @@
         <nd ref="-1696"/>
         <nd ref="724"/>
         <nd ref="725"/>
-        <tag k="maxspeed:conditional" v="60 @ (22:00-06:00)"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="no"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="bus:lanes" v="no|yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
         <tag k="destination:ref" v="L-07"/>
         <tag k="destination:symbol" v="motorway"/>
-        <tag k="lit" v="yes"/>
-        <tag k="toll" v="no"/>
+        <tag k="foot" v="no"/>
+        <tag k="hgv:lanes" v="no|yes"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="hoot:id" v="-52"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Distribuidor: San Agustín del Norte"/>
-        <tag k="source:datetime" v="2015-12-15T02:07:00.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="bicycle" v="no"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="maxheight" v="5"/>
+        <tag k="hoot:way:node:count" v="10"/>
         <tag k="incline" v="10%"/>
         <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="50"/>
-        <tag k="bus:lanes" v="no|yes"/>
-        <tag k="uuid" v="{ba18fba0-a24a-4c64-8450-fb6b959dc789}"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="maxspeed:lanes" v="50|30"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="minspeed" v="40"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="foot" v="no"/>
-        <tag k="overtaking" v="no"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.644Z"/>
-        <tag k="sidewalk" v="none"/>
-        <tag k="hgv:lanes" v="no|yes"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="albertoq2004@hotmail.com"/>
-        <tag k="hoot:id" v="-52"/>
-        <tag k="destination" v="Plaza Venezuela;Petare"/>
-        <tag k="highway" v="motorway_link"/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="maxspeed:conditional" v="60 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="50|30"/>
         <tag k="maxweight" v="20"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="name" v="Distribuidor: San Agustín del Norte"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="overtaking" v="no"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="source" v="albertoq2004@hotmail.com"/>
+        <tag k="source:datetime" v="2015-12-15T02:07:00.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.644Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="toll" v="no"/>
+        <tag k="uuid" v="{ba18fba0-a24a-4c64-8450-fb6b959dc789}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-163"/>
         <nd ref="-23"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="maxspeed" v="60"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
-        <tag k="highway" v="primary_link"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{0c96907a-31ed-4a7e-a65d-1f539a3fee9b}"/>
-        <tag k="layer" v="-1"/>
-        <tag k="hoot:id" v="-46"/>
-        <tag k="source:datetime" v="2014-10-17T04:22:35.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="primary_link"/>
+        <tag k="hoot:id" v="-46"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="2"/>
+        <tag k="layer" v="-1"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="60"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:35.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{0c96907a-31ed-4a7e-a65d-1f539a3fee9b}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-162"/>
         <nd ref="-24"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="primary_link"/>
+        <tag k="hoot:id" v="-45"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="3"/>
+        <tag k="layer" v="-1"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Distribuidor: Botánico"/>
-        <tag k="uuid" v="{dcb33d08-3dfa-4573-bd67-04e49f5077a7}"/>
-        <tag k="layer" v="-1"/>
-        <tag k="hoot:id" v="-45"/>
-        <tag k="source:datetime" v="2014-10-17T04:22:36.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="3"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:36.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{dcb33d08-3dfa-4573-bd67-04e49f5077a7}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-44" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-173"/>
         <nd ref="-1705"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="destination:ref" v="A-01"/>
-        <tag k="layer" v="2"/>
-        <tag k="destination:symbol" v="motorway"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Distribuidor: Botánico"/>
-        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="uuid" v="{a8119095-4ce1-43b7-821c-e0212cfff2ef}"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.713Z"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="destination:ref" v="A-01"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="hoot:id" v="-44"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="3"/>
+        <tag k="layer" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-44"/>
-        <tag k="highway" v="motorway_link"/>
-        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.713Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{a8119095-4ce1-43b7-821c-e0212cfff2ef}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-43" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-1707"/>
         <nd ref="-172"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="destination:ref" v="A-01"/>
-        <tag k="layer" v="2"/>
-        <tag k="destination:symbol" v="motorway"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Distribuidor: Botánico"/>
-        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="uuid" v="{d6301467-078a-4887-9721-e695c7326c60}"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.713Z"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="destination:ref" v="A-01"/>
+        <tag k="destination:symbol" v="motorway"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="hoot:id" v="-43"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="3"/>
+        <tag k="layer" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-43"/>
-        <tag k="highway" v="motorway_link"/>
-        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="source:datetime" v="2014-10-13T00:42:46.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.713Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{d6301467-078a-4887-9721-e695c7326c60}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-39" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-113"/>
         <nd ref="-119"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.651Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="tertiary"/>
+        <tag k="hoot:id" v="-39"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Sur 21"/>
-        <tag k="uuid" v="{5e377d6d-519d-4593-b04c-512b7e66f8f0}"/>
-        <tag k="hoot:id" v="-39"/>
-        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.651Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{5e377d6d-519d-4593-b04c-512b7e66f8f0}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-33" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1543,47 +1556,49 @@
         <nd ref="-99"/>
         <nd ref="-98"/>
         <nd ref="-33"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Sur 25"/>
-        <tag k="source:datetime" v="2014-12-07T00:24:04.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{3eb4e182-ecd1-4d24-b49e-9ec888a0de8b}"/>
-        <tag k="destination:lanes" v="Bellas Artes;La Hoyada;Centro;Capitolio|Bellas Artes;La Hoyada;Centro;Capitolio|Bellas Artes;La Hoyada;Centro;Capitolio;San Bernardino"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
         <tag k="cycleway" v="no"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="turn:lanes" v="through|through|through;slight_right"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.657Z"/>
-        <tag k="sidewalk" v="left"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-33"/>
+        <tag k="destination:lanes" v="Bellas Artes;La Hoyada;Centro;Capitolio|Bellas Artes;La Hoyada;Centro;Capitolio|Bellas Artes;La Hoyada;Centro;Capitolio;San Bernardino"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:id" v="-33"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="4"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Sur 25"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="left"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-12-07T00:24:04.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.657Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="turn:lanes" v="through|through|through;slight_right"/>
+        <tag k="uuid" v="{3eb4e182-ecd1-4d24-b49e-9ec888a0de8b}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-26" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-122"/>
         <nd ref="-133"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.644Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{d2ce194a-e59a-44c4-86b8-3e27f9c64f43}"/>
-        <tag k="hoot:id" v="-26"/>
-        <tag k="source:datetime" v="2013-12-10T14:05:24.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="service"/>
+        <tag k="hoot:id" v="-26"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="no"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2013-12-10T14:05:24.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.644Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{d2ce194a-e59a-44c4-86b8-3e27f9c64f43}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-21" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1601,18 +1616,19 @@
         <nd ref="-193"/>
         <nd ref="-192"/>
         <nd ref="-21"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="1"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
-        <tag k="highway" v="road"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{fad92ca0-648c-4a9b-9778-89b75bacec9d}"/>
-        <tag k="hoot:id" v="-21"/>
-        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="road"/>
+        <tag k="hoot:id" v="-21"/>
+        <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="14"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{fad92ca0-648c-4a9b-9778-89b75bacec9d}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1638,21 +1654,22 @@
         <nd ref="-252"/>
         <nd ref="-253"/>
         <nd ref="-20"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="maxspeed" v="50"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{f9c8d427-58df-45b3-a630-2b3589f66293}"/>
-        <tag k="hoot:id" v="-17"/>
-        <tag k="source:datetime" v="2015-06-24T22:17:54.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:id" v="-17"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="22"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-06-24T22:17:54.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{f9c8d427-58df-45b3-a630-2b3589f66293}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-16" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1671,40 +1688,41 @@
         <nd ref="-267"/>
         <nd ref="-266"/>
         <nd ref="-265"/>
-        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="toll" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Autopista: Francisco Fajardo"/>
-        <tag k="ref" v="L-07"/>
-        <tag k="source:datetime" v="2015-12-15T02:06:53.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="bicycle" v="no"/>
+        <tag k="bus:lanes" v="no|no|no|yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="foot" v="no"/>
+        <tag k="hgv:lanes" v="no|no|no|yes"/>
+        <tag k="highway" v="motorway"/>
+        <tag k="hoot:id" v="-16"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="15"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="90"/>
+        <tag k="maxspeed:conditional" v="120 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="90|70|40|40"/>
+        <tag k="maxweight" v="20"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="name" v="Autopista: Francisco Fajardo"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="overtaking" v="yes"/>
+        <tag k="ref" v="L-07"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-12-15T02:06:53.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="toll" v="no"/>
+        <tag k="uuid" v="{7cc0b66d-1dd7-450e-a845-fbd96f0a9f49}"/>
         <tag k="way_area" v="-999999"/>
         <tag k="wikipedia" v="es:Autopista Francisco Fajardo"/>
-        <tag k="maxheight" v="5"/>
-        <tag k="lanes" v="4"/>
-        <tag k="maxspeed" v="90"/>
-        <tag k="bus:lanes" v="no|no|no|yes"/>
-        <tag k="uuid" v="{7cc0b66d-1dd7-450e-a845-fbd96f0a9f49}"/>
-        <tag k="maxspeed:lanes" v="90|70|40|40"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="minspeed" v="40"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="foot" v="no"/>
-        <tag k="overtaking" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
-        <tag k="sidewalk" v="none"/>
-        <tag k="hgv:lanes" v="no|no|no|yes"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-16"/>
-        <tag k="highway" v="motorway"/>
-        <tag k="maxweight" v="20"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-14" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-1702"/>
@@ -1720,60 +1738,62 @@
         <nd ref="-112"/>
         <nd ref="-1698"/>
         <tag k="alt_name" v="Av. Este 10 bis"/>
-        <tag k="maxspeed:conditional" v="60 @ (22:00-06:00)"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="lit" v="yes"/>
-        <tag k="toll" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Distribuidor: San Agustín del Norte"/>
-        <tag k="source:datetime" v="2015-12-15T02:07:00.000Z;2015-06-10T00:02:17.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="bicycle" v="no"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="maxheight" v="5"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="bus:lanes" v="no|yes"/>
+        <tag k="cycleway" v="no"/>
+        <tag k="destination" v="San Agustín del Norte"/>
+        <tag k="foot" v="no"/>
+        <tag k="hgv:lanes" v="no|yes"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="hoot:id" v="-14"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="12"/>
         <tag k="incline" v="10%"/>
         <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="50"/>
-        <tag k="bus:lanes" v="no|yes"/>
-        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38}"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="maxspeed:lanes" v="50|30"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="minspeed" v="40"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="cycleway" v="no"/>
-        <tag k="foot" v="no"/>
-        <tag k="overtaking" v="no"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
-        <tag k="sidewalk" v="none"/>
-        <tag k="hgv:lanes" v="no|yes"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-14"/>
-        <tag k="destination" v="San Agustín del Norte"/>
-        <tag k="highway" v="motorway_link"/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxheight" v="5"/>
+        <tag k="maxspeed" v="50"/>
+        <tag k="maxspeed:conditional" v="60 @ (22:00-06:00)"/>
+        <tag k="maxspeed:lanes" v="50|30"/>
         <tag k="maxweight" v="20"/>
+        <tag k="minspeed" v="40"/>
+        <tag k="name" v="Distribuidor: San Agustín del Norte"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="overtaking" v="no"/>
+        <tag k="sidewalk" v="none"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-12-15T02:07:00.000Z;2015-06-10T00:02:17.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="toll" v="no"/>
+        <tag k="uuid" v="{22a82dc7-8817-40e1-9204-b335c659de38}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-13" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-100"/>
         <nd ref="-32"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.656Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="tertiary"/>
+        <tag k="hoot:id" v="-13"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Sur 21"/>
-        <tag k="uuid" v="{ece7cc35-e067-46b2-a785-9818027199f4}"/>
-        <tag k="hoot:id" v="-13"/>
-        <tag k="source:datetime" v="2013-08-02T20:39:44.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2013-08-02T20:39:44.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.656Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{ece7cc35-e067-46b2-a785-9818027199f4}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1791,20 +1811,21 @@
         <nd ref="-135"/>
         <nd ref="-134"/>
         <nd ref="-26"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="no"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.644Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{d2ce194a-e59a-44c4-86b8-3e27f9c64f43};{fda12f7a-21e1-44f2-b0af-e26a3c8af46b}"/>
-        <tag k="hoot:id" v="-10"/>
-        <tag k="source:datetime" v="2013-12-10T14:05:24.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="service"/>
+        <tag k="hoot:id" v="-10"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="14"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="no"/>
         <tag k="osm_id" v="-999999"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2013-12-10T14:05:24.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.644Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{d2ce194a-e59a-44c4-86b8-3e27f9c64f43};{fda12f7a-21e1-44f2-b0af-e26a3c8af46b}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-9" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1813,28 +1834,29 @@
         <nd ref="-131"/>
         <nd ref="-130"/>
         <nd ref="-129"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Leonardo Ruíz Pineda"/>
-        <tag k="source:datetime" v="2013-11-11T16:52:07.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="bicycle" v="yes"/>
-        <tag k="lanes" v="4"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{ba18fba0-a24a-4c64-8450-fb6b959dc789}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
+        <tag k="bicycle" v="yes"/>
         <tag k="cycleway" v="no"/>
         <tag k="foot" v="yes"/>
-        <tag k="oneway" v="no"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.644Z"/>
-        <tag k="sidewalk" v="both"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-9"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:id" v="-9"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="lanes" v="4"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Leonardo Ruíz Pineda"/>
+        <tag k="oneway" v="no"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="both"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2013-11-11T16:52:07.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.644Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{ba18fba0-a24a-4c64-8450-fb6b959dc789}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-5" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-177"/>
@@ -1853,22 +1875,23 @@
         <nd ref="-190"/>
         <nd ref="-191"/>
         <nd ref="-162"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z;2019-01-17T19:50:05.712Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="primary_link"/>
+        <tag k="hoot:id" v="-5"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="16"/>
+        <tag k="lanes" v="3"/>
+        <tag k="layer" v="-1"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Distribuidor: Botánico"/>
-        <tag k="uuid" v="{dcb33d08-3dfa-4573-bd67-04e49f5077a7};{9d0eafa4-ccb5-4671-ae40-969b40abd855}"/>
-        <tag k="layer" v="-1"/>
-        <tag k="hoot:id" v="-5"/>
-        <tag k="source:datetime" v="2014-10-17T04:22:36.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="3"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:36.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z;2019-01-17T19:50:05.712Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{dcb33d08-3dfa-4573-bd67-04e49f5077a7};{9d0eafa4-ccb5-4671-ae40-969b40abd855}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-4" timestamp="2019-01-17T19:50:06Z" version="1">
@@ -1884,44 +1907,46 @@
         <nd ref="-214"/>
         <nd ref="-215"/>
         <nd ref="-163"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="layer" v="-1"/>
-        <tag k="destination:symbol" v="centre"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:datetime" v="2014-10-17T04:22:35.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="30"/>
-        <tag k="uuid" v="{0c96907a-31ed-4a7e-a65d-1f539a3fee9b};{de06a6f1-d8f2-4e5d-82bb-df9b89ae10e3}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z;2019-01-17T19:50:05.712Z"/>
+        <tag k="destination" v="Centro"/>
+        <tag k="destination:symbol" v="centre"/>
+        <tag k="highway" v="primary_link"/>
+        <tag k="hoot:id" v="-4"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="12"/>
+        <tag k="lanes" v="2"/>
+        <tag k="layer" v="-1"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-4"/>
-        <tag k="highway" v="primary_link"/>
-        <tag k="destination" v="Centro"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:35.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z;2019-01-17T19:50:05.712Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{0c96907a-31ed-4a7e-a65d-1f539a3fee9b};{de06a6f1-d8f2-4e5d-82bb-df9b89ae10e3}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-3" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-115"/>
         <nd ref="-116"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="residential"/>
+        <tag k="hoot:id" v="-3"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Sur 19"/>
-        <tag k="uuid" v="{8c42bbbc-4fa7-4783-af94-380567b82677}"/>
-        <tag k="hoot:id" v="-3"/>
-        <tag k="source:datetime" v="2015-09-08T18:26:40.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-09-08T18:26:40.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.653Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{8c42bbbc-4fa7-4783-af94-380567b82677}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-2" timestamp="2019-01-17T19:50:06Z" version="1">
@@ -1943,29 +1968,30 @@
         <nd ref="-82"/>
         <nd ref="-81"/>
         <nd ref="-34"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="lit" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Av. Sur 25"/>
-        <tag k="source:datetime" v="2014-12-07T00:24:04.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="3"/>
-        <tag k="maxspeed" v="40"/>
-        <tag k="uuid" v="{977359ab-12a8-4a75-a522-803dd1962a81}"/>
-        <tag k="destination:lanes" v="Bellas Artes;La Hoyada;Centro;Capitolio|Bellas Artes;La Hoyada;Centro;Capitolio|Bellas Artes;La Hoyada;Centro;Capitolio;San Bernardino"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
         <tag k="cycleway" v="no"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="turn:lanes" v="through|through|through;slight_right"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.657Z"/>
-        <tag k="sidewalk" v="left"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="osm_id" v="-999999"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="-2"/>
+        <tag k="destination:lanes" v="Bellas Artes;La Hoyada;Centro;Capitolio|Bellas Artes;La Hoyada;Centro;Capitolio|Bellas Artes;La Hoyada;Centro;Capitolio;San Bernardino"/>
         <tag k="highway" v="secondary"/>
+        <tag k="hoot:id" v="-2"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="18"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="lit" v="yes"/>
+        <tag k="maxspeed" v="40"/>
+        <tag k="name" v="Av. Sur 25"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="sidewalk" v="left"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-12-07T00:24:04.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.657Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="turn:lanes" v="through|through|through;slight_right"/>
+        <tag k="uuid" v="{977359ab-12a8-4a75-a522-803dd1962a81}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="-1" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-25"/>
@@ -1986,18 +2012,19 @@
         <nd ref="-160"/>
         <nd ref="-161"/>
         <nd ref="-129"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
-        <tag k="highway" v="unclassified"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{8f68fc57-cb08-49d9-a928-e0fae7bb1985}"/>
-        <tag k="hoot:id" v="-1"/>
-        <tag k="source:datetime" v="2009-01-17T18:10:43.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="unclassified"/>
+        <tag k="hoot:id" v="-1"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="18"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2009-01-17T18:10:43.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{8f68fc57-cb08-49d9-a928-e0fae7bb1985}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="6" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
@@ -2048,24 +2075,25 @@
         <nd ref="-36"/>
         <nd ref="-35"/>
         <nd ref="-34"/>
-        <tag k="surface" v="asphalt"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:datetime" v="2014-11-30T23:21:49.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="30"/>
-        <tag k="uuid" v="{4cffc09e-5c44-4c33-927e-f92110b30575}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.657Z"/>
+        <tag k="destination" v="Bellas Artes;Colegio de Ingenieros"/>
+        <tag k="highway" v="secondary_link"/>
+        <tag k="hoot:id" v="6"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="47"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="30"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="6"/>
-        <tag k="highway" v="secondary_link"/>
-        <tag k="destination" v="Bellas Artes;Colegio de Ingenieros"/>
+        <tag k="source:datetime" v="2014-11-30T23:21:49.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.657Z"/>
+        <tag k="surface" v="asphalt"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{4cffc09e-5c44-4c33-927e-f92110b30575}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="9" timestamp="2019-01-17T19:50:06Z" version="1">
         <nd ref="-97"/>
@@ -2073,25 +2101,26 @@
         <nd ref="-170"/>
         <nd ref="-171"/>
         <nd ref="-1707"/>
-        <tag k="z_order" v="-999999"/>
+        <tag k="attribution" v="osm"/>
+        <tag k="destination" v="Plaza Venezuela;Petare"/>
         <tag k="destination:ref" v="A-01"/>
         <tag k="destination:symbol" v="motorway"/>
+        <tag k="highway" v="motorway_link"/>
+        <tag k="hoot:id" v="9"/>
         <tag k="hoot:status" v="3"/>
-        <tag k="name" v="Distribuidor: Botánico"/>
-        <tag k="source:datetime" v="2014-11-30T21:06:28.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="hoot:way:node:count" v="5"/>
         <tag k="lanes" v="3"/>
-        <tag k="uuid" v="{d6301467-078a-4887-9721-e695c7326c60}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.713Z"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="name" v="Distribuidor: Botánico"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="9"/>
-        <tag k="highway" v="motorway_link"/>
-        <tag k="destination" v="Plaza Venezuela;Petare"/>
+        <tag k="source:datetime" v="2014-11-30T21:06:28.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.713Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{d6301467-078a-4887-9721-e695c7326c60}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="10" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
         <nd ref="-99"/>
@@ -2099,67 +2128,70 @@
         <nd ref="-168"/>
         <nd ref="-166"/>
         <nd ref="-80"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="layer" v="-1"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:datetime" v="2014-11-30T23:21:49.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="2"/>
-        <tag k="uuid" v="{93cc50db-b0c3-4ae9-9dcb-a6a5eb211f78};{a704fbf2-494e-4894-a205-2c5e007a4dbd}"/>
-        <tag k="destination:lanes" v="Los Caobos;Plaza Venezuela|Los Caobos;Plaza Venezuela;Bellas Artes;San Bernardino"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="turn:lanes" v="through|through;slight_right"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
+        <tag k="destination" v="Bellas Artes;Colegio de Ingenieros"/>
+        <tag k="destination:lanes" v="Los Caobos;Plaza Venezuela|Los Caobos;Plaza Venezuela;Bellas Artes;San Bernardino"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:id" v="10"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="5"/>
+        <tag k="lanes" v="2"/>
+        <tag k="layer" v="-1"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="10"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="destination" v="Bellas Artes;Colegio de Ingenieros"/>
+        <tag k="source:datetime" v="2014-11-30T23:21:49.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.640Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="turn:lanes" v="through|through;slight_right"/>
+        <tag k="uuid" v="{93cc50db-b0c3-4ae9-9dcb-a6a5eb211f78};{a704fbf2-494e-4894-a205-2c5e007a4dbd}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="335" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-28"/>
         <nd ref="-121"/>
         <nd ref="-116"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="maxspeed" v="20"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.649Z"/>
-        <tag k="highway" v="service"/>
-        <tag k="service" v="parking_aisle"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{19693054-3f36-4ca3-915e-a0284c23e3a4}"/>
-        <tag k="hoot:id" v="335"/>
-        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="3"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="highway" v="service"/>
+        <tag k="hoot:id" v="335"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="3"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="20"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="service" v="parking_aisle"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-09-04T15:01:21.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.649Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{19693054-3f36-4ca3-915e-a0284c23e3a4}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="580" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-102"/>
         <nd ref="-101"/>
         <nd ref="-31"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.656Z"/>
+        <tag k="attribution" v="osm"/>
         <tag k="highway" v="tertiary"/>
+        <tag k="hoot:id" v="580"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="3"/>
+        <tag k="lanes" v="2"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
         <tag k="name" v="Av. Sur 21"/>
-        <tag k="uuid" v="{86e7e9c0-56f8-44fc-8f61-27745e3e939e}"/>
-        <tag k="hoot:id" v="580"/>
-        <tag k="source:datetime" v="2015-08-18T16:11:08.000Z;2014-09-04T15:01:18.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
-        <tag k="attribution" v="osm"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2015-08-18T16:11:08.000Z;2014-09-04T15:01:18.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.656Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{86e7e9c0-56f8-44fc-8f61-27745e3e939e}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="750" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
@@ -2175,22 +2207,23 @@
         <nd ref="-256"/>
         <nd ref="-255"/>
         <nd ref="-254"/>
-        <tag k="source" v="osm:line"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="maxspeed" v="60"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
-        <tag k="highway" v="tertiary_link"/>
-        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
-        <tag k="uuid" v="{d6f907cb-cc8a-41be-87c4-2fb2d0482594}"/>
-        <tag k="destination" v="Plaza Venezuela"/>
-        <tag k="hoot:id" v="750"/>
-        <tag k="source:datetime" v="2014-10-17T04:22:36.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
-        <tag k="lanes" v="2"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="osm_id" v="-999999"/>
         <tag k="attribution" v="osm"/>
+        <tag k="destination" v="Plaza Venezuela"/>
+        <tag k="highway" v="tertiary_link"/>
+        <tag k="hoot:id" v="750"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="12"/>
+        <tag k="lanes" v="2"/>
+        <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="60"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="osm_id" v="-999999"/>
+        <tag k="source" v="osm:line"/>
+        <tag k="source:datetime" v="2014-10-17T04:22:36.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{d6f907cb-cc8a-41be-87c4-2fb2d0482594}"/>
+        <tag k="way_area" v="-999999"/>
         <tag k="z_order" v="-999999"/>
     </way>
     <way visible="true" id="790" timestamp="2019-01-17T19:50:06Z" version="1" changeset="841">
@@ -2212,23 +2245,24 @@
         <nd ref="-230"/>
         <nd ref="-231"/>
         <nd ref="-232"/>
-        <tag k="z_order" v="-999999"/>
-        <tag k="layer" v="-1"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="source:datetime" v="2014-11-30T23:21:49.000Z;2019-01-17T19:50:06Z"/>
-        <tag k="way_area" v="-999999"/>
-        <tag k="lanes" v="2"/>
-        <tag k="maxspeed" v="60"/>
-        <tag k="uuid" v="{d2585762-bf3c-4d4e-841e-a614bc878dde}"/>
-        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
         <tag k="attribution" v="osm"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
+        <tag k="destination" v="Plaza Venezuela"/>
+        <tag k="highway" v="tertiary_link"/>
+        <tag k="hoot:id" v="790"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="18"/>
+        <tag k="lanes" v="2"/>
+        <tag k="layer" v="-1"/>
         <tag k="license" v="This data is made available under the Open Database License: http://opendatacommons.org/licenses/odbl/1.0/."/>
+        <tag k="maxspeed" v="60"/>
+        <tag k="oneway" v="yes"/>
         <tag k="osm_id" v="-999999"/>
         <tag k="source" v="osm:line"/>
-        <tag k="hoot:id" v="790"/>
-        <tag k="highway" v="tertiary_link"/>
-        <tag k="destination" v="Plaza Venezuela"/>
+        <tag k="source:datetime" v="2014-11-30T23:21:49.000Z;2019-01-17T19:50:06Z"/>
+        <tag k="source:ingest:datetime" v="2019-01-17T19:50:05.712Z"/>
+        <tag k="tags" v="\&quot;source:datetime\&quot;=&gt;\&quot;2018-10-30T13:05:51Z\\"/>
+        <tag k="uuid" v="{d2585762-bf3c-4d4e-841e-a614bc878dde}"/>
+        <tag k="way_area" v="-999999"/>
+        <tag k="z_order" v="-999999"/>
     </way>
 </osm>

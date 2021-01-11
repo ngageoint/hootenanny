@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ChangesetCutOnlyCreator.h"
 
@@ -254,13 +254,13 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
   OsmMapPtr& cachedMap)
 {
   conf().set(
-    ConfigOptions::getConvertBoundsKeepEntireFeaturesCrossingBoundsKey(),
+    ConfigOptions::getBoundsKeepEntireFeaturesCrossingBoundsKey(),
     keepEntireFeaturesCrossingBounds);
   conf().set(
-    ConfigOptions::getConvertBoundsKeepOnlyFeaturesInsideBoundsKey(),
+    ConfigOptions::getBoundsKeepOnlyFeaturesInsideBoundsKey(),
    keepOnlyFeaturesInsideBounds);
   conf().set(
-    ConfigOptions::getConvertBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(),
+    ConfigOptions::getBoundsKeepImmediatelyConnectedWaysOutsideBoundsKey(),
     keepImmediatelyConnectedWaysOutsideBounds);
 
   if (warnOnZeroVersions)
@@ -294,15 +294,15 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
     {
       // Clear out the bounding box param temporarily, so that we can read the full map here. Kind
       // of kludgy, but there is no access to it from here via IoUtils::loadMap.
-      const QString bbox = conf().getString(ConfigOptions::getConvertBoundsKey());
-      conf().set(ConfigOptions::getConvertBoundsKey(), "");
+      const QString bbox = conf().getString(ConfigOptions::getBoundsKey());
+      conf().set(ConfigOptions::getBoundsKey(), "");
 
       LOG_STATUS("Loading map from: ..." << inputUrl.right(_maxFilePrintLength) << "...");
       cachedMap.reset(new OsmMap());
       cachedMap->setName(mapName);
       IoUtils::loadMap(cachedMap, inputUrl, useFileIds, status);
       // Restore it back to original.
-      conf().set(ConfigOptions::getConvertBoundsKey(), bbox);
+      conf().set(ConfigOptions::getBoundsKey(), bbox);
     }
     LOG_STATUS(
       "Copying map of size: " << StringUtils::formatLargeNumber(cachedMap->size()) <<

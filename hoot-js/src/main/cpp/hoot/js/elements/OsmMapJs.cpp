@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #define BUILDING_NODE_EXTENSION
 
@@ -40,7 +40,7 @@
 #include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
-#include <hoot/core/conflate/merging/CollectionRelationMerger.h>
+#include <hoot/core/conflate/merging/RelationMerger.h>
 #include <hoot/core/elements/RelationMemberNodeCounter.h>
 #include <hoot/core/elements/ConnectedRelationMemberFinder.h>
 
@@ -102,8 +102,8 @@ void OsmMapJs::Init(Handle<Object> target)
     String::NewFromUtf8(current, "isMemberOfRelationWithTagKey"),
     FunctionTemplate::New(current, isMemberOfRelationWithTagKey));
   tpl->PrototypeTemplate()->Set(
-    String::NewFromUtf8(current, "mergeCollectionRelations"),
-    FunctionTemplate::New(current, mergeCollectionRelations));
+    String::NewFromUtf8(current, "mergeRelations"),
+    FunctionTemplate::New(current, mergeRelations));
   tpl->PrototypeTemplate()->Set(
     String::NewFromUtf8(current, "getNumRelationMemberNodes"),
     FunctionTemplate::New(current, getNumRelationMemberNodes));
@@ -362,7 +362,7 @@ void OsmMapJs::isMemberOfRelationWithTagKey(const FunctionCallbackInfo<Value>& a
   args.GetReturnValue().Set(Boolean::New(current, inRelationWithSpecifiedTagKey));
 }
 
-void OsmMapJs::mergeCollectionRelations(const FunctionCallbackInfo<Value>& args)
+void OsmMapJs::mergeRelations(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
@@ -371,7 +371,7 @@ void OsmMapJs::mergeCollectionRelations(const FunctionCallbackInfo<Value>& args)
   ElementId elementId1 = toCpp<ElementId>(args[0]);
   ElementId elementId2 = toCpp<ElementId>(args[1]);
 
-  CollectionRelationMerger merger;
+  RelationMerger merger;
   merger.setOsmMap(mapJs->getMap().get());
   try
   {

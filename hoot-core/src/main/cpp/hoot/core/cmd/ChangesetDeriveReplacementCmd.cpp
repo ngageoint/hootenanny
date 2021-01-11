@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -177,7 +177,7 @@ public:
     // do this here to get the --write-bounds param removed from args before the param error
     // checking and non-optional param parsing
     const QString boundsStr = args[boundsIndex].trimmed();
-    conf().set(ConfigOptions::getConvertBoundsKey(), boundsStr);
+    conf().set(ConfigOptions::getBoundsKey(), boundsStr);
     BoundedCommand::runSimple(args);
 
     LOG_VARD(args);
