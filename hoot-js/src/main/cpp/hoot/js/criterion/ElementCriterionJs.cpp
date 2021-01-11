@@ -74,9 +74,8 @@ void ElementCriterionJs::Init(Handle<Object> target)
       PopulateConsumersJs::baseClass(),
       String::NewFromUtf8(current, ElementCriterion::className().data()));
 
-    //Persistent<Function> constructor(current, tpl->GetFunction());
     _constructor.Reset(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&_constructor/*constructor*/));
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&_constructor));
   }
 }
 

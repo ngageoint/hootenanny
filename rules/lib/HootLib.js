@@ -564,6 +564,14 @@ function haveGeometricRelationship(e, bounds, relationship, map)
 }
 
 /*
+ * TODO
+ */
+function relationHasMemberWithGeometricRelationship(relation, bounds, relationship, map)
+{
+  return hoot.ElementGeometryUtils.relationHasMemberWithGeometricRelationship(relation, bounds, relationship, map);
+}
+
+/*
  * Gets the currently configured convert bounds relationship as a string (see
    ConfigUtils::getBoundsRelationship())
  */

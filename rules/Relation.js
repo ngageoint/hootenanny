@@ -41,7 +41,19 @@ var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
  */
 exports.isMatchCandidate = function(map, e)
 {
-  return isCollectionRelation(e);
+  if (!isCollectionRelation(e))
+  {
+    return false;
+  }
+
+  var bounds = getBounds();
+  hoot.trace("bounds: " + bounds);
+  if (bounds !== 'undefined' && bounds !== null && bounds !== '')
+  {
+    return relationHasMemberWithGeometricRelationship(e, bounds, getBoundsRelationship(), map);
+  }
+
+  return true;
 };
 
 /**
