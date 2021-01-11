@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -51,9 +51,8 @@ class OgrWriterTest : public HootTestFixture
 
 public:
 
-  OgrWriterTest()
-    : HootTestFixture("test-files/io/",
-                      "test-output/io/")
+  OgrWriterTest() :
+  HootTestFixture("test-files/io/", "test-output/io/")
   {
   }
 
@@ -148,9 +147,6 @@ public:
     uut.write(createTestMap());
     uut.close();
 
-    FileUtils::makeDir("tmp");
-    OsmMapWriterFactory::write(createTestMap(), "tmp/TestMap.osm");
-
     // make sure it created a bunch of files. We aren't testing for correct output.
     CPPUNIT_ASSERT(QDir(_outputPath + "OgrWriterTest.gdb").entryList().size() > 10);
   }
@@ -183,7 +179,6 @@ public:
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OgrWriterTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OgrWriterTest, "quick");
 
 }

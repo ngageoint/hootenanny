@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_H
 #define CHANGESET_REPLACEMENT_H
@@ -41,7 +41,7 @@ namespace hoot
  * Interface for classes generating changesets where one dataset replaces another
  *
  * The interface supports a Polygon geometry instead of any geometry as input due to the fact the
- * convert.bounds option string has to be set by the creators at the beginning of the replacement
+ * bounds option string has to be set by the creators at the beginning of the replacement
  * operation, and there only exist sa string parsing implementation for Polygon. Its possible for
  * this support additional geometry types at some point going forward, but there's no need for it
  * currently.

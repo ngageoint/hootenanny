@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementStreamer.h"
 
@@ -68,7 +68,7 @@ bool ElementStreamer::isStreamableIo(const QString& input, const QString& output
     //option be specified in order to stream when writing that format
     (writerName != "hoot::OsmXmlWriter" ||
     (writerName == "hoot::OsmXmlWriter" && !ConfigOptions().getWriterXmlSortById())) &&
-    // No readers when using the convert.bounds option are able to do streaming I/O at this point.
+    // No readers when using the bounds option are able to do streaming I/O at this point.
     !ConfigUtils::boundsOptionEnabled();
 }
 

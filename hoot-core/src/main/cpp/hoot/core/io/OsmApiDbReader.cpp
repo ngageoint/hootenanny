@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbReader.h"
 
@@ -254,8 +254,8 @@ void OsmApiDbReader::setConfiguration(const Settings& conf)
   ConfigOptions configOptions(conf);
   setMaxElementsPerMap(configOptions.getMaxElementsPerPartialMap());
   setUserEmail(configOptions.getApiDbEmail());
-  setBoundingBox(configOptions.getConvertBounds());
-  setOverrideBoundingBox(configOptions.getConvertBoundsOsmApiDatabase());
+  setBoundingBox(configOptions.getBounds());
+  setOverrideBoundingBox(configOptions.getBoundsOsmApiDatabase());
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -39,7 +39,7 @@
 #include <hoot/core/algorithms/subline-matching/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
+#include <hoot/core/conflate/linear/LinearSnapMerger.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -61,9 +61,9 @@ using namespace std;
 namespace hoot
 {
 
-class HighwaySnapMergerTest : public HootTestFixture
+class LinearSnapMergerTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(HighwaySnapMergerTest);
+  CPPUNIT_TEST_SUITE(LinearSnapMergerTest);
   CPPUNIT_TEST(runReverseTest);
   CPPUNIT_TEST(runSimpleTest);
   CPPUNIT_TEST(runSmallScrapTest);
@@ -75,10 +75,10 @@ class HighwaySnapMergerTest : public HootTestFixture
 
 public:
 
-  HighwaySnapMergerTest() :
+  LinearSnapMergerTest() :
   HootTestFixture(
-    "test-files/conflate/highway/HighwaySnapMergerTest/",
-    "test-output/conflate/highway/HighwaySnapMergerTest/")
+    "test-files/conflate/linear/LinearSnapMergerTest/",
+    "test-output/conflate/linear/LinearSnapMergerTest/")
   {
     setResetType(ResetBasic);
   }
@@ -124,7 +124,7 @@ public:
     set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(pairs, sublineMatcher);
+    LinearSnapMerger merger(pairs, sublineMatcher);
 
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
@@ -194,7 +194,7 @@ public:
     set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(pairs, sublineMatcher);
+    LinearSnapMerger merger(pairs, sublineMatcher);
 
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
@@ -241,7 +241,7 @@ public:
     set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(pairs, sublineMatcher);
+    LinearSnapMerger merger(pairs, sublineMatcher);
 
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
@@ -307,7 +307,7 @@ public:
     set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(r->getElementId(), w3->getElementId()));
 
-    HighwaySnapMerger merger(pairs, sublineMatcher);
+    LinearSnapMerger merger(pairs, sublineMatcher);
 
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
@@ -356,7 +356,7 @@ public:
     set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(pairs, sublineMatcher);
+    LinearSnapMerger merger(pairs, sublineMatcher);
 
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
@@ -413,7 +413,7 @@ public:
     set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), r->getElementId()));
 
-    HighwaySnapMerger merger(pairs, sublineMatcher);
+    LinearSnapMerger merger(pairs, sublineMatcher);
 
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
@@ -446,7 +446,7 @@ public:
     set<pair<ElementId, ElementId>> pairs;
     pairs.insert(pair<ElementId, ElementId>(w1->getElementId(), w2->getElementId()));
 
-    HighwaySnapMerger merger(pairs, sublineMatcher);
+    LinearSnapMerger merger(pairs, sublineMatcher);
 
     vector<pair<ElementId, ElementId>> replaced;
     merger.apply(map, replaced);
@@ -462,6 +462,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(HighwaySnapMergerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(LinearSnapMergerTest, "quick");
 
 }

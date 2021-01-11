@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // boost
@@ -174,8 +174,8 @@ public:
       }
     }
 
-    OsmXmlWriter writer;
-    writer.write(map, "tmp/ErrorMap.osm");
+    //OsmXmlWriter writer;
+    //writer.write(map, "tmp/ErrorMap.osm");
 
     tbs::SampleStats statsError(errors);
     tbs::SampleStats statsDeltaError(deltaErrors);
@@ -200,7 +200,6 @@ public:
     }
 
   }
-
 
   void testRegion(const OGREnvelope& env, QString name)
   {

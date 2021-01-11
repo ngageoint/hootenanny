@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -71,7 +71,7 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
         options.add("api.db.email=" + params.getUser().getEmail());
         options.add("reader.add.source.datetime=false");
         options.add("writer.include.circular.error.tags=false");
-        options.add("convert.bounds.remove.missing.elements=false");
+        options.add("bounds.remove.missing.elements=false");
 
         List<String> hootOptions = toHootOptions(options);
 

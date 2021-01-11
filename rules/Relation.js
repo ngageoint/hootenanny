@@ -1,6 +1,6 @@
 /**
- * This script conflates collection relations (e.g route, administrative boundary relations, etc.). 
- * It is meant to be run after all other matchers.
+ * This script conflates "collection" relations (e.g route, administrative boundary relations, etc.). 
+ * Eventually it could be adapted to conflate any relation. It is meant to be run after all other matchers.
  */
 
 "use strict";
@@ -15,9 +15,9 @@ exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default")
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
 exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default"));
 
-exports.searchRadius = parseFloat(hoot.get("search.radius.collection.relation"));
-exports.typeThreshold = parseFloat(hoot.get("collection.relation.type.threshold"));
-exports.nameThreshold = parseFloat(hoot.get("collection.relation.name.threshold"));
+exports.searchRadius = parseFloat(hoot.get("search.radius.relation"));
+exports.typeThreshold = parseFloat(hoot.get("relation.type.threshold"));
+exports.nameThreshold = parseFloat(hoot.get("relation.name.threshold"));
 exports.experimental = false;
 exports.baseFeatureType = "CollectionRelation";
 exports.writeMatchedBy = hoot.get("writer.include.matched.by.tag");
@@ -261,7 +261,7 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergePair = function(map, e1, e2)
 {
-  mergeCollectionRelations(map, e1.getElementId(), e2.getElementId());
+  mergeRelations(map, e1.getElementId(), e2.getElementId());
 
   e1.setStatusString("conflated");
   if (exports.writeMatchedBy == "true")

@@ -22,15 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef FEATUREEXTRACTOR_JS_H
-#define FEATUREEXTRACTOR_JS_H
+#ifndef LINEAR_SNAP_MERGER_JS_H
+#define LINEAR_SNAP_MERGER_JS_H
 
 // hoot
-#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
-#include <hoot/js/HootBaseJs.h>
+#include <hoot/core/conflate/linear/LinearSnapMerger.h>
 #include <hoot/js/io/DataConvertJs.h>
+
+// node.js
+#include <hoot/js/HootBaseJs.h>
 
 // Qt
 #include <QString>
@@ -43,29 +45,30 @@ namespace hoot
 
 class OsmMapOperation;
 
-class FeatureExtractorJs : public HootBaseJs
+class LinearSnapMergerJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  FeatureExtractorPtr getFeatureExtractor() { return _fe; }
+  LinearSnapMergerPtr getLinearSnapMerger() { return _ptr; }
 
-  virtual ~FeatureExtractorJs() = default;
+  static v8::Handle<v8::Object> New(const LinearSnapMergerPtr& ptr);
+
+  virtual ~LinearSnapMergerJs() = default;
 
 private:
 
-  FeatureExtractorJs(FeatureExtractorPtr fe) : _fe(fe) { }
+  LinearSnapMergerJs() = default;
 
-  static void extract(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void getName(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  QString _className;
-  FeatureExtractorPtr _fe;
+  LinearSnapMergerPtr _ptr;
+  static v8::Persistent<v8::Function> _constructor;
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, FeatureExtractorPtr& p)
+inline void toCpp(v8::Handle<v8::Value> v, LinearSnapMergerPtr& ptr)
 {
   if (!v->IsObject())
   {
@@ -73,19 +76,10 @@ inline void toCpp(v8::Handle<v8::Value> v, FeatureExtractorPtr& p)
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  FeatureExtractorJs* fej = 0;
-  fej = node::ObjectWrap::Unwrap<FeatureExtractorJs>(obj);
-  if (fej)
-  {
-    p = fej->getFeatureExtractor();
-  }
-  else
-  {
-    throw IllegalArgumentException("Expected a FeatureExtractorJs, got: (" + toJson(v) + ")");
-  }
+  LinearSnapMergerJs* ptrj = node::ObjectWrap::Unwrap<LinearSnapMergerJs>(obj);
+  ptr = ptrj->getLinearSnapMerger();
 }
-
 
 }
 
-#endif // FEATUREEXTRACTOR_JS_H
+#endif // LINEAR_SNAP_MERGER_JS_H

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAYSNAPMERGER_H
-#define HIGHWAYSNAPMERGER_H
+#ifndef LINEAR_SNAP_MERGER_H
+#define LINEAR_SNAP_MERGER_H
 
 // Hoot
-#include <hoot/core/conflate/highway/HighwayMergerAbstract.h>
+#include <hoot/core/conflate/linear/LinearMergerAbstract.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot
@@ -41,21 +41,19 @@ class WaySublineCollection;
  *
  * Note that this was originally written specifically for roads, but now is used by several linear
  * script routines, including railway and river.
- *
- * @todo rename to LinearSnapMerger since this is used by multiple feature types
  */
-class HighwaySnapMerger : public HighwayMergerAbstract
+class LinearSnapMerger : public LinearMergerAbstract
 {
 
 public:
 
-  static std::string className() { return "hoot::HighwaySnapMerger"; }
+  static std::string className() { return "hoot::LinearSnapMerger"; }
 
-  HighwaySnapMerger();
-  HighwaySnapMerger(
+  LinearSnapMerger();
+  LinearSnapMerger(
     const std::set<std::pair<ElementId, ElementId>>& pairs,
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
-  virtual ~HighwaySnapMerger() = default;
+  virtual ~LinearSnapMerger() = default;
 
   virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
@@ -126,11 +124,11 @@ private:
   void _updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap);
 
   // for white box testing.
-  friend class HighwaySnapMergerTest;
+  friend class LinearSnapMergerTest;
 };
 
-typedef std::shared_ptr<HighwaySnapMerger> HighwaySnapMergerPtr;
+typedef std::shared_ptr<LinearSnapMerger> LinearSnapMergerPtr;
 
 }
 
-#endif // HIGHWAYSNAPMERGER_H
+#endif // LINEAR_SNAP_MERGER_H

@@ -3,8 +3,8 @@ set -e
 
 # This tests to see if collection relations (e.g. admin bounds, routes, etc.) get merged correctly during conflation.
 
-IN_DIR=test-files/cmd/glacial/CollectionRelationMergeTest
-OUT_DIR=test-output/cmd/glacial/CollectionRelationMergeTest
+IN_DIR=test-files/cmd/glacial/RelationMergeTest
+OUT_DIR=test-output/cmd/glacial/RelationMergeTest
 mkdir -p $OUT_DIR
 
 CONFIG="--warn -C Testing.conf"

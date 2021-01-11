@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ApiDbReader.h"
 
@@ -66,7 +66,7 @@ _numNodesRead(0),
 _numWaysRead(0),
 _numRelationsRead(0),
 _keepImmediatelyConnectedWaysOutsideBounds(
-  ConfigOptions().getConvertBoundsKeepImmediatelyConnectedWaysOutsideBounds())
+  ConfigOptions().getBoundsKeepImmediatelyConnectedWaysOutsideBounds())
 {
 }
 
@@ -311,7 +311,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     std::shared_ptr<QSqlQuery> wayItr =
       _getDatabase()->selectElementsByElementIdList(wayIds, TableType::Way);
     const bool tagConnectedWays =
-      ConfigOptions().getConvertBoundsTagImmediatelyConnectedOutOfBoundsWays();
+      ConfigOptions().getBoundsTagImmediatelyConnectedOutOfBoundsWays();
     LOG_VART(tagConnectedWays);
     while (wayItr->next())
     {
@@ -565,8 +565,8 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
   // already cropped the way we want them from the start and skip this step completely. That's
   // possibly an optimization to look into doing in the future.
   ConfigOptions conf;
-  if (!conf.getConvertBoundsKeepEntireFeaturesCrossingBounds() ||
-       conf.getConvertBoundsKeepOnlyFeaturesInsideBounds())
+  if (!conf.getBoundsKeepEntireFeaturesCrossingBounds() ||
+       conf.getBoundsKeepOnlyFeaturesInsideBounds())
   {
     // We've already handled keeping immediately connected oob ways during the query, so don't need
     // to worry about it here.

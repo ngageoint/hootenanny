@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -245,9 +245,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/cmd/glacial/CollectionRelationMergeTest/input1.osm", map);
+    reader.read("test-files/cmd/glacial/RelationMergeTest/input1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/cmd/glacial/CollectionRelationMergeTest/input2.osm", map);
+    reader.read("test-files/cmd/glacial/RelationMergeTest/input2.osm", map);
 
     RubberSheet uut;
     uut.setReference(true);
@@ -268,9 +268,9 @@ public:
     OsmXmlReader reader;
     OsmMapPtr map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
-    reader.read("test-files/cmd/glacial/CollectionRelationMergeTest/input1.osm", map);
+    reader.read("test-files/cmd/glacial/RelationMergeTest/input1.osm", map);
     reader.setDefaultStatus(Status::Unknown2);
-    reader.read("test-files/cmd/glacial/CollectionRelationMergeTest/input2.osm", map);
+    reader.read("test-files/cmd/glacial/RelationMergeTest/input2.osm", map);
 
     RubberSheet uut;
     uut.setReference(true);

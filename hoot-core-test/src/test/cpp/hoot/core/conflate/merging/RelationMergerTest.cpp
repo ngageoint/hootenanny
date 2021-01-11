@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -32,7 +32,7 @@
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/conflate/merging/CollectionRelationMerger.h>
+#include <hoot/core/conflate/merging/RelationMerger.h>
 
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -43,18 +43,18 @@
 namespace hoot
 {
 
-class CollectionRelationMergerTest : public HootTestFixture
+class RelationMergerTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(CollectionRelationMergerTest);
+  CPPUNIT_TEST_SUITE(RelationMergerTest);
   CPPUNIT_TEST(runTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  CollectionRelationMergerTest() :
+  RelationMergerTest() :
   HootTestFixture(
-    "test-files/conflate/merging/CollectionRelationMergerTest/",
-    "test-output/conflate/merging/CollectionRelationMergerTest/")
+    "test-files/conflate/merging/RelationMergerTest/",
+    "test-output/conflate/merging/RelationMergerTest/")
   {
     // If uncommenting out the writer include debug tags calls for debugging purposes only for the
     // tests below, then also uncomment this line.
@@ -68,7 +68,7 @@ public:
     OsmMapPtr map(new OsmMap());
     OsmMapReaderFactory::read(map, _inputPath + "runTestInput.osm", true);
 
-    CollectionRelationMerger uut;
+    RelationMerger uut;
     uut.setOsmMap(map.get());
     uut.merge(ElementId(ElementType::Relation, 7387470), ElementId(ElementType::Relation, -1));
 
@@ -80,6 +80,6 @@ public:
   }
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(CollectionRelationMergerTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(RelationMergerTest, "quick");
 
 }

@@ -22,17 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef HIGHWAYSNAPMERGERJS_H
-#define HIGHWAYSNAPMERGERJS_H
+#ifndef FEATUREEXTRACTOR_JS_H
+#define FEATUREEXTRACTOR_JS_H
 
 // hoot
-#include <hoot/core/conflate/highway/HighwaySnapMerger.h>
-#include <hoot/js/io/DataConvertJs.h>
-
-// node.js
+#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
 #include <hoot/js/HootBaseJs.h>
+#include <hoot/js/io/DataConvertJs.h>
 
 // Qt
 #include <QString>
@@ -45,33 +43,29 @@ namespace hoot
 
 class OsmMapOperation;
 
-/**
- * @todo rename this to SnapMergerJs or MergerJs, as it does more than roads now
- */
-class HighwaySnapMergerJs : public HootBaseJs
+class FeatureExtractorJs : public HootBaseJs
 {
 public:
 
   static void Init(v8::Handle<v8::Object> target);
 
-  HighwaySnapMergerPtr getHighwaySnapMerger() { return _ptr; }
+  FeatureExtractorPtr getFeatureExtractor() { return _fe; }
 
-  static v8::Handle<v8::Object> New(const HighwaySnapMergerPtr& ptr);
-
-  virtual ~HighwaySnapMergerJs() = default;
+  virtual ~FeatureExtractorJs() = default;
 
 private:
 
-  HighwaySnapMergerJs() = default;
+  FeatureExtractorJs(FeatureExtractorPtr fe) : _fe(fe) { }
 
+  static void extract(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getName(const v8::FunctionCallbackInfo<v8::Value>& args);
 
-  HighwaySnapMergerPtr _ptr;
-  static v8::Persistent<v8::Function> _constructor;
+  QString _className;
+  FeatureExtractorPtr _fe;
 };
 
-inline void toCpp(v8::Handle<v8::Value> v, HighwaySnapMergerPtr& ptr)
+inline void toCpp(v8::Handle<v8::Value> v, FeatureExtractorPtr& p)
 {
   if (!v->IsObject())
   {
@@ -79,10 +73,19 @@ inline void toCpp(v8::Handle<v8::Value> v, HighwaySnapMergerPtr& ptr)
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  HighwaySnapMergerJs* ptrj = node::ObjectWrap::Unwrap<HighwaySnapMergerJs>(obj);
-  ptr = ptrj->getHighwaySnapMerger();
+  FeatureExtractorJs* fej = 0;
+  fej = node::ObjectWrap::Unwrap<FeatureExtractorJs>(obj);
+  if (fej)
+  {
+    p = fej->getFeatureExtractor();
+  }
+  else
+  {
+    throw IllegalArgumentException("Expected a FeatureExtractorJs, got: (" + toJson(v) + ")");
+  }
 }
+
 
 }
 
-#endif // HIGHWAYSNAPMERGERJS_H
+#endif // FEATUREEXTRACTOR_JS_H
