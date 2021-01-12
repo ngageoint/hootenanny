@@ -134,6 +134,7 @@ Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const Co
   HistogramVisitor v(*result);
   v.setOsmMap(&map);
   e->visitRo(map, v);
+  LOG_VART(result->numBins());
   return result;
 }
 
