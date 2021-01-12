@@ -20,6 +20,10 @@ var runningStatus = 'running',
 
 function getJobs() { return jobs; }
 function getConfig() { return config; }
+function waitSomeSeconds(seconds) {
+    var someSecondsLater = new Date(new Date().getTime() + seconds * 1000);
+    while(someSecondsLater > new Date()){}
+}
 
 // pipes request data to temp file with name that matches posted data format.
 function writeExportFile(req, done) {
@@ -245,12 +249,16 @@ exports.validateBbox = function(bbox) {
     return null;
 }
 
+function jobComplete(hash) {
+    jobs[hash].status = 'complete';
+    console.log(jobs[hash].id + ' complete');
+}
+
 function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
     var config = getConfig(), jobs = getJobs();
     var stream = fs.createWriteStream(outZip);
     stream.on('close', function() {
-        jobs[hash].status = 'complete';
-        console.log(jobs[hash].id + ' complete');
+        jobComplete(hash);
         if (cb) cb();
     });
 
@@ -357,36 +365,53 @@ function doMerge(req, res, mergeJobs, mergeHash, input) {
         + '_' + req.params.format.replace(' ', '_')
         + '.zip';
 
-    var ext = config.formats[req.params.format];
-    var inputs = mergeJobs.reduce(function(inputs, jobHash) { return inputs += appDir + 'export_' + jobHash + ext + ' '; }, '');
-    var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, req.query.poly, true, inputs, outDir, outFile);
-    var command = 'hoot convert -C NodeExport.conf ' + inputs + outFile;
-    var child = exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
-        //setTimeout(function() { //used to simulate a long request
-        console.log(stderr)
-        console.log(error)
-        if (stderr || error) {
-            //res.send({command: command, stderr: stderr, error: error});
-            jobs[mergeHash].status = stderr;
-        } else {
-            zipOutput(mergeHash, req, false, outFile, outZip, function() {
-                inputs.forEach(function(input) {
-                    fs.unlink(job.outFile, function(err) {
-                        if (err) {
-                            console.error(err);
-                        } else {
-                            console.log('deleted ' + job.outFile);
-                        }
-                    });
-                });
-            })
+    setTimeout(function() {
+        var jobsInProgress = true, counter = 0, maxretries = 50, ingoreJobs = {};
+        while (jobsInProgress || (counter === maxretries)) {
+            console.log('Ring in progress');
+            jobsInProgress = mergeJobs.filter(function(jobHash) {
+                var job = jobs[jobHash];
+                if (!job) return false;
+                if (job.status !== runningStatus && !ingoreJobs[jobHash]) {
+                    if (jobStatus !== completeStatus && !ignoreJobs[jobHash]) ignoreJobs[jobHash] = true;
+                    return true;
+                }
+                return false;
+            }).length < mergeJobs.length;
+            waitSomeSeconds(1);
+            counter++;
         }
-    });
+        var ext = config.formats[req.params.format];
+        var inputs = mergeJobs.reduce(function(inputs, jobHash) {
+            return ignoreJobs[jobHash] ? inputs : inputs += appDir + 'export_' + jobHash + ext + ' ';
+        }, '');
+        var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, req.query.poly, true, inputs, outDir, outFile);
+        var command = 'hoot convert -C NodeExport.conf ' + inputs + outFile;
+        jobs[mergeHash].process = exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
+            //setTimeout(function() { //used to simulate a long request
+            if (stderr || error) {
+                //res.send({command: command, stderr: stderr, error: error});
+                jobs[mergeHash].status = stderr;
+            } else {
+                zipOutput(mergeHash, req, false, outFile, outZip, function() {
+                    inputs.forEach(function(input) {
+                        fs.unlink(job.outFile, function(err) {
+                            if (err) {
+                                console.error(err);
+                            } else {
+                                console.log('deleted ' + job.outFile);
+                            }
+                        });
+                    });
+                })
+            }
+        });
+    }, 0)
 
     jobs[mergeHash] = {
         id: id,
         status: runningStatus,
-        process: child,
+        process: null,
         input: input,
         isFile: isFile,
         outFile: outFile,
@@ -399,19 +424,6 @@ function doMerge(req, res, mergeJobs, mergeHash, input) {
 }
 
 function doExportWork(req, res, hash, poly, input, createOutputZip) {
-    var id = uuid.v4();
-    var output = 'export_' + id;
-    var isFile = req.params.format === 'OSM XML';
-    var outDir = appDir + output;
-    var outFile = outDir + config.formats[req.params.format];
-    console.log("this is the export outfile: " + outFile)
-    if (req.params.format === 'File Geodatabase') outDir = outFile;
-    var outZip = outDir + '.zip';
-    var downloadFile = req.params.datasource.replace(' ', '_')
-        + '_' + req.params.schema.replace(' ', '_')
-        + '_' + req.params.format.replace(' ', '_')
-        + '.zip';
-
     //if we have a polygon and it is really a multipolygon,
     //We first need to export & crop data for each polygon ring by calling doExportWork for each ring.
     //Then, we merge their outputs into a single output zip by calling doMerge() when each ring's export work is done.
@@ -429,27 +441,9 @@ function doExportWork(req, res, hash, poly, input, createOutputZip) {
             doExportWork(req, res, polyHash, polyString, input, false);
             return polyHash;
         })
-
-        setTimeout(function() {
-            var jobsInProgress = false, progressRetries = 50, counter = 0;
-            while (jobsInProgress || progressRetries === counter) {
-                console.log('multipolygon export jobs in progress...');
-                var jobs = getJobs();
-                jobsInProgress = mergeJobs.filter(function(jobHash) {
-                    var job = jobs[jobHash];
-                    return job ? jobs[jobHash].status === completeStatus : false;
-                }).length < jobs.length;
-                sleep(2000);
-                counter++;
-            }
-
-            if (progressRetries === counter) res.status(500);
-
-            // merge them all together
-            doMerge(req, res, mergeJobs, hash, input);
-        }, 0);
-
+        doMerge(req, res, mergeJobs, hash, input)
     } else {
+        var id = uuid.v4();
         var output = 'export_' + id;
         var isFile = req.params.format === 'OSM XML';
         var outDir = appDir + output;
@@ -462,8 +456,7 @@ function doExportWork(req, res, hash, poly, input, createOutputZip) {
             + '.zip';
 
         var jobs = getJobs();
-        var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, poly,
-            isFile, input, outDir, outFile);
+        var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, poly, isFile, input, outDir, outFile);
         var child = exec(command, {cwd: hootHome},
             function(error, stdout, stderr) {
                 //setTimeout(function() { //used to simulate a long request
@@ -474,6 +467,7 @@ function doExportWork(req, res, hash, poly, input, createOutputZip) {
                 } else {
                     // if export specifies cropping to bounds or poly, do so.
                     if (req.query.crop) {
+
                         // if request did not provide a polygon or bounds to
                         // crop with, then go about zipping the output
                         var cropShape = exports.polyQuotes(exports.validatePoly(poly)) || exports.validateBbox(req.query.bbox);
@@ -492,17 +486,26 @@ function doExportWork(req, res, hash, poly, input, createOutputZip) {
                                 if (stderr || error) {
                                     jobs[hash].status = stderr;
                                 } else {
-                                    if (createOutputZip)
+                                    if (createOutputZip) {
                                         zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
+                                    } else {
+                                        jobComplete(hash);
+                                    }
                                 }
                             })
                         } else {
-                            if (createOutputZip)
+                            if (createOutputZip) {
                                 zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
+                            } else {
+                                jobComplete(hash);
+                            }
                         }
                     } else {
-                        if (createOutputZip)
+                        if (createOutputZip) {
                             zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
+                        } else {
+                            jobComplete(hash);
+                        }
                     }
                 }
                 //}, 10000); //used to simulate a long request
