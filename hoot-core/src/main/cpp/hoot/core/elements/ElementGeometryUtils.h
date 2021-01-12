@@ -79,19 +79,6 @@ public:
     const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**
-   * TODO
-   *
-   * @param relation
-   * @param bounds
-   * @param relationship
-   * @param map
-   * @return
-   */
-  static bool relationHasMemberWithGeometricRelationship(
-    const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
-    const GeometricRelationship& relationship, ConstOsmMapPtr map);
-
-  /**
    * Determines an elements hoot geometry type (used by GeometryTypeCriterion)
    *
    * @param element the element to inspect

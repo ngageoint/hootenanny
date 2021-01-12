@@ -65,8 +65,6 @@ void RelationMerger::merge(const ElementId& elementId1, const ElementId& element
   // copy relation 2's members into 1
   const bool allMembersCopied = _mergeMembers(relation1, relation2);
 
-  // TODO: not sure this is the right behavior yet...
-
   // replace any references to relation 2 with a ref to relation 1
   LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
   ReplaceElementOp(elementId2, elementId1, true).apply(_map);

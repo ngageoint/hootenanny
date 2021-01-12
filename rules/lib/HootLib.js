@@ -168,7 +168,7 @@ function bothElementsHaveName(e1, e2)
  */
 function isMemberOfRelationType(map, childElementId, relationType)
 {
-  return map.isMemberOfRelationType(childElementId, relationType);
+  return hoot.RelationMemberUtils.isMemberOfRelationType(childElementId, relationType, map);
 }
 
 /**
@@ -176,7 +176,7 @@ function isMemberOfRelationType(map, childElementId, relationType)
  */
 function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
 {
-  return map.isMemberOfRelationInCategory(childElementId, schemaCategory);
+  return hoot.RelationMemberUtils.isMemberOfRelationInCategory(map, childElementId, schemaCategory);
 }
 
 /**
@@ -184,7 +184,7 @@ function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
  */
 function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
 {
-  return map.isMemberOfRelationWithTagKey(childElementId, tagKey);
+  return hoot.RelationMemberUtils.isMemberOfRelationWithTagKey(map, childElementId, tagKey);
 }
 
 /*
@@ -192,7 +192,7 @@ function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
  */
 function isMemberOfRelationSatisfyingCriterion(map, childElementId, criterionClassName)
 {
-  return map.isMemberOfRelationSatisfyingCriterion(childElementId, criterionClassName);
+  return hoot.RelationMemberUtils.isMemberOfRelationSatisfyingCriterion(map, childElementId, criterionClassName);
 }
 
 /**
@@ -354,7 +354,7 @@ function removeElement(map, e)
  */
 function mergeRelations(map, elementId1, elementId2)
 {
-  return map.mergeRelations(elementId1, elementId2);
+  return hoot.RelationMerger.mergeRelations(elementId1, elementId2);
 }
 
 /**
@@ -362,7 +362,7 @@ function mergeRelations(map, elementId1, elementId2)
  */
 function getNumRelationMemberNodes(map, relationId)
 {
-  return map.getNumRelationMemberNodes(relationId);
+  return hoot.RelationMemberUtils.getNumRelationMemberNodes(map, relationId);
 }
 
 /**
@@ -370,7 +370,7 @@ function getNumRelationMemberNodes(map, relationId)
  */
 function relationsHaveConnectedWayMembers(map, relationId1, relationId2)
 {
-  return map.relationsHaveConnectedWayMembers(relationId1, relationId2);
+  return hoot.RelationMemberUtils.relationsHaveConnectedWayMembers(map, relationId1, relationId2);
 }
 
 /**
@@ -566,9 +566,9 @@ function haveGeometricRelationship(e, bounds, relationship, map)
 /*
  * TODO
  */
-function relationHasMemberWithGeometricRelationship(relation, bounds, relationship, map)
+function relationHasMember(relation, criterionClassName, bounds, relationship, filterBasedOnActiveMatchers, map)
 {
-  return hoot.ElementGeometryUtils.relationHasMemberWithGeometricRelationship(relation, bounds, relationship, map);
+  return hoot.RelationMemberUtils.relationHasMember(relation, bounds, relationship, filterBasedOnActiveMatchers, map);
 }
 
 /*

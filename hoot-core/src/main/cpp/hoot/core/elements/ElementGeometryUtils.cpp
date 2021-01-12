@@ -172,26 +172,6 @@ bool ElementGeometryUtils::haveGeometricRelationship(
   return haveRelationship;
 }
 
-bool ElementGeometryUtils::relationHasMemberWithGeometricRelationship(
-  const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
-  const GeometricRelationship& relationship, ConstOsmMapPtr map)
-{
-  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
-  for (size_t i = 0; i < relationMembers.size(); i++)
-  {
-    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
-    if (member)
-    {
-      LOG_VART(member->getElementId());
-      if (haveGeometricRelationship(member, bounds, relationship, map))
-      {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
 std::shared_ptr<geos::geom::Geometry> ElementGeometryUtils::_getGeometry(
   const ConstElementPtr& element, ConstOsmMapPtr map)
 {

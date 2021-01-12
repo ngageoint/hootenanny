@@ -22,55 +22,36 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-
-#ifndef CONFLATE_UTILS_H
-#define CONFLATE_UTILS_H
+#ifndef RELATION_MERGER_JS_H
+#define RELATION_MERGER_JS_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/js/SystemNodeJs.h>
+#include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
 /**
- * General utilities to be used with conflation
+ * TODO
  */
-class ConflateUtils
+class RelationMergerJs : public HootBaseJs
 {
-
 public:
 
-  /**
-   * Writes any data that cannot be conflated
-   *
-   * @param map the map to examine
-   * @param output the URL to write the data to
-   * @return the number of features written
-   */
-  static int writeNonConflatable(const ConstOsmMapPtr& map, const QString& output);
+  static void Init(v8::Handle<v8::Object> target);
 
-  /**
-   * Writes the differential between to maps
-   *
-   * @param mapUrl1 map 1 URL
-   * @param mapUrl2 map 2 URL
-   * @param bounds the area over which to calculate the differential
-   * @param output the URL to write the data to
-   */
-  static void writeDiff(const QString& mapUrl1, const QString& mapUrl2,
-                        const geos::geom::Envelope& bounds, const QString& output);
+  virtual ~RelationMergerJs() = default;
 
-  /**
-   * TODO
-   *
-   * @param element
-   * @return
-   */
-  static bool elementCanBeConflatedByActiveMatcher(const ConstElementPtr& element);
+  static void mergeRelations(const v8::FunctionCallbackInfo<v8::Value>& args);
+
+private:
+
+  RelationMergerJs() = default;
 };
 
 }
 
-#endif // CONFLATE_UTILS_H
+#endif // RELATION_MERGER_JS_H

@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/geometry/GeometricRelationship.h>
 
 namespace hoot
 {
@@ -177,6 +178,21 @@ public:
    * @return a count
    */
   static int getMemberWayNodeCount(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+
+  /**
+   * TODO
+   *
+   * @param relation
+   * @param bounds
+   * @param relationship
+   * @param filterBasedOnActiveMatchers
+   * @param map
+   * @return
+   */
+  static bool relationHasMember(
+    const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
+    const GeometricRelationship& relationship, const bool filterBasedOnActiveMatchers,
+    ConstOsmMapPtr map);
 };
 
 }

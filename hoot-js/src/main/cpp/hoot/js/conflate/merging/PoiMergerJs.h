@@ -53,7 +53,6 @@ public:
    * @param current the context this method should run under
    */
   static void mergePois(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
-
 };
 
 }

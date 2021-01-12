@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 namespace hoot
 {
@@ -304,5 +305,50 @@ int RelationMemberUtils::getMemberWayNodeCount(const ConstRelationPtr& relation,
   }
   return count;
 }
+
+bool RelationMemberUtils::relationHasMember(
+  const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
+  const GeometricRelationship& relationship, const bool filterBasedOnActiveMatchers,
+  ConstOsmMapPtr map)
+{
+  if (!relation)
+  {
+    return false;
+  }
+  else if ((!bounds || relationship == GeometricRelationship::Invalid) &&
+           !filterBasedOnActiveMatchers)
+  {
+    throw IllegalArgumentException("TODO");
+  }
+  const bool useGeoFilter = bounds && relationship != GeometricRelationship::Invalid;
+
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member)
+    {
+      LOG_VART(member->getElementId());
+      bool result = true;
+
+      if (useGeoFilter)
+      {
+        result =
+          result &&
+          ElementGeometryUtils::haveGeometricRelationship(member, bounds, relationship, map);
+      }
+      if (result && filterBasedOnActiveMatchers)
+      {
+        result = result && ConflateUtils::elementCanBeConflatedByActiveMatcher(member);
+      }
+      if (result)
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 
 }

@@ -22,33 +22,41 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENT_GEOMETRY_UTILS_JS_H
-#define ELEMENT_GEOMETRY_UTILS_JS_H
+#ifndef RELATION_MEMBER_UTILS_JS_H
+#define RELATION_MEMBER_UTILS_JS_H
 
-//  Hoot
+// Hoot
+#include <hoot/js/SystemNodeJs.h>
 #include <hoot/js/HootBaseJs.h>
 
 namespace hoot
 {
 
-class ElementGeometryUtilsJs : public HootBaseJs
+class RelationMemberUtilsJs : public HootBaseJs
 {
 public:
 
- static void Init(v8::Handle<v8::Object> target);
+  static void Init(v8::Handle<v8::Object> target);
 
- virtual ~ElementGeometryUtilsJs() = default;
+  virtual ~RelationMemberUtilsJs() = default;
+
+  static void isMemberOfRelationType(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationInCategory(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationWithTagKey(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void getNumRelationMemberNodes(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void relationsHaveConnectedWayMembers(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void isMemberOfRelationSatisfyingCriterion(
+    const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void relationHasMember(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 
-  ElementGeometryUtilsJs() = default;
-
-  static void calculateLength(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void haveGeometricRelationship(const v8::FunctionCallbackInfo<v8::Value>& args);
+  RelationMemberUtilsJs() = default;
 };
 
 }
 
-#endif // ELEMENT_GEOMETRY_UTILS_JS_H
+
+#endif // RELATION_MEMBER_UTILS_JS_H

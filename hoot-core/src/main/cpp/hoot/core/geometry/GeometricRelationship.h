@@ -58,7 +58,8 @@ public:
     Intersects,
     IsWithin,
     Overlaps,
-    Touches
+    Touches,
+    Invalid
   } Type;
 
   GeometricRelationship() : _type(Contains) {}

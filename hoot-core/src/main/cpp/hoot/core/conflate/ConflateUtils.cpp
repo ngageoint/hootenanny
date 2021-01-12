@@ -147,4 +147,10 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
   timer.restart();
 }
 
+bool ConflateUtils::elementCanBeConflatedByActiveMatcher(const ConstElementPtr& /*element*/)
+{
+ // TODO: finish
+ return false;
+}
+
 }

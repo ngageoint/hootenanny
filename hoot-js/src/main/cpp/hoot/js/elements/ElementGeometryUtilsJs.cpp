@@ -57,9 +57,6 @@ void ElementGeometryUtilsJs::Init(Handle<Object> exports)
                FunctionTemplate::New(current, calculateLength)->GetFunction());
   thisObj->Set(String::NewFromUtf8(current, "haveGeometricRelationship"),
                FunctionTemplate::New(current, haveGeometricRelationship)->GetFunction());
-  thisObj->Set(
-    String::NewFromUtf8(current, "relationHasMemberWithGeometricRelationship"),
-    FunctionTemplate::New(current, relationHasMemberWithGeometricRelationship)->GetFunction());
 }
 
 void ElementGeometryUtilsJs::calculateLength(const FunctionCallbackInfo<Value>& args)
@@ -112,52 +109,6 @@ void ElementGeometryUtilsJs::haveGeometricRelationship(const FunctionCallbackInf
       Boolean::New(
         current,
         ElementGeometryUtils::haveGeometricRelationship(element, bounds, relationship, map)));
-  }
-  catch (const HootException& err)
-  {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
-  }
-}
-
-void ElementGeometryUtilsJs::relationHasMemberWithGeometricRelationship(
-  const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  try
-  {
-    Context::Scope context_scope(current->GetCurrentContext());
-
-    ConstElementPtr element = toCpp<ConstElementPtr>(args[0]);
-    if (element->getElementType() != ElementType::Relation)
-    {
-      args.GetReturnValue().Set(
-        current->ThrowException(
-          Exception::TypeError(String::NewFromUtf8(current, "Expected a relation"))));
-    }
-    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-    std::shared_ptr<geos::geom::Geometry> bounds =
-      GeometryUtils::boundsFromString(toCpp<QString>(args[1]));
-    const GeometricRelationship relationship =
-      GeometricRelationship::fromString(toCpp<QString>(args[2]));
-    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[3]);
-
-    if (!MapProjector::isGeographic(map))
-    {
-      // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
-      // the bounds.
-      std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
-      srs84->SetWellKnownGeogCS("WGS84");
-      MapProjector::project(bounds, srs84, map->getProjection());
-      LOG_VART(bounds);
-    }
-
-    args.GetReturnValue().Set(
-      Boolean::New(
-        current,
-        ElementGeometryUtils::relationHasMemberWithGeometricRelationship(
-          relation, bounds, relationship, map)));
   }
   catch (const HootException& err)
   {

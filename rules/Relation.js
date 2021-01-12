@@ -41,6 +41,8 @@ var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
  */
 exports.isMatchCandidate = function(map, e)
 {
+  // TODO: Think the collection relation part is too strict and should be changed to all relations
+  // at some point.
   if (!isCollectionRelation(e))
   {
     return false;
@@ -50,10 +52,13 @@ exports.isMatchCandidate = function(map, e)
   hoot.trace("bounds: " + bounds);
   if (bounds !== 'undefined' && bounds !== null && bounds !== '')
   {
-    return relationHasMemberWithGeometricRelationship(e, bounds, getBoundsRelationship(), map);
+    // Only conflate relations that have at least one member in the specified conflate bounds.
+    return relationHasMember(e, "", getBoundsRelationship(), true, map);
   }
-
-  return true;
+  else
+  {
+    return relationHasMember(e, null, "", true, map);
+  }
 };
 
 /**
@@ -172,7 +177,7 @@ function getBoundsSubsetMap(map, e1, e2)
 function geometryMismatch(map, e1, e2)
 {
   var mapToUse;
-  if (boundsOptionEnabled())
+  /*if (boundsOptionEnabled())
   {
     // If a conflate bounds was specified, copy the two relations over to a temp map with only their
     // members which intersect the bounds, since there could be members outside of the bounds due to
@@ -180,9 +185,9 @@ function geometryMismatch(map, e1, e2)
     mapToUse = getBoundsSubsetMap(map, e1, e2);
   }
   else
-  {
+  {*/
     mapToUse = map;
-  }
+  //}
 
   // This is a little convoluted and may need further adjustment. Edge distance is fairly accurate
   // for this but gets expensive as the relations get larger. Angle hist is a little less accurate
