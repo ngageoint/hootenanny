@@ -19,7 +19,7 @@ Feature: Import Export Delete MGCP Shapefile Dataset
         And I select the "Multinational Geospatial Co-production Program (MGCP) TRD3&4" option in the "Select Data Translation Schema" combobox
         When I press "big.loud" span with text "Import"
         Then I wait 60 "seconds" to not see "Add Data"
-        Then I wait 10 "seconds" to see "CucumberShp"
+        Then I wait 20 "seconds" to see "CucumberShp"
 
     Scenario: Export Dataset
         When I click the "CucumberShp" Dataset
