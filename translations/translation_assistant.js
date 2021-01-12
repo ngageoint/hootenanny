@@ -39,7 +39,8 @@ translation_assistant = {
         }
     },
     // Takes 'attrs' and returns OSM 'tags'
-    translateToOsm: function(attrs, layerName, attributeMapping, fcode, schema, replace)
+    // translateToOsm: function(attrs, layerName, attributeMapping, fcode, schema, replace)
+    translateAttributes: function(attrs, layerName, attributeMapping, fcode, schema, replace)
     {
         var tags = {};
         var extras = []
