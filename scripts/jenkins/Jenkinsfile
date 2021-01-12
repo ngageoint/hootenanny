@@ -99,7 +99,7 @@ pipeline {
                     // Configure for sonar if user selected it, pull-request, or nightly run of master
                     expression { return params.Sonar }
 //  UNCOMMENT AFTER SONAR IS FIXED
-//                    changeRequest()
+                    changeRequest()
 //                    allOf {
 //                        triggeredBy 'TimerTrigger'
 //                        branch 'master'
@@ -111,10 +111,10 @@ pipeline {
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
                 script {
-                    if (env.BRANCH_NAME == "master") {
+//                    if (env.BRANCH_NAME == "master") {
                         // Compile instrumented code for master branch which allows for calculating coverage
                         sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
-                    }
+//                    }
                 }
             }
         }
@@ -162,7 +162,7 @@ pipeline {
                 anyOf {
                     expression { return params.Sonar }
 //  UNCOMMENT AFTER SONAR IS FIXED
-//                    changeRequest()
+                    changeRequest()
 //                    allOf {
 //                        triggeredBy 'TimerTrigger'
 //                        branch 'master'
@@ -178,14 +178,14 @@ pipeline {
                         -Dsonar.branch.name=${env.BRANCH_NAME}'"
 
                 script {
-                    if (env.BRANCH_NAME.startsWith("PR-")) {
-                        // PR scan will use github plugin
-                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
-                    }
-                    else {
-                        if (env.BRANCH_NAME == "master") {
+//                    if (env.BRANCH_NAME.startsWith("PR-")) {
+//                        // PR scan will use github plugin
+//                        sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME} -p ${env.CHANGE_ID} -a ${env.DGIS_BOT_TOKEN}'"
+//                    }
+//                    else {
+//                        if (env.BRANCH_NAME == "master") {
                             sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/cover/coverGcov.sh'"
-                        }
+//                        }
                         sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; ./scripts/sonar/sonar-scan.sh -l ${env.SONAR_CLOUD_KEY} -b ${env.BRANCH_NAME}'"
                     }
                 }
