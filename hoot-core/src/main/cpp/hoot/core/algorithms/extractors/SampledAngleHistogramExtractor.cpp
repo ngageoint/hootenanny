@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SampledAngleHistogramExtractor.h"
 
@@ -63,10 +63,16 @@ public:
   _headingDelta(headingDelta)
   {
   }
+
   virtual ~SampledAngleHistogramVisitor() = default;
 
   virtual void visit(const std::shared_ptr<const Element>& e)
   {
+    if (!e)
+    {
+      return;
+    }
+    LOG_VART(e->getElementId());
     if (e->getElementType() == ElementType::Way)
     {
       _addWay(_map->getWay(e->getElementId()));
@@ -157,6 +163,7 @@ Histogram* SampledAngleHistogramExtractor::_createHistogram(const OsmMap& map,
   SampledAngleHistogramVisitor v(*result, _sampleDistance, _headingDelta);
   v.setOsmMap(&map);
   e->visitRo(map, v);
+  LOG_VART(result->numBins());
   return result;
 }
 
