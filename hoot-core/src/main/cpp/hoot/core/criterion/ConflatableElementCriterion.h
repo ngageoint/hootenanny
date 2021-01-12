@@ -36,10 +36,8 @@ namespace hoot
 
 /**
  * Simple abstract base class that signifies an ElementCriterion that describes a conflatable
- * feature type; e.g. BuildingCriterion.  All ElementCriterion used for identifying conflatable
+ * feature type; e.g. BuildingCriterion. All ElementCriterion used for identifying conflatable
  * features should inherit from this class
- *
- * TODO: Think we combine this class with NonConflatableCriterion.
  */
 class ConflatableElementCriterion : public GeometryTypeCriterion
 {

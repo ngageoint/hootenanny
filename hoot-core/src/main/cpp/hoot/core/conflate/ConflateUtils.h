@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -66,9 +67,15 @@ public:
    * TODO
    *
    * @param element
+   * @param map
    * @return
    */
-  static bool elementCanBeConflatedByActiveMatcher(const ConstElementPtr& element);
+  static bool elementCanBeConflatedByActiveMatcher(
+    const ConstElementPtr& element, const ConstOsmMapPtr& map);
+
+private:
+
+  static QMap<QString, ElementCriterionPtr> _critCache;
 };
 
 }

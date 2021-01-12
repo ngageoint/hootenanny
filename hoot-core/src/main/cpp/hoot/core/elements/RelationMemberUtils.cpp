@@ -329,21 +329,31 @@ bool RelationMemberUtils::relationHasMember(
     if (member)
     {
       LOG_VART(member->getElementId());
-      bool result = true;
 
-      if (useGeoFilter)
+      if (useGeoFilter && !filterBasedOnActiveMatchers)
       {
-        result =
-          result &&
+        if (ElementGeometryUtils::haveGeometricRelationship(member, bounds, relationship, map))
+        {
+          return true;
+        }
+      }
+      else if (!useGeoFilter && filterBasedOnActiveMatchers)
+      {
+        if (ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map))
+        {
+          return true;
+        }
+      }
+      else if (useGeoFilter && filterBasedOnActiveMatchers)
+      {
+        const bool memberCanBeConflatedByActiveMatcher =
+          ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map);
+        const bool memberInBounds =
           ElementGeometryUtils::haveGeometricRelationship(member, bounds, relationship, map);
-      }
-      if (result && filterBasedOnActiveMatchers)
-      {
-        result = result && ConflateUtils::elementCanBeConflatedByActiveMatcher(member);
-      }
-      if (result)
-      {
-        return true;
+        if (memberCanBeConflatedByActiveMatcher && memberInBounds)
+        {
+          return true;
+        }
       }
     }
   }

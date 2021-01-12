@@ -161,7 +161,6 @@ function getBoundsSubsetMap(map, e1, e2)
   var relationIdsStr = e1.getElementId().toString() + ";" + e2.getElementId().toString();
   var relationIdCrit = new hoot.ElementIdCriterion({"element.id.criterion.ids": relationIdsStr});
   var relationMemberCrit = new hoot.RelationMemberCriterion(map, {"relation.member.criterion.parent.relation.ids": relationIdsStr});
-  //var boundsCrit = new hoot.InBoundsCriterion(map, {"in.bounds.criterion.strict": "false", "in.bounds.criterion.bounds": getBounds()});
   var boundsCrit = hoot.getBoundsCrit(map);
   var orCrit = new hoot.OrCriterion(relationIdCrit, relationMemberCrit);
   var filter = new hoot.ChainCriterion(orCrit, boundsCrit);

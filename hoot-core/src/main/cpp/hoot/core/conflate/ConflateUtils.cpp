@@ -29,6 +29,7 @@
 
 // Hoot
 #include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/NonConflatableCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -39,12 +40,15 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/conflate/DiffConflator.h>
+#include <hoot/core/conflate/matching/MatchFactory.h>
 
 // Qt
 #include <QElapsedTimer>
 
 namespace hoot
 {
+
+QMap<QString, ElementCriterionPtr> ConflateUtils::_critCache;
 
 int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString& output)
 {
@@ -147,10 +151,50 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
   timer.restart();
 }
 
-bool ConflateUtils::elementCanBeConflatedByActiveMatcher(const ConstElementPtr& /*element*/)
+bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
+  const ConstElementPtr& element, const ConstOsmMapPtr& map)
 {
- // TODO: finish
- return false;
+  const std::vector<std::shared_ptr<MatchCreator>> activeMatchCreators =
+    MatchFactory::getInstance().getCreators();
+  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = activeMatchCreators.begin();
+       itr != activeMatchCreators.end(); ++itr)
+  {
+    std::shared_ptr<MatchCreator> activeMatchCreator = *itr;
+    const QStringList supportedCriteriaClassNames = activeMatchCreator->getCriteria();
+    for (int i = 0; i < supportedCriteriaClassNames.size(); i++)
+    {
+      const QString criterionClassName = supportedCriteriaClassNames.at(i);
+
+      ElementCriterionPtr crit;
+      if (_critCache.contains(criterionClassName))
+      {
+        crit = _critCache[criterionClassName];
+      }
+      else
+      {
+        crit.reset(
+          Factory::getInstance().constructObject<ElementCriterion>(
+            criterionClassName.toStdString()));
+
+        // All ElementCriterion that are map consumers inherit from ConstOsmMapConsumer, so this
+        // works.
+        std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+          std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+        LOG_VART(mapConsumer.get());
+        if (mapConsumer)
+        {
+          mapConsumer->setOsmMap(map.get());
+        }
+      }
+
+      if (crit->isSatisfied(element))
+      {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 }
