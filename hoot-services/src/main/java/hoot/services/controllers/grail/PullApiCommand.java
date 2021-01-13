@@ -212,8 +212,13 @@ public class PullApiCommand implements InternalCommand {
             connectedWaysQuery = FileUtils.readFileToString(connectedWaysQueryFile, "UTF-8");
             //swap in filter term to connected ways query
             if (filterList.size() > 0) {
-                String filter = "~\"^(" + String.join("|", filterList).replace("\"", "") + ")$\"~\".\"";
-                connectedWaysQuery = connectedWaysQuery.replace("way(bn.oobnd)", "way[" + filter + "](bn.oobnd)");
+                // creating union for all queries created from the filter list
+                String filter = "(\n";
+                for (String filterOpt : filterList) {
+                    filter += "way[" + filterOpt + "](bn.oobnd);\n";
+                }
+                filter += ");\n";
+                connectedWaysQuery = connectedWaysQuery.replace("way(bn.oobnd);", filter);
             }
 
         } catch(Exception exc) {
