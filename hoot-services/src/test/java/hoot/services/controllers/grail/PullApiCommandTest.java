@@ -51,7 +51,7 @@ public class PullApiCommandTest {
         String filter = null;
         Matcher matcher = PullApiCommand.oqlFilterPattern.matcher(oql);
         if (matcher.find()) {
-            filter = matcher.group();
+            filter = matcher.group(1);
         }
         assertEquals("natural=coastline", filter);
 
@@ -59,7 +59,7 @@ public class PullApiCommandTest {
 
     @Test
     public void testGetFilterPatternHighway() throws IOException {
-        String oql = "[out:json][bbox:{{bbox}}];\n" +
+        String oql = "[out:json];\n" +
                 "(\n" +
                 "nwr[\"highway\"]({{bbox}});\n" +
                 ");\n" +
@@ -68,9 +68,9 @@ public class PullApiCommandTest {
         String filter = null;
         Matcher matcher = PullApiCommand.oqlFilterPattern.matcher(oql);
         if (matcher.find()) {
-            filter = matcher.group();
+            filter = matcher.group(1);
         }
-        assertEquals("highway", filter);
+        assertEquals("\"highway\"", filter);
 
     }
 
@@ -85,7 +85,7 @@ public class PullApiCommandTest {
         String filter = null;
         Matcher matcher = PullApiCommand.oqlFilterPattern.matcher(oql);
         if (matcher.find()) {
-            filter = matcher.group();
+            filter = matcher.group(1);
         }
         assertEquals("~\"^(highway|building)$\"~\".\"", filter);
 
