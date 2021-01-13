@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AngleHistogramExtractor.h"
 
@@ -134,6 +134,7 @@ Histogram* AngleHistogramExtractor::_createHistogram(const OsmMap& map, const Co
   HistogramVisitor v(*result);
   v.setOsmMap(&map);
   e->visitRo(map, v);
+  LOG_VART(result->numBins());
   return result;
 }
 

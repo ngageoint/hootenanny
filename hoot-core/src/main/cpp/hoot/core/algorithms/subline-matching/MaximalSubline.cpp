@@ -395,13 +395,13 @@ double MaximalSubline::_findBestMatchesRecursive(
   if (_maxRecursions != -1 && _findBestMatchesRecursionCount > _maxRecursions)
   {
     throw RecursiveComplexityException(
-      "MaximalSubline reached configured maximum complexity threshold of : " +
+      "MaximalSubline reached configured maximum recursion complexity threshold of : " +
       QString::number(_maxRecursions));
   }
   else if (_findBestMatchesRecursionCount > MAX_RECURSIONS_UPPER_LIMIT)
   {
     throw RecursiveComplexityException(
-      "MaximalSubline reached default maximum complexity threshold of : " +
+      "MaximalSubline reached default maximum recursion complexity threshold of : " +
       QString::number(MAX_RECURSIONS_UPPER_LIMIT));
   }
   else if (_findBestMatchesRecursionCount %

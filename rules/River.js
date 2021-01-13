@@ -179,7 +179,7 @@ function geometryMismatch(map, e1, e2)
   hoot.trace("Extracting sublines with default...");
   sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
-  if (sublines && String(sublines).indexOf("RecursiveComplexityException") !== -1)
+  if (sublines && String(sublines).includes("maximum recursion complexity"))
   {
     // If we receive an error message with "RecursiveComplexityException" from the matching routine, we 
     // know our subline matcher hit the cap on the number of recursive calls we allow for it (A little 
@@ -196,6 +196,11 @@ function geometryMismatch(map, e1, e2)
     var m = sublines.map;
     var m1 = sublines.match1;
     var m2 = sublines.match2;
+
+    if (!m || !m1 || !m2)
+    {
+      hoot.error("Map or subline match null.");
+    }
 
     var weightedShapeDist = -1;
     hoot.trace("Getting angleHist...");
