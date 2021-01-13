@@ -35,7 +35,6 @@ import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
 import java.security.KeyStore;
@@ -59,7 +58,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-import org.jboss.logging.LoggingClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,6 +71,8 @@ import hoot.services.geo.BoundingBox;
  */
 public class PullApiCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullApiCommand.class);
+
+    public static Pattern oqlFilterPattern = Pattern.compile(".+\\[(.*?)\\]"); // matches [xxx] pattern
 
     private final GrailParams params;
     private final String jobId;
@@ -198,8 +198,7 @@ public class PullApiCommand implements InternalCommand {
             newQuery = query;
             //check for any filters in custom query
             //find the first term within square brackets
-            Pattern pattern = Pattern.compile(".+\\[(.*?)\\]"); // matches [xxx] pattern
-            Matcher matcher = pattern.matcher(query);
+            Matcher matcher = oqlFilterPattern.matcher(query);
 
             while (matcher.find()) {
                 filterList.add(matcher.group(1));
@@ -214,9 +213,9 @@ public class PullApiCommand implements InternalCommand {
             //swap in filter term to connected ways query
             if (filterList.size() > 0) {
                 String filter = "~\"^(" + String.join("|", filterList).replace("\"", "") + ")$\"~\".\"";
-                connectedWaysQuery = connectedWaysQuery.replace("way(bn.oobnd)", "way[" + filter + "](bn.oobnd)");
+            	connectedWaysQuery = connectedWaysQuery.replace("way(bn.oobnd)", "way[" + filter + "](bn.oobnd)");
             }
-
+            
         } catch(Exception exc) {
             throw new IllegalArgumentException("Grail pull connected ways error. Couldn't read connected ways overpass query file: " + connectedWaysQueryFile.getName());
         }
