@@ -185,14 +185,12 @@ public:
    * @param relation
    * @param bounds
    * @param relationship
-   * @param filterBasedOnActiveMatchers
    * @param map
    * @return
    */
-  static bool relationHasMember(
+  static bool relationHasConflatableMember(
     const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
-    const GeometricRelationship& relationship, const bool filterBasedOnActiveMatchers,
-    ConstOsmMapPtr map);
+    const GeometricRelationship& relationship, const ConstOsmMapPtr& map);
 };
 
 }

@@ -306,19 +306,13 @@ int RelationMemberUtils::getMemberWayNodeCount(const ConstRelationPtr& relation,
   return count;
 }
 
-bool RelationMemberUtils::relationHasMember(
+bool RelationMemberUtils::relationHasConflatableMember(
   const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
-  const GeometricRelationship& relationship, const bool filterBasedOnActiveMatchers,
-  ConstOsmMapPtr map)
+  const GeometricRelationship& relationship, const ConstOsmMapPtr& map)
 {
   if (!relation)
   {
     return false;
-  }
-  else if ((!bounds || relationship == GeometricRelationship::Invalid) &&
-           !filterBasedOnActiveMatchers)
-  {
-    throw IllegalArgumentException("TODO");
   }
   const bool useGeoFilter = bounds && relationship != GeometricRelationship::Invalid;
 
@@ -330,21 +324,14 @@ bool RelationMemberUtils::relationHasMember(
     {
       LOG_VART(member->getElementId());
 
-      if (useGeoFilter && !filterBasedOnActiveMatchers)
-      {
-        if (ElementGeometryUtils::haveGeometricRelationship(member, bounds, relationship, map))
-        {
-          return true;
-        }
-      }
-      else if (!useGeoFilter && filterBasedOnActiveMatchers)
+      if (!useGeoFilter)
       {
         if (ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map))
         {
           return true;
         }
       }
-      else if (useGeoFilter && filterBasedOnActiveMatchers)
+      else
       {
         const bool memberCanBeConflatedByActiveMatcher =
           ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map);

@@ -49,7 +49,8 @@ public:
   static void relationsHaveConnectedWayMembers(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void isMemberOfRelationSatisfyingCriterion(
     const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void relationHasMember(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void relationHasConflatableMember(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void relationHasConflatableMemberInBounds(const v8::FunctionCallbackInfo<v8::Value>& args);
 
 private:
 

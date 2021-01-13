@@ -566,9 +566,17 @@ function haveGeometricRelationship(e, bounds, relationship, map)
 /*
  * TODO
  */
-function relationHasMember(relation, bounds, relationship, filterBasedOnActiveMatchers, map)
+function relationHasConflatableMemberInBounds(element, bounds, boundsRelationship, map)
 {
-  return hoot.RelationMemberUtils.relationHasMember(relation, bounds, relationship, filterBasedOnActiveMatchers, map);
+  return hoot.RelationMemberUtils.relationHasConflatableMemberInBounds(element, bounds, boundsRelationship, map);
+}
+
+/*
+ * TODO
+ */
+function relationHasConflatableMember(element, map)
+{
+  return hoot.RelationMemberUtils.relationHasConflatableMember(element, map);
 }
 
 /*

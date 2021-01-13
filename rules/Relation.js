@@ -52,12 +52,15 @@ exports.isMatchCandidate = function(map, e)
   hoot.trace("bounds: " + bounds);
   if (bounds !== 'undefined' && bounds !== null && bounds !== '')
   {
-    // Only conflate relations that have at least one member in the specified conflate bounds.
-    return relationHasMember(e, bounds, getBoundsRelationship(), true, map);
+    // Only conflate relations that have at least one member in the specified conflate bounds and
+    // those members can be conflated by one of the configured conflate matchers.
+    return relationHasConflatableMemberInBounds(e, bounds, getBoundsRelationship(), map);
   }
   else
   {
-    return relationHasMember(e, null, "", true, map);
+    // Only conflate relations that have at least one member that can be conflated by one of the
+    // configured conflate matchers.
+    return relationHasConflatableMember(e, map);
   }
 };
 

@@ -69,8 +69,10 @@ void RelationMemberUtilsJs::Init(Handle<Object> exports)
            FunctionTemplate::New(current, relationsHaveConnectedWayMembers)->GetFunction());
   obj->Set(String::NewFromUtf8(current, "isMemberOfRelationSatisfyingCriterion"),
            FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion)->GetFunction());
-  obj->Set(String::NewFromUtf8(current, "relationHasMember"),
-           FunctionTemplate::New(current, relationHasMember)->GetFunction());
+  obj->Set(String::NewFromUtf8(current, "relationHasConflatableMember"),
+           FunctionTemplate::New(current, relationHasConflatableMember)->GetFunction());
+  obj->Set(String::NewFromUtf8(current, "relationHasConflatableMemberInBounds"),
+           FunctionTemplate::New(current, relationHasConflatableMemberInBounds)->GetFunction());
 }
 
 void RelationMemberUtilsJs::isMemberOfRelationType(const FunctionCallbackInfo<Value>& args)
@@ -168,7 +170,7 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  OsmMapPtr map = toCpp<OsmMapPtr>(args[0]);
+  ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
   ElementId childId = toCpp<ElementId>(args[1]);
   LOG_VART(childId);
   QString critClassName = toCpp<QString>(args[2]);
@@ -182,8 +184,8 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
     throw IllegalArgumentException(
       "isMemberOfRelationSatisfyingCriterion: invalid criterion: " + critClassName.trimmed());
   }
-  std::shared_ptr<OsmMapConsumer> mapConsumer =
-    std::dynamic_pointer_cast<OsmMapConsumer>(crit);
+  std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+    std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
   LOG_VART(mapConsumer.get());
   if (mapConsumer)
   {
@@ -196,7 +198,40 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
   args.GetReturnValue().Set(Boolean::New(current, isMember));
 }
 
-void RelationMemberUtilsJs::relationHasMember(const FunctionCallbackInfo<Value>& args)
+void RelationMemberUtilsJs::relationHasConflatableMember(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  try
+  {
+    Context::Scope context_scope(current->GetCurrentContext());
+
+    ConstElementPtr element = toCpp<ConstElementPtr>(args[0]);
+    if (element->getElementType() != ElementType::Relation)
+    {
+      args.GetReturnValue().Set(
+        current->ThrowException(
+          Exception::TypeError(String::NewFromUtf8(current, "Expected a relation"))));
+    }
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
+
+    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[1]);
+
+    args.GetReturnValue().Set(
+      Boolean::New(
+        current,
+        RelationMemberUtils::relationHasConflatableMember(
+          relation, std::shared_ptr<geos::geom::Geometry>(), GeometricRelationship::Invalid, map)));
+  }
+  catch (const HootException& err)
+  {
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
+  }
+}
+
+void RelationMemberUtilsJs::relationHasConflatableMemberInBounds(
+  const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
@@ -228,9 +263,7 @@ void RelationMemberUtilsJs::relationHasMember(const FunctionCallbackInfo<Value>&
       geometricRelationship = GeometricRelationship::fromString(geometricRelationshipStr);
     }
 
-    const bool filterBasedOnActiveMatchers = toCpp<bool>(args[3]);
-
-    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[4]);
+    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[3]);
     if (!MapProjector::isGeographic(map))
     {
       // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
@@ -244,8 +277,8 @@ void RelationMemberUtilsJs::relationHasMember(const FunctionCallbackInfo<Value>&
     args.GetReturnValue().Set(
       Boolean::New(
         current,
-        RelationMemberUtils::relationHasMember(
-          relation, bounds, geometricRelationship, filterBasedOnActiveMatchers, map)));
+        RelationMemberUtils::relationHasConflatableMember(
+          relation, bounds, geometricRelationship, map)));
   }
   catch (const HootException& err)
   {
