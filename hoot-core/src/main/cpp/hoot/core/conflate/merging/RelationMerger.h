@@ -64,9 +64,16 @@ public:
    */
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
+  void setMergeConflatableMembersOnly(bool conflatableMembersOnly)
+  { _mergeConflatableMembersOnly = conflatableMembersOnly; }
+
 private:
 
   OsmMapPtr _map;
+
+  // TODO
+  bool _mergeConflatableMembersOnly;
+
   bool _writeDebugMaps;
 
   /*

@@ -35,6 +35,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 
 // Qt
 #include <QFile>
@@ -139,17 +141,12 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       "...");
 
     // TODO
-    ConstOsmMapPtr map1;
-    ConstOsmMapPtr map2;
+    ConstOsmMapPtr map1 = _map1List.at(i);
+    ConstOsmMapPtr map2 = _map2List.at(i);
     std::shared_ptr<InBoundsCriterion> boundsCrit1;
     std::shared_ptr<InBoundsCriterion> boundsCrit2;
     if (ConfigUtils::boundsOptionEnabled())
     {
-      map1 = _map1List.at(i);
-      LOG_VART(map1.get());
-      map2 = _map2List.at(i);
-      LOG_VART(map2.get());
-
       if (map1)
       {
         boundsCrit1 = ConfigUtils::getBoundsCrit(map1);
@@ -183,13 +180,13 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       // multiple derivers. You could make the argument to prevent these types of dupes from
       // occurring before outputting this changeset file, but not quite sure how to do that yet, due
       // to the fact that the changeset providers have a streaming interface.
-      else if (_parsedChangeIds.contains(_change.getElement()->getElementId()))
+      if (_parsedChangeIds.contains(_change.getElement()->getElementId()))
       {
         LOG_TRACE("Skipping change for element ID already having change: " << _change << "...");
         continue;
       }
       // TODO
-      else if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
       {
         std::shared_ptr<InBoundsCriterion> boundsCrit;
         if (map2 && boundsCrit2 && map2->containsElement(_change.getElement()))
@@ -211,7 +208,43 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         }
         if (boundsCrit && !boundsCrit->isSatisfied(_change.getElement()))
         {
+          LOG_TRACE("Skipping change for change with out of bounds element: " << _change << "...");
           continue;
+        }
+      }
+      // TODO
+      if (!ConfigOptions().getMatchCreators().isEmpty())
+      {
+        ConstOsmMapPtr map;
+        if (map2 && map2->containsElement(_change.getElement()))
+        {
+          map = map2;
+        }
+        else if (map1 && map1->containsElement(_change.getElement()))
+        {
+          map = map1;
+        }
+        if (map && !WayNodeCriterion(map).isSatisfied(_change.getElement()))
+        {
+          bool conflatable = true;
+          if (_change.getElement()->getElementType() == ElementType::Relation &&
+              !RelationMemberUtils::relationHasConflatableMember(
+                std::dynamic_pointer_cast<const Relation>(_change.getElement()),
+                std::shared_ptr<geos::geom::Geometry>(), GeometricRelationship::Invalid, map))
+          {
+            conflatable = false;
+          }
+          else if (_change.getElement()->getElementType() != ElementType::Relation &&
+                   !ConflateUtils::elementCanBeConflatedByActiveMatcher(_change.getElement(), map))
+          {
+            conflatable = false;
+          }
+          if (!conflatable)
+          {
+            LOG_TRACE(
+              "Skipping change for change with unconflatable element: " << _change << "...");
+            continue;
+          }
         }
       }
 

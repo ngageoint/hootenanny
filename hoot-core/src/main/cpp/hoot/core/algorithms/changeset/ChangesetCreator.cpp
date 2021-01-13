@@ -330,10 +330,10 @@ bool ChangesetCreator::_inputIsSorted(const QString& input) const
     return false;
   }
 
-  //Streaming db inputs actually do not come back sorted, despite the order by id clause
-  //in the query (see ApiDb::selectElements). Otherwise, we'd skip sorting them too.
+  // Streaming db inputs actually do not come back sorted, despite the order by id clause
+  // in the query (see ApiDb::selectElements). Otherwise, we'd skip sorting them too.
 
-  //pbf sets a sort flag
+  // pbf sets a sort flag
   if (OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input))
   {
     return true;
@@ -449,9 +449,8 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
   _currentTaskNum++;
 }
 
-void ChangesetCreator::_handleStreamableConvertOpsInMemory(const QString& input1,
-                                                           const QString& input2, OsmMapPtr& map1,
-                                                           OsmMapPtr& map2, Progress progress)
+void ChangesetCreator::_handleStreamableConvertOpsInMemory(
+  const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
 {
   LOG_DEBUG("Handling streamable convert ops in memory...");
 
@@ -497,8 +496,8 @@ void ChangesetCreator::_handleStreamableConvertOpsInMemory(const QString& input1
   _currentTaskNum++;
 }
 
-void ChangesetCreator::_readInputsFully(const QString& input1, const QString& input2,
-                                        OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
+void ChangesetCreator::_readInputsFully(
+  const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
 {  
   LOG_VARD(ConfigOptions().getConvertOps().size());
   if (ConfigOptions().getConvertOps().size() > 0)

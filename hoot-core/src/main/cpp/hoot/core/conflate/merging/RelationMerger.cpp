@@ -34,11 +34,13 @@
 #include <hoot/core/elements/RelationMemberComparison.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 namespace hoot
 {
 
 RelationMerger::RelationMerger() :
+_mergeConflatableMembersOnly(false),
 _writeDebugMaps(false) // ONLY ENABLE THIS DURING DEBUGGING
 {
 }
@@ -66,10 +68,12 @@ void RelationMerger::merge(const ElementId& elementId1, const ElementId& element
   const bool allMembersCopied = _mergeMembers(relation1, relation2);
 
   // replace any references to relation 2 with a ref to relation 1
-  LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
-  ReplaceElementOp(elementId2, elementId1, true).apply(_map);
+//  LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
+//  ReplaceElementOp(elementId2, elementId1, true).apply(_map);
   if (allMembersCopied)
   {
+    LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
+    ReplaceElementOp(elementId2, elementId1, true).apply(_map);
     // remove all instances of relation 2
     LOG_TRACE("Removing " << elementId2 << "...");
     RemoveRelationByEid(elementId2.getId()).apply(_map);
@@ -90,6 +94,8 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
   const int numRelationBeingReplacedMembers = relationBeingReplaced->getMemberCount();
   int numMembersCopied = 0;
   std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getBoundsCrit(_map);
+
+  // Load up the relation members from both relations.
 
   const std::vector<RelationData::Entry> replacingRelationMembers = replacingRelation->getMembers();
   LOG_VART(replacingRelationMembers.size());
@@ -136,8 +142,27 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
     if (replacingRelationMemberComps.contains(currentMemberFromReplaced))
     {
       LOG_TRACE(
-        "Skipping adding member being replaced already in the replacing relation: " <<
-        currentMemberFromReplaced << "...");
+        "Skipping adding member being replaced that is already in the replacing relation: " <<
+        currentMemberFromReplaced.getElement()->getElementId() << "...");
+      LOG_TRACE("************************");
+      continue;
+    }
+    // Don't add any relation members which aren't within the current bounds if one was specified.
+    else if (boundsCrit && !boundsCrit->isSatisfied(currentMemberFromReplaced.getElement()))
+    {
+      LOG_TRACE(
+        "Skipping adding member being replaced that is out of bounds: " <<
+        currentMemberFromReplaced.getElement()->getElementId() << "...");
+      LOG_TRACE("************************");
+      continue;
+    }
+    else if (_mergeConflatableMembersOnly &&
+             !ConflateUtils::elementCanBeConflatedByActiveMatcher(
+               currentMemberFromReplaced.getElement(), _map))
+    {
+      LOG_TRACE(
+        "Skipping adding member being replaced that is not conflatable: " <<
+        currentMemberFromReplaced.getElement()->getElementId() << "...");
       LOG_TRACE("************************");
       continue;
     }
@@ -257,7 +282,7 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
     else
     {
       // If the replacing relation has no matching directly preceding/following members, arbitrarily
-      // add the current member from the relation being replacd to the end of the replacing
+      // add the current member from the relation being replaced to the end of the replacing
       // relation.
       LOG_TRACE(
         "No directly preceding or following members. Inserting current member: " <<
@@ -272,19 +297,19 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
   for (int i = 0; i < replacingRelationMemberComps.size(); i++)
   {
     const RelationMemberComparison currentMemberFromReplaced = replacingRelationMemberComps[i];
-    if (!boundsCrit || boundsCrit->isSatisfied(currentMemberFromReplaced.getElement()))
-    {
-      // Add the relation member to the relation we're keeping.
-      modifiedMembers.push_back(
-        RelationData::Entry(
-          currentMemberFromReplaced.getRole(),
-          currentMemberFromReplaced.getElement()->getElementId()));
-      // Remove the member from the relation we may or may not be keeping.
-      relationBeingReplaced->removeElement(currentMemberFromReplaced.getElement()->getElementId());
-      numMembersCopied++;
-    }
+    // Add the relation member to the relation we're keeping.
+    modifiedMembers.push_back(
+      RelationData::Entry(
+        currentMemberFromReplaced.getRole(),
+        currentMemberFromReplaced.getElement()->getElementId()));
+    // Remove the member from the relation we may or may not be keeping.
+    relationBeingReplaced->removeElement(currentMemberFromReplaced.getElement()->getElementId());
+    numMembersCopied++;
   }
-  replacingRelation->setMembers(modifiedMembers);
+  if (modifiedMembers.size() > 0)
+  {
+    replacingRelation->setMembers(modifiedMembers);
+  }
 
   return numRelationBeingReplacedMembers == numMembersCopied;
 }

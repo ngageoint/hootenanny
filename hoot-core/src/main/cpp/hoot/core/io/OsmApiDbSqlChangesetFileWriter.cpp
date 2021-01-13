@@ -34,6 +34,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 
 // Qt
 #include <QSqlError>
@@ -115,17 +117,12 @@ void OsmApiDbSqlChangesetFileWriter::write(
       "...");
 
     // TODO
-    ConstOsmMapPtr map1;
-    ConstOsmMapPtr map2;
+    ConstOsmMapPtr map1 = _map1List.at(i);
+    ConstOsmMapPtr map2 = _map2List.at(i);
     std::shared_ptr<InBoundsCriterion> boundsCrit1;
     std::shared_ptr<InBoundsCriterion> boundsCrit2;
     if (ConfigUtils::boundsOptionEnabled())
     {
-      map1 = _map1List.at(i);
-      LOG_VART(map1.get());
-      map2 = _map2List.at(i);
-      LOG_VART(map2.get());
-
       if (map1)
       {
         boundsCrit1 = ConfigUtils::getBoundsCrit(map1);
@@ -150,14 +147,17 @@ void OsmApiDbSqlChangesetFileWriter::write(
         continue;
       }
       // See related note in OsmXmlChangesetFileWriter::write.
-      else if (_parsedChangeIds.contains(change.getElement()->getElementId()))
+      if (_parsedChangeIds.contains(change.getElement()->getElementId()))
       {
         LOG_TRACE("Skipping change for element ID already having change: " << change << "...");
         continue;
       }
       // TODO
-      else if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
       {
+        LOG_TRACE(
+          "Checking bounds requirement for " << change.getElement()->getElementId() << "...");
+
         std::shared_ptr<InBoundsCriterion> boundsCrit;
         if (map2 && boundsCrit2 && map2->containsElement(change.getElement()))
         {
@@ -169,9 +169,7 @@ void OsmApiDbSqlChangesetFileWriter::write(
         }
         else
         {
-          //throw HootException(
-          // change.getElement()->getElementId().toString() + " not found in map for bounds check.");
-          LOG_DEBUG(change.getElement()->getElementId() << " not found in map for bounds check.");
+          LOG_TRACE(change.getElement()->getElementId() << " not found in map for bounds check.");
         }
         LOG_VART(boundsCrit.get());
         if (boundsCrit)
@@ -180,7 +178,45 @@ void OsmApiDbSqlChangesetFileWriter::write(
         }
         if (boundsCrit && !boundsCrit->isSatisfied(change.getElement()))
         {
+          LOG_TRACE("Skipping change for change with out of bounds element: " << change << "...");
           continue;
+        }
+      }
+      // TODO
+      if (!ConfigOptions().getMatchCreators().isEmpty())
+      {
+        LOG_TRACE(
+          "Checking conflatable requirement for " << change.getElement()->getElementId() << "...");
+
+        ConstOsmMapPtr map;
+        if (map2 && map2->containsElement(change.getElement()))
+        {
+          map = map2;
+        }
+        else if (map1 && map1->containsElement(change.getElement()))
+        {
+          map = map1;
+        }
+        if (map && !WayNodeCriterion(map).isSatisfied(change.getElement()))
+        {
+          bool conflatable = true;
+          if (change.getElement()->getElementType() == ElementType::Relation &&
+              !RelationMemberUtils::relationHasConflatableMember(
+                std::dynamic_pointer_cast<const Relation>(change.getElement()),
+                std::shared_ptr<geos::geom::Geometry>(), GeometricRelationship::Invalid, map))
+          {
+            conflatable = false;
+          }
+          else if (change.getElement()->getElementType() != ElementType::Relation &&
+                   !ConflateUtils::elementCanBeConflatedByActiveMatcher(change.getElement(), map))
+          {
+            conflatable = false;
+          }
+          if (!conflatable)
+          {
+            LOG_TRACE("Skipping change for change with unconflatable element: " << change << "...");
+            continue;
+          }
         }
       }
 
