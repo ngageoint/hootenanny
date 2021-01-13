@@ -200,7 +200,9 @@ public class PullApiCommand implements InternalCommand {
             //find the first term within square brackets
             Pattern pattern = Pattern.compile("\\[(.*?)\\]"); // matches [xxx] pattern
             Matcher matcher = pattern.matcher(query);
-            filter = matcher.group();
+            if (matcher.find()) {
+                filter = matcher.group();
+            }
         }
 
         // connected ways query
@@ -212,7 +214,7 @@ public class PullApiCommand implements InternalCommand {
             if (filter != null) {
             	connectedWaysQuery = connectedWaysQuery.replace("way(bn.oobnd)", "way[" + filter + "](bn.oobnd)");
             }
-            
+
         } catch(Exception exc) {
             throw new IllegalArgumentException("Grail pull connected ways error. Couldn't read connected ways overpass query file: " + connectedWaysQueryFile.getName());
         }
