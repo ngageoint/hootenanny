@@ -213,9 +213,9 @@ public class PullApiCommand implements InternalCommand {
             //swap in filter term to connected ways query
             if (filterList.size() > 0) {
                 String filter = "~\"^(" + String.join("|", filterList).replace("\"", "") + ")$\"~\".\"";
-            	connectedWaysQuery = connectedWaysQuery.replace("way(bn.oobnd)", "way[" + filter + "](bn.oobnd)");
+                connectedWaysQuery = connectedWaysQuery.replace("way(bn.oobnd)", "way[" + filter + "](bn.oobnd)");
             }
-            
+
         } catch(Exception exc) {
             throw new IllegalArgumentException("Grail pull connected ways error. Couldn't read connected ways overpass query file: " + connectedWaysQueryFile.getName());
         }
