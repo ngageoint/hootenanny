@@ -42,6 +42,8 @@ import java.security.KeyStore;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.WebApplicationException;
@@ -57,6 +59,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.jboss.logging.LoggingClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -186,6 +189,7 @@ public class PullApiCommand implements InternalCommand {
      */
     static String connectedWaysQuery(String query) {
         String newQuery;
+        String filter = null;
 
         // if no query provided then use default overpass query
         if (query == null || query.equals("")) {
@@ -193,7 +197,10 @@ public class PullApiCommand implements InternalCommand {
         } else {
             newQuery = query;
             //check for any filters in custom query
-            
+            //find the first term within square brackets
+            Pattern pattern = Pattern.compile("\\[(.*?)\\]"); // matches [xxx] pattern
+            Matcher matcher = pattern.matcher(query);
+            filter = matcher.group();
         }
 
         // connected ways query
@@ -202,6 +209,9 @@ public class PullApiCommand implements InternalCommand {
         try {
             connectedWaysQuery = FileUtils.readFileToString(connectedWaysQueryFile, "UTF-8");
             //swap in filter term to connected ways query
+            if (filter != null) {
+            	connectedWaysQuery = connectedWaysQuery.replace("way(bn.oobnd)", "way[" + filter + "](bn.oobnd)");
+            }
             
         } catch(Exception exc) {
             throw new IllegalArgumentException("Grail pull connected ways error. Couldn't read connected ways overpass query file: " + connectedWaysQueryFile.getName());
@@ -212,7 +222,7 @@ public class PullApiCommand implements InternalCommand {
         } else if (newQuery.lastIndexOf("out count;") != -1) {
             newQuery = newQuery.substring(0, newQuery.lastIndexOf("out count;")) + connectedWaysQuery;
         }
-
+        logger.info(newQuery);
         return newQuery;
     }
 }
