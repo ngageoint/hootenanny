@@ -53,7 +53,7 @@ public class PullApiCommandTest {
         if (matcher.find()) {
             filter = matcher.group();
         }
-        assertEquals("[natural=coastline]", filter);
+        assertEquals("natural=coastline", filter);
 
     }
 
@@ -70,7 +70,7 @@ public class PullApiCommandTest {
         if (matcher.find()) {
             filter = matcher.group();
         }
-        assertEquals("[highway]", filter);
+        assertEquals("highway", filter);
 
     }
 
