@@ -192,6 +192,8 @@ public class PullApiCommand implements InternalCommand {
             newQuery = PullOverpassCommand.getDefaultOverpassQuery();
         } else {
             newQuery = query;
+            //check for any filters in custom query
+            
         }
 
         // connected ways query
@@ -199,6 +201,8 @@ public class PullApiCommand implements InternalCommand {
         File connectedWaysQueryFile = new File(HOME_FOLDER, GRAIL_CONNECTED_WAYS_QUERY);
         try {
             connectedWaysQuery = FileUtils.readFileToString(connectedWaysQueryFile, "UTF-8");
+            //swap in filter term to connected ways query
+            
         } catch(Exception exc) {
             throw new IllegalArgumentException("Grail pull connected ways error. Couldn't read connected ways overpass query file: " + connectedWaysQueryFile.getName());
         }
