@@ -191,8 +191,8 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN(
-          "Received a non-linear relation as a valid network element. Ignoring relation. " << e);
+        LOG_WARN("Received a non-linear relation as a valid network element. Ignoring relation...");
+        LOG_VART(e);
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {
@@ -210,7 +210,8 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
         {
           if (logWarnCount < Log::getWarnMessageLimit())
           {
-            LOG_WARN("Received a linear relation that contains a non-linear element: " << e);
+            LOG_WARN("Received a linear relation that contains a non-linear element.");
+            LOG_VART(e);
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {
