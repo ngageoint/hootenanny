@@ -189,7 +189,7 @@ public class PullApiCommand implements InternalCommand {
      */
     static String connectedWaysQuery(String query) {
         String newQuery;
-        String filter = null;
+        List<String> filterList = new ArrayList<>();
 
         // if no query provided then use default overpass query
         if (query == null || query.equals("")) {
@@ -198,10 +198,11 @@ public class PullApiCommand implements InternalCommand {
             newQuery = query;
             //check for any filters in custom query
             //find the first term within square brackets
-            Pattern pattern = Pattern.compile("\\[(.*?)\\]"); // matches [xxx] pattern
+            Pattern pattern = Pattern.compile(".+\\[(.*?)\\]"); // matches [xxx] pattern
             Matcher matcher = pattern.matcher(query);
-            if (matcher.find()) {
-                filter = matcher.group();
+
+            while (matcher.find()) {
+                filterList.add(matcher.group(1));
             }
         }
 
@@ -211,7 +212,8 @@ public class PullApiCommand implements InternalCommand {
         try {
             connectedWaysQuery = FileUtils.readFileToString(connectedWaysQueryFile, "UTF-8");
             //swap in filter term to connected ways query
-            if (filter != null) {
+            if (filterList.size() > 0) {
+                String filter = "~\"^(" + String.join("|", filterList).replace("\"", "") + ")$\"~\".\"";
             	connectedWaysQuery = connectedWaysQuery.replace("way(bn.oobnd)", "way[" + filter + "](bn.oobnd)");
             }
 
