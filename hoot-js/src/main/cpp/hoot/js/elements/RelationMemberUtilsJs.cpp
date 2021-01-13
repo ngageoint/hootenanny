@@ -79,11 +79,11 @@ void RelationMemberUtilsJs::isMemberOfRelationType(const FunctionCallbackInfo<Va
   HandleScope scope(current);
 
   ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
-  ElementIdJs* childIdJs = ObjectWrap::Unwrap<ElementIdJs>(args[1]->ToObject());
+  ElementId childId = toCpp<ElementId>(args[1]);
   QString relationType = toCpp<QString>(args[2]);
 
   const bool inRelationOfSpecifiedType =
-    RelationMemberUtils::isMemberOfRelationType(map, childIdJs->getElementId(), relationType);
+    RelationMemberUtils::isMemberOfRelationType(map, childId, relationType);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedType));
 }
@@ -94,12 +94,11 @@ void RelationMemberUtilsJs::isMemberOfRelationInCategory(const FunctionCallbackI
   HandleScope scope(current);
 
   ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
-  ElementIdJs* childIdJs = ObjectWrap::Unwrap<ElementIdJs>(args[1]->ToObject());
+  ElementId childId = toCpp<ElementId>(args[1]);
   QString schemaCategory = toCpp<QString>(args[2]);
 
   const bool inRelationOfSpecifiedCategory =
-    RelationMemberUtils::isMemberOfRelationInCategory(
-      map, childIdJs->getElementId(), schemaCategory);
+    RelationMemberUtils::isMemberOfRelationInCategory(map, childId, schemaCategory);
   LOG_VART(inRelationOfSpecifiedCategory);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedCategory));
@@ -111,11 +110,11 @@ void RelationMemberUtilsJs::isMemberOfRelationWithTagKey(const FunctionCallbackI
   HandleScope scope(current);
 
   ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
-  ElementIdJs* childIdJs = ObjectWrap::Unwrap<ElementIdJs>(args[1]->ToObject());
+  ElementId childId = toCpp<ElementId>(args[1]);
   QString tagKey = toCpp<QString>(args[2]);
 
   const bool inRelationWithSpecifiedTagKey =
-    RelationMemberUtils::isMemberOfRelationWithTagKey(map, childIdJs->getElementId(), tagKey);
+    RelationMemberUtils::isMemberOfRelationWithTagKey(map, childId, tagKey);
 
   args.GetReturnValue().Set(Boolean::New(current, inRelationWithSpecifiedTagKey));
 }
@@ -126,8 +125,8 @@ void RelationMemberUtilsJs::getNumRelationMemberNodes(const FunctionCallbackInfo
   HandleScope scope(current);
 
   ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
-  ElementIdJs* relationIdJs = ObjectWrap::Unwrap<ElementIdJs>(args[1]->ToObject());
-  ConstRelationPtr relation = map->getRelation(relationIdJs->getElementId().getId());
+  ElementId relationId = toCpp<ElementId>(args[1]);
+  ConstRelationPtr relation = map->getRelation(relationId.getId());
   int numNodes = 0;
   if (relation)
   {
@@ -145,10 +144,10 @@ void RelationMemberUtilsJs::relationsHaveConnectedWayMembers(
   HandleScope scope(current);
 
   ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[0]);
-  ElementIdJs* relationId1Js = ObjectWrap::Unwrap<ElementIdJs>(args[1]->ToObject());
-  ElementIdJs* relationId2Js = ObjectWrap::Unwrap<ElementIdJs>(args[2]->ToObject());
-  if (relationId1Js->getElementId().getType() != ElementType::Relation ||
-      relationId2Js->getElementId().getType() != ElementType::Relation)
+  ElementId relationId1 = toCpp<ElementId>(args[1]);
+  ElementId relationId2 = toCpp<ElementId>(args[2]);
+  if (relationId1.getType() != ElementType::Relation ||
+      relationId2.getType() != ElementType::Relation)
   {
     throw IllegalArgumentException(
       "Passed non-relation ID to relationsHaveConnectedWayMembers.");
@@ -160,8 +159,7 @@ void RelationMemberUtilsJs::relationsHaveConnectedWayMembers(
     Boolean::New(
       current,
         finder.haveConnectedWayMembers(
-          map->getRelation(relationId1Js->getElementId().getId()),
-          map->getRelation(relationId2Js->getElementId().getId()))));
+          map->getRelation(relationId1.getId()), map->getRelation(relationId2.getId()))));
 }
 
 void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
@@ -171,8 +169,8 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
   HandleScope scope(current);
 
   OsmMapPtr map = toCpp<OsmMapPtr>(args[0]);
-  ElementIdJs* childIdJs = ObjectWrap::Unwrap<ElementIdJs>(args[1]->ToObject());
-  LOG_VART(childIdJs->getElementId());
+  ElementId childId = toCpp<ElementId>(args[1]);
+  LOG_VART(childId);
   QString critClassName = toCpp<QString>(args[2]);
   LOG_VART(critClassName);
 
@@ -193,8 +191,7 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
   }
 
   const bool isMember =
-    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
-      map, childIdJs->getElementId(), *crit);
+    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(map, childId, *crit);
 
   args.GetReturnValue().Set(Boolean::New(current, isMember));
 }

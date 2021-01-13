@@ -53,7 +53,7 @@ exports.isMatchCandidate = function(map, e)
   if (bounds !== 'undefined' && bounds !== null && bounds !== '')
   {
     // Only conflate relations that have at least one member in the specified conflate bounds.
-    return relationHasMember(e, "", getBoundsRelationship(), true, map);
+    return relationHasMember(e, bounds, getBoundsRelationship(), true, map);
   }
   else
   {
@@ -156,6 +156,7 @@ function nameMismatch(map, e1, e2)
   return false;
 }
 
+// TODO: remove
 function getBoundsSubsetMap(map, e1, e2)
 {
   var relationIdsStr = e1.getElementId().toString() + ";" + e2.getElementId().toString();
@@ -175,6 +176,7 @@ function getBoundsSubsetMap(map, e1, e2)
 
 function geometryMismatch(map, e1, e2)
 {
+  // TODO: remove
   var mapToUse;
   /*if (boundsOptionEnabled())
   {
@@ -308,6 +310,8 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergePair = function(map, e1, e2)
 {
+  hoot.trace("Merging " + e1.getElementId() + " and " + e2.getElementId() + "...");
+
   mergeRelations(map, e1.getElementId(), e2.getElementId());
 
   e1.setStatusString("conflated");

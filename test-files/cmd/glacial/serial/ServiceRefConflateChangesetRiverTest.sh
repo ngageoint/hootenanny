@@ -1,19 +1,15 @@
 #!/bin/bash
 set -e
 
-# TODO: update description to include non-river specific issues also fixed
-
-# This tests River Reference Conflation within a bounding box. The original problem leading to the 
-# creation of this test was that the API DB query was changed at one point to read data in that also 
-# includes all parent relations for rivers within the bounds and subsequently, all the relation 
-# members of those relations. This caused two basic problems: 1) rivers were being conflated that 
+# This tests conflation within a bounding box. The original problem leading to the creation of this 
+# test was that because the API DB query was changed at one point to read data in that also 
+# includes all parent relations for features within the bounds and subsequently, all the relation 
+# members of those relations. This caused two basic problems: 1) features were being conflated that 
 # were completely outside of the conflate bounds, which is misleading and 2) for datasets with 
 # large numbers of long rivers completely outside of the conflate bounds, the increased processing 
 # time caused River Conflation to unnecessarily revert to using lesser algorithms to increase 
 # runtime performance (see #RiverMaximalSublineSettingOptimizer). Extra per feature bounds checking 
-# has been added to river match candidate checking within River.js to prevent this. After that 
-# change, the conflate portion of this test runs quickly and properly merges rivers within the 
-# bounds.
+# has been added to river match candidate checking within each matcher to prevent this.
 
 TEST_NAME=ServiceRefConflateChangesetRiverTest
 GOLD_DIR=test-files/cmd/glacial/serial/$TEST_NAME
@@ -39,9 +35,9 @@ CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.refere
 
 DEBUG=false
 if [ "$DEBUG" == "true" ]; then
-  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
+  #GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter=Relation.js;CopyMapSubsetOp;RelationMerger;InBoundsCriterion "
+  LOG_FILTER="-D log.class.filter=Relation.js;RelationMemberUtilsJs;RelationMemberUtils;RelationMerger;RelationMergerJs "
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh

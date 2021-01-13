@@ -354,7 +354,7 @@ function removeElement(map, e)
  */
 function mergeRelations(map, elementId1, elementId2)
 {
-  return hoot.RelationMerger.mergeRelations(elementId1, elementId2);
+  return hoot.RelationMerger.mergeRelations(map, elementId1, elementId2);
 }
 
 /**
@@ -566,7 +566,7 @@ function haveGeometricRelationship(e, bounds, relationship, map)
 /*
  * TODO
  */
-function relationHasMember(relation, criterionClassName, bounds, relationship, filterBasedOnActiveMatchers, map)
+function relationHasMember(relation, bounds, relationship, filterBasedOnActiveMatchers, map)
 {
   return hoot.RelationMemberUtils.relationHasMember(relation, bounds, relationship, filterBasedOnActiveMatchers, map);
 }

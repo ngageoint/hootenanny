@@ -52,7 +52,7 @@ void RelationMergerJs::Init(Handle<Object> exports)
   Isolate* current = exports->GetIsolate();
   HandleScope scope(current);
   Handle<Object> thisObj = Object::New(current);
-  exports->Set(String::NewFromUtf8(current, "RelationMergerJs"), thisObj);
+  exports->Set(String::NewFromUtf8(current, "RelationMerger"), thisObj);
 
   thisObj->Set(String::NewFromUtf8(current, "mergeRelations"),
                FunctionTemplate::New(current, mergeRelations)->GetFunction());
@@ -64,14 +64,14 @@ void RelationMergerJs::mergeRelations(const FunctionCallbackInfo<Value>& args)
   HandleScope scope(current);
 
   OsmMapPtr map = toCpp<OsmMapPtr>(args[0]);
-  ElementIdJs* elementId1Js = ObjectWrap::Unwrap<ElementIdJs>(args[1]->ToObject());
-  ElementIdJs* elementId2Js = ObjectWrap::Unwrap<ElementIdJs>(args[2]->ToObject());
+  ElementId eid1 = toCpp<ElementId>(args[1]);
+  ElementId eid2 = toCpp<ElementId>(args[2]);
 
   RelationMerger merger;
   merger.setOsmMap(map.get());
   try
   {
-    merger.merge(elementId1Js->getElementId(), elementId2Js->getElementId());
+    merger.merge(eid1, eid2);
 
     args.GetReturnValue().SetUndefined();
   }
