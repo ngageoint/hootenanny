@@ -44,6 +44,7 @@
         "description": "FCODE: SU001 - An installation designed for military use. For example, used to perform military operations, initiate forward movements, and/or furnish supplies. Often protected by fortifications or natural advantages.",
         "isA": "military",
         "name": "military=installation",
+        "geometries": ["node", "area"],
         "objectType": "tag",
         "similarTo": {
             "name": "landuse=installation",
