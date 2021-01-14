@@ -65,19 +65,19 @@ void RelationMerger::merge(const ElementId& elementId1, const ElementId& element
   relation1->setTags(newTags);
 
   // copy relation 2's members into 1
-  const bool allMembersCopied = _mergeMembers(relation1, relation2);
+  /*const bool allMembersCopied =*/ _mergeMembers(relation1, relation2);
 
   // replace any references to relation 2 with a ref to relation 1
 //  LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
 //  ReplaceElementOp(elementId2, elementId1, true).apply(_map);
-  if (allMembersCopied)
-  {
+  //if (allMembersCopied)
+  //{
     LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
     ReplaceElementOp(elementId2, elementId1, true).apply(_map);
     // remove all instances of relation 2
     LOG_TRACE("Removing " << elementId2 << "...");
     RemoveRelationByEid(elementId2.getId()).apply(_map);
-  }
+  //}
 
   LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
   if (_writeDebugMaps)
@@ -156,16 +156,16 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
       LOG_TRACE("************************");
       continue;
     }
-    else if (_mergeConflatableMembersOnly &&
-             !ConflateUtils::elementCanBeConflatedByActiveMatcher(
-               currentMemberFromReplaced.getElement(), _map))
-    {
-      LOG_TRACE(
-        "Skipping adding member being replaced that is not conflatable: " <<
-        currentMemberFromReplaced.getElement()->getElementId() << "...");
-      LOG_TRACE("************************");
-      continue;
-    }
+//    else if (_mergeConflatableMembersOnly &&
+//             !ConflateUtils::elementCanBeConflatedByActiveMatcher(
+//               currentMemberFromReplaced.getElement(), _map))
+//    {
+//      LOG_TRACE(
+//        "Skipping adding member being replaced that is not conflatable: " <<
+//        currentMemberFromReplaced.getElement()->getElementId() << "...");
+//      LOG_TRACE("************************");
+//      continue;
+//    }
 
     // Determine which index in the target relation we want to insert the member from the replacing
     // relation.

@@ -354,6 +354,7 @@ function removeElement(map, e)
  */
 function mergeRelations(map, elementId1, elementId2, mergeConflatableMembersOnly)
 {
+  // TODO: remove mergeConflatableMembersOnly?
   return hoot.RelationMerger.mergeRelations(map, elementId1, elementId2, mergeConflatableMembersOnly);
 }
 

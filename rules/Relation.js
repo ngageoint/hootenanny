@@ -316,7 +316,7 @@ exports.mergePair = function(map, e1, e2)
   hoot.trace("Merging " + e1.getElementId() + " and " + e2.getElementId() + "...");
 
   // TODO
-  mergeRelations(map, e1.getElementId(), e2.getElementId(), true);
+  mergeRelations(map, e1.getElementId(), e2.getElementId(), false);
 
   e1.setStatusString("conflated");
   if (exports.writeMatchedBy == "true")

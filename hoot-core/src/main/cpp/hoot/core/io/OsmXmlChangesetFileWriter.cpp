@@ -213,40 +213,40 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         }
       }
       // TODO
-      if (!ConfigOptions().getMatchCreators().isEmpty())
-      {
-        ConstOsmMapPtr map;
-        if (map2 && map2->containsElement(_change.getElement()))
-        {
-          map = map2;
-        }
-        else if (map1 && map1->containsElement(_change.getElement()))
-        {
-          map = map1;
-        }
-        if (map && !WayNodeCriterion(map).isSatisfied(_change.getElement()))
-        {
-          bool conflatable = true;
-          if (_change.getElement()->getElementType() == ElementType::Relation &&
-              !RelationMemberUtils::relationHasConflatableMember(
-                std::dynamic_pointer_cast<const Relation>(_change.getElement()),
-                std::shared_ptr<geos::geom::Geometry>(), GeometricRelationship::Invalid, map))
-          {
-            conflatable = false;
-          }
-          else if (_change.getElement()->getElementType() != ElementType::Relation &&
-                   !ConflateUtils::elementCanBeConflatedByActiveMatcher(_change.getElement(), map))
-          {
-            conflatable = false;
-          }
-          if (!conflatable)
-          {
-            LOG_TRACE(
-              "Skipping change for change with unconflatable element: " << _change << "...");
-            continue;
-          }
-        }
-      }
+//      if (!ConfigOptions().getMatchCreators().isEmpty())
+//      {
+//        ConstOsmMapPtr map;
+//        if (map2 && map2->containsElement(_change.getElement()))
+//        {
+//          map = map2;
+//        }
+//        else if (map1 && map1->containsElement(_change.getElement()))
+//        {
+//          map = map1;
+//        }
+//        if (map && !WayNodeCriterion(map).isSatisfied(_change.getElement()))
+//        {
+//          bool conflatable = true;
+//          if (_change.getElement()->getElementType() == ElementType::Relation &&
+//              !RelationMemberUtils::relationHasConflatableMember(
+//                std::dynamic_pointer_cast<const Relation>(_change.getElement()),
+//                std::shared_ptr<geos::geom::Geometry>(), GeometricRelationship::Invalid, map))
+//          {
+//            conflatable = false;
+//          }
+//          else if (_change.getElement()->getElementType() != ElementType::Relation &&
+//                   !ConflateUtils::elementCanBeConflatedByActiveMatcher(_change.getElement(), map))
+//          {
+//            conflatable = false;
+//          }
+//          if (!conflatable)
+//          {
+//            LOG_TRACE(
+//              "Skipping change for change with unconflatable element: " << _change << "...");
+//            continue;
+//          }
+//        }
+//      }
 
       LOG_VART(Change::changeTypeToString(last));
       if (_change.getType() != last)
