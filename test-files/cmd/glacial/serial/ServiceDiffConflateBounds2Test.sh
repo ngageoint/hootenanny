@@ -7,12 +7,13 @@ set -e
 #
 # 2) Rivers and their parent relations only are conflated with no input filtering:
 #   a) Only rivers that exist within or cross over the bounds should be conflated and added to the 
-#      output changeset. 
+#      output changeset. No new secondary features should be added that don't satisfy the bounds 
+#      requirement.
 #   b) Only reference relations who have at least one river that exists within or crosses over the 
 #      bounds should be merged with secondary relations and added to the output changeset. Members 
 #      in such reference and secondary relations completely outside of the bounds should remain in 
 #      their parent relations after changeset application.
-#   c) Same as scenario 1a
+#   c) Same as scenario 1c
 #
 # See related notes in ServiceDiffConflateBounds1Test and other ServiceDiffConflateBounds*Test files 
 # for other scenarios.

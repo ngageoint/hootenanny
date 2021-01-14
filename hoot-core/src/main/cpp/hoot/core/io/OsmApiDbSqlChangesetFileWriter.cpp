@@ -720,18 +720,24 @@ void OsmApiDbSqlChangesetFileWriter::_createWayNodes(ConstWayPtr way)
     // If this was a newly created node its id was remapped when it was created, but the way still
     // has the old way node id.
     ElementId nodeElementId = ElementId(ElementType::Node, nodeIds.at(i));
-    LOG_VART(nodeElementId);
+    LOG_TRACE("Way node ID before: " << nodeElementId);
     if (_remappedIds.contains(nodeElementId))
     {
       nodeElementId = _remappedIds[nodeElementId];
+      if (nodeElementId.getId() <= 0)
+      {
+        throw HootException(
+          "SQL changesets can only create way nodes with positive element IDs: " +
+          nodeElementId.toString());
+      }
     }
-    if (nodeElementId.getId() <= 0)
+    else if (nodeElementId.getId() <= 0)
     {
-      throw HootException(
-        "SQL changesets can only create way nodes with positive element IDs: " +
-        nodeElementId.toString());
+      ElementId newId = ElementId(ElementType::Node, _db.getNextId(ElementType::Node));
+      _remappedIds[nodeElementId] = newId;
+      nodeElementId = newId;
     }
-    LOG_VART(nodeElementId);
+    LOG_TRACE("Way node ID after: " << nodeElementId);
 
     QString values =
       QString("(way_id, node_id, version, sequence_id) VALUES (%1, %2, 1, %3);\n")
@@ -761,18 +767,26 @@ void OsmApiDbSqlChangesetFileWriter::_createRelationMembers(ConstRelationPtr rel
     // If the member was a newly created element its id was remapped when it was created, but the
     // relation still has the old element id.
     ElementId memberElementId = member.getElementId();
-    LOG_VART(memberElementId);
+    LOG_TRACE("Member ID before: " << memberElementId);
     if (_remappedIds.contains(memberElementId))
     {
       memberElementId = _remappedIds[memberElementId];
+      if (memberElementId.getId() <= 0)
+      {
+        throw HootException(
+          "SQL changesets can only create relation members with positive element IDs: " +
+          memberElementId.toString());
+      }
     }
-    if (memberElementId.getId() <= 0)
+    else if (memberElementId.getId() <= 0)
     {
-      throw HootException(
-        "SQL changesets can only create relation members with positive element IDs: " +
-        memberElementId.toString());
+      ElementId newId =
+        ElementId(
+          memberElementId.getType().getEnum(), _db.getNextId(memberElementId.getType().getEnum()));
+      _remappedIds[memberElementId] = newId;
+      memberElementId = newId;
     }
-    LOG_VART(memberElementId);
+    LOG_TRACE("Member ID after: " << memberElementId);
 
     QString values =
       QString(

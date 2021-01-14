@@ -7,7 +7,8 @@ set -e
 #
 # 1) Data of all types conflated with no input filtering:
 #   a) Only features (of any type) that exist within or cross over the bounds should be conflated 
-#      and added to the output changeset. 
+#      and added to the output changeset. No new secondary features should be added that don'
+#      satisfy the bounds requirement. 
 #   b) Only reference relations who have at least one member that exists within or crosses over the 
 #      bounds should be merged with secondary relations and added to the output changeset. Members 
 #      in such reference and secondary relations completely outside of the bounds should remain in 
@@ -50,9 +51,9 @@ CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.refere
 
 DEBUG=false
 if [ "$DEBUG" == "true" ]; then
-  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
+  #GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter=Relation.js;RelationMemberUtils;RelationMerger;OsmApiDbSqlChangesetFileWriter;ConflateUtils"
+  LOG_FILTER="-D log.class.filter=OsmApiDbSqlChangesetFileWriter"
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
