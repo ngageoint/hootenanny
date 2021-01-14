@@ -29,7 +29,7 @@ See the <<hootInstall, Hootenanny Installation>> and <<hootDevGuide, Hootenanny 
 
 ==== Configuration
 
-Road Conflation can further be customized with the highway.* configuration options. See the "Configuration Options" section of User Guide 
+Road Conflation can further be customized with the highway.* configuration options. See the "Configuration Options" section of User Guide
 for more detail.
 
 [[PoiToPoi]]
@@ -70,16 +70,16 @@ the two features, name similarity, type similarity, address similarity, and phon
 [[PoiToPolygonConfigurableOptions]]
 ==== Configurable Options
 
-POI to Polygon Conflation can further be customized with the poi.polygon.* configuration options. See the "Configuration Options" section of 
+POI to Polygon Conflation can further be customized with the poi.polygon.* configuration options. See the "Configuration Options" section of
 User Guide for more detail.
 
 [[PoiToPolygonStatistics]]
 ==== Statistics
 
-Conflation statistics for POI to Polygon Conflation are available from the command line with the `--stats` option as well as in the User 
-Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a different definition than those 
-conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other 
-POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions 
+Conflation statistics for POI to Polygon Conflation are available from the command line with the `--stats` option as well as in the User
+Interface, the same as with all other types of conflation.  Note that POIs conflatable with polygons have a different definition than those
+conflatable with other POIs, which is less strict.  Therefore, POIs conflatable with polygons are a superset of POIs conflatable with other
+POIs.  Likewise, polygons are a superset of buildings and also include features such as parks, parking lots, etc.  See the Feature Definitions
 section <<hootalgo, Hootenanny - Algorithms>> for POI and polygon definition details.
 
 [[PoiToPolygonUseCases]]
@@ -136,7 +136,7 @@ hoot conflate <river-dataset-1> <river-dataset-2> <output>
 ------
 
 All of the settings that can be modified for river conflation exist in +conf/core/ConfigOptions.asciidoc+.  Tweaking the settings can
-result in better conflation performance depending on the datasets being conflated. See the "Configuration Options" section of User Guide for 
+result in better conflation performance depending on the datasets being conflated. See the "Configuration Options" section of User Guide for
 more detail.
 
 [[Power-Line-Conflation]]
@@ -159,7 +159,7 @@ this conflation.
 ==== Usage
 
 Power line conflation can be done from the command line or the web user interface.  Conflating in both environments is similar as described
-in the above River Conflation section.  Railway Conflation can further be customized with the power.line.* configuration options. See the 
+in the above River Conflation section.  Railway Conflation can further be customized with the power.line.* configuration options. See the
 "Configuration Options" section of User Guide for more detail.
 
 [[Feature-Review]]
@@ -197,14 +197,14 @@ this conflation.
 | `rules/Railway.js` | custom rule based conflation model
 |======
 
-Railway Conflation can further be customized with the railway.* configuration options. See the "Configuration Options" section of User Guide 
+Railway Conflation can further be customized with the railway.* configuration options. See the "Configuration Options" section of User Guide
 for more detail.
 
 [[ConflationFeatureAccuracyHandling]]
 == Conflation Feature Accuracy Handling
 
 Feature accuracy is measure of the confidence in how accurately a feature's geospatial coordinates are. Feature accuracy values affect the
-accuracy of conflated output data. Feature circular error (accuracy) can be processed in one of two ways: 1) on a feature by feature basis manually or 2) use Hootenanny's default value to assign it to all features. 
+accuracy of conflated output data. Feature circular error (accuracy) can be processed in one of two ways: 1) on a feature by feature basis manually or 2) use Hootenanny's default value to assign it to all features.
 
 For 1), you can manually assign the  either the `circular:error` or `accuracy` tag with your CE value to individual features and Hootenanny will read in the values.
 
@@ -433,8 +433,7 @@ for (var r in one2one) {
     }
     lookup[row[0]][row[1]] = [row[2], row[3]];
 }
-// A translateAttributes method that is very similar to the python translate
-// attributes
+// A translateToOsm method that is very similar to the python one
 function translateToOsm(attrs, layerName) {
     var tags = {};
     for (var col in attrs) {
@@ -474,7 +473,7 @@ The purpose of the translation file is to convert your custom Shapefile into the
 OSM schema (http://wiki.openstreetmap.org/wiki/Map_Features). The translation
 file is a Python script with a global function with the following definition:
 
-* +def translateAttributes(attrs, layerName):+
+* +def translateToOsm(attrs, layerName):+
 ** +attrs+ - A dictionary of attributes for a single feature to be translated.
 ** +layerName+ - The name of the layer being translated. This is provided in
    case multiple files are being translated at one time such as roads, bridges
@@ -486,7 +485,7 @@ should be filtered from the data set. When +convert+ is launched Hootenanny
 loads the specified Python file. The files in the +translations+ directory will
 be included in the Python path. The same Python instance will be used for the
 translations of all files in the _input_ list. This means that the script will
-only be intialized once and then +translateAttributes+ will be called once for
+only be intialized once and then +translateToOsm+ will be called once for
 each feature in all of the input files.
 
 ===== Example Translation Work Flow
@@ -508,7 +507,7 @@ In my notional example there are three columns with the following definitions:
 * +DIR+ - The flow of traffic, either 1 for one way traffic, or 2 for
   bidirectional traffic.
 
-Hootenanny will call the translateAttributes method 3 times for this input. Each
+Hootenanny will call the translateToOsm method 3 times for this input. Each
 call will contain the attributes for a given row. In this case the parameters
 passed will be:
 
@@ -554,7 +553,7 @@ To accomplish this we can use the following translation script:
 [source,python]
 ----
 #!/bin/python
-def translateAttributes(attrs, layerName):
+def translateToOsm(attrs, layerName):
     # Intialize our results object
     tags = {}
     # Is the STNAME attribute properly populated?
@@ -622,7 +621,7 @@ http://www.census.gov/geo/www/tiger/tgrshp2012/tgrshp2012.html[2010 Tiger road d
 [source,python]
 ----
 #!/bin/python
-def translateAttributes(attrs, layerName):
+def translateToOsm(attrs, layerName):
     if not attrs: return
     tags = {}
     if 'FULLNAME' in attrs:
@@ -1012,7 +1011,7 @@ The following translation code will always work for roads, but drops all the att
 [source,python]
 ------
 #!/bin/python
-def translateAttributes(attrs, layerName):
+def translateToOsm(attrs, layerName):
     if not attrs: return
     return {'highway':'road'}
 ------
@@ -1027,7 +1026,7 @@ The following translation will work well with the tiger data.
 [source,python]
 ------
 #!/bin/python
-def translateAttributes(attrs, layerName):
+def translateToOsm(attrs, layerName):
     if not attrs: return
     tags = {}
     # 95% CE in meters
@@ -1083,7 +1082,7 @@ The following translation will work OK with the DC data.
 [source,python]
 ------
 #!/bin/python
-def translateAttributes(attrs, layerName):
+def translateToOsm(attrs, layerName):
     if not attrs: return
     tags = {}
     # 95% CE in meters
@@ -1182,7 +1181,7 @@ An example translation file is:
 [source,python]
 ------
 #!/bin/python
-def translateAttributes(attrs, layerName):
+def translateToOsm(attrs, layerName):
     if not attrs: return
     tags = attrs
     tags['accuracy'] = '5'

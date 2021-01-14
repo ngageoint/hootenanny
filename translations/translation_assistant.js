@@ -38,8 +38,15 @@ translation_assistant = {
             tags[tagKey] = value;
         }
     },
-    // Takes 'attrs' and returns OSM 'tags'
+
+
     translateAttributes: function(attrs, layerName, attributeMapping, fcode, schema, replace)
+    {
+        return translation_assistant.translateToOsm(attrs, layerName, attributeMapping, fcode, schema, replace);
+    },
+
+    // Takes 'attrs' and returns OSM 'tags'
+    translateToOsm: function(attrs, layerName, attributeMapping, fcode, schema, replace)
     {
         var tags = {};
         var extras = []
@@ -61,7 +68,7 @@ translation_assistant = {
             var amKeys = Object.keys(attributeMapping);
             if (amKeys.length == 1) {
                 l = attributeMapping[amKeys[0]];
-            }            
+            }
         }
 
         // Don't translate feature if no matching attribute mapping could be found
@@ -164,6 +171,6 @@ translation_assistant = {
 }
 
 if (typeof exports !== 'undefined') {
-    exports.translateAttributes = translation_assistant.translateAttributes;
+    exports.translateToOsm = translation_assistant.translateToOsm;
     exports.difference = translation_assistant.difference;
 }

@@ -61,8 +61,7 @@ function getDbSchema()
 }
 
 // IMPORT
-// translateAttributes - takes 'attrs' and returns OSM 'tags'
-// function translateAttributes(attrs, layerName)
+// translateToOsm - takes 'attrs' and returns OSM 'tags'
 function translateToOsm(attrs, layerName, geometryType)
 {
   return dnc.toOsm(attrs, layerName, geometryType);

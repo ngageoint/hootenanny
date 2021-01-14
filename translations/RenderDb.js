@@ -105,7 +105,7 @@ function initialize()
 } // End Initialize
 
 // IMPORT
-// translateAttributes - takes 'attrs' and returns OSM 'tags'
+// translateToOsm - takes 'attrs' and returns OSM 'tags'
 function translateToOsm(attrs, layerName, geometryType)
 {
   // Debug

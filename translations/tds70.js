@@ -517,7 +517,7 @@ tds70 = {
     for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
     {
       // pre processing
-      tds70.applyToTdsPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
+      tds70.applyToOgrPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
 
       // apply the simple number and text biased rules
       // Note: These are BACKWARD, not forward!
@@ -528,7 +528,7 @@ tds70 = {
       translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds70.lookup, tds70.fcodeLookup,transMap);
 
       // post processing
-      tds70.applyToTdsPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
+      tds70.applyToOgrPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});
 
       returnData.push({attrs: newFeatures[i]['attrs'],tableName: ''});
     }
@@ -1138,9 +1138,9 @@ tds70 = {
 
   // #####################################################################################################
 
-  // ##### Start of the xxToTdsxx Block #####
+  // ##### Start of the xxToOgrxx Block #####
 
-  applyToTdsPreProcessing: function(tags, attrs, geometryType)
+  applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
     if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
@@ -1965,11 +1965,11 @@ tds70 = {
       }
     }
 
-  }, // End applyToTdsPreProcessing
+  }, // End applyToOgrPreProcessing
 
   // #####################################################################################################
 
-  applyToTdsPostProcessing : function (tags, attrs, geometryType, notUsedTags)
+  applyToOgrPostProcessing : function (tags, attrs, geometryType, notUsedTags)
   {
     // Shoreline Construction (BB081) covers a lot of features
     if (attrs.PWC) attrs.F_CODE = 'BB081';
@@ -2306,11 +2306,11 @@ tds70 = {
 
     }
 
-  }, // End applyToTdsPostProcessing
+  }, // End applyToOgrPostProcessing
 
   // #####################################################################################################
 
-  // ##### End of the xxToTdsxx Block #####
+  // ##### End of the xxToOgrxx Block #####
 
   // toOsm - Translate Attrs to Tags
   // This is the main routine to convert _TO_ OSM
@@ -2459,7 +2459,7 @@ tds70 = {
   // This gets called by translateToOGR and is where the main work gets done
   // We get Tags and return Attrs and a tableName
   // This is the main routine to convert _TO_ TDS
-  toTds : function(tags, elementType, geometryType)
+  toOgr : function(tags, elementType, geometryType)
   {
     var tableName = ''; // The final table name
     var returnData = []; // The array of features to return
@@ -2544,7 +2544,7 @@ tds70 = {
     translate.overrideValues(tags,tds70.toChange);
 
     // Pre Processing
-    tds70.applyToTdsPreProcessing(tags, attrs, geometryType);
+    tds70.applyToOgrPreProcessing(tags, attrs, geometryType);
 
     // Make a copy of the input tags so we can remove them as they get translated. What is left is
     // the not used tags.
@@ -2579,8 +2579,8 @@ tds70 = {
 
     // Post Processing.
     // We send the original list of tags and the list of tags we haven't used yet.
-    // tds70.applyToTdsPostProcessing(tags, attrs, geometryType);
-    tds70.applyToTdsPostProcessing(tags, attrs, geometryType, notUsedTags);
+    // tds70.applyToOgrPostProcessing(tags, attrs, geometryType);
+    tds70.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
     // Debug
     if (tds70.configOut.getOgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 3: ');
@@ -2745,6 +2745,6 @@ tds70 = {
 
     return returnData;
 
-  } // End of toTds
+  } // End of toOgr
 
 }; // End of tds70

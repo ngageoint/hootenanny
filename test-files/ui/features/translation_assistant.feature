@@ -85,7 +85,7 @@ Feature: Translation Assistant
         And I select the "cali-Cucumber" option in the "Select Data Translation Schema" combobox
         When I press "big.loud" span with text "Import"
         Then I wait 60 "seconds" to not see "Add Data"
-        Then I wait 10 "seconds" to see "cali_shp_Cucumber"
+        Then I wait 20 "seconds" to see "cali_shp_Cucumber"
 
     Scenario: Delete custom translation
         When I click on the "Translations" option in the "settingsSidebar"

@@ -172,5 +172,5 @@ if (typeof exports !== 'undefined') {
     exports.EnglishtoOSM = etds61_osm.toOSM;
     exports.RawtoOSM = tds61.toOsm;
     exports.OSMtoEnglish = etds61.toEnglish;
-    exports.OSMtoRaw = tds61.toTds;
+    exports.OSMtoRaw = tds61.toOgr;
 }

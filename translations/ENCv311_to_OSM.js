@@ -203,7 +203,7 @@ enc311 = {
     // These add to the seamark ones.
     // E.g. seamark:building:function = post_office => amenity=post_office
     // First, add some generic tags based on the layer name. These get refined later
-  
+
     // Save this for use later
     var smType = tags['seamark:type'];
 
@@ -472,9 +472,9 @@ enc311 = {
 // #####################################################################################################
 
 // IMPORT
-// translateAttributes - takes 'attrs' and returns OSM 'tags'
+// translateToOsm - takes 'attrs' and returns OSM 'tags'
 // NOTE: translateToOSM has a higher priority than translateAttributes
-function translateAttributes(attrs, layerName, geometryType)
+function translateToOSM(attrs, layerName, geometryType)
 {
   return enc311.toOsm(attrs, layerName, geometryType);
-} // End of Translate Attributes
+} // End of translateToOsm
