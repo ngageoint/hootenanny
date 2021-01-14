@@ -64,11 +64,12 @@ public:
                         const geos::geom::Envelope& bounds, const QString& output);
 
   /**
-   * TODO
+   * Checks to see if an element can be conflated by any of the configured matchers for conflation.
    *
-   * @param element
-   * @param map
-   * @return
+   * @param element element to examine
+   * @param map map containing the element
+   * @return true if the conflate matchers are configured with at least one matcher that
+   * can conflate the input element; false otherwise
    */
   static bool elementCanBeConflatedByActiveMatcher(
     const ConstElementPtr& element, const ConstOsmMapPtr& map);

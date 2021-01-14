@@ -116,7 +116,7 @@ void OsmApiDbSqlChangesetFileWriter::write(
       "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
-    // TODO
+    // Bounds checking requires a map. Grab the two input maps if they were passed in.
     ConstOsmMapPtr map1;
     ConstOsmMapPtr map2;
     if (_map1List.size() > 0)
@@ -160,13 +160,14 @@ void OsmApiDbSqlChangesetFileWriter::write(
         LOG_TRACE("Skipping change for element ID already having change: " << change << "...");
         continue;
       }
-      // TODO
       if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
       {
         LOG_TRACE(
           "Checking bounds requirement for " << change.getElement()->getElementId() << "...");
 
         std::shared_ptr<InBoundsCriterion> boundsCrit;
+        // map2 takes precedence over map 1, since map2 represents the changed set of the data
+        // (its possible we don't need map1 at all here...not sure).
         if (map2 && boundsCrit2 && map2->containsElement(change.getElement()))
         {
           boundsCrit = boundsCrit2;
@@ -190,7 +191,6 @@ void OsmApiDbSqlChangesetFileWriter::write(
           continue;
         }
       }
-      // TODO
 //      if (!ConfigOptions().getMatchCreators().isEmpty())
 //      {
 //        LOG_TRACE(

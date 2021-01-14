@@ -32,7 +32,6 @@
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -40,8 +39,7 @@ namespace hoot
 /**
  * Identifies relation members
  */
-class RelationMemberCriterion : public ElementCriterion, public ConstOsmMapConsumer,
-  public Configurable
+class RelationMemberCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
@@ -49,7 +47,6 @@ public:
 
   RelationMemberCriterion() = default;
   RelationMemberCriterion(ConstOsmMapPtr map);
-  RelationMemberCriterion(ConstOsmMapPtr map, const QSet<long>& parentRelationIds);
   virtual ~RelationMemberCriterion() = default;
 
   /**
@@ -67,13 +64,9 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
-  void setConfiguration(const Settings& conf) override;
-
 private:
 
   ConstOsmMapPtr _map;
-  // TODO
-  QSet<long> _parentRelationIds;
 };
 
 }

@@ -144,7 +144,7 @@ private:
   int _numModifyChanges;
   int _numDeleteChanges;
 
-  // TODO
+  // These are used by the changeset writer for bounds calc.
   QList<ConstOsmMapPtr> _map1List;
   QList<ConstOsmMapPtr> _map2List;
 

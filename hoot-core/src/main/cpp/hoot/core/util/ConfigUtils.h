@@ -55,9 +55,9 @@ public:
   static bool boundsOptionEnabled();
 
   /**
-   * TODO
+   * Gets the current configured bounds geometry
    *
-   * @return
+   * @return a geometry
    */
   static std::shared_ptr<geos::geom::Geometry> getBounds();
 
@@ -70,11 +70,11 @@ public:
   static GeometricRelationship getBoundsRelationship();
 
   /**
-   * TODO
+   * Gets the current configured bounds condition
    *
-   * @param map
-   * @return
-   * @todo This causes memory errors.
+   * @param map map in use for the current operation
+   * @return a criterion used for checking whether an element satisfies the current configured
+   * bounds condition
    */
   static std::shared_ptr<InBoundsCriterion> getBoundsCrit(const ConstOsmMapPtr& map);
 

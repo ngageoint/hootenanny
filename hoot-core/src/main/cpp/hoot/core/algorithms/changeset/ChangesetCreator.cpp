@@ -122,7 +122,6 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   _singleInput = input2.trimmed().isEmpty();
   LOG_VARD(_singleInput);
   // both inputs must support streaming to use streaming I/O
-  // TODO: explain
   const bool useStreamingIo =
     // TODO: may be able to move this check to ElementStreamer::areValidStreamingOps
     !ConfigUtils::boundsOptionEnabled() &&
@@ -652,9 +651,9 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
     filteredInputStream.reset(new ElementVisitorInputStream(inputStream, visitors.at(0)));
   }
 
-  // Add convert ops supporting streaming into the pipeline, if there are any. TODO: Any
-  // OsmMapOperations in the bunch need to operate on the entire map made up of both inputs to
-  // work correctly.
+  // Add convert ops supporting streaming into the pipeline, if there are any.
+  // TODO: Any OsmMapOperations in the bunch need to operate on the entire map made up of both
+  // inputs to work correctly.
   return
     ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
 }
@@ -711,7 +710,8 @@ void ChangesetCreator::_streamChangesetOutput(
 
   std::shared_ptr<OsmChangesetFileWriter> writer =
     OsmChangesetFileWriterFactory::getInstance().createWriter(output, _osmApiDbUrl);
-  // TODO
+  // Changeset writing honors the bounds config opt, if specified. To do bounds checking a map is
+  // needed, so pass in maps to the changeset writer.
   if (ConfigUtils::boundsOptionEnabled())
   {
     LOG_VARD(_map1List.size());

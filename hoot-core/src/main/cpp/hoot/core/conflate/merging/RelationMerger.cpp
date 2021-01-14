@@ -40,7 +40,7 @@ namespace hoot
 {
 
 RelationMerger::RelationMerger() :
-_mergeConflatableMembersOnly(false),
+//_mergeConflatableMembersOnly(false),
 _writeDebugMaps(false) // ONLY ENABLE THIS DURING DEBUGGING
 {
 }
@@ -93,6 +93,7 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
 
   const int numRelationBeingReplacedMembers = relationBeingReplaced->getMemberCount();
   int numMembersCopied = 0;
+  // If a bounds was configured, we'll only merge in members that satisfy it.
   std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getBoundsCrit(_map);
 
   // Load up the relation members from both relations.

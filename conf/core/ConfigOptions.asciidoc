@@ -728,7 +728,10 @@ The text description that is written to the OSM API database with a changeset.
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+If enabled, changeset writers will ignore the `bounds` configuration option. Otherwise, only
+elements satisfying the configured geospatial bounds options will be used to generate changeset
+statements. Currently this primarily used by the Cut and Replace workflow, as it handles the bounds
+internally.
 
 === changeset.hashtags
 
@@ -4131,14 +4134,6 @@ pre-existing.
 * Default Value: ``
 
 Allows for requiring a type tag match when using RelationCriterion.
-
-=== relation.member.criterion.parent.relation.ids
-
-* Data Type: list
-* Default Value:
-** ``
-
-TODO
 
 === relation.name.threshold
 

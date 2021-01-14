@@ -46,8 +46,8 @@ namespace hoot
 {
 
 /*
- * @todo None of the tests in this class will run on a VM for me when the test isn't run in parallel
- * (1/13/21) - BDW.
+ * @todo None of the tests in this class will run on a VM for me when the test class isn't run in
+ * parallel (test hangs)...very strange (1/13/21) - BDW.
  */
 class MatchCandidateCountVisitorTest : public HootTestFixture
 {

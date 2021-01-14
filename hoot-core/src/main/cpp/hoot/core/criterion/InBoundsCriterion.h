@@ -98,7 +98,7 @@ private:
   std::shared_ptr<WayNodeCriterion> _wayNodeCrit;
   // If false, the element can cross the bounds and still be considered within bounds.
   bool _mustCompletelyContain;
-  // TODO
+  // If this is enabled, only the parent ways of way nodes are checked for bounds satisfaction.
   bool _treatWayNodesAsPartOfWays;
 
   bool _nonWayNodeInBounds(const ConstElementPtr& e) const;

@@ -140,7 +140,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
-    // TODO
+    // Bounds checking requires a map. Grab the two input maps if they were passed in.
     ConstOsmMapPtr map1;
     ConstOsmMapPtr map2;
     if (_map1List.size() > 0)
@@ -186,8 +186,8 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       // to work well. Other options could be to favor certain change types over others. This check
       // must be here and not in ChangesetDeriver, as the problem has only been seen when combining
       // multiple derivers. You could make the argument to prevent these types of dupes from
-      // occurring before outputting this changeset file, but not quite sure how to do that yet, due
-      // to the fact that the changeset providers have a streaming interface.
+      // occurring before outputting the changeset file with this writer, but not quite sure how to
+      // do that yet, due to the fact that the changeset providers have a streaming interface.
       if (_parsedChangeIds.contains(_change.getElement()->getElementId()))
       {
         LOG_TRACE("Skipping change for element ID already having change: " << _change << "...");
@@ -197,6 +197,8 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
       {
         std::shared_ptr<InBoundsCriterion> boundsCrit;
+        // map2 takes precedence over map 1, since map2 represents the changed set of the data
+        // (its possible we don't need map1 at all here...not sure).
         if (map2 && boundsCrit2 && map2->containsElement(_change.getElement()))
         {
           boundsCrit = boundsCrit2;
@@ -220,41 +222,6 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
           continue;
         }
       }
-      // TODO
-//      if (!ConfigOptions().getMatchCreators().isEmpty())
-//      {
-//        ConstOsmMapPtr map;
-//        if (map2 && map2->containsElement(_change.getElement()))
-//        {
-//          map = map2;
-//        }
-//        else if (map1 && map1->containsElement(_change.getElement()))
-//        {
-//          map = map1;
-//        }
-//        if (map && !WayNodeCriterion(map).isSatisfied(_change.getElement()))
-//        {
-//          bool conflatable = true;
-//          if (_change.getElement()->getElementType() == ElementType::Relation &&
-//              !RelationMemberUtils::relationHasConflatableMember(
-//                std::dynamic_pointer_cast<const Relation>(_change.getElement()),
-//                std::shared_ptr<geos::geom::Geometry>(), GeometricRelationship::Invalid, map))
-//          {
-//            conflatable = false;
-//          }
-//          else if (_change.getElement()->getElementType() != ElementType::Relation &&
-//                   !ConflateUtils::elementCanBeConflatedByActiveMatcher(_change.getElement(), map))
-//          {
-//            conflatable = false;
-//          }
-//          if (!conflatable)
-//          {
-//            LOG_TRACE(
-//              "Skipping change for change with unconflatable element: " << _change << "...");
-//            continue;
-//          }
-//        }
-//      }
 
       LOG_VART(Change::changeTypeToString(last));
       if (_change.getType() != last)

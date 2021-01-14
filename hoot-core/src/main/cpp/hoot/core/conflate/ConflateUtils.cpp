@@ -154,17 +154,20 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
 bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
   const ConstElementPtr& element, const ConstOsmMapPtr& map)
 {
+  // Get all the configured matchers.
   const std::vector<std::shared_ptr<MatchCreator>> activeMatchCreators =
     MatchFactory::getInstance().getCreators();
   for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = activeMatchCreators.begin();
        itr != activeMatchCreators.end(); ++itr)
   {
+    // Get the element criterion this matcher uses for matching elements.
     std::shared_ptr<MatchCreator> activeMatchCreator = *itr;
     const QStringList supportedCriteriaClassNames = activeMatchCreator->getCriteria();
     for (int i = 0; i < supportedCriteriaClassNames.size(); i++)
     {
       const QString criterionClassName = supportedCriteriaClassNames.at(i);
 
+      // Crit creation can be expensive, so cache those created.
       ElementCriterionPtr crit;
       if (_critCache.contains(criterionClassName))
       {
@@ -188,6 +191,7 @@ bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
         }
       }
 
+      // If any matcher's crit matches the element, return true.
       if (crit->isSatisfied(element))
       {
         return true;

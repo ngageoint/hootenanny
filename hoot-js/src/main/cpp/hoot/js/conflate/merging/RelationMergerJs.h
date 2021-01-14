@@ -34,9 +34,6 @@
 namespace hoot
 {
 
-/**
- * TODO
- */
 class RelationMergerJs : public HootBaseJs
 {
 public:

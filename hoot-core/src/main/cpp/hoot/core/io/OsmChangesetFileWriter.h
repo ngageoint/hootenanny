@@ -90,8 +90,14 @@ public:
    */
   virtual void setConfiguration(const Settings& conf) = 0;
 
-  // TODO: explain
+  /**
+   * Sets all maps corresponding to the former state of the datasets
+   */
   virtual void setMap1List(const QList<ConstOsmMapPtr>& /*map*/) {}
+
+  /**
+   * Sets all maps corresponding to the changed state of the datasets
+   */
   virtual void setMap2List(const QList<ConstOsmMapPtr>& /*map*/) {}
 };
 

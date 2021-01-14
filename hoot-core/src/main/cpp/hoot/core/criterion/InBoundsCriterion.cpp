@@ -100,7 +100,6 @@ bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   LOG_VART(e->getElementId());
 
-  // TODO
   const bool isWayNode = _wayNodeCrit->isSatisfied(e);
   LOG_VART(isWayNode);
   if (!isWayNode || (isWayNode && !_treatWayNodesAsPartOfWays))

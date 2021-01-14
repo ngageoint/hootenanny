@@ -161,11 +161,11 @@ public:
     const ConstOsmMapPtr& map, const ElementId& childId);
 
   /**
-   * TODO
+   * Returns IDs of all relation which contain the element with the input ID as a member
    *
-   * @param map
-   * @param childId
-   * @return
+   * @param map map owning the element identified by childId
+   * @param childId ID of the child element
+   * @return a list of element IDs
    */
   static QSet<long> getContainingRelationIds(
     const ConstOsmMapPtr& map, const ElementId& childId);
@@ -180,13 +180,16 @@ public:
   static int getMemberWayNodeCount(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
   /**
-   * TODO
+   * Determines if a relation has a member conflatable by the current configuration of conflate
+   * matchers
    *
-   * @param relation
-   * @param bounds
-   * @param relationship
-   * @param map
-   * @return
+   * @param relation relation to examine
+   * @param bounds optional member bounds requirement; leave null to disable bounds checking
+   * @param relationship optional geometric bounds relationship used with bounds; set to
+   * GeometricRelationship::Invalid to disable bounds checking
+   * @param map map owning the input relation
+   * @return true if the input relation contains at least one member element that can be conflated
+   * and optionally satisfies the bounds requirement; false otherwise
    */
   static bool relationHasConflatableMember(
     const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,

@@ -50,7 +50,7 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(FeatureExtractor, EdgeDistanceExtractor)
 
-// TODO: move this to its own file and factory register it
+// TODO: move this into its own file and factory register it
 class DiscretizeWaysVisitor : public ElementConstOsmMapVisitor
 {
 public:
@@ -76,7 +76,7 @@ private:
   vector<Coordinate>& _result;
 };
 
-// TODO: move this to its own file and factory register it
+// TODO: move this into its own file and factory register it
 class LinesWaysVisitor : public ElementConstOsmMapVisitor
 {
 public:

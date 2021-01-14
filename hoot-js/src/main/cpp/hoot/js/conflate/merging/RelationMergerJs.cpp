@@ -66,11 +66,11 @@ void RelationMergerJs::mergeRelations(const FunctionCallbackInfo<Value>& args)
   OsmMapPtr map = toCpp<OsmMapPtr>(args[0]);
   ElementId eid1 = toCpp<ElementId>(args[1]);
   ElementId eid2 = toCpp<ElementId>(args[2]);
-  const bool mergeConflatableMembersOnly = toCpp<bool>(args[3]);
+  //const bool mergeConflatableMembersOnly = toCpp<bool>(args[3]);
 
   RelationMerger merger;
   merger.setOsmMap(map.get());
-  merger.setMergeConflatableMembersOnly(mergeConflatableMembersOnly);
+  //merger.setMergeConflatableMembersOnly(mergeConflatableMembersOnly);
   try
   {
     merger.merge(eid1, eid2);
