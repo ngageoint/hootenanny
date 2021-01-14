@@ -2,7 +2,8 @@
 set -e
 
 # Main sonar scanner
-SONAR_VERSION=4.3.0.2102
+SONAR_VERSION=4.5.0.2216
+#SONAR_VERSION=4.6.0.2311 # Requires Java 11
 SONAR_CLI=sonar-scanner-cli-$SONAR_VERSION-linux
 SONAR_PKG=sonar-scanner-$SONAR_VERSION-linux
 SONAR_ZIP=$SONAR_CLI.zip
