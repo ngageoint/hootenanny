@@ -12,7 +12,9 @@ set -e
 #   b) Only reference relations who have at least one river that exists within or crosses over the 
 #      bounds should be merged with secondary relations and added to the output changeset. Members 
 #      in such reference and secondary relations completely outside of the bounds should remain in 
-#      their parent relations after changeset application.
+#      their parent relations after changeset application. When two relations are merged, if similar
+#      rivers cannot be matched, there will appear to be duplicated rivers in the merged 
+#      relation. This is expected and the conflicts must be manually resolved.
 #   c) Same as scenario 1c
 #
 # See related notes in ServiceDiffConflateBounds1Test and other ServiceDiffConflateBounds*Test files 
