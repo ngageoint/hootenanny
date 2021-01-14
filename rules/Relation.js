@@ -186,7 +186,7 @@ function geometryMismatch(map, e1, e2)
   }
   else
   {
-    var angleHist = angleHistExtractor.extract(mapToUse, e1, e2);
+    var angleHist = angleHistExtractor.extract(map, e1, e2);
     hoot.trace("angleHist: " + angleHist);
     if (angleHist < 0.73)
     {
