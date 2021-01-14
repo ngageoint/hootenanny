@@ -342,6 +342,12 @@ void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
   LOG_TRACE("ID before: " << changeElement->getElementId());
   const long id = _db.getNextId(element->getElementType().getEnum());
   _remappedIds[changeElement->getElementId()] = ElementId(changeElement->getElementType(), id);
+  if (id <= 0)
+  {
+    throw HootException(
+      "SQL changesets can only create elements with positive element IDs: " +
+      ElementId(changeElement->getElementType(), id).toString());
+  }
   LOG_TRACE("ID after: " << ElementId(changeElement->getElementType(), id));
 
   changeElement->setId(id);
@@ -421,6 +427,12 @@ QString OsmApiDbSqlChangesetFileWriter::_getUpdateValuesWayOrRelationStr(ConstEl
 
 void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr element)
 {
+  if (element->getElementId().getId() <= 0)
+  {
+    throw HootException(
+      "SQL changesets can only modify positive element IDs: " + element->getElementId().toString());
+  }
+
   LOG_TRACE("Writing update for: " << element->getElementId() << "...");
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
@@ -484,6 +496,13 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
 
 void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr element)
 {
+  if (element->getElementId().getId() <= 0)
+  {
+    throw HootException(
+      "SQL changesets can only create relation members with positive element IDs: " +
+      element->getElementId().toString());
+  }
+
   const QString elementIdStr = QString::number(element->getId());
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
@@ -706,7 +725,12 @@ void OsmApiDbSqlChangesetFileWriter::_createWayNodes(ConstWayPtr way)
     {
       nodeElementId = _remappedIds[nodeElementId];
     }
-    assert(nodeElementId.getId() > 0);
+    if (nodeElementId.getId() <= 0)
+    {
+      throw HootException(
+        "SQL changesets can only create way nodes with positive element IDs: " +
+        nodeElementId.toString());
+    }
     LOG_VART(nodeElementId);
 
     QString values =
@@ -742,7 +766,12 @@ void OsmApiDbSqlChangesetFileWriter::_createRelationMembers(ConstRelationPtr rel
     {
       memberElementId = _remappedIds[memberElementId];
     }
-    assert(memberElementId.getId() > 0);
+    if (memberElementId.getId() <= 0)
+    {
+      throw HootException(
+        "SQL changesets can only create relation members with positive element IDs: " +
+        memberElementId.toString());
+    }
     LOG_VART(memberElementId);
 
     QString values =
