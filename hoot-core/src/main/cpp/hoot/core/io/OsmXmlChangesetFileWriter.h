@@ -87,6 +87,7 @@ public:
 
 private:
 
+  // used for bounds checking
   QList<ConstOsmMapPtr> _map1List;
   QList<ConstOsmMapPtr> _map2List;
 
@@ -113,7 +114,7 @@ private:
   // list of metadata tag keys allowed to be written to the changeset
   QStringList _metadataAllowKeys;
 
-  // TODO
+  // overrides bounds checking
   bool _changesetIgnoreBounds;
 
   /** Helper functions to write nodes, ways, and relations. */

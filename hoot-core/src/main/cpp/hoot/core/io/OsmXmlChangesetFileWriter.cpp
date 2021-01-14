@@ -193,7 +193,6 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         LOG_TRACE("Skipping change for element ID already having change: " << _change << "...");
         continue;
       }
-      // TODO
       if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
       {
         std::shared_ptr<InBoundsCriterion> boundsCrit;

@@ -71,7 +71,6 @@ private:
 
   OsmMapPtr _map;
 
-  // TODO
   //bool _mergeConflatableMembersOnly;
 
   bool _writeDebugMaps;

@@ -92,6 +92,9 @@ public:
 
   /**
    * Sets all maps corresponding to the former state of the datasets
+   *
+   * @todo These map setters feel a little kludgy...maybe use a new map list interface, similar to
+   * OsmMapConsumer?
    */
   virtual void setMap1List(const QList<ConstOsmMapPtr>& /*map*/) {}
 
