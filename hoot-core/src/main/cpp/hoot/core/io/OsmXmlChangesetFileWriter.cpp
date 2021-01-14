@@ -141,8 +141,16 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       "...");
 
     // TODO
-    ConstOsmMapPtr map1 = _map1List.at(i);
-    ConstOsmMapPtr map2 = _map2List.at(i);
+    ConstOsmMapPtr map1;
+    ConstOsmMapPtr map2;
+    if (_map1List.size() > 0)
+    {
+      map1 = _map1List.at(i);
+    }
+    if (_map2List.size() > 0)
+    {
+      map2 = _map2List.at(i);
+    }
     std::shared_ptr<InBoundsCriterion> boundsCrit1;
     std::shared_ptr<InBoundsCriterion> boundsCrit2;
     if (ConfigUtils::boundsOptionEnabled())
