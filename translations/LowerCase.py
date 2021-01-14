@@ -1,8 +1,8 @@
 #!/bin/python
 
-def translateAttributes(attrs, layerName, geometryType):
+def translateToOsm(attrs, layerName, geometryType):
     if not attrs: return
-    
+
     tags = {}
 
     for k, v in attrs.iteritems():

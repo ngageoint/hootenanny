@@ -37,17 +37,17 @@
 //  90% of this code is taken from the standard NFDD translation script.
 //
 
-function translateAttributes(attrs, layerName, geometryType)
+function translateToOsm(attrs, layerName, geometryType)
 {
         return attrs; // Do Nothing
 
 } // End of Translate Attributes
 
 function translateToOgr(tags, elementType, geometryType)
-{ 
+{
     var attrs = {};   // The Output
     var tableName = ''; // The final Table Name
-    
+
     var attrs2 = {};   // The Second Output
     var tableName2 = ''; // The Second Table Name
 
@@ -72,7 +72,7 @@ function translateToOgr(tags, elementType, geometryType)
         else
         {
             attrs.ZI005_FNA = tags.alt_name;
-        } 
+        }
     }
 
     // Buildings
@@ -80,8 +80,8 @@ function translateToOgr(tags, elementType, geometryType)
 
     if (tags.amenity) attrs.OTH = '(FFN:' + tags.amenity + ')';
 
-    // Road rules 
-    if (tags.highway == 'road') 
+    // Road rules
+    if (tags.highway == 'road')
     {
         attrs.RTN_ROI = '5'; // Making them local
         attrs.TYP = '1'; // Making them a road
@@ -129,13 +129,13 @@ function translateToOgr(tags, elementType, geometryType)
         if (attrs.ZI005_FNA) attrs2.ZI005_FNA = attrs.ZI005_FNA;
         if (attrs.ZI006_MEM) attrs2.ZI006_MEM = attrs.ZI006_MEM;
     } // End Make a Bridge
-    
+
     // Build a Table Name
     for (var i=0, sLen = schema.length; i < sLen; i++)
     {
         if (schema[i].fcode == attrs.F_CODE && schema[i].geom == geometryType)
         {
-            tableName = schema[i].name; 
+            tableName = schema[i].name;
             break;
         }
     }
@@ -228,7 +228,7 @@ function getDbSchema ()
                          { name:"Street", value:"33" },
                          { name:"Motorway", value:"41" },
                          { name:"Other", value:"999" },
-                         ] // End of Enumerations 
+                         ] // End of Enumerations
                    },
                    { name:"RTN_ROI",
                      desc:"Route Designation (route designation type)",
@@ -243,7 +243,7 @@ function getDbSchema ()
                          { name:"Secondary", value:"4" },
                          { name:"Local", value:"5" },
                          { name:"Other", value:"999" },
-                     ] // End of Enumerations 
+                     ] // End of Enumerations
                    }
                   ] // End of Columns
         }, // End of Feature
@@ -252,7 +252,7 @@ function getDbSchema ()
           fcode:"AP010",
           desc:"Cart Track",
           geom:"Line",
-          columns:[ 
+          columns:[
                      { name:"F_CODE",
                        desc:"Feature Code",
                        type:"String",
@@ -287,7 +287,7 @@ function getDbSchema ()
                            { name:"Pipeline Maintenance", value:"21" },
                            { name:"Power Line Maintenance", value:"22" },
                            { name:"Other", value:"999" },
-                        ] // End of Enumerations 
+                        ] // End of Enumerations
                      },
                      { name:"UFI",
                        desc:"Unique Entity Identifier",
@@ -303,7 +303,7 @@ function getDbSchema ()
           fcode:"AN010",
           desc:"Railway",
           geom:"Line",
-          columns:[ 
+          columns:[
                      { name:"F_CODE",
                        desc:"Feature Code",
                        type:"String",
@@ -344,7 +344,7 @@ function getDbSchema ()
           fcode:"AQ040",
           desc:"Bridge",
           geom:"Line",
-          columns:[ 
+          columns:[
                      { name:"F_CODE",
                        desc:"Feature Code",
                        type:"String",
@@ -381,7 +381,7 @@ function getDbSchema ()
                            { name:"Taxiway", value:"20" },
                            { name:"Runway", value:"25" },
                            { name:"Other", value:"999" },
-                        ] // End of Enumerations 
+                        ] // End of Enumerations
                      },
                      { name:"UFI",
                        desc:"Unique Entity Identifier",
@@ -397,7 +397,7 @@ function getDbSchema ()
           fcode:"AQ040",
           desc:"Bridge",
           geom:"Point",
-          columns:[ 
+          columns:[
                      { name:"F_CODE",
                        desc:"Feature Code",
                        type:"String",
@@ -434,7 +434,7 @@ function getDbSchema ()
                            { name:"Taxiway", value:"20" },
                            { name:"Runway", value:"25" },
                            { name:"Other", value:"999" },
-                        ] // End of Enumerations 
+                        ] // End of Enumerations
                      },
                      { name:"UFI",
                        desc:"Unique Entity Identifier",
@@ -445,7 +445,7 @@ function getDbSchema ()
                      },
                     ] // End of Columns
           }, // End of Feature
-        
+
         { name:"BUILDING_P",
           fcode:"AL013",
           desc:"Building",
@@ -493,7 +493,7 @@ function getDbSchema ()
                          { name:"No Information", value:"-999999" },
                          { name:"Restaurant", value:"572" },
                          { name:"Other", value:"999" },
-                     ] // End of Enumerations 
+                     ] // End of Enumerations
                    }
                   ] // End of Columns
         }, // End of Feature
@@ -545,7 +545,7 @@ function getDbSchema ()
                          { name:"No Information", value:"-999999" },
                          { name:"Restaurant", value:"572" },
                          { name:"Other", value:"999" },
-                     ] // End of Enumerations 
+                     ] // End of Enumerations
                    },
                   ] // End of Columns
         }, // End of Feature
@@ -593,7 +593,7 @@ function getDbSchema ()
         { name: "o2s_P",
           desc: "o2s",
           geom: "Point",
-          columns:[ 
+          columns:[
                    { name:'tag1',
                      desc:'Tag List',
                      type:'String',
@@ -605,7 +605,7 @@ function getDbSchema ()
         { name: "o2s_L",
           desc: "o2s",
           geom: "Line",
-          columns:[ 
+          columns:[
                    { name:'tag1',
                      desc:'Tag List',
                      type:'String',
@@ -617,7 +617,7 @@ function getDbSchema ()
         { name: "o2s_A",
           desc: "o2s",
           geom: "Area",
-          columns:[ 
+          columns:[
                    { name:'tag1',
                      desc:'Tag List',
                      type:'String',

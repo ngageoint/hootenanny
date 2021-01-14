@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.controllers.grail;
 
@@ -35,13 +35,14 @@ import static hoot.services.HootProperties.replaceSensitiveData;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
 import java.security.KeyStore;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.WebApplicationException;
@@ -70,6 +71,8 @@ import hoot.services.geo.BoundingBox;
  */
 public class PullApiCommand implements InternalCommand {
     private static final Logger logger = LoggerFactory.getLogger(PullApiCommand.class);
+
+    public static Pattern oqlFilterPattern = Pattern.compile(".+\\[(.*?)\\]"); // matches [xxx] pattern
 
     private final GrailParams params;
     private final String jobId;
@@ -186,12 +189,20 @@ public class PullApiCommand implements InternalCommand {
      */
     static String connectedWaysQuery(String query) {
         String newQuery;
+        List<String> filterList = new ArrayList<>();
 
         // if no query provided then use default overpass query
         if (query == null || query.equals("")) {
             newQuery = PullOverpassCommand.getDefaultOverpassQuery();
         } else {
             newQuery = query;
+            //check for any filters in custom query
+            //find the first term within square brackets
+            Matcher matcher = oqlFilterPattern.matcher(query);
+
+            while (matcher.find()) {
+                filterList.add(matcher.group(1));
+            }
         }
 
         // connected ways query
@@ -199,6 +210,17 @@ public class PullApiCommand implements InternalCommand {
         File connectedWaysQueryFile = new File(HOME_FOLDER, GRAIL_CONNECTED_WAYS_QUERY);
         try {
             connectedWaysQuery = FileUtils.readFileToString(connectedWaysQueryFile, "UTF-8");
+            //swap in filter term to connected ways query
+            if (filterList.size() > 0) {
+                // creating union for all queries created from the filter list
+                String filter = "(\n";
+                for (String filterOpt : filterList) {
+                    filter += "way[" + filterOpt + "](bn.oobnd);\n";
+                }
+                filter += ");\n";
+                connectedWaysQuery = connectedWaysQuery.replace("way(bn.oobnd);", filter);
+            }
+
         } catch(Exception exc) {
             throw new IllegalArgumentException("Grail pull connected ways error. Couldn't read connected ways overpass query file: " + connectedWaysQueryFile.getName());
         }
@@ -208,7 +230,7 @@ public class PullApiCommand implements InternalCommand {
         } else if (newQuery.lastIndexOf("out count;") != -1) {
             newQuery = newQuery.substring(0, newQuery.lastIndexOf("out count;")) + connectedWaysQuery;
         }
-
+        logger.info(newQuery);
         return newQuery;
     }
 }

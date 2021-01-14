@@ -487,56 +487,56 @@ var tagsAppend2 = {
     source: "GPS"
 };
 
-describe('translateAttributes', function() {
+describe('translateToOsm', function() {
     it('should translate shapefile attributes to osm tags', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mapping)), JSON.stringify(tags));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrs, layerName, mapping)), JSON.stringify(tags));
     })
     it('should return null if no attributes could be translated to tags', function(){
-        assert.equal(translation.translateAttributes(attrsNoMatch, layerName, mapping), null);
+        assert.equal(translation.translateToOsm(attrsNoMatch, layerName, mapping), null);
     })
     it('should return null if no layer name matched and no attributes could be translated to tags', function(){
-        assert.equal(translation.translateAttributes(attrsNoMatch, 'foo', mapping), null);
+        assert.equal(translation.translateToOsm(attrsNoMatch, 'foo', mapping), null);
     })
     it('for duplicate tag keys, values should be appended', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mappingWithDuplicateTags)), JSON.stringify(tagsWithDuplicateKeys));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrs, layerName, mappingWithDuplicateTags)), JSON.stringify(tagsWithDuplicateKeys));
     })
     it('tag keys with empty values are ignored', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsNoRamp, layerName, mappingWithDuplicateTags)), JSON.stringify(tagsWithEmptyValues));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsNoRamp, layerName, mappingWithDuplicateTags)), JSON.stringify(tagsWithEmptyValues));
     })
     it('note and Note : Memorandum tags concatenate extra attributes', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mappingManyToOne)), JSON.stringify(tagsWithManyToOne));
-        assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mappingManyToOneTds)), JSON.stringify(tagsWithManyToOneTds));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrs, layerName, mappingManyToOne)), JSON.stringify(tagsWithManyToOne));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrs, layerName, mappingManyToOneTds)), JSON.stringify(tagsWithManyToOneTds));
     })
     it('empty string in duplicate tag mapping allows merge', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsManyToOneMerge1, layerName, mappingManyToOneMerge)), JSON.stringify(tagsWithManyToOneMerge1));
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsManyToOneMerge2, layerName, mappingManyToOneMerge)), JSON.stringify(tagsWithManyToOneMerge2));
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsManyToOneMerge3, layerName, mappingManyToOneMerge)), JSON.stringify(tagsWithManyToOneMerge3));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsManyToOneMerge1, layerName, mappingManyToOneMerge)), JSON.stringify(tagsWithManyToOneMerge1));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsManyToOneMerge2, layerName, mappingManyToOneMerge)), JSON.stringify(tagsWithManyToOneMerge2));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsManyToOneMerge3, layerName, mappingManyToOneMerge)), JSON.stringify(tagsWithManyToOneMerge3));
     })
     it('multiple layer mappings are supported', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mappingMultipleLayers)), JSON.stringify(tags));
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsLayer2, "layer2", mappingMultipleLayers)), JSON.stringify(tagsLayer2));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrs, layerName, mappingMultipleLayers)), JSON.stringify(tags));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsLayer2, "layer2", mappingMultipleLayers)), JSON.stringify(tagsLayer2));
     })
     it('allows mapping to static tags', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrs, layerName, mappingStatic)), JSON.stringify(tagsStatic));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrs, layerName, mappingStatic)), JSON.stringify(tagsStatic));
     })
     it('compares mapping columns for match if layername missing', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsMissingNull, "foo", mappingMultipleLayers)), JSON.stringify(tags));
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsLayer2, "bar", mappingMultipleLayers)), JSON.stringify(tagsLayer2));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsMissingNull, "foo", mappingMultipleLayers)), JSON.stringify(tags));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsLayer2, "bar", mappingMultipleLayers)), JSON.stringify(tagsLayer2));
     })
     it('allows mapping to regex tag keys', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsRegex, layerName, mappingRegex)), JSON.stringify(tagsRegex));
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsRegex2, layerName, mappingRegex)), JSON.stringify(tagsRegex2));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsRegex, layerName, mappingRegex)), JSON.stringify(tagsRegex));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsRegex2, layerName, mappingRegex)), JSON.stringify(tagsRegex2));
     })
     it('overwrites "yes" keys with more specific values', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsMultiRule, layerName, mappingMultiRule)), JSON.stringify(tagsMultiRule));
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsMultiRule2, layerName, mappingMultiRule)), JSON.stringify(tagsMultiRule2));
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsMultiRule3, layerName, mappingMultiRule)), JSON.stringify(tagsMultiRule3));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsMultiRule, layerName, mappingMultiRule)), JSON.stringify(tagsMultiRule));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsMultiRule2, layerName, mappingMultiRule)), JSON.stringify(tagsMultiRule2));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsMultiRule3, layerName, mappingMultiRule)), JSON.stringify(tagsMultiRule3));
     })
     it('will append multiple tag values', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsAppend, layerName, mappingAppend)), JSON.stringify(tagsAppend));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsAppend, layerName, mappingAppend)), JSON.stringify(tagsAppend));
     })
     it('will replace instead of append when told', function(){
-        assert.equal(JSON.stringify(translation.translateAttributes(attrsAppend, layerName, mappingAppend, null, null, true)), JSON.stringify(tagsAppend2));
+        assert.equal(JSON.stringify(translation.translateToOsm(attrsAppend, layerName, mappingAppend, null, null, true)), JSON.stringify(tagsAppend2));
     })
 })
 
