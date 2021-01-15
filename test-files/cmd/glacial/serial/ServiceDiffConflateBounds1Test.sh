@@ -48,12 +48,13 @@ LOG_FILTER=""
 
 GENERAL_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999" 
-CONFLATE_OPTS="-D bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672 -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"
-CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false -D bounds=-117.729492166,40.9881915574,-117.718505838,40.996484138672"
+BOUNDS="-117.729492166,40.9881915574,-117.718505838,40.996484138672"
+CONFLATE_OPTS="-D bounds=$BOUNDS -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"
+CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false -D bounds=$BOUNDS"
 
 DEBUG=false
 if [ "$DEBUG" == "true" ]; then
-  #GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
+  GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
   LOG_FILTER="-D log.class.filter=OsmApiDbSqlChangesetFileWriter"
 fi
@@ -61,7 +62,7 @@ fi
 scripts/database/CleanAndInitializeOsmApiDb.sh
 
 # write ref to osmapidb
-hoot convert $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=tr $GOLD_DIR/Input1.osm $OSM_API_DB_URL
+hoot convert $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUTPUT_DIR/ref-load-debug.osm -D reader.use.data.source.ids=true $GOLD_DIR/Input1.osm $OSM_API_DB_URL
 
 # write sec to hootapidb
 SEC_INPUT=$HOOT_DB_URL/$TEST_NAME-sec-input
