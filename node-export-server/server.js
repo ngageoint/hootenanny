@@ -165,7 +165,7 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
     }
 
     if (match.length > 1) {
-        for (m of match) {
+        for (var m of match) {
             // gather capture groups to add to coordinates array
             // if we ever don't get a capture, exit early.
             // this is a way to make sure nothing that isn't a cooridnate can get injected into the hoot command
@@ -343,7 +343,7 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
         ;
 
     if (doCrop && poly) {
-        command += ' && hoot crop ' + outFile + ' ' + outFile + ' ' + poly;
+        command += ' && hoot crop ' + outFile + ' ' + outFile + ' "' + poly + '"';
     }
     //if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
 
@@ -474,8 +474,7 @@ function doExport(req, res, hash, input) {
                 var outDir = appDir + output;
                 var outFile = outDir + config.formats[req.params.format];
                 if (req.params.format === 'File Geodatabase') outDir = outFile;
-                multiCommand += buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, polyString, isFile, input, outDir, outFile, req.query.crop
-                    ;
+                multiCommand += buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, polyString, isFile, input, outDir, outFile, req.query.crop);
                 if (i !== polygons.length - 1) multiCommand += ' && ';
                 rings.push(outFile);
             }
