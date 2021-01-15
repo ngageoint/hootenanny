@@ -542,7 +542,7 @@ tds61 = {
       translate.txtToOgr(newFeatures[i]['attrs'], newFeatures[i]['tags'], tds61.rules.txtBiased,transMap);
 
       // one 2 one - we call the version that knows about OTH fields
-      translate.applyOgrOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup,transMap);
+      translate.applyTdsOne2One(newFeatures[i]['tags'], newFeatures[i]['attrs'], tds61.lookup, tds61.fcodeLookup,transMap);
 
       // post processing
       tds61.applyToOgrPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType, {});

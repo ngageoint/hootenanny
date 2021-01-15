@@ -11,7 +11,8 @@ export outputfolder=$HOOT_HOME/tmp/$outputname
 export inputfile=DcGisRoads
 export input=$inputfile_$outputname
 export inputtype=db
-export HOOT_OPTS="-C Testing.conf -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=test@test.com -D writer.include.debug.tags=true --warn"
+export TEST_EMAIL="ServiceExportOsmTest@hootenanny.com"
+export HOOT_OPTS="-C Testing.conf -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D api.db.email=${TEST_EMAIL} -D writer.include.debug.tags=true --warn"
 
 echo "Ingest the data"
 hoot convert $HOOT_OPTS test-files/$inputfile.osm $DB_URL/$input
@@ -41,4 +42,4 @@ hoot db-delete $HOOT_OPTS $DB_URL/$input
 rm -rf $outputfolder
 
 # Delete the user
-PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME  -c "DELETE FROM users WHERE email='test@test.com';" > /dev/null
+PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME  -c "DELETE FROM users WHERE email='${TEST_EMAIL}';" > /dev/null
