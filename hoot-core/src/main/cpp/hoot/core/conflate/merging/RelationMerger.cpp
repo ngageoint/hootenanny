@@ -83,7 +83,7 @@ void RelationMerger::merge(const ElementId& elementId1, const ElementId& element
   if (_writeDebugMaps)
   {
     OsmMapWriterFactory::writeDebugMap(
-      _map, "CollectionRelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
+      _map, "RelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
   }
 }
 
