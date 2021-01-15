@@ -365,34 +365,38 @@ function doMerge(req, res, mergeJobs, mergeHash, input) {
         + '_' + req.params.format.replace(' ', '_')
         + '.zip';
 
-    setTimeout(function() {
+    setTimeout(function() { // use setTimeout so we don't block waiting for the ring export/crop jobs to finish.
         var jobsInProgress = true, counter = 0, maxretries = 50, ingoreJobs = {};
         while (jobsInProgress || (counter === maxretries)) {
-            console.log('Ring in progress');
+            console.log('mutlipolygon rings exporting...');
             jobsInProgress = mergeJobs.filter(function(jobHash) {
                 var job = jobs[jobHash];
-                if (!job) return false;
-                if (job.status !== runningStatus && !ingoreJobs[jobHash]) {
-                    if (jobStatus !== completeStatus && !ignoreJobs[jobHash]) ignoreJobs[jobHash] = true;
+                if (!job) return false; // job hasn't been cicked off yet
+                if (job.status !== runningStatus) { // job is finished or errored out
+                    if (jobStatus !== completeStatus && !ignoreJobs[jobHash]) { // job has errored out, ingore it and still try to merge other outputs?
+                        ignoreJobs[jobHash] = true;
+                    }
                     return true;
                 }
                 return false;
             }).length < mergeJobs.length;
-            waitSomeSeconds(1);
+            waitSomeSeconds(2);
             counter++;
         }
         var ext = config.formats[req.params.format];
+        //string of paths to successfully exported/cropped multipolygon rings
         var inputs = mergeJobs.reduce(function(inputs, jobHash) {
-            return ignoreJobs[jobHash] ? inputs : inputs += appDir + 'export_' + jobHash + ext + ' ';
+            if (ingoreJobs[jobHash] !== true) {
+                inputs += appDir + 'export_' + jobHash + ext + ' ';
+            }
+            return inputs;
         }, '');
-        var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, req.query.poly, true, inputs, outDir, outFile);
         var command = 'hoot convert -C NodeExport.conf ' + inputs + outFile;
         jobs[mergeHash].process = exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
-            //setTimeout(function() { //used to simulate a long request
             if (stderr || error) {
-                //res.send({command: command, stderr: stderr, error: error});
                 jobs[mergeHash].status = stderr;
             } else {
+                //zip the merged output then remove the rings individual export/crop output files.
                 zipOutput(mergeHash, req, false, outFile, outZip, function() {
                     inputs.forEach(function(input) {
                         fs.unlink(job.outFile, function(err) {
@@ -423,12 +427,13 @@ function doMerge(req, res, mergeJobs, mergeHash, input) {
     res.send(mergeHash);
 }
 
-function doExportWork(req, res, hash, poly, input, createOutputZip) {
+function doExportWork(req, res, hash, poly, input, isFile, createOutputZip) {
     //if we have a polygon and it is really a multipolygon,
     //We first need to export & crop data for each polygon ring by calling doExportWork for each ring.
     //Then, we merge their outputs into a single output zip by calling doMerge() when each ring's export work is done.
     if (exports.isMultipolygon(poly)) {
-        var mergeJobs = exports.validatePoly(poly, true).map(function(poly) {
+        var polygons = exports.validatePoly(poly,true), mergeJobs = [];
+        for (var poly of polygons) {
             var polyString = poly.join(';');
             var params = req.params.datasource
                 + req.params.schema
@@ -438,14 +443,13 @@ function doExportWork(req, res, hash, poly, input, createOutputZip) {
                 + polyString
                 + req.query.overrideTags;
             var polyHash = crypto.createHash('sha1').update(params).digest('hex');
-            doExportWork(req, res, polyHash, polyString, input, false);
-            return polyHash;
-        })
+            doExportWork(req, res, polyHash, polyString, input, isFile, false); // this exports/crops a single ring.
+            mergeJobs.push(polyHash);
+        }
         doMerge(req, res, mergeJobs, hash, input)
     } else {
         var id = uuid.v4();
         var output = 'export_' + id;
-        var isFile = req.params.format === 'OSM XML';
         var outDir = appDir + output;
         var outFile = outDir + config.formats[req.params.format];
         if (req.params.format === 'File Geodatabase') outDir = outFile;
@@ -512,7 +516,6 @@ function doExportWork(req, res, hash, poly, input, createOutputZip) {
             }
         );
 
-        //create new job entry
         getJobs()[hash] = {
                         id: id,
                         status: runningStatus,
@@ -540,6 +543,7 @@ function doExportWork(req, res, hash, poly, input, createOutputZip) {
 function doExport(req, res, hash, input) {
     //Check existing jobs
     var job = jobs[hash];
+    var isFile = req.params.format === 'OSM XML';
     if (job) {
         if (job.status === completeStatus) { //if complete, return file
             if (req.method === 'POST') {
@@ -634,7 +638,7 @@ function doExport(req, res, hash, input) {
 
         }
     } else { //if missing, run job
-        doExportWork(req, res, hash, req.query.poly, input, true);
+        doExportWork(req, res, hash, req.query.poly, input, isFile, true);
     }
 }
 
