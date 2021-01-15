@@ -40,6 +40,8 @@ hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
 
 === Bounded Conversions
 
+TODO: reword this
+
 If a configuration option matching, `bounds.*` is set to a valid bounding box, supporting readers will read data only from
 the specified bounds.
 

@@ -115,6 +115,7 @@ exports.isMatchCandidate = function(map, e)
   // relation hydration but doing it anyway really shouldn't be slowing things down too much, if at
   // all.
 
+  // TODO: remove this bounds check and do it in MatchCreator instead
   var bounds = getBounds();
   hoot.trace("bounds: " + bounds);
   // Only check that the input features are in bounds if a bounds was specified as a config option.

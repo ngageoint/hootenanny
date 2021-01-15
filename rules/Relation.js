@@ -48,6 +48,7 @@ exports.isMatchCandidate = function(map, e)
     return false;
   }
 
+  // TODO: remove this bounds check and do it in MatchCreator instead
   var bounds = getBounds();
   hoot.trace("bounds: " + bounds);
   if (bounds !== 'undefined' && bounds !== null && bounds !== '')

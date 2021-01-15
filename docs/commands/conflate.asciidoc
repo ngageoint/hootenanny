@@ -32,6 +32,8 @@ A subset of input features may be conflated by specifying the 'conflate.tag.filt
 feature tag filtering by specifying either inline JSON or the path to a JSON file.  For more information, see the "Feature Filtering"
 section of the Hootenanny User Guide.
 
+TODO: add section here about bounds option
+
 === Usage
 
 --------------------------------------
