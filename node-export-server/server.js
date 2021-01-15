@@ -255,7 +255,6 @@ function jobComplete(hash) {
 }
 
 function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
-    var config = getConfig(), jobs = getJobs();
     var stream = fs.createWriteStream(outZip);
     stream.on('close', function() {
         jobComplete(hash);
@@ -278,7 +277,7 @@ function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
     zip.finalize();
 }
 
-function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile) {
+function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop) {
     var command = '', overrideTags = null;
     if (queryOverrideTags) {
         if (queryOverrideTags === 'true') { //if it's true
@@ -343,6 +342,9 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
         + outFile
         ;
 
+    if (doCrop && poly) {
+        command += ' && hoot crop ' + outFile + ' ' + outFile + ' ' + poly;
+    }
     //if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
 
     //used for testing to simulate hoot export
@@ -350,195 +352,6 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
     console.log(command);
     return command;
 };
-
-function doMerge(req, res, mergeJobs, mergeHash, input) {
-    var jobs = getJobs();
-    var id = uuid.v4();
-    var output = 'export_' + mergeHash;
-    var isFile = req.params.format === 'OSM XML';
-    var outDir = appDir + output;
-    var outFile = outDir + config.formats[req.params.format];
-    if (req.params.format === 'File Geodatabase') outDir = outFile;
-    var outZip = outDir + '.zip';
-    var downloadFile = req.params.datasource.replace(' ', '_')
-        + '_' + req.params.schema.replace(' ', '_')
-        + '_' + req.params.format.replace(' ', '_')
-        + '.zip';
-
-    setTimeout(function() { // use setTimeout so we don't block waiting for the ring export/crop jobs to finish.
-        var jobsInProgress = true, counter = 0, maxretries = 50, ingoreJobs = {};
-        while (jobsInProgress || (counter === maxretries)) {
-            console.log('mutlipolygon rings exporting...');
-            jobsInProgress = mergeJobs.filter(function(jobHash) {
-                var job = jobs[jobHash];
-                if (!job) return false; // job hasn't been cicked off yet
-                if (job.status !== runningStatus) { // job is finished or errored out
-                    if (jobStatus !== completeStatus && !ignoreJobs[jobHash]) { // job has errored out, ingore it and still try to merge other outputs?
-                        ignoreJobs[jobHash] = true;
-                    }
-                    return true;
-                }
-                return false;
-            }).length < mergeJobs.length;
-            waitSomeSeconds(2);
-            counter++;
-        }
-        var ext = config.formats[req.params.format];
-        //string of paths to successfully exported/cropped multipolygon rings
-        var inputs = mergeJobs.reduce(function(inputs, jobHash) {
-            if (ingoreJobs[jobHash] !== true) {
-                inputs += appDir + 'export_' + jobHash + ext + ' ';
-            }
-            return inputs;
-        }, '');
-        var command = 'hoot convert -C NodeExport.conf ' + inputs + outFile;
-        jobs[mergeHash].process = exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
-            if (stderr || error) {
-                jobs[mergeHash].status = stderr;
-            } else {
-                //zip the merged output then remove the rings individual export/crop output files.
-                zipOutput(mergeHash, req, false, outFile, outZip, function() {
-                    inputs.forEach(function(input) {
-                        fs.unlink(job.outFile, function(err) {
-                            if (err) {
-                                console.error(err);
-                            } else {
-                                console.log('deleted ' + job.outFile);
-                            }
-                        });
-                    });
-                })
-            }
-        });
-    }, 0)
-
-    jobs[mergeHash] = {
-        id: id,
-        status: runningStatus,
-        process: null,
-        input: input,
-        isFile: isFile,
-        outFile: outFile,
-        outDir: outDir,
-        outZip: outZip,
-        downloadFile: downloadFile
-    };
-
-    res.send(mergeHash);
-}
-
-function doExportWork(req, res, hash, poly, input, isFile, createOutputZip) {
-    //if we have a polygon and it is really a multipolygon,
-    //We first need to export & crop data for each polygon ring by calling doExportWork for each ring.
-    //Then, we merge their outputs into a single output zip by calling doMerge() when each ring's export work is done.
-    if (exports.isMultipolygon(poly)) {
-        var polygons = exports.validatePoly(poly,true), mergeJobs = [];
-        for (var poly of polygons) {
-            var polyString = poly.join(';');
-            var params = req.params.datasource
-                + req.params.schema
-                + req.params.format
-                + req.query.bbox
-                + req.query.crop
-                + polyString
-                + req.query.overrideTags;
-            var polyHash = crypto.createHash('sha1').update(params).digest('hex');
-            doExportWork(req, res, polyHash, polyString, input, isFile, false); // this exports/crops a single ring.
-            mergeJobs.push(polyHash);
-        }
-        doMerge(req, res, mergeJobs, hash, input)
-    } else {
-        var id = uuid.v4();
-        var output = 'export_' + id;
-        var outDir = appDir + output;
-        var outFile = outDir + config.formats[req.params.format];
-        if (req.params.format === 'File Geodatabase') outDir = outFile;
-        var outZip = outDir + '.zip';
-        var downloadFile = req.params.datasource.replace(' ', '_')
-            + '_' + req.params.schema.replace(' ', '_')
-            + '_' + req.params.format.replace(' ', '_')
-            + '.zip';
-
-        var jobs = getJobs();
-        var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, poly, isFile, input, outDir, outFile);
-        var child = exec(command, {cwd: hootHome},
-            function(error, stdout, stderr) {
-                //setTimeout(function() { //used to simulate a long request
-                if (stderr || error) {
-                    //res.send({command: command, stderr: stderr, error: error});
-                    jobs[hash].status = stderr;
-
-                } else {
-                    // if export specifies cropping to bounds or poly, do so.
-                    if (req.query.crop) {
-
-                        // if request did not provide a polygon or bounds to
-                        // crop with, then go about zipping the output
-                        var cropShape = exports.polyQuotes(exports.validatePoly(poly)) || exports.validateBbox(req.query.bbox);
-                        if (cropShape) {
-                            var cropCommand = 'hoot crop '
-                            + outFile + ' '
-                            + outFile + ' '
-                            + cropShape
-                            // following how I saw we logged convert command
-                            // also proved helpful to just see if request handler calling crop or not when crop
-                            // was present.
-                            console.log(cropCommand)
-
-                            // crop the output of the hoot convert, then write it to a zip
-                            exec(cropCommand, {cwd: hootHome}, function(error, stdout, stderr) {
-                                if (stderr || error) {
-                                    jobs[hash].status = stderr;
-                                } else {
-                                    if (createOutputZip) {
-                                        zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
-                                    } else {
-                                        jobComplete(hash);
-                                    }
-                                }
-                            })
-                        } else {
-                            if (createOutputZip) {
-                                zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
-                            } else {
-                                jobComplete(hash);
-                            }
-                        }
-                    } else {
-                        if (createOutputZip) {
-                            zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
-                        } else {
-                            jobComplete(hash);
-                        }
-                    }
-                }
-                //}, 10000); //used to simulate a long request
-            }
-        );
-
-        getJobs()[hash] = {
-                        id: id,
-                        status: runningStatus,
-                        process: child,
-                        input: input,
-                        isFile: isFile,
-                        outFile: outFile,
-                        outDir: outDir,
-                        outZip: outZip,
-                        downloadFile: downloadFile
-        };
-        //return job status
-        //if (job.status !== runningStatus) res.status(500);
-
-        //the poly on req.query will always be the poly specified in query parameters.
-        //so it acts as guide to know if the initial querystring specified a regular polygon or a bbox, OR a multipolygon.
-        //in the case this line is reached when doExportWork is called recursively for a mutlipolygon ring, it is false and
-        //no hash is sent until the doMerge hash gets sent.
-        //in the regular poly / no poly case, this resolves true and we send the hash
-        if (!exports.isMultipolygon(req.query.poly)) res.send(hash);
-
-    }
-}
 
 function doExport(req, res, hash, input) {
     //Check existing jobs
@@ -638,8 +451,121 @@ function doExport(req, res, hash, input) {
 
         }
     } else { //if missing, run job
-        doExportWork(req, res, hash, req.query.poly, input, isFile, true);
+        var child = null;
+        var id = uuid.v4();
+        var output = 'export_' + hash;
+        var isFile = req.params.format === 'OSM XML';
+        var outDir = appDir + output;
+        var outFile = outDir + config.formats[req.params.format];
+        if (req.params.format === 'File Geodatabase') outDir = outFile;
+        var outZip = outDir + '.zip';
+        var downloadFile = req.params.datasource.replace(' ', '_')
+            + '_' + req.params.schema.replace(' ', '_')
+            + '_' + req.params.format.replace(' ', '_')
+            + '.zip';
+
+        if (exports.isMultipolygon(req.query.poly)) {
+            var polygons = exports.validatePoly(req.query.poly,true), multiCommand = '', rings = [];
+            for (var i = 0; i < polygons.length; i++) {
+                var poly = polygons[i];
+                var polyString = poly.join(';');
+                var ringId = uuid.v4();
+                var output = 'export_' + ringId;
+                var outDir = appDir + output;
+                var outFile = outDir + config.formats[req.params.format];
+                if (req.params.format === 'File Geodatabase') outDir = outFile;
+                multiCommand += buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, polyString, isFile, input, outDir, outFile, req.query.crop
+                    ;
+                if (i !== polygons.length - 1) multiCommand += ' && ';
+                rings.push(outFile);
+            }
+            console.log(multiCommand);
+            child = exec(multiCommand, function(error, stdout, stderr) {
+                if (stderr || error) {
+                    jobs[hash].status = error;
+                } else {
+                    // jobStatus(hash);
+
+                   var command = 'hoot convert -C NodeExport.conf ' + rings.join(' ') + ' ' + outFile;
+                   exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
+                       if (stderr || error) {
+                           jobs[hash].status = stderr;
+                       } else {
+                            //zip the merged output then remove the rings individual export/crop output files.
+                            zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format, function() {
+                                rings.forEach(function(ring) {
+                                    fs.unlink(ring, function(err) {
+                                        if (err) {
+                                            console.error(err);
+                                        } else {
+                                            console.log('deleted ' + ring);
+                                        }
+                                    });
+                                });
+                            })
+                        }
+                    });
+                }
+            })
+        } else {
+            var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, poly, isFile, input, outDir, outFile);
+            child = exec(command, {cwd: hootHome},
+                function(error, stdout, stderr) {
+                    //setTimeout(function() { //used to simulate a long request
+                    if (stderr || error) {
+                        //res.send({command: command, stderr: stderr, error: error});
+                        jobs[hash].status = stderr;
+
+                    } else {
+                        // if export specifies cropping to bounds or poly, do so.
+                        if (req.query.crop) {
+
+                            // if request did not provide a polygon or bounds to
+                            // crop with, then go about zipping the output
+                            var cropShape = exports.polyQuotes(exports.validatePoly(poly)) || exports.validateBbox(req.query.bbox);
+                            if (cropShape) {
+                                var cropCommand = 'hoot crop '
+                                + outFile + ' '
+                                + outFile + ' '
+                                + cropShape
+                                // following how I saw we logged convert command
+                                // also proved helpful to just see if request handler calling crop or not when crop
+                                // was present.
+                                console.log(cropCommand)
+
+                                // crop the output of the hoot convert, then write it to a zip
+                                exec(cropCommand, {cwd: hootHome}, function(error, stdout, stderr) {
+                                    if (stderr || error) {
+                                        jobs[hash].status = stderr;
+                                    } else {
+                                        zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
+                                    }
+                                })
+                            } else {
+                                zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
+                            }
+                        } else {
+                            zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
+                        }
+                    }
+                    //}, 10000); //used to simulate a long request
+                }
+            );
+        }
+
     }
+    jobs[hash] = {
+                    id: id,
+                    status: runningStatus,
+                    process: child,
+                    input: input,
+                    isFile: isFile,
+                    outFile: outFile,
+                    outDir: outDir,
+                    outZip: outZip,
+                    downloadFile: downloadFile
+    };
+    res.send(hash);
 }
 
 /* Run the server. */
