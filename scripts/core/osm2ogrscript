@@ -5,7 +5,7 @@
 # Options for most exports
 HOOT_OPTS+= -D convert.ops=hoot::DecomposeBuildingRelationsVisitor
 HOOT_OPTS+= -D hootapi.db.writer.overwrite.map=true -D hootapi.db.writer.create.user=true
-HOOT_OPTS+= -D api.db.email=test@test.com
+HOOT_OPTS+= -D api.db.email=${TEST_EMAIL}
 
 # Add the option to append
 ifeq "$(append)" "true"
@@ -14,7 +14,7 @@ endif
 
 
 # Options for osm & osm.pbf export
-OSM_OPTS=-D hootapi.db.writer.create.user=true -D api.db.email=test@test.com
+OSM_OPTS=-D hootapi.db.writer.create.user=true -D api.db.email=${TEST_EMAIL}
 
 # Add the option to have status tags as text with "Input1" instead of "1" or "Unknown1"
 ifeq "$(textstatus)" "true"
