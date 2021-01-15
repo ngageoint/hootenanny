@@ -36,7 +36,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(WayJoiner, ReplacementSnappedWayJoiner)
 
-ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner()
+ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner() :
+WayJoinerAdvanced::WayJoinerAdvanced()
 {
   _leavePid = true;
   _callingClass = QString::fromStdString(className());
@@ -108,6 +109,8 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
 {
   LOG_DEBUG("Joining ways...");
 
+  _leavePid = true;
+
   WayJoinerAdvanced::join(map);
 
   if (_refIdToVersionMappings.isEmpty())
@@ -124,7 +127,9 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
+    LOG_VART(way->getElementId());
     const long pid = _getPid(way);
+    LOG_VART(pid);
     if (pid != WayData::PID_EMPTY && pid > 0 && !pidsUsed.contains(pid))
     {
       LOG_TRACE("Setting id from pid: " << pid << " on: " << way->getElementId());

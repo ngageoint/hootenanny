@@ -5302,6 +5302,13 @@ If enabled, WayJoinerAdvanced will not consider the "alt_name" tag when performi
 
 If enabled, WayJoinerOp will leave a way's parent ID populated after joining.
 
+=== way.joiner.write.parent.id.to.child.id
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === way.matcher.heading.delta
 
 * Data Type: double

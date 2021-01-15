@@ -57,6 +57,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(WayJoiner, WayJoinerAdvanced)
 
 WayJoinerAdvanced::WayJoinerAdvanced() :
+WayJoiner::WayJoiner(),
 _callingClass(QString::fromStdString(className()))
 {
 }

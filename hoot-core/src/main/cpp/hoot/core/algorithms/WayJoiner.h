@@ -58,6 +58,8 @@ public:
    */
   virtual void setLeavePid(bool leavePid) { _leavePid = leavePid; }
   virtual bool getLeavePid() const { return _leavePid; }
+  virtual void setWritePidToChildId(bool write) { _writePidToChildId = write; }
+  virtual bool getWritePidToChildId() const { return _writePidToChildId; }
 
   virtual int getNumJoined() const { return _numJoined; }
 
@@ -67,6 +69,8 @@ protected:
 
   /** Debugging flag to leave parent IDs intact for output */
   bool _leavePid;
+  // TODO
+  bool _writePidToChildId;
   /** Pointer to the map to work on */
   OsmMapPtr _map;
 
@@ -125,6 +129,11 @@ private:
    *    does nothing if _leavePid is true
    */
   void _resetParents();
+
+  /*
+   * TODO
+   */
+  void _writeParentIdsToChildIds();
 };
 
 }

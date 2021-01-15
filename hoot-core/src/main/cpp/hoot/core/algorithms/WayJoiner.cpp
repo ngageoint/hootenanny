@@ -50,6 +50,7 @@ namespace hoot
 
 WayJoiner::WayJoiner() :
 _leavePid(false),
+_writePidToChildId(false),
 _numJoined(0),
 _numProcessed(0),
 _totalWays(0),
@@ -78,8 +79,17 @@ void WayJoiner::join(const OsmMapPtr& map)
   _joinAtNode();
   OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-join-at-node");
 
-  //  Clear out any remaining unjoined parent ids
-  _resetParents();
+  if (_writePidToChildId)
+  {
+    _writeParentIdsToChildIds();
+  }
+
+  LOG_VARD(_leavePid);
+  if (!_leavePid)
+  {
+    //  Clear out any remaining unjoined parent ids
+    _resetParents();
+  }
 }
 
 void WayJoiner::_joinParentChild()
@@ -245,11 +255,31 @@ bool WayJoiner::_areJoinable(const WayPtr& w1, const WayPtr& w2) const
     //  What isn't joinable is one is UNKNOWN1 and the other is UNKNOWN2 or vice-a-versa
 }
 
+void WayJoiner::_writeParentIdsToChildIds()
+{
+  WayMap ways = _map->getWays();
+  QSet<long> pidsUsed;
+  for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
+  {
+    WayPtr way = it->second;
+    LOG_VART(way->getElementId());
+    const long pid = way->getPid();
+    LOG_VART(pid);
+    if (pid != WayData::PID_EMPTY && pid > 0 && !pidsUsed.contains(pid))
+    {
+      LOG_TRACE(
+        "Setting parent ID: " << ElementId(ElementType::Way, pid) << " on: " <<
+        way->getElementId());
+      ElementPtr newWay(way->clone());
+      newWay->setId(pid);
+      _map->replace(way, newWay);
+      pidsUsed.insert(pid);
+    }
+  }
+}
+
 void WayJoiner::_resetParents()
 {
-  LOG_VARD(_leavePid);
-  if (_leavePid)
-    return;
   WayMap ways = _map->getWays();
   //  Find all ways that have a split parent id and reset them
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
