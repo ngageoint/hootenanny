@@ -212,11 +212,11 @@ QString HootApiDbSqlStatementFormatter::relationMemberToSqlString(const long rel
   const QString memberType = member.getElementId().getType().toString().toLower();
   const QString memberSequenceIndexStr(QString::number(memberSequenceIndex));
   QString memberRole = OsmApiDbSqlStatementFormatter::escapeCopyToData(member.getRole());
-  //handle empty data; this is needed for pg_bulkload
-  if (memberRole.trimmed().isEmpty())
-  {
-    memberRole = "<no role>";
-  }
+  // handle empty data; This was needed for pg_bulkload, but we haven't integrated with it yet.
+//  if (memberRole.trimmed().isEmpty())
+//  {
+//    memberRole = "<no role>";
+//  }
   return
     _outputFormatStrings[HootApiDb::getCurrentRelationMembersTableName(_mapId)]
       .arg(relationIdStr, memberType, memberIdStr, memberRole, memberSequenceIndexStr);
