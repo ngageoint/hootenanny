@@ -38,7 +38,7 @@ namespace hoot
 
 /**
  * An way joiner with extended features implemented to work with Attribute Conflation. Eventually
- * some of the logic could be moved up to WayJoinerBasic.
+ * some of the logic other than tag merging could be moved up to WayJoinerBasic.
  */
 class WayJoinerAdvanced : public WayJoiner
 {
