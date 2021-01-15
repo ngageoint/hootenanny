@@ -38,8 +38,8 @@ function initialize()
 }
 
 
-function translateAttributes(attrs, layerName, geometryType)
-{ 
+function translateToOsm(attrs, layerName, geometryType)
+{
   // Add UUID
   if (!(attrs.uuid)) attrs.uuid = createUuid();
 

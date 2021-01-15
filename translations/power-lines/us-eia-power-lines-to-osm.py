@@ -2,11 +2,11 @@
 
 # This translates U.S. country-wide power line data published by the United States Energy Information Adminstration.
 
-def translateAttributes(attrs, layerName, geometryType):
+def translateToOsm(attrs, layerName, geometryType):
 
     #print(geometryType)
     if not attrs or geometryType != 'Line': return
-    
+
     if 'OWNER' in attrs:
         attrs['owner'] = attrs['OWNER']
         del attrs['OWNER']
@@ -32,7 +32,7 @@ def translateAttributes(attrs, layerName, geometryType):
             pass
         if voltage > 0:
             voltage = voltage * 1000
-            attrs['voltage'] = str(voltage) 
+            attrs['voltage'] = str(voltage)
         del attrs['VOLTAGE']
 
     # If we don't have voltage, assume major line?

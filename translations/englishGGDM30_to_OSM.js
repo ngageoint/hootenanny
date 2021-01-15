@@ -40,14 +40,14 @@ function initialize()
 
 
 // IMPORT
-// translateAttributes - Normally takes 'attrs' and returns OSM 'tags'.  This version
+// translateToOsm - Normally takes 'attrs' and returns OSM 'tags'.  This version
 //    converts OSM+ tags to NFDD "English" Attributes
 //
 // This can be called via the following for testing:
 // hoot convert -D "convert.ops=hoot::SchemaTranslationVisitor"  \
-//      -D schema.translation.script=$HOOT_HOME/translations/NFDD_English.js <input>.osm <output>.osm
+//      -D schema.translation.script=$HOOT_HOME/translations/script.js <input>.osm <output>.osm
 //
-function translateAttributes(attrs, layerName, geometryType)
+function translateToOsm(attrs, layerName, geometryType)
 {
 
   // We use the temp var because nfdd_e.toEnglish returns "attrs" and "tableName"
@@ -63,7 +63,7 @@ function translateAttributes(attrs, layerName, geometryType)
     return null;
   }
 
-} // End of Translate Attributes
+} // End of translateToOsm
 
 
 // EXPORT

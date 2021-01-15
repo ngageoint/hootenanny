@@ -91,8 +91,8 @@ function getToOsmTable()
     return toOsmTable;
 }
 
-// an optional initialize function that gets called once before any 
-// translateAttribute calls.
+// an optional initialize function that gets called once before any
+// translateToOsm calls.
 function initialize()
 {
     // The print method simply prints the string representation to stdout
@@ -100,7 +100,7 @@ function initialize()
 }
 
 // an optional finalize function that gets called once after all
-// translateAttribute calls.
+// translateToOsm calls.
 function finalize()
 {
     // the debug method prints to stdout when --debug has been specified on
@@ -114,7 +114,7 @@ function finalize()
 // - TYP column to OSM+'s highway tag
 // This is far from complete, but demonstrates the concepts.
 //
-function translateToOgr(tags, elementType, geometryType) 
+function translateToOgr(tags, elementType, geometryType)
 {
     var attrs = {};
 
@@ -135,8 +135,8 @@ function translateToOgr(tags, elementType, geometryType)
 // This is far from complete, but demonstrates the concepts.
 //
 function translateToOsm(attrs, layerName, geometryType)
-{ 
-    tags = {}; 
+{
+    tags = {};
 
     translate.applyOne2One(attrs, tags, getToOsmTable(), [], []);
 
@@ -158,7 +158,7 @@ function getDbSchema()
                   optional:"O" ,
                   type:"enumeration",
                   enumerations:[
-                     { name:"Unknown", value:"0" }, 
+                     { name:"Unknown", value:"0" },
                      { name:"Road", value:"1" },
                      { name:"Street", value:"33" },
                      { name:"Motorway", value:"41" },
@@ -187,6 +187,6 @@ function getDbSchema()
             ]
         }
     ]
- 
+
     return schema;
 }

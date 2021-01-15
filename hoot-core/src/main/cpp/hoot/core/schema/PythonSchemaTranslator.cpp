@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Python redefines these two macros from /usr/include/features.h
@@ -113,14 +113,14 @@ void PythonSchemaTranslator::_init()
     throw Exception("Error loading module " + _scriptPath);
   }
 
-  _translateFunction = PyObject_GetAttrString(module, "translateAttributes");
+  _translateFunction = PyObject_GetAttrString(module, "translateToOsm");
   if (_translateFunction == NULL)
   {
-    throw Exception("Error retrieving 'translateAttributes'");
+    throw Exception("Error retrieving 'translateToOsm'");
   }
   if (PyCallable_Check((PyObject*)_translateFunction) == 0)
   {
-    throw Exception("Error: 'translateAttributes' isn't callable");
+    throw Exception("Error: 'translateToOsm' isn't callable");
   }
   Py_DECREF(module);
 }

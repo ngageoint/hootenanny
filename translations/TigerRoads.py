@@ -1,12 +1,12 @@
 #!/bin/python
 
-def translateAttributes(attrs, layerName, geometryType):
+def translateToOsm(attrs, layerName, geometryType):
     if not attrs: return
 
     tags = {}
 
     tags['accuracy'] = '5'
-    
+
     if 'FULLNAME' in attrs:
         name = attrs['FULLNAME']
         if name != 'NULL' and name != '':

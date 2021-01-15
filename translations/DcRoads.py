@@ -1,12 +1,12 @@
 #!/bin/python
 
-def translateAttributes(attrs, layerName, geometryType):
+def translateToOsm(attrs, layerName, geometryType):
     if not attrs: return
 
     tags = {}
 
     tags['accuracy'] = '5'
-    
+
     name = []
     if 'REGISTERED' in attrs:
         name.append(attrs['REGISTERED'])
@@ -24,7 +24,7 @@ def translateAttributes(attrs, layerName, geometryType):
         else:
             tags['highway'] = 'road'
 
-    # There is also a one way attribute in the data, but I can't tell which 
+    # There is also a one way attribute in the data, but I can't tell which
     # way is which so I'll leave it out.
 
     return tags

@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -48,7 +48,7 @@ MassNh = {
      'NUMBEROFTR':'lanes', // Track or Lane Count
      'NUM_LANES':'lanes', // Track or Lane Count
      }, // End numBiased
-    
+
     // Common one2one rules. Used for both import and export
     one2one : [
      // Road class
@@ -566,14 +566,14 @@ MassNh = {
 
         if (MassNh.lookup == undefined)
         {
-            // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the 
+            // Setup lookup tables to make translation easier. I'm assumeing that since this is not set, the
             // other tables are not set either.
-            
+
             MassNh.lookup = translate.createLookup(MassNh.rules.one2one);
 
             // Build an Object with both the SimpleText & SimpleNum lists
             MassNh.ignoreList = translate.joinList(MassNh.rules.numBiased, MassNh.rules.txtBiased);
-            
+
             // Add features to ignore
             MassNh.ignoreList.F_CODE = '';
             MassNh.ignoreList.FCSUBTYPE = '';
@@ -586,7 +586,7 @@ MassNh = {
         // one 2 one
         translate.applyOne2One(attrs, tags, MassNh.lookup, {'k':'v'}, MassNh.ignoreList);
 
-        
+
         // apply the simple number and text biased rules
         // NOTE: We are not using the intList paramater for applySimpleNumBiased when going to OSM.
         translate.applySimpleNumBiased(attrs, tags, MassNh.rules.numBiased, 'forward',[]);
@@ -614,10 +614,10 @@ MassNh = {
 // ####################
 
 // IMPORT
-// translateAttributes - takes 'attrs' and returns OSM 'tags'
-function translateAttributes(attrs, layerName, geometryType)
+// translateToOsm - takes 'attrs' and returns OSM 'tags'
+function translateToOsm(attrs, layerName, geometryType)
 {
     return MassNh.toOsm(attrs, layerName, geometryType);
 
-} // End of Translate Attributes
+} // End of translateToOsm
 

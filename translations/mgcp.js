@@ -309,7 +309,7 @@ mgcp = {
     for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
     {
       // pre processing
-      mgcp.applyToMgcpPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
+      mgcp.applyToOgrPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
 
       var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
@@ -322,7 +322,7 @@ mgcp = {
       translate.applyOne2One(notUsedTags, newFeatures[i]['attrs'], mgcp.lookup, mgcp.fcodeLookup, transMap);
 
       // post processing
-      mgcp.applyToMgcpPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType,notUsedTags);
+      mgcp.applyToOgrPostProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType,notUsedTags);
 
       returnData.push({attrs: newFeatures[i]['attrs'],tableName: ''});
     }
@@ -962,8 +962,8 @@ mgcp = {
 
   }, // End of applyToOsmPostProcessing
 
-  // ##### Start of the xxToMgcpxx Block #####
-  applyToMgcpPreProcessing: function(tags, attrs, geometryType)
+  // ##### Start of the xxToOgrxx Block #####
+  applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
     if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
@@ -976,7 +976,7 @@ mgcp = {
     // Adding this because we might not be reading from OSM
     if (tags.other_tags)
     {
-      var tList = tags.other_tags.split('","');
+      var tList = tags.other_tags.toString().replace(/\\/g,'').replace(/\"/g,'"').split('","');
 
       delete tags.other_tags;
 
@@ -1633,10 +1633,10 @@ mgcp = {
     // Names. Sometimes we don't have a name but we do have language ones
     if (!tags.name) translate.swapName(tags);
 
-  }, // End applyToMgcpPreProcessing
+  }, // End applyToOgrPreProcessing
 
 
-  applyToMgcpPostProcessing : function (tags, attrs, geometryType, notUsedTags)
+  applyToOgrPostProcessing : function (tags, attrs, geometryType, notUsedTags)
   {
     // Gross generalisation. If we don't have an FCODE but we do have an FFN then we either have a
     // Building or a Facility
@@ -2002,9 +2002,9 @@ mgcp = {
       attrs.SDV = translate.chopDateTime(attrs.SDV);
     }
 
-  }, // End of applyToMgcpPostProcessing
+  }, // End of applyToOgrPostProcessing
 
-  // ##### End of the xxToMgcpxx Block #####
+  // ##### End of the xxToOgrxx Block #####
 
   // toOsm - Translate Attrs to Tags
   toOsm : function(attrs, layerName, geometryType)
@@ -2244,7 +2244,7 @@ mgcp = {
     translate.overrideValues(tags,mgcp.toChange);
 
     // pre processing
-    mgcp.applyToMgcpPreProcessing(tags, attrs, geometryType);
+    mgcp.applyToOgrPreProcessing(tags, attrs, geometryType);
 
     // Make a copy of the input tags so we can remove them as they get translated. What is left is
     // the not used tags
@@ -2263,8 +2263,8 @@ mgcp = {
     translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, transMap);
 
     // post processing
-    // mgcp.applyToMgcpPostProcessing(attrs, tableName, geometryType);
-    mgcp.applyToMgcpPostProcessing(tags, attrs, geometryType, notUsedTags);
+    // mgcp.applyToOgrPostProcessing(attrs, tableName, geometryType);
+    mgcp.applyToOgrPostProcessing(tags, attrs, geometryType, notUsedTags);
 
     // Debug
     if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used: ');

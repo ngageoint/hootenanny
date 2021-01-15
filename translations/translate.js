@@ -1499,7 +1499,7 @@ translate = {
     // We need to unpack this before we can do anything.
     if (attrs.other_tags)
     {
-      var tList = attrs.other_tags.split('","');
+      var tList = tags.other_tags.toString().replace(/\\/g,'').replace(/\"/g,'"').split('","');
 
       delete attrs.other_tags;
 
