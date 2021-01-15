@@ -5,8 +5,8 @@ set -e
 # fully hydrated relations (API DB queries used automatically hydrate the relations) in the 
 # following way:
 #
-# 3) Rivers only and their parent relations are conflated and the input data is filtered to rivers 
-#    only:
+# 3) Rivers and their parent relations only are conflated with the input data is first filtered to 
+#    rivers only:
 #   a) Same as scenario 2a
 #   b) Same as scenario 2b
 #   c) Any unmerged secondary relation containing rivers may exist in the output changeset.
@@ -31,9 +31,8 @@ LOG_FILTER=""
 
 GENERAL_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.conf -D uuid.helper.repeatable=true -D writer.include.debug.tags=true -D reader.add.source.datetime=false -D writer.include.circular.error.tags=false"
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999" 
-# The input feature filtering done here is the only difference between this scenario and scenario 
-# 2.
-CONVERT_OPTS="-D convert.ops=hoot::RemoveElementsVisitor -D remove.elements.visitor.element.criteria=hoot::LinearWaterwayCriterion;hoot::LinearWaterwayWayNodeCriterion;hoot::RelationCriterion -D element.criterion.negate=true -D remove.elements.visitor.chain.element.criteria=true -D remove.elements.visitor.recursive=false"
+# The input feature filtering done here is the only difference between this scenario and scenario 2.
+CONVERT_OPTS="-D convert.ops=hoot::RemoveElementsVisitor -D remove.elements.visitor.element.criteria=hoot::LinearWaterwayCriterion;hoot::LinearWaterwayWayNodeCriterion;hoot::RelationWithRiverMembersCriterion -D element.criterion.negate=true -D remove.elements.visitor.chain.element.criteria=true -D remove.elements.visitor.recursive=true -D relation.with.members.of.type.criterion.allow.mixed.children=false"
 # The match/merger creators added here are the only difference between this scenario and scenario 1.
 BOUNDS="-117.729492166,40.9881915574,-117.718505838,40.996484138672"
 CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,Relation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D bounds=$BOUNDS -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true"

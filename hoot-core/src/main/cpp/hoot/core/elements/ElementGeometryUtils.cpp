@@ -34,7 +34,6 @@
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
-#include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/criterion/AreaCriterion.h>

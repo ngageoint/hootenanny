@@ -22,45 +22,46 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef RELATION_WITH_POINT_MEMBERS_CRITERION_H
-#define RELATION_WITH_POINT_MEMBERS_CRITERION_H
+#ifndef RELATION_WITH_RAILWAY_MEMBERS_CRITERION_H
+#define RELATION_WITH_RAILWAY_MEMBERS_CRITERION_H
 
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
 
 namespace hoot
 {
 
 /**
- * Identifies relations with children having point geometries
+ * Identifies relations having railway members
  */
-class RelationWithPointMembersCriterion : public RelationWithMembersOfTypeCriterion
+class RelationWithRailwayMembersCriterion : public RelationWithMembersOfTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithPointMembersCriterion"; }
+  static std::string className() { return "hoot::RelationWithRailwayMembersCriterion"; }
 
-  RelationWithPointMembersCriterion();
-  RelationWithPointMembersCriterion(ConstOsmMapPtr map);
-  virtual ~RelationWithPointMembersCriterion() = default;
+  RelationWithRailwayMembersCriterion();
+  virtual ~RelationWithRailwayMembersCriterion() = default;
 
   virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new RelationWithPointMembersCriterion(_map)); }
+  { return ElementCriterionPtr(new RelationWithRailwayMembersCriterion()); }
 
-  virtual QString getCriterion() const override { return "hoot::PointCriterion"; }
+  virtual QString getCriterion() const override
+  { return QString::fromStdString(RailwayCriterion::className()); }
 
   virtual QString getDescription() const
-  { return "Identifies relations with children having point geometries"; }
+  { return "Identifies relations with railway members"; }
 
-  virtual GeometryType getGeometryType() const { return GeometryType::Point; }
+  virtual GeometryType getGeometryType() const { return RailwayCriterion().getGeometryType(); }
 
   virtual QString toString() const override
   { return QString::fromStdString(className()).remove("hoot::"); }
 };
 
 }
-#endif // RELATION_WITH_POINT_MEMBERS_CRITERION_H
+#endif // RELATION_WITH_RAILWAY_MEMBERS_CRITERION_H

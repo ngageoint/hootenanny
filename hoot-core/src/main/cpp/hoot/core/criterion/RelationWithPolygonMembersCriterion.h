@@ -29,7 +29,7 @@
 #define RELATION_WITH_POLYGON_MEMBERS_CRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/RelationWithGeometryMembersCriterion.h>
+#include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
@@ -38,13 +38,13 @@ namespace hoot
 /**
  * Identifies relations with children having polygon geometries
  */
-class RelationWithPolygonMembersCriterion : public RelationWithGeometryMembersCriterion
+class RelationWithPolygonMembersCriterion : public RelationWithMembersOfTypeCriterion
 {
 public:
 
   static std::string className() { return "hoot::RelationWithPolygonMembersCriterion"; }
 
-  RelationWithPolygonMembersCriterion() = default;
+  RelationWithPolygonMembersCriterion();
   RelationWithPolygonMembersCriterion(ConstOsmMapPtr map);
   virtual ~RelationWithPolygonMembersCriterion() = default;
 

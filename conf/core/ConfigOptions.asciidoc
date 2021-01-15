@@ -4151,6 +4151,14 @@ considered to have a name match.
 Tag similarity threshold (0.0 to 1.0) at or above which an collection relation feature is considered
 to have similar tags.
 
+=== relation.with.members.of.type.criterion.allow.mixed.children
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, implementations of RelationWithMembersOfTypeCriterion will be satisfied if any member
+meets their member criterion. If disabled, all members must satisfy the member criterion.
+
 === relation.with.most.members.op.member.criterion
 
 * Data Type: string

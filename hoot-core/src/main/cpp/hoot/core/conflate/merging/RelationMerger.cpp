@@ -65,7 +65,8 @@ void RelationMerger::merge(const ElementId& elementId1, const ElementId& element
   relation1->setTags(newTags);
 
   // copy relation 2's members into 1
-  /*const bool allMembersCopied =*/ _mergeMembers(relation1, relation2);
+  const bool allMembersCopied = _mergeMembers(relation1, relation2);
+  LOG_VART(allMembersCopied);
 
   // replace any references to relation 2 with a ref to relation 1
 //  LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
@@ -157,16 +158,6 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
       LOG_TRACE("************************");
       continue;
     }
-//    else if (_mergeConflatableMembersOnly &&
-//             !ConflateUtils::elementCanBeConflatedByActiveMatcher(
-//               currentMemberFromReplaced.getElement(), _map))
-//    {
-//      LOG_TRACE(
-//        "Skipping adding member being replaced that is not conflatable: " <<
-//        currentMemberFromReplaced.getElement()->getElementId() << "...");
-//      LOG_TRACE("************************");
-//      continue;
-//    }
 
     // Determine which index in the target relation we want to insert the member from the replacing
     // relation.

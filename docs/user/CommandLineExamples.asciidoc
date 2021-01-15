@@ -515,7 +515,7 @@ hoot alpha-shape --buffer 10 input.osm 200 0 output.osm
 
 -----
     hoot conflate -D convert.ops=hoot::RemoveElementsVisitor \
-      -D remove.elements.visitor.element.criteria=hoot::LinearWaterwayCriterion;hoot::LinearWaterwayWayNodeCriterion \
+      -D remove.elements.visitor.element.criteria=hoot::LinearWaterwayCriterion;hoot::LinearWaterwayWayNodeCriterion;hoot::RelationWithRiverMembersCriterion \
       -D element.criterion.negate=true \
       -D remove.elements.visitor.chain.element.criteria=true \
       -D remove.elements.visitor.recursive=false input1.osm input2.osm output.osm

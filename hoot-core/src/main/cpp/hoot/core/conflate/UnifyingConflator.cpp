@@ -71,9 +71,11 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnifyingConflator)
 
 UnifyingConflator::UnifyingConflator() :
-  _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_matchFactory(MatchFactory::getInstance()),
+_settings(Settings::getInstance()),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+// WARNING: Enabling this could result in a lot of files being generated. Use for debugging only.
+_writeDebugMaps(true)
 {
   _reset();
 }
@@ -81,7 +83,9 @@ UnifyingConflator::UnifyingConflator() :
 UnifyingConflator::UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
+// See related note in previous constructor.
+_writeDebugMaps(true)
 {
   _matchThreshold = matchThreshold;
   _reset();
@@ -123,6 +127,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _reset();
   int currentStep = 1;  // tracks the current job task step for progress reporting
 
+  // ERROR CHECKING
+
   // Check to see if all the data is untyped. If so, log a warning so the user knows they may not
   // be getting the best conflate results in case types could be added to the input.
   if (map->size() > 0 && !SchemaUtils::anyElementsHaveType(map))
@@ -140,7 +146,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     }
   }
 
-  _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
+  // DATA PREP
+
+  //_stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
 
   // will reproject if necessary.
   MapProjector::projectToPlanar(map);
@@ -149,6 +157,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   // This status progress reporting could get way more granular, but we'll go with this for now to
   // avoid overloading users with status.
+
+  // MATCH
 
   _updateProgress(currentStep - 1, "Matching features...");
 
@@ -178,6 +188,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     SingleStat("Number of Matches Found per Second", (double)_matches.size() / findMatchesTime));
 
   vector<ConstMatchPtr> allMatches = _matches;
+
+  // OPTIMIZE MATCHES
 
   // add score tags to all matches that have some score component
   _addReviewAndScoreTags(map, allMatches);
@@ -272,6 +284,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   currentStep++;
 
+  // MERGE PREP
+
   _updateProgress(currentStep - 1, "Merging feature matches...");
 
   // POI/Polygon matching is unique in that it is the only non-generic geometry type matcher that
@@ -319,6 +333,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   allMatches.clear();
   _matches.clear();
 
+  // MERGE
+
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
   _mapElementIdsToMergers();
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
@@ -328,14 +344,68 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   QElapsedTimer mergersTimer;
   mergersTimer.start();
 
-  LOG_INFO("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
-  vector<pair<ElementId, ElementId>> replaced;
-  for (size_t i = 0; i < _mergers.size(); ++i)
+  // TODO
+  std::vector<MergerPtr> relationMergers;
+  std::vector<MergerPtr> nonRelationMergers;
+  for (std::vector<MergerPtr>::const_iterator mergersItr = _mergers.begin();
+       mergersItr != _mergers.end(); ++mergersItr)
   {
-    MergerPtr merger = _mergers[i];
+    MergerPtr merger = *mergersItr;
+    LOG_VART(merger->getName());
+    if (merger->getName().contains("CollectionRelation"))
+    {
+      relationMergers.push_back(merger);
+    }
+    else
+    {
+      nonRelationMergers.push_back(merger);
+    }
+  }
+  _mergers = nonRelationMergers;
+  LOG_VARD(_mergers.size());
+  LOG_VARD(relationMergers.size());
+
+  LOG_INFO(
+    "Applying " << StringUtils::formatLargeNumber(_mergers.size() + relationMergers.size()) <<
+    " mergers...");
+  _applyMergers(_mergers, map);
+  _applyMergers(relationMergers, map);
+  MemoryUsageChecker::getInstance().check();
+  OsmMapWriterFactory::writeDebugMap(map, "after-merging");
+
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
+  const size_t mergerCount = _mergers.size() + relationMergers.size();
+  // free up any used resources.
+  _reset();
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
+  double mergersTime = timer.getElapsedAndRestart();
+  _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
+  _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
+
+  if (!ConfigOptions().getWriterIncludeDebugTags())
+  {
+    QStringList tagKeysToRemove;
+    tagKeysToRemove.append(MetadataTags::HootMultilineString());
+    RemoveTagsVisitor tagRemover(tagKeysToRemove);
+    map->visitRw(tagRemover);
+  }
+
+  LOG_INFO(
+    "Applied " << StringUtils::formatLargeNumber(mergerCount) << " mergers in " <<
+    StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
+
+  currentStep++;
+}
+
+void UnifyingConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
+{
+  vector<pair<ElementId, ElementId>> replaced;
+  for (size_t i = 0; i < mergers.size(); ++i)
+  {
+    MergerPtr merger = mergers[i];
     const QString msg =
       "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
-      " / " + StringUtils::formatLargeNumber(_mergers.size());
+      " / " + StringUtils::formatLargeNumber(mergers.size());
     // There are way more log statements generated from this than we normally want to see, so just
     // info out a subset. If running in debug, then you'll see all of them which can be useful.
     if (i != 0 && i % 10 == 0)
@@ -361,36 +431,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     replaced.clear();
     LOG_VART(merger->getImpactedElementIds());
 
-    // WARNING: Enabling this could result in a lot of files being generated.
-    //OsmMapWriterFactory::writeDebugMap(
-      //map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+    if (_writeDebugMaps)
+    {
+      OsmMapWriterFactory::writeDebugMap(
+        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+    }
   }
-  MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(map, "after-merging");
-
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-  size_t mergerCount = _mergers.size();
-  // free up any used resources.
-  _reset();
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-
-  double mergersTime = timer.getElapsedAndRestart();
-  _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
-  _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
-
-  if (!ConfigOptions().getWriterIncludeDebugTags())
-  {
-    QStringList tagKeysToRemove;
-    tagKeysToRemove.append(MetadataTags::HootMultilineString());
-    RemoveTagsVisitor tagRemover(tagKeysToRemove);
-    map->visitRw(tagRemover);
-  }
-
-  LOG_INFO(
-    "Applied " << StringUtils::formatLargeNumber(mergerCount) << " mergers in " <<
-    StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
-
-  currentStep++;
 }
 
 bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,

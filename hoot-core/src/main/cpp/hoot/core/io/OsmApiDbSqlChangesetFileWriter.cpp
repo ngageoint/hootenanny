@@ -191,42 +191,6 @@ void OsmApiDbSqlChangesetFileWriter::write(
           continue;
         }
       }
-//      if (!ConfigOptions().getMatchCreators().isEmpty())
-//      {
-//        LOG_TRACE(
-//          "Checking conflatable requirement for " << change.getElement()->getElementId() << "...");
-
-//        ConstOsmMapPtr map;
-//        if (map2 && map2->containsElement(change.getElement()))
-//        {
-//          map = map2;
-//        }
-//        else if (map1 && map1->containsElement(change.getElement()))
-//        {
-//          map = map1;
-//        }
-//        if (map && !WayNodeCriterion(map).isSatisfied(change.getElement()))
-//        {
-//          bool conflatable = true;
-//          if (change.getElement()->getElementType() == ElementType::Relation &&
-//              !RelationMemberUtils::relationHasConflatableMember(
-//                std::dynamic_pointer_cast<const Relation>(change.getElement()),
-//                std::shared_ptr<geos::geom::Geometry>(), GeometricRelationship::Invalid, map))
-//          {
-//            conflatable = false;
-//          }
-//          else if (change.getElement()->getElementType() != ElementType::Relation &&
-//                   !ConflateUtils::elementCanBeConflatedByActiveMatcher(change.getElement(), map))
-//          {
-//            conflatable = false;
-//          }
-//          if (!conflatable)
-//          {
-//            LOG_TRACE("Skipping change with unconflatable element: " << change << "...");
-//            continue;
-//          }
-//        }
-//      }
 
       LOG_VART(change.getType());
       switch (change.getType())

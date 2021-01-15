@@ -22,10 +22,10 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "RelationWithLinearMembersCriterion.h"
+#include "RelationWithBuildingMembersCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -33,14 +33,14 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithLinearMembersCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithBuildingMembersCriterion)
 
-RelationWithLinearMembersCriterion::RelationWithLinearMembersCriterion() :
+RelationWithBuildingMembersCriterion::RelationWithBuildingMembersCriterion() :
 RelationWithMembersOfTypeCriterion()
 {
 }
 
-RelationWithLinearMembersCriterion::RelationWithLinearMembersCriterion(ConstOsmMapPtr map) :
+RelationWithBuildingMembersCriterion::RelationWithBuildingMembersCriterion(ConstOsmMapPtr map) :
 RelationWithMembersOfTypeCriterion(map)
 {
 }

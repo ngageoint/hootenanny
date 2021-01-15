@@ -5,7 +5,7 @@ set -e
 # fully hydrated relations (API DB queries used automatically hydrate the relations) in the 
 # following way:
 #
-# 1) Data of all types conflated with no input filtering:
+# 1) Data of all types and their parent relations conflated with no input filtering:
 #   a) Only features (of any type) that exist within or cross over the bounds should be conflated 
 #      and added to the output changeset. No new secondary features should be added that don'
 #      satisfy the bounds requirement. 

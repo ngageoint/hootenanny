@@ -105,9 +105,13 @@ private:
   HashMap<ElementId, std::vector<MergerPtr>> _e2m;
   std::vector<ConstMatchPtr> _matches;
   std::vector<MergerPtr> _mergers;
+
   QList<SingleStat> _stats;
+
   int _taskStatusUpdateInterval;
   Progress _progress;
+
+  bool _writeDebugMaps;
 
   void _addReviewAndScoreTags(const OsmMapPtr &map, const std::vector<ConstMatchPtr> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
@@ -138,6 +142,8 @@ private:
   QString _matchSetToString(const MatchSet& matchSet) const;
 
   void _updateProgress(const int currentStep, const QString message);
+
+  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
 };
 
 }

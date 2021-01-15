@@ -25,7 +25,7 @@
  * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "RelationWithGeometryMembersCriterion.h"
+#include "RelationWithMembersOfTypeCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
@@ -35,18 +35,18 @@
 namespace hoot
 {
 
-RelationWithGeometryMembersCriterion::RelationWithGeometryMembersCriterion() :
+RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion() :
 _allowMixedChildren(false)
 {
 }
 
-RelationWithGeometryMembersCriterion::RelationWithGeometryMembersCriterion(ConstOsmMapPtr map) :
+RelationWithMembersOfTypeCriterion::RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map) :
 _map(map),
 _allowMixedChildren(false)
 {
 }
 
-void RelationWithGeometryMembersCriterion::_initCrit() const
+void RelationWithMembersOfTypeCriterion::_initCrit() const
 {
   _crit =
     std::shared_ptr<ElementCriterion>(
@@ -62,22 +62,27 @@ void RelationWithGeometryMembersCriterion::_initCrit() const
   }
 }
 
-void RelationWithGeometryMembersCriterion::setOsmMap(const OsmMap* map)
+void RelationWithMembersOfTypeCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
 }
 
-bool RelationWithGeometryMembersCriterion::isSatisfied(const ConstElementPtr& e) const
+void RelationWithMembersOfTypeCriterion::setConfiguration(const Settings& conf)
+{
+  ConfigOptions options(conf);
+  _allowMixedChildren = options.getRelationWithMembersOfTypeCriterionAllowMixedChildren();
+}
+
+bool RelationWithMembersOfTypeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-  //LOG_VART(e);
 
   bool result = false;
   if (e->getElementType() == ElementType::Relation)
   {
     if (!_map)
     {
-      throw IllegalArgumentException("No map set on RelationWithGeometryMembersCriterion.");
+      throw IllegalArgumentException("No map set on RelationWithMembersOfTypeCriterion.");
     }
     if (!_crit)
     {
