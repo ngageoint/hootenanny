@@ -64,8 +64,8 @@ void AttributeScoreExtractor::setConfiguration(const Settings& conf)
 double AttributeScoreExtractor::_extract(const OsmMap& /*map*/, const ConstWayPtr& w1,
                                          const ConstWayPtr& w2) const
 {
-  double score;
-  double weight;
+  double score = 1.0;
+  double weight = 0.0;
   TagComparator::getInstance().compareEnumeratedTags(w1->getTags(), w2->getTags(), score, weight);
   if (_useWeight)
   {
