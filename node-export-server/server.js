@@ -510,6 +510,7 @@ function doExport(req, res, hash, input) {
                 }
             })
         } else {
+            var poly = exports.validatePoly(req.query.poly);
             var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, poly, isFile, input, outDir, outFile, req.query.crop);
             child = exec(command, {cwd: hootHome},
                 function(error, stdout, stderr) {
@@ -525,9 +526,7 @@ function doExport(req, res, hash, input) {
                 }
             );
         }
-
-    }
-    jobs[hash] = {
+        jobs[hash] = {
                     id: id,
                     status: runningStatus,
                     process: child,
@@ -537,8 +536,10 @@ function doExport(req, res, hash, input) {
                     outDir: outDir,
                     outZip: outZip,
                     downloadFile: downloadFile
-    };
-    res.send(hash);
+        };
+
+        res.send(hash);
+    }
 }
 
 /* Run the server. */
