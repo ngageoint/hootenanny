@@ -483,13 +483,16 @@ function doExport(req, res, hash, input) {
                 if (stderr || error) {
                     jobs[hash].status = error;
                 } else {
-                    // jobStatus(hash);
-
-                   var command = 'hoot convert -C NodeExport.conf ' + rings.join(' ') + ' ' + outFile;
-                   exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
-                       if (stderr || error) {
-                           jobs[hash].status = stderr;
-                       } else {
+                    //we need to ignore source ids because the hoot crop command will add new nodes with negative ids at the edges of the crop polygon/bbox.
+                    //if we were to use source ids, rings' negative ids end up colliding creating unexpected outputs like two roads snapping together that you would
+                    //and orphan nodes.
+                    var command = 'hoot convert -C NodeExport.conf -D reader.use.data.source.ids=false ' + rings.join(' ') + ' ' + outFile;
+                    exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
+                        if (stderr || error) {
+                            jobs[hash].status = stderr;
+                            console.log(jobs[hash].status);
+                        } else {
+                            jobComplete(hash)
                             //zip the merged output then remove the rings individual export/crop output files.
                             zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format, function() {
                                 rings.forEach(function(ring) {
@@ -507,7 +510,7 @@ function doExport(req, res, hash, input) {
                 }
             })
         } else {
-            var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, poly, isFile, input, outDir, outFile);
+            var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, poly, isFile, input, outDir, outFile, req.query.crop);
             child = exec(command, {cwd: hootHome},
                 function(error, stdout, stderr) {
                     //setTimeout(function() { //used to simulate a long request
@@ -516,36 +519,7 @@ function doExport(req, res, hash, input) {
                         jobs[hash].status = stderr;
 
                     } else {
-                        // if export specifies cropping to bounds or poly, do so.
-                        if (req.query.crop) {
-
-                            // if request did not provide a polygon or bounds to
-                            // crop with, then go about zipping the output
-                            var cropShape = exports.polyQuotes(exports.validatePoly(poly)) || exports.validateBbox(req.query.bbox);
-                            if (cropShape) {
-                                var cropCommand = 'hoot crop '
-                                + outFile + ' '
-                                + outFile + ' '
-                                + cropShape
-                                // following how I saw we logged convert command
-                                // also proved helpful to just see if request handler calling crop or not when crop
-                                // was present.
-                                console.log(cropCommand)
-
-                                // crop the output of the hoot convert, then write it to a zip
-                                exec(cropCommand, {cwd: hootHome}, function(error, stdout, stderr) {
-                                    if (stderr || error) {
-                                        jobs[hash].status = stderr;
-                                    } else {
-                                        zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
-                                    }
-                                })
-                            } else {
-                                zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
-                            }
-                        } else {
-                            zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
-                        }
+                        zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format)
                     }
                     //}, 10000); //used to simulate a long request
                 }
