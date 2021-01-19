@@ -87,10 +87,6 @@ public:
 
 private:
 
-  // used for bounds checking
-  QList<ConstOsmMapPtr> _map1List;
-  QList<ConstOsmMapPtr> _map2List;
-
   /** Settings from the config file */
   int _precision;
 
@@ -99,8 +95,6 @@ private:
   QList<ElementId> _parsedChangeIds;
 
   bool _addTimestamp;
-  bool _includeDebugTags;
-  bool _includeCircularErrorTags;
 
   OsmXmlWriter _invalidCharacterHandler;
 
@@ -110,12 +104,6 @@ private:
 
   //  Keep track of the matrix of add, modify, delete for nodes, ways, relations
   ScoreMatrix<long> _stats;
-
-  // list of metadata tag keys allowed to be written to the changeset
-  QStringList _metadataAllowKeys;
-
-  // overrides bounds checking
-  bool _changesetIgnoreBounds;
 
   /** Helper functions to write nodes, ways, and relations. */
   void _writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous);

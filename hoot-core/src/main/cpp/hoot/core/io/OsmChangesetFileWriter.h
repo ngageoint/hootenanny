@@ -48,7 +48,7 @@ public:
 
   static std::string className() { return "hoot::OsmChangesetFileWriter"; }
 
-  OsmChangesetFileWriter() = default;
+  OsmChangesetFileWriter();
   virtual ~OsmChangesetFileWriter() = default;
 
   /**
@@ -102,6 +102,32 @@ public:
    * Sets all maps corresponding to the changed state of the datasets
    */
   virtual void setMap2List(const QList<ConstOsmMapPtr>& /*map*/) {}
+
+protected:
+
+  // used for bounds checking
+  QList<ConstOsmMapPtr> _map1List;
+  QList<ConstOsmMapPtr> _map2List;
+
+  bool _includeDebugTags;
+  bool _includeCircularErrorTags;
+
+  // list of metadata tag keys allowed to be written to the changeset
+  QStringList _metadataAllowKeys;
+
+  // overrides bounds checking
+  bool _changesetIgnoreBounds;
+
+  /*
+   * Determines if an change element satisfies the configured bounds requirement
+   *
+   * @param element the element to check
+   * @param map1 before changes map
+   * @param map2 after changes map
+   * @return true if the element passes the configured bounds requirement; false otherwise
+   */
+  bool _failsBoundsCheck(
+    const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2) const;
 };
 
 }

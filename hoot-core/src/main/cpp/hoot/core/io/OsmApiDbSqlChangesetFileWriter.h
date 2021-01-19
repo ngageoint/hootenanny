@@ -96,10 +96,6 @@ public:
 
 private:
 
-  // used for bounds checking
-  QList<ConstOsmMapPtr> _map1List;
-  QList<ConstOsmMapPtr> _map2List;
-
   OsmApiDb _db;
   QFile _outputSql;
 
@@ -109,20 +105,11 @@ private:
   /** Settings from the config file */
   double _changesetUserId;
 
-  bool _includeDebugTags;
-  bool _includeCircularErrorTags;
-
   // id mappings for created elements
   QMap<ElementId, ElementId> _remappedIds;
 
   // element IDs associated with a changes encountered
   QList<ElementId> _parsedChangeIds;
-
-  // list of metadata tag keys allowed to be written to the changeset
-  QStringList _metadataAllowKeys;
-
-  // overrides bounds checking
-  bool _changesetIgnoreBounds;
 
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 
@@ -134,9 +121,6 @@ private:
   void _updateChangeset(const int numChanges);
 
   long _getNextId(const ElementType type);
-
-  bool _failsBoundsCheck(
-    const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2) const;
 
   //clones the input so local element version tracking can be done
   ElementPtr _getChangeElement(ConstElementPtr element);

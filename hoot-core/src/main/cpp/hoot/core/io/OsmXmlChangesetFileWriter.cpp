@@ -51,11 +51,9 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmXmlChangesetFileWriter)
 
 OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
+OsmChangesetFileWriter(),
 _precision(16),
-_addTimestamp(false),
-_includeDebugTags(false),
-_includeCircularErrorTags(false),
-_changesetIgnoreBounds(false)
+_addTimestamp(false)
 {
 }
 
@@ -152,30 +150,19 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
     {
       map2 = _map2List.at(i);
     }
-    std::shared_ptr<InBoundsCriterion> boundsCrit1;
-    std::shared_ptr<InBoundsCriterion> boundsCrit2;
-    if (ConfigUtils::boundsOptionEnabled())
-    {
-      if (map1)
-      {
-        boundsCrit1 = ConfigUtils::getBoundsCrit(map1);
-      }
-      if (map2)
-      {
-        boundsCrit2 = ConfigUtils::getBoundsCrit(map2);
-      }
-    }
 
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
     LOG_VARD(changesetProvider->hasMoreChanges());
+    ConstElementPtr changeElement;
     while (changesetProvider->hasMoreChanges())
     {
       LOG_VART(changesetProvider->hasMoreChanges());
       LOG_TRACE("Reading next XML change...");
       _change = changesetProvider->readNextChange();
-      LOG_VART(_change.toString());
+      LOG_VART(_change);
+      changeElement = _change.getElement();
 
-      if (!_change.getElement())
+      if (!changeElement)
       {
         continue;
       }
@@ -190,40 +177,17 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       // multiple derivers. You could make the argument to prevent these types of dupes from
       // occurring before outputting the changeset file with this writer, but not quite sure how to
       // do that yet, due to the fact that the changeset providers have a streaming interface.
-      if (_parsedChangeIds.contains(_change.getElement()->getElementId()))
+      if (_parsedChangeIds.contains(changeElement->getElementId()))
       {
         LOG_TRACE("Skipping change for element ID already having change: " << _change << "...");
         continue;
       }
 
       // If a bounds was specified for calculating the changeset, honor it.
-      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() &&
+          _failsBoundsCheck(changeElement, map1, map2))
       {
-        std::shared_ptr<InBoundsCriterion> boundsCrit;
-        // map2 takes precedence over map 1, since map2 represents the changed set of the data
-        // (its possible we don't need map1 at all here...not sure).
-        if (map2 && boundsCrit2 && map2->containsElement(_change.getElement()))
-        {
-          boundsCrit = boundsCrit2;
-        }
-        else if (map1 && boundsCrit1 && map1->containsElement(_change.getElement()))
-        {
-          boundsCrit = boundsCrit1;
-        }
-        else
-        {
-          throw HootException("Element not found in map for bounds check.");
-        }
-        LOG_VART(boundsCrit.get());
-        if (boundsCrit)
-        {
-          LOG_VART(boundsCrit->isSatisfied(_change.getElement()));
-        }
-        if (boundsCrit && !boundsCrit->isSatisfied(_change.getElement()))
-        {
-          LOG_TRACE("Skipping change for change with out of bounds element: " << _change << "...");
-          continue;
-        }
+        continue;
       }
 
       LOG_VART(Change::changeTypeToString(last));
@@ -232,7 +196,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         if (last != Change::Unknown)
         {
           writer.writeEndElement();
-          _parsedChangeIds.append(_change.getElement()->getElementId());
+          _parsedChangeIds.append(changeElement->getElementId());
         }
         switch (_change.getType())
         {
@@ -261,17 +225,17 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
 
       if (_change.getType() != Change::Unknown)
       {
-        ElementType::Type type = _change.getElement()->getElementType().getEnum();
+        ElementType::Type type = changeElement->getElementType().getEnum();
         switch (type)
         {
           case ElementType::Node:
-            _writeNode(writer, _change.getElement(), _change.getPreviousElement());
+            _writeNode(writer, changeElement, _change.getPreviousElement());
             break;
           case ElementType::Way:
-            _writeWay(writer, _change.getElement(), _change.getPreviousElement());
+            _writeWay(writer, changeElement, _change.getPreviousElement());
             break;
           case ElementType::Relation:
-            _writeRelation(writer, _change.getElement(), _change.getPreviousElement());
+            _writeRelation(writer, changeElement, _change.getPreviousElement());
             break;
           default:
             throw IllegalArgumentException("Unexpected element type.");
@@ -288,7 +252,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       LOG_TRACE("Writing change end element...");
       writer.writeEndElement();
       last = Change::Unknown;
-      _parsedChangeIds.append(_change.getElement()->getElementId());
+      _parsedChangeIds.append(changeElement->getElementId());
     }
   }
 

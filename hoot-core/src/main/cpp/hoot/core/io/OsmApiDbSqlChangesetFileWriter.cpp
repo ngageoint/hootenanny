@@ -34,8 +34,6 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/conflate/ConflateUtils.h>
-#include <hoot/core/elements/RelationMemberUtils.h>
 
 // Qt
 #include <QSqlError>
@@ -49,18 +47,14 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmApiDbSqlChangesetFileWriter)
 
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter() :
-_changesetId(0),
-_includeDebugTags(false),
-_includeCircularErrorTags(false),
-_changesetIgnoreBounds(false)
+OsmChangesetFileWriter(),
+_changesetId(0)
 {
 }
 
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) :
-_changesetId(0),
-_includeDebugTags(false),
-_includeCircularErrorTags(false),
-_changesetIgnoreBounds(false)
+OsmChangesetFileWriter(),
+_changesetId(0)
 {
   _db.open(url);
 }
@@ -194,69 +188,6 @@ void OsmApiDbSqlChangesetFileWriter::write(
   _updateChangeset(changes);
 
   _outputSql.close();
-}
-
-bool OsmApiDbSqlChangesetFileWriter::_failsBoundsCheck(
-  const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2) const
-{
-  if (!element || !map1 || !map2)
-  {
-    return false;
-  }
-
-  LOG_TRACE("Checking bounds requirement for " << element->getElementId() << "...");
-
-  // Pick the map and bounds crit based on the status of the element involved in the current
-  // change being processed.
-  std::shared_ptr<InBoundsCriterion> boundsCrit;
-  ConstOsmMapPtr map;
-  if (element->getStatus() == Status::Unknown1 && map1->containsElement(element))
-  {
-    map = map1;
-    boundsCrit = ConfigUtils::getBoundsCrit(map1);
-  }
-  else if ((element->getStatus() == Status::Unknown2 ||
-            element->getStatus() == Status::Conflated) &&
-           map2->containsElement(element))
-  {
-    map = map2;
-    boundsCrit = ConfigUtils::getBoundsCrit(map2);
-  }
-  else
-  {
-    LOG_TRACE(element->getElementId() << " not found in map for bounds check.");
-    return false;
-  }
-
-  // If we're dealing with a relation from the new data (secondary; status = 2 or
-  // conflated), we're requiring that all of its members be within bounds for it to be used
-  // in the changeset. If this isn't done, relations may end up incomplete with missing
-  // members. We don't worry about this for ref data, as we're assuming our ref data store
-  // has all of its relation member data intact.
-  if (element->getElementType() == ElementType::Relation &&
-      (element->getStatus() == Status::Unknown2 || element->getStatus() == Status::Conflated))
-  {
-    if (!RelationMemberUtils::relationHasAllMembersWithinBounds(
-          std::dynamic_pointer_cast<const Relation>(element), boundsCrit, map))
-    {
-      LOG_TRACE(
-        "Skipping change with relation containing out of bounds element: " <<
-        element->getElementId() << "...");
-      return true;
-    }
-  }
-  else
-  {
-    LOG_VART(boundsCrit->isSatisfied(element));
-    if (!boundsCrit->isSatisfied(element))
-    {
-      LOG_TRACE(
-        "Skipping change with out of bounds element: " << element->getElementId() << "...");
-      return true;
-    }
-  }
-
-  return false;
 }
 
 void OsmApiDbSqlChangesetFileWriter::_updateChangeset(const int numChanges)
