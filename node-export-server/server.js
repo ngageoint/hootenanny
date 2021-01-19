@@ -319,7 +319,7 @@ function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
 /**
  * Builds the hootenanny command(s) from parts of provided request.
  */
-function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop) {
+function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop, ignoreSourceIds, mutlipleInputs) {
     var command = '', overrideTags = null;
     if (queryOverrideTags) {
         if (queryOverrideTags === 'true') { //if it's true
@@ -346,9 +346,8 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
         temp_file = outDir + '.osm';
         command += 'wget -q ' + cert_param + ' -O ' + temp_file + ' ' + input + '?bbox=' + (poly ? exports.polyToBbox(poly) : bbox) + ' && ';
         input = temp_file;
-        //bbox not valid with osm file input source
-        bbox = null;
     }
+
     //create command and run
     command += 'hoot convert -C NodeExport.conf';
     var bboxOption = '';
@@ -364,32 +363,37 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
             }
             command += ' -D schema.translation.override=' + overrideTags;
         }
-        if (paramschema !== 'OSM' && getConfig().schemas[paramschema] !== '') {
+        if (paramschema !== 'OSM' && config.schemas[paramschema] !== '') {
             command += ' -D convert.ops=hoot::SchemaTranslationOp';
-            command += ' -D schema.translation.script=' + getConfig().schemas[paramschema];
+            command += ' -D schema.translation.script=' + config.schemas[paramschema];
             command += ' -D schema.translation.direction=toogr';
             // Set per schema config options
-            if (getConfig().schema_options[paramschema]) command += ' -D ' + getConfig().schema_options[paramschema];
+            if (config.schema_options[paramschema]) command += ' -D ' + config.schema_options[paramschema];
         }
     } else {
         if (paramschema === 'OSM') command += ' -D writer.include.debug.tags=true';
         command += ' -D convert.ops=hoot::SchemaTranslationOp';
-        command += ' -D schema.translation.script=' + getConfig().schemas[paramschema];
+        command += ' -D schema.translation.script=' + config.schemas[paramschema];
         if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
         if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
-        // Set per schema getConfig() options
-        if (getConfig().schema_options[paramschema]) command += ' -D ' + getConfig().schema_options[paramschema];
+        // Set per schema config options
+        if (config.schema_options[paramschema]) command += ' -D ' + config.schema_options[paramschema];
     }
-    command += ' "' + input + '" '
-        + outFile
-        ;
+
+    if (ignoreSourceIds)
+        command += ' -D reader.use.data.source.ids=false'
+
+    if (mutlipleInputs)
+        command += ' ' + input + ' ' + outFile;
+    else
+        command += ' "' + input + '" ' + outFile;
 
     // if the request specifed to crop the output and the request also
     // has a valid polygon or bbox, crop the output too.
     // note that we give a polygon precendence to a bbox
-    if (doCrop && (poly || bbox)) {
+    if (doCrop && (poly || bbox))
         command += ' && hoot crop ' + outFile + ' ' + outFile + ' "' + (poly || bbox) + '"';
-    }
+
     //if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
 
     //used for testing to simulate hoot export
@@ -524,7 +528,7 @@ function doExport(req, res, hash, input) {
                 var outDir = appDir + output;
                 var outFile = outDir + config.formats[req.params.format];
                 if (req.params.format === 'File Geodatabase') outDir = outFile;
-                multiCommand += buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, polyString, isFile, input, outDir, outFile, req.query.crop);
+                multiCommand += buildCommand('OSM', req.query.overrideTags, null,  polyString, isFile, input, outDir, outFile, req.query.crop);
                 if (i !== polygons.length - 1) multiCommand += ' && ';
                 rings.push(outFile);
             }
@@ -533,10 +537,14 @@ function doExport(req, res, hash, input) {
                 if (stderr || error) {
                     jobs[hash].status = error;
                 } else {
-                    //we need to ignore source ids because the hoot crop command will add new nodes with negative ids at the edges of the crop polygon/bbox.
-                    //if we were to use source ids, rings' negative ids end up colliding creating unexpected outputs like two roads snapping together that you would
-                    //and orphan nodes.
-                    var command = 'hoot convert -C NodeExport.conf -D reader.use.data.source.ids=false ' + rings.join(' ') + ' ' + outFile;
+                    //we call buildCommand here using the request's schema, no bbox or poly arguments, the outputted rings as our inputs, and the ignoreSourceIds argument as true.
+                    //this generates a hoot command that will merge all the rings into a single file with tags in the schema specified by the request.
+                    //also by ingoring source ids we prevent bad side-effects that can occur when negative ids in the inputs collide.
+                    //this can arise when the crop command adds nodes (that have negative ids) when clipping the dataset.
+                    //if we were to use source ids, rings' the negative id collisions generate  unexpected outputs like two roads snapping together that you would and orphan nodes.
+                    var command = buildCommand(req.params.schema, req.query.overrideTags, null, null, isFile, rings.join(' '), outDir, outFile, false, true, true);
+
+                    console.log(command);
                     exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
                         if (stderr || error) {
                             jobs[hash].status = stderr;
@@ -560,8 +568,7 @@ function doExport(req, res, hash, input) {
                 }
             })
         } else {
-            var poly = exports.validatePoly(req.query.poly);
-            var command = buildCommand(req.params.schema, req.query.overrideTags, req.query.bbox, poly, isFile, input, outDir, outFile, req.query.crop);
+            var command = buildCommand(req.params.schema, req.params.tagOverrides, req.query.bbox, req.query.poly, isFile, input, outDir, outFile, req.query.crop);
             child = exec(command, {cwd: hootHome},
                 function(error, stdout, stderr) {
                     //setTimeout(function() { //used to simulate a long request
