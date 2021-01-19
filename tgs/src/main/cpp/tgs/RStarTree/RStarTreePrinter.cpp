@@ -36,8 +36,9 @@ namespace Tgs
 {
 
 RStarTreePrinter::RStarTreePrinter(const std::shared_ptr<const RStarTree>& tree)
+  : _tree(tree),
+    _indent(0)
 {
-  _tree = tree;
 }
 
 string RStarTreePrinter::_indentStr(int size)
