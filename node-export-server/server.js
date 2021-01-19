@@ -173,7 +173,7 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
     for (var m of match) {
         var captures = /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(m);
         // something about the polygon is invalid.
-        if (!capture)
+        if (!captures)
             return null;
 
         var coordinate = captures.splice(1).map(parseFloat); ring.push(coordinate);
