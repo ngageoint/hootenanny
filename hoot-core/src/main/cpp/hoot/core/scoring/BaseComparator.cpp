@@ -197,7 +197,7 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
 
   QImage qImage(_width, _height, QImage::Format_ARGB32);
 
-  QRgb rgb;
+  QRgb rgb = 0;
   if (max > 0.0)
   {
     for (int y = 0; y < _height; y++)
