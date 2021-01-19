@@ -126,10 +126,17 @@ private:
 
   friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 
+  QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
+
+  void _setChangesetUserId(long id) { _changesetUserId = id; }
+
   void _createChangeSet();
   void _updateChangeset(const int numChanges);
 
   long _getNextId(const ElementType type);
+
+  bool _failsBoundsCheck(
+    const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2) const;
 
   //clones the input so local element version tracking can be done
   ElementPtr _getChangeElement(ConstElementPtr element);
@@ -156,10 +163,6 @@ private:
 
   void _deleteExistingElement(ConstElementPtr removedElement);
   void _deleteAll(const QString& tableName, const QString& idFieldName, const long id);
-
-  QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
-
-  void _setChangesetUserId(long id) { _changesetUserId = id; }
 };
 
 }

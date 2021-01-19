@@ -128,19 +128,6 @@ void OsmApiDbSqlChangesetFileWriter::write(
     {
       map2 = _map2List.at(i);
     }
-    std::shared_ptr<InBoundsCriterion> boundsCrit1;
-    std::shared_ptr<InBoundsCriterion> boundsCrit2;
-    if (ConfigUtils::boundsOptionEnabled())
-    {
-      if (map1)
-      {
-        boundsCrit1 = ConfigUtils::getBoundsCrit(map1);
-      }
-      if (map2)
-      {
-        boundsCrit2 = ConfigUtils::getBoundsCrit(map2);
-      }
-    }
 
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
     LOG_VART(changesetProvider.get());
@@ -149,7 +136,7 @@ void OsmApiDbSqlChangesetFileWriter::write(
     {
       LOG_TRACE("Reading next SQL change...");
       Change change = changesetProvider->readNextChange();
-      LOG_VART(change.toString());
+      LOG_VART(change);
       ConstElementPtr changeElement = change.getElement();
 
       if (!changeElement)
@@ -165,62 +152,10 @@ void OsmApiDbSqlChangesetFileWriter::write(
       }
 
       // If a bounds was specified for calculating the changeset, honor it.
-      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() &&
+          _failsBoundsCheck(changeElement, map1, map2))
       {
-        LOG_TRACE("Checking bounds requirement for " << changeElement->getElementId() << "...");
-
-        // Pick the map and bounds crit based on the status of the element involved in the current
-        // change being processed.
-        std::shared_ptr<InBoundsCriterion> boundsCrit;
-        ConstOsmMapPtr map;
-        if (map1 && changeElement->getStatus() == Status::Unknown1 &&
-            map1->containsElement(changeElement))
-        {
-          map = map1;
-          boundsCrit = boundsCrit1;
-        }
-        else if (map2 &&
-                 (changeElement->getStatus() == Status::Unknown2 ||
-                  changeElement->getStatus() == Status::Conflated) &&
-                 map2->containsElement(changeElement))
-        {
-          map = map2;
-          boundsCrit = boundsCrit2;
-        }
-        else
-        {
-          LOG_TRACE(changeElement->getElementId() << " not found in map for bounds check.");
-        }
-        if (boundsCrit && map)
-        {
-          // If we're dealing with a relation from the new data (secondary; status = 2 or
-          // conflated), we're requiring that all of its members be within bounds for it to be used
-          // in the changeset. If this isn't done, relations may end up incomplete with missing
-          // members. We don't worry about this for ref data, as we're assuming our ref data store
-          // has all of its relation member data intact.
-          if (changeElement->getElementType() == ElementType::Relation &&
-              (changeElement->getStatus() == Status::Unknown2 ||
-               changeElement->getStatus() == Status::Conflated))
-          {
-            if (!RelationMemberUtils::relationHasAllMembersWithinBounds(
-                  std::dynamic_pointer_cast<const Relation>(changeElement), boundsCrit, map))
-            {
-              LOG_TRACE(
-                "Skipping change with relation containing out of bounds element: " << change <<
-                "...");
-              continue;
-            }
-          }
-          else
-          {
-            LOG_VART(boundsCrit->isSatisfied(changeElement));
-            if (!boundsCrit->isSatisfied(changeElement))
-            {
-              LOG_TRACE("Skipping change with out of bounds element: " << change << "...");
-              continue;
-            }
-          }
-        }
+        continue;
       }
 
       LOG_VART(change.getType());
@@ -254,14 +189,74 @@ void OsmApiDbSqlChangesetFileWriter::write(
         changes++;
       }
     }
-
-    boundsCrit1.reset();
-    boundsCrit2.reset();
   }
 
   _updateChangeset(changes);
 
   _outputSql.close();
+}
+
+bool OsmApiDbSqlChangesetFileWriter::_failsBoundsCheck(
+  const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2) const
+{
+  if (!element || !map1 || !map2)
+  {
+    return false;
+  }
+
+  LOG_TRACE("Checking bounds requirement for " << element->getElementId() << "...");
+
+  // Pick the map and bounds crit based on the status of the element involved in the current
+  // change being processed.
+  std::shared_ptr<InBoundsCriterion> boundsCrit;
+  ConstOsmMapPtr map;
+  if (element->getStatus() == Status::Unknown1 && map1->containsElement(element))
+  {
+    map = map1;
+    boundsCrit = ConfigUtils::getBoundsCrit(map1);
+  }
+  else if ((element->getStatus() == Status::Unknown2 ||
+            element->getStatus() == Status::Conflated) &&
+           map2->containsElement(element))
+  {
+    map = map2;
+    boundsCrit = ConfigUtils::getBoundsCrit(map2);
+  }
+  else
+  {
+    LOG_TRACE(element->getElementId() << " not found in map for bounds check.");
+    return false;
+  }
+
+  // If we're dealing with a relation from the new data (secondary; status = 2 or
+  // conflated), we're requiring that all of its members be within bounds for it to be used
+  // in the changeset. If this isn't done, relations may end up incomplete with missing
+  // members. We don't worry about this for ref data, as we're assuming our ref data store
+  // has all of its relation member data intact.
+  if (element->getElementType() == ElementType::Relation &&
+      (element->getStatus() == Status::Unknown2 || element->getStatus() == Status::Conflated))
+  {
+    if (!RelationMemberUtils::relationHasAllMembersWithinBounds(
+          std::dynamic_pointer_cast<const Relation>(element), boundsCrit, map))
+    {
+      LOG_TRACE(
+        "Skipping change with relation containing out of bounds element: " <<
+        element->getElementId() << "...");
+      return true;
+    }
+  }
+  else
+  {
+    LOG_VART(boundsCrit->isSatisfied(element));
+    if (!boundsCrit->isSatisfied(element))
+    {
+      LOG_TRACE(
+        "Skipping change with out of bounds element: " << element->getElementId() << "...");
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void OsmApiDbSqlChangesetFileWriter::_updateChangeset(const int numChanges)
