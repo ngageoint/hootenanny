@@ -43,7 +43,7 @@ DEBUG=false
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter=WayJoiner;WayJoinerOp;WayJoinerBasic;WayJoinerAdvanced;ReplacementSnappedWayJoiner "
+  LOG_FILTER="-D log.class.filter=MultilineStringMergeRelationCollapser;RelationMerger"
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh

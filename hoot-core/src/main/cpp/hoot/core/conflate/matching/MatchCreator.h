@@ -77,7 +77,7 @@ public:
    * @param element element to determine the match candidate status of
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
-   * @todo add a bounds check here
+   * @todo add a bounds check here instead of in individual match creators
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) = 0;
 

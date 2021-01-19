@@ -34,6 +34,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/merging/RelationMerger.h>
 
 namespace hoot
 {
@@ -42,7 +43,7 @@ namespace hoot
  * Collapses multilinestring relations created during conflate merging and passing a filter by
  * removing them and copying their type tags to members.
  *
- * These relations can be unwanted byproducts of merging (see HighwaySnapMerger) in certain
+ * These relations can be unwanted byproducts of merging (see LinearSnapMerger) in certain
  * situations. In some cases, its easier to remove them using this as a conflate post op than it is
  * to not create them in the first place due to the complexity of the merging logic.
  */
@@ -64,7 +65,7 @@ public:
   /**
    * @see OsmMapConsumer
    */
-  virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
+  virtual void setOsmMap(OsmMap* map);
 
   virtual QString getInitStatusMessage() const
   { return "Collapsing multilinestring merge relations..."; }
@@ -94,6 +95,9 @@ private:
   QStringList _typeKeys;
   // a list of type key/value pairs to be removed from the parent relation and copied to its members
   QStringList _typeKvps;
+
+  // merges the ms relation contained by other relation into them
+  RelationMerger _relationMerger;
 
   // total number of relation members which had tags transferred to them
   int _numRelationMembersModified;

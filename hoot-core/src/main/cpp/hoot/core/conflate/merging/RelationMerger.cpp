@@ -45,7 +45,8 @@ _writeDebugMaps(false) // ONLY ENABLE THIS DURING DEBUGGING
 {
 }
 
-void RelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
+void RelationMerger::merge(
+  const ElementId& elementId1, const ElementId& elementId2, const bool deleteRelation2)
 {
   if (elementId1.getType() != ElementType::Relation ||
       elementId2.getType() != ElementType::Relation)
@@ -72,13 +73,14 @@ void RelationMerger::merge(const ElementId& elementId1, const ElementId& element
 //  LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
 //  ReplaceElementOp(elementId2, elementId1, true).apply(_map);
   //if (allMembersCopied)
-  //{
+  if (deleteRelation2)
+  {
     LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
     ReplaceElementOp(elementId2, elementId1, true).apply(_map);
     // remove all instances of relation 2
     LOG_TRACE("Removing " << elementId2 << "...");
     RemoveRelationByEid(elementId2.getId()).apply(_map);
-  //}
+  }
 
   LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
   if (_writeDebugMaps)

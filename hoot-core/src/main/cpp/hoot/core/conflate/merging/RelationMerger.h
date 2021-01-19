@@ -56,22 +56,19 @@ public:
    *
    * @param elementId1 ID of the first relation to merge
    * @param elementId2 ID of the second relation to merge
+   * @param deleteRelation2 TODO
    */
-  void merge(const ElementId& elementId1, const ElementId& elementId2);
+  void merge(const ElementId& elementId1, const ElementId& elementId2,
+             const bool deleteRelation2 = true);
 
   /**
    * @see OsmMapConsumer
    */
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
-//  void setMergeConflatableMembersOnly(bool conflatableMembersOnly)
-//  { _mergeConflatableMembersOnly = conflatableMembersOnly; }
-
 private:
 
   OsmMapPtr _map;
-
-  //bool _mergeConflatableMembersOnly;
 
   bool _writeDebugMaps;
 
