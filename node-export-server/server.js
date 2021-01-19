@@ -18,13 +18,6 @@ var appDir = hootHome + '/node-export-server/';
 var runningStatus = 'running',
     completeStatus = 'complete';
 
-function getJobs() { return jobs; }
-function getConfig() { return config; }
-function waitSomeSeconds(seconds) {
-    var someSecondsLater = new Date(new Date().getTime() + seconds * 1000);
-    while(someSecondsLater > new Date()){}
-}
-
 // pipes request data to temp file with name that matches posted data format.
 function writeExportFile(req, done) {
     //Build a hash for the input params used in file name
