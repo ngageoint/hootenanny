@@ -135,14 +135,26 @@ app.get('/export/:datasource/:schema/:format', function(req, res) {
 
 exports.writeExportFile = writeExportFile
 
-// ensures poly string in query params
-//  1. follows structure lon_0,lat_0;...lon_n,lat_n;lon_0,lat_0
-//  2. first and last match, meaning its a polygon
-//  3. does not self intersect as deterimed by shamos-hoey alg
+/**
+ * Validates that provided poly parameter is a valid polygon/multipolygon string.
+ * If at any point the string is determined invalid, will return null.
+ * Otherwise returns the original string by default or optionally an array of polygon coordinates
+ * parsed from the input string.
+ *
+ * Input strings are determined valid when each polygon in the input string...
+ * 1. follows the lon_0,lat_0;...lon_n,lat_n;lon_0,lat_0
+ * 2. has a first and last coordinate that match
+ * 3. does not self intersect as deterimed as determined by the shamos-hoey alg
+ */
 exports.validatePoly = function(poly, returnPolyArray = false) {
     var rings = [], ring = [];
     if (!poly) return null;
     var match = poly.split(';');
+
+    //if the input array is empty, it lacks semi colons, or there is only 1 coordinate, then we
+    //certainly do not have a polygon and so it is invalid
+    if (match.length <= 1)
+        return null;
 
     function validCoordinates(coordinates) {
         for (var c of coordinates) {
@@ -157,56 +169,68 @@ exports.validatePoly = function(poly, returnPolyArray = false) {
         return first[0] === other[0] && first[1] === other[1]
     }
 
-    if (match.length > 1) {
-        for (var m of match) {
-            // gather capture groups to add to coordinates array
-            // if we ever don't get a capture, exit early.
-            // this is a way to make sure nothing that isn't a cooridnate can get injected into the hoot command
-            var captures = /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(m);
-            if (captures) {
-                var coordinate = captures.splice(1).map(parseFloat);
-                ring.push(coordinate);
-                if (ring.length > 1 && matchingFirstLast(ring[0], coordinate)) {
-                    rings.push(ring);
-                    ring = [];
-                }
-            } else {
-                return null;
-            }
+    //try to parse each coordinate string.
+    for (var m of match) {
+        var captures = /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(m);
+        // something about the polygon is invalid.
+        if (!capture)
+            return null;
+
+        var coordinate = captures.splice(1).map(parseFloat); ring.push(coordinate);
+        //once we've added a coordinate to the ring array, see if the first and last match
+        //when they do we've found a polygon so we can add the ring (polygon) array to the rings array
+        //then clear it out and follow the same process.
+        if (ring.length > 1 && matchingFirstLast(ring[0], coordinate)) {
+            rings.push(ring);
+            ring = [];
         }
-
-        // if there is a ring with data, that tells us it's not matching first and last, and so invalid.
-        if (ring.length) return null;
-
-        for (var ring of rings) {
-            if (!validCoordinates(ring) || !matchingFirstLast(ring[0], ring[ring.length - 1]) ||
-                !noIntersection({ type: 'Polygon', coordinates: [ring] })
-            ) {
-                return null;
-            }
-        }
-
-        return returnPolyArray ? rings : poly;
     }
-    return null;
+
+    //if there is a ring with data, that tells us we did not find a matching first and last and so the input string does not
+    //represent polygon data.
+    if (ring.length) return null;
+
+    //if we get passed the previous if statement we know that each ring atleast has a matching first and last polygon.
+    //so, we only need to check to make sure that all coordinates are within bounds of geo-coordinate system and see that
+    //no intersections are present.
+    for (var ring of rings) {
+        if (!validCoordinates(ring) || !noIntersection({ type: 'Polygon', coordinates: [ring] })) {
+            return null;
+        }
+    }
+
+    //return the polygon string by default or if specified the polygons array
+    return returnPolyArray ? rings : poly;
 }
 
+/**
+ * Using the validatePoly function, returns true when that function does not return null and
+ * it returns more than one polygon array
+ */
 exports.isMultipolygon = function(poly) {
     var polygons = exports.validatePoly(poly, true);
     return polygons !== null && polygons.length > 1;
 }
 
-// create object of lat/lon that is sorted from min<max values then
-// use order of list to return first values as min and last as max
+/**
+ * Transforms a polygon string into a bounding box string.
+ * Does so by sorting longitude and latitude from smallest to largest,
+ * then returns the a string with form 'smallest_lon,smallest_lat,largest_lat,largest_lon'
+ */
 exports.polyToBbox = function(polyString) {
     var coordinates = polyString.split(';').reduce(function(coordsMap, coord, idx) {
-        var pair = /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(coord).splice(1).map(parseFloat)
-        if (idx === 0 || coordsMap.lon.indexOf(pair[0]) === -1)
+        var pair = /(-?\d+\.?\d*),(-?\d+\.?\d*)/g.exec(coord).splice(1).map(parseFloat);
+
+        //adds longitude and latitude not yet in the array.
+        if (coordsMap.lon.indexOf(pair[0]) === -1)
             coordsMap.lon.push(pair[0]);
-        if (idx === 0 || coordsMap.lat.indexOf(pair[1]) === -1)
+        if (coordsMap.lat.indexOf(pair[1]) === -1)
             coordsMap.lat.push(pair[1]);
+
+        //sort longitude and latitude arrays from smallest->largest
         coordsMap.lon.sort(function(a,b) { return a - b })
         coordsMap.lat.sort(function(a,b) { return a - b })
+
         return coordsMap;
     }, { lon: [], lat: [] })
 
@@ -215,15 +239,30 @@ exports.polyToBbox = function(polyString) {
            coordinates.lon[coordinates.lon.length - 1] + ',' +
            coordinates.lat[coordinates.lat.length - 1];
 }
-// hoot requires quotes for bounds so make sure they exist
+
+/**
+ * Adds quotes around polyString when missing since hoot requires quotes
+ */
 exports.polyQuotes = function(polyString) {
-    if (!polyString) return null
+    if (!polyString)
+        return null
+
     polyString = polyString.trim()
-    if (polyString[0] !== '"') polyString = '"' + polyString
-    if (polyString[polyString.length - 1] !== '"') polyString = polyString + '"'
+
+    if (polyString[0] !== '"')
+        polyString = '"' + polyString
+    if (polyString[polyString.length - 1] !== '"')
+        polyString = polyString + '"'
+
     return polyString;
 }
 
+/**
+ * Ensures bbox string is a valid bounding box by checking...
+ * 1. that it is a string of 4 floating point numbers
+ * 2. the smaller longitude and latitude come first
+ * 3. all longitude and latitude are within max bounds
+ */
 exports.validateBbox = function(bbox) {
     //38.4902,35.7982,38.6193,35.8536
     var regex = /(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*),(-?\d+\.?\d*$)/;
@@ -242,16 +281,23 @@ exports.validateBbox = function(bbox) {
     return null;
 }
 
+/**
+ * updates job with hash's status
+ * We do this in a couple places so figured a function would reduce writing smame things twice.
+ */
 function jobComplete(hash) {
     jobs[hash].status = 'complete';
     console.log(jobs[hash].id + ' complete');
 }
 
+/**
+ * Creates a zip archive of outFile.
+ */
 function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
     var stream = fs.createWriteStream(outZip);
     stream.on('close', function() {
         jobComplete(hash);
-        if (cb) cb();
+        if (cb) cb(); // optional callback function. used now in the multipolygon case so we can unlink each of the input files once the zip is generated.
     });
 
     var zip = archiver('zip');
@@ -270,6 +316,9 @@ function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
     zip.finalize();
 }
 
+/**
+ * Builds the hootenanny command(s) from parts of provided request.
+ */
 function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop) {
     var command = '', overrideTags = null;
     if (queryOverrideTags) {
@@ -335,8 +384,11 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
         + outFile
         ;
 
-    if (doCrop && poly) {
-        command += ' && hoot crop ' + outFile + ' ' + outFile + ' "' + poly + '"';
+    // if the request specifed to crop the output and the request also
+    // has a valid polygon or bbox, crop the output too.
+    // note that we give a polygon precendence to a bbox
+    if (doCrop && (poly || bbox)) {
+        command += ' && hoot crop ' + outFile + ' ' + outFile + ' "' + (poly || bbox) + '"';
     }
     //if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
 
@@ -346,6 +398,11 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
     return command;
 };
 
+/**
+ * Manages request to the node-export service.
+ * If provided job does not yet exist, kicks off the job and returns the hash to the user.
+ * Otherwise, returns the job output, job has if running, or error message if an error occured.
+ */
 function doExport(req, res, hash, input) {
     //Check existing jobs
     var job = jobs[hash];
