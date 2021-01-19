@@ -11,8 +11,7 @@ set -e
 #   b) Same as scenario 2b
 #   c) Any unmerged secondary relation containing rivers may exist in the output changeset.
 #
-# See related notes in ServiceDiffConflateBounds1Test and other ServiceDiffConflateBounds*Test files 
-# for other scenarios.
+# See related notes in other ServiceDiffConflateBounds*Test files for other scenarios.
 
 TEST_NAME=ServiceDiffConflateBounds3Test
 GOLD_DIR=test-files/cmd/glacial/serial/ServiceDiffConflateBoundsTest
@@ -36,14 +35,14 @@ CONVERT_OPTS="-D convert.ops=hoot::RemoveElementsVisitor -D remove.elements.visi
 # The match/merger creators added here are the only difference between this scenario and scenario 1.
 BOUNDS="-117.729492166,40.9881915574,-117.718505838,40.996484138672"
 # TODO: explain way join options
-CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,Relation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D bounds=$BOUNDS -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true -D way.joiner=hoot::WayJoinerBasic -D way.joiner.leave.parent.id=false -D way.joiner.write.parent.id.to.child.id=true"
+CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,Relation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D bounds=$BOUNDS -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true -D way.joiner.write.parent.id.to.child.id=true"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false -D bounds=$BOUNDS"
 
 DEBUG=false
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
   LOG_LEVEL="--trace"
-  LOG_FILTER="-D log.class.filter=MultilineStringMergeRelationCollapser;RelationMerger"
+  LOG_FILTER="-D log.class.filter= "
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
@@ -73,6 +72,7 @@ hoot convert $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS -D debug.maps.filenam
 hoot diff $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $GOLD_DIR/out-3.osm $OUTPUT_DIR/out.osm
 
 # cleanup
-hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_DB_INPUT $SEC_INPUT
-hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_DB_INPUT $CONFLATED
+scripts/database/CleanOsmApiDB.sh
+hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_INPUT
+hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $CONFLATED
 PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

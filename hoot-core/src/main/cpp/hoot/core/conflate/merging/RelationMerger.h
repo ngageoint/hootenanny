@@ -56,19 +56,26 @@ public:
    *
    * @param elementId1 ID of the first relation to merge
    * @param elementId2 ID of the second relation to merge
-   * @param deleteRelation2 TODO
    */
-  void merge(const ElementId& elementId1, const ElementId& elementId2,
-             const bool deleteRelation2 = true);
+  void merge(const ElementId& elementId1, const ElementId& elementId2);
 
   /**
    * @see OsmMapConsumer
    */
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
+  void setMergeTags(bool merge) { _mergeTags = merge; }
+  void setDeleteRelation2(bool deleteRelation) { _deleteRelation2 = deleteRelation; }
+
 private:
 
   OsmMapPtr _map;
+
+  // determines whether tags of the two relations are merged
+  bool _mergeTags;
+  // determines whether the relation whose members were merged into the other relation is deleted;
+  // Useful if members from the same relation are to be merged into multiple other relations
+  bool _deleteRelation2;
 
   bool _writeDebugMaps;
 

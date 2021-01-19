@@ -40,13 +40,14 @@ namespace hoot
 {
 
 RelationMerger::RelationMerger() :
-//_mergeConflatableMembersOnly(false),
+_mergeTags(true),
+_deleteRelation2(true),
 _writeDebugMaps(false) // ONLY ENABLE THIS DURING DEBUGGING
 {
 }
 
 void RelationMerger::merge(
-  const ElementId& elementId1, const ElementId& elementId2, const bool deleteRelation2)
+  const ElementId& elementId1, const ElementId& elementId2)
 {
   if (elementId1.getType() != ElementType::Relation ||
       elementId2.getType() != ElementType::Relation)
@@ -60,21 +61,22 @@ void RelationMerger::merge(
   RelationPtr relation1 = _map->getRelation(elementId1.getId());
   RelationPtr relation2 = _map->getRelation(elementId2.getId());
 
-  LOG_TRACE("Merging tags...");
-  Tags newTags =
-    TagMergerFactory::mergeTags(relation1->getTags(), relation2->getTags(), ElementType::Relation);
-  relation1->setTags(newTags);
+  if (_mergeTags)
+  {
+    LOG_TRACE("Merging tags...");
+    Tags newTags =
+      TagMergerFactory::mergeTags(
+        relation1->getTags(), relation2->getTags(), ElementType::Relation);
+    relation1->setTags(newTags);
+  }
 
   // copy relation 2's members into 1
   const bool allMembersCopied = _mergeMembers(relation1, relation2);
   LOG_VART(allMembersCopied);
 
-  // replace any references to relation 2 with a ref to relation 1
-//  LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
-//  ReplaceElementOp(elementId2, elementId1, true).apply(_map);
-  //if (allMembersCopied)
-  if (deleteRelation2)
+  if (_deleteRelation2)
   {
+    // replace any references to relation 2 with a ref to relation 1
     LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
     ReplaceElementOp(elementId2, elementId1, true).apply(_map);
     // remove all instances of relation 2

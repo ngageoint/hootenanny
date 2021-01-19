@@ -15,8 +15,12 @@ set -e
 #      their parent relations after changeset application. When two relations are merged, if similar
 #      features cannot be matched, there will appear to be duplicated features in the merged 
 #      relation. This is expected and the conflicts must be manually resolved.
-#   c) Any unmerged secondary relation containing features of any type may exist in the output 
-#      changeset.
+#   c) Unmerged secondary relations, in or out of bounds, containing features of any type may exist 
+#      in the output changeset.
+#
+# There should not be any relation with incomplete members (members missing) in the output data.
+# There should be any duplicated features added to the output. Duplicated features can be difficult 
+# to locate without searching for them by name.
 #
 # The original problem leading to the creation of this test and the other related scenario tests was 
 # that because the API DB query was changed at one point to read data in that also includes all 
@@ -69,13 +73,13 @@ SEC_INPUT=$HOOT_DB_URL/$TEST_NAME-sec-input
 hoot convert $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUTPUT_DIR/sec-load-debug.osm -D reader.use.data.source.ids=true  $GOLD_DIR/Input2.osm $SEC_INPUT
 
 # run ref conflate to osm
-SEC_CONFLATED=$HOOT_DB_URL/$TEST_NAME-sec-conflated
-hoot conflate $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true $OSM_API_DB_URL $SEC_INPUT $SEC_CONFLATED --write-bounds
+CONFLATED=$HOOT_DB_URL/$TEST_NAME-conflated
+hoot conflate $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CONFLATE_OPTS -D debug.maps.filename=$OUTPUT_DIR/conflate-debug.osm -D conflate.use.data.source.ids.1=true -D conflate.use.data.source.ids.2=true $OSM_API_DB_URL $SEC_INPUT $CONFLATED --write-bounds
 
 # generate a changeset between the original ref data and the diff calculated in the previous step
-hoot changeset-derive $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm  $OSM_API_DB_URL $SEC_CONFLATED $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
+hoot changeset-derive $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm  $OSM_API_DB_URL $CONFLATED $OUTPUT_DIR/diff.osc.sql $OSM_API_DB_URL
 if [ "$DEBUG" == "true" ]; then
-  hoot changeset-derive $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $OSM_API_DB_URL $SEC_CONFLATED $OUTPUT_DIR/diff.osc
+  hoot changeset-derive $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUTPUT_DIR/changeset-derive-debug.osm $OSM_API_DB_URL $CONFLATED $OUTPUT_DIR/diff.osc
 fi
 
 # apply changeset back to ref
@@ -86,6 +90,7 @@ hoot convert $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $DB_OPTS -D debug.maps.filenam
 hoot diff $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $GOLD_DIR/out-1.osm $OUTPUT_DIR/out.osm
 
 # cleanup
-hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_DB_INPUT $SEC_INPUT
-hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_DB_INPUT $SEC_CONFLATED
+scripts/database/CleanOsmApiDB.sh
+hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_INPUT
+hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $CONFLATED
 PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

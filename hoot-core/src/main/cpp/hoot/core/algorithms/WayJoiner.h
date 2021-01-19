@@ -69,7 +69,9 @@ protected:
 
   /** Debugging flag to leave parent IDs intact for output */
   bool _leavePid;
-  // TODO
+  // If enabled, the ID of any element with a parent ID will be updated with the parent ID's value.
+  // at the end of joinin. In the case of multiple elements with the same parent ID, only the first
+  // element's ID will be updated.
   bool _writePidToChildId;
   /** Pointer to the map to work on */
   OsmMapPtr _map;
@@ -131,7 +133,7 @@ private:
   void _resetParents();
 
   /*
-   * TODO
+   * @see _writePidToChildId
    */
   void _writeParentIdsToChildIds();
 };

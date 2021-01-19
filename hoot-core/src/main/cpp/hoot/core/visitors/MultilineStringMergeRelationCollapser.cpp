@@ -43,6 +43,8 @@ HOOT_FACTORY_REGISTER(ElementVisitor, MultilineStringMergeRelationCollapser)
 MultilineStringMergeRelationCollapser::MultilineStringMergeRelationCollapser() :
 _numRelationMembersModified(0)
 {
+  _relationMerger.setMergeTags(false);
+  _relationMerger.setDeleteRelation2(false);
 }
 
 void MultilineStringMergeRelationCollapser::setOsmMap(OsmMap* map)
@@ -178,7 +180,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
             // the merger from deleting the merged ms relation, we may need to merge it with
             // multiple parent relations and will delete it outside of this loop.
             _relationMerger.merge(
-              relationOwningMsRelation->getElementId(), relation->getElementId(), false);
+              relationOwningMsRelation->getElementId(), relation->getElementId());
           }
 
           _numRelationMembersModified++;

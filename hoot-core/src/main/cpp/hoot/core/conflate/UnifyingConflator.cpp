@@ -344,7 +344,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   QElapsedTimer mergersTimer;
   mergersTimer.start();
 
-  // TODO
+  // Separate mergers that merge relations from other mergers. We want to run them very last.
   std::vector<MergerPtr> relationMergers;
   std::vector<MergerPtr> nonRelationMergers;
   for (std::vector<MergerPtr>::const_iterator mergersItr = _mergers.begin();
