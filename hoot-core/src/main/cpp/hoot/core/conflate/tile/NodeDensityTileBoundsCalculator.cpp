@@ -147,7 +147,8 @@ void NodeDensityTileBoundsCalculator::calculateTiles(const ConstOsmMapPtr& map)
         {
           msg += " Aborting calculation.";
           LOG_ERROR(msg);
-          throw e;
+          //  Rethrow original exception
+          throw;
         }
         else
         {
