@@ -51,7 +51,15 @@ namespace hoot
 {
 
 WayAverager::WayAverager(OsmMapPtr map, WayPtr w1, WayPtr w2) :
-    _map(*map)
+    _map(*map),
+    _meanMovement1(0.0),
+    _meanMovement2(0.0),
+    _sumMovement1(0.0),
+    _sumMovement2(0.0),
+    _maxMovement1(0.0),
+    _maxMovement2(0.0),
+    _moveCount1(0),
+    _moveCount2(0)
 {
   if (w1->getStatus() == Status::Unknown2 && w2->getStatus() == Status::Unknown1)
   {
