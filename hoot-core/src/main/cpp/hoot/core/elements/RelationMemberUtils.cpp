@@ -36,6 +36,8 @@
 #include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
 
 namespace hoot
 {
@@ -347,5 +349,126 @@ bool RelationMemberUtils::relationHasConflatableMember(
   return false;
 }
 
+bool RelationMemberUtils::relationHasAnyMemberWithinBounds(
+  const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
+  const GeometricRelationship& relationship, const ConstOsmMapPtr& map)
+{
+  if (!relation || !bounds || relationship == GeometricRelationship::Invalid || !map)
+  {
+    return false;
+  }
+
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member)
+    {
+      LOG_VART(member->getElementId());
+
+      const bool memberInBounds =
+        ElementGeometryUtils::haveGeometricRelationship(member, bounds, relationship, map);
+      if (memberInBounds)
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool RelationMemberUtils::relationHasAllMembersWithinBounds(
+  const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
+  const GeometricRelationship& relationship, const ConstOsmMapPtr& map)
+{
+  if (!relation || !bounds || relationship == GeometricRelationship::Invalid || !map)
+  {
+    return false;
+  }
+
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member)
+    {
+      LOG_VART(member->getElementId());
+
+      const bool memberInBounds =
+        ElementGeometryUtils::haveGeometricRelationship(member, bounds, relationship, map);
+      if (!memberInBounds)
+      {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+bool RelationMemberUtils::relationHasAnyMemberWithinCurrentBounds(
+  const ConstRelationPtr& relation, const ConstOsmMapPtr& map)
+{
+  return relationHasAnyMemberWithinBounds(relation, ConfigUtils::getBoundsCrit(map), map);
+}
+
+bool RelationMemberUtils::relationHasAllMembersWithinCurrentBounds(
+  const ConstRelationPtr& relation, const ConstOsmMapPtr& map)
+{
+  return relationHasAllMembersWithinBounds(relation, ConfigUtils::getBoundsCrit(map), map);
+}
+
+bool RelationMemberUtils::relationHasAnyMemberWithinBounds(
+  const ConstRelationPtr& relation, const std::shared_ptr<InBoundsCriterion>& boundsCriterion,
+  const ConstOsmMapPtr& map)
+{
+  if (!relation || !boundsCriterion || !map)
+  {
+    return false;
+  }
+
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member)
+    {
+      LOG_VART(member->getElementId());
+
+      const bool memberInBounds = boundsCriterion->isSatisfied(member);
+      if (memberInBounds)
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool RelationMemberUtils::relationHasAllMembersWithinBounds(
+  const ConstRelationPtr& relation, const std::shared_ptr<InBoundsCriterion>& boundsCriterion,
+  const ConstOsmMapPtr& map)
+{
+  if (!relation || !boundsCriterion || !map)
+  {
+    return false;
+  }
+
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member)
+    {
+      LOG_VART(member->getElementId());
+
+      const bool memberInBounds = boundsCriterion->isSatisfied(member);
+      if (!memberInBounds)
+      {
+        return false;
+      }
+    }
+  }
+  return true;
+}
 
 }

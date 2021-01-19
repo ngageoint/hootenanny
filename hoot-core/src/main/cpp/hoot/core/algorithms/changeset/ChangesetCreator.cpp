@@ -591,8 +591,8 @@ ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QStri
 
   ElementInputStreamPtr sortedElements;
 
-  //Some in these datasets may have status=3 if you're loading conflated data, so use
-  //reader.use.file.status and reader.keep.status.tag if you want to retain that value.
+  // Some in these datasets may have status=3 if you're loading conflated data, so use
+  // reader.use.file.status and reader.keep.status.tag if you want to retain that value.
 
   // Only sort if input isn't already sorted.
   if (!_inputIsSorted(input))

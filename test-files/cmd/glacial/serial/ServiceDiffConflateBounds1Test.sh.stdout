@@ -4,20 +4,16 @@
 (1 row)
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=40.9945562, max_lat=41.0367375, min_lon=-117.722977, max_lon=-117.6071629, num_changes=63
+Changeset Details: min_lat=40.9945562, max_lat=41.0367375, min_lon=-117.722977, max_lon=-117.6071629, num_changes=54
 Node(s) Created: 45
 Node(s) Modified: 0
 Node(s) Deleted: 0
-Way(s) Created: 8
-Way(s) Modified: 4
+Way(s) Created: 3
+Way(s) Modified: 6
 Way(s) Deleted: 0
-Relation(s) Created: 1
-Relation(s) Modified: 5
+Relation(s) Created: 0
+Relation(s) Modified: 0
 Relation(s) Deleted: 0
-Total Creations: 54
-Total Modifications: 9
+Total Creations: 48
+Total Modifications: 6
 Total Deletions: 0
-17:53:23.618 WARN   .../hoot/core/io/OsmXmlReader.cpp( 717) Skipping missing Way(217226) in Relation(1161)...
-17:53:23.619 WARN   .../hoot/core/io/OsmXmlReader.cpp( 717) Skipping missing Way(217227) in Relation(1318)...
-17:53:23.619 WARN   .../hoot/core/io/OsmXmlReader.cpp( 717) Skipping missing Way(217228) in Relation(1318)...
-17:53:23.619 WARN   .../hoot/core/io/OsmXmlReader.cpp( 721) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...

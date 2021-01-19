@@ -38,14 +38,15 @@ GENERAL_OPTS="-C UnifyingAlgorithm.conf -C ReferenceConflation.conf -C Testing.c
 DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D hootapi.db.writer.overwrite.map=true -D changeset.user.id=1 -D changeset.max.size=999999" 
 BOUNDS="-117.729492166,40.9881915574,-117.718505838,40.996484138672"
 # The match/merger creators added here are the only difference between this scenario and scenario 1.
+# TODO: explain way join options
 CONFLATE_OPTS="-D match.creators=hoot::ScriptMatchCreator,River.js;hoot::ScriptMatchCreator,Relation.js -D merger.creators=hoot::ScriptMergerCreator;hoot::ScriptMergerCreator -D bounds=$BOUNDS -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true -D way.joiner.write.parent.id.to.child.id=true"
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false -D bounds=$BOUNDS"
 
-DEBUG=true
+DEBUG=false
 if [ "$DEBUG" == "true" ]; then
   GENERAL_OPTS=$GENERAL_OPTS" -D debug.maps.write=true"
-  #LOG_LEVEL="--trace"
-  #LOG_FILTER="-D log.class.filter= "
+  LOG_LEVEL="--trace"
+  LOG_FILTER="-D log.class.filter= "
 fi
 
 scripts/database/CleanAndInitializeOsmApiDb.sh
@@ -78,4 +79,4 @@ hoot diff $LOG_LEVEL $LOG_FILTER $GENERAL_OPTS $GOLD_DIR/out-2.osm $OUTPUT_DIR/o
 scripts/database/CleanOsmApiDB.sh
 hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $SEC_INPUT
 hoot db-delete --warn $GENERAL_OPTS $DB_OPTS $CONFLATED
-PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null
+#PGPASSWORD=$DB_PASSWORD psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

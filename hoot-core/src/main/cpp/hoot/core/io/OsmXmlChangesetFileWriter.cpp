@@ -140,7 +140,8 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
-    // Bounds checking requires a map. Grab the two input maps if they were passed in.
+    // Bounds checking requires a map. Grab the two input maps if they were passed in...one for
+    // each dataset, before changes and after.
     ConstOsmMapPtr map1;
     ConstOsmMapPtr map2;
     if (_map1List.size() > 0)
@@ -178,6 +179,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       {
         continue;
       }
+
       // When multiple changeset providers are passed in, sometimes multiple changes for the same
       // element may exist as a result of combining their results together, so we're skipping those
       // dupes here. Formerly, we only checked for exact duplicate statements and now we're more
@@ -193,6 +195,8 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         LOG_TRACE("Skipping change for element ID already having change: " << _change << "...");
         continue;
       }
+
+      // If a bounds was specified for calculating the changeset, honor it.
       if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
       {
         std::shared_ptr<InBoundsCriterion> boundsCrit;

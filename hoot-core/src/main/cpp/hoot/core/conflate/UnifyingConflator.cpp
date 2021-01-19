@@ -148,8 +148,6 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   // DATA PREP
 
-  //_stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
-
   // will reproject if necessary.
   MapProjector::projectToPlanar(map);
 

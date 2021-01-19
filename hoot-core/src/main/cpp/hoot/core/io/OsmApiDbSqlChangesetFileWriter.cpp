@@ -116,7 +116,8 @@ void OsmApiDbSqlChangesetFileWriter::write(
       "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
-    // Bounds checking requires a map. Grab the two input maps if they were passed in.
+    // Bounds checking requires a map. Grab the two input maps if they were passed in...one for
+    // each dataset, before changes and after.
     ConstOsmMapPtr map1;
     ConstOsmMapPtr map2;
     if (_map1List.size() > 0)
@@ -149,46 +150,76 @@ void OsmApiDbSqlChangesetFileWriter::write(
       LOG_TRACE("Reading next SQL change...");
       Change change = changesetProvider->readNextChange();
       LOG_VART(change.toString());
+      ConstElementPtr changeElement = change.getElement();
 
-      if (!change.getElement())
+      if (!changeElement)
       {
         continue;
       }
+
       // See related note in OsmXmlChangesetFileWriter::write.
-      if (_parsedChangeIds.contains(change.getElement()->getElementId()))
+      if (_parsedChangeIds.contains(changeElement->getElementId()))
       {
         LOG_TRACE("Skipping change for element ID already having change: " << change << "...");
         continue;
       }
+
+      // If a bounds was specified for calculating the changeset, honor it.
       if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled())
       {
-        LOG_TRACE(
-          "Checking bounds requirement for " << change.getElement()->getElementId() << "...");
+        LOG_TRACE("Checking bounds requirement for " << changeElement->getElementId() << "...");
 
+        // Pick the map and bounds crit based on the status of the element involved in the current
+        // change being processed.
         std::shared_ptr<InBoundsCriterion> boundsCrit;
-        // map2 takes precedence over map 1, since map2 represents the changed set of the data
-        // (its possible we don't need map1 at all here...not sure).
-        if (map2 && boundsCrit2 && map2->containsElement(change.getElement()))
+        ConstOsmMapPtr map;
+        if (map1 && changeElement->getStatus() == Status::Unknown1 &&
+            map1->containsElement(changeElement))
         {
-          boundsCrit = boundsCrit2;
-        }
-        else if (map1 && boundsCrit1 && map1->containsElement(change.getElement()))
-        {
+          map = map1;
           boundsCrit = boundsCrit1;
+        }
+        else if (map2 &&
+                 (changeElement->getStatus() == Status::Unknown2 ||
+                  changeElement->getStatus() == Status::Conflated) &&
+                 map2->containsElement(changeElement))
+        {
+          map = map2;
+          boundsCrit = boundsCrit2;
         }
         else
         {
-          LOG_TRACE(change.getElement()->getElementId() << " not found in map for bounds check.");
+          LOG_TRACE(changeElement->getElementId() << " not found in map for bounds check.");
         }
-        LOG_VART(boundsCrit.get());
-        if (boundsCrit)
+        if (boundsCrit && map)
         {
-          LOG_VART(boundsCrit->isSatisfied(change.getElement()));
-        }
-        if (boundsCrit && !boundsCrit->isSatisfied(change.getElement()))
-        {
-          LOG_TRACE("Skipping change with out of bounds element: " << change << "...");
-          continue;
+          // If we're dealing with a relation from the new data (secondary; status = 2 or
+          // conflated), we're requiring that all of its members be within bounds for it to be used
+          // in the changeset. If this isn't done, relations may end up incomplete with missing
+          // members. We don't worry about this for ref data, as we're assuming our ref data store
+          // has all of its relation member data intact.
+          if (changeElement->getElementType() == ElementType::Relation &&
+              (changeElement->getStatus() == Status::Unknown2 ||
+               changeElement->getStatus() == Status::Conflated))
+          {
+            if (!RelationMemberUtils::relationHasAllMembersWithinBounds(
+                  std::dynamic_pointer_cast<const Relation>(changeElement), boundsCrit, map))
+            {
+              LOG_TRACE(
+                "Skipping change with relation containing out of bounds element: " << change <<
+                "...");
+              continue;
+            }
+          }
+          else
+          {
+            LOG_VART(boundsCrit->isSatisfied(changeElement));
+            if (!boundsCrit->isSatisfied(changeElement))
+            {
+              LOG_TRACE("Skipping change with out of bounds element: " << change << "...");
+              continue;
+            }
+          }
         }
       }
 
@@ -196,13 +227,13 @@ void OsmApiDbSqlChangesetFileWriter::write(
       switch (change.getType())
       {
         case Change::Create:
-          _createNewElement(change.getElement());
+          _createNewElement(changeElement);
           break;
         case Change::Modify:
-          _updateExistingElement(change.getElement());
+          _updateExistingElement(changeElement);
           break;
         case Change::Delete:
-          _deleteExistingElement(change.getElement());
+          _deleteExistingElement(changeElement);
           break;
         case Change::Unknown:
           // see comment in ChangesetDeriver::_nextChange() when
@@ -214,12 +245,12 @@ void OsmApiDbSqlChangesetFileWriter::write(
 
       if (change.getType() != Change::Unknown)
       {
-        if (change.getElement()->getElementType().getEnum() == ElementType::Node)
+        if (changeElement->getElementType().getEnum() == ElementType::Node)
         {
-          ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
+          ConstNodePtr node = std::dynamic_pointer_cast<const Node>(changeElement);
           _changesetBounds.expandToInclude(node->getX(), node->getY());
         }
-        _parsedChangeIds.append(change.getElement()->getElementId());
+        _parsedChangeIds.append(changeElement->getElementId());
         changes++;
       }
     }
