@@ -760,11 +760,11 @@ void BuildingMerger::_fixStatuses(OsmMapPtr map)
   {
     if (secondElement->getStatus() == Status::Unknown1)
     {
-      firstElement->getStatus() == Status::Unknown2;
+      firstElement->setStatus(Status::Unknown2);
     }
     else if (secondElement->getStatus() == Status::Unknown2)
     {
-      firstElement->getStatus() == Status::Unknown1;
+      firstElement->setStatus(Status::Unknown1);
     }
   }
   else if (secondElement->getStatus() == Status::Conflated &&
@@ -772,11 +772,11 @@ void BuildingMerger::_fixStatuses(OsmMapPtr map)
   {
     if (firstElement->getStatus() == Status::Unknown1)
     {
-      secondElement->getStatus() == Status::Unknown2;
+      secondElement->setStatus(Status::Unknown2);
     }
     else if (firstElement->getStatus() == Status::Unknown2)
     {
-      secondElement->getStatus() == Status::Unknown1;
+      secondElement->setStatus(Status::Unknown1);
     }
   }
 }
