@@ -319,7 +319,7 @@ function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
 /**
  * Builds the hootenanny command(s) from parts of provided request.
  */
-function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop, ignoreSourceIds, mutlipleInputs) {
+function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop, ignoreSourceIds) {
     var command = '', overrideTags = null;
     if (queryOverrideTags) {
         if (queryOverrideTags === 'true') { //if it's true
@@ -383,10 +383,7 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
     if (ignoreSourceIds)
         command += ' -D reader.use.data.source.ids=false'
 
-    if (mutlipleInputs)
-        command += ' ' + input + ' ' + outFile;
-    else
-        command += ' "' + input + '" ' + outFile;
+    command += ' ' + input + ' ' + outFile;
 
     // if the request specifed to crop the output and the request also
     // has a valid polygon or bbox, crop the output too.
@@ -542,7 +539,7 @@ function doExport(req, res, hash, input) {
                     //also by ingoring source ids we prevent bad side-effects that can occur when negative ids in the inputs collide.
                     //this can arise when the crop command adds nodes (that have negative ids) when clipping the dataset.
                     //if we were to use source ids, rings' the negative id collisions generate  unexpected outputs like two roads snapping together that you would and orphan nodes.
-                    var command = buildCommand(req.params.schema, req.query.overrideTags, null, null, isFile, rings.join(' '), outDir, outFile, false, true, true);
+                    var command = buildCommand(req.params.schema, req.query.overrideTags, null, null, isFile, rings.join(' '), outDir, outFile, false, true);
 
                     console.log(command);
                     exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
