@@ -78,6 +78,8 @@ public:
   RubberSheet();
   virtual ~RubberSheet() = default;
 
+  RubberSheet* clone() const { return new RubberSheet(*this); }
+
   /**
    * @see OsmMapOperation
    */

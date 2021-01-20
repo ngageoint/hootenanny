@@ -77,6 +77,9 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 
   // determine tie points with rubbersheeting
   const std::vector<double> tiePointDistances = _getTiePointDistances(filteredMap);
+//  TESTING
+//  LOG_VARI(tiePointDistances);
+//  END TESTING
   if (tiePointDistances.size() == 0)
   {
     // no tie points found, so use CE
@@ -89,6 +92,9 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 
   // calc the optimium search radius based off of the tie points
   _calculateSearchRadius(tiePointDistances);
+//  TESTING
+//  LOG_VARI(_result);
+//  END TESTING
 }
 
 OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
@@ -130,42 +136,54 @@ OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
 std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map)
 {
   std::vector<double> tiePointDistances;
-
-  std::shared_ptr<RubberSheet> rubberSheet(new RubberSheet());
-  rubberSheet->setReference(_rubberSheetRef);
-  rubberSheet->setMinimumTies(_minTies);
-  rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
-  rubberSheet->setLogWarningWhenRequirementsNotFound(false);
-  try
+  //  First check if there is a cached RubberSheet before creating a new one
+//  TESTING
+//  std::shared_ptr<RubberSheet> rubberSheet;
+  std::shared_ptr<RubberSheet> rubberSheet = map->getCachedRubberSheet();
+//  END TESTING
+  if (!rubberSheet)
   {
-    rubberSheet->calculateTransform(map);
-  }
-  catch (const HootException& e)
-  {
-    // In many cases, the input map will have already been cleaned by this point...but possibly not
-    // (direct call to the stats command, for example). So, try to clean it and re-run to get around
-    // this error.
-    LOG_DEBUG("Rubber sheeting error: " << e.getWhat());
-    LOG_DEBUG(
-      "An error occurred calculating the rubber sheet transform during automatic search radius " <<
-      "calculation.  Cleaning the data and attempting to calculate the transform again...");
+//LOG_ERROR("Re-RubberSheeting");
+    rubberSheet.reset(new RubberSheet());
+    rubberSheet->setReference(_rubberSheetRef);
+    rubberSheet->setMinimumTies(_minTies);
+    rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
+    rubberSheet->setLogWarningWhenRequirementsNotFound(false);
     try
     {
-      MapCleaner().apply(map);
-
-      rubberSheet.reset(new RubberSheet());
-      rubberSheet->setReference(_rubberSheetRef);
-      rubberSheet->setMinimumTies(_minTies);
-      rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
-      rubberSheet->setLogWarningWhenRequirementsNotFound(false);
       rubberSheet->calculateTransform(map);
     }
     catch (const HootException& e)
     {
-      // after the second try, we give up
-      return tiePointDistances;
+      // In many cases, the input map will have already been cleaned by this point...but possibly not
+      // (direct call to the stats command, for example). So, try to clean it and re-run to get around
+      // this error.
+      LOG_DEBUG("Rubber sheeting error: " << e.getWhat());
+      LOG_DEBUG(
+        "An error occurred calculating the rubber sheet transform during automatic search radius " <<
+        "calculation.  Cleaning the data and attempting to calculate the transform again...");
+      try
+      {
+        MapCleaner().apply(map);
+
+        rubberSheet.reset(new RubberSheet());
+        rubberSheet->setReference(_rubberSheetRef);
+        rubberSheet->setMinimumTies(_minTies);
+        rubberSheet->setFailWhenMinimumTiePointsNotFound(false);
+        rubberSheet->setLogWarningWhenRequirementsNotFound(false);
+        rubberSheet->calculateTransform(map);
+      }
+      catch (const HootException&)
+      {
+        // after the second try, we give up
+        return tiePointDistances;
+      }
     }
   }
+//  else
+//  {
+//    LOG_ERROR("Using cached RubberSheet");
+//  }
 
   try
   {

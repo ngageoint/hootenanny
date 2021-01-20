@@ -171,6 +171,8 @@ void CopyMapSubsetOp::apply(OsmMapPtr& map)
   std::set<ElementId> eids = v.getElementsAdded();
   LOG_VART(eids.size());
   _eidsCopied.insert(eids.begin(), eids.end());
+  //  Copy the cached rubbersheet if it exists
+  map->setCachedRubberSheet(_from->getCachedRubberSheet());
 }
 
 }

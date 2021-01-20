@@ -31,23 +31,24 @@
 #include <geos/geom/LineString.h>
 
 // Hoot
+#include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/conflate/IdSwap.h>
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/elements/ElementId.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMapListener.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/SignalCatcher.h>
 #include <hoot/core/util/Validate.h>
-#include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/util/StringUtils.h>
 using namespace hoot::elements;
 
@@ -107,10 +108,6 @@ OsmMap::OsmMap(const ConstOsmMapPtr& map, const std::shared_ptr<OGRSpatialRefere
   _srs = srs;
   _initCounters();
   _enableProgressLogging = true;
-}
-
-OsmMap::~OsmMap()
-{
 }
 
 void OsmMap::_initCounters()
@@ -413,6 +410,7 @@ void OsmMap::_copy(const ConstOsmMapPtr& from)
   _roundabouts = from->getRoundabouts();
   _idSwap = from->getIdSwap();
   _name = from->getName();
+  _cachedRubberSheet = from->_cachedRubberSheet;
 
   int i = 0;
   const RelationMap& allRelations = from->getRelations();
