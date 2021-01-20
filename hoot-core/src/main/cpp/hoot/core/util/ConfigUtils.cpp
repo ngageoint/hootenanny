@@ -78,7 +78,7 @@ std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsCrit(const ConstOsmMapP
 {
   std::shared_ptr<InBoundsCriterion> boundsCrit;
   const QString boundsStr = ConfigOptions().getBounds().trimmed();
-  LOG_VARD(boundsStr);
+  LOG_VART(boundsStr);
   if (!boundsStr.isEmpty())
   {
     const GeometricRelationship boundsRelationship = ConfigUtils::getBoundsRelationship();
@@ -96,6 +96,7 @@ std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsCrit(const ConstOsmMapP
     boundsCrit->setBounds(bounds);
     boundsCrit->setOsmMap(map.get());
   }
+  LOG_VART(boundsCrit.get());
   return boundsCrit;
 }
 
