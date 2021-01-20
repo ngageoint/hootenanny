@@ -247,8 +247,6 @@ public:
    */
   void loadTest()
   {
-    QString hootHome(getenv("HOOT_HOME"));
-
     OsmSchema& uut = OsmSchema::getInstance();
 
     QFile fp("tmp/schema.dot");

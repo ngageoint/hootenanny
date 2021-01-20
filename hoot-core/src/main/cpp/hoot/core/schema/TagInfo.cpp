@@ -33,6 +33,7 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
@@ -97,7 +98,7 @@ QString TagInfo::_getInfo(const QString& input)
   std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
   {
-    ogrReader->setSchemaTranslationScript(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
+    ogrReader->setSchemaTranslationScript(ConfPath::getHootHome() + "/translations/quick.js");
 
     QStringList layers;
     if (inputInfo.contains(";"))

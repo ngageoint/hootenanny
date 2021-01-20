@@ -27,8 +27,9 @@
 #include "ScriptTestSuite.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
 #include <hoot/core/HootConfig.h>
+#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QDir>
@@ -39,9 +40,9 @@ namespace hoot
 
 ScriptTestSuite::ScriptTestSuite(QString dir, bool printDiff, double waitTimeSec,
                                  bool hideDisableTests, bool suppressFailureDetail) :
-TestSuite(dir.toStdString())
+TestSuite((ConfPath::getHootHome() + "/" + dir).toStdString())
 {
-  QDir d(dir);
+  QDir d(ConfPath::getHootHome() + "/" + dir);
   QStringList files = d.entryList(QDir::Files);
   QStringList ignorePrefix;
 
