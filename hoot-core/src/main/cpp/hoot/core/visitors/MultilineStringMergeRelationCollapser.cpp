@@ -111,7 +111,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
   // The criteria used here was set up in setConfiguration.
   if (!_criteriaSatisfied(e))
   {
-    LOG_TRACE("Element did not satisfy criteria: " << e->getElementId() << ". Skipping...");
+    LOG_TRACE(e->getElementId() << " did not satisfy criteria: " << toString() << ". Skipping...");
     return;
   }
 
