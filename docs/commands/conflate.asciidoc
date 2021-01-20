@@ -26,13 +26,18 @@ changeset will be written, instead of an OSM map.
 * +--write-bounds+    - If the `bounds` configuration option is specified, optionally outputs a file containing the input bounds.
                         The location of the file is controlled via the `bounds.output.file` configuration option.
 
-=== Feature Filtering
+=== Feature Tag Filtering
 
 A subset of input features may be conflated by specifying the 'conflate.tag.filter' configuration option.  The option allows for JSON
 feature tag filtering by specifying either inline JSON or the path to a JSON file.  For more information, see the "Feature Filtering"
 section of the Hootenanny User Guide.
 
-TODO: add section here about bounds option
+=== Filtering Features Geographically
+
+If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration 
+option documentation for formats), conflation will conflate data only from within the specified 
+bounds. The `bounds.*` configuration options allow for further customization of the bounds 
+requirement.
 
 === Usage
 

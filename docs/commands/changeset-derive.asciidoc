@@ -49,7 +49,12 @@ hoot changeset-derive inputData.osm "" outputChangeset.osc.sql osmapidb://userna
 
 Changeset deriviation supports inline conversion operations with the `convert.ops` configuration option. See the https://github.com/ngageoint/hootenanny/blob/master/docs/commands/convert.asciidoc#conversion-operations[Conversion Operations] section of the `convert` command documentation for details.
 
-TODO: add section here about bounds option
+=== Filtering Features Geographically
+
+If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration 
+option documentation for formats), changeset derivation will ignore data outside of the bounds when
+generating changeset statements. The `bounds.*` configuration options allow for further 
+customization of the bounds requirement.
 
 === Sorting
 
