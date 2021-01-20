@@ -34,7 +34,6 @@
 #include <hoot/core/elements/RelationMemberComparison.h>
 #include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/conflate/ConflateUtils.h>
 
 namespace hoot
 {
@@ -42,7 +41,9 @@ namespace hoot
 RelationMerger::RelationMerger() :
 _mergeTags(true),
 _deleteRelation2(true),
-_writeDebugMaps(false) // ONLY ENABLE THIS DURING DEBUGGING
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// a very large number of files.
+_writeDebugMaps(true)
 {
 }
 

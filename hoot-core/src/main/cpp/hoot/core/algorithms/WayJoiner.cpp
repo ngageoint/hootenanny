@@ -82,6 +82,7 @@ void WayJoiner::join(const OsmMapPtr& map)
   if (_writePidToChildId)
   {
     _writeParentIdsToChildIds();
+    OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-write-parent-ids-to-child-ids");
   }
 
   LOG_VARD(_leavePid);
@@ -89,6 +90,7 @@ void WayJoiner::join(const OsmMapPtr& map)
   {
     //  Clear out any remaining unjoined parent ids
     _resetParents();
+    OsmMapWriterFactory::writeDebugMap(map, "after-way-joiner-remove-parent-ids");
   }
 }
 
@@ -272,6 +274,10 @@ void WayJoiner::_writeParentIdsToChildIds()
         way->getElementId());
       ElementPtr newWay(way->clone());
       newWay->setId(pid);
+      if (newWay->hasTag(MetadataTags::HootId()))
+      {
+        newWay->setTag(MetadataTags::HootId(), QString::number(pid));
+      }
       _map->replace(way, newWay);
       pidsUsed.insert(pid);
     }

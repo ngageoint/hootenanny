@@ -50,6 +50,7 @@
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
+#include <hoot/core/ops/WayJoinerOp.h>
 
 // standard
 #include <algorithm>
@@ -74,7 +75,8 @@ UnifyingConflator::UnifyingConflator() :
 _matchFactory(MatchFactory::getInstance()),
 _settings(Settings::getInstance()),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-// WARNING: Enabling this could result in a lot of files being generated. Use for debugging only.
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// a very large number of files.
 _writeDebugMaps(true)
 {
   _reset();
@@ -331,16 +333,9 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   allMatches.clear();
   _matches.clear();
 
-  // MERGE
-
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
   _mapElementIdsToMergers();
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-
-  _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
-
-  QElapsedTimer mergersTimer;
-  mergersTimer.start();
 
   // Separate mergers that merge relations from other mergers. We want to run them very last.
   std::vector<MergerPtr> relationMergers;
@@ -363,17 +358,33 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   LOG_VARD(_mergers.size());
   LOG_VARD(relationMergers.size());
 
+  _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
+
+  // TODO
+//  WayJoinerOp wayJoiner;
+//  wayJoiner.setConfiguration(conf());
+//  LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
+//  wayJoiner.apply(map);
+//  LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
+//  OsmMapWriterFactory::writeDebugMap(map, "after-way-joining");
+
+  // MERGE
+
+  QElapsedTimer mergersTimer;
+  mergersTimer.start();
+
   LOG_INFO(
     "Applying " << StringUtils::formatLargeNumber(_mergers.size() + relationMergers.size()) <<
     " mergers...");
   _applyMergers(_mergers, map);
   _applyMergers(relationMergers, map);
+
   MemoryUsageChecker::getInstance().check();
   OsmMapWriterFactory::writeDebugMap(map, "after-merging");
 
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
   const size_t mergerCount = _mergers.size() + relationMergers.size();
-  // free up any used resources.
+  // free up any used resources
   _reset();
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
   double mergersTime = timer.getElapsedAndRestart();

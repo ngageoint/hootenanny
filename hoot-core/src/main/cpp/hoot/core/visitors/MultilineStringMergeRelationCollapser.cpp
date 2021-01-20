@@ -176,11 +176,14 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
           {
             RelationPtr relationOwningMsRelation =
               std::const_pointer_cast<Relation>(*owningRelationsItr);
-            // Use relation merger here, as will make the member insert indexes be correct. Prevent
-            // the merger from deleting the merged ms relation, we may need to merge it with
-            // multiple parent relations and will delete it outside of this loop.
-            _relationMerger.merge(
-              relationOwningMsRelation->getElementId(), relation->getElementId());
+            if (relationOwningMsRelation)
+            {
+              // Use relation merger here, as will make the member insert indexes be correct.
+              // Prevent the merger from deleting the merged ms relation, we may need to merge it
+              // with multiple parent relations and will delete it outside of this loop.
+              _relationMerger.merge(
+                relationOwningMsRelation->getElementId(), relation->getElementId());
+            }
           }
 
           _numRelationMembersModified++;

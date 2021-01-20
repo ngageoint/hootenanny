@@ -83,8 +83,8 @@ _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations
   (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations()),
 _matchedBy(HighwayMatch::MATCH_NAME),
-// ENABLE THE OsmMapWriterFactory::writeDebugMap CALLS FOR SMALL DATASETS DURING DEBUGGING ONLY.
-// writes a map file for each road merge
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// a very large number of files.
 _writeDebugMaps(false)
 {
   LOG_VART(_markAddedMultilineStringRelations);

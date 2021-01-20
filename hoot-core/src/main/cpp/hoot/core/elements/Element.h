@@ -118,6 +118,7 @@ public:
   const Tags& getTags() const { return _getElementData().getTags(); }
   Tags& getTags() { return _getElementData().getTags(); }
   QString getTag(const QString& key) const { return _getElementData().getTags().get(key); }
+  bool hasTag(const QString& key) const { return _getElementData().getTags().contains(key); }
   int getTagCount() const { return _getElementData().getTags().size(); }
 
   bool hasCircularError() const { return _getElementData().hasCircularError(); }

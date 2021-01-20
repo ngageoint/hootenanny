@@ -490,7 +490,7 @@ int ConflateCmd::runSimple(QStringList& args)
       " total.");
   }
 
-  // doing this after the conflate post ops run, since some invalid reviews are removed by them
+  // Doing this after the conflate post ops run, since some invalid reviews are removed by them.
   progress.set(_getJobPercentComplete(currentTask - 1), "Counting feature reviews...");
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
