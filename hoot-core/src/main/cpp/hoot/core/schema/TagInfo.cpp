@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "TagInfo.h"
@@ -33,6 +33,7 @@
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Settings.h>
 #include <hoot/core/util/StringUtils.h>
@@ -97,7 +98,7 @@ QString TagInfo::_getInfo(const QString& input)
   std::shared_ptr<OgrReader> ogrReader = std::dynamic_pointer_cast<OgrReader>(reader);
   if (ogrReader.get())
   {
-    ogrReader->setSchemaTranslationScript(QString(getenv("HOOT_HOME")) + "/translations/quick.js");
+    ogrReader->setSchemaTranslationScript(ConfPath::getHootHome() + "/translations/quick.js");
 
     QStringList layers;
     if (inputInfo.contains(";"))

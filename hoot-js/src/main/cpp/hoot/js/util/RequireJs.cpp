@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RequireJs.h"
 
 // hoot
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/Settings.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/PluginContext.h>
 #include <hoot/js/io/DataConvertJs.h>
@@ -69,7 +70,7 @@ void RequireJs::jsRequire(const FunctionCallbackInfo<Value>& args)
     The new Hoot "include" files are all under $HOOT_HOME/translations & $HOOT_HOME/translations_local
     */
 
-    const QString hootHome = QString(getenv("HOOT_HOME"));
+    const QString hootHome = ConfPath::getHootHome();
     if (hootHome.isEmpty())
     {
       throw HootException("$HOOT_HOME is empty.");

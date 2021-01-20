@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "EdgeDistanceExtractor.h"
 
@@ -163,8 +163,7 @@ double EdgeDistanceExtractor::_oneDistance(const OsmMap& map,
     return -1;
   }
 
-  const double result = _aggregator->aggregate(distances);
-  return result;
+  return _aggregator->aggregate(distances);
 }
 
 std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(const OsmMap& map,

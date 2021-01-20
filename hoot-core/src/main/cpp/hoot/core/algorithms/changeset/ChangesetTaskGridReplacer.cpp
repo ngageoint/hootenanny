@@ -111,7 +111,8 @@ OsmMapPtr ChangesetTaskGridReplacer::replace(
       }
       else
       {
-        throw e;
+        //  Rethrow original exception
+        throw;
       }
     }
 

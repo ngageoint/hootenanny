@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HilbertRTree.h"
@@ -95,7 +95,7 @@ void HilbertRTree::_calculateHilbertValues(const std::vector<Box>& boxes,
     bounds.expand(boxes[i]);
   }
 
-  double boundsWidth[Box::MAX_DIMENSIONS];
+  double boundsWidth[Box::MAX_DIMENSIONS] = { 0.0 };
   for (int i = 0; i < bounds.getDimensions(); i++)
   {
     boundsWidth[i] = bounds.getUpperBoundRaw(i) - bounds.getLowerBoundRaw(i);
@@ -367,7 +367,7 @@ int HilbertRTree::_splitBoxes(BoxVector& boxes)
   {
     bounds.expand(boxes[i].box);
   }
-  double boundsWidth[Box::MAX_DIMENSIONS];
+  double boundsWidth[Box::MAX_DIMENSIONS] = { 0.0 };
   for (int i = 0; i < bounds.getDimensions(); i++)
   {
     boundsWidth[i] = bounds.getUpperBoundRaw(i) - bounds.getLowerBoundRaw(i);

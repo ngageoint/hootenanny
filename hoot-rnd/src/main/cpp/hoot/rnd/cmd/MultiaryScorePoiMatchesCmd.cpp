@@ -22,25 +22,26 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/rnd/scoring/multiary/MultiaryMatchComparator.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
-#include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/rnd/conflate/multiary/MultiaryUtilities.h>
+#include <hoot/rnd/scoring/multiary/MultiaryMatchComparator.h>
+#include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -177,7 +178,7 @@ public:
     hashVisitor.setIncludeCircularError(true);
     map->visitRw(hashVisitor);
 
-    OsmMapWriterFactory::write(map, "/tmp/score-matches-after-prep.osm");
+    OsmMapWriterFactory::write(map, ConfPath::getHootHome() + "/tmp/score-matches-after-prep.osm");
     MapProjector::projectToPlanar(map);
 
     std::shared_ptr<MatchThreshold> mt;

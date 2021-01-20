@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchGraph.h"
 
@@ -67,14 +67,15 @@ class MatchEdge
 {
 public:
 
-  MatchEdge() : match(0) {}
-  MatchEdge(ConstMatchPtr m) : match(m) {}
-
   typedef enum
   {
     AssociatedWith,
-    MatchWith
+    MatchWith,
+    InvalidMatch
   } MatchType;
+
+  MatchEdge() : match(0), type(InvalidMatch) {}
+  MatchEdge(ConstMatchPtr m, MatchType t) : match(m), type(t) {}
 
   ConstMatchPtr match;
   MatchType type;
@@ -254,8 +255,7 @@ private:
 
   void _addMatchWith(ConstMatchPtr m)
   {
-    MatchEdge matchWith(m);
-    matchWith.type = MatchEdge::MatchWith;
+    MatchEdge matchWith(m, MatchEdge::MatchWith);
 
     // add an edge for each of the match pairs (typically just one match pair)
     set<pair<ElementId, ElementId>> eids = m->getMatchPairs();

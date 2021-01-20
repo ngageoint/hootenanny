@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TESTUTILS_H
@@ -263,10 +263,12 @@ protected:
     ResetAll
   };
 
-  /** Constructor to set the paths, default reset to none, and create the output path if needed */
+  /** Constructor to set the paths to begin with $HOOT_HOME if used, default reset to none,
+   *  and create the output path if needed
+   */
   HootTestFixture(const QString& inputPath = UNUSED_PATH, const QString& outputPath = UNUSED_PATH)
-    : _inputPath(inputPath),
-      _outputPath(outputPath),
+    : _inputPath((inputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + inputPath : inputPath),
+      _outputPath((outputPath != UNUSED_PATH) ? ConfPath::getHootHome() + "/" + outputPath : outputPath),
       _reset(ResetNone)
   {
     if (outputPath != UNUSED_PATH)
