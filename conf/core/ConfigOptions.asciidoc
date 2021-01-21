@@ -5309,7 +5309,8 @@ If enabled, WayJoinerOp will leave a way's parent ID populated after joining.
 
 If enabled, at the end of way joining `WayJoinerOp` will replace the ID of any element with a
 parent ID with the parent ID's value. In the case of multiple elements with the same parent ID, only
-the first element's ID will be updated.
+the first element's ID will be updated. This can be useful when performing a bounded conflate and
+the source data has relation with some members falling outside of the bounds.
 
 === way.matcher.heading.delta
 

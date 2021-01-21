@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -118,12 +119,28 @@ public:
         QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
     }
 
+    // TODO: We may need to further restrict this to only data with relation having oob members due
+    // to full hydration (would then need to move this to inside ChangesetCreator).
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      _updateConfigOptionsForBounds();
+    }
+
     ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
 
     LOG_STATUS(
       "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
+  }
+
+private:
+
+  void _updateConfigOptionsForBounds()
+  {
+    // If we're working with a bounds, we need to ensure that reference features outside of the
+    // bounds don't get deleted.
+    conf().set(ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey(), false);
   }
 };
 

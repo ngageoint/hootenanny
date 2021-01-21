@@ -282,6 +282,7 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     _updateConfigOptionsForAttributeConflation();
   }
+
   if (isDiffConflate)
   {
     _updateConfigOptionsForDifferentialConflation();
@@ -289,6 +290,13 @@ int ConflateCmd::runSimple(QStringList& args)
   if (isDiffConflate || isAttributeConflate)
   {
     _disableRoundaboutRemoval();
+  }
+
+  // TODO: We may need to further restrict this to only data with relation having oob members due
+  // to full hydration (would then need to move this after the data load).
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    _updateConfigOptionsForBounds();
   }
 
   if (_filterOps)
@@ -729,6 +737,13 @@ void ConflateCmd::_updateConfigOptionsForDifferentialConflation()
   ConfigUtils::removeListOpEntry(
     ConfigOptions::getConflatePostOpsKey(),
     QString::fromStdString(RoadCrossingPolyReviewMarker::className()));
+}
+
+void ConflateCmd::_updateConfigOptionsForBounds()
+{
+  // If we're working with a bounds, we need to ensure that IDs of the original ref parents created
+  // by a split operation are applied to their split children.
+  conf().set(ConfigOptions::getWayJoinerWriteParentIdToChildIdKey(), true);
 }
 
 }

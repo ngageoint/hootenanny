@@ -76,6 +76,7 @@ private:
 
   void _updateConfigOptionsForAttributeConflation();
   void _updateConfigOptionsForDifferentialConflation();
+  void _updateConfigOptionsForBounds();
   void _disableRoundaboutRemoval();
   void _checkForTagValueTruncationOverride();
 
