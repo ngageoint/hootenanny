@@ -111,17 +111,6 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
       "Ignoring OSM API database URL: " << _osmApiDbUrl << " for non-SQL changeset output...");
   }
 
-  const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-  QString msg =
-    "Creating changeset from " + input1.right(maxFilePrintLength) + " and " +
-    input2.right(maxFilePrintLength);
-  if (ConfigUtils::boundsOptionEnabled())
-  {
-    msg += " over bounds: " + ConfigUtils::getBoundsString().right(maxFilePrintLength);
-  }
-  msg += " and writing the output to " + output.right(maxFilePrintLength) + "...";
-  LOG_PROGRESS(msg);
-
   // write the output dir now so we don't get a nasty surprise at the end of a long job that it
   // can't be written
   IoUtils::writeOutputDir(output);
@@ -166,11 +155,15 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   _currentTaskNum = 1;
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-
-  progress.set(
-    0.0,
+  QString msg =
     "Deriving output changeset: ..." + output.right(maxFilePrintLength) + " from inputs: ..." +
-    input1.right(maxFilePrintLength) + " and ..." + input2.right(maxFilePrintLength) + "...");
+    input1.right(maxFilePrintLength) + " and ..." + input2.right(maxFilePrintLength);
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    msg += " over bounds: ..." + ConfigUtils::getBoundsString().right(maxFilePrintLength);
+  }
+  msg += "...";
+  progress.set(0.0, msg);
 
   //sortedElements1 is the former state of the data
   ElementInputStreamPtr sortedElements1;
