@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="bobby.simic" id="32" context="default">
+        <comment>
+        Adding foreign key constraint to folders so that parent folder can't be deleted when child exists.
+        </comment>
+
+        <dropNotNullConstraint tableName="folders" columnName="parent_id" />
+
+        <update tableName="folders">
+            <column name="parent_id" value="NULL" />
+            <where> id=0 AND parent_id=-1 </where>
+        </update>
+
+        <addForeignKeyConstraint
+            baseColumnNames="parent_id"
+            baseTableName="folders"
+            constraintName="fk_folders_parent_id"
+            deferrable="true"
+            initiallyDeferred="true"
+            onDelete="CASCADE"
+            onUpdate="RESTRICT"
+            referencedColumnNames="id"
+            referencedTableName="folders" />
+
+    </changeSet>
+</databaseChangeLog>
