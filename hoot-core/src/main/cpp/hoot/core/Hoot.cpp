@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "Hoot.h"
 
@@ -36,8 +36,9 @@
 #include <geos/version.h>
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfPath.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
@@ -85,7 +86,7 @@ void Hoot::_init()
 # ifdef TGS_HAVE_LIBSTXXL
   // initialize the environment variable for loading STXXL configuration. If the environment
   // variable has already been set then don't overwrite it (that is the 0 at the end).
-  QString stxxlConf = QString(getenv("HOOT_HOME")) + "/conf/core/stxxl.conf";
+  QString stxxlConf = ConfPath::getHootHome() + "/conf/core/stxxl.conf";
   Tgs::Stxxl::getInstance().setConfig(stxxlConf);
 # endif
 

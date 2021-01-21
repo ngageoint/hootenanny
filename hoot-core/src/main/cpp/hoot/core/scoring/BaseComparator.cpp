@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "BaseComparator.h"
@@ -197,7 +197,7 @@ void BaseComparator::_saveImage(cv::Mat& image, QString path, double max, bool g
 
   QImage qImage(_width, _height, QImage::Format_ARGB32);
 
-  QRgb rgb;
+  QRgb rgb = 0;
   if (max > 0.0)
   {
     for (int y = 0; y < _height; y++)

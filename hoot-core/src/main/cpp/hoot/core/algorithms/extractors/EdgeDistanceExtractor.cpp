@@ -167,8 +167,7 @@ double EdgeDistanceExtractor::_oneDistance(
     return -1;
   }
 
-  const double result = _aggregator->aggregate(distances);
-  return result;
+  return _aggregator->aggregate(distances);
 }
 
 std::shared_ptr<Geometry> EdgeDistanceExtractor::_toLines(

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DirectedGraph.h"
@@ -56,41 +56,23 @@ double DirectedGraph::determineCost(const std::shared_ptr<Way>& way)
 
   // TODO: move to config
   if (highway == "motorway")
-  {
     mph = 65;
-  }
-  if (highway == "trunk")
-  {
+  else if (highway == "trunk")
     mph = 45;
-  }
-  if (highway == "primary")
-  {
+  else if (highway == "primary")
     mph = 30;
-  }
-  if (highway == "secondary")
-  {
+  else if (highway == "secondary")
     mph = 25;
-  }
-  if (highway == "tertiary")
-  {
+  else if (highway == "tertiary")
     mph = 22;
-  }
-  if (highway == "residential" || highway == "unclassified")
-  {
+  else if (highway == "residential" || highway == "unclassified")
     mph = 15;
-  }
-  if (highway == "living_street")
-  {
+  else if (highway == "living_street")
     mph = 10;
-  }
-  if (highway == "track")
-  {
+  else if (highway == "track")
     mph = 10;
-  }
-  if (highway == "path")
-  {
+  else if (highway == "path")
     mph = 5;
-  }
 
   return _mphToSecondsPerMeter(mph);
 }

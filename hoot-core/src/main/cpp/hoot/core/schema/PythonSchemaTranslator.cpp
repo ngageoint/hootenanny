@@ -40,9 +40,10 @@
 #include "PythonSchemaTranslator.h"
 
 // hoot
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/Log.h>
 
 // Qt
@@ -70,7 +71,7 @@ void PythonSchemaTranslator::_init()
 {
   LOG_DEBUG("Initializing Python");
 
-  QString hootHome(getenv("HOOT_HOME"));
+  QString hootHome = ConfPath::getHootHome();
 
   QStringList pythonPath;
   QString moduleName;

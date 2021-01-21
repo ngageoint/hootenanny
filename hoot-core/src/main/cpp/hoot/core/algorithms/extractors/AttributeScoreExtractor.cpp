@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AttributeScoreExtractor.h"
 
@@ -64,8 +64,8 @@ void AttributeScoreExtractor::setConfiguration(const Settings& conf)
 double AttributeScoreExtractor::_extract(const OsmMap& /*map*/, const ConstWayPtr& w1,
                                          const ConstWayPtr& w2) const
 {
-  double score;
-  double weight;
+  double score = 1.0;
+  double weight = 0.0;
   TagComparator::getInstance().compareEnumeratedTags(w1->getTags(), w2->getTags(), score, weight);
   if (_useWeight)
   {
