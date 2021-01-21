@@ -40,8 +40,8 @@ bool SchemaUtils::anyElementsHaveType(const ConstOsmMapPtr& map)
 {
   return
     (int)FilteredVisitor::getStat(
-      std::shared_ptr<HasTypeCriterion>(new HasTypeCriterion()),
-      std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) > 0;
+      ElementCriterionPtr(new HasTypeCriterion()),
+      ElementVisitorPtr(new ElementCountVisitor()), map) > 0;
 }
 
 }

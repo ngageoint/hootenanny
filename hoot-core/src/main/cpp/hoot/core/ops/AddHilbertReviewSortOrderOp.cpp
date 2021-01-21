@@ -140,7 +140,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
     ConstElementPtr element = map->getElement(*it);
     if (element)
     {
-      Envelope::AutoPtr te(element->getEnvelope(map));
+      std::unique_ptr<Envelope> te(element->getEnvelope(map));
       LOG_VART(env.get());
       if (env.get() == 0)
       {

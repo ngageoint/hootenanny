@@ -41,12 +41,12 @@ namespace hoot
 
 int VersionUtils::versionLessThanOneCount(const OsmMapPtr& map)
 {
-  std::shared_ptr<AttributeValueCriterion> attrCrit(
-    new AttributeValueCriterion(
-      ElementAttributeType(ElementAttributeType::Version), 1, NumericComparisonType::LessThan));
   return
     (int)FilteredVisitor::getStat(
-      attrCrit, std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map);
+      ElementCriterionPtr(
+        new AttributeValueCriterion(
+          ElementAttributeType(ElementAttributeType::Version), 1, NumericComparisonType::LessThan)),
+      ElementVisitorPtr(new ElementCountVisitor()), map);
 }
 
 bool VersionUtils::checkVersionLessThanOneCountAndLogWarning(const OsmMapPtr& map)

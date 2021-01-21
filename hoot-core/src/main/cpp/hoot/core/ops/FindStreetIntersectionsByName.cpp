@@ -69,8 +69,8 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
   // Use the total number of roads in the map as the total feature being processed.
   _numProcessed =
     (int)FilteredVisitor::getStat(
-      std::shared_ptr<HighwayCriterion>(new HighwayCriterion(map)),
-      std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()),
+      ElementCriterionPtr(new HighwayCriterion(map)),
+      ElementVisitorPtr(new ElementCountVisitor()),
       map);
   LOG_VARD(_numProcessed);
   _numAffected = 0;

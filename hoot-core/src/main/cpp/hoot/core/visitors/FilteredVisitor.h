@@ -66,8 +66,8 @@ public:
 
   /**
    * Similar to above but this is convenient if you want to pass in a temporary criterion and
-   * visitor. In this case FilteredVisitor will take ownership of the criterion and visitor and
-   * delete it when destructed.
+   * visitor. WARNING: FilteredVisitor DOES NOT take ownership of the criterion and visitor and
+   * WON'T delete them when destructed.
    */
   FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor);
 
@@ -84,6 +84,8 @@ public:
 
   static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map);
+  static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
+                        const ConstOsmMapPtr& map, const ElementPtr& element);
   static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 

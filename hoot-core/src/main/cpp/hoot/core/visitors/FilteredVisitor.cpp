@@ -131,6 +131,12 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr
   return stat->getStat();
 }
 
+double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
+                                const ConstOsmMapPtr& map, const ElementPtr& element)
+{
+  return getStat(criterion.get(), visitor.get(), map, element);
+}
+
 double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* visitor,
                                 const ConstOsmMapPtr& map, const ElementPtr& element)
 {
