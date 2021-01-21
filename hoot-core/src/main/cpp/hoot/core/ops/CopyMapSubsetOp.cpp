@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CopyMapSubsetOp.h"
 
@@ -171,6 +171,8 @@ void CopyMapSubsetOp::apply(OsmMapPtr& map)
   std::set<ElementId> eids = v.getElementsAdded();
   LOG_VART(eids.size());
   _eidsCopied.insert(eids.begin(), eids.end());
+  //  Copy the cached rubbersheet if it exists
+  map->setCachedRubberSheet(_from->getCachedRubberSheet());
 }
 
 }

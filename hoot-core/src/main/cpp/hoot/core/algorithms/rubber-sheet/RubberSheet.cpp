@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RubberSheet.h"
@@ -254,6 +254,8 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
     _filterCalcAndApplyTransform(map);
   }
   _numProcessed = map->getWayCount();
+  //  Cache the rubbersheet for use later
+  map->setCachedRubberSheet(std::shared_ptr<RubberSheet>(this->clone()));
 }
 
 bool RubberSheet::_calcAndApplyTransform(OsmMapPtr& map)
