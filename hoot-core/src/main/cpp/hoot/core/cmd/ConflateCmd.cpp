@@ -250,9 +250,12 @@ int ConflateCmd::runSimple(QStringList& args)
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString msg =
-    "Conflating " + input1.right(maxFilePrintLength) + " with " +
-    input2.right(maxFilePrintLength) + " and writing the output to " +
-    output.right(maxFilePrintLength);
+    "Conflating " + input1.right(maxFilePrintLength) + " with " + input2.right(maxFilePrintLength);
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    msg += " over bounds: " + ConfigUtils::getBoundsString().right(maxFilePrintLength);
+  }
+  msg += " and writing the output to " + output.right(maxFilePrintLength) + "...";
   if (isDiffConflate)
   {
     if (diffConflator.conflatingTags())
@@ -264,7 +267,6 @@ int ConflateCmd::runSimple(QStringList& args)
       msg = msg.replace("Conflating", "Differentially conflating ");
     }
   }
-
   progress.set(0.0, msg);
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
@@ -378,8 +380,13 @@ int ConflateCmd::runSimple(QStringList& args)
     currentTask++;
   }
   MemoryUsageChecker::getInstance().check();
-  LOG_STATUS(
-    "Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
+  msg = "Conflating map with " + StringUtils::formatLargeNumber(map->size()) + " elements";
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    msg += " over bounds: " + ConfigUtils::getBoundsString().right(maxFilePrintLength);
+  }
+  msg += "...";
+  LOG_STATUS(msg);
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);

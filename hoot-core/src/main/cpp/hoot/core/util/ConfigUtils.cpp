@@ -65,6 +65,26 @@ std::shared_ptr<geos::geom::Geometry> ConfigUtils::getBounds()
   return std::shared_ptr<geos::geom::Geometry>();
 }
 
+QString ConfigUtils::getBoundsString()
+{
+  QString boundsStr = conf().get(ConfigOptions::getBoundsKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return boundsStr;
+  }
+  boundsStr = conf().get(ConfigOptions::getBoundsHootApiDatabaseKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return boundsStr;
+  }
+  boundsStr = conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return boundsStr;
+  }
+  return "";
+}
+
 GeometricRelationship ConfigUtils::getBoundsRelationship()
 {
   if (ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds())

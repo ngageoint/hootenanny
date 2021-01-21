@@ -62,6 +62,13 @@ public:
   static std::shared_ptr<geos::geom::Geometry> getBounds();
 
   /**
+   * TODO
+   *
+   * @return
+   */
+  static QString getBoundsString();
+
+  /**
    * Determines which feature bounds checking relationship should be used based on the configured
    * options for bounds
    *
