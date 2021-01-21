@@ -55,6 +55,8 @@ DB_OPTS="-D api.db.email=$HOOT_EMAIL -D hootapi.db.writer.create.user=true -D ho
 BOUNDS="-117.729492166,40.9881915574,-117.718505838,40.996484138672"
 # TODO: explain way join options
 CONFLATE_OPTS="-D bounds=$BOUNDS -D bounds.output.file=$OUTPUT_DIR/bounds.osm -D waterway.maximal.subline.auto.optimize=true -D way.joiner.write.parent.id.to.child.id=true"
+# changeset.allow.deleting.reference.features=false is needed here to ensure we don't deleting any 
+# ref relations outside of the bounds
 CHANGESET_DERIVE_OPTS="-D changeset.user.id=1 -D changeset.allow.deleting.reference.features=false -D bounds=$BOUNDS"
 
 DEBUG=false
