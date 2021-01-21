@@ -77,9 +77,6 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 
   // determine tie points with rubbersheeting
   const std::vector<double> tiePointDistances = _getTiePointDistances(filteredMap);
-//  TESTING
-//  LOG_VARI(tiePointDistances);
-//  END TESTING
   if (tiePointDistances.size() == 0)
   {
     // no tie points found, so use CE
@@ -92,9 +89,6 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 
   // calc the optimium search radius based off of the tie points
   _calculateSearchRadius(tiePointDistances);
-//  TESTING
-//  LOG_VARI(_result);
-//  END TESTING
 }
 
 OsmMapPtr SearchRadiusCalculator::_getFilteredMap(const ConstOsmMapPtr& map)
@@ -137,13 +131,9 @@ std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map
 {
   std::vector<double> tiePointDistances;
   //  First check if there is a cached RubberSheet before creating a new one
-//  TESTING
-//  std::shared_ptr<RubberSheet> rubberSheet;
   std::shared_ptr<RubberSheet> rubberSheet = map->getCachedRubberSheet();
-//  END TESTING
   if (!rubberSheet)
   {
-//LOG_ERROR("Re-RubberSheeting");
     rubberSheet.reset(new RubberSheet());
     rubberSheet->setReference(_rubberSheetRef);
     rubberSheet->setMinimumTies(_minTies);
@@ -180,10 +170,6 @@ std::vector<double> SearchRadiusCalculator::_getTiePointDistances(OsmMapPtr& map
       }
     }
   }
-//  else
-//  {
-//    LOG_ERROR("Using cached RubberSheet");
-//  }
 
   try
   {
