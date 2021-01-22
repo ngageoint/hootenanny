@@ -111,7 +111,7 @@ private:
   int _taskStatusUpdateInterval;
   Progress _progress;
 
-  bool _writeDebugMaps;
+  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   void _addReviewAndScoreTags(const OsmMapPtr &map, const std::vector<ConstMatchPtr> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);

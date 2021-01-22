@@ -68,15 +68,16 @@ using namespace Tgs;
 namespace hoot
 {
 
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// a very large number of files.
+const bool UnifyingConflator::WRITE_DETAILED_DEBUG_MAPS = false;
+
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnifyingConflator)
 
 UnifyingConflator::UnifyingConflator() :
 _matchFactory(MatchFactory::getInstance()),
 _settings(Settings::getInstance()),
-_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// a very large number of files.
-_writeDebugMaps(false)
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _reset();
 }
@@ -84,9 +85,7 @@ _writeDebugMaps(false)
 UnifyingConflator::UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
   _matchFactory(MatchFactory::getInstance()),
   _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
-// See related note in previous constructor.
-_writeDebugMaps(false)
+  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _matchThreshold = matchThreshold;
   _reset();
@@ -434,7 +433,7 @@ void UnifyingConflator::_applyMergers(const std::vector<MergerPtr>& mergers, Osm
     replaced.clear();
     LOG_VART(merger->getImpactedElementIds());
 
-    if (_writeDebugMaps)
+    if (WRITE_DETAILED_DEBUG_MAPS)
     {
       OsmMapWriterFactory::writeDebugMap(
         map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));

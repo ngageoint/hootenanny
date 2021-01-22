@@ -73,6 +73,10 @@ using namespace std;
 namespace hoot
 {
 
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// a very large number of files.
+const bool LinearSnapMerger::WRITE_DETAILED_DEBUG_MAPS = false;
+
 HOOT_FACTORY_REGISTER(Merger, LinearSnapMerger)
 
 int LinearSnapMerger::logWarnCount = 0;
@@ -82,10 +86,7 @@ LinearMergerAbstract(),
 _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations
   (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations()),
-_matchedBy(HighwayMatch::MATCH_NAME),
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// a very large number of files.
-_writeDebugMaps(false)
+_matchedBy(HighwayMatch::MATCH_NAME)
 {
   LOG_VART(_markAddedMultilineStringRelations);
 }
@@ -97,9 +98,7 @@ _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations
   (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations()),
 _sublineMatcher(sublineMatcher),
-_matchedBy(HighwayMatch::MATCH_NAME),
-// see note above
-_writeDebugMaps(false)
+_matchedBy(HighwayMatch::MATCH_NAME)
 {
   _pairs = pairs;
 
@@ -255,7 +254,7 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
     // remove the second element and any reviews that contain the element
     RemoveReviewsByEidOp(remove->getElementId(), true).apply(result);
 
-    if (_writeDebugMaps)
+    if (WRITE_DETAILED_DEBUG_MAPS)
     {
       OsmMapWriterFactory::writeDebugMap(
        map, "LinearSnapMerger-merged-identical-elements" + eidLogString);
@@ -295,14 +294,14 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
   // Split the first element and don't reverse any of the geometries.
   _splitElement(
     map, match.getSublineString1(), match.getReverseVector1(), replaced, e1, e1Match, scraps1);
-  if (_writeDebugMaps)
+  if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(map, "LinearSnapMerger-after-split-1" + eidLogString);
   }
   // Split the second element and reverse any geometries to make the matches work.
   _splitElement(
     map, match.getSublineString2(), match.getReverseVector2(), replaced, e2, e2Match, scraps2);
-  if (_writeDebugMaps)
+  if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(map, "LinearSnapMerger-after-split-2" + eidLogString);
   }
@@ -328,12 +327,12 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
 
   // remove any ways that directly connect from e1Match to e2Match
   _removeSpans(result, e1Match, e2Match);
-  if (_writeDebugMaps)
+  if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(map, "LinearSnapMerger-after-remove-spans" + eidLogString);
   }
   _snapEnds(map, e2Match, e1Match);
-  if (_writeDebugMaps)
+  if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(map, "LinearSnapMerger-after-snap-ends" + eidLogString);
   }
@@ -368,7 +367,7 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
   LOG_VART(e1Match->getElementType());
   LOG_VART(e1->getElementId());
   LOG_VART(e2->getElementId());
-  if (_writeDebugMaps)
+  if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(map, "LinearSnapMerger-after-tag-merging" + eidLogString);
   }
@@ -544,7 +543,7 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
     LOG_TRACE("Removing e1: " << eid1 << "...");
     RemoveReviewsByEidOp(eid1, true).apply(result);
   }
-  if (_writeDebugMaps)
+  if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(
       map, "LinearSnapMerger-after-old-way-removal-1" + eidLogString);
@@ -601,7 +600,7 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
     // remove reviews e2 is involved in
     RemoveReviewsByEidOp(eid2, true).apply(result);
   }
-  if (_writeDebugMaps)
+  if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(
       map, "LinearSnapMerger-after-old-way-removal-2" + eidLogString);

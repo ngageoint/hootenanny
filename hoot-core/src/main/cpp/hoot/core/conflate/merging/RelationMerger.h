@@ -77,7 +77,7 @@ private:
   // Useful if members from the same relation are to be merged into multiple other relations
   bool _deleteRelation2;
 
-  bool _writeDebugMaps;
+  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   /*
    * Returns true if all members from the second relation were merged into the frist relation

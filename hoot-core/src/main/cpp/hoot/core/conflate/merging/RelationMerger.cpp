@@ -38,12 +38,13 @@
 namespace hoot
 {
 
-RelationMerger::RelationMerger() :
-_mergeTags(true),
-_deleteRelation2(true),
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // a very large number of files.
-_writeDebugMaps(false)
+const bool RelationMerger::WRITE_DETAILED_DEBUG_MAPS = false;
+
+RelationMerger::RelationMerger() :
+_mergeTags(true),
+_deleteRelation2(true)
 {
 }
 
@@ -86,7 +87,7 @@ void RelationMerger::merge(
   }
 
   LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
-  if (_writeDebugMaps)
+  if (WRITE_DETAILED_DEBUG_MAPS)
   {
     OsmMapWriterFactory::writeDebugMap(
       _map, "RelationMerger-" + elementId1.toString() + "-" + elementId2.toString());

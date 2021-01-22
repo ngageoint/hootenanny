@@ -90,7 +90,7 @@ private:
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
 
-  bool _writeDebugMaps;
+  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   /*
    * Returns true if the way directly connects the left and right ways. There is some tolerance
