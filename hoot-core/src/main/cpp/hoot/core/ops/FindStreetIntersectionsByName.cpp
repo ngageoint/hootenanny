@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C)  2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FindStreetIntersectionsByName.h"
 
@@ -69,8 +69,8 @@ void FindStreetIntersectionsByName::apply(OsmMapPtr& map)
   // Use the total number of roads in the map as the total feature being processed.
   _numProcessed =
     (int)FilteredVisitor::getStat(
-      std::shared_ptr<HighwayCriterion>(new HighwayCriterion(map)),
-      std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()),
+      ElementCriterionPtr(new HighwayCriterion(map)),
+      ElementVisitorPtr(new ElementCountVisitor()),
       map);
   LOG_VARD(_numProcessed);
   _numAffected = 0;
