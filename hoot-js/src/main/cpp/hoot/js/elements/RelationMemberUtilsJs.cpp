@@ -31,7 +31,6 @@
 #include <hoot/core/elements/RelationMemberNodeCounter.h>
 #include <hoot/core/elements/ConnectedRelationMemberFinder.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
-#include <hoot/core/geometry/GeometricRelationship.h>
 #include <hoot/core/util/Factory.h>
 
 #include <hoot/js/JsRegistrar.h>
@@ -215,10 +214,7 @@ void RelationMemberUtilsJs::relationHasConflatableMember(const FunctionCallbackI
     ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[1]);
 
     args.GetReturnValue().Set(
-      Boolean::New(
-        current,
-        RelationMemberUtils::relationHasConflatableMember(
-          relation, std::shared_ptr<geos::geom::Geometry>(), GeometricRelationship::Invalid, map)));
+      Boolean::New(current, RelationMemberUtils::relationHasConflatableMember(relation, map)));
   }
   catch (const HootException& err)
   {

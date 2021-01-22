@@ -33,7 +33,6 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/conflate/ConflateUtils.h>
 
@@ -307,14 +306,12 @@ int RelationMemberUtils::getMemberWayNodeCount(const ConstRelationPtr& relation,
 }
 
 bool RelationMemberUtils::relationHasConflatableMember(
-  const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
-  const GeometricRelationship& relationship, const ConstOsmMapPtr& map)
+  const ConstRelationPtr& relation, const ConstOsmMapPtr& map)
 {
   if (!relation)
   {
     return false;
   }
-  const bool useGeoFilter = bounds && relationship != GeometricRelationship::Invalid;
 
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
@@ -324,23 +321,9 @@ bool RelationMemberUtils::relationHasConflatableMember(
     {
       LOG_VART(member->getElementId());
 
-      if (!useGeoFilter)
+      if (ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map))
       {
-        if (ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map))
-        {
-          return true;
-        }
-      }
-      else
-      {
-        const bool memberCanBeConflatedByActiveMatcher =
-          ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map);
-        const bool memberInBounds =
-          ElementGeometryUtils::haveGeometricRelationship(member, bounds, relationship, map);
-        if (memberCanBeConflatedByActiveMatcher && memberInBounds)
-        {
-          return true;
-        }
+        return true;
       }
     }
   }

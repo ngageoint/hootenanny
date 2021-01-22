@@ -558,65 +558,15 @@ function getRiverMaxSublineRecursions(map)
 /*
  * Determines if an element has a particular geometric relationship with a bounds
  */
-/*function haveGeometricRelationship(e, bounds, relationship, map)
+function haveGeometricRelationship(e, bounds, relationship, map)
 {
   return hoot.ElementGeometryUtils.haveGeometricRelationship(e, bounds, relationship, map);
-}*/
+}
 
 /*
- * TODO
+ * Determines if a relation has any member conflatable by the current conflation configuration
  */
-/*function relationHasConflatableMemberInBounds(element, bounds, boundsRelationship, map)
-{
-  return hoot.RelationMemberUtils.relationHasConflatableMemberInBounds(element, bounds, boundsRelationship, map);
-}*/
-
-/*
- * TODO
- */
-/*function relationHasConflatableMember(element, map)
+function relationHasConflatableMember(element, map)
 {
   return hoot.RelationMemberUtils.relationHasConflatableMember(element, map);
-}*/
-
-/*
- * Gets the currently configured convert bounds relationship as a string (see
-   ConfigUtils::getBoundsRelationship())
- */
-/*function getBoundsRelationship()
-{
-  var mustContain = (hoot.get("bounds.keep.only.features.inside.bounds") === 'true');
-  if (mustContain)
-  {
-    return "contains";
-  }
-  else
-  {
-    return "intersects";
-  }
-}*/
-
-/*
- * TODO
- */
-/*function boundsOptionEnabled()
-{
-  var bounds = getBounds();
-  return bounds !== 'undefined' && bounds !== null && bounds !== '';
-}*/
-
-/*
- * TODO
- */
-/*function getBounds()
-{
-  return String(hoot.get("bounds")).trim();
-}*/
-
-/*
- * TODO
- */
-/*function getBoundsCrit(map)
-{
-  return hoot.getBoundsCrit(map);
-}*/
+}

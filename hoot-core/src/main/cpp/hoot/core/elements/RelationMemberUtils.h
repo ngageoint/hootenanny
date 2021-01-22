@@ -184,16 +184,12 @@ public:
    * matchers
    *
    * @param relation relation to examine
-   * @param bounds optional member bounds requirement; leave null to disable bounds checking
-   * @param relationship optional geometric bounds relationship used with bounds; set to
-   * GeometricRelationship::Invalid to disable bounds checking
    * @param map map owning the input relation
    * @return true if the input relation contains at least one member element that can be conflated
    * and optionally satisfies the bounds requirement; false otherwise
    */
   static bool relationHasConflatableMember(
-    const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
-    const GeometricRelationship& relationship, const ConstOsmMapPtr& map);
+    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 };
 
 }
