@@ -34,6 +34,9 @@ set -e
 # added to each feature matcher and to changeset derivation.
 #
 # See other ServiceDiffConflateBounds*Test for other scenarios.
+#
+# Note: There is a small section of road from the reference layer on "East 2nd Street" that gets 
+# dropped due to use of parent IDs during way joining that needs to be fixed.
 
 TEST_NAME=ServiceDiffConflateBounds1Test
 GOLD_DIR=test-files/cmd/glacial/serial/ServiceDiffConflateBoundsTest

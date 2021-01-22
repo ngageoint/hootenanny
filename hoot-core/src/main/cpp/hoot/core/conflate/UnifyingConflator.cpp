@@ -50,7 +50,6 @@
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
-#include <hoot/core/ops/WayJoinerOp.h>
 
 // standard
 #include <algorithm>
@@ -158,7 +157,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   // This status progress reporting could get way more granular, but we'll go with this for now to
   // avoid overloading users with status.
 
-  // MATCH
+  // MATCH FEATURES
 
   _updateProgress(currentStep - 1, "Matching features...");
 
@@ -337,7 +336,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _mapElementIdsToMergers();
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
 
-  // Separate mergers that merge relations from other mergers. We want to run them very last.
+  // Separate mergers that merge relations from other mergers. We want to run them very last so that
+  // they have the latest version of their members to work with.
   std::vector<MergerPtr> relationMergers;
   std::vector<MergerPtr> nonRelationMergers;
   for (std::vector<MergerPtr>::const_iterator mergersItr = _mergers.begin();
@@ -360,15 +360,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
 
-  // TODO
-//  WayJoinerOp wayJoiner;
-//  wayJoiner.setConfiguration(conf());
-//  LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
-//  wayJoiner.apply(map);
-//  LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
-//  OsmMapWriterFactory::writeDebugMap(map, "after-way-joining");
-
-  // MERGE
+  // MERGE FEATURES
 
   QElapsedTimer mergersTimer;
   mergersTimer.start();
@@ -390,6 +382,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   double mergersTime = timer.getElapsedAndRestart();
   _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
   _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
+
+  // CLEANUP
 
   if (!ConfigOptions().getWriterIncludeDebugTags())
   {
