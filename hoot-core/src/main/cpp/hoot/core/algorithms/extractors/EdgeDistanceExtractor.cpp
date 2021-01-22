@@ -133,8 +133,8 @@ vector<Coordinate> EdgeDistanceExtractor::_discretize(const OsmMap& map,
 }
 
 double EdgeDistanceExtractor::distance(
-  const OsmMap &map, const std::shared_ptr<const Element>& target,
-  const std::shared_ptr<const Element> &candidate) const
+  const OsmMap& map, const std::shared_ptr<const Element>& target,
+  const std::shared_ptr<const Element>& candidate) const
 {
   double d1 = _oneDistance(map, target, candidate);
   double d2 = _oneDistance(map, candidate, target);
