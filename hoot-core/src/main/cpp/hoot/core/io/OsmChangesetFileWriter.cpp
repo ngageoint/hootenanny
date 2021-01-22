@@ -27,7 +27,6 @@
 #include "OsmChangesetFileWriter.h"
 
 // hoot
-#include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
@@ -71,30 +70,6 @@ bool OsmChangesetFileWriter::_failsBoundsCheck(
     LOG_TRACE(element->getElementId() << " not found in map for bounds check.");
     return false;
   }
-
-//  if (element->getElementType() == ElementType::Relation &&
-//      (element->getStatus() == Status::Unknown2 || element->getStatus() == Status::Conflated))
-//  {
-//    // TODO: should be able to replace this with a call to the bounds crit
-//    if (!RelationMemberUtils::relationHasAllMembersWithinBounds(
-//          std::dynamic_pointer_cast<const Relation>(element), boundsCrit, map))
-//    {
-//      LOG_TRACE(
-//        "Skipping change with relation containing out of bounds element: " <<
-//        element->getElementId() << "...");
-//      return true;
-//    }
-//  }
-//  else
-//  {
-//    LOG_VART(boundsCrit->isSatisfied(element));
-//    if (!boundsCrit->isSatisfied(element))
-//    {
-//      LOG_TRACE(
-//        "Skipping change with out of bounds element: " << element->getElementId() << "...");
-//      return true;
-//    }
-//  }
 
   if (element->getElementType() == ElementType::Relation &&
       (element->getStatus() == Status::Unknown2 || element->getStatus() == Status::Conflated))

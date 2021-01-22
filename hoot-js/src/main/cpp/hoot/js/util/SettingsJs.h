@@ -54,7 +54,6 @@ private:
   static void prependToList(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void removeFromList(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void replaceInList(const v8::FunctionCallbackInfo<v8::Value>& args);
-  //static void getBoundsCrit(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 

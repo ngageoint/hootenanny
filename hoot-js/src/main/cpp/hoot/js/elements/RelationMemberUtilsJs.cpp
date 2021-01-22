@@ -31,9 +31,7 @@
 #include <hoot/core/elements/RelationMemberNodeCounter.h>
 #include <hoot/core/elements/ConnectedRelationMemberFinder.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
-//#include <hoot/core/geometry/GeometricRelationship.h>
-//#include <hoot/core/elements/MapProjector.h>
-//#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/geometry/GeometricRelationship.h>
 #include <hoot/core/util/Factory.h>
 
 #include <hoot/js/JsRegistrar.h>
@@ -69,10 +67,8 @@ void RelationMemberUtilsJs::Init(Handle<Object> exports)
            FunctionTemplate::New(current, relationsHaveConnectedWayMembers)->GetFunction());
   obj->Set(String::NewFromUtf8(current, "isMemberOfRelationSatisfyingCriterion"),
            FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion)->GetFunction());
-//  obj->Set(String::NewFromUtf8(current, "relationHasConflatableMember"),
-//           FunctionTemplate::New(current, relationHasConflatableMember)->GetFunction());
-//  obj->Set(String::NewFromUtf8(current, "relationHasConflatableMemberInBounds"),
-//           FunctionTemplate::New(current, relationHasConflatableMemberInBounds)->GetFunction());
+  obj->Set(String::NewFromUtf8(current, "relationHasConflatableMember"),
+           FunctionTemplate::New(current, relationHasConflatableMember)->GetFunction());
 }
 
 void RelationMemberUtilsJs::isMemberOfRelationType(const FunctionCallbackInfo<Value>& args)
@@ -198,92 +194,36 @@ void RelationMemberUtilsJs::isMemberOfRelationSatisfyingCriterion(
   args.GetReturnValue().Set(Boolean::New(current, isMember));
 }
 
-//void RelationMemberUtilsJs::relationHasConflatableMember(const FunctionCallbackInfo<Value>& args)
-//{
-//  Isolate* current = args.GetIsolate();
-//  HandleScope scope(current);
+void RelationMemberUtilsJs::relationHasConflatableMember(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
 
-//  try
-//  {
-//    Context::Scope context_scope(current->GetCurrentContext());
+  try
+  {
+    Context::Scope context_scope(current->GetCurrentContext());
 
-//    ConstElementPtr element = toCpp<ConstElementPtr>(args[0]);
-//    if (element->getElementType() != ElementType::Relation)
-//    {
-//      args.GetReturnValue().Set(
-//        current->ThrowException(
-//          Exception::TypeError(String::NewFromUtf8(current, "Expected a relation"))));
-//    }
-//    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
+    ConstElementPtr element = toCpp<ConstElementPtr>(args[0]);
+    if (element->getElementType() != ElementType::Relation)
+    {
+      args.GetReturnValue().Set(
+        current->ThrowException(
+          Exception::TypeError(String::NewFromUtf8(current, "Expected a relation"))));
+    }
+    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
 
-//    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[1]);
+    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[1]);
 
-//    args.GetReturnValue().Set(
-//      Boolean::New(
-//        current,
-//        RelationMemberUtils::relationHasConflatableMember(
-//          relation, std::shared_ptr<geos::geom::Geometry>(), GeometricRelationship::Invalid, map)));
-//  }
-//  catch (const HootException& err)
-//  {
-//    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
-//  }
-//}
-
-//void RelationMemberUtilsJs::relationHasConflatableMemberInBounds(
-//  const FunctionCallbackInfo<Value>& args)
-//{
-//  Isolate* current = args.GetIsolate();
-//  HandleScope scope(current);
-
-//  try
-//  {
-//    Context::Scope context_scope(current->GetCurrentContext());
-
-//    ConstElementPtr element = toCpp<ConstElementPtr>(args[0]);
-//    if (element->getElementType() != ElementType::Relation)
-//    {
-//      args.GetReturnValue().Set(
-//        current->ThrowException(
-//          Exception::TypeError(String::NewFromUtf8(current, "Expected a relation"))));
-//    }
-//    ConstRelationPtr relation = std::dynamic_pointer_cast<const Relation>(element);
-
-//    const QString boundsStr = toCpp<QString>(args[1]);
-//    std::shared_ptr<geos::geom::Geometry> bounds;
-//    if (!boundsStr.trimmed().isEmpty())
-//    {
-//      bounds = GeometryUtils::boundsFromString(boundsStr);
-//    }
-
-//    const QString geometricRelationshipStr = toCpp<QString>(args[2]);
-//    GeometricRelationship geometricRelationship = GeometricRelationship::Invalid;
-//    if (!geometricRelationshipStr.trimmed().isEmpty())
-//    {
-//      geometricRelationship = GeometricRelationship::fromString(geometricRelationshipStr);
-//    }
-
-//    ConstOsmMapPtr map = toCpp<ConstOsmMapPtr>(args[3]);
-//    if (!MapProjector::isGeographic(map))
-//    {
-//      // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
-//      // the bounds.
-//      std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
-//      srs84->SetWellKnownGeogCS("WGS84");
-//      MapProjector::project(bounds, srs84, map->getProjection());
-//      LOG_VART(bounds);
-//    }
-
-//    args.GetReturnValue().Set(
-//      Boolean::New(
-//        current,
-//        RelationMemberUtils::relationHasConflatableMember(
-//          relation, bounds, geometricRelationship, map)));
-//  }
-//  catch (const HootException& err)
-//  {
-//    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
-//  }
-//}
+    args.GetReturnValue().Set(
+      Boolean::New(
+        current,
+        RelationMemberUtils::relationHasConflatableMember(
+          relation, std::shared_ptr<geos::geom::Geometry>(), GeometricRelationship::Invalid, map)));
+  }
+  catch (const HootException& err)
+  {
+    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
+  }
+}
 
 }
