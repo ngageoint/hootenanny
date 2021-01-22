@@ -292,8 +292,8 @@ int ConflateCmd::runSimple(QStringList& args)
     _disableRoundaboutRemoval();
   }
 
-  // TODO: We may need to further restrict this to only data with relation having oob members due
-  // to full hydration (would then need to move this after the data load).
+  // Note that we may need to eventually further restrict this to only data with relation having oob
+  // members due to full hydration (would then need to move this code to after the data load).
   if (ConfigUtils::boundsOptionEnabled())
   {
     _updateConfigOptionsForBounds();

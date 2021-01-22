@@ -119,8 +119,9 @@ public:
         QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
     }
 
-    // TODO: We may need to further restrict this to only data with relation having oob members due
-    // to full hydration (would then need to move this to inside ChangesetCreator).
+    // Note that we may need to eventually further restrict this to only data with relation having
+    // oob members due to full hydration (would then need to move this code to inside
+    ChangesetCreator).
     if (ConfigUtils::boundsOptionEnabled())
     {
       _updateConfigOptionsForBounds();
