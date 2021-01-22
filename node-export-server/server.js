@@ -344,7 +344,7 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
         if (input.substring(0,5) === 'https' && fs.existsSync(appDir + 'key.pem') && fs.existsSync(appDir + 'cert.pem')) {
             cert_param = '--private-key=' + appDir + 'key.pem --certificate=' + appDir + 'cert.pem';
         }
-        temp_file = outDir + '.osm';
+        var temp_file = outDir + '.osm';
         command += 'wget -q ' + cert_param + ' -O ' + temp_file + ' ' + input + '?bbox=' + (poly ? exports.polyToBbox(poly) : bbox) + ' && ';
         input = temp_file;
     }
@@ -529,13 +529,14 @@ function doExport(req, res, hash, input) {
                 var poly = polygons[i];
                 var polyString = poly.join(';');
                 var ringId = uuid.v4();
-                var output = 'export_' + ringId;
-                var outDir = appDir + output;
-                var outFile = outDir + config.formats[req.params.format];
-                if (req.params.format === 'File Geodatabase') outDir = outFile;
-                multiCommand += buildCommand('OSM', req.query.overrideTags, null,  polyString, isFile, input, outDir, outFile, Number(req.query.crop));
+                // disregard output format for rings. since we are going to merge these into a single file,
+                // dealing with a list of osm files (versus directories for shp or gdb) is easier.
+                var ringOutput = 'export_' + ringId;
+                var ringOutDir = appDir + ringOutput;
+                var ringOutFile = ringOutDir + '.osm';
+                multiCommand += buildCommand('OSM', req.query.overrideTags, null,  polyString, isFile, input, ringOutDir, ringOutFile, Number(req.query.crop));
                 if (i !== polygons.length - 1) multiCommand += ' && ';
-                rings.push(outFile);
+                rings.push(ringOutFile);
             }
             console.log(multiCommand);
             child = exec(multiCommand, function(error, stdout, stderr) {
