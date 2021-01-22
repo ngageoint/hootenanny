@@ -121,7 +121,7 @@ public:
 
     // Note that we may need to eventually further restrict this to only data with relation having
     // oob members due to full hydration (would then need to move this code to inside
-    ChangesetCreator).
+    // ChangesetCreator).
     if (ConfigUtils::boundsOptionEnabled())
     {
       _updateConfigOptionsForBounds();
