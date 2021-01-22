@@ -43,26 +43,7 @@ exports.isMatchCandidate = function(map, e)
 {
   // TODO: Think the collection relation part is too strict and should be changed to all relations
   // at some point.
-  if (!isCollectionRelation(e))
-  {
-    return false;
-  }
-
-  // TODO: remove this bounds check and do it in MatchCreator instead
-  var bounds = getBounds();
-  hoot.trace("bounds: " + bounds);
-  if (bounds !== 'undefined' && bounds !== null && bounds !== '')
-  {
-    // Only conflate relations that have at least one member in the specified conflate bounds and
-    // those members can be conflated by one of the configured conflate matchers.
-    return relationHasConflatableMemberInBounds(e, bounds, getBoundsRelationship(), map);
-  }
-  else
-  {
-    // Only conflate relations that have at least one member that can be conflated by one of the
-    // configured conflate matchers.
-    return relationHasConflatableMember(e, map);
-  }
+  return isCollectionRelation(e);
 };
 
 /**

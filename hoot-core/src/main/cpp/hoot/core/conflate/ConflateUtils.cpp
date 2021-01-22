@@ -40,7 +40,9 @@
 #include <hoot/core/ops/NamedOp.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/conflate/DiffConflator.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
+//#include <hoot/core/conflate/matching/MatchFactory.h>
+//#include <hoot/core/util/ConfigUtils.h>
+//#include <hoot/core/elements/RelationMemberUtils.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -48,7 +50,8 @@
 namespace hoot
 {
 
-QMap<QString, ElementCriterionPtr> ConflateUtils::_critCache;
+//QMap<QString, ElementCriterionPtr> ConflateUtils::_critCache;
+//std::shared_ptr<InBoundsCriterion> ConflateUtils::_cachedBoundsCrit;
 
 int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString& output)
 {
@@ -151,55 +154,93 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
   timer.restart();
 }
 
-bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
-  const ConstElementPtr& element, const ConstOsmMapPtr& map)
-{
-  // Get all the configured matchers.
-  const std::vector<std::shared_ptr<MatchCreator>> activeMatchCreators =
-    MatchFactory::getInstance().getCreators();
-  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = activeMatchCreators.begin();
-       itr != activeMatchCreators.end(); ++itr)
-  {
-    // Get the element criterion this matcher uses for matching elements.
-    std::shared_ptr<MatchCreator> activeMatchCreator = *itr;
-    const QStringList supportedCriteriaClassNames = activeMatchCreator->getCriteria();
-    for (int i = 0; i < supportedCriteriaClassNames.size(); i++)
-    {
-      const QString criterionClassName = supportedCriteriaClassNames.at(i);
+//bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
+//  const ConstElementPtr& element, const ConstOsmMapPtr& map)
+//{
+//  // Get all the configured matchers.
+//  const std::vector<std::shared_ptr<MatchCreator>> activeMatchCreators =
+//    MatchFactory::getInstance().getCreators();
+//  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = activeMatchCreators.begin();
+//       itr != activeMatchCreators.end(); ++itr)
+//  {
+//    // Get the element criterion this matcher uses for matching elements.
+//    std::shared_ptr<MatchCreator> activeMatchCreator = *itr;
+//    const QStringList supportedCriteriaClassNames = activeMatchCreator->getCriteria();
+//    for (int i = 0; i < supportedCriteriaClassNames.size(); i++)
+//    {
+//      const QString criterionClassName = supportedCriteriaClassNames.at(i);
 
-      // Crit creation can be expensive, so cache those created.
-      ElementCriterionPtr crit;
-      if (_critCache.contains(criterionClassName))
-      {
-        crit = _critCache[criterionClassName];
-      }
-      else
-      {
-        crit.reset(
-          Factory::getInstance().constructObject<ElementCriterion>(
-            criterionClassName.toStdString()));
-        _critCache[criterionClassName] = crit;
+//      // Crit creation can be expensive, so cache those created.
+//      ElementCriterionPtr crit;
+//      if (_critCache.contains(criterionClassName))
+//      {
+//        crit = _critCache[criterionClassName];
+//      }
+//      else
+//      {
+//        crit.reset(
+//          Factory::getInstance().constructObject<ElementCriterion>(
+//            criterionClassName.toStdString()));
+//        _critCache[criterionClassName] = crit;
 
-        // All ElementCriterion that are map consumers inherit from ConstOsmMapConsumer, so this
-        // works.
-        std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-          std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
-        LOG_VART(mapConsumer.get());
-        if (mapConsumer)
-        {
-          mapConsumer->setOsmMap(map.get());
-        }
-      }
+//        // All ElementCriterion that are map consumers inherit from ConstOsmMapConsumer, so this
+//        // works.
+//        std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+//          std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+//        LOG_VART(mapConsumer.get());
+//        if (mapConsumer)
+//        {
+//          mapConsumer->setOsmMap(map.get());
+//        }
+//      }
 
-      // If any matcher's crit matches the element, return true.
-      if (crit->isSatisfied(element))
-      {
-        return true;
-      }
-    }
-  }
+//      // If any matcher's crit matches the element, return true.
+//      if (crit->isSatisfied(element))
+//      {
+//        return true;
+//      }
+//    }
+//  }
 
-  return false;
-}
+//  return false;
+//}
+
+//bool ConflateUtils::elementFailsConfiguredBoundsCheck(
+//  const ConstElementPtr& element, const ConstOsmMapPtr& map)
+//{
+//  if (ConfigUtils::boundsOptionEnabled())
+//  {
+//    // Even though data often comes into hoot from readers pre-filtered by bounds, we still perform
+//    // a bounds check here. For instance, when data is read in by bounds from an API database query,
+//    // the default behavior is to return parent relations and all their relation members for any
+//    // data within the bounds (fully hydrated relations). Without further filtering of such data,
+//    // conflation may incorrectly modify features outside of the conflate bounds and encounter
+//    // increased runtime due to conflation of extra features. Turning off relation member hydration
+//    // or trying to crop such data after its read can lead to malformed relations. So, here we're
+//    // performing a per features bounds check beyond the one done by the reader that populated the
+//    // input data. Input from certain readers does not fully hydrate relations, making this check
+//    // unnecessary. However, its being made anyway to keep the logic clean and really shouldn't
+//    // slow things down too much, if at all.
+
+//    if (!_cachedBoundsCrit)
+//    {
+//      _cachedBoundsCrit = ConfigUtils::getBoundsFilter(map);
+//    }
+//    if (element->getElementType() == ElementType::Relation)
+//    {
+//      // Only attempt to conflate relations that have at least one member in the specified conflate
+//      // bound.
+//      return
+//        !RelationMemberUtils::relationHasAnyMemberWithinBounds(
+//          std::dynamic_pointer_cast<const Relation>(element), _cachedBoundsCrit, map);
+//    }
+//    else
+//    {
+//      return !_cachedBoundsCrit->isSatisfied(element);
+//    }
+//  }
+
+//  return false;
+//}
 
 }

@@ -153,7 +153,7 @@ void MultilineStringMergeRelationCollapser::visit(const ElementPtr& e)
         ElementPtr memberElement = _map->getElement(member.getElementId());
         if (memberElement)
         {
-          // update each member's tag.
+          // ...update each member's tag.
           if (matchingTypeIsKey)
           {
             LOG_TRACE(

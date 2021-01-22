@@ -94,7 +94,7 @@ GeometricRelationship ConfigUtils::getBoundsRelationship()
   return GeometricRelationship::Intersects;
 }
 
-std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsCrit(const ConstOsmMapPtr& map)
+std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsFilter(const ConstOsmMapPtr& map)
 {
   std::shared_ptr<InBoundsCriterion> boundsCrit;
   const QString boundsStr = ConfigOptions().getBounds().trimmed();

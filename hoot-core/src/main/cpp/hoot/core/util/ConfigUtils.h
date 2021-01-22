@@ -83,7 +83,7 @@ public:
    * @return a criterion used for checking whether an element satisfies the current configured
    * bounds condition
    */
-  static std::shared_ptr<InBoundsCriterion> getBoundsCrit(const ConstOsmMapPtr& map);
+  static std::shared_ptr<InBoundsCriterion> getBoundsFilter(const ConstOsmMapPtr& map);
 
   /**
    * Removes ApiTruncateTagVisitor from conflate ops if the corresponding config option is

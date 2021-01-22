@@ -97,34 +97,7 @@ exports.isMatchCandidate = function(map, e)
 {
   hoot.trace("e: " + e.getElementId());
   hoot.trace("isLinearWaterway: " + isLinearWaterway(e));
-
-  var isRiver = isLinearWaterway(e);
-  if (!isRiver)
-  {
-    return false;
-  }
-
-  // Even though data is expected to come into hoot pre-filtered by bounds, we still perform a
-  // bounds check here. When data is read in with a bounds from an API database query, the default
-  // behavior is to return the parent relations and all relation members for any data inside the
-  // bounds (fully hydrated relations). Without further filtering of such data, conflation wil
-  // incorrectly modify rivers outside of the conflate bounds. Turning off the hydration or trying
-  // to crop the data after the query can lead to malformed relations. So, here we're doing a bounds
-  // intersection check beyond the one done by the original query that pulled down the input data.
-  // If the data was originally read in by file, this check shouldn't be necessary due to lack of
-  // relation hydration but doing it anyway really shouldn't be slowing things down too much, if at
-  // all.
-
-  // TODO: remove this bounds check and do it in MatchCreator instead
-  var bounds = getBounds();
-  hoot.trace("bounds: " + bounds);
-  // Only check that the input features are in bounds if a bounds was specified as a config option.
-  if (bounds !== 'undefined' && bounds !== null && bounds !== '')
-  { 
-    return haveGeometricRelationship(e, bounds, getBoundsRelationship(), map);
-  }
-  
-  return true;
+  return isLinearWaterway(e);
 };
 
 /**

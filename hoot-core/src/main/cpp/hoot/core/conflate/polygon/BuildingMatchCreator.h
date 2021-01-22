@@ -52,7 +52,8 @@ public:
 
   virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+  virtual void createMatches(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
@@ -78,7 +79,7 @@ public:
 
 private:
 
-  /// Don't use this directly. See below.
+  // Don't use this directly. See below.
   std::shared_ptr<BuildingRfClassifier> _rf;
   std::shared_ptr<MatchThreshold> _matchThreshold;
 
@@ -86,7 +87,7 @@ private:
 
   BuildingCriterion _buildingCrit;
 
-  /**
+  /*
    * The building model can be slow to load, this provides a lazy load.
    */
   std::shared_ptr<BuildingRfClassifier> _getRf();

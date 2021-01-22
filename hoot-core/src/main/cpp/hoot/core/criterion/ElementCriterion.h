@@ -78,7 +78,7 @@ public:
    * @return a string
    * @todo Many of the crits are only returning their class names in toString(). So, we may want to
    * add getClassName() here to mimic OsmMapOperation and ElementVisitor and make toString()
-   * optional.
+   * optional with actual useful info in it.
    */
   virtual QString toString() const = 0;
 };

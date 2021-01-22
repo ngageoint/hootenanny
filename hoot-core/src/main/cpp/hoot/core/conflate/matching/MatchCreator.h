@@ -50,7 +50,7 @@ public:
 
   static std::string className() { return "hoot::MatchCreator"; }
 
-  MatchCreator() = default;
+  MatchCreator();
   virtual ~MatchCreator() = default;
 
   /**
@@ -62,8 +62,9 @@ public:
   /**
    * Search the provided map for building matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
-    ConstMatchThresholdPtr threshold) = 0;
+  virtual void createMatches(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+    ConstMatchThresholdPtr threshold);
 
   /**
    * Generally this just returns the class name of this creator. However, creators that take
@@ -77,13 +78,12 @@ public:
    * @param element element to determine the match candidate status of
    * @param map the map the element whose candidacy is being determined belongs to
    * @return true if the element is a match candidate; false otherwise
-   * @todo add a bounds check here instead of in individual match creators
    */
   virtual bool isMatchCandidate(ConstElementPtr element, const ConstOsmMapPtr& map) = 0;
 
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() = 0;
 
-  virtual void setCriterion(const ElementCriterionPtr& filter) { _filter = filter; }
+  virtual void setFilter(const ElementCriterionPtr& filter) { _filter = filter; }
 
   /**
    * Arguments are passed in by the MatchFactory.
@@ -93,10 +93,14 @@ public:
     throw HootException("This match creator takes no arguments.");
   }
 
-  /*
+  /**
+   * Returns a description for the match creator
+   *
    * This is actually being done in order to track the script name in ScriptMatchCreator, so we
    * need to do some refactoring to get rid of this.  Could be redundant with the
    * CreatorDescription class.
+   *
+   * @return a string
    */
   QString getDescription() const { return _description; }
 
@@ -115,12 +119,15 @@ public:
 protected:
 
   QString _description;
-  // This var allows for matching only a subset of features in the input data. Unfortunately, each
-  // match creator will need to add explicit logic to use this filter in their isMatchCandidate
-  // method (if they call into a match visitor, then in that class's isMatchCandidate method).
-  // Couldn't find any clean way to add that to this base class, given the way that each match
-  // creator calls into a visitor to parse potential matches.
+  // This var allows for matching against only a subset of features in the input data.
+  // At this time, each match creator will need to add explicit logic to use this filter in their
+  // isMatchCandidate method (if they call into a match visitor, then in that class's
+  // isMatchCandidate method). There may eventually be a cleaner way to do it.
   ElementCriterionPtr _filter;
+
+private:
+
+  bool _boundsAddedToFilter;
 };
 
 typedef std::shared_ptr<MatchCreator> MatchCreatorPtr;

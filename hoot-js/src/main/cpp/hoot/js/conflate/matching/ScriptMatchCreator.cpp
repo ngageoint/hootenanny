@@ -794,6 +794,9 @@ void ScriptMatchCreator::createMatches(
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
 
+  // The parent does some initialization we need.
+  MatchCreator::createMatches(map, matches, threshold);
+
   QElapsedTimer timer;
   timer.start();
 

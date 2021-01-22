@@ -57,14 +57,14 @@ bool OsmChangesetFileWriter::_failsBoundsCheck(
   if (element->getStatus() == Status::Unknown1 && map1->containsElement(element))
   {
     map = map1;
-    boundsCrit = ConfigUtils::getBoundsCrit(map1);
+    boundsCrit = ConfigUtils::getBoundsFilter(map1);
   }
   else if ((element->getStatus() == Status::Unknown2 ||
             element->getStatus() == Status::Conflated) &&
            map2->containsElement(element))
   {
     map = map2;
-    boundsCrit = ConfigUtils::getBoundsCrit(map2);
+    boundsCrit = ConfigUtils::getBoundsFilter(map2);
   }
   else
   {
@@ -72,32 +72,51 @@ bool OsmChangesetFileWriter::_failsBoundsCheck(
     return false;
   }
 
-  // If we're dealing with a relation from the new data (secondary; status = 2 or
-  // conflated), we're requiring that all of its members be within bounds for it to be used
-  // in the changeset. If this isn't done, relations may end up incomplete with missing
-  // members. We don't worry about this for ref data, as we're assuming our ref data store
-  // has all of its relation member data intact.
+//  if (element->getElementType() == ElementType::Relation &&
+//      (element->getStatus() == Status::Unknown2 || element->getStatus() == Status::Conflated))
+//  {
+//    // TODO: should be able to replace this with a call to the bounds crit
+//    if (!RelationMemberUtils::relationHasAllMembersWithinBounds(
+//          std::dynamic_pointer_cast<const Relation>(element), boundsCrit, map))
+//    {
+//      LOG_TRACE(
+//        "Skipping change with relation containing out of bounds element: " <<
+//        element->getElementId() << "...");
+//      return true;
+//    }
+//  }
+//  else
+//  {
+//    LOG_VART(boundsCrit->isSatisfied(element));
+//    if (!boundsCrit->isSatisfied(element))
+//    {
+//      LOG_TRACE(
+//        "Skipping change with out of bounds element: " << element->getElementId() << "...");
+//      return true;
+//    }
+//  }
+
   if (element->getElementType() == ElementType::Relation &&
       (element->getStatus() == Status::Unknown2 || element->getStatus() == Status::Conflated))
   {
-    if (!RelationMemberUtils::relationHasAllMembersWithinBounds(
-          std::dynamic_pointer_cast<const Relation>(element), boundsCrit, map))
-    {
-      LOG_TRACE(
-        "Skipping change with relation containing out of bounds element: " <<
-        element->getElementId() << "...");
-      return true;
-    }
+    // If we're dealing with a relation from the new data (secondary; status = 2 or
+    // conflated), we're requiring that all of its members be within bounds for it to be used
+    // in the changeset. If this isn't done, relations may end up incomplete with missing
+    // members. We don't worry about this for ref data, as we're assuming our ref data store
+    // has all of its relation member data intact.
+    boundsCrit->setMustCompletelyContain(true);
   }
   else
   {
-    LOG_VART(boundsCrit->isSatisfied(element));
-    if (!boundsCrit->isSatisfied(element))
-    {
-      LOG_TRACE(
-        "Skipping change with out of bounds element: " << element->getElementId() << "...");
-      return true;
-    }
+    boundsCrit->setMustCompletelyContain(ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds());
+  }
+
+  LOG_VART(boundsCrit->isSatisfied(element));
+  if (!boundsCrit->isSatisfied(element))
+  {
+    LOG_TRACE(
+      "Skipping change with out of bounds element: " << element->getElementId() << "...");
+    return true;
   }
 
   return false;

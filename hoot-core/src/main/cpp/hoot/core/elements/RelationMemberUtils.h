@@ -30,8 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
-#include <hoot/core/geometry/GeometricRelationship.h>
+//#include <hoot/core/geometry/GeometricRelationship.h>
 
 namespace hoot
 {
@@ -180,99 +179,99 @@ public:
    */
   static int getMemberWayNodeCount(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
-  /**
-   * Determines if a relation has a member conflatable by the current configuration of conflate
-   * matchers
-   *
-   * @param relation relation to examine
-   * @param bounds optional member bounds requirement; leave null to disable bounds checking
-   * @param relationship optional geometric bounds relationship used with bounds; set to
-   * GeometricRelationship::Invalid to disable bounds checking
-   * @param map map owning the input relation
-   * @return true if the input relation contains at least one member element that can be conflated
-   * and optionally satisfies the bounds requirement; false otherwise
-   */
-  static bool relationHasConflatableMember(
-    const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
-    const GeometricRelationship& relationship, const ConstOsmMapPtr& map);
+//  /**
+//   * Determines if a relation has a member conflatable by the current configuration of conflate
+//   * matchers
+//   *
+//   * @param relation relation to examine
+//   * @param bounds optional member bounds requirement; leave null to disable bounds checking
+//   * @param relationship optional geometric bounds relationship used with bounds; set to
+//   * GeometricRelationship::Invalid to disable bounds checking
+//   * @param map map owning the input relation
+//   * @return true if the input relation contains at least one member element that can be conflated
+//   * and optionally satisfies the bounds requirement; false otherwise
+//   */
+//  static bool relationHasConflatableMember(
+//    const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
+//    const GeometricRelationship& relationship, const ConstOsmMapPtr& map);
 
-  /**
-   * Determines if a relation has any member satisfying a bounds requirement
-   *
-   * @param relation relation with members to examine
-   * @param bounds member bounds requirement
-   * @param relationship geometric bounds relationship used with bounds
-   * @param map map owning the input relation
-   * @return true if the input relation contains at least one member element that satisfies the
-   * bounds requirement; false otherwise
-   */
-  static bool relationHasAnyMemberWithinBounds(
-    const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
-    const GeometricRelationship& relationship, const ConstOsmMapPtr& map);
+//  /**
+//   * Determines if a relation has any member satisfying a bounds requirement
+//   *
+//   * @param relation relation with members to examine
+//   * @param bounds member bounds requirement
+//   * @param relationship geometric bounds relationship used with bounds
+//   * @param map map owning the input relation
+//   * @return true if the input relation contains at least one member element that satisfies the
+//   * bounds requirement; false otherwise
+//   */
+//  static bool relationHasAnyMemberWithinBounds(
+//    const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
+//    const GeometricRelationship& relationship, const ConstOsmMapPtr& map);
 
-  /**
-   * Determines if all members within a relation satisfy a bounds requirement
-   *
-   * @param relation relation with members to examine
-   * @param bounds member bounds requirement
-   * @param relationship geometric bounds relationship used with bounds
-   * @param map map owning the input relation
-   * @return true if all members of the input relation satisify the bounds requirement; false
-   * otherwise
-   */
-  static bool relationHasAllMembersWithinBounds(
-    const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
-    const GeometricRelationship& relationship, const ConstOsmMapPtr& map);
+//  /**
+//   * Determines if all members within a relation satisfy a bounds requirement
+//   *
+//   * @param relation relation with members to examine
+//   * @param bounds member bounds requirement
+//   * @param relationship geometric bounds relationship used with bounds
+//   * @param map map owning the input relation
+//   * @return true if all members of the input relation satisify the bounds requirement; false
+//   * otherwise
+//   */
+//  static bool relationHasAllMembersWithinBounds(
+//    const ConstRelationPtr& relation, const std::shared_ptr<geos::geom::Geometry>& bounds,
+//    const GeometricRelationship& relationship, const ConstOsmMapPtr& map);
 
-  /**
-   * Determines if a relation has any member satisfying the currently configured bounds requirement
-   * (`bounds` configuration option)
-   *
-   * @param relation relation with members to examine
-   * @param map map owning the input relation
-   * @return true if the input relation contains at least one member element that satisfies the
-   * bounds requirement; false otherwise
-   */
-  static bool relationHasAnyMemberWithinCurrentBounds(
-    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+//  /**
+//   * Determines if a relation has any member satisfying the currently configured bounds requirement
+//   * (`bounds` configuration option)
+//   *
+//   * @param relation relation with members to examine
+//   * @param map map owning the input relation
+//   * @return true if the input relation contains at least one member element that satisfies the
+//   * bounds requirement; false otherwise
+//   */
+//  static bool relationHasAnyMemberWithinCurrentBounds(
+//    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
-  /**
-   * Determines if all members within a relation satisfy the currently configured bounds requirement
-   * (`bounds` configuration option)
-   *
-   * @param relation relation with members to examine
-   * @param map map owning the input relation
-   * @return true if all members of the input relation satisify the bounds requirement; false
-   * otherwise
-   */
-  static bool relationHasAllMembersWithinCurrentBounds(
-    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+//  /**
+//   * Determines if all members within a relation satisfy the currently configured bounds requirement
+//   * (`bounds` configuration option)
+//   *
+//   * @param relation relation with members to examine
+//   * @param map map owning the input relation
+//   * @return true if all members of the input relation satisify the bounds requirement; false
+//   * otherwise
+//   */
+//  static bool relationHasAllMembersWithinCurrentBounds(
+//    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 
-  /**
-   * Determines if a relation has any member satisfying a bounds requirement
-   *
-   * @param relation relation with members to examine
-   * @param boundsCriterion bounds criterion
-   * @param map map owning the input relation
-   * @return true if the input relation contains at least one member element that satisfies the
-   * bounds requirement; false otherwise
-   */
-  static bool relationHasAnyMemberWithinBounds(
-    const ConstRelationPtr& relation, const std::shared_ptr<InBoundsCriterion>& boundsCriterion,
-    const ConstOsmMapPtr& map);
+//  /**
+//   * Determines if a relation has any member satisfying a bounds requirement
+//   *
+//   * @param relation relation with members to examine
+//   * @param boundsCriterion bounds criterion
+//   * @param map map owning the input relation
+//   * @return true if the input relation contains at least one member element that satisfies the
+//   * bounds requirement; false otherwise
+//   */
+//  static bool relationHasAnyMemberWithinBounds(
+//    const ConstRelationPtr& relation, const std::shared_ptr<InBoundsCriterion>& boundsCriterion,
+//    const ConstOsmMapPtr& map);
 
-  /**
-   * Determines if all members within a relation satisfy a bounds requirement
-   *
-   * @param relation relation with members to examine
-   * @param boundsCriterion bounds criterion
-   * @param map map owning the input relation
-   * @return true if all members of the input relation satisify the bounds requirement; false
-   * otherwise
-   */
-  static bool relationHasAllMembersWithinBounds(
-    const ConstRelationPtr& relation, const std::shared_ptr<InBoundsCriterion>& boundsCriterion,
-    const ConstOsmMapPtr& map);
+//  /**
+//   * Determines if all members within a relation satisfy a bounds requirement
+//   *
+//   * @param relation relation with members to examine
+//   * @param boundsCriterion bounds criterion
+//   * @param map map owning the input relation
+//   * @return true if all members of the input relation satisify the bounds requirement; false
+//   * otherwise
+//   */
+//  static bool relationHasAllMembersWithinBounds(
+//    const ConstRelationPtr& relation, const std::shared_ptr<InBoundsCriterion>& boundsCriterion,
+//    const ConstOsmMapPtr& map);
 };
 
 }

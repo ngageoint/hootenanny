@@ -34,8 +34,8 @@
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
-#include <hoot/js/criterion/ElementCriterionJs.h>
-#include <hoot/js/elements/OsmMapJs.h>
+//#include <hoot/js/criterion/ElementCriterionJs.h>
+//#include <hoot/js/elements/OsmMapJs.h>
 
 using namespace v8;
 
@@ -86,10 +86,10 @@ void SettingsJs::Init(Handle<Object> exports)
                FunctionTemplate::New(current, replaceInList)->GetFunction());
   settings->Set(String::NewFromUtf8(current, "replaceInList"),
                 FunctionTemplate::New(current, replaceInList)->GetFunction());
-  exports->Set(String::NewFromUtf8(current, "getBoundsCrit"),
-               FunctionTemplate::New(current, getBoundsCrit)->GetFunction());
-  settings->Set(String::NewFromUtf8(current, "getBoundsCrit"),
-                FunctionTemplate::New(current, getBoundsCrit)->GetFunction());
+//  exports->Set(String::NewFromUtf8(current, "getBoundsCrit"),
+//               FunctionTemplate::New(current, getBoundsCrit)->GetFunction());
+//  settings->Set(String::NewFromUtf8(current, "getBoundsCrit"),
+//                FunctionTemplate::New(current, getBoundsCrit)->GetFunction());
 }
 
 void SettingsJs::get(const FunctionCallbackInfo<Value>& args)
@@ -282,16 +282,16 @@ void SettingsJs::replaceInList(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void SettingsJs::getBoundsCrit(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
+//void SettingsJs::getBoundsCrit(const FunctionCallbackInfo<Value>& args)
+//{
+//  Isolate* current = args.GetIsolate();
+//  HandleScope scope(current);
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
+//  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject());
 
-  ElementCriterionPtr boundsCrit = ConfigUtils::getBoundsCrit(mapJs->getConstMap());
+//  ElementCriterionPtr boundsCrit = ConfigUtils::getBoundsCrit(mapJs->getConstMap());
 
-  args.GetReturnValue().Set(ElementCriterionJs::New(boundsCrit));
-}
+//  args.GetReturnValue().Set(ElementCriterionJs::New(boundsCrit));
+//}
 
 }

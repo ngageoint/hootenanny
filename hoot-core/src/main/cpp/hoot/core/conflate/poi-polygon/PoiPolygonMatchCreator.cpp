@@ -82,6 +82,9 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
   QElapsedTimer timer;
   timer.start();
 
+  // The parent does some initialization we need.
+  MatchCreator::createMatches(map, matches, threshold);
+
   QString searchRadiusStr;
   const double additionalDistance = ConfigOptions().getPoiPolygonAdditionalSearchDistance();
   if (additionalDistance <= 0)
@@ -548,8 +551,8 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
   return result;
 }
 
-bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
-                                              const ConstOsmMapPtr& /*map*/)
+bool PoiPolygonMatchCreator::isMatchCandidate(
+  ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
   return
     element->isUnknown() && (_poiCrit.isSatisfied(element) || _polyCrit.isSatisfied(element));

@@ -77,7 +77,7 @@ _settings(Settings::getInstance()),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // a very large number of files.
-_writeDebugMaps(true)
+_writeDebugMaps(false)
 {
   _reset();
 }
@@ -87,7 +87,7 @@ UnifyingConflator::UnifyingConflator(const std::shared_ptr<MatchThreshold>& matc
   _settings(Settings::getInstance()),
   _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 // See related note in previous constructor.
-_writeDebugMaps(true)
+_writeDebugMaps(false)
 {
   _matchThreshold = matchThreshold;
   _reset();

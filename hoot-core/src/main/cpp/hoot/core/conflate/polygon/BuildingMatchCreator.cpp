@@ -439,6 +439,9 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
   QElapsedTimer timer;
   timer.start();
 
+  // The parent does some initialization we need.
+  MatchCreator::createMatches(map, matches, threshold);
+
   QString searchRadiusStr;
   const double searchRadius = ConfigOptions().getSearchRadiusBuilding();
   if (searchRadius < 0)

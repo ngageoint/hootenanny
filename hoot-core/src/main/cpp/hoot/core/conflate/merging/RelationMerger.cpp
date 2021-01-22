@@ -43,7 +43,7 @@ _mergeTags(true),
 _deleteRelation2(true),
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // a very large number of files.
-_writeDebugMaps(true)
+_writeDebugMaps(false)
 {
 }
 
@@ -100,7 +100,7 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
   const int numRelationBeingReplacedMembers = relationBeingReplaced->getMemberCount();
   int numMembersCopied = 0;
   // If a bounds was configured, we'll only merge in members that satisfy it.
-  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getBoundsCrit(_map);
+  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getBoundsFilter(_map);
 
   // Load up the relation members from both relations.
 

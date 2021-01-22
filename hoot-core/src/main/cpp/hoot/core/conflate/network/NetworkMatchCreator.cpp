@@ -92,6 +92,9 @@ void NetworkMatchCreator::createMatches(
   QElapsedTimer timer;
   timer.start();
 
+  // The parent does some initialization we need.
+  MatchCreator::createMatches(map, matches, threshold);
+
   QString searchRadiusStr;
   const double searchRadius = ConfigOptions().getSearchRadiusHighway();
   if (searchRadius < 0)
