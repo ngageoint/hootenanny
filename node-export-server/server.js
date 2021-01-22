@@ -336,6 +336,7 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
     var bbox_param = 'bounds';
     var bbox = exports.validateBbox(querybbox);
     var poly = exports.validatePoly(querypoly);
+    var willCrop = doCrop == 1 && (poly || bbox) !== null;
 
     //if conn is url, write that response to a file
     if (input.substring(0,4) === 'http') {
@@ -350,46 +351,53 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
 
     //create command and run
     command += 'hoot convert -C NodeExport.conf';
+
+    var convertOpts = [];
     var bboxOption = '';
     if (bbox) bboxOption = ' -D ' + bbox_param + '=' + bbox;
     if (poly) bboxOption = ' -D ' + bbox_param + '=' + exports.polyQuotes(poly);
     if (bboxOption) command += bboxOption
+
     if (isFile) {
         if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
         if (overrideTags) {
             if (paramschema === 'OSM') {
-                command += ' -D convert.ops=hoot::SchemaTranslationOp';
-                command += ' -D translation.script=translations/OSM_Ingest.js';
+                convertOpts.push('hoot::SchemaTranslationOp');
+                command += ' -D translation.script=' + hootHome  + '/translations/OSM_Ingest.js';
             }
             command += ' -D schema.translation.override=' + overrideTags;
         }
         if (paramschema !== 'OSM' && config.schemas[paramschema] !== '') {
-            command += ' -D convert.ops=hoot::SchemaTranslationOp';
-            command += ' -D schema.translation.script=' + config.schemas[paramschema];
+            convertOpts.push('hootSchemaTranslationOp')
+            command += ' -D schema.translation.script=' + hootHome + '/' + config.schemas[paramschema];
             command += ' -D schema.translation.direction=toogr';
             // Set per schema config options
             if (config.schema_options[paramschema]) command += ' -D ' + config.schema_options[paramschema];
         }
     } else {
         if (paramschema === 'OSM') command += ' -D writer.include.debug.tags=true';
-        command += ' -D convert.ops=hoot::SchemaTranslationOp';
-        command += ' -D schema.translation.script=' + config.schemas[paramschema];
+        convertOpts.push('hoot::SchemaTranslationOp');
+        command += ' -D schema.translation.script=' + hootHome + '/' + config.schemas[paramschema];
         if (overrideTags) command +=  ' -D schema.translation.override=' + overrideTags;
         if (input.substring(0,2) === 'PG') command += ' -D ogr.reader.bounding.box.latlng=true';
         // Set per schema config options
         if (config.schema_options[paramschema]) command += ' -D ' + config.schema_options[paramschema];
     }
 
+    //prevent negative id collision when mering multipolygon rings
     if (ignoreSourceIds)
         command += ' -D reader.use.data.source.ids=false'
 
-    command += ' ' + input + ' ' + outFile;
+    //hard clip data to bounds of or bbox or polygon
+    if (willCrop) {
+        command += ' -D crop.bounds="' + (bbox || poly) + '"';
+        convertOpts.push('hoot::MapCropper');
+    }
 
-    // if the request specifed to crop the output and the request also
-    // has a valid polygon or bbox, crop the output too.
-    // note that we give a polygon precendence to a bbox
-    if (doCrop && (poly || bbox))
-        command += ' && hoot crop ' + outFile + ' ' + outFile + ' "' + (poly || bbox) + '"';
+    if (convertOpts.length > 0)
+        command += ' -D convert.ops="' + convertOpts.join(';') + '"';
+
+    command += ' ' + input + ' ' + outFile;
 
     //if (!isFile) command += ' --trans ' + config.schemas[req.params.schema];
 
@@ -525,7 +533,7 @@ function doExport(req, res, hash, input) {
                 var outDir = appDir + output;
                 var outFile = outDir + config.formats[req.params.format];
                 if (req.params.format === 'File Geodatabase') outDir = outFile;
-                multiCommand += buildCommand('OSM', req.query.overrideTags, null,  polyString, isFile, input, outDir, outFile, req.query.crop);
+                multiCommand += buildCommand('OSM', req.query.overrideTags, null,  polyString, isFile, input, outDir, outFile, Number(req.query.crop));
                 if (i !== polygons.length - 1) multiCommand += ' && ';
                 rings.push(outFile);
             }
@@ -565,7 +573,7 @@ function doExport(req, res, hash, input) {
                 }
             })
         } else {
-            var command = buildCommand(req.params.schema, req.params.tagOverrides, req.query.bbox, req.query.poly, isFile, input, outDir, outFile, req.query.crop);
+            var command = buildCommand(req.params.schema, req.params.tagOverrides, req.query.bbox, req.query.poly, isFile, input, outDir, outFile, Number(req.query.crop));
             child = exec(command, {cwd: hootHome},
                 function(error, stdout, stderr) {
                     //setTimeout(function() { //used to simulate a long request
