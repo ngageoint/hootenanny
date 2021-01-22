@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGMATCHCREATOR_H
 #define BUILDINGMATCHCREATOR_H
@@ -52,7 +52,8 @@ public:
 
   virtual MatchPtr createMatch(const ConstOsmMapPtr& map, ElementId eid1, ElementId eid2) override;
 
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+  virtual void createMatches(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
@@ -78,7 +79,7 @@ public:
 
 private:
 
-  /// Don't use this directly. See below.
+  // Don't use this directly. See below.
   std::shared_ptr<BuildingRfClassifier> _rf;
   std::shared_ptr<MatchThreshold> _matchThreshold;
 
@@ -86,7 +87,7 @@ private:
 
   BuildingCriterion _buildingCrit;
 
-  /**
+  /*
    * The building model can be slow to load, this provides a lazy load.
    */
   std::shared_ptr<BuildingRfClassifier> _getRf();

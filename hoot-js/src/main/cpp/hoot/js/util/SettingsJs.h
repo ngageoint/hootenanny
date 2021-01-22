@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SETTINGSJS_H
 #define SETTINGSJS_H
@@ -50,6 +50,10 @@ private:
   static void getValue(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void loadJson(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void set(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void appendToList(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void prependToList(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void removeFromList(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void replaceInList(const v8::FunctionCallbackInfo<v8::Value>& args);
 };
 
 

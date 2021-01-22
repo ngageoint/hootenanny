@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTCRITERION_H
 #define ELEMENTCRITERION_H
@@ -78,7 +78,7 @@ public:
    * @return a string
    * @todo Many of the crits are only returning their class names in toString(). So, we may want to
    * add getClassName() here to mimic OsmMapOperation and ElementVisitor and make toString()
-   * optional.
+   * optional with actual useful info in it.
    */
   virtual QString toString() const = 0;
 };

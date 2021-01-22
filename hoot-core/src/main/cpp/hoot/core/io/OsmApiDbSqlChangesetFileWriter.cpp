@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbSqlChangesetFileWriter.h"
 
@@ -32,6 +32,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QSqlError>
@@ -45,20 +47,14 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmApiDbSqlChangesetFileWriter)
 
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter() :
-_changesetId(0),
-_changesetUserId(ConfigOptions().getChangesetUserId()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
-_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
+OsmChangesetFileWriter(),
+_changesetId(0)
 {
 }
 
 OsmApiDbSqlChangesetFileWriter::OsmApiDbSqlChangesetFileWriter(const QUrl& url) :
-_changesetId(0),
-_changesetUserId(ConfigOptions().getChangesetUserId()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
-_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
+OsmChangesetFileWriter(),
+_changesetId(0)
 {
   _db.open(url);
 }
@@ -68,18 +64,32 @@ OsmApiDbSqlChangesetFileWriter::~OsmApiDbSqlChangesetFileWriter()
   _db.close();
 }
 
-void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
-                                           const ChangesetProviderPtr& changesetProvider)
+void OsmApiDbSqlChangesetFileWriter::setConfiguration(const Settings &conf)
+{
+  ConfigOptions co(conf);
+  _changesetUserId = co.getChangesetUserId();
+  _includeDebugTags = co.getWriterIncludeDebugTags();
+  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
+  _metadataAllowKeys = co.getChangesetMetadataAllowedTagKeys();
+  _changesetIgnoreBounds = co.getChangesetIgnoreBounds();
+}
+
+void OsmApiDbSqlChangesetFileWriter::write(
+  const QString& path, const ChangesetProviderPtr& changesetProvider)
 {
   QList<ChangesetProviderPtr> changesetProviders;
   changesetProviders.append(changesetProvider);
   write(path, changesetProviders);
 }
 
-void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
-                                           const QList<ChangesetProviderPtr>& changesetProviders)
+void OsmApiDbSqlChangesetFileWriter::write(
+  const QString& path, const QList<ChangesetProviderPtr>& changesetProviders)
 {
   LOG_DEBUG("Writing changeset to: " << path << "...");
+
+  LOG_VARD(_map1List.size());
+  LOG_VARD(_map2List.size());
+  assert(_map1List.size() == _map2List.size());
 
   _remappedIds.clear();
   _changesetBounds.init();
@@ -100,6 +110,19 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
       "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
+    // Bounds checking requires a map. Grab the two input maps if they were passed in...one for
+    // each dataset, before changes and after.
+    ConstOsmMapPtr map1;
+    ConstOsmMapPtr map2;
+    if (_map1List.size() > 0)
+    {
+      map1 = _map1List.at(i);
+    }
+    if (_map2List.size() > 0)
+    {
+      map2 = _map2List.at(i);
+    }
+
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
     LOG_VART(changesetProvider.get());
     LOG_VART(changesetProvider->hasMoreChanges());
@@ -107,33 +130,43 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
     {
       LOG_TRACE("Reading next SQL change...");
       Change change = changesetProvider->readNextChange();
+      LOG_VART(change);
+      ConstElementPtr changeElement = change.getElement();
 
-      if (!change.getElement())
+      if (!changeElement)
       {
         continue;
       }
 
       // See related note in OsmXmlChangesetFileWriter::write.
-      if (_parsedChangeIds.contains(change.getElement()->getElementId()))
+      if (_parsedChangeIds.contains(changeElement->getElementId()))
       {
         LOG_TRACE("Skipping change for element ID already having change: " << change << "...");
         continue;
       }
 
+      // If a bounds was specified for calculating the changeset, honor it.
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() &&
+          _failsBoundsCheck(changeElement, map1, map2))
+      {
+        continue;
+      }
+
+      LOG_VART(change.getType());
       switch (change.getType())
       {
         case Change::Create:
-          _createNewElement(change.getElement());
+          _createNewElement(changeElement);
           break;
         case Change::Modify:
-          _updateExistingElement(change.getElement());
+          _updateExistingElement(changeElement);
           break;
         case Change::Delete:
-          _deleteExistingElement(change.getElement());
+          _deleteExistingElement(changeElement);
           break;
         case Change::Unknown:
-          //see comment in ChangesetDeriver::_nextChange() when
-          //_fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
+          // see comment in ChangesetDeriver::_nextChange() when
+          // _fromE->getElementId() < _toE->getElementId() as to why we do a no-op here.
           break;
         default:
           throw IllegalArgumentException("Unexpected change type.");
@@ -141,12 +174,12 @@ void OsmApiDbSqlChangesetFileWriter::write(const QString& path,
 
       if (change.getType() != Change::Unknown)
       {
-        if (change.getElement()->getElementType().getEnum() == ElementType::Node)
+        if (changeElement->getElementType().getEnum() == ElementType::Node)
         {
-          ConstNodePtr node = std::dynamic_pointer_cast<const Node>(change.getElement());
+          ConstNodePtr node = std::dynamic_pointer_cast<const Node>(changeElement);
           _changesetBounds.expandToInclude(node->getX(), node->getY());
         }
-        _parsedChangeIds.append(change.getElement()->getElementId());
+        _parsedChangeIds.append(changeElement->getElementId());
         changes++;
       }
     }
@@ -238,6 +271,12 @@ void OsmApiDbSqlChangesetFileWriter::_createNewElement(ConstElementPtr element)
   LOG_TRACE("ID before: " << changeElement->getElementId());
   const long id = _db.getNextId(element->getElementType().getEnum());
   _remappedIds[changeElement->getElementId()] = ElementId(changeElement->getElementType(), id);
+  if (id <= 0)
+  {
+    throw HootException(
+      "SQL changesets can only create elements with positive element IDs: " +
+      ElementId(changeElement->getElementType(), id).toString());
+  }
   LOG_TRACE("ID after: " << ElementId(changeElement->getElementType(), id));
 
   changeElement->setId(id);
@@ -317,6 +356,12 @@ QString OsmApiDbSqlChangesetFileWriter::_getUpdateValuesWayOrRelationStr(ConstEl
 
 void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr element)
 {
+  if (element->getElementId().getId() <= 0)
+  {
+    throw HootException(
+      "SQL changesets can only modify positive element IDs: " + element->getElementId().toString());
+  }
+
   LOG_TRACE("Writing update for: " << element->getElementId() << "...");
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
@@ -380,6 +425,13 @@ void OsmApiDbSqlChangesetFileWriter::_updateExistingElement(ConstElementPtr elem
 
 void OsmApiDbSqlChangesetFileWriter::_deleteExistingElement(ConstElementPtr element)
 {
+  if (element->getElementId().getId() <= 0)
+  {
+    throw HootException(
+      "SQL changesets can only create relation members with positive element IDs: " +
+      element->getElementId().toString());
+  }
+
   const QString elementIdStr = QString::number(element->getId());
   const QString elementTypeStr = element->getElementType().toString().toLower();
   ElementPtr changeElement = _getChangeElement(element);
@@ -597,11 +649,24 @@ void OsmApiDbSqlChangesetFileWriter::_createWayNodes(ConstWayPtr way)
     // If this was a newly created node its id was remapped when it was created, but the way still
     // has the old way node id.
     ElementId nodeElementId = ElementId(ElementType::Node, nodeIds.at(i));
+    LOG_TRACE("Way node ID before: " << nodeElementId);
     if (_remappedIds.contains(nodeElementId))
     {
       nodeElementId = _remappedIds[nodeElementId];
+      if (nodeElementId.getId() <= 0)
+      {
+        throw HootException(
+          "SQL changesets can only create way nodes with positive element IDs: " +
+          nodeElementId.toString());
+      }
     }
-    LOG_VART(nodeElementId);
+    else if (nodeElementId.getId() <= 0)
+    {
+      ElementId newId = ElementId(ElementType::Node, _db.getNextId(ElementType::Node));
+      _remappedIds[nodeElementId] = newId;
+      nodeElementId = newId;
+    }
+    LOG_TRACE("Way node ID after: " << nodeElementId);
 
     QString values =
       QString("(way_id, node_id, version, sequence_id) VALUES (%1, %2, 1, %3);\n")
@@ -631,11 +696,26 @@ void OsmApiDbSqlChangesetFileWriter::_createRelationMembers(ConstRelationPtr rel
     // If the member was a newly created element its id was remapped when it was created, but the
     // relation still has the old element id.
     ElementId memberElementId = member.getElementId();
+    LOG_TRACE("Member ID before: " << memberElementId);
     if (_remappedIds.contains(memberElementId))
     {
       memberElementId = _remappedIds[memberElementId];
+      if (memberElementId.getId() <= 0)
+      {
+        throw HootException(
+          "SQL changesets can only create relation members with positive element IDs: " +
+          memberElementId.toString());
+      }
     }
-    LOG_VART(memberElementId);
+    else if (memberElementId.getId() <= 0)
+    {
+      ElementId newId =
+        ElementId(
+          memberElementId.getType().getEnum(), _db.getNextId(memberElementId.getType().getEnum()));
+      _remappedIds[memberElementId] = newId;
+      memberElementId = newId;
+    }
+    LOG_TRACE("Member ID after: " << memberElementId);
 
     QString values =
       QString(
@@ -683,14 +763,6 @@ void OsmApiDbSqlChangesetFileWriter::_deleteAll(const QString& tableName, const 
       .arg(idFieldName)
       .arg(id))
     .toUtf8());
-}
-
-void OsmApiDbSqlChangesetFileWriter::setConfiguration(const Settings &conf)
-{
-  ConfigOptions co(conf);
-  _changesetUserId = co.getChangesetUserId();
-  _includeDebugTags = co.getWriterIncludeDebugTags();
-  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
 }
 
 }

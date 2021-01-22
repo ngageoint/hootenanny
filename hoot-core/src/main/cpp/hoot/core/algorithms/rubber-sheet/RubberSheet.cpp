@@ -144,8 +144,8 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
           }
         }
 
-        std::shared_ptr<OsmMapConsumer> mapConsumer =
-          std::dynamic_pointer_cast<OsmMapConsumer>(crit);
+        std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+          std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
         LOG_VART(mapConsumer.get());
         if (mapConsumer)
         {

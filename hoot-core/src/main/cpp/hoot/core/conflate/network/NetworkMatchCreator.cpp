@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatchCreator.h"
 
@@ -91,6 +91,9 @@ void NetworkMatchCreator::createMatches(
 {
   QElapsedTimer timer;
   timer.start();
+
+  // The parent does some initialization we need.
+  MatchCreator::createMatches(map, matches, threshold);
 
   QString searchRadiusStr;
   const double searchRadius = ConfigOptions().getSearchRadiusHighway();

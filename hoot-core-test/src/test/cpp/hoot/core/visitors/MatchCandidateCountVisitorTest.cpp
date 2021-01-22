@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -45,6 +45,10 @@
 namespace hoot
 {
 
+/*
+ * None of the tests in this class will run on a VM for me when the test class isn't run in parallel
+ * (whole test hangs)...very strange (1/13/21) - BDW.
+ */
 class MatchCandidateCountVisitorTest : public HootTestFixture
 {
   CPPUNIT_TEST_SUITE(MatchCandidateCountVisitorTest);

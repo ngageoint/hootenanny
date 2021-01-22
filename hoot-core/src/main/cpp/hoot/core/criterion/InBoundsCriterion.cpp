@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "InBoundsCriterion.h"
@@ -35,6 +35,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/elements/WayUtils.h>
 
 namespace hoot
 {
@@ -42,14 +43,22 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, InBoundsCriterion)
 
 InBoundsCriterion::InBoundsCriterion() :
-_mustCompletelyContain(true)
+_mustCompletelyContain(true),
+_treatWayNodesAsPartOfWays(true)
 {
   setConfiguration(conf());
 }
 
 InBoundsCriterion::InBoundsCriterion(const bool mustCompletelyContain) :
-_mustCompletelyContain(mustCompletelyContain)
+_mustCompletelyContain(mustCompletelyContain),
+_treatWayNodesAsPartOfWays(true)
 {
+}
+
+InBoundsCriterion::~InBoundsCriterion()
+{
+  _elementConverter.reset();
+  _wayNodeCrit.reset();
 }
 
 void InBoundsCriterion::setConfiguration(const Settings& conf)
@@ -64,10 +73,15 @@ void InBoundsCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
   _elementConverter.reset(new ElementToGeometryConverter(_map));
+  _wayNodeCrit.reset(new WayNodeCriterion(_map));
 }
 
 bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  if (!_map)
+  {
+    throw IllegalArgumentException("No map passed to InBoundsCriterion.");
+  }
   if (!_bounds)
   {
     throw IllegalArgumentException("No bounds passed to InBoundsCriterion.");
@@ -76,18 +90,52 @@ bool InBoundsCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     throw IllegalArgumentException("No map set on InBoundsCriterion.");
   }
+  if (!_wayNodeCrit)
+  {
+    throw IllegalArgumentException("No way node criterion set on InBoundsCriterion.");
+  }
   if (!e)
   {
     return false;
   }
-
   LOG_VART(e->getElementId());
+
+  const bool isWayNode = _wayNodeCrit->isSatisfied(e);
+  LOG_VART(isWayNode);
+  if (!isWayNode || (isWayNode && !_treatWayNodesAsPartOfWays))
+  {
+    return _nonWayNodeInBounds(e);
+  }
+  else
+  {
+    std::vector<ConstWayPtr> containingWays =
+      WayUtils::getContainingWaysByNodeId(e->getElementId().getId(), _map);
+    LOG_VART(containingWays.size());
+    for (std::vector<ConstWayPtr>::const_iterator containingWaysItr = containingWays.begin();
+         containingWaysItr != containingWays.end(); ++containingWaysItr)
+    {
+      ConstWayPtr containingWay = *containingWaysItr;
+      if (containingWay)
+      {
+        LOG_VART(containingWay->getElementId());
+        const bool inBounds = _nonWayNodeInBounds(containingWay);
+        if (inBounds)
+        {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+}
+
+bool InBoundsCriterion::_nonWayNodeInBounds(const ConstElementPtr& e) const
+{
   std::shared_ptr<geos::geom::Geometry> geom = _elementConverter->convertToGeometry(e);
   if (!geom)
   {
     return false;
   }
-  LOG_VART(geom->toString());
   if (_mustCompletelyContain)
   {
     LOG_VART(_bounds->contains(geom.get()));

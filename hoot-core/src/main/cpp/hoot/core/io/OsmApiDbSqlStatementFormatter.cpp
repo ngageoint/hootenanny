@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmApiDbSqlStatementFormatter.h"
 
@@ -268,11 +268,11 @@ QStringList OsmApiDbSqlStatementFormatter::relationMemberToSqlStrings(const long
   const QString memberSequenceIndexStr(QString::number(memberSequenceIndex));
   const QString versionStr(QString::number(ver));
   QString memberRole = escapeCopyToData(member.getRole());
-  //handle empty data; this is needed for pg_bulkload
-  if (memberRole.trimmed().isEmpty())
-  {
-    memberRole = "<no role>";
-  }
+  // handle empty data; This was needed for pg_bulkload, but we haven't integrated with it yet.
+//  if (memberRole.trimmed().isEmpty())
+//  {
+//    memberRole = "<no role>";
+//  }
 
   sqlStrs.append(
     _outputFormatStrings[ApiDb::getCurrentRelationMembersTableName()]

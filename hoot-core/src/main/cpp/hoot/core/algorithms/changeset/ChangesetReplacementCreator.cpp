@@ -395,6 +395,8 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+  // Don't let the changeset writer use the bounds. We'll handle it internally as part of C&R.
+  conf().set(ConfigOptions::getChangesetIgnoreBoundsKey(), true);
 
   // For this being enabled to have any effect,
   // bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.

@@ -156,8 +156,9 @@ protected:
   void _fullRead(OsmMapPtr map);
 
   /*
-   * Reads a portion of the dataset into a map over the specified bounds. This uses the same bounded
-   * query logic as used in the Map.java query method.
+   * Reads a portion of the dataset into a map over the specified bounds. Note that this fully
+   * hydrates relations, so extra filtering may need to be done after the fact to prevent conflating
+   * features outside of the bounds.
    */
   void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
 

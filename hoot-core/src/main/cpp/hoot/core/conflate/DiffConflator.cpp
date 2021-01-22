@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DiffConflator.h"
 
@@ -283,7 +283,7 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   roadSnapper.setMarkSnappedWays(true);
   LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
   roadSnapper.apply(_pMap);
-  LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
+  LOG_DEBUG("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
 
   // Since way splitting was done as part of the conflate pre ops previously run and we've now
@@ -293,7 +293,7 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   wayJoiner.setConfiguration(conf());
   LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
   wayJoiner.apply(_pMap);
-  LOG_INFO("\t" << wayJoiner.getCompletedStatusMessage());
+  LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-way-joining");
 
   // No point in running way joining a second time in post conflate ops since we already did it here

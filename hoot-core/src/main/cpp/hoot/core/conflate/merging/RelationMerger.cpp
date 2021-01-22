@@ -32,11 +32,24 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/elements/RelationMemberComparison.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
 {
 
-void RelationMerger::merge(const ElementId& elementId1, const ElementId& elementId2)
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// a very large number of files.
+const bool RelationMerger::WRITE_DETAILED_DEBUG_MAPS = false;
+
+RelationMerger::RelationMerger() :
+_mergeTags(true),
+_deleteRelation2(true)
+{
+}
+
+void RelationMerger::merge(
+  const ElementId& elementId1, const ElementId& elementId2)
 {
   if (elementId1.getType() != ElementType::Relation ||
       elementId2.getType() != ElementType::Relation)
@@ -50,29 +63,47 @@ void RelationMerger::merge(const ElementId& elementId1, const ElementId& element
   RelationPtr relation1 = _map->getRelation(elementId1.getId());
   RelationPtr relation2 = _map->getRelation(elementId2.getId());
 
-  LOG_TRACE("Merging tags...");
-  Tags newTags =
-    TagMergerFactory::mergeTags(relation1->getTags(), relation2->getTags(), ElementType::Relation);
-  relation1->setTags(newTags);
+  if (_mergeTags)
+  {
+    LOG_TRACE("Merging tags...");
+    Tags newTags =
+      TagMergerFactory::mergeTags(
+        relation1->getTags(), relation2->getTags(), ElementType::Relation);
+    relation1->setTags(newTags);
+  }
 
   // copy relation 2's members into 1
-  _mergeMembers(relation1, relation2);
+  const bool allMembersCopied = _mergeMembers(relation1, relation2);
+  LOG_VART(allMembersCopied);
 
-  LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
-  ReplaceElementOp(elementId2, elementId1, true).apply(_map);
-
-  LOG_TRACE("Removing " << elementId2 << "...");
-  RemoveRelationByEid(elementId2.getId()).apply(_map);
+  if (_deleteRelation2)
+  {
+    // replace any references to relation 2 with a ref to relation 1
+    LOG_TRACE("Replacing " << elementId2 << " with " << elementId1 << "...");
+    ReplaceElementOp(elementId2, elementId1, true).apply(_map);
+    // remove all instances of relation 2
+    LOG_TRACE("Removing " << elementId2 << "...");
+    RemoveRelationByEid(elementId2.getId()).apply(_map);
+  }
 
   LOG_TRACE("Merged relations " << elementId1 << " and " << elementId2);
-  // ONLY ENABLE THIS DURING DEBUGGING
-  //OsmMapWriterFactory::writeDebugMap(
-    //_map, "RelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
+  if (WRITE_DETAILED_DEBUG_MAPS)
+  {
+    OsmMapWriterFactory::writeDebugMap(
+      _map, "RelationMerger-" + elementId1.toString() + "-" + elementId2.toString());
+  }
 }
 
-void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
+bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced)
 {
   LOG_TRACE("Merging members...");
+
+  const int numRelationBeingReplacedMembers = relationBeingReplaced->getMemberCount();
+  int numMembersCopied = 0;
+  // If a bounds was configured, we'll only merge in members that satisfy it.
+  std::shared_ptr<InBoundsCriterion> boundsCrit = ConfigUtils::getBoundsFilter(_map);
+
+  // Load up the relation members from both relations.
 
   const std::vector<RelationData::Entry> replacingRelationMembers = replacingRelation->getMembers();
   LOG_VART(replacingRelationMembers.size());
@@ -80,8 +111,8 @@ void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
     relationBeingReplaced->getMembers();
   LOG_VART(relationBeingReplacedMembers.size());
 
-  // if insertion ever proves too slow with these lists, then we can switch them over to linked
-  // lists
+  // If insertion ever proves too slow with these lists, then we can switch them over to linked
+  // lists.
   QList<RelationMemberComparison> replacingRelationMemberComps;
   for (size_t i = 0; i < replacingRelationMembers.size(); i++)
   {
@@ -115,26 +146,38 @@ void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
     const RelationMemberComparison currentMemberFromReplaced = relationBeingReplacedMemberComps[i];
     LOG_VART(currentMemberFromReplaced);
 
-    // skip copying members our replacing relation already has
+    // Skip copying any members to our target relation that our replacing relation already has.
     if (replacingRelationMemberComps.contains(currentMemberFromReplaced))
     {
       LOG_TRACE(
-        "Skipping adding member being replaced already in the replacing relation: " <<
-        currentMemberFromReplaced << "...");
+        "Skipping adding member being replaced that is already in the replacing relation: " <<
+        currentMemberFromReplaced.getElement()->getElementId() << "...");
       LOG_TRACE("************************");
       continue;
     }
+    // Don't add any relation members which aren't within the current bounds if one was specified.
+    else if (boundsCrit && !boundsCrit->isSatisfied(currentMemberFromReplaced.getElement()))
+    {
+      LOG_TRACE(
+        "Skipping adding member being replaced that is out of bounds: " <<
+        currentMemberFromReplaced.getElement()->getElementId() << "...");
+      LOG_TRACE("************************");
+      continue;
+    }
+
+    // Determine which index in the target relation we want to insert the member from the replacing
+    // relation.
 
     RelationMemberComparison beforeMemberFromReplaced;
     RelationMemberComparison afterMemberFromReplaced;
     if (i != 0)
     {
-      // find the member right before our current member in the relation being replaced
+      // Find the member right before our current member in the relation being replaced.
       beforeMemberFromReplaced = relationBeingReplacedMemberComps[i - 1];
     }
     if (i != relationBeingReplacedMemberComps.size() - 1)
     {
-      // find the member right after our current member in the relation being replaced
+      // Find the member right after our current member in the relation being replaced.
       afterMemberFromReplaced = relationBeingReplacedMemberComps[i + 1];
     }
     if (!beforeMemberFromReplaced.isNull())
@@ -146,14 +189,14 @@ void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
       LOG_VART(afterMemberFromReplaced);
     }
 
-    // use the relation size as the null value for size_t, since it can't be negative like the
-    // not found index coming back from QList will be
+    // Use the relation size as the null value for size_t, since it can't be negative like the
+    // not found index coming back from QList will be.
     int matchingFromReplacingBeforeIndex = relationBeingReplacedMemberComps.size();
     if (!beforeMemberFromReplaced.isNull())
     {
-      // if there was a member directly preceding our current member in the relation being replaced,
-      // see if it exists in the replacing relation; if so record that member's index from the
-      // replacing relation
+      // If there was a member directly preceding our current member in the relation being replaced,
+      // see if it exists in the replacing relation. If so, record that member's index from the
+      // replacing relation.
       const int index = replacingRelationMemberComps.indexOf(beforeMemberFromReplaced);
       if (index != -1)
       {
@@ -163,9 +206,9 @@ void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
     int matchingFromReplacingAfterIndex = relationBeingReplacedMemberComps.size();
     if (!afterMemberFromReplaced.isNull())
     {
-      // if there was a member directly following our current member in the relation being replaced,
-      // see if it exists in the replacing relation; if so record that member's index from the
-      // replacing relation
+      // If there was a member directly following our current member in the relation being replaced,
+      // see if it exists in the replacing relation. If so, record that member's index from the
+      // replacing relation.
       const int index = replacingRelationMemberComps.indexOf(afterMemberFromReplaced);
       if (index != -1)
       {
@@ -186,9 +229,9 @@ void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
     {
       if ((matchingFromReplacingAfterIndex - matchingFromReplacingBeforeIndex) == 1)
       {
-        // if the replacing relation has matching directly preceding/following members for the
+        // If the replacing relation has matching directly preceding/following members for the
         // current member from the relation being replaced and they are consecutive, insert our
-        // current member in between them in the replacing relation
+        // current member in between them in the replacing relation.
         LOG_TRACE(
           "Consecutive directly preceding and following members. Inserting current member: " <<
           currentMemberFromReplaced << " between indexes " <<
@@ -198,9 +241,9 @@ void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
       }
       else
       {
-        // if the replacing relation has matching directly preceding/following members for the
+        // If the replacing relation has matching directly preceding/following members for the
         // current member from the relation being replaced and they are not consecutive,
-        // arbitrarily insert our current member just after the preceding member
+        // arbitrarily insert our current member just after the preceding member.
         LOG_TRACE(
           "Non-consecutive directly preceding and following members. Inserting current member: " <<
           currentMemberFromReplaced << " after index " << matchingFromReplacingBeforeIndex <<
@@ -212,9 +255,9 @@ void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
     else if (matchingFromReplacingAfterIndex == relationBeingReplacedMemberComps.size() &&
              matchingFromReplacingBeforeIndex != relationBeingReplacedMemberComps.size())
     {
-      // if the replacing relation has a matching directly preceding member but not a directly
+      // If the replacing relation has a matching and directly preceding member but not a directly
       // following member, insert our current member from the relation being replaced just after the
-      // preceding member in the replacing relation
+      // preceding member in the replacing relation.
       LOG_TRACE(
         "Directly preceding member only. Inserting current member: " <<
         currentMemberFromReplaced << " after index " <<  matchingFromReplacingBeforeIndex <<
@@ -225,9 +268,9 @@ void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
     else if (matchingFromReplacingAfterIndex != relationBeingReplacedMemberComps.size() &&
              matchingFromReplacingBeforeIndex == relationBeingReplacedMemberComps.size())
     {
-      // if the replacing relation has a matching directly following member but not a directly
+      // If the replacing relation has a matching and directly following member but not a directly
       // preceding member, insert our current member from the relation being replaced just before
-      // the following member in the replacing relation
+      // the following member in the replacing relation.
       LOG_TRACE(
         "Directly following member only. Inserting current member: " <<
         currentMemberFromReplaced << " before index " <<  matchingFromReplacingAfterIndex << "...");
@@ -236,8 +279,9 @@ void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
     }
     else
     {
-      // if the replacing relation has no matching directly preceding/following members, arbitrarily
-      // add the current member from the relation being replacd to the end of the replacing relation
+      // If the replacing relation has no matching directly preceding/following members, arbitrarily
+      // add the current member from the relation being replaced to the end of the replacing
+      // relation.
       LOG_TRACE(
         "No directly preceding or following members. Inserting current member: " <<
         currentMemberFromReplaced << " at the end of the relation...");
@@ -251,12 +295,21 @@ void RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
   for (int i = 0; i < replacingRelationMemberComps.size(); i++)
   {
     const RelationMemberComparison currentMemberFromReplaced = replacingRelationMemberComps[i];
+    // Add the relation member to the relation we're keeping.
     modifiedMembers.push_back(
       RelationData::Entry(
         currentMemberFromReplaced.getRole(),
         currentMemberFromReplaced.getElement()->getElementId()));
+    // Remove the member from the relation we may or may not be keeping.
+    relationBeingReplaced->removeElement(currentMemberFromReplaced.getElement()->getElementId());
+    numMembersCopied++;
   }
-  replacingRelation->setMembers(modifiedMembers);
+  if (modifiedMembers.size() > 0)
+  {
+    replacingRelation->setMembers(modifiedMembers);
+  }
+
+  return numRelationBeingReplacedMembers == numMembersCopied;
 }
 
 }

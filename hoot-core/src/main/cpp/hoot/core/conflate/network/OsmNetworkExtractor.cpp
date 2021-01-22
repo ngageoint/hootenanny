@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmNetworkExtractor.h"
 
@@ -191,8 +191,8 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {
-        LOG_WARN(
-          "Received a non-linear relation as a valid network element. Ignoring relation. " << e);
+        LOG_WARN("Received a non-linear relation as a valid network element. Ignoring relation...");
+        LOG_VART(e);
       }
       else if (logWarnCount == Log::getWarnMessageLimit())
       {
@@ -210,7 +210,8 @@ bool OsmNetworkExtractor::_isValidElement(const ConstElementPtr& e)
         {
           if (logWarnCount < Log::getWarnMessageLimit())
           {
-            LOG_WARN("Received a linear relation that contains a non-linear element: " << e);
+            LOG_WARN("Received a linear relation that contains a non-linear element.");
+            LOG_VART(e);
           }
           else if (logWarnCount == Log::getWarnMessageLimit())
           {

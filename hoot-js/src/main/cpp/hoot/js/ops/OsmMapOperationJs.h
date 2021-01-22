@@ -55,9 +55,9 @@ private:
 
   OsmMapOperationJs(OsmMapOperation *op) : _op(op) { }
 
+    static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void apply(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void applyAndGetResult(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void New(const v8::FunctionCallbackInfo<v8::Value>& args);
 
   QString _className;
   std::shared_ptr<OsmMapOperation> _op;

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RELATION_WITH_POINT_MEMBERS_CRITERION_H
 #define RELATION_WITH_POINT_MEMBERS_CRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/RelationWithGeometryMembersCriterion.h>
+#include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
@@ -38,7 +38,7 @@ namespace hoot
 /**
  * Identifies relations with children having point geometries
  */
-class RelationWithPointMembersCriterion : public RelationWithGeometryMembersCriterion
+class RelationWithPointMembersCriterion : public RelationWithMembersOfTypeCriterion
 {
 public:
 

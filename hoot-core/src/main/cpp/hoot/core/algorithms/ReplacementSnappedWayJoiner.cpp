@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ReplacementSnappedWayJoiner.h"
@@ -36,7 +36,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(WayJoiner, ReplacementSnappedWayJoiner)
 
-ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner()
+ReplacementSnappedWayJoiner::ReplacementSnappedWayJoiner() :
+WayJoinerAdvanced::WayJoinerAdvanced()
 {
   _leavePid = true;
   _callingClass = QString::fromStdString(className());
@@ -108,6 +109,8 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
 {
   LOG_DEBUG("Joining ways...");
 
+  _leavePid = true;
+
   WayJoinerAdvanced::join(map);
 
   if (_refIdToVersionMappings.isEmpty())
@@ -116,14 +119,17 @@ void ReplacementSnappedWayJoiner::join(const OsmMapPtr& map)
   }
 
   // If anything left has a PID on it, let's make that PID its ID. This doesn't seem like a great
-  // way to do it and problems could be encountered in the future where more than one split way inside
-  // of the bounds had the same parent...haven't seen that happen yet, so will go with this for now.
+  // way to do it and problems could be encountered in the future where more than one split way
+  // inside of the bounds had the same parent...haven't seen that happen yet, so will go with this
+  // for now.
   WayMap ways = _map->getWays();
   QSet<long> pidsUsed;
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr way = it->second;
+    LOG_VART(way->getElementId());
     const long pid = _getPid(way);
+    LOG_VART(pid);
     if (pid != WayData::PID_EMPTY && pid > 0 && !pidsUsed.contains(pid))
     {
       LOG_TRACE("Setting id from pid: " << pid << " on: " << way->getElementId());

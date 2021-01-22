@@ -58,7 +58,8 @@ class PopulateConsumersJs
 {
 public:
 
-  static v8::Local<v8::String> baseClass() { return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "baseClass"); }
+  static v8::Local<v8::String> baseClass()
+  { return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "baseClass"); }
 
   template <typename T>
   static void populateConsumers(T* consumer, const v8::FunctionCallbackInfo<v8::Value>& args)
@@ -108,8 +109,8 @@ public:
         }
         else
         {
-          throw IllegalArgumentException("Unexpected object passed to consumer " +
-                                         str(obj->Get(baseClass())));
+          throw IllegalArgumentException(
+            "Unexpected object passed to consumer " + str(obj->Get(baseClass())));
         }
       }
       else
@@ -166,7 +167,6 @@ public:
     LOG_TRACE("Populating criterion consumer...");
 
     ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject());
-
     ElementCriterionConsumer* c = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
     if (c == 0)
@@ -185,7 +185,6 @@ public:
     LOG_TRACE("Populating element consumer...");
 
     ElementJs* obj = node::ObjectWrap::Unwrap<ElementJs>(v->ToObject());
-
     ElementConsumer* c = dynamic_cast<ElementConsumer*>(consumer);
 
     if (c == 0)

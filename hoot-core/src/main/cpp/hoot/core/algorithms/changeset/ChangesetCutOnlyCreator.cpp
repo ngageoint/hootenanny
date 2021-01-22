@@ -606,6 +606,8 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+  // Don't let the changeset writer use the bounds. We'll handle it internally as part of C&R.
+  conf().set(ConfigOptions::getChangesetIgnoreBoundsKey(), true);
   // This is kind of klunky to set this here, imo. However, its currently the only way to get this
   // bounds to the readers.
   conf().set(

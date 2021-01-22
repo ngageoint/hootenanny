@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RELATION_MEMBER_UTILS_H
@@ -30,12 +30,13 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/GeometryTypeCriterion.h>
+#include <hoot/core/geometry/GeometricRelationship.h>
 
 namespace hoot
 {
 
 class ElementCriterion;
+class InBoundsCriterion;
 
 /**
  * Various utilities useful when working with relation members but kept out of the Relation class
@@ -150,13 +151,23 @@ public:
     const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion);
 
   /**
-   * Retrieves all relations containing a child element
+   * Retrieves all relations containing a child element as const
    *
    * @param map map the child element belongs to
    * @param childId ID of the child element
-   * @return a collection of relations
+   * @return a collection of const relations
    */
   static std::vector<ConstRelationPtr> getContainingRelations(
+    const ConstOsmMapPtr& map, const ElementId& childId);
+
+  /**
+   * Returns IDs of all relation which contain the element with the input ID as a member
+   *
+   * @param map map owning the element identified by childId
+   * @param childId ID of the child element
+   * @return a list of element IDs
+   */
+  static QSet<long> getContainingRelationIds(
     const ConstOsmMapPtr& map, const ElementId& childId);
 
   /**
@@ -167,6 +178,18 @@ public:
    * @return a count
    */
   static int getMemberWayNodeCount(const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
+
+  /**
+   * Determines if a relation has a member conflatable by the current configuration of conflate
+   * matchers
+   *
+   * @param relation relation to examine
+   * @param map map owning the input relation
+   * @return true if the input relation contains at least one member element that can be conflated
+   * and optionally satisfies the bounds requirement; false otherwise
+   */
+  static bool relationHasConflatableMember(
+    const ConstRelationPtr& relation, const ConstOsmMapPtr& map);
 };
 
 }

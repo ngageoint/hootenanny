@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "UnifyingConflator.h"
 
@@ -47,9 +47,9 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/conflate/network/NetworkMatchCreator.h>
 #include <hoot/core/schema/SchemaUtils.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMergerCreator.h>
+#include <hoot/core/visitors/RemoveTagsVisitor.h>
 
 // standard
 #include <algorithm>
@@ -68,12 +68,16 @@ using namespace Tgs;
 namespace hoot
 {
 
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// a very large number of files.
+const bool UnifyingConflator::WRITE_DETAILED_DEBUG_MAPS = false;
+
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnifyingConflator)
 
 UnifyingConflator::UnifyingConflator() :
-  _matchFactory(MatchFactory::getInstance()),
-  _settings(Settings::getInstance()),
-  _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
+_matchFactory(MatchFactory::getInstance()),
+_settings(Settings::getInstance()),
+_taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 {
   _reset();
 }
@@ -92,55 +96,29 @@ UnifyingConflator::~UnifyingConflator()
   _reset();
 }
 
-void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)
+void UnifyingConflator::setConfiguration(const Settings &conf)
 {
-  Tags& tags = e->getTags();
-  tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
-  tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
-  tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
+  _settings = conf;
+
+  _matchThreshold.reset();
+  _mergerFactory.reset();
+  _reset();
 }
 
-void UnifyingConflator::_addReviewAndScoreTags(
-  const OsmMapPtr& map, const std::vector<ConstMatchPtr>& matches)
+void UnifyingConflator::_reset()
 {
-  if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
+  if (_mergerFactory == 0)
   {
-    for (size_t i = 0; i < matches.size(); i++)
-    {
-      ConstMatchPtr m = matches[i];
-      const MatchClassification& mc = m->getClassification();
-      set<pair<ElementId, ElementId>> pairs = m->getMatchPairs();
-      for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-           it != pairs.end(); ++it)
-      {
-        if (mc.getReviewP() > 0.0)
-        {
-          ElementPtr e1 = map->getElement(it->first);
-          ElementPtr e2 = map->getElement(it->second);
-
-          LOG_TRACE(
-            "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() <<
-            "...");
-
-          _addScoreTags(e1, mc);
-          _addScoreTags(e2, mc);
-          e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
-          e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
-        }
-      }
-    }
+    _mergerFactory.reset(new MergerFactory());
+    // register the mark for review merger first so all reviews get tagged before another merger
+    // gets a chance.
+    _mergerFactory->registerCreator(MergerCreatorPtr(new MarkForReviewMergerCreator()));
+    _mergerFactory->registerDefaultCreators();
   }
-}
 
-void UnifyingConflator::_updateProgress(const int currentStep, const QString message)
-{
-  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
-  // just an empty progress object, and we shouldn't log progress.
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
-  {
-    _progress.setFromRelative(
-      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
-  }
+  _e2m.clear();
+  _matches.clear();
+  _mergers.clear();
 }
 
 void UnifyingConflator::apply(OsmMapPtr& map)
@@ -148,6 +126,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   Timer timer;
   _reset();
   int currentStep = 1;  // tracks the current job task step for progress reporting
+
+  // ERROR CHECKING
 
   // Check to see if all the data is untyped. If so, log a warning so the user knows they may not
   // be getting the best conflate results in case types could be added to the input.
@@ -166,7 +146,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     }
   }
 
-  _stats.append(SingleStat("Apply Pre Ops Time (sec)", timer.getElapsedAndRestart()));
+  // DATA PREP
 
   // will reproject if necessary.
   MapProjector::projectToPlanar(map);
@@ -175,6 +155,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   // This status progress reporting could get way more granular, but we'll go with this for now to
   // avoid overloading users with status.
+
+  // MATCH FEATURES
 
   _updateProgress(currentStep - 1, "Matching features...");
 
@@ -204,6 +186,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     SingleStat("Number of Matches Found per Second", (double)_matches.size() / findMatchesTime));
 
   vector<ConstMatchPtr> allMatches = _matches;
+
+  // OPTIMIZE MATCHES
 
   // add score tags to all matches that have some score component
   _addReviewAndScoreTags(map, allMatches);
@@ -298,6 +282,8 @@ void UnifyingConflator::apply(OsmMapPtr& map)
 
   currentStep++;
 
+  // MERGE PREP
+
   _updateProgress(currentStep - 1, "Merging feature matches...");
 
   // POI/Polygon matching is unique in that it is the only non-generic geometry type matcher that
@@ -349,19 +335,79 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _mapElementIdsToMergers();
   LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
 
+  // Separate mergers that merge relations from other mergers. We want to run them very last so that
+  // they have the latest version of their members to work with.
+  std::vector<MergerPtr> relationMergers;
+  std::vector<MergerPtr> nonRelationMergers;
+  for (std::vector<MergerPtr>::const_iterator mergersItr = _mergers.begin();
+       mergersItr != _mergers.end(); ++mergersItr)
+  {
+    MergerPtr merger = *mergersItr;
+    LOG_VART(merger->getName());
+    if (merger->getName().contains("CollectionRelation"))
+    {
+      relationMergers.push_back(merger);
+    }
+    else
+    {
+      nonRelationMergers.push_back(merger);
+    }
+  }
+  _mergers = nonRelationMergers;
+  LOG_VARD(_mergers.size());
+  LOG_VARD(relationMergers.size());
+
   _stats.append(SingleStat("Create Mergers Time (sec)", timer.getElapsedAndRestart()));
+
+  // MERGE FEATURES
 
   QElapsedTimer mergersTimer;
   mergersTimer.start();
 
-  LOG_INFO("Applying " << StringUtils::formatLargeNumber(_mergers.size()) << " mergers...");
-  vector<pair<ElementId, ElementId>> replaced;
-  for (size_t i = 0; i < _mergers.size(); ++i)
+  LOG_INFO(
+    "Applying " << StringUtils::formatLargeNumber(_mergers.size() + relationMergers.size()) <<
+    " mergers...");
+  _applyMergers(_mergers, map);
+  _applyMergers(relationMergers, map);
+
+  MemoryUsageChecker::getInstance().check();
+  OsmMapWriterFactory::writeDebugMap(map, "after-merging");
+
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
+  const size_t mergerCount = _mergers.size() + relationMergers.size();
+  // free up any used resources
+  _reset();
+  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
+  double mergersTime = timer.getElapsedAndRestart();
+  _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
+  _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
+
+  // CLEANUP
+
+  if (!ConfigOptions().getWriterIncludeDebugTags())
   {
-    MergerPtr merger = _mergers[i];
+    QStringList tagKeysToRemove;
+    tagKeysToRemove.append(MetadataTags::HootMultilineString());
+    RemoveTagsVisitor tagRemover(tagKeysToRemove);
+    map->visitRw(tagRemover);
+  }
+
+  LOG_INFO(
+    "Applied " << StringUtils::formatLargeNumber(mergerCount) << " mergers in " <<
+    StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
+
+  currentStep++;
+}
+
+void UnifyingConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
+{
+  vector<pair<ElementId, ElementId>> replaced;
+  for (size_t i = 0; i < mergers.size(); ++i)
+  {
+    MergerPtr merger = mergers[i];
     const QString msg =
       "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
-      " / " + StringUtils::formatLargeNumber(_mergers.size());
+      " / " + StringUtils::formatLargeNumber(mergers.size());
     // There are way more log statements generated from this than we normally want to see, so just
     // info out a subset. If running in debug, then you'll see all of them which can be useful.
     if (i != 0 && i % 10 == 0)
@@ -373,6 +419,10 @@ void UnifyingConflator::apply(OsmMapPtr& map)
       LOG_DEBUG(msg);
     }
 
+    // We require that each individual merger set the option to mark merge created relations, so
+    // disable this option as each merger is processed.
+    conf().set(ConfigOptions::getConflateMarkMergeCreatedMultilinestringRelationsKey(), false);
+
     merger->apply(map, replaced);
 
     LOG_VART(replaced);
@@ -383,31 +433,12 @@ void UnifyingConflator::apply(OsmMapPtr& map)
     replaced.clear();
     LOG_VART(merger->getImpactedElementIds());
 
-    // WARNING: Enabling this could result in a lot of files being generated.
-    //if (i % 30 == 0)
-    //{
-      //OsmMapWriterFactory::writeDebugMap(
-        //map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
-    //}
+    if (WRITE_DETAILED_DEBUG_MAPS)
+    {
+      OsmMapWriterFactory::writeDebugMap(
+        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
+    }
   }
-  MemoryUsageChecker::getInstance().check();
-  OsmMapWriterFactory::writeDebugMap(map, "after-merging");
-
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-  size_t mergerCount = _mergers.size();
-  // free up any used resources.
-  _reset();
-  LOG_DEBUG(SystemInfo::getCurrentProcessMemoryUsageString());
-
-  double mergersTime = timer.getElapsedAndRestart();
-  _stats.append(SingleStat("Apply Mergers Time (sec)", mergersTime));
-  _stats.append(SingleStat("Mergers Applied per Second", (double)mergerCount / mergersTime));
-
-  LOG_INFO(
-    "Applied " << StringUtils::formatLargeNumber(mergerCount) << " mergers in " <<
-    StringUtils::millisecondsToDhms(mergersTimer.elapsed()) << ".");
-
-  currentStep++;
 }
 
 bool elementIdPairCompare(const pair<ElementId, ElementId>& pair1,
@@ -508,31 +539,6 @@ void UnifyingConflator::_replaceElementIds(const vector<pair<ElementId, ElementI
   }
 }
 
-void UnifyingConflator::setConfiguration(const Settings &conf)
-{
-  _settings = conf;
-
-  _matchThreshold.reset();
-  _mergerFactory.reset();
-  _reset();
-}
-
-void UnifyingConflator::_reset()
-{
-  if (_mergerFactory == 0)
-  {
-    _mergerFactory.reset(new MergerFactory());
-    // register the mark for review merger first so all reviews get tagged before another merger
-    // gets a chance.
-    _mergerFactory->registerCreator(MergerCreatorPtr(new MarkForReviewMergerCreator()));
-    _mergerFactory->registerDefaultCreators();
-  }
-
-  _e2m.clear();
-  _matches.clear();
-  _mergers.clear();
-}
-
 void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches)
 {
   for (size_t i = 0; i < matches.size(); i++)
@@ -554,11 +560,55 @@ void UnifyingConflator::_printMatches(std::vector<ConstMatchPtr> matches,
   }
 }
 
-bool UnifyingConflator::isNetworkConflate()
+void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassification& mc)
 {
-  return
-    ConfigOptions().getMatchCreators().contains(
-      QString::fromStdString(NetworkMatchCreator::className()));
+  Tags& tags = e->getTags();
+  tags.appendValue(MetadataTags::HootScoreReview(), mc.getReviewP());
+  tags.appendValue(MetadataTags::HootScoreMatch(), mc.getMatchP());
+  tags.appendValue(MetadataTags::HootScoreMiss(), mc.getMissP());
+}
+
+void UnifyingConflator::_addReviewAndScoreTags(
+  const OsmMapPtr& map, const std::vector<ConstMatchPtr>& matches)
+{
+  if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
+  {
+    for (size_t i = 0; i < matches.size(); i++)
+    {
+      ConstMatchPtr m = matches[i];
+      const MatchClassification& mc = m->getClassification();
+      set<pair<ElementId, ElementId>> pairs = m->getMatchPairs();
+      for (set<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
+           it != pairs.end(); ++it)
+      {
+        if (mc.getReviewP() > 0.0)
+        {
+          ElementPtr e1 = map->getElement(it->first);
+          ElementPtr e2 = map->getElement(it->second);
+
+          LOG_TRACE(
+            "Adding score tags to " << e1->getElementId() << " and " << e2->getElementId() <<
+            "...");
+
+          _addScoreTags(e1, mc);
+          _addScoreTags(e2, mc);
+          e1->getTags().appendValue(MetadataTags::HootScoreUuid(), e2->getTags().getCreateUuid());
+          e2->getTags().appendValue(MetadataTags::HootScoreUuid(), e1->getTags().getCreateUuid());
+        }
+      }
+    }
+  }
+}
+
+void UnifyingConflator::_updateProgress(const int currentStep, const QString message)
+{
+  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+  // just an empty progress object, and we shouldn't log progress.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
+  }
 }
 
 }

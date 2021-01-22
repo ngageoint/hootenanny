@@ -127,7 +127,7 @@ exports.matchScore = function(map, e1, e2)
   hoot.trace("Extracting sublines with default...");
   sublines = sublineMatcher.extractMatchingSublines(map, e1, e2);
   hoot.trace(sublines);
-  if (sublines && sublines == "RecursiveComplexityException")
+  if (sublines && String(sublines).indexOf("RecursiveComplexityException") !== -1)
   {
     hoot.trace("Extracting sublines with Frechet...");
     sublines = frechetSublineMatcher.extractMatchingSublines(map, e1, e2);

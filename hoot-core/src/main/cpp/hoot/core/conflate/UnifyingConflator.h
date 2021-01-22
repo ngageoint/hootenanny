@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UNIFYINGCONFLATOR_H
 #define UNIFYINGCONFLATOR_H
@@ -96,13 +96,6 @@ public:
   virtual void setProgress(Progress progress) override { _progress = progress; }
   virtual unsigned int getNumSteps() const override { return 3; }
 
-  /**
-   * Determines if conflation is configured with the Network Roads algorithm
-   *
-   * @return true if conflation is configured with the Network Roads algorithm; false otherwise
-   */
-  static bool isNetworkConflate();
-
 private:
 
   const MatchFactory& _matchFactory;
@@ -112,9 +105,13 @@ private:
   HashMap<ElementId, std::vector<MergerPtr>> _e2m;
   std::vector<ConstMatchPtr> _matches;
   std::vector<MergerPtr> _mergers;
+
   QList<SingleStat> _stats;
+
   int _taskStatusUpdateInterval;
   Progress _progress;
+
+  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   void _addReviewAndScoreTags(const OsmMapPtr &map, const std::vector<ConstMatchPtr> &matches);
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
@@ -145,6 +142,8 @@ private:
   QString _matchSetToString(const MatchSet& matchSet) const;
 
   void _updateProgress(const int currentStep, const QString message);
+
+  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
 };
 
 }

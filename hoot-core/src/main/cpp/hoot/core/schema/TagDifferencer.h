@@ -53,8 +53,8 @@ public:
    * The score returned should not be considered linear. If a = 1 and b = 0.01, then all you can
    * say is that a is more different than b, not that a is 100 times more different, etc.
    */
-  virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
-    const ConstElementPtr& e2) const = 0;
+  virtual double diff(
+    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2) const = 0;
 };
 
 }

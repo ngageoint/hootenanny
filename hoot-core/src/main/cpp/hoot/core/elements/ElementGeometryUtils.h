@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ELEMENT_GEOMETRY_UTILS_H
@@ -65,6 +65,20 @@ public:
     const GeometricRelationship& relationship, ConstOsmMapPtr map);
 
   /**
+   * Determines two elements have a geometric relationship
+   *
+   * @param element the element to examine
+   * @param bounds the bounds geometry to examine
+   * @param relationship the geometric relationship to check for between the element and the bounds
+   * @param map map owning the input element
+   * @return true if the element and the bounds have the specified geometric relationship; false
+   * otherwise or if the relationship could not be calculated
+   */
+  static bool haveGeometricRelationship(
+    const ConstElementPtr& element, const std::shared_ptr<geos::geom::Geometry>& bounds,
+    const GeometricRelationship& relationship, ConstOsmMapPtr map);
+
+  /**
    * Determines an elements hoot geometry type (used by GeometryTypeCriterion)
    *
    * @param element the element to inspect
@@ -73,6 +87,12 @@ public:
    */
   static GeometryTypeCriterion::GeometryType geometryTypeForElement(
     const ConstElementPtr& element, ConstOsmMapPtr map = OsmMapPtr());
+
+  /**
+   * Calculate the length of the given way in meters. The projection must be planar.
+   */
+  static Meters calculateLength(const ConstElementPtr& e,
+                                const ConstElementProviderPtr& constProvider);
 
 private:
 

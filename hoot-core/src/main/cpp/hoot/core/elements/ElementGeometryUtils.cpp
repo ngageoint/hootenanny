@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ElementGeometryUtils.h"
@@ -34,8 +34,9 @@
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/criterion/RelationWithLinearMembersCriterion.h>
-#include <hoot/core/criterion/RelationWithPointMembersCriterion.h>
 #include <hoot/core/criterion/RelationWithPolygonMembersCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/criterion/AreaCriterion.h>
 
 // GEOS
 #include <geos/util/TopologyException.h>
@@ -73,6 +74,9 @@ bool ElementGeometryUtils::haveGeometricRelationship(
       case GeometricRelationship::DisjointWith:
         haveRelationship = geom1->disjoint(geom2.get());
         break;
+      case GeometricRelationship::Equals:
+        haveRelationship = geom1->equals(geom2.get());
+        break;
       case GeometricRelationship::Intersects:
         haveRelationship = geom1->intersects(geom2.get());
         break;
@@ -95,6 +99,75 @@ bool ElementGeometryUtils::haveGeometricRelationship(
       "Unable to calculate geometric relationship: " << relationship.toString() << " for: " <<
       element1->getElementId() << " and: " << element2->getElementId() << ".");
   }
+  return haveRelationship;
+}
+
+bool ElementGeometryUtils::haveGeometricRelationship(
+  const ConstElementPtr& element, const std::shared_ptr<geos::geom::Geometry>& bounds,
+  const GeometricRelationship& relationship, ConstOsmMapPtr map)
+{
+  if (!element)
+  {
+    throw IllegalArgumentException("The input element is null.");
+  }
+  if (!bounds)
+  {
+    throw IllegalArgumentException("The input bounds is null.");
+  }
+  if (!map)
+  {
+    throw IllegalArgumentException("The input map is null.");
+  }
+  LOG_VART(bounds->toString());
+  LOG_VART(relationship.toString())
+
+  std::shared_ptr<geos::geom::Geometry> elementGeom = _getGeometry(element, map);
+  LOG_VART(elementGeom.get());
+  bool haveRelationship = false;
+  if (elementGeom)
+  {
+    LOG_VART(elementGeom->toString());
+    switch (relationship.getEnum())
+    {
+      case GeometricRelationship::Contains:
+        haveRelationship = bounds->contains(elementGeom.get());
+        break;
+      case GeometricRelationship::Covers:
+        haveRelationship = bounds->covers(elementGeom.get());
+        break;
+      case GeometricRelationship::Crosses:
+        haveRelationship = elementGeom->crosses(bounds.get());
+        break;
+      case GeometricRelationship::DisjointWith:
+        haveRelationship = bounds->disjoint(elementGeom.get());
+        break;
+      case GeometricRelationship::Equals:
+        haveRelationship = bounds->equals(elementGeom.get());
+        break;
+      case GeometricRelationship::Intersects:
+        haveRelationship = elementGeom->intersects(bounds.get());
+        break;
+      case GeometricRelationship::IsWithin:
+        haveRelationship = elementGeom->within(bounds.get());
+        break;
+      case GeometricRelationship::Overlaps:
+        haveRelationship = elementGeom->overlaps(bounds.get());
+        break;
+      case GeometricRelationship::Touches:
+        haveRelationship = elementGeom->touches(bounds.get());
+        break;
+      default:
+        throw IllegalArgumentException("Unsupported geometry relationship type.");
+    }
+  }
+  else
+  {
+    LOG_TRACE(
+      "Unable to calculate geometric relationship: " << relationship.toString() << " for: " <<
+      element->getElementId() << " and: " << QString::fromStdString(bounds->toString()).right(50) <<
+      ".");
+  }
+  LOG_VART(haveRelationship);
   return haveRelationship;
 }
 
@@ -191,6 +264,31 @@ GeometryTypeCriterion::GeometryType ElementGeometryUtils::geometryTypeForElement
   else
   {
     throw IllegalArgumentException("Invalid element type.");
+  }
+}
+
+Meters ElementGeometryUtils::calculateLength(const ConstElementPtr& e,
+                                             const ConstElementProviderPtr& constProvider)
+{
+  // Doing length/distance calcs only make sense if we've projected down onto a flat surface
+  if (!MapProjector::isPlanar(constProvider))
+  {
+    throw IllegalArgumentException("Map must be in planar coordinate system.");
+  }
+
+  // if the element is not a point and is not an area.
+  // NOTE: Originally, we used isLinear. This was a bit too strict in that it wants evidence of
+  // being linear before the length is calculated. Conversely, this wants evidence that it is not
+  // linear before it will assume it doesn't have a length.
+  if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(e) == false)
+  {
+    // TODO: optimize - we don't really need to convert first, we can just loop through the nodes
+    // and sum up the distance.
+    return ElementToGeometryConverter(constProvider).convertToGeometry(e)->getLength();
+  }
+  else
+  {
+    return 0;
   }
 }
 

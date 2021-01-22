@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatchCreator.h"
 
@@ -81,6 +81,9 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 {
   QElapsedTimer timer;
   timer.start();
+
+  // The parent does some initialization we need.
+  MatchCreator::createMatches(map, matches, threshold);
 
   QString searchRadiusStr;
   const double additionalDistance = ConfigOptions().getPoiPolygonAdditionalSearchDistance();
@@ -548,8 +551,8 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
   return result;
 }
 
-bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
-                                              const ConstOsmMapPtr& /*map*/)
+bool PoiPolygonMatchCreator::isMatchCandidate(
+  ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
   return
     element->isUnknown() && (_poiCrit.isSatisfied(element) || _polyCrit.isSatisfied(element));

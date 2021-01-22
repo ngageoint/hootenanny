@@ -60,11 +60,9 @@ double RelationMemberSimilarityExtractor::extract(
     QSet<ElementId> targetMemberIds =
       CollectionUtils::stdSetToQSet(targetRelation->getMemberIds());
     LOG_VART(targetMemberIds.size());
-    //LOG_VART(targetMemberIds);
     QSet<ElementId> candidateMemberIds =
       CollectionUtils::stdSetToQSet(candidateRelation->getMemberIds());
     LOG_VART(candidateMemberIds.size());
-    //LOG_VART(candidateMemberIds);
     const int totalMembers = targetMemberIds.size() + candidateMemberIds.size();
     LOG_VART(totalMembers);
 

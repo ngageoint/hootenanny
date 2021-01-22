@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESET_CREATOR_H
 #define CHANGESET_CREATOR_H
@@ -143,6 +143,10 @@ private:
   int _numCreateChanges;
   int _numModifyChanges;
   int _numDeleteChanges;
+
+  // These are used by the changeset writer for bounds calc.
+  QList<ConstOsmMapPtr> _map1List;
+  QList<ConstOsmMapPtr> _map2List;
 
   bool _isSupportedOutputFormat(const QString& format) const;
   bool _inputIsSorted(const QString& input) const;

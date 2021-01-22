@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DataQualityMetricTagger.h"
 
@@ -83,6 +83,7 @@ void DataQualityMetricTagger::apply(OsmMapPtr& map)
   std::shared_ptr<InBoundsCriterion> inBoundsCrit(new InBoundsCriterion(true));
   inBoundsCrit->setBounds(_bounds);
   inBoundsCrit->setOsmMap(map.get());
+  inBoundsCrit->setTreatWayNodesAsPartOfWays(false);
 
   tagVis.reset(new SetTagValueVisitor(MetadataTags::HootDisconnected(), "yes"));
   crit.reset(

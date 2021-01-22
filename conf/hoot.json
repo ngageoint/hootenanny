@@ -1,3 +1,5 @@
 {
+  "#": "Use this file for temporary testing of configuration option changes. Make permanent changes ",
+  "#": "in conf/ConfigOptions.asciidoc",
   "#" : "end"
 }

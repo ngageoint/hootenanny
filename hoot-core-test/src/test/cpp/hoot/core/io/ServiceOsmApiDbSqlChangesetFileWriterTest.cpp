@@ -68,9 +68,10 @@ public:
     database.deleteData();
     ApiDb::execSqlFile(ServicesDbTestUtils::getOsmApiDbUrl().toString(), _scriptDir + "users.sql");
 
-    OsmApiDbSqlChangesetFileWriter writer(ServicesDbTestUtils::getOsmApiDbUrl());
-    writer.setChangesetUserId(1);
-    writer.write(_outputPath + "changeset.osc.sql", changesetProvider);
+    OsmApiDbSqlChangesetFileWriter uut(ServicesDbTestUtils::getOsmApiDbUrl());
+    uut.setConfiguration(conf());
+    uut._setChangesetUserId(1);
+    uut.write(_outputPath + "changeset.osc.sql", changesetProvider);
     HOOT_FILE_EQUALS(_inputPath + "changeset.osc.sql",
                     _outputPath + "changeset.osc.sql");
   }

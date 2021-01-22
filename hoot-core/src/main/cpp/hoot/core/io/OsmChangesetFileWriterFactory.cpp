@@ -59,6 +59,13 @@ std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWri
     if (writer->isSupported(url))
     {
       LOG_DEBUG("Using changeset output writer: " << names[i]);
+
+      Configurable* c = dynamic_cast<Configurable*>(writer.get());
+      if (c != 0)
+      {
+        c->setConfiguration(conf());
+      }
+
       if (url.endsWith(".osc.sql"))
       {
         if (osmApiDbUrl.isEmpty())

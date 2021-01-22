@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ConflateCmd.h"
@@ -65,6 +65,7 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
+#include <hoot/core/util/DbUtils.h>
 
 // Standard
 #include <fstream>
@@ -91,16 +92,6 @@ ConflateCmd::ConflateCmd() :
 _numTotalTasks(0),
 _filterOps(ConfigOptions().getConflateRemoveSuperfluousOps())
 {
-}
-
-void ConflateCmd::printStats(const QList<SingleStat>& stats)
-{
-  QString sep = "\t";
-  cout << "== Stats ==" << endl;
-  for (int i = 0; i < stats.size(); i++)
-  {
-    cout << stats[i].name << sep << stats[i].value << endl;
-  }
 }
 
 int ConflateCmd::runSimple(QStringList& args)
@@ -259,9 +250,13 @@ int ConflateCmd::runSimple(QStringList& args)
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
   QString msg =
-    "Conflating " + input1.right(maxFilePrintLength) + " with " +
-    input2.right(maxFilePrintLength) + " and writing the output to " +
-    output.right(maxFilePrintLength);
+    "Conflating ..." + input1.right(maxFilePrintLength) + " with ..." +
+    input2.right(maxFilePrintLength);
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    msg += " over bounds: ..." + ConfigUtils::getBoundsString().right(maxFilePrintLength);
+  }
+  msg += " and writing the output to ..." + output.right(maxFilePrintLength) + "...";
   if (isDiffConflate)
   {
     if (diffConflator.conflatingTags())
@@ -273,7 +268,6 @@ int ConflateCmd::runSimple(QStringList& args)
       msg = msg.replace("Conflating", "Differentially conflating ");
     }
   }
-
   progress.set(0.0, msg);
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
@@ -288,6 +282,7 @@ int ConflateCmd::runSimple(QStringList& args)
   {
     _updateConfigOptionsForAttributeConflation();
   }
+
   if (isDiffConflate)
   {
     _updateConfigOptionsForDifferentialConflation();
@@ -295,6 +290,13 @@ int ConflateCmd::runSimple(QStringList& args)
   if (isDiffConflate || isAttributeConflate)
   {
     _disableRoundaboutRemoval();
+  }
+
+  // Note that we may need to eventually further restrict this to only data with relation having oob
+  // members due to full hydration (would then need to move this code to after the data load).
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    _updateConfigOptionsForBounds();
   }
 
   if (_filterOps)
@@ -387,8 +389,13 @@ int ConflateCmd::runSimple(QStringList& args)
     currentTask++;
   }
   MemoryUsageChecker::getInstance().check();
-  LOG_STATUS(
-    "Conflating map with " << StringUtils::formatLargeNumber(map->size()) << " elements...");
+  msg = "Conflating map with " + StringUtils::formatLargeNumber(map->size()) + " elements";
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    msg += " over bounds: " + ConfigUtils::getBoundsString().right(maxFilePrintLength);
+  }
+  msg += "...";
+  LOG_STATUS(msg);
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
@@ -499,7 +506,7 @@ int ConflateCmd::runSimple(QStringList& args)
       " total.");
   }
 
-  // doing this after the conflate post ops run, since some invalid reviews are removed by them
+  // Doing this after the conflate post ops run, since some invalid reviews are removed by them.
   progress.set(_getJobPercentComplete(currentTask - 1), "Counting feature reviews...");
   CountUniqueReviewsVisitor countReviewsVis;
   result->visitRo(countReviewsVis);
@@ -730,6 +737,13 @@ void ConflateCmd::_updateConfigOptionsForDifferentialConflation()
   ConfigUtils::removeListOpEntry(
     ConfigOptions::getConflatePostOpsKey(),
     QString::fromStdString(RoadCrossingPolyReviewMarker::className()));
+}
+
+void ConflateCmd::_updateConfigOptionsForBounds()
+{
+  // If we're working with a bounds, we need to ensure that IDs of the original ref parents created
+  // by a split operation are applied to their split children.
+  conf().set(ConfigOptions::getWayJoinerWriteParentIdToChildIdKey(), true);
 }
 
 }

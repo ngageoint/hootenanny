@@ -883,14 +883,35 @@
         <tag k="hoot:id" v="4881737619"/>
         <tag k="hoot:status" v="1"/>
     </node>
-    <way visible="true" id="-1882" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1893" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881734505"/>
+        <nd ref="-15"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:4db167f20182365256328143b1a3f623f100c3a1;sha1sum:6de8c5cfdd6ba704f4141d5ea9c567697faed439"/>
+        <tag k="hoot:id" v="-1893"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Lakeview Avenue"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z;2019-03-29T01:33:26Z"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Lakeview"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-1876" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881736159"/>
         <nd ref="4881736182"/>
         <nd ref="4881737546"/>
         <nd ref="4881726722"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="unclassified"/>
-        <tag k="hoot:id" v="-1882"/>
+        <tag k="hoot:id" v="-1876"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="4"/>
         <tag k="name" v="Seabury Avenue"/>
@@ -1044,7 +1065,7 @@
         <tag k="hgv" v="designated"/>
         <tag k="hgv:national_network" v="yes"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:0aef26884e3c4097a6bef17a0e5ae1269a36055c;sha1sum:49902feb856556e0acdc93fee902c8256cbb63bd"/>
+        <tag k="hoot:hash" v="sha1sum:0aef26884e3c4097a6bef17a0e5ae1269a36055c;sha1sum:90ebf3ba1fbc41a3b00bb04f78937cdd24c219fd"/>
         <tag k="hoot:id" v="-1841"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="3"/>
@@ -1210,7 +1231,7 @@
         <tag k="hgv" v="designated"/>
         <tag k="hgv:national_network" v="yes"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:03c3cf595088a968bc678367409dae8dfa8f2349;sha1sum:c77bd0f1856413e9b7d9e7b6ddee702d0914b972"/>
+        <tag k="hoot:hash" v="sha1sum:03c3cf595088a968bc678367409dae8dfa8f2349;sha1sum:c659874d6d5a8f05c15dd0142108a28b4f821bf9"/>
         <tag k="hoot:id" v="-1790"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="2"/>
@@ -1230,6 +1251,27 @@
         <tag k="tiger:name_direction_prefix_2" v="S"/>
         <tag k="tiger:name_type" v="Blvd"/>
         <tag k="tiger:name_type_2" v="Blvd"/>
+    </way>
+    <way visible="true" id="-1759" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881730743"/>
+        <nd ref="4881727629"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:ae316d028882de6211cf2416c5f07a0704c24b7f;sha1sum:e9669c152d50b3bef5434d7fe19550dbf8530427"/>
+        <tag k="hoot:id" v="-1759"/>
+        <tag k="hoot:status" v="3"/>
+        <tag k="hoot:way:node:count" v="2"/>
+        <tag k="name" v="Lakeview Avenue"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z;2019-03-29T01:33:26Z"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Lakeview"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-1757" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="4881728010"/>
@@ -1257,7 +1299,7 @@
         <tag k="hgv" v="designated"/>
         <tag k="hgv:national_network" v="yes"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:4a60b31199a72a1bd19ed7e2744ba8b3a6e93a78"/>
+        <tag k="hoot:hash" v="sha1sum:d62b73627c09511760cb611b9365c751be1be755"/>
         <tag k="hoot:id" v="-1748"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="4"/>
@@ -1285,7 +1327,7 @@
         <tag k="hgv" v="designated"/>
         <tag k="hgv:national_network" v="yes"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:bad4843089d65e8e2bce1fb6c79e4be6ed9d1938"/>
+        <tag k="hoot:hash" v="sha1sum:b1854453fb1d24d7e7117a42b2d463a0612df8ac"/>
         <tag k="hoot:id" v="-113"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="1"/>
@@ -1337,36 +1379,31 @@
         <tag k="tiger:name_type" v="Blvd"/>
         <tag k="tiger:name_type_2" v="Blvd"/>
     </way>
-    <way visible="true" id="-110" timestamp="1970-01-01T00:00:00Z" version="1">
-        <nd ref="4881727627"/>
-        <nd ref="4881730743"/>
-        <nd ref="4881727629"/>
-        <nd ref="4881734505"/>
-        <nd ref="-15"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:ae316d028882de6211cf2416c5f07a0704c24b7f;sha1sum:e9669c152d50b3bef5434d7fe19550dbf8530427;sha1sum:4db167f20182365256328143b1a3f623f100c3a1;sha1sum:328b99003dd0e55efba20c89f10323c95f107cf8"/>
-        <tag k="hoot:id" v="-110"/>
-        <tag k="hoot:status" v="3"/>
-        <tag k="hoot:way:node:count" v="5"/>
-        <tag k="name" v="Lakeview Avenue"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z;2019-03-29T01:33:26Z"/>
-        <tag k="tiger:cfcc" v="A21"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Lakeview"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:zip_right" v="19963"/>
-    </way>
     <way visible="true" id="-97" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881733241"/>
         <nd ref="4881736159"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:9fb549f923b7fb1aa04acad1aac7016bde7d27a1"/>
         <tag k="hoot:id" v="-97"/>
         <tag k="hoot:status" v="1"/>
+        <tag k="hoot:way:node:count" v="2"/>
+    </way>
+    <way visible="true" id="-87" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881727629"/>
+        <nd ref="4881734505"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:8ba32b6ee87d706355d8a617ce5ca3e7500a0cd0"/>
+        <tag k="hoot:id" v="-87"/>
+        <tag k="hoot:status" v="2"/>
+        <tag k="hoot:way:node:count" v="2"/>
+    </way>
+    <way visible="true" id="-84" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881727627"/>
+        <nd ref="4881730743"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:0cb16309f186e4d10292ca32d0513aac0825d0a3"/>
+        <tag k="hoot:id" v="-84"/>
+        <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
     </way>
     <way visible="true" id="-78" timestamp="1970-01-01T00:00:00Z" version="1">
@@ -1409,7 +1446,7 @@
         <tag k="hgv" v="designated"/>
         <tag k="hgv:national_network" v="yes"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:523d273bb7e25fccd97c69990aef50a81628be2f;sha1sum:499a1503ce9d5fc416cfeba0001a558e22f76d3e;sha1sum:19bb1301410c986a91ca60bc693212badf52773c;sha1sum:afc022c9cdd30ec260c9e38332f82c3f4a63208e;sha1sum:a961c65319c3ef7a895cd5460e79671ba4fffdba"/>
+        <tag k="hoot:hash" v="sha1sum:f32df5cdf828e18710a4e317c0790f35e6b77ad4;sha1sum:76381b3083cd8542fcfb1a225598a55e5a6bfc74;sha1sum:802c95f0ab9c20a47a0ebf37202798ae6722823f;sha1sum:afc022c9cdd30ec260c9e38332f82c3f4a63208e;sha1sum:20c5300242accaf33d3018eb60881212dfdd1d34"/>
         <tag k="hoot:id" v="-72"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="5"/>
@@ -1438,7 +1475,7 @@
         <tag k="hgv" v="designated"/>
         <tag k="hgv:national_network" v="yes"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:75d53106c957175ecd62089d47e5fb4e08a1c3f7"/>
+        <tag k="hoot:hash" v="sha1sum:0e740f821bbd417c07e1eee8a2772c9423424dd6"/>
         <tag k="hoot:id" v="-68"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="2"/>
@@ -1471,7 +1508,7 @@
         <tag k="hgv" v="designated"/>
         <tag k="hgv:national_network" v="yes"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:2864163da8008f39f068a3a00133dad91c2551f3;sha1sum:a961c65319c3ef7a895cd5460e79671ba4fffdba;sha1sum:855b36a707b53670110b347709182c54fd330cf5;sha1sum:ad69fc5f9581354a71f8ac538fa928d842014ede;sha1sum:c77bd0f1856413e9b7d9e7b6ddee702d0914b972"/>
+        <tag k="hoot:hash" v="sha1sum:0cd7fbf8a859f5add276b1037003f451734dc9ef;sha1sum:2864163da8008f39f068a3a00133dad91c2551f3;sha1sum:20c5300242accaf33d3018eb60881212dfdd1d34;sha1sum:ae76e8435ab116a75b55737b07926dbe6ddc0cba;sha1sum:855b36a707b53670110b347709182c54fd330cf5;sha1sum:ad69fc5f9581354a71f8ac538fa928d842014ede;sha1sum:c659874d6d5a8f05c15dd0142108a28b4f821bf9"/>
         <tag k="hoot:id" v="-67"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="6"/>
@@ -1731,7 +1768,7 @@
         <nd ref="-13"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:44c67c1bd697cdb33ffa9eb1f308b737bcbc2dfd"/>
+        <tag k="hoot:hash" v="sha1sum:0dcefa4ba7fa76b28754732771dc79f00f5ed093"/>
         <tag k="hoot:id" v="-32"/>
         <tag k="hoot:status" v="2"/>
         <tag k="hoot:way:node:count" v="2"/>
@@ -1797,7 +1834,7 @@
         <tag k="hgv" v="designated"/>
         <tag k="hgv:national_network" v="yes"/>
         <tag k="highway" v="trunk"/>
-        <tag k="hoot:hash" v="sha1sum:1fa41b1f5e02e32901ce71a2c4fe4557cfdce9ad;sha1sum:171150a1a58622d7d760daac6a36dacf8a890f6a;sha1sum:4ee8cc9951c819106573033f03d82afed354842c;sha1sum:7306832a4945b2ae49d74802cbde03a0c5838e44;sha1sum:cf2834f2a402fcf2b56667fabfd307700022c48a;sha1sum:1b964c8201f87ee29d9a5a508e8c1c0175542cc6"/>
+        <tag k="hoot:hash" v="sha1sum:2ebc8f4274da050cb39daf16492d8f4d9070536f;sha1sum:1fa41b1f5e02e32901ce71a2c4fe4557cfdce9ad;sha1sum:171150a1a58622d7d760daac6a36dacf8a890f6a;sha1sum:0e34e54cf83d65b2293bca4d27557d2ca0693191;sha1sum:cf2834f2a402fcf2b56667fabfd307700022c48a;sha1sum:4fa6916d2ba6ca98b0b8d22b9c21cf7970a7d1f2;sha1sum:08aa2ec5200ab25a9ae3baab0ef794e4a05e2e1d"/>
         <tag k="hoot:id" v="-15"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="11"/>
@@ -1823,6 +1860,7 @@
         <nd ref="-17"/>
         <nd ref="4881727651"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:854486954c3ce03974c44a3f58f5eb5db73b2eef"/>
         <tag k="hoot:id" v="-14"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="2"/>
@@ -1873,7 +1911,7 @@
         <tag k="alt_name" v="Shawnee Road"/>
         <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:bed32d79c5bff545d6da027b918f8f8a3dfbc39a;sha1sum:a778a4d91b0c753b99943bdc1bc48a1cb87362df;sha1sum:51c51c8a3bccddf1c92cf9cd1e4c8a4a9b05d7fd;sha1sum:ad08f9812f21a93aa1bf6555f0e23ef4c9de0dc2;sha1sum:dfc46b26981053fa400f3ddff67e5f76407b8372;sha1sum:f919165b5cc24f0c76e514441d48cb6a78a22743;sha1sum:e502278a31de43d87d96aa300ef2e0607f26f7ab;sha1sum:d5feca6925710b725815bfa38a10dc8cd61b3a44;sha1sum:21a6044c80a480b705335a9b733eebc0b53366bc;sha1sum:351d2c6d27bab308d15c8d23754782855db0bff0;sha1sum:c5536f42322f20c4bba6f7e84d3605a228034499;sha1sum:b43d927198597117698b3caed2877115ce1c751f;sha1sum:ddf8f2bdb00e8cf2c43a89653fe5dcac7fe58ab2;sha1sum:49fdc2bbf39ef1932f8436c2fba81ad46069824b;sha1sum:31d824d84170fa5afea7695fef374b8348e75903;sha1sum:ce82457142b9071e450eee4fbcbe57f7a0413252;sha1sum:e68f0fa39ddedf07e3f765dd6b813cf0437b6556"/>
+        <tag k="hoot:hash" v="sha1sum:72a57c78e7e3f44b07d07f60c1cde9d20ef866c5;sha1sum:eb758d414fa93afe604316a5e84c00a69264f9f2;sha1sum:a778a4d91b0c753b99943bdc1bc48a1cb87362df;sha1sum:89f3dc3df22704a0bb68ab4a86a2303cd1257eb8;sha1sum:5e3528c1e5c11543506ed31a52ab3922ebadd862;sha1sum:dfc46b26981053fa400f3ddff67e5f76407b8372;sha1sum:02df519b7ca683e9037e899291856a810591f5c1;sha1sum:059a87359ea39d2a5806d652321071433a1fdce9;sha1sum:d111ea2e3d77a5d00a2c3875f126bd833aaea135;sha1sum:6bd8cab6fd9f7082fbbd170661df1f96fd66ff76;sha1sum:d9175b34489f94059a83a1be5897ce3d0599bf27;sha1sum:5df535ed06b5bdc9634ca1143e620a9b47d28bb5;sha1sum:7888eea9afeff1beb43c026d13d0ff2256d239a4;sha1sum:7ebe5d0ff0ce8ce88e334e4fe1988d954bc142cb;sha1sum:49fdc2bbf39ef1932f8436c2fba81ad46069824b;sha1sum:c2b071b7f9a03d57223fc8e67c6bdf0bfd406f37;sha1sum:ce82457142b9071e450eee4fbcbe57f7a0413252;sha1sum:ff3c346c197c735ac3f1581f0303244babe6d76f"/>
         <tag k="hoot:id" v="-12"/>
         <tag k="hoot:status" v="3"/>
         <tag k="hoot:way:node:count" v="20"/>
@@ -2157,8 +2195,9 @@
     </relation>
     <relation visible="true" id="7387465" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-12" role=""/>
-        <member type="way" ref="-110" role=""/>
         <member type="way" ref="-32" role=""/>
+        <member type="way" ref="-87" role=""/>
+        <member type="way" ref="-84" role=""/>
         <tag k="FIXME" v="verify east end"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="7387465"/>
@@ -2174,15 +2213,15 @@
     </relation>
     <relation visible="true" id="7387466" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-15" role="forward"/>
-        <member type="way" ref="-14" role="forward"/>
-        <member type="way" ref="-67" role="forward"/>
-        <member type="way" ref="-97" role="forward"/>
         <member type="way" ref="-113" role="forward"/>
+        <member type="way" ref="-14" role="forward"/>
         <member type="way" ref="-1748" role="forward"/>
         <member type="way" ref="-112" role="forward"/>
         <member type="way" ref="-78" role="forward"/>
         <member type="way" ref="-68" role="forward"/>
         <member type="way" ref="-72" role="forward"/>
+        <member type="way" ref="-67" role="forward"/>
+        <member type="way" ref="-97" role="forward"/>
         <tag k="error:circular" v="15"/>
         <tag k="hoot:id" v="7387466"/>
         <tag k="hoot:status" v="3"/>

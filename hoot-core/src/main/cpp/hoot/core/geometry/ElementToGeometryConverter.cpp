@@ -49,7 +49,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
 #include <hoot/core/geometry/GeometryUtils.h>
@@ -76,30 +75,6 @@ _spatialReference(provider->getProjection()),
 _requireAreaForPolygonConversion(true),
 _logWarningsForMissingElements(logWarningsForMissingElements)
 {
-}
-
-Meters ElementToGeometryConverter::calculateLength(const ConstElementPtr &e) const
-{
-  // Doing length/distance calcs only make sense if we've projected down onto a flat surface
-  if (!MapProjector::isPlanar(_constProvider))
-  {
-    throw IllegalArgumentException("Map must be in planar coordinate system.");
-  }
-
-  // if the element is not a point and is not an area.
-  // NOTE: Originally, I was using isLinear. This was a bit too strict in that it wants evidence of
-  // being linear before the length is calculated. Conversely, this wants evidence that is is not
-  // linear before it will assume it doesn't have a length.
-  if (e->getElementType() != ElementType::Node && AreaCriterion().isSatisfied(e) == false)
-  {
-    // TODO: optimize - we don't really need to convert first, we can just loop through the nodes
-    // and sum up the distance.
-    return convertToGeometry(e)->getLength();
-  }
-  else
-  {
-    return 0;
-  }
 }
 
 std::shared_ptr<Geometry> ElementToGeometryConverter::convertToGeometry(

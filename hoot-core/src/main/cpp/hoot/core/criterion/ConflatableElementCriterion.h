@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CONFLATABLE_ELEMENT_CRITERION_H
 #define CONFLATABLE_ELEMENT_CRITERION_H
@@ -36,10 +36,8 @@ namespace hoot
 
 /**
  * Simple abstract base class that signifies an ElementCriterion that describes a conflatable
- * feature type; e.g. BuildingCriterion.  All ElementCriterion used for identifying conflatable
+ * feature type; e.g. BuildingCriterion. All ElementCriterion used for identifying conflatable
  * features should inherit from this class
- *
- * TODO: Think we combine this class with NonConflatableCriterion.
  */
 class ConflatableElementCriterion : public GeometryTypeCriterion
 {

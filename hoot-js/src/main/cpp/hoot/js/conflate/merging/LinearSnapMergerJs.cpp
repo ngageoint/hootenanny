@@ -108,6 +108,7 @@ void LinearSnapMergerJs::apply(const FunctionCallbackInfo<Value>& args)
   vector<pair<ElementId, ElementId>> replaced =
     toCpp<vector<pair<ElementId, ElementId>>>(args[3]);
   const QString matchedBy = toCpp<QString>(args[4]);
+  LOG_VART(matchedBy);
   SublineStringMatcherPtr sublineMatcher2;
   if (args.Length() > 5)
   {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef POIMERGERJS_H
@@ -53,7 +53,6 @@ public:
    * @param current the context this method should run under
    */
   static void mergePois(OsmMapPtr map, const ElementId& mergeTargetId, v8::Isolate* current);
-
 };
 
 }

@@ -4959,6 +4959,7 @@
         <nd ref="4881732781"/>
         <nd ref="-787"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:90200f5da0d5b766ef6843fff362c1a271fa200d"/>
         <tag k="hoot:id" v="-4"/>
         <tag k="hoot:status" v="1"/>
         <tag k="hoot:way:node:count" v="3"/>

@@ -31,6 +31,8 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -41,6 +43,81 @@ bool ConfigUtils::boundsOptionEnabled()
     !conf().get(ConfigOptions::getBoundsKey()).toString().trimmed().isEmpty() ||
     !conf().get(ConfigOptions::getBoundsHootApiDatabaseKey()).toString().trimmed().isEmpty() ||
     !conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed().isEmpty();
+}
+
+std::shared_ptr<geos::geom::Geometry> ConfigUtils::getBounds()
+{
+  QString boundsStr = conf().get(ConfigOptions::getBoundsKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return GeometryUtils::boundsFromString(boundsStr);
+  }
+  boundsStr = conf().get(ConfigOptions::getBoundsHootApiDatabaseKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return GeometryUtils::boundsFromString(boundsStr);
+  }
+  boundsStr = conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return GeometryUtils::boundsFromString(boundsStr);
+  }
+  return std::shared_ptr<geos::geom::Geometry>();
+}
+
+QString ConfigUtils::getBoundsString()
+{
+  QString boundsStr = conf().get(ConfigOptions::getBoundsKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return boundsStr;
+  }
+  boundsStr = conf().get(ConfigOptions::getBoundsHootApiDatabaseKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return boundsStr;
+  }
+  boundsStr = conf().get(ConfigOptions::getBoundsOsmApiDatabaseKey()).toString().trimmed();
+  if (!boundsStr.isEmpty())
+  {
+    return boundsStr;
+  }
+  return "";
+}
+
+GeometricRelationship ConfigUtils::getBoundsRelationship()
+{
+  if (ConfigOptions().getBoundsKeepOnlyFeaturesInsideBounds())
+  {
+    return GeometricRelationship::Contains;
+  }
+  return GeometricRelationship::Intersects;
+}
+
+std::shared_ptr<InBoundsCriterion> ConfigUtils::getBoundsFilter(const ConstOsmMapPtr& map)
+{
+  std::shared_ptr<InBoundsCriterion> boundsCrit;
+  const QString boundsStr = ConfigOptions().getBounds().trimmed();
+  LOG_VART(boundsStr);
+  if (!boundsStr.isEmpty())
+  {
+    const GeometricRelationship boundsRelationship = ConfigUtils::getBoundsRelationship();
+    const bool mustContain = true ? (boundsRelationship == GeometricRelationship::Contains) : false;
+    boundsCrit.reset(new InBoundsCriterion(mustContain));
+    std::shared_ptr<geos::geom::Geometry> bounds = GeometryUtils::boundsFromString(boundsStr);
+    if (!MapProjector::isGeographic(map))
+    {
+      // The bounds is always in WGS84, so if our map isn't currently in WGS84 we need to reproject
+      // the bounds.
+      std::shared_ptr<OGRSpatialReference> srs84(new OGRSpatialReference());
+      srs84->SetWellKnownGeogCS("WGS84");
+      MapProjector::project(bounds, srs84, map->getProjection());
+    }
+    boundsCrit->setBounds(bounds);
+    boundsCrit->setOsmMap(map.get());
+  }
+  LOG_VART(boundsCrit.get());
+  return boundsCrit;
 }
 
 void ConfigUtils::checkForTagValueTruncationOverride()

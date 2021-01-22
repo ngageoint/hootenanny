@@ -69,7 +69,6 @@ std::set<long> WayUtils::getContainingWayIdsByNodeId(const long nodeId,
   {
     const long containingWayId = *containingWaysItr;
     LOG_VART(containingWayId);
-    //LOG_VART(map->getWay(containingWayId));
 
     if (wayCriterion)
     {

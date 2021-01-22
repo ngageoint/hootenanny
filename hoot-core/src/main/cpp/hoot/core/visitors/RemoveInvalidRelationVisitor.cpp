@@ -60,7 +60,6 @@ void RemoveInvalidRelationVisitor::visit(const ElementPtr& e)
     assert(r != 0);
 
     LOG_VART(r->getId());
-    //LOG_VART(r);
     //  Only multilinestring or review relations
     if (r->getType() == MetadataTags::RelationReview())
       _removeDuplicates(r);

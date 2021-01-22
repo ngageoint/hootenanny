@@ -46,14 +46,16 @@ class RelationMerger : public OsmMapConsumer
 {
 public:
 
-  RelationMerger() = default;
+  RelationMerger();
   virtual ~RelationMerger() = default;
 
   /**
-   * Merges two collection relations
+   * Merges the members from the relation with the second element ID into the relation with the
+   * first element ID, updates element references, and removes the relation with the second element
+   * ID if all of its members are copied over (they may not be if a bounds is present).
    *
-   * @param elementId1 ID of the first relation to merger
-   * @param elementId2 ID of the second relation to merger
+   * @param elementId1 ID of the first relation to merge
+   * @param elementId2 ID of the second relation to merge
    */
   void merge(const ElementId& elementId1, const ElementId& elementId2);
 
@@ -62,11 +64,25 @@ public:
    */
   virtual void setOsmMap(OsmMap* map) { _map = map->shared_from_this(); }
 
+  void setMergeTags(bool merge) { _mergeTags = merge; }
+  void setDeleteRelation2(bool deleteRelation) { _deleteRelation2 = deleteRelation; }
+
 private:
 
   OsmMapPtr _map;
 
-  void _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
+  // determines whether tags of the two relations are merged
+  bool _mergeTags;
+  // determines whether the relation whose members were merged into the other relation is deleted;
+  // Useful if members from the same relation are to be merged into multiple other relations
+  bool _deleteRelation2;
+
+  static const bool WRITE_DETAILED_DEBUG_MAPS;
+
+  /*
+   * Returns true if all members from the second relation were merged into the frist relation
+   */
+  bool _mergeMembers(RelationPtr replacingRelation, RelationPtr relationBeingReplaced);
 };
 
 }

@@ -53,50 +53,6 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmMapOperationJs)
 
-void OsmMapOperationJs::apply(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
-
-  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
-
-  op->getMapOp()->apply(map);
-
-  args.GetReturnValue().SetUndefined();
-}
-
-void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
-  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
-  op->getMapOp()->apply(map);
-  boost::any result = op->getMapOp()->getResult();
-
-  /// I'm sure there's a better way to do this...initially just supporting a small number of
-  /// returned types here.
-  if (result.type() == typeid(double))
-  {
-    args.GetReturnValue().Set(Number::New(current, boost::any_cast<double>(result)));
-  }
-  else if (result.type() == typeid(int))
-  {
-    args.GetReturnValue().Set(Number::New(current, boost::any_cast<int>(result)));
-  }
-  else if (result.type() == typeid(QString))
-  {
-    args.GetReturnValue().Set(String::NewFromUtf8(current, boost::any_cast<QString>(result).toLatin1().data()));
-  }
-  else
-  {
-    throw HootException("Unsupported OsmMapOperation result type encountered by Javascript API.");
-  }
-}
-
 void OsmMapOperationJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
@@ -133,8 +89,10 @@ void OsmMapOperationJs::New(const FunctionCallbackInfo<Value>& args)
   QString className = str(args.This()->GetConstructorName());
   if (className == "Object")
   {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-      "Invalid OsmMapOperation. Did you forget 'new'?"))));
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        HootExceptionJs::create(
+          IllegalArgumentException("Invalid OsmMapOperation. Did you forget 'new'?"))));
   }
   OsmMapOperation* op = Factory::getInstance().constructObject<OsmMapOperation>(className);
   OsmMapOperationJs* obj = new OsmMapOperationJs(op);
@@ -144,6 +102,49 @@ void OsmMapOperationJs::New(const FunctionCallbackInfo<Value>& args)
   PopulateConsumersJs::populateConsumers<OsmMapOperation>(op, args);
 
   args.GetReturnValue().Set(args.This());
+}
+
+void OsmMapOperationJs::apply(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
+  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
+
+  op->getMapOp()->apply(map);
+
+  args.GetReturnValue().SetUndefined();
+}
+
+void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
+  OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
+  op->getMapOp()->apply(map);
+  boost::any result = op->getMapOp()->getResult();
+
+  /// I'm sure there's a better way to do this...initially just supporting a small number of
+  /// returned types here.
+  if (result.type() == typeid(double))
+  {
+    args.GetReturnValue().Set(Number::New(current, boost::any_cast<double>(result)));
+  }
+  else if (result.type() == typeid(int))
+  {
+    args.GetReturnValue().Set(Number::New(current, boost::any_cast<int>(result)));
+  }
+  else if (result.type() == typeid(QString))
+  {
+    args.GetReturnValue().Set(String::NewFromUtf8(current, boost::any_cast<QString>(result).toLatin1().data()));
+  }
+  else
+  {
+    throw HootException("Unsupported OsmMapOperation result type encountered by Javascript API.");
+  }
 }
 
 }

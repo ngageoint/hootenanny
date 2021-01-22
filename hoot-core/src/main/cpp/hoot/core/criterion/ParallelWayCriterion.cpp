@@ -38,9 +38,10 @@ using namespace geos::operation::distance;
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 // Qt
 #include <QDebug>
@@ -63,7 +64,7 @@ ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPt
 
   // space 4m or get at least 5 samples
   std::vector<Coordinate> coords;
-  Meters spacing = std::min(ElementToGeometryConverter(map).calculateLength(baseWay) / 5, 4.0);
+  Meters spacing = std::min(ElementGeometryUtils::calculateLength(baseWay, map) / 5, 4.0);
   if (spacing <= 0.0)
   {
     spacing = 4.0;
