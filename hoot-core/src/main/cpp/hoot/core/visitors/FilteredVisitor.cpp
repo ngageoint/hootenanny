@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FilteredVisitor.h"
 
@@ -129,6 +129,12 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr
   FilteredVisitor& filteredVis = const_cast<FilteredVisitor&>(filteredVisitor);
   map->visitRo(filteredVis);
   return stat->getStat();
+}
+
+double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
+                                const ConstOsmMapPtr& map, const ElementPtr& element)
+{
+  return getStat(criterion.get(), visitor.get(), map, element);
 }
 
 double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* visitor,
