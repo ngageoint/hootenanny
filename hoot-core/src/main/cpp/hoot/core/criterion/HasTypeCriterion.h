@@ -40,7 +40,7 @@ class HasTypeCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::HasTypeCriterion"; }
+  static QString className() { return "hoot::HasTypeCriterion"; }
 
   HasTypeCriterion() = default;
   virtual ~HasTypeCriterion() = default;
@@ -52,7 +52,7 @@ public:
   virtual QString getDescription() const
   { return "Determines if an element has a recognizable type."; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

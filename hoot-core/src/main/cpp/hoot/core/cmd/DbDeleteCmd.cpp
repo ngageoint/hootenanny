@@ -43,7 +43,7 @@ class DbDeleteCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::DbDeleteCmd"; }
+  static QString className() { return "hoot::DbDeleteCmd"; }
 
   DbDeleteCmd() = default;
 

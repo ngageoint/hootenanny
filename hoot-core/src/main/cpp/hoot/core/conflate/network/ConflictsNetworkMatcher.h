@@ -49,7 +49,7 @@ class ConflictsNetworkMatcher : public NetworkMatcher
 {
 public:
 
-  static std::string className() { return "hoot::ConflictsNetworkMatcher"; }
+  static QString className() { return "hoot::ConflictsNetworkMatcher"; }
 
   const static double EPSILON;
 

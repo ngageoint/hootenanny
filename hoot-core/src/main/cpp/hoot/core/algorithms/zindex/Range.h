@@ -43,7 +43,7 @@ class Range
 {
 public:
 
-  static std::string className() { return "hoot::Range"; }
+  static QString className() { return "hoot::Range"; }
 
   Range() {}
 

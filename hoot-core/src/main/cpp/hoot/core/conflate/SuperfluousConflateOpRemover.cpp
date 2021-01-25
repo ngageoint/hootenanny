@@ -69,7 +69,7 @@ void SuperfluousConflateOpRemover::removeSuperfluousOps()
     conf().set(ConfigOptions::getConflatePostOpsKey(), modifiedPostConflateOps);
   }
 
-  const QString mapCleanerName = QString::fromStdString(MapCleaner::className());
+  const QString mapCleanerName = MapCleaner::className();
   if (modifiedPreConflateOps.contains(mapCleanerName) ||
       modifiedPostConflateOps.contains(mapCleanerName))
   {
@@ -105,7 +105,7 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
     LOG_VART(opName);
 
     // MapCleaner's ops are configured with map.cleaner.transforms, so don't exclude it here.
-    if (opName == QString::fromStdString(MapCleaner::className()))
+    if (opName == MapCleaner::className())
     {
       modifiedOps.append(opName);
       continue;
@@ -238,7 +238,7 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
       LOG_VART(pointCrits);
       if (pointCrits.contains(critStr))
       {
-        matcherCrits.insert(QString::fromStdString(PointCriterion::className()));
+        matcherCrits.insert(PointCriterion::className());
       }
 
       const QStringList lineCrits =
@@ -247,7 +247,7 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
       LOG_VART(lineCrits);
       if (lineCrits.contains(critStr))
       {
-        matcherCrits.insert(QString::fromStdString(LinearCriterion::className()));
+        matcherCrits.insert(LinearCriterion::className());
       }
 
       const QStringList polyCrits =
@@ -256,7 +256,7 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
       LOG_VART(polyCrits);
       if (polyCrits.contains(critStr))
       {
-        matcherCrits.insert(QString::fromStdString(PolygonCriterion::className()));
+        matcherCrits.insert(PolygonCriterion::className());
       }
     }
   }

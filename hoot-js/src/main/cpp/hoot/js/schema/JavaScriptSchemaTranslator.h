@@ -65,7 +65,7 @@ class JavaScriptSchemaTranslator : public ScriptSchemaTranslator, public ScriptT
 {
 public:
 
-  static std::string className() { return "hoot::JavaScriptSchemaTranslator"; }
+  static QString className() { return "hoot::JavaScriptSchemaTranslator"; }
 
   static int logWarnCount;
 

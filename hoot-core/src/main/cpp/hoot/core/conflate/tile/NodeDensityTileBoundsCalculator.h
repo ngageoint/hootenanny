@@ -79,7 +79,7 @@ public:
       }
   };
 
-  static std::string className() { return "hoot::NodeDensityTileBoundsCalculator"; }
+  static QString className() { return "hoot::NodeDensityTileBoundsCalculator"; }
 
   /**
    * Specifies the index of a pixel. When specifying a bounding box this represents the lower left

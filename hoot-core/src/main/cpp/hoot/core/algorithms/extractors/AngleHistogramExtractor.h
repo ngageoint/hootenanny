@@ -57,9 +57,9 @@ public:
   AngleHistogramExtractor(Radians smoothing, unsigned int bins = 16);
   virtual ~AngleHistogramExtractor() = default;
 
-  static std::string className() { return "hoot::AngleHistogramExtractor"; }
+  static QString className() { return "hoot::AngleHistogramExtractor"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString toString() const override;
 

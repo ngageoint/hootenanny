@@ -43,14 +43,14 @@ class RemoveEmptyRelationsOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::RemoveEmptyRelationsOp"; }
+  static QString className() { return "hoot::RemoveEmptyRelationsOp"; }
 
   RemoveEmptyRelationsOp() = default;
   virtual ~RemoveEmptyRelationsOp() = default;
 
   virtual void apply(OsmMapPtr& map) override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   long getNumRemoved() const { return _numAffected; }
 

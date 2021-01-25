@@ -301,7 +301,7 @@ QString ApiEntityDisplayInfo::getDisplayInfo(const QString& apiEntityType)
 
 template<typename ApiEntity, typename ApiEntityChild>
 QString ApiEntityDisplayInfo::_getApiEntities(
-  const std::string& apiEntityBaseClassName, const QString& apiEntityType,
+  const QString& apiEntityBaseClassName, const QString& apiEntityType,
   const bool displayType,
   //the size of the longest names plus a 3 space buffer; the value passed in
   //here by callers may have to be adjusted over time for some entity types
@@ -391,7 +391,7 @@ QString ApiEntityDisplayInfo::_getApiEntities(
 // display method for them
 template<typename ApiEntity>
 QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
-  const std::string& apiEntityClassName)
+  const QString& apiEntityClassName)
 {
   //the size of the longest names plus a 3 space buffer
   const int maxNameSize = 48;
@@ -442,12 +442,12 @@ QString ApiEntityDisplayInfo::_getApiEntitiesForMatchMergerCreators(
 QString ApiEntityDisplayInfo::_apiEntityTypeForBaseClass(const QString& className)
 {
   LOG_VARD(className);
-  if (className == QString::fromStdString(OsmMapOperation::className()) ||
+  if (className == OsmMapOperation::className() ||
       Factory::getInstance().hasBase<OsmMapOperation>(className))
   {
     return "operation";
   }
-  else if (className == QString::fromStdString(ElementVisitor::className()) ||
+  else if (className == ElementVisitor::className() ||
            Factory::getInstance().hasBase<ElementVisitor>(className))
   {
     return "visitor";

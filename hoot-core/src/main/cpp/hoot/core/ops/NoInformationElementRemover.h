@@ -44,7 +44,7 @@ class NoInformationElementRemover : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::NoInformationElementRemover"; }
+  static QString className() { return "hoot::NoInformationElementRemover"; }
 
   NoInformationElementRemover() = default;
   virtual ~NoInformationElementRemover() = default;
@@ -63,7 +63,7 @@ public:
   virtual QString getDescription() const
   { return "Removes elements containing no information in tags"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

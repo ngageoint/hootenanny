@@ -38,7 +38,7 @@ class MultiVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::MultiVisitor"; }
+  static QString className() { return "hoot::MultiVisitor"; }
 
   MultiVisitor() = default;
   virtual ~MultiVisitor() = default;
@@ -49,7 +49,7 @@ public:
 
   virtual QString getDescription() const { return "Allows for combining multiple visitors"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

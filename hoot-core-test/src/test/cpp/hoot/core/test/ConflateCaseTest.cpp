@@ -192,7 +192,7 @@ void ConflateCaseTest::runTest()
   // configures and cleans up the conf() environment
   TestSetup st(_confs);
 
-  if (ConfigOptions().getTestCaseConflateCmd().toStdString() == ConflateCmd::className())
+  if (ConfigOptions().getTestCaseConflateCmd() == ConflateCmd::className())
   {
     _runConflateCmd();
   }

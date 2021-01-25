@@ -37,7 +37,7 @@ class PowerLineWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::PowerLineWayNodeCriterion"; }
+  static QString className() { return "hoot::PowerLineWayNodeCriterion"; }
 
   PowerLineWayNodeCriterion();
   PowerLineWayNodeCriterion(ConstOsmMapPtr map);
@@ -50,7 +50,7 @@ public:
 
   virtual QString getDescription() const override { return "Identifies power line nodes"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

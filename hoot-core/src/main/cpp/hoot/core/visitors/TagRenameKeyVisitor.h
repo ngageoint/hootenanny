@@ -41,7 +41,7 @@ class TagRenameKeyVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagRenameKeyVisitor"; }
+  static QString className() { return "hoot::TagRenameKeyVisitor"; }
 
   TagRenameKeyVisitor() = default;
   virtual ~TagRenameKeyVisitor() = default;
@@ -62,7 +62,7 @@ public:
   void setOldKey(const QString& key) { _oldKey = key; }
   void setNewKey(const QString& key) { _newKey = key; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

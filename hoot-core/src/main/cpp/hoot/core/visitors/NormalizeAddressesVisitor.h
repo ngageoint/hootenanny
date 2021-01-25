@@ -42,7 +42,7 @@ class NormalizeAddressesVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::NormalizeAddressesVisitor"; }
+  static QString className() { return "hoot::NormalizeAddressesVisitor"; }
 
   NormalizeAddressesVisitor() = default;
   virtual ~NormalizeAddressesVisitor() = default;
@@ -59,7 +59,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Normalized " + QString::number(_addressNormalizer.getNumNormalized()) + " addresses"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

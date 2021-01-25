@@ -89,7 +89,7 @@ public:
    * @brief className - Get a string that represents this class name
    * @return class name
    */
-  static std::string className() { return "hoot::DiffConflator"; }
+  static QString className() { return "hoot::DiffConflator"; }
 
   /**
    * @brief DiffConflator - Default constructor
@@ -116,7 +116,7 @@ public:
    * @brief getClassName - Gets the class name
    * @return The class name string
    */
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * @brief getStats - Gets a list of stats recorded during the conflation process,

@@ -59,7 +59,7 @@ class TagAdvancedCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagAdvancedCriterion"; }
+  static QString className() { return "hoot::TagAdvancedCriterion"; }
 
   TagAdvancedCriterion();
   TagAdvancedCriterion(const QString& filterJsonStrOrPath);
@@ -74,7 +74,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements by tag using a set of advanced schema functionality"; }
 
- virtual QString getName() const override { return QString::fromStdString(className()); }
+ virtual QString getName() const override { return className(); }
 
 private:
 

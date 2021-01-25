@@ -50,7 +50,7 @@ class ApiTagTruncateVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ApiTagTruncateVisitor"; }
+  static QString className() { return "hoot::ApiTagTruncateVisitor"; }
 
   ApiTagTruncateVisitor();
   virtual ~ApiTagTruncateVisitor() = default;
@@ -70,7 +70,7 @@ public:
       " elements";
   }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   void setConfiguration(const Settings& conf) override;
 

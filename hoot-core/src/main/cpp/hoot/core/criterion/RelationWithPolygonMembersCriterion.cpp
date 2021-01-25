@@ -48,7 +48,7 @@ RelationWithMembersOfTypeCriterion(map)
 
 QString RelationWithPolygonMembersCriterion::getCriterion() const
 {
-  return QString::fromStdString(PolygonCriterion::className());
+  return PolygonCriterion::className();
 }
 
 GeometryTypeCriterion::GeometryType RelationWithPolygonMembersCriterion::getGeometryType() const

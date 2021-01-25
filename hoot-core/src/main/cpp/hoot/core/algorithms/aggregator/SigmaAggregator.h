@@ -36,16 +36,16 @@ class SigmaAggregator : public ValueAggregator
 {
 public:
 
-  static std::string className() { return "hoot::SigmaAggregator"; }
+  static QString className() { return "hoot::SigmaAggregator"; }
 
   SigmaAggregator() = default;
   virtual ~SigmaAggregator() = default;
 
   virtual double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const override { return QString::fromStdString(className()); }
+  virtual QString toString() const override { return className(); }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Aggregates data based on the unbiased Standard Deviation value"; }

@@ -46,7 +46,7 @@ class HootServicesLanguageInfoClient : public LanguageInfoProvider
 {
 public:
 
-  static std::string className() { return "hoot::HootServicesLanguageInfoClient"; }
+  static QString className() { return "hoot::HootServicesLanguageInfoClient"; }
 
   HootServicesLanguageInfoClient() : _useCookies(true), _timeout(500) { }
   virtual ~HootServicesLanguageInfoClient() = default;

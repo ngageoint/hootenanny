@@ -55,7 +55,7 @@ class CountCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::CountCmd"; }
+  static QString className() { return "hoot::CountCmd"; }
 
   CountCmd() :
   _total(0),

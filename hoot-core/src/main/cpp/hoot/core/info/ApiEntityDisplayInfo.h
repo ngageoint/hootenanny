@@ -71,11 +71,11 @@ private:
 
   template<typename ApiEntity, typename ApiEntityChild>
   static QString _getApiEntities(
-    const std::string& apiEntityBaseClassName, const QString& apiEntityType, const bool displayType,
+    const QString& apiEntityBaseClassName, const QString& apiEntityType, const bool displayType,
     const int maxNameSize);
 
   template<typename ApiEntity>
-  static QString _getApiEntitiesForMatchMergerCreators(const std::string& apiEntityClassName);
+  static QString _getApiEntitiesForMatchMergerCreators(const QString& apiEntityClassName);
 };
 
 }

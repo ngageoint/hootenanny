@@ -43,7 +43,7 @@ namespace hoot
 class CentroidDistanceExtractor : public AbstractDistanceExtractor
 {
 public:
-  static std::string className() { return "hoot::CentroidDistanceExtractor"; }
+  static QString className() { return "hoot::CentroidDistanceExtractor"; }
 
   CentroidDistanceExtractor() = default;
   virtual ~CentroidDistanceExtractor() = default;
@@ -51,8 +51,7 @@ public:
   virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getName() const
-  { return QString::fromStdString(CentroidDistanceExtractor::className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getDescription() const
   { return "Finds feature centroids and calculates the distance between them"; }

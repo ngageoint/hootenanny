@@ -42,7 +42,7 @@ class StatusCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::StatusCriterion"; }
+  static QString className() { return "hoot::StatusCriterion"; }
 
   StatusCriterion() { setConfiguration(conf()); }
   StatusCriterion(Status s) : _status(s) { }
@@ -56,7 +56,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies elements with a particular status"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

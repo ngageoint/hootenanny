@@ -60,7 +60,7 @@ public:
   {
     setResetType(ResetAll);
 
-    _scriptMatchCreatorName = QString::fromStdString(ScriptMatchCreator::className());
+    _scriptMatchCreatorName = ScriptMatchCreator::className();
   }
 
   void runOpFilter1Test()

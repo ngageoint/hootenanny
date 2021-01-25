@@ -44,7 +44,7 @@ class RfExtractorClassifier
 {
 public:
 
-  static std::string className() { return "hoot::RfExtractorClassifier"; }
+  static QString className() { return "hoot::RfExtractorClassifier"; }
 
   RfExtractorClassifier() = default;
   virtual ~RfExtractorClassifier() = default;

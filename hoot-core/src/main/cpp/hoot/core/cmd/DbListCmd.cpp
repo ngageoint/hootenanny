@@ -37,7 +37,7 @@ class DbListCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::DbListCmd"; }
+  static QString className() { return "hoot::DbListCmd"; }
 
   DbListCmd() = default;
 

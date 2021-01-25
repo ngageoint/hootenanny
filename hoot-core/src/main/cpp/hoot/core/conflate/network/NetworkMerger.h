@@ -45,7 +45,7 @@ class NetworkMerger : public MergerBase
 {
 public:
 
-  static std::string className() { return "hoot::NetworkMerger"; }
+  static QString className() { return "hoot::NetworkMerger"; }
 
   NetworkMerger() = default;
   virtual ~NetworkMerger() = default;
@@ -63,7 +63,7 @@ public:
 
   virtual QString getDescription() const { return "Merges roads matched by the Network Algorithm"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 protected:
 

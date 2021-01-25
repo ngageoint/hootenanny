@@ -46,7 +46,7 @@ class OsmGbdxJsonWriter : public OsmJsonWriter
 {
 public:
 
-  static std::string className() { return "hoot::OsmGbdxJsonWriter"; }
+  static QString className() { return "hoot::OsmGbdxJsonWriter"; }
 
   OsmGbdxJsonWriter(int precision = ConfigOptions().getWriterPrecision());
   virtual ~OsmGbdxJsonWriter() = default;

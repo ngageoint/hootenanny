@@ -58,7 +58,7 @@ class PoiPolygonMerger : public MergerBase
 
 public:
 
-  static std::string className() { return "hoot::PoiPolygonMerger"; }
+  static QString className() { return "hoot::PoiPolygonMerger"; }
 
   PoiPolygonMerger();
   virtual ~PoiPolygonMerger() = default;
@@ -87,7 +87,7 @@ public:
 
   void setTagMergerClass(const QString& className) { _tagMergerClass = className; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 protected:
 

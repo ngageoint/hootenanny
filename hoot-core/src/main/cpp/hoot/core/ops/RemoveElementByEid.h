@@ -55,7 +55,7 @@ public:
    * @brief className gets the name of the class
    * @return class name string
    */
-  static std::string className() { return "hoot::RemoveElementByEid"; }
+  static QString className() { return "hoot::RemoveElementByEid"; }
 
   /**
    * @brief RemoveElementByEid removes an element from the map
@@ -93,7 +93,7 @@ public:
    * @brief getClassName gest the name of the class
    * @return class name string
    */
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * @brief setElementId sets the id of the element to remove

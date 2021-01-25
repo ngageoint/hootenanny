@@ -50,7 +50,7 @@ class WayGeneralizeVisitor : public ElementOsmMapVisitor, public Configurable,
 {
 public:
 
-  static std::string className() { return "hoot::WayGeneralizeVisitor"; }
+  static QString className() { return "hoot::WayGeneralizeVisitor"; }
 
   WayGeneralizeVisitor();
   virtual ~WayGeneralizeVisitor() = default;
@@ -85,7 +85,7 @@ public:
 
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

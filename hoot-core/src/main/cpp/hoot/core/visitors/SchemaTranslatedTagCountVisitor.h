@@ -46,7 +46,7 @@ class SchemaTranslatedTagCountVisitor : public ConstElementVisitor, public Const
 {
 public:
 
-  static std::string className() { return "hoot::SchemaTranslatedTagCountVisitor"; }
+  static QString className() { return "hoot::SchemaTranslatedTagCountVisitor"; }
 
   SchemaTranslatedTagCountVisitor(const std::shared_ptr<ScriptSchemaTranslator>& t);
   SchemaTranslatedTagCountVisitor() = default;
@@ -66,7 +66,7 @@ public:
   virtual QString getDescription() const
   { return "Counts the number of tags translated to a schema"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getInitStatusMessage() const { return "Counting translated tags..."; }
 

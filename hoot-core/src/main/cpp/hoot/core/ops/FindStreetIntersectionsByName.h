@@ -48,7 +48,7 @@ class FindStreetIntersectionsByName : public OsmMapOperation, public Configurabl
 {
 public:
 
-  static std::string className() { return "hoot::FindStreetIntersectionsByName"; }
+  static QString className() { return "hoot::FindStreetIntersectionsByName"; }
 
   FindStreetIntersectionsByName() = default;
   virtual ~FindStreetIntersectionsByName() = default;
@@ -66,7 +66,7 @@ public:
   virtual QString getDescription() const override
   { return "Locates street intersections by street name"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * @see OperationStatus

@@ -42,7 +42,7 @@ class FeatureCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static std::string className() { return "hoot::FeatureCountVisitor"; }
+  static QString className() { return "hoot::FeatureCountVisitor"; }
 
   FeatureCountVisitor() : _count(0) { }
   virtual ~FeatureCountVisitor() = default;
@@ -56,7 +56,7 @@ public:
   virtual QString getDescription() const
   { return "Counts the number of elements having at least one information tag"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

@@ -56,7 +56,7 @@ class ReplaceElementOp : public ConstOsmMapOperation, public ConstElementConsume
 {
 public:
 
-  static std::string className() { return "hoot::ReplaceElementOp"; }
+  static QString className() { return "hoot::ReplaceElementOp"; }
 
   /**
    * @param from Replace this element.
@@ -85,7 +85,7 @@ public:
 
   virtual QString getDescription() const override { return "Replaces one element with another"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

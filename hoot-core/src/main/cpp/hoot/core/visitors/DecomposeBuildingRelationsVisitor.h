@@ -47,7 +47,7 @@ class DecomposeBuildingRelationsVisitor : public ConstElementVisitor, public Osm
 {
 public:
 
-  static std::string className() { return "hoot::DecomposeBuildingRelationsVisitor"; }
+  static QString className() { return "hoot::DecomposeBuildingRelationsVisitor"; }
 
   static int logWarnCount;
 
@@ -67,7 +67,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Decomposed " + QString::number(_numAffected) + " complex buildings"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

@@ -41,7 +41,7 @@ class OneWayCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::OneWayCriterion"; }
+  static QString className() { return "hoot::OneWayCriterion"; }
 
   OneWayCriterion(bool isOneWay = true);
   virtual ~OneWayCriterion() = default;
@@ -55,7 +55,7 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Line; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

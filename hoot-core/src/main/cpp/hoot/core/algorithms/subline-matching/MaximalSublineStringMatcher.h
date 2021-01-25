@@ -45,7 +45,7 @@ class MaximalSublineStringMatcher : public SublineStringMatcher
 {
 public:
 
-  static std::string className() { return "hoot::MaximalSublineStringMatcher"; }
+  static QString className() { return "hoot::MaximalSublineStringMatcher"; }
 
   MaximalSublineStringMatcher();
   virtual ~MaximalSublineStringMatcher() = default;
@@ -70,7 +70,7 @@ public:
   virtual QString getDescription() const
   { return "Matches lines based on the maximal subline string found"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getSublineMatcherName() const { return _sublineMatcher->getName(); }
 

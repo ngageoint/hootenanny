@@ -54,7 +54,7 @@ void SuperfluousWayRemover::setConfiguration(const Settings& conf)
     if (!ok)
     {
       throw IllegalArgumentException(
-        QString("Invalid element exclude ID passed to ") + QString::fromStdString(className()));
+        QString("Invalid element exclude ID passed to ") + className());
     }
   }
   LOG_VARD(_excludeIds.size());
@@ -132,8 +132,8 @@ void SuperfluousWayRemover::apply(std::shared_ptr<OsmMap>& map)
 QStringList SuperfluousWayRemover::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(LinearCriterion::className()));
-  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  criteria.append(LinearCriterion::className());
+  criteria.append(PolygonCriterion::className());
   return criteria;
 }
 

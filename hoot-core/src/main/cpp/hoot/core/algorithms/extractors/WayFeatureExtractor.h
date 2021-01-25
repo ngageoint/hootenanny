@@ -46,7 +46,7 @@ class WayFeatureExtractor : public FeatureExtractorBase, public ValueAggregatorC
 {
 public:
 
-  static std::string className() { return "hoot::WayFeatureExtractor"; }
+  static QString className() { return "hoot::WayFeatureExtractor"; }
 
   WayFeatureExtractor(ValueAggregatorPtr agg);
 
@@ -56,7 +56,7 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString toString() const;
 

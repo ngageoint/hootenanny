@@ -56,7 +56,7 @@ class RubberSheet : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::RubberSheet"; }
+  static QString className() { return "hoot::RubberSheet"; }
 
   /**
    * If this configuration setting is set to true then the first layer is treated as the reference
@@ -150,7 +150,7 @@ public:
     */
    virtual QStringList getCriteria() const;
 
-   virtual QString getName() const { return QString::fromStdString(className()); }
+   virtual QString getName() const { return className(); }
 
    /**
     * @see OperationStatus

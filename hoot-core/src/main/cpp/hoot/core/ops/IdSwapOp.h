@@ -46,7 +46,7 @@ public:
    * @brief className - Get classname string
    * @return - "hoot::IdSwapOp"
    */
-  static std::string className() { return "hoot::IdSwapOp"; }
+  static QString className() { return "hoot::IdSwapOp"; }
 
   /**
    * @brief IdSwapOp - Default constructor
@@ -80,7 +80,7 @@ public:
   virtual QString getCompletedStatusMessage() const override
   { return "Swapped " + QString::number(_numAffected) + " IDs."; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
   /**

@@ -401,7 +401,7 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      QString::fromStdString(className()),
+      className(),
       "Generates matchers that match roads with the 2nd Generation (Unifying) Algorithm",
       CreatorDescription::Highway,
       false));
@@ -428,7 +428,7 @@ std::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
 
 QStringList HighwayMatchCreator::getCriteria() const
 {
-  return QStringList(QString::fromStdString(HighwayCriterion::className()));
+  return QStringList(HighwayCriterion::className());
 }
 
 }

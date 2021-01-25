@@ -42,7 +42,7 @@ class MedianNodeVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::MedianNodeVisitor"; }
+  static QString className() { return "hoot::MedianNodeVisitor"; }
 
   MedianNodeVisitor() = default;
   virtual ~MedianNodeVisitor() = default;
@@ -53,7 +53,7 @@ public:
 
   virtual QString getDescription() const { return "Calculates the median node"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

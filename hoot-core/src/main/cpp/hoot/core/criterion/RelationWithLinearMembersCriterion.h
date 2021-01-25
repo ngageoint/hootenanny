@@ -42,7 +42,7 @@ class RelationWithLinearMembersCriterion : public RelationWithMembersOfTypeCrite
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithLinearMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithLinearMembersCriterion"; }
 
   RelationWithLinearMembersCriterion();
   RelationWithLinearMembersCriterion(ConstOsmMapPtr map);
@@ -51,14 +51,14 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RelationWithLinearMembersCriterion(_map)); }
 
-  virtual QString getCriterion() const override { return "hoot::LinearCriterion"; }
+  virtual QString getCriterion() const override;
 
   virtual QString getDescription() const
   { return "Identifies relations with children having linear geometries"; }
 
-  virtual GeometryType getGeometryType() const { return GeometryType::Line; }
+  virtual GeometryType getGeometryType() const;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

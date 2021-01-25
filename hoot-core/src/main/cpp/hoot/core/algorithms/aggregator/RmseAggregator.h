@@ -42,16 +42,16 @@ class RmseAggregator : public ValueAggregator
 {
 public:
 
-  static std::string className() { return "hoot::RmseAggregator"; }
+  static QString className() { return "hoot::RmseAggregator"; }
 
   RmseAggregator() = default;
   virtual ~RmseAggregator() = default;
 
   virtual double aggregate(std::vector<double>& d) const;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
-  virtual QString toString() const override { return QString::fromStdString(className()); }
+  virtual QString toString() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Aggregates data based on the Root Mean Square Deviation value"; }

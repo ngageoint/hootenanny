@@ -52,7 +52,7 @@ class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriter
 {
 public:
 
-  static std::string className() { return "hoot::ElementVisitor"; }
+  static QString className() { return "hoot::ElementVisitor"; }
 
   ElementVisitor() : _numAffected(0), _numProcessed(0) { }
   virtual ~ElementVisitor() = default;

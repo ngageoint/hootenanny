@@ -45,7 +45,7 @@ class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementCon
 {
 public:
 
-  static std::string className() { return "hoot::RemoveReviewsByEidOp"; }
+  static QString className() { return "hoot::RemoveReviewsByEidOp"; }
 
   /**
    */
@@ -75,7 +75,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " conflation reviews"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

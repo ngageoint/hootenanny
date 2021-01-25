@@ -134,7 +134,7 @@ class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
 
 public:
 
-  static std::string className() { return "hoot::OsmApiDbBulkInserter"; }
+  static QString className() { return "hoot::OsmApiDbBulkInserter"; }
 
   OsmApiDbBulkInserter();
   virtual ~OsmApiDbBulkInserter();

@@ -40,7 +40,7 @@ class ContainsNodeCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ContainsNodeCriterion"; }
+  static QString className() { return "hoot::ContainsNodeCriterion"; }
 
   ContainsNodeCriterion() = default;
   explicit ContainsNodeCriterion(long nodeId) : _nodeId(nodeId) { }
@@ -56,7 +56,7 @@ public:
 
   virtual void setConfiguration(const Settings& s);
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

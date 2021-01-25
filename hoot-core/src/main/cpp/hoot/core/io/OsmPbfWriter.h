@@ -61,7 +61,7 @@ class OsmPbfWriter : public PartialOsmMapWriter
 {
 public:
 
-  static std::string className() { return "hoot::OsmPbfWriter"; }
+  static QString className() { return "hoot::OsmPbfWriter"; }
 
   class BlobLocation
   {

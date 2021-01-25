@@ -36,7 +36,7 @@ class GeneralizeTagMerger : public TagMerger
 {
 public:
 
-  static std::string className() { return "hoot::GeneralizeTagMerger"; }
+  static QString className() { return "hoot::GeneralizeTagMerger"; }
 
   GeneralizeTagMerger() = default;
   virtual ~GeneralizeTagMerger() = default;
@@ -46,7 +46,7 @@ public:
   virtual QString getDescription() const
   { return "Keeps tags from both features and overlapping tags are generalized to a common parent"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

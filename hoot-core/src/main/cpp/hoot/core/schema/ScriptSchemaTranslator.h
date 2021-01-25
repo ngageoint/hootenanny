@@ -50,7 +50,7 @@ class ScriptSchemaTranslator
 {
 public:
 
-  static std::string className() { return "hoot::ScriptSchemaTranslator"; }
+  static QString className() { return "hoot::ScriptSchemaTranslator"; }
 
   ScriptSchemaTranslator();
 

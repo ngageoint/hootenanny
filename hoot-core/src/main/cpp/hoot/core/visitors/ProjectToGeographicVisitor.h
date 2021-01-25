@@ -42,7 +42,7 @@ class ProjectToGeographicVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::ProjectToGeographicVisitor"; }
+  static QString className() { return "hoot::ProjectToGeographicVisitor"; }
 
   ProjectToGeographicVisitor();
   virtual ~ProjectToGeographicVisitor();
@@ -54,7 +54,7 @@ public:
   virtual QString getDescription() const
   { return "Projects features to a geographic coordinate system"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

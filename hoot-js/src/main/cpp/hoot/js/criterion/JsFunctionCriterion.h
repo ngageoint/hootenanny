@@ -43,7 +43,7 @@ class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
 {
 public:
 
-  static std::string className() { return "hoot::JsFunctionCriterion"; }
+  static QString className() { return "hoot::JsFunctionCriterion"; }
 
   JsFunctionCriterion() = default;
   virtual ~JsFunctionCriterion() = default;
@@ -58,7 +58,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

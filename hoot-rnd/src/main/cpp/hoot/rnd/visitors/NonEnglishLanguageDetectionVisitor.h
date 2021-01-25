@@ -53,7 +53,7 @@ class NonEnglishLanguageDetectionVisitor : public ElementVisitor, public Configu
 
 public:
 
-  static std::string className() { return "hoot::NonEnglishLanguageDetectionVisitor"; }
+  static QString className() { return "hoot::NonEnglishLanguageDetectionVisitor"; }
 
   NonEnglishLanguageDetectionVisitor();
   virtual ~NonEnglishLanguageDetectionVisitor();
@@ -71,7 +71,7 @@ public:
   virtual QString getInitStatusMessage() const;
   virtual QString getCompletedStatusMessage() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

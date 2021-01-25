@@ -37,7 +37,7 @@ class AreaWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::AreaWayNodeCriterion"; }
+  static QString className() { return "hoot::AreaWayNodeCriterion"; }
 
   AreaWayNodeCriterion();
   AreaWayNodeCriterion(ConstOsmMapPtr map);
@@ -50,7 +50,7 @@ public:
 
   virtual QString getDescription() const override { return "Identifies area nodes"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

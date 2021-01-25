@@ -41,7 +41,7 @@ class RemoveReviewUnknown2Visitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveReviewUnknown2Visitor"; }
+  static QString className() { return "hoot::RemoveReviewUnknown2Visitor"; }
 
   RemoveReviewUnknown2Visitor() = default;
   virtual ~RemoveReviewUnknown2Visitor() = default;
@@ -61,7 +61,7 @@ public:
       QString::number(_numElements) + " UNKNOWN2 elements.";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

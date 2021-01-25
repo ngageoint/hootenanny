@@ -47,7 +47,7 @@ class ElementHashOp : public ConstOsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::ElementHashOp"; }
+  static QString className() { return "hoot::ElementHashOp"; }
 
   ElementHashOp();
   virtual ~ElementHashOp() = default;
@@ -56,7 +56,7 @@ public:
 
   virtual QString getDescription() const { return _hashVis.getDescription(); }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   QMap<QString, ElementId> getHashesToElementIds() const
   { return _hashVis.getHashesToElementIds(); }

@@ -82,7 +82,7 @@ bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
   if (_keys.size() == 0 || _valueSubstrings.size() == 0)
   {
     throw IllegalArgumentException(
-      "No tag keys or values specified for: " + QString::fromStdString(className()));
+      "No tag keys or values specified for: " + className());
   }
 
   bool matches = false;
@@ -116,7 +116,7 @@ void TagContainsCriterion::addPair(QString key, QString valueSubstring)
 QString TagContainsCriterion::toString() const
 {
   return
-    QString::fromStdString(className()).remove("hoot::") + ":keys:" + _keys.join(",") + ":vals:" +
+    className().remove("hoot::") + ":keys:" + _keys.join(",") + ":vals:" +
     _valueSubstrings.join(",");
 }
 

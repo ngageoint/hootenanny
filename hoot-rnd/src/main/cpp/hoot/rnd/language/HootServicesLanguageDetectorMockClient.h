@@ -46,7 +46,7 @@ class HootServicesLanguageDetectorMockClient : public HootServicesLanguageDetect
 
 public:
 
-  static std::string className() { return "hoot::HootServicesLanguageDetectorMockClient"; }
+  static QString className() { return "hoot::HootServicesLanguageDetectorMockClient"; }
 
   HootServicesLanguageDetectorMockClient();
   virtual ~HootServicesLanguageDetectorMockClient() = default;

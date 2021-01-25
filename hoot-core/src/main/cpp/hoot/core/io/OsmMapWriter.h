@@ -37,7 +37,7 @@ class OsmMapWriter
 {
 public:
 
-  static std::string className() { return "hoot::OsmMapWriter"; }
+  static QString className() { return "hoot::OsmMapWriter"; }
 
   OsmMapWriter() : _debug(false) { }
   virtual ~OsmMapWriter() = default;

@@ -54,7 +54,7 @@ void RelationJs::Init(Handle<Object> target)
   HandleScope scope(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Relation::className().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, Relation::className().toStdString().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   ElementJs::_addBaseFunctions(tpl);

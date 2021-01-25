@@ -41,7 +41,7 @@ class RelationWithPowerLineMembersCriterion : public RelationWithMembersOfTypeCr
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithPowerLineMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithPowerLineMembersCriterion"; }
 
   RelationWithPowerLineMembersCriterion();
   virtual ~RelationWithPowerLineMembersCriterion() = default;
@@ -56,7 +56,7 @@ public:
 
   virtual GeometryType getGeometryType() const;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

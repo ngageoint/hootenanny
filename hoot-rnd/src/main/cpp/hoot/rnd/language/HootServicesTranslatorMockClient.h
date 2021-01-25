@@ -46,7 +46,7 @@ class HootServicesTranslatorMockClient : public HootServicesTranslatorClient
 
 public:
 
-  static std::string className() { return "hoot::HootServicesTranslatorMockClient"; }
+  static QString className() { return "hoot::HootServicesTranslatorMockClient"; }
 
   HootServicesTranslatorMockClient();
   virtual ~HootServicesTranslatorMockClient() = default;

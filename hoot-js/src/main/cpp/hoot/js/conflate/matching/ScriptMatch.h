@@ -47,7 +47,7 @@ class ScriptMatch : public Match, public MatchDetails
 {
 public:
 
-  static std::string className() { return "hoot::ScriptMatch"; }
+  static QString className() { return "hoot::ScriptMatch"; }
 
   static int logWarnCount;
 

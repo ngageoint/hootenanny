@@ -50,8 +50,8 @@ public:
    * @brief className the the class name as a string
    * @return the name of the class
    */
-  static std::string className() { return "hoot::RemoveNodeByEid"; }
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  static QString className() { return "hoot::RemoveNodeByEid"; }
+  virtual QString getName() const { return className(); }
 
   /**
    * @brief RemoveNodeByEid Removes a node from a map

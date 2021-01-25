@@ -37,7 +37,7 @@ class TransliterateNameVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::TransliterateNameVisitor"; }
+  static QString className() { return "hoot::TransliterateNameVisitor"; }
 
   TransliterateNameVisitor() = default;
   virtual ~TransliterateNameVisitor() = default;
@@ -53,7 +53,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Transliterated " + QString::number(_numAffected) + " names"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

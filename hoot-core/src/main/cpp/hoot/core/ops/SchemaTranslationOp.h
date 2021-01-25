@@ -48,7 +48,7 @@ class SchemaTranslationOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SchemaTranslationOp"; }
+  static QString className() { return "hoot::SchemaTranslationOp"; }
 
   SchemaTranslationOp() = default;
   virtual ~SchemaTranslationOp() = default;
@@ -70,7 +70,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return _translator.getCompletedStatusMessage(); }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

@@ -59,7 +59,7 @@ class OgrReader : public PartialOsmMapReader, public ProgressReporter
 {
 public:
 
-  static std::string className() { return "hoot::OgrReader"; }
+  static QString className() { return "hoot::OgrReader"; }
 
   /**
    * Returns true if this appears to be a reasonable path without actually attempting to open the

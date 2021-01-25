@@ -43,7 +43,7 @@ class ElementIdToTagValueMapper : public ConstElementVisitor, public ElementCrit
 
 public:
 
-  static std::string className() { return "hoot::ElementIdToTagValueMapper"; }
+  static QString className() { return "hoot::ElementIdToTagValueMapper"; }
 
   ElementIdToTagValueMapper() = default;
   virtual ~ElementIdToTagValueMapper() = default;
@@ -64,7 +64,7 @@ public:
 
   void setTagKey(const QString& key) { _tagKey = key; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

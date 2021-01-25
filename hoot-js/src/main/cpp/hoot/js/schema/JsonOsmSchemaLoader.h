@@ -40,7 +40,7 @@ class JsonOsmSchemaLoader : public OsmSchemaLoader
 {
 public:
 
-  static std::string className() { return "hoot::JsonOsmSchemaLoader"; }
+  static QString className() { return "hoot::JsonOsmSchemaLoader"; }
 
   static int logWarnCount;
 

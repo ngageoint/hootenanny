@@ -45,7 +45,7 @@ public:
   static const QString MAX_AREA_PARAM;
   static const QString MAX_LENGTH_PARAM;
 
-  static std::string className() { return "hoot::CollapsePolyGeoModifierAction"; }
+  static QString className() { return "hoot::CollapsePolyGeoModifierAction"; }
 
   CollapsePolyGeoModifierAction() = default;
   virtual ~CollapsePolyGeoModifierAction() = default;
@@ -56,7 +56,7 @@ public:
   virtual void parseArguments(const QHash<QString, QString>& arguments) override;
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
   const double DEFAULT_AREA = 15000;

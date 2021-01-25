@@ -51,7 +51,7 @@ class CleanCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::CleanCmd"; }
+  static QString className() { return "hoot::CleanCmd"; }
 
   CleanCmd() = default;
 

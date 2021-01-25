@@ -48,7 +48,7 @@ class LanguageInfoProvider : public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::LanguageInfoProvider"; }
+  static QString className() { return "hoot::LanguageInfoProvider"; }
 
   LanguageInfoProvider() = default;
   virtual ~LanguageInfoProvider() = default;

@@ -259,7 +259,7 @@ void UnlikelyIntersectionRemover::apply(std::shared_ptr<OsmMap>& map)
 
 QStringList UnlikelyIntersectionRemover::getCriteria() const
 {
-  return QStringList(QString::fromStdString(LinearCriterion::className()));
+  return QStringList(LinearCriterion::className());
 }
 
 

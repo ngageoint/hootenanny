@@ -41,7 +41,7 @@ class ImplicitPoiPolygonTypeTagger : public ImplicitPoiTypeTagger
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitPoiPolygonTypeTagger"; }
+  static QString className() { return "hoot::ImplicitPoiPolygonTypeTagger"; }
 
   ImplicitPoiPolygonTypeTagger() = default;
   ImplicitPoiPolygonTypeTagger(const QString& databasePath);
@@ -55,7 +55,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Added " + QString::number(_numAffected) + " tags to POIs and polygons"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

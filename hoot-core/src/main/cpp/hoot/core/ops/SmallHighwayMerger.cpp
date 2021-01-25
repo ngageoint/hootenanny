@@ -266,7 +266,7 @@ void SmallHighwayMerger::mergeWays(std::shared_ptr<OsmMap> map, Meters threshold
 
 QStringList SmallHighwayMerger::getCriteria() const
 {
-  return QStringList(QString::fromStdString(HighwayCriterion::className()));
+  return QStringList(HighwayCriterion::className());
 }
 
 }

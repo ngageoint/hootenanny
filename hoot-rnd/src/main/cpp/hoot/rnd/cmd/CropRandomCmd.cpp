@@ -47,7 +47,7 @@ class CropRandomCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::CropRandomCmd"; }
+  static QString className() { return "hoot::CropRandomCmd"; }
 
   CropRandomCmd() = default;
 

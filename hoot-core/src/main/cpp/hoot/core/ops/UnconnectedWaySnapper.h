@@ -76,7 +76,7 @@ class UnconnectedWaySnapper : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::UnconnectedWaySnapper"; }
+  static QString className() { return "hoot::UnconnectedWaySnapper"; }
 
   UnconnectedWaySnapper();
   virtual ~UnconnectedWaySnapper() = default;
@@ -115,7 +115,7 @@ public:
   virtual QString getDescription() const
   { return "Snaps unconnected ways to the nearest way."; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * @see Configurable

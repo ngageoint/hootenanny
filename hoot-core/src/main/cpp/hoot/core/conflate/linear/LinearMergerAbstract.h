@@ -83,7 +83,7 @@ class LinearMergerAbstract : public MergerBase
 
 public:
 
-  static std::string className() { return "hoot::LinearMergerAbstract"; }
+  static QString className() { return "hoot::LinearMergerAbstract"; }
 
   LinearMergerAbstract() = default;
   virtual ~LinearMergerAbstract() = default;

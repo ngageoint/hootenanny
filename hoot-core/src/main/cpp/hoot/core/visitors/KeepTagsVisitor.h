@@ -40,7 +40,7 @@ class KeepTagsVisitor : public RemoveTagsVisitor
 {
 public:
 
-  static std::string className() { return "hoot::KeepTagsVisitor"; }
+  static QString className() { return "hoot::KeepTagsVisitor"; }
 
   KeepTagsVisitor() = default;
   explicit KeepTagsVisitor(const QStringList& keys);
@@ -50,7 +50,7 @@ public:
 
   virtual QString getDescription() const { return "Keeps tags by key"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

@@ -48,7 +48,7 @@ public:
   PhoneNumberLocateVisitor() = default;
   virtual ~PhoneNumberLocateVisitor() = default;
 
-  static std::string className() { return "hoot::PhoneNumberLocateVisitor"; }
+  static QString className() { return "hoot::PhoneNumberLocateVisitor"; }
 
   /**
    * @see Configurable
@@ -73,7 +73,7 @@ public:
       QString::number(_numAffected) + " different elements";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

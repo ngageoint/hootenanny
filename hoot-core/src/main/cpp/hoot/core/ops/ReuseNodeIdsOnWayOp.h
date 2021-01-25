@@ -46,7 +46,7 @@ class ReuseNodeIdsOnWayOp : public ConstOsmMapOperation, public ConstElementCons
 {
 public:
 
-  static std::string className() { return "hoot::ReuseNodeIdsOnWayOp"; }
+  static QString className() { return "hoot::ReuseNodeIdsOnWayOp"; }
 
   ReuseNodeIdsOnWayOp(ElementId from, ElementId to);
   ReuseNodeIdsOnWayOp() = default;
@@ -57,7 +57,7 @@ public:
 
   virtual QString getDescription() const { return "Reuses the node IDs from one way in another."; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

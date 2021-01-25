@@ -195,7 +195,7 @@ vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      QString::fromStdString(className()),
+      className(),
       "Generates matchers that match roads with the Network Algorithm",
       CreatorDescription::BaseFeatureType::Highway,
       false));
@@ -228,7 +228,7 @@ std::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
 
 QStringList NetworkMatchCreator::getCriteria() const
 {
-  return QStringList(QString::fromStdString(HighwayCriterion::className()));
+  return QStringList(HighwayCriterion::className());
 }
 
 }

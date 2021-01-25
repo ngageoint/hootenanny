@@ -49,7 +49,7 @@ public:
   ConstElementVisitor() = default;
   virtual ~ConstElementVisitor() = default;
 
-  static std::string className() { return "hoot::ConstElementVisitor"; }
+  static QString className() { return "hoot::ConstElementVisitor"; }
 
   virtual void visit(const ConstElementPtr& e) = 0;
 

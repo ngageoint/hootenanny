@@ -47,7 +47,7 @@ class AlphaShapeGenerator
 {
 public:
 
-  static std::string className() { return "hoot::AlphaShapeGenerator"; }
+  static QString className() { return "hoot::AlphaShapeGenerator"; }
 
   /**
    * Constructor

@@ -59,11 +59,6 @@ Factory& Factory::getInstance()
   return instance;
 }
 
-vector<QString> Factory::getObjectNamesByBase(const std::string& baseName)
-{
-  return getObjectNamesByBase(QString::fromStdString(baseName));
-}
-
 vector<QString> Factory::getObjectNamesByBase(const QString& baseName)
 {
   QMutexLocker locker(&_mutex);

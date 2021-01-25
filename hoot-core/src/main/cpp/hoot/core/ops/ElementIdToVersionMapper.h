@@ -39,7 +39,7 @@ class ElementIdToVersionMapper : public ConstOsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::ElementIdToVersionMapper"; }
+  static QString className() { return "hoot::ElementIdToVersionMapper"; }
 
   ElementIdToVersionMapper() = default;
   virtual ~ElementIdToVersionMapper() = default;
@@ -57,7 +57,7 @@ public:
   virtual QString getDescription() const
   { return "Maintains a mapping of element IDs to changeset versions"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

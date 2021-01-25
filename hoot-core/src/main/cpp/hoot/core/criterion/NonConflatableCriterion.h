@@ -50,7 +50,7 @@ class NonConflatableCriterion : public ElementCriterion, public ConstOsmMapConsu
 
 public:
 
-  static std::string className() { return "hoot::NonConflatableCriterion"; }
+  static QString className() { return "hoot::NonConflatableCriterion"; }
 
   NonConflatableCriterion();
   NonConflatableCriterion(ConstOsmMapPtr map);
@@ -67,7 +67,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies features that are not conflatable"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

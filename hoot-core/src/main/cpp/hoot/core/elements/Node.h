@@ -44,7 +44,7 @@ class Node : public Element
 {
 public:
 
-  static std::string className() { return "hoot::Node"; }
+  static QString className() { return "hoot::Node"; }
 
   Node(const Node& from);
 

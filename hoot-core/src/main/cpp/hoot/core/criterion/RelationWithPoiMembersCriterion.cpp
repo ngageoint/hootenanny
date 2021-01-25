@@ -43,7 +43,7 @@ RelationWithMembersOfTypeCriterion()
 
 QString RelationWithPoiMembersCriterion::getCriterion() const
 {
-  return QString::fromStdString(PoiCriterion::className());
+  return PoiCriterion::className();
 }
 
 GeometryTypeCriterion::GeometryType RelationWithPoiMembersCriterion::getGeometryType() const

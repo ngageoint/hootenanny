@@ -53,7 +53,7 @@ class IterativeNetworkMatcherTest;
 class IterativeNetworkMatcher : public NetworkMatcher
 {
 public:
-  static std::string className() { return "hoot::IterativeNetworkMatcher"; }
+  static QString className() { return "hoot::IterativeNetworkMatcher"; }
 
   const static double EPSILON;
 

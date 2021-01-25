@@ -41,7 +41,7 @@ class HootApiDbReader : public ApiDbReader
 {
 public:
 
-  static std::string className() { return "hoot::HootApiDbReader"; }
+  static QString className() { return "hoot::HootApiDbReader"; }
 
   HootApiDbReader();
 

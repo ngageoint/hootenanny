@@ -114,7 +114,7 @@ class OsmJsonReader : public OsmMapReader, public Boundable, private ParallelBou
 {
 public:
 
-  static std::string className() { return "hoot::OsmJsonReader"; }
+  static QString className() { return "hoot::OsmJsonReader"; }
 
   static int logWarnCount;
 

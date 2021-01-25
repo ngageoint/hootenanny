@@ -49,7 +49,7 @@ class SparkChangesetWriter : public OsmChangeWriter, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SparkChangesetWriter"; }
+  static QString className() { return "hoot::SparkChangesetWriter"; }
 
   SparkChangesetWriter();
   virtual ~SparkChangesetWriter();

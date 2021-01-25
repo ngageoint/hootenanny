@@ -46,7 +46,7 @@ class SchemaChecker
 {
 public:
 
-  static std::string className() { return "hoot::SchemaChecker"; }
+  static QString className() { return "hoot::SchemaChecker"; }
 
   static int logWarnCount;
 

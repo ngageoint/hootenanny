@@ -57,13 +57,12 @@ class AddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::AddressScoreExtractor"; }
+  static QString className() { return "hoot::AddressScoreExtractor"; }
 
   AddressScoreExtractor();
   virtual ~AddressScoreExtractor() = default;
 
-  virtual QString getName() const
-  { return QString::fromStdString(AddressScoreExtractor::className()); }
+  virtual QString getName() const { return className(); }
 
   virtual void setConfiguration(const Settings& conf);
 

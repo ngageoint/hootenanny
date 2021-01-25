@@ -46,7 +46,7 @@ class UnionPolygonsVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::UnionPolygonsVisitor"; }
+  static QString className() { return "hoot::UnionPolygonsVisitor"; }
 
   UnionPolygonsVisitor();
   virtual ~UnionPolygonsVisitor() = default;
@@ -64,7 +64,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Combined " + QString::number(_numAffected) + " areas"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

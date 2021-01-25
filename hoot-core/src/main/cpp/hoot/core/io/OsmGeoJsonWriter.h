@@ -45,7 +45,7 @@ namespace hoot
 class OsmGeoJsonWriter : public OsmJsonWriter
 {
 public:
-  static std::string className() { return "hoot::OsmGeoJsonWriter"; }
+  static QString className() { return "hoot::OsmGeoJsonWriter"; }
 
   OsmGeoJsonWriter(int precision = ConfigOptions().getWriterPrecision());
   virtual ~OsmGeoJsonWriter() = default;

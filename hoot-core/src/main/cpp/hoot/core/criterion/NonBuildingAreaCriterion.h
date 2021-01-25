@@ -45,7 +45,7 @@ class NonBuildingAreaCriterion : public GeometryTypeCriterion, public ConstOsmMa
 {
 public:
 
-  static std::string className() { return "hoot::NonBuildingAreaCriterion"; }
+  static QString className() { return "hoot::NonBuildingAreaCriterion"; }
 
   NonBuildingAreaCriterion() = default;
   NonBuildingAreaCriterion(ConstOsmMapPtr map) : _map(map) { }
@@ -61,7 +61,7 @@ public:
 
   virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

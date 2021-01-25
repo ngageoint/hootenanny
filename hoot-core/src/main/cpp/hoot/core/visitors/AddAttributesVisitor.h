@@ -44,7 +44,7 @@ class AddAttributesVisitor : public MultipleCriterionConsumerVisitor, public Con
 
 public:
 
-  static std::string className() { return "hoot::AddAttributesVisitor"; }
+  static QString className() { return "hoot::AddAttributesVisitor"; }
 
   AddAttributesVisitor();
   explicit AddAttributesVisitor(const QStringList attributes, const bool negateCriteria = false);
@@ -65,7 +65,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Added " + QString::number(_numAffected) + " attributes"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

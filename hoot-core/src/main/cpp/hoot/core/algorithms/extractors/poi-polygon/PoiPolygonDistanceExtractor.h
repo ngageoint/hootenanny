@@ -42,13 +42,12 @@ class PoiPolygonDistanceExtractor : public FeatureExtractorBase
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonDistanceExtractor"; }
+  static QString className() { return "hoot::PoiPolygonDistanceExtractor"; }
 
   PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
   virtual ~PoiPolygonDistanceExtractor() = default;
 
-  virtual QString getName() const
-  { return QString::fromStdString(PoiPolygonDistanceExtractor::className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * Calculates the distance between a poi and a polygon

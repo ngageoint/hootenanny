@@ -53,7 +53,7 @@ class AbstractDistanceExtractor : public FeatureExtractorBase
 {
 public:
 
-  static std::string className() { return "hoot::AbstractDistanceExtractor"; }
+  static QString className() { return "hoot::AbstractDistanceExtractor"; }
 
   AbstractDistanceExtractor() = default;
   virtual ~AbstractDistanceExtractor() = default;

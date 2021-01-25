@@ -58,7 +58,7 @@ public:
   void setActionDesc(GeometryModifierActionDesc actionDesc ) { _actionDesc = actionDesc; }
 
   // ElementVisitor
-  static std::string className() { return "hoot::GeometryModifierVisitor"; }
+  static QString className() { return "hoot::GeometryModifierVisitor"; }
   QString getDescription() const { return "Modifies map geometry as specified"; }
 
   // visits the element, checks if it matches the filter set in _actionDesc and
@@ -70,7 +70,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Modified " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
   OsmMap* _pMap;

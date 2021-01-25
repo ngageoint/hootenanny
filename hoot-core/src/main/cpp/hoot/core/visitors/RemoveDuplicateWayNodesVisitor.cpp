@@ -108,8 +108,8 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
 QStringList RemoveDuplicateWayNodesVisitor::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(LinearCriterion::className()));
-  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  criteria.append(LinearCriterion::className());
+  criteria.append(PolygonCriterion::className());
   return criteria;
 }
 

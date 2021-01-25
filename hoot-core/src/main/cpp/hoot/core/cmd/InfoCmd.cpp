@@ -48,7 +48,7 @@ class InfoCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::InfoCmd"; }
+  static QString className() { return "hoot::InfoCmd"; }
 
   InfoCmd() = default;
 

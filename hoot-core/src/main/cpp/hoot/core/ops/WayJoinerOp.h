@@ -44,7 +44,7 @@ public:
   WayJoinerOp();
   virtual ~WayJoinerOp() = default;
 
-  static std::string className() { return "hoot::WayJoinerOp"; }
+  static QString className() { return "hoot::WayJoinerOp"; }
 
   /**
    * Apply the way joiner to the specified map
@@ -70,7 +70,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   std::shared_ptr<WayJoiner> getWayJoiner() const { return _wayJoiner; }
 

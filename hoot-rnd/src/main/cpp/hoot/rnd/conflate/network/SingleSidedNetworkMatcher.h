@@ -61,7 +61,7 @@ class SingleSidedNetworkMatcherTest;
 class SingleSidedNetworkMatcher : public NetworkMatcher
 {
 public:
-  static std::string className() { return "hoot::SingleSidedNetworkMatcher"; }
+  static QString className() { return "hoot::SingleSidedNetworkMatcher"; }
 
   const static double EPSILON;
 

@@ -41,7 +41,7 @@ class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer,
 {
 public:
 
-  static std::string className() { return "hoot::MaxWordSetDistance"; }
+  static QString className() { return "hoot::MaxWordSetDistance"; }
 
   MaxWordSetDistance(StringDistancePtr d);
   MaxWordSetDistance() = default;
@@ -55,7 +55,7 @@ public:
 
   virtual QString toString() const override { return "MaxWordSet " + _d->toString(); }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Returns a score based on the max (best) pairwise word comparison within two sets of words"; }

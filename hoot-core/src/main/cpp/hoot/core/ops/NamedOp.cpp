@@ -69,7 +69,7 @@ void NamedOp::setConfiguration(const Settings& conf)
 
 void NamedOp::_substituteForContainingOps()
 {
-  const QString mapCleanerName = QString::fromStdString(MapCleaner::className());
+  const QString mapCleanerName = MapCleaner::className();
   if (_namedOps.contains(mapCleanerName))
   {
     int cleaningOpIndex = _namedOps.indexOf(mapCleanerName);

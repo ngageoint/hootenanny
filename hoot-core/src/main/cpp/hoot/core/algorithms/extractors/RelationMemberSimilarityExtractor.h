@@ -52,10 +52,9 @@ public:
   RelationMemberSimilarityExtractor() = default;
   virtual ~RelationMemberSimilarityExtractor() = default;
 
-  static std::string className() { return "hoot::RelationMemberSimilarityExtractor"; }
+  static QString className() { return "hoot::RelationMemberSimilarityExtractor"; }
 
-  virtual QString getName() const
-  { return QString::fromStdString(RelationMemberSimilarityExtractor::className()); }
+  virtual QString getName() const { return className(); }
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;

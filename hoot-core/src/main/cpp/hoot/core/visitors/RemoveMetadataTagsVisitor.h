@@ -43,7 +43,7 @@ class RemoveMetadataTagsVisitor : public RemoveTagsVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveMetadataTagsVisitor"; }
+  static QString className() { return "hoot::RemoveMetadataTagsVisitor"; }
 
   RemoveMetadataTagsVisitor() = default;
   virtual ~RemoveMetadataTagsVisitor()  = default;
@@ -65,7 +65,7 @@ public:
       QString::number(_numAffected) + " different elements";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

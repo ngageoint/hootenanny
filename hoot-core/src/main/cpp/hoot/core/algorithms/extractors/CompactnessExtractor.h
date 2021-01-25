@@ -58,9 +58,9 @@ public:
   CompactnessExtractor() = default;
   virtual ~CompactnessExtractor() = default;
 
-  static std::string className() { return "hoot::CompactnessExtractor"; }
+  static QString className() { return "hoot::CompactnessExtractor"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;

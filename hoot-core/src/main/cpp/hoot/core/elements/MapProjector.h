@@ -60,7 +60,7 @@ class MapProjector
 {
 public:
 
-  static std::string className() { return "hoot::MapProjector"; }
+  static QString className() { return "hoot::MapProjector"; }
 
   static int logWarnCount;
 

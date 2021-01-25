@@ -541,7 +541,7 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
   std::vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      QString::fromStdString(className()),
+      className(),
       "Generates matchers that match POIs to polygons",
       //this match creator has two conflatable types, so arbitrarily just picking one of them as
       //the base feature type; stats class will handle the logic to deal with both poi and polygon
@@ -578,8 +578,8 @@ std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
 QStringList PoiPolygonMatchCreator::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(PoiCriterion::className()));
-  criteria.append(QString::fromStdString(BuildingCriterion::className()));
+  criteria.append(PoiCriterion::className());
+  criteria.append(BuildingCriterion::className());
   return criteria;
 }
 

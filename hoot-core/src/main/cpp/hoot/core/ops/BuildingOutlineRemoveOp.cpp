@@ -82,7 +82,7 @@ void BuildingOutlineRemoveOp::_removeOutline(const std::shared_ptr<Relation>& bu
 
 QStringList BuildingOutlineRemoveOp::getCriteria() const
 {
-  return QStringList(QString::fromStdString(BuildingCriterion::className()));
+  return QStringList(BuildingCriterion::className());
 }
 
 }

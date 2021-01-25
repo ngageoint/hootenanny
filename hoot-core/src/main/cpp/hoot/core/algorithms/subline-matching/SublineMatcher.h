@@ -42,7 +42,7 @@ class SublineMatcher : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::SublineMatcher"; }
+  static QString className() { return "hoot::SublineMatcher"; }
 
   SublineMatcher() = default;
   virtual ~SublineMatcher() = default;

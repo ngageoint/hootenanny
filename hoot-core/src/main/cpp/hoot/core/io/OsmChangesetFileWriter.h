@@ -46,7 +46,7 @@ class OsmChangesetFileWriter : public Configurable
 
 public:
 
-  static std::string className() { return "hoot::OsmChangesetFileWriter"; }
+  static QString className() { return "hoot::OsmChangesetFileWriter"; }
 
   OsmChangesetFileWriter();
   virtual ~OsmChangesetFileWriter() = default;

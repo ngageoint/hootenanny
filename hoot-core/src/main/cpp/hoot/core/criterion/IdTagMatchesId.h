@@ -38,7 +38,7 @@ class IdTagMatchesId : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::IdTagMatchesId"; }
+  static QString className() { return "hoot::IdTagMatchesId"; }
 
   IdTagMatchesId() = default;
   virtual ~IdTagMatchesId() = default;
@@ -48,7 +48,7 @@ public:
   virtual QString getDescription() const
   { return "Determines whether an element's " + MetadataTags::HootId() + " tag matches its ID"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IdTagMatchesId()); }
 };

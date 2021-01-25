@@ -45,7 +45,7 @@ public:
 
   static QString ALT_TYPES_TAG_KEY;
 
-  static std::string className() { return "hoot::PreserveTypesTagMerger"; }
+  static QString className() { return "hoot::PreserveTypesTagMerger"; }
 
   /**
    * Constructor
@@ -64,7 +64,7 @@ public:
   virtual QString getDescription() const
   { return "Keeps tags from both features and preserves overlapping type tags"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual void setConfiguration(const Settings& conf);
 

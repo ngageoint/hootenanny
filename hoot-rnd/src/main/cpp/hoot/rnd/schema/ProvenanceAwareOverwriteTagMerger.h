@@ -41,7 +41,7 @@ class ProvenanceAwareOverwriteTagMerger : public OverwriteTagMerger
 
 public:
 
-  static std::string className() { return "hoot::ProvenanceAwareOverwriteTagMerger"; }
+  static QString className() { return "hoot::ProvenanceAwareOverwriteTagMerger"; }
 
   ProvenanceAwareOverwriteTagMerger(bool swap = false);
 

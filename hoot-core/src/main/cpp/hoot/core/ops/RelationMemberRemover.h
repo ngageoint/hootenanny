@@ -42,7 +42,7 @@ class RelationMemberRemover : public ConstOsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::RelationMemberRemover"; }
+  static QString className() { return "hoot::RelationMemberRemover"; }
 
   RelationMemberRemover();
   RelationMemberRemover(const ElementId& idToReplace, const bool includeReviewRelations = true);
@@ -74,7 +74,7 @@ public:
   virtual QString getDescription() const
   { return "Removes all relation members references for an element"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

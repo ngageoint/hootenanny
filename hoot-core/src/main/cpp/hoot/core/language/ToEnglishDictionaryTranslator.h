@@ -55,7 +55,7 @@ class ToEnglishDictionaryTranslator : public ToEnglishTranslator
 {
 public:
 
-  static std::string className() { return "hoot::ToEnglishDictionaryTranslator"; }
+  static QString className() { return "hoot::ToEnglishDictionaryTranslator"; }
 
   ToEnglishDictionaryTranslator();
   virtual ~ToEnglishDictionaryTranslator() = default;

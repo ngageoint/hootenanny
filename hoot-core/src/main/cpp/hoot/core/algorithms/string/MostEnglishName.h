@@ -64,7 +64,7 @@ class MostEnglishName : public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::MostEnglishName"; }
+  static QString className() { return "hoot::MostEnglishName"; }
 
   static const MostEnglishNamePtr& getInstance();
 

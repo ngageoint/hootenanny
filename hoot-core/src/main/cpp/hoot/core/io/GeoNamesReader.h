@@ -40,7 +40,7 @@ class GeoNamesReader : public PartialOsmMapReader
 {
 public:
 
-  static std::string className() { return "hoot::GeoNamesReader"; }
+  static QString className() { return "hoot::GeoNamesReader"; }
 
   GeoNamesReader();
   virtual ~GeoNamesReader() = default;

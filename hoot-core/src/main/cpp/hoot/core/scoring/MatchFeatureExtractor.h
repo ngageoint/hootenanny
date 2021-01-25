@@ -64,7 +64,7 @@ class MatchFeatureExtractor
 {
 public:
 
-  static std::string className() { return "hoot::MatchFeatureExtractor"; }
+  static QString className() { return "hoot::MatchFeatureExtractor"; }
 
   static int logWarnCount;
 

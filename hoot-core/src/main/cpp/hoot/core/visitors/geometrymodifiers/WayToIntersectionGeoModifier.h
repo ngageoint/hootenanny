@@ -55,7 +55,7 @@ public:
     long segNodeId2;
   };
 
-  static std::string className() { return "hoot::WayToIntersectionGeoModifier"; }
+  static QString className() { return "hoot::WayToIntersectionGeoModifier"; }
 
   WayToIntersectionGeoModifier() = default;
   virtual ~WayToIntersectionGeoModifier() = default;
@@ -66,7 +66,7 @@ public:
   virtual void parseArguments(const QHash<QString, QString>& /*arguments*/) override { }
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

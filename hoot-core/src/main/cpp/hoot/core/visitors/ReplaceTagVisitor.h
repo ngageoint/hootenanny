@@ -51,7 +51,7 @@ public:
    * @brief className - get class name string
    * @return The namespace qualified class name
    */
-  static std::string className() { return "hoot::ReplaceTagVisitor"; }
+  static QString className() { return "hoot::ReplaceTagVisitor"; }
 
   /**
    * @brief ReplaceTagVisitor - default constructor
@@ -103,7 +103,7 @@ public:
     return "Replaced " + QString::number(_numAffected) + " element tags";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

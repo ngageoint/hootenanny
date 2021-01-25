@@ -52,7 +52,7 @@ class CompletelyContainedByMapElementVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
+  static QString className() { return "hoot::CompletelyContainedByMapElementVisitor"; }
 
   CompletelyContainedByMapElementVisitor();
   virtual ~CompletelyContainedByMapElementVisitor() = default;
@@ -69,7 +69,7 @@ public:
   virtual QString getDescription() const
   { return "Determines if a element is completely contained within a map"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

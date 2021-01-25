@@ -65,7 +65,7 @@ class GeometryToElementConverter
 {
 public:
 
-  static std::string className() { return "hoot::GeometryToElementConverter"; }
+  static QString className() { return "hoot::GeometryToElementConverter"; }
 
   GeometryToElementConverter(const OsmMapPtr& map);
   GeometryToElementConverter(const ConstOsmMapPtr& map);

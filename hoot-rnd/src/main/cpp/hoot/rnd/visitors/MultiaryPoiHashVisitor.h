@@ -41,12 +41,12 @@ class MultiaryPoiHashVisitor : public ElementHashVisitor
 {
 public:
 
-  static std::string className() { return "hoot::MultiaryPoiHashVisitor"; }
+  static QString className() { return "hoot::MultiaryPoiHashVisitor"; }
 
   MultiaryPoiHashVisitor() = default;
   virtual ~MultiaryPoiHashVisitor() = default;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates unique hash values for POIs conflated with Multiary POI Conflation"; }

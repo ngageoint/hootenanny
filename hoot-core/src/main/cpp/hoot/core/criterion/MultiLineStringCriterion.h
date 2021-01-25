@@ -40,7 +40,7 @@ class MultiLineStringCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::MultiLineStringCriterion"; }
+  static QString className() { return "hoot::MultiLineStringCriterion"; }
 
   MultiLineStringCriterion() = default;
   virtual ~MultiLineStringCriterion() = default;
@@ -55,7 +55,7 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Line; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

@@ -41,7 +41,7 @@ class BridgeCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::BridgeCriterion"; }
+  static QString className() { return "hoot::BridgeCriterion"; }
 
   BridgeCriterion() = default;
   virtual ~BridgeCriterion() = default;
@@ -52,7 +52,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies bridges"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

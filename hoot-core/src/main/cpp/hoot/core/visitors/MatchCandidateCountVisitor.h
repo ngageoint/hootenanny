@@ -47,7 +47,7 @@ class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public Sing
 {
 public:
 
-  static std::string className() { return "hoot::MatchCandidateCountVisitor"; }
+  static QString className() { return "hoot::MatchCandidateCountVisitor"; }
 
   MatchCandidateCountVisitor(const std::vector<std::shared_ptr<MatchCreator>>& matchCreators);
   virtual ~MatchCandidateCountVisitor() = default;
@@ -68,7 +68,7 @@ public:
     return "Counted " + StringUtils::formatLargeNumber(_totalCandidateCount) + " match candidates.";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

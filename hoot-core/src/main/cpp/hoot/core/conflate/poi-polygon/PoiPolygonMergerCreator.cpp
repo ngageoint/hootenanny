@@ -148,7 +148,7 @@ vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      QString::fromStdString(className()),
+      className(),
       "Generates mergers that merge POIs into polygons",
       false));
   return result;

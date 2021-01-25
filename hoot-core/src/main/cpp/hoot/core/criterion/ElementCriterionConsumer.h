@@ -36,7 +36,7 @@ class ElementCriterionConsumer
 {
 public:
 
-  static std::string className() { return "hoot::ElementCriterionConsumer"; }
+  static QString className() { return "hoot::ElementCriterionConsumer"; }
 
   ElementCriterionConsumer() = default;
   virtual ~ElementCriterionConsumer() = default;

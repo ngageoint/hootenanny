@@ -43,7 +43,7 @@ class DirectSequentialSimulation : public PermuteGridCalculator
 {
 public:
 
-  static std::string className() { return "hoot::DirectSequentialSimulation"; }
+  static QString className() { return "hoot::DirectSequentialSimulation"; }
 
   DirectSequentialSimulation() = default;
   virtual ~DirectSequentialSimulation() = default;

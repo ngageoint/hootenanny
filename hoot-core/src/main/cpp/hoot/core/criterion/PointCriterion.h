@@ -44,7 +44,7 @@ class PointCriterion : public ConflatableElementCriterion, public ConstOsmMapCon
 {
 public:
 
-  static std::string className() { return "hoot::PointCriterion"; }
+  static QString className() { return "hoot::PointCriterion"; }
 
   PointCriterion() = default;
   PointCriterion(ConstOsmMapPtr map);
@@ -61,7 +61,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map);
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return false; }
 

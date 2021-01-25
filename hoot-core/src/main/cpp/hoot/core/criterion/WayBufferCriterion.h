@@ -45,7 +45,7 @@ class WayBufferCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::WayBufferCriterion"; }
+  static QString className() { return "hoot::WayBufferCriterion"; }
 
   WayBufferCriterion() = default;
   virtual ~WayBufferCriterion() = default;
@@ -79,7 +79,7 @@ public:
 
   virtual QString getDescription() const { return "Allows for operations on ways with buffers"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

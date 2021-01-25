@@ -41,7 +41,7 @@ class WayDirectionCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::WayDirectionCriterion"; }
+  static QString className() { return "hoot::WayDirectionCriterion"; }
 
   WayDirectionCriterion(const ConstOsmMapPtr& map,
                         ConstWayPtr baseWay,
@@ -55,7 +55,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies which direction a way is pointing"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

@@ -75,7 +75,7 @@ class AlphaShape
 {
 public:
 
-  static std::string className() { return "hoot::AlphaShape"; }
+  static QString className() { return "hoot::AlphaShape"; }
 
   static int logWarnCount;
 

@@ -57,7 +57,7 @@ public:
 
   static int logWarnCount;
 
-  static std::string className() { return "hoot::SpatialIndexer"; }
+  static QString className() { return "hoot::SpatialIndexer"; }
 
   explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index,
                           std::deque<ElementId>& indexToEid,
@@ -115,7 +115,7 @@ public:
 
   long getSize() const { return _numAffected; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

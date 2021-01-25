@@ -490,7 +490,7 @@ void DualHighwaySplitter::apply(std::shared_ptr<OsmMap>& map)
 
 QStringList DualHighwaySplitter::getCriteria() const
 {
-  return QStringList(QString::fromStdString(HighwayCriterion::className()));
+  return QStringList(HighwayCriterion::className());
 }
 
 }

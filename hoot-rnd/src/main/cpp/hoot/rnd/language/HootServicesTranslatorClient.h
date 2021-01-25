@@ -55,7 +55,7 @@ class HootServicesTranslatorClient : public ToEnglishTranslator
 
 public:
 
-  static std::string className() { return "hoot::HootServicesTranslatorClient"; }
+  static QString className() { return "hoot::HootServicesTranslatorClient"; }
 
   HootServicesTranslatorClient();
   virtual ~HootServicesTranslatorClient();

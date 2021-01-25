@@ -43,7 +43,7 @@ class RailwayCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::RailwayCriterion"; }
+  static QString className() { return "hoot::RailwayCriterion"; }
 
   RailwayCriterion() = default;
   virtual ~RailwayCriterion() = default;
@@ -58,7 +58,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies linear railways"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return true; }
 };

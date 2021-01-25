@@ -49,7 +49,7 @@ class RemoveTagsVisitor : public ElementOsmMapVisitor, public Configurable,
 {
 public:
 
-  static std::string className() { return "hoot::RemoveTagsVisitor"; }
+  static QString className() { return "hoot::RemoveTagsVisitor"; }
 
   RemoveTagsVisitor();
   explicit RemoveTagsVisitor(const QStringList& keys);
@@ -75,7 +75,7 @@ public:
       StringUtils::formatLargeNumber(_numAffected) + " different elements";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

@@ -46,7 +46,7 @@ class IsSortedVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::IsSortedVisitor"; }
+  static QString className() { return "hoot::IsSortedVisitor"; }
 
   IsSortedVisitor();
   virtual ~IsSortedVisitor() = default;
@@ -58,7 +58,7 @@ public:
 
   bool getIsSorted() const { return _isSorted; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

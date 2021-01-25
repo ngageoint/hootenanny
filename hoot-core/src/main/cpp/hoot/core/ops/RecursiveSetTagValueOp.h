@@ -44,7 +44,7 @@ class RecursiveSetTagValueOp : public OsmMapOperation, public ElementCriterionCo
 {
 public:
 
-  static std::string className() { return "hoot::RecursiveSetTagValueOp"; }
+  static QString className() { return "hoot::RecursiveSetTagValueOp"; }
 
   RecursiveSetTagValueOp() = default;
   virtual ~RecursiveSetTagValueOp() = default;
@@ -100,7 +100,7 @@ public:
    */
   virtual QString getCompletedStatusMessage() const { return _tagger->getCompletedStatusMessage(); }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

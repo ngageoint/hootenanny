@@ -41,7 +41,7 @@ class HighwayRfClassifier : public HighwayClassifier
 {
 public:
 
-  static std::string className() { return "hoot::HighwayRfClassifier"; }
+  static QString className() { return "hoot::HighwayRfClassifier"; }
 
   HighwayRfClassifier() = default;
   virtual ~HighwayRfClassifier() = default;

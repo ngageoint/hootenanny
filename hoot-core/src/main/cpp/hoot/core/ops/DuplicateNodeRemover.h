@@ -58,14 +58,14 @@ class DuplicateNodeRemover : public OsmMapOperation, public Boundable
 {
 public:
 
-  static std::string className() { return "hoot::DuplicateNodeRemover"; }
+  static QString className() { return "hoot::DuplicateNodeRemover"; }
 
   DuplicateNodeRemover(Meters distanceThreshold = -1.0);
   virtual ~DuplicateNodeRemover() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   /**
    * Removes duplicate nodes from a map

@@ -47,7 +47,7 @@ class DataQualityMetricTagger : public OsmMapOperation, public Boundable
 {
 public:
 
-  static std::string className() { return "hoot::DataQualityMetricTagger"; }
+  static QString className() { return "hoot::DataQualityMetricTagger"; }
 
   DataQualityMetricTagger();
   virtual ~DataQualityMetricTagger() = default;
@@ -57,7 +57,7 @@ public:
    */
   virtual void apply(OsmMapPtr& map);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getInitStatusMessage() const
   { return "Calculating data quality metrics..."; }

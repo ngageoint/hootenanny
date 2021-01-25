@@ -44,7 +44,7 @@ class PoiPolygonMatchCreator : public MatchCreator
 
 public:
 
-  static std::string className() { return "hoot::PoiPolygonMatchCreator"; }
+  static QString className() { return "hoot::PoiPolygonMatchCreator"; }
 
   PoiPolygonMatchCreator() = default;
   virtual ~PoiPolygonMatchCreator() = default;
@@ -70,7 +70,7 @@ public:
 
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * @see FilteredByGeometryTypeCriteria

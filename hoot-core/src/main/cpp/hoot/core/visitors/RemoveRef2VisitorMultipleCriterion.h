@@ -45,7 +45,7 @@ class RemoveRef2VisitorMultipleCriterion : public RemoveRef2Visitor
 
 public:
 
-  static std::string className() { return "hoot::RemoveRef2VisitorMultipleCriterion"; }
+  static QString className() { return "hoot::RemoveRef2VisitorMultipleCriterion"; }
 
   RemoveRef2VisitorMultipleCriterion() = default;
   virtual ~RemoveRef2VisitorMultipleCriterion() = default;

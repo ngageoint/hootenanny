@@ -48,7 +48,7 @@ class DistanceNodeCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::DistanceNodeCriterion"; }
+  static QString className() { return "hoot::DistanceNodeCriterion"; }
 
   DistanceNodeCriterion() = default;
   DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
@@ -64,7 +64,7 @@ public:
 
   virtual void setConfiguration(const Settings& s);
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

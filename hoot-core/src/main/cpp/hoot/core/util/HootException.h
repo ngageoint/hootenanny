@@ -44,7 +44,7 @@ class HootException : public std::exception
 {
 public:
 
-  static std::string className() { return "hoot::HootException"; }
+  static QString className() { return "hoot::HootException"; }
 
   HootException() { }
   HootException(const char* str) { _what = QString::fromUtf8(str); }
@@ -55,7 +55,7 @@ public:
 
   virtual HootException* clone() const { return new HootException(*this); }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   const QString& getWhat() const { return _what; }
   virtual const char* what() const throw() { _tmp = _what.toLatin1(); return _tmp.constData(); }
@@ -152,26 +152,26 @@ public:
 class Name : public HootException \
 { \
 public: \
-  static std::string className() { return "hoot::" #Name; } \
+  static QString className() { return "hoot::" #Name; } \
   Name() : HootException() {} \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
   virtual HootException* clone() const { return new Name(*this); } \
-  virtual QString getName() const { return QString::fromStdString(className()); } \
+  virtual QString getName() const { return className(); } \
 };
 
 #define HOOT_DEFINE_EXCEPTION_STR(Name, Default) \
 class Name : public HootException \
 { \
 public: \
-  static std::string className() { return "hoot::" #Name; } \
+  static QString className() { return "hoot::" #Name; } \
   Name() : HootException(Default) {} \
   Name(QString str) : HootException(str) { } \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
   virtual HootException* clone() const { return new Name(*this); } \
-  virtual QString getName() const { return QString::fromStdString(className()); } \
+  virtual QString getName() const { return className(); } \
 };
 
 /****

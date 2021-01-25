@@ -41,7 +41,7 @@ class TagDistributionCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::TagDistributionCmd"; }
+  static QString className() { return "hoot::TagDistributionCmd"; }
 
   TagDistributionCmd() = default;
 

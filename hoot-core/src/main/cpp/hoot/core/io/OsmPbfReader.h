@@ -80,7 +80,7 @@ public:
 
   static QString maxElementsPerMapKey() { return "pbf.reader.max.elements.per.partial.map"; }
 
-  static std::string className() { return "hoot::OsmPbfReader"; }
+  static QString className() { return "hoot::OsmPbfReader"; }
 
   OsmPbfReader();
   OsmPbfReader(bool useFileId);

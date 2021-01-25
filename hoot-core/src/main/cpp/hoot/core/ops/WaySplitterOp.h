@@ -50,7 +50,7 @@ class WaySplitterOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::WaySplitterOp"; }
+  static QString className() { return "hoot::WaySplitterOp"; }
 
   static QString maxLengthKey() { return "way.splitter.max.length"; }
 
@@ -59,7 +59,7 @@ public:
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual void setConfiguration(const Settings& conf);
 

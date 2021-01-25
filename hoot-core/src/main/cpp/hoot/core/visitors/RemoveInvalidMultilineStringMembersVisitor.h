@@ -44,7 +44,7 @@ class RemoveInvalidMultilineStringMembersVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveInvalidMultilineStringMembersVisitor"; }
+  static QString className() { return "hoot::RemoveInvalidMultilineStringMembersVisitor"; }
 
   RemoveInvalidMultilineStringMembersVisitor();
   virtual ~RemoveInvalidMultilineStringMembersVisitor() = default;
@@ -64,7 +64,7 @@ public:
   virtual QString getDescription() const
   { return "Removes invalid multiline string relation members"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

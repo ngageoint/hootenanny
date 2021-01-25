@@ -51,7 +51,7 @@ class ScriptMatchCreator : public MatchCreator, public SearchRadiusProvider
 {
 public:
 
-  static std::string className() { return "hoot::ScriptMatchCreator"; }
+  static QString className() { return "hoot::ScriptMatchCreator"; }
 
   static const QString POINT_POLYGON_SCRIPT_NAME;
 

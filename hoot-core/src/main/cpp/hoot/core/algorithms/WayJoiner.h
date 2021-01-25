@@ -43,7 +43,7 @@ class WayJoiner : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::WayJoiner"; }
+  static QString className() { return "hoot::WayJoiner"; }
 
   WayJoiner();
   virtual ~WayJoiner() = default;

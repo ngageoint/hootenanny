@@ -37,7 +37,7 @@ class ZValue
 {
 public:
 
-  static std::string className() { return "hoot::ZValue"; }
+  static QString className() { return "hoot::ZValue"; }
 
   ZValue() {}
 

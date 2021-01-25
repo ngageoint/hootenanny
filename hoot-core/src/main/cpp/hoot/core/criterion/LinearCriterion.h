@@ -41,7 +41,7 @@ class LinearCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::LinearCriterion"; }
+  static QString className() { return "hoot::LinearCriterion"; }
 
   LinearCriterion() = default;
   virtual ~LinearCriterion() = default;
@@ -54,7 +54,7 @@ public:
 
   virtual GeometryType getGeometryType() const { return GeometryType::Line; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return false; }
 

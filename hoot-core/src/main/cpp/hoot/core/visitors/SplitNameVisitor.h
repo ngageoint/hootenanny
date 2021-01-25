@@ -42,7 +42,7 @@ class SplitNameVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SplitNameVisitor"; }
+  static QString className() { return "hoot::SplitNameVisitor"; }
 
   SplitNameVisitor();
   virtual ~SplitNameVisitor() = default;
@@ -62,7 +62,7 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

@@ -73,7 +73,7 @@ void NodeJs::Init(Handle<Object> target)
   HandleScope scope(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Node::className().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, Node::className().toStdString().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getX"),

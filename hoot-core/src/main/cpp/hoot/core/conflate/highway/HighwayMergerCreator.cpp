@@ -103,7 +103,7 @@ vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      QString::fromStdString(className()),
+      className(),
       "Generates mergers that merge roads with the 2nd Generation (Unifying) Algorithm",
       false));
   return result;

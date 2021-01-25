@@ -43,7 +43,7 @@ class Interpolator
 {
 public:
 
-  static std::string className() { return "Tgs::Interpolator"; }
+  static QString className() { return "Tgs::Interpolator"; }
 
   virtual ~Interpolator() {}
 

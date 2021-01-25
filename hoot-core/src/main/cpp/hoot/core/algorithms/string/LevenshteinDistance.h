@@ -46,7 +46,7 @@ class LevenshteinDistance : public StringDistance, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::LevenshteinDistance"; }
+  static QString className() { return "hoot::LevenshteinDistance"; }
 
   /**
    * @param alph See the levenshtein.distance.alpha configuration option for an explanation.
@@ -121,7 +121,7 @@ public:
   virtual QString getDescription() const override
   { return "Returns a string comparison score derived using Levenshtein Distance"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

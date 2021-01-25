@@ -41,7 +41,7 @@ class RelationWithPointMembersCriterion : public RelationWithMembersOfTypeCriter
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithPointMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithPointMembersCriterion"; }
 
   RelationWithPointMembersCriterion();
   RelationWithPointMembersCriterion(ConstOsmMapPtr map);
@@ -57,7 +57,7 @@ public:
 
   virtual GeometryType getGeometryType() const;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

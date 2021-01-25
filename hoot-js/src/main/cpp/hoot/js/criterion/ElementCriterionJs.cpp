@@ -63,7 +63,7 @@ void ElementCriterionJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "addCriterion"),
@@ -72,7 +72,7 @@ void ElementCriterionJs::Init(Handle<Object> target)
         FunctionTemplate::New(current, isSatisfied));
     tpl->PrototypeTemplate()->Set(
       PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, ElementCriterion::className().data()));
+      String::NewFromUtf8(current, ElementCriterion::className().toStdString().data()));
 
     _constructor.Reset(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&_constructor));

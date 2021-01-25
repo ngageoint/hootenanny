@@ -46,7 +46,7 @@ class MultipleCriterionConsumerVisitor : public ElementVisitor,
 {
 public:
 
-  static std::string className() { return "hoot::MultipleCriterionConsumerVisitor"; }
+  static QString className() { return "hoot::MultipleCriterionConsumerVisitor"; }
 
   MultipleCriterionConsumerVisitor();
   virtual ~MultipleCriterionConsumerVisitor() = default;
@@ -59,7 +59,7 @@ public:
 
   QString toString() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

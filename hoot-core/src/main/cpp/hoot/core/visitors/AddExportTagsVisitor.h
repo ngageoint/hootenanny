@@ -48,7 +48,7 @@ public:
   AddExportTagsVisitor();
   virtual ~AddExportTagsVisitor() = default;
 
-  static std::string className() { return "hoot::AddExportTagsVisitor"; }
+  static QString className() { return "hoot::AddExportTagsVisitor"; }
 
   virtual void visit(const ElementPtr& pElement);
 
@@ -60,7 +60,7 @@ public:
   { _includeCircularError = includeCircularError; }
   void overrideDebugSettings();
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

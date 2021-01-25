@@ -45,7 +45,7 @@ class RefRemoveOp : public OsmMapOperation, public ElementCriterionConsumer
 {
 public:
 
-  static std::string className() { return "hoot::RefRemoveOp"; }
+  static QString className() { return "hoot::RefRemoveOp"; }
 
   RefRemoveOp() = default;
   virtual ~RefRemoveOp() = default;
@@ -60,7 +60,7 @@ public:
   virtual QString getDescription() const
   { return "Removes elements meeting a criterion and updates REF tags"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

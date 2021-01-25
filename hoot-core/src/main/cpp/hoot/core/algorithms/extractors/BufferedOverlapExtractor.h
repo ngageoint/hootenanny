@@ -62,9 +62,9 @@ public:
    */
   explicit BufferedOverlapExtractor(double bufferPortion);
 
-  static std::string className() { return "hoot::BufferedOverlapExtractor"; }
+  static QString className() { return "hoot::BufferedOverlapExtractor"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString toString() const override;
 

@@ -42,7 +42,7 @@ class HasAddressCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::HasAddressCriterion"; }
+  static QString className() { return "hoot::HasAddressCriterion"; }
 
   HasAddressCriterion() = default;
   virtual ~HasAddressCriterion() = default;
@@ -55,7 +55,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies features with addresses"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

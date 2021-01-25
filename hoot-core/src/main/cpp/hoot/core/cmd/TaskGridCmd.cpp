@@ -43,7 +43,7 @@ class TaskGridCmd : public BaseCommand
 
 public:
 
-  static std::string className() { return "hoot::TaskGridCmd"; }
+  static QString className() { return "hoot::TaskGridCmd"; }
 
   TaskGridCmd() = default;
 

@@ -43,7 +43,7 @@ class FilteredVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
 
 public:
 
-  static std::string className() { return "hoot::FilteredVisitor"; }
+  static QString className() { return "hoot::FilteredVisitor"; }
 
   FilteredVisitor() : _criterion(0), _visitor(0) { }
   virtual ~FilteredVisitor() = default;
@@ -91,7 +91,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

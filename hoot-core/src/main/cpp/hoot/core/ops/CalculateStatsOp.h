@@ -56,7 +56,7 @@ class CalculateStatsOp : public ConstOsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::CalculateStatsOp"; }
+  static QString className() { return "hoot::CalculateStatsOp"; }
 
   CalculateStatsOp(QString mapName = "", bool inputIsConflatedMapOutput = false);
   CalculateStatsOp(ElementCriterionPtr criterion, QString mapName = "",
@@ -88,7 +88,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

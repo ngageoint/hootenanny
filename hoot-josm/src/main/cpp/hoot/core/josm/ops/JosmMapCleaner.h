@@ -52,7 +52,7 @@ class JosmMapCleaner : public JosmMapValidatorAbstract
 
 public:
 
-  static std::string className() { return "hoot::JosmMapCleaner"; }
+  static QString className() { return "hoot::JosmMapCleaner"; }
 
   JosmMapCleaner();
   virtual ~JosmMapCleaner() = default;
@@ -83,7 +83,7 @@ public:
   void setAddDetailTags(const bool add) { _addDetailTags = add; }
   int getNumFailedCleaningOperations() const { return _numFailedCleaningOperations; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

@@ -43,7 +43,7 @@ class UniqueElementIdVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::UniqueElementIdVisitor"; }
+  static QString className() { return "hoot::UniqueElementIdVisitor"; }
 
   UniqueElementIdVisitor() = default;
   virtual ~UniqueElementIdVisitor() = default;
@@ -57,7 +57,7 @@ public:
 
   virtual QString getDescription() const { return "Returns the unique element IDs visited"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

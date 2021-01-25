@@ -40,7 +40,7 @@ class StatsAreaCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::StatsAreaCriterion"; }
+  static QString className() { return "hoot::StatsAreaCriterion"; }
 
   StatsAreaCriterion() = default;
   virtual ~StatsAreaCriterion() = default;
@@ -51,7 +51,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies areas for use by statistics"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

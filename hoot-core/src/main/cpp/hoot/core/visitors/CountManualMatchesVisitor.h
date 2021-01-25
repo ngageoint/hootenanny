@@ -44,7 +44,7 @@ class CountManualMatchesVisitor : public ConstElementVisitor, public SingleStati
 
 public:
 
-  static std::string className() { return "hoot::CountManualMatchesVisitor"; }
+  static QString className() { return "hoot::CountManualMatchesVisitor"; }
 
   CountManualMatchesVisitor() : _numManualMatches(0) { }
 
@@ -56,7 +56,7 @@ public:
 
   virtual QString getDescription() const { return "Counts manual matches"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

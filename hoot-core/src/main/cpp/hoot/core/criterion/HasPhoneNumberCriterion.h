@@ -41,7 +41,7 @@ namespace hoot
 class HasPhoneNumberCriterion : public ElementCriterion, public Configurable
 {
 public:
-  static std::string className() { return "hoot::HasPhoneNumberCriterion"; }
+  static QString className() { return "hoot::HasPhoneNumberCriterion"; }
 
   HasPhoneNumberCriterion() = default;
   virtual ~HasPhoneNumberCriterion() = default;
@@ -54,7 +54,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies features with phone numbers"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

@@ -145,7 +145,7 @@ void RemoveRoundabouts::apply(OsmMapPtr& pMap)
 
 QStringList RemoveRoundabouts::getCriteria() const
 {
-  return QStringList(QString::fromStdString(HighwayCriterion::className()));
+  return QStringList(HighwayCriterion::className());
 }
 
 }

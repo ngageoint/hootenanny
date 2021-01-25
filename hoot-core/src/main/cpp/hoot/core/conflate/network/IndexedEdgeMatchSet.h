@@ -42,7 +42,7 @@ class IndexedEdgeMatchSet : public EdgeMatchSet
 {
 public:
 
-  static std::string className() { return "hoot::IndexedEdgeMatchSet"; }
+  static QString className() { return "hoot::IndexedEdgeMatchSet"; }
 
   typedef QHash<ConstEdgeMatchPtr, double> MatchHash;
 

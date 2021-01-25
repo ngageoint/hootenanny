@@ -46,7 +46,7 @@ class FindIntersectionsOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::FindIntersectionsOp"; }
+  static QString className() { return "hoot::FindIntersectionsOp"; }
 
   static QString opsKey() { return "map.cleaner.transforms"; }
 
@@ -62,7 +62,7 @@ public:
    */
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor() = 0;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 /**
@@ -75,13 +75,13 @@ public:
   FindHighwayIntersectionsOp() = default;
   virtual ~FindHighwayIntersectionsOp() = default;
 
-  static std::string className() { return "hoot::FindHighwayIntersectionsOp"; }
+  static QString className() { return "hoot::FindHighwayIntersectionsOp"; }
 
   virtual QString getDescription() const override { return "Identifies highway intersections"; }
 
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 /**
@@ -94,13 +94,13 @@ public:
   FindRailwayIntersectionsOp() = default;
   virtual ~FindRailwayIntersectionsOp() = default;
 
-  static std::string className() { return "hoot::FindRailwayIntersectionsOp"; }
+  static QString className() { return "hoot::FindRailwayIntersectionsOp"; }
 
   virtual QString getDescription() const override { return "Identifies railway intersections"; }
 
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

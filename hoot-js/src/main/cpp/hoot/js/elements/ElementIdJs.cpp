@@ -50,11 +50,11 @@ void ElementIdJs::Init(Handle<Object> target)
   HandleScope scope(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, ElementId::className().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, ElementId::className().toStdString().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, ElementId::className().data()));
+      String::NewFromUtf8(current, ElementId::className().toStdString().data()));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getId"),
       FunctionTemplate::New(current, getType));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getType"),

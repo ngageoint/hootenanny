@@ -48,7 +48,7 @@ class WaySublineCollection
 {
 public:
 
-  static std::string className() { return "hoot::WaySublineCollection"; }
+  static QString className() { return "hoot::WaySublineCollection"; }
 
   static int logWarnCount;
 

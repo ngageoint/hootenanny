@@ -46,7 +46,7 @@ class HootApiDb : public ApiDb
 {
 public:
 
-  static std::string className() { return "hoot::HootApiDb"; }
+  static QString className() { return "hoot::HootApiDb"; }
 
   HootApiDb();
 

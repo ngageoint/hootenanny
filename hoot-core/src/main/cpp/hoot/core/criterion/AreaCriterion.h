@@ -42,7 +42,7 @@ class AreaCriterion : public ConflatableElementCriterion, public ConstOsmMapCons
 {
 public:
 
-  static std::string className() { return "hoot::AreaCriterion"; }
+  static QString className() { return "hoot::AreaCriterion"; }
 
   AreaCriterion() = default;
   AreaCriterion(ConstOsmMapPtr map) : _map(map) { }
@@ -58,7 +58,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies areas"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

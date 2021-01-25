@@ -39,7 +39,7 @@ class ComparatorTagDifferencer : public TagDifferencer
 {
 public:
 
-  static std::string className() { return "hoot::ComparatorTagDifferencer"; }
+  static QString className() { return "hoot::ComparatorTagDifferencer"; }
 
   ComparatorTagDifferencer() = default;
   virtual ~ComparatorTagDifferencer() = default;

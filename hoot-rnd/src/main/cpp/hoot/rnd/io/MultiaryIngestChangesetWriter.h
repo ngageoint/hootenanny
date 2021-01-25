@@ -46,7 +46,7 @@ class MultiaryIngestChangesetWriter : public OsmChangeWriter, public Configurabl
 {
 public:
 
-  static std::string className() { return "hoot::MultiaryIngestChangesetWriter"; }
+  static QString className() { return "hoot::MultiaryIngestChangesetWriter"; }
 
   MultiaryIngestChangesetWriter();
 

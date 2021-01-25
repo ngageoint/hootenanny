@@ -48,7 +48,7 @@ class ChangesetCutOnlyCreator : public ChangesetReplacementCreatorAbstract
 
 public:
 
-  static std::string className() { return "hoot::ChangesetCutOnlyCreator"; }
+  static QString className() { return "hoot::ChangesetCutOnlyCreator"; }
 
   ChangesetCutOnlyCreator();
 
@@ -87,7 +87,7 @@ public:
   virtual void setRetainmentFilterOptions(const QStringList& optionKvps);
 
   virtual QString toString() const override
-    { return QString::fromStdString(className()).remove("hoot::"); }
+    { return className().remove("hoot::"); }
 
 protected:
 

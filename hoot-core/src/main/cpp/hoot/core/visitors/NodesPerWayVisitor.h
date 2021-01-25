@@ -50,7 +50,7 @@ class NodesPerWayVisitor : public ConstElementVisitor, public NumericStatistic,
 {
 public:
 
-  static std::string className() { return "hoot::NodesPerWayVisitor"; }
+  static QString className() { return "hoot::NodesPerWayVisitor"; }
 
   NodesPerWayVisitor();
   virtual ~NodesPerWayVisitor() = default;
@@ -79,7 +79,7 @@ public:
     return average;
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

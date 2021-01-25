@@ -42,7 +42,7 @@ class BuildingCriterion : public ConflatableElementCriterion, public ConstOsmMap
 {
 public:
 
-  static std::string className() { return "hoot::BuildingCriterion"; }
+  static QString className() { return "hoot::BuildingCriterion"; }
 
   BuildingCriterion() = default;
   BuildingCriterion(ConstOsmMapPtr map) : _map(map) { }
@@ -63,7 +63,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies buildings"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return true; }
 

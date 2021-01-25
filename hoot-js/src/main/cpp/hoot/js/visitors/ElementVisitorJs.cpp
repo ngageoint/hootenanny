@@ -61,11 +61,12 @@ void ElementVisitorJs::Init(Handle<Object> target)
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::NewFromUtf8(current, ElementVisitor::className().data()));
+    tpl->PrototypeTemplate()->Set(
+       PopulateConsumersJs::baseClass(),
+       String::NewFromUtf8(current, ElementVisitor::className().toStdString().data()));
 
     Persistent<Function> constructor(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));

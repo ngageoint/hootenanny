@@ -52,7 +52,7 @@ class InBoundsCriterion : public ElementCriterion, public Boundable, public Cons
 {
 public:
 
-  static std::string className() { return "hoot::InBoundsCriterion"; }
+  static QString className() { return "hoot::InBoundsCriterion"; }
 
   InBoundsCriterion();
   InBoundsCriterion(const bool mustCompletelyContain);
@@ -87,7 +87,7 @@ public:
   void setMustCompletelyContain(bool mustCompletelyContain)
   { _mustCompletelyContain = mustCompletelyContain; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

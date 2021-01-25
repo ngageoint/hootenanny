@@ -52,7 +52,7 @@ class MergerFactory
 {
 public:
 
-  static std::string className() { return "hoot::ScriptMerger"; }
+  static QString className() { return "hoot::ScriptMerger"; }
 
   static int logWarnCount;
 

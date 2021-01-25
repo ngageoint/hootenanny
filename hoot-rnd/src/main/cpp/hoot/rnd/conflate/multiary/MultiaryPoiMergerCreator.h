@@ -55,7 +55,7 @@ namespace hoot
 class MultiaryPoiMergerCreator : public MergerCreator
 {
 public:
-  static std::string className() { return "hoot::MultiaryPoiMergerCreator"; }
+  static QString className() { return "hoot::MultiaryPoiMergerCreator"; }
 
   MultiaryPoiMergerCreator() = default;
   virtual ~MultiaryPoiMergerCreator() = default;

@@ -46,7 +46,7 @@ class SumNumericTagsVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static std::string className() { return "hoot::SumNumericTagsVisitor"; }
+  static QString className() { return "hoot::SumNumericTagsVisitor"; }
 
   static int logWarnCount;
 
@@ -69,7 +69,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getInitStatusMessage() const { return "Summing values of numeric tags..."; }
 

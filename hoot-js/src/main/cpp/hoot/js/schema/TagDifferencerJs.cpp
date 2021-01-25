@@ -94,13 +94,14 @@ void TagDifferencerJs::Init(Handle<Object> target)
     const char* n = utf8.data();
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "diff"),
         FunctionTemplate::New(current, diff));
-    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::NewFromUtf8(current, TagDifferencer::className().data()));
+    tpl->PrototypeTemplate()->Set(
+      PopulateConsumersJs::baseClass(),
+      String::NewFromUtf8(current, TagDifferencer::className().toStdString().data()));
 
     Persistent<Function> constructor(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
@@ -117,8 +118,10 @@ void TagDifferencerJs::New(const FunctionCallbackInfo<Value>& args)
     QString className = str(args.This()->GetConstructorName());
     if (className == "Object")
     {
-      args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-        "Invalid TagDifferencer. Did you forget 'new'?"))));
+      args.GetReturnValue().Set(
+        current->ThrowException(
+          HootExceptionJs::create(
+            IllegalArgumentException("Invalid TagDifferencer. Did you forget 'new'?"))));
     }
     else
     {

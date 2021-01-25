@@ -40,7 +40,7 @@ class ReviewRelationCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ReviewRelationCriterion"; }
+  static QString className() { return "hoot::ReviewRelationCriterion"; }
 
   ReviewRelationCriterion() = default;
   virtual ~ReviewRelationCriterion() = default;
@@ -53,7 +53,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies review relations created during conflation"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

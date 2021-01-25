@@ -38,7 +38,7 @@ class AddRef1Visitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::AddRef1Visitor"; }
+  static QString className() { return "hoot::AddRef1Visitor"; }
 
   AddRef1Visitor();
   virtual ~AddRef1Visitor() = default;
@@ -54,7 +54,7 @@ public:
 
   virtual QString getDescription() const { return "Adds REF1 tags"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

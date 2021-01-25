@@ -49,7 +49,7 @@ class HistogramVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::HistogramVisitor"; }
+  static QString className() { return "hoot::HistogramVisitor"; }
 
   HistogramVisitor(Histogram& h) : _h(h) { }
   virtual ~HistogramVisitor() = default;

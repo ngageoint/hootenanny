@@ -43,7 +43,7 @@ class PolygonCriterion : public ConflatableElementCriterion, public ConstOsmMapC
 {
 public:
 
-  static std::string className() { return "hoot::PolygonCriterion"; }
+  static QString className() { return "hoot::PolygonCriterion"; }
 
   PolygonCriterion() = default;
   PolygonCriterion(ConstOsmMapPtr map);
@@ -60,7 +60,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map);
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return false; }
 

@@ -40,7 +40,7 @@ class MultiUseCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::MultiUseCriterion"; }
+  static QString className() { return "hoot::MultiUseCriterion"; }
 
   MultiUseCriterion() = default;
   virtual ~MultiUseCriterion() = default;
@@ -51,7 +51,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies features with multiple purposes"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

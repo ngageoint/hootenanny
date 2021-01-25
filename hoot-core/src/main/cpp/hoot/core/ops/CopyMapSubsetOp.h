@@ -47,7 +47,7 @@ class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumer,
 {
 public:
 
-  static std::string className() { return "hoot::CopyMapSubsetOp"; }
+  static QString className() { return "hoot::CopyMapSubsetOp"; }
 
   CopyMapSubsetOp();
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
@@ -75,7 +75,7 @@ public:
 
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 
   void setEids(const std::set<ElementId>& eids) { _eids = eids; }

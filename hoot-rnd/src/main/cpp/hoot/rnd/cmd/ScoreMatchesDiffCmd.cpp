@@ -42,7 +42,7 @@ class ScoreMatchesDiffCmd : public BaseCommand
 
 public:
 
-  static std::string className() { return "hoot::ScoreMatchesDiffCmd"; }
+  static QString className() { return "hoot::ScoreMatchesDiffCmd"; }
 
   ScoreMatchesDiffCmd() = default;
 

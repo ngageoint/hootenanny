@@ -45,7 +45,7 @@ class OsmNetworkExtractor
 {
 public:
 
-  static std::string className() { return "hoot::OsmNetworkExtractor"; }
+  static QString className() { return "hoot::OsmNetworkExtractor"; }
 
   OsmNetworkExtractor() = default;
   virtual ~OsmNetworkExtractor() = default;

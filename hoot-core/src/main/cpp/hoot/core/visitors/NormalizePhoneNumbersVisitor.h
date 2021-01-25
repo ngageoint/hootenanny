@@ -43,7 +43,7 @@ class NormalizePhoneNumbersVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::NormalizePhoneNumbersVisitor"; }
+  static QString className() { return "hoot::NormalizePhoneNumbersVisitor"; }
 
   NormalizePhoneNumbersVisitor() = default;
   virtual ~NormalizePhoneNumbersVisitor() = default;
@@ -63,7 +63,7 @@ public:
       " phone numbers";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

@@ -41,7 +41,7 @@ class OverwriteTagMerger : public TagMerger
 {
 public:
 
-  static std::string className() { return "hoot::OverwriteTagMerger"; }
+  static QString className() { return "hoot::OverwriteTagMerger"; }
 
   /**
    * If swap is set to true then t1 will be overwritten with t2 values.
@@ -83,7 +83,7 @@ class OverwriteTag2Merger : public OverwriteTagMerger
 {
 public:
 
-  static std::string className() { return "hoot::OverwriteTag2Merger"; }
+  static QString className() { return "hoot::OverwriteTag2Merger"; }
 
   OverwriteTag2Merger() : OverwriteTagMerger(false) { }
   virtual ~OverwriteTag2Merger() = default;
@@ -91,7 +91,7 @@ public:
   virtual QString getDescription() const
   {  return "Overwrites conflicting tags with those from the reference feature"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 /**
@@ -101,7 +101,7 @@ class OverwriteTag1Merger : public OverwriteTagMerger
 {
 public:
 
-  static std::string className() { return "hoot::OverwriteTag1Merger"; }
+  static QString className() { return "hoot::OverwriteTag1Merger"; }
 
   OverwriteTag1Merger() : OverwriteTagMerger(true) { }
   virtual ~OverwriteTag1Merger() = default;
@@ -109,7 +109,7 @@ public:
   virtual QString getDescription() const
   {  return "Overwrites conflicting tags with those from the secondary feature"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

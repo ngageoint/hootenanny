@@ -50,7 +50,7 @@ class AlphaShapeCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::AlphaShapeCmd"; }
+  static QString className() { return "hoot::AlphaShapeCmd"; }
 
   AlphaShapeCmd() = default;
 

@@ -45,7 +45,7 @@ class ToEnglishTranslateStringDistance : public StringDistance, public StringDis
 {
 public:
 
-  static std::string className() { return "hoot::ToEnglishTranslateStringDistance"; }
+  static QString className() { return "hoot::ToEnglishTranslateStringDistance"; }
 
   ToEnglishTranslateStringDistance();
   explicit ToEnglishTranslateStringDistance(const StringDistancePtr& d);
@@ -72,7 +72,7 @@ public:
   virtual QString getDescription() const override
   { return "Returns a string comparison score based on the associated string comparator after first translating to English"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

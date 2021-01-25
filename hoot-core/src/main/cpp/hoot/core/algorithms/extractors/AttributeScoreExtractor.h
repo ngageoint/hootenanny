@@ -41,14 +41,14 @@ class AttributeScoreExtractor : public WayFeatureExtractor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::AttributeScoreExtractor"; }
+  static QString className() { return "hoot::AttributeScoreExtractor"; }
 
   AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight = false);
 
   AttributeScoreExtractor(bool useWeight = false);
   virtual ~AttributeScoreExtractor() = default;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString toString() const override;
 

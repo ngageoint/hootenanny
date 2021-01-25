@@ -48,7 +48,7 @@ class RemoveAttributesVisitor : public ElementVisitor, public Configurable
 
 public:
 
-  static std::string className() { return "hoot::RemoveAttributesVisitor"; }
+  static QString className() { return "hoot::RemoveAttributesVisitor"; }
 
   RemoveAttributesVisitor();
   explicit RemoveAttributesVisitor(const QStringList types);
@@ -64,7 +64,7 @@ public:
   virtual QString getDescription() const
   { return "Removes one or more common OSM attributes from features"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

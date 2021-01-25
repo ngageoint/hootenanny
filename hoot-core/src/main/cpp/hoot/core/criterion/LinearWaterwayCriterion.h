@@ -39,7 +39,7 @@ namespace hoot
 class LinearWaterwayCriterion : public ConflatableElementCriterion
 {
 public:
-  static std::string className() { return "hoot::LinearWaterwayCriterion"; }
+  static QString className() { return "hoot::LinearWaterwayCriterion"; }
 
   LinearWaterwayCriterion() = default;
   virtual ~LinearWaterwayCriterion() = default;
@@ -53,7 +53,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies linear bodies of water"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return true; }
 };

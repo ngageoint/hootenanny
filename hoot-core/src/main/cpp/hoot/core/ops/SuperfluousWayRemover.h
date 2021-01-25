@@ -51,7 +51,7 @@ class SuperfluousWayRemover : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SuperfluousWayRemover"; }
+  static QString className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover() = default;
   virtual ~SuperfluousWayRemover() = default;
@@ -86,7 +86,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

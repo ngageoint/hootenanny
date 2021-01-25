@@ -53,7 +53,7 @@ class DelaunayInterpolator : public BaseInterpolator
 {
 public:
 
-  static std::string className() { return "Tgs::DelaunayInterpolator"; }
+  static QString className() { return "Tgs::DelaunayInterpolator"; }
 
   DelaunayInterpolator();
 

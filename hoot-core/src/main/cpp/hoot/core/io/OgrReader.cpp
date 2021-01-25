@@ -73,7 +73,7 @@ class OgrReaderInternal : public ProgressReporter
 {
 public:
 
-  static std::string className() { return "hoot::OgrReaderInternal"; }
+  static QString className() { return "hoot::OgrReaderInternal"; }
 
   static int logWarnCount;
 

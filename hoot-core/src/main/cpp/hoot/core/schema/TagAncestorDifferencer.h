@@ -41,7 +41,7 @@ class TagAncestorDifferencer : public TagFilteredDifferencer, public Configurabl
 {
 public:
 
-  static std::string className() { return "hoot::TagAncestorDifferencer"; }
+  static QString className() { return "hoot::TagAncestorDifferencer"; }
 
   TagAncestorDifferencer() = default;
   TagAncestorDifferencer(QString ancestor);

@@ -44,7 +44,7 @@ class WayJoinerAdvanced : public WayJoiner
 {
 public:
 
-  static std::string className() { return "hoot::WayJoinerAdvanced"; }
+  static QString className() { return "hoot::WayJoinerAdvanced"; }
 
   typedef enum
   {
@@ -72,7 +72,7 @@ public:
   virtual QString getDescription() const override
   { return "Extends WayJoinerBasic with additional join pre-conditions."; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 protected:
 

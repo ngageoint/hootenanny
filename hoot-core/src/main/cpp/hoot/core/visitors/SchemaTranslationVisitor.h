@@ -48,7 +48,7 @@ class SchemaTranslationVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SchemaTranslationVisitor"; }
+  static QString className() { return "hoot::SchemaTranslationVisitor"; }
 
   SchemaTranslationVisitor();
   virtual ~SchemaTranslationVisitor() = default;
@@ -71,7 +71,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Translated " + QString::number(_numAffected) + " features to a schema"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

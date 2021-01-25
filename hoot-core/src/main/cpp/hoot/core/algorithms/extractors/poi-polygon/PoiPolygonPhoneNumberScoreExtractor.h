@@ -49,12 +49,12 @@ class PoiPolygonPhoneNumberScoreExtractor : public FeatureExtractorBase, public 
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonPhoneNumberScoreExtractor"; }
+  static QString className() { return "hoot::PoiPolygonPhoneNumberScoreExtractor"; }
 
   PoiPolygonPhoneNumberScoreExtractor();
   virtual ~PoiPolygonPhoneNumberScoreExtractor() = default;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;

@@ -44,7 +44,7 @@ class NetworkMatch : public Match
 {
 public:
 
-  static std::string className() { return "hoot::NetworkMatch"; }
+  static QString className() { return "hoot::NetworkMatch"; }
 
   NetworkMatch() = default;
   NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,

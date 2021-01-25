@@ -46,7 +46,7 @@ class UselessElementCriterion : public ElementCriterion, public ConstOsmMapConsu
 {
 public:
 
-  static std::string className() { return "hoot::UselessElementCriterion"; }
+  static QString className() { return "hoot::UselessElementCriterion"; }
 
   UselessElementCriterion() = default;
   UselessElementCriterion(ConstOsmMapPtr map) : _map(map) { }
@@ -60,7 +60,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies elements that have no use"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

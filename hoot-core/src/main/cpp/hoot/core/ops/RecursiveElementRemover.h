@@ -62,7 +62,7 @@ class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElement
 {
 public:
 
-  static std::string className() { return "hoot::RecursiveElementRemover"; }
+  static QString className() { return "hoot::RecursiveElementRemover"; }
 
   /**
    * @param eid The element to recursively delete.
@@ -93,7 +93,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

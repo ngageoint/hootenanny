@@ -42,7 +42,7 @@ class HighwayCriterion : public ConflatableElementCriterion, public ConstOsmMapC
 {
 public:
 
-  static std::string className() { return "hoot::HighwayCriterion"; }
+  static QString className() { return "hoot::HighwayCriterion"; }
 
   HighwayCriterion() = default;
   HighwayCriterion(ConstOsmMapPtr map) : _map(map) { }
@@ -59,7 +59,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return true; }
 

@@ -42,7 +42,7 @@ class RelationMemberSwapper : public ConstOsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::RelationMemberSwapper"; }
+  static QString className() { return "hoot::RelationMemberSwapper"; }
 
   RelationMemberSwapper();
   RelationMemberSwapper(const ElementId& idToReplace, const ElementId& idToReplaceWith,
@@ -78,7 +78,7 @@ public:
   virtual QString getDescription() const
   { return "Swaps all relation members references for one element ID with another"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

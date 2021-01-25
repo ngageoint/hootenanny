@@ -42,7 +42,7 @@ class PythonSchemaTranslator : public ScriptSchemaTranslator
 {
 public:
 
-  static std::string className() { return "hoot::PythonSchemaTranslator"; }
+  static QString className() { return "hoot::PythonSchemaTranslator"; }
 
   PythonSchemaTranslator() = default;
   virtual ~PythonSchemaTranslator();

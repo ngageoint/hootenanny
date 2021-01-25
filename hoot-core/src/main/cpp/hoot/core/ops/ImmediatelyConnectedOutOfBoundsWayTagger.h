@@ -49,7 +49,7 @@ class ImmediatelyConnectedOutOfBoundsWayTagger : public OsmMapOperation, public 
 {
 public:
 
-  static std::string className() { return "hoot::ImmediatelyConnectedOutOfBoundsWayTagger"; }
+  static QString className() { return "hoot::ImmediatelyConnectedOutOfBoundsWayTagger"; }
 
   ImmediatelyConnectedOutOfBoundsWayTagger();
   ImmediatelyConnectedOutOfBoundsWayTagger(const bool strictBounds);
@@ -99,7 +99,7 @@ public:
 
   long getNumTagged() const { return _numAffected; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

@@ -47,7 +47,7 @@ class InWayNodeCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::InWayNodeCriterion"; }
+  static QString className() { return "hoot::InWayNodeCriterion"; }
 
   InWayNodeCriterion() = default;
   InWayNodeCriterion(const OsmMap& map, const std::vector<long>& wayIds);
@@ -60,7 +60,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies nodes contained in a specified set of ways"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

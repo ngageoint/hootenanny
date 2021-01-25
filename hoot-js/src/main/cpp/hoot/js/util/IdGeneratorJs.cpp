@@ -70,11 +70,12 @@ void IdGeneratorJs::Init(Handle<Object> target)
     const char* n = utf8.data();
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
 
-    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::NewFromUtf8(current, IdGenerator::className().data()));
+    tpl->PrototypeTemplate()->Set(
+      PopulateConsumersJs::baseClass(),
+      String::NewFromUtf8(current, IdGenerator::className().toStdString().data()));
 
     target->Set(String::NewFromUtf8(current, n), tpl->GetFunction());
   }

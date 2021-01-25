@@ -45,7 +45,7 @@ class WayEndNodeCriterion : public WayNodeCriterion
 
 public:
 
-  static std::string className() { return "hoot::WayEndNodeCriterion"; }
+  static QString className() { return "hoot::WayEndNodeCriterion"; }
 
   WayEndNodeCriterion(const bool allowShared = true);
   WayEndNodeCriterion(ConstOsmMapPtr map, const bool allowShared = true);

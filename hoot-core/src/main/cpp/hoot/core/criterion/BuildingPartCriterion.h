@@ -40,7 +40,7 @@ class BuildingPartCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::BuildingPartCriterion"; }
+  static QString className() { return "hoot::BuildingPartCriterion"; }
 
   BuildingPartCriterion() = default;
   virtual ~BuildingPartCriterion() = default;
@@ -54,7 +54,7 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Polygon; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

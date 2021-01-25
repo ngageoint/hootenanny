@@ -55,7 +55,7 @@ class RandomWayGeneralizer : public ElementOsmMapVisitor, public RngConsumer,
 
 public:
 
-  static std::string className() { return "hoot::RandomWayGeneralizer"; }
+  static QString className() { return "hoot::RandomWayGeneralizer"; }
 
   RandomWayGeneralizer();
   virtual ~RandomWayGeneralizer() = default;
@@ -97,7 +97,7 @@ public:
 
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

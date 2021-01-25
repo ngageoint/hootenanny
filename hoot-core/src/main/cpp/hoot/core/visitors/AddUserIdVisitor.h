@@ -41,7 +41,7 @@ class AddUserIdVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::AddUserIdVisitor"; }
+  static QString className() { return "hoot::AddUserIdVisitor"; }
 
   AddUserIdVisitor();
 
@@ -52,7 +52,7 @@ public:
 
   virtual QString getDescription() const { return "Adds the user name and user id to elements as tags"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 //private:
 };

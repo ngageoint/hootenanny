@@ -45,7 +45,7 @@ class SublineStringMatcher : public Configurable, public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::SublineStringMatcher"; }
+  static QString className() { return "hoot::SublineStringMatcher"; }
 
   SublineStringMatcher() = default;
   virtual ~SublineStringMatcher() = default;

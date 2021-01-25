@@ -36,7 +36,7 @@ class MergerBase : public Merger
 {
 public:
 
-  static std::string className() { return "hoot::MergerBase"; }
+  static QString className() { return "hoot::MergerBase"; }
 
   typedef std::set<std::pair<ElementId, ElementId>> PairsSet;
 

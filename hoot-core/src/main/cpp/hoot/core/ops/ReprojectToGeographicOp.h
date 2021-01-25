@@ -44,14 +44,14 @@ class ReprojectToGeographicOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::ReprojectToGeographicOp"; }
+  static QString className() { return "hoot::ReprojectToGeographicOp"; }
 
   ReprojectToGeographicOp() = default;
   virtual ~ReprojectToGeographicOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getDescription() const
   { return "Reprojects to a geographic projection"; }

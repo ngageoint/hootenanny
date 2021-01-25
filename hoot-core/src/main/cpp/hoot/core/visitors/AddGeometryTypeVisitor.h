@@ -36,7 +36,7 @@ class AddGeometryTypeVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::AddGeometryTypeVisitor"; }
+  static QString className() { return "hoot::AddGeometryTypeVisitor"; }
 
   AddGeometryTypeVisitor() = default;
   virtual ~AddGeometryTypeVisitor() = default;
@@ -45,7 +45,7 @@ public:
 
   virtual QString getDescription() const { return "Adds geometry types"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

@@ -49,7 +49,7 @@ class NamedOp : public OsmMapOperation, public Configurable, public ProgressRepo
 {
 public:
 
-  static std::string className() { return "hoot::NamedOp"; }
+  static QString className() { return "hoot::NamedOp"; }
 
   NamedOp();
   NamedOp(QStringList namedOps);
@@ -64,7 +64,7 @@ public:
   virtual void setProgress(Progress progress) override { _progress = progress; }
   virtual unsigned int getNumSteps() const override { return _namedOps.size(); }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   std::shared_ptr<OsmMapOperation> getAppliedOperation(const QString& className)
   { return _appliedOps[className]; }

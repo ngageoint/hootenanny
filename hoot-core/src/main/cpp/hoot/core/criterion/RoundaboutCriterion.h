@@ -42,7 +42,7 @@ class RoundaboutCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::RoundaboutCriterion"; }
+  static QString className() { return "hoot::RoundaboutCriterion"; }
 
   RoundaboutCriterion() = default;
   virtual ~RoundaboutCriterion() = default;
@@ -56,7 +56,7 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Line; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

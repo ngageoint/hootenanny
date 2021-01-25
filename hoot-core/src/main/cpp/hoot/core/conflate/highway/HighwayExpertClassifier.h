@@ -38,7 +38,7 @@ class HighwayExpertClassifier : public HighwayClassifier
 {
 public:
 
-  static std::string className() { return "hoot::HighwayExpertClassifier"; }
+  static QString className() { return "hoot::HighwayExpertClassifier"; }
 
   HighwayExpertClassifier() = default;
   virtual ~HighwayExpertClassifier() = default;

@@ -43,7 +43,7 @@ class TagCountVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:
 
-  static std::string className() { return "hoot::TagCountVisitor"; }
+  static QString className() { return "hoot::TagCountVisitor"; }
 
   TagCountVisitor();
   virtual ~TagCountVisitor() = default;
@@ -80,7 +80,7 @@ public:
     return average;
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

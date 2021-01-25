@@ -41,7 +41,7 @@ class RelationWithPolygonMembersCriterion : public RelationWithMembersOfTypeCrit
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithPolygonMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithPolygonMembersCriterion"; }
 
   RelationWithPolygonMembersCriterion();
   RelationWithPolygonMembersCriterion(ConstOsmMapPtr map);
@@ -57,7 +57,7 @@ public:
 
   virtual GeometryType getGeometryType() const;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

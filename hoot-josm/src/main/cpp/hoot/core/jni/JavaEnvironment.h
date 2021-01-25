@@ -49,7 +49,7 @@ class JavaEnvironment
 
 public:
 
-  static std::string className() { return "hoot::JavaEnvironment"; }
+  static QString className() { return "hoot::JavaEnvironment"; }
 
   virtual ~JavaEnvironment();
 

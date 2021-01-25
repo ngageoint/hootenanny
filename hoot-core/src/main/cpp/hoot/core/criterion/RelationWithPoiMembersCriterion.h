@@ -41,7 +41,7 @@ class RelationWithPoiMembersCriterion : public RelationWithMembersOfTypeCriterio
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithPoiMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithPoiMembersCriterion"; }
 
   RelationWithPoiMembersCriterion();
   virtual ~RelationWithPoiMembersCriterion() = default;
@@ -56,7 +56,7 @@ public:
 
   virtual GeometryType getGeometryType() const;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

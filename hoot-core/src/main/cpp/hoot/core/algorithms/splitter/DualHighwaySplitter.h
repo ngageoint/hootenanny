@@ -53,7 +53,7 @@ class DualHighwaySplitter : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::DualHighwaySplitter"; }
+  static QString className() { return "hoot::DualHighwaySplitter"; }
 
   typedef enum DrivingSide
   {
@@ -90,7 +90,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

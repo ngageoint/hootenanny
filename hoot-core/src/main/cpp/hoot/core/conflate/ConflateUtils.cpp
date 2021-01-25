@@ -80,15 +80,14 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
     ConfigOptions().getConflateRubberSheetElementCriteria());
   // don't remove/replace roundabouts during diff conflate
   QStringList preConflateOps = ConfigOptions().getConflatePreOps();
-  const QString removeRoundaboutsClassName = QString::fromStdString(RemoveRoundabouts::className());
+  const QString removeRoundaboutsClassName = RemoveRoundabouts::className();
   if (preConflateOps.contains(removeRoundaboutsClassName))
   {
     preConflateOps.removeAll(removeRoundaboutsClassName);
     conf().set(ConfigOptions::getConflatePreOpsKey(), preConflateOps);
   }
   QStringList postConflateOps = ConfigOptions().getConflatePostOps();
-  const QString replaceRoundaboutsClassName =
-    QString::fromStdString(ReplaceRoundabouts::className());
+  const QString replaceRoundaboutsClassName = ReplaceRoundabouts::className();
   if (postConflateOps.contains(replaceRoundaboutsClassName))
   {
     postConflateOps.removeAll(replaceRoundaboutsClassName);

@@ -46,7 +46,7 @@ class LargeWaySplitter
 {
 public:
 
-  static std::string className() { return "hoot::LargeWaySplitter"; }
+  static QString className() { return "hoot::LargeWaySplitter"; }
 
   static int logWarnCount;
 

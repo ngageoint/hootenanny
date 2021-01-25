@@ -46,7 +46,7 @@ class RelationCircularRefRemover : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::RelationCircularRefRemover"; }
+  static QString className() { return "hoot::RelationCircularRefRemover"; }
 
   RelationCircularRefRemover() = default;
   virtual ~RelationCircularRefRemover() = default;
@@ -63,7 +63,7 @@ public:
   virtual QString getDescription() const
   { return "Removes half of a relation pair that reference each other from a map"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

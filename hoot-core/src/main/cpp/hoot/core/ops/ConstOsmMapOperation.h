@@ -41,7 +41,7 @@ class ConstOsmMapOperation : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::ConstOsmMapOperation"; }
+  static QString className() { return "hoot::ConstOsmMapOperation"; }
 
   ConstOsmMapOperation() = default;
   virtual ~ConstOsmMapOperation() = default;

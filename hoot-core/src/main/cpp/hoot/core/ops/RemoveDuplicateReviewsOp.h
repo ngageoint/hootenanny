@@ -45,14 +45,14 @@ class RemoveDuplicateReviewsOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::RemoveDuplicateReviewsOp"; }
+  static QString className() { return "hoot::RemoveDuplicateReviewsOp"; }
 
   RemoveDuplicateReviewsOp();
   virtual ~RemoveDuplicateReviewsOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getInitStatusMessage() const
   { return "Removing duplicate conflation review relations..."; }

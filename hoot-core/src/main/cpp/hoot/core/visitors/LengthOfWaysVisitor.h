@@ -44,7 +44,7 @@ class LengthOfWaysVisitor : public ElementConstOsmMapVisitor, public NumericStat
 {
 public:
 
-  static std::string className() { return "hoot::LengthOfWaysVisitor"; }
+  static QString className() { return "hoot::LengthOfWaysVisitor"; }
 
   LengthOfWaysVisitor();
   virtual ~LengthOfWaysVisitor() = default;
@@ -68,7 +68,7 @@ public:
     return average;
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

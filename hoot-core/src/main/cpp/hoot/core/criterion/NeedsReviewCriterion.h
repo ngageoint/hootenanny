@@ -43,7 +43,7 @@ class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static std::string className() { return "hoot::NeedsReviewCriterion"; }
+  static QString className() { return "hoot::NeedsReviewCriterion"; }
 
   NeedsReviewCriterion() = default;
   NeedsReviewCriterion(ConstOsmMapPtr& map) : _map(map) { }
@@ -58,7 +58,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies features that need to be reviewed"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

@@ -41,7 +41,7 @@ class ElementCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static std::string className() { return "hoot::ElementCountVisitor"; }
+  static QString className() { return "hoot::ElementCountVisitor"; }
 
   ElementCountVisitor() : _count(0) { }
   virtual ~ElementCountVisitor() = default;
@@ -54,7 +54,7 @@ public:
 
   virtual QString getDescription() const { return "Counts the number of elements"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

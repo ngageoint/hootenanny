@@ -44,7 +44,7 @@ class PoiPolygonPoiCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonPoiCriterion"; }
+  static QString className() { return "hoot::PoiPolygonPoiCriterion"; }
 
   PoiPolygonPoiCriterion();
   virtual ~PoiPolygonPoiCriterion() = default;
@@ -58,7 +58,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return true; }
 

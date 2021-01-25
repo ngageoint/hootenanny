@@ -40,7 +40,7 @@ namespace hoot
 class FrechetSublineMatcher : public SublineMatcher, public Configurable
 {
 public:
-  static std::string className() { return "hoot::FrechetSublineMatcher"; }
+  static QString className() { return "hoot::FrechetSublineMatcher"; }
 
   FrechetSublineMatcher() = default;
   virtual ~FrechetSublineMatcher() = default;
@@ -62,7 +62,7 @@ public:
   virtual QString getDescription() const
   { return "Matches lines based on the Frechet Distance algorithm"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

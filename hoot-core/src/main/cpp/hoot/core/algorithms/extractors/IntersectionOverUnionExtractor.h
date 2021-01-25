@@ -47,7 +47,7 @@ class IntersectionOverUnionExtractor : public FeatureExtractorBase
 {
 public:
 
-  static std::string className() { return "hoot::IntersectionOverUnionExtractor"; }
+  static QString className() { return "hoot::IntersectionOverUnionExtractor"; }
 
   IntersectionOverUnionExtractor() = default;
   virtual ~IntersectionOverUnionExtractor() = default;
@@ -55,7 +55,7 @@ public:
   /**
    * @see FeatureExtractor
    */
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   /**
    * @see FeatureExtractor

@@ -36,16 +36,16 @@ class MinAggregator : public ValueAggregator
 {
 public:
 
-  static std::string className() { return "hoot::MinAggregator"; }
+  static QString className() { return "hoot::MinAggregator"; }
 
   MinAggregator() = default;
   virtual ~MinAggregator() = default;
 
   virtual double aggregate(std::vector<double>& d) const override;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
-  virtual QString toString() const override { return QString::fromStdString(className()); }
+  virtual QString toString() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Aggregates data based on the minimum value"; }

@@ -49,7 +49,7 @@ class DuplicateWayRemover : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::DuplicateWayRemover"; }
+  static QString className() { return "hoot::DuplicateWayRemover"; }
 
   DuplicateWayRemover();
   virtual ~DuplicateWayRemover() = default;
@@ -86,7 +86,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

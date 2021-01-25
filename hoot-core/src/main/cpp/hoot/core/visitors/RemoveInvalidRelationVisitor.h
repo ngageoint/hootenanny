@@ -48,7 +48,7 @@ class RemoveInvalidRelationVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveInvalidRelationVisitor"; }
+  static QString className() { return "hoot::RemoveInvalidRelationVisitor"; }
 
   RemoveInvalidRelationVisitor();
   virtual ~RemoveInvalidRelationVisitor() = default;
@@ -67,7 +67,7 @@ public:
     return "Removes duplicate ways in relations and invalid relations";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

@@ -46,7 +46,7 @@ class KeepHighwaysVisitor : public ConstElementVisitor, public OsmMapConsumer
 {
 public:
 
-  static std::string className() { return "hoot::KeepHighwaysVisitor"; }
+  static QString className() { return "hoot::KeepHighwaysVisitor"; }
 
   KeepHighwaysVisitor() = default;
   virtual ~KeepHighwaysVisitor() = default;
@@ -62,7 +62,7 @@ public:
   virtual QString getDescription() const
   { return "Removes all ways and relations that are not part of a linear highway"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

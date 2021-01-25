@@ -38,7 +38,7 @@ class LongestTagVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static std::string className() { return "hoot::LongestTagVisitor"; }
+  static QString className() { return "hoot::LongestTagVisitor"; }
 
   LongestTagVisitor() : _longestTag(0) { }
   virtual ~LongestTagVisitor() = default;
@@ -51,7 +51,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies the tag with the largest text size"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

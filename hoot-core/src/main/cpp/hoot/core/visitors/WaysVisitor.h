@@ -37,7 +37,7 @@ class WaysVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::WaysVisitor"; }
+  static QString className() { return "hoot::WaysVisitor"; }
 
   WaysVisitor(std::vector<ConstWayPtr>& w) : _w(w) { }
   virtual ~WaysVisitor() = default;
@@ -51,7 +51,7 @@ public:
 
   virtual QString getDescription() const { return "Collects the ways visited"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

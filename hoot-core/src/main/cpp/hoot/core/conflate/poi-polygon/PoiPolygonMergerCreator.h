@@ -45,7 +45,7 @@ class PoiPolygonMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 
 public:
 
-  static std::string className() { return "hoot::PoiPolygonMergerCreator"; }
+  static QString className() { return "hoot::PoiPolygonMergerCreator"; }
 
   PoiPolygonMergerCreator();
   virtual ~PoiPolygonMergerCreator() = default;

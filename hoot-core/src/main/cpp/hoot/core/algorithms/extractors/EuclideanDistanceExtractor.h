@@ -41,7 +41,7 @@ public:
   EuclideanDistanceExtractor();
   virtual ~EuclideanDistanceExtractor() = default;
 
-  static std::string className() { return "hoot::EuclideanDistanceExtractor"; }
+  static QString className() { return "hoot::EuclideanDistanceExtractor"; }
 
   /**
    * Measure the Euclidean distance in meters between two elements in the same map
@@ -68,8 +68,7 @@ public:
     const OsmMap& map1, const OsmMap& map2, const ConstElementPtr& target,
     const ConstElementPtr& candidate) const;
 
-  virtual QString getName() const
-  { return QString::fromStdString(EuclideanDistanceExtractor::className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates the Euclidean distance between two features"; }

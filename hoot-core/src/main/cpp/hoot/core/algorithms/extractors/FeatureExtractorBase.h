@@ -39,7 +39,7 @@ class FeatureExtractorBase : public FeatureExtractor
 {
 public:
 
-  static std::string className() { return "hoot::FeatureExtractorBase"; }
+  static QString className() { return "hoot::FeatureExtractorBase"; }
 
   FeatureExtractorBase() = default;
   virtual ~FeatureExtractorBase() = default;

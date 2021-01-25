@@ -43,7 +43,7 @@ class ConflatableElementCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ConflatableElementCriterion"; }
+  static QString className() { return "hoot::ConflatableElementCriterion"; }
 
   ConflatableElementCriterion() = default;
   virtual ~ConflatableElementCriterion() = default;

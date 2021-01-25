@@ -42,7 +42,7 @@ class ElementReplacer : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::ElementReplacer"; }
+  static QString className() { return "hoot::ElementReplacer"; }
 
   ElementReplacer() = default;
   ElementReplacer(OsmMapPtr mapToReplaceFrom) : _mapToReplaceFrom(mapToReplaceFrom) { }
@@ -62,7 +62,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Replaced " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

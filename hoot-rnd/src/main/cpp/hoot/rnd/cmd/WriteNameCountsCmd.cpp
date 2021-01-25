@@ -54,7 +54,7 @@ class WriteNameCountsCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::WriteNameCountsCmd"; }
+  static QString className() { return "hoot::WriteNameCountsCmd"; }
 
   WriteNameCountsCmd() = default;
 

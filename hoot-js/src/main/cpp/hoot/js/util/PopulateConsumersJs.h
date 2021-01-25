@@ -83,27 +83,27 @@ public:
 
       if (obj->Has(baseClass()))
       {
-        if (str(obj->Get(baseClass())) == QString::fromStdString(ElementCriterion::className()))
+        if (str(obj->Get(baseClass())) == ElementCriterion::className())
         {
           populateCriterionConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(ElementVisitor::className()))
+        else if (str(obj->Get(baseClass())) == ElementVisitor::className())
         {
           populateVisitorConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(Element::className()))
+        else if (str(obj->Get(baseClass())) == Element::className())
         {
           populateElementConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(StringDistance::className()))
+        else if (str(obj->Get(baseClass())) == StringDistance::className())
         {
           populateStringDistanceConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(ValueAggregator::className()))
+        else if (str(obj->Get(baseClass())) == ValueAggregator::className())
         {
           populateValueAggregatorConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(OsmMap::className()))
+        else if (str(obj->Get(baseClass())) == OsmMap::className())
         {
           populateOsmMapConsumer<T>(consumer, v);
         }

@@ -61,7 +61,7 @@ class MultiaryConflatePoiCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::MultiaryConflatePoiCmd"; }
+  static QString className() { return "hoot::MultiaryConflatePoiCmd"; }
 
   MultiaryConflatePoiCmd() = default;
 

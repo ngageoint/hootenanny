@@ -44,7 +44,7 @@ class ConflatableCriteriaVisitor : public ElementVisitor, public ConstOsmMapCons
 
 public:
 
-  static std::string className() { return "hoot::ConflatableCriteriaVisitor"; }
+  static QString className() { return "hoot::ConflatableCriteriaVisitor"; }
 
   ConflatableCriteriaVisitor() = default;
   virtual ~ConflatableCriteriaVisitor() = default;
@@ -54,7 +54,7 @@ public:
   virtual QString getDescription() const
   { return "Marks elements with all criterion classes that consider them conflatable"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

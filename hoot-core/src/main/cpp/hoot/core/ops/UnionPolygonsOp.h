@@ -44,14 +44,14 @@ class UnionPolygonsOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::UnionPolygonsOp"; }
+  static QString className() { return "hoot::UnionPolygonsOp"; }
 
   UnionPolygonsOp();
   virtual ~UnionPolygonsOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getDescription() const override { return _combiner->getDescription(); }
 

@@ -53,7 +53,7 @@ class HighwayCornerSplitter : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::HighwayCornerSplitter"; }
+  static QString className() { return "hoot::HighwayCornerSplitter"; }
 
   HighwayCornerSplitter();
   HighwayCornerSplitter(const std::shared_ptr<OsmMap>& map);
@@ -81,7 +81,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

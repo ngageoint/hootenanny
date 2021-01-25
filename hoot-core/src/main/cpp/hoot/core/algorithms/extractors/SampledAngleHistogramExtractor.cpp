@@ -54,7 +54,7 @@ class SampledAngleHistogramVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::SampledAngleHistogramVisitor"; }
+  static QString className() { return "hoot::SampledAngleHistogramVisitor"; }
 
   SampledAngleHistogramVisitor(Histogram& histogram, const double sampleDistance,
     const double headingDelta) :

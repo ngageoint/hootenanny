@@ -45,7 +45,7 @@ class CountUniqueReviewsVisitor : public ElementConstOsmMapVisitor, public Singl
 
 public:
 
-  static std::string className() { return "hoot::CountUniqueReviewsVisitor"; }
+  static QString className() { return "hoot::CountUniqueReviewsVisitor"; }
 
   CountUniqueReviewsVisitor() = default;
   virtual ~CountUniqueReviewsVisitor() = default;
@@ -58,7 +58,7 @@ public:
 
   void clear();
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

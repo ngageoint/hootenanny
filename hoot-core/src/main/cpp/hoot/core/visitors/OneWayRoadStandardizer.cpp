@@ -76,7 +76,7 @@ void OneWayRoadStandardizer::visit(const std::shared_ptr<Element>& e)
 
 QStringList OneWayRoadStandardizer::getCriteria() const
 {
-  return QStringList(QString::fromStdString(HighwayCriterion::className()));
+  return QStringList(HighwayCriterion::className());
 }
 
 }

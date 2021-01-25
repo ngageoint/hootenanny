@@ -38,7 +38,7 @@ class QuantileAggregator : public ValueAggregator, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::QuantileAggregator"; }
+  static QString className() { return "hoot::QuantileAggregator"; }
 
   QuantileAggregator();
   virtual ~QuantileAggregator() = default;
@@ -52,7 +52,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString toString() const override
   { return QString("QuantileAggregator %1").arg(_quantile); }

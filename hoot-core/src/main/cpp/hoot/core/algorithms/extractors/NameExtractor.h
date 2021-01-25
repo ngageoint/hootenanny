@@ -44,10 +44,9 @@ public:
   NameExtractor(StringDistancePtr d);
   virtual ~NameExtractor() = default;
 
-  static std::string className() { return "hoot::NameExtractor"; }
+  static QString className() { return "hoot::NameExtractor"; }
 
-  virtual QString getName() const
-  { return QString::fromStdString(NameExtractor::className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString toString() const;
 

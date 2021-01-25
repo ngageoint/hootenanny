@@ -40,7 +40,7 @@ class OsmApiDbReader : public ApiDbReader
 {
 public:
 
-  static std::string className() { return "hoot::OsmApiDbReader"; }
+  static QString className() { return "hoot::OsmApiDbReader"; }
 
   OsmApiDbReader();
   virtual ~OsmApiDbReader();

@@ -36,7 +36,7 @@ class AddBboxVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::AddBboxVisitor"; }
+  static QString className() { return "hoot::AddBboxVisitor"; }
 
   AddBboxVisitor() = default;
   virtual ~AddBboxVisitor() = default;
@@ -46,7 +46,7 @@ public:
   virtual QString getDescription() const
   { return "Adds a bounding box tag to applicable elements"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

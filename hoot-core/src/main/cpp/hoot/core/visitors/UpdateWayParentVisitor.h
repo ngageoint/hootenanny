@@ -37,7 +37,7 @@ class UpdateWayParentVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::UpdateWayParentVisitor"; }
+  static QString className() { return "hoot::UpdateWayParentVisitor"; }
 
   UpdateWayParentVisitor(long oldParentId, long newParentId);
   virtual ~UpdateWayParentVisitor() = default;
@@ -47,7 +47,7 @@ public:
   virtual QString getDescription() const override
   { return "Updates all way parent IDs to a new ID"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

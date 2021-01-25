@@ -54,7 +54,7 @@ class OsmGbdxXmlWriter : public QXmlDefaultHandler, public PartialOsmMapWriter
 {
 public:
 
-  static std::string className() { return "hoot::OsmGbdxXmlWriter"; }
+  static QString className() { return "hoot::OsmGbdxXmlWriter"; }
 
   OsmGbdxXmlWriter();
   virtual ~OsmGbdxXmlWriter();

@@ -45,8 +45,8 @@ public:
    * @brief className gets the name of the class as a string
    * @return class name
    */
-  static std::string className() { return "hoot::RemoveWayByEid"; }
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  static QString className() { return "hoot::RemoveWayByEid"; }
+  virtual QString getName() const { return className(); }
 
   /**
    * @brief RemoveWayByEid is used to remove ways from maps

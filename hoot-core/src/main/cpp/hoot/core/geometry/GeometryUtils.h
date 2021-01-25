@@ -61,7 +61,7 @@ class GeometryUtils
 {
 public:
 
-  static std::string className() { return "hoot::GeometryUtils"; }
+  static QString className() { return "hoot::GeometryUtils"; }
 
   static int logWarnCount;
 

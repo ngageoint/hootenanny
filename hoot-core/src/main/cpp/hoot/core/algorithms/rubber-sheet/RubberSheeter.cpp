@@ -52,7 +52,7 @@ void RubberSheeter::rubberSheet(const QString& input1, const QString& input2, co
   IoUtils::loadMap(map, input2, false, Status::Unknown2);
 
   QStringList l = ConfigOptions().getMapCleanerTransforms();
-  l.removeAll(QString::fromStdString(RubberSheet::className()));
+  l.removeAll(RubberSheet::className());
   conf().set(MapCleaner::opsKey(), l);
   MapCleaner().apply(map);
   RubberSheet().apply(map);

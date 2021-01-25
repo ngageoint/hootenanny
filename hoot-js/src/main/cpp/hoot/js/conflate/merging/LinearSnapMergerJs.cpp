@@ -61,11 +61,12 @@ void LinearSnapMergerJs::Init(Handle<Object> target)
   HandleScope scope(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, LinearSnapMerger::className().data()));
+  tpl->SetClassName(
+     String::NewFromUtf8(current, LinearSnapMerger::className().toStdString().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-    String::NewFromUtf8(current, MergerBase::className().data()));
+    String::NewFromUtf8(current, MergerBase::className().toStdString().data()));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
       FunctionTemplate::New(current, apply));
 

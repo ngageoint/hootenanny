@@ -53,7 +53,7 @@ class WayLocation
 {
 public:
 
-  static std::string className() { return "hoot::WayLocation"; }
+  static QString className() { return "hoot::WayLocation"; }
 
   static int logWarnCount;
 

@@ -62,7 +62,7 @@ public:
   void setAllowWordsInvolvedInMultipleRules(bool allow)
   { _ruleReader->setAllowWordsInvolvedInMultipleRules(allow); }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

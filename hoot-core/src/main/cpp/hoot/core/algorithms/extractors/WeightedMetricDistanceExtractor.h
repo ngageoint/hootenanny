@@ -41,7 +41,7 @@ class WeightedMetricDistanceExtractor : public WayFeatureExtractor, public Confi
 {
 public:
 
-  static std::string className() { return "hoot::WeightedMetricDistanceExtractor"; }
+  static QString className() { return "hoot::WeightedMetricDistanceExtractor"; }
 
   WeightedMetricDistanceExtractor(ValueAggregatorPtr wayAgg, ValueAggregatorPtr pointAgg,
                                   Meters searchRadius = -1);
@@ -51,7 +51,7 @@ public:
 
   virtual ~WeightedMetricDistanceExtractor() = default;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString toString() const override;
 

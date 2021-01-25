@@ -89,7 +89,7 @@ public:
     ConstEdgeSublinePtr _subline;
   };
 
-  static std::string className() { return "hoot::EdgeString"; }
+  static QString className() { return "hoot::EdgeString"; }
 
   static int logWarnCount;
 

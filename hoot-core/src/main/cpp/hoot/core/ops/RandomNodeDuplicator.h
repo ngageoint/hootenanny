@@ -48,7 +48,7 @@ class RandomNodeDuplicator : public OsmMapOperation, public Configurable, public
 {
 public:
 
-  static std::string className() { return "hoot::RandomNodeDuplicator"; }
+  static QString className() { return "hoot::RandomNodeDuplicator"; }
 
   RandomNodeDuplicator();
   virtual ~RandomNodeDuplicator() = default;
@@ -89,7 +89,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Randomly duplicated " + QString::number(_numAffected) + " nodes"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

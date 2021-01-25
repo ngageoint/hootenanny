@@ -52,7 +52,7 @@ class HighwayMatch : public Match, public MatchDetails
 {
 public:
 
-  static std::string className() { return "hoot::HighwayMatch"; }
+  static QString className() { return "hoot::HighwayMatch"; }
 
   static const QString MATCH_NAME;
 

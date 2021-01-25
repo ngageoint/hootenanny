@@ -42,7 +42,7 @@ class DuplicateElementMarker : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::DuplicateElementMarker"; }
+  static QString className() { return "hoot::DuplicateElementMarker"; }
 
   DuplicateElementMarker();
   virtual ~DuplicateElementMarker() = default;
@@ -75,7 +75,7 @@ public:
 
   virtual QString getDescription() const { return "Adds a tag to elements who have duplicates"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   std::set<QString> getContainingWayTypes() const { return _containingWayTypes; }
 

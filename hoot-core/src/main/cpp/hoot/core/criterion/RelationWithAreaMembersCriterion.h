@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 
 namespace hoot
 {
@@ -43,7 +42,7 @@ class RelationWithAreaMembersCriterion : public RelationWithMembersOfTypeCriteri
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithAreaMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithAreaMembersCriterion"; }
 
   RelationWithAreaMembersCriterion();
   RelationWithAreaMembersCriterion(ConstOsmMapPtr map);
@@ -52,15 +51,14 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RelationWithAreaMembersCriterion(_map)); }
 
-  virtual QString getCriterion() const override
-  { return QString::fromStdString(AreaCriterion::className()); }
+  virtual QString getCriterion() const override;
 
   virtual QString getDescription() const
   { return "Identifies relations with area members"; }
 
-  virtual GeometryType getGeometryType() const { return AreaCriterion().getGeometryType(); }
+  virtual GeometryType getGeometryType() const;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

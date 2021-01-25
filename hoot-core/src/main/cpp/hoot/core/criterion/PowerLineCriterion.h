@@ -39,7 +39,7 @@ class PowerLineCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::PowerLineCriterion"; }
+  static QString className() { return "hoot::PowerLineCriterion"; }
 
   PowerLineCriterion() = default;
   virtual ~PowerLineCriterion() = default;
@@ -53,7 +53,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies power line utilities"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return true; }
 };

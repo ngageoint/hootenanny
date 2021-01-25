@@ -40,7 +40,7 @@ class ExactTagDifferencer : public TagDifferencer
 {
 public:
 
-  static std::string className() { return "hoot::ExactTagDifferencer"; }
+  static QString className() { return "hoot::ExactTagDifferencer"; }
 
   ExactTagDifferencer() = default;
   virtual ~ExactTagDifferencer() = default;

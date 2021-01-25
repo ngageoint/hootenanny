@@ -44,7 +44,7 @@ class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
+  static QString className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
 
   RemoveInvalidReviewRelationsVisitor() = default;
   virtual ~RemoveInvalidReviewRelationsVisitor() = default;
@@ -59,7 +59,7 @@ public:
 
   virtual QString getDescription() const { return "Removes empty review relations"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

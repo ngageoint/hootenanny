@@ -299,7 +299,7 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   // No point in running way joining a second time in post conflate ops since we already did it here
   // (its configured in post ops by default), so let's remove it.
   ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(), QString::fromStdString(WayJoinerOp::className()));
+    ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
 
   return roadSnapper.getNumFeaturesAffected();
 }

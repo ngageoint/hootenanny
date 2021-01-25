@@ -44,7 +44,7 @@ class RemoveElementsVisitor : public MultipleCriterionConsumerVisitor, public Os
 {
 public:
 
-  static std::string className() { return "hoot::RemoveElementsVisitor"; }
+  static QString className() { return "hoot::RemoveElementsVisitor"; }
 
   RemoveElementsVisitor(bool negateCriteria = false);
   virtual ~RemoveElementsVisitor() = default;
@@ -71,7 +71,7 @@ public:
       StringUtils::formatLargeNumber(_numProcessed) + " elements.";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

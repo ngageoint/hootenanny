@@ -66,7 +66,7 @@ class VagabondNetworkMatcher : public NetworkMatcher
 {
 public:
 
-  static std::string className() { return "hoot::VagabondNetworkMatcher"; }
+  static QString className() { return "hoot::VagabondNetworkMatcher"; }
 
   /**
    * Use create instead.

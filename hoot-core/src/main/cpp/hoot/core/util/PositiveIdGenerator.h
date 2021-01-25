@@ -41,7 +41,7 @@ class PositiveIdGenerator : public IdGenerator
 {
 public:
 
-  static std::string className() { return "hoot::PositiveIdGenerator"; }
+  static QString className() { return "hoot::PositiveIdGenerator"; }
 
   PositiveIdGenerator() { reset(); }
 

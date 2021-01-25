@@ -54,7 +54,7 @@ namespace hoot
 class MultiaryReviewCommand
 {
 public:
-  static std::string className() { return "hoot::MultiaryReviewCommand"; }
+  static QString className() { return "hoot::MultiaryReviewCommand"; }
 
   // Review operations. Feel free to extend.
   enum Operation

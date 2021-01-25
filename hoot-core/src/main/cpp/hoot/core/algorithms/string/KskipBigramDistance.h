@@ -78,7 +78,7 @@ class KskipBigramDistance : public StringDistance
 {
 public:
 
-  static std::string className() { return "hoot::KskipBigramDistance"; }
+  static QString className() { return "hoot::KskipBigramDistance"; }
 
   KskipBigramDistance(int k = 2);
   virtual ~KskipBigramDistance() = default;
@@ -100,7 +100,7 @@ public:
   virtual QString getDescription() const override
   { return "Returns a string comparison score derived using Skip-gram modelling"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
   /**

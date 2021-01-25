@@ -43,7 +43,7 @@ class AlignCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::AlignCmd"; }
+  static QString className() { return "hoot::AlignCmd"; }
 
   AlignCmd() = default;
 

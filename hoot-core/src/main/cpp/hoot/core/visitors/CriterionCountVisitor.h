@@ -41,7 +41,7 @@ class CriterionCountVisitor : public ConstElementVisitor, public ElementCriterio
 {
 public:
 
-  static std::string className() { return "hoot::CriterionCountVisitor"; }
+  static QString className() { return "hoot::CriterionCountVisitor"; }
 
   CriterionCountVisitor();
   CriterionCountVisitor(const ElementCriterionPtr& pCrit);
@@ -61,7 +61,7 @@ public:
   virtual QString getDescription() const
   { return "Counts the number of elements matching a criterion"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

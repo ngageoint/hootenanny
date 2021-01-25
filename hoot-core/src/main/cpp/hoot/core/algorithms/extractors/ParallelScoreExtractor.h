@@ -39,12 +39,12 @@ class ParallelScoreExtractor : public WayFeatureExtractor
 {
 public:
 
-  static std::string className() { return "hoot::ParallelScoreExtractor"; }
+  static QString className() { return "hoot::ParallelScoreExtractor"; }
 
   ParallelScoreExtractor() = default;
   virtual ~ParallelScoreExtractor() = default;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates how parallel ways are with each other"; }

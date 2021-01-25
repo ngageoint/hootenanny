@@ -51,7 +51,7 @@ class StatCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::StatCmd"; }
+  static QString className() { return "hoot::StatCmd"; }
 
   StatCmd() :
   _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())

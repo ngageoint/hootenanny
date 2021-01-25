@@ -42,13 +42,12 @@ class PoiPolygonAlphaShapeDistanceExtractor : public FeatureExtractorBase
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonAlphaShapeDistanceExtractor"; }
+  static QString className() { return "hoot::PoiPolygonAlphaShapeDistanceExtractor"; }
 
   PoiPolygonAlphaShapeDistanceExtractor() = default;
   virtual ~PoiPolygonAlphaShapeDistanceExtractor() = default;
 
-  virtual QString getName() const
-  { return QString::fromStdString(PoiPolygonAlphaShapeDistanceExtractor::className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * Calculates the convex hull distance between a poi and a polygon

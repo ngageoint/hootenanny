@@ -39,7 +39,7 @@ class TypeSimilarityCmd : public BaseCommand
 
 public:
 
-  static std::string className() { return "hoot::TypeSimilarityCmd"; }
+  static QString className() { return "hoot::TypeSimilarityCmd"; }
 
   TypeSimilarityCmd() = default;
 

@@ -43,7 +43,7 @@ class ValueAggregator : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::ValueAggregator"; }
+  static QString className() { return "hoot::ValueAggregator"; }
 
   ValueAggregator() = default;
   virtual ~ValueAggregator() = default;

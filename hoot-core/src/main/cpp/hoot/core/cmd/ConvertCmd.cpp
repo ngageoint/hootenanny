@@ -50,7 +50,7 @@ class ConvertCmd : public BoundedCommand
 {
 public:
 
-  static std::string className() { return "hoot::ConvertCmd"; }
+  static QString className() { return "hoot::ConvertCmd"; }
 
   ConvertCmd() = default;
 
@@ -76,13 +76,12 @@ public:
 
     ConfigOptions configOpts(conf());
 
-    if (configOpts.getConvertOps().contains(QString::fromStdString(MapCropper::className())) &&
+    if (configOpts.getConvertOps().contains(MapCropper::className()) &&
         configOpts.getCropBounds().trimmed().isEmpty())
     {
       throw IllegalArgumentException(
-        "When using " + QString::fromStdString(MapCropper::className()) +
-        " with the convert command, the " + configOpts.getCropBoundsKey() +
-        " option must be specified.");
+        "When using " + MapCropper::className() + " with the convert command, the " +
+        configOpts.getCropBoundsKey() + " option must be specified.");
     }
 
     QStringList inputs;

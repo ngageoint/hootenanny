@@ -43,7 +43,7 @@ class EmptyWayCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::EmptyWayCriterion"; }
+  static QString className() { return "hoot::EmptyWayCriterion"; }
 
   EmptyWayCriterion();
   virtual ~EmptyWayCriterion() = default;
@@ -59,7 +59,7 @@ public:
   virtual QString getDescription() const override
   { return "Identifies ways with no nodes"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

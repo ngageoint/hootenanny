@@ -43,7 +43,7 @@ class CalculateMapBoundsVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::CalculateMapBoundsVisitor"; }
+  static QString className() { return "hoot::CalculateMapBoundsVisitor"; }
 
   CalculateMapBoundsVisitor() = default;
   virtual ~CalculateMapBoundsVisitor() = default;
@@ -61,7 +61,7 @@ public:
 
   virtual QString getDescription() const { return "Calculates the extent of a map"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

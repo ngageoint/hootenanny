@@ -44,7 +44,7 @@ class KernelEstimationInterpolator : public BaseInterpolator
 {
 public:
 
-  static std::string className() { return "Tgs::KernelEstimationInterpolator"; }
+  static QString className() { return "Tgs::KernelEstimationInterpolator"; }
 
   /**
    * When sigma is less than zero (recommended) cross-validation will be used to determine an
@@ -54,7 +54,7 @@ public:
 
   virtual ~KernelEstimationInterpolator();
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   double getSigma() const { return _sigma; }
 

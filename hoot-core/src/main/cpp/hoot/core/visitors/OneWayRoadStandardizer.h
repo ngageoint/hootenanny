@@ -42,7 +42,7 @@ class OneWayRoadStandardizer : public ElementOsmMapVisitor
 
 public:
 
-  static std::string className() { return "hoot::OneWayRoadStandardizer"; }
+  static QString className() { return "hoot::OneWayRoadStandardizer"; }
 
   OneWayRoadStandardizer() = default;
   virtual ~OneWayRoadStandardizer() = default;
@@ -63,7 +63,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

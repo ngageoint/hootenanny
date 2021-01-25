@@ -61,7 +61,7 @@ class PertyOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::PertyOp"; }
+  static QString className() { return "hoot::PertyOp"; }
 
   PertyOp();
   virtual ~PertyOp() = default;
@@ -103,7 +103,7 @@ public:
 
   virtual QString getDescription() const { return "Perturbs map data"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

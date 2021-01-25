@@ -175,7 +175,7 @@ private:
 };
 
 PertyOp::PertyOp() :
-_permuteAlgorithm(QString::fromStdString(DirectSequentialSimulation::className())),
+_permuteAlgorithm(DirectSequentialSimulation::className()),
 _settings(conf())
 {
   _configure();

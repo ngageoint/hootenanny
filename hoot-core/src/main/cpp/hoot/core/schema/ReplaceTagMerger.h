@@ -40,7 +40,7 @@ class ReplaceTagMerger : public TagMerger
 {
 public:
 
-  static std::string className() { return "hoot::ReplaceTagMerger"; }
+  static QString className() { return "hoot::ReplaceTagMerger"; }
 
   /**
    * If swap is set to true then t1 will be overwritten with t2 values.
@@ -75,7 +75,7 @@ class ReplaceTag2Merger : public ReplaceTagMerger
 {
 public:
 
-  static std::string className() { return "hoot::ReplaceTag2Merger"; }
+  static QString className() { return "hoot::ReplaceTag2Merger"; }
 
   ReplaceTag2Merger() : ReplaceTagMerger(false) { }
   virtual ~ReplaceTag2Merger() = default;
@@ -86,7 +86,7 @@ public:
       "Completely replaces tags in the secondary feature with those from the reference feature";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 /**
@@ -97,7 +97,7 @@ class ReplaceTag1Merger : public ReplaceTagMerger
 {
 public:
 
-  static std::string className() { return "hoot::ReplaceTag1Merger"; }
+  static QString className() { return "hoot::ReplaceTag1Merger"; }
 
   ReplaceTag1Merger() : ReplaceTagMerger(true) { }
   virtual ~ReplaceTag1Merger() = default;
@@ -108,7 +108,7 @@ public:
       "Completely replaces tags in the reference feature with those from the secondary feature";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

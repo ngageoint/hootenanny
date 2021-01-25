@@ -133,7 +133,7 @@ void HighwayImpliedDividedMarker::apply(std::shared_ptr<OsmMap>& map)
 
 QStringList HighwayImpliedDividedMarker::getCriteria() const
 {
-  return QStringList(QString::fromStdString(HighwayCriterion::className()));
+  return QStringList(HighwayCriterion::className());
 }
 
 }

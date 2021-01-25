@@ -40,7 +40,7 @@ class RemoveUnknownVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveUnknownVisitor"; }
+  static QString className() { return "hoot::RemoveUnknownVisitor"; }
 
   virtual ~RemoveUnknownVisitor() = default;
 
@@ -69,7 +69,7 @@ class RemoveUnknown1Visitor : public RemoveUnknownVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveUnknown1Visitor"; }
+  static QString className() { return "hoot::RemoveUnknown1Visitor"; }
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
   virtual ~RemoveUnknown1Visitor() = default;
@@ -79,7 +79,7 @@ public:
   virtual QString getDescription() const override
   { return "Removes all elements with a status of Unknown1"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 /**
@@ -89,7 +89,7 @@ class RemoveUnknown2Visitor : public RemoveUnknownVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveUnknown2Visitor"; }
+  static QString className() { return "hoot::RemoveUnknown2Visitor"; }
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
   virtual ~RemoveUnknown2Visitor() = default;
@@ -99,7 +99,7 @@ public:
   virtual QString getDescription() const override
   { return "Removes all elements with a status of Unknown2"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

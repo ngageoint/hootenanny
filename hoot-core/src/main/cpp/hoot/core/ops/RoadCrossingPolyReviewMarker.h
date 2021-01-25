@@ -51,7 +51,7 @@ class RoadCrossingPolyReviewMarker : public ConstOsmMapOperation, public Configu
 {
 public:
 
-  static std::string className() { return "hoot::RoadCrossingPolyReviewMarker"; }
+  static QString className() { return "hoot::RoadCrossingPolyReviewMarker"; }
 
   RoadCrossingPolyReviewMarker();
   virtual ~RoadCrossingPolyReviewMarker() = default;
@@ -79,7 +79,7 @@ public:
   virtual QString getDescription() const
   { return "Marks roads crossing polygons for review during conflation"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * @see FilteredByGeometryTypeCriteria

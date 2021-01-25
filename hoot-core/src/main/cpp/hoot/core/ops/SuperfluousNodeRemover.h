@@ -65,7 +65,7 @@ class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public 
 {
 public:
 
-  static std::string className() { return "hoot::SuperfluousNodeRemover"; }
+  static QString className() { return "hoot::SuperfluousNodeRemover"; }
 
   SuperfluousNodeRemover();
   virtual ~SuperfluousNodeRemover() = default;
@@ -75,7 +75,7 @@ public:
    */
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * Removes superfluous nodes from a map

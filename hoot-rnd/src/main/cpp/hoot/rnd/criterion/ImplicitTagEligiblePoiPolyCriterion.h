@@ -41,7 +41,7 @@ class ImplicitTagEligiblePoiPolyCriterion : public ImplicitTagEligibleCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitTagEligiblePoiPolyCriterion"; }
+  static QString className() { return "hoot::ImplicitTagEligiblePoiPolyCriterion"; }
 
   ImplicitTagEligiblePoiPolyCriterion() = default;
   virtual ~ImplicitTagEligiblePoiPolyCriterion() = default;
@@ -71,7 +71,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies POIs and polygons eligible for type tag addition"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

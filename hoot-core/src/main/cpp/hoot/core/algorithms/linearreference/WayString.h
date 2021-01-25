@@ -48,7 +48,7 @@ class WayString
 {
 public:
 
-  static std::string className() { return "hoot::WayString"; }
+  static QString className() { return "hoot::WayString"; }
 
   static int logWarnCount;
 

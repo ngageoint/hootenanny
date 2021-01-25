@@ -41,7 +41,7 @@ class MultiLineStringSplitter
 {
 public:
 
-  static std::string className() { return "hoot::MultiLineStringSplitter"; }
+  static QString className() { return "hoot::MultiLineStringSplitter"; }
 
   MultiLineStringSplitter(const bool markAddedMultilineStringRelations = false);
 

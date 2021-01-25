@@ -55,7 +55,7 @@ public:
   FeatureExtractor() = default;
   virtual ~FeatureExtractor() = default;
 
-  static std::string className() { return "hoot::FeatureExtractor"; }
+  static QString className() { return "hoot::FeatureExtractor"; }
 
   static double nullValue() { return -999999999; }
 

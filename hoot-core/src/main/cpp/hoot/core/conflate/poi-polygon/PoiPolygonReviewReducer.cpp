@@ -121,8 +121,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
   QString ruleDescription = "#1: multi-use";
   LOG_TRACE("Checking rule : " << ruleDescription << "...");
   if (_typeScore < 0.4 &&
-      poiHasType &&
-      _infoCache->hasCriterion(poly, QString::fromStdString(MultiUseCriterion::className())))
+      poiHasType && _infoCache->hasCriterion(poly, MultiUseCriterion::className()))
   {
     LOG_TRACE("Returning miss per review reduction rule: " << ruleDescription << "...");
     _triggeredRuleDescription = ruleDescription;
@@ -490,12 +489,10 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
     poiContainedInAnotherParkPoly || (polyIsPark && _distance == 0);
   LOG_VART(poiContainedInParkPoly);
 
-  const bool poiIsBuilding =
-    _infoCache->hasCriterion(poi, QString::fromStdString(BuildingCriterion::className()));
+  const bool poiIsBuilding = _infoCache->hasCriterion(poi, BuildingCriterion::className());
   LOG_VART(poiIsBuilding);
 
-  const bool polyIsBuilding =
-    _infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className()));
+  const bool polyIsBuilding = _infoCache->hasCriterion(poly, BuildingCriterion::className());
   LOG_VART(polyIsBuilding);
 
   bool iterateOverPolyNeighbors = false;
@@ -535,8 +532,7 @@ bool PoiPolygonReviewReducer::triggersRule(ConstNodePtr poi, ConstElementPtr pol
         {
           sportPoiOnOtherSportPolyWithTypeMatch = true;
         }
-        else if (_infoCache->hasCriterion(
-                   polyNeighbor, QString::fromStdString(BuildingCriterion::className())) &&
+        else if (_infoCache->hasCriterion(polyNeighbor, BuildingCriterion::className()) &&
                  _infoCache->elementContains(polyNeighbor, poi))
         {
           poiOnBuilding = true;

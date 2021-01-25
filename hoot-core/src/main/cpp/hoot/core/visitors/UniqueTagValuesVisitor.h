@@ -41,7 +41,7 @@ class UniqueTagValuesVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::UniqueTagValuesVisitor"; }
+  static QString className() { return "hoot::UniqueTagValuesVisitor"; }
 
   /**
    * @param split If split is set to true then the values in the tag are split before they're placed
@@ -56,7 +56,7 @@ public:
 
   virtual QString getDescription() const { return "Returns all the unique element IDs visited"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

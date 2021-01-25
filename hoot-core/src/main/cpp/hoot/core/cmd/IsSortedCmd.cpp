@@ -45,7 +45,7 @@ class IsSortedCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::IsSortedCmd"; }
+  static QString className() { return "hoot::IsSortedCmd"; }
 
   IsSortedCmd() = default;
 

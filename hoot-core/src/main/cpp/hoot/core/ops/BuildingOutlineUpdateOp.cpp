@@ -353,7 +353,7 @@ void BuildingOutlineUpdateOp::_mergeNodes(
 
 QStringList BuildingOutlineUpdateOp::getCriteria() const
 {
-  return QStringList(QString::fromStdString(BuildingCriterion::className()));
+  return QStringList(BuildingCriterion::className());
 }
 
 }

@@ -47,7 +47,7 @@ class SearchRadiusCalculator : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SearchRadiusCalculator"; }
+  static QString className() { return "hoot::SearchRadiusCalculator"; }
 
   SearchRadiusCalculator();
   virtual ~SearchRadiusCalculator() = default;
@@ -66,7 +66,7 @@ public:
   virtual QString getDescription() const override
   { return "Calculates a search radius using tie points found by rubbersheeting"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

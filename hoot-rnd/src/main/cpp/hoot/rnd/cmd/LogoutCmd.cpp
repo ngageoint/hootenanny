@@ -40,7 +40,7 @@ class LogoutCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::LogoutCmd"; }
+  static QString className() { return "hoot::LogoutCmd"; }
 
   LogoutCmd() = default;
 

@@ -75,7 +75,7 @@ public:
 
   static int logWarnCount;
 
-  static std::string className() { return "hoot::ElementToGeometryConverter"; }
+  static QString className() { return "hoot::ElementToGeometryConverter"; }
 
   /**
    * see class description

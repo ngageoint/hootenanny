@@ -62,7 +62,7 @@ class SmallHighwayMerger : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::SmallHighwayMerger"; }
+  static QString className() { return "hoot::SmallHighwayMerger"; }
 
   SmallHighwayMerger(Meters threshold = -1);
   virtual ~SmallHighwayMerger() = default;
@@ -87,7 +87,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

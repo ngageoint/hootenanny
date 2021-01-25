@@ -43,7 +43,7 @@ class RandomMapCropper : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::RandomMapCropper"; }
+  static QString className() { return "hoot::RandomMapCropper"; }
 
   RandomMapCropper();
   virtual ~RandomMapCropper() = default;
@@ -68,7 +68,7 @@ public:
   void setTileFootprintOutputPath(QString path);
   void setPixelSize(double size) { _pixelSize = size; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

@@ -61,7 +61,7 @@ public:
   virtual ~AddMeasurementTagsVisitor() = default;
 
   // ElementVisitor
-  static std::string className() { return "hoot::AddMeasurementTagsVisitor"; }
+  static QString className() { return "hoot::AddMeasurementTagsVisitor"; }
   QString getDescription() const { return "Modifies map geometry as specified"; }
 
   virtual void visit(const ElementPtr& e);
@@ -71,7 +71,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Added tags to " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

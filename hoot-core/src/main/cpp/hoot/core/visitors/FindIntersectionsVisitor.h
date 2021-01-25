@@ -43,7 +43,7 @@ class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsum
 {
 public:
 
-  static std::string className() { return "hoot::FindIntersectionsVisitor"; }
+  static QString className() { return "hoot::FindIntersectionsVisitor"; }
 
   FindIntersectionsVisitor() = default;
   virtual ~FindIntersectionsVisitor() = default;
@@ -66,7 +66,7 @@ public:
 
   virtual ElementCriterionPtr createCriterion(ConstOsmMapPtr map) = 0;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 
@@ -82,7 +82,7 @@ class FindHighwayIntersectionsVisitor : public FindIntersectionsVisitor
 {
 public:
 
-  static std::string className() { return "hoot::FindHighwayIntersectionsVisitor"; }
+  static QString className() { return "hoot::FindHighwayIntersectionsVisitor"; }
 
   FindHighwayIntersectionsVisitor() = default;
   virtual ~FindHighwayIntersectionsVisitor() = default;
@@ -105,7 +105,7 @@ class FindRailwayIntersectionsVisitor : public FindIntersectionsVisitor
 {
 public:
 
-  static std::string className() { return "hoot::FindRailwayIntersectionsVisitor"; }
+  static QString className() { return "hoot::FindRailwayIntersectionsVisitor"; }
 
   FindRailwayIntersectionsVisitor() = default;
   virtual ~FindRailwayIntersectionsVisitor() = default;

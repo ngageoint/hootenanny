@@ -53,7 +53,7 @@ class MatchComparator
 
 public:
 
-  static std::string className() { return "hoot::MatchComparator"; }
+  static QString className() { return "hoot::MatchComparator"; }
 
   typedef QMultiMap<QString, ElementId> UuidToEid;
 

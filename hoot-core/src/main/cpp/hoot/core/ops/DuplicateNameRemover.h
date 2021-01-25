@@ -47,7 +47,7 @@ class DuplicateNameRemover : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::DuplicateNameRemover"; }
+  static QString className() { return "hoot::DuplicateNameRemover"; }
 
   DuplicateNameRemover();
   virtual ~DuplicateNameRemover() = default;
@@ -70,7 +70,7 @@ public:
 
   virtual QString getDescription() const { return "Removes duplicate name tags from a feature"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

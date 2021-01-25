@@ -50,7 +50,7 @@ class MultiLineStringVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::MultiLineStringVisitor"; }
+  static QString className() { return "hoot::MultiLineStringVisitor"; }
 
   MultiLineStringVisitor();
   virtual ~MultiLineStringVisitor() = default;
@@ -77,7 +77,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Created " + QString::number(_numAffected) + " multi-line strings"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

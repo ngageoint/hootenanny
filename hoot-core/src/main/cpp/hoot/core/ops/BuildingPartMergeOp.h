@@ -96,7 +96,7 @@ class BuildingPartMergeOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::BuildingPartMergeOp"; }
+  static QString className() { return "hoot::BuildingPartMergeOp"; }
 
 
   BuildingPartMergeOp(bool preserveTypes = false);
@@ -106,7 +106,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }

@@ -106,7 +106,7 @@ void ReplaceRoundabouts::apply(std::shared_ptr<OsmMap>& pMap)
 
 QStringList ReplaceRoundabouts::getCriteria() const
 {
-  return QStringList(QString::fromStdString(HighwayCriterion::className()));
+  return QStringList(HighwayCriterion::className());
 }
 
 }

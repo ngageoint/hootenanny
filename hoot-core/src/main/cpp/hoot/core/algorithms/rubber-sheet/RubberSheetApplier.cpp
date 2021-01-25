@@ -55,7 +55,7 @@ void RubberSheetApplier::apply(const QString& transform, const QString& input, c
 
   // make sure rubber sheeting isn't applied during cleaning.
   QStringList l = ConfigOptions().getMapCleanerTransforms();
-  l.removeAll(QString::fromStdString(RubberSheet::className()));
+  l.removeAll(RubberSheet::className());
   conf().set(MapCleaner::opsKey(), l);
   MapCleaner().apply(map);
 

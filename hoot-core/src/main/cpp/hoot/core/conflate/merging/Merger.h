@@ -39,13 +39,13 @@ namespace hoot
 {
 
 /**
- * Mergers are created by the MergerFactory.
+ * Merges features together after matching. Mergers are created by the MergerFactory.
  */
 class Merger : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::Merger"; }
+  static QString className() { return "hoot::Merger"; }
 
   Merger() = default;
   virtual ~Merger() = default;
@@ -76,6 +76,8 @@ public:
    * may be manipulating elements that this merger relies on.
    */
   virtual void replace(ElementId oldEid, ElementId newEid) = 0;
+
+  virtual QString toString() const = 0;
 };
 
 typedef std::shared_ptr<Merger> MergerPtr;

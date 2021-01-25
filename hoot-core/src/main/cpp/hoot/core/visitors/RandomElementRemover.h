@@ -43,7 +43,7 @@ class RandomElementRemover : public ElementOsmMapVisitor, public RngConsumer,
 {
 public:
 
-  static std::string className() { return "hoot::RandomElementRemover"; }
+  static QString className() { return "hoot::RandomElementRemover"; }
 
   /**
    * @arg p Probability that any given feature will be removed.
@@ -71,7 +71,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Randomly removed " + QString::number(_numAffected) + " elements"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

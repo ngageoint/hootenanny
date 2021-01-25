@@ -60,7 +60,7 @@ class RandomWaySplitter : public ElementOsmMapVisitor, public RngConsumer, publi
 
 public:
 
-  static std::string className() { return "hoot::RandomWaySplitter"; }
+  static QString className() { return "hoot::RandomWaySplitter"; }
 
   RandomWaySplitter();
   virtual ~RandomWaySplitter() = default;
@@ -108,7 +108,7 @@ public:
 
   virtual QString getDescription() const { return "Randomly splits ways"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

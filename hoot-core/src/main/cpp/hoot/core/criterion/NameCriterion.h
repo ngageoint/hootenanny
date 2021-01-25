@@ -47,7 +47,7 @@ class NameCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::NameCriterion"; }
+  static QString className() { return "hoot::NameCriterion"; }
 
   NameCriterion();
   NameCriterion(const QStringList& names, const bool caseSensitive = false,
@@ -71,7 +71,7 @@ public:
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
   void setPartialMatch(bool partialMatch) { _partialMatch = partialMatch; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

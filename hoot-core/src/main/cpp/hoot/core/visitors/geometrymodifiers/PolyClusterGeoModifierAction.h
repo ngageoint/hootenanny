@@ -68,7 +68,7 @@ public:
   static const QString CHECK_INTERSECTIONS_PARAM;
   static const QString CLUSTER_TAG_LIST_PARAM;
 
-  static std::string className() { return "hoot::PolyClusterGeoModifierAction"; }
+  static QString className() { return "hoot::PolyClusterGeoModifierAction"; }
 
   PolyClusterGeoModifierAction() = default;
   virtual ~PolyClusterGeoModifierAction() = default;
@@ -82,7 +82,7 @@ public:
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
   virtual void processFinalize(OsmMapPtr& pMap) override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

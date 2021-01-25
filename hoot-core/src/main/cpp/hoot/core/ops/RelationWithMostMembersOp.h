@@ -47,7 +47,7 @@ class RelationWithMostMembersOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithMostMembersOp"; }
+  static QString className() { return "hoot::RelationWithMostMembersOp"; }
 
   RelationWithMostMembersOp();
   virtual ~RelationWithMostMembersOp() = default;
@@ -66,7 +66,7 @@ public:
 
   virtual QString getCompletedStatusMessage() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

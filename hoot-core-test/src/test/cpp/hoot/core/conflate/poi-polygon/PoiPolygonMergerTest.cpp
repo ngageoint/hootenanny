@@ -93,7 +93,7 @@ public:
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
-      uut.setTagMergerClass(QString::fromStdString(OverwriteTag2Merger::className()));
+      uut.setTagMergerClass(OverwriteTag2Merger::className());
       vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 
@@ -114,7 +114,7 @@ public:
       set<pair<ElementId, ElementId>> s;
       s.insert(pair<ElementId, ElementId>(w1->getElementId(), n1->getElementId()));
       PoiPolygonMerger uut(s);
-      uut.setTagMergerClass(QString::fromStdString(OverwriteTag2Merger::className()));
+      uut.setTagMergerClass(OverwriteTag2Merger::className());
       vector<pair<ElementId, ElementId>> replaced;
       uut.apply(map2, replaced);
 

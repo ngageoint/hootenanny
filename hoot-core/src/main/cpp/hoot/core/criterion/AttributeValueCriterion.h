@@ -41,7 +41,7 @@ class AttributeValueCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::AttributeValueCriterion"; }
+  static QString className() { return "hoot::AttributeValueCriterion"; }
 
   AttributeValueCriterion();
   AttributeValueCriterion(const ElementAttributeType& attributeType,
@@ -69,7 +69,7 @@ public:
    */
   virtual QString getDescription() const { return "Identifies element attributes by value"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

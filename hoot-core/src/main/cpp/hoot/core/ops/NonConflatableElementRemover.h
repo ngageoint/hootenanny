@@ -41,7 +41,7 @@ class NonConflatableElementRemover : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::NonConflatableElementRemover"; }
+  static QString className() { return "hoot::NonConflatableElementRemover"; }
 
   NonConflatableElementRemover() = default;
   virtual ~NonConflatableElementRemover() = default;
@@ -59,7 +59,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " unconflatable elements"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

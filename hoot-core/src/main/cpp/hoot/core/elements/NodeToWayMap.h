@@ -48,7 +48,7 @@ class NodeToWayMap : public std::map<long, std::set<long>>
 {
 public:
 
-  static std::string className() { return "hoot::NodeToWayMap"; }
+  static QString className() { return "hoot::NodeToWayMap"; }
 
   NodeToWayMap(const OsmMap& map);
   virtual ~NodeToWayMap() = default;

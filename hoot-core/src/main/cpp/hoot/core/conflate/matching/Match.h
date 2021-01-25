@@ -57,7 +57,7 @@ class Match : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::Match"; }
+  static QString className() { return "hoot::Match"; }
 
   Match() = default;
   virtual ~Match() = default;

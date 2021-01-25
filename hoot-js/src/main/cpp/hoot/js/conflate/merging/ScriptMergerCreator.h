@@ -40,7 +40,7 @@ class ScriptMergerCreator : public MergerCreator
 {
 public:
 
-  static std::string className() { return "hoot::ScriptMergerCreator"; }
+  static QString className() { return "hoot::ScriptMergerCreator"; }
 
   ScriptMergerCreator() = default;
   virtual ~ScriptMergerCreator() = default;

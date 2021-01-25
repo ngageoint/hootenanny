@@ -43,7 +43,7 @@ RelationWithMembersOfTypeCriterion()
 
 QString RelationWithRailwayMembersCriterion::getCriterion() const
 {
-  return QString::fromStdString(RailwayCriterion::className());
+  return RailwayCriterion::className();
 }
 
 GeometryTypeCriterion::GeometryType RelationWithRailwayMembersCriterion::getGeometryType() const

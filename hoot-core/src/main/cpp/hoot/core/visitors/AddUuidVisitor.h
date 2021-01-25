@@ -42,7 +42,7 @@ class AddUuidVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::AddUuidVisitor"; }
+  static QString className() { return "hoot::AddUuidVisitor"; }
 
   AddUuidVisitor() = default;
   AddUuidVisitor(QString key);
@@ -57,7 +57,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

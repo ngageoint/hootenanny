@@ -44,7 +44,7 @@ class BuildingLevelsVisitor : public ConstElementVisitor, public NumericStatisti
 {
 public:
 
-  static std::string className() { return "hoot::BuildingLevelsVisitor"; }
+  static QString className() { return "hoot::BuildingLevelsVisitor"; }
 
   BuildingLevelsVisitor();
   virtual ~BuildingLevelsVisitor() = default;
@@ -69,7 +69,7 @@ public:
     return average;
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

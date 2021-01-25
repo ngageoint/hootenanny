@@ -62,7 +62,7 @@ class MetadataExport : public MetadataOp
 {
 public:
 
-  static std::string className() { return "hoot::MetadataExport"; }
+  static QString className() { return "hoot::MetadataExport"; }
 
   MetadataExport() = default;
   virtual ~MetadataExport() = default;
@@ -70,7 +70,7 @@ public:
   // OsmMapOperation
   virtual QString getDescription() const override { return "Creates and exports metadata"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

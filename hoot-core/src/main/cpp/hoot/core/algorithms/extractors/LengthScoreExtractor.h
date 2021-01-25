@@ -39,14 +39,14 @@ class LengthScoreExtractor : public WayFeatureExtractor
 {
 public:
 
-  static std::string className() { return "hoot::LengthScoreExtractor"; }
+  static QString className() { return "hoot::LengthScoreExtractor"; }
 
   LengthScoreExtractor(ValueAggregatorPtr wayAgg);
 
   LengthScoreExtractor() = default;
   virtual ~LengthScoreExtractor() = default;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates a score based on the length of a match between way features"; }

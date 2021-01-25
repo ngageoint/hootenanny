@@ -50,14 +50,14 @@ class PoiPolygonInvalidReviewNodeRemover : public ConstOsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonInvalidReviewNodeRemover"; }
+  static QString className() { return "hoot::PoiPolygonInvalidReviewNodeRemover"; }
 
   PoiPolygonInvalidReviewNodeRemover();
   virtual ~PoiPolygonInvalidReviewNodeRemover() = default;
 
   virtual void apply(const std::shared_ptr<OsmMap>& map);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getDescription() const
   { return "Removes all reviewable POI/Polygon POIs and their reviews that are invalid"; }

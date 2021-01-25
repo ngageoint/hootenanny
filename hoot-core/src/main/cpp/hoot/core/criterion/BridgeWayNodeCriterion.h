@@ -37,7 +37,7 @@ class BridgeWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::BridgeWayNodeCriterion"; }
+  static QString className() { return "hoot::BridgeWayNodeCriterion"; }
 
   BridgeWayNodeCriterion();
   BridgeWayNodeCriterion(ConstOsmMapPtr map);
@@ -50,7 +50,7 @@ public:
 
   virtual QString getDescription() const override { return "Identifies bridge nodes"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

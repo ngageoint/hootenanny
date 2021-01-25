@@ -44,7 +44,7 @@ class VisitorOp : public OsmMapOperation, public ElementVisitorConsumer
 {
 public:
 
-  static std::string className() { return "hoot::VisitorOp"; }
+  static QString className() { return "hoot::VisitorOp"; }
 
   VisitorOp() = default;
   VisitorOp(const ElementVisitorPtr& v) { _visitor = v; }
@@ -61,7 +61,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

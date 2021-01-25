@@ -61,7 +61,7 @@ class ScoreMatchesCmd : public BaseCommand
 
 public:
 
-  static std::string className() { return "hoot::ScoreMatchesCmd"; }
+  static QString className() { return "hoot::ScoreMatchesCmd"; }
 
   ScoreMatchesCmd() = default;
 

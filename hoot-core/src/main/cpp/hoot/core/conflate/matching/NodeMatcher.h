@@ -49,7 +49,7 @@ class NodeMatcher
 {
 public:
 
-  static std::string className() { return "hoot::NodeMatcher"; }
+  static QString className() { return "hoot::NodeMatcher"; }
 
   static int logWarnCount;
 

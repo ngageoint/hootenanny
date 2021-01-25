@@ -71,8 +71,8 @@ QString OrCriterion::toString() const
 {
   return
     ChainCriterion::toString().replace(
-      QString::fromStdString(ChainCriterion::className()).replace("hoot::", ""),
-      QString::fromStdString(className()).replace("hoot::", ""));
+      ChainCriterion::className().replace("hoot::", ""),
+      className().replace("hoot::", ""));
 }
 
 }

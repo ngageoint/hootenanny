@@ -41,7 +41,7 @@ class MultiaryPoiIngestCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::MultiaryPoiIngestCmd"; }
+  static QString className() { return "hoot::MultiaryPoiIngestCmd"; }
 
   virtual QString getName() const override { return "multiary-poi-ingest"; }
 

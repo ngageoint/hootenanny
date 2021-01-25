@@ -42,7 +42,7 @@ class ElementIdCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ElementIdCriterion"; }
+  static QString className() { return "hoot::ElementIdCriterion"; }
 
   ElementIdCriterion();
   ElementIdCriterion(const ElementId& id);
@@ -63,7 +63,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies elements by type and ID"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

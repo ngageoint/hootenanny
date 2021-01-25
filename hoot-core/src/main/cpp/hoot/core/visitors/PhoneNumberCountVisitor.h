@@ -46,7 +46,7 @@ class PhoneNumberCountVisitor : public ConstElementVisitor, public SingleStatist
 {
 public:
 
-  static std::string className() { return "hoot::PhoneNumberCountVisitor"; }
+  static QString className() { return "hoot::PhoneNumberCountVisitor"; }
 
   PhoneNumberCountVisitor();
   virtual ~PhoneNumberCountVisitor() = default;
@@ -66,7 +66,7 @@ public:
   virtual QString getDescription() const
   { return "Counts the number of valid element phone numbers"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

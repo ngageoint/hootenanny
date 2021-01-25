@@ -45,7 +45,7 @@ class PartialNetworkMerger : public MergerBase, public EidMapper
 {
 public:
 
-  static std::string className() { return "hoot::PartialNetworkMerger"; }
+  static QString className() { return "hoot::PartialNetworkMerger"; }
 
   PartialNetworkMerger();
   /**
@@ -70,7 +70,7 @@ public:
 
   virtual QString getDescription() const { return "Merges roads matched by the Network Algorithm"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   bool getNeedsReview() const { return _needsReview; }
 

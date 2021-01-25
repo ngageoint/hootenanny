@@ -49,16 +49,17 @@ void MostEnglishNameJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
-  QString name = QString::fromStdString(MostEnglishName::className()).replace("hoot::", "");
+  QString name = MostEnglishName::className().replace("hoot::", "");
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, MostEnglishName::className().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, MostEnglishName::className().toStdString().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(2);
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getMostEnglishName"),
       FunctionTemplate::New(current, getMostEnglishName));
-  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                String::NewFromUtf8(current, MostEnglishName::className().data()));
+  tpl->PrototypeTemplate()->Set(
+    PopulateConsumersJs::baseClass(),
+    String::NewFromUtf8(current, MostEnglishName::className().toStdString().data()));
 
   Persistent<Function> constructor(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, name.toUtf8().data()), ToLocal(&constructor));

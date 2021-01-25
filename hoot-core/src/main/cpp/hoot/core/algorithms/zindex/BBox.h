@@ -37,7 +37,7 @@ class BBox
 {
 public:
 
-  static std::string className() { return "hoot::BBox"; }
+  static QString className() { return "hoot::BBox"; }
 
   BBox(const std::vector<double>& min, const std::vector<double>& max);
 

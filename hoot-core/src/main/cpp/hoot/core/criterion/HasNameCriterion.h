@@ -39,7 +39,7 @@ class HasNameCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::HasNameCriterion"; }
+  static QString className() { return "hoot::HasNameCriterion"; }
 
   HasNameCriterion() = default;
   virtual ~HasNameCriterion() = default;
@@ -50,7 +50,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

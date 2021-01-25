@@ -43,7 +43,7 @@ class NoInformationCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::NoInformationCriterion"; }
+  static QString className() { return "hoot::NoInformationCriterion"; }
 
   NoInformationCriterion() { setConfiguration(conf()); }
   NoInformationCriterion(bool treatReviewTagsAsMetadata) :
@@ -60,7 +60,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies features with no useful information"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

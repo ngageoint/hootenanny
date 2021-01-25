@@ -40,7 +40,7 @@ class MembersPerRelationVisitor : public ConstElementVisitor, public NumericStat
 {
 public:
 
-  static std::string className() { return "hoot::MembersPerRelationVisitor"; }
+  static QString className() { return "hoot::MembersPerRelationVisitor"; }
 
   MembersPerRelationVisitor();
   virtual ~MembersPerRelationVisitor() = default;
@@ -65,7 +65,7 @@ public:
     return average;
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

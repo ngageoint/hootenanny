@@ -49,7 +49,7 @@ class AverageNumericTagsVisitor : public ConstElementVisitor, public SingleStati
 {
 public:
 
-  static std::string className() { return "hoot::AverageNumericTagsVisitor"; }
+  static QString className() { return "hoot::AverageNumericTagsVisitor"; }
 
   static int logWarnCount;
 
@@ -72,7 +72,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

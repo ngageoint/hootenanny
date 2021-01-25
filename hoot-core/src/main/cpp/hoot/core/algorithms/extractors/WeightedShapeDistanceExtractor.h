@@ -40,14 +40,14 @@ class WeightedShapeDistanceExtractor : public WayFeatureExtractor
 {
 public:
 
-  static std::string className() { return "hoot::WeightedShapeDistanceExtractor"; }
+  static QString className() { return "hoot::WeightedShapeDistanceExtractor"; }
 
   WeightedShapeDistanceExtractor(ValueAggregatorPtr wayAgg);
 
   WeightedShapeDistanceExtractor() = default;
   virtual ~WeightedShapeDistanceExtractor() = default;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates shape distance between features"; }

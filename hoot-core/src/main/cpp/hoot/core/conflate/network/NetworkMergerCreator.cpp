@@ -230,7 +230,7 @@ vector<CreatorDescription> NetworkMergerCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      QString::fromStdString(className()),
+      className(),
       "Generates mergers that merge roads conflated with the Network Algorithm",
       false));
   return result;

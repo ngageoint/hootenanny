@@ -69,7 +69,7 @@ class RelationToMultiPolygonConverter
 {
 public:
 
-  static std::string className() { return "hoot::RelationToMultiPolygonConverter"; }
+  static QString className() { return "hoot::RelationToMultiPolygonConverter"; }
 
   static int logWarnCount;
 

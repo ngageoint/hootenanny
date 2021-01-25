@@ -41,7 +41,7 @@ class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapCo
 {
 public:
 
-  static std::string className() { return "hoot::RemoveMissingElementsVisitor"; }
+  static QString className() { return "hoot::RemoveMissingElementsVisitor"; }
 
   RemoveMissingElementsVisitor(const Log::WarningLevel& logLevel = Log::Trace,
                                const int maxReport = Log::getWarnMessageLimit());
@@ -65,7 +65,7 @@ public:
   virtual QString getDescription() const
   { return "Removes references to any elements that do not exist"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

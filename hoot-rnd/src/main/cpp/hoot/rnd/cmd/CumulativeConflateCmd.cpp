@@ -44,7 +44,7 @@ class ConflateCumulativeCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::ConflateCumulativeCmd"; }
+  static QString className() { return "hoot::ConflateCumulativeCmd"; }
 
   ConflateCumulativeCmd() = default;
 

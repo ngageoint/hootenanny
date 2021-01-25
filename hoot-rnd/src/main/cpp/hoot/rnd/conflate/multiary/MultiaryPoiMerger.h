@@ -44,7 +44,7 @@ class MultiaryPoiMerger : public MergerBase
 {
 public:
 
-  static std::string className() { return "hoot::MultiaryPoiMerger"; }
+  static QString className() { return "hoot::MultiaryPoiMerger"; }
 
   MultiaryPoiMerger() = default;
   virtual ~MultiaryPoiMerger() = default;
@@ -65,7 +65,7 @@ public:
   virtual QString getDescription() const
   { return "Merges POIs matched with Multiary Conflation (experimental)"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 protected:
 

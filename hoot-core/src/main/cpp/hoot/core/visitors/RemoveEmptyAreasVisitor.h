@@ -44,7 +44,7 @@ class RemoveEmptyAreasVisitor : public ElementOsmMapVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::RemoveEmptyAreasVisitor"; }
+  static QString className() { return "hoot::RemoveEmptyAreasVisitor"; }
 
   RemoveEmptyAreasVisitor();
   virtual ~RemoveEmptyAreasVisitor() = default;
@@ -63,7 +63,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * @see Configurable

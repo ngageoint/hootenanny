@@ -42,7 +42,7 @@ class ValidateCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::ValidateCmd"; }
+  static QString className() { return "hoot::ValidateCmd"; }
 
   ValidateCmd() = default;
 

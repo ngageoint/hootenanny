@@ -52,7 +52,7 @@ public:
     Unknown
   };
 
-  static std::string className() { return "hoot::GeometryTypeCriterion"; }
+  static QString className() { return "hoot::GeometryTypeCriterion"; }
 
   GeometryTypeCriterion() = default;
   virtual ~GeometryTypeCriterion() = default;

@@ -44,7 +44,7 @@ class SetTagValueVisitor : public MultipleCriterionConsumerVisitor, public Confi
 {
 public:
 
-  static std::string className() { return "hoot::SetTagValueVisitor"; }
+  static QString className() { return "hoot::SetTagValueVisitor"; }
 
   SetTagValueVisitor();
   SetTagValueVisitor(
@@ -68,7 +68,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Updated " + StringUtils::formatLargeNumber(_numAffected) + " tags"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

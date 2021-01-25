@@ -226,8 +226,8 @@ QStringList RemoveDuplicateAreasVisitor::getCriteria() const
   QStringList criteria;
   // need to also add building here for unecessary conflation op removal purposes, since
   // AreaCriterion includes buildings in some instances
-  criteria.append(QString::fromStdString(BuildingCriterion::className()));
-  criteria.append(QString::fromStdString(AreaCriterion::className()));
+  criteria.append(BuildingCriterion::className());
+  criteria.append(AreaCriterion::className());
   return criteria;
 }
 

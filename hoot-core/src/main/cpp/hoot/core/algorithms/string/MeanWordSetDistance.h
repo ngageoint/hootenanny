@@ -54,7 +54,7 @@ public:
   MeanWordSetDistance();
   virtual ~MeanWordSetDistance() = default;
 
-  static std::string className() { return "hoot::MeanWordSetDistance"; }
+  static QString className() { return "hoot::MeanWordSetDistance"; }
 
   virtual double compare(const QString& s1, const QString& s2) const override;
 
@@ -65,7 +65,7 @@ public:
   virtual QString toString() const override
   { return QString("MeanWordSet %1 %2").arg(_p).arg(_d->toString()); }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Returns a score based on the mean distance between two sets of words"; }

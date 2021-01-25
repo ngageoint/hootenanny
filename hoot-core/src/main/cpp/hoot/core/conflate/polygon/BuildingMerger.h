@@ -43,7 +43,7 @@ class BuildingMerger : public MergerBase
 {
 public:
 
-  static std::string className() { return "hoot::BuildingMerger"; }
+  static QString className() { return "hoot::BuildingMerger"; }
 
   BuildingMerger() = default;
   virtual ~BuildingMerger() = default;
@@ -96,7 +96,7 @@ public:
 
   virtual QString getDescription() const { return "Merges buildings"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
   { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }

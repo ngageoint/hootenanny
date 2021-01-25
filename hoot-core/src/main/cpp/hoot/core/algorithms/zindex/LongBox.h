@@ -43,7 +43,7 @@ class LongBox
 {
 public:
 
-  static std::string className() { return "hoot::LongBox"; }
+  static QString className() { return "hoot::LongBox"; }
 
   LongBox() {}
 

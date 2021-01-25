@@ -44,7 +44,7 @@ class RemoveDuplicateRelationMembersVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveDuplicateRelationMembersVisitor"; }
+  static QString className() { return "hoot::RemoveDuplicateRelationMembersVisitor"; }
 
   RemoveDuplicateRelationMembersVisitor() = default;
   virtual ~RemoveDuplicateRelationMembersVisitor() = default;
@@ -58,7 +58,7 @@ public:
 
   virtual QString getDescription() const { return "Removes duplicate relation members"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

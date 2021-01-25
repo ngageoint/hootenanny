@@ -64,7 +64,7 @@ namespace hoot
     virtual ~GeometryModifierOp() = default;
 
     // OsmMapOperation
-    static std::string className() { return "hoot::GeometryModifierOp"; }
+    static QString className() { return "hoot::GeometryModifierOp"; }
     QString getDescription() const { return "Modifies map geometry as specified"; }
 
     // applies all actions specified in the rules file '_rulesFileName' to the map.
@@ -78,7 +78,7 @@ namespace hoot
     // Configurable
     virtual void setConfiguration(const Settings& conf);
 
-    virtual QString getName() const { return QString::fromStdString(className()); }
+    virtual QString getName() const { return className(); }
 
   private:
     // json rules file name

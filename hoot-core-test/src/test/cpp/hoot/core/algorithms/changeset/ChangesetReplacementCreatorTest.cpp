@@ -179,8 +179,7 @@ public:
     ChangesetCutOnlyCreator changesetCreator;
 
     // the filter can be any non-geometry crit here
-    changesetCreator.setReplacementFilters(
-      QStringList(QString::fromStdString(TagCriterion::className())));
+    changesetCreator.setReplacementFilters(QStringList(TagCriterion::className()));
     try
     {
       changesetCreator.setReplacementFilterOptions(QStringList("blah"));
@@ -192,8 +191,7 @@ public:
     CPPUNIT_ASSERT(exceptionMsg.startsWith("Invalid filter configuration option"));
 
     // the filter can be any non-geometry crit here
-    changesetCreator.setRetainmentFilters(
-      QStringList(QString::fromStdString(TagCriterion::className())));
+    changesetCreator.setRetainmentFilters(QStringList(TagCriterion::className()));
     try
     {
       changesetCreator.setRetainmentFilterOptions(QStringList("blah"));
@@ -211,8 +209,7 @@ public:
     ChangesetCutOnlyCreator changesetCreator;
     // the convert ops added here can contain any op
     conf().set(
-      ConfigOptions::getConvertOpsKey(),
-      QStringList(QString::fromStdString(DuplicateNodeRemover::className())));
+      ConfigOptions::getConvertOpsKey(), QStringList(DuplicateNodeRemover::className()));
     try
     {
       changesetCreator.create(
@@ -233,8 +230,7 @@ public:
     ChangesetCutOnlyCreator changesetCreator;
     changesetCreator.setFullReplacement(true);
     // the filter can be any non-geometry crit here
-    changesetCreator.setRetainmentFilters(
-      QStringList(QString::fromStdString(TagCriterion::className())));
+    changesetCreator.setRetainmentFilters(QStringList(TagCriterion::className()));
     try
     {
       changesetCreator.create(

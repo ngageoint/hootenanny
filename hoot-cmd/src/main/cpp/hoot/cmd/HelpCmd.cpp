@@ -44,7 +44,7 @@ class HelpCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::HelpCmd"; }
+  static QString className() { return "hoot::HelpCmd"; }
 
   HelpCmd()
   {
@@ -131,7 +131,7 @@ private:
 
   int _printSummary()
   {
-    const vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className();
+    const vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
     vector<std::shared_ptr<Command>> coreCmds;
     vector<std::shared_ptr<Command>> rndCmds;
     for (size_t i = 0; i < cmds.size(); i++)

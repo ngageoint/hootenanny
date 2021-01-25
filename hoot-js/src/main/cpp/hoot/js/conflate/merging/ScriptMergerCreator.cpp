@@ -124,7 +124,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
 vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
-  d.className = QString::fromStdString(className());
+  d.className = className();
   d.description = "Generates mergers used in Generic Conflation";
   d.experimental = false;
   vector<CreatorDescription> result;

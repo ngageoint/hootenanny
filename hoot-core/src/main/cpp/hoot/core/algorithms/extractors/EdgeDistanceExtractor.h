@@ -55,12 +55,12 @@ public:
   EdgeDistanceExtractor(Meters spacing = 5.0);
   virtual ~EdgeDistanceExtractor() = default;
 
-  static std::string className() { return "hoot::EdgeDistanceExtractor"; }
+  static QString className() { return "hoot::EdgeDistanceExtractor"; }
 
   double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString toString() const override;
 

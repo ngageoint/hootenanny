@@ -56,7 +56,7 @@ class NetworkDetails : public SearchRadiusProvider, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::NetworkDetails"; }
+  static QString className() { return "hoot::NetworkDetails"; }
 
   NetworkDetails(ConstOsmMapPtr map, ConstOsmNetworkPtr n1, ConstOsmNetworkPtr n2);
   virtual ~NetworkDetails() = default;

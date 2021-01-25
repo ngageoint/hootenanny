@@ -61,7 +61,7 @@ class OsmGeoJsonReader : public OsmJsonReader
 {
 public:
 
-  static std::string className() { return "hoot::OsmGeoJsonReader"; }
+  static QString className() { return "hoot::OsmGeoJsonReader"; }
 
   OsmGeoJsonReader() = default;
   virtual ~OsmGeoJsonReader() = default;

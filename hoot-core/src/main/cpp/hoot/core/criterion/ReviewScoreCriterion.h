@@ -42,7 +42,7 @@ class ReviewScoreCriterion : public ReviewRelationCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ReviewScoreCriterion"; }
+  static QString className() { return "hoot::ReviewScoreCriterion"; }
 
   ReviewScoreCriterion();
   virtual ~ReviewScoreCriterion() = default;
@@ -60,7 +60,7 @@ public:
   void setMaxScoreThreshold(const double threshold);
   void setInvertThresholding(const bool invert) { _invertThresholding = invert; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

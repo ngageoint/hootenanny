@@ -48,7 +48,7 @@ class PoiRfClassifier
 {
 public:
 
-  static std::string className() { return "hoot::PoiRfClassifier"; }
+  static QString className() { return "hoot::PoiRfClassifier"; }
 
   static int logWarnCount;
 

@@ -63,7 +63,7 @@ public:
    * @brief className - Get classname string
    * @return - "hoot::RemoveRoundabouts"
    */
-  static std::string className() { return "hoot::RemoveRoundabouts"; }
+  static QString className() { return "hoot::RemoveRoundabouts"; }
 
   /**
    * @brief RemoveRoundabouts - Default constructor
@@ -97,7 +97,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

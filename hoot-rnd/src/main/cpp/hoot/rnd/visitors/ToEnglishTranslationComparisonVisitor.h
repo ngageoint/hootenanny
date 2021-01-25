@@ -45,7 +45,7 @@ class ToEnglishTranslationComparisonVisitor : public ToEnglishTranslationVisitor
 
 public:
 
-  static std::string className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
+  static QString className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
 
   ToEnglishTranslationComparisonVisitor();
   virtual ~ToEnglishTranslationComparisonVisitor() = default;
@@ -67,7 +67,7 @@ public:
       QString::number(_numProcessedElements) + " different elements";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

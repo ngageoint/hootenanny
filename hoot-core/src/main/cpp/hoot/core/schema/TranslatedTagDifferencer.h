@@ -59,7 +59,7 @@ class TranslatedTagDifferencer : public TagDifferencer, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TranslatedTagDifferencer"; }
+  static QString className() { return "hoot::TranslatedTagDifferencer"; }
 
   TranslatedTagDifferencer();
   virtual ~TranslatedTagDifferencer() = default;

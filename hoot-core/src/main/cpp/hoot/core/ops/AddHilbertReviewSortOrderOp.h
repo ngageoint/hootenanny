@@ -39,7 +39,7 @@ class AddHilbertReviewSortOrderOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
+  static QString className() { return "hoot::AddHilbertReviewSortOrderOp"; }
 
   static int logWarnCount;
 
@@ -48,7 +48,7 @@ public:
 
   virtual void apply(OsmMapPtr& map);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getInitStatusMessage() const
   { return "Adding geospatial sorting tags to review relations..."; }

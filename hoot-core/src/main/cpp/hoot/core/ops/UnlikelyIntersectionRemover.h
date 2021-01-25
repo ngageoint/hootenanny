@@ -53,7 +53,7 @@ class UnlikelyIntersectionRemover : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::UnlikelyIntersectionRemover"; }
+  static QString className() { return "hoot::UnlikelyIntersectionRemover"; }
 
   UnlikelyIntersectionRemover() = default;
   virtual ~UnlikelyIntersectionRemover() = default;
@@ -79,7 +79,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

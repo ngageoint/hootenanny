@@ -44,7 +44,7 @@ class TagKeyCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagKeyCriterion"; }
+  static QString className() { return "hoot::TagKeyCriterion"; }
 
   TagKeyCriterion() = default;
   explicit TagKeyCriterion(QString key);
@@ -63,7 +63,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 protected:
 

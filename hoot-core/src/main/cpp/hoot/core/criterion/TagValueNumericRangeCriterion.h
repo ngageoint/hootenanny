@@ -43,7 +43,7 @@ class TagValueNumericRangeCriterion : public ElementCriterion, public Configurab
 {
 public:
 
-  static std::string className() { return "hoot::TagValueNumericRangeCriterion"; }
+  static QString className() { return "hoot::TagValueNumericRangeCriterion"; }
 
   TagValueNumericRangeCriterion();
   TagValueNumericRangeCriterion(const QStringList tagKeys, const long rangeMin,
@@ -60,7 +60,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements having numeric tag values falling within a range"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

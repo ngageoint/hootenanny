@@ -40,7 +40,7 @@ class CollectionRelationCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::CollectionRelationCriterion"; }
+  static QString className() { return "hoot::CollectionRelationCriterion"; }
 
   CollectionRelationCriterion() = default;
   virtual ~CollectionRelationCriterion() = default;
@@ -57,7 +57,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies collection relations"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

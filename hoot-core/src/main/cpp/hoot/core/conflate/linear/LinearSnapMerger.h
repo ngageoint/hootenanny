@@ -47,7 +47,7 @@ class LinearSnapMerger : public LinearMergerAbstract
 
 public:
 
-  static std::string className() { return "hoot::LinearSnapMerger"; }
+  static QString className() { return "hoot::LinearSnapMerger"; }
 
   LinearSnapMerger();
   LinearSnapMerger(
@@ -61,7 +61,7 @@ public:
 
   virtual QString getDescription() const { return "Merges road geometries and tags"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 protected:
 

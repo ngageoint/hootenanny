@@ -42,7 +42,7 @@ class DisconnectedWayCriterion : public ElementCriterion, public ConstOsmMapCons
 {
 public:
 
-  static std::string className() { return "hoot::DisconnectedWayCriterion"; }
+  static QString className() { return "hoot::DisconnectedWayCriterion"; }
 
   DisconnectedWayCriterion();
   DisconnectedWayCriterion(ConstOsmMapPtr map);
@@ -64,7 +64,7 @@ public:
   virtual QString getDescription() const override
   { return "Identifies way that are connected to no other ways"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

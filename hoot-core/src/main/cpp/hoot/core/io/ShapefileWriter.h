@@ -54,7 +54,7 @@ class ShapefileWriter : public OsmMapWriter, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ShapefileWriter"; }
+  static QString className() { return "hoot::ShapefileWriter"; }
 
   ShapefileWriter();
   virtual ~ShapefileWriter() = default;

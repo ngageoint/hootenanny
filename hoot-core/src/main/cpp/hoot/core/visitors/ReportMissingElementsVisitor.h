@@ -48,7 +48,7 @@ class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapCo
 {
 public:
 
-  static std::string className() { return "hoot::ReportMissingElementsVisitor"; }
+  static QString className() { return "hoot::ReportMissingElementsVisitor"; }
 
   ReportMissingElementsVisitor(const bool removeMissing = false,
                                const Log::WarningLevel& logLevel = Log::Trace,
@@ -69,7 +69,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Reported " + StringUtils::formatLargeNumber(_missingCount) + " missing elements."; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   int getMissingCount() const { return _missingCount; }
 

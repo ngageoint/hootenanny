@@ -56,7 +56,7 @@ public:
 
   static int logWarnCount;
 
-  static std::string className() { return "hoot::MapCropper"; }
+  static QString className() { return "hoot::MapCropper"; }
 
   MapCropper();
   virtual ~MapCropper() = default;
@@ -65,7 +65,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf) override;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getDescription() const override { return "Crops a map"; }
 

@@ -40,7 +40,7 @@ class ImplicitTagEligiblePoiCriterion : public ImplicitTagEligibleCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitTagEligiblePoiCriterion"; }
+  static QString className() { return "hoot::ImplicitTagEligiblePoiCriterion"; }
 
   ImplicitTagEligiblePoiCriterion() = default;
   virtual ~ImplicitTagEligiblePoiCriterion() = default;
@@ -70,7 +70,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies POIs eligible for type tag addition"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

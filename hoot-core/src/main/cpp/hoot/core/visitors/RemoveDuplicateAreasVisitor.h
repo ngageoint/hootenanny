@@ -56,7 +56,7 @@ class RemoveDuplicateAreasVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveDuplicateAreasVisitor"; }
+  static QString className() { return "hoot::RemoveDuplicateAreasVisitor"; }
 
   RemoveDuplicateAreasVisitor();
   virtual ~RemoveDuplicateAreasVisitor() = default;
@@ -75,7 +75,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

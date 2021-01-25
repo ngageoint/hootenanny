@@ -66,7 +66,7 @@ class UnifyingConflator : public OsmMapOperation, public Boundable, public Confi
 {
 public:
 
-  static std::string className() { return "hoot::UnifyingConflator"; }
+  static QString className() { return "hoot::UnifyingConflator"; }
 
   UnifyingConflator();
   UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
@@ -79,7 +79,7 @@ public:
    */
   virtual void apply(OsmMapPtr& map) override;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   QList<SingleStat> getStats() const { return _stats; }
 

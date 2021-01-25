@@ -40,7 +40,7 @@ class NetworkMergerCreator : public MergerCreator, public ConstOsmMapConsumer
 {
 public:
 
-  static std::string className() { return "hoot::NetworkMergerCreator"; }
+  static QString className() { return "hoot::NetworkMergerCreator"; }
 
   NetworkMergerCreator();
   virtual ~NetworkMergerCreator() = default;

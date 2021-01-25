@@ -40,7 +40,7 @@ class ImplicitPoiTypeTagger : public ImplicitTypeTaggerBase
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitPoiTypeTagger"; }
+  static QString className() { return "hoot::ImplicitPoiTypeTagger"; }
 
   ImplicitPoiTypeTagger() = default;
   ImplicitPoiTypeTagger(const QString& databasePath);
@@ -49,7 +49,7 @@ public:
   virtual QString getDescription() const override
   { return "Adds tags to POIs implicitly derived from their names"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

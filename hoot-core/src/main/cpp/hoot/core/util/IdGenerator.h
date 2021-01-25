@@ -39,7 +39,7 @@ class IdGenerator
 {
 public:
 
-  static std::string className() { return "hoot::IdGenerator"; }
+  static QString className() { return "hoot::IdGenerator"; }
 
   IdGenerator() = default;
   virtual ~IdGenerator() = default;

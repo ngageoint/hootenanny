@@ -628,11 +628,9 @@ void ChangesetCutOnlyCreator::_setGlobalOpts()
   // We're not going to remove missing elements, as we want to have as minimal of an impact on
   // the resulting changeset as possible.
   ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePreOpsKey(),
-    QString::fromStdString(RemoveMissingElementsVisitor::className()));
+    ConfigOptions::getConflatePreOpsKey(), RemoveMissingElementsVisitor::className());
   ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(),
-    QString::fromStdString(RemoveMissingElementsVisitor::className()));
+    ConfigOptions::getConflatePostOpsKey(), RemoveMissingElementsVisitor::className());
   // Having to set multiple different settings to prevent missing elements from being dropped here
   // is convoluted...may need to look into changing at some point.
   conf().set(ConfigOptions::getBoundsRemoveMissingElementsKey(), false);
@@ -711,11 +709,9 @@ void ChangesetCutOnlyCreator::_parseConfigOpts(
 
     LOG_VART(conf().getList(ConfigOptions::getConflatePostOpsKey()));
     QStringList conflatePostOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
-    conflatePostOps.removeAll(QString::fromStdString(WayJoinerOp::className()));
-    const int indexOfTagTruncater =
-      conflatePostOps.indexOf(QString::fromStdString(ApiTagTruncateVisitor::className()));
-    conflatePostOps.insert(
-      indexOfTagTruncater - 1, QString::fromStdString(WayJoinerOp::className()));
+    conflatePostOps.removeAll(WayJoinerOp::className());
+    const int indexOfTagTruncater = conflatePostOps.indexOf(ApiTagTruncateVisitor::className());
+    conflatePostOps.insert(indexOfTagTruncater - 1, WayJoinerOp::className());
     conf().set(ConfigOptions::getConflatePostOpsKey(), conflatePostOps);
     LOG_VARD(conf().getList(ConfigOptions::getConflatePostOpsKey()));
   }
@@ -819,9 +815,7 @@ bool ChangesetCutOnlyCreator::_roadFilterExists() const
   ElementCriterionPtr lineFilter = _geometryTypeFilters[GeometryTypeCriterion::GeometryType::Line];
   if (lineFilter)
   {
-    return
-      lineFilter->toString()
-        .contains(QString::fromStdString(HighwayCriterion::className()).remove("hoot::"));
+    return lineFilter->toString().contains(HighwayCriterion::className().remove("hoot::"));
   }
   return false;
 }

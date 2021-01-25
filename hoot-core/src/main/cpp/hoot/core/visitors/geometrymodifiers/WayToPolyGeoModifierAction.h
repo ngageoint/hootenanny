@@ -45,7 +45,7 @@ public:
   static const QString WIDTH_TAG_PARAM;
   static const QString DEFAULT_WIDTH_PARAM;
 
-  static std::string className() { return "hoot::WayToPolyGeoModifierAction"; }
+  static QString className() { return "hoot::WayToPolyGeoModifierAction"; }
 
   WayToPolyGeoModifierAction() = default;
   virtual ~WayToPolyGeoModifierAction() = default;
@@ -56,7 +56,7 @@ public:
   virtual void parseArguments(const QHash<QString, QString>& arguments) override;
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

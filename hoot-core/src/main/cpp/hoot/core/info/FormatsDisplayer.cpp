@@ -101,7 +101,7 @@ QString FormatsDisplayer::display(
 
 template<typename IoClass>
 QString FormatsDisplayer::_getFormatsString(
-  const std::string& className, const QStringList extraFormats, const bool ogrOnly,
+  const QString& className, const QStringList extraFormats, const bool ogrOnly,
   const bool ogrReadOnly)
 {
   return _getPrintableString(_getFormats<IoClass>(className, extraFormats, ogrOnly, ogrReadOnly));
@@ -109,7 +109,7 @@ QString FormatsDisplayer::_getFormatsString(
 
 template<typename IoClass>
 QStringList FormatsDisplayer::_getFormats(
-  const std::string& className, const QStringList extraFormats, const bool ogrOnly,
+  const QString& className, const QStringList extraFormats, const bool ogrOnly,
   const bool ogrReadOnly)
 {
   QSet<QString> formats;

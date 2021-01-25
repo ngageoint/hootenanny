@@ -54,7 +54,7 @@ class ElementCriterion : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::ElementCriterion"; }
+  static QString className() { return "hoot::ElementCriterion"; }
 
   ElementCriterion() = default;
   virtual ~ElementCriterion() = default;

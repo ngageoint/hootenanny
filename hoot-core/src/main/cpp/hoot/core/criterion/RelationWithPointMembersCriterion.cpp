@@ -48,7 +48,7 @@ RelationWithMembersOfTypeCriterion(map)
 
 QString RelationWithPointMembersCriterion::getCriterion() const
 {
-  return QString::fromStdString(PointCriterion::className());
+  return PointCriterion::className();
 }
 
 GeometryTypeCriterion::GeometryType RelationWithPointMembersCriterion::getGeometryType() const

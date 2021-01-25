@@ -43,7 +43,7 @@ RelationWithMembersOfTypeCriterion()
 
 QString RelationWithPowerLineMembersCriterion::getCriterion() const
 {
-  return QString::fromStdString(PowerLineCriterion::className());
+  return PowerLineCriterion::className();
 }
 
 GeometryTypeCriterion::GeometryType RelationWithPowerLineMembersCriterion::getGeometryType() const

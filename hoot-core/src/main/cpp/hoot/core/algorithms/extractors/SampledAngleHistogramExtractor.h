@@ -52,9 +52,9 @@ public:
   SampledAngleHistogramExtractor();
   virtual ~SampledAngleHistogramExtractor() = default;
 
-  static std::string className() { return "hoot::SampledAngleHistogramExtractor"; }
+  static QString className() { return "hoot::SampledAngleHistogramExtractor"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual void setConfiguration(const Settings& conf) override;
 

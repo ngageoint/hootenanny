@@ -475,7 +475,7 @@ std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
   std::vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      QString::fromStdString(className()),
+      className(),
       "Generates matchers that match buildings",
       CreatorDescription::Building,
       false));
@@ -531,7 +531,7 @@ std::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
 
 QStringList BuildingMatchCreator::getCriteria() const
 {
-  return QStringList(QString::fromStdString(BuildingCriterion::className()));
+  return QStringList(BuildingCriterion::className());
 }
 
 }

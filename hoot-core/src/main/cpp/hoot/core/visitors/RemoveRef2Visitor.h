@@ -53,7 +53,7 @@ public:
 
   typedef QMap<QString, ElementId> Ref1ToEid;
 
-  static std::string className() { return "hoot::RemoveRef2Visitor"; }
+  static QString className() { return "hoot::RemoveRef2Visitor"; }
 
   static int logWarnCount;
 
@@ -73,7 +73,7 @@ public:
   virtual QString getDescription() const
   { return "Removes REF2 tags when a criterion is met for both REF1 and REF2 elements"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

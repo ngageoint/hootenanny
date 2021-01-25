@@ -60,7 +60,7 @@ class OgrWriter : public PartialOsmMapWriter, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::OgrWriter"; }
+  static QString className() { return "hoot::OgrWriter"; }
 
   OgrWriter();
   virtual ~OgrWriter() = default;

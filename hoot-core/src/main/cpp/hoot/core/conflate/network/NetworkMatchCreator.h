@@ -40,7 +40,7 @@ class NetworkMatchCreator : public MatchCreator
 
 public:
 
-  static std::string className() { return "hoot::NetworkMatchCreator"; }
+  static QString className() { return "hoot::NetworkMatchCreator"; }
 
   NetworkMatchCreator();
   virtual ~NetworkMatchCreator() = default;
@@ -59,7 +59,7 @@ public:
 
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * @see FilteredByGeometryTypeCriteria

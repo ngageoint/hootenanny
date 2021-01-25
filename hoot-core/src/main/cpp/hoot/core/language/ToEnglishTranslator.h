@@ -45,7 +45,7 @@ class ToEnglishTranslator : public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ToEnglishTranslator"; }
+  static QString className() { return "hoot::ToEnglishTranslator"; }
 
   ToEnglishTranslator() = default;
   virtual ~ToEnglishTranslator() = default;

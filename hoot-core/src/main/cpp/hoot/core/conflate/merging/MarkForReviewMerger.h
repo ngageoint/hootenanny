@@ -43,7 +43,7 @@ class MarkForReviewMerger : public Merger
 {
 public:
 
-  static std::string className() { return "hoot::MarkForReviewMerger"; }
+  static QString className() { return "hoot::MarkForReviewMerger"; }
 
   MarkForReviewMerger() = default;
   virtual ~MarkForReviewMerger() = default;
@@ -76,7 +76,7 @@ public:
   virtual QString getDescription() const
   { return "Marks elements as needing review before merging"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

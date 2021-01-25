@@ -44,7 +44,7 @@ class ReversedRoadCriterion : public GeometryTypeCriterion, public ConstOsmMapCo
 {
 public:
 
-  static std::string className() { return "hoot::ReversedRoadCriterion"; }
+  static QString className() { return "hoot::ReversedRoadCriterion"; }
 
   ReversedRoadCriterion() = default;
   ReversedRoadCriterion(ConstOsmMapPtr map) : _map(map) { }
@@ -59,7 +59,7 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Line; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

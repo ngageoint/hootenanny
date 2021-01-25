@@ -39,7 +39,7 @@ class Tags;
 class TagDifferencer
 {
 public:
-  static std::string className() { return "hoot::TagDifferencer"; }
+  static QString className() { return "hoot::TagDifferencer"; }
 
   TagDifferencer() = default;
   virtual ~TagDifferencer() = default;

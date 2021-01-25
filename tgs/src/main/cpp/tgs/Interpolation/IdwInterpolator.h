@@ -44,7 +44,7 @@ class IdwInterpolator : public BaseInterpolator
 {
 public:
 
-  static std::string className() { return "Tgs::IdwInterpolator"; }
+  static QString className() { return "Tgs::IdwInterpolator"; }
 
   /**
    * Constructs a IDW instance where the power parameter, p, will be determined via hold one out

@@ -50,7 +50,7 @@ class Relation : public Element
 {
 public:
 
-  static std::string className() { return "hoot::Relation"; }
+  static QString className() { return "hoot::Relation"; }
 
   explicit Relation(const Relation& from);
 

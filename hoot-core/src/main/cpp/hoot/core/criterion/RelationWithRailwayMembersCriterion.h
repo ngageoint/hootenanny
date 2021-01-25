@@ -41,7 +41,7 @@ class RelationWithRailwayMembersCriterion : public RelationWithMembersOfTypeCrit
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithRailwayMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithRailwayMembersCriterion"; }
 
   RelationWithRailwayMembersCriterion();
   virtual ~RelationWithRailwayMembersCriterion() = default;
@@ -56,7 +56,7 @@ public:
 
   virtual GeometryType getGeometryType() const;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

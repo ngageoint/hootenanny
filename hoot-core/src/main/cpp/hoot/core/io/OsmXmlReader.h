@@ -55,7 +55,7 @@ class OsmXmlReader : public QXmlDefaultHandler, public PartialOsmMapReader, publ
 {
 public:
 
-  static std::string className() { return "hoot::OsmXmlReader"; }
+  static QString className() { return "hoot::OsmXmlReader"; }
 
   OsmXmlReader();
   virtual ~OsmXmlReader();

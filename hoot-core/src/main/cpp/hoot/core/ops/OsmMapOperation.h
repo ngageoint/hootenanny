@@ -62,7 +62,7 @@ class OsmMapOperation : public ApiEntityInfo, public FilteredByGeometryTypeCrite
 {
 public:
 
-  static std::string className() { return "hoot::OsmMapOperation"; }
+  static QString className() { return "hoot::OsmMapOperation"; }
 
   OsmMapOperation() : _numAffected(0), _numProcessed(0) {}
   virtual ~OsmMapOperation() = default;

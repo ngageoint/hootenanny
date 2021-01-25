@@ -45,7 +45,7 @@ namespace hoot
 class HausdorffDistanceExtractor : public AbstractDistanceExtractor
 {
 public:
-  static std::string className() { return "hoot::HausdorffDistanceExtractor"; }
+  static QString className() { return "hoot::HausdorffDistanceExtractor"; }
 
   HausdorffDistanceExtractor() = default;
   virtual ~HausdorffDistanceExtractor() = default;
@@ -53,8 +53,7 @@ public:
   virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getName() const
-  { return QString::fromStdString(HausdorffDistanceExtractor::className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates the Hausdorff distance between two features"; }

@@ -45,7 +45,7 @@ class LanguageDetector : public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::LanguageDetector"; }
+  static QString className() { return "hoot::LanguageDetector"; }
 
   LanguageDetector() = default;
   virtual ~LanguageDetector() = default;

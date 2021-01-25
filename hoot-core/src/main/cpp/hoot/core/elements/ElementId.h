@@ -51,7 +51,7 @@ class ElementId
 {
 public:
 
-  static std::string className() { return "ElementId"; }
+  static QString className() { return "ElementId"; }
 
   ElementId();
   ElementId(ElementType type, long id);

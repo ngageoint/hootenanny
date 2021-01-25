@@ -43,7 +43,7 @@ class StatusUpdateVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::StatusUpdateVisitor"; }
+  static QString className() { return "hoot::StatusUpdateVisitor"; }
 
   StatusUpdateVisitor();
   StatusUpdateVisitor(Status status, bool onlyUpdateIfStatusInvalid = false);
@@ -55,7 +55,7 @@ public:
 
   virtual QString getDescription() const { return "Sets element statuses"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

@@ -42,7 +42,7 @@ class TagKeyContainsCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagKeyContainsCriterion"; }
+  static QString className() { return "hoot::TagKeyContainsCriterion"; }
 
   TagKeyContainsCriterion() : _text(""), _caseSensitive(false) { }
   explicit TagKeyContainsCriterion(const QString& text);
@@ -60,7 +60,7 @@ public:
   void setText(const QString& text) { _text = text; }
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

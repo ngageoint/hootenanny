@@ -45,7 +45,7 @@ class ElementIdsVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::ElementIdsVisitor"; }
+  static QString className() { return "hoot::ElementIdsVisitor"; }
 
   ElementIdsVisitor(const ElementType& elementType);
   ElementIdsVisitor(const ElementType& elementType, ElementCriterion* pCrit);
@@ -126,7 +126,7 @@ public:
 
   virtual QString getDescription() const { return "Collects the element IDs visited"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

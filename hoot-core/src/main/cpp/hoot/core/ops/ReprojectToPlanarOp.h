@@ -42,14 +42,14 @@ class ReprojectToPlanarOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::ReprojectToPlanarOp"; }
+  static QString className() { return "hoot::ReprojectToPlanarOp"; }
 
   ReprojectToPlanarOp() = default;
   virtual ~ReprojectToPlanarOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getDescription() const { return "Reprojects to a custom planar projection"; }
 

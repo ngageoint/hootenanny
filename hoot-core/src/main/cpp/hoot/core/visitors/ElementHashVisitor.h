@@ -51,7 +51,7 @@ class ElementHashVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::ElementHashVisitor"; }
+  static QString className() { return "hoot::ElementHashVisitor"; }
 
   ElementHashVisitor();
   virtual ~ElementHashVisitor() = default;
@@ -79,7 +79,7 @@ public:
 
   virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }
   QMap<ElementId, QString> getElementIdsToHashes() const { return _elementIdsToHashes; }

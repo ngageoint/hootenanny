@@ -44,7 +44,7 @@ class CookieCutterOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::CookieCutterOp"; }
+  static QString className() { return "hoot::CookieCutterOp"; }
 
   CookieCutterOp();
   virtual ~CookieCutterOp() = default;
@@ -60,7 +60,7 @@ public:
   virtual QString getDescription() const override
   { return "Cookie cuts one dataset out of another"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

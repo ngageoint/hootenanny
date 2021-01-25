@@ -49,7 +49,7 @@ class MergerCreator
 {
 public:
 
-  static std::string className() { return "hoot::MergerCreator"; }
+  static QString className() { return "hoot::MergerCreator"; }
 
   MergerCreator() = default;
   virtual ~MergerCreator() = default;

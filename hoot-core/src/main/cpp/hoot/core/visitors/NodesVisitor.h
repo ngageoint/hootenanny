@@ -41,7 +41,7 @@ class NodesVisitor : public ConstElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::NodesVisitor"; }
+  static QString className() { return "hoot::NodesVisitor"; }
 
   NodesVisitor(QList<ConstNodePtr>& n) : _n(n) { }
   virtual ~NodesVisitor() = default;
@@ -50,7 +50,7 @@ public:
 
   virtual QString getDescription() const { return "Collects the nodes visited"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

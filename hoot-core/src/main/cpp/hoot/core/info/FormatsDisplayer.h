@@ -61,12 +61,12 @@ private:
 
   template<typename IoClass>
   static QString _getFormatsString(
-    const std::string& className, const QStringList extraFormats = QStringList(),
+    const QString& className, const QStringList extraFormats = QStringList(),
     const bool ogrOnly = false, const bool ogrReadOnly = false);
 
   template<typename IoClass>
   static QStringList _getFormats(
-    const std::string& className, const QStringList extraFormats = QStringList(),
+    const QString& className, const QStringList extraFormats = QStringList(),
     const bool ogrOnly = false, const bool ogrReadOnly = false);
 
   static QString _getFormatsSupportingBoundsString(const bool ogrOnly = false);

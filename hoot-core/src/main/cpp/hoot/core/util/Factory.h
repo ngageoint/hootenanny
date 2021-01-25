@@ -115,7 +115,7 @@ public:
     {
       throw HootException("Could not find object to check. (" + name + ")");
     }
-    if (_creators[name]->getBaseName() != QString::fromStdString(ExpectedBase::className()))
+    if (_creators[name]->getBaseName() != ExpectedBase::className())
     {
       return false;
     }
@@ -133,7 +133,7 @@ public:
     {
       throw HootException("Could not find object to check. (" + name + ")");
     }
-    if (_creators[name]->getBaseName() != QString::fromStdString(ExpectedBase::className()))
+    if (_creators[name]->getBaseName() != ExpectedBase::className())
     {
       throw HootException(
         "Class (" + name + ") does not have a base class of " + ExpectedBase::className());
@@ -148,7 +148,6 @@ public:
     return boost::any_cast<T*>(constructObject(name));
   }
 
-  std::vector<QString> getObjectNamesByBase(const std::string& baseName);
   std::vector<QString> getObjectNamesByBase(const QString& baseName);
 
   bool hasClass(const QString& name);
@@ -187,14 +186,6 @@ public:
     Factory::getInstance().registerCreator(
       std::shared_ptr<ObjectCreatorTemplate<Base, T>>(
         new ObjectCreatorTemplate<Base, T>(baseName, name)), baseClass);
-  }
-
-  AutoRegister(std::string baseName, std::string name, bool baseClass = false)
-  {
-    Factory::getInstance().registerCreator(
-      std::shared_ptr<ObjectCreatorTemplate<Base, T>>(
-        new ObjectCreatorTemplate<Base, T>(
-          QString::fromStdString(baseName), QString::fromStdString(name))), baseClass);
   }
 };
 

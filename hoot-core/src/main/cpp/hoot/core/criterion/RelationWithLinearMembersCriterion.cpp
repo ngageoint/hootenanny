@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/LinearCriterion.h>
 
 namespace hoot
 {
@@ -43,6 +44,16 @@ RelationWithMembersOfTypeCriterion()
 RelationWithLinearMembersCriterion::RelationWithLinearMembersCriterion(ConstOsmMapPtr map) :
 RelationWithMembersOfTypeCriterion(map)
 {
+}
+
+QString RelationWithLinearMembersCriterion::getCriterion() const
+{
+  return LinearCriterion::className();
+}
+
+GeometryTypeCriterion::GeometryType RelationWithLinearMembersCriterion::getGeometryType() const
+{
+  return LinearCriterion().getGeometryType();
 }
 
 }

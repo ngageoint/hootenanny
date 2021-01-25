@@ -44,7 +44,7 @@ class TagCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagCriterion"; }
+  static QString className() { return "hoot::TagCriterion"; }
 
   TagCriterion();
   TagCriterion(const QString& k, const QString& v);
@@ -64,7 +64,7 @@ public:
 
   virtual QString toString() const override;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
 private:
 

@@ -37,7 +37,7 @@ class RailwayWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::RailwayWayNodeCriterion"; }
+  static QString className() { return "hoot::RailwayWayNodeCriterion"; }
 
   RailwayWayNodeCriterion();
   RailwayWayNodeCriterion(ConstOsmMapPtr map);
@@ -50,7 +50,7 @@ public:
 
   virtual QString getDescription() const override { return "Identifies railway nodes"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

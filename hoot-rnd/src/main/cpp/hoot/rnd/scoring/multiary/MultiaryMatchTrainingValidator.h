@@ -37,7 +37,7 @@ class MultiaryMatchTrainingValidator : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::AddressCountVisitor"; }
+  static QString className() { return "hoot::AddressCountVisitor"; }
 
   MultiaryMatchTrainingValidator() = default;
   virtual ~MultiaryMatchTrainingValidator() = default;
@@ -49,7 +49,7 @@ public:
 
   virtual QString getDescription() const override { return "TODO"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 };
 
 }

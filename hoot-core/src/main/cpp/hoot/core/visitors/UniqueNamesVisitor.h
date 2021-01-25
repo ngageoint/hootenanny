@@ -44,7 +44,7 @@ class UniqueNamesVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static std::string className() { return "hoot::UniqueNamesVisitor"; }
+  static QString className() { return "hoot::UniqueNamesVisitor"; }
 
   UniqueNamesVisitor() = default;
   virtual ~UniqueNamesVisitor() = default;
@@ -57,7 +57,7 @@ public:
 
   virtual QString getDescription() const { return "Counts unique names"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

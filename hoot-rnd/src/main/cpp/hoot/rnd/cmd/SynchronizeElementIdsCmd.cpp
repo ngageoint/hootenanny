@@ -45,7 +45,7 @@ class SynchronizeElementIdsCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::SynchronizeElementIdsCmd"; }
+  static QString className() { return "hoot::SynchronizeElementIdsCmd"; }
 
   SynchronizeElementIdsCmd()
   {

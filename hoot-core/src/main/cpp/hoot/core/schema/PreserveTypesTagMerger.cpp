@@ -45,8 +45,7 @@ QString PreserveTypesTagMerger::ALT_TYPES_TAG_KEY = "alt_types";
 HOOT_FACTORY_REGISTER(TagMerger, PreserveTypesTagMerger)
 
 PreserveTypesTagMerger::PreserveTypesTagMerger(const QSet<QString>& skipTagKeys) :
-_overwrite1(ConfigOptions().getTagMergerDefault() ==
-              QString::fromStdString(OverwriteTag1Merger::className())),
+_overwrite1(ConfigOptions().getTagMergerDefault() == OverwriteTag1Merger::className()),
 _skipTagKeys(skipTagKeys)
 {
   setConfiguration(conf());

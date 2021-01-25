@@ -48,7 +48,7 @@ class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsu
 {
 public:
 
-  static std::string className() { return "hoot::RemoveDuplicateWayNodesVisitor"; }
+  static QString className() { return "hoot::RemoveDuplicateWayNodesVisitor"; }
 
   RemoveDuplicateWayNodesVisitor() = default;
   virtual ~RemoveDuplicateWayNodesVisitor() = default;
@@ -79,7 +79,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

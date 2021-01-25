@@ -47,14 +47,14 @@ class BuildingOutlineUpdateOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::BuildingOutlineUpdateOp"; }
+  static QString className() { return "hoot::BuildingOutlineUpdateOp"; }
 
   BuildingOutlineUpdateOp() = default;
   virtual ~BuildingOutlineUpdateOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   virtual QString getInitStatusMessage() const
   { return "Updating building outlines..."; }

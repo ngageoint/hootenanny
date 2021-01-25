@@ -37,7 +37,7 @@ class BuildingMergerCreator : public MergerCreator
 {
 public:
 
-  static std::string className() { return "hoot::BuildingMergerCreator"; }
+  static QString className() { return "hoot::BuildingMergerCreator"; }
 
   BuildingMergerCreator() = default;
   virtual ~BuildingMergerCreator() = default;

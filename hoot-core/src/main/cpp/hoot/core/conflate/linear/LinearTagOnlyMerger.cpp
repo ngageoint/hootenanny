@@ -127,12 +127,12 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
     QString mergerName;
     if (!_networkMerger)
     {
-      mergerName = QString::fromStdString(LinearSnapMerger::className());
+      mergerName = LinearSnapMerger::className();
       needsReview = LinearSnapMerger::_mergePair(map, eid1, eid2, replaced);
     }
     else
     {
-      mergerName = QString::fromStdString(PartialNetworkMerger::className());
+      mergerName = PartialNetworkMerger::className();
       _networkMerger->apply(map, replaced);
     }
     if (needsReview)

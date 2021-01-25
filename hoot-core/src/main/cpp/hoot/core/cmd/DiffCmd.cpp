@@ -52,7 +52,7 @@ class DiffCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::DiffCmd"; }
+  static QString className() { return "hoot::DiffCmd"; }
 
   DiffCmd() = default;
 

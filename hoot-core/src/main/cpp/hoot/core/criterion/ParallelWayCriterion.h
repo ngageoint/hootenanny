@@ -45,7 +45,7 @@ class ParallelWayCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ParallelWayCriterion"; }
+  static QString className() { return "hoot::ParallelWayCriterion"; }
 
   ParallelWayCriterion() = default;
   ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel = true);
@@ -66,7 +66,7 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Line; }
 
- virtual QString getName() const override { return QString::fromStdString(className()); }
+ virtual QString getName() const override { return className(); }
 
 private:
 

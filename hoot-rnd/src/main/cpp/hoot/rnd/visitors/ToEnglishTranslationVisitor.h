@@ -48,7 +48,7 @@ class ToEnglishTranslationVisitor : public ElementVisitor, public Configurable
 
 public:
 
-  static std::string className() { return "hoot::ToEnglishTranslationVisitor"; }
+  static QString className() { return "hoot::ToEnglishTranslationVisitor"; }
 
   ToEnglishTranslationVisitor();
   virtual ~ToEnglishTranslationVisitor();
@@ -70,7 +70,7 @@ public:
       QString::number(_numProcessedElements) + " different elements";
   }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 protected:
 

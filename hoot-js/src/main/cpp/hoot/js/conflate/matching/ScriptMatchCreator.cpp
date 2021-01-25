@@ -1026,7 +1026,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   }
 
   QFileInfo fi(path);
-  result.className = (className() + "," + fi.fileName()).toStdString();
+  result.className = className() + "," + fi.fileName();
 
   return result;
 }
@@ -1083,7 +1083,7 @@ std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
 QString ScriptMatchCreator::getName() const
 {
   QFileInfo scriptFileInfo(_scriptPath);
-  return QString::fromStdString(className()) + ";" + scriptFileInfo.fileName();
+  return className() + ";" + scriptFileInfo.fileName();
 }
 
 QStringList ScriptMatchCreator::getCriteria() const

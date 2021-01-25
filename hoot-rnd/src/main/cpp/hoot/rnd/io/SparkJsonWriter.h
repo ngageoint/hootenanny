@@ -48,7 +48,7 @@ class SparkJsonWriter : public PartialOsmMapWriter
 {
 public:
 
-  static std::string className() { return "hoot::SparkJsonWriter"; }
+  static QString className() { return "hoot::SparkJsonWriter"; }
 
   SparkJsonWriter();
   virtual ~SparkJsonWriter() = default;

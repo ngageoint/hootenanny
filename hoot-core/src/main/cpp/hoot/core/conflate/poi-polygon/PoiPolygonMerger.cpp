@@ -86,7 +86,7 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
     // Attribute Conflation as well, via tag.merger.overwrite.exclude.
     if (_autoMergeManyPoiToOnePolyMatches)
     {
-      tagMergerClass = QString::fromStdString(PreserveTypesTagMerger::className());
+      tagMergerClass = PreserveTypesTagMerger::className();
     }
     // Otherwise, allow for calling class to specify the tag merger outside of Configurable.
     else if (!_tagMergerClass.trimmed().isEmpty())

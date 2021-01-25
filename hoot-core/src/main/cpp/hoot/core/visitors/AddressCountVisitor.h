@@ -45,7 +45,7 @@ class AddressCountVisitor : public ConstElementVisitor, public SingleStatistic, 
 {
 public:
 
-  static std::string className() { return "hoot::AddressCountVisitor"; }
+  static QString className() { return "hoot::AddressCountVisitor"; }
 
   AddressCountVisitor() : _totalCount(0) { }
   virtual ~AddressCountVisitor() = default;
@@ -59,7 +59,7 @@ public:
   virtual QString getDescription() const
   { return "Counts the total number of valid element addresses"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

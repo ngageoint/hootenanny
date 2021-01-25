@@ -42,7 +42,7 @@ class RandomElementRenamer : public ElementVisitor, public RngConsumer, public C
 {
 public:
 
-  static std::string className() { return "hoot::RandomElementRenamer"; }
+  static QString className() { return "hoot::RandomElementRenamer"; }
 
   RandomElementRenamer();
   virtual ~RandomElementRenamer() = default;
@@ -74,7 +74,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Randomly changed " + QString::number(_numAffected) + " element names"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

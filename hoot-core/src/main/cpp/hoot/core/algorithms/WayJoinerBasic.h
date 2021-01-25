@@ -42,7 +42,7 @@ class WayJoinerBasic : public WayJoiner
 {
 public:
 
-  static std::string className() { return "hoot::WayJoinerBasic"; }
+  static QString className() { return "hoot::WayJoinerBasic"; }
 
   WayJoinerBasic() = default;
   virtual ~WayJoinerBasic() = default;
@@ -55,7 +55,7 @@ public:
   virtual QString getDescription() const override
   { return "Rejoins ways split during pre-conflation cleaning or conflation matching."; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 };
 
 }

@@ -42,7 +42,7 @@ class RandomTagModifier : public ElementVisitor, public RngConsumer, public Conf
 {
 public:
 
-  static std::string className() { return "hoot::RandomTagModifier"; }
+  static QString className() { return "hoot::RandomTagModifier"; }
 
   RandomTagModifier();
   virtual ~RandomTagModifier() = default;
@@ -66,7 +66,7 @@ public:
 
   virtual QString getDescription() const { return "Randomly modifies feature tags"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

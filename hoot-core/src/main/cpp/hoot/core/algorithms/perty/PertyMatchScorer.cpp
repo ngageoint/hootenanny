@@ -222,7 +222,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
     LOG_VARD(numTotalTags);
   }
 
-  if (ConfigOptions().getConflatePreOps().contains(QString::fromStdString(RubberSheet::className())))
+  if (ConfigOptions().getConflatePreOps().contains(RubberSheet::className()))
   {
     // move Unknown2 toward Unknown1
     conf().set(RubberSheet::refKey(), true);

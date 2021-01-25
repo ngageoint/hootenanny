@@ -48,7 +48,7 @@ class Soundex : public StringDistance
 {
 public:
 
-  static std::string className() { return "hoot::Soundex"; }
+  static QString className() { return "hoot::Soundex"; }
 
   Soundex() = default;
   virtual ~Soundex() = default;
@@ -79,7 +79,7 @@ public:
 
   QString toString() const override { return "Soundex"; }
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Returns a string comparison score based on the Soundex algorithm"; }

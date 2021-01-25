@@ -40,14 +40,14 @@ class DistanceScoreExtractor : public WayFeatureExtractor
 {
 public:
 
-  static std::string className() { return "hoot::DistanceScoreExtractor"; }
+  static QString className() { return "hoot::DistanceScoreExtractor"; }
 
   DistanceScoreExtractor(ValueAggregatorPtr wayAgg);
 
   DistanceScoreExtractor() = default;
   virtual ~DistanceScoreExtractor() = default;
 
-  virtual QString getName() const override { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates metric distance between features"; }

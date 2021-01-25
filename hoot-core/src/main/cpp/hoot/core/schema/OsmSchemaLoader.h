@@ -35,7 +35,7 @@ namespace hoot
 class OsmSchemaLoader
 {
 public:
-  static std::string className() { return "hoot::OsmSchemaLoader"; }
+  static QString className() { return "hoot::OsmSchemaLoader"; }
 
   OsmSchemaLoader() = default;
 

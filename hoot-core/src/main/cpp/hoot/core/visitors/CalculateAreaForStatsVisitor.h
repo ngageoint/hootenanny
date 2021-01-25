@@ -42,7 +42,7 @@ class CalculateAreaForStatsVisitor : public ElementConstOsmMapVisitor, public Si
 {
 public:
 
-  static std::string className() { return "hoot::CalculateAreaForStatsVisitor"; }
+  static QString className() { return "hoot::CalculateAreaForStatsVisitor"; }
 
   CalculateAreaForStatsVisitor() : _total(0) { }
   virtual ~CalculateAreaForStatsVisitor() = default;
@@ -61,7 +61,7 @@ public:
   // We don't use this outside of stats, so hide it from the info API.
   virtual QString getDescription() const { return ""; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

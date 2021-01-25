@@ -53,7 +53,7 @@ class ManualMatchValidator : public ConstOsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::ManualMatchValidator"; }
+  static QString className() { return "hoot::ManualMatchValidator"; }
 
   ManualMatchValidator();
   virtual ~ManualMatchValidator() = default;
@@ -105,7 +105,7 @@ public:
   void setAllowUuidManualMatchIds(bool allow) { _allowUuidManualMatchIds = allow; }
   void setFullDebugOutput(bool fullDebugOutput) { _fullDebugOutput = fullDebugOutput; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

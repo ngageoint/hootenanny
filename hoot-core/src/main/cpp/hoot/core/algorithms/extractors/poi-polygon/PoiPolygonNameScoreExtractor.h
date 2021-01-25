@@ -44,13 +44,12 @@ class PoiPolygonNameScoreExtractor : public FeatureExtractorBase, public Configu
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonNameScoreExtractor"; }
+  static QString className() { return "hoot::PoiPolygonNameScoreExtractor"; }
 
   PoiPolygonNameScoreExtractor();
   virtual ~PoiPolygonNameScoreExtractor() = default;
 
-  virtual QString getName() const
-  { return QString::fromStdString(PoiPolygonNameScoreExtractor::className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1

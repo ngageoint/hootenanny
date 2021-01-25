@@ -45,7 +45,7 @@ class SplitLongLinearWaysVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::SplitLongLinearWaysVisitor"; }
+  static QString className() { return "hoot::SplitLongLinearWaysVisitor"; }
 
   static int logWarnCount;
 
@@ -69,7 +69,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Split " + QString::number(_numAffected) + " ways"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
 private:
 

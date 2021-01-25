@@ -45,7 +45,7 @@ class DeDuplicateCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::DeDuplicateCmd"; }
+  static QString className() { return "hoot::DeDuplicateCmd"; }
 
   DeDuplicateCmd()
   {

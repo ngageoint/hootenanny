@@ -37,7 +37,7 @@ class MarkForReviewMergerCreator : public MergerCreator
 {
 public:
 
-  static std::string className() { return "hoot::MarkForReviewMergerCreator"; }
+  static QString className() { return "hoot::MarkForReviewMergerCreator"; }
 
   MarkForReviewMergerCreator() = default;
   virtual ~MarkForReviewMergerCreator() = default;

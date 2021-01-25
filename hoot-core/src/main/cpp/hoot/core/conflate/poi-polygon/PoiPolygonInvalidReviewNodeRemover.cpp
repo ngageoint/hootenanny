@@ -177,8 +177,8 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
 QStringList PoiPolygonInvalidReviewNodeRemover::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(PoiCriterion::className()));
-  criteria.append(QString::fromStdString(BuildingCriterion::className()));
+  criteria.append(PoiCriterion::className());
+  criteria.append(BuildingCriterion::className());
   return criteria;
 }
 
