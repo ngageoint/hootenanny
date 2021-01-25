@@ -54,7 +54,8 @@ public:
 
   static QString className() { return "hoot::SampledAngleHistogramExtractor"; }
 
-  virtual QString getName() const override { return className(); }
+  virtual QString getClassName() const override
+  { return SampledAngleHistogramExtractor::className(); }
 
   virtual void setConfiguration(const Settings& conf) override;
 

@@ -67,7 +67,7 @@ public:
     }
   }
 
-  QString getDescription() const override { return ""; }
+  virtual QString getDescription() const override { return ""; }
   virtual QString getName() const override { return ""; }
 
 private:
@@ -95,7 +95,7 @@ public:
     }
   }
 
-  QString getDescription() const override { return ""; }
+  virtual QString getDescription() const override { return ""; }
   virtual QString getName() const override { return ""; }
 
 private:
@@ -141,9 +141,9 @@ double EdgeDistanceExtractor::distance(
   return min(d1, d2);
 }
 
-QString EdgeDistanceExtractor::toString() const
+QString EdgeDistanceExtractor::getName() const
 {
-  return (QString("EdgeDistance") + _aggregator->toString());
+  return QString("EdgeDistance") + _aggregator->toString();
 }
 
 double EdgeDistanceExtractor::_oneDistance(

@@ -77,7 +77,7 @@ void StringDistanceJs::New(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
-  QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
   StringDistance* c = Factory::getInstance().constructObject<StringDistance>(className);
   StringDistanceJs* obj = new StringDistanceJs(StringDistancePtr(c));

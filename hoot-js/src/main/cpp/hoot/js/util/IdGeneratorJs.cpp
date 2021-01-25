@@ -86,11 +86,13 @@ void IdGeneratorJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
   if (className == "Object")
   {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-      "Invalid IdGenerator. Did you forget 'new'?"))));
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        HootExceptionJs::create(
+          IllegalArgumentException("Invalid IdGenerator. Did you forget 'new'?"))));
   }
   else
   {

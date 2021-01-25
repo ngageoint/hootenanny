@@ -47,7 +47,7 @@ public:
   WeightedShapeDistanceExtractor() = default;
   virtual ~WeightedShapeDistanceExtractor() = default;
 
-  virtual QString getName() const override { return className(); }
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates shape distance between features"; }

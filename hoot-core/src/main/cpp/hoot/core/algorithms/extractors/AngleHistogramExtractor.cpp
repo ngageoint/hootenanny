@@ -76,6 +76,8 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
+  virtual QString getClassName() const { return ""; }
+  virtual QString toString() const { return ""; }
   virtual QString getName() const { return ""; }
 
 private:
@@ -155,9 +157,9 @@ double AngleHistogramExtractor::extract(const OsmMap& map, const ConstElementPtr
   return 1.0 - diff;
 }
 
-QString AngleHistogramExtractor::toString() const
+QString AngleHistogramExtractor::getName() const
 {
-  QString result = getName();
+  QString result = getClassName();
   if (_smoothing > 0.0)
   {
     result += QString(" %2").arg(_smoothing, 0, 'g', 4);

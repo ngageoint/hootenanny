@@ -102,9 +102,9 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   return _pointAgg->aggregate(distances);
 }
 
-QString WeightedMetricDistanceExtractor::toString() const
+QString WeightedMetricDistanceExtractor::getName() const
 {
-  return getName() + " way agg: " + _agg->toString() + " point agg: " + _pointAgg->toString();
+  return getClassName() + " way agg: " + _agg->toString() + " point agg: " + _pointAgg->toString();
 }
 
 void WeightedMetricDistanceExtractor::setPointAggregator(const QString& aggregator)

@@ -51,7 +51,7 @@ public:
   virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getName() const { return className(); }
+  virtual QString getClassName() const { return CentroidDistanceExtractor::className(); }
 
   virtual QString getDescription() const
   { return "Finds feature centroids and calculates the distance between them"; }

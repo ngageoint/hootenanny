@@ -78,7 +78,7 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  const QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
   LOG_VART(className);
   ElementVisitor* vis = Factory::getInstance().constructObject<ElementVisitor>(className);
   ElementVisitorJs* obj = new ElementVisitorJs(vis);

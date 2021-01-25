@@ -135,14 +135,13 @@ void RfExtractorClassifier::import(QDomElement& docRoot)
     {
       LOG_WARN(
         "An extractor used by the model is not being calculated. We will still try, but this will "
-        "undoubtably result in poor quality matches. Missing extractors:");
+        "undoubtably result in poor quality matches. Missing extractors: " << missingExtractors);
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
     {
       LOG_WARN(className() << ": " << Log::LOG_WARN_LIMIT_REACHED_MESSAGE);
     }
     logWarnCount++;
-    LOG_TRACE("Missing extractors: " << missingExtractors);
     LOG_TRACE("Available extractors: " << extractorNames);
   }
 }

@@ -115,7 +115,7 @@ void TagDifferencerJs::New(const FunctionCallbackInfo<Value>& args)
 
   try
   {
-    QString className = str(args.This()->GetConstructorName());
+    const QString className = "hoot::" + str(args.This()->GetConstructorName());
     if (className == "Object")
     {
       args.GetReturnValue().Set(

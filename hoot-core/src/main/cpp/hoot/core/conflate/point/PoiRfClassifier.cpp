@@ -125,8 +125,7 @@ PoiRfClassifier::PoiRfClassifier()
     {
       LOG_WARN(
         "An extractor used by the model is not being calculated. We will still try, but this will "
-        "undoubtably result in poor quality matches. Missing extractors:");
-      LOG_TRACE("Missing extractors: " << missingExtractors);
+        "undoubtably result in poor quality matches. Missing extractors: " << missingExtractors);
       LOG_TRACE("Available extractors: " << extractorNames);
     }
     else if (logWarnCount == Log::getWarnMessageLimit())

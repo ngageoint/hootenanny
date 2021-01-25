@@ -60,7 +60,7 @@ public:
 
   static QString className() { return "hoot::CompactnessExtractor"; }
 
-  virtual QString getName() const override { return className(); }
+  virtual QString getClassName() const override { return CompactnessExtractor::className(); }
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;

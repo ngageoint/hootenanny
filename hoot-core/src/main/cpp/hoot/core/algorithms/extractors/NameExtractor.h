@@ -46,9 +46,9 @@ public:
 
   static QString className() { return "hoot::NameExtractor"; }
 
-  virtual QString getName() const { return className(); }
+  virtual QString getClassName() const { return NameExtractor::className(); }
 
-  virtual QString toString() const;
+  virtual QString getName() const;
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;

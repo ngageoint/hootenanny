@@ -47,7 +47,7 @@ public:
   DistanceScoreExtractor() = default;
   virtual ~DistanceScoreExtractor() = default;
 
-  virtual QString getName() const override { return className(); }
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates metric distance between features"; }

@@ -84,7 +84,7 @@ void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  const QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
   LOG_VART(className);
   ElementCriterion* c = Factory::getInstance().constructObject<ElementCriterion>(className);
   ElementCriterionJs* obj = new ElementCriterionJs(c);

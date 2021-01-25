@@ -87,7 +87,7 @@ void OsmMapOperationJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
   if (className == "Object")
   {
     args.GetReturnValue().Set(

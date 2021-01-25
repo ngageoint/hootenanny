@@ -110,7 +110,7 @@ void FeatureExtractorJs::New(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(v8::Isolate::GetCurrent());
 
-  QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
   FeatureExtractorPtr fe(Factory::getInstance().constructObject<FeatureExtractor>(className));
   FeatureExtractorJs* obj = new FeatureExtractorJs(fe);

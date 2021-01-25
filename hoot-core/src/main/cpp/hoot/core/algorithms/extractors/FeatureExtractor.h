@@ -66,6 +66,15 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const = 0;
 
+  // TODO: get rid of?
+  virtual QString getClassName() const = 0;
+
+  // TODO: make default on all children
+  virtual QString getName() const { return getClassName(); }
+
+  // TODO: remove
+  virtual QString toString() const { return ""; }
+
   /**
    * Returns the factor type for this feature/factor (Nominal or Numeric).
    */
@@ -77,8 +86,6 @@ public:
   virtual Tgs::DataFrame::NullTreatment getNullTreatment() const = 0;
 
   static bool isNull(double v) { return v == nullValue() || ::qIsNaN(v); }
-
-  virtual QString toString() const override { return ""; }
 };
 
 typedef std::shared_ptr<FeatureExtractor> FeatureExtractorPtr;
