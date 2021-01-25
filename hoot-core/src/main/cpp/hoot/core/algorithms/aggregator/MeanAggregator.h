@@ -43,9 +43,7 @@ public:
 
   virtual double aggregate(std::vector<double>& d) const override;
 
-  virtual QString getName() const override { return className(); }
-
-  virtual QString toString() const override { return className(); }
+  virtual QString toString() const override { return "MeanAggregator"; }
 
   virtual QString getDescription() const override
   { return "Aggregates data based on the mean value"; }

@@ -49,9 +49,7 @@ public:
 
   virtual double aggregate(std::vector<double>& d) const;
 
-  virtual QString getName() const override { return className(); }
-
-  virtual QString toString() const override { return className(); }
+  virtual QString toString() const { return "RmseAggregator"; }
 
   virtual QString getDescription() const
   { return "Aggregates data based on the Root Mean Square Deviation value"; }

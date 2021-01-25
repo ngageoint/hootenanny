@@ -52,8 +52,6 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getName() const override { return className(); }
-
   virtual QString toString() const override
   { return QString("QuantileAggregator %1").arg(_quantile); }
 
