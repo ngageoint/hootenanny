@@ -28,7 +28,7 @@
 #define ADDREF1VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -54,7 +54,7 @@ public:
 
   virtual QString getDescription() const { return "Adds REF1 tags"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

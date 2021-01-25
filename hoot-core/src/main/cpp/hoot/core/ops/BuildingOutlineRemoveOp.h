@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
 
 // Standard
 #include <set>
@@ -53,7 +52,7 @@ public:
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual QString getInitStatusMessage() const { return "Removing outlines around buildings..."; }
 
@@ -65,8 +64,7 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(BuildingCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
 private:
 

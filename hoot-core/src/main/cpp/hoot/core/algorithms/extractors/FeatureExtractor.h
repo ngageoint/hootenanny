@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 // Qt
 #include <qnumeric.h>
@@ -47,7 +48,7 @@ class OsmMap;
 /**
  * Extracts a single feature (AKA factor) for a given element pair.
  */
-class FeatureExtractor
+class FeatureExtractor : public ApiEntityInfo
 {
 public:
 
@@ -65,10 +66,6 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const = 0;
 
-  virtual std::string getClassName() const = 0;
-
-  virtual std::string getName() const { return getClassName(); }
-
   /**
    * Returns the factor type for this feature/factor (Nominal or Numeric).
    */
@@ -80,6 +77,8 @@ public:
   virtual Tgs::DataFrame::NullTreatment getNullTreatment() const = 0;
 
   static bool isNull(double v) { return v == nullValue() || ::qIsNaN(v); }
+
+  virtual QString toString() const override { return ""; }
 };
 
 typedef std::shared_ptr<FeatureExtractor> FeatureExtractorPtr;

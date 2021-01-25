@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/network/NetworkDetails.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -65,8 +64,7 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
 private:
 
@@ -77,8 +75,8 @@ private:
   double _matchScoringFunctionCurveMidpointX;
   double _matchScoringFunctionCurveSteepness;
 
-  ConstMatchPtr _createMatch(const NetworkDetailsPtr &map, NetworkEdgeScorePtr e,
-    ConstMatchThresholdPtr mt);
+  ConstMatchPtr _createMatch(
+    const NetworkDetailsPtr &map, NetworkEdgeScorePtr e, ConstMatchThresholdPtr mt);
 };
 
 }

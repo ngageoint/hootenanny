@@ -73,7 +73,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const
   { return "Cleaning elements with JOSM..."; }
@@ -83,7 +83,7 @@ public:
   void setAddDetailTags(const bool add) { _addDetailTags = add; }
   int getNumFailedCleaningOperations() const { return _numFailedCleaningOperations; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 protected:
 

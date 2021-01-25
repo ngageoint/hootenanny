@@ -105,7 +105,7 @@ public:
   void setAllowUuidManualMatchIds(bool allow) { _allowUuidManualMatchIds = allow; }
   void setFullDebugOutput(bool fullDebugOutput) { _fullDebugOutput = fullDebugOutput; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

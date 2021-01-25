@@ -62,7 +62,8 @@ public:
   AddressScoreExtractor();
   virtual ~AddressScoreExtractor() = default;
 
-  virtual std::string getClassName() const { return AddressScoreExtractor::className(); }
+  virtual QString getName() const
+  { return QString::fromStdString(AddressScoreExtractor::className()); }
 
   virtual void setConfiguration(const Settings& conf);
 

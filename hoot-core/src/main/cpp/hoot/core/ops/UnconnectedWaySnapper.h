@@ -98,24 +98,24 @@ public:
                                        const WayPtr& connectTo);
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const
   { return "Snapping unconnected ways to the nearest way..."; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getCompletedStatusMessage() const
   { return "Snapped " + QString::number(_numAffected) + " unconnected ways."; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getDescription() const
   { return "Snaps unconnected ways to the nearest way."; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   /**
    * @see Configurable

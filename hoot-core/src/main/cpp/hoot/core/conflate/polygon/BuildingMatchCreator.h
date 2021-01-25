@@ -74,8 +74,7 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(BuildingCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
 private:
 

@@ -81,27 +81,27 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
     LOG_VART(ConfigOptions().getPoiPolygonTagMerger());
     LOG_VART(ConfigOptions().getTagMergerDefault());
 
-    std::string tagMergerClass;
+    QString tagMergerClass;
     // We force this setting always preserve types when merging many POIs in. It works with
     // Attribute Conflation as well, via tag.merger.overwrite.exclude.
     if (_autoMergeManyPoiToOnePolyMatches)
     {
-      tagMergerClass = PreserveTypesTagMerger::className();
+      tagMergerClass = QString::fromStdString(PreserveTypesTagMerger::className());
     }
     // Otherwise, allow for calling class to specify the tag merger outside of Configurable.
     else if (!_tagMergerClass.trimmed().isEmpty())
     {
-      tagMergerClass = _tagMergerClass.toStdString();
+      tagMergerClass = _tagMergerClass;
     }
     // Otherwise, let's see if the tag merger was set specifically for poi/poly.
     else if (!ConfigOptions().getPoiPolygonTagMerger().trimmed().isEmpty())
     {
-      tagMergerClass = ConfigOptions().getPoiPolygonTagMerger().trimmed().toStdString();
+      tagMergerClass = ConfigOptions().getPoiPolygonTagMerger().trimmed();
     }
     // Otherwise, let's try the default configured tag merger.
     else if (!ConfigOptions().getTagMergerDefault().trimmed().isEmpty())
     {
-      tagMergerClass = ConfigOptions().getTagMergerDefault().trimmed().toStdString();
+      tagMergerClass = ConfigOptions().getTagMergerDefault().trimmed();
     }
     else
     {
@@ -117,7 +117,7 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
       critConfig->setConfiguration(conf());
     }
   }
-  LOG_VART(_tagMerger->getClassName());
+  LOG_VART(_tagMerger->getName());
   return _tagMerger;
 }
 

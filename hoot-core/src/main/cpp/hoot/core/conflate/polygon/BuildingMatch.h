@@ -63,7 +63,7 @@ public:
 
   virtual MatchMembers getMatchMembers() const override { return MatchMembers::Polygon; }
 
-  virtual QString getMatchName() const override { return MATCH_NAME; }
+  virtual QString getName() const override { return MATCH_NAME; }
 
   virtual double getProbability() const override;
 

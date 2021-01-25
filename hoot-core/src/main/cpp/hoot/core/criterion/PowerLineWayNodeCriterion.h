@@ -50,8 +50,7 @@ public:
 
   virtual QString getDescription() const override { return "Identifies power line nodes"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 };
 
 }

@@ -58,9 +58,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies features that need to be reviewed"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
-
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 private:
 

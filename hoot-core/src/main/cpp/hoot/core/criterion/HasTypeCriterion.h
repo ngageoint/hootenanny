@@ -52,8 +52,7 @@ public:
   virtual QString getDescription() const
   { return "Determines if an element has a recognizable type."; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 };
 
 }

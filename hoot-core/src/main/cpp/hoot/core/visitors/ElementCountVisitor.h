@@ -54,7 +54,7 @@ public:
 
   virtual QString getDescription() const { return "Counts the number of elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

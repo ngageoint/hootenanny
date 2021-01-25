@@ -60,12 +60,12 @@ public:
    */
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
 
-  virtual QString getClassName() const  = 0;
-
   void setConfiguration(const Settings& conf) override
   {
     _caseSensitive = ConfigOptions(conf).getDuplicateNameCaseSensitive();
   }
+
+  virtual QString toString() const override { return ""; }
 
 protected:
 

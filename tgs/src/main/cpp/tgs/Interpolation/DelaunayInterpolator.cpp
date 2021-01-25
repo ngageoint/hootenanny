@@ -272,7 +272,7 @@ void DelaunayInterpolator::_readInterpolator(QIODevice& is)
   _kFold = kf;
 }
 
-string DelaunayInterpolator::toString() const
+QString DelaunayInterpolator::toString() const
 {
   return "DelaunayInterpolator";
 }

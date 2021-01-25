@@ -97,7 +97,7 @@ namespace hoot
 class VersionCmd : public BaseCommand
 {
 public:
-  static string className() { return "hoot::VersionCmd"; }
+  static std::string className() { return "hoot::VersionCmd"; }
 
   VersionCmd() = default;
 

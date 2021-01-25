@@ -79,6 +79,8 @@ public:
 
   QString toString() const override { return "Soundex"; }
 
+  virtual QString getName() const override { return QString::fromStdString(className()); }
+
   virtual QString getDescription() const override
   { return "Returns a string comparison score based on the Soundex algorithm"; }
 };

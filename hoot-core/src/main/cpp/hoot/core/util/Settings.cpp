@@ -36,7 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 
 // Boost
@@ -882,7 +882,7 @@ QString Settings::_replaceVariablesValue(QString value, std::set<QString> used) 
   return value;
 }
 
-void Settings::set(const QString& key, const QStringList &value)
+void Settings::set(const QString& key, const QStringList& value)
 {
   set(key, value.join(";"));
 }

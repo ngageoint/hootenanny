@@ -57,7 +57,7 @@ class MultiaryScorePoiMatchesCmd : public BaseCommand
 
 public:
 
-  static string className() { return "hoot::MultiaryScorePoiMatchesCmd"; }
+  static std::string className() { return "hoot::MultiaryScorePoiMatchesCmd"; }
 
   MultiaryScorePoiMatchesCmd() = default;
 

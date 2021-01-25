@@ -65,7 +65,7 @@ public:
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
-  virtual std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   /**
    * Removes duplicate nodes from a map

@@ -55,7 +55,7 @@ class PlotNodeDensityCmd : public BaseCommand
 
   public:
 
-    static string className() { return "hoot::PlotNodeDensityCmd"; }
+    static std::string className() { return "hoot::PlotNodeDensityCmd"; }
 
     PlotNodeDensityCmd() = default;
 

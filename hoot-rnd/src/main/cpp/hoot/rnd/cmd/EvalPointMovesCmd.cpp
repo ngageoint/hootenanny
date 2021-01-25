@@ -62,7 +62,7 @@ class EvalPointMovesCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::EvalPointMovesCmd"; }
+  static std::string className() { return "hoot::EvalPointMovesCmd"; }
 
   EvalPointMovesCmd() = default;
 

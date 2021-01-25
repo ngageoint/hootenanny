@@ -66,7 +66,7 @@ public:
   virtual QString getDescription() const
   { return "Counts the number of tags translated to a schema"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual QString getInitStatusMessage() const { return "Counting translated tags..."; }
 

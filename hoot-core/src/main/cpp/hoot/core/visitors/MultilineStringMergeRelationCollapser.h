@@ -80,7 +80,7 @@ public:
   virtual QString getDescription() const
   { return "Collapses multilinestring relations created during conflation merging"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   /**
    * @see Configurable

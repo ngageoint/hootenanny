@@ -29,8 +29,8 @@
 #define REMOVE_DUPLICATE_RELATION_MEMBER_VISITOR_H
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/info/OperationStatus.h>
 
 namespace hoot
 {
@@ -58,7 +58,7 @@ public:
 
   virtual QString getDescription() const { return "Removes duplicate relation members"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 };
 
 }

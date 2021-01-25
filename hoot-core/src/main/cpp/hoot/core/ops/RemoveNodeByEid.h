@@ -51,7 +51,7 @@ public:
    * @return the name of the class
    */
   static std::string className() { return "hoot::RemoveNodeByEid"; }
-  std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   /**
    * @brief RemoveNodeByEid Removes a node from a map

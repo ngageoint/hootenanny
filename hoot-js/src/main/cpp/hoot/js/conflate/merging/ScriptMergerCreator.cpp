@@ -81,9 +81,9 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
       plugin.Reset(current, sm->getPlugin());
       set<pair<ElementId, ElementId>> s = sm->getMatchPairs();
       eids.insert(s.begin(), s.end());
-      if (matchType.contains(sm->getMatchName()) == false)
+      if (matchType.contains(sm->getName()) == false)
       {
-        matchType.append(sm->getMatchName());
+        matchType.append(sm->getName());
       }
     }
   }
@@ -124,7 +124,7 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
 vector<CreatorDescription> ScriptMergerCreator::getAllCreators() const
 {
   CreatorDescription d;
-  d.className = className();
+  d.className = QString::fromStdString(className());
   d.description = "Generates mergers used in Generic Conflation";
   d.experimental = false;
   vector<CreatorDescription> result;

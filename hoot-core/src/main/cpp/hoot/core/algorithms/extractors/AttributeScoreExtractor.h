@@ -48,9 +48,9 @@ public:
   AttributeScoreExtractor(bool useWeight = false);
   virtual ~AttributeScoreExtractor() = default;
 
-  virtual std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
-  virtual std::string getName() const override;
+  virtual QString toString() const override;
 
   virtual void setConfiguration(const Settings& conf);
 

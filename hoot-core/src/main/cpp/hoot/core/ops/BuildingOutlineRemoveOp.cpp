@@ -39,6 +39,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 using namespace std;
 
@@ -77,6 +78,11 @@ void BuildingOutlineRemoveOp::_removeOutline(const std::shared_ptr<Relation>& bu
       _numAffected++;
     }
   }
+}
+
+QStringList BuildingOutlineRemoveOp::getCriteria() const
+{
+  return QStringList(QString::fromStdString(BuildingCriterion::className()));
 }
 
 }

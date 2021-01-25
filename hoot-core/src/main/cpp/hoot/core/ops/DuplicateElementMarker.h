@@ -75,7 +75,7 @@ public:
 
   virtual QString getDescription() const { return "Adds a tag to elements who have duplicates"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   std::set<QString> getContainingWayTypes() const { return _containingWayTypes; }
 

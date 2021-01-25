@@ -758,12 +758,12 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 //    }
   }
 
-  //We only want to run this if the previous match distance calculation was too large.
-  //Tightening up the requirements for running the convex poly calculation here to improve
-  //runtime.  These requirements can possibly be removed at some point in the future, if proven
-  //necessary.  The school requirement definitely seems too type specific (this type of evidence
-  //has actually only been found with school pois in one test dataset so far), but when
-  //removing it scores dropped for other datasets...so not changing it for now.
+  // We only want to run this if the previous match distance calculation was too large.
+  // Tightening up the requirements for running the convex poly calculation here to improve
+  // runtime.  These requirements can possibly be removed at some point in the future, if proven
+  // necessary.  The school requirement definitely seems too type specific (this type of evidence
+  // has actually only been found with school pois in one test dataset so far), but when
+  // removing it scores dropped for other datasets...so not changing it for now.
   if (evidence == 0 && _distance <= 35.0 && _infoCache->isType(poi, PoiPolygonSchemaType::School) &&
       _infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className())))
   {

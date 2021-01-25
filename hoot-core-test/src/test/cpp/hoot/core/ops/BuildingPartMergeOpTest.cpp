@@ -125,9 +125,7 @@ public:
     BuildingPartMergeOp uut;
     uut.setThreadCount(1);
     uut.setPreserveTypes(true);
-    conf().set(
-      ConfigOptions().getTagMergerDefaultKey(),
-      QString::fromStdString(OverwriteTag1Merger::className()));
+    conf().set(ConfigOptions().getTagMergerDefaultKey(), OverwriteTag1Merger::className());
     uut.apply(map);
 
     MapProjector::projectToWgs84(map);

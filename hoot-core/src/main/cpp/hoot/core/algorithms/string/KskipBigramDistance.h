@@ -100,6 +100,8 @@ public:
   virtual QString getDescription() const override
   { return "Returns a string comparison score derived using Skip-gram modelling"; }
 
+  virtual QString getName() const override { return QString::fromStdString(className()); }
+
 private:
   /**
    * @brief _k is a value 'k' >= 0 for k-skip bi-grams

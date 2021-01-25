@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
 
 namespace hoot
 {
@@ -38,6 +39,16 @@ HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithPowerLineMembersCriterion)
 RelationWithPowerLineMembersCriterion::RelationWithPowerLineMembersCriterion() :
 RelationWithMembersOfTypeCriterion()
 {
+}
+
+QString RelationWithPowerLineMembersCriterion::getCriterion() const
+{
+  return QString::fromStdString(PowerLineCriterion::className());
+}
+
+GeometryTypeCriterion::GeometryType RelationWithPowerLineMembersCriterion::getGeometryType() const
+{
+  return PowerLineCriterion().getGeometryType();
 }
 
 }

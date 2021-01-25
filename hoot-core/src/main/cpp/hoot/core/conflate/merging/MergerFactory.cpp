@@ -106,9 +106,7 @@ vector<CreatorDescription> MergerFactory::getAllAvailableCreators() const
   vector<CreatorDescription> result;
 
   // get all match creators from the factory
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(MergerCreator::className());
-
+  vector<QString> names = Factory::getInstance().getObjectNamesByBase(MergerCreator::className());
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator.

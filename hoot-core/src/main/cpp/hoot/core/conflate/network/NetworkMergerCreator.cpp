@@ -200,7 +200,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
                   eids,
                   "A complex road situation was found with multiple plausible solutions. Please "
                   "reference input data/imagery and manually merge or modify as needed.",
-                  m->getMatchName(),
+                  m->getName(),
                   m->getScore())));
 
             count++;
@@ -230,7 +230,8 @@ vector<CreatorDescription> NetworkMergerCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "Generates mergers that merge roads conflated with the Network Algorithm",
+      QString::fromStdString(className()),
+      "Generates mergers that merge roads conflated with the Network Algorithm",
       false));
   return result;
 }

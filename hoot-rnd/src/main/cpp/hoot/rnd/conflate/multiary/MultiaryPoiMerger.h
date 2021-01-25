@@ -65,7 +65,7 @@ public:
   virtual QString getDescription() const
   { return "Merges POIs matched with Multiary Conflation (experimental)"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 protected:
 

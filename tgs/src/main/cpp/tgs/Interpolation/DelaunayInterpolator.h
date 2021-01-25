@@ -52,6 +52,7 @@ namespace Tgs
 class DelaunayInterpolator : public BaseInterpolator
 {
 public:
+
   static std::string className() { return "Tgs::DelaunayInterpolator"; }
 
   DelaunayInterpolator();
@@ -63,13 +64,15 @@ public:
    */
   virtual double estimateError();
 
-  virtual std::string getClassName() const { return DelaunayInterpolator::className(); }
+  virtual QString getName() const
+  { return QString::fromStdString(DelaunayInterpolator::className()); }
 
   virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
 
-  virtual std::string toString() const;
+  virtual QString toString() const;
 
 protected:
+
   /// The number of folds in cross validation
   int _kFold;
   std::shared_ptr<DelaunayTriangulation> _dt;

@@ -71,7 +71,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Randomly removed " + QString::number(_numAffected) + " elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

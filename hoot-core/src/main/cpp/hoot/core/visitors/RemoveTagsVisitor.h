@@ -75,7 +75,7 @@ public:
       StringUtils::formatLargeNumber(_numAffected) + " different elements";
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 protected:
 

@@ -124,15 +124,15 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
     LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
 
     bool needsReview = false;
-    std::string mergerName;
+    QString mergerName;
     if (!_networkMerger)
     {
-      mergerName = LinearSnapMerger::className();
+      mergerName = QString::fromStdString(LinearSnapMerger::className());
       needsReview = LinearSnapMerger::_mergePair(map, eid1, eid2, replaced);
     }
     else
     {
-      mergerName = PartialNetworkMerger::className();
+      mergerName = QString::fromStdString(PartialNetworkMerger::className());
       _networkMerger->apply(map, replaced);
     }
     if (needsReview)

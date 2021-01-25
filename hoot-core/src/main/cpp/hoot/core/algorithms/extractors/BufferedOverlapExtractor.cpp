@@ -116,9 +116,9 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
   return std::min(1.0, (2 * overlapArea) / (bufferedA1 + bufferedA2));
 }
 
-string BufferedOverlapExtractor::getName() const
+QString BufferedOverlapExtractor::toString() const
 {
-  return QString("BufferedOverlapExtractor %1").arg(_bufferPortion).toStdString();
+  return QString("BufferedOverlapExtractor %1").arg(_bufferPortion);
 }
 
 }

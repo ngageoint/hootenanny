@@ -80,7 +80,7 @@ public:
     return _c;
   }
 
-  virtual QString getMatchName() const override { return "Fake Match"; }
+  virtual QString getName() const override { return "Fake Match"; }
 
   virtual double getProbability() const override { return _p; }
 

@@ -53,7 +53,7 @@ public:
 
   // leave empty to avoid duplicate tag mergers displayed by the info command
   virtual QString getDescription() const { return ""; }
-  virtual QString getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -86,7 +86,7 @@ public:
       "Completely replaces tags in the secondary feature with those from the reference feature";
   }
 
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 };
 
 /**
@@ -108,7 +108,7 @@ public:
       "Completely replaces tags in the reference feature with those from the secondary feature";
   }
 
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 };
 
 }

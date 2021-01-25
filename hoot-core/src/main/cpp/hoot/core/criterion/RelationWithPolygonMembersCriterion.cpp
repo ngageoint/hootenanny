@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 
 namespace hoot
 {
@@ -40,10 +41,19 @@ RelationWithMembersOfTypeCriterion()
 {
 }
 
-
 RelationWithPolygonMembersCriterion::RelationWithPolygonMembersCriterion(ConstOsmMapPtr map) :
 RelationWithMembersOfTypeCriterion(map)
 {
+}
+
+QString RelationWithPolygonMembersCriterion::getCriterion() const
+{
+  return QString::fromStdString(PolygonCriterion::className());
+}
+
+GeometryTypeCriterion::GeometryType RelationWithPolygonMembersCriterion::getGeometryType() const
+{
+  return PolygonCriterion().getGeometryType();
 }
 
 }

@@ -55,8 +55,7 @@ public:
 
   virtual GeometryType getGeometryType() const { return GeometryType::Point; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   /**
    * Returns the ID of the first way that owns input node

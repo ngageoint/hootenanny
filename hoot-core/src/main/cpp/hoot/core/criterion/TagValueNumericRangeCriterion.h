@@ -60,8 +60,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements having numeric tag values falling within a range"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 private:
 

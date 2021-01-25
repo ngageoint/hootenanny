@@ -91,16 +91,16 @@ public:
   { return "Adds or updates specific tags on elements and their children"; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const { return _tagger->getInitStatusMessage(); }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getCompletedStatusMessage() const { return _tagger->getCompletedStatusMessage(); }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

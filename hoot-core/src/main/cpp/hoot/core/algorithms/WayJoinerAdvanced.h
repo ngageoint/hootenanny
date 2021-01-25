@@ -72,6 +72,8 @@ public:
   virtual QString getDescription() const override
   { return "Extends WayJoinerBasic with additional join pre-conditions."; }
 
+  virtual QString getName() const override { return QString::fromStdString(className()); }
+
 protected:
 
   // identifies the way in the join pair whose ID was kep after the join

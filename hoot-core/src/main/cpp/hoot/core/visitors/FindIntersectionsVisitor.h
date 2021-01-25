@@ -66,7 +66,7 @@ public:
 
   virtual ElementCriterionPtr createCriterion(ConstOsmMapPtr map) = 0;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

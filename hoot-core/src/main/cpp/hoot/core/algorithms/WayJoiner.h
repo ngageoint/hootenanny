@@ -65,6 +65,8 @@ public:
 
   QHash<long, long> getJoinedWayIdMappings() const { return _joinedWayIdMappings; }
 
+  virtual QString toString() const override { return ""; }
+
 protected:
 
   /** Debugging flag to leave parent IDs intact for output */

@@ -49,7 +49,7 @@ std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWri
   LOG_VARD(url);
   LOG_VARD(osmApiDbUrl);
 
-  std::vector<std::string> names =
+  std::vector<QString> names =
     Factory::getInstance().getObjectNamesByBase(OsmChangesetFileWriter::className());
   std::shared_ptr<OsmChangesetFileWriter> writer;
   for (size_t i = 0; i < names.size() && !writer; ++i)

@@ -56,9 +56,9 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
-  virtual std::string getName() const;
+  virtual QString toString() const;
 
   virtual void setValueAggregator(const ValueAggregatorPtr& va) { _agg = va; }
 

@@ -48,7 +48,7 @@ class ChangesetApplyCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::ChangesetApplyCmd"; }
+  static std::string className() { return "hoot::ChangesetApplyCmd"; }
 
   ChangesetApplyCmd() = default;
 

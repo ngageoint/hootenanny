@@ -57,7 +57,7 @@ public:
 
   virtual QString getDescription() const { return "Merges ways with one or more subline matchers"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 protected:
 

@@ -77,9 +77,9 @@ double AttributeScoreExtractor::_extract(const OsmMap& /*map*/, const ConstWayPt
   }
 }
 
-string AttributeScoreExtractor::getName() const
+QString AttributeScoreExtractor::toString() const
 {
-  string result = getClassName() + (" agg: " + _agg->toString()).toStdString();
+  QString result = getName() + " agg: " + _agg->toString();
   if (_useWeight)
   {
     result += " use weight";

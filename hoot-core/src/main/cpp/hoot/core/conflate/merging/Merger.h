@@ -76,20 +76,6 @@ public:
    * may be manipulating elements that this merger relies on.
    */
   virtual void replace(ElementId oldEid, ElementId newEid) = 0;
-
-  virtual QString toString() const = 0;
-
-  /**
-   * @see ApiEntityInfo
-   */
-  virtual QString getDescription() const = 0;
-
-  /**
-   * Returns the name of this merger
-   *
-   * @return a name string
-   */
-  virtual QString getName() const = 0;
 };
 
 typedef std::shared_ptr<Merger> MergerPtr;

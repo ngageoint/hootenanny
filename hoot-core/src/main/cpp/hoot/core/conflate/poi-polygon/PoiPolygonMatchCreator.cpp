@@ -389,10 +389,10 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
          matchesItr2 != matchesWithSharedId.end(); ++matchesItr2)
     {
       ConstMatchPtr overlappingMatch = *matchesItr2;
-      LOG_VART(overlappingMatch->getMatchName());
+      LOG_VART(overlappingMatch->getName());
       LOG_VART(overlappingMatch);
 
-      if (overlappingMatch->getMatchName() == PoiPolygonMatch::getPoiPolygonMatchName())
+      if (overlappingMatch->getName() == PoiPolygonMatch::getPoiPolygonMatchName())
       {
         std::pair<ElementId, ElementId> matchElementIds =
           *(overlappingMatch->getMatchPairs()).begin();
@@ -541,7 +541,7 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
   std::vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(),
+      QString::fromStdString(className()),
       "Generates matchers that match POIs to polygons",
       //this match creator has two conflatable types, so arbitrarily just picking one of them as
       //the base feature type; stats class will handle the logic to deal with both poi and polygon

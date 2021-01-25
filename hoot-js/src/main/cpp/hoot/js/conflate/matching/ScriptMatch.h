@@ -65,7 +65,7 @@ public:
 
   virtual QString explain() const override { return _explainText; }
 
-  virtual QString getMatchName() const override { return _matchName; }
+  virtual QString getName() const override { return _matchName; }
 
   virtual double getProbability() const override;
 

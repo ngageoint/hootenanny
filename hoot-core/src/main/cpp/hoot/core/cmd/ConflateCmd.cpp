@@ -700,11 +700,9 @@ void ConflateCmd::_disableRoundaboutRemoval()
   // add DifferentialConflation.conf instead of doing it here.
 
   ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePreOpsKey(),
-    QString::fromStdString(RemoveRoundabouts::className()));
+    ConfigOptions::getConflatePreOpsKey(), QString::fromStdString(RemoveRoundabouts::className()));
   ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(),
-    QString::fromStdString(ReplaceRoundabouts::className()));
+    ConfigOptions::getConflatePostOpsKey(), QString::fromStdString(ReplaceRoundabouts::className()));
 }
 
 void ConflateCmd::_updateConfigOptionsForAttributeConflation()

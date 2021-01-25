@@ -70,7 +70,7 @@ public:
   /**
    * As new network matching routines are introduced this will need to be modified. E.g. Railway
    */
-  virtual QString getMatchName() const override { return HighwayMatch::MATCH_NAME; }
+  virtual QString getName() const override { return HighwayMatch::MATCH_NAME; }
 
   virtual double getScore() const override { return getProbability(); }
 

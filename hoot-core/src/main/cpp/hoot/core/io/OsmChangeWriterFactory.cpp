@@ -49,7 +49,7 @@ std::shared_ptr<OsmChangeWriter> OsmChangeWriterFactory::createWriter(
   LOG_VART(url);
   LOG_VART(elementPayloadFormat);
 
-  vector<std::string> names =
+  vector<QString> names =
     Factory::getInstance().getObjectNamesByBase(OsmChangeWriter::className());
   std::shared_ptr<OsmChangeWriter> writer;
   for (size_t i = 0; i < names.size() && !writer; ++i)

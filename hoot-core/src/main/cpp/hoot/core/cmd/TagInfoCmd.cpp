@@ -45,7 +45,7 @@ class TagInfoCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::TagInfoCmd"; }
+  static std::string className() { return "hoot::TagInfoCmd"; }
 
   TagInfoCmd() = default;
 

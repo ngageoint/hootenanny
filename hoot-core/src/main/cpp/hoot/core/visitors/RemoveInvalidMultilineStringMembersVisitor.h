@@ -64,7 +64,7 @@ public:
   virtual QString getDescription() const
   { return "Removes invalid multiline string relation members"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

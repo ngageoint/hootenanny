@@ -61,6 +61,8 @@ public:
 
   virtual QString toString() const override;
 
+  virtual QString getName() const override { return QString::fromStdString(className()); }
+
   virtual void setConfiguration(const Settings& conf);
 
   virtual void setOsmMap(const OsmMap* map);

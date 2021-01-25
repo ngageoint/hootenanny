@@ -102,8 +102,7 @@ PoiRfClassifier::PoiRfClassifier()
   QStringList extractorNames;
   for (size_t i = 0; i < _extractors.size(); i++)
   {
-    extractorNames.append(QString::fromStdString(_extractors[i]->getName()).
-                          replace(QRegExp("[^\\w]"), "_"));
+    extractorNames.append(_extractors[i]->getName().replace(QRegExp("[^\\w]"), "_"));
   }
 
   QStringList missingExtractors;
@@ -180,8 +179,8 @@ MatchClassification PoiRfClassifier::classify(const ConstOsmMapPtr& map,
 void PoiRfClassifier::_createAllExtractors()
 {
   _extractors.clear();
-  vector<std::string> extractorNames = Factory::getInstance().getObjectNamesByBase(
-    FeatureExtractor::className());
+  vector<QString> extractorNames =
+    Factory::getInstance().getObjectNamesByBase(FeatureExtractor::className());
   LOG_VART(extractorNames);
 
 //  for (size_t i = 0; i < extractorNames.size(); i++)
@@ -304,8 +303,7 @@ map<QString, double> PoiRfClassifier::getFeatures(const ConstOsmMapPtr& m,
     // if it isn't null then include it.
     if (!FeatureExtractor::isNull(v))
     {
-      QString factorName = QString::fromStdString(_extractors[i]->getName()).
-          replace(QRegExp("[^\\w]"), "_");
+      QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");
       result[factorName] = v;
     }
   }

@@ -53,8 +53,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies linear bodies of water"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   virtual bool supportsSpecificConflation() const { return true; }
 };

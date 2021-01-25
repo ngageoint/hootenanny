@@ -46,7 +46,7 @@ public:
    * @return class name
    */
   static std::string className() { return "hoot::RemoveWayByEid"; }
-  std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   /**
    * @brief RemoveWayByEid is used to remove ways from maps

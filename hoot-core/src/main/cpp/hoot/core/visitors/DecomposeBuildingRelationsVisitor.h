@@ -67,7 +67,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Decomposed " + QString::number(_numAffected) + " complex buildings"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

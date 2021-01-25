@@ -69,7 +69,7 @@ public:
   const RefToUuid& getRefToUuid() const { return _ref2Uuid; }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
 
   virtual void visit(const ConstElementPtr& e)
   {
@@ -123,7 +123,7 @@ public:
   const MatchComparator::UuidToEid& getUuidToEid() const { return _uuidToEid; }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
 
   virtual void visit(const ConstElementPtr& e)
   {

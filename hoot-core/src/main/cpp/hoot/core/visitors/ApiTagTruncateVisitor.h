@@ -28,7 +28,7 @@
 #define APITAGTRUNCATEVISITOR_H
 
 //  Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -70,7 +70,7 @@ public:
       " elements";
   }
 
-  std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   void setConfiguration(const Settings& conf) override;
 

@@ -50,7 +50,7 @@ class ConvertCmd : public BoundedCommand
 {
 public:
 
-  static string className() { return "hoot::ConvertCmd"; }
+  static std::string className() { return "hoot::ConvertCmd"; }
 
   ConvertCmd() = default;
 
@@ -99,7 +99,6 @@ public:
       // options. So, let's throw if we see a command line option at this point.
       if (arg.startsWith("--"))
       {
-        //break;
         throw IllegalArgumentException(
           QString("The convert command takes no inline options starting with '--'. All options ") +
           QString("are passed in as configuration options (-D)."));

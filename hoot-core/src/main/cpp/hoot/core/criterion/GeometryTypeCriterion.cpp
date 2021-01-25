@@ -43,11 +43,11 @@ QStringList GeometryTypeCriterion::getCriterionClassNames()
 QStringList GeometryTypeCriterion::getCriterionClassNamesByGeometryType(const GeometryType& type)
 {
   QStringList classNamesByType;
-  std::vector<std::string> classNames =
-    Factory::getInstance().getObjectNamesByBase("hoot::ElementCriterion");
+  std::vector<QString> classNames =
+    Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
   for (size_t i = 0; i < classNames.size(); i++)
   {
-    const std::string className = classNames[i];
+    const QString className = classNames[i];
 
     ElementCriterionPtr crit(
       Factory::getInstance().constructObject<ElementCriterion>(className));
@@ -57,7 +57,7 @@ QStringList GeometryTypeCriterion::getCriterionClassNamesByGeometryType(const Ge
        (geometryTypeCrit->getGeometryType() == type ||
         (geometryTypeCrit->getGeometryType() == GeometryType::Unknown)))
     {
-      classNamesByType.append(QString::fromStdString(className));
+      classNamesByType.append(className);
     }
   }
   return classNamesByType;

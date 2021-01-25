@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
 
 // Standard
 #include <set>
@@ -55,7 +54,7 @@ public:
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual QString getInitStatusMessage() const
   { return "Updating building outlines..."; }
@@ -69,8 +68,7 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(BuildingCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
 private:
 

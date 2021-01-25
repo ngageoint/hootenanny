@@ -54,7 +54,8 @@ public:
 
   virtual ~IdwInterpolator();
 
-  virtual std::string getClassName() const { return IdwInterpolator::className(); }
+  virtual QString getName() const
+  { return QString::fromStdString(IdwInterpolator::className()); }
 
   virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
 
@@ -65,7 +66,7 @@ public:
    */
   void setStopDelta(double stopDelta) { _stopDelta = stopDelta; }
 
-  virtual std::string toString() const;
+  virtual QString toString() const;
 
 protected:
 

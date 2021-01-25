@@ -88,7 +88,7 @@ public:
     return _c;
   }
 
-  virtual QString getMatchName() const { return "Fake Match"; }
+  virtual QString getName() const { return "Fake Match"; }
 
   virtual double getProbability() const { return _p; }
 

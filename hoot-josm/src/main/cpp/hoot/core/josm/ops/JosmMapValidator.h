@@ -55,7 +55,7 @@ public:
   virtual QString getDescription() const { return "Validates a map using JOSM"; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const
   { return "Validating elements with JOSM..."; }
@@ -67,7 +67,7 @@ protected:
    */
   virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

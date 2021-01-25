@@ -60,82 +60,82 @@ public:
   {
     setResetType(ResetAll);
 
-    scriptMatchCreatorName = QString::fromStdString(ScriptMatchCreator::className());
+    _scriptMatchCreatorName = QString::fromStdString(ScriptMatchCreator::className());
   }
 
   void runOpFilter1Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(scriptMatchCreatorName + ",Area.js"), 1, 12, 11);
+      QStringList(_scriptMatchCreatorName + ",Area.js"), 1, 12, 11);
   }
 
   void runOpFilter2Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(scriptMatchCreatorName + ",Line.js"), 1, 12, 10);
+      QStringList(_scriptMatchCreatorName + ",Line.js"), 1, 12, 10);
   }
 
   void runOpFilter3Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(scriptMatchCreatorName + ",Poi.js"), 1, 9, 7);
+      QStringList(_scriptMatchCreatorName + ",Poi.js"), 1, 9, 7);
   }
 
   void runOpFilter4Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(scriptMatchCreatorName + ",Point.js"), 1, 9, 7);
+      QStringList(_scriptMatchCreatorName + ",Point.js"), 1, 9, 7);
   }
 
   void runOpFilter5Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(scriptMatchCreatorName + ",PointPolygon.js"), 1, 12, 9);
+      QStringList(_scriptMatchCreatorName + ",PointPolygon.js"), 1, 12, 9);
   }
 
   void runOpFilter6Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(scriptMatchCreatorName + ",Polygon.js"), 1, 12, 9);
+      QStringList(_scriptMatchCreatorName + ",Polygon.js"), 1, 12, 9);
   }
 
   void runOpFilter7Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(scriptMatchCreatorName + ",PowerLine.js"), 1, 12, 11);
+      QStringList(_scriptMatchCreatorName + ",PowerLine.js"), 1, 12, 11);
   }
 
   void runOpFilter8Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(scriptMatchCreatorName + ",Railway.js"), 1, 12, 11);
+      QStringList(_scriptMatchCreatorName + ",Railway.js"), 1, 12, 11);
   }
 
   void runOpFilter9Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(scriptMatchCreatorName + ",River.js"), 1, 12, 11);
+      QStringList(_scriptMatchCreatorName + ",River.js"), 1, 12, 11);
   }
 
   void runOpFilterCombinedTest()
   {
     QStringList matchCreators;
-    matchCreators.append(scriptMatchCreatorName + ",Area.js");
-    matchCreators.append(scriptMatchCreatorName + ",Line.js");
-    matchCreators.append(scriptMatchCreatorName + ",Poi.js");
-    matchCreators.append(scriptMatchCreatorName + ",Point.js");
-    matchCreators.append(scriptMatchCreatorName + ",PointPolygon.js");
-    matchCreators.append(scriptMatchCreatorName + ",Polygon.js");
-    matchCreators.append(scriptMatchCreatorName + ",PowerLine.js");
-    matchCreators.append(scriptMatchCreatorName + ",Railway.js");
-    matchCreators.append(scriptMatchCreatorName + ",River.js");
+    matchCreators.append(_scriptMatchCreatorName + ",Area.js");
+    matchCreators.append(_scriptMatchCreatorName + ",Line.js");
+    matchCreators.append(_scriptMatchCreatorName + ",Poi.js");
+    matchCreators.append(_scriptMatchCreatorName + ",Point.js");
+    matchCreators.append(_scriptMatchCreatorName + ",PointPolygon.js");
+    matchCreators.append(_scriptMatchCreatorName + ",Polygon.js");
+    matchCreators.append(_scriptMatchCreatorName + ",PowerLine.js");
+    matchCreators.append(_scriptMatchCreatorName + ",Railway.js");
+    matchCreators.append(_scriptMatchCreatorName + ",River.js");
 
     TestUtils::runConflateOpReductionTest(matchCreators, 1, 12, 13);
   }
 
 private:
 
-  QString scriptMatchCreatorName;
+  QString _scriptMatchCreatorName;
 };
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SuperfluousConflateOpRemoverJsTest, "quick");

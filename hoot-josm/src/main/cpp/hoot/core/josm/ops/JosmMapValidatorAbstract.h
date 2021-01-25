@@ -87,7 +87,7 @@ public:
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getCompletedStatusMessage() const { return _errorSummary; }
 

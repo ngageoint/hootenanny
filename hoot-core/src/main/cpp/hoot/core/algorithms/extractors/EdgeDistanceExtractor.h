@@ -60,9 +60,9 @@ public:
   double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  std::string getClassName() const override { return EdgeDistanceExtractor::className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
-  std::string getName() const override;
+  virtual QString toString() const override;
 
   void setValueAggregator(const ValueAggregatorPtr& va) override { _aggregator = va; }
 
@@ -70,7 +70,7 @@ public:
 
   void setSpacing(const double spacing) { _spacing = spacing; }
 
-  QString getDescription() const override
+  virtual QString getDescription() const override
   { return "Calculates the distance from one set of lines to another"; }
 
 private:

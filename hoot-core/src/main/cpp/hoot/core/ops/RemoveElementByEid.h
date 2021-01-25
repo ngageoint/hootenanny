@@ -93,7 +93,7 @@ public:
    * @brief getClassName gest the name of the class
    * @return class name string
    */
-  std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   /**
    * @brief setElementId sets the id of the element to remove

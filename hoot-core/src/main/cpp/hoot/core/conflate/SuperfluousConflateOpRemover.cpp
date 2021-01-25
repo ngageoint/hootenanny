@@ -34,7 +34,7 @@
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/ops/MapCleaner.h>
 
 namespace hoot
@@ -114,14 +114,14 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
     // All the ops should be map ops or element vis and, thus, support
     // FilteredByGeometryTypeCriteria, but we'll check anyway to be safe.
     std::shared_ptr<FilteredByGeometryTypeCriteria> op;
-    if (Factory::getInstance().hasBase<OsmMapOperation>(opName.toStdString()))
+    if (Factory::getInstance().hasBase<OsmMapOperation>(opName))
     {
       op =
         std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(
           std::shared_ptr<OsmMapOperation>(
             Factory::getInstance().constructObject<OsmMapOperation>(opName)));
     }
-    else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
+    else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
     {
       op =
         std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(
@@ -275,12 +275,12 @@ bool SuperfluousConflateOpRemover::_isGeometryTypeCrit(const QString& className)
   // can't use hasBase with GeometryTypeCriterion here, since GeometryTypeCriterion are registered
   // as ElementCriterion
   std::shared_ptr<GeometryTypeCriterion> crit;
-  if (Factory::getInstance().hasBase<ElementCriterion>(className.toStdString()))
+  if (Factory::getInstance().hasBase<ElementCriterion>(className))
   {
     crit =
       std::dynamic_pointer_cast<GeometryTypeCriterion>(
         std::shared_ptr<ElementCriterion>(
-          Factory::getInstance().constructObject<ElementCriterion>(className.toStdString())));
+          Factory::getInstance().constructObject<ElementCriterion>(className)));
     return crit.get();
   }
 

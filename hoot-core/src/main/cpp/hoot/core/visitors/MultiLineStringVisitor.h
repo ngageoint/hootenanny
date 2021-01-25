@@ -77,7 +77,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Created " + QString::number(_numAffected) + " multi-line strings"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 protected:
 

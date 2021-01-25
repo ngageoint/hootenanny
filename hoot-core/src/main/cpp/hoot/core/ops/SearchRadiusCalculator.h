@@ -66,7 +66,7 @@ public:
   virtual QString getDescription() const override
   { return "Calculates a search radius using tie points found by rubbersheeting"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

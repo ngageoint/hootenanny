@@ -54,6 +54,8 @@ public:
 
   virtual QString getDescription() const override
   { return "Rejoins ways split during pre-conflation cleaning or conflation matching."; }
+
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 };
 
 }

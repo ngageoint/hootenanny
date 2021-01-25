@@ -28,7 +28,7 @@
 #define FINDINTERSECTIONSOP_H
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 
 // Qt
@@ -62,7 +62,7 @@ public:
    */
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor() = 0;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 };
 
 /**
@@ -81,7 +81,7 @@ public:
 
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 };
 
 /**
@@ -100,7 +100,7 @@ public:
 
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 };
 
 }

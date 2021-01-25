@@ -72,6 +72,8 @@ public:
 
   virtual QString toString() const override;
 
+  virtual QString getName() const override { return QString::fromStdString(className()); }
+
 private:
 
   QStringList _keys;

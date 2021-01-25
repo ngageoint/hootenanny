@@ -98,9 +98,9 @@ double WayFeatureExtractor::extract(
   return _agg->aggregate(scores);
 }
 
-string WayFeatureExtractor::getName() const
+QString WayFeatureExtractor::toString() const
 {
-  return getClassName() + (" agg: " + _agg->toString()).toStdString();
+  return getName() + " agg: " + _agg->toString();
 }
 
 }

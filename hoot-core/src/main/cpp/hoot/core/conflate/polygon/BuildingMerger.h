@@ -96,7 +96,7 @@ public:
 
   virtual QString getDescription() const { return "Merges buildings"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   void setKeepMoreComplexGeometryWhenAutoMerging(bool keepMoreComplex)
   { _keepMoreComplexGeometryWhenAutoMerging = keepMoreComplex; }

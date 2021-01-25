@@ -69,7 +69,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Reported " + StringUtils::formatLargeNumber(_missingCount) + " missing elements."; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   int getMissingCount() const { return _missingCount; }
 

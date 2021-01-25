@@ -28,7 +28,7 @@
 #define ELEMENTVISITORINPUTSTREAM_H
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot

@@ -47,8 +47,8 @@ public:
   PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
   virtual ~PoiPolygonDistanceExtractor() = default;
 
-  virtual std::string getClassName() const
-  { return PoiPolygonDistanceExtractor::className(); }
+  virtual QString getName() const
+  { return QString::fromStdString(PoiPolygonDistanceExtractor::className()); }
 
   /**
    * Calculates the distance between a poi and a polygon

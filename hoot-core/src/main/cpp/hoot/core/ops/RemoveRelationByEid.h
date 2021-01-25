@@ -46,7 +46,7 @@ public:
    * @return class name
    */
   static std::string className() { return "hoot::RemoveRelationByEid"; }
-  std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   /**
    * @brief RemoveRelationByEid Default constructor

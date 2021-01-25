@@ -50,7 +50,7 @@ public:
 
   virtual void apply(OsmMapPtr& map);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual QString getInitStatusMessage() const
   { return "Converting non-child points to polygons..."; }

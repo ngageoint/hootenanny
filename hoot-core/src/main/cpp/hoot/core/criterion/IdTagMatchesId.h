@@ -48,8 +48,7 @@ public:
   virtual QString getDescription() const
   { return "Determines whether an element's " + MetadataTags::HootId() + " tag matches its ID"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IdTagMatchesId()); }
 };

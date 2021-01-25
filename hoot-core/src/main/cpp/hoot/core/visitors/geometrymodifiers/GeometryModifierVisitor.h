@@ -31,7 +31,7 @@
 #include "GeometryModifierAction.h"
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
 
@@ -65,12 +65,12 @@ public:
   // calls the action's process function
   virtual void visit(const ElementPtr& e) override;
 
-  // OperationStatusInfo
+  // OperationStatus
   virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
   virtual QString getCompletedStatusMessage() const
   { return "Modified " + QString::number(_numAffected) + " elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
   OsmMap* _pMap;

@@ -40,7 +40,7 @@ namespace hoot
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
  *
- * TODO: implement OperationStatusInfo
+ * TODO: implement OperationStatus
  */
 class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumer,
   public ElementCriterionConsumer
@@ -75,7 +75,7 @@ public:
 
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 
   void setEids(const std::set<ElementId>& eids) { _eids = eids; }

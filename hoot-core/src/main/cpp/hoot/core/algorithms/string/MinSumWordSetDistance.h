@@ -61,6 +61,8 @@ public:
   virtual QString toString() const override
   { return QString("MinSumWordSetDistance %1 %2").arg(_p).arg(_d->toString()); }
 
+  virtual QString getName() const override { return QString::fromStdString(className()); }
+
   virtual QString getDescription() const override
   { return "Returns a string comparison score based on Minimum Sum Wordset Distance"; }
 

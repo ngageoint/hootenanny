@@ -41,7 +41,7 @@ class SchemaCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::SchemaCmd"; }
+  static std::string className() { return "hoot::SchemaCmd"; }
 
   SchemaCmd() = default;
 

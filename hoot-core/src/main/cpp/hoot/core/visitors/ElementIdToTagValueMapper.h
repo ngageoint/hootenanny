@@ -64,7 +64,7 @@ public:
 
   void setTagKey(const QString& key) { _tagKey = key; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

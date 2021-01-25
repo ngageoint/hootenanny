@@ -36,7 +36,7 @@ namespace hoot
 {
 
 /**
- * @todo implement OperationStatusInfo
+ * @todo implement OperationStatus
  */
 class DisconnectedWayCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
@@ -64,8 +64,7 @@ public:
   virtual QString getDescription() const override
   { return "Identifies way that are connected to no other ways"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 private:
 

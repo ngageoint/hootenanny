@@ -31,7 +31,7 @@
 // Hoot
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 
 // Standard
 #include <string>
@@ -54,11 +54,11 @@ class OsmMap;
  * entire input map in memory at one time (operation logic does not require it and you are not
  * running in the conflate pipeline), consider using ElementVisitor instead.
  *
- * @todo We could eventually remove the default empty string implementations of OperationStatusInfo
+ * We could eventually remove the default empty string implementations of OperationStatus
  * methods and require them to be implemented in children.
  */
 class OsmMapOperation : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
-  public OperationStatusInfo
+  public OperationStatus
 {
 public:
 
@@ -82,22 +82,22 @@ public:
   virtual boost::any getResult() { boost::any ptr; return ptr; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual long getNumFeaturesAffected() const { return _numAffected; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual long getNumFeaturesProcessed() const { return _numProcessed; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const { return ""; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getCompletedStatusMessage() const { return ""; }
 
@@ -111,16 +111,11 @@ public:
    */
   virtual QStringList getCriteria() const { return QStringList(); }
 
-  /**
-   * Returns the operation's class name
-   *
-   * @return class name string
-   */
-  virtual std::string getClassName() const = 0;
+  virtual QString toString() const override { return ""; }
 
 protected:
 
-  // These will only be used by those implementing OperationStatusInfo.
+  // These will only be used by those implementing OperationStatus.
   long _numAffected;    // how many elements the operation actually counted or did something to
   long _numProcessed;   // how many elements the operation processed total
 };

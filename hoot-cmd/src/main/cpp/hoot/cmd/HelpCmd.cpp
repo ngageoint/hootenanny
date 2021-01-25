@@ -44,7 +44,7 @@ class HelpCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::HelpCmd"; }
+  static std::string className() { return "hoot::HelpCmd"; }
 
   HelpCmd()
   {
@@ -62,7 +62,7 @@ public:
     _forceToRndList.append("type-similarity");
   }
 
-  static bool commandCompare(const std::string& n1, const std::string& n2)
+  static bool commandCompare(const QString& n1, const QString& n2)
   {
     std::shared_ptr<Command> c1(Factory::getInstance().constructObject<Command>(n1));
     std::shared_ptr<Command> c2(Factory::getInstance().constructObject<Command>(n2));
@@ -104,7 +104,8 @@ private:
   int _printDetails(const QString& command)
   {
     int result = 0;
-    vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
+    vector<QString> cmds =
+      Factory::getInstance().getObjectNamesByBase(Command::className());
 
     bool foundIt = false;
     for (size_t i = 0; i < cmds.size(); i++)
@@ -130,12 +131,12 @@ private:
 
   int _printSummary()
   {
-    const vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
+    const vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className();
     vector<std::shared_ptr<Command>> coreCmds;
     vector<std::shared_ptr<Command>> rndCmds;
     for (size_t i = 0; i < cmds.size(); i++)
     {
-      const string cmdClassName = cmds[i];
+      const QString cmdClassName = cmds[i];
       LOG_VART(cmdClassName);
       std::shared_ptr<Command> command(
         Factory::getInstance().constructObject<Command>(cmdClassName));
@@ -209,7 +210,7 @@ private:
 
   int _printVerbose()
   {
-    vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
+    vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
     LOG_VART(cmds);
     sort(cmds.begin(), cmds.end(), commandCompare);
     for (size_t i = 0; i < cmds.size(); i++)

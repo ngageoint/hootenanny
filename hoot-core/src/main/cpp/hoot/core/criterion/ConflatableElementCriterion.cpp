@@ -77,16 +77,16 @@ QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCr
 
 void ConflatableElementCriterion::_createConflatableCriteria()
 {
-  const std::vector<std::string> criterionClassNames =
+  const std::vector<QString> criterionClassNames =
     Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
   LOG_VART(criterionClassNames);
-  for (std::vector<std::string>::const_iterator itr = criterionClassNames.begin();
+  for (std::vector<QString>::const_iterator itr = criterionClassNames.begin();
        itr != criterionClassNames.end(); ++itr)
   {
     ElementCriterionPtr crit(Factory::getInstance().constructObject<ElementCriterion>(*itr));
     if (std::dynamic_pointer_cast<ConflatableElementCriterion>(crit) != 0)
     {
-      _conflatableCriteria[QString::fromStdString(*itr)] = crit;
+      _conflatableCriteria[*itr] = crit;
     }
   }
   LOG_VART(_conflatableCriteria.size());
@@ -157,12 +157,12 @@ QStringList ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
   const GeometryType& type)
 {
   QStringList classNamesByType;
-  std::vector<std::string> classNames =
-    Factory::getInstance().getObjectNamesByBase("hoot::ElementCriterion");
+  std::vector<QString> classNames =
+    Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
   LOG_VART(classNamesByType);
   for (size_t i = 0; i < classNames.size(); i++)
   {
-    const std::string className = classNames[i];
+    const QString className = classNames[i];
     LOG_VART(className);
 
     ElementCriterionPtr crit(
@@ -177,7 +177,7 @@ QStringList ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
       if (geometryTypeCrit && geometryTypeCrit->getGeometryType() == type)
       {
         LOG_TRACE("is same geometry: " << className);
-        classNamesByType.append(QString::fromStdString(className));
+        classNamesByType.append(className);
       }
     }
   }

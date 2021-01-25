@@ -65,7 +65,7 @@ public:
   virtual QString getDescription() const
   { return "Removes references to any elements that do not exist"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

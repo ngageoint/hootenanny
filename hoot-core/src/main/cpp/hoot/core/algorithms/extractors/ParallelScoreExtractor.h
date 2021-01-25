@@ -44,7 +44,7 @@ public:
   ParallelScoreExtractor() = default;
   virtual ~ParallelScoreExtractor() = default;
 
-  virtual std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   virtual QString getDescription() const
   { return "Calculates how parallel ways are with each other"; }

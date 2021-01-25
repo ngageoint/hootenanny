@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/rnd/visitors/ToEnglishTranslationVisitor.h>
 #include <hoot/core/algorithms/string/StringDistance.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 
 namespace hoot
 {
@@ -67,7 +67,7 @@ public:
       QString::number(_numProcessedElements) + " different elements";
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

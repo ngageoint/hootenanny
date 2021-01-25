@@ -57,16 +57,14 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new NoInformationCriterion(_treatReviewTagsAsMetadata)); }
 
-  virtual QString getDescription() const { return "Identifies features with no useful information"; }
+  virtual QString getDescription() const
+  { return "Identifies features with no useful information"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
-
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 private:
 
   bool _treatReviewTagsAsMetadata;
-
 };
 
 }

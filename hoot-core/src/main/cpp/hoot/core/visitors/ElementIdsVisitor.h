@@ -126,7 +126,7 @@ public:
 
   virtual QString getDescription() const { return "Collects the element IDs visited"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

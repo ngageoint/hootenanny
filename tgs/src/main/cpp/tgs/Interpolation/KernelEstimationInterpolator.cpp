@@ -285,11 +285,11 @@ void KernelEstimationInterpolator::_readInterpolator(QIODevice& is)
   ds >> _stopDelta;
 }
 
-string KernelEstimationInterpolator::toString() const
+QString KernelEstimationInterpolator::toString() const
 {
   stringstream ss;
   ss << "Kernel estimation, sigma: " << _sigma;
-  return ss.str();
+  return QString::fromStdString(ss.str());
 }
 
 void KernelEstimationInterpolator::_writeInterpolator(QIODevice& os) const

@@ -28,7 +28,6 @@
 #define FEATUREEXTRACTORBASE_H
 
 #include <hoot/core/algorithms/extractors/FeatureExtractor.h>
-#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -36,7 +35,7 @@ namespace hoot
 /**
  * Base class for feature extractors, which compare two feature and provide a metric score
  */
-class FeatureExtractorBase : public FeatureExtractor, public ApiEntityInfo
+class FeatureExtractorBase : public FeatureExtractor
 {
 public:
 

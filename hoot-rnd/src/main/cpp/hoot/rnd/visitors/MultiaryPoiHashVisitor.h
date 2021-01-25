@@ -46,7 +46,7 @@ public:
   MultiaryPoiHashVisitor() = default;
   virtual ~MultiaryPoiHashVisitor() = default;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual QString getDescription() const
   { return "Calculates unique hash values for POIs conflated with Multiary POI Conflation"; }

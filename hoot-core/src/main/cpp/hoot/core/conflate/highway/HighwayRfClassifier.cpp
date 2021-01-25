@@ -268,8 +268,7 @@ map<QString, double> HighwayRfClassifier::getFeatures(const ConstOsmMapPtr& m,
       // if it isn't null then include it.
       if (!FeatureExtractor::isNull(v))
       {
-        QString factorName = QString::fromStdString(_extractors[i]->getName()).
-            replace(QRegExp("[^\\w]"), "_");
+        QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");
         result[factorName] = v;
       }
     }
@@ -311,8 +310,7 @@ void HighwayRfClassifier::_init() const
     QStringList extractorNames;
     for (size_t i = 0; i < _extractors.size(); i++)
     {
-      extractorNames.append(QString::fromStdString(_extractors[i]->getName()).
-                            replace(QRegExp("[^\\w]"), "_"));
+      extractorNames.append(_extractors[i]->getName().replace(QRegExp("[^\\w]"), "_"));
     }
 
     QStringList missingExtractors;

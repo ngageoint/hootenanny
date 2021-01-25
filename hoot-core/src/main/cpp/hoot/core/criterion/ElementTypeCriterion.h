@@ -54,8 +54,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements based on the specified type"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 protected:
 
@@ -74,8 +73,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies nodes"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 };
 
 class WayCriterion : public ElementTypeCriterion
@@ -89,8 +87,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies ways"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 };
 
 class RelationCriterion : public ElementTypeCriterion, public Configurable
@@ -123,8 +120,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies relations"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   virtual void setConfiguration(const Settings& conf)
   {

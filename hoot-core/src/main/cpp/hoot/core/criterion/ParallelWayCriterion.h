@@ -48,9 +48,7 @@ public:
   static std::string className() { return "hoot::ParallelWayCriterion"; }
 
   ParallelWayCriterion() = default;
-  ParallelWayCriterion(const ConstOsmMapPtr& map,
-                       ConstWayPtr baseWay,
-                       bool isParallel = true);
+  ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel = true);
   virtual ~ParallelWayCriterion();
 
   Radians calculateDifference(const ConstWayPtr& w) const;
@@ -68,9 +66,7 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Line; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
-
+ virtual QString getName() const override { return QString::fromStdString(className()); }
 
 private:
 

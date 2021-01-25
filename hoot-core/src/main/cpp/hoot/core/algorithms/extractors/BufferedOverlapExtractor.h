@@ -64,9 +64,9 @@ public:
 
   static std::string className() { return "hoot::BufferedOverlapExtractor"; }
 
-  virtual std::string getClassName() const override { return BufferedOverlapExtractor::className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
-  virtual std::string getName() const override;
+  virtual QString toString() const override;
 
   virtual void setConfiguration(const Settings& conf);
 

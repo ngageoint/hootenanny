@@ -29,7 +29,7 @@
 #define REMOVEDUPLICATEWAYNODESVISITOR_H
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -79,7 +79,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

@@ -54,7 +54,7 @@ public:
 
   virtual ~KernelEstimationInterpolator();
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   double getSigma() const { return _sigma; }
 
@@ -69,9 +69,10 @@ public:
    */
   void setStopDelta(double stopDelta) { _stopDelta = stopDelta; _checkRebuild(); }
 
-  virtual std::string toString() const;
+  virtual QString toString() const;
 
 protected:
+
   double _sigma;
   double _stopDelta;
 

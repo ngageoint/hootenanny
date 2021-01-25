@@ -48,8 +48,10 @@ void AddGeometryTypeVisitor::visit(const std::shared_ptr<Element>& e)
     }
     else
     {
-      QString type = QString::fromStdString(
-        ElementToGeometryConverter(_map->shared_from_this()).convertToGeometry(e)->getGeometryType());
+      QString type =
+        QString::fromStdString(
+          ElementToGeometryConverter(_map->shared_from_this())
+          .convertToGeometry(e)->getGeometryType());
       e->getTags()["geometry_type"] = type;
     }
   }

@@ -71,14 +71,14 @@ namespace hoot
     // runs through each action in the sequence they appear in the rules file
     void apply(std::shared_ptr<OsmMap>& map);
 
-    // OperationStatusInfo
+    // OperationStatus
     virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
     virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
 
     // Configurable
     virtual void setConfiguration(const Settings& conf);
 
-    virtual std::string getClassName() const { return className(); }
+    virtual QString getName() const { return QString::fromStdString(className()); }
 
   private:
     // json rules file name

@@ -98,9 +98,9 @@ double NameExtractor::extract(const ConstElementPtr& target, const ConstElementP
   return score;
 }
 
-string NameExtractor::getName() const
+QString NameExtractor::toString() const
 {
-  return "name " + _d->toString().toStdString();
+  return "name " + _d->toString();
 }
 
 }

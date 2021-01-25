@@ -55,8 +55,7 @@ public:
   /**
    * @see FeatureExtractor
    */
-  virtual std::string getClassName() const override
-  { return IntersectionOverUnionExtractor::className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   /**
    * @see FeatureExtractor

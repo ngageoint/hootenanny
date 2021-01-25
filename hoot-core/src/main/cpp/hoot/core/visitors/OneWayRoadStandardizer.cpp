@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/ReversedRoadCriterion.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -71,6 +72,11 @@ void OneWayRoadStandardizer::visit(const std::shared_ptr<Element>& e)
       roadRelation->getTags().set("oneway", "yes");
     }
   }
+}
+
+QStringList OneWayRoadStandardizer::getCriteria() const
+{
+  return QStringList(QString::fromStdString(HighwayCriterion::className()));
 }
 
 }

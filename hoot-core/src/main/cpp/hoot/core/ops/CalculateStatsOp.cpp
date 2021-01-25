@@ -191,7 +191,7 @@ shared_ptr<MatchCreator> CalculateStatsOp::getMatchCreator(
     for (vector<CreatorDescription>::const_iterator descIt = desc.begin();
          descIt != desc.end(); ++descIt)
     {
-      QString testName = QString::fromStdString(descIt->className);
+      QString testName = descIt->className;
       LOG_VART(testName);
       if (0 == matchCreatorName.compare(testName))
       {
@@ -814,7 +814,7 @@ double CalculateStatsOp::_getApplyVisitor(ConstElementVisitor* v, const QString&
   const SingleStatistic* ss = dynamic_cast<const SingleStatistic*>(v);
   if (v == 0)
   {
-    throw HootException(v->getClassName() + " does not implement SingleStatistic.");
+    throw HootException(v->getName() + " does not implement SingleStatistic.");
   }
   return ss->getStat();
 }

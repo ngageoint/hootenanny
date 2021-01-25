@@ -53,6 +53,8 @@ public:
   virtual QString getDescription() const { return "Allows for combining criteria (logical OR)"; }
 
   virtual QString toString() const override;
+
+ virtual QString getName() const override { return QString::fromStdString(className()); }
 };
 
 typedef std::shared_ptr<OrCriterion> OrCriterionPtr;

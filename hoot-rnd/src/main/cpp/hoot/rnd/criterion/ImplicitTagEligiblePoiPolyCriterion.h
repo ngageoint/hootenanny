@@ -71,9 +71,7 @@ public:
   virtual QString getDescription() const
   { return "Identifies POIs and polygons eligible for type tag addition"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
-
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 };
 
 }

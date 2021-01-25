@@ -176,11 +176,11 @@ public:
     args.append("-D");
     args.append(
       ConfigOptions::getConvertOpsKey() + "=" +
-      QString::fromStdString(ReplaceElementOp::className()) + ";" +
-      QString::fromStdString(RemoveElementsVisitor::className()) + ";" +
-      QString::fromStdString(BuildingCriterion::className()) + ";" +
+      ReplaceElementOp::className() + ";" +
+      RemoveElementsVisitor::className() + ";" +
+      BuildingCriterion::className() + ";" +
       // fails; only ops, vis, and crits are valid
-      QString::fromStdString(Node::className()));
+      Node::className());
     try
     {
       Settings::parseCommonArguments(args);
@@ -190,17 +190,16 @@ public:
       exceptionMsg = e.what();
     }
     expectedErrorMessage =
-      "Invalid option operator class name: " +
-      QString::fromStdString(Node::className());
+      "Invalid option operator class name: " + Node::className();
     CPPUNIT_ASSERT_EQUAL(expectedErrorMessage.toStdString(), exceptionMsg.toStdString());
 
     args.clear();
     args.append("-D");
     args.append(
       ConfigOptions::getConvertOpsKey() + "=" +
-      QString::fromStdString(ReplaceElementOp::className()) + ";" +
+      ReplaceElementOp::className() + ";" +
       // fails; visitor is missing namespace
-      QString::fromStdString(RemoveElementsVisitor::className()).replace("hoot::", ""));
+      RemoveElementsVisitor::className().replace("hoot::", ""));
     try
     {
       Settings::parseCommonArguments(args);
@@ -211,15 +210,15 @@ public:
     }
     expectedErrorMessage =
       "Invalid option operator class name: " +
-      QString::fromStdString(RemoveElementsVisitor::className()).replace("hoot::", "");
+      RemoveElementsVisitor::className().replace("hoot::", "");
     CPPUNIT_ASSERT_EQUAL(expectedErrorMessage.toStdString(), exceptionMsg.toStdString());
 
     args.clear();
     args.append("-D");
     args.append(
       ConfigOptions::getConvertOpsKey() + "=" +
-      QString::fromStdString(ReplaceElementOp::className()) + ";" +
-      QString::fromStdString(RemoveElementsVisitor::className()) + ";" +
+      ReplaceElementOp::className() + ";" +
+      RemoveElementsVisitor::className() + ";" +
       "blah");
     exceptionMsg = "";
     try

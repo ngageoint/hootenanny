@@ -45,6 +45,7 @@
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 // Standard
 #include <fstream>
@@ -117,7 +118,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -474,7 +475,10 @@ std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
   std::vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "Generates matchers that match buildings", CreatorDescription::Building, false));
+      QString::fromStdString(className()),
+      "Generates matchers that match buildings",
+      CreatorDescription::Building,
+      false));
   return result;
 }
 
@@ -523,6 +527,11 @@ std::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
                          config.getBuildingReviewThreshold()));
   }
   return _matchThreshold;
+}
+
+QStringList BuildingMatchCreator::getCriteria() const
+{
+  return QStringList(QString::fromStdString(BuildingCriterion::className()));
 }
 
 }

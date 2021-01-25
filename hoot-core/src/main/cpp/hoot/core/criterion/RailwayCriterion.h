@@ -58,8 +58,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies linear railways"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   virtual bool supportsSpecificConflation() const { return true; }
 };

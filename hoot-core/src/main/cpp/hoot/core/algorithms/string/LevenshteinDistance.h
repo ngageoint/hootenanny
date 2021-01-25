@@ -121,6 +121,8 @@ public:
   virtual QString getDescription() const override
   { return "Returns a string comparison score derived using Levenshtein Distance"; }
 
+  virtual QString getName() const override { return QString::fromStdString(className()); }
+
 private:
 
   double _alpha;

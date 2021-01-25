@@ -116,7 +116,7 @@ public:
    * @brief getClassName - Gets the class name
    * @return The class name string
    */
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   /**
    * @brief getStats - Gets a list of stats recorded during the conflation process,

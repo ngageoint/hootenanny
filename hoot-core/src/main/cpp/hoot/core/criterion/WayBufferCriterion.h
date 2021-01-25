@@ -79,8 +79,7 @@ public:
 
   virtual QString getDescription() const { return "Allows for operations on ways with buffers"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 private:
 

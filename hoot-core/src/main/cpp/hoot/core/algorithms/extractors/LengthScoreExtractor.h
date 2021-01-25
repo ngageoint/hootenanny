@@ -46,7 +46,7 @@ public:
   LengthScoreExtractor() = default;
   virtual ~LengthScoreExtractor() = default;
 
-  virtual std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   virtual QString getDescription() const
   { return "Calculates a score based on the length of a match between way features"; }

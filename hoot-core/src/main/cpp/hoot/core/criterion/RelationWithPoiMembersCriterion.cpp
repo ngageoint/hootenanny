@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/PoiCriterion.h>
 
 namespace hoot
 {
@@ -38,6 +39,16 @@ HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithPoiMembersCriterion)
 RelationWithPoiMembersCriterion::RelationWithPoiMembersCriterion() :
 RelationWithMembersOfTypeCriterion()
 {
+}
+
+QString RelationWithPoiMembersCriterion::getCriterion() const
+{
+  return QString::fromStdString(PoiCriterion::className());
+}
+
+GeometryTypeCriterion::GeometryType RelationWithPoiMembersCriterion::getGeometryType() const
+{
+  return PoiCriterion().getGeometryType();
 }
 
 }

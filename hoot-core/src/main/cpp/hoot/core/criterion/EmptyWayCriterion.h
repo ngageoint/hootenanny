@@ -37,7 +37,7 @@ namespace hoot
  * Ways with no nodes; will see this from time to time as a result of cut and replace, since we
  * allow element references point to missing elements to persist
  *
- * @todo implement OperationStatusInfo
+ * @todo implement OperationStatus
  */
 class EmptyWayCriterion : public ElementCriterion
 {
@@ -59,8 +59,7 @@ public:
   virtual QString getDescription() const override
   { return "Identifies ways with no nodes"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 };
 
 }

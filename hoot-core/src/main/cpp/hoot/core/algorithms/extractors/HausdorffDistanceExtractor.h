@@ -53,7 +53,8 @@ public:
   virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual std::string getClassName() const { return HausdorffDistanceExtractor::className(); }
+  virtual QString getName() const
+  { return QString::fromStdString(HausdorffDistanceExtractor::className()); }
 
   virtual QString getDescription() const
   { return "Calculates the Hausdorff distance between two features"; }

@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/schema/ScriptSchemaTranslator.h>
 #include <hoot/core/util/Configurable.h>
 
@@ -71,7 +71,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Translated " + QString::number(_numAffected) + " features to a schema"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

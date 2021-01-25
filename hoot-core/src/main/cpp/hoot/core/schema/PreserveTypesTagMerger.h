@@ -64,7 +64,7 @@ public:
   virtual QString getDescription() const
   { return "Keeps tags from both features and preserves overlapping type tags"; }
 
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual void setConfiguration(const Settings& conf);
 

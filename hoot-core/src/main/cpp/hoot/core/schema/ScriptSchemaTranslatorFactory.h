@@ -54,13 +54,13 @@ public:
    * This can be used to register translators, but using the Factory methods are preferred. See
    * JavaScriptSchemaTranslator for an example.
    */
-  void registerScript(const std::string& className) { _translators.push_back(className); }
+  void registerScript(const QString& className) { _translators.push_back(className); }
 
 private:
 
   void _init();
 
-  std::vector<std::string> _translators;
+  std::vector<QString> _translators;
 
   /** Default constructor/destructor */
   ScriptSchemaTranslatorFactory() = default;

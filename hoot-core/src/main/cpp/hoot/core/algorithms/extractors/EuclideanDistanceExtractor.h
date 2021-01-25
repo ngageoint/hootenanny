@@ -68,7 +68,8 @@ public:
     const OsmMap& map1, const OsmMap& map2, const ConstElementPtr& target,
     const ConstElementPtr& candidate) const;
 
-  virtual std::string getClassName() const { return EuclideanDistanceExtractor::className(); }
+  virtual QString getName() const
+  { return QString::fromStdString(EuclideanDistanceExtractor::className()); }
 
   virtual QString getDescription() const
   { return "Calculates the Euclidean distance between two features"; }

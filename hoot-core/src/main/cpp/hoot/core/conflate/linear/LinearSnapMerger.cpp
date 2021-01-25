@@ -757,7 +757,7 @@ void LinearSnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, Elemen
     }
 
     virtual QString getDescription() const { return ""; }
-    virtual std::string getClassName() const { return ""; }
+    virtual QString getName() const { return ""; }
 
     virtual void visit(const std::shared_ptr<Element>& e)
     {

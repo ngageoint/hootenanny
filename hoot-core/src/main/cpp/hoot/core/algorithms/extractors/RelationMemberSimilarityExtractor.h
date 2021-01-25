@@ -54,8 +54,8 @@ public:
 
   static std::string className() { return "hoot::RelationMemberSimilarityExtractor"; }
 
-  virtual std::string getClassName() const
-  { return RelationMemberSimilarityExtractor::className(); }
+  virtual QString getName() const
+  { return QString::fromStdString(RelationMemberSimilarityExtractor::className()); }
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;

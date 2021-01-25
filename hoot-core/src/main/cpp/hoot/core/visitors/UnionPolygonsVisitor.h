@@ -64,7 +64,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Combined " + QString::number(_numAffected) + " areas"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

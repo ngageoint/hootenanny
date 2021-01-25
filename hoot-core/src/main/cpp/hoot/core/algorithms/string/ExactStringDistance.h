@@ -55,6 +55,8 @@ public:
 
   QString toString() const override { return "ExactStringDistance"; }
 
+  virtual QString getName() const override { return QString::fromStdString(className()); }
+
   virtual QString getDescription() const override
   { return "Returns a matching string comparison score only if the strings match exactly (ignoring case)"; }
 };

@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -68,7 +68,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Updated " + StringUtils::formatLargeNumber(_numAffected) + " tags"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

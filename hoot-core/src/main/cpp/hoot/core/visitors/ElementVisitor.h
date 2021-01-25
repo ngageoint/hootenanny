@@ -31,7 +31,7 @@
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 
 namespace hoot
 {
@@ -44,12 +44,11 @@ namespace hoot
  * does not require it and you are not running in the conflate pipeline where all map data must
  * be read into memory).
  *
- * @todo We could eventually remove the default empty string implementations of OperationStatusInfo
+ * We could eventually remove the default empty string implementations of OperationStatus
  * methods and require them to be implemented in children.
- * @todo move this to the visitors folder
  */
 class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
-  public OperationStatusInfo
+  public OperationStatus
 {
 public:
 
@@ -66,22 +65,22 @@ public:
   virtual void visit(const ElementPtr& e) = 0;
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   long getNumFeaturesAffected() const override { return _numAffected; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   long getNumFeaturesProcessed() const override { return _numProcessed; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const override { return ""; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getCompletedStatusMessage() const override { return ""; }
 
@@ -95,16 +94,11 @@ public:
    */
   virtual QStringList getCriteria() const override { return QStringList(); }
 
-  /**
-   * Returns the visitor's class name
-   *
-   * @return class name string
-   */
-  virtual std::string getClassName() const = 0;
+  virtual QString toString() const override { return ""; }
 
 protected:
 
-  // These will only be used by those implementing OperationStatusInfo.
+  // These will only be used by those implementing OperationStatus.
   long _numAffected;    // how many elements the operation actually counted or did something to
   long _numProcessed;   // how many elements the operation processed total
 };

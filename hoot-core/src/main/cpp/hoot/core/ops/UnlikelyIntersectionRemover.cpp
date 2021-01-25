@@ -35,6 +35,9 @@
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+
+
 // Standard
 #include <iostream>
 
@@ -253,5 +256,11 @@ void UnlikelyIntersectionRemover::apply(std::shared_ptr<OsmMap>& map)
     }
   }
 }
+
+QStringList UnlikelyIntersectionRemover::getCriteria() const
+{
+  return QStringList(QString::fromStdString(LinearCriterion::className()));
+}
+
 
 }

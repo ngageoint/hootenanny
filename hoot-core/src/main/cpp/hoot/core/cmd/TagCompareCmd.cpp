@@ -44,7 +44,7 @@ class TagCompareCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::TagCompareCmd"; }
+  static std::string className() { return "hoot::TagCompareCmd"; }
 
   TagCompareCmd() = default;
 

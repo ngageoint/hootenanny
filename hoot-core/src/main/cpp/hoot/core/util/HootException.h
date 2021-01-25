@@ -55,7 +55,7 @@ public:
 
   virtual HootException* clone() const { return new HootException(*this); }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   const QString& getWhat() const { return _what; }
   virtual const char* what() const throw() { _tmp = _what.toLatin1(); return _tmp.constData(); }
@@ -158,7 +158,7 @@ public: \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
   virtual HootException* clone() const { return new Name(*this); } \
-  virtual std::string getClassName() const { return className(); } \
+  virtual QString getName() const { return QString::fromStdString(className()); } \
 };
 
 #define HOOT_DEFINE_EXCEPTION_STR(Name, Default) \
@@ -171,7 +171,7 @@ public: \
   Name(const Name& e) : HootException(e.getWhat()) { } \
   virtual ~Name() throw() {} \
   virtual HootException* clone() const { return new Name(*this); } \
-  virtual std::string getClassName() const { return className(); } \
+  virtual QString getName() const { return QString::fromStdString(className()); } \
 };
 
 /****

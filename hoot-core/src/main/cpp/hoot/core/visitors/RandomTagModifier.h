@@ -28,7 +28,7 @@
 #define RANDOM_TAG_MODIFIER_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/RngConsumer.h>
 
@@ -66,7 +66,7 @@ public:
 
   virtual QString getDescription() const { return "Randomly modifies feature tags"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

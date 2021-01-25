@@ -62,7 +62,7 @@ public:
   // OsmMapOperation
   virtual void apply(std::shared_ptr<OsmMap>& pMap) override;
 
-  // OperationStatusInfo
+  // OperationStatus
   virtual QString getInitStatusMessage() const { return "Processing metadata..."; }
   virtual QString getCompletedStatusMessage() const
   { return "Modified " + QString::number(_numAffected) + " elements"; }
@@ -70,7 +70,7 @@ public:
   // Configurable
   virtual void setConfiguration(const Settings& conf);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 protected:
 

@@ -52,9 +52,13 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString toString() const override { return QString("QuantileAggregator %1").arg(_quantile); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
-  virtual QString getDescription() const override { return "Aggregates data based on the quantile value"; }
+  virtual QString toString() const override
+  { return QString("QuantileAggregator %1").arg(_quantile); }
+
+  virtual QString getDescription() const override
+  { return "Aggregates data based on the quantile value"; }
 
 private:
 

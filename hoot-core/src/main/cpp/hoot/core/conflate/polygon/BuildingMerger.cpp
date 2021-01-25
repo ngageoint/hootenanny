@@ -94,6 +94,8 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
+  virtual QString getName() const override { return ""; }
+
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
 

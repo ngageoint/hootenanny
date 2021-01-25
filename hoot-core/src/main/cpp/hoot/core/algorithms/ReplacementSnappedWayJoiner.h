@@ -68,6 +68,8 @@ public:
   virtual QString getDescription() const override
   { return "Way joiner for use after way snapping when generating replacement changesets."; }
 
+  virtual QString getName() const override { return QString::fromStdString(className()); }
+
 protected:
 
   /*

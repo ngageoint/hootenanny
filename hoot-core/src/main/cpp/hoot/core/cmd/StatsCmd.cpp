@@ -50,7 +50,7 @@ class StatsCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::StatsCmd"; }
+  static std::string className() { return "hoot::StatsCmd"; }
 
   StatsCmd() = default;
 

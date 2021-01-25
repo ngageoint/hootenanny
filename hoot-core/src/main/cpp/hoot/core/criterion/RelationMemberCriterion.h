@@ -59,8 +59,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies relation members"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

@@ -70,7 +70,7 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   std::shared_ptr<WayJoiner> getWayJoiner() const { return _wayJoiner; }
 

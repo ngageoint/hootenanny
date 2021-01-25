@@ -51,7 +51,7 @@ class PerturbCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::PerturbCmd"; }
+  static std::string className() { return "hoot::PerturbCmd"; }
 
   PerturbCmd() = default;
 

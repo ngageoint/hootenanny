@@ -36,6 +36,7 @@
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Standard
 #include <iostream>
@@ -128,6 +129,11 @@ std::shared_ptr<OsmMap> HighwayImpliedDividedMarker::markDivided()
 void HighwayImpliedDividedMarker::apply(std::shared_ptr<OsmMap>& map)
 {
   map = markDivided(map);
+}
+
+QStringList HighwayImpliedDividedMarker::getCriteria() const
+{
+  return QStringList(QString::fromStdString(HighwayCriterion::className()));
 }
 
 }

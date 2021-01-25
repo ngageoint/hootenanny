@@ -61,7 +61,7 @@ public:
 
   static QSet<QString> getBuildingPartTagNames();
 
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

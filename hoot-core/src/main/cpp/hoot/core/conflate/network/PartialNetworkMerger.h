@@ -70,7 +70,7 @@ public:
 
   virtual QString getDescription() const { return "Merges roads matched by the Network Algorithm"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   bool getNeedsReview() const { return _needsReview; }
 

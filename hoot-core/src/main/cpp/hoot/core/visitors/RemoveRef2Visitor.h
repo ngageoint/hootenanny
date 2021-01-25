@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 // Qt
 #include <QMap>
@@ -73,7 +73,7 @@ public:
   virtual QString getDescription() const
   { return "Removes REF2 tags when a criterion is met for both REF1 and REF2 elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 protected:
 

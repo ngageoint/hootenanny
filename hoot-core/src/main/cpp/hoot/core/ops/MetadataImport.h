@@ -74,7 +74,7 @@ public:
   // OsmMapOperation
   virtual QString getDescription() const override { return "Imports metadata"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

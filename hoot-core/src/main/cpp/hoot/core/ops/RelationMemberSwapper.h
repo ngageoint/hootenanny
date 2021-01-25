@@ -78,7 +78,7 @@ public:
   virtual QString getDescription() const
   { return "Swaps all relation members references for one element ID with another"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

@@ -49,7 +49,7 @@ using namespace v8;
 class HootJsLoaded
 {
 public:
-  static string className() { return "hoot::HootJsLoaded"; }
+  static std::string className() { return "hoot::HootJsLoaded"; }
 };
 
 HOOT_FACTORY_REGISTER_BASE(HootJsLoaded)

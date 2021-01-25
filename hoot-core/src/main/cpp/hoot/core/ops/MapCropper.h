@@ -65,7 +65,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf) override;
 
-  virtual std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   virtual QString getDescription() const override { return "Crops a map"; }
 

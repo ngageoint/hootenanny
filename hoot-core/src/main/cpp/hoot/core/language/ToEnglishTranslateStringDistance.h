@@ -72,6 +72,8 @@ public:
   virtual QString getDescription() const override
   { return "Returns a string comparison score based on the associated string comparator after first translating to English"; }
 
+  virtual QString getName() const override { return QString::fromStdString(className()); }
+
 private:
 
   StringDistancePtr _d;

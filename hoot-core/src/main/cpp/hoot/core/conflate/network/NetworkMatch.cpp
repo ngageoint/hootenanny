@@ -173,7 +173,7 @@ QString NetworkMatch::toString() const
 {
   return
     QString("Network Match (%1) pairs: %2 score:%3")
-      .arg(getMatchName())
+      .arg(getName())
       .arg(hoot::toString(_pairs))
       .arg(getScore());
 }

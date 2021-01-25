@@ -56,8 +56,7 @@ public:
 
   virtual void setConfiguration(const Settings& s);
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 private:
 

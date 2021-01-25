@@ -64,7 +64,7 @@ public:
    */
   void restore(OsmMapPtr& map);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual QString getInitStatusMessage() const
   { return "Remapping element IDs..."; }

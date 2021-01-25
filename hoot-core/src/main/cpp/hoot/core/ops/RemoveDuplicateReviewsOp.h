@@ -52,7 +52,7 @@ public:
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual QString getInitStatusMessage() const
   { return "Removing duplicate conflation review relations..."; }

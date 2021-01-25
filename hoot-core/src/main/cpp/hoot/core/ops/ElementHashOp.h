@@ -56,7 +56,7 @@ public:
 
   virtual QString getDescription() const { return _hashVis.getDescription(); }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   QMap<QString, ElementId> getHashesToElementIds() const
   { return _hashVis.getHashesToElementIds(); }

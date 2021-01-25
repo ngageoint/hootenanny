@@ -63,7 +63,7 @@ public:
   virtual QString getDescription() const
   { return "Removes elements containing no information in tags"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 protected:
 

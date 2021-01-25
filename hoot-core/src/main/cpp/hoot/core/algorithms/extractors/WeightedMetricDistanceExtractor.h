@@ -51,9 +51,9 @@ public:
 
   virtual ~WeightedMetricDistanceExtractor() = default;
 
-  virtual std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
-  virtual std::string getName() const override;
+  virtual QString toString() const override;
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -66,7 +66,8 @@ public:
 
 protected:
 
-  double _extract(const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
+  double _extract(
+    const OsmMap& /*map*/, const ConstWayPtr& w1, const ConstWayPtr& w2) const override;
 
   std::shared_ptr<ValueAggregator> _pointAgg;
   Meters _searchRadius;

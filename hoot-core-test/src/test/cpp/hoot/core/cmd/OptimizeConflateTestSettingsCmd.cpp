@@ -42,7 +42,7 @@ class OptimizeConflateTestSettingsCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::OptimizeConflateTestSettingsCmd"; }
+  static std::string className() { return "hoot::OptimizeConflateTestSettingsCmd"; }
 
   OptimizeConflateTestSettingsCmd() { }
 

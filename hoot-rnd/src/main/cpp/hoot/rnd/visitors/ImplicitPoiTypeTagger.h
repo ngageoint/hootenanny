@@ -49,7 +49,7 @@ public:
   virtual QString getDescription() const override
   { return "Adds tags to POIs implicitly derived from their names"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 protected:
 

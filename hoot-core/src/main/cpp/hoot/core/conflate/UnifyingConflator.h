@@ -79,7 +79,7 @@ public:
    */
   virtual void apply(OsmMapPtr& map) override;
 
-  virtual std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   QList<SingleStat> getStats() const { return _stats; }
 

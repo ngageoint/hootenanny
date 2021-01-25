@@ -32,7 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -136,8 +136,7 @@ private:
 
     try
     {
-      statsCollector.reset(
-        Factory::getInstance().constructObject<ElementVisitor>(visClassName));
+      statsCollector.reset(Factory::getInstance().constructObject<ElementVisitor>(visClassName));
     }
     catch (const boost::bad_any_cast&)
     {

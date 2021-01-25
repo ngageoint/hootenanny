@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef OPERATION_STATUS_INFO_H
-#define OPERATION_STATUS_INFO_H
+#ifndef OPERATION_STATUS_H
+#define OPERATION_STATUS_H
 
 #include <QString>
 
@@ -40,12 +40,12 @@ namespace hoot
  * can force a subset of any of the status messages to not be displayed by returning an empty
  * string.
  */
-class OperationStatusInfo
+class OperationStatus
 {
 public:
 
-  OperationStatusInfo() = default;
-  virtual ~OperationStatusInfo() = default;
+  OperationStatus() = default;
+  virtual ~OperationStatus() = default;
 
   /**
     Returns a user friendly message indicating the visitor has begun its work
@@ -78,4 +78,4 @@ public:
 
 }
 
-#endif // OPERATION_STATUS_INFO_H
+#endif // OPERATION_STATUS_H

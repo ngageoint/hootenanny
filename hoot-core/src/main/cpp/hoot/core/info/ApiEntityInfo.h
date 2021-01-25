@@ -30,9 +30,10 @@
 namespace hoot
 {
 
+#include <QString>
+
 /**
- * Interface to describe the functionality of various Hoot API entities. e.g. OsmMapOperation,
- * ElementVisitor, ValueAggregator, etc.
+ * Interface to describe the functionality of various Hoot API entities.
  */
 class ApiEntityInfo
 {
@@ -42,7 +43,7 @@ public:
   virtual ~ApiEntityInfo() = default;
 
   /**
-   * Returns a one sentence description for the entity.
+   * Returns a one sentence description of the entity used for documentation purposes.
    *
    * Keep this as short as possible, capitalize the first letter, and check to see that it stays
    * on one line when displayed with the 'info --operators' command.
@@ -51,6 +52,21 @@ public:
    * as returning an empty string.
    */
   virtual QString getDescription() const = 0;
+
+  /**
+   * Returns the entity's name; often this is the full class name
+   *
+   * @return class name string
+   */
+  virtual QString getName() const = 0;
+
+  /**
+   * Returns a string uniquely identifying the entity. May contain information about the data
+   * contained within the entity.
+   *
+   * @return a string
+   */
+  virtual QString toString() const = 0;
 };
 
 }

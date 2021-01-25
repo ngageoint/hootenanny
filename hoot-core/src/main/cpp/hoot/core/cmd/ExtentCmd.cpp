@@ -47,7 +47,7 @@ class ExtentCmd : public BaseCommand
 
 public:
 
-  static string className() { return "hoot::ExtentCmd"; }
+  static std::string className() { return "hoot::ExtentCmd"; }
 
   ExtentCmd() = default;
 

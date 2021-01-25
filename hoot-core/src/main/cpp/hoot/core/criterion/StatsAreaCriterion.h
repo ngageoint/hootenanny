@@ -51,9 +51,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies areas for use by statistics"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
-
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 };
 
 }

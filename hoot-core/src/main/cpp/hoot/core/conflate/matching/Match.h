@@ -84,7 +84,7 @@ public:
    * QString to return the name. This avoid constructing multiple duplicate QStrings (possibly
    * lots of duplicates).
    */
-  virtual QString getMatchName() const = 0;
+  virtual QString getName() const = 0;
 
   /**
    * Returns the score associated with this match. Score is a bit abstract at this point and may
@@ -111,8 +111,7 @@ public:
    * @return true if the two matches are conflicting; false otherwise
    */
   virtual bool isConflicting(
-    const std::shared_ptr<const Match>& other,
-    const ConstOsmMapPtr& map,
+    const std::shared_ptr<const Match>& other, const ConstOsmMapPtr& map,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const = 0;
 
   /**
@@ -141,16 +140,12 @@ public:
    */
   virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const = 0;
 
-  virtual QString toString() const = 0;
-
   /**
    * Returns this match's type.
    *
    * @return a match type
    */
   virtual MatchType getType() const;
-
-  virtual QString getDescription() const = 0;
 
   /**
    * Determines if this matches equals another match
@@ -177,6 +172,8 @@ public:
    */
   static QString matchPairsToString(
     const std::set<std::pair<ElementId, ElementId>>& matchPairs);
+
+  virtual QString toString() const = 0;
 
 protected:
 

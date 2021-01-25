@@ -45,7 +45,7 @@ namespace hoot
  * We want to keep ID's out of this, so not using GeoJsonWriter. Although, possibly we could add
  * a switch to GeoJsonWriter to not write ID's and use it at some point instead of this.
  *
- * @todo implement OperationStatusInfo
+ * @todo implement OperationStatus
  */
 class ElementHashVisitor : public ElementOsmMapVisitor
 {
@@ -79,7 +79,7 @@ public:
 
   virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }
   QMap<ElementId, QString> getElementIdsToHashes() const { return _elementIdsToHashes; }

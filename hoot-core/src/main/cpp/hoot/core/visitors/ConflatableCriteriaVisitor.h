@@ -28,7 +28,7 @@
 #define CONFLATABLE_CRITERIA_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
 
@@ -54,7 +54,7 @@ public:
   virtual QString getDescription() const
   { return "Marks elements with all criterion classes that consider them conflatable"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

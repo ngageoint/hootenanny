@@ -43,9 +43,12 @@ public:
 
   virtual double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const override { return "MaxAggregator"; }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
-  virtual QString getDescription() const override { return "Aggregates data based on the maximum value"; }
+  virtual QString toString() const override { return QString::fromStdString(className()); }
+
+  virtual QString getDescription() const override
+  { return "Aggregates data based on the maximum value"; }
 };
 
 }

@@ -150,15 +150,15 @@ public:
     */
    virtual QStringList getCriteria() const;
 
-   virtual std::string getClassName() const { return className(); }
+   virtual QString getName() const { return QString::fromStdString(className()); }
 
    /**
-    * @see OperationStatusInfo
+    * @see OperationStatus
     */
    virtual QString getInitStatusMessage() const override { return "Rubbersheeting data..."; }
 
    /**
-    * @see OperationStatusInfo
+    * @see OperationStatus
     */
    virtual QString getCompletedStatusMessage() const override
    {
@@ -207,7 +207,7 @@ private:
   // used as a temporary in interpolating.
   std::vector<double> _matchPoint;
   std::shared_ptr<OGRSpatialReference> _projection;
-  std::string _interpolatorClassName;
+  QString _interpolatorClassName;
 
   double _searchRadius;
 

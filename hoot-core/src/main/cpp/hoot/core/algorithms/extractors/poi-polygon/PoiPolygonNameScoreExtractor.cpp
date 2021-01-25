@@ -94,7 +94,7 @@ void PoiPolygonNameScoreExtractor::setConfiguration(const Settings& conf)
         config.getLanguageTranslationTranslator()));
     _translator->setConfiguration(conf);
     _translator->setSourceLanguages(config.getLanguageTranslationSourceLanguages());
-    _translator->setId(QString::fromStdString(className()));
+    _translator->setId(className());
   }
 }
 

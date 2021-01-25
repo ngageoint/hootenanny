@@ -43,7 +43,9 @@ public:
 
   virtual double aggregate(std::vector<double>& d) const override;
 
-  virtual QString toString() const override { return QString("Sigma Aggregator"); }
+  virtual QString toString() const override { return QString::fromStdString(className()); }
+
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
   virtual QString getDescription() const override
   { return "Aggregates data based on the unbiased Standard Deviation value"; }

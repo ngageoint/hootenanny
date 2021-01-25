@@ -29,7 +29,7 @@
 #define NORMALIZE_ADDRESSES_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/conflate/address/AddressNormalizer.h>
 
 namespace hoot
@@ -59,7 +59,7 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Normalized " + QString::number(_addressNormalizer.getNumNormalized()) + " addresses"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

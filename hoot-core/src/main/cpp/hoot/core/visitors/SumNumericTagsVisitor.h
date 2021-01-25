@@ -69,7 +69,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual QString getInitStatusMessage() const { return "Summing values of numeric tags..."; }
 

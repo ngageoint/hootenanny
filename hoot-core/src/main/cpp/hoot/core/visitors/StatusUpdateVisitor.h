@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -37,7 +37,7 @@ namespace hoot
 /**
  * Sets the status on elements
  *
- * @todo implement OperationStatusInfo
+ * @todo implement OperationStatus
  */
 class StatusUpdateVisitor : public ElementVisitor, public Configurable
 {
@@ -55,7 +55,7 @@ public:
 
   virtual QString getDescription() const { return "Sets element statuses"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

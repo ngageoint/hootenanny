@@ -31,7 +31,7 @@
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
 
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -54,7 +54,7 @@ public:
   virtual QString getDescription() const
   { return "Projects features to a geographic coordinate system"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

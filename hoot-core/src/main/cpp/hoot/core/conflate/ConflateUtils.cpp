@@ -175,9 +175,7 @@ bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
       }
       else
       {
-        crit.reset(
-          Factory::getInstance().constructObject<ElementCriterion>(
-            criterionClassName.toStdString()));
+        crit.reset(Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
         _critCache[criterionClassName] = crit;
 
         // All ElementCriterion that are map consumers inherit from ConstOsmMapConsumer, so this

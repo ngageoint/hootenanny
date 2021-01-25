@@ -48,7 +48,7 @@ class CutCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::CutCmd"; }
+  static std::string className() { return "hoot::CutCmd"; }
 
   CutCmd() = default;
 

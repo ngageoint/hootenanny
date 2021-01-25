@@ -56,8 +56,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies elements with a particular status"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 private:
 

@@ -45,6 +45,7 @@ using namespace hoot;
 #include <QCoreApplication>
 #include <QString>
 #include <QTime>
+#include <QString>
 
 // Standard
 #include <exception>
@@ -60,8 +61,7 @@ int main(int argc, char *argv[])
 
   QCoreApplication app(argc, argv);
 
-  vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
-
+  vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
   std::shared_ptr<Command> c;
   for (size_t i = 0; i < cmds.size(); i++)
   {
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
   }
   else
   {
-    c.reset(Factory::getInstance().constructObject<Command>(string("hoot::HelpCmd")));
+    c.reset(Factory::getInstance().constructObject<Command>("hoot::HelpCmd"));
     c->run(argv, argc);
     return -1;
   }

@@ -133,7 +133,7 @@ void ScriptMatch::_calculateClassification(
   }
   catch (const NeedsReviewException& ex)
   {
-    LOG_VART(ex.getClassName());
+    LOG_VART(ex.getName());
     _p.setReview();
     _explainText = ex.getWhat();
   }

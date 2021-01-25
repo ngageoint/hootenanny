@@ -49,7 +49,7 @@ class CropCmd : public BoundedCommand
 {
 public:
 
-  static string className() { return "hoot::CropCmd"; }
+  static std::string className() { return "hoot::CropCmd"; }
 
   CropCmd() = default;
 

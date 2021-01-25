@@ -38,6 +38,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/criterion/RoundaboutCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QDebug>
@@ -140,6 +141,11 @@ void RemoveRoundabouts::apply(OsmMapPtr& pMap)
   std::vector<RoundaboutPtr> removed;
   removeRoundabouts(removed);
   pMap->setRoundabouts(removed);
+}
+
+QStringList RemoveRoundabouts::getCriteria() const
+{
+  return QStringList(QString::fromStdString(HighwayCriterion::className()));
 }
 
 }

@@ -29,7 +29,7 @@
 #define PHONE_NUMBER_LOCATE_VISITOR_H
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/conflate/phone/PhoneNumberLocator.h>
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
 #include <hoot/core/util/Configurable.h>
@@ -73,7 +73,7 @@ public:
       QString::number(_numAffected) + " different elements";
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

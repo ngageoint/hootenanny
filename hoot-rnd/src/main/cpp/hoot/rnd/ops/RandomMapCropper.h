@@ -68,7 +68,7 @@ public:
   void setTileFootprintOutputPath(QString path);
   void setPixelSize(double size) { _pixelSize = size; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

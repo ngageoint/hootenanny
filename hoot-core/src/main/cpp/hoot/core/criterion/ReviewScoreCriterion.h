@@ -60,9 +60,7 @@ public:
   void setMaxScoreThreshold(const double threshold);
   void setInvertThresholding(const bool invert) { _invertThresholding = invert; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
-
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
 private:
 

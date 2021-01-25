@@ -163,7 +163,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -717,7 +717,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   Context::Scope context_scope(_script->getContext(current));
   _script->loadScript(_scriptPath, "plugin");
   // bit of a hack...see MatchCreator.h...need to refactor
-  _description = QString::fromStdString(className()) + "," + args[0];
+  _description = className() + "," + args[0];
   _cachedScriptVisitor.reset();
   _scriptInfo = _getScriptDescription(_scriptPath);
 
@@ -1026,7 +1026,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   }
 
   QFileInfo fi(path);
-  result.className = (QString::fromStdString(className()) + "," + fi.fileName()).toStdString();
+  result.className = (className() + "," + fi.fileName()).toStdString();
 
   return result;
 }

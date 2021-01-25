@@ -53,7 +53,7 @@ class CompareCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::CompareCmd"; }
+  static std::string className() { return "hoot::CompareCmd"; }
 
   CompareCmd() = default;
 

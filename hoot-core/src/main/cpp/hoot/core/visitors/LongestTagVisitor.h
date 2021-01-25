@@ -51,7 +51,7 @@ public:
 
   virtual QString getDescription() const { return "Identifies the tag with the largest text size"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

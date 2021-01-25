@@ -52,7 +52,7 @@ geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
-CreatorDescription::CreatorDescription(std::string className, QString description,
+CreatorDescription::CreatorDescription(const QString& className, const QString& description,
                                        bool experimental) :
 experimental(experimental),
 className(className),
@@ -62,7 +62,7 @@ geometryType(GeometryTypeCriterion::GeometryType::Unknown)
 {
 }
 
-CreatorDescription::CreatorDescription(std::string className, QString description,
+CreatorDescription::CreatorDescription(const QString& className, const QString& description,
                                        BaseFeatureType featureType, bool experimental) :
 experimental(experimental),
 className(className),
@@ -204,7 +204,7 @@ ElementCriterionPtr CreatorDescription::getElementCriterion(BaseFeatureType t, C
 
 QString CreatorDescription::toString() const
 {
-  return QString::fromStdString(className) + ";" + baseFeatureTypeToString(baseFeatureType);
+  return className + ";" + baseFeatureTypeToString(baseFeatureType);
 }
 
 }

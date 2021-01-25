@@ -106,7 +106,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }

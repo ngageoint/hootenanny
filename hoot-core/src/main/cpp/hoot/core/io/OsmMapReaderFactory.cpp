@@ -84,8 +84,7 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::_createReader(const QString& 
     LOG_DEBUG("Using reader: " << readerOverride);
   }
 
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
+  vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
   for (size_t i = 0; i < names.size() && !reader; ++i)
   {
     LOG_TRACE("Checking input " << url << " with reader " << names[i]);
@@ -141,20 +140,19 @@ std::shared_ptr<OsmMapReader> OsmMapReaderFactory::createReader(bool useDataSour
 QString OsmMapReaderFactory::getReaderName(const QString& url)
 {
   LOG_VARD(url);
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
+  vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapReader::className());
   LOG_VARD(names.size());
   std::shared_ptr<OsmMapReader> writer;
   for (size_t i = 0; i < names.size(); i++)
   {
-    const std::string name = names[i];
+    const QString name = names[i];
     LOG_VART(name);
     writer.reset(Factory::getInstance().constructObject<OsmMapReader>(name));
     LOG_VART(url);
     LOG_VART(writer->isSupported(url));
     if (writer->isSupported(url))
     {
-      return QString::fromStdString(name);
+      return name;
     }
   }
   return "";

@@ -72,8 +72,7 @@ map<QString, double> PoiPolygonRfClassifier::getFeatures(const ConstOsmMapPtr& m
     // if it isn't null then include it.
     if (!FeatureExtractor::isNull(v))
     {
-      QString factorName =
-        QString::fromStdString(_extractors[i]->getName()).replace(QRegExp("[^\\w]"), "_");
+      QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");
       result[factorName] = v;
     }
   }

@@ -69,7 +69,7 @@ public:
 
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
-  virtual QString getMatchName() const override { return getHighwayMatchName(); }
+  virtual QString getName() const override { return getHighwayMatchName(); }
   static QString getHighwayMatchName() { return MATCH_NAME; }
 
   virtual double getProbability() const override;

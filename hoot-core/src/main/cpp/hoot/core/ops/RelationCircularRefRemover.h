@@ -63,7 +63,7 @@ public:
   virtual QString getDescription() const
   { return "Removes half of a relation pair that reference each other from a map"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

@@ -46,10 +46,10 @@ const std::string GeometryModifierAction::ARGUMENT_TAG = "arguments";
 GeometryModifierOp::GeometryModifierOp(): _pConf(&conf())
 {
   // get and instantiate available actions
-  std::vector<std::string> availableActionTypes = Factory::getInstance().getObjectNamesByBase(GeometryModifierAction::className());
-
+  std::vector<QString> availableActionTypes =
+    Factory::getInstance().getObjectNamesByBase(GeometryModifierAction::className());
   LOG_DEBUG( "Available Geometry Modifiers:")
-  for (std::string availType : availableActionTypes)
+  for (QString availType : availableActionTypes)
   {
     std::shared_ptr<GeometryModifierAction> pAction(Factory::getInstance().constructObject<GeometryModifierAction>(availType));
     _actions.append(pAction);

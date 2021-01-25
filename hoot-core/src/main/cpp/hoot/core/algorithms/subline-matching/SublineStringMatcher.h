@@ -65,18 +65,13 @@ public:
   virtual void setHeadingDelta(Meters headingDelta) = 0;
 
   /**
-   * Returns the matcher's class name
-   *
-   * @return class name string
-   */
-  virtual std::string getClassName() const = 0;
-
-  /**
    * Returns the class name of the underlying subline matcher
    *
    * @return class name string
    */
-  virtual std::string getSublineMatcherName() const = 0;
+  virtual QString getSublineMatcherName() const = 0;
+
+  virtual QString toString() const override { return ""; }
 };
 
 typedef std::shared_ptr<SublineStringMatcher> SublineStringMatcherPtr;

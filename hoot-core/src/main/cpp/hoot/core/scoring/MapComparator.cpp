@@ -100,7 +100,7 @@ public:
   bool isMatch() { return _matches; }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
 
   virtual void visit(const std::shared_ptr<const Element>& e)
   {

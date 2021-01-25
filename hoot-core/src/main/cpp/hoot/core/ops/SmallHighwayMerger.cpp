@@ -47,6 +47,8 @@
 #include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -260,6 +262,11 @@ void SmallHighwayMerger::mergeWays(std::shared_ptr<OsmMap> map, Meters threshold
 {
   SmallHighwayMerger a(threshold);
   a.apply(map);
+}
+
+QStringList SmallHighwayMerger::getCriteria() const
+{
+  return QStringList(QString::fromStdString(HighwayCriterion::className()));
 }
 
 }

@@ -27,7 +27,7 @@
 #ifndef ADDEXPORTTAGSVISITOR_H
 #define ADDEXPORTTAGSVISITOR_H
 
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -60,7 +60,7 @@ public:
   { _includeCircularError = includeCircularError; }
   void overrideDebugSettings();
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

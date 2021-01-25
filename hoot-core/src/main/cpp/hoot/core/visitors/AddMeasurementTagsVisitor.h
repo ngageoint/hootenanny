@@ -28,7 +28,7 @@
 #define ADDMEASUREMENTTAGSVISITOR_H
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
@@ -66,12 +66,12 @@ public:
 
   virtual void visit(const ElementPtr& e);
 
-  // OperationStatusInfo
+  // OperationStatus
   virtual QString getInitStatusMessage() const { return "Adding measurement tags..."; }
   virtual QString getCompletedStatusMessage() const
   { return "Added tags to " + QString::number(_numAffected) + " elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return QString::fromStdString(className()); }
 
 private:
 

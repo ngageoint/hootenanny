@@ -59,7 +59,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
 
 private:
 
@@ -84,7 +84,7 @@ public:
   }
 
   virtual QString getDescription() const { return "Randomly removes elements from a map"; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
 
 private:
 
@@ -113,7 +113,7 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
 
   virtual void visit(const std::shared_ptr<Element>& e)
   {

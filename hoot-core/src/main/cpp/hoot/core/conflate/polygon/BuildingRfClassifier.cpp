@@ -62,9 +62,8 @@ namespace hoot
 void BuildingRfClassifier::_createAllExtractors() const
 {
   _extractors.clear();
-  vector<std::string> extractorNames =
+  vector<QString> extractorNames =
     Factory::getInstance().getObjectNamesByBase(FeatureExtractor::className());
-
   for (size_t i = 0; i < extractorNames.size(); i++)
   {
     FeatureExtractor* fe =

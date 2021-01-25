@@ -67,7 +67,7 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
     }
 
     virtual QString getDescription() const { return ""; }
-    virtual std::string getClassName() const { return ""; }
+    virtual QString getName() const { return ""; }
 
   protected:
     HashMap<ElementId, set<long>>& _mapping;
@@ -117,7 +117,7 @@ void ElementToRelationMap::removeRelation(const OsmMap& map,
     virtual ~RemoveMemberVisitor() = default;
 
     virtual QString getDescription() const { return ""; }
-    virtual std::string getClassName() const { return ""; }
+    virtual QString getName() const { return ""; }
 
     virtual void visit(const ConstElementPtr& e)
     {
@@ -155,7 +155,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     virtual ~ContainsElementVisitor() = default;
 
     virtual QString getDescription() const { return ""; }
-    virtual std::string getClassName() const { return ""; }
+    virtual QString getName() const { return ""; }
 
     virtual void visit(const ConstElementPtr& e)
     {
@@ -188,7 +188,7 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     virtual ~CheckVisitor() = default;
 
     virtual QString getDescription() const { return ""; }
-    virtual std::string getClassName() const { return ""; }
+    virtual QString getName() const { return ""; }
 
     bool containsRecursive(const ConstRelationPtr& r, ElementId eid)
     {

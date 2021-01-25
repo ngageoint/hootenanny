@@ -59,9 +59,9 @@ public:
 
   static std::string className() { return "hoot::AngleHistogramExtractor"; }
 
-  virtual std::string getClassName() const override { return AngleHistogramExtractor::className(); }
+  virtual QString getName() const override { return QString::fromStdString(className()); }
 
-  virtual std::string getName() const override;
+  virtual QString toString() const override;
 
   virtual void setConfiguration(const Settings& conf);
 

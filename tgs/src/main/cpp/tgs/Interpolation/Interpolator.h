@@ -47,7 +47,7 @@ public:
 
   virtual ~Interpolator() {}
 
-  virtual std::string getClassName() const = 0;
+  virtual QString getName() const = 0;
 
   /**
    * Returns the estimated RMSE for the interpolator.
@@ -85,7 +85,7 @@ public:
   /**
    * Returns a human readable summary of the interpolator.
    */
-  virtual std::string toString() const = 0;
+  virtual QString toString() const = 0;
 
   /**
    * Write the interpolator to the specified output stream.
