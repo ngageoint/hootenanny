@@ -68,6 +68,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getInitStatusMessage() const { return "Counting translated tags..."; }
 
   virtual QString getCompletedStatusMessage() const

@@ -63,6 +63,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 protected:
 
   // When roads are split and the pieces stored in multilinestring relations, this decides if the

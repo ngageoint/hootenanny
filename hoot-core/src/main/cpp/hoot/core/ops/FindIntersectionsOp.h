@@ -63,6 +63,8 @@ public:
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor() = 0;
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 /**
@@ -82,6 +84,8 @@ public:
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 /**
@@ -101,6 +105,8 @@ public:
   virtual std::shared_ptr<FindIntersectionsVisitor> createVisitor();
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

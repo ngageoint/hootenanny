@@ -82,6 +82,8 @@ public:
 
   virtual QString getName() const override { return "Fake Match"; }
 
+  virtual QString getClassName() const { return ""; }
+
   virtual double getProbability() const override { return _p; }
 
   virtual bool isConflicting(const ConstMatchPtr& other, const ConstOsmMapPtr& /*map*/,

@@ -77,6 +77,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   /**
    * Removes superfluous nodes from a map
    *

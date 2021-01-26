@@ -57,6 +57,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getDescription() const override
   { return "Returns a matching string comparison score only if the strings match exactly (ignoring case)"; }
 };

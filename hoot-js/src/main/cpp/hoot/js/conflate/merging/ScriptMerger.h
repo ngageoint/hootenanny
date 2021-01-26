@@ -66,6 +66,8 @@ public:
 
   virtual QString getName() const { return className() + "-" + _matchType; }
 
+  virtual QString getClassName() const override { return className(); }
+
   void setMatchType(const QString& matchType) { _matchType = matchType; }
 
 protected:

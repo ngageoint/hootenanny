@@ -58,6 +58,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   QMap<QString, ElementId> getHashesToElementIds() const
   { return _hashVis.getHashesToElementIds(); }
   QMap<ElementId, QString> getElementIdsToHashes() const

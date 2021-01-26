@@ -73,12 +73,15 @@ namespace hoot
 
     // OperationStatus
     virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
-    virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
+    virtual QString getCompletedStatusMessage() const
+    { return "Modified " + QString::number(_numAffected) + " elements"; }
 
     // Configurable
     virtual void setConfiguration(const Settings& conf);
 
     virtual QString getName() const { return className(); }
+
+    virtual QString getClassName() const override { return className(); }
 
   private:
     // json rules file name

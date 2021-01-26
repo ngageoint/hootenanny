@@ -66,6 +66,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   geos::geom::Coordinate _center;

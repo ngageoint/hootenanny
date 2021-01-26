@@ -71,6 +71,7 @@ public:
 
   virtual QString getName() const override { return getHighwayMatchName(); }
   static QString getHighwayMatchName() { return MATCH_NAME; }
+  virtual QString getClassName() const override { return className(); }
 
   virtual double getProbability() const override;
 

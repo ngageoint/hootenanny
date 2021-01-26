@@ -51,6 +51,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getDescription() const { return "Reprojects to a custom planar projection"; }
 
   virtual QString getInitStatusMessage() const

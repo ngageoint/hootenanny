@@ -54,8 +54,7 @@ public:
 
   virtual ~IdwInterpolator();
 
-  virtual QString getName() const
-  { return QString::fromStdString(IdwInterpolator::className()); }
+  virtual QString getName() const { return className(); }
 
   virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
 

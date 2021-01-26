@@ -46,7 +46,7 @@ public:
 
   static QString className() { return "hoot::NameExtractor"; }
 
-  virtual QString getClassName() const { return NameExtractor::className(); }
+  virtual QString getClassName() const { return className(); }
 
   virtual QString getName() const;
 

@@ -108,6 +108,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }
 

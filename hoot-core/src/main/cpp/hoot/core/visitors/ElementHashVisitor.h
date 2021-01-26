@@ -81,6 +81,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }
   QMap<ElementId, QString> getElementIdsToHashes() const { return _elementIdsToHashes; }
   QSet<std::pair<ElementId, ElementId>> getDuplicates() const { return _duplicates; }

@@ -56,6 +56,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 protected:
 
   ElementType::Type _elementType;
@@ -74,6 +76,8 @@ public:
   virtual QString getDescription() const { return "Identifies nodes"; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 class WayCriterion : public ElementTypeCriterion
@@ -88,6 +92,8 @@ public:
   virtual QString getDescription() const { return "Identifies ways"; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 class RelationCriterion : public ElementTypeCriterion, public Configurable
@@ -121,6 +127,8 @@ public:
   virtual QString getDescription() const { return "Identifies relations"; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual void setConfiguration(const Settings& conf)
   {

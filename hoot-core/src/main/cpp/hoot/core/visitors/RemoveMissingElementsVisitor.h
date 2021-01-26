@@ -67,6 +67,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   std::shared_ptr<ReportMissingElementsVisitor> _v;

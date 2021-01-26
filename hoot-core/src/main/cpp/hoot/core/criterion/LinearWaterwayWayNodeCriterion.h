@@ -52,6 +52,8 @@ public:
   { return "Identifies nodes belonging to linear bodies of water"; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

@@ -64,8 +64,7 @@ public:
    */
   virtual double estimateError();
 
-  virtual QString getName() const
-  { return QString::fromStdString(DelaunayInterpolator::className()); }
+  virtual QString getName() const { return className(); }
 
   virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
 

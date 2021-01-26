@@ -58,6 +58,8 @@ public:
   virtual QString getDescription() const { return "Identifies collection relations"; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

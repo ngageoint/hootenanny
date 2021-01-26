@@ -67,6 +67,8 @@ public:
 
   virtual QString getName() const override { return _matchName; }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual double getProbability() const override;
 
   virtual bool isConflicting(

@@ -118,6 +118,8 @@ public:
    */
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   /**
    * @brief getStats - Gets a list of stats recorded during the conflation process,
    * like number of matches found, time spent finding matches, etc.

@@ -59,6 +59,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getDescription() const
   { return "Removes all reviewable POI/Polygon POIs and their reviews that are invalid"; }
 

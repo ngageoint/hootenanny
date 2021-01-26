@@ -54,6 +54,7 @@ public:
   // leave empty to avoid duplicate tag mergers displayed by the info command
   virtual QString getDescription() const { return ""; }
   virtual QString getName() const { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -87,6 +88,8 @@ public:
   }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 /**
@@ -109,6 +112,8 @@ public:
   }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

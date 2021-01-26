@@ -66,6 +66,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   std::shared_ptr<OsmMapOperation> getAppliedOperation(const QString& className)
   { return _appliedOps[className]; }
   std::shared_ptr<ElementVisitor> getAppliedVisitor(const QString& className)

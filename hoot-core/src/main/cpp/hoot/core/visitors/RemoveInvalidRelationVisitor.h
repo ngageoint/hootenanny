@@ -69,6 +69,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   // one of the few OperatStatusInfo implementers recording two stats, so we'll add an extra var

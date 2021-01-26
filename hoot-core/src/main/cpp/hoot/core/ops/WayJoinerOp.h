@@ -72,6 +72,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   std::shared_ptr<WayJoiner> getWayJoiner() const { return _wayJoiner; }
 
 private:

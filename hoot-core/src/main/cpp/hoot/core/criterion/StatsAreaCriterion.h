@@ -52,6 +52,8 @@ public:
   virtual QString getDescription() const { return "Identifies areas for use by statistics"; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

@@ -53,6 +53,8 @@ public:
   { return "Determines if an element has a recognizable type."; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

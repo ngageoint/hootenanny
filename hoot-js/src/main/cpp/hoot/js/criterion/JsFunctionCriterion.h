@@ -60,6 +60,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   JsFunctionCriterion(v8::Persistent<v8::Function>& func)

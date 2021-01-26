@@ -47,6 +47,7 @@ public:
    */
   static QString className() { return "hoot::RemoveWayByEid"; }
   virtual QString getName() const { return className(); }
+  virtual QString getClassName() const override { return className(); }
 
   /**
    * @brief RemoveWayByEid is used to remove ways from maps

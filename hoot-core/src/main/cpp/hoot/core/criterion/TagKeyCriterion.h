@@ -65,6 +65,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 protected:
 
   explicit TagKeyCriterion(QStringList keys);

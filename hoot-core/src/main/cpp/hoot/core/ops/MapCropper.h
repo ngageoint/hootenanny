@@ -67,6 +67,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getDescription() const override { return "Crops a map"; }
 
   virtual QString getInitStatusMessage() const override;

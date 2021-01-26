@@ -57,6 +57,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   /**
    * Returns the ID of the first way that owns input node
    *

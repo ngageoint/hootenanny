@@ -52,6 +52,8 @@ public:
   virtual QString getDescription() const { return "Identifies features with multiple purposes"; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

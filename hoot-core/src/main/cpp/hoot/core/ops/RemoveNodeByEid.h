@@ -52,6 +52,7 @@ public:
    */
   static QString className() { return "hoot::RemoveNodeByEid"; }
   virtual QString getName() const { return className(); }
+  virtual QString getClassName() const override { return className(); }
 
   /**
    * @brief RemoveNodeByEid Removes a node from a map

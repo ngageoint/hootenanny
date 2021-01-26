@@ -71,6 +71,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   int getMissingCount() const { return _missingCount; }
 
   int getNumWaysMarkedForReview() const { return _numWaysMarkedForReview; }

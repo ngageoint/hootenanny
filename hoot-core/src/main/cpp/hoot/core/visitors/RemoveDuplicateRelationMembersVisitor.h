@@ -59,6 +59,8 @@ public:
   virtual QString getDescription() const { return "Removes duplicate relation members"; }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

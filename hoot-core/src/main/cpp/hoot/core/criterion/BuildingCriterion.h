@@ -67,6 +67,8 @@ public:
 
   virtual bool supportsSpecificConflation() const { return true; }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   ConstOsmMapPtr _map;

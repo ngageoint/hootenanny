@@ -65,6 +65,8 @@ public:
 
   virtual QString getName() const override { return MATCH_NAME; }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual double getProbability() const override;
 
   /**

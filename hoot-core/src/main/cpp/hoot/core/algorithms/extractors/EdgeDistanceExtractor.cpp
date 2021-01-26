@@ -69,6 +69,7 @@ public:
 
   virtual QString getDescription() const override { return ""; }
   virtual QString getName() const override { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
 private:
 
@@ -97,6 +98,7 @@ public:
 
   virtual QString getDescription() const override { return ""; }
   virtual QString getName() const override { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
 private:
 

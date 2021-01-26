@@ -48,6 +48,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getDescription() const
   { return "Calculates unique hash values for POIs conflated with Multiary POI Conflation"; }
 

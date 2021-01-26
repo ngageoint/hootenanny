@@ -78,6 +78,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
   virtual QString getName() const { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
   virtual void visit(const std::shared_ptr<Element>&) {}
 

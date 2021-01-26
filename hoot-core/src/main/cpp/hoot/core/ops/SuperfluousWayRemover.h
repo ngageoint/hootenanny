@@ -88,6 +88,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   // ways with these IDs will never be removed

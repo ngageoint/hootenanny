@@ -60,7 +60,7 @@ public:
 
   static QString className() { return "hoot::SmallerOverlapExtractor"; }
 
-  virtual QString getClassName() const override { return SmallerOverlapExtractor::className(); }
+  virtual QString getClassName() const override { return className(); }
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
@@ -72,6 +72,8 @@ public:
    * @see Configurable
    */
   virtual void setConfiguration(const Settings& conf);
+
+  virtual QString getName() const { return className(); }
 
 private:
 

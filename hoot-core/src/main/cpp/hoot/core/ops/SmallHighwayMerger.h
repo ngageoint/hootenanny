@@ -89,6 +89,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 protected:
 
   std::shared_ptr<OsmMap> _map;

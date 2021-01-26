@@ -49,6 +49,8 @@ public:
 
   virtual QString getClassName() const override { return className(); }
 
+  virtual QString getName() const { return className(); }
+
   virtual QString getDescription() const
   { return "Calculates metric distance between features"; }
 

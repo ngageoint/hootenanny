@@ -63,6 +63,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 
 private:

@@ -47,6 +47,8 @@ public:
   { return "Keeps tags from both features and overlapping tags are averaged together"; }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

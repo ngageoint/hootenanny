@@ -54,8 +54,9 @@ public:
   PoiPolygonPhoneNumberScoreExtractor();
   virtual ~PoiPolygonPhoneNumberScoreExtractor() = default;
 
-  virtual QString getClassName() const override
-  { return PoiPolygonPhoneNumberScoreExtractor::className(); }
+  virtual QString getClassName() const override { return className(); }
+
+  virtual QString getName() const { return className(); }
 
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;

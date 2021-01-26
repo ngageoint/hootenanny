@@ -60,6 +60,8 @@ public:
   virtual QString getDescription() const { return "Removes empty review relations"; }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

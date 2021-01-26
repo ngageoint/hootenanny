@@ -79,6 +79,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
   virtual QString getName() const { return ""; }
+    virtual QString getClassName() const override { return ""; }
 };
 
 void MultiaryMatchTrainingValidator::apply(std::shared_ptr<OsmMap>& map)

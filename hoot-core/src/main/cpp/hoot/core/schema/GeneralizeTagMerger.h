@@ -47,6 +47,8 @@ public:
   { return "Keeps tags from both features and overlapping tags are generalized to a common parent"; }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

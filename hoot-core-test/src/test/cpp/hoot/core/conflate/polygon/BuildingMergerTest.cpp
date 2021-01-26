@@ -100,6 +100,7 @@ public:
 
     virtual QString getDescription() const {return ""; }
     virtual QString getName() const { return ""; }
+    virtual QString getClassName() const { return ""; }
 
   private:
 

@@ -56,7 +56,8 @@ public:
   /**
    * Search the provided map for highway matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+  virtual void createMatches(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
@@ -72,7 +73,7 @@ public:
 
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
-  virtual QString getName() const { return className(); }
+  virtual QString getName() const override { return className(); }
 
   /**
    * @see FilteredByGeometryTypeCriteria

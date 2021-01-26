@@ -54,7 +54,7 @@ class OsmMap;
  * entire input map in memory at one time (operation logic does not require it and you are not
  * running in the conflate pipeline), consider using ElementVisitor instead.
  *
- * We could eventually remove the default empty string implementations of OperationStatus
+ * @todo We should eventually remove the default empty string implementations of OperationStatus
  * methods and require them to be implemented in children.
  */
 class OsmMapOperation : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,

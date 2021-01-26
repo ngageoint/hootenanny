@@ -47,8 +47,7 @@ public:
   PoiPolygonAlphaShapeDistanceExtractor() = default;
   virtual ~PoiPolygonAlphaShapeDistanceExtractor() = default;
 
-  virtual QString getClassName() const
-  { return PoiPolygonAlphaShapeDistanceExtractor::className(); }
+  virtual QString getClassName() const { return className(); }
 
   /**
    * Calculates the convex hull distance between a poi and a polygon
@@ -63,6 +62,8 @@ public:
 
   virtual QString getDescription() const
   { return "Calculates the convex hull distance between a poi and a polygon"; }
+
+  virtual QString getName() const { return className(); }
 };
 
 }

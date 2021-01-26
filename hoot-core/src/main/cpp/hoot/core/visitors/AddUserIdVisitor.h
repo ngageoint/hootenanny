@@ -50,11 +50,12 @@ public:
    */
   virtual void visit(const ElementPtr& e);
 
-  virtual QString getDescription() const { return "Adds the user name and user id to elements as tags"; }
+  virtual QString getDescription() const
+  { return "Adds the user name and user id to elements as tags"; }
 
   virtual QString getName() const { return className(); }
 
-//private:
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

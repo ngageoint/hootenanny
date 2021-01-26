@@ -59,7 +59,7 @@ public:
 
   static QString className() { return "hoot::AngleHistogramExtractor"; }
 
-  virtual QString getClassName() const override { return AngleHistogramExtractor::className(); }
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getName() const override;
 

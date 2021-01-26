@@ -74,6 +74,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 protected:
 
   // identifies the way in the join pair whose ID was kep after the join

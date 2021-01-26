@@ -52,6 +52,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   long getNumRemoved() const { return _numAffected; }
 
   virtual QString getInitStatusMessage() const override

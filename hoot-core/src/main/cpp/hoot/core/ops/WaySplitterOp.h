@@ -61,6 +61,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual void setConfiguration(const Settings& conf);
 
   void setMaxLength(Meters l) { _maxLength = l; }

@@ -60,14 +60,16 @@ public:
   virtual QString getInitStatusMessage() const
   { return "Validating elements with JOSM..."; }
 
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
+
 protected:
 
   /*
    * @see JosmMapValidatorAbstract
    */
   virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
-
-  virtual QString getName() const { return className(); }
 
 private:
 

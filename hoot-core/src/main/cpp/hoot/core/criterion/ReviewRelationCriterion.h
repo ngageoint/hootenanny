@@ -54,6 +54,8 @@ public:
   { return "Identifies review relations created during conflation"; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

@@ -52,6 +52,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getInitStatusMessage() const
   { return "Converting non-child points to polygons..."; }
 

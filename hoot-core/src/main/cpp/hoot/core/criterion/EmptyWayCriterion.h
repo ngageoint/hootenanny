@@ -60,6 +60,8 @@ public:
   { return "Identifies ways with no nodes"; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

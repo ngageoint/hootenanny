@@ -56,6 +56,8 @@ public:
   { return "Rejoins ways split during pre-conflation cleaning or conflation matching."; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

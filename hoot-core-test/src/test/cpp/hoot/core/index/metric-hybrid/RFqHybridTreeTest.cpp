@@ -77,6 +77,7 @@ public:
     _eid(eid),
     _name(name)
   {}
+
   RFqHybridDummyData(const Coordinate& c, const QString& name, ElementId eid) :
     _e(c.x, c.x, c.y, c.y),
     _eid(eid),
@@ -328,6 +329,7 @@ public:
 
     virtual QString getDescription() const {return ""; }
     virtual QString getName() const { return ""; }
+    virtual QString getClassName() const { return ""; }
 
   private:
 

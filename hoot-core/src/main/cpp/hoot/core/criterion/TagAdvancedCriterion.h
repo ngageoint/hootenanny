@@ -74,7 +74,9 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements by tag using a set of advanced schema functionality"; }
 
- virtual QString getName() const override { return className(); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

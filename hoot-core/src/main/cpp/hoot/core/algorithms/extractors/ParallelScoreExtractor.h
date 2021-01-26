@@ -44,6 +44,8 @@ public:
   ParallelScoreExtractor() = default;
   virtual ~ParallelScoreExtractor() = default;
 
+  virtual QString getName() const { return className(); }
+
   virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const

@@ -67,6 +67,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   /**
    * Removes duplicate nodes from a map
    *

@@ -56,6 +56,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getInitStatusMessage() const
   { return "Updating building outlines..."; }
 

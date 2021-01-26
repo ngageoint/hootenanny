@@ -66,6 +66,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual void setConfiguration(const Settings& conf);
 
   void setOverwrite1(bool overwrite) { _overwrite1 = overwrite; }

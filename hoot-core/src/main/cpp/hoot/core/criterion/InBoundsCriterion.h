@@ -89,6 +89,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   // This map must be in the same coord sys as the bounds.

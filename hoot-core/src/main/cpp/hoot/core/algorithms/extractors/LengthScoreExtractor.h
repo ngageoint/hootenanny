@@ -46,6 +46,8 @@ public:
   LengthScoreExtractor() = default;
   virtual ~LengthScoreExtractor() = default;
 
+  virtual QString getName() const { return className(); }
+
   virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const

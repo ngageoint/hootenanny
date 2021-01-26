@@ -47,6 +47,7 @@ public:
    */
   static QString className() { return "hoot::RemoveRelationByEid"; }
   virtual QString getName() const { return className(); }
+  virtual QString getClassName() const override { return className(); }
 
   /**
    * @brief RemoveRelationByEid Default constructor

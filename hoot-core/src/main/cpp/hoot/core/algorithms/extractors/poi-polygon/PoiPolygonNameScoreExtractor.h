@@ -51,6 +51,8 @@ public:
 
   virtual QString getClassName() const { return PoiPolygonNameScoreExtractor::className(); }
 
+  virtual QString getName() const { return className(); }
+
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1
    * means one or both of the features have no names.

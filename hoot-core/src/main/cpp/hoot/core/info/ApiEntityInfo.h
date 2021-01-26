@@ -43,6 +43,21 @@ public:
   virtual ~ApiEntityInfo() = default;
 
   /**
+   * Returns the entity's full class name
+   *
+   * @return class name string
+   */
+  virtual QString getClassName() const = 0;
+
+  /**
+   * Returns a name for the entity; often this is just the full class name, but some implementors
+   * may need to extend the behavior
+   *
+   * @return name string
+   */
+  virtual QString getName() const = 0;
+
+  /**
    * Returns a one sentence description of the entity used for documentation purposes.
    *
    * Keep this as short as possible, capitalize the first letter, and check to see that it stays
@@ -52,13 +67,6 @@ public:
    * as returning an empty string.
    */
   virtual QString getDescription() const = 0;
-
-  /**
-   * Returns the entity's name; often this is the full class name
-   *
-   * @return class name string
-   */
-  virtual QString getName() const = 0;
 
   /**
    * Returns a string uniquely identifying the entity. May contain information about the data

@@ -74,6 +74,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   QStringList _keys;

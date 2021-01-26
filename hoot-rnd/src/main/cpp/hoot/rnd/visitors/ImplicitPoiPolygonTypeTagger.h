@@ -57,6 +57,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 protected:
 
   virtual bool _visitElement(const ElementPtr& e);

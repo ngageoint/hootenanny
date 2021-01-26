@@ -51,6 +51,8 @@ public:
   virtual QString getDescription() const override { return "Identifies area nodes"; }
 
   virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

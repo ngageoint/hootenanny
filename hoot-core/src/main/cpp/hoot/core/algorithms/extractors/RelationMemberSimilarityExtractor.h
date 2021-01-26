@@ -54,14 +54,15 @@ public:
 
   static QString className() { return "hoot::RelationMemberSimilarityExtractor"; }
 
-  virtual QString getClassName() const
-  { return RelationMemberSimilarityExtractor::className(); }
+  virtual QString getClassName() const { return className(); }
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;
 
   virtual QString getDescription() const
   { return "Scores the similarity between two sets of relation members"; }
+
+  virtual QString getName() const { return className(); }
 };
 
 }

@@ -62,6 +62,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual bool supportsSpecificConflation() const { return false; }
 
   void setAllowMixedChildren(bool allow) { _relationCrit.setAllowMixedChildren(allow); }

@@ -101,6 +101,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   // passed in directly to InBoundsCriterion

@@ -55,8 +55,7 @@ public:
   /**
    * @see FeatureExtractor
    */
-  virtual QString getClassName() const override
-  { return IntersectionOverUnionExtractor::className(); }
+  virtual QString getClassName() const override { return className(); }
 
   /**
    * @see FeatureExtractor
@@ -69,6 +68,8 @@ public:
    */
   virtual QString getDescription() const
   { return "Calculates Intersection over Union (IoU) for polygons"; }
+
+  virtual QString getName() const { return className(); }
 };
 
 }

@@ -63,6 +63,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getDescription() const override
   { return "Returns a string comparison score based on Minimum Sum Wordset Distance"; }
 

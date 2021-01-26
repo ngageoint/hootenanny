@@ -91,6 +91,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   double _moveMultiplier;

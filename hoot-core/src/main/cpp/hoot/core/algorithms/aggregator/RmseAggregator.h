@@ -53,6 +53,10 @@ public:
 
   virtual QString getDescription() const
   { return "Aggregates data based on the Root Mean Square Deviation value"; }
+
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

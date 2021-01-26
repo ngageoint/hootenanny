@@ -66,13 +66,6 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const = 0;
 
-  // TODO: get rid of?
-  virtual QString getClassName() const = 0;
-
-  // TODO: make default on all children
-  virtual QString getName() const { return getClassName(); }
-
-  // TODO: remove
   virtual QString toString() const { return ""; }
 
   /**

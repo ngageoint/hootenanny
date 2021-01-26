@@ -80,6 +80,8 @@ public:
   { return "Removes all elements with a status of Unknown1"; }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 /**
@@ -100,6 +102,8 @@ public:
   { return "Removes all elements with a status of Unknown2"; }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

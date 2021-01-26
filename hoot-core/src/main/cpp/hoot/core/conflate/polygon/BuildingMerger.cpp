@@ -96,6 +96,8 @@ public:
 
   virtual QString getName() const override { return ""; }
 
+virtual QString getClassName() const override { return ""; }
+
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
 

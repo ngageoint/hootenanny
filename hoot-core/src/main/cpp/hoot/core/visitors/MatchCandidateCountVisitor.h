@@ -70,6 +70,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   QMap<QString, std::shared_ptr<MatchCreator>> _matchCreatorsByName;

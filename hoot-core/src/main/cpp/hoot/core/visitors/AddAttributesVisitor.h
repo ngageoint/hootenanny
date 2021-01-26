@@ -67,6 +67,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   //a semicolon delimited list of attributes of the form key=value

@@ -63,6 +63,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual QString getDescription() const override
   { return "Returns a score based on the best pairwise comparison within two sets of words"; }
 

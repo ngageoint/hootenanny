@@ -46,6 +46,8 @@ public:
   virtual QString getDescription() const { return "Adds geometry types"; }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

@@ -91,8 +91,8 @@ void CumulativeConflator::conflate(const QStringList& inputs, const QString& out
         LOG_INFO("Conflating cumulative map with " << inputs[i] << "...");
       }
 
-      //I'm not yet sure all the projecting going on here is the right way to go about this, but
-      //the maps must be in the same projection for the appending to work.
+      // I'm not yet sure all the projecting going on here is the right way to go about this, but
+      // the maps must be in the same projection for the appending to work.
 
       OsmMapPtr unknown2Map(new OsmMap());
       OsmMapReaderFactory::read(

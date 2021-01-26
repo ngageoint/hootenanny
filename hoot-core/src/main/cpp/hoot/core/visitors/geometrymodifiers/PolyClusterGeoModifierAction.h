@@ -82,8 +82,6 @@ public:
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
   virtual void processFinalize(OsmMapPtr& pMap) override;
 
-  virtual QString getName() const { return className(); }
-
 private:
 
   const double DEFAULT_DISTANCE = 20;

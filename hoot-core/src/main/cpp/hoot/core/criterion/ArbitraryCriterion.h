@@ -66,6 +66,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   std::function<bool (const std::shared_ptr<const Element>& e)> _f;

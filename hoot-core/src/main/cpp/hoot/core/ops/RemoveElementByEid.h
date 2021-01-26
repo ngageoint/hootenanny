@@ -95,6 +95,8 @@ public:
    */
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   /**
    * @brief setElementId sets the id of the element to remove
    * @param eId ElementId

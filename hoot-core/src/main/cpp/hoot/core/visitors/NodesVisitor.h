@@ -52,6 +52,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   QList<ConstNodePtr>& _n;

@@ -83,6 +83,7 @@ public:
 
   virtual QString getName() const override { return getPoiPolygonMatchName(); }
   static QString getPoiPolygonMatchName() { return MATCH_NAME; }
+  virtual QString getClassName() const override { return className(); }
 
   virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 

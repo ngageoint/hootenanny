@@ -55,6 +55,8 @@ public:
   virtual QString toString() const override;
 
  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 typedef std::shared_ptr<OrCriterion> OrCriterionPtr;

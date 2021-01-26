@@ -81,6 +81,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   QList<SingleStat> getStats() const { return _stats; }
 
   virtual void setConfiguration(const Settings &conf) override;

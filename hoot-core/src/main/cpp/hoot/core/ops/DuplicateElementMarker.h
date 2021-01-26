@@ -77,6 +77,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   std::set<QString> getContainingWayTypes() const { return _containingWayTypes; }
 
   void setCoordinateComparisonSensitivity(int sensitivity)

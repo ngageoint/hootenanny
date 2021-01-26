@@ -47,6 +47,8 @@ public:
   { return "Adds a bounding box tag to applicable elements"; }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

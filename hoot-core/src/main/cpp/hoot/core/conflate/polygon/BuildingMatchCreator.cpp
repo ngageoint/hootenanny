@@ -119,6 +119,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
   virtual QString getName() const { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {

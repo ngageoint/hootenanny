@@ -63,6 +63,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
   virtual void setConfiguration(const Settings& conf);
 
   virtual void setOsmMap(const OsmMap* map);

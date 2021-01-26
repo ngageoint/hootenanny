@@ -128,6 +128,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
 
   // matching IDs; This should probably be a set, b/c there shouldn't be any dupe element IDs for

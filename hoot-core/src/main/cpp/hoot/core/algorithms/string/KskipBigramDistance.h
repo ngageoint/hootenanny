@@ -102,6 +102,8 @@ public:
 
   virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
   /**
    * @brief _k is a value 'k' >= 0 for k-skip bi-grams

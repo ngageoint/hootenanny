@@ -82,6 +82,8 @@ public:
 
   virtual QString getName() const { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
+
 private:
   /**
    * @brief swapNodeIdInWay Swap the node ID in the ways with the swap ID

@@ -76,6 +76,9 @@ public:
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
   virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
+
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 
   void setEids(const std::set<ElementId>& eids) { _eids = eids; }
