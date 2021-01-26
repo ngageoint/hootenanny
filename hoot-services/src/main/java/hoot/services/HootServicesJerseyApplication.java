@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.glassfish.jersey.filter.LoggingFilter;
+import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
@@ -45,14 +46,10 @@ public class HootServicesJerseyApplication extends ResourceConfig {
         super.register(RequestContextFilter.class);
         super.register(HootUserRequestFilter.class);
 
-        /*
 		// Could not get LoggingFeature to work for some reason.  Falling back to the deprecated LoggingFilter!
 		super.registerInstances(new LoggingFeature(logger,
 		                                             Level.ALL,
 		                                             LoggingFeature.Verbosity.PAYLOAD_TEXT,
 		                                             LoggingFeature.DEFAULT_MAX_ENTITY_SIZE));
-         */
-
-        super.registerInstances(new LoggingFilter(logger, true));
     }
 }
