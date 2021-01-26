@@ -83,6 +83,8 @@ private:
 
   int _numTotalTasks;
 
+  void _initConfig();
+
   void _updateConfigOptionsForAttributeConflation();
   void _updateConfigOptionsForDifferentialConflation();
   void _updateConfigOptionsForBounds();
@@ -91,7 +93,6 @@ private:
 
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
-
 };
 
 }

@@ -78,17 +78,55 @@ _displayStats(false),
 _displayChangesetStats(false),
 _filterOps(ConfigOptions().getConflateRemoveSuperfluousOps()),
 _numTotalTasks(0)
+{ 
+}
+
+void Conflator::_initConfig()
 {
   ConfigUtils::checkForTagValueTruncationOverride();
   QStringList allOps = ConfigOptions().getConflatePreOps();
   allOps += ConfigOptions().getConflatePostOps();
   ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
+
+  // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
+  // use it as the sole identifier for it. If that ever changes, then we'll need a different way
+  // to recognize when AC is occurring.
+  const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
+  if (isAttributeConflate)
+  {
+    _updateConfigOptionsForAttributeConflation();
+  }
+
+  if (_isDiffConflate)
+  {
+    _updateConfigOptionsForDifferentialConflation();
+  }
+  if (_isDiffConflate || isAttributeConflate)
+  {
+    _disableRoundaboutRemoval();
+  }
+
+  // Note that we may need to eventually further restrict this to only data with relation having oob
+  // members due to full hydration (would then need to move this code to after the data load).
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    _updateConfigOptionsForBounds();
+  }
+
+  if (_filterOps)
+  {
+    // Let's see if we can remove any ops in the configuration that will have no effect on the
+    // feature types we're conflating in order to improve runtime performance.
+    SuperfluousConflateOpRemover::removeSuperfluousOps();
+  }
 }
 
 void Conflator::conflate(const QString& input1, const QString& input2, QString& output)
 {
   Tgs::Timer totalTime;
   Tgs::Timer t;
+
+  _initConfig();
 
   if (!IoUtils::isUrl(output))
   {
@@ -123,38 +161,6 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
   QList<QList<SingleStat>> allStats;
-
-  // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
-  // use it as the sole identifier for it. If that ever changes, then we'll need a different way
-  // to recognize when AC is occurring.
-  const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
-  if (isAttributeConflate)
-  {
-    _updateConfigOptionsForAttributeConflation();
-  }
-
-  if (_isDiffConflate)
-  {
-    _updateConfigOptionsForDifferentialConflation();
-  }
-  if (_isDiffConflate || isAttributeConflate)
-  {
-    _disableRoundaboutRemoval();
-  }
-
-  // Note that we may need to eventually further restrict this to only data with relation having oob
-  // members due to full hydration (would then need to move this code to after the data load).
-  if (ConfigUtils::boundsOptionEnabled())
-  {
-    _updateConfigOptionsForBounds();
-  }
-
-  if (_filterOps)
-  {
-    // Let's see if we can remove any ops in the configuration that will have no effect on the
-    // feature types we're conflating in order to improve runtime performance.
-    SuperfluousConflateOpRemover::removeSuperfluousOps();
-  }
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
   _numTotalTasks = 5;
