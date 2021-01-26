@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APITAGTRUNCATEVISITOR_H
 #define APITAGTRUNCATEVISITOR_H
 
 //  Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -50,7 +50,7 @@ class ApiTagTruncateVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ApiTagTruncateVisitor"; }
+  static QString className() { return "hoot::ApiTagTruncateVisitor"; }
 
   ApiTagTruncateVisitor();
   virtual ~ApiTagTruncateVisitor() = default;
@@ -70,7 +70,9 @@ public:
       " elements";
   }
 
-  std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   void setConfiguration(const Settings& conf) override;
 

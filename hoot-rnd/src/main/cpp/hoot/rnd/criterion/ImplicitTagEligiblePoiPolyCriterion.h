@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
 #define IMPLICIT_TAG_ELIGIBLE_POI_POLY_CRITERION_H
@@ -41,7 +41,7 @@ class ImplicitTagEligiblePoiPolyCriterion : public ImplicitTagEligibleCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitTagEligiblePoiPolyCriterion"; }
+  static QString className() { return "hoot::ImplicitTagEligiblePoiPolyCriterion"; }
 
   ImplicitTagEligiblePoiPolyCriterion() = default;
   virtual ~ImplicitTagEligiblePoiPolyCriterion() = default;
@@ -71,9 +71,9 @@ public:
   virtual QString getDescription() const
   { return "Identifies POIs and polygons eligible for type tag addition"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

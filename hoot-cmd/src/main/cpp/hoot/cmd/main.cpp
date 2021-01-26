@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // GCC
@@ -45,6 +45,7 @@ using namespace hoot;
 #include <QCoreApplication>
 #include <QString>
 #include <QTime>
+#include <QString>
 
 // Standard
 #include <exception>
@@ -60,8 +61,7 @@ int main(int argc, char *argv[])
 
   QCoreApplication app(argc, argv);
 
-  vector<string> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
-
+  vector<QString> cmds = Factory::getInstance().getObjectNamesByBase(Command::className());
   std::shared_ptr<Command> c;
   for (size_t i = 0; i < cmds.size(); i++)
   {
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
   }
   else
   {
-    c.reset(Factory::getInstance().constructObject<Command>(string("hoot::HelpCmd")));
+    c.reset(Factory::getInstance().constructObject<Command>("hoot::HelpCmd"));
     c->run(argv, argc);
     return -1;
   }

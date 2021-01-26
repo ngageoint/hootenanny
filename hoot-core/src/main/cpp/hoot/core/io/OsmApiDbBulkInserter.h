@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBBULKINSERTER_H
 #define OSMAPIDBBULKINSERTER_H
@@ -134,7 +134,7 @@ class OsmApiDbBulkInserter : public PartialOsmMapWriter, public Configurable
 
 public:
 
-  static std::string className() { return "hoot::OsmApiDbBulkInserter"; }
+  static QString className() { return "hoot::OsmApiDbBulkInserter"; }
 
   OsmApiDbBulkInserter();
   virtual ~OsmApiDbBulkInserter();

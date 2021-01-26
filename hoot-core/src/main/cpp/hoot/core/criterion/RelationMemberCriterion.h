@@ -43,7 +43,7 @@ class RelationMemberCriterion : public ElementCriterion, public ConstOsmMapConsu
 {
 public:
 
-  static std::string className() { return "hoot::RelationMemberCriterion"; }
+  static QString className() { return "hoot::RelationMemberCriterion"; }
 
   RelationMemberCriterion() = default;
   RelationMemberCriterion(ConstOsmMapPtr map);
@@ -59,8 +59,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies relation members"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -32,7 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStatistic.h>
 #include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Exception.h>
 #include <hoot/core/io/OsmMapReader.h>
 #include <hoot/core/util/ConfigOptions.h>
@@ -51,7 +51,7 @@ class StatCmd : public BaseCommand
 {
 public:
 
-  static std::string className() { return "hoot::StatCmd"; }
+  static QString className() { return "hoot::StatCmd"; }
 
   StatCmd() :
   _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
@@ -136,8 +136,7 @@ private:
 
     try
     {
-      statsCollector.reset(
-        Factory::getInstance().constructObject<ElementVisitor>(visClassName));
+      statsCollector.reset(Factory::getInstance().constructObject<ElementVisitor>(visClassName));
     }
     catch (const boost::bad_any_cast&)
     {

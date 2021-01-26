@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef STATSAREACRITERION_H
@@ -40,7 +40,7 @@ class StatsAreaCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::StatsAreaCriterion"; }
+  static QString className() { return "hoot::StatsAreaCriterion"; }
 
   StatsAreaCriterion() = default;
   virtual ~StatsAreaCriterion() = default;
@@ -51,9 +51,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies areas for use by statistics"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

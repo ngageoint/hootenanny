@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SOUNDEX_H
 #define SOUNDEX_H
@@ -48,7 +48,7 @@ class Soundex : public StringDistance
 {
 public:
 
-  static std::string className() { return "hoot::Soundex"; }
+  static QString className() { return "hoot::Soundex"; }
 
   Soundex() = default;
   virtual ~Soundex() = default;
@@ -78,6 +78,10 @@ public:
   static QString toDigit(QChar c);
 
   QString toString() const override { return "Soundex"; }
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Returns a string comparison score based on the Soundex algorithm"; }

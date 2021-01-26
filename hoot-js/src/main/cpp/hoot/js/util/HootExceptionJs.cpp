@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "HootExceptionJs.h"
 
@@ -58,12 +58,12 @@ void HootExceptionJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
-  vector<string> opNames =
+  vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(HootException::className());
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
-    QString noNamespace = QString::fromStdString(opNames[i]).replace("hoot::", "");
+    QString noNamespace = opNames[i].replace("hoot::", "");
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
@@ -184,7 +184,7 @@ void HootExceptionJs::toJSON(const FunctionCallbackInfo<Value>& args)
 
   QVariantMap m;
   m["message"] = e->getWhat();
-  m["classname"] = QString::fromStdString(e->getClassName());
+  m["classname"] = e->getName();
 
   args.GetReturnValue().Set(toV8(m));
 }

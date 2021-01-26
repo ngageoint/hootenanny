@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LINEAR_WATERWAY_WAY_NODE_CRITERION_H
 #define LINEAR_WATERWAY_WAY_NODE_CRITERION_H
@@ -37,7 +37,7 @@ class LinearWaterwayWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::LinearWaterwayWayNodeCriterion"; }
+  static QString className() { return "hoot::LinearWaterwayWayNodeCriterion"; }
 
   LinearWaterwayWayNodeCriterion();
   LinearWaterwayWayNodeCriterion(ConstOsmMapPtr map);
@@ -51,8 +51,9 @@ public:
   virtual QString getDescription() const override
   { return "Identifies nodes belonging to linear bodies of water"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

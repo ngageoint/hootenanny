@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEWAYBYEID_H
 #define REMOVEWAYBYEID_H
@@ -45,8 +45,9 @@ public:
    * @brief className gets the name of the class as a string
    * @return class name
    */
-  static std::string className() { return "hoot::RemoveWayByEid"; }
-  std::string getClassName() const { return className(); }
+  static QString className() { return "hoot::RemoveWayByEid"; }
+  virtual QString getName() const { return className(); }
+  virtual QString getClassName() const override { return className(); }
 
   /**
    * @brief RemoveWayByEid is used to remove ways from maps

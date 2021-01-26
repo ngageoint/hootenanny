@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHAINCRITERION_H
 #define CHAINCRITERION_H
@@ -43,7 +43,7 @@ class ChainCriterion : public ElementCriterion, public ElementCriterionConsumer,
 {
 public:
 
-  static std::string className() { return "hoot::ChainCriterion"; }
+  static QString className() { return "hoot::ChainCriterion"; }
 
   ChainCriterion() = default;
   ChainCriterion(const ElementCriterionPtr& child1, const ElementCriterionPtr& child2);
@@ -62,6 +62,10 @@ public:
   { return "Allows for chaining criteria together (logical AND)"; }
 
   virtual QString toString() const override;
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual void setOsmMap(const OsmMap* map);
 

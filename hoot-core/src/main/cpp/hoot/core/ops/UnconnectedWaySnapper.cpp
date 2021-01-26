@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "UnconnectedWaySnapper.h"
@@ -763,7 +763,7 @@ void UnconnectedWaySnapper::_reviewSnappedWay(const long idOfNodeBeingSnapped)
   const long owningWayId = *owningWayIds.begin();
   _reviewMarker.mark(
     _map, _map->getWay(owningWayId), "Potentially snappable unconnected way",
-    QString::fromStdString(className()), 1.0);
+    className(), 1.0);
 }
 
 bool UnconnectedWaySnapper::_snapUnconnectedNodeToWay(const NodePtr& nodeToSnap,

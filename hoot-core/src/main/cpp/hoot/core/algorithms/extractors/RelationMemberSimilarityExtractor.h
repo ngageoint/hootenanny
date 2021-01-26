@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RELATION_MEMBER_SIMILARITY_EXTRACTOR_H
 #define RELATION_MEMBER_SIMILARITY_EXTRACTOR_H
@@ -52,16 +52,17 @@ public:
   RelationMemberSimilarityExtractor() = default;
   virtual ~RelationMemberSimilarityExtractor() = default;
 
-  static std::string className() { return "hoot::RelationMemberSimilarityExtractor"; }
+  static QString className() { return "hoot::RelationMemberSimilarityExtractor"; }
 
-  virtual std::string getClassName() const
-  { return RelationMemberSimilarityExtractor::className(); }
+  virtual QString getClassName() const { return className(); }
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;
 
   virtual QString getDescription() const
   { return "Scores the similarity between two sets of relation members"; }
+
+  virtual QString getName() const { return className(); }
 };
 
 }

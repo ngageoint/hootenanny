@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GEOMETRYMODIFIERACTION_H
 #define GEOMETRYMODIFIERACTION_H
@@ -53,7 +53,7 @@ public:
   static const std::string ARGUMENT_TAG;
 
   // Class name for hoot factory
-  static std::string className() { return "hoot::GeometryModifierAction"; }
+  static QString className() { return "hoot::GeometryModifierAction"; }
 
   GeometryModifierAction() = default;
   virtual ~GeometryModifierAction() = default;

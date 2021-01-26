@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTTYPECRITERION_H
 #define ELEMENTTYPECRITERION_H
@@ -40,7 +40,7 @@ class ElementTypeCriterion : public ElementCriterion
 
 public:
 
-  static std::string className() { return "hoot::ElementTypeCriterion"; }
+  static QString className() { return "hoot::ElementTypeCriterion"; }
 
   ElementTypeCriterion() = default;
   ElementTypeCriterion(ElementType::Type eType) : _elementType(eType) { }
@@ -54,8 +54,9 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements based on the specified type"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 
@@ -67,37 +68,39 @@ class NodeCriterion : public ElementTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::NodeCriterion"; }
+  static QString className() { return "hoot::NodeCriterion"; }
 
   NodeCriterion() : ElementTypeCriterion(ElementType::Node) { }
   virtual ~NodeCriterion() = default;
 
   virtual QString getDescription() const { return "Identifies nodes"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 class WayCriterion : public ElementTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::WayCriterion"; }
+  static QString className() { return "hoot::WayCriterion"; }
 
   WayCriterion() : ElementTypeCriterion(ElementType::Way) { }
   virtual ~WayCriterion() = default;
 
   virtual QString getDescription() const { return "Identifies ways"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 class RelationCriterion : public ElementTypeCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::RelationCriterion"; }
+  static QString className() { return "hoot::RelationCriterion"; }
 
   RelationCriterion() : ElementTypeCriterion(ElementType::Relation) { }
   RelationCriterion(const QString& type) :
@@ -123,8 +126,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies relations"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual void setConfiguration(const Settings& conf)
   {

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAY_GENERALIZE_VISITOR_H
 #define WAY_GENERALIZE_VISITOR_H
@@ -50,7 +50,7 @@ class WayGeneralizeVisitor : public ElementOsmMapVisitor, public Configurable,
 {
 public:
 
-  static std::string className() { return "hoot::WayGeneralizeVisitor"; }
+  static QString className() { return "hoot::WayGeneralizeVisitor"; }
 
   WayGeneralizeVisitor();
   virtual ~WayGeneralizeVisitor() = default;
@@ -85,7 +85,9 @@ public:
 
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

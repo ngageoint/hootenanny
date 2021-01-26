@@ -54,7 +54,7 @@ class OsmXmlChangesetFileWriter : public OsmChangesetFileWriter
 
 public:
 
-  static std::string className() { return "hoot::OsmXmlChangesetFileWriter"; }
+  static QString className() { return "hoot::OsmXmlChangesetFileWriter"; }
 
   OsmXmlChangesetFileWriter();
   virtual ~OsmXmlChangesetFileWriter() = default;

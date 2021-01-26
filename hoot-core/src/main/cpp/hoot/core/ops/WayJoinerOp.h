@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __WAY_JOINER_OP_H__
@@ -44,7 +44,7 @@ public:
   WayJoinerOp();
   virtual ~WayJoinerOp() = default;
 
-  static std::string className() { return "hoot::WayJoinerOp"; }
+  static QString className() { return "hoot::WayJoinerOp"; }
 
   /**
    * Apply the way joiner to the specified map
@@ -70,7 +70,9 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   std::shared_ptr<WayJoiner> getWayJoiner() const { return _wayJoiner; }
 

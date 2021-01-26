@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef KEEPTAGSVISITOR_H
 #define KEEPTAGSVISITOR_H
@@ -40,7 +40,7 @@ class KeepTagsVisitor : public RemoveTagsVisitor
 {
 public:
 
-  static std::string className() { return "hoot::KeepTagsVisitor"; }
+  static QString className() { return "hoot::KeepTagsVisitor"; }
 
   KeepTagsVisitor() = default;
   explicit KeepTagsVisitor(const QStringList& keys);
@@ -50,7 +50,9 @@ public:
 
   virtual QString getDescription() const { return "Keeps tags by key"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

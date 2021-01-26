@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef APIENTITYDISPLAYINFO_H
@@ -71,11 +71,11 @@ private:
 
   template<typename ApiEntity, typename ApiEntityChild>
   static QString _getApiEntities(
-    const std::string& apiEntityBaseClassName, const QString& apiEntityType, const bool displayType,
+    const QString& apiEntityBaseClassName, const QString& apiEntityType, const bool displayType,
     const int maxNameSize);
 
   template<typename ApiEntity>
-  static QString _getApiEntitiesForMatchMergerCreators(const std::string& apiEntityClassName);
+  static QString _getApiEntitiesForMatchMergerCreators(const QString& apiEntityClassName);
 };
 
 }

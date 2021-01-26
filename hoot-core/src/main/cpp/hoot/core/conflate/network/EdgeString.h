@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGESTRING_H
 #define EDGESTRING_H
@@ -89,7 +89,7 @@ public:
     ConstEdgeSublinePtr _subline;
   };
 
-  static std::string className() { return "hoot::EdgeString"; }
+  static QString className() { return "hoot::EdgeString"; }
 
   static int logWarnCount;
 

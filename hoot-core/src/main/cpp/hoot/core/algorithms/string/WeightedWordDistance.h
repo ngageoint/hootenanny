@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WEIGHTEDWORDDISTANCE_H
 #define WEIGHTEDWORDDISTANCE_H
@@ -47,7 +47,7 @@ class WeightedWordDistance : public StringDistance, public StringDistanceConsume
 {
 public:
 
-  static std::string className() { return "hoot::WeightedWordDistance"; }
+  static QString className() { return "hoot::WeightedWordDistance"; }
 
   WeightedWordDistance(StringDistance* d, WordWeightDictionary* dictionary);
   WeightedWordDistance();
@@ -60,6 +60,10 @@ public:
   virtual void setStringDistance(const StringDistancePtr& sd) { _d = sd; }
 
   virtual QString toString() const override { return "WeightedWordDistance " + _d->toString(); }
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Returns a score based on the best pairwise comparison within two sets of words"; }

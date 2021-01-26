@@ -22,13 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FEATUREEXTRACTORBASE_H
 #define FEATUREEXTRACTORBASE_H
 
 #include <hoot/core/algorithms/extractors/FeatureExtractor.h>
-#include <hoot/core/info/ApiEntityInfo.h>
 
 namespace hoot
 {
@@ -36,11 +35,11 @@ namespace hoot
 /**
  * Base class for feature extractors, which compare two feature and provide a metric score
  */
-class FeatureExtractorBase : public FeatureExtractor, public ApiEntityInfo
+class FeatureExtractorBase : public FeatureExtractor
 {
 public:
 
-  static std::string className() { return "hoot::FeatureExtractorBase"; }
+  static QString className() { return "hoot::FeatureExtractorBase"; }
 
   FeatureExtractorBase() = default;
   virtual ~FeatureExtractorBase() = default;

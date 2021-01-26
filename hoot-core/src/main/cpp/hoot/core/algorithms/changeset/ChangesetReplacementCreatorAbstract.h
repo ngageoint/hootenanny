@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_CREATOR_ABSTRACT_H
 #define CHANGESET_REPLACEMENT_CREATOR_ABSTRACT_H
@@ -118,7 +118,7 @@ class ChangesetReplacementCreatorAbstract : public ChangesetReplacement
 
 public:
 
-  static std::string className() { return "hoot::ChangesetReplacementCreatorAbstract"; }
+  static QString className() { return "hoot::ChangesetReplacementCreatorAbstract"; }
 
   static const QString JOB_SOURCE;
 
@@ -140,7 +140,7 @@ public:
   virtual void setChangesetId(const QString& id) { _changesetId = id; }
 
   virtual QString toString() const override
-    { return QString::fromStdString(className()).remove("hoot::"); }
+    { return className().remove("hoot::"); }
 
 protected:
 

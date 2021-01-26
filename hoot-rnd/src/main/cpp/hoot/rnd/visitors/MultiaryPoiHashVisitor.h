@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARY_POI_HASH_VISITOR_H
 #define MULTIARY_POI_HASH_VISITOR_H
@@ -41,12 +41,14 @@ class MultiaryPoiHashVisitor : public ElementHashVisitor
 {
 public:
 
-  static std::string className() { return "hoot::MultiaryPoiHashVisitor"; }
+  static QString className() { return "hoot::MultiaryPoiHashVisitor"; }
 
   MultiaryPoiHashVisitor() = default;
   virtual ~MultiaryPoiHashVisitor() = default;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Calculates unique hash values for POIs conflated with Multiary POI Conflation"; }

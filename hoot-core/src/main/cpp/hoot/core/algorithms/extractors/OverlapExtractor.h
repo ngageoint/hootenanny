@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OVERLAPEXTRACTOR_H
 #define OVERLAPEXTRACTOR_H
@@ -55,14 +55,16 @@ public:
   OverlapExtractor() = default;
   virtual ~OverlapExtractor() = default;
 
-  static std::string className() { return "hoot::OverlapExtractor"; }
+  static QString className() { return "hoot::OverlapExtractor"; }
 
-  virtual std::string getClassName() const override { return OverlapExtractor::className(); }
+  virtual QString getClassName() const override { return className(); }
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
   virtual QString getDescription() const { return "Determines the overlap between two features"; }
+
+  virtual QString getName() const { return className(); }
 };
 
 }

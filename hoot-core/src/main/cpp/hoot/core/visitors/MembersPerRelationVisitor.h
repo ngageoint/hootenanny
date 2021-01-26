@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MEMBERS_PER_RELATION_VISITOR_H
@@ -40,7 +40,7 @@ class MembersPerRelationVisitor : public ConstElementVisitor, public NumericStat
 {
 public:
 
-  static std::string className() { return "hoot::MembersPerRelationVisitor"; }
+  static QString className() { return "hoot::MembersPerRelationVisitor"; }
 
   MembersPerRelationVisitor();
   virtual ~MembersPerRelationVisitor() = default;
@@ -65,7 +65,9 @@ public:
     return average;
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

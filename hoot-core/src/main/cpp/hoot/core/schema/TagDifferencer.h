@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGSIMILARITYSCORER_H
 #define TAGSIMILARITYSCORER_H
@@ -39,7 +39,7 @@ class Tags;
 class TagDifferencer
 {
 public:
-  static std::string className() { return "hoot::TagDifferencer"; }
+  static QString className() { return "hoot::TagDifferencer"; }
 
   TagDifferencer() = default;
   virtual ~TagDifferencer() = default;

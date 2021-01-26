@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef QUANTILEAGGREGATOR_H
 #define QUANTILEAGGREGATOR_H
@@ -38,7 +38,7 @@ class QuantileAggregator : public ValueAggregator, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::QuantileAggregator"; }
+  static QString className() { return "hoot::QuantileAggregator"; }
 
   QuantileAggregator();
   virtual ~QuantileAggregator() = default;
@@ -52,9 +52,15 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString toString() const override { return QString("QuantileAggregator %1").arg(_quantile); }
+  virtual QString toString() const override
+  { return QString("QuantileAggregator %1").arg(_quantile); }
 
-  virtual QString getDescription() const override { return "Aggregates data based on the quantile value"; }
+  virtual QString getDescription() const override
+  { return "Aggregates data based on the quantile value"; }
+
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIVISITOR_H
 #define MULTIVISITOR_H
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -38,7 +38,7 @@ class MultiVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::MultiVisitor"; }
+  static QString className() { return "hoot::MultiVisitor"; }
 
   MultiVisitor() = default;
   virtual ~MultiVisitor() = default;
@@ -49,7 +49,9 @@ public:
 
   virtual QString getDescription() const { return "Allows for combining multiple visitors"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

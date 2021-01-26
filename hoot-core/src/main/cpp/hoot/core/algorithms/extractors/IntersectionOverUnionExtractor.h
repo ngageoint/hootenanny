@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTERSECTION_OVER_UNION_EXTRACTOR_H
 #define INTERSECTION_OVER_UNION_EXTRACTOR_H
@@ -47,7 +47,7 @@ class IntersectionOverUnionExtractor : public FeatureExtractorBase
 {
 public:
 
-  static std::string className() { return "hoot::IntersectionOverUnionExtractor"; }
+  static QString className() { return "hoot::IntersectionOverUnionExtractor"; }
 
   IntersectionOverUnionExtractor() = default;
   virtual ~IntersectionOverUnionExtractor() = default;
@@ -55,8 +55,7 @@ public:
   /**
    * @see FeatureExtractor
    */
-  virtual std::string getClassName() const override
-  { return IntersectionOverUnionExtractor::className(); }
+  virtual QString getClassName() const override { return className(); }
 
   /**
    * @see FeatureExtractor
@@ -69,6 +68,8 @@ public:
    */
   virtual QString getDescription() const
   { return "Calculates Intersection over Union (IoU) for polygons"; }
+
+  virtual QString getName() const { return className(); }
 };
 
 }

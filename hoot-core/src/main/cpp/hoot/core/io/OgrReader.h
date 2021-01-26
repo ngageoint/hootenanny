@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __OGR_READER_H__
@@ -59,7 +59,7 @@ class OgrReader : public PartialOsmMapReader, public ProgressReporter
 {
 public:
 
-  static std::string className() { return "hoot::OgrReader"; }
+  static QString className() { return "hoot::OgrReader"; }
 
   /**
    * Returns true if this appears to be a reasonable path without actually attempting to open the

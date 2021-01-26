@@ -700,11 +700,9 @@ void ConflateCmd::_disableRoundaboutRemoval()
   // add DifferentialConflation.conf instead of doing it here.
 
   ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePreOpsKey(),
-    QString::fromStdString(RemoveRoundabouts::className()));
+    ConfigOptions::getConflatePreOpsKey(), RemoveRoundabouts::className());
   ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(),
-    QString::fromStdString(ReplaceRoundabouts::className()));
+    ConfigOptions::getConflatePostOpsKey(), ReplaceRoundabouts::className());
 }
 
 void ConflateCmd::_updateConfigOptionsForAttributeConflation()
@@ -712,8 +710,7 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
   // There may be a way to eliminate these by adding more custom behavior to the UI.
 
-  const QString reviewRelationCritName =
-    QString::fromStdString(ReviewRelationCriterion::className());
+  const QString reviewRelationCritName = ReviewRelationCriterion::className();
 
   // This swaps the logic that removes all reviews with the logic that removes them based on score
   // thresholding.
@@ -722,7 +719,7 @@ void ConflateCmd::_updateConfigOptionsForAttributeConflation()
     QStringList removeElementsCriteria =
       conf().get(ConfigOptions::getRemoveElementsVisitorElementCriteriaKey()).toStringList();
     removeElementsCriteria.replaceInStrings(
-      reviewRelationCritName, QString::fromStdString(ReviewScoreCriterion::className()));
+      reviewRelationCritName, ReviewScoreCriterion::className());
     conf().set(
       ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(), removeElementsCriteria);
   }
@@ -735,8 +732,7 @@ void ConflateCmd::_updateConfigOptionsForDifferentialConflation()
   // The list option removal being done here could be made obsolete by handling it in the JSON
   // config instead with custom syntax (#3442).
   ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(),
-    QString::fromStdString(RoadCrossingPolyReviewMarker::className()));
+    ConfigOptions::getConflatePostOpsKey(), RoadCrossingPolyReviewMarker::className());
 }
 
 void ConflateCmd::_updateConfigOptionsForBounds()

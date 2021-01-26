@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FEATUREEXTRACTOR_H
 #define FEATUREEXTRACTOR_H
 
 // hoot
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/info/ApiEntityInfo.h>
 
 // Qt
 #include <qnumeric.h>
@@ -47,14 +48,14 @@ class OsmMap;
 /**
  * Extracts a single feature (AKA factor) for a given element pair.
  */
-class FeatureExtractor
+class FeatureExtractor : public ApiEntityInfo
 {
 public:
 
   FeatureExtractor() = default;
   virtual ~FeatureExtractor() = default;
 
-  static std::string className() { return "hoot::FeatureExtractor"; }
+  static QString className() { return "hoot::FeatureExtractor"; }
 
   static double nullValue() { return -999999999; }
 
@@ -65,9 +66,7 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const = 0;
 
-  virtual std::string getClassName() const = 0;
-
-  virtual std::string getName() const { return getClassName(); }
+  virtual QString toString() const { return ""; }
 
   /**
    * Returns the factor type for this feature/factor (Nominal or Numeric).

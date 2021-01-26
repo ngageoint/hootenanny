@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JSFUNCTIONVISITOR_H
 #define JSFUNCTIONVISITOR_H
@@ -44,7 +44,7 @@ class JsFunctionVisitor : public ConstElementVisitor, public ConstOsmMapConsumer
 {
 public:
 
-  static std::string className() { return "hoot::JsFunctionVisitor"; }
+  static QString className() { return "hoot::JsFunctionVisitor"; }
 
   JsFunctionVisitor() : _map(0) {}
   virtual ~JsFunctionVisitor() = default;
@@ -59,7 +59,8 @@ public:
   virtual void visit(const ConstElementPtr& e);
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NodeJs.h"
 
@@ -73,7 +73,7 @@ void NodeJs::Init(Handle<Object> target)
   HandleScope scope(current);
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-  tpl->SetClassName(String::NewFromUtf8(current, Node::className().data()));
+  tpl->SetClassName(String::NewFromUtf8(current, Node::className().toStdString().data()));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getX"),

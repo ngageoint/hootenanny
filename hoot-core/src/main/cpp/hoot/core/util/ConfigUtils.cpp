@@ -126,15 +126,13 @@ void ConfigUtils::checkForTagValueTruncationOverride()
   if (ConfigOptions().getConflateTagDisableValueTruncation())
   {
     QStringList conflatePreOps = ConfigOptions().getConflatePreOps();
-    int numFound =
-      conflatePreOps.removeAll(QString::fromStdString(ApiTagTruncateVisitor::className()));
+    int numFound = conflatePreOps.removeAll(ApiTagTruncateVisitor::className());
     if (numFound > 0)
     {
       conf().set("conflate.pre.ops", conflatePreOps);
     }
     QStringList conflatePostOps = ConfigOptions().getConflatePostOps();
-    numFound =
-      conflatePostOps.removeAll(QString::fromStdString(ApiTagTruncateVisitor::className()));
+    numFound = conflatePostOps.removeAll(ApiTagTruncateVisitor::className());
     if (numFound > 0)
     {
       conf().set("conflate.post.ops", conflatePostOps);
@@ -144,8 +142,7 @@ void ConfigUtils::checkForTagValueTruncationOverride()
 
 void ConfigUtils::checkForDuplicateElementCorrectionMismatch(const QStringList& ops)
 {
-  const QString dupeNodeRemoverClassName =
-    QString::fromStdString(DuplicateNodeRemover::className());
+  const QString dupeNodeRemoverClassName = DuplicateNodeRemover::className();
   if (ops.contains(dupeNodeRemoverClassName))
   {
     conf().set(ConfigOptions::getMapMergeIgnoreDuplicateIdsKey(), true);

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCRITERION_H
 #define TAGCRITERION_H
@@ -44,7 +44,7 @@ class TagCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagCriterion"; }
+  static QString className() { return "hoot::TagCriterion"; }
 
   TagCriterion();
   TagCriterion(const QString& k, const QString& v);
@@ -63,6 +63,10 @@ public:
   { return "Identifies elements containing a specified tag key/value combination"; }
 
   virtual QString toString() const override;
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

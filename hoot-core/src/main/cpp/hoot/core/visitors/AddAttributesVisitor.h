@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDATTRIBUTESVISITOR_H
 #define ADDATTRIBUTESVISITOR_H
@@ -44,7 +44,7 @@ class AddAttributesVisitor : public MultipleCriterionConsumerVisitor, public Con
 
 public:
 
-  static std::string className() { return "hoot::AddAttributesVisitor"; }
+  static QString className() { return "hoot::AddAttributesVisitor"; }
 
   AddAttributesVisitor();
   explicit AddAttributesVisitor(const QStringList attributes, const bool negateCriteria = false);
@@ -65,7 +65,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Added " + QString::number(_numAffected) + " attributes"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

@@ -30,8 +30,6 @@
 
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/PoiCriterion.h>
 
 namespace hoot
 {
@@ -43,7 +41,7 @@ class RelationWithPoiMembersCriterion : public RelationWithMembersOfTypeCriterio
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithPoiMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithPoiMembersCriterion"; }
 
   RelationWithPoiMembersCriterion();
   virtual ~RelationWithPoiMembersCriterion() = default;
@@ -51,16 +49,16 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RelationWithPoiMembersCriterion()); }
 
-  virtual QString getCriterion() const override
-  { return QString::fromStdString(PoiCriterion::className()); }
+  virtual QString getCriterion() const override;
 
   virtual QString getDescription() const
   { return "Identifies relations with POI members"; }
 
-  virtual GeometryType getGeometryType() const { return PoiCriterion().getGeometryType(); }
+  virtual GeometryType getGeometryType() const;
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

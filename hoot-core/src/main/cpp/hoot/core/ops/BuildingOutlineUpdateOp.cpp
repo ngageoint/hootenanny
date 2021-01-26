@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingOutlineUpdateOp.h"
 
@@ -47,6 +47,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -74,7 +75,8 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
+virtual QString getClassName() const override { return ""; }
 
 private:
 
@@ -122,7 +124,8 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
 private:
 
@@ -308,8 +311,8 @@ void BuildingOutlineUpdateOp::_createOutline(const RelationPtr& pBuilding)
   LOG_TRACE("Output building: " << pBuilding);
 }
 
-void BuildingOutlineUpdateOp::_mergeNodes(const std::shared_ptr<Element>& changed,
-  const RelationPtr& reference)
+void BuildingOutlineUpdateOp::_mergeNodes(
+  const std::shared_ptr<Element>& changed, const RelationPtr& reference)
 {
   set<long> changedNodes;
   set<long> referenceNodes;
@@ -348,6 +351,11 @@ void BuildingOutlineUpdateOp::_mergeNodes(const std::shared_ptr<Element>& change
   // replace the nodes in changed with the new nodes we found.
   NodeReplaceVisitor nrv(*_map, nodeIdMap);
   changed->visitRw(*_map, nrv);
+}
+
+QStringList BuildingOutlineUpdateOp::getCriteria() const
+{
+  return QStringList(BuildingCriterion::className());
 }
 
 }

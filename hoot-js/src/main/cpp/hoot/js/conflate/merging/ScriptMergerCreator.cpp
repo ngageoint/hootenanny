@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMergerCreator.h"
 
@@ -81,9 +81,9 @@ bool ScriptMergerCreator::createMergers(const MatchSet& matches, vector<MergerPt
       plugin.Reset(current, sm->getPlugin());
       set<pair<ElementId, ElementId>> s = sm->getMatchPairs();
       eids.insert(s.begin(), s.end());
-      if (matchType.contains(sm->getMatchName()) == false)
+      if (matchType.contains(sm->getName()) == false)
       {
-        matchType.append(sm->getMatchName());
+        matchType.append(sm->getName());
       }
     }
   }

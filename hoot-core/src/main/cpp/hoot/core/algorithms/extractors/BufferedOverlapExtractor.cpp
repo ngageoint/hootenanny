@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BufferedOverlapExtractor.h"
 
@@ -116,9 +116,9 @@ double BufferedOverlapExtractor::extract(const OsmMap& map, const ConstElementPt
   return std::min(1.0, (2 * overlapArea) / (bufferedA1 + bufferedA2));
 }
 
-string BufferedOverlapExtractor::getName() const
+QString BufferedOverlapExtractor::getName() const
 {
-  return QString("BufferedOverlapExtractor %1").arg(_bufferPortion).toStdString();
+  return QString("BufferedOverlapExtractor %1").arg(_bufferPortion);
 }
 
 }

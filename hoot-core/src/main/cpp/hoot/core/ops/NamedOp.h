@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NAMEDOP_H
 #define NAMEDOP_H
 
 // hoot
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ProgressReporter.h>
@@ -49,7 +49,7 @@ class NamedOp : public OsmMapOperation, public Configurable, public ProgressRepo
 {
 public:
 
-  static std::string className() { return "hoot::NamedOp"; }
+  static QString className() { return "hoot::NamedOp"; }
 
   NamedOp();
   NamedOp(QStringList namedOps);
@@ -64,7 +64,9 @@ public:
   virtual void setProgress(Progress progress) override { _progress = progress; }
   virtual unsigned int getNumSteps() const override { return _namedOps.size(); }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   std::shared_ptr<OsmMapOperation> getAppliedOperation(const QString& className)
   { return _appliedOps[className]; }
@@ -88,7 +90,7 @@ private:
   void _substituteForContainingOps();
 
   QString _getInitMessage(const QString& message, 
-                          const std::shared_ptr<OperationStatusInfo>& statusInfo) const;
+                          const std::shared_ptr<OperationStatus>& statusInfo) const;
   void _updateProgress(const int currentStep, const QString& message);
 };
 

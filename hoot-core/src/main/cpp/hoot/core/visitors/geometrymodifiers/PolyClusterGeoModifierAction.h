@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POLYCLUSTERGEOMODIFIERACTION_H
 #define POLYCLUSTERGEOMODIFIERACTION_H
@@ -68,7 +68,7 @@ public:
   static const QString CHECK_INTERSECTIONS_PARAM;
   static const QString CLUSTER_TAG_LIST_PARAM;
 
-  static std::string className() { return "hoot::PolyClusterGeoModifierAction"; }
+  static QString className() { return "hoot::PolyClusterGeoModifierAction"; }
 
   PolyClusterGeoModifierAction() = default;
   virtual ~PolyClusterGeoModifierAction() = default;
@@ -81,8 +81,6 @@ public:
   virtual void processStart(OsmMapPtr& pMap) override;
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
   virtual void processFinalize(OsmMapPtr& pMap) override;
-
-  virtual std::string getClassName() const { return className(); }
 
 private:
 

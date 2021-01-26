@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SIGMAAGGREGATOR_H
 #define SIGMAAGGREGATOR_H
@@ -36,7 +36,7 @@ class SigmaAggregator : public ValueAggregator
 {
 public:
 
-  static std::string className() { return "hoot::SigmaAggregator"; }
+  static QString className() { return "hoot::SigmaAggregator"; }
 
   SigmaAggregator() = default;
   virtual ~SigmaAggregator() = default;
@@ -47,6 +47,10 @@ public:
 
   virtual QString getDescription() const override
   { return "Aggregates data based on the unbiased Standard Deviation value"; }
+
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MINAGGREGATOR_H
 #define MINAGGREGATOR_H
@@ -36,7 +36,7 @@ class MinAggregator : public ValueAggregator
 {
 public:
 
-  static std::string className() { return "hoot::MinAggregator"; }
+  static QString className() { return "hoot::MinAggregator"; }
 
   MinAggregator() = default;
   virtual ~MinAggregator() = default;
@@ -45,7 +45,12 @@ public:
 
   virtual QString toString() const override { return "MinAggregator"; }
 
-  virtual QString getDescription() const override { return "Aggregates data based on the minimum value"; }
+  virtual QString getDescription() const override
+  { return "Aggregates data based on the minimum value"; }
+
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

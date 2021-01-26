@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef _HOOT_FACTORY_H
@@ -36,10 +36,10 @@
 
 // Qt
 #include <QMutex>
+#include <QString>
 
 // Standard
 #include <map>
-#include <string>
 #include <vector>
 
 namespace hoot
@@ -54,10 +54,8 @@ public:
   virtual ~ObjectCreator() = default;
 
   virtual boost::any create() = 0;
-
-  virtual std::string getBaseName() = 0;
-
-  virtual std::string getName() = 0;
+  virtual QString getBaseName() const = 0;
+  virtual QString getName() const = 0;
 
 private:
 
@@ -70,7 +68,7 @@ class ObjectCreatorTemplate : public ObjectCreator
 {
 public:
 
-  ObjectCreatorTemplate(std::string baseName, std::string name)
+  ObjectCreatorTemplate(QString baseName, QString name)
     : _name(name), _baseName(baseName)
   {
   }
@@ -86,13 +84,13 @@ public:
     return dynamic_cast<Base*>(b);
   }
 
-  std::string getBaseName() override { return _baseName; }
+  QString getBaseName() const override { return _baseName; }
 
-  std::string getName() override { return _name; }
+  QString getName() const override { return _name; }
 
 private:
 
-  std::string _name, _baseName;
+  QString _name, _baseName;
 };
 
 /**
@@ -110,7 +108,7 @@ public:
    * If the class isn't found an exception is thrown.
    */
   template<class ExpectedBase>
-  bool hasBase(const std::string& name)
+  bool hasBase(const QString& name)
   {
     QMutexLocker locker(&_mutex);
     if (_creators.find(name) == _creators.end())
@@ -128,7 +126,7 @@ public:
    * Checks to make sure the class works as expected. Nice for error checking.
    */
   template<class ExpectedBase>
-  void checkClass(const std::string& name)
+  void checkClass(const QString& name)
   {
     QMutexLocker locker(&_mutex);
     if (_creators.find(name) == _creators.end())
@@ -137,31 +135,22 @@ public:
     }
     if (_creators[name]->getBaseName() != ExpectedBase::className())
     {
-      throw HootException("Class (" + name + ") does not have a base class of " +
-        ExpectedBase::className());
+      throw HootException(
+        "Class (" + name + ") does not have a base class of " + ExpectedBase::className());
     }
   }
 
-  boost::any constructObject(const std::string& name);
+  boost::any constructObject(const QString& name);
 
   template<class T>
   T* constructObject(const QString& name)
   {
-    std::string n = name.toStdString();
-    return constructObject<T>(n);
-  }
-
-  template<class T>
-  T* constructObject(const std::string& name)
-  {
     return boost::any_cast<T*>(constructObject(name));
   }
 
-  std::vector<std::string> getObjectNamesByBase(const std::string& baseName);
+  std::vector<QString> getObjectNamesByBase(const QString& baseName);
 
-  bool hasClass(const QString& name) { return hasClass(name.toStdString()); }
-
-  bool hasClass(const std::string& name);
+  bool hasClass(const QString& name);
 
   /**
    * Register an object creator.
@@ -175,7 +164,7 @@ private:
 
   QMutex _mutex;
 
-  std::map<std::string, std::shared_ptr<ObjectCreator>> _creators;
+  std::map<QString, std::shared_ptr<ObjectCreator>> _creators;
 
   /** Default constructor/destructor */
   Factory() = default;
@@ -192,10 +181,11 @@ public:
 
   /** Auto-register the suite factory in the global registry.
    */
-  AutoRegister(std::string baseName, std::string name, bool baseClass = false)
+  AutoRegister(QString baseName, QString name, bool baseClass = false)
   {
-    Factory::getInstance().registerCreator(std::shared_ptr<ObjectCreatorTemplate<Base, T>>(
-      new ObjectCreatorTemplate<Base, T>(baseName, name)), baseClass);
+    Factory::getInstance().registerCreator(
+      std::shared_ptr<ObjectCreatorTemplate<Base, T>>(
+        new ObjectCreatorTemplate<Base, T>(baseName, name)), baseClass);
   }
 };
 

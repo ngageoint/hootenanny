@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTMERGER_H
 #define SCRIPTMERGER_H
@@ -41,7 +41,7 @@ class ScriptMerger : public MergerBase
 {
 public:
 
-  static std::string className() { return "hoot::ScriptMerger"; }
+  static QString className() { return "hoot::ScriptMerger"; }
 
   static int logWarnCount;
 
@@ -64,7 +64,9 @@ public:
   virtual QString getDescription() const
   { return "Merges elements matched with Generic Conflation"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()) + "-" + _matchType; }
+  virtual QString getName() const { return className() + "-" + _matchType; }
+
+  virtual QString getClassName() const override { return className(); }
 
   void setMatchType(const QString& matchType) { _matchType = matchType; }
 

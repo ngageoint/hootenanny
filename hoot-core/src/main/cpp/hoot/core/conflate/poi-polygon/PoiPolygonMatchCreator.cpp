@@ -389,10 +389,10 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
          matchesItr2 != matchesWithSharedId.end(); ++matchesItr2)
     {
       ConstMatchPtr overlappingMatch = *matchesItr2;
-      LOG_VART(overlappingMatch->getMatchName());
+      LOG_VART(overlappingMatch->getName());
       LOG_VART(overlappingMatch);
 
-      if (overlappingMatch->getMatchName() == PoiPolygonMatch::getPoiPolygonMatchName())
+      if (overlappingMatch->getName() == PoiPolygonMatch::getPoiPolygonMatchName())
       {
         std::pair<ElementId, ElementId> matchElementIds =
           *(overlappingMatch->getMatchPairs()).begin();
@@ -578,8 +578,8 @@ std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
 QStringList PoiPolygonMatchCreator::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(PoiCriterion::className()));
-  criteria.append(QString::fromStdString(BuildingCriterion::className()));
+  criteria.append(PoiCriterion::className());
+  criteria.append(BuildingCriterion::className());
   return criteria;
 }
 

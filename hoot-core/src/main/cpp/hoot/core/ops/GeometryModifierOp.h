@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GEOMETRYMODIFIEROP_H
@@ -64,21 +64,24 @@ namespace hoot
     virtual ~GeometryModifierOp() = default;
 
     // OsmMapOperation
-    static std::string className() { return "hoot::GeometryModifierOp"; }
+    static QString className() { return "hoot::GeometryModifierOp"; }
     QString getDescription() const { return "Modifies map geometry as specified"; }
 
     // applies all actions specified in the rules file '_rulesFileName' to the map.
     // runs through each action in the sequence they appear in the rules file
     void apply(std::shared_ptr<OsmMap>& map);
 
-    // OperationStatusInfo
+    // OperationStatus
     virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
-    virtual QString getCompletedStatusMessage() const { return "Modified " + QString::number(_numAffected) + " elements"; }
+    virtual QString getCompletedStatusMessage() const
+    { return "Modified " + QString::number(_numAffected) + " elements"; }
 
     // Configurable
     virtual void setConfiguration(const Settings& conf);
 
-    virtual std::string getClassName() const { return className(); }
+    virtual QString getName() const { return className(); }
+
+    virtual QString getClassName() const override { return className(); }
 
   private:
     // json rules file name

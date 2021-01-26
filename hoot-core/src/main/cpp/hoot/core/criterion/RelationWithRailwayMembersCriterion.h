@@ -30,8 +30,6 @@
 
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/RailwayCriterion.h>
 
 namespace hoot
 {
@@ -43,7 +41,7 @@ class RelationWithRailwayMembersCriterion : public RelationWithMembersOfTypeCrit
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithRailwayMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithRailwayMembersCriterion"; }
 
   RelationWithRailwayMembersCriterion();
   virtual ~RelationWithRailwayMembersCriterion() = default;
@@ -51,16 +49,16 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RelationWithRailwayMembersCriterion()); }
 
-  virtual QString getCriterion() const override
-  { return QString::fromStdString(RailwayCriterion::className()); }
+  virtual QString getCriterion() const override;
 
   virtual QString getDescription() const
   { return "Identifies relations with railway members"; }
 
-  virtual GeometryType getGeometryType() const { return RailwayCriterion().getGeometryType(); }
+  virtual GeometryType getGeometryType() const;
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

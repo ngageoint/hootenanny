@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REPLACEMENT_SNAPPED_WAY_JOINER_H
@@ -42,7 +42,7 @@ class ReplacementSnappedWayJoiner : public WayJoinerAdvanced
 {
 public:
 
-  static std::string className() { return "hoot::ReplacementSnappedWayJoiner"; }
+  static QString className() { return "hoot::ReplacementSnappedWayJoiner"; }
 
   /**
    * Constructor
@@ -67,6 +67,10 @@ public:
    */
   virtual QString getDescription() const override
   { return "Way joiner for use after way snapping when generating replacement changesets."; }
+
+  virtual QString getClassName() const override { return className(); }
+
+  virtual QString getName() const override { return className(); }
 
 protected:
 

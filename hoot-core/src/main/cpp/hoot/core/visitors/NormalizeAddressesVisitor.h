@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NORMALIZE_ADDRESSES_VISITOR_H
 #define NORMALIZE_ADDRESSES_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/conflate/address/AddressNormalizer.h>
 
 namespace hoot
@@ -42,7 +42,7 @@ class NormalizeAddressesVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::NormalizeAddressesVisitor"; }
+  static QString className() { return "hoot::NormalizeAddressesVisitor"; }
 
   NormalizeAddressesVisitor() = default;
   virtual ~NormalizeAddressesVisitor() = default;
@@ -59,7 +59,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Normalized " + QString::number(_addressNormalizer.getNumNormalized()) + " addresses"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

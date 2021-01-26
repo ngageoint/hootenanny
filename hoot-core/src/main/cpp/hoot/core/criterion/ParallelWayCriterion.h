@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PARALLELWAYCRITERION_H
@@ -45,12 +45,10 @@ class ParallelWayCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ParallelWayCriterion"; }
+  static QString className() { return "hoot::ParallelWayCriterion"; }
 
   ParallelWayCriterion() = default;
-  ParallelWayCriterion(const ConstOsmMapPtr& map,
-                       ConstWayPtr baseWay,
-                       bool isParallel = true);
+  ParallelWayCriterion(const ConstOsmMapPtr& map, ConstWayPtr baseWay, bool isParallel = true);
   virtual ~ParallelWayCriterion();
 
   Radians calculateDifference(const ConstWayPtr& w) const;
@@ -68,9 +66,9 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Line; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+ virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

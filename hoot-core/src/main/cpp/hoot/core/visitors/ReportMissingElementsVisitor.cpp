@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ReportMissingElementsVisitor.h"
 
@@ -109,8 +109,7 @@ void ReportMissingElementsVisitor::_updateWay(const WayPtr& way, const QStringLi
       _reviewMarker.mark(
         _map->shared_from_this(), way,
         way->getElementId().toString() + ", name: " + way->getTags().getName() +
-          "; Missing way node(s): " + missingChildIds.join(","),
-        QString::fromStdString(getClassName()), 1.0);
+          "; Missing way node(s): " + missingChildIds.join(","), getName(), 1.0);
       _numWaysMarkedForReview++;
     }
 
@@ -134,8 +133,7 @@ void ReportMissingElementsVisitor::_updateRelation(const RelationPtr& relation,
         _map->shared_from_this(), relation,
         relation->getElementId().toString() + ", name: " + relation->getTags().getName() +
           ", type: " + relation->getType() +
-          ", Missing relation member(s): " + missingChildIds.join(","),
-        QString::fromStdString(getClassName()), 1.0);
+          ", Missing relation member(s): " + missingChildIds.join(","), getName(), 1.0);
        _numRelationsMarkedForReview++;
        LOG_TRACE("Marked " << relation->getElementId() << " for review.");
     }

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef PHONE_NUMBER_LOCATE_VISITOR_H
 #define PHONE_NUMBER_LOCATE_VISITOR_H
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/conflate/phone/PhoneNumberLocator.h>
 #include <hoot/core/conflate/phone/PhoneNumberParser.h>
 #include <hoot/core/util/Configurable.h>
@@ -48,7 +48,7 @@ public:
   PhoneNumberLocateVisitor() = default;
   virtual ~PhoneNumberLocateVisitor() = default;
 
-  static std::string className() { return "hoot::PhoneNumberLocateVisitor"; }
+  static QString className() { return "hoot::PhoneNumberLocateVisitor"; }
 
   /**
    * @see Configurable
@@ -73,7 +73,9 @@ public:
       QString::number(_numAffected) + " different elements";
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

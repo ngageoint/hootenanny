@@ -49,14 +49,12 @@ class Element;
  * should only use the criteria in a positive sense. (e.g. apply something to the elements that
  * meet the criteria, rather than apply it to those that don't meet the criteria). Look at the
  * NotCriterion for an example to negate criterion.
- *
- * Also see: ConflatableElementCriterion and GeometryTypeCriterion.
  */
 class ElementCriterion : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::ElementCriterion"; }
+  static QString className() { return "hoot::ElementCriterion"; }
 
   ElementCriterion() = default;
   virtual ~ElementCriterion() = default;
@@ -71,16 +69,7 @@ public:
    */
   virtual std::shared_ptr<ElementCriterion> clone() = 0;
 
-  /**
-   * Returns a string uniquely identifying the criterion. May contain information about the data
-   * contained within the criterion.
-   *
-   * @return a string
-   * @todo Many of the crits are only returning their class names in toString(). So, we may want to
-   * add getClassName() here to mimic OsmMapOperation and ElementVisitor and make toString()
-   * optional with actual useful info in it.
-   */
-  virtual QString toString() const = 0;
+  virtual QString toString() const override { return ""; }
 };
 
 typedef std::shared_ptr<ElementCriterion> ElementCriterionPtr;

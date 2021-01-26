@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SpatialIndexer_H
 #define SpatialIndexer_H
@@ -31,7 +31,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 #include <hoot/core/util/StringUtils.h>
 
 // TGS
@@ -57,7 +57,7 @@ public:
 
   static int logWarnCount;
 
-  static std::string className() { return "hoot::SpatialIndexer"; }
+  static QString className() { return "hoot::SpatialIndexer"; }
 
   explicit SpatialIndexer(std::shared_ptr<Tgs::HilbertRTree>& index,
                           std::deque<ElementId>& indexToEid,
@@ -115,7 +115,9 @@ public:
 
   long getSize() const { return _numAffected; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

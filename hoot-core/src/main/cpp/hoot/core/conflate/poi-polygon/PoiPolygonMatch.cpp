@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatch.h"
 
@@ -471,8 +471,7 @@ void PoiPolygonMatch::calculateMatch(const ElementId& eid1, const ElementId& eid
       LOG_VART(MultiUseBuildingCriterion().isSatisfied(_poly));
       //only do the multi-use check on the poly
       if (_reviewMultiUseBuildings &&
-          _infoCache->hasCriterion(
-            _poly, QString::fromStdString(MultiUseBuildingCriterion::className())))
+          _infoCache->hasCriterion(_poly, MultiUseBuildingCriterion::className()))
       {
         _class.setReview();
         _explainText = "Match involves a multi-use building.";
@@ -758,14 +757,14 @@ unsigned int PoiPolygonMatch::_calculateEvidence(ConstElementPtr poi, ConstEleme
 //    }
   }
 
-  //We only want to run this if the previous match distance calculation was too large.
-  //Tightening up the requirements for running the convex poly calculation here to improve
-  //runtime.  These requirements can possibly be removed at some point in the future, if proven
-  //necessary.  The school requirement definitely seems too type specific (this type of evidence
-  //has actually only been found with school pois in one test dataset so far), but when
-  //removing it scores dropped for other datasets...so not changing it for now.
+  // We only want to run this if the previous match distance calculation was too large.
+  // Tightening up the requirements for running the convex poly calculation here to improve
+  // runtime.  These requirements can possibly be removed at some point in the future, if proven
+  // necessary.  The school requirement definitely seems too type specific (this type of evidence
+  // has actually only been found with school pois in one test dataset so far), but when
+  // removing it scores dropped for other datasets...so not changing it for now.
   if (evidence == 0 && _distance <= 35.0 && _infoCache->isType(poi, PoiPolygonSchemaType::School) &&
-      _infoCache->hasCriterion(poly, QString::fromStdString(BuildingCriterion::className())))
+      _infoCache->hasCriterion(poly, BuildingCriterion::className()))
   {
     evidence += _getConvexPolyDistanceEvidence(poi, poly);
 //    if (evidence >= _matchEvidenceThreshold)

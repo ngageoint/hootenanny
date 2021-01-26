@@ -462,8 +462,8 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
 {
   std::shared_ptr<DataFrame> df = _buildDataFrame(s);
 
-  vector<std::string> candidates;
-  if (_interpolatorClassName.empty())
+  vector<QString> candidates;
+  if (_interpolatorClassName.isEmpty())
   {
     candidates = Factory::getInstance().getObjectNamesByBase(Interpolator::className());
   }
@@ -665,10 +665,10 @@ bool RubberSheet::_findTies()
       "required minimum of " << _minimumTies << ", which is enough to perform rubbersheeting.");
 
     // experimentally determine the best interpolator.
-    _interpolatorClassName.clear();
+    _interpolatorClassName = "";
     _interpolator2to1 = _buildInterpolator(Status::Unknown2);
     // make sure we use the same interpolator for both directions.
-    _interpolatorClassName = _interpolator2to1->getClassName();
+    _interpolatorClassName = _interpolator2to1->getName();
     LOG_DEBUG(_interpolator2to1->toString());
     if (_ref == false)
     {
@@ -706,7 +706,7 @@ bool RubberSheet::_findTies()
 
     _interpolator1to2.reset();
     _interpolator2to1.reset();
-    _interpolatorClassName.clear();
+    _interpolatorClassName = "";
 
     return false;
   }
@@ -741,8 +741,7 @@ std::shared_ptr<Interpolator> RubberSheet::_readInterpolator(QIODevice& is)
   QString interpolatorClass;
   ds >> interpolatorClass;
   std::shared_ptr<Interpolator> result;
-  result.reset(Factory::getInstance().constructObject<Interpolator>(
-    interpolatorClass.toStdString()));
+  result.reset(Factory::getInstance().constructObject<Interpolator>(interpolatorClass));
   result->readInterpolator(is);
   return result;
 }
@@ -780,7 +779,7 @@ void RubberSheet::_writeInterpolator(
   ds << QString(projStr);
   delete [] projStr;
 
-  ds << QString::fromStdString(interpolator->getClassName());
+  ds << interpolator->getName();
   interpolator->writeInterpolator(os);
 }
 
@@ -804,8 +803,8 @@ vector<double> RubberSheet::calculateTiePointDistances()
 QStringList RubberSheet::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(LinearCriterion::className()));
-  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  criteria.append(LinearCriterion::className());
+  criteria.append(PolygonCriterion::className());
   return criteria;
 }
 

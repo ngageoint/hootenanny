@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EDGEDISTANCEEXTRACTOR_H
 #define EDGEDISTANCEEXTRACTOR_H
@@ -55,14 +55,14 @@ public:
   EdgeDistanceExtractor(Meters spacing = 5.0);
   virtual ~EdgeDistanceExtractor() = default;
 
-  static std::string className() { return "hoot::EdgeDistanceExtractor"; }
+  static QString className() { return "hoot::EdgeDistanceExtractor"; }
 
   double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  std::string getClassName() const override { return EdgeDistanceExtractor::className(); }
+  virtual QString getClassName() const override { return className(); }
 
-  std::string getName() const override;
+  virtual QString getName() const override;
 
   void setValueAggregator(const ValueAggregatorPtr& va) override { _aggregator = va; }
 

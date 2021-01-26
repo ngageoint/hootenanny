@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGMERGER_H
 #define TAGMERGER_H
@@ -45,7 +45,7 @@ class TagMerger : public ApiEntityInfo, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagMerger"; }
+  static QString className() { return "hoot::TagMerger"; }
 
   TagMerger() : _caseSensitive(ConfigOptions().getDuplicateNameCaseSensitive()) {}
   virtual ~TagMerger() = default;
@@ -60,12 +60,12 @@ public:
    */
   virtual Tags mergeTags(const Tags& t1, const Tags& t2, ElementType et) const = 0;
 
-  virtual QString getClassName() const  = 0;
-
   void setConfiguration(const Settings& conf) override
   {
     _caseSensitive = ConfigOptions(conf).getDuplicateNameCaseSensitive();
   }
+
+  virtual QString toString() const override { return ""; }
 
 protected:
 

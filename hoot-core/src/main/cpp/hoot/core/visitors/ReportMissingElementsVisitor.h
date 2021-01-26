@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPORTMISSINGELEMENTSVISITOR_H
 #define REPORTMISSINGELEMENTSVISITOR_H
@@ -48,7 +48,7 @@ class ReportMissingElementsVisitor : public ConstElementVisitor, public OsmMapCo
 {
 public:
 
-  static std::string className() { return "hoot::ReportMissingElementsVisitor"; }
+  static QString className() { return "hoot::ReportMissingElementsVisitor"; }
 
   ReportMissingElementsVisitor(const bool removeMissing = false,
                                const Log::WarningLevel& logLevel = Log::Trace,
@@ -69,7 +69,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Reported " + StringUtils::formatLargeNumber(_missingCount) + " missing elements."; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   int getMissingCount() const { return _missingCount; }
 

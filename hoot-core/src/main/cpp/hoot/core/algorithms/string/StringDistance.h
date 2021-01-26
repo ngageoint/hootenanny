@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef STRINGDISTANCE_H
 #define STRINGDISTANCE_H
@@ -46,7 +46,7 @@ class StringDistance : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::StringDistance"; }
+  static QString className() { return "hoot::StringDistance"; }
 
   StringDistance() = default;
   virtual ~StringDistance() = default;

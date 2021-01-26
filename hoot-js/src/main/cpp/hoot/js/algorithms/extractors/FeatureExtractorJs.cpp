@@ -83,17 +83,17 @@ void FeatureExtractorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
-  vector<string> opNames =
+  vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(FeatureExtractor::className());
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
-    QByteArray utf8 = QString::fromStdString(opNames[i]).replace("hoot::", "").toUtf8();
+    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
     const char* n = utf8.data();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extract"),
@@ -110,7 +110,7 @@ void FeatureExtractorJs::New(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(v8::Isolate::GetCurrent());
 
-  QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
   FeatureExtractorPtr fe(Factory::getInstance().constructObject<FeatureExtractor>(className));
   FeatureExtractorJs* obj = new FeatureExtractorJs(fe);

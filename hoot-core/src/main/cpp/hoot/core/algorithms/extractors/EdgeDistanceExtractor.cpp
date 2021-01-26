@@ -67,8 +67,9 @@ public:
     }
   }
 
-  QString getDescription() const override { return ""; }
-  std::string getClassName() const override { return ""; }
+  virtual QString getDescription() const override { return ""; }
+  virtual QString getName() const override { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
 private:
 
@@ -95,8 +96,9 @@ public:
     }
   }
 
-  QString getDescription() const override { return ""; }
-  std::string getClassName() const override { return ""; }
+  virtual QString getDescription() const override { return ""; }
+  virtual QString getName() const override { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
 private:
 
@@ -141,9 +143,9 @@ double EdgeDistanceExtractor::distance(
   return min(d1, d2);
 }
 
-string EdgeDistanceExtractor::getName() const
+QString EdgeDistanceExtractor::getName() const
 {
-  return (QString("EdgeDistance") + _aggregator->toString()).toStdString();
+  return QString("EdgeDistance") + _aggregator->toString();
 }
 
 double EdgeDistanceExtractor::_oneDistance(

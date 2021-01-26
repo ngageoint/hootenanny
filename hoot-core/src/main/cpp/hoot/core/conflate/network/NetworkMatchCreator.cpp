@@ -45,6 +45,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Standard
 #include <fstream>
@@ -194,8 +195,10 @@ vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "Generates matchers that match roads with the Network Algorithm",
-      CreatorDescription::BaseFeatureType::Highway, false));
+      className(),
+      "Generates matchers that match roads with the Network Algorithm",
+      CreatorDescription::BaseFeatureType::Highway,
+      false));
   return result;
 }
 
@@ -221,6 +224,11 @@ std::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
                          config.getNetworkReviewThreshold()));
   }
   return _matchThreshold;
+}
+
+QStringList NetworkMatchCreator::getCriteria() const
+{
+  return QStringList(HighwayCriterion::className());
 }
 
 }

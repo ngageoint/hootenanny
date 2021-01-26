@@ -54,7 +54,7 @@ class ConflateCmd : public BoundedCommand
 
 public:
 
-  static std::string className() { return "hoot::ConflateCmd"; }
+  static QString className() { return "hoot::ConflateCmd"; }
 
   static const QString JOB_SOURCE;
 

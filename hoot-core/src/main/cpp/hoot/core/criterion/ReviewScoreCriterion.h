@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REVIEW_SCORE_CRITERION_H
@@ -42,7 +42,7 @@ class ReviewScoreCriterion : public ReviewRelationCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ReviewScoreCriterion"; }
+  static QString className() { return "hoot::ReviewScoreCriterion"; }
 
   ReviewScoreCriterion();
   virtual ~ReviewScoreCriterion() = default;
@@ -60,9 +60,9 @@ public:
   void setMaxScoreThreshold(const double threshold);
   void setInvertThresholding(const bool invert) { _invertThresholding = invert; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

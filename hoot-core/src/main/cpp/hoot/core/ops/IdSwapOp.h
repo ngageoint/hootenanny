@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef IDSWAPOP_H
@@ -46,7 +46,7 @@ public:
    * @brief className - Get classname string
    * @return - "hoot::IdSwapOp"
    */
-  static std::string className() { return "hoot::IdSwapOp"; }
+  static QString className() { return "hoot::IdSwapOp"; }
 
   /**
    * @brief IdSwapOp - Default constructor
@@ -80,7 +80,9 @@ public:
   virtual QString getCompletedStatusMessage() const override
   { return "Swapped " + QString::number(_numAffected) + " IDs."; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
   /**

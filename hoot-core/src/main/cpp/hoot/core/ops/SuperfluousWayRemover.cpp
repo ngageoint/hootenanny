@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SuperfluousWayRemover.h"
@@ -54,7 +54,7 @@ void SuperfluousWayRemover::setConfiguration(const Settings& conf)
     if (!ok)
     {
       throw IllegalArgumentException(
-        QString("Invalid element exclude ID passed to ") + QString::fromStdString(className()));
+        QString("Invalid element exclude ID passed to ") + className());
     }
   }
   LOG_VARD(_excludeIds.size());
@@ -132,8 +132,8 @@ void SuperfluousWayRemover::apply(std::shared_ptr<OsmMap>& map)
 QStringList SuperfluousWayRemover::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(LinearCriterion::className()));
-  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  criteria.append(LinearCriterion::className());
+  criteria.append(PolygonCriterion::className());
   return criteria;
 }
 

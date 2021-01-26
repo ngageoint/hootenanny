@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYTOPOLYGEOMODIFIERACTION_H
 #define WAYTOPOLYGEOMODIFIERACTION_H
@@ -45,7 +45,7 @@ public:
   static const QString WIDTH_TAG_PARAM;
   static const QString DEFAULT_WIDTH_PARAM;
 
-  static std::string className() { return "hoot::WayToPolyGeoModifierAction"; }
+  static QString className() { return "hoot::WayToPolyGeoModifierAction"; }
 
   WayToPolyGeoModifierAction() = default;
   virtual ~WayToPolyGeoModifierAction() = default;
@@ -55,8 +55,6 @@ public:
 
   virtual void parseArguments(const QHash<QString, QString>& arguments) override;
   virtual bool processElement(const ElementPtr& pElement, OsmMap* pMap) override;
-
-  virtual std::string getClassName() const { return className(); }
 
 private:
 

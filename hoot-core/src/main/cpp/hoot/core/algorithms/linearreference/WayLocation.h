@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __WAY_LOCATION_H__
 #define __WAY_LOCATION_H__
@@ -53,7 +53,7 @@ class WayLocation
 {
 public:
 
-  static std::string className() { return "hoot::WayLocation"; }
+  static QString className() { return "hoot::WayLocation"; }
 
   static int logWarnCount;
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SuperfluousConflateOpRemover.h"
 
@@ -34,7 +34,7 @@
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/ops/MapCleaner.h>
 
 namespace hoot
@@ -69,7 +69,7 @@ void SuperfluousConflateOpRemover::removeSuperfluousOps()
     conf().set(ConfigOptions::getConflatePostOpsKey(), modifiedPostConflateOps);
   }
 
-  const QString mapCleanerName = QString::fromStdString(MapCleaner::className());
+  const QString mapCleanerName = MapCleaner::className();
   if (modifiedPreConflateOps.contains(mapCleanerName) ||
       modifiedPostConflateOps.contains(mapCleanerName))
   {
@@ -105,7 +105,7 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
     LOG_VART(opName);
 
     // MapCleaner's ops are configured with map.cleaner.transforms, so don't exclude it here.
-    if (opName == QString::fromStdString(MapCleaner::className()))
+    if (opName == MapCleaner::className())
     {
       modifiedOps.append(opName);
       continue;
@@ -114,14 +114,14 @@ QStringList SuperfluousConflateOpRemover::_filterOutUnneededOps(
     // All the ops should be map ops or element vis and, thus, support
     // FilteredByGeometryTypeCriteria, but we'll check anyway to be safe.
     std::shared_ptr<FilteredByGeometryTypeCriteria> op;
-    if (Factory::getInstance().hasBase<OsmMapOperation>(opName.toStdString()))
+    if (Factory::getInstance().hasBase<OsmMapOperation>(opName))
     {
       op =
         std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(
           std::shared_ptr<OsmMapOperation>(
             Factory::getInstance().constructObject<OsmMapOperation>(opName)));
     }
-    else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
+    else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
     {
       op =
         std::dynamic_pointer_cast<FilteredByGeometryTypeCriteria>(
@@ -238,7 +238,7 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
       LOG_VART(pointCrits);
       if (pointCrits.contains(critStr))
       {
-        matcherCrits.insert(QString::fromStdString(PointCriterion::className()));
+        matcherCrits.insert(PointCriterion::className());
       }
 
       const QStringList lineCrits =
@@ -247,7 +247,7 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
       LOG_VART(lineCrits);
       if (lineCrits.contains(critStr))
       {
-        matcherCrits.insert(QString::fromStdString(LinearCriterion::className()));
+        matcherCrits.insert(LinearCriterion::className());
       }
 
       const QStringList polyCrits =
@@ -256,7 +256,7 @@ QSet<QString> SuperfluousConflateOpRemover::_getMatchCreatorGeometryTypeCrits()
       LOG_VART(polyCrits);
       if (polyCrits.contains(critStr))
       {
-        matcherCrits.insert(QString::fromStdString(PolygonCriterion::className()));
+        matcherCrits.insert(PolygonCriterion::className());
       }
     }
   }
@@ -275,12 +275,12 @@ bool SuperfluousConflateOpRemover::_isGeometryTypeCrit(const QString& className)
   // can't use hasBase with GeometryTypeCriterion here, since GeometryTypeCriterion are registered
   // as ElementCriterion
   std::shared_ptr<GeometryTypeCriterion> crit;
-  if (Factory::getInstance().hasBase<ElementCriterion>(className.toStdString()))
+  if (Factory::getInstance().hasBase<ElementCriterion>(className))
   {
     crit =
       std::dynamic_pointer_cast<GeometryTypeCriterion>(
         std::shared_ptr<ElementCriterion>(
-          Factory::getInstance().constructObject<ElementCriterion>(className.toStdString())));
+          Factory::getInstance().constructObject<ElementCriterion>(className)));
     return crit.get();
   }
 

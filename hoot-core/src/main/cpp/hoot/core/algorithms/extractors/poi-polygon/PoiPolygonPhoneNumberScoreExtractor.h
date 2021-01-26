@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef POIPOLYGONPHONENUMBERSCOREEXTRACTOR_H
@@ -49,13 +49,14 @@ class PoiPolygonPhoneNumberScoreExtractor : public FeatureExtractorBase, public 
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonPhoneNumberScoreExtractor"; }
+  static QString className() { return "hoot::PoiPolygonPhoneNumberScoreExtractor"; }
 
   PoiPolygonPhoneNumberScoreExtractor();
   virtual ~PoiPolygonPhoneNumberScoreExtractor() = default;
 
-  virtual std::string getClassName() const override
-  { return PoiPolygonPhoneNumberScoreExtractor::className(); }
+  virtual QString getClassName() const override { return className(); }
+
+  virtual QString getName() const { return className(); }
 
   virtual double extract(const OsmMap& map, const ConstElementPtr& poi,
                          const ConstElementPtr& poly) const;

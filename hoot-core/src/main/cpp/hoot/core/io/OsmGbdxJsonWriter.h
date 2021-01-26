@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_GBDX_JSON_WRITER
 #define OSM_GBDX_JSON_WRITER
@@ -46,7 +46,7 @@ class OsmGbdxJsonWriter : public OsmJsonWriter
 {
 public:
 
-  static std::string className() { return "hoot::OsmGbdxJsonWriter"; }
+  static QString className() { return "hoot::OsmGbdxJsonWriter"; }
 
   OsmGbdxJsonWriter(int precision = ConfigOptions().getWriterPrecision());
   virtual ~OsmGbdxJsonWriter() = default;

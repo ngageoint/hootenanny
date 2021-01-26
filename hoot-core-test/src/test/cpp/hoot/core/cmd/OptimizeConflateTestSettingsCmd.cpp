@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -42,7 +42,7 @@ class OptimizeConflateTestSettingsCmd : public BaseCommand
 {
 public:
 
-  static string className() { return "hoot::OptimizeConflateTestSettingsCmd"; }
+  static QString className() { return "hoot::OptimizeConflateTestSettingsCmd"; }
 
   OptimizeConflateTestSettingsCmd() { }
 

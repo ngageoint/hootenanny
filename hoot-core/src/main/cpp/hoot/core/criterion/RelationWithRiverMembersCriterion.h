@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/LinearWaterwayCriterion.h>
 
 namespace hoot
 {
@@ -43,7 +42,7 @@ class RelationWithRiverMembersCriterion : public RelationWithMembersOfTypeCriter
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithRiverMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithRiverMembersCriterion"; }
 
   RelationWithRiverMembersCriterion();
   virtual ~RelationWithRiverMembersCriterion() = default;
@@ -51,17 +50,16 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RelationWithRiverMembersCriterion()); }
 
-  virtual QString getCriterion() const override
-  { return QString::fromStdString(LinearWaterwayCriterion::className()); }
+  virtual QString getCriterion() const override;
 
   virtual QString getDescription() const
   { return "Identifies relations with river members"; }
 
-  virtual GeometryType getGeometryType() const
-  { return LinearWaterwayCriterion().getGeometryType(); }
+  virtual GeometryType getGeometryType() const;
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

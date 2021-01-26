@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OrCriterion.h"
 
@@ -71,8 +71,8 @@ QString OrCriterion::toString() const
 {
   return
     ChainCriterion::toString().replace(
-      QString::fromStdString(ChainCriterion::className()).replace("hoot::", ""),
-      QString::fromStdString(className()).replace("hoot::", ""));
+      ChainCriterion::className().replace("hoot::", ""),
+      className().replace("hoot::", ""));
 }
 
 }

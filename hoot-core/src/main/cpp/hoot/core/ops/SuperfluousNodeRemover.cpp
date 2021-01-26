@@ -76,7 +76,7 @@ void SuperfluousNodeRemover::setConfiguration(const Settings& conf)
     if (!ok)
     {
       throw IllegalArgumentException(
-        QString("Invalid element exclude ID passed to ") + QString::fromStdString(className()));
+        QString("Invalid element exclude ID passed to ") + className());
     }
   }
   LOG_VARD(_excludeIds.size());

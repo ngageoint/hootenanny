@@ -35,7 +35,7 @@
 
 // Hoot
 #include <hoot/core/elements/ElementProvider.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
@@ -89,7 +89,7 @@ class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvid
 
 public:
 
-  static std::string className() { return "hoot::OsmMap"; }
+  static QString className() { return "hoot::OsmMap"; }
 
   OsmMap();
 

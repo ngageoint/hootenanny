@@ -79,7 +79,7 @@ std::ostream& operator<<(std::ostream& o, const std::list<T>& l)
 }
 
 template <class K, class V>
-std::ostream & operator << (std::ostream & o, const std::map<K, V> & map)
+std::ostream& operator << (std::ostream & o, const std::map<K, V> & map)
 {
   int n = map.size();
   o << "[" << n << "]{";
@@ -98,7 +98,7 @@ std::ostream & operator << (std::ostream & o, const std::map<K, V> & map)
 }
 
 template <class K, class V>
-std::ostream & operator << (std::ostream & o, const std::multimap<K, V> & map)
+std::ostream& operator << (std::ostream & o, const std::multimap<K, V> & map)
 {
   int n = map.size();
   o << "[" << n << "]{";

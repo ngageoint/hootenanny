@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NAMEEXTRACTOR_H
 #define NAMEEXTRACTOR_H
@@ -44,11 +44,11 @@ public:
   NameExtractor(StringDistancePtr d);
   virtual ~NameExtractor() = default;
 
-  static std::string className() { return "hoot::NameExtractor"; }
+  static QString className() { return "hoot::NameExtractor"; }
 
-  virtual std::string getClassName() const { return NameExtractor::className(); }
+  virtual QString getClassName() const { return className(); }
 
-  virtual std::string getName() const;
+  virtual QString getName() const;
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;

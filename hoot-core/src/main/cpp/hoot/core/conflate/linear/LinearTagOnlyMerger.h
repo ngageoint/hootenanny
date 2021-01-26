@@ -46,7 +46,7 @@ class LinearTagOnlyMerger : public LinearSnapMerger
 
 public:
 
-  static std::string className() { return "hoot::LinearTagOnlyMerger"; }
+  static QString className() { return "hoot::LinearTagOnlyMerger"; }
 
   LinearTagOnlyMerger() = default;
   LinearTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,

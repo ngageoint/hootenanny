@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "FormatsDisplayer.h"
@@ -57,8 +57,9 @@ QString FormatsDisplayer::display(
   if (displayInputs)
   {
     ts << "Input formats:" << endl << endl;
-    ts << _getFormatsString<OsmMapReader>(
-            OsmMapReader::className(), QStringList(), displayOgrOnly, true)
+    ts <<
+      _getFormatsString<OsmMapReader>(
+        OsmMapReader::className(), QStringList(), displayOgrOnly, true)
        << endl;
   }
 
@@ -83,8 +84,9 @@ QString FormatsDisplayer::display(
     // OsmMapReader/OsmMapwriter with the supportedFormats method to make this better.
     formatsList.append(".osc");
     formatsList.append(".osc.sql");
-    ts << _getFormatsString<OsmMapWriter>(
-            OsmMapWriter::className(), formatsList, displayOgrOnly, false)
+    ts <<
+      _getFormatsString<OsmMapWriter>(
+        OsmMapWriter::className(), formatsList, displayOgrOnly, false)
        << endl;
   }
 
@@ -99,7 +101,7 @@ QString FormatsDisplayer::display(
 
 template<typename IoClass>
 QString FormatsDisplayer::_getFormatsString(
-  const std::string& className, const QStringList extraFormats, const bool ogrOnly,
+  const QString& className, const QStringList extraFormats, const bool ogrOnly,
   const bool ogrReadOnly)
 {
   return _getPrintableString(_getFormats<IoClass>(className, extraFormats, ogrOnly, ogrReadOnly));
@@ -107,14 +109,14 @@ QString FormatsDisplayer::_getFormatsString(
 
 template<typename IoClass>
 QStringList FormatsDisplayer::_getFormats(
-  const std::string& className, const QStringList extraFormats, const bool ogrOnly,
+  const QString& className, const QStringList extraFormats, const bool ogrOnly,
   const bool ogrReadOnly)
 {
   QSet<QString> formats;
 
   if (!ogrOnly)
   {
-    std::vector<std::string> classNames =
+    std::vector<QString> classNames =
       Factory::getInstance().getObjectNamesByBase(className);
     for (size_t i = 0; i < classNames.size(); i++)
     {

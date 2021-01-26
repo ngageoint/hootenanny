@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/PointCriterion.h>
 
 namespace hoot
 {
@@ -43,6 +44,16 @@ RelationWithMembersOfTypeCriterion()
 RelationWithPointMembersCriterion::RelationWithPointMembersCriterion(ConstOsmMapPtr map) :
 RelationWithMembersOfTypeCriterion(map)
 {
+}
+
+QString RelationWithPointMembersCriterion::getCriterion() const
+{
+  return PointCriterion::className();
+}
+
+GeometryTypeCriterion::GeometryType RelationWithPointMembersCriterion::getGeometryType() const
+{
+  return PointCriterion().getGeometryType();
 }
 
 }

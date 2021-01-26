@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NONCONFLATABLECRITERION_H
 #define NONCONFLATABLECRITERION_H
@@ -50,7 +50,7 @@ class NonConflatableCriterion : public ElementCriterion, public ConstOsmMapConsu
 
 public:
 
-  static std::string className() { return "hoot::NonConflatableCriterion"; }
+  static QString className() { return "hoot::NonConflatableCriterion"; }
 
   NonConflatableCriterion();
   NonConflatableCriterion(ConstOsmMapPtr map);
@@ -67,8 +67,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies features that are not conflatable"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

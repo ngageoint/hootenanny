@@ -67,7 +67,7 @@ class Element
 {
 public:
 
-  static std::string className() { return "hoot::Element"; }
+  static QString className() { return "hoot::Element"; }
 
   Element();
 

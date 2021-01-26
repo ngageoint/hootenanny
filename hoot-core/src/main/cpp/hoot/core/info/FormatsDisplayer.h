@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef FORMATSDISPLAYER_H
@@ -61,12 +61,12 @@ private:
 
   template<typename IoClass>
   static QString _getFormatsString(
-    const std::string& className, const QStringList extraFormats = QStringList(),
+    const QString& className, const QStringList extraFormats = QStringList(),
     const bool ogrOnly = false, const bool ogrReadOnly = false);
 
   template<typename IoClass>
   static QStringList _getFormats(
-    const std::string& className, const QStringList extraFormats = QStringList(),
+    const QString& className, const QStringList extraFormats = QStringList(),
     const bool ogrOnly = false, const bool ogrReadOnly = false);
 
   static QString _getFormatsSupportingBoundsString(const bool ogrOnly = false);

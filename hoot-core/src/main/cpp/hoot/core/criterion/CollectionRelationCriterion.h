@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COLLECTION_RELATION_CRITERION_H
 #define COLLECTION_RELATION_CRITERION_H
@@ -40,7 +40,7 @@ class CollectionRelationCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::CollectionRelationCriterion"; }
+  static QString className() { return "hoot::CollectionRelationCriterion"; }
 
   CollectionRelationCriterion() = default;
   virtual ~CollectionRelationCriterion() = default;
@@ -57,8 +57,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies collection relations"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

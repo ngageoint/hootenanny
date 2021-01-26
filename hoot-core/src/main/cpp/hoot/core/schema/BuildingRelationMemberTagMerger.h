@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDING_RELATION_MEMBER_TAG_MERGER_H
 #define BUILDING_RELATION_MEMBER_TAG_MERGER_H
@@ -39,7 +39,7 @@ class BuildingRelationMemberTagMerger : public TagMerger
 {
 public:
 
-  static std::string className() { return "hoot::BuildingRelationMemberTagMerger"; }
+  static QString className() { return "hoot::BuildingRelationMemberTagMerger"; }
 
   BuildingRelationMemberTagMerger() = default;
   BuildingRelationMemberTagMerger(const QSet<QString>& ignoreTagKeys);
@@ -61,7 +61,9 @@ public:
 
   static QSet<QString> getBuildingPartTagNames();
 
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

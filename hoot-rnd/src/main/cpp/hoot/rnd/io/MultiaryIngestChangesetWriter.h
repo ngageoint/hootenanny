@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARY_INGEST_CHANGESET_WRITER_H
 #define MULTIARY_INGEST_CHANGESET_WRITER_H
@@ -46,7 +46,7 @@ class MultiaryIngestChangesetWriter : public OsmChangeWriter, public Configurabl
 {
 public:
 
-  static std::string className() { return "hoot::MultiaryIngestChangesetWriter"; }
+  static QString className() { return "hoot::MultiaryIngestChangesetWriter"; }
 
   MultiaryIngestChangesetWriter();
 

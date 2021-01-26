@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CENTROIDDISTANCEEXTRACTOR_H
 #define CENTROIDDISTANCEEXTRACTOR_H
@@ -43,7 +43,7 @@ namespace hoot
 class CentroidDistanceExtractor : public AbstractDistanceExtractor
 {
 public:
-  static std::string className() { return "hoot::CentroidDistanceExtractor"; }
+  static QString className() { return "hoot::CentroidDistanceExtractor"; }
 
   CentroidDistanceExtractor() = default;
   virtual ~CentroidDistanceExtractor() = default;
@@ -51,7 +51,9 @@ public:
   virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual std::string getClassName() const { return CentroidDistanceExtractor::className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const { return CentroidDistanceExtractor::className(); }
 
   virtual QString getDescription() const
   { return "Finds feature centroids and calculates the distance between them"; }

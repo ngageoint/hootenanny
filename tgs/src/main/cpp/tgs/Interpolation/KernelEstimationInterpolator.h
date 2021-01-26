@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef KERNELESTIMATIONINTERPOLATOR_H
 #define KERNELESTIMATIONINTERPOLATOR_H
@@ -44,7 +44,7 @@ class KernelEstimationInterpolator : public BaseInterpolator
 {
 public:
 
-  static std::string className() { return "Tgs::KernelEstimationInterpolator"; }
+  static QString className() { return "Tgs::KernelEstimationInterpolator"; }
 
   /**
    * When sigma is less than zero (recommended) cross-validation will be used to determine an
@@ -54,7 +54,7 @@ public:
 
   virtual ~KernelEstimationInterpolator();
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
 
   double getSigma() const { return _sigma; }
 
@@ -69,9 +69,10 @@ public:
    */
   void setStopDelta(double stopDelta) { _stopDelta = stopDelta; _checkRebuild(); }
 
-  virtual std::string toString() const;
+  virtual QString toString() const;
 
 protected:
+
   double _sigma;
   double _stopDelta;
 

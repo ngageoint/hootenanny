@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef COPYMAPSUBSETOP_H
 #define COPYMAPSUBSETOP_H
@@ -40,14 +40,14 @@ namespace hoot
 /**
  * Copies a subset of the map into a new map. The old map is unchanged.
  *
- * TODO: implement OperationStatusInfo
+ * TODO: implement OperationStatus
  */
 class CopyMapSubsetOp : public OsmMapOperation, public ConstOsmMapConsumer,
   public ElementCriterionConsumer
 {
 public:
 
-  static std::string className() { return "hoot::CopyMapSubsetOp"; }
+  static QString className() { return "hoot::CopyMapSubsetOp"; }
 
   CopyMapSubsetOp();
   CopyMapSubsetOp(const ConstOsmMapPtr& from, const std::set<ElementId>& eids);
@@ -75,7 +75,10 @@ public:
 
   virtual QString getDescription() const { return "Copies a subset of the map into a new map"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
+
   std::set<ElementId>& getEidsCopied() { return _eidsCopied; }
 
   void setEids(const std::set<ElementId>& eids) { _eids = eids; }

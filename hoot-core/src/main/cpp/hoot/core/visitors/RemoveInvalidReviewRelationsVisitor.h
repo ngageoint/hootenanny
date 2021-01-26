@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEINVALIDREVIEWRELATIONSVISITOR_H
 #define REMOVEINVALIDREVIEWRELATIONSVISITOR_H
@@ -44,7 +44,7 @@ class RemoveInvalidReviewRelationsVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
+  static QString className() { return "hoot::RemoveInvalidReviewRelationsVisitor"; }
 
   RemoveInvalidReviewRelationsVisitor() = default;
   virtual ~RemoveInvalidReviewRelationsVisitor() = default;
@@ -59,7 +59,9 @@ public:
 
   virtual QString getDescription() const { return "Removes empty review relations"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

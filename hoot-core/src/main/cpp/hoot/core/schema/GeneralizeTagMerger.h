@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GENERALIZETAGMERGER_H
 #define GENERALIZETAGMERGER_H
@@ -36,7 +36,7 @@ class GeneralizeTagMerger : public TagMerger
 {
 public:
 
-  static std::string className() { return "hoot::GeneralizeTagMerger"; }
+  static QString className() { return "hoot::GeneralizeTagMerger"; }
 
   GeneralizeTagMerger() = default;
   virtual ~GeneralizeTagMerger() = default;
@@ -46,7 +46,9 @@ public:
   virtual QString getDescription() const
   { return "Keeps tags from both features and overlapping tags are generalized to a common parent"; }
 
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

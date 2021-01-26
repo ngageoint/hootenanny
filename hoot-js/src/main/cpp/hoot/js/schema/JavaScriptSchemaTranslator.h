@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef JAVASCRIPT_SCHEMA_TRANSLATOR_H
@@ -65,7 +65,7 @@ class JavaScriptSchemaTranslator : public ScriptSchemaTranslator, public ScriptT
 {
 public:
 
-  static std::string className() { return "hoot::JavaScriptSchemaTranslator"; }
+  static QString className() { return "hoot::JavaScriptSchemaTranslator"; }
 
   static int logWarnCount;
 

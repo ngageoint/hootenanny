@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REVIEWRELATIONCRITERION_H
 #define REVIEWRELATIONCRITERION_H
@@ -40,7 +40,7 @@ class ReviewRelationCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::ReviewRelationCriterion"; }
+  static QString className() { return "hoot::ReviewRelationCriterion"; }
 
   ReviewRelationCriterion() = default;
   virtual ~ReviewRelationCriterion() = default;
@@ -53,8 +53,9 @@ public:
   virtual QString getDescription() const
   { return "Identifies review relations created during conflation"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

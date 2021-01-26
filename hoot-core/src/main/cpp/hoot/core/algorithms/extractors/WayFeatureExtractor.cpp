@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "WayFeatureExtractor.h"
 
@@ -98,9 +98,9 @@ double WayFeatureExtractor::extract(
   return _agg->aggregate(scores);
 }
 
-string WayFeatureExtractor::getName() const
+QString WayFeatureExtractor::getName() const
 {
-  return getClassName() + (" agg: " + _agg->toString()).toStdString();
+  return getClassName() + (" agg: " + _agg->toString());
 }
 
 }

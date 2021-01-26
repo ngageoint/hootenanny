@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -43,6 +44,16 @@ RelationWithMembersOfTypeCriterion()
 RelationWithHighwayMembersCriterion::RelationWithHighwayMembersCriterion(ConstOsmMapPtr map) :
 RelationWithMembersOfTypeCriterion(map)
 {
+}
+
+QString RelationWithHighwayMembersCriterion::getCriterion() const
+{
+  return HighwayCriterion::className();
+}
+
+GeometryTypeCriterion::GeometryType RelationWithHighwayMembersCriterion::getGeometryType() const
+{
+  return HighwayCriterion().getGeometryType();
 }
 
 }

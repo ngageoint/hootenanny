@@ -87,8 +87,9 @@ void OsmMapJs::Init(Handle<Object> target)
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "copyProjection"),
       FunctionTemplate::New(current, copyProjection));
 
-  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                String::NewFromUtf8(current, OsmMap::className().data()));
+  tpl->PrototypeTemplate()->Set(
+    PopulateConsumersJs::baseClass(),
+    String::NewFromUtf8(current, OsmMap::className().toStdString().data()));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "OsmMap"), ToLocal(&_constructor));

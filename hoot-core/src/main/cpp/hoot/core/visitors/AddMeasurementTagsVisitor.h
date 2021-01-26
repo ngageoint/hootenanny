@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDMEASUREMENTTAGSVISITOR_H
 #define ADDMEASUREMENTTAGSVISITOR_H
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
@@ -61,17 +61,19 @@ public:
   virtual ~AddMeasurementTagsVisitor() = default;
 
   // ElementVisitor
-  static std::string className() { return "hoot::AddMeasurementTagsVisitor"; }
+  static QString className() { return "hoot::AddMeasurementTagsVisitor"; }
   QString getDescription() const { return "Modifies map geometry as specified"; }
 
   virtual void visit(const ElementPtr& e);
 
-  // OperationStatusInfo
+  // OperationStatus
   virtual QString getInitStatusMessage() const { return "Adding measurement tags..."; }
   virtual QString getCompletedStatusMessage() const
   { return "Added tags to " + QString::number(_numAffected) + " elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

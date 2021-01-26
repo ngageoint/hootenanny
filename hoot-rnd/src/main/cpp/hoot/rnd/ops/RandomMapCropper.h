@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RANDOM_MAP_CROPPER_H
@@ -43,7 +43,7 @@ class RandomMapCropper : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::RandomMapCropper"; }
+  static QString className() { return "hoot::RandomMapCropper"; }
 
   RandomMapCropper();
   virtual ~RandomMapCropper() = default;
@@ -68,7 +68,9 @@ public:
   void setTileFootprintOutputPath(QString path);
   void setPixelSize(double size) { _pixelSize = size; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

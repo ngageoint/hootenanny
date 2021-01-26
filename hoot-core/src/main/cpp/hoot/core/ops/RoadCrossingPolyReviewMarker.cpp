@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RoadCrossingPolyReviewMarker.h"
@@ -140,7 +140,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
 QStringList RoadCrossingPolyReviewMarker::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(HighwayCriterion::className()));
+  criteria.append(HighwayCriterion::className());
   return criteria;
 }
 

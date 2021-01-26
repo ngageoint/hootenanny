@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RANDOM_ELEMENT_REMOVER_H
 #define RANDOM_ELEMENT_REMOVER_H
@@ -43,7 +43,7 @@ class RandomElementRemover : public ElementOsmMapVisitor, public RngConsumer,
 {
 public:
 
-  static std::string className() { return "hoot::RandomElementRemover"; }
+  static QString className() { return "hoot::RandomElementRemover"; }
 
   /**
    * @arg p Probability that any given feature will be removed.
@@ -71,7 +71,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Randomly removed " + QString::number(_numAffected) + " elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

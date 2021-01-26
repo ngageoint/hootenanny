@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/RailwayCriterion.h>
 
 namespace hoot
 {
@@ -38,6 +39,16 @@ HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithRailwayMembersCriterion)
 RelationWithRailwayMembersCriterion::RelationWithRailwayMembersCriterion() :
 RelationWithMembersOfTypeCriterion()
 {
+}
+
+QString RelationWithRailwayMembersCriterion::getCriterion() const
+{
+  return RailwayCriterion::className();
+}
+
+GeometryTypeCriterion::GeometryType RelationWithRailwayMembersCriterion::getGeometryType() const
+{
+  return RailwayCriterion().getGeometryType();
 }
 
 }

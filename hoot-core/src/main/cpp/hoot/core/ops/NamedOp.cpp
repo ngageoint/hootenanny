@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NamedOp.h"
 
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/MapCleaner.h>
@@ -69,7 +69,7 @@ void NamedOp::setConfiguration(const Settings& conf)
 
 void NamedOp::_substituteForContainingOps()
 {
-  const QString mapCleanerName = QString::fromStdString(MapCleaner::className());
+  const QString mapCleanerName = MapCleaner::className();
   if (_namedOps.contains(mapCleanerName))
   {
     int cleaningOpIndex = _namedOps.indexOf(mapCleanerName);
@@ -105,12 +105,12 @@ void NamedOp::apply(OsmMapPtr& map)
 
     // We could benefit from passing progress into some of the ops to get more granular feedback.
 
-    std::shared_ptr<OperationStatusInfo> statusInfo;
-    if (f.hasBase<OsmMapOperation>(s.toStdString()))
+    std::shared_ptr<OperationStatus> statusInfo;
+    if (f.hasBase<OsmMapOperation>(s))
     {
       std::shared_ptr<OsmMapOperation> op(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
-      statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(op);
+      statusInfo = std::dynamic_pointer_cast<OperationStatus>(op);
 
       if (_progress.getState() == Progress::JobState::Running)
       {
@@ -130,13 +130,13 @@ void NamedOp::apply(OsmMapPtr& map)
 
       op->apply(map);
 
-      _appliedOps[QString::fromStdString(op->getClassName())] = op;
+      _appliedOps[op->getName()] = op;
     }
-    else if (f.hasBase<ElementVisitor>(s.toStdString()))
+    else if (f.hasBase<ElementVisitor>(s))
     {
       std::shared_ptr<ElementVisitor> vis(
         Factory::getInstance().constructObject<ElementVisitor>(s));
-      statusInfo = std::dynamic_pointer_cast<OperationStatusInfo>(vis);
+      statusInfo = std::dynamic_pointer_cast<OperationStatus>(vis);
 
       Configurable* c = dynamic_cast<Configurable*>(vis.get());
       if (_conf != 0 && c != 0)
@@ -165,7 +165,7 @@ void NamedOp::apply(OsmMapPtr& map)
 
       map->visitRw(*vis);
 
-      _appliedVis[QString::fromStdString(vis->getClassName())] = vis;
+      _appliedVis[vis->getName()] = vis;
     }
     else
     {
@@ -205,7 +205,7 @@ void NamedOp::_updateProgress(const int currentStep, const QString& message)
 }
 
 QString NamedOp::_getInitMessage(const QString& message,
-                                 const std::shared_ptr<OperationStatusInfo>& statusInfo) const
+                                 const std::shared_ptr<OperationStatus>& statusInfo) const
 {
   QString initMessage;
   if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())

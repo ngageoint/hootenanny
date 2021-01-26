@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SPLITNAMEVISITOR_H
 #define SPLITNAMEVISITOR_H
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -42,7 +42,7 @@ class SplitNameVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SplitNameVisitor"; }
+  static QString className() { return "hoot::SplitNameVisitor"; }
 
   SplitNameVisitor();
   virtual ~SplitNameVisitor() = default;
@@ -62,7 +62,9 @@ public:
 
   void setConfiguration(const Settings& conf) override;
 
-  std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

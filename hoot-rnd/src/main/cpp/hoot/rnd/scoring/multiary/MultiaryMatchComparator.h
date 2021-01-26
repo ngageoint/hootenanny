@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTIARYMATCHCOMPARATOR_H
 #define MULTIARYMATCHCOMPARATOR_H
@@ -58,7 +58,7 @@ class MultiaryMatchComparator
 
 public:
 
-  static std::string className() { return "hoot::MultiaryMatchComparator"; }
+  static QString className() { return "hoot::MultiaryMatchComparator"; }
 
   static int logWarnCount;
 

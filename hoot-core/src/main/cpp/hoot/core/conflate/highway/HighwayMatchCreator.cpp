@@ -48,6 +48,7 @@
 #include <hoot/core/schema/TagAncestorDifferencer.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Standard
 #include <fstream>
@@ -125,7 +126,8 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -402,7 +404,8 @@ vector<CreatorDescription> HighwayMatchCreator::getAllCreators() const
     CreatorDescription(
       className(),
       "Generates matchers that match roads with the 2nd Generation (Unifying) Algorithm",
-      CreatorDescription::Highway, false));
+      CreatorDescription::Highway,
+      false));
   return result;
 }
 
@@ -422,6 +425,11 @@ std::shared_ptr<MatchThreshold> HighwayMatchCreator::getMatchThreshold()
                          config.getHighwayReviewThreshold()));
   }
   return _matchThreshold;
+}
+
+QStringList HighwayMatchCreator::getCriteria() const
+{
+  return QStringList(HighwayCriterion::className());
 }
 
 }

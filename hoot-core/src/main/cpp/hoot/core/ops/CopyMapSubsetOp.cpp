@@ -95,7 +95,8 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
+virtual QString getClassName() const override { return ""; }
 
   std::set<ElementId>& getElementsAdded() { return _elementsAdded; }
 

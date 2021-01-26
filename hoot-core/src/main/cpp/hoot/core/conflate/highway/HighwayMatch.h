@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYMATCH_H
 #define HIGHWAYMATCH_H
@@ -52,7 +52,7 @@ class HighwayMatch : public Match, public MatchDetails
 {
 public:
 
-  static std::string className() { return "hoot::HighwayMatch"; }
+  static QString className() { return "hoot::HighwayMatch"; }
 
   static const QString MATCH_NAME;
 
@@ -69,8 +69,9 @@ public:
 
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& m) const override;
 
-  virtual QString getMatchName() const override { return getHighwayMatchName(); }
+  virtual QString getName() const override { return getHighwayMatchName(); }
   static QString getHighwayMatchName() { return MATCH_NAME; }
+  virtual QString getClassName() const override { return className(); }
 
   virtual double getProbability() const override;
 

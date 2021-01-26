@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONDISTANCEEXTRACTOR_H
 #define POIPOLYGONDISTANCEEXTRACTOR_H
@@ -42,13 +42,12 @@ class PoiPolygonDistanceExtractor : public FeatureExtractorBase
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonDistanceExtractor"; }
+  static QString className() { return "hoot::PoiPolygonDistanceExtractor"; }
 
   PoiPolygonDistanceExtractor(PoiPolygonInfoCachePtr infoCache = PoiPolygonInfoCachePtr());
   virtual ~PoiPolygonDistanceExtractor() = default;
 
-  virtual std::string getClassName() const
-  { return PoiPolygonDistanceExtractor::className(); }
+  virtual QString getClassName() const { return className(); }
 
   /**
    * Calculates the distance between a poi and a polygon
@@ -63,6 +62,8 @@ public:
 
   virtual QString getDescription() const
   { return "Calculates the distance between a poi and a polygon"; }
+
+  virtual QString getName() const { return className(); }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DUPLICATE_NODE_REMOVER_H
@@ -58,14 +58,16 @@ class DuplicateNodeRemover : public OsmMapOperation, public Boundable
 {
 public:
 
-  static std::string className() { return "hoot::DuplicateNodeRemover"; }
+  static QString className() { return "hoot::DuplicateNodeRemover"; }
 
   DuplicateNodeRemover(Meters distanceThreshold = -1.0);
   virtual ~DuplicateNodeRemover() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map);
 
-  virtual std::string getClassName() const override { return className(); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   /**
    * Removes duplicate nodes from a map

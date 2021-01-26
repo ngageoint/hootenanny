@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SublineStringMatcherJs.h"
 
@@ -187,17 +187,17 @@ void SublineStringMatcherJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
-  vector<string> opNames =
+  vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(SublineStringMatcher::className());
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
-    QByteArray utf8 = QString::fromStdString(opNames[i]).replace("hoot::", "").toUtf8();
+    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
     const char* n = utf8.data();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "extractMatchingSublines"),
@@ -214,7 +214,7 @@ void SublineStringMatcherJs::New(const FunctionCallbackInfo<Value>& args)
 {
   HandleScope scope(args.GetIsolate());
 
-  QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
   SublineStringMatcherPtr sm(
     Factory::getInstance().constructObject<SublineStringMatcher>(className));

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SmallHighwayMerger.h"
@@ -47,6 +47,8 @@
 #include <hoot/core/schema/TagDifferencer.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+
 
 // Tgs
 #include <tgs/StreamUtils.h>
@@ -260,6 +262,11 @@ void SmallHighwayMerger::mergeWays(std::shared_ptr<OsmMap> map, Meters threshold
 {
   SmallHighwayMerger a(threshold);
   a.apply(map);
+}
+
+QStringList SmallHighwayMerger::getCriteria() const
+{
+  return QStringList(HighwayCriterion::className());
 }
 
 }

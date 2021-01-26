@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DIFFCONFLATOR_H
 #define DIFFCONFLATOR_H
@@ -89,7 +89,7 @@ public:
    * @brief className - Get a string that represents this class name
    * @return class name
    */
-  static std::string className() { return "hoot::DiffConflator"; }
+  static QString className() { return "hoot::DiffConflator"; }
 
   /**
    * @brief DiffConflator - Default constructor
@@ -116,7 +116,9 @@ public:
    * @brief getClassName - Gets the class name
    * @return The class name string
    */
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   /**
    * @brief getStats - Gets a list of stats recorded during the conflation process,

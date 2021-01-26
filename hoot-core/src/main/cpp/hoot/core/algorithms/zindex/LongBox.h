@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LONGBOX_H
 #define LONGBOX_H
@@ -43,7 +43,7 @@ class LongBox
 {
 public:
 
-  static std::string className() { return "hoot::LongBox"; }
+  static QString className() { return "hoot::LongBox"; }
 
   LongBox() {}
 

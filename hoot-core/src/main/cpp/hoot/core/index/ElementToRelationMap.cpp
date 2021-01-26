@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementToRelationMap.h"
 
@@ -67,7 +67,8 @@ void ElementToRelationMap::addRelation(const OsmMap& map,
     }
 
     virtual QString getDescription() const { return ""; }
-    virtual std::string getClassName() const { return ""; }
+    virtual QString getName() const { return ""; }
+    virtual QString getClassName() const override { return ""; }
 
   protected:
     HashMap<ElementId, set<long>>& _mapping;
@@ -117,7 +118,8 @@ void ElementToRelationMap::removeRelation(const OsmMap& map,
     virtual ~RemoveMemberVisitor() = default;
 
     virtual QString getDescription() const { return ""; }
-    virtual std::string getClassName() const { return ""; }
+    virtual QString getName() const { return ""; }
+    virtual QString getClassName() const override { return ""; }
 
     virtual void visit(const ConstElementPtr& e)
     {
@@ -155,7 +157,8 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     virtual ~ContainsElementVisitor() = default;
 
     virtual QString getDescription() const { return ""; }
-    virtual std::string getClassName() const { return ""; }
+    virtual QString getName() const { return ""; }
+    virtual QString getClassName() const override { return ""; }
 
     virtual void visit(const ConstElementPtr& e)
     {
@@ -188,7 +191,8 @@ bool ElementToRelationMap::validate(const OsmMap& map) const
     virtual ~CheckVisitor() = default;
 
     virtual QString getDescription() const { return ""; }
-    virtual std::string getClassName() const { return ""; }
+    virtual QString getName() const { return ""; }
+    virtual QString getClassName() const override { return ""; }
 
     bool containsRecursive(const ConstRelationPtr& r, ElementId eid)
     {

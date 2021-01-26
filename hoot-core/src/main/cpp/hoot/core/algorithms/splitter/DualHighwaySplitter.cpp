@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "DualHighwaySplitter.h"
@@ -57,6 +57,7 @@ using namespace geos::operation::buffer;
 #include <hoot/core/util/Log.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QDebug>
@@ -485,6 +486,11 @@ void DualHighwaySplitter::_splitWay(long wid)
 void DualHighwaySplitter::apply(std::shared_ptr<OsmMap>& map)
 {
   map = splitAll(map, _drivingSide, _defaultSplitSize);
+}
+
+QStringList DualHighwaySplitter::getCriteria() const
+{
+  return QStringList(HighwayCriterion::className());
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NOTCRITERION_H
 #define NOTCRITERION_H
@@ -40,7 +40,7 @@ class NotCriterion : public ElementCriterion, public ElementCriterionConsumer, p
 {
 public:
 
-  static std::string className() { return "hoot::NotCriterion"; }
+  static QString className() { return "hoot::NotCriterion"; }
 
   NotCriterion() = default;
   NotCriterion(ElementCriterion* c) : _child(c) { }
@@ -60,6 +60,10 @@ public:
   virtual QString getDescription() const { return "Negates a criterion"; }
 
   virtual QString toString() const override;
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual void setConfiguration(const Settings& conf);
 

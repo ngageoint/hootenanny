@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MANUAL_MATCH_VALIDATOR_H
 #define MANUAL_MATCH_VALIDATOR_H
@@ -53,7 +53,7 @@ class ManualMatchValidator : public ConstOsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::ManualMatchValidator"; }
+  static QString className() { return "hoot::ManualMatchValidator"; }
 
   ManualMatchValidator();
   virtual ~ManualMatchValidator() = default;
@@ -105,7 +105,9 @@ public:
   void setAllowUuidManualMatchIds(bool allow) { _allowUuidManualMatchIds = allow; }
   void setFullDebugOutput(bool fullDebugOutput) { _fullDebugOutput = fullDebugOutput; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

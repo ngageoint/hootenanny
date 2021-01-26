@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -43,7 +42,7 @@ class RelationWithHighwayMembersCriterion : public RelationWithMembersOfTypeCrit
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithHighwayMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithHighwayMembersCriterion"; }
 
   RelationWithHighwayMembersCriterion();
   RelationWithHighwayMembersCriterion(ConstOsmMapPtr map);
@@ -52,16 +51,16 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RelationWithHighwayMembersCriterion(_map)); }
 
-  virtual QString getCriterion() const override
-  { return QString::fromStdString(HighwayCriterion::className()); }
+  virtual QString getCriterion() const override;
 
   virtual QString getDescription() const
   { return "Identifies relations with road members"; }
 
-  virtual GeometryType getGeometryType() const { return HighwayCriterion().getGeometryType(); }
+  virtual GeometryType getGeometryType() const;
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

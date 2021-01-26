@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENTID_H
 #define ELEMENTID_H
@@ -51,7 +51,7 @@ class ElementId
 {
 public:
 
-  static std::string className() { return "ElementId"; }
+  static QString className() { return "ElementId"; }
 
   ElementId();
   ElementId(ElementType type, long id);

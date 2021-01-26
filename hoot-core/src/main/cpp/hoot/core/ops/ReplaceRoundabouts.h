@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REPLACEROUNDABOUTS_H
@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/conflate/highway/Roundabout.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QMultiHash>
@@ -59,7 +58,7 @@ public:
    * @brief className - Get classname string
    * @return "hoot::ReplaceRoundabouts"
    */
-  static std::string className() { return "hoot::ReplaceRoundabouts"; }
+  static QString className() { return "hoot::ReplaceRoundabouts"; }
 
   /**
    * @brief ReplaceRoundabouts - default constructor
@@ -93,10 +92,11 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

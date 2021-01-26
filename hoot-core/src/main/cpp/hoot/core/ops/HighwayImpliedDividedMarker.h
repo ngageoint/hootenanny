@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HIGHWAYIMPLIEDDIVIDEDMARKER_H
@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/util/Units.h>
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Standard
 #include <set>
@@ -55,7 +54,7 @@ class HighwayImpliedDividedMarker : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::HighwayImpliedDividedMarker"; }
+  static QString className() { return "hoot::HighwayImpliedDividedMarker"; }
 
   HighwayImpliedDividedMarker() = default;
   HighwayImpliedDividedMarker(const std::shared_ptr<const OsmMap>& map) : _inputMap(map) { }
@@ -85,10 +84,11 @@ public:
    * This isn't actually using HighwayCriterion in the filtering, but for the purposes of reducing
    * unnecessary conflate ops we don't need to run it unless we're running road conflation.
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SUPERFLUOUSWAYREMOVER_H
@@ -51,7 +51,7 @@ class SuperfluousWayRemover : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::SuperfluousWayRemover"; }
+  static QString className() { return "hoot::SuperfluousWayRemover"; }
 
   SuperfluousWayRemover() = default;
   virtual ~SuperfluousWayRemover() = default;
@@ -86,7 +86,9 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

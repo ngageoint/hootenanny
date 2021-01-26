@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RANDOM_WAY_GENERALIZER_H
 #define RANDOM_WAY_GENERALIZER_H
@@ -55,7 +55,7 @@ class RandomWayGeneralizer : public ElementOsmMapVisitor, public RngConsumer,
 
 public:
 
-  static std::string className() { return "hoot::RandomWayGeneralizer"; }
+  static QString className() { return "hoot::RandomWayGeneralizer"; }
 
   RandomWayGeneralizer();
   virtual ~RandomWayGeneralizer() = default;
@@ -97,7 +97,9 @@ public:
 
   void setRemoveNodesSharedByWays(bool remove) { _removeNodesSharedByWays = remove; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

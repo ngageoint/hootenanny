@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef POINT_CRITERION_H
@@ -44,7 +44,7 @@ class PointCriterion : public ConflatableElementCriterion, public ConstOsmMapCon
 {
 public:
 
-  static std::string className() { return "hoot::PointCriterion"; }
+  static QString className() { return "hoot::PointCriterion"; }
 
   PointCriterion() = default;
   PointCriterion(ConstOsmMapPtr map);
@@ -61,8 +61,9 @@ public:
 
   virtual void setOsmMap(const OsmMap* map);
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return false; }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JOSM_MAP_CLEANER_H
 #define JOSM_MAP_CLEANER_H
@@ -52,7 +52,7 @@ class JosmMapCleaner : public JosmMapValidatorAbstract
 
 public:
 
-  static std::string className() { return "hoot::JosmMapCleaner"; }
+  static QString className() { return "hoot::JosmMapCleaner"; }
 
   JosmMapCleaner();
   virtual ~JosmMapCleaner() = default;
@@ -73,7 +73,7 @@ public:
   virtual void setConfiguration(const Settings& conf);
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const
   { return "Cleaning elements with JOSM..."; }
@@ -83,7 +83,9 @@ public:
   void setAddDetailTags(const bool add) { _addDetailTags = add; }
   int getNumFailedCleaningOperations() const { return _numFailedCleaningOperations; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 

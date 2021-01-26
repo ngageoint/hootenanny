@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RANDOM_ELEMENT_RENAMER_H
 #define RANDOM_ELEMENT_RENAMER_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/RngConsumer.h>
 
@@ -42,7 +42,7 @@ class RandomElementRenamer : public ElementVisitor, public RngConsumer, public C
 {
 public:
 
-  static std::string className() { return "hoot::RandomElementRenamer"; }
+  static QString className() { return "hoot::RandomElementRenamer"; }
 
   RandomElementRenamer();
   virtual ~RandomElementRenamer() = default;
@@ -74,7 +74,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Randomly changed " + QString::number(_numAffected) + " element names"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

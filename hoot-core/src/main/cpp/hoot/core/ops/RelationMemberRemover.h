@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RELATION_MEMBER_REMOVER_H
@@ -42,7 +42,7 @@ class RelationMemberRemover : public ConstOsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::RelationMemberRemover"; }
+  static QString className() { return "hoot::RelationMemberRemover"; }
 
   RelationMemberRemover();
   RelationMemberRemover(const ElementId& idToReplace, const bool includeReviewRelations = true);
@@ -74,7 +74,9 @@ public:
   virtual QString getDescription() const
   { return "Removes all relation members references for an element"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

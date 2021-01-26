@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IdwInterpolator.h"
 
@@ -231,11 +231,11 @@ void IdwInterpolator::_readInterpolator(QIODevice& is)
   ds >> _stopDelta;
 }
 
-string IdwInterpolator::toString() const
+QString IdwInterpolator::toString() const
 {
   stringstream ss;
   ss << "IDW, p: " << _p;
-  return ss.str();
+  return QString::fromStdString(ss.str());
 }
 
 void IdwInterpolator::_writeInterpolator(QIODevice& os) const

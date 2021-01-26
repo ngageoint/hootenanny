@@ -110,9 +110,7 @@ vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
   vector<CreatorDescription> result;
 
   // Get all match creators from the factory.
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(MatchCreator::className());
-
+  vector<QString> names = Factory::getInstance().getObjectNamesByBase(MatchCreator::className());
   for (size_t i = 0; i < names.size(); i++)
   {
     // Get all names known by this creator.

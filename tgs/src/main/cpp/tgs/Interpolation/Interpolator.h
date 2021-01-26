@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef INTERPOLATOR_H
 #define INTERPOLATOR_H
@@ -43,11 +43,11 @@ class Interpolator
 {
 public:
 
-  static std::string className() { return "Tgs::Interpolator"; }
+  static QString className() { return "Tgs::Interpolator"; }
 
   virtual ~Interpolator() {}
 
-  virtual std::string getClassName() const = 0;
+  virtual QString getName() const = 0;
 
   /**
    * Returns the estimated RMSE for the interpolator.
@@ -85,7 +85,7 @@ public:
   /**
    * Returns a human readable summary of the interpolator.
    */
-  virtual std::string toString() const = 0;
+  virtual QString toString() const = 0;
 
   /**
    * Write the interpolator to the specified output stream.

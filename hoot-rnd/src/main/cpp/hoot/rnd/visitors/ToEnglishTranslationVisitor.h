@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TO_ENGLISH_TRANSLATION_VISITOR_H
@@ -30,9 +30,9 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/language/ToEnglishTranslator.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 
 // Qt
 #include <QSet>
@@ -48,7 +48,7 @@ class ToEnglishTranslationVisitor : public ElementVisitor, public Configurable
 
 public:
 
-  static std::string className() { return "hoot::ToEnglishTranslationVisitor"; }
+  static QString className() { return "hoot::ToEnglishTranslationVisitor"; }
 
   ToEnglishTranslationVisitor();
   virtual ~ToEnglishTranslationVisitor();
@@ -70,7 +70,9 @@ public:
       QString::number(_numProcessedElements) + " different elements";
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 

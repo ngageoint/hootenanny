@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveDuplicateReviewsOp.h"
 
@@ -108,7 +108,7 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
       MatchPtr match = MatchFactory::getInstance().createMatch(copy, beid, eeid);
       if (match)
       {
-        LOG_VART(match);
+        LOG_VART(match->getType());
       }
       if (match && match->getType() != MatchType::Miss)
       {
@@ -125,8 +125,8 @@ void RemoveDuplicateReviewsOp::apply(std::shared_ptr<OsmMap>& map)
           }
         }
         reviewMarker.mark(
-          map, map->getElement(beid), map->getElement(eeid),
-          explain, match->getMatchName(), match->getClassification().getReviewP());
+          map, map->getElement(beid), map->getElement(eeid), explain, match->getName(),
+          match->getClassification().getReviewP());
       }
     }
     ++it;

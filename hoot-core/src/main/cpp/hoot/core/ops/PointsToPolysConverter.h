@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef _POINTS_TO_POLYS_CONVERTER_H_
 #define _POINTS_TO_POLYS_CONVERTER_H_
@@ -43,14 +43,16 @@ class PointsToPolysConverter : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::PointsToPolysConverter"; }
+  static QString className() { return "hoot::PointsToPolysConverter"; }
 
   PointsToPolysConverter(const double bufferSize = 1.0);
   virtual ~PointsToPolysConverter() = default;
 
   virtual void apply(OsmMapPtr& map);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getInitStatusMessage() const
   { return "Converting non-child points to polygons..."; }

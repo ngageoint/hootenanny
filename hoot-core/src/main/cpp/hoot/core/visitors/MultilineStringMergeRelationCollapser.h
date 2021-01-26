@@ -52,7 +52,7 @@ class MultilineStringMergeRelationCollapser : public MultipleCriterionConsumerVi
 {
 public:
 
-  static std::string className() { return "hoot::MultilineStringMergeRelationCollapser"; }
+  static QString className() { return "hoot::MultilineStringMergeRelationCollapser"; }
 
   MultilineStringMergeRelationCollapser();
   virtual ~MultilineStringMergeRelationCollapser() = default;
@@ -80,7 +80,9 @@ public:
   virtual QString getDescription() const
   { return "Collapses multilinestring relations created during conflation merging"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   /**
    * @see Configurable

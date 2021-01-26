@@ -60,7 +60,7 @@ WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(
   {
     LOG_TRACE(
       "Matching elements for merging: " << e1->getElementId() << ", " <<
-      e2->getElementId() << " with " << _sublineMatcher->getClassName() << " and " <<
+      e2->getElementId() << " with " << _sublineMatcher->getName() << " and " <<
       _sublineMatcher->getSublineMatcherName() << "...");
     try
     {
@@ -75,7 +75,7 @@ WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(
       LOG_TRACE(
         e.getWhat() << " Re-matching river sublines for merging: " <<
         e1->getElementId() << ", " <<  e2->getElementId() << " with " <<
-        _sublineMatcher2->getClassName() << " and " << _sublineMatcher2->getSublineMatcherName() <<
+        _sublineMatcher2->getName() << " and " << _sublineMatcher2->getSublineMatcherName() <<
         "...");
       match = _sublineMatcher2->findMatch(map, e1, e2);
     }

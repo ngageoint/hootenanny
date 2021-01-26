@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef _ELEMENT_ID_REMAPPER_H_
 #define _ELEMENT_ID_REMAPPER_H_
@@ -44,7 +44,7 @@ class ElementIdRemapper : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::ElementIdRemapper"; }
+  static QString className() { return "hoot::ElementIdRemapper"; }
 
   ElementIdRemapper();
   ElementIdRemapper(const ElementCriterionPtr& remapFilter);
@@ -64,7 +64,9 @@ public:
    */
   void restore(OsmMapPtr& map);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getInitStatusMessage() const
   { return "Remapping element IDs..."; }

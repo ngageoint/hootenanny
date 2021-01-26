@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCH_CANDIDATE_COUNT_VISITOR_H
 #define MATCH_CANDIDATE_COUNT_VISITOR_H
@@ -47,7 +47,7 @@ class MatchCandidateCountVisitor : public ElementConstOsmMapVisitor, public Sing
 {
 public:
 
-  static std::string className() { return "hoot::MatchCandidateCountVisitor"; }
+  static QString className() { return "hoot::MatchCandidateCountVisitor"; }
 
   MatchCandidateCountVisitor(const std::vector<std::shared_ptr<MatchCreator>>& matchCreators);
   virtual ~MatchCandidateCountVisitor() = default;
@@ -68,7 +68,9 @@ public:
     return "Counted " + StringUtils::formatLargeNumber(_totalCandidateCount) + " match candidates.";
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

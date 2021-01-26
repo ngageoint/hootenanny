@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RAILWAYCRITERION_H
@@ -43,7 +43,7 @@ class RailwayCriterion : public ConflatableElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::RailwayCriterion"; }
+  static QString className() { return "hoot::RailwayCriterion"; }
 
   RailwayCriterion() = default;
   virtual ~RailwayCriterion() = default;
@@ -58,8 +58,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies linear railways"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return true; }
 };

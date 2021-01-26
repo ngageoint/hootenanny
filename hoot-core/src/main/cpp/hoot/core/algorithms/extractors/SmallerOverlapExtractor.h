@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SMALLEROVERLAPEXTRACTOR_H
 #define SMALLEROVERLAPEXTRACTOR_H
@@ -58,9 +58,9 @@ public:
   SmallerOverlapExtractor();
   virtual ~SmallerOverlapExtractor() = default;
 
-  static std::string className() { return "hoot::SmallerOverlapExtractor"; }
+  static QString className() { return "hoot::SmallerOverlapExtractor"; }
 
-  virtual std::string getClassName() const override { return SmallerOverlapExtractor::className(); }
+  virtual QString getClassName() const override { return className(); }
 
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
@@ -72,6 +72,8 @@ public:
    * @see Configurable
    */
   virtual void setConfiguration(const Settings& conf);
+
+  virtual QString getName() const { return className(); }
 
 private:
 

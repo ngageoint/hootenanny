@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_ID_TO_TAG_VALUE_MAPPER_H
 #define ELEMENT_ID_TO_TAG_VALUE_MAPPER_H
@@ -43,7 +43,7 @@ class ElementIdToTagValueMapper : public ConstElementVisitor, public ElementCrit
 
 public:
 
-  static std::string className() { return "hoot::ElementIdToTagValueMapper"; }
+  static QString className() { return "hoot::ElementIdToTagValueMapper"; }
 
   ElementIdToTagValueMapper() = default;
   virtual ~ElementIdToTagValueMapper() = default;
@@ -64,7 +64,9 @@ public:
 
   void setTagKey(const QString& key) { _tagKey = key; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

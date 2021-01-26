@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMERGER_H
 #define POIPOLYGONMERGER_H
@@ -58,7 +58,7 @@ class PoiPolygonMerger : public MergerBase
 
 public:
 
-  static std::string className() { return "hoot::PoiPolygonMerger"; }
+  static QString className() { return "hoot::PoiPolygonMerger"; }
 
   PoiPolygonMerger();
   virtual ~PoiPolygonMerger() = default;
@@ -87,7 +87,9 @@ public:
 
   void setTagMergerClass(const QString& className) { _tagMergerClass = className; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 

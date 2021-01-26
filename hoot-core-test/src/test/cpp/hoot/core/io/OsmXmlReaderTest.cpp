@@ -137,8 +137,10 @@ public:
     int retVal;
     if ((retVal = std::system(cmd.c_str())) != 0)
     {
-      QString error = QString("Error %1 returned from compress command: %2").arg(retVal).
-        arg(QString::fromStdString(cmd));
+      QString error =
+        QString("Error %1 returned from compress command: %2")
+          .arg(retVal)
+          .arg(QString::fromStdString(cmd));
       throw HootException(error);
     }
 

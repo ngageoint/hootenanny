@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_HASH_VISITOR_H
 #define ELEMENT_HASH_VISITOR_H
@@ -45,13 +45,13 @@ namespace hoot
  * We want to keep ID's out of this, so not using GeoJsonWriter. Although, possibly we could add
  * a switch to GeoJsonWriter to not write ID's and use it at some point instead of this.
  *
- * @todo implement OperationStatusInfo
+ * @todo implement OperationStatus
  */
 class ElementHashVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::ElementHashVisitor"; }
+  static QString className() { return "hoot::ElementHashVisitor"; }
 
   ElementHashVisitor();
   virtual ~ElementHashVisitor() = default;
@@ -79,7 +79,9 @@ public:
 
   virtual QString getDescription() const { return "Calculates unique hash values for elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   QMap<QString, ElementId> getHashesToElementIds() const { return _hashesToElementIds; }
   QMap<ElementId, QString> getElementIdsToHashes() const { return _elementIdsToHashes; }

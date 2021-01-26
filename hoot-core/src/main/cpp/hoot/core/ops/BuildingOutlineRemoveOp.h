@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGOUTLINEREMOVEOP_H
 #define BUILDINGOUTLINEREMOVEOP_H
 
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
 
 // Standard
 #include <set>
@@ -46,14 +45,16 @@ class BuildingOutlineRemoveOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::BuildingOutlineRemoveOp"; }
+  static QString className() { return "hoot::BuildingOutlineRemoveOp"; }
 
   BuildingOutlineRemoveOp() = default;
   virtual ~BuildingOutlineRemoveOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getInitStatusMessage() const { return "Removing outlines around buildings..."; }
 
@@ -65,8 +66,7 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(BuildingCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
 private:
 

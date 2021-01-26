@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef API_ENTITY_INFO_H
 #define API_ENTITY_INFO_H
@@ -30,9 +30,10 @@
 namespace hoot
 {
 
+#include <QString>
+
 /**
- * Interface to describe the functionality of various Hoot API entities. e.g. OsmMapOperation,
- * ElementVisitor, ValueAggregator, etc.
+ * Interface to describe the functionality of various Hoot API entities.
  */
 class ApiEntityInfo
 {
@@ -42,7 +43,22 @@ public:
   virtual ~ApiEntityInfo() = default;
 
   /**
-   * Returns a one sentence description for the entity.
+   * Returns the entity's full class name
+   *
+   * @return class name string
+   */
+  virtual QString getClassName() const = 0;
+
+  /**
+   * Returns a name for the entity; often this is just the full class name, but some implementors
+   * may need to extend the behavior
+   *
+   * @return name string
+   */
+  virtual QString getName() const = 0;
+
+  /**
+   * Returns a one sentence description of the entity used for documentation purposes.
    *
    * Keep this as short as possible, capitalize the first letter, and check to see that it stays
    * on one line when displayed with the 'info --operators' command.
@@ -51,6 +67,14 @@ public:
    * as returning an empty string.
    */
   virtual QString getDescription() const = 0;
+
+  /**
+   * Returns a string uniquely identifying the entity. May contain information about the data
+   * contained within the entity.
+   *
+   * @return a string
+   */
+  virtual QString toString() const = 0;
 };
 
 }

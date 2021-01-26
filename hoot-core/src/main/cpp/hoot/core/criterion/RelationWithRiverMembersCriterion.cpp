@@ -29,6 +29,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/LinearWaterwayCriterion.h>
 
 namespace hoot
 {
@@ -38,6 +39,16 @@ HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithRiverMembersCriterion)
 RelationWithRiverMembersCriterion::RelationWithRiverMembersCriterion() :
 RelationWithMembersOfTypeCriterion()
 {
+}
+
+QString RelationWithRiverMembersCriterion::getCriterion() const
+{
+  return LinearWaterwayCriterion::className();
+}
+
+GeometryTypeCriterion::GeometryType RelationWithRiverMembersCriterion::getGeometryType() const
+{
+  return LinearWaterwayCriterion().getGeometryType();
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HAS_PHONE_NUMBER_CRITERION_H
@@ -41,7 +41,7 @@ namespace hoot
 class HasPhoneNumberCriterion : public ElementCriterion, public Configurable
 {
 public:
-  static std::string className() { return "hoot::HasPhoneNumberCriterion"; }
+  static QString className() { return "hoot::HasPhoneNumberCriterion"; }
 
   HasPhoneNumberCriterion() = default;
   virtual ~HasPhoneNumberCriterion() = default;
@@ -54,8 +54,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies features with phone numbers"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

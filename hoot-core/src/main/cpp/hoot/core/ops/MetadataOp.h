@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef METADATAOP_H
@@ -54,7 +54,7 @@ class MetadataOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::MetadataOp"; }
+  static QString className() { return "hoot::MetadataOp"; }
 
   MetadataOp() : _pConf(&conf()) { }
   virtual ~MetadataOp() = default;
@@ -62,7 +62,7 @@ public:
   // OsmMapOperation
   virtual void apply(std::shared_ptr<OsmMap>& pMap) override;
 
-  // OperationStatusInfo
+  // OperationStatus
   virtual QString getInitStatusMessage() const { return "Processing metadata..."; }
   virtual QString getCompletedStatusMessage() const
   { return "Modified " + QString::number(_numAffected) + " elements"; }
@@ -70,7 +70,9 @@ public:
   // Configurable
   virtual void setConfiguration(const Settings& conf);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 

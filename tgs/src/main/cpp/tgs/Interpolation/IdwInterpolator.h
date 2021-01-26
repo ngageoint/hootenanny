@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IDWINTERPOLATOR_H
 #define IDWINTERPOLATOR_H
@@ -44,7 +44,7 @@ class IdwInterpolator : public BaseInterpolator
 {
 public:
 
-  static std::string className() { return "Tgs::IdwInterpolator"; }
+  static QString className() { return "Tgs::IdwInterpolator"; }
 
   /**
    * Constructs a IDW instance where the power parameter, p, will be determined via hold one out
@@ -54,7 +54,7 @@ public:
 
   virtual ~IdwInterpolator();
 
-  virtual std::string getClassName() const { return IdwInterpolator::className(); }
+  virtual QString getName() const { return className(); }
 
   virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
 
@@ -65,7 +65,7 @@ public:
    */
   void setStopDelta(double stopDelta) { _stopDelta = stopDelta; }
 
-  virtual std::string toString() const;
+  virtual QString toString() const;
 
 protected:
 

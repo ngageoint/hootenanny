@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SCRIPTMATCH_H
 #define SCRIPTMATCH_H
@@ -47,7 +47,7 @@ class ScriptMatch : public Match, public MatchDetails
 {
 public:
 
-  static std::string className() { return "hoot::ScriptMatch"; }
+  static QString className() { return "hoot::ScriptMatch"; }
 
   static int logWarnCount;
 
@@ -65,7 +65,9 @@ public:
 
   virtual QString explain() const override { return _explainText; }
 
-  virtual QString getMatchName() const override { return _matchName; }
+  virtual QString getName() const override { return _matchName; }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual double getProbability() const override;
 

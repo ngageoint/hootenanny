@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef DISTANCENODECRITERION_H
@@ -48,7 +48,7 @@ class DistanceNodeCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::DistanceNodeCriterion"; }
+  static QString className() { return "hoot::DistanceNodeCriterion"; }
 
   DistanceNodeCriterion() = default;
   DistanceNodeCriterion(geos::geom::Coordinate center, Meters distance);
@@ -64,8 +64,9 @@ public:
 
   virtual void setConfiguration(const Settings& s);
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

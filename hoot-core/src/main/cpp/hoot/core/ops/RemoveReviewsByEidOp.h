@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEREVIEWSBYEIDOP_H
 #define REMOVEREVIEWSBYEIDOP_H
@@ -45,7 +45,7 @@ class RemoveReviewsByEidOp : public ConstOsmMapOperation, public ConstElementCon
 {
 public:
 
-  static std::string className() { return "hoot::RemoveReviewsByEidOp"; }
+  static QString className() { return "hoot::RemoveReviewsByEidOp"; }
 
   /**
    */
@@ -75,7 +75,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " conflation reviews"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

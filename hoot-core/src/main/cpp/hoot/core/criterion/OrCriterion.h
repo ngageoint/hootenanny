@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ORCRITERION_H
 #define ORCRITERION_H
@@ -39,7 +39,7 @@ class OrCriterion : public ChainCriterion
 {
 public:
 
-  static std::string className() { return "hoot::OrCriterion"; }
+  static QString className() { return "hoot::OrCriterion"; }
 
   OrCriterion() = default;
   OrCriterion(ElementCriterion* child1, ElementCriterion* child2);
@@ -53,6 +53,10 @@ public:
   virtual QString getDescription() const { return "Allows for combining criteria (logical OR)"; }
 
   virtual QString toString() const override;
+
+ virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 typedef std::shared_ptr<OrCriterion> OrCriterionPtr;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYINTERSECTIONCRITERION_H
 #define HIGHWAYINTERSECTIONCRITERION_H
@@ -45,7 +45,7 @@ class HighwayIntersectionCriterion : public ElementCriterion, public ConstOsmMap
 {
 public:
 
-  static std::string className() { return "hoot::HighwayIntersectionCriterion"; }
+  static QString className() { return "hoot::HighwayIntersectionCriterion"; }
 
   HighwayIntersectionCriterion() = default;
   explicit HighwayIntersectionCriterion(ConstOsmMapPtr map);
@@ -60,8 +60,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies highway intersections"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

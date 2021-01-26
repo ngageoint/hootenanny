@@ -30,7 +30,6 @@
 
 // Hoot
 #include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
-#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -42,7 +41,7 @@ class RelationWithPolygonMembersCriterion : public RelationWithMembersOfTypeCrit
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithPolygonMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithPolygonMembersCriterion"; }
 
   RelationWithPolygonMembersCriterion();
   RelationWithPolygonMembersCriterion(ConstOsmMapPtr map);
@@ -51,15 +50,16 @@ public:
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RelationWithPolygonMembersCriterion(_map)); }
 
-  virtual QString getCriterion() const override { return "hoot::PolygonCriterion"; }
+  virtual QString getCriterion() const override;
 
   virtual QString getDescription() const
   { return "Identifies relations with children having polygon geometries"; }
 
-  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
+  virtual GeometryType getGeometryType() const;
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

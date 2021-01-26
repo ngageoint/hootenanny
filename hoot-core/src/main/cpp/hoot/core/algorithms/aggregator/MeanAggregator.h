@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MEANAGGREGATOR_H
 #define MEANAGGREGATOR_H
@@ -36,7 +36,7 @@ class MeanAggregator : public ValueAggregator
 {
 public:
 
-  static std::string className() { return "hoot::MeanAggregator"; }
+  static QString className() { return "hoot::MeanAggregator"; }
 
   MeanAggregator() = default;
   virtual ~MeanAggregator() = default;
@@ -47,6 +47,10 @@ public:
 
   virtual QString getDescription() const override
   { return "Aggregates data based on the mean value"; }
+
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

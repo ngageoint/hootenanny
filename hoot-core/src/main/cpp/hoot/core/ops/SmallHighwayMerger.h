@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SMALLHIGHWAYMERGER_H
@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Std
 #include <set>
@@ -63,7 +62,7 @@ class SmallHighwayMerger : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::SmallHighwayMerger"; }
+  static QString className() { return "hoot::SmallHighwayMerger"; }
 
   SmallHighwayMerger(Meters threshold = -1);
   virtual ~SmallHighwayMerger() = default;
@@ -86,10 +85,11 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 

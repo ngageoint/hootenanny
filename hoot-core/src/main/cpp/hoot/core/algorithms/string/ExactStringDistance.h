@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __EXACT_STRING_DISTANCE_H__
 #define __EXACT_STRING_DISTANCE_H__
@@ -46,7 +46,7 @@ class ExactStringDistance : public StringDistance
 {
 public:
 
-  static std::string className() { return "hoot::ExactStringDistance"; }
+  static QString className() { return "hoot::ExactStringDistance"; }
 
   ExactStringDistance() = default;
   virtual ~ExactStringDistance() = default;
@@ -54,6 +54,10 @@ public:
   virtual double compare(const QString& s1, const QString& s2) const override;
 
   QString toString() const override { return "ExactStringDistance"; }
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Returns a matching string comparison score only if the strings match exactly (ignoring case)"; }
