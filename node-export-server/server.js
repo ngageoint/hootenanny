@@ -25,6 +25,7 @@ function writeExportFile(req, done) {
         + req.params.datasource
         + req.params.schema
         + req.params.format;
+
     var fileNameHash = crypto.createHash('sha1').update(params, 'utf-8').digest('hex');
 
     //Write payload to file
@@ -319,7 +320,7 @@ function zipOutput(hash,output,outFile,outDir,outZip,isFile,format,cb) {
 /**
  * Builds the hootenanny command(s) from parts of provided request.
  */
-function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop, ignoreSourceIds) {
+function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFile, input, outDir, outFile, doCrop, ignoreSourceIds, ignoreConf) {
     var command = '', overrideTags = null;
     if (queryOverrideTags) {
         if (queryOverrideTags === 'true') { //if it's true
@@ -350,7 +351,10 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
     }
 
     //create command and run
-    command += 'hoot convert -C NodeExport.conf';
+    command += 'hoot convert'
+
+    if (!ignoreConf)
+        command += ' -C NodeExport.conf';
 
     var convertOpts = [];
     var bboxOption = '';
@@ -368,7 +372,7 @@ function buildCommand(paramschema, queryOverrideTags, querybbox, querypoly, isFi
             command += ' -D schema.translation.override=' + overrideTags;
         }
         if (paramschema !== 'OSM' && config.schemas[paramschema] !== '') {
-            convertOpts.push('hootSchemaTranslationOp')
+            convertOpts.push('hoot::SchemaTranslationOp')
             command += ' -D schema.translation.script=' + hootHome + '/' + config.schemas[paramschema];
             command += ' -D schema.translation.direction=toogr';
             // Set per schema config options
@@ -512,12 +516,14 @@ function doExport(req, res, hash, input) {
     } else { //if missing, run job
         var child = null;
         var id = uuid.v4();
-        var output = 'export_' + hash;
+        var output = 'export_' + id;
         var isFile = req.params.format === 'OSM XML';
         var outDir = appDir + output;
         var outFile = outDir + config.formats[req.params.format];
         if (req.params.format === 'File Geodatabase') outDir = outFile;
         var outZip = outDir + '.zip';
+        var doCrop = req.query.crop || Number(req.query.crop);
+        var tempOsmFile = outDir + '.osm';
         var downloadFile = req.params.datasource.replace(' ', '_')
             + '_' + req.params.schema.replace(' ', '_')
             + '_' + req.params.format.replace(' ', '_')
@@ -534,43 +540,38 @@ function doExport(req, res, hash, input) {
                 var ringOutput = 'export_' + ringId;
                 var ringOutDir = appDir + ringOutput;
                 var ringOutFile = ringOutDir + '.osm';
-                multiCommand += buildCommand('OSM', req.query.overrideTags, null,  polyString, isFile, input, ringOutDir, ringOutFile, Number(req.query.crop));
-                if (i !== polygons.length - 1) multiCommand += ' && ';
+
+                multiCommand += buildCommand('OSM', req.query.overrideTags, null,  polyString, isFile, input, ringOutDir, ringOutFile, doCrop);
+                multiCommand += ' && ';
+
                 rings.push(ringOutFile);
             }
+
+            //here we merge the rings into a single osm file and create a new id sequence (to avoid negative id collisions).
+            multiCommand += buildCommand('OSM', req.query.overrideTags, null, null, true, rings.join(' '), outDir, tempOsmFile, false, true);
+            //if we need to make a shapefile/geodatabase or our ourput schema is not OSM, then we add a second command that'll do so.
+            if (!isFile || req.params.schema !== 'OSM')
+                multiCommand += ' && ' + buildCommand(req.params.schema, req.query.overrideTags, null, null, isFile, tempOsmFile, outDir, outFile, false, false, true);
+
             console.log(multiCommand);
             child = exec(multiCommand, function(error, stdout, stderr) {
                 if (stderr || error) {
                     jobs[hash].status = error;
+                    console.log(jobs[hash].status);
                 } else {
-                    //we call buildCommand here using the request's schema, no bbox or poly arguments, the outputted rings as our inputs, and the ignoreSourceIds argument as true.
-                    //this generates a hoot command that will merge all the rings into a single file with tags in the schema specified by the request.
-                    //also by ingoring source ids we prevent bad side-effects that can occur when negative ids in the inputs collide.
-                    //this can arise when the crop command adds nodes (that have negative ids) when clipping the dataset.
-                    //if we were to use source ids, rings' the negative id collisions generate  unexpected outputs like two roads snapping together that you would and orphan nodes.
-                    var command = buildCommand(req.params.schema, req.query.overrideTags, null, null, isFile, rings.join(' '), outDir, outFile, false, true);
-
-                    console.log(command);
-                    exec(command, {cwd: hootHome}, function(error, stdout, stderr) {
-                        if (stderr || error) {
-                            jobs[hash].status = stderr;
-                            console.log(jobs[hash].status);
-                        } else {
-                            jobComplete(hash)
-                            //zip the merged output then remove the rings individual export/crop output files.
-                            zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format, function() {
-                                rings.forEach(function(ring) {
-                                    fs.unlink(ring, function(err) {
-                                        if (err) {
-                                            console.error(err);
-                                        } else {
-                                            console.log('deleted ' + ring);
-                                        }
-                                    });
-                                });
-                            })
-                        }
-                    });
+                    jobComplete(hash)
+                    //zip the merged output then remove the rings individual export/crop output files.
+                    zipOutput(hash,output,outFile,outDir,outZip,isFile,req.params.format, function() {
+                        rings.forEach(function(ring) {
+                            fs.unlink(ring, function(err) {
+                                if (err) {
+                                    console.error(err);
+                                } else {
+                                    console.log('deleted ' + ring);
+                                }
+                            });
+                        });
+                    })
                 }
             })
         } else {
