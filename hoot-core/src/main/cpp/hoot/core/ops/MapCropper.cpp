@@ -218,7 +218,7 @@ void MapCropper::apply(OsmMapPtr& map)
   LOG_VARD(_invert);
   LOG_VARD(_keepEntireFeaturesCrossingBounds);
   LOG_VARD(_keepOnlyFeaturesInsideBounds);
-  LOG_VART(_bounds->toString());
+  LOG_VARD(_bounds->toString());
   LOG_VARD(_inclusionCrit.get());
 
   // go through all the ways
@@ -285,7 +285,7 @@ void MapCropper::apply(OsmMapPtr& map)
       _numWaysOutOfBounds++;
       _numAffected++;
     }
-    //  For whatever reason, the inside check against an envelope only causes no problems, but
+    // For whatever reason, the inside check against an envelope only causes no problems, but
     // checking against just the geometry yields test failures.
     else if (_isWhollyInside(wayEnv))
     {
@@ -328,6 +328,7 @@ void MapCropper::apply(OsmMapPtr& map)
     }
   }
   LOG_VARD(map->size());
+  OsmMapWriterFactory::writeDebugMap(map, "after-way-removal");
 
   std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
 
@@ -404,6 +405,7 @@ void MapCropper::apply(OsmMapPtr& map)
     }
   }
   LOG_VARD(map->size());
+  OsmMapWriterFactory::writeDebugMap(map, "after-node-removal");
 
   // Remove dangling features here now, which used to be done in CropCmd only.
   long numSuperfluousWaysRemoved = 0;

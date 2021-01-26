@@ -130,8 +130,8 @@ Vagrant.configure(2) do |config|
       end
 
       override.vm.provision 'build', type: 'shell', :privileged => false, :path => 'VagrantBuild.sh'
-      override.vm.provision 'EGD', type: 'shell', :privileged => false, :inline  => '([ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat ~/ActivateEGDplugin.sh /var/lib/tomcat8) || true'
-      override.vm.provision 'tomcat', type: 'shell', :privileged => false, :inline => tomcat_script, run: 'always'
+      #override.vm.provision 'EGD', type: 'shell', :privileged => false, :inline  => '([ -f ~/ActivateEGDplugin.sh ] && sudo -u tomcat ~/ActivateEGDplugin.sh /var/lib/tomcat8) || true'
+      #override.vm.provision 'tomcat', type: 'shell', :privileged => false, :inline => tomcat_script, run: 'always'
 
       # TODO: Why is node-export only on CentOS?
       if os.start_with?('CentOS')
@@ -159,9 +159,9 @@ Vagrant.configure(2) do |config|
   def set_provisioners(config)
     config.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh", :env => {"ADDREPOS" => $addRepos, "YUMUPDATE" => $yumUpdate}
     config.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
-    config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-    config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
-    config.vm.provision "valgrind", type: "shell", :privileged => false, :path => "scripts/valgrind/valgrind_install.sh"
+    #config.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+    #config.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+    #config.vm.provision "valgrind", type: "shell", :privileged => false, :path => "scripts/valgrind/valgrind_install.sh"
   end
 
   def set_forwarding(config)
@@ -227,8 +227,8 @@ Vagrant.configure(2) do |config|
     dockcentos72.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionCentOS7.sh"
     dockcentos72.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
 
-    dockcentos72.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
-    dockcentos72.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
+    #dockcentos72.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo systemctl restart tomcat8", run: "always"
+    #dockcentos72.vm.provision "export", type: "shell", :privileged => false, :inline => "sudo systemctl restart node-export", run: "always"
   end
 
   # Provider-specific configuration so you can fine-tune various
