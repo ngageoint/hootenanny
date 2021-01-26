@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -138,7 +138,7 @@ public:
       db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
       db.insertFolderMapMapping(
         writer.getMapId(),
-        db.insertFolder(_testName, -1, db.getUserId(userEmail(_testName), true), folderIsPublic));
+        db.insertFolder(_testName, NULL, db.getUserId(userEmail(_testName), true), folderIsPublic));
       db.close();
     }
 
@@ -892,7 +892,7 @@ public:
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     db.insertFolderMapMapping(
       secondMapId,
-      db.insertFolder(_testName, -1, db.getUserId(differentUserEmail, true), true));
+      db.insertFolder(_testName, NULL, db.getUserId(differentUserEmail, true), true));
     db.close();
 
     // Configure the reader for no user
