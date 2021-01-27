@@ -79,13 +79,11 @@ public:
 
 private:
 
-  // See DiffConflator for more info on these vars.
   bool _isDiffConflate;
   bool _diffConflateSeparateOutput;
   DiffConflator _diffConflator;
   ChangesetProviderPtr _pTagChanges;
 
-  // needed when generating changesets against an OSMAPIDB
   QString _osmApiDbUrl;
 
   QList<QList<SingleStat>> _allStats;
@@ -95,7 +93,6 @@ private:
   bool _displayChangesetStats;
   QString _outputChangesetStatsFile;
 
-  // allows for tailoring the pre/post conflate ops to the data being conflated
   bool _filterOps;
 
   std::shared_ptr<Progress> _progress;
@@ -118,17 +115,13 @@ private:
 
   void _load(const QString& input1, const QString& input2, OsmMapPtr& map,
              const bool isChangesetOut);
-  void _getInputStats(
-    OsmMapPtr& map, const QString& input1, const QString& input2,
-    std::shared_ptr<CalculateStatsOp> input1Cso, std::shared_ptr<CalculateStatsOp> input2Cso);
 
   void _runConflate(OsmMapPtr& map);
 
   void _runConflateOps(OsmMapPtr& map, const bool runPre);
 
-  void _writeOutput(OsmMapPtr& map, QString& output, const bool isChangesetOutput);
-  void _writeStats(OsmMapPtr& map, std::shared_ptr<CalculateStatsOp> input1Cso,
-                   std::shared_ptr<CalculateStatsOp> input2Cso, const QString& outputFileName);
+  void _writeStats(OsmMapPtr& map, const CalculateStatsOp& input1Cso,
+                   const CalculateStatsOp& input2Cso, const QString& outputFileName);
 };
 
 }

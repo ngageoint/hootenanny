@@ -74,7 +74,7 @@ _filterOps(ConfigOptions().getConflateRemoveSuperfluousOps()),
 _numTotalTasks(0),
 _currentTask(0),
 _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax())
-{ 
+{
 }
 
 void Conflator::_initConfig()
@@ -147,17 +147,9 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
 {
   Tgs::Timer totalTime;
   _taskTimer.reset();
-  _progress.reset(
-    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
-  OsmMapPtr map(new OsmMap());
-  const bool isChangesetOutput = output.endsWith(".osc") || output.endsWith(".osc.sql");
-  double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
-  LOG_VART(bytesRead);
-  _allStats.clear();
-  _stats.clear();
 
   _initConfig();
-  _initTaskCount();
+
   if (!IoUtils::isUrl(output))
   {
     // Write the output dir now so we don't get a nasty surprise at the end of a long job that it
@@ -165,6 +157,8 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
     IoUtils::writeOutputDir(output);
   }
 
+  _progress.reset(
+    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
   QString msg =
     "Conflating ..." + input1.right(_maxFilePrintLength) + " with ..." +
     input2.right(_maxFilePrintLength);
@@ -186,6 +180,15 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   }
   _progress->set(0.0, msg);
 
+  double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
+  LOG_VART(bytesRead);
+  _allStats.clear();
+
+  _initTaskCount();
+
+  OsmMapPtr map(new OsmMap());
+  const bool isChangesetOutput = output.endsWith(".osc") || output.endsWith(".osc.sql");
+
   _load(input1, input2, map, isChangesetOutput);
 
   msg = "Conflating map with " + StringUtils::formatLargeNumber(map->size()) + " elements";
@@ -199,9 +202,37 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
   double elapsed = _taskTimer.getElapsedAndRestart();
+  _stats.clear();
   _stats.append(SingleStat("Read Inputs Time (sec)", elapsed));
   _stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
   _stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
+
+  CalculateStatsOp input1Cso(
+    ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");
+  CalculateStatsOp input2Cso(
+    ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), "input map 2");
+  if (_displayStats)
+  {
+    _progress->set(
+      _getJobPercentComplete(_currentTask - 1),
+      "Calculating reference statistics for: ..." + input1.right(_maxFilePrintLength) + "...");
+    input1Cso.apply(map);
+    _allStats.append(input1Cso.getStats());
+    _stats.append(
+      SingleStat("Calculate Stats for Input 1 Time (sec)", _taskTimer.getElapsedAndRestart()));
+    _currentTask++;
+
+    _progress->set(
+      _getJobPercentComplete(_currentTask - 1),
+      "Calculating secondary data statistics for: ..." + input2.right(_maxFilePrintLength) + "...");
+    input2Cso.apply(map);
+    _allStats.append(input2Cso.getStats());
+    _stats.append(
+      SingleStat("Calculate Stats for Input 2 Time (sec)", _taskTimer.getElapsedAndRestart()));
+    _currentTask++;
+  }
+  MemoryUsageChecker::getInstance().check();
+
   size_t initialElementCount = map->getElementCount();
   _stats.append(SingleStat("Initial Element Count", initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
@@ -212,6 +243,7 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   }
 
   OsmMapPtr result = map;
+
   _runConflate(result);
 
   if (ConfigOptions().getConflatePostOps().size() > 0)
@@ -232,7 +264,51 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   _stats.append(SingleStat("Project to WGS84 Time (sec)", _taskTimer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(result, "after-wgs84-projection");
 
-  _writeOutput(result, output, isChangesetOutput);
+  // Figure out what to write
+  _progress->set(
+    _getJobPercentComplete(_currentTask - 1),
+    "Writing conflated output: ..." + output.right(_maxFilePrintLength) + "...");
+  if (_isDiffConflate && isChangesetOutput)
+  {
+    // Get the changeset stats output format from the changeset stats file extension, or if no
+    // extension is there assume a text table output to the display.
+    ChangesetStatsFormat statsFormat;
+    if (_displayChangesetStats)
+    {
+      if (!_outputChangesetStatsFile.isEmpty())
+      {
+        QFileInfo changesetStatsFileInfo(_outputChangesetStatsFile);
+        statsFormat.setFormat(
+          ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix()));
+      }
+      else
+      {
+        statsFormat.setFormat(ChangesetStatsFormat::Text);
+      }
+    }
+    _diffConflator.writeChangeset(
+      result, output, _diffConflateSeparateOutput, statsFormat, _osmApiDbUrl);
+  }
+  else
+  {
+    // Write a map
+    if (_isDiffConflate && _diffConflator.conflatingTags())
+    {
+      // Add tag changes to our map
+      _diffConflator.addChangesToMap(result, _pTagChanges);
+      _currentTask++;
+    }
+    IoUtils::saveMap(result, output);
+    OsmMapWriterFactory::writeDebugMap(result, "after-conflate-output-write");
+  }
+  _currentTask++;
+
+  // Do the tags if we need to
+  if (_isDiffConflate && _diffConflator.conflatingTags())
+  {
+    QString outFileName = output;
+    outFileName.replace(".osm", "");
+  }
 
   double timingOutput = _taskTimer.getElapsedAndRestart();
   double totalElapsed = totalTime.getElapsed();
@@ -254,9 +330,6 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
 
   if (_displayStats)
   {
-    std::shared_ptr<CalculateStatsOp> input1Cso;
-    std::shared_ptr<CalculateStatsOp> input2Cso;
-    _getInputStats(map, input1, input2, input1Cso, input2Cso);
     _writeStats(result, input1Cso, input2Cso, output);
   }
 
@@ -331,35 +404,6 @@ void Conflator::_load(const QString& input1, const QString& input2, OsmMapPtr& m
   MemoryUsageChecker::getInstance().check();
 }
 
-void Conflator::_getInputStats(
-  OsmMapPtr& map, const QString& input1, const QString& input2,
-  std::shared_ptr<CalculateStatsOp> input1Cso, std::shared_ptr<CalculateStatsOp> input2Cso)
-{
-  input1Cso.reset(
-    new CalculateStatsOp(
-      ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1"));
-  input2Cso.reset(
-    new CalculateStatsOp(
-      ElementCriterionPtr(new StatusCriterion(Status::Unknown2)), "input map 2"));
-  _progress->set(
-    _getJobPercentComplete(_currentTask - 1),
-    "Calculating reference statistics for: ..." + input1.right(_maxFilePrintLength) + "...");
-  input1Cso->apply(map);
-  _allStats.append(input1Cso->getStats());
-  _stats.append(
-    SingleStat("Calculate Stats for Input 1 Time (sec)", _taskTimer.getElapsedAndRestart()));
-  _currentTask++;
-
-  _progress->set(
-    _getJobPercentComplete(_currentTask - 1),
-    "Calculating secondary data statistics for: ..." + input2.right(_maxFilePrintLength) + "...");
-  input2Cso->apply(map);
-  _allStats.append(input2Cso->getStats());
-  _stats.append(
-    SingleStat("Calculate Stats for Input 2 Time (sec)", _taskTimer.getElapsedAndRestart()));
-  _currentTask++;
-}
-
 void Conflator::_runConflate(OsmMapPtr& map)
 {
   if (_isDiffConflate)
@@ -429,58 +473,9 @@ void Conflator::_runConflateOps(OsmMapPtr& map, const bool runPre)
     StringUtils::millisecondsToDhms(opsTimer.elapsed()) << " total.");
 }
 
-void Conflator::_writeOutput(OsmMapPtr& map, QString& output, const bool isChangesetOutput)
-{
-  // Figure out what to write
-  _progress->set(
-    _getJobPercentComplete(_currentTask - 1),
-    "Writing conflated output: ..." + output.right(_maxFilePrintLength) + "...");
-  if (_isDiffConflate && isChangesetOutput)
-  {
-    // Get the changeset stats output format from the changeset stats file extension, or if no
-    // extension is there assume a text table output to the display.
-    ChangesetStatsFormat statsFormat;
-    if (_displayChangesetStats)
-    {
-      if (!_outputChangesetStatsFile.isEmpty())
-      {
-        QFileInfo changesetStatsFileInfo(_outputChangesetStatsFile);
-        statsFormat.setFormat(
-          ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix()));
-      }
-      else
-      {
-        statsFormat.setFormat(ChangesetStatsFormat::Text);
-      }
-    }
-    _diffConflator.writeChangeset(
-      map, output, _diffConflateSeparateOutput, statsFormat, _osmApiDbUrl);
-  }
-  else
-  {
-    // Write a map
-    if (_isDiffConflate && _diffConflator.conflatingTags())
-    {
-      // Add tag changes to our map
-      _diffConflator.addChangesToMap(map, _pTagChanges);
-      _currentTask++;
-    }
-    IoUtils::saveMap(map, output);
-    OsmMapWriterFactory::writeDebugMap(map, "after-conflate-output-write");
-  }
-  _currentTask++;
-
-  // Do the tags if we need to
-//  if (_isDiffConflate && _diffConflator.conflatingTags())
-//  {
-//    QString outFileName = output;
-//    outFileName.replace(".osm", "");
-//  }
-}
-
 void Conflator::_writeStats(
-  OsmMapPtr& map, std::shared_ptr<CalculateStatsOp> input1Cso,
-  std::shared_ptr<CalculateStatsOp> input2Cso, const QString& outputFileName)
+  OsmMapPtr& map, const CalculateStatsOp& input1Cso, const CalculateStatsOp& input2Cso,
+  const QString& outputFileName)
 {
   _progress->set(
     _getJobPercentComplete(_currentTask - 1),
@@ -489,7 +484,7 @@ void Conflator::_writeStats(
   CalculateStatsOp outputCso("output map", true);
   outputCso.apply(map);
   QList<SingleStat> outputStats = outputCso.getStats();
-  ConflateStatsHelper(input1Cso->getStats(), input2Cso->getStats(), outputCso.getStats())
+  ConflateStatsHelper(input1Cso.getStats(), input2Cso.getStats(), outputCso.getStats())
     .updateStats(
       outputStats,
       outputCso.indexOfSingleStat("Total Unmatched Features"));
