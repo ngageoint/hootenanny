@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFLATOR_H
@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/conflate/DiffConflator.h>
+#include <hoot/core/util/Progress.h>
 
 namespace hoot
 {
@@ -81,9 +82,15 @@ private:
 
   bool _filterOps;
 
+  std::shared_ptr<Progress> _progress;
   int _numTotalTasks;
+  int _currentTask;
+  int _maxFilePrintLength;
 
   void _initConfig();
+
+  void _load(const QString& input1, const QString& input2, OsmMapPtr& map,
+             const bool isChangesetOut);
 
   void _updateConfigOptionsForAttributeConflation();
   void _updateConfigOptionsForDifferentialConflation();
