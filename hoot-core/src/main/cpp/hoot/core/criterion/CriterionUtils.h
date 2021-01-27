@@ -57,7 +57,6 @@ public:
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the map meets the specified criteria; false otherwise
    * @todo move this to MapUtils?
-   * @todo this should honor ConstOsmMapConsumer on crits
    */
   template<class C>
   static bool containsSatisfyingElements(
@@ -66,14 +65,20 @@ public:
     if (!std::is_base_of<ElementCriterion,C>::value)
     {
       throw IllegalArgumentException(
-        "Non-criterion passed to CriterionUtils::getSatisfyingElementIds");
+        "Non-criterion passed to CriterionUtils::containsSatisfyingElements");
+    }
+
+    ElementCriterionPtr crit(new C());
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+      std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+    if (mapConsumer)
+    {
+      mapConsumer->setOsmMap(map.get());
     }
 
     const long count =
       (long)FilteredVisitor::getStat(
-        ElementCriterionPtr(new C()),
-        ConstElementVisitorPtr(new ElementCountVisitor()),
-        map);
+        crit, ConstElementVisitorPtr(new ElementCountVisitor()), map);
     LOG_VART(count);
     return exactCount ? (count == minCount) : (count >= minCount);
   }
@@ -82,16 +87,17 @@ public:
    * Determines whether a collection of elements meet a criterion a minimum or a fixed amount of
    * times. Only objects of type ElementCriterion are allowed, all others will return false
    *
-   * @param element the element to examine
-   * @param minCount the minmal count of elements required (if exactCount == false)
+   * @param elements the elements to examine
+   * @param map required to satisfy OsmMapConsumers
+   * @param minCount the minimal count of elements required (if exactCount == false)
    * @param exactCount if true, the count must be exactly minCount
    * @return true if the elements meet the specified criterion the specified number of times
    * @todo move this to MapUtils?
-   * @todo this won't work for map consuming crits
    */
   template<class C>
   static bool containsSatisfyingElements(
-    const std::vector<ConstElementPtr>& elements, int minCount = 1, bool exactCount = false)
+    const std::vector<ConstElementPtr>& elements, const ConstOsmMapPtr& map, int minCount = 1,
+    bool exactCount = false)
   {
     if (!std::is_base_of<ElementCriterion,C>::value)
     {
@@ -99,8 +105,15 @@ public:
         "Non-criterion passed to CriterionUtils::getSatisfyingElementIds");
     }
 
-    int count = 0;
     ElementCriterionPtr crit(new C());
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+      std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+    if (mapConsumer)
+    {
+      mapConsumer->setOsmMap(map.get());
+    }
+
+    int count = 0;
     for (std::vector<ConstElementPtr>::const_iterator itr = elements.begin(); itr != elements.end();
          ++itr)
     {
