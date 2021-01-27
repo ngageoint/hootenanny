@@ -77,6 +77,7 @@ private:
   bool _isDiffConflate;
   bool _diffConflateSeparateOutput;
   DiffConflator _diffConflator;
+  ChangesetProviderPtr _pTagChanges;
 
   QString _osmApiDbUrl;
 
@@ -109,6 +110,8 @@ private:
 
   void _load(const QString& input1, const QString& input2, OsmMapPtr& map,
              const bool isChangesetOut);
+
+  void _runConflate(OsmMapPtr& map);
 
   void _runConflateOps(OsmMapPtr& map, const bool runPre);
 

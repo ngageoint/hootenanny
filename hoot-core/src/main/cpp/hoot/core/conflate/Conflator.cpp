@@ -187,7 +187,6 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   _initTaskCount();
 
   OsmMapPtr map(new OsmMap());
-  ChangesetProviderPtr pTagChanges;
   const bool isChangesetOutput = output.endsWith(".osc") || output.endsWith(".osc.sql");
 
   _load(input1, input2, map, isChangesetOutput);
@@ -245,31 +244,7 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
 
   OsmMapPtr result = map;
 
-  if (_isDiffConflate)
-  {
-    _diffConflator.setProgress(
-      Progress(
-        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-        _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
-    _diffConflator.apply(result);
-    if (_diffConflator.conflatingTags())
-    {
-      pTagChanges = _diffConflator.getTagDiff();
-    }
-    _stats.append(_diffConflator.getStats());
-  }
-  else
-  {
-    UnifyingConflator unifyingConflator;
-    unifyingConflator.setProgress(
-      Progress(
-        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-        _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
-    unifyingConflator.apply(result);
-    _stats.append(unifyingConflator.getStats());
-  }
-  _stats.append(SingleStat("Conflation Time (sec)", _taskTimer.getElapsedAndRestart()));
-  _currentTask++;
+  _runConflate(result);
 
   if (ConfigOptions().getConflatePostOps().size() > 0)
   {
@@ -320,7 +295,7 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
     if (_isDiffConflate && _diffConflator.conflatingTags())
     {
       // Add tag changes to our map
-      _diffConflator.addChangesToMap(result, pTagChanges);
+      _diffConflator.addChangesToMap(result, _pTagChanges);
       _currentTask++;
     }
     IoUtils::saveMap(result, output);
@@ -427,6 +402,35 @@ void Conflator::_load(const QString& input1, const QString& input2, OsmMapPtr& m
     _currentTask++;
   }
   MemoryUsageChecker::getInstance().check();
+}
+
+void Conflator::_runConflate(OsmMapPtr& map)
+{
+  if (_isDiffConflate)
+  {
+    _diffConflator.setProgress(
+      Progress(
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
+    _diffConflator.apply(map);
+    if (_diffConflator.conflatingTags())
+    {
+      _pTagChanges = _diffConflator.getTagDiff();
+    }
+    _stats.append(_diffConflator.getStats());
+  }
+  else
+  {
+    UnifyingConflator unifyingConflator;
+    unifyingConflator.setProgress(
+      Progress(
+        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+        _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
+    unifyingConflator.apply(map);
+    _stats.append(unifyingConflator.getStats());
+  }
+  _stats.append(SingleStat("Conflation Time (sec)", _taskTimer.getElapsedAndRestart()));
+  _currentTask++;
 }
 
 void Conflator::_runConflateOps(OsmMapPtr& map, const bool runPre)
