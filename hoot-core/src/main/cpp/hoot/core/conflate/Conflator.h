@@ -120,6 +120,7 @@ private:
 
   void _runConflateOps(OsmMapPtr& map, const bool runPre);
 
+  void _writeOutput(OsmMapPtr& map, QString& output, const bool isChangesetOutput);
   void _writeStats(OsmMapPtr& map, const CalculateStatsOp& input1Cso,
                    const CalculateStatsOp& input2Cso, const QString& outputFileName);
 };

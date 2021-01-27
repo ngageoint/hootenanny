@@ -259,44 +259,7 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   _stats.append(SingleStat("Project to WGS84 Time (sec)", _taskTimer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(result, "after-wgs84-projection");
 
-  // Figure out what to write
-  _progress->set(
-    _getJobPercentComplete(_currentTask - 1),
-    "Writing conflated output: ..." + output.right(_maxFilePrintLength) + "...");
-  if (_isDiffConflate && isChangesetOutput)
-  {
-    // Get the changeset stats output format from the changeset stats file extension, or if no
-    // extension is there assume a text table output to the display.
-    ChangesetStatsFormat statsFormat;
-    if (_displayChangesetStats)
-    {
-      if (!_outputChangesetStatsFile.isEmpty())
-      {
-        QFileInfo changesetStatsFileInfo(_outputChangesetStatsFile);
-        statsFormat.setFormat(
-          ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix()));
-      }
-      else
-      {
-        statsFormat.setFormat(ChangesetStatsFormat::Text);
-      }
-    }
-    _diffConflator.writeChangeset(
-      result, output, _diffConflateSeparateOutput, statsFormat, _osmApiDbUrl);
-  }
-  else
-  {
-    // Write a map
-    if (_isDiffConflate && _diffConflator.conflatingTags())
-    {
-      // Add tag changes to our map
-      _diffConflator.addChangesToMap(result, _pTagChanges);
-      _currentTask++;
-    }
-    IoUtils::saveMap(result, output);
-    OsmMapWriterFactory::writeDebugMap(result, "after-conflate-output-write");
-  }
-  _currentTask++;
+  _writeOutput(result, output, isChangesetOutput);
 
   double timingOutput = _taskTimer.getElapsedAndRestart();
   double totalElapsed = totalTime.getElapsed();
@@ -459,6 +422,48 @@ void Conflator::_runConflateOps(OsmMapPtr& map, const bool runPre)
   LOG_STATUS(
     "Conflate " << opStr.toLower() << "-operations ran in " +
     StringUtils::millisecondsToDhms(opsTimer.elapsed()) << " total.");
+}
+
+void Conflator::_writeOutput(OsmMapPtr& map, QString& output, const bool isChangesetOutput)
+{
+  // Figure out what to write
+  _progress->set(
+    _getJobPercentComplete(_currentTask - 1),
+    "Writing conflated output: ..." + output.right(_maxFilePrintLength) + "...");
+  if (_isDiffConflate && isChangesetOutput)
+  {
+    // Get the changeset stats output format from the changeset stats file extension, or if no
+    // extension is there assume a text table output to the display.
+    ChangesetStatsFormat statsFormat;
+    if (_displayChangesetStats)
+    {
+      if (!_outputChangesetStatsFile.isEmpty())
+      {
+        QFileInfo changesetStatsFileInfo(_outputChangesetStatsFile);
+        statsFormat.setFormat(
+          ChangesetStatsFormat::fromString(changesetStatsFileInfo.completeSuffix()));
+      }
+      else
+      {
+        statsFormat.setFormat(ChangesetStatsFormat::Text);
+      }
+    }
+    _diffConflator.writeChangeset(
+      map, output, _diffConflateSeparateOutput, statsFormat, _osmApiDbUrl);
+  }
+  else
+  {
+    // Write a map
+    if (_isDiffConflate && _diffConflator.conflatingTags())
+    {
+      // Add tag changes to our map
+      _diffConflator.addChangesToMap(map, _pTagChanges);
+      _currentTask++;
+    }
+    IoUtils::saveMap(map, output);
+    OsmMapWriterFactory::writeDebugMap(map, "after-conflate-output-write");
+  }
+  _currentTask++;
 }
 
 void Conflator::_writeStats(
