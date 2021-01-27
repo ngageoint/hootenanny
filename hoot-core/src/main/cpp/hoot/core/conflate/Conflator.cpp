@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/conflate/stats/ConflateStatsHelper.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/info/IoSingleStat.h>
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/CalculateStatsOp.h>
@@ -61,9 +60,6 @@
 
 // Standard
 #include <fstream>
-
-// Tgs
-#include <tgs/System/Timer.h>
 
 namespace hoot
 {
@@ -122,10 +118,36 @@ void Conflator::_initConfig()
   }
 }
 
+void Conflator::_initTaskCount()
+{
+  // The number of steps here must be updated as you add/remove job steps in the logic.
+  _numTotalTasks = 5;
+  if (_displayStats)
+  {
+    _numTotalTasks += 3;
+  }
+  if (_isDiffConflate)
+  {
+    _numTotalTasks++;
+  }
+
+  // Only add one task for each set of conflate ops, since NamedOp will create its own task step for
+  // each op internally.
+  if (ConfigOptions().getConflatePreOps().size() > 0)
+  {
+    _numTotalTasks++;
+  }
+  if (ConfigOptions().getConflatePostOps().size() > 0)
+  {
+    _numTotalTasks++;
+  }
+  _currentTask = 1;
+}
+
 void Conflator::conflate(const QString& input1, const QString& input2, QString& output)
 {
   Tgs::Timer totalTime;
-  Tgs::Timer t;
+  _taskTimer.reset();
 
   _initConfig();
 
@@ -161,30 +183,9 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
 
   double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
   LOG_VART(bytesRead);
-  QList<QList<SingleStat>> allStats;
+  _allStats.clear();
 
-  // The number of steps here must be updated as you add/remove job steps in the logic.
-  _numTotalTasks = 5;
-  if (_displayStats)
-  {
-    _numTotalTasks += 3;
-  }
-  if (_isDiffConflate)
-  {
-    _numTotalTasks++;
-  }
-
-  // Only add one task for each set of conflate ops, since NamedOp will create its own task step for
-  // each op internally.
-  if (ConfigOptions().getConflatePreOps().size() > 0)
-  {
-    _numTotalTasks++;
-  }
-  if (ConfigOptions().getConflatePostOps().size() > 0)
-  {
-    _numTotalTasks++;
-  }
-  _currentTask = 1;
+  _initTaskCount();
 
   OsmMapPtr map(new OsmMap());
   ChangesetProviderPtr pTagChanges;
@@ -202,11 +203,11 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
-  double elapsed = t.getElapsedAndRestart();
-  QList<SingleStat> stats;
-  stats.append(SingleStat("Read Inputs Time (sec)", elapsed));
-  stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
-  stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
+  double elapsed = _taskTimer.getElapsedAndRestart();
+  _stats.clear();
+  _stats.append(SingleStat("Read Inputs Time (sec)", elapsed));
+  _stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
+  _stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
 
   CalculateStatsOp input1Cso(
     ElementCriterionPtr(new StatusCriterion(Status::Unknown1)), "input map 1");
@@ -218,48 +219,29 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
       _getJobPercentComplete(_currentTask - 1),
       "Calculating reference statistics for: ..." + input1.right(_maxFilePrintLength) + "...");
     input1Cso.apply(map);
-    allStats.append(input1Cso.getStats());
-    stats.append(SingleStat("Calculate Stats for Input 1 Time (sec)", t.getElapsedAndRestart()));
+    _allStats.append(input1Cso.getStats());
+    _stats.append(
+      SingleStat("Calculate Stats for Input 1 Time (sec)", _taskTimer.getElapsedAndRestart()));
     _currentTask++;
 
     _progress->set(
       _getJobPercentComplete(_currentTask - 1),
       "Calculating secondary data statistics for: ..." + input2.right(_maxFilePrintLength) + "...");
     input2Cso.apply(map);
-    allStats.append(input2Cso.getStats());
-    stats.append(SingleStat("Calculate Stats for Input 2 Time (sec)", t.getElapsedAndRestart()));
+    _allStats.append(input2Cso.getStats());
+    _stats.append(
+      SingleStat("Calculate Stats for Input 2 Time (sec)", _taskTimer.getElapsedAndRestart()));
     _currentTask++;
   }
   MemoryUsageChecker::getInstance().check();
 
   size_t initialElementCount = map->getElementCount();
-  stats.append(SingleStat("Initial Element Count", initialElementCount));
+  _stats.append(SingleStat("Initial Element Count", initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
-    // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
-    // config.
-    conf().set(
-      ConfigOptions::getRubberSheetElementCriteriaKey(),
-      ConfigOptions().getConflateRubberSheetElementCriteria());
-
-    // apply any user specified pre-conflate operations
-    LOG_STATUS("Running pre-conflate operations...");
-    QElapsedTimer timer;
-    timer.start();
-    NamedOp preOps(ConfigOptions().getConflatePreOps());
-    preOps.setProgress(
-      Progress(
-        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-        _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
-    preOps.apply(map);
-    stats.append(SingleStat("Apply Pre-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
-    OsmMapWriterFactory::writeDebugMap(map, "after-pre-ops");
-    _currentTask++;
-    LOG_STATUS(
-      "Conflate pre-operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
-      " total.");
+    _runConflateOps(map, true);
   }
 
   OsmMapPtr result = map;
@@ -275,7 +257,7 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
     {
       pTagChanges = _diffConflator.getTagDiff();
     }
-    stats.append(_diffConflator.getStats());
+    _stats.append(_diffConflator.getStats());
   }
   else
   {
@@ -285,29 +267,14 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
         ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
         _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
     unifyingConflator.apply(result);
-    stats.append(unifyingConflator.getStats());
+    _stats.append(unifyingConflator.getStats());
   }
-  stats.append(SingleStat("Conflation Time (sec)", t.getElapsedAndRestart()));
+  _stats.append(SingleStat("Conflation Time (sec)", _taskTimer.getElapsedAndRestart()));
   _currentTask++;
 
   if (ConfigOptions().getConflatePostOps().size() > 0)
   {
-    // apply any user specified post-conflate operations
-    LOG_STATUS("Running post-conflate operations...");
-    QElapsedTimer timer;
-    timer.start();
-    NamedOp postOps(ConfigOptions().getConflatePostOps());
-    postOps.setProgress(
-      Progress(
-        ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-        _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
-    postOps.apply(map);
-    stats.append(SingleStat("Apply Post-Conflate Ops Time (sec)", t.getElapsedAndRestart()));
-    OsmMapWriterFactory::writeDebugMap(result, "after-post-ops");
-    _currentTask++;
-    LOG_STATUS(
-      "Conflate post-operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
-      " total.");
+    _runConflateOps(map, false);
   }
 
   // Doing this after the conflate post ops run, since some invalid reviews are removed by them.
@@ -320,7 +287,7 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   _currentTask++;
 
   MapProjector::projectToWgs84(result);
-  stats.append(SingleStat("Project to WGS84 Time (sec)", t.getElapsedAndRestart()));
+  _stats.append(SingleStat("Project to WGS84 Time (sec)", _taskTimer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(result, "after-wgs84-projection");
 
   // Figure out what to write
@@ -369,7 +336,7 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
     outFileName.replace(".osm", "");
   }
 
-  double timingOutput = t.getElapsedAndRestart();
+  double timingOutput = _taskTimer.getElapsedAndRestart();
 
   if (_displayStats)
   {
@@ -383,27 +350,28 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
       .updateStats(
         outputStats,
         outputCso.indexOfSingleStat("Total Unmatched Features"));
-    allStats.append(outputStats);
-    stats.append(SingleStat("Calculate Stats for Output Time (sec)", t.getElapsedAndRestart()));
+    _allStats.append(outputStats);
+    _stats.append(
+      SingleStat("Calculate Stats for Output Time (sec)", _taskTimer.getElapsedAndRestart()));
     _currentTask++;
   }
 
   double totalElapsed = totalTime.getElapsed();
-  stats.append(SingleStat("(Dubious) Initial Elements Processed per Second",
+  _stats.append(SingleStat("(Dubious) Initial Elements Processed per Second",
                           initialElementCount / totalElapsed));
-  stats.append(SingleStat("(Dubious) Final Elements Processed per Second",
+  _stats.append(SingleStat("(Dubious) Final Elements Processed per Second",
                           result->getElementCount() / totalElapsed));
-  stats.append(SingleStat("Write Output Time (sec)", timingOutput));
-  stats.append(SingleStat("Final Element Count", result->getElementCount()));
-  stats.append(SingleStat("Total Time Elapsed (sec)", totalElapsed));
-  stats.append(IoSingleStat(IoSingleStat::RChar));
-  stats.append(IoSingleStat(IoSingleStat::WChar));
-  stats.append(IoSingleStat(IoSingleStat::SysCr));
-  stats.append(IoSingleStat(IoSingleStat::SysCw));
-  stats.append(IoSingleStat(IoSingleStat::ReadBytes));
-  stats.append(IoSingleStat(IoSingleStat::WriteBytes));
-  stats.append(IoSingleStat(IoSingleStat::CancelledWriteBytes));
-  stats.append(SingleStat("(Dubious) Bytes Processed per Second", inputBytes / totalElapsed));
+  _stats.append(SingleStat("Write Output Time (sec)", timingOutput));
+  _stats.append(SingleStat("Final Element Count", result->getElementCount()));
+  _stats.append(SingleStat("Total Time Elapsed (sec)", totalElapsed));
+  _stats.append(IoSingleStat(IoSingleStat::RChar));
+  _stats.append(IoSingleStat(IoSingleStat::WChar));
+  _stats.append(IoSingleStat(IoSingleStat::SysCr));
+  _stats.append(IoSingleStat(IoSingleStat::SysCw));
+  _stats.append(IoSingleStat(IoSingleStat::ReadBytes));
+  _stats.append(IoSingleStat(IoSingleStat::WriteBytes));
+  _stats.append(IoSingleStat(IoSingleStat::CancelledWriteBytes));
+  _stats.append(SingleStat("(Dubious) Bytes Processed per Second", inputBytes / totalElapsed));
 
   if (_isDiffConflate && _displayStats)
   {
@@ -411,22 +379,22 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
       _getJobPercentComplete(_currentTask - 1),
       "Calculating differential output statistics for: ..." + output.right(_maxFilePrintLength) +
       "...");
-    _diffConflator.calculateStats(result, stats);
+    _diffConflator.calculateStats(result, _stats);
     _currentTask++;
   }
 
   if (_displayStats)
   {
-    allStats.append(stats);
+    _allStats.append(_stats);
     if (_outputStatsFile.isEmpty())
     {
-      QString statsMsg = MapStatsWriter().statsToString(allStats, "\t");
+      QString statsMsg = MapStatsWriter().statsToString(_allStats, "\t");
       std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" <<
               statsMsg << std::endl;
     }
     else
     {
-      MapStatsWriter().writeStatsToJson(allStats, _outputStatsFile);
+      MapStatsWriter().writeStatsToJson(_allStats, _outputStatsFile);
       std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " <<
               _outputStatsFile << std::endl;
     }
@@ -534,6 +502,46 @@ void Conflator::_load(const QString& input1, const QString& input2, OsmMapPtr& m
     _currentTask++;
   }
   MemoryUsageChecker::getInstance().check();
+}
+
+void Conflator::_runConflateOps(OsmMapPtr& map, const bool runPre)
+{
+  QStringList opNames;
+  QString opStr;
+  if (runPre)
+  {
+    // By default rubbersheeting has no filters. When conflating, we need to add the ones from the
+    // config.
+    conf().set(
+      ConfigOptions::getRubberSheetElementCriteriaKey(),
+      ConfigOptions().getConflateRubberSheetElementCriteria());
+
+    opNames = ConfigOptions().getConflatePreOps();
+    opStr = "Pre";
+  }
+  else
+  {
+    opNames = ConfigOptions().getConflatePostOps();
+    opStr = "Post";
+  }
+
+  // apply any user specified pre-conflate operations
+  LOG_STATUS("Running " << opStr.toLower() << "-conflate operations...");
+  QElapsedTimer opsTimer;
+  opsTimer.start();
+  NamedOp ops(opNames);
+  ops.setProgress(
+    Progress(
+      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
+      _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
+  ops.apply(map);
+  _stats.append(
+    SingleStat("Apply " + opStr + "-Conflate Ops Time (sec)", _taskTimer.getElapsedAndRestart()));
+  OsmMapWriterFactory::writeDebugMap(map, "after-" + opStr.toLower() + "-ops");
+  _currentTask++;
+  LOG_STATUS(
+    "Conflate " << opStr.toLower() << "-operations ran in " +
+    StringUtils::millisecondsToDhms(opsTimer.elapsed()) << " total.");
 }
 
 float Conflator::_getTaskWeight() const

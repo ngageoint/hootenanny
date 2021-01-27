@@ -31,6 +31,10 @@
 // Hoot
 #include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/util/Progress.h>
+#include <hoot/core/info/IoSingleStat.h>
+
+// Tgs
+#include <tgs/System/Timer.h>
 
 namespace hoot
 {
@@ -75,6 +79,8 @@ private:
 
   QString _osmApiDbUrl;
 
+  QList<QList<SingleStat>> _allStats;
+  QList<SingleStat> _stats;
   bool _displayStats;
   QString _outputStatsFile;
   bool _displayChangesetStats;
@@ -87,10 +93,15 @@ private:
   int _currentTask;
   int _maxFilePrintLength;
 
+  Tgs::Timer _taskTimer;
+
   void _initConfig();
+  void _initTaskCount();
 
   void _load(const QString& input1, const QString& input2, OsmMapPtr& map,
              const bool isChangesetOut);
+
+  void _runConflateOps(OsmMapPtr& map, const bool runPre);
 
   void _updateConfigOptionsForAttributeConflation();
   void _updateConfigOptionsForDifferentialConflation();
