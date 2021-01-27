@@ -452,6 +452,9 @@ void OsmXmlWriter::writePartial(const ConstNodePtr& n)
 
 void OsmXmlWriter::_writePartialIncludePoints(const ConstWayPtr& w, ConstOsmMapPtr map)
 {
+  //  Ignore NULL elements
+  if (!w) return;
+
   LOG_TRACE("Writing " << w->getElementId() << "...");
 
   _writer->writeStartElement("way");

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "OsmPbfWriter.h"
@@ -479,6 +479,9 @@ void OsmPbfWriter::_writeMap()
 
 void OsmPbfWriter::_writeNode(const std::shared_ptr<const hoot::Node>& n)
 {
+  //  Ignore NULL elements
+  if (!n) return;
+
   _elementsWritten++;
   if (_pg == 0)
   {
@@ -531,6 +534,9 @@ void OsmPbfWriter::_writeNode(const std::shared_ptr<const hoot::Node>& n)
 
 void OsmPbfWriter::_writeNodeDense(const std::shared_ptr<const hoot::Node>& n)
 {
+  //  Ignore NULL elements
+  if (!n) return;
+
   LOG_TRACE("Writing node: " << n->getElementId() << "...");
 
   _elementsWritten++;
@@ -695,6 +701,9 @@ void OsmPbfWriter::_writePrimitiveBlock()
 
 void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r)
 {
+  //  Ignore NULL elements
+  if (!r) return;
+
   LOG_TRACE("Writing relation: " << r->getElementId() << "...");
 
   _elementsWritten++;
@@ -765,6 +774,9 @@ void OsmPbfWriter::_writeRelation(const std::shared_ptr<const hoot::Relation>& r
 
 void OsmPbfWriter::_writeWay(const std::shared_ptr<const hoot::Way>& w)
 {
+  //  Ignore NULL elements
+  if (!w) return;
+
   LOG_TRACE("Writing way: " << w->getElementId() << "...");
 
   _elementsWritten++;
