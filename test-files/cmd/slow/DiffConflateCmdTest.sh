@@ -90,11 +90,11 @@ echo "Checking unified geometry+tag diff changeset..."
 echo ""
 if diff $OUTPUT_DIR/output_unified.osc $INPUT_DIR/output_unified.osc >/dev/null ; then
   echo ""
-  echo "Unified Changeset Files Match"
+  echo "Unified geometry+tag diff Changeset Files Match"
   echo ""
 else
   echo ""
-  echo "Unified Changeset Files Don't Match"
+  echo "Unified geometry+tag diff Changeset Files Don't Match"
   echo ""
   diff $OUTPUT_DIR/output_unified.osc $INPUT_DIR/output_unified.osc
 fi
@@ -112,11 +112,11 @@ echo "Checking Unified Changeset Stats..."
 echo ""
 if diff $OUTPUT_DIR/output_unified_changeset_stats.json $INPUT_DIR/output_unified_changeset_stats.json >/dev/null ; then
   echo ""
-  echo "Changeset Stats Files Match"
+  echo "Changeset Unified Stats Files Match"
   echo ""
 else
   echo ""
-  echo "Changeset Stats Files Don't Match"
+  echo "Changeset Unified Stats Files Don't Match"
   echo ""
   diff $OUTPUT_DIR/output_unified_changeset_stats.json t$INPUT_DIR/output_unified_changeset_stats.json
 fi
