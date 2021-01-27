@@ -147,9 +147,17 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
 {
   Tgs::Timer totalTime;
   _taskTimer.reset();
+  _progress.reset(
+    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
+  OsmMapPtr map(new OsmMap());
+  const bool isChangesetOutput = output.endsWith(".osc") || output.endsWith(".osc.sql");
+  double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
+  LOG_VART(bytesRead);
+  _allStats.clear();
+  _stats.clear();
 
   _initConfig();
-
+  _initTaskCount();
   if (!IoUtils::isUrl(output))
   {
     // Write the output dir now so we don't get a nasty surprise at the end of a long job that it
@@ -157,8 +165,6 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
     IoUtils::writeOutputDir(output);
   }
 
-  _progress.reset(
-    new Progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running));
   QString msg =
     "Conflating ..." + input1.right(_maxFilePrintLength) + " with ..." +
     input2.right(_maxFilePrintLength);
@@ -180,15 +186,6 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   }
   _progress->set(0.0, msg);
 
-  double bytesRead = IoSingleStat(IoSingleStat::RChar).value;
-  LOG_VART(bytesRead);
-  _allStats.clear();
-
-  _initTaskCount();
-
-  OsmMapPtr map(new OsmMap());
-  const bool isChangesetOutput = output.endsWith(".osc") || output.endsWith(".osc.sql");
-
   _load(input1, input2, map, isChangesetOutput);
 
   msg = "Conflating map with " + StringUtils::formatLargeNumber(map->size()) + " elements";
@@ -202,7 +199,6 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   double inputBytes = IoSingleStat(IoSingleStat::RChar).value - bytesRead;
   LOG_VART(inputBytes);
   double elapsed = _taskTimer.getElapsedAndRestart();
-  _stats.clear();
   _stats.append(SingleStat("Read Inputs Time (sec)", elapsed));
   _stats.append(SingleStat("(Dubious) Read Inputs Bytes", inputBytes));
   _stats.append(SingleStat("(Dubious) Read Inputs Bytes per Second", inputBytes / elapsed));
@@ -243,7 +239,6 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   }
 
   OsmMapPtr result = map;
-
   _runConflate(result);
 
   if (ConfigOptions().getConflatePostOps().size() > 0)
@@ -302,13 +297,6 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
     OsmMapWriterFactory::writeDebugMap(result, "after-conflate-output-write");
   }
   _currentTask++;
-
-  // Do the tags if we need to
-  if (_isDiffConflate && _diffConflator.conflatingTags())
-  {
-    QString outFileName = output;
-    outFileName.replace(".osm", "");
-  }
 
   double timingOutput = _taskTimer.getElapsedAndRestart();
   double totalElapsed = totalTime.getElapsed();
