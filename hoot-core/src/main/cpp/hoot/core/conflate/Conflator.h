@@ -32,6 +32,7 @@
 #include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/info/IoSingleStat.h>
+#include <hoot/core/ops/CalculateStatsOp.h>
 
 // Tgs
 #include <tgs/System/Timer.h>
@@ -96,21 +97,23 @@ private:
   Tgs::Timer _taskTimer;
 
   void _initConfig();
-  void _initTaskCount();
-
-  void _load(const QString& input1, const QString& input2, OsmMapPtr& map,
-             const bool isChangesetOut);
-
-  void _runConflateOps(OsmMapPtr& map, const bool runPre);
-
   void _updateConfigOptionsForAttributeConflation();
   void _updateConfigOptionsForDifferentialConflation();
   void _updateConfigOptionsForBounds();
   void _disableRoundaboutRemoval();
   void _checkForTagValueTruncationOverride();
 
+  void _initTaskCount();
   float _getJobPercentComplete(const int currentTaskNum) const;
   float _getTaskWeight() const;
+
+  void _load(const QString& input1, const QString& input2, OsmMapPtr& map,
+             const bool isChangesetOut);
+
+  void _runConflateOps(OsmMapPtr& map, const bool runPre);
+
+  void _writeStats(OsmMapPtr& map, const CalculateStatsOp& input1Cso,
+                   const CalculateStatsOp& input2Cso, const QString& outputFileName);
 };
 
 }
