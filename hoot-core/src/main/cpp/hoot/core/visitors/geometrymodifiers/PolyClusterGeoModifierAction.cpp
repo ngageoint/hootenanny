@@ -182,6 +182,8 @@ void PolyClusterGeoModifierAction::_createWayPolygons()
 
   foreach (WayPtr pWay, _ways)
   {
+    if (!pWay)
+      continue;
     std::shared_ptr<Polygon> pPoly = ElementToGeometryConverter.convertToPolygon(pWay);
     long wayId = pWay->getId();
     // set id as user data
