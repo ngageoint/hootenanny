@@ -81,6 +81,9 @@ void AddMeasurementTagsVisitor::visit(const ElementPtr& pElement)
 
 void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
 {
+  //  Ignore NULL elements
+  if (!pRelation) return;
+
   // for length/width combine all way member polygons
   std::shared_ptr<Geometry> pCombined = std::shared_ptr<Polygon>(GeometryFactory::getDefaultInstance()->createPolygon());
   ElementToGeometryConverter ElementToGeometryConverter(_map->shared_from_this());
@@ -135,6 +138,9 @@ void AddMeasurementTagsVisitor::processRelation(const RelationPtr pRelation)
 
 void AddMeasurementTagsVisitor::processWay(const WayPtr pWay)
 {
+  //  Ignore NULL elements
+  if (!pWay) return;
+
   Tags& tags = pWay->getTags();
 
   ElementToGeometryConverter ElementToGeometryConverter(_map->shared_from_this());
