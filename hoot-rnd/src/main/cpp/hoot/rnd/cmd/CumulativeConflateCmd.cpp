@@ -154,7 +154,10 @@ public:
     conflator.setRunEnsemble(ensemble);
     conflator.setMaxIterations(maxIterations);
     conflator.setKeepIntermediateOutputs(keepIntermediateOutputs);
-    conflator.setInputSortScoreType(inputSortScoreType);
+    if (!inputSortScoreType.isEmpty())
+    {
+      conflator.setInputSortScoreType(inputSortScoreType);
+    }
     conflator.conflate(input, args[1]);
 
     LOG_STATUS(
