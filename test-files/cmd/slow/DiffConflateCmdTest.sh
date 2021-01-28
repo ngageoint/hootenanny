@@ -66,7 +66,7 @@ else
   echo ""
   echo "Changeset Files Don't Match"
   echo ""
-  diff $OUTPUT_DIR/output.osc t$INPUT_DIR/output.osc
+  diff $OUTPUT_DIR/output.osc $INPUT_DIR/output.osc
 fi
 
 # Check tag output
@@ -133,7 +133,7 @@ else
   echo ""
   echo "Changeset Stats Files Don't Match"
   echo ""
-  diff $OUTPUT_DIR/output_changeset_stats.json t$INPUT_DIR/output_changeset_stats.json
+  diff $OUTPUT_DIR/output_changeset_stats.json $INPUT_DIR/output_changeset_stats.json
 fi
 
 # Check to make sure we don't bomb out on empty files
