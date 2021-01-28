@@ -261,7 +261,15 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
 
   _writeOutput(result, output, isChangesetOutput);
 
+  // Do the tags if we need to
+  if (_isDiffConflate && _diffConflator.conflatingTags())
+  {
+    QString outFileName = output;
+    outFileName.replace(".osm", "");
+  }
+
   double timingOutput = _taskTimer.getElapsedAndRestart();
+
   double totalElapsed = totalTime.getElapsed();
   _stats.append(SingleStat("(Dubious) Initial Elements Processed per Second",
                           initialElementCount / totalElapsed));
@@ -281,7 +289,77 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
 
   if (_displayStats)
   {
-    _writeStats(result, input1Cso, input2Cso, output);
+    _progress->set(
+      _getJobPercentComplete(_currentTask - 1),
+      "Calculating output data statistics for: ..." + output.right(_maxFilePrintLength) + "...");
+    CalculateStatsOp outputCso("output map", true);
+    outputCso.apply(map);
+    QList<SingleStat> outputStats = outputCso.getStats();
+    ConflateStatsHelper(input1Cso.getStats(), input2Cso.getStats(), outputCso.getStats())
+      .updateStats(
+        outputStats,
+        outputCso.indexOfSingleStat("Total Unmatched Features"));
+    _allStats.append(outputStats);
+    _stats.append(
+      SingleStat("Calculate Stats for Output Time (sec)", _taskTimer.getElapsedAndRestart()));
+    _currentTask++;
+
+    if (_isDiffConflate)
+    {
+      _progress->set(
+        _getJobPercentComplete(_currentTask - 1),
+        "Calculating differential output statistics for: ..." +
+        output.right(_maxFilePrintLength) + "...");
+      _diffConflator.calculateStats(map, _stats);
+      _currentTask++;
+    }
+
+    _allStats.append(_stats);
+    if (_outputStatsFile.isEmpty())
+    {
+      QString statsMsg = MapStatsWriter().statsToString(_allStats, "\t");
+      std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" <<
+        statsMsg << std::endl;
+    }
+    else
+    {
+      MapStatsWriter().writeStatsToJson(_allStats, _outputStatsFile);
+      std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " <<
+        _outputStatsFile << std::endl;
+    }
+
+    if (_displayChangesetStats)
+    {
+      if (_outputChangesetStatsFile.isEmpty())
+      {
+        // output to display
+        LOG_STATUS("Changeset Geometry Stats:\n" << _diffConflator.getGeometryChangesetStats());
+        if (_diffConflator.conflatingTags())
+        {
+          LOG_STATUS("\nChangeset Tag Stats:\n" << _diffConflator.getTagChangesetStats() << "\n");
+        }
+      }
+      else
+      {
+        // output to file
+        if (_diffConflateSeparateOutput)
+        {
+          // output separate files for geometry and tag change stats
+          FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getGeometryChangesetStats());
+          if (_diffConflator.conflatingTags())
+          {
+            QString tagsOutFile = _outputChangesetStatsFile.replace(".json", "");
+            tagsOutFile.append(".tags.json");
+            FileUtils::writeFully(tagsOutFile, _diffConflator.getTagChangesetStats());
+          }
+        }
+        else
+        {
+          // output a single stats file with both geometry and tags change stats
+          FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getUnifiedChangesetStats());
+        }
+      }
+    }
   }
 
   _progress->set(
@@ -464,84 +542,6 @@ void Conflator::_writeOutput(OsmMapPtr& map, QString& output, const bool isChang
     OsmMapWriterFactory::writeDebugMap(map, "after-conflate-output-write");
   }
   _currentTask++;
-}
-
-void Conflator::_writeStats(
-  OsmMapPtr& map, const CalculateStatsOp& input1Cso, const CalculateStatsOp& input2Cso,
-  const QString& outputFileName)
-{
-  _progress->set(
-    _getJobPercentComplete(_currentTask - 1),
-    "Calculating output data statistics for: ..." + outputFileName.right(_maxFilePrintLength) +
-    "...");
-  CalculateStatsOp outputCso("output map", true);
-  outputCso.apply(map);
-  QList<SingleStat> outputStats = outputCso.getStats();
-  ConflateStatsHelper(input1Cso.getStats(), input2Cso.getStats(), outputCso.getStats())
-    .updateStats(
-      outputStats,
-      outputCso.indexOfSingleStat("Total Unmatched Features"));
-  _allStats.append(outputStats);
-  _stats.append(
-    SingleStat("Calculate Stats for Output Time (sec)", _taskTimer.getElapsedAndRestart()));
-  _currentTask++;
-
-  if (_isDiffConflate)
-  {
-    _progress->set(
-      _getJobPercentComplete(_currentTask - 1),
-      "Calculating differential output statistics for: ..." +
-      outputFileName.right(_maxFilePrintLength) + "...");
-    _diffConflator.calculateStats(map, _stats);
-    _currentTask++;
-  }
-
-  _allStats.append(_stats);
-  if (_outputStatsFile.isEmpty())
-  {
-    QString statsMsg = MapStatsWriter().statsToString(_allStats, "\t");
-    std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat)\n" <<
-      statsMsg << std::endl;
-  }
-  else
-  {
-    MapStatsWriter().writeStatsToJson(_allStats, _outputStatsFile);
-    std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " <<
-      _outputStatsFile << std::endl;
-  }
-
-  if (_displayChangesetStats)
-  {
-    if (_outputChangesetStatsFile.isEmpty())
-    {
-      // output to display
-      LOG_STATUS("Changeset Geometry Stats:\n" << _diffConflator.getGeometryChangesetStats());
-      if (_diffConflator.conflatingTags())
-      {
-        LOG_STATUS("\nChangeset Tag Stats:\n" << _diffConflator.getTagChangesetStats() << "\n");
-      }
-    }
-    else
-    {
-      // output to file
-      if (_diffConflateSeparateOutput)
-      {
-        // output separate files for geometry and tag change stats
-        FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getGeometryChangesetStats());
-        if (_diffConflator.conflatingTags())
-        {
-          QString tagsOutFile = _outputChangesetStatsFile.replace(".json", "");
-          tagsOutFile.append(".tags.json");
-          FileUtils::writeFully(tagsOutFile, _diffConflator.getTagChangesetStats());
-        }
-      }
-      else
-      {
-        // output a single stats file with both geometry and tags change stats
-        FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getUnifiedChangesetStats());
-      }
-    }
-  }
 }
 
 float Conflator::_getTaskWeight() const
