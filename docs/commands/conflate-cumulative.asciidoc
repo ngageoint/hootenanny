@@ -3,7 +3,7 @@
 
 === Description
 
-The +conflate-cumulative+ command conflates three or more maps into a single map in a cumulative fashion.
+The +conflate-cumulative+ command conflates multiple maps into a single map in a cumulative fashion.
 
 This command must be run with the following configuration options:
 * writer.clean.review.tags=false
@@ -11,16 +11,13 @@ This command must be run with the following configuration options:
 
 This command does not work with the --stats option.
 
-* +input1+ - First input; may be any supported input format.
-* +input2+ - Second input; may be any supported input format.
-* +input3+ - Third input; may be any supported input format.
-* +inputN+ - Final input; may be any supported output format.
+* +inputDir+ - Input directory; may contain any supported input format.
 * +output+ - The output path.
 
 === Usage
 
 --------------------------------------
-conflate-cumulative (input1) (input2) (input3) [inputN] (output)
+conflate-cumulative (inputDir) (output)
 --------------------------------------
 
 ==== Example

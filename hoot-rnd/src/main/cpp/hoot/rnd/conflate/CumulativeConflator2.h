@@ -30,24 +30,79 @@
 
 // Qt
 #include <QStringList>
+#include <QDir>
 
 namespace hoot
 {
 
 /**
- * Allows for conflating more than two inputs in a cumulative fashion.
+ * Allows for conflating maps in a cumulative fashion.
+ *
+ * @todo Test the following:
+ *
+ * - forward and reverse (--reverse-inputs)
+ *   -
+ * - unifying vs network (from existing options)
+ *   -
+ * - match/review thresh adjustment (from existing options)
+ *   -
+ * - drop reviews and/or drop secondary features involved in reviews?
+ * - score outputs with logic from compare command (--score-output)
+ * - option for diff conflate and merge workflow (--differential)
+ * - pre-attribute conflate against osm option (--add-tags <source-file>)
+ * - modifications to SmallHighwayMerger to make pre-cleaning step better?
+ * - alg ensemble approach tied to score (--ensemble)
+ *
+ * - avg conflate?
+ *
+ * hoot conflate-cumulative --status -C ReferenceConflation.conf -C UnifyingAlgorithm.conf \
+ * -D uuid.helper.repeatable=true -D writer.include.debug.tags=true \
+ * -D log.class.filter="CumulativeConflator2;ConflateCumulativeCmd" \
+ * -D match.creators="hoot::HighwayMatchCreator" -D merger.creators="hoot::HighwayMergerCreator" \
+ * -D bounds="8.4762,12.0504,8.4793,12.0526" -D highway.match.threshold=0.161 \
+ * -D highway.review.threshold=0.25 \
+ * -D highway.miss.threshold=0.999 /home/vagrant/hoot/tmp/kano_033133330302/input/ \
+ * /home/vagrant/hoot/tmp/kano_033133330302/output/kano-final.osm --keep-intermediate-outputs \
+ * --reverse-inputs --max-iterations -1
  */
 class CumulativeConflator2
 {
 public:
 
+  CumulativeConflator2();
+
   /**
-   * Conflates three or more input files in a cumulative fashion.
+   * Conflates maps in a cumulative fashion.
    *
-   * @param inputs input file paths to conflate
-   * @param output output file path to write conflated data
+   * @param input input directory with files to conflate
+   * @param output output path to write conflated data
    */
-  static void conflate(const QStringList& inputs, const QString& output);
+  void conflate(const QDir& input, const QString& output);
+
+  void setReverseInputs(bool reverse) { _reverseInputs = reverse; }
+  void setDropSecondaryReviewElements(bool drop) { _dropSecondaryReviewElements = drop; }
+  void setScoreOutput(bool score) { _scoreOutput = score; }
+  void setDifferential(bool isDifferential) { _isDifferential = isDifferential; }
+  void setAddTagsInput(QString addTagsInput) { _addTagsInput = addTagsInput; }
+  void setRunEnsemble(bool runEnsemble) { _runEnsemble = runEnsemble; }
+  void setMaxIterations(int max) { _maxIterations = max; }
+  void setArgs(const QStringList& args) { _args = args; }
+  void setKeepIntermediateOutputs(bool keep) { _keepIntermediateOutputs = keep; }
+
+private:
+
+  bool _reverseInputs;
+  bool _dropSecondaryReviewElements;
+  bool _scoreOutput;
+  bool _isDifferential;
+  QString _addTagsInput;
+  bool _runEnsemble;
+  int _maxIterations;
+  bool _keepIntermediateOutputs;
+
+  QStringList _args;
+
+  void _resetInitConfig();
 };
 
 }

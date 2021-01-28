@@ -96,6 +96,7 @@ int BaseCommand::run(char* argv[], int argc)
   LOG_VART(args)
 
   args = args.mid(2);
+  _rawArgs = args;
 
   Settings::parseCommonArguments(args);
   LOG_VART(args);

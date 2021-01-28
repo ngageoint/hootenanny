@@ -35,6 +35,9 @@
 #include <hoot/core/cmd/Command.h>
 #include <hoot/core/elements/Status.h>
 
+// Qt
+#include <QStringList>
+
 namespace hoot
 {
 
@@ -67,6 +70,8 @@ public:
   QStringList toQStringList(char* argv[], int argc);
 
 protected:
+
+  QStringList _rawArgs;
 
   virtual QString _getHelpPath() const;
 };
