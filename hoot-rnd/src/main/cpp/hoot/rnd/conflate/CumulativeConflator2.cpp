@@ -45,7 +45,6 @@ namespace hoot
 
 CumulativeConflator2::CumulativeConflator2() :
 _reverseInputs(false),
-_dropSecondaryReviewElements(false),
 _scoreOutput(false),
 _isDifferential(false),
 _runEnsemble(false),
@@ -131,11 +130,6 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
       LOG_STATUS("Conflation took: " << StringUtils::millisecondsToDhms(conflateTimer.elapsed()));
     }
 //    else
-//    {
-
-//    }
-
-//    if (_dropSecondaryReviewElements)
 //    {
 
 //    }

@@ -65,6 +65,7 @@ public:
 
     CumulativeConflator2 conflator;
     conflator.setArgs(_rawArgs);
+    LOG_VARD(_rawArgs);
 
     BoundedCommand::runSimple(args);
 
@@ -73,12 +74,6 @@ public:
     {
       reverseInputs = true;
       args.removeAll("--reverse-inputs");
-    }
-    bool dropSecondaryReviewElements = false;
-    if (args.contains("--drop-secondary-review"))
-    {
-      dropSecondaryReviewElements = true;
-      args.removeAll("--drop-secondary-review");
     }
     bool scoreOutput = false;
     if (args.contains("--score-output"))
@@ -126,9 +121,9 @@ public:
       args.removeAll("--keep-intermediate-outputs");
     }
     QString inputSortScoreType;
-    if (args.contains("--sort-input-by-score"))
+    if (args.contains("--sort-inputs-by-score"))
     {
-      const int optionNameIndex = args.indexOf("--sort-input-by-score");
+      const int optionNameIndex = args.indexOf("--sort-inputs-by-score");
       inputSortScoreType = args.at(optionNameIndex + 1).trimmed();
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
@@ -147,7 +142,6 @@ public:
     }
 
     conflator.setReverseInputs(reverseInputs);
-    conflator.setDropSecondaryReviewElements(dropSecondaryReviewElements);
     conflator.setScoreOutput(scoreOutput);
     conflator.setDifferential(isDifferential);
     conflator.setAddTagsInput(addTagsInput);
