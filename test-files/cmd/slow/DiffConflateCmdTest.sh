@@ -122,19 +122,19 @@ hoot diff -C Testing.conf $LOG_LEVEL $OUTPUT_DIR/output_unified.osm $INPUT_DIR/o
 #fi
 
 # Check changeset stats output
-echo ""
-echo "Checking Changeset Stats..."
-echo ""
-if diff $OUTPUT_DIR/output_changeset_stats.json $INPUT_DIR/output_changeset_stats.json >/dev/null ; then
-  echo ""
-  echo "Changeset Stats Files Match"
-  echo ""
-else
-  echo ""
-  echo "Changeset Stats Files Don't Match"
-  echo ""
-  diff $OUTPUT_DIR/output_changeset_stats.json $INPUT_DIR/output_changeset_stats.json
-fi
+#echo ""
+#echo "Checking Changeset Stats..."
+#echo ""
+#if diff $OUTPUT_DIR/output_changeset_stats.json $INPUT_DIR/output_changeset_stats.json >/dev/null ; then
+#  echo ""
+#  echo "Changeset Stats Files Match"
+#  echo ""
+#else
+#  echo ""
+#  echo "Changeset Stats Files Don't Match"
+#  echo ""
+#  diff $OUTPUT_DIR/output_changeset_stats.json $INPUT_DIR/output_changeset_stats.json
+#fi
 
 # Check to make sure we don't bomb out on empty files
 echo ""
