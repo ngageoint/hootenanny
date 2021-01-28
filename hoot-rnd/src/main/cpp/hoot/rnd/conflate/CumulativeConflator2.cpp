@@ -67,6 +67,11 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
   }
   const QStringList inputs = input.entryList(QDir::Files, sortFlags);
 
+//  if (!_addTagsInput.isEmpty())
+//  {
+
+//  }
+
   QFileInfo outputInfo(output);
 
   QString tempOutput;
@@ -108,14 +113,36 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
     QFileInfo input2Info(input2);
     QFileInfo tempOutputInfo(tempOutput);
 
-    conflateTimer.restart();
-    LOG_STATUS("******************************************************");
-    LOG_STATUS(
-      "Conflating " << " (" << i << "/" << numIterations << ") " << input1Info.fileName() <<
-      " with " << input2Info.fileName() << " and writing output to " << tempOutputInfo.fileName() <<
-      "...");
-    conflator.conflate(input1, input2, tempOutput);
-    LOG_STATUS("Conflation took: " << StringUtils::millisecondsToDhms(conflateTimer.elapsed()));
+    if (!_isDifferential)
+    {
+      conflateTimer.restart();
+      LOG_STATUS("******************************************************");
+      LOG_STATUS(
+        "Conflating (" << i << "/" << numIterations << ") " << input1Info.fileName() <<
+        " with " << input2Info.fileName() << " and writing output to " <<
+        tempOutputInfo.fileName() << "...");
+      conflator.conflate(input1, input2, tempOutput);
+      LOG_STATUS("Conflation took: " << StringUtils::millisecondsToDhms(conflateTimer.elapsed()));
+    }
+//    else
+//    {
+
+//    }
+
+//    if (_dropSecondaryReviewElements)
+//    {
+
+//    }
+
+//    if (_runEnsemble)
+//    {
+
+//    }
+
+//    if (_scoreOutput)
+//    {
+
+//    }
 
     if (i != 1 && !_keepIntermediateOutputs)
     {
