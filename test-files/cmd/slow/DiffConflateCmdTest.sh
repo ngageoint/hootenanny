@@ -118,7 +118,7 @@ else
   echo ""
   echo "Changeset Unified Stats Files Don't Match"
   echo ""
-  diff $OUTPUT_DIR/output_unified_changeset_stats.json t$INPUT_DIR/output_unified_changeset_stats.json
+  diff $OUTPUT_DIR/output_unified_changeset_stats.json $INPUT_DIR/output_unified_changeset_stats.json
 fi
 
 # Check changeset stats output
