@@ -512,6 +512,8 @@ void Conflator::_writeStats(
 
   if (_displayChangesetStats)
   {
+    // TODO: remove
+    LOG_WARN(_outputChangesetStatsFile);
     if (_outputChangesetStatsFile.isEmpty())
     {
       // output to display
@@ -532,12 +534,17 @@ void Conflator::_writeStats(
         {
           QString tagsOutFile = _outputChangesetStatsFile.replace(".json", "");
           tagsOutFile.append(".tags.json");
+          // TODO: remove
+          LOG_VARW(tagsOutFile);
+          LOG_VARW(_diffConflator.getTagChangesetStats());
           FileUtils::writeFully(tagsOutFile, _diffConflator.getTagChangesetStats());
         }
       }
       else
       {
         // output a single stats file with both geometry and tags change stats
+        // TODO: remove
+        LOG_VARW(_diffConflator.getUnifiedChangesetStats());
         FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getUnifiedChangesetStats());
       }
     }
