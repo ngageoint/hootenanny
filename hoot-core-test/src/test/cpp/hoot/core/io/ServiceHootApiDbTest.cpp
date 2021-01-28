@@ -481,7 +481,7 @@ public:
     database.setUserId(currentUserId);
     QString currentUser = testName + "-current-user";
     const long currentUserPrivateFolderId =
-      database.insertFolder(currentUser, NULL, currentUserId, false);
+      database.insertFolder(currentUser, nullptr, currentUserId, false);
     long testMapId = database.insertMap("runAvailableMapNamesTest-1");
     database.insertFolderMapMapping(testMapId, currentUserPrivateFolderId);
     testMapId = database.insertMap("runAvailableMapNamesTest-2");
@@ -496,7 +496,7 @@ public:
     database.setUserId(differentUserId);
     QString differentUser1 = testName + "-different-user-1";
     const long differentUserPublicFolderId =
-      database.insertFolder(differentUser1, NULL, differentUserId, true);
+      database.insertFolder(differentUser1, nullptr, differentUserId, true);
     testMapId = database.insertMap("runAvailableMapNamesTest-3");
     database.insertFolderMapMapping(testMapId, differentUserPublicFolderId);
     testMapId = database.insertMap("runAvailableMapNamesTest-4");
@@ -506,7 +506,7 @@ public:
     // selectMapNamesAvailableToCurrentUser
     QString differentUser2 = testName + "-different-user-2";
     const long differentUserPrivateFolderId =
-      database.insertFolder(differentUser2, NULL, differentUserId, false);
+      database.insertFolder(differentUser2, nullptr, differentUserId, false);
     testMapId = database.insertMap("runAvailableMapNamesTest-5");
     database.insertFolderMapMapping(testMapId, differentUserPrivateFolderId);
     testMapId = database.insertMap("runAvailableMapNamesTest-6");

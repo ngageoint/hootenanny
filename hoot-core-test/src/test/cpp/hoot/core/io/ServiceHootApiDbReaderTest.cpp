@@ -138,7 +138,7 @@ public:
       db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
       db.insertFolderMapMapping(
         writer.getMapId(),
-        db.insertFolder(_testName, NULL, db.getUserId(userEmail(_testName), true), folderIsPublic));
+        db.insertFolder(_testName, nullptr, db.getUserId(userEmail(_testName), true), folderIsPublic));
       db.close();
     }
 
@@ -892,7 +892,7 @@ public:
     db.open(ServicesDbTestUtils::getDbModifyUrl(_testName).toString());
     db.insertFolderMapMapping(
       secondMapId,
-      db.insertFolder(_testName, NULL, db.getUserId(differentUserEmail, true), true));
+      db.insertFolder(_testName, nullptr, db.getUserId(differentUserEmail, true), true));
     db.close();
 
     // Configure the reader for no user
