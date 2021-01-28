@@ -219,6 +219,9 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; tar czf failed-test-output.tar.gz test-output'"
                 sh "vagrant scp ${params.Box}:~/hoot/failed-test-output.tar.gz ./"
                 archiveArtifacts artifacts: '**/failed-test-output.tar.gz'
+                // Copy over the failed sonar file
+                sh "vagrant scp ${params.Box}:~/hoot/sonar-cfamily-reproducer.zip ./ || touch sonar-cfamily-reproducer.zip"
+                archiveArtifacts artifacts: '**/sonar-cfamily-reproducer.zip'
             }
         }
         cleanup {

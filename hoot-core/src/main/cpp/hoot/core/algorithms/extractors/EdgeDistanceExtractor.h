@@ -60,9 +60,9 @@ public:
   double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual QString getClassName() const override { return className(); }
+  QString getClassName() const override { return className(); }
 
-  virtual QString getName() const override;
+  QString getName() const override;
 
   void setValueAggregator(const ValueAggregatorPtr& va) override { _aggregator = va; }
 
