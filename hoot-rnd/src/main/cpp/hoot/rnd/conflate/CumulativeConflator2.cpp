@@ -50,7 +50,8 @@ _scoreOutput(false),
 _isDifferential(false),
 _runEnsemble(false),
 _maxIterations(-1),
-_keepIntermediateOutputs(false)
+_keepIntermediateOutputs(false),
+_inputSortScoreType(ScoreType::None)
 {
 }
 
@@ -68,6 +69,11 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
   const QStringList inputs = input.entryList(QDir::Files, sortFlags);
 
 //  if (!_addTagsInput.isEmpty())
+//  {
+
+//  }
+
+//  if (_inputSortScoreType != ScoreType::None)
 //  {
 
 //  }
@@ -166,6 +172,23 @@ void CumulativeConflator2::_resetInitConfig()
   QStringList tempArgs = _args;
   Settings::parseCommonArguments(tempArgs);
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+}
+
+CumulativeConflator2::ScoreType CumulativeConflator2::scoreTypeFromString(QString& scoreTypeStr)
+{
+  scoreTypeStr = scoreTypeStr.toLower().trimmed();
+  if (scoreTypeStr == "raster")
+  {
+    return ScoreType::Raster;
+  }
+  else if (scoreTypeStr == "graph")
+  {
+    return ScoreType::Graph;
+  }
+  else
+  {
+    throw IllegalArgumentException("Invalid score type string: " + scoreTypeStr);
+  }
 }
 
 }

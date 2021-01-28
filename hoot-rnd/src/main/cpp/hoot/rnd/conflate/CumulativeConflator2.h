@@ -47,7 +47,10 @@ namespace hoot
  * - match/review thresh adjustment (from existing options)
  *   -
  * - drop reviews and/or drop secondary features involved in reviews?
- * - score outputs with logic from compare command (--score-output)
+ * - throw out unmatched overlapping secondary features?
+ * - sort inputs by score (--sort-input-by-score <type>)
+ * - score outputs with logic from compare command and throw out result if score doesn't get any
+ *   better (--score-output)
  * - option for diff conflate and merge workflow (--differential)
  * - pre-attribute conflate against osm option (--add-tags <source-file>)
  * - modifications to SmallHighwayMerger to make pre-cleaning step better?
@@ -69,6 +72,14 @@ class CumulativeConflator2
 {
 public:
 
+  typedef enum ScoreType
+  {
+    None = 0,
+    Raster,
+    Graph
+  }
+  ScoreType;
+
   CumulativeConflator2();
 
   /**
@@ -79,6 +90,14 @@ public:
    */
   void conflate(const QDir& input, const QString& output);
 
+  /**
+   * TODO
+   *
+   * @param scoreTypeStr
+   * @return
+   */
+  static ScoreType scoreTypeFromString(QString& scoreTypeStr);
+
   void setReverseInputs(bool reverse) { _reverseInputs = reverse; }
   void setDropSecondaryReviewElements(bool drop) { _dropSecondaryReviewElements = drop; }
   void setScoreOutput(bool score) { _scoreOutput = score; }
@@ -88,6 +107,8 @@ public:
   void setMaxIterations(int max) { _maxIterations = max; }
   void setArgs(const QStringList& args) { _args = args; }
   void setKeepIntermediateOutputs(bool keep) { _keepIntermediateOutputs = keep; }
+  void setInputSortScoreType(QString scoreTypeStr)
+  { _inputSortScoreType = scoreTypeFromString(scoreTypeStr); }
 
 private:
 
@@ -99,6 +120,7 @@ private:
   bool _runEnsemble;
   int _maxIterations;
   bool _keepIntermediateOutputs;
+  ScoreType _inputSortScoreType;
 
   QStringList _args;
 

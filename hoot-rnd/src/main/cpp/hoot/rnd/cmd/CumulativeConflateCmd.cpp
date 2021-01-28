@@ -125,6 +125,14 @@ public:
       keepIntermediateOutputs = true;
       args.removeAll("--keep-intermediate-outputs");
     }
+    QString inputSortScoreType;
+    if (args.contains("--sort-input-by-score"))
+    {
+      const int optionNameIndex = args.indexOf("--sort-input-by-score");
+      inputSortScoreType = args.at(optionNameIndex + 1).trimmed();
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
 
     if (args.size() != 2)
     {
@@ -146,6 +154,7 @@ public:
     conflator.setRunEnsemble(ensemble);
     conflator.setMaxIterations(maxIterations);
     conflator.setKeepIntermediateOutputs(keepIntermediateOutputs);
+    conflator.setInputSortScoreType(inputSortScoreType);
     conflator.conflate(input, args[1]);
 
     LOG_STATUS(
