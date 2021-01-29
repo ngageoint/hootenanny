@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -88,7 +88,7 @@ public class QFolders extends com.querydsl.sql.RelationalPathBase<Folders> {
         addMetadata(createdAt, ColumnMetadata.named("created_at").withIndex(6).ofType(Types.TIMESTAMP).withSize(35).withDigits(6).notNull());
         addMetadata(displayName, ColumnMetadata.named("display_name").withIndex(2).ofType(Types.VARCHAR).withSize(255).notNull());
         addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.BIGINT).withSize(19).notNull());
-        addMetadata(parentId, ColumnMetadata.named("parent_id").withIndex(3).ofType(Types.BIGINT).withSize(19).notNull());
+        addMetadata(parentId, ColumnMetadata.named("parent_id").withIndex(3).ofType(Types.BIGINT).withSize(19));
         addMetadata(publicCol, ColumnMetadata.named("public").withIndex(5).ofType(Types.BIT).withSize(1).notNull());
         addMetadata(userId, ColumnMetadata.named("user_id").withIndex(4).ofType(Types.BIGINT).withSize(19).notNull());
     }
