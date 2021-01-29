@@ -22,23 +22,31 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#include "AbstractConflator.h"
+#include "CumulativeConflator2.h"
 
 // Hoot
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/DiffConflator.h>
-
-// Qt
-#include <QElapsedTimer>
 
 namespace hoot
 {
 
-AbstractConflator::AbstractConflator()
+void CumulativeConflator2::conflate(const QStringList& /*inputs*/, const QString& /*output*/)
 {
+  //assert(inputs.size() >= 3);
+
+  // TODO: drop features in reviews?
+  // TODO: option for diff conflate and merge workflow
+  // TODO: pre-attribute conflate against osm option
+  // TODO: avg conflate?
+  // TODO: modifications to SmallHighwayMerger to make pre-cleaning step better?
+  // TODO: score outputs with logic from compare command
+  // TODO: ensemble approach
+
+
 }
 
 }

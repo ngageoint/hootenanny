@@ -80,6 +80,7 @@ public:
     MapCropper cropper;
     cropper.setBounds(_env);
     cropper.setConfiguration(Settings::getInstance());
+    //cropper.setRemoveSuperflousFeatures(false);
     cropper.apply(map);
 
     IoUtils::saveMap(map, out);
