@@ -434,17 +434,17 @@ precendence over the `bounds` setting for Hootenanny API database data sources o
 * Data Type: bool
 * Default Value: `true`
 
-If true, will not break apart features crossing the convert bounds. This is analagous to
-crop.keep.entire.features.crossing.bounds used with the crop command, but used with the convert
-command only and kept as a separate option with a different default value.
+If enabled, operations supporting the `bounds` option other than `crop` will not break apart
+features crossing the specified. This is analagous to crop.keep.entire.features.crossing.bounds used
+with the `crop` command.
 
 === bounds.keep.immediately.connected.ways.outside.bounds
 
 * Data Type: bool
 * Default Value: `false`
 
-If enabled, bounded queries will also return ways that are outside of `bounds` but
-immediately connected to ways crossing or within the bounds. Can be used in conjunction with
+If enabled, APIDB readers will also return ways that are outside of `bounds` but immediately
+connected to ways crossing or within the bounds. Can be used in conjunction with
 `bounds.tag.immediately.connected.out.of.bounds.ways`. Not supported by all readers.
 
 === bounds.keep.only.features.inside.bounds
@@ -452,9 +452,9 @@ immediately connected to ways crossing or within the bounds. Can be used in conj
 * Data Type: bool
 * Default Value: `false`
 
-If true, will throw out any features that do not fall completely within the convert bounds. This is
-analagous to crop.keep.entire.features.crossing.bounds used with the crop command, but used with
-the commands supporting the `bounds` option only and kept as a separate option.
+If enabled, operations supporting the `bounds` option other than `crop` will throw out any features
+that do not fall completely within the specified bounds. This is analagous to
+crop.keep.entire.features.crossing.bounds used with the crop command.
 
 === bounds.osm.api.database
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 package hoot.services.command;
 
@@ -48,7 +48,6 @@ import hoot.services.HootProperties;
 
 
 public abstract class ExternalCommand implements Command {
-
     private String caller;
     private String command;
     private Map<String, ?> substitutionMap;
@@ -59,7 +58,7 @@ public abstract class ExternalCommand implements Command {
     static {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            TypeReference<?> schema = new TypeReference<Map<String, Map<String, Object>>>(){};
+            TypeReference<Map<String, Map<String, String>>> schema = new TypeReference<Map<String, Map<String, String>>>(){};
             // get json of all config options...
             String file = FileUtils.readFileToString(new File(HOME_FOLDER, CONFIG_OPTIONS), Charset.defaultCharset());
             configOptions = mapper.readValue(file, schema);

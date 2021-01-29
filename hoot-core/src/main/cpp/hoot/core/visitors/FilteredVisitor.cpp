@@ -40,25 +40,29 @@ HOOT_FACTORY_REGISTER(ElementVisitor, FilteredVisitor)
 
 FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor) :
   _criterion(&criterion),
-  _visitor(&visitor)
+  _visitor(&visitor),
+  _map(NULL)
 {
 }
 
 FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitorPtr visitor) :
   _criterion(&criterion),
-  _visitor(visitor.get())
+  _visitor(visitor.get()),
+  _map(NULL)
 {
 }
 
 FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor) :
   _criterion(criterion.get()),
-  _visitor(visitor.get())
+  _visitor(visitor.get()),
+  _map(NULL)
 {
 }
 
 FilteredVisitor::FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor) :
   _criterion(criterion),
-  _visitor(visitor)
+  _visitor(visitor),
+  _map(NULL)
 {
 }
 

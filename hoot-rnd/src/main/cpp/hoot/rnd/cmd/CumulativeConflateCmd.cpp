@@ -26,10 +26,10 @@
  */
 
 // Hoot
-#include <hoot/core/cmd/BaseCommand.h>
+#include <hoot/core/cmd/BoundedCommand.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/conflate/CumulativeConflator.h>
+#include <hoot/rnd/conflate/CumulativeConflator2.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -40,18 +40,21 @@ using namespace std;
 namespace hoot
 {
 
-class ConflateCumulativeCmd : public BaseCommand
+class ConflateCumulativeCmd : public BoundedCommand
 {
 public:
 
   static QString className() { return "hoot::ConflateCumulativeCmd"; }
 
-  ConflateCumulativeCmd() = default;
+  ConflateCumulativeCmd() :
+  BoundedCommand()
+  {
+  }
 
   virtual QString getName() const override { return "conflate-cumulative"; }
 
   virtual QString getDescription() const override
-  { return "Conflates three or more maps into a single map while retaining feature provenance (experimental)"; }
+  { return "Conflates maps in a cumulative fashion (experimental)"; }
 
   virtual QString getType() const { return "rnd"; }
 
@@ -60,26 +63,96 @@ public:
     QElapsedTimer timer;
     timer.start();
 
-    // doesn't work with stats yet
-    if (args.contains("--stats"))
+    CumulativeConflator2 conflator;
+    conflator.setArgs(_rawArgs);
+    LOG_VARD(_rawArgs);
+
+    BoundedCommand::runSimple(args);
+
+    bool reverseInputs = false;
+    if (args.contains("--reverse-inputs"))
     {
-      throw HootException("Multi-conflation does not work with the --stats option.");
+      reverseInputs = true;
+      args.removeAll("--reverse-inputs");
+    }
+    bool scoreOutput = false;
+    if (args.contains("--score-output"))
+    {
+      scoreOutput = true;
+      args.removeAll("--score-output");
+    }
+    bool isDifferential = false;
+    if (args.contains("--differential"))
+    {
+      isDifferential = true;
+      args.removeAll("--differential");
+    }
+    QString addTagsInput;
+    if (args.contains("--add-tags"))
+    {
+      const int optionNameIndex = args.indexOf("--add-tags");
+      addTagsInput = args.at(optionNameIndex + 1).trimmed();
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    bool ensemble = false;
+    if (args.contains("--ensemble"))
+    {
+      ensemble = true;
+      args.removeAll("--ensemble");
+    }
+    int maxIterations = -1;
+    if (args.contains("--max-iterations"))
+    {
+      const int optionNameIndex = args.indexOf("--max-iterations");
+      bool ok = false;
+      maxIterations = args.at(optionNameIndex + 1).trimmed().toInt(&ok);
+      if (!ok)
+      {
+        throw IllegalArgumentException();
+      }
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
+    bool keepIntermediateOutputs = false;
+    if (args.contains("--keep-intermediate-outputs"))
+    {
+      keepIntermediateOutputs = true;
+      args.removeAll("--keep-intermediate-outputs");
+    }
+    QString inputSortScoreType;
+    if (args.contains("--sort-inputs-by-score"))
+    {
+      const int optionNameIndex = args.indexOf("--sort-inputs-by-score");
+      inputSortScoreType = args.at(optionNameIndex + 1).trimmed();
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
     }
 
-    if (args.size() < 4)
+    if (args.size() != 2)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(
-        QString("%1 takes four or more parameters with at least three input paths and exactly") +
-        QString("one output path. ").arg(getName()));
+      throw HootException(QString("%1 takes two input parameters.").arg(getName()));
     }
 
-    QStringList inputsTemp = args;
-    inputsTemp.removeLast();
-    const QStringList inputs = inputsTemp;
-    const QString output = args.last();
+    QDir input(args[0]);
+    if (!input.exists())
+    {
+      throw IllegalArgumentException("Input directory does not exist.");
+    }
 
-    CumulativeConflator::conflate(inputs, output);
+    conflator.setReverseInputs(reverseInputs);
+    conflator.setScoreOutput(scoreOutput);
+    conflator.setDifferential(isDifferential);
+    conflator.setAddTagsInput(addTagsInput);
+    conflator.setRunEnsemble(ensemble);
+    conflator.setMaxIterations(maxIterations);
+    conflator.setKeepIntermediateOutputs(keepIntermediateOutputs);
+    if (!inputSortScoreType.isEmpty())
+    {
+      conflator.setInputSortScoreType(inputSortScoreType);
+    }
+    conflator.conflate(input, args[1]);
 
     LOG_STATUS(
       "Conflation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
@@ -88,8 +161,7 @@ public:
   }
 };
 
-// not currently in use
-//HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
+HOOT_FACTORY_REGISTER(Command, ConflateCumulativeCmd)
 
 }
 

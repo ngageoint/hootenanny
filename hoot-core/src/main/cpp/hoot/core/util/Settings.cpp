@@ -585,6 +585,7 @@ void Settings::parseCommonArguments(QStringList& args)
       {
         throw HootException("--conf must be followed by a file name.");
       }
+      LOG_DEBUG("Loading " << args[1] << "...");
       conf().loadJson(args[1]);
       // move on to the next argument.
       args = args.mid(2);

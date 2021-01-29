@@ -55,7 +55,7 @@ class DeriveChangesetReplacementCommand extends GrailCommand {
     static {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            TypeReference<?> schema = new TypeReference<Map<String, String>>(){};
+            TypeReference<Map<String, String>> schema = new TypeReference<Map<String, String>>(){};
             // get json of advanced options
             String file = FileUtils.readFileToString(new File(HOME_FOLDER, CHANGESET_OPTION_KEYS), Charset.defaultCharset());
             advOptionKeys = mapper.readValue(file, schema);

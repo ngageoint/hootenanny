@@ -197,7 +197,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     }
     _numProcessed++;
 
-    if (_numProcessed % _taskStatusUpdateInterval == 0)
+    if (_numProcessed % _taskStatusUpdateInterval == 0 && _numProcessed != 0)
     {
       PROGRESS_INFO(
         "Exempted " << StringUtils::formatLargeNumber(_usedNodeIds.size()) <<
@@ -211,7 +211,6 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     " total elements.");
 
   LOG_VARD(_usedNodeIds.size());
-  //LOG_VART(_usedNodeIds);
 
   std::shared_ptr<OsmMap> reprojected;
   const NodeMap* nodesWgs84 = &nodes;
