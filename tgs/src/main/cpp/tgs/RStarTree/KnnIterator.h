@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef __TGC_KNN_ITERATOR_H__
@@ -53,7 +53,7 @@ public:
   class LeafDistance
   {
   public:
-    LeafDistance() {}
+    LeafDistance() : distance(0.0), fid(0) { }
 
     LeafDistance(double dist, int fid)
     {
@@ -103,8 +103,8 @@ public:
     : public std::binary_function<KnnIterator::NodeDistance*, KnnIterator::NodeDistance*, bool>
   {
   public:
-    bool operator()(/*const*/ KnnIterator::NodeDistance*& _Left,
-      /*const*/ KnnIterator::NodeDistance*& _Right) const
+    bool operator()(KnnIterator::NodeDistance*& _Left,
+                    KnnIterator::NodeDistance*& _Right) const
     {
       return (_Left->minPossibleDistance > _Right->minPossibleDistance);
     }
