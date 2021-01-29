@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchCandidateCountVisitor.h"
 
@@ -53,7 +53,7 @@ void MatchCandidateCountVisitor::_setupCreators(
     const QString matchCreatorDescription = matchCreator->getDescription();
     if (matchCreatorDescription.isEmpty())
     {
-      matchCreatorName = QString::fromStdString(matchCreator->getAllCreators().at(0).className);
+      matchCreatorName = matchCreator->getAllCreators().at(0).className;
     }
     else
     {

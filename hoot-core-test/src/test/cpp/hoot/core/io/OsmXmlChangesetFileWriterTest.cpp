@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2012, 2013, 2014, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -55,6 +55,7 @@ public:
   {
     std::shared_ptr<ChangesetProvider> changesetProvider(new TestOsmChangesetProvider(false));
     OsmXmlChangesetFileWriter uut;
+    uut.setConfiguration(conf());
     uut.write(_outputPath + "changeset.osc", changesetProvider);
     FileUtils::writeFully(_outputPath + "stats", uut.getStatsTable(ChangesetStatsFormat::Text));
     FileUtils::writeFully(

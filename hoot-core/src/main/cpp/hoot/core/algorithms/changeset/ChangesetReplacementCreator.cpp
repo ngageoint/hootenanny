@@ -128,7 +128,7 @@ void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterCl
       ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
         GeometryTypeCriterion::GeometryType::Line);
   }
-  _linearFilterClassNames.removeAll(QString::fromStdString(LinearCriterion::className()));
+  _linearFilterClassNames.removeAll(LinearCriterion::className());
 
   LOG_VARD(_geometryTypeFilters.size());
   LOG_VART(_linearFilterClassNames);
@@ -395,6 +395,8 @@ void ChangesetReplacementCreator::_setGlobalOpts()
   conf().set(ConfigOptions::getChangesetXmlWriterAddTimestampKey(), false);
   conf().set(ConfigOptions::getReaderAddSourceDatetimeKey(), false);
   conf().set(ConfigOptions::getWriterIncludeCircularErrorTagsKey(), false);
+  // Don't let the changeset writer use the bounds. We'll handle it internally as part of C&R.
+  conf().set(ConfigOptions::getChangesetIgnoreBoundsKey(), true);
 
   // For this being enabled to have any effect,
   // bounds.keep.immediately.connected.ways.outside.bounds must be enabled as well.
@@ -642,8 +644,7 @@ void ChangesetReplacementCreator::_snapUnconnectedWays(
   lineSnapper.setSnapWayStatuses(snapWayStatuses);
   lineSnapper.setMarkSnappedWays(markSnappedWays);
   // TODO: Do we need a way to derive the way node crit from the input feature filter crit?
-  lineSnapper.setWayNodeToSnapToCriterionClassName(
-    QString::fromStdString(WayNodeCriterion::className()));
+  lineSnapper.setWayNodeToSnapToCriterionClassName(WayNodeCriterion::className());
   lineSnapper.setWayToSnapCriterionClassName(typeCriterionClassName);
   lineSnapper.setWayToSnapToCriterionClassName(typeCriterionClassName);
   // This prevents features of different types snapping to each other that shouldn't do so.

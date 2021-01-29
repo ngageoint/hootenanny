@@ -255,8 +255,8 @@
     <node visible="true" id="-632" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9123923999999946" lon="-75.4338728999999972"/>
     <node visible="true" id="-631" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9125016999999929" lon="-75.4278046999999816"/>
     <node visible="true" id="-630" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9124282681688811" lon="-75.4326454487295166">
-        <tag k="ford" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="ford" v="yes"/>
     </node>
     <node visible="true" id="-629" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9122786999999946" lon="-75.4307281999999901"/>
     <node visible="true" id="-628" timestamp="2020-02-28T16:47:46Z" version="1" lat="38.9122413000000051" lon="-75.4309326999999996"/>
@@ -475,6 +475,10 @@
     <node visible="true" id="-360" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9069599000000039" lon="-75.4335887000000014"/>
     <node visible="true" id="-359" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9068838999999969" lon="-75.4336538000000019"/>
     <node visible="true" id="-358" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9071246000000031" lon="-75.4341179999999980"/>
+    <node visible="true" id="-341" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9119699999999824" lon="-75.4341570999999931"/>
+    <node visible="true" id="-340" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9113890999999938" lon="-75.4330806999999908"/>
+    <node visible="true" id="-338" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9098534000000029" lon="-75.4311004999999994"/>
+    <node visible="true" id="-337" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9083646999999928" lon="-75.4293511000000052"/>
     <node visible="true" id="-328" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9125159999999966" lon="-75.4304118999999957"/>
     <node visible="true" id="-326" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9124840000000063" lon="-75.4360776999999842"/>
     <node visible="true" id="-325" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9124572999999998" lon="-75.4359448999999955"/>
@@ -559,34 +563,37 @@
     <node visible="true" id="-215" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9096311999999926" lon="-75.4338963000000007"/>
     <node visible="true" id="-214" timestamp="2020-02-28T16:47:45Z" version="1" lat="38.9096246999999948" lon="-75.4339870000000019"/>
     <node visible="true" id="-187" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9112000000000009" lon="-75.4282999999999930">
-        <tag k="gnis:county_name" v="Sussex"/>
-        <tag k="source" v="USGS Geonames"/>
-        <tag k="amenity" v="townhall"/>
         <tag k="addr:state" v="DE"/>
+        <tag k="amenity" v="townhall"/>
         <tag k="ele" v="6"/>
-        <tag k="name" v="Milford City Hall"/>
-        <tag k="gnis:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gnis:county_name" v="Sussex"/>
         <tag k="gnis:feature_id" v="2378943"/>
         <tag k="gnis:import_uuid" v="57871b70-0100-4405-bb30-88b2e001a944"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="gnis:reviewed" v="no"/>
+        <tag k="name" v="Milford City Hall"/>
+        <tag k="source" v="USGS Geonames"/>
     </node>
     <node visible="true" id="-186" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9126400000000032" lon="-75.4277430000000066">
-        <tag k="gnis:county_name" v="Sussex"/>
-        <tag k="source" v="USGS Geonames"/>
-        <tag k="amenity" v="library"/>
         <tag k="addr:state" v="DE"/>
+        <tag k="amenity" v="library"/>
         <tag k="ele" v="4"/>
-        <tag k="name" v="Milford Public Library"/>
-        <tag k="gnis:reviewed" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gnis:county_name" v="Sussex"/>
         <tag k="gnis:feature_id" v="2378944"/>
         <tag k="gnis:import_uuid" v="57871b70-0100-4405-bb30-88b2e001a944"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="gnis:reviewed" v="no"/>
+        <tag k="name" v="Milford Public Library"/>
+        <tag k="source" v="USGS Geonames"/>
     </node>
+    <node visible="true" id="-179" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9089230000000015" lon="-75.4300180000000040"/>
     <node visible="true" id="-119" timestamp="2020-02-28T16:47:44Z" version="1" lat="38.9084471000000036" lon="-75.4361413999999968">
-        <tag k="source" v="Bing"/>
-        <tag k="highway" v="turning_circle"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="turning_circle"/>
+        <tag k="source" v="Bing"/>
     </node>
+    <node visible="true" id="-104" timestamp="2020-02-28T16:47:43Z" version="1" lat="38.9115800000000007" lon="-75.4333797999999973"/>
+    <node visible="true" id="-103" timestamp="2020-02-28T16:47:43Z" version="1" lat="38.9121786000000043" lon="-75.4346828000000045"/>
     <node visible="true" id="-96" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4286207516099978"/>
     <node visible="true" id="-95" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999972" lon="-75.4288367337699981"/>
     <node visible="true" id="-94" timestamp="1970-01-01T00:00:00Z" version="1" lat="38.9127999999999901" lon="-75.4305254314400031"/>
@@ -706,16 +713,16 @@
     <node visible="true" id="4881725224" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9127596999999952" lon="-75.4281921999999980"/>
     <node visible="true" id="4881725242" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081079999999915" lon="-75.4366789999999980"/>
     <node visible="true" id="4881725255" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083490000000012" lon="-75.4360969999999895">
-        <tag k="source" v="Bing"/>
-        <tag k="highway" v="turning_circle"/>
-        <tag k="source:datetime" v="2015-09-14T06:08:10.000Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="turning_circle"/>
+        <tag k="source" v="Bing"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:10.000Z"/>
     </node>
     <node visible="true" id="4881725317" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098129999999998" lon="-75.4305209999999988"/>
     <node visible="true" id="4881725477" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9121419000000017" lon="-75.4284938999999923">
-        <tag k="traffic_signals" v="signal"/>
-        <tag k="highway" v="traffic_signals"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="traffic_signals" v="signal"/>
     </node>
     <node visible="true" id="4881725480" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9098842000000005" lon="-75.4286637000000013"/>
     <node visible="true" id="4881725481" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9116020000000020" lon="-75.4283929999999998"/>
@@ -729,9 +736,9 @@
     <node visible="true" id="4881726688" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9106049999999968" lon="-75.4306049999999999"/>
     <node visible="true" id="4881726689" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9106049999999968" lon="-75.4299769999999938"/>
     <node visible="true" id="4881726965" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9079610000000002" lon="-75.4289650000000051">
+        <tag k="error:circular" v="15"/>
         <tag k="railway" v="level_crossing"/>
         <tag k="source:datetime" v="2014-10-01T04:16:48.000Z"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881726968" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9078729999999879" lon="-75.4289770000000033"/>
     <node visible="true" id="4881726970" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9058479999999918" lon="-75.4293229999999966"/>
@@ -740,9 +747,9 @@
     <node visible="true" id="4881727146" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124430000000032" lon="-75.4285310000000067"/>
     <node visible="true" id="4881727157" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124580000000009" lon="-75.4285280000000000"/>
     <node visible="true" id="4881727158" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9125143999999921" lon="-75.4285193999999990">
-        <tag k="traffic_signals" v="signal"/>
-        <tag k="highway" v="traffic_signals"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="traffic_signals"/>
+        <tag k="traffic_signals" v="signal"/>
     </node>
     <node visible="true" id="4881727159" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9124529999999993" lon="-75.4285299999999950"/>
     <node visible="true" id="4881727340" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104564000000011" lon="-75.4274158000000057"/>
@@ -754,9 +761,9 @@
     <node visible="true" id="4881727795" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9094924000000049" lon="-75.4275585000000035"/>
     <node visible="true" id="4881727823" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069700000000012" lon="-75.4318009999999930"/>
     <node visible="true" id="4881727825" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9062695000000076" lon="-75.4304467999999986">
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="turning_circle"/>
         <tag k="source:datetime" v="2015-04-27T15:16:35.000Z"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881727865" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9104335000000106" lon="-75.4280009000000007"/>
     <node visible="true" id="4881728037" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9122480000000053" lon="-75.4340609999999998"/>
@@ -774,9 +781,9 @@
     <node visible="true" id="4881729677" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9069589000000065" lon="-75.4283003999999977"/>
     <node visible="true" id="4881729678" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9083646999999928" lon="-75.4293511000000052"/>
     <node visible="true" id="4881729682" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9109600999999969" lon="-75.4325089000000020">
+        <tag k="error:circular" v="15"/>
         <tag k="railway" v="level_crossing"/>
         <tag k="source:datetime" v="2013-04-20T20:53:27.000Z"/>
-        <tag k="error:circular" v="15"/>
     </node>
     <node visible="true" id="4881729687" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126817999999943" lon="-75.4328961999999876"/>
     <node visible="true" id="4881729698" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9126203000000004" lon="-75.4328514000000041"/>
@@ -948,337 +955,316 @@
     <node visible="true" id="4881736719" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075454999999906" lon="-75.4286388999999957"/>
     <node visible="true" id="4881736722" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9089230000000015" lon="-75.4300180000000040"/>
     <node visible="true" id="4881736844" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9108310000000088" lon="-75.4357760000000042">
-        <tag k="source" v="county_import_v0.1"/>
         <tag k="attribution" v="USGS 2001 County Boundary"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source" v="county_import_v0.1"/>
     </node>
     <node visible="true" id="4881737312" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075559999999996" lon="-75.4284679999999952"/>
     <node visible="true" id="4881737314" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074880000000007" lon="-75.4283479999999855"/>
     <node visible="true" id="4881737315" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9074600000000004" lon="-75.4278910000000025"/>
     <node visible="true" id="4881737326" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9081259999999958" lon="-75.4289430000000038"/>
     <node visible="true" id="4881737431" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070" lat="38.9075100000000020" lon="-75.4359070000000003"/>
-    <way visible="true" id="-1833" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1821" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881735996"/>
         <nd ref="4881729621"/>
+        <tag k="alt_name" v="South Church Street"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:8a4175e86ff8cec42f32926ec5ac2e60774cb4e8;sha1sum:04c9fb92997b4d134bdfcaa72cadc5acbf97d0a3"/>
         <tag k="name" v="South Church Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="alt_name" v="South Church Street"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2013-04-20T15:01:21.000Z;2019-04-03T12:36:05Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Church"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-1830" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881733488"/>
-        <nd ref="4881733499"/>
-        <nd ref="4881730541"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="tiger:zip_left_1" v="19963"/>
-        <tag k="hoot:hash" v="sha1sum:073f0f7a898268186f103f575397da2966eb41af;sha1sum:179257c52273031debaa8ceaaefb203392ca3bf6"/>
-        <tag k="name" v="Lakeview Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="ref" v="DE 36"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
         <tag k="tiger:name_type" v="Ave"/>
-        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z;2015-09-14T06:08:20Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
-        <tag k="tiger:cfcc" v="A21"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Lakeview"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1810" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1801" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881730483"/>
         <nd ref="-1368"/>
         <nd ref="4881730482"/>
         <nd ref="4881730533"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:cc8d74873da1816cc79cc9b735fd02e31107b058;sha1sum:2e027bc21757fc1f7a37baa73c47750c921021b1;sha1sum:e19817fcd08cc161a43b0dd3397a274aeaca69e2;sha1sum:913f4ae4cc27e05cfa7adfb55c24aff5efa5e324;sha1sum:9df9b80a8ac9c0e3640f316791e5a6152f1067f0"/>
         <tag k="name" v="Kings Highway"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Hwy"/>
         <tag k="source:datetime" v="2013-04-20T14:48:37.000Z;2019-04-02T11:40:19Z;2019-04-02T11:40:15Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Kings"/>
+        <tag k="tiger:name_type" v="Hwy"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1765" timestamp="2020-02-28T16:47:47Z" version="1">
+    <way visible="true" id="-1759" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="4881732116"/>
         <nd ref="-445"/>
         <nd ref="-446"/>
         <nd ref="-1359"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="source:datetime" v="2019-03-29T03:41:30Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1743" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1737" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881732116"/>
         <nd ref="-1354"/>
         <nd ref="-1355"/>
         <nd ref="-1351"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:3ee2d66ed58bbca4946b0401b0858ac11103a9ae;sha1sum:901c69c1a9ef1be4fa97349dd1aa3a99ebfd3a51"/>
         <tag k="name" v="Sussex Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2013-04-20T14:55:32.000Z;2019-03-29T03:41:30Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Sussex"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1739" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1733" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881727825"/>
         <nd ref="4881727823"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:d45eca1881299f20d921f400492288f50482285c;sha1sum:fabf15a226bb48d044e01c42b69fd4524e758500"/>
         <tag k="name" v="Sussex Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2013-04-20T14:55:31.000Z;2013-04-20T14:55:31Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Sussex"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1736" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1730" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881725477"/>
         <nd ref="4881727145"/>
         <nd ref="4881727146"/>
         <nd ref="4881727159"/>
         <nd ref="4881727157"/>
         <nd ref="4881727158"/>
-        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:9dce7a350e3034419a2ce15a60bb806f4f2380bb"/>
         <tag k="name" v="North Walnut Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
-        <tag k="tiger:name_direction_prefix" v="N"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2014-12-20T06:02:00.000Z;2019-03-29T02:01:52Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Walnut"/>
+        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1733" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1727" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881727342"/>
         <nd ref="4881727865"/>
         <nd ref="4881727352"/>
         <nd ref="4881727340"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="source:datetime" v="2012-11-23T22:14:16.000Z;2019-04-02T13:01:38Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1719" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1713" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881727158"/>
         <nd ref="-1"/>
-        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:hash" v="sha1sum:a5b12e612c0c59f0e2690db26924ae20d2d66fb7;sha1sum:5bbd0834fe00d901f9bd687d95352b5852cfc499"/>
-        <tag k="name_1" v="County Road 213"/>
         <tag k="name" v="North Walnut Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_direction_prefix" v="N"/>
-        <tag k="tiger:name_type" v="St"/>
+        <tag k="name_1" v="County Road 213"/>
         <tag k="source:datetime" v="2013-04-22T15:49:25.000Z;2019-09-25T16:43:21Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Walnut"/>
+        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1716" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1710" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-2"/>
         <nd ref="4881729789"/>
+        <tag k="alt_name" v="North Church Street"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:f8e37fbb30877ab239c68678983a65539582c764;sha1sum:3e432f6e2df63c701b90f4e30f7e2e817ba0a5bb"/>
         <tag k="name" v="North Church Avenue"/>
-        <tag k="alt_name" v="North Church Street"/>
-        <tag k="tiger:name_direction_prefix" v="N"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2014-04-28T23:37:13.000Z;2019-04-03T12:36:06Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Kent, DE"/>
         <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1713" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1707" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="4881729880"/>
         <nd ref="4881729893"/>
         <nd ref="4881727158"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:2cad6b09b84f9f83db9e336d8d149e23044cd63b;sha1sum:acf7cc60ca6b6ee54904059a03defc8a806bf48c"/>
+        <tag k="hoot:hash" v="sha1sum:ec14d1c61480a3d1b1de57159245e6165fa26a68"/>
         <tag k="name" v="Southeast Front Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2015-04-27T15:16:27.000Z;2019-09-25T16:43:21Z"/>
         <tag k="surface" v="asphalt"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A21"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="E Front"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1710" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1704" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729772"/>
         <nd ref="-15"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:244fe1495641c154f02c8c7d1a92e2308b8d4904;sha1sum:581ea8eb90b703ff015593928a61a60d0ac247fe"/>
         <tag k="name" v="Caulk Road"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Rd"/>
         <tag k="source:datetime" v="2013-04-20T14:52:29.000Z;2019-04-02T11:40:18Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Caulk"/>
+        <tag k="tiger:name_type" v="Rd"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1707" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1701" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-16"/>
         <nd ref="4881724996"/>
         <nd ref="4881730539"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Regent Road"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Rd"/>
         <tag k="source:datetime" v="2013-04-20T14:53:43.000Z;2019-04-02T11:40:18Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Regent"/>
+        <tag k="tiger:name_type" v="Rd"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1701" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1695" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-18"/>
         <nd ref="4881727385"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
-        <tag k="service" v="alley"/>
         <tag k="hoot:hash" v="sha1sum:a11068924259047a025c1599151b2debead92fe5;sha1sum:158fc9a1f0c81939c35e360bac30970e06a473a4"/>
         <tag k="name" v="Corn Cob Alley"/>
+        <tag k="service" v="alley"/>
         <tag k="source:datetime" v="2007-12-19T13:32:19.000Z;2019-02-07T03:00:16Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Kent, DE"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1698" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1692" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881730541"/>
         <nd ref="4881730539"/>
         <nd ref="-19"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="tertiary"/>
         <tag k="hoot:hash" v="sha1sum:689a908a77798b58773af92379e315baa330ecde;sha1sum:6df228706bf130286d7b958ff1df0c4169a3ad60"/>
         <tag k="name" v="Kings Highway"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Hwy"/>
         <tag k="source:datetime" v="2015-09-14T06:08:17.000Z;2019-04-02T11:40:19Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Kings"/>
+        <tag k="tiger:name_type" v="Hwy"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1695" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1689" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-21"/>
         <nd ref="4881726363"/>
         <nd ref="4881726355"/>
         <nd ref="4881726353"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:65f10d6af78b8fd3a1fc3d7d851a34560740ac96;sha1sum:b42a05e904cc85e2bbc8c0335e09c3c3beab64c8"/>
         <tag k="name" v="Southeast 2nd Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_direction_prefix" v="SE"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T14:46:58.000Z;2019-04-02T13:01:37Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="2nd"/>
+        <tag k="tiger:name_direction_prefix" v="SE"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1685" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1679" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881732962"/>
         <nd ref="4881735886"/>
         <nd ref="4881735866"/>
         <nd ref="4881726094"/>
         <nd ref="4881735865"/>
         <nd ref="-26"/>
-        <tag k="tiger:name_base_1" v="Buzzard"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
-        <tag k="service" v="alley"/>
         <tag k="hoot:hash" v="sha1sum:282a82a01fdb2bf12876d79385294a1001880af7;sha1sum:9bfefc2abfb1e8aeb5926bf9737ca1a89ac15166"/>
-        <tag k="name_1" v="Buzzard Alley"/>
         <tag k="name" v="Ball Park Lane"/>
-        <tag k="tiger:name_type" v="Ln"/>
+        <tag k="name_1" v="Buzzard Alley"/>
+        <tag k="service" v="alley"/>
         <tag k="source:datetime" v="2015-04-27T15:16:22.000Z;2015-04-27T15:16:22Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_type_1" v="Aly"/>
         <tag k="tiger:name_base" v="Ball Park"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_base_1" v="Buzzard"/>
+        <tag k="tiger:name_type" v="Ln"/>
+        <tag k="tiger:name_type_1" v="Aly"/>
     </way>
-    <way visible="true" id="-1682" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1676" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-27"/>
         <nd ref="4881727795"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:7c7e17619676f808ce3ee81872d8e837de5907df;sha1sum:dcb90cbfc196e69632c58c2716418f760c36926f"/>
         <tag k="name" v="Southeast 4th Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_direction_prefix" v="SE"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T14:52:13.000Z;2013-04-20T14:52:13Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="4th"/>
+        <tag k="tiger:name_direction_prefix" v="SE"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1679" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1673" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>
         <nd ref="4881736844"/>
         <nd ref="4881736380"/>
-        <tag k="source" v="county_import_v0.1_20080508235458"/>
-        <tag k="hoot:hash" v="sha1sum:e3e9b9b0fa3f43e86856f14da2d2cf67a64bbb4c;sha1sum:5b45ee649251fc16946d3d83204a103b95bdbd64"/>
-        <tag k="boundary" v="administrative"/>
-        <tag k="source:datetime" v="2014-02-12T09:54:39.000Z;2014-02-12T09:54:39Z"/>
-        <tag k="attribution" v="USGS 2001 County Boundary"/>
         <tag k="admin_level" v="6"/>
+        <tag k="attribution" v="USGS 2001 County Boundary"/>
         <tag k="border_type" v="county"/>
+        <tag k="boundary" v="administrative"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:e3e9b9b0fa3f43e86856f14da2d2cf67a64bbb4c;sha1sum:5b45ee649251fc16946d3d83204a103b95bdbd64"/>
+        <tag k="source" v="county_import_v0.1_20080508235458"/>
+        <tag k="source:datetime" v="2014-02-12T09:54:39.000Z;2014-02-12T09:54:39Z"/>
     </way>
-    <way visible="true" id="-1677" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1671" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881733094"/>
         <nd ref="4881728056"/>
         <nd ref="4881728043"/>
@@ -1286,40 +1272,40 @@
         <nd ref="4881728042"/>
         <nd ref="4881727385"/>
         <nd ref="-28"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:a9c925b5e4fadb0600a474451c8257ebb5decf0f;sha1sum:3968760e74f2ad930db6616c09c82c4c92e8b1fd"/>
         <tag k="name" v="Maple Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2013-04-21T11:00:18.000Z;2019-03-29T03:59:46Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Kent, DE"/>
         <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
     </way>
-    <way visible="true" id="-1674" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1668" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729715"/>
         <nd ref="4881729708"/>
         <nd ref="4881734370"/>
         <nd ref="-13"/>
-        <tag k="old_railway_operator" v="PRR"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1435"/>
         <tag k="hoot:hash" v="sha1sum:23c03a3aac0c6b3e7107e3d79c94d3606eac501a;sha1sum:bc82a6c867f22bc21b7103e052f4668ed023c6b8"/>
         <tag k="name" v="Indian River Secondary"/>
-        <tag k="gauge" v="1435"/>
-        <tag k="railway" v="rail"/>
-        <tag k="electrified" v="no"/>
-        <tag k="source:datetime" v="2015-07-17T14:03:35.000Z;2017-07-15T20:33:40Z"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="old_railway_operator" v="PRR"/>
         <tag k="operator" v="NS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source:datetime" v="2015-07-17T14:03:35.000Z;2017-07-15T20:33:40Z"/>
         <tag k="tiger:cfcc" v="B11:B21"/>
         <tag k="tiger:county" v="Kent, DE:Sussex, DE"/>
-        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
         <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="usage" v="branch"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1672" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1666" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-29"/>
         <nd ref="4881735246"/>
         <nd ref="4881726044"/>
@@ -1327,83 +1313,83 @@
         <nd ref="4881726046"/>
         <nd ref="4881735243"/>
         <nd ref="4881735296"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:hash" v="sha1sum:f1f085f33cab572013b90aaa03ea5d507148e3ff;sha1sum:d981a8440bf7f3c50fc2bbd12a3d2fde9bda08ab;sha1sum:2adafe14d6f9b19272130b3b5e47139dcd63113d"/>
         <tag k="name" v="Lakeview Apts"/>
         <tag k="source:datetime" v="2015-04-27T15:16:24.000Z;2015-04-27T15:16:24Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1669" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1663" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14"/>
         <nd ref="4881729676"/>
         <nd ref="4881736707"/>
         <nd ref="4881729677"/>
         <nd ref="4881736719"/>
         <nd ref="4881726965"/>
-        <tag k="old_railway_operator" v="PRR"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1435"/>
         <tag k="hoot:hash" v="sha1sum:31cdffddedd64ed8675216d85355083121ec861a;sha1sum:fbf1c0577b635103a9278e88366403c6406d5457"/>
         <tag k="name" v="Indian River Secondary"/>
-        <tag k="gauge" v="1435"/>
-        <tag k="railway" v="rail"/>
-        <tag k="electrified" v="no"/>
-        <tag k="source:datetime" v="2015-11-24T20:07:42.000Z;2017-04-20T21:38:41Z"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="old_railway_operator" v="PRR"/>
         <tag k="operator" v="NS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source:datetime" v="2015-11-24T20:07:42.000Z;2017-04-20T21:38:41Z"/>
         <tag k="tiger:cfcc" v="B11:B21"/>
         <tag k="tiger:county" v="Kent, DE:Sussex, DE"/>
-        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
         <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="usage" v="branch"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1667" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1661" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-30"/>
         <nd ref="4881735239"/>
         <nd ref="4881735242"/>
         <nd ref="4881735251"/>
         <nd ref="-31"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="hoot:hash" v="sha1sum:6dc502a0727642447d073fb88c0cd0e38bfe7d12;sha1sum:d2fcb26871f10c2ad9de1bbe2dfc8f60769626b3"/>
         <tag k="source:datetime" v="2015-04-27T15:16:29.000Z;2015-04-27T15:16:29Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1664" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1658" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881727793"/>
         <nd ref="4881725317"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:a98e33b43a7d63169b8a54766a013b0822810604;sha1sum:43be9ac486a79850b51753b15ee54ccce92aa779"/>
         <tag k="name" v="South Maple Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2013-04-20T14:53:15.000Z;2013-04-20T14:53:15Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1661" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1655" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-33"/>
         <nd ref="4881734728"/>
         <nd ref="-1372"/>
         <nd ref="4881736041"/>
         <nd ref="4881733488"/>
         <nd ref="4881737431"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:246ca22e6152e643f66d131f229d0ed84776a5de;sha1sum:9ec6a544a9e062fd46c19da898c4340ebf84bcff;sha1sum:7b70e0c8e0ae57acd7b0d8f9e9cf79bad7ca0bc8;sha1sum:ec60e24ccaf17ddbd3da2d9b80c501af02588dad;sha1sum:02c36d03960f7945f0bdaa4da81a99a31733bd15;sha1sum:4226cf5e04cc4e14bff8978dd92e23e264685292;sha1sum:26e8f915a0ebc12af482f7fb537c1b8b94d267e5;sha1sum:9d57c61df70f45073ae19d8e9d8f05c36cc2ae1c"/>
         <tag k="name" v="West Clarke Avenue"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:name_direction_prefix" v="W"/>
         <tag k="source:datetime" v="2013-04-20T15:01:35.000Z;2019-03-29T03:41:34Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Clarke"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_direction_prefix" v="W"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
     </way>
-    <way visible="true" id="-1658" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1652" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881731157"/>
         <nd ref="4881730482"/>
         <nd ref="-1365"/>
@@ -1411,73 +1397,73 @@
         <nd ref="4881731155"/>
         <nd ref="4881731148"/>
         <nd ref="-35"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
-        <tag k="service" v="alley"/>
         <tag k="hoot:hash" v="sha1sum:c944e0b45de48226b0abe8f321fbe5b1f5ec6960;sha1sum:ef2294d014c3d797ed30f9815bc09593c6578d9d;sha1sum:22a5112916ffe4cc0b194be837d975847a4aff47;sha1sum:77d2f2b729b207f4cac924ea7888dbc7b70ec762;sha1sum:229f6eb51c6a5c26fd3131777461cda69511ebaa"/>
         <tag k="name" v="Plum Street"/>
-        <tag k="tiger:name_type" v="St"/>
+        <tag k="service" v="alley"/>
         <tag k="source:datetime" v="2013-04-20T14:57:17.000Z;2019-04-02T11:40:19Z;2019-04-02T11:40:15Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Plum"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
     </way>
-    <way visible="true" id="-1655" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1649" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729682"/>
         <nd ref="4881729663"/>
-        <tag k="old_railway_operator" v="PRR"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1435"/>
         <tag k="hoot:hash" v="sha1sum:3efddcd177e950ecd668e1570d84905c04b88c82;sha1sum:d2f8f3f860525f0da3db5904157de6a6a04a264a"/>
         <tag k="name" v="Indian River Secondary"/>
-        <tag k="gauge" v="1435"/>
-        <tag k="railway" v="rail"/>
-        <tag k="electrified" v="no"/>
-        <tag k="source:datetime" v="2015-11-24T20:07:42.000Z;2017-04-20T21:38:41Z"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="old_railway_operator" v="PRR"/>
         <tag k="operator" v="NS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source:datetime" v="2015-11-24T20:07:42.000Z;2017-04-20T21:38:41Z"/>
         <tag k="tiger:cfcc" v="B11:B21"/>
         <tag k="tiger:county" v="Kent, DE:Sussex, DE"/>
-        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
         <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="usage" v="branch"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1653" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1647" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-36"/>
         <nd ref="4881732999"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:3558af60b67f51fac0e53a8248363fd36ad1a0b1;sha1sum:7abc9cb2ec41f6cf0586fce57cb1148adc587241"/>
         <tag k="name" v="Southeast 3rd Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_direction_prefix" v="SE"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T14:58:04.000Z;2019-04-02T13:01:38Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="3rd"/>
+        <tag k="tiger:name_direction_prefix" v="SE"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1650" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1644" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>
         <nd ref="4881733488"/>
-        <tag k="tiger:name_base_1" v="Shawnee"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:hash" v="sha1sum:08abd55c6be8ca73f39508a9137e16f4c4318300;sha1sum:ac248a4511b0d7f56d8ab570dc098043cac8dcd8"/>
         <tag k="name" v="Shawnee Road"/>
-        <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
         <tag k="source:datetime" v="2014-10-01T07:34:03.000Z;2014-10-01T07:34:03Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A31"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_type_1" v="Rd"/>
         <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Shawnee"/>
+        <tag k="tiger:name_type_1" v="Rd"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1647" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1641" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881736380"/>
         <nd ref="4881736376"/>
         <nd ref="4881736393"/>
@@ -1489,36 +1475,35 @@
         <nd ref="4881736413"/>
         <nd ref="4881736402"/>
         <nd ref="-3"/>
-        <tag k="source" v="Yahoo"/>
-        <tag k="hoot:hash" v="sha1sum:c3456a5577b48cbea0771d9d9af70df3de48624a"/>
-        <tag k="name" v="Mispillion River"/>
-        <tag k="boundary" v="administrative"/>
-        <tag k="waterway" v="river"/>
-        <tag k="source:datetime" v="2014-10-01T04:16:46.000Z;2019-09-25T16:27:15Z"/>
         <tag k="admin_level" v="6"/>
         <tag k="border_type" v="county"/>
+        <tag k="boundary" v="administrative"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Mispillion River"/>
+        <tag k="source" v="Yahoo"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:46.000Z;2019-09-25T16:27:15Z"/>
+        <tag k="waterway" v="river"/>
     </way>
-    <way visible="true" id="-1645" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1639" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881726968"/>
         <nd ref="4881733435"/>
         <nd ref="4881731157"/>
         <nd ref="4881733436"/>
         <nd ref="4881732088"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:34d779ead155a9d927d05701ecefe0e84a19b520;sha1sum:12338a20cf3bc597c4c2718af3e0df42f82a5857;sha1sum:a10ac719505617e8070fe2981737642864dc81cf;sha1sum:5a03d73495b6e583d166dcaa453bb8111538801f"/>
         <tag k="name" v="Jefferson Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2013-04-20T14:58:25.000Z;2019-04-02T11:40:19Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Jefferson"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1642" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1636" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-12"/>
         <nd ref="4881729702"/>
         <nd ref="4881729687"/>
@@ -1526,172 +1511,150 @@
         <nd ref="4881729703"/>
         <nd ref="-630"/>
         <nd ref="4881732043"/>
-        <tag k="waterway" v="stream"/>
+        <tag k="error:circular" v="15"/>
         <tag k="source:datetime" v="2014-10-01T04:16:43.000Z;2019-09-25T16:27:15Z"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="waterway" v="stream"/>
     </way>
-    <way visible="true" id="-1640" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881735994"/>
-        <nd ref="4881729682"/>
-        <nd ref="4881735985"/>
-        <nd ref="4881735998"/>
-        <nd ref="4881735999"/>
-        <nd ref="4881735996"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
-        <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:3c4ab10665bf6b3d63d7fb3ddfa9aa102a6878a4;sha1sum:0284413166d678294f2806deb418ca1243afaf46;sha1sum:c9b948dc5c94bcf80a9692e60eecc6202094ec91;sha1sum:5c9905721fc8402977740a3e4d034abe3ffed2ec"/>
-        <tag k="name" v="Causey Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="source:datetime" v="2013-04-20T20:52:40.000Z;2019-03-29T03:41:35Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
-        <tag k="tiger:cfcc" v="A21"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Causey"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-1637" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1634" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881730541"/>
         <nd ref="4881735994"/>
-        <tag k="tiger:name_base_1" v="Lakeview"/>
-        <tag k="tiger:name_base_2" v="Shawnee"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:hash" v="sha1sum:13d286ce5173f0888fad6d564242b11d9a101532;sha1sum:b49c488a153bc74d7f34ba0b635dda14185e1602"/>
-        <tag k="name_1" v="Shawnee Rd"/>
         <tag k="name" v="Lakeview Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="name_1" v="Shawnee Rd"/>
         <tag k="ref" v="DE 36"/>
         <tag k="source:datetime" v="2015-09-14T06:08:30.000Z;2015-09-14T06:08:30Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
-        <tag k="tiger:name_type_1" v="Ave"/>
         <tag k="tiger:cfcc" v="A31"/>
         <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Lakeview"/>
+        <tag k="tiger:name_base_2" v="Shawnee"/>
+        <tag k="tiger:name_type_1" v="Ave"/>
         <tag k="tiger:name_type_2" v="Rd"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:name_base" v="State Highway 36"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1631" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1628" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729070"/>
         <nd ref="4881729742"/>
+        <tag k="alt_name" v="Southwest Front Street"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:2c50018f021ca04b3c4968a0c2e12d85a10055e7;sha1sum:e259dedad7b6aab91b1d2e509b350460bbb9ce82"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="name" v="Front Street"/>
         <tag k="layer" v="1"/>
-        <tag k="alt_name" v="Southwest Front Street"/>
-        <tag k="tiger:name_type" v="St"/>
+        <tag k="name" v="Front Street"/>
         <tag k="source:datetime" v="2013-04-21T11:00:17.000Z;2019-04-03T12:36:06Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Front"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1625" timestamp="1970-01-01T00:00:00Z" version="1">
+    <way visible="true" id="-1622" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729706"/>
         <nd ref="4881729707"/>
         <nd ref="4881729699"/>
         <nd ref="-11"/>
-        <tag k="hoot:hash" v="sha1sum:bb80591852d30af5bced6f14d3f3fd7158531463;sha1sum:f002baa5bae5e57f87c3c0683865db1b2c407189"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="source:datetime" v="2014-10-01T04:16:43.000Z;2019-09-25T16:27:15Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:bb80591852d30af5bced6f14d3f3fd7158531463;sha1sum:f002baa5bae5e57f87c3c0683865db1b2c407189"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:43.000Z;2019-09-25T16:27:15Z"/>
+        <tag k="waterway" v="stream"/>
     </way>
-    <way visible="true" id="-1623" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1620" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881737315"/>
         <nd ref="4881737314"/>
         <nd ref="4881737312"/>
         <nd ref="4881737326"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Jefferson Avenue"/>
         <tag k="source:datetime" v="2007-12-19T16:06:37.000Z;2019-03-29T02:01:51Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1620" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1617" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729718"/>
         <nd ref="4881729706"/>
-        <tag k="hoot:hash" v="sha1sum:96cd61dbef36934f96bca4972a363c36afdd530d;sha1sum:0ecdfda9cafcc89cf1a88a63f687144d69ab1b71"/>
-        <tag k="tunnel" v="culvert"/>
-        <tag k="layer" v="-1"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="source:datetime" v="2014-10-01T04:16:43.000Z;2014-10-01T04:16:43Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:96cd61dbef36934f96bca4972a363c36afdd530d;sha1sum:0ecdfda9cafcc89cf1a88a63f687144d69ab1b71"/>
+        <tag k="layer" v="-1"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:43.000Z;2014-10-01T04:16:43Z"/>
+        <tag k="tunnel" v="culvert"/>
+        <tag k="waterway" v="stream"/>
     </way>
-    <way visible="true" id="-1615" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1612" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729621"/>
         <nd ref="4881729086"/>
+        <tag k="alt_name" v="South Church Street"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:8b56a4304f992df4a96db2dadc9aaa2002858ca0;sha1sum:2bae28876e70149ff7a90902a04c0d3f787d3473"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="name" v="South Church Avenue"/>
         <tag k="layer" v="1"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="alt_name" v="South Church Street"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="name" v="South Church Avenue"/>
         <tag k="source:datetime" v="2013-04-21T11:00:17.000Z;2019-04-03T12:36:06Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
-    <way visible="true" id="-1613" timestamp="2020-02-28T16:47:46Z" version="1">
+    <way visible="true" id="-1610" timestamp="2020-02-28T16:47:46Z" version="1">
         <nd ref="4881725255"/>
         <nd ref="-119"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Grier Lane"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Ln"/>
         <tag k="source:datetime" v="2019-04-02T11:40:19Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Grier"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-1611" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881725242"/>
-        <nd ref="4881725255"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name" v="Grier Lane"/>
-        <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_type" v="Ln"/>
-        <tag k="source:datetime" v="2013-04-20T14:46:16.000Z;2019-04-02T11:40:19Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
-        <tag k="tiger:cfcc" v="A41"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:name_base" v="Grier"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-1608" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881725242"/>
+        <nd ref="4881725255"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Grier Lane"/>
+        <tag k="source:datetime" v="2013-04-20T14:46:16.000Z;2019-04-02T11:40:19Z"/>
+        <tag k="tiger:cfcc" v="A41"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Grier"/>
+        <tag k="tiger:name_type" v="Ln"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-1605" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881729086"/>
         <nd ref="4881729789"/>
+        <tag k="alt_name" v="North Church Street"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:4cf0b7625ba577b3331d4e15aa6a9cf435d31ea3;sha1sum:015790b35e0d0ef07e0281a2123dcb80d1d8fe34"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="name" v="North Church Avenue"/>
         <tag k="layer" v="1"/>
-        <tag k="alt_name" v="North Church Street"/>
-        <tag k="tiger:name_direction_prefix" v="N"/>
-        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="name" v="North Church Avenue"/>
         <tag k="source:datetime" v="2013-04-20T14:30:10.000Z;2019-04-03T12:36:06Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Kent, DE"/>
         <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:name_direction_prefix" v="N"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
     </way>
-    <way visible="true" id="-1602" timestamp="2020-02-28T16:48:04Z" version="1">
+    <way visible="true" id="-1599" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881725317"/>
         <nd ref="4881731173"/>
         <nd ref="4881731174"/>
@@ -1699,47 +1662,22 @@
         <nd ref="4881731172"/>
         <nd ref="4881731185"/>
         <nd ref="4881735985"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
+        <tag k="name" v="Shawnee Road"/>
+        <tag k="name_1" v="S Maple Ave"/>
+        <tag k="source:datetime" v="2014-10-01T07:34:03.000Z;2019-03-29T03:41:35Z"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
         <tag k="tiger:name_base_1" v="Shawnee"/>
         <tag k="tiger:name_base_2" v="Maple"/>
-        <tag k="highway" v="residential"/>
-        <tag k="name_1" v="S Maple Ave"/>
-        <tag k="name" v="Shawnee Road"/>
-        <tag k="tiger:zip_left" v="19963"/>
         <tag k="tiger:name_direction_prefix_2" v="S"/>
-        <tag k="source:datetime" v="2014-10-01T07:34:03.000Z;2019-03-29T03:41:35Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
-        <tag k="tiger:cfcc" v="A31"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_type_1" v="Rd"/>
         <tag k="tiger:name_type_2" v="Ave"/>
-        <tag k="tiger:name_base" v="State Highway 36"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
-    </way>
-    <way visible="true" id="-1596" timestamp="2020-02-28T16:48:04Z" version="1">
-        <nd ref="4881735996"/>
-        <nd ref="4881725477"/>
-        <tag k="tiger:name_type_1" v="Ave"/>
-        <tag k="tiger:name_type_2" v="Rd"/>
-        <tag k="tiger:zip_right" v="19963"/>
-        <tag k="error:circular" v="15"/>
-        <tag k="name" v="Causey Avenue"/>
-        <tag k="tiger:cfcc" v="A31"/>
-        <tag k="ref" v="DE 36"/>
-        <tag k="tiger:zip_right_1" v="19963"/>
-        <tag k="source:datetime" v="2014-12-20T08:06:40.000Z;2014-12-20T08:06:40Z"/>
-        <tag k="tiger:zip_right_2" v="19963"/>
         <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
-        <tag k="tiger:zip_left_1" v="19963"/>
-        <tag k="tiger:zip_left_2" v="19963"/>
-        <tag k="name_1" v="Shawnee Rd"/>
-        <tag k="tiger:name_base" v="State Highway 36"/>
-        <tag k="tiger:name_base_1" v="Causey"/>
-        <tag k="tiger:name_base_2" v="Shawnee"/>
-        <tag k="hoot:hash" v="sha1sum:b730c29a6aa8df1ce10a78f973ab41b3d22a0555;sha1sum:6fadb953ed98cacbcac0fa667e33d702d4cd5b3e"/>
-        <tag k="highway" v="secondary"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-1593" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881734728"/>
@@ -1749,73 +1687,73 @@
         <nd ref="4881733083"/>
         <nd ref="4881730533"/>
         <nd ref="4881733436"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:87217e16566253ce9f60f369dcec292ba6eb5b32;sha1sum:7d47c548949bc239989d037df1e013ff178bb76b;sha1sum:000d5a3a57416ed009d6f9332cb7ddc057e0d986;sha1sum:868bbd747bd3f8b0a87c16cd1c9494e7c1c4eac4;sha1sum:80c4fc6588f79f9b89d84571734d4f2e293afec9;sha1sum:1b1fd9642e4c662177cd2d5c20e13c80b5342dfb"/>
         <tag k="name" v="Polk Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2015-07-08T21:29:23.000Z;2019-03-29T03:41:34Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Polk"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-1590" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881733148"/>
         <nd ref="4881733165"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:2b3e1f20a2e5f18053a8879c5dee1e2b0634e6f4;sha1sum:106efea0896fac0f17a5e478e684bc7f0b4772dd"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="name" v="South Maple Avenue"/>
         <tag k="layer" v="1"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="name" v="South Maple Avenue"/>
         <tag k="source:datetime" v="2013-04-21T11:00:19.000Z;2013-04-21T11:00:19Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Maple"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-1565" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881730547"/>
         <nd ref="4881736053"/>
         <nd ref="4881733423"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Williams Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T15:01:22.000Z;2019-03-29T03:41:30Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Williams"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-1552" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881725317"/>
         <nd ref="4881736189"/>
         <nd ref="4881726688"/>
         <nd ref="4881735996"/>
+        <tag k="alt_name" v="South Church Street"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:d12b353d86d89ce74f8d2d99448b217ba887690b;sha1sum:6f63805f70171edd40f3a4d598ef7514553cafb3;sha1sum:e899c7fe454df5746e454b3ebebdc825f9a7f61c"/>
         <tag k="name" v="South Church Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="alt_name" v="South Church Street"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2013-04-20T15:01:21.000Z;2019-04-03T12:36:06Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Church"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-1549" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-22"/>
@@ -1830,19 +1768,19 @@
         <nd ref="4881727340"/>
         <nd ref="4881732999"/>
         <nd ref="-23"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:dff92d321a54a2f8a44fbeed6707847e40eefc23;sha1sum:6ccbab3ef8bc0733b43532e8cbc9414e4e7169c2;sha1sum:d4403c1c1878fe2078cf1d7f34da0299e1702fbf;sha1sum:cdb7e65e3471c251113003fce973250b7a0c079f;sha1sum:594c9296a13df57b9cd7f90c1f4f83ac61e03b82;sha1sum:9c2a09fa905d00cf9a0d22e2267b1bcadc534366;sha1sum:0c44130b6c1c834c6b23347c7e3bddc0b458257c;sha1sum:2d331f9d17fb0fc33c361cffa0e3d326d062e42d;sha1sum:69ea01ee676a245b6a3407232d7ce49e3cebb288;sha1sum:f753134373dfba07ac41332745e13400f5fc1350"/>
         <tag k="name" v="South Washington Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T14:49:32.000Z;2019-09-25T16:43:21Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Washington"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-256" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-17"/>
@@ -1857,36 +1795,53 @@
         <nd ref="4881726353"/>
         <nd ref="4881725481"/>
         <nd ref="4881725477"/>
-        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
         <tag k="hoot:hash" v="sha1sum:b1d735e1be51f554402af2deeacede0b5bb4e661;sha1sum:84faa7533a091d4896a50a35a8203258b4d6f9a3;sha1sum:1ec464648dd260a9139b427661766bfdb14f83bf;sha1sum:13b827e219c33e02455638f254c7779da65e259c;sha1sum:045bacd42f510be79684627bed27ec4a84f796b0;sha1sum:2f9e12314a24fd79304f8eaaabb6a0fbbb3b16ea;sha1sum:2b339923b4f5d2d6616c94f777ed83172067528e;sha1sum:278b024cceb5c7853149fe3b57198d52059dff8c;sha1sum:9e10102795c4d216cf0cb2647dc5692cbb4f49eb;sha1sum:152338312ea5aacddef057d8f7ccf81cf1a14cd3;sha1sum:f228c301d0c6e7326f428681b8451fabf1565323;sha1sum:b4eaab5b94c727e125c203166cf4c0b94565ab11"/>
-        <tag k="name_1" v="County Road 213"/>
         <tag k="name" v="South Walnut Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="name_1" v="County Road 213"/>
         <tag k="ref" v="CR 213"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2014-04-23T00:12:33.000Z;2019-07-27T01:20:36Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Walnut"/>
+        <tag k="tiger:name_base_1" v="County Road 213"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-236" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881735985"/>
+        <nd ref="4881735998"/>
+        <nd ref="4881735999"/>
+        <nd ref="4881735996"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:4c3873c2e44d248fbe24016aa2226bccf1817b93"/>
     </way>
     <way visible="true" id="-230" timestamp="2020-02-28T16:47:46Z" version="1">
         <nd ref="-1349"/>
         <nd ref="4881729070"/>
+        <tag k="alt_name" v="Southwest Front Street"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Front Street"/>
-        <tag k="alt_name" v="Southwest Front Street"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T14:54:50.000Z;2019-04-03T12:36:07Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Front"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
+    </way>
+    <way visible="true" id="-228" timestamp="1970-01-01T00:00:00Z" version="1">
+        <nd ref="4881726965"/>
+        <nd ref="-337"/>
+        <nd ref="-179"/>
+        <nd ref="-338"/>
+        <nd ref="4881729682"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:dcc4bb0e1f16687fe55571102c8a0c72e269a929"/>
     </way>
     <way visible="true" id="-211" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881732088"/>
@@ -1895,18 +1850,18 @@
         <nd ref="-1334"/>
         <nd ref="4881733423"/>
         <nd ref="4881735994"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:0eb29bcff3cdbff980cb14a32ef9a79522400f3d;sha1sum:259213f3d1f81e170faa5ce03aaa21fb457143e5"/>
         <tag k="name" v="Jefferson Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2013-04-20T14:58:25.000Z;2019-04-02T11:40:19Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Jefferson"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-194" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881730533"/>
@@ -1916,18 +1871,39 @@
         <nd ref="4881730547"/>
         <nd ref="4881730543"/>
         <nd ref="4881730541"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:06087520c757565a3b1cd2b92281ff181702a3d5;sha1sum:94481ef21923819c9c4c36b4286864cf90ba1543;sha1sum:44f8afd9ffdc4e96e40e2fc7d3218c686700ba52;sha1sum:6fd0940a22e7ab0cfd73bc3e312b05af461f5ab1;sha1sum:d85a8364401569fa151822f6e317de55f617f7f2;sha1sum:fc62dbd40511f7f7e66d8178d3f45229ae380f31"/>
         <tag k="name" v="Kings Highway"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Hwy"/>
         <tag k="source:datetime" v="2013-04-20T14:48:37.000Z;2019-04-02T11:40:15Z;2019-03-29T03:41:34Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Kings"/>
+        <tag k="tiger:name_type" v="Hwy"/>
         <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+    </way>
+    <way visible="true" id="-170" timestamp="2020-02-28T16:48:04Z" version="1">
+        <nd ref="4881729682"/>
+        <nd ref="4881735985"/>
+        <nd ref="4881735998"/>
+        <nd ref="4881735999"/>
+        <nd ref="4881735996"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:41c6f861721f44cd5cddda3f30baa3f3a51a4eaa"/>
+        <tag k="name" v="Causey Avenue"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2013-04-20T20:52:40.000Z;2019-03-29T03:41:35Z"/>
+        <tag k="tiger:cfcc" v="A21"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="Causey"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-165" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-858"/>
@@ -1936,8 +1912,8 @@
         <nd ref="-861"/>
         <nd ref="-858"/>
         <tag k="building" v="apartments"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-164" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-853"/>
@@ -1947,8 +1923,8 @@
         <nd ref="-857"/>
         <nd ref="-853"/>
         <tag k="building" v="apartments"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-163" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-849"/>
@@ -1957,8 +1933,8 @@
         <nd ref="-852"/>
         <nd ref="-849"/>
         <tag k="building" v="garage"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-162" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-845"/>
@@ -1967,8 +1943,8 @@
         <nd ref="-848"/>
         <nd ref="-845"/>
         <tag k="building" v="garage"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-161" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-839"/>
@@ -1978,9 +1954,9 @@
         <nd ref="-843"/>
         <nd ref="-844"/>
         <nd ref="-839"/>
+        <tag k="error:circular" v="15"/>
         <tag k="man_made" v="pumping_station"/>
         <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-160" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-835"/>
@@ -1988,10 +1964,10 @@
         <nd ref="-837"/>
         <nd ref="-838"/>
         <nd ref="-835"/>
-        <tag k="shop" v="bicycle"/>
         <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="shop" v="bicycle"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-159" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-813"/>
@@ -2017,12 +1993,12 @@
         <nd ref="-833"/>
         <nd ref="-834"/>
         <nd ref="-813"/>
+        <tag k="error:circular" v="15"/>
         <tag k="hoot:poipolygon:poismerged" v="1"/>
         <tag k="hoot:poipolygon:poismerged:1" v="0"/>
         <tag k="hoot:poipolygon:poismerged:2" v="1"/>
         <tag k="man_made" v="water_tower"/>
         <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-158" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-803"/>
@@ -2038,8 +2014,8 @@
         <nd ref="-803"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-157" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-799"/>
@@ -2047,10 +2023,10 @@
         <nd ref="-801"/>
         <nd ref="-802"/>
         <nd ref="-799"/>
-        <tag k="tourism" v="museum"/>
         <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
+        <tag k="tourism" v="museum"/>
     </way>
     <way visible="true" id="-156" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-791"/>
@@ -2063,8 +2039,8 @@
         <nd ref="-798"/>
         <nd ref="-791"/>
         <tag k="building" v="public"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-155" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-781"/>
@@ -2080,8 +2056,8 @@
         <nd ref="-781"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-154" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-775"/>
@@ -2092,8 +2068,8 @@
         <nd ref="-780"/>
         <nd ref="-775"/>
         <tag k="building" v="house"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-153" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-762"/>
@@ -2102,8 +2078,8 @@
         <nd ref="-774"/>
         <nd ref="-762"/>
         <tag k="building" v="house"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-152" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-764"/>
@@ -2117,8 +2093,8 @@
         <nd ref="-771"/>
         <nd ref="-764"/>
         <tag k="building" v="house"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-151" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-760"/>
@@ -2129,8 +2105,8 @@
         <nd ref="-765"/>
         <nd ref="-760"/>
         <tag k="building" v="house"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-150" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-746"/>
@@ -2149,8 +2125,8 @@
         <nd ref="-759"/>
         <nd ref="-746"/>
         <tag k="building" v="house"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-149" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-727"/>
@@ -2174,8 +2150,8 @@
         <nd ref="-745"/>
         <nd ref="-727"/>
         <tag k="building" v="house"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-148" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-723"/>
@@ -2184,8 +2160,8 @@
         <nd ref="-726"/>
         <nd ref="-723"/>
         <tag k="amenity" v="fuel"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-147" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-719"/>
@@ -2194,8 +2170,8 @@
         <nd ref="-722"/>
         <nd ref="-719"/>
         <tag k="amenity" v="fuel"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-146" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-715"/>
@@ -2204,8 +2180,8 @@
         <nd ref="-718"/>
         <nd ref="-715"/>
         <tag k="amenity" v="fuel"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-145" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-709"/>
@@ -2216,8 +2192,8 @@
         <nd ref="-714"/>
         <nd ref="-709"/>
         <tag k="amenity" v="fuel"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-144" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-701"/>
@@ -2230,8 +2206,8 @@
         <nd ref="-708"/>
         <nd ref="-701"/>
         <tag k="building" v="public"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-143" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-689"/>
@@ -2240,8 +2216,8 @@
         <nd ref="-692"/>
         <nd ref="-689"/>
         <tag k="building" v="retail"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-142" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-675"/>
@@ -2261,8 +2237,8 @@
         <nd ref="-684"/>
         <nd ref="-675"/>
         <tag k="building" v="retail"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-141" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-661"/>
@@ -2282,8 +2258,8 @@
         <nd ref="-661"/>
         <tag k="amenity" v="place_of_worship"/>
         <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-140" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-657"/>
@@ -2292,8 +2268,8 @@
         <nd ref="-660"/>
         <nd ref="-657"/>
         <tag k="building" v="garage"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-139" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-653"/>
@@ -2302,8 +2278,8 @@
         <nd ref="-656"/>
         <nd ref="-653"/>
         <tag k="building" v="retail"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-138" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-584"/>
@@ -2334,26 +2310,26 @@
         <nd ref="-611"/>
         <nd ref="-609"/>
         <nd ref="-610"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="footway"/>
         <tag k="name" v="Missipillion Riverwalk"/>
         <tag k="source:datetime" v="2019-09-25T17:02:05Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-136" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-579"/>
         <nd ref="-1339"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-04-02T11:40:15Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-135" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-577"/>
         <nd ref="-1333"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-04-02T11:40:15Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-134" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-1334"/>
@@ -2361,10 +2337,10 @@
         <nd ref="-577"/>
         <nd ref="-579"/>
         <nd ref="-1374"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-04-02T11:40:15Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-133" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-570"/>
@@ -2373,9 +2349,9 @@
         <nd ref="-573"/>
         <nd ref="-570"/>
         <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
         <tag k="parking" v="surface"/>
         <tag k="source:datetime" v="2019-04-02T11:40:15Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-131" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-509"/>
@@ -2388,16 +2364,16 @@
         <nd ref="-516"/>
         <nd ref="-509"/>
         <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
     </way>
     <way visible="true" id="-130" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-1380"/>
         <nd ref="-507"/>
         <nd ref="-508"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-129" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-502"/>
@@ -2405,14 +2381,14 @@
         <nd ref="-504"/>
         <nd ref="-505"/>
         <nd ref="-502"/>
-        <tag k="addr:street" v="Kings Highway"/>
-        <tag k="addr:state" v="DE"/>
-        <tag k="addr:postcode" v="19963"/>
-        <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
         <tag k="addr:city" v="Milford"/>
         <tag k="addr:housenumber" v="200"/>
+        <tag k="addr:postcode" v="19963"/>
+        <tag k="addr:state" v="DE"/>
+        <tag k="addr:street" v="Kings Highway"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
     </way>
     <way visible="true" id="-128" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-498"/>
@@ -2421,9 +2397,9 @@
         <nd ref="-501"/>
         <nd ref="-498"/>
         <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
         <tag k="parking" v="surface"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-127" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="4881733083"/>
@@ -2432,68 +2408,68 @@
         <nd ref="-495"/>
         <nd ref="-496"/>
         <nd ref="-497"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-126" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-491"/>
         <nd ref="-492"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-125" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-489"/>
         <nd ref="-490"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-124" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-487"/>
         <nd ref="-488"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-123" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-485"/>
         <nd ref="-486"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-122" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-483"/>
         <nd ref="-478"/>
         <nd ref="-484"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-121" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-449"/>
         <nd ref="-1354"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-120" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-1355"/>
         <nd ref="-480"/>
         <nd ref="-481"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-119" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-1351"/>
@@ -2502,10 +2478,10 @@
         <nd ref="-476"/>
         <nd ref="-477"/>
         <nd ref="-478"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-118" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-457"/>
@@ -2528,9 +2504,9 @@
         <nd ref="-474"/>
         <nd ref="-457"/>
         <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
         <tag k="parking" v="surface"/>
         <tag k="source:datetime" v="2019-03-29T03:41:31Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-117" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-1342"/>
@@ -2545,9 +2521,9 @@
         <nd ref="-455"/>
         <nd ref="-491"/>
         <nd ref="-1363"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="source:datetime" v="2019-03-29T03:41:30Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-116" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-1376"/>
@@ -2558,9 +2534,9 @@
         <nd ref="-449"/>
         <nd ref="-1360"/>
         <nd ref="-450"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="source:datetime" v="2019-03-29T03:41:30Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-112" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-432"/>
@@ -2575,18 +2551,18 @@
         <nd ref="-441"/>
         <nd ref="-432"/>
         <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
         <tag k="parking" v="surface"/>
         <tag k="source:datetime" v="2019-03-29T03:41:30Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-111" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-429"/>
         <nd ref="-430"/>
         <nd ref="-431"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="service" v="parking_aisle"/>
         <tag k="source:datetime" v="2019-03-29T03:41:30Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-110" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-1378"/>
@@ -2594,9 +2570,9 @@
         <nd ref="-427"/>
         <nd ref="-431"/>
         <nd ref="-1372"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="source:datetime" v="2019-03-29T03:41:30Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-109" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-1370"/>
@@ -2609,10 +2585,10 @@
         <nd ref="-415"/>
         <nd ref="-416"/>
         <nd ref="4881726363"/>
-        <tag k="oneway" v="yes"/>
-        <tag k="highway" v="service"/>
-        <tag k="source:datetime" v="2019-03-29T02:01:47Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="service"/>
+        <tag k="oneway" v="yes"/>
+        <tag k="source:datetime" v="2019-03-29T02:01:47Z"/>
     </way>
     <way visible="true" id="-108" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-399"/>
@@ -2621,8 +2597,8 @@
         <nd ref="-402"/>
         <nd ref="-399"/>
         <tag k="aeroway" v="helipad"/>
-        <tag k="source:datetime" v="2016-12-20T19:41:27Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2016-12-20T19:41:27Z"/>
     </way>
     <way visible="true" id="-105" timestamp="2020-02-28T16:47:47Z" version="1">
         <nd ref="-358"/>
@@ -2680,14 +2656,53 @@
         <nd ref="-394"/>
         <nd ref="-395"/>
         <nd ref="-358"/>
-        <tag k="addr:street" v="West Clarke Avenue"/>
-        <tag k="addr:state" v="DE"/>
-        <tag k="addr:postcode" v="19963"/>
-        <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2019-03-29T03:41:35Z"/>
         <tag k="addr:city" v="Milford"/>
         <tag k="addr:housenumber" v="21"/>
+        <tag k="addr:postcode" v="19963"/>
+        <tag k="addr:state" v="DE"/>
+        <tag k="addr:street" v="West Clarke Avenue"/>
+        <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-03-29T03:41:35Z"/>
+    </way>
+    <way visible="true" id="-102" timestamp="2020-02-28T16:47:46Z" version="1">
+        <nd ref="-340"/>
+        <nd ref="-104"/>
+        <nd ref="-341"/>
+        <nd ref="-103"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:038164f084c375945150f24fff13f5780c59e5b1"/>
+    </way>
+    <way visible="true" id="-101" timestamp="2020-02-28T16:47:46Z" version="1">
+        <nd ref="4881729663"/>
+        <nd ref="-340"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:951b7ffeaa6fe10c0ad202c64249f090fb565b2a"/>
+    </way>
+    <way visible="true" id="-100" timestamp="2020-02-28T16:47:46Z" version="1">
+        <nd ref="-103"/>
+        <nd ref="4881729715"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:0677073384459dafe63a59f8e7bf307a226ee127"/>
+    </way>
+    <way visible="true" id="-91" timestamp="2020-02-28T16:47:46Z" version="1">
+        <nd ref="4881735996"/>
+        <nd ref="4881725477"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:a1bb939f8adad8d7da9b49fa6bd4a35f19adc60e"/>
+    </way>
+    <way visible="true" id="-82" timestamp="2020-02-28T16:47:46Z" version="1">
+        <nd ref="4881735994"/>
+        <nd ref="4881729682"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:77f4db13aaf36e1be24001ef174049c08b40d67c"/>
+    </way>
+    <way visible="true" id="-81" timestamp="2020-02-28T16:47:46Z" version="1">
+        <nd ref="4881733488"/>
+        <nd ref="4881733499"/>
+        <nd ref="4881730541"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:cfa97c6eb1d3de7972ad942b4fc675b503f412b0;sha1sum:01bf0ce13e94a9e035e15dedc2580d63bec3caba"/>
     </way>
     <way visible="true" id="-70" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-96"/>
@@ -2697,8 +2712,8 @@
         <nd ref="-95"/>
         <nd ref="-96"/>
         <tag k="building" v="retail"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-69" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-94"/>
@@ -2714,18 +2729,18 @@
         <nd ref="-93"/>
         <nd ref="-94"/>
         <tag k="building" v="public"/>
-        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
     </way>
     <way visible="true" id="-67" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-91"/>
         <nd ref="-560"/>
         <nd ref="-561"/>
         <nd ref="-90"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="footway"/>
         <tag k="name" v="Missipillion Riverwalk"/>
         <tag k="source:datetime" v="2019-09-25T16:46:23Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-66" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-611"/>
@@ -2750,10 +2765,10 @@
         <nd ref="-629"/>
         <nd ref="-698"/>
         <nd ref="-89"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="footway"/>
         <tag k="name" v="Missipillion Riverwalk"/>
         <tag k="source:datetime" v="2019-09-30T15:51:28Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-57" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-79"/>
@@ -2763,10 +2778,10 @@
         <nd ref="-595"/>
         <nd ref="-78"/>
         <nd ref="-79"/>
-        <tag k="name" v="Milford Ballpark"/>
-        <tag k="leisure" v="park"/>
-        <tag k="source:datetime" v="2019-09-25T16:04:23Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Milford Ballpark"/>
+        <tag k="source:datetime" v="2019-09-25T16:04:23Z"/>
     </way>
     <way visible="true" id="-54" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-74"/>
@@ -2852,9 +2867,9 @@
         <nd ref="-234"/>
         <nd ref="-237"/>
         <nd ref="-73"/>
+        <tag k="error:circular" v="15"/>
         <tag k="hoot:hash" v="sha1sum:d6d9fdf0b6de769351c163b6474156dbe0fb621c"/>
         <tag k="source:datetime" v="2014-10-01T03:34:56Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-45" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-61"/>
@@ -2863,22 +2878,22 @@
         <nd ref="-60"/>
         <nd ref="-61"/>
         <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2019-03-29T02:10:39Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-03-29T02:10:39Z"/>
     </way>
     <way visible="true" id="-44" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-1349"/>
         <nd ref="-59"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="source:datetime" v="2019-03-29T02:10:39Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-43" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-58"/>
         <nd ref="-1348"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="service"/>
         <tag k="source:datetime" v="2019-03-29T02:10:39Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-42" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-543"/>
@@ -2901,8 +2916,8 @@
         <nd ref="-556"/>
         <nd ref="-543"/>
         <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2019-03-29T10:14:30Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2019-03-29T10:14:30Z"/>
     </way>
     <way visible="true" id="-41" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-558"/>
@@ -2911,9 +2926,9 @@
         <nd ref="-559"/>
         <nd ref="-558"/>
         <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
         <tag k="parking" v="surface"/>
         <tag k="source:datetime" v="2019-03-29T10:14:30Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-40" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-90"/>
@@ -2923,9 +2938,9 @@
         <nd ref="-49"/>
         <nd ref="-90"/>
         <tag k="amenity" v="parking"/>
+        <tag k="error:circular" v="15"/>
         <tag k="parking" v="surface"/>
         <tag k="source:datetime" v="2019-09-25T16:46:23Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-39" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
@@ -2934,10 +2949,10 @@
         <nd ref="-52"/>
         <nd ref="-49"/>
         <nd ref="-4"/>
-        <tag k="name" v="Library Portico and Amphitheater Park"/>
-        <tag k="leisure" v="park"/>
-        <tag k="source:datetime" v="2019-09-25T16:43:21Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="leisure" v="park"/>
+        <tag k="name" v="Library Portico and Amphitheater Park"/>
+        <tag k="source:datetime" v="2019-09-25T16:43:21Z"/>
     </way>
     <way visible="true" id="-38" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-45"/>
@@ -2980,29 +2995,30 @@
         <nd ref="-640"/>
         <nd ref="-44"/>
         <nd ref="-45"/>
+        <tag k="error:circular" v="15"/>
         <tag k="natural" v="water"/>
         <tag k="source:datetime" v="2019-09-25T17:02:05Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-31" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-37"/>
         <nd ref="4881733488"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:f46d7e093f6e4c1fb32c901eef8ad29309fed628"/>
     </way>
     <way visible="true" id="-28" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729742"/>
         <nd ref="-34"/>
-        <tag k="highway" v="residential"/>
         <tag k="bridge" v="yes"/>
-        <tag k="name" v="Front Street"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="highway" v="residential"/>
         <tag k="layer" v="1"/>
-        <tag k="tiger:name_type" v="St"/>
+        <tag k="name" v="Front Street"/>
         <tag k="source:datetime" v="2013-04-20T14:32:39.000Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Kent, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Front"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
     </way>
     <way visible="true" id="-26" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-32"/>
@@ -3010,16 +3026,16 @@
         <nd ref="4881734217"/>
         <nd ref="4881729880"/>
         <nd ref="4881726363"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:6195bcc0489a306b38d07a3dea51e4f2562e0528"/>
         <tag k="name" v="Pearl Alley"/>
-        <tag k="tiger:name_type" v="Aly"/>
         <tag k="source:datetime" v="2015-04-27T15:16:25.000Z"/>
         <tag k="surface" v="asphalt"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Pearl"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Aly"/>
     </way>
     <way visible="true" id="-20" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-24"/>
@@ -3033,22 +3049,23 @@
         <nd ref="4881729760"/>
         <nd ref="4881729790"/>
         <nd ref="-25"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:188f86e3ed1787699abd3131a290604e34647b47;sha1sum:3d1d567c27eb540896e1d4357b8a16e314024ebf"/>
         <tag k="name" v="Lakelawn Drive"/>
-        <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2013-04-20T14:49:10.000Z;2019-04-02T11:40:18Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Lakelawn"/>
+        <tag k="tiger:name_type" v="Dr"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-17" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-20"/>
         <nd ref="4881736844"/>
         <nd ref="4881736380"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:e7d8ae26612903af1ade452e501df71cb312a52d"/>
     </way>
     <way visible="true" id="-11" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-14"/>
@@ -3062,21 +3079,21 @@
         <nd ref="4881729666"/>
         <nd ref="4881729682"/>
         <nd ref="4881729663"/>
-        <tag k="old_railway_operator" v="PRR"/>
-        <tag k="hoot:hash" v="sha1sum:83d6c3c6eda30ae1d65076b0563c9407d58d054f"/>
-        <tag k="name" v="Indian River Secondary"/>
-        <tag k="railway" v="rail"/>
-        <tag k="gauge" v="1435"/>
         <tag k="electrified" v="no"/>
-        <tag k="source:datetime" v="2015-11-24T20:07:42.000Z"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="hoot:hash" v="sha1sum:7b56633ae09bafa42027dcb9178317c0dd88dd17;sha1sum:83d6c3c6eda30ae1d65076b0563c9407d58d054f;sha1sum:dce5f3228528b194edf664161f01ee50063a9c50"/>
+        <tag k="name" v="Indian River Secondary"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="old_railway_operator" v="PRR"/>
         <tag k="operator" v="NS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source:datetime" v="2015-11-24T20:07:42.000Z"/>
         <tag k="tiger:cfcc" v="B11:B21"/>
         <tag k="tiger:county" v="Kent, DE:Sussex, DE"/>
+        <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="usage" v="branch"/>
-        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
-        <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-10" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881729715"/>
@@ -3084,6 +3101,7 @@
         <nd ref="4881734370"/>
         <nd ref="-13"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:58032eee4a90f06b8bd05ba40c9dac95e0dd589c"/>
     </way>
     <way visible="true" id="-7" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-9"/>
@@ -3131,11 +3149,11 @@
         <nd ref="4881724722"/>
         <nd ref="-10"/>
         <nd ref="-9"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="natural" v="water"/>
+        <tag k="source:datetime" v="2014-10-01T03:34:58.000Z;2019-09-30T15:51:28Z"/>
         <tag k="water" v="river"/>
         <tag k="waterway" v="riverbank"/>
-        <tag k="source:datetime" v="2014-10-01T03:34:58.000Z;2019-09-30T15:51:28Z"/>
-        <tag k="natural" v="water"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-6" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-7"/>
@@ -3146,8 +3164,8 @@
         <nd ref="-8"/>
         <nd ref="-7"/>
         <tag k="building" v="yes"/>
-        <tag k="source:datetime" v="2014-10-01T03:34:57.000Z;2014-10-01T03:34:57Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="source:datetime" v="2014-10-01T03:34:57.000Z;2014-10-01T03:34:57Z"/>
     </way>
     <way visible="true" id="-5" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-5"/>
@@ -3233,30 +3251,30 @@
         <nd ref="4881724934"/>
         <nd ref="4881724937"/>
         <nd ref="-6"/>
+        <tag k="error:circular" v="15"/>
         <tag k="hoot:hash" v="sha1sum:793214e78390a133ff7753ac7f93149479f23a05"/>
         <tag k="source:datetime" v="2020-02-28T16:41:52Z"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="-4" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="-4"/>
         <nd ref="4881729880"/>
         <nd ref="4881729893"/>
         <nd ref="4881727158"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:1589e876c133c43b7274307bfd11d9e0a7fcc8f0;sha1sum:c765560cf8a0537da946c60342a819cd884577d3"/>
+        <tag k="hoot:hash" v="sha1sum:854ed5586493e1480db7ade46599c4f9c2b241e3"/>
         <tag k="name" v="Southeast Front Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2015-04-27T15:16:27.000Z;2019-09-25T16:43:21Z"/>
         <tag k="surface" v="asphalt"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A21"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="E Front"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="-3" timestamp="1970-01-01T00:00:00Z" version="1">
         <nd ref="4881736380"/>
@@ -3271,127 +3289,128 @@
         <nd ref="4881736402"/>
         <nd ref="-3"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:6123884ea55df0d6a597b8b662c62870383516c3"/>
     </way>
     <way visible="true" id="496849574" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881729663"/>
         <nd ref="4881729668"/>
-        <tag k="old_railway_operator" v="PRR"/>
-        <tag k="hoot:hash" v="sha1sum:e0936be41774ce6e920d83844b62c80045c20043"/>
         <tag k="bridge" v="yes"/>
-        <tag k="name" v="Indian River Secondary"/>
-        <tag k="railway" v="rail"/>
-        <tag k="gauge" v="1435"/>
         <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="hoot:hash" v="sha1sum:e0936be41774ce6e920d83844b62c80045c20043"/>
         <tag k="layer" v="1"/>
-        <tag k="source:datetime" v="2015-07-17T14:03:33.000Z"/>
+        <tag k="name" v="Indian River Secondary"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="old_railway_operator" v="PRR"/>
         <tag k="operator" v="NS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source:datetime" v="2015-07-17T14:03:33.000Z"/>
         <tag k="tiger:cfcc" v="B11:B21"/>
         <tag k="tiger:county" v="Kent, DE:Sussex, DE"/>
+        <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="usage" v="branch"/>
-        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
-        <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="496849575" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881732039"/>
         <nd ref="4881729716"/>
         <nd ref="4881729717"/>
         <nd ref="4881729718"/>
-        <tag k="hoot:hash" v="sha1sum:08af4e3fcea23185651072be951d6bc60d817055"/>
-        <tag k="waterway" v="stream"/>
-        <tag k="source:datetime" v="2014-10-01T04:16:43.000Z"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:08af4e3fcea23185651072be951d6bc60d817055"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:43.000Z"/>
+        <tag k="waterway" v="stream"/>
     </way>
     <way visible="true" id="496849576" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881734369"/>
         <nd ref="4881729715"/>
-        <tag k="old_railway_operator" v="PRR"/>
-        <tag k="hoot:hash" v="sha1sum:507a30bb4e788d99cdc53ab663fd12fb47fefaba"/>
         <tag k="bridge" v="yes"/>
-        <tag k="name" v="Indian River Secondary"/>
-        <tag k="railway" v="rail"/>
-        <tag k="gauge" v="1435"/>
         <tag k="electrified" v="no"/>
-        <tag k="layer" v="1"/>
-        <tag k="source:datetime" v="2015-07-17T14:03:34.000Z"/>
-        <tag k="operator" v="NS"/>
-        <tag k="usage" v="branch"/>
-        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
         <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1435"/>
+        <tag k="hoot:hash" v="sha1sum:507a30bb4e788d99cdc53ab663fd12fb47fefaba"/>
+        <tag k="layer" v="1"/>
+        <tag k="name" v="Indian River Secondary"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="old_railway_operator" v="PRR"/>
+        <tag k="operator" v="NS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source:datetime" v="2015-07-17T14:03:34.000Z"/>
+        <tag k="usage" v="branch"/>
     </way>
     <way visible="true" id="496849577" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881729668"/>
         <nd ref="4881734357"/>
         <nd ref="4881729665"/>
         <nd ref="4881734369"/>
-        <tag k="old_railway_operator" v="PRR"/>
+        <tag k="electrified" v="no"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="gauge" v="1435"/>
         <tag k="hoot:hash" v="sha1sum:dd7c69e57bdf4c1f6e68b4acc392969962539b9d"/>
         <tag k="name" v="Indian River Secondary"/>
-        <tag k="railway" v="rail"/>
-        <tag k="gauge" v="1435"/>
-        <tag k="electrified" v="no"/>
-        <tag k="source:datetime" v="2015-07-17T14:03:34.000Z"/>
+        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
+        <tag k="old_railway_operator" v="PRR"/>
         <tag k="operator" v="NS"/>
+        <tag k="railway" v="rail"/>
+        <tag k="source:datetime" v="2015-07-17T14:03:34.000Z"/>
         <tag k="tiger:cfcc" v="B11:B21"/>
         <tag k="tiger:county" v="Kent, DE:Sussex, DE"/>
+        <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
         <tag k="tiger:reviewed" v="no"/>
         <tag k="usage" v="branch"/>
-        <tag k="note:old_railway_operator" v="PB&amp;W (DM&amp;V)"/>
-        <tag k="tiger:name_base" v="Conrail Railroad:Maryland and Delaware Railroad"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="496849585" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881735994"/>
         <nd ref="4881729682"/>
         <nd ref="4881735985"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
-        <tag k="hoot:hash" v="sha1sum:af87b2236fc941a5102024d20f8b2b668960cc62;sha1sum:bee388fc304f7bb4b45054b4343ec024b42e8405"/>
+        <tag k="hoot:hash" v="sha1sum:3c4ab10665bf6b3d63d7fb3ddfa9aa102a6878a4;sha1sum:af87b2236fc941a5102024d20f8b2b668960cc62;sha1sum:bee388fc304f7bb4b45054b4343ec024b42e8405"/>
         <tag k="name" v="Causey Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2013-04-20T20:52:40.000Z;2019-03-29T03:41:35Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A21"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Causey"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="496849617" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881735985"/>
         <nd ref="4881733148"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:1891f3785ef4e33285812c28f2e8f3c27e52d283"/>
         <tag k="name" v="South Maple Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="tiger:name_direction_prefix" v="S"/>
         <tag k="source:datetime" v="2013-04-20T14:53:15.000Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Maple"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_direction_prefix" v="S"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="496849653" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881727158"/>
         <nd ref="4881727099"/>
         <nd ref="-1348"/>
         <nd ref="-1349"/>
+        <tag k="alt_name" v="Southwest Front Street"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Front Street"/>
-        <tag k="alt_name" v="Southwest Front Street"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T14:54:50.000Z;2019-04-03T12:36:07Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Front"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
     </way>
     <way visible="true" id="496849655" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881725477"/>
@@ -3401,57 +3420,58 @@
         <nd ref="4881727157"/>
         <nd ref="4881727158"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:2a573b7cfccba85bbb9ed4f082549bb93b740623"/>
     </way>
     <way visible="true" id="496849685" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="-1351"/>
         <nd ref="4881727394"/>
         <nd ref="4881733499"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:3ee2d66ed58bbca4946b0401b0858ac11103a9ae;sha1sum:d4e7df2801aacba81a98268eec7b238735aac252;sha1sum:1f8fd54005e257492ebb2b6d1620bb4f14bac57d;sha1sum:9e640bf7ff7b171432d979ebccbaa09398c8c920"/>
         <tag k="name" v="Sussex Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="Ave"/>
         <tag k="source:datetime" v="2013-04-20T14:55:32.000Z;2019-03-29T03:41:30Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Sussex"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="496849690" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881726688"/>
         <nd ref="4881726689"/>
         <nd ref="4881726686"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Pri Drive"/>
-        <tag k="tiger:name_type" v="Dr"/>
         <tag k="source:datetime" v="2013-04-20T14:54:24.000Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Pri"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Dr"/>
+        <tag k="tiger:reviewed" v="no"/>
     </way>
     <way visible="true" id="496849786" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881733488"/>
         <nd ref="4881733499"/>
         <nd ref="4881730541"/>
-        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="secondary"/>
-        <tag k="tiger:zip_left_1" v="19963"/>
-        <tag k="hoot:hash" v="sha1sum:ed0fec3d590d1c035e94d768058920e1787f93cf;sha1sum:a8f97ab2566e247842e9dfa2b73c4e18d1bb51ef"/>
+        <tag k="hoot:hash" v="sha1sum:073f0f7a898268186f103f575397da2966eb41af;sha1sum:ed0fec3d590d1c035e94d768058920e1787f93cf"/>
         <tag k="name" v="Lakeview Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
         <tag k="ref" v="DE 36"/>
-        <tag k="tiger:name_type" v="Ave"/>
-        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z;2015-09-14T06:08:20Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="source:datetime" v="2015-09-14T06:08:20.000Z"/>
         <tag k="tiger:cfcc" v="A21"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Lakeview"/>
+        <tag k="tiger:name_base_1" v="State Road 36"/>
+        <tag k="tiger:name_type" v="Ave"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="496849840" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881732116"/>
@@ -3464,49 +3484,49 @@
         <nd ref="-1374"/>
         <nd ref="4881732074"/>
         <nd ref="4881732088"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Foster Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T14:46:30.000Z;2019-03-29T03:41:30Z;2019-04-02T11:40:20Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Foster"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="St"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="496850009" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881733165"/>
         <nd ref="4881733094"/>
+        <tag k="bridge" v="yes"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:2ad121a8ad3023b26f7a1489ab92f093d5214553"/>
-        <tag k="bridge" v="yes"/>
-        <tag k="name" v="Maple Avenue"/>
-        <tag k="tiger:zip_left" v="19963"/>
         <tag k="layer" v="1"/>
-        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="name" v="Maple Avenue"/>
         <tag k="source:datetime" v="2013-04-20T14:33:51.000Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Kent, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Maple"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Ave"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
     </way>
     <way visible="true" id="496850206" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881732960"/>
         <nd ref="4881727342"/>
         <nd ref="4881725480"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:60a28daf9bfa97e8e20e937052ec175505a9a02d;sha1sum:173ca118cd84467dfe8b43266f1da8caff772cb2;sha1sum:daefe87bf055678485599b3913987a73b380f48b"/>
         <tag k="name" v="Barker Street"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T15:00:54.000Z;2013-04-20T15:00:54Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Barker"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
     </way>
     <way visible="true" id="496850207" timestamp="2020-02-28T16:48:04Z" version="1">
         <nd ref="4881736041"/>
@@ -3516,193 +3536,218 @@
         <nd ref="4881736054"/>
         <nd ref="4881736055"/>
         <nd ref="4881730547"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="hoot:hash" v="sha1sum:853dd0bdb354dc86d1af8190ff09cd357307dfd6;sha1sum:4880582ead5db9a59a64aebf12332498d8a13a0f;sha1sum:3cb6e0bca8e7fa216f9d9e2927915b716f7e1753;sha1sum:ba906079dc25c3f988baf4b16ca988be095b1588"/>
         <tag k="name" v="Williams Street"/>
-        <tag k="tiger:zip_left" v="19963"/>
-        <tag k="tiger:name_type" v="St"/>
         <tag k="source:datetime" v="2013-04-20T15:01:22.000Z;2019-03-29T03:41:33Z;2019-03-29T03:41:30Z"/>
-        <tag k="tiger:zip_right" v="19963"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
         <tag k="tiger:name_base" v="Williams"/>
+        <tag k="tiger:name_type" v="St"/>
         <tag k="tiger:reviewed" v="no"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
     </way>
     <way visible="true" id="496850237" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881731155"/>
         <nd ref="4881734703"/>
         <nd ref="4881733083"/>
+        <tag k="error:circular" v="15"/>
         <tag k="highway" v="residential"/>
         <tag k="name" v="Cherry Alley"/>
-        <tag k="tiger:name_type" v="Aly"/>
         <tag k="source:datetime" v="2015-07-08T21:29:23.000Z"/>
         <tag k="tiger:cfcc" v="A41"/>
         <tag k="tiger:county" v="Sussex, DE"/>
-        <tag k="tiger:reviewed" v="no"/>
         <tag k="tiger:name_base" v="Cherry"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="tiger:name_type" v="Aly"/>
+        <tag k="tiger:reviewed" v="no"/>
     </way>
     <way visible="true" id="496850273" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
-        <nd ref="4881735985"/>
-        <nd ref="4881735998"/>
-        <nd ref="4881735999"/>
         <nd ref="4881735996"/>
         <nd ref="4881725477"/>
         <tag k="error:circular" v="15"/>
+        <tag k="highway" v="secondary"/>
+        <tag k="hoot:hash" v="sha1sum:869ffa7153d14a32906b9aa30ceb95906c2bafa2"/>
+        <tag k="name" v="Causey Avenue"/>
+        <tag k="name_1" v="Shawnee Rd"/>
+        <tag k="ref" v="DE 36"/>
+        <tag k="source:datetime" v="2014-12-20T08:06:40.000Z"/>
+        <tag k="tiger:cfcc" v="A31"/>
+        <tag k="tiger:county" v="Sussex, DE"/>
+        <tag k="tiger:name_base" v="State Highway 36"/>
+        <tag k="tiger:name_base_1" v="Causey"/>
+        <tag k="tiger:name_base_2" v="Shawnee"/>
+        <tag k="tiger:name_type_1" v="Ave"/>
+        <tag k="tiger:name_type_2" v="Rd"/>
+        <tag k="tiger:reviewed" v="no"/>
+        <tag k="tiger:zip_left" v="19963"/>
+        <tag k="tiger:zip_left_1" v="19963"/>
+        <tag k="tiger:zip_left_2" v="19963"/>
+        <tag k="tiger:zip_right" v="19963"/>
+        <tag k="tiger:zip_right_1" v="19963"/>
+        <tag k="tiger:zip_right_2" v="19963"/>
     </way>
     <way visible="true" id="496850334" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <nd ref="4881730541"/>
         <nd ref="4881735994"/>
         <tag k="error:circular" v="15"/>
+        <tag k="hoot:hash" v="sha1sum:33510081609fdc598a3e0b659ee2e88ef2f6a3ef"/>
     </way>
     <relation visible="true" id="-61" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="496849840" role="reviewee"/>
-        <tag k="hoot:review:type" v="road_crossing_polygon"/>
-        <tag k="hoot:review:sort_order" v="0"/>
-        <tag k="hoot:review:note" v="Road crossing polygon: poly criteria filter: hoot::BuildingCriterion; poly tag filter: ; allowed road tag filter:"/>
         <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Road crossing polygon: poly criteria filter: hoot::BuildingCriterion; poly tag filter: ; allowed road tag filter:"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="0"/>
+        <tag k="hoot:review:type" v="road_crossing_polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-60" timestamp="1970-01-01T00:00:00Z" version="1">
-        <member type="way" ref="-1765" role="reviewee"/>
-        <tag k="hoot:review:type" v="road_crossing_polygon"/>
-        <tag k="hoot:review:sort_order" v="1"/>
-        <tag k="hoot:review:note" v="Road crossing polygon: poly criteria filter: hoot::BuildingCriterion; poly tag filter: ; allowed road tag filter:"/>
+        <member type="way" ref="-1759" role="reviewee"/>
         <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Road crossing polygon: poly criteria filter: hoot::BuildingCriterion; poly tag filter: ; allowed road tag filter:"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="1"/>
+        <tag k="hoot:review:type" v="road_crossing_polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-59" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="way" ref="-26" role="reviewee"/>
-        <tag k="hoot:review:type" v="road_crossing_polygon"/>
-        <tag k="hoot:review:sort_order" v="3"/>
-        <tag k="hoot:review:note" v="Road crossing polygon: poly criteria filter: ; poly tag filter: amenity=parking; allowed road tag filter: highway=service;highway=footway"/>
         <tag k="hoot:review:members" v="1"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Road crossing polygon: poly criteria filter: ; poly tag filter: amenity=parking; allowed road tag filter: highway=service;highway=footway"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="3"/>
+        <tag k="hoot:review:type" v="road_crossing_polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-58" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="4881726965" role="reviewee"/>
         <member type="node" ref="4881729682" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI"/>
-        <tag k="hoot:review:sort_order" v="2"/>
-        <tag k="hoot:review:note" v="Somewhat similar (450m) - similar POI type"/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Somewhat similar (450m) - similar POI type"/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="2"/>
+        <tag k="hoot:review:type" v="POI"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-46" timestamp="1970-01-01T00:00:00Z" version="1">
         <member type="node" ref="-186" role="reviewee"/>
         <member type="way" ref="-42" role="reviewee"/>
-        <tag k="hoot:review:type" v="POI to Polygon"/>
-        <tag k="hoot:review:sort_order" v="4"/>
-        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
         <tag k="hoot:review:members" v="2"/>
         <tag k="hoot:review:needs" v="yes"/>
+        <tag k="hoot:review:note" v="Similarity score: 2; less than match threshold: 3; meets review threshold: 1. distance: yes (0m; score: 2/2), type: no (score: 0/1), name: no (score: 0/1), address: no (score: 0/1). Max distance allowed for match: 5m, review: 146.213m."/>
         <tag k="hoot:review:score" v="1"/>
+        <tag k="hoot:review:sort_order" v="4"/>
+        <tag k="hoot:review:type" v="POI to Polygon"/>
         <tag k="type" v="review"/>
     </relation>
     <relation visible="true" id="-9" timestamp="2020-02-28T16:47:47Z" version="1">
         <member type="way" ref="496849655" role=""/>
         <member type="way" ref="-256" role=""/>
-        <tag k="route" v="bus"/>
-        <tag k="name" v="DART 303"/>
+        <tag k="error:circular" v="15"/>
         <tag k="fixme" v="verify route in Dover, Ellendale, Georgetown, Milford"/>
-        <tag k="public_transport:version" v="1"/>
-        <tag k="ref" v="303"/>
-        <tag k="source:datetime" v="2020-02-20T14:41:24Z"/>
+        <tag k="name" v="DART 303"/>
         <tag k="network" v="DART"/>
         <tag k="operator" v="Delaware Transit Corporation"/>
-        <tag k="error:circular" v="15"/>
+        <tag k="public_transport:version" v="1"/>
+        <tag k="ref" v="303"/>
+        <tag k="route" v="bus"/>
+        <tag k="source:datetime" v="2020-02-20T14:41:24Z"/>
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="7387460" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-11" role=""/>
+        <member type="way" ref="-228" role=""/>
+        <member type="way" ref="-101" role=""/>
+        <member type="way" ref="-102" role=""/>
+        <member type="way" ref="-100" role=""/>
         <member type="way" ref="496849574" role=""/>
         <member type="way" ref="496849577" role=""/>
         <member type="way" ref="496849576" role=""/>
         <member type="way" ref="-10" role=""/>
-        <tag k="route" v="railway"/>
-        <tag k="name" v="Indian River Secondary"/>
-        <tag k="source:datetime" v="2014-10-01T04:16:44.000Z;2016-12-15T17:00:00Z"/>
-        <tag k="operator" v="NS"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Indian River Secondary"/>
+        <tag k="operator" v="NS"/>
+        <tag k="route" v="railway"/>
+        <tag k="source:datetime" v="2014-10-01T04:16:44.000Z;2016-12-15T17:00:00Z"/>
         <tag k="type" v="route"/>
     </relation>
     <relation visible="true" id="7387461" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-3" role="outer"/>
         <member type="way" ref="-17" role="outer"/>
-        <tag k="wikipedia" v="en:Kent County, Delaware"/>
-        <tag k="nist:fips_code" v="10001"/>
-        <tag k="feature_area" v="4.97903906E8"/>
-        <tag k="wikidata" v="Q128137"/>
-        <tag k="name" v="Kent County"/>
-        <tag k="security:classification" v="UNCLASSIFIED"/>
-        <tag k="source:imagery" v="Unknown"/>
-        <tag k="boundary" v="administrative"/>
-        <tag k="nist:state_fips" v="10"/>
-        <tag k="population" v="173533"/>
-        <tag k="source:datetime" v="2014-05-04T21:01:03.000Z;2017-10-21T19:29:56Z"/>
-        <tag k="source:population" v="https://www.census.gov/programs-surveys/popest.html"/>
         <tag k="admin_level" v="6"/>
         <tag k="border_type" v="county"/>
-        <tag k="length" v="166229.5"/>
+        <tag k="boundary" v="administrative"/>
         <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="4.97903906E8"/>
+        <tag k="length" v="166229.5"/>
+        <tag k="name" v="Kent County"/>
+        <tag k="nist:fips_code" v="10001"/>
+        <tag k="nist:state_fips" v="10"/>
+        <tag k="population" v="173533"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2014-05-04T21:01:03.000Z;2017-10-21T19:29:56Z"/>
+        <tag k="source:imagery" v="Unknown"/>
+        <tag k="source:population" v="https://www.census.gov/programs-surveys/popest.html"/>
         <tag k="type" v="boundary"/>
+        <tag k="wikidata" v="Q128137"/>
+        <tag k="wikipedia" v="en:Kent County, Delaware"/>
     </relation>
     <relation visible="true" id="7387462" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-17" role="outer"/>
         <member type="way" ref="-3" role="outer"/>
-        <tag k="wikipedia" v="en:Sussex County, Delaware"/>
-        <tag k="nist:fips_code" v="10005"/>
-        <tag k="wikidata" v="Q156213"/>
-        <tag k="name" v="Sussex County"/>
+        <tag k="admin_level" v="6"/>
+        <tag k="border_type" v="county"/>
         <tag k="boundary" v="administrative"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="name" v="Sussex County"/>
+        <tag k="nist:fips_code" v="10005"/>
         <tag k="nist:state_fips" v="10"/>
         <tag k="population" v="215622"/>
         <tag k="source:datetime" v="2014-10-27T00:23:55.000Z;2017-07-20T11:56:59Z"/>
         <tag k="source:population" v="https://www.census.gov/programs-surveys/popest.html"/>
-        <tag k="admin_level" v="6"/>
-        <tag k="border_type" v="county"/>
-        <tag k="error:circular" v="15"/>
         <tag k="type" v="boundary"/>
+        <tag k="wikidata" v="Q156213"/>
+        <tag k="wikipedia" v="en:Sussex County, Delaware"/>
     </relation>
     <relation visible="true" id="7387465" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-4" role=""/>
-        <member type="way" ref="-1713" role=""/>
+        <member type="way" ref="-1707" role=""/>
         <member type="way" ref="496849655" role=""/>
+        <member type="way" ref="-91" role=""/>
+        <member type="way" ref="-82" role=""/>
         <member type="way" ref="496850273" role=""/>
         <member type="way" ref="496849585" role=""/>
-        <member type="way" ref="-1640" role=""/>
+        <member type="way" ref="-170" role=""/>
+        <member type="way" ref="-236" role=""/>
         <member type="way" ref="496850334" role=""/>
+        <member type="way" ref="-81" role=""/>
         <member type="way" ref="496849786" role=""/>
-        <member type="way" ref="-1830" role=""/>
         <member type="way" ref="-31" role=""/>
-        <tag k="wikipedia" v="en:Delaware Route 36"/>
-        <tag k="wikidata" v="Q798659"/>
-        <tag k="symbol" v="http://commons.wikimedia.org/wiki/File:Elongated_circle_36.svg"/>
-        <tag k="route" v="road"/>
-        <tag k="ref" v="36"/>
-        <tag k="source:datetime" v="2015-01-20T08:41:26.000Z;2019-09-17T00:22:50Z"/>
         <tag k="FIXME" v="verify east end"/>
-        <tag k="network" v="US:DE"/>
         <tag k="error:circular" v="15"/>
+        <tag k="network" v="US:DE"/>
+        <tag k="ref" v="36"/>
+        <tag k="route" v="road"/>
+        <tag k="source:datetime" v="2015-01-20T08:41:26.000Z;2019-09-17T00:22:50Z"/>
+        <tag k="symbol" v="http://commons.wikimedia.org/wiki/File:Elongated_circle_36.svg"/>
         <tag k="type" v="route"/>
+        <tag k="wikidata" v="Q798659"/>
+        <tag k="wikipedia" v="en:Delaware Route 36"/>
     </relation>
     <relation visible="true" id="7387469" timestamp="2020-02-28T16:48:04Z" version="1" changeset="10070">
         <member type="way" ref="-5" role="outer"/>
         <member type="way" ref="-54" role="outer"/>
-        <tag k="wikidata" v="Q34923642"/>
-        <tag k="name" v="Silver Lake"/>
-        <tag k="source:datetime" v="2014-10-01T03:34:58.000Z;2017-09-22T05:25:25Z"/>
-        <tag k="natural" v="water"/>
         <tag k="error:circular" v="15"/>
+        <tag k="name" v="Silver Lake"/>
+        <tag k="natural" v="water"/>
+        <tag k="source:datetime" v="2014-10-01T03:34:58.000Z;2017-09-22T05:25:25Z"/>
         <tag k="type" v="multipolygon"/>
+        <tag k="wikidata" v="Q34923642"/>
     </relation>
 </osm>

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEATTRIBUTESVISITOR_H
 #define REMOVEATTRIBUTESVISITOR_H
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -48,7 +48,7 @@ class RemoveAttributesVisitor : public ElementVisitor, public Configurable
 
 public:
 
-  static std::string className() { return "hoot::RemoveAttributesVisitor"; }
+  static QString className() { return "hoot::RemoveAttributesVisitor"; }
 
   RemoveAttributesVisitor();
   explicit RemoveAttributesVisitor(const QStringList types);
@@ -64,7 +64,9 @@ public:
   virtual QString getDescription() const
   { return "Removes one or more common OSM attributes from features"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

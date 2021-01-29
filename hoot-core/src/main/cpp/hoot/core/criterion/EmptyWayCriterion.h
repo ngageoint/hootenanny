@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef EMPTY_WAY_CRITERION_H
 #define EMPTY_WAY_CRITERION_H
@@ -37,13 +37,13 @@ namespace hoot
  * Ways with no nodes; will see this from time to time as a result of cut and replace, since we
  * allow element references point to missing elements to persist
  *
- * @todo implement OperationStatusInfo
+ * @todo implement OperationStatus
  */
 class EmptyWayCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::EmptyWayCriterion"; }
+  static QString className() { return "hoot::EmptyWayCriterion"; }
 
   EmptyWayCriterion();
   virtual ~EmptyWayCriterion() = default;
@@ -59,8 +59,9 @@ public:
   virtual QString getDescription() const override
   { return "Identifies ways with no nodes"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

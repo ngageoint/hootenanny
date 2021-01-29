@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ELEMENT_TO_GEOMETRY_CONVERTER_H
@@ -75,7 +75,7 @@ public:
 
   static int logWarnCount;
 
-  static std::string className() { return "hoot::ElementToGeometryConverter"; }
+  static QString className() { return "hoot::ElementToGeometryConverter"; }
 
   /**
    * see class description
@@ -86,11 +86,7 @@ public:
    */
   ElementToGeometryConverter(const ConstElementProviderPtr& provider,
                              const bool logWarningsForMissingElements = true);
-
-  /**
-   * Calculate the length of the given way in meters. The projection must be planar.
-   */
-  Meters calculateLength(const ConstElementPtr& e) const;
+  ~ElementToGeometryConverter() = default;
 
   /**
    * Converts the given element to a geos geometry object. The tags are used with OsmSchema to
@@ -133,8 +129,9 @@ public:
 
 protected:
 
-  ConstElementProviderPtr                 _constProvider;
+  ConstElementProviderPtr _constProvider;
   std::shared_ptr<OGRSpatialReference>  _spatialReference;
+
   // if true, conversions to polys require that the source element be classifiable in the schema as
   // an area
   bool _requireAreaForPolygonConversion;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MatchFactory.h"
 
@@ -90,8 +90,8 @@ void MatchFactory::createMatches(const ConstOsmMapPtr& map, std::vector<ConstMat
   }
 }
 
-void MatchFactory::_checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
-                                               const std::shared_ptr<Geometry>& bounds) const
+void MatchFactory::_checkMatchCreatorBoundable(
+  const std::shared_ptr<MatchCreator>& matchCreator, const std::shared_ptr<Geometry>& bounds) const
 {
   if (bounds.get())
   {
@@ -109,13 +109,11 @@ vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
 {
   vector<CreatorDescription> result;
 
-  // get all match creators from the factory
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(MatchCreator::className());
-
+  // Get all match creators from the factory.
+  vector<QString> names = Factory::getInstance().getObjectNamesByBase(MatchCreator::className());
   for (size_t i = 0; i < names.size(); i++)
   {
-    // get all names known by this creator.
+    // Get all names known by this creator.
     std::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(names[i]));
 
@@ -137,13 +135,14 @@ void MatchFactory::registerCreator(const QString& c)
     std::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(className));
 
+    ElementCriterionPtr filter;
     if (!_tagFilter.trimmed().isEmpty())
     {
       // We're specifically checking for an option to feed this tag criterion. Additional combined
       // criteria can be added to this match creator if needed.
-      std::shared_ptr<TagAdvancedCriterion> filter(new TagAdvancedCriterion(_tagFilter));
-      mc->setCriterion(filter);
+      filter.reset(new TagAdvancedCriterion(_tagFilter));
     }
+    mc->setFilter(filter);
 
     registerCreator(mc);
 

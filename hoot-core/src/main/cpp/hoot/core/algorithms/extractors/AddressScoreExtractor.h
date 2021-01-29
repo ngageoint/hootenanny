@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDRESS_SCORE_EXTRACTOR_H
 #define ADDRESS_SCORE_EXTRACTOR_H
@@ -57,12 +57,14 @@ class AddressScoreExtractor : public FeatureExtractorBase, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::AddressScoreExtractor"; }
+  static QString className() { return "hoot::AddressScoreExtractor"; }
 
   AddressScoreExtractor();
   virtual ~AddressScoreExtractor() = default;
 
-  virtual std::string getClassName() const { return AddressScoreExtractor::className(); }
+  virtual QString getClassName() const { return className(); }
+
+  virtual QString getName() const { return className(); }
 
   virtual void setConfiguration(const Settings& conf);
 

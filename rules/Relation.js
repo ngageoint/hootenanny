@@ -8,8 +8,8 @@
 exports.candidateDistanceSigma = 1.0; // 1.0 * (CE95 + Worst CE95);
 exports.description = "Matches collection relations";
 
-// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used. 
-// If that ever changes, then the generic score threshold configuration options used below should 
+// This matcher only sets match/miss/review values to 1.0, therefore the score thresholds aren't used.
+// If that ever changes, then the generic score threshold configuration options used below should
 // be replaced with custom score threshold configuration options.
 exports.matchThreshold = parseFloat(hoot.get("conflate.match.threshold.default"));
 exports.missThreshold = parseFloat(hoot.get("conflate.miss.threshold.default"));
@@ -32,7 +32,6 @@ var edgeDistanceExtractor = new hoot.EdgeDistanceExtractor();
 var angleHistExtractor = new hoot.AngleHistogramExtractor();
 // We may eventually want to try something other than the default name extractor here.
 var nameExtractor = new hoot.NameExtractor();
-
 var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
 
 /**
@@ -42,6 +41,8 @@ var memberSimilarityExtractor = new hoot.RelationMemberSimilarityExtractor();
  */
 exports.isMatchCandidate = function(map, e)
 {
+  // TODO: Think the collection relation part is too strict and should be changed to all relations
+  // at some point.
   return isCollectionRelation(e);
 };
 
@@ -50,7 +51,7 @@ exports.isMatchCandidate = function(map, e)
  * as a group. For now that means if two matches overlap then the whole group
  * will be marked as needing review.
  *
- * If this function returns false the conflation routines will attempt to 
+ * If this function returns false the conflation routines will attempt to
  * pick the best subset of matches that do not conflict.
  */
 exports.isWholeGroup = function()
@@ -74,7 +75,7 @@ function typeMismatch(e1, e2)
   // geometry checks afterward can become very expensive.
 
   if (type1 != type2)
-  {    
+  {
     hoot.trace("type mismatch; type1: " + type1 + "; type2: " + type2);
     hoot.trace("mostSpecificType 1: " + mostSpecificType(e1));
     hoot.trace("mostSpecificType 2: " + mostSpecificType(e2));
@@ -142,24 +143,25 @@ function nameMismatch(map, e1, e2)
 
 function geometryMismatch(map, e1, e2)
 {
-  // This is a little convoluted and may need further adjustment. Edge distance is pretty accurate 
+  // This is a little convoluted and may need further adjustment. Edge distance is fairly accurate
   // for this but gets expensive as the relations get larger. Angle hist is a little less accurate
-  // overall but runs faster and seems to be working ok for the largeer relations. For matching
+  // overall but runs faster and seems to be working ok for the larger relations. For matching
   // of disjointed relations (relations with different but connecting ways) a further check is
   // needed (which also has the potential to be very expensive at O(n^2)) and is only done for the
   // larger relations when the geometry check fails.
 
-  // TODO: Should we be extracting sublines first and passing those to the extractors?
+  // Should we be extracting sublines first and passing those to the extractors?
 
   var numRelationMemberNodes = getNumRelationMemberNodes(map, e1.getElementId()) + getNumRelationMemberNodes(map, e2.getElementId());
   hoot.trace("numRelationMemberNodes: " + numRelationMemberNodes);
-  if (numRelationMemberNodes < 2000) // Threshold determined off of one dataset...may need tweaking.
+  // This threshold was determined from one test dataset...may need tweaking.
+  if (numRelationMemberNodes < 2000)
   {
     // This can become a fairly expensive check for relations with a lot of total nodes.
     var edgeDist = edgeDistanceExtractor.extract(map, e1, e2);
     hoot.trace("edgeDist: " + edgeDist);
     if (edgeDist < 0.97)
-    { 
+    {
       hoot.trace("match failed on edgeDist: " + edgeDist);
       return true;
     }
@@ -169,16 +171,16 @@ function geometryMismatch(map, e1, e2)
     var angleHist = angleHistExtractor.extract(map, e1, e2);
     hoot.trace("angleHist: " + angleHist);
     if (angleHist < 0.73)
-    { 
+    {
       if (relationsHaveConnectedWayMembers(map, e1.getElementId(), e2.getElementId()))
       {
-        hoot.trace("match failed on angleHist: " + angleHist + " but there are connected ways.");
+        hoot.trace("match failed on angleHist: " + angleHist + ", but there are connected ways.");
       }
       else
       {
         hoot.trace("match failed on angleHist: " + angleHist);
         return true;
-      }  
+      }
     }
   }
   return false;
@@ -186,8 +188,8 @@ function geometryMismatch(map, e1, e2)
 
 function memberSimilarityMismatch(map, e1, e2)
 {
-  // This hasn't panned out as being useful yet. This is meant to recognize relations with almost 
-  // identical members. We do encounter those, but the other checks (name, geometry) usually help 
+  // This hasn't panned out as being useful yet. This is meant to recognize relations with almost
+  // identical members. We do encounter those, but the other checks (name, geometry) usually help
   // identify them beforehand and makes this check unnecessary.
 
   var memberSim = memberSimilarityExtractor.extract(map, e1, e2);
@@ -206,14 +208,14 @@ function memberSimilarityMismatch(map, e1, e2)
  * - miss
  * - review
  *
- * The scores should always sum to one. If they don't you will be taunted 
+ * The scores should always sum to one. If they don't you will be taunted
  * mercilessly and we'll normalize it anyway. :P
  */
 exports.matchScore = function(map, e1, e2)
 {
   var result = { miss: 1.0 };
 
-  if (e1.getStatusString() == e2.getStatusString()) 
+  if (e1.getStatusString() == e2.getStatusString())
   {
     return result;
   }
@@ -232,8 +234,8 @@ exports.matchScore = function(map, e1, e2)
   {
     hoot.trace("e2 note: " + tags2.get("note"));
   }
-  
-  // These checks were determined with a very small sample of test data and no model was used, so 
+
+  // These checks were determined with a very small sample of test data and no model was used, so
   // may need further refinement.
 
   if (typeMismatch(e1, e2))
@@ -261,12 +263,15 @@ exports.matchScore = function(map, e1, e2)
  */
 exports.mergePair = function(map, e1, e2)
 {
+  hoot.trace("Merging " + e1.getElementId() + " and " + e2.getElementId() + "...");
+
   mergeRelations(map, e1.getElementId(), e2.getElementId());
 
   e1.setStatusString("conflated");
   if (exports.writeMatchedBy == "true")
   {
-    // Technically, we should get this key from MetadataTags, but that's not integrated with hoot yet.
+    // Technically we should get this key from MetadataTags, but that's not integrated with hoot
+    // yet.
     e1.setTag("hoot:matchedBy", exports.baseFeatureType);
   }
   return e1;

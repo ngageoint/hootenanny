@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingOutlineRemoveOp.h"
 
@@ -39,6 +39,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/geometry/GeometryToElementConverter.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 using namespace std;
 
@@ -77,6 +78,11 @@ void BuildingOutlineRemoveOp::_removeOutline(const std::shared_ptr<Relation>& bu
       _numAffected++;
     }
   }
+}
+
+QStringList BuildingOutlineRemoveOp::getCriteria() const
+{
+  return QStringList(BuildingCriterion::className());
 }
 
 }

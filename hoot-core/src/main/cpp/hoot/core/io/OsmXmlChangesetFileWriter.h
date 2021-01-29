@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMXMLCHANGESETFILEWRITER_H
 #define OSMXMLCHANGESETFILEWRITER_H
@@ -54,7 +54,7 @@ class OsmXmlChangesetFileWriter : public OsmChangesetFileWriter
 
 public:
 
-  static std::string className() { return "hoot::OsmXmlChangesetFileWriter"; }
+  static QString className() { return "hoot::OsmXmlChangesetFileWriter"; }
 
   OsmXmlChangesetFileWriter();
   virtual ~OsmXmlChangesetFileWriter() = default;
@@ -75,6 +75,9 @@ public:
   virtual QString getStatsTable(
     const ChangesetStatsFormat& format = ChangesetStatsFormat::Text) const;
 
+  virtual void setMap1List(const QList<ConstOsmMapPtr>& mapList) { _map1List = mapList; }
+  virtual void setMap2List(const QList<ConstOsmMapPtr>& mapList) { _map2List = mapList; }
+
   /**
    * @see ChangesetFileWriter
    */
@@ -92,20 +95,15 @@ private:
   QList<ElementId> _parsedChangeIds;
 
   bool _addTimestamp;
-  bool _includeDebugTags;
-  bool _includeCircularErrorTags;
 
   OsmXmlWriter _invalidCharacterHandler;
 
   QMap<ElementType::Type, long> _newElementIdCtrs;
-  //keeping track of these mappings unfortunately makes this writer memory bound
+  // keeping track of these mappings unfortunately makes this writer memory bound
   QMap<ElementType::Type, QMap<long, long>> _newElementIdMappings;
 
   //  Keep track of the matrix of add, modify, delete for nodes, ways, relations
   ScoreMatrix<long> _stats;
-
-  // list of metadata tag keys allowed to be written to the changeset
-  QStringList _metadataAllowKeys;
 
   /** Helper functions to write nodes, ways, and relations. */
   void _writeNode(QXmlStreamWriter& writer, ConstElementPtr node, ConstElementPtr previous);

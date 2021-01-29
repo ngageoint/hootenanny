@@ -38,10 +38,12 @@ hoot convert -D convert.ops="hoot::RemoveElementsVisitor" \
   -D remove.elements.visitor.element.criteria="hoot::RelationCriterion" input.osm output.osm
 --------------------------------------
 
-=== Bounded Conversions
+=== Filtering Features Geographically
 
-If a configuration option matching, `bounds.*` is set to a valid bounding box, supporting readers will read data only from
-the specified bounds.
+If the configuration option, `bounds`, is set to a valid geographic bounds (see the configuration 
+option documentation for formats), supporting readers will read data only from within the specified 
+bounds. The `bounds.*` configuration options allow for further customization of the bounds 
+requirement.
 
 ==== Schema Translation
 
@@ -202,3 +204,4 @@ field separators. If you get errors using absolute paths, check that you have th
 === See Also
 
 * https://github.com/ngageoint/hootenanny/blob/master/docs/user/SupportedDataFormats.asciidoc#applying-changes-1[Supported Input Formats]
+* `bounds.*` configuration options

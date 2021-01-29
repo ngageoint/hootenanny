@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONMATCH_H
 #define POIPOLYGONMATCH_H
@@ -59,7 +59,7 @@ class PoiPolygonMatch : public Match, public MatchDetails, public Configurable
 
 public:
 
-  static std::string className() { return "hoot::PoiPolygonMatch"; }
+  static QString className() { return "hoot::PoiPolygonMatch"; }
 
   static const QString MATCH_NAME;
 
@@ -81,8 +81,9 @@ public:
   virtual MatchMembers getMatchMembers() const override
   { return MatchMembers::Poi | MatchMembers::Polygon; }
 
-  virtual QString getMatchName() const override { return getPoiPolygonMatchName(); }
+  virtual QString getName() const override { return getPoiPolygonMatchName(); }
   static QString getPoiPolygonMatchName() { return MATCH_NAME; }
+  virtual QString getClassName() const override { return className(); }
 
   virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 

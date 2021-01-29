@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RelationMemberSimilarityExtractor.h"
 
@@ -60,11 +60,9 @@ double RelationMemberSimilarityExtractor::extract(
     QSet<ElementId> targetMemberIds =
       CollectionUtils::stdSetToQSet(targetRelation->getMemberIds());
     LOG_VART(targetMemberIds.size());
-    //LOG_VART(targetMemberIds);
     QSet<ElementId> candidateMemberIds =
       CollectionUtils::stdSetToQSet(candidateRelation->getMemberIds());
     LOG_VART(candidateMemberIds.size());
-    //LOG_VART(candidateMemberIds);
     const int totalMembers = targetMemberIds.size() + candidateMemberIds.size();
     LOG_VART(totalMembers);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef APIDBREADER_H
 #define APIDBREADER_H
@@ -53,7 +53,7 @@ class ApiDbReader : public PartialOsmMapReader, public Boundable
 {
 public:
 
-  static std::string className() { return "hoot::ApiDbReader"; }
+  static QString className() { return "hoot::ApiDbReader"; }
 
   ApiDbReader();
   virtual ~ApiDbReader() = default;
@@ -156,8 +156,9 @@ protected:
   void _fullRead(OsmMapPtr map);
 
   /*
-   * Reads a portion of the dataset into a map over the specified bounds. This uses the same bounded
-   * query logic as used in the Map.java query method.
+   * Reads a portion of the dataset into a map over the specified bounds. Note that this fully
+   * hydrates relations, so extra filtering may need to be done after the fact to prevent conflating
+   * features outside of the bounds.
    */
   void _readByBounds(OsmMapPtr map, const geos::geom::Envelope& bounds);
 

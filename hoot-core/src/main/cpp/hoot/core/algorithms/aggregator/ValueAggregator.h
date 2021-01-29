@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef VALUEAGGREGATOR_H
 #define VALUEAGGREGATOR_H
@@ -43,7 +43,7 @@ class ValueAggregator : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::ValueAggregator"; }
+  static QString className() { return "hoot::ValueAggregator"; }
 
   ValueAggregator() = default;
   virtual ~ValueAggregator() = default;
@@ -56,7 +56,7 @@ public:
    */
   virtual double aggregate(std::vector<double>& d) const = 0;
 
-  virtual QString toString() const = 0;
+  virtual QString toString() const { return ""; }
 };
 
 typedef std::shared_ptr<ValueAggregator> ValueAggregatorPtr;

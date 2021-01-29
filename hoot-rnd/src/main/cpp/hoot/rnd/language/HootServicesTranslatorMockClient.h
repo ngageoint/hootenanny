@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HOOT_SERVICES_TRANSLATOR_MOCK_CLIENT_H
@@ -46,7 +46,7 @@ class HootServicesTranslatorMockClient : public HootServicesTranslatorClient
 
 public:
 
-  static std::string className() { return "hoot::HootServicesTranslatorMockClient"; }
+  static QString className() { return "hoot::HootServicesTranslatorMockClient"; }
 
   HootServicesTranslatorMockClient();
   virtual ~HootServicesTranslatorMockClient() = default;

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMatchCreator.h"
 
@@ -81,6 +81,9 @@ void PoiPolygonMatchCreator::createMatches(const ConstOsmMapPtr& map,
 {
   QElapsedTimer timer;
   timer.start();
+
+  // The parent does some initialization we need.
+  MatchCreator::createMatches(map, matches, threshold);
 
   QString searchRadiusStr;
   const double additionalDistance = ConfigOptions().getPoiPolygonAdditionalSearchDistance();
@@ -386,10 +389,10 @@ std::vector<ConstMatchPtr> PoiPolygonMatchCreator::_filterOutNonClosestMatches(
          matchesItr2 != matchesWithSharedId.end(); ++matchesItr2)
     {
       ConstMatchPtr overlappingMatch = *matchesItr2;
-      LOG_VART(overlappingMatch->getMatchName());
+      LOG_VART(overlappingMatch->getName());
       LOG_VART(overlappingMatch);
 
-      if (overlappingMatch->getMatchName() == PoiPolygonMatch::getPoiPolygonMatchName())
+      if (overlappingMatch->getName() == PoiPolygonMatch::getPoiPolygonMatchName())
       {
         std::pair<ElementId, ElementId> matchElementIds =
           *(overlappingMatch->getMatchPairs()).begin();
@@ -548,8 +551,8 @@ std::vector<CreatorDescription> PoiPolygonMatchCreator::getAllCreators() const
   return result;
 }
 
-bool PoiPolygonMatchCreator::isMatchCandidate(ConstElementPtr element,
-                                              const ConstOsmMapPtr& /*map*/)
+bool PoiPolygonMatchCreator::isMatchCandidate(
+  ConstElementPtr element, const ConstOsmMapPtr& /*map*/)
 {
   return
     element->isUnknown() && (_poiCrit.isSatisfied(element) || _polyCrit.isSatisfied(element));
@@ -575,8 +578,8 @@ std::shared_ptr<PoiPolygonRfClassifier> PoiPolygonMatchCreator::_getRf()
 QStringList PoiPolygonMatchCreator::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(PoiCriterion::className()));
-  criteria.append(QString::fromStdString(BuildingCriterion::className()));
+  criteria.append(PoiCriterion::className());
+  criteria.append(BuildingCriterion::className());
   return criteria;
 }
 

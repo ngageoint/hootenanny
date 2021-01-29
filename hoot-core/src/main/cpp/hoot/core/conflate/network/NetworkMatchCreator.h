@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKMATCHCREATOR_H
 #define NETWORKMATCHCREATOR_H
@@ -31,7 +31,6 @@
 #include <hoot/core/conflate/matching/MatchCreator.h>
 #include <hoot/core/conflate/network/NetworkDetails.h>
 #include <hoot/core/conflate/network/NetworkEdgeScore.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -41,7 +40,7 @@ class NetworkMatchCreator : public MatchCreator
 
 public:
 
-  static std::string className() { return "hoot::NetworkMatchCreator"; }
+  static QString className() { return "hoot::NetworkMatchCreator"; }
 
   NetworkMatchCreator();
   virtual ~NetworkMatchCreator() = default;
@@ -60,13 +59,12 @@ public:
 
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
 private:
 
@@ -77,8 +75,8 @@ private:
   double _matchScoringFunctionCurveMidpointX;
   double _matchScoringFunctionCurveSteepness;
 
-  ConstMatchPtr _createMatch(const NetworkDetailsPtr &map, NetworkEdgeScorePtr e,
-    ConstMatchThresholdPtr mt);
+  ConstMatchPtr _createMatch(
+    const NetworkDetailsPtr &map, NetworkEdgeScorePtr e, ConstMatchThresholdPtr mt);
 };
 
 }

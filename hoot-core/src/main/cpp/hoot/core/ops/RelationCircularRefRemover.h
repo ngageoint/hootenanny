@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RELATION_CIRCULAR_REF_REMOVER_H
@@ -46,7 +46,7 @@ class RelationCircularRefRemover : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::RelationCircularRefRemover"; }
+  static QString className() { return "hoot::RelationCircularRefRemover"; }
 
   RelationCircularRefRemover() = default;
   virtual ~RelationCircularRefRemover() = default;
@@ -63,7 +63,9 @@ public:
   virtual QString getDescription() const
   { return "Removes half of a relation pair that reference each other from a map"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

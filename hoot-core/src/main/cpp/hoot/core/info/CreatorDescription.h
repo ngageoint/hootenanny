@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CREATOR_DESCRIPTON_H
@@ -76,12 +76,12 @@ public:
   };
 
   CreatorDescription();
-  CreatorDescription(std::string className, QString description, bool experimental);
-  CreatorDescription(std::string className, QString description, BaseFeatureType featureType,
-                     bool experimental);
+  CreatorDescription(const QString& className, const QString& description, bool experimental);
+  CreatorDescription(const QString& className, const QString& description,
+                     BaseFeatureType featureType, bool experimental);
 
   bool experimental;
-  std::string className;
+  QString className;
   QString description;
   BaseFeatureType baseFeatureType;
   GeometryTypeCriterion::GeometryType geometryType;
@@ -101,8 +101,8 @@ public:
    */
   static FeatureCalcType getFeatureCalcType(BaseFeatureType t);
 
-  static std::shared_ptr<ElementCriterion> getElementCriterion(BaseFeatureType t,
-                                                               ConstOsmMapPtr map);
+  static std::shared_ptr<ElementCriterion> getElementCriterion(
+    BaseFeatureType t, ConstOsmMapPtr map);
 
   QString toString() const;
 };

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FIND_STREET_INTERSECTIONS_BY_NAME_H
 #define FIND_STREET_INTERSECTIONS_BY_NAME_H
@@ -32,7 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/criterion/NameCriterion.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 #include <hoot/core/util/StringUtils.h>
 
 namespace hoot
@@ -48,7 +48,7 @@ class FindStreetIntersectionsByName : public OsmMapOperation, public Configurabl
 {
 public:
 
-  static std::string className() { return "hoot::FindStreetIntersectionsByName"; }
+  static QString className() { return "hoot::FindStreetIntersectionsByName"; }
 
   FindStreetIntersectionsByName() = default;
   virtual ~FindStreetIntersectionsByName() = default;
@@ -66,15 +66,17 @@ public:
   virtual QString getDescription() const override
   { return "Locates street intersections by street name"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const { return "Locating street intersections..."; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getCompletedStatusMessage() const
   {

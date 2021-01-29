@@ -51,7 +51,7 @@ class ChangesetReplacement
 
 public:
 
-  static std::string className() { return "hoot::ChangesetReplacement"; }
+  static QString className() { return "hoot::ChangesetReplacement"; }
 
   /**
    * The manner in which replacement boundary conditions are handled. See the

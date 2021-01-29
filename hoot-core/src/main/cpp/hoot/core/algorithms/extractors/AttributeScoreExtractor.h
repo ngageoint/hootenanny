@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ATTRIBUTESCOREEXTRACTOR_H
 #define ATTRIBUTESCOREEXTRACTOR_H
@@ -41,16 +41,16 @@ class AttributeScoreExtractor : public WayFeatureExtractor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::AttributeScoreExtractor"; }
+  static QString className() { return "hoot::AttributeScoreExtractor"; }
 
   AttributeScoreExtractor(ValueAggregatorPtr wayAgg, bool useWeight = false);
 
   AttributeScoreExtractor(bool useWeight = false);
   virtual ~AttributeScoreExtractor() = default;
 
-  virtual std::string getClassName() const override { return className(); }
+  virtual QString getClassName() const override { return className(); }
 
-  virtual std::string getName() const override;
+  virtual QString getName() const override;
 
   virtual void setConfiguration(const Settings& conf);
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GEOMETRY_TO_ELEMENT_CONVERTER_H
@@ -65,7 +65,7 @@ class GeometryToElementConverter
 {
 public:
 
-  static std::string className() { return "hoot::GeometryToElementConverter"; }
+  static QString className() { return "hoot::GeometryToElementConverter"; }
 
   GeometryToElementConverter(const OsmMapPtr& map);
   GeometryToElementConverter(const ConstOsmMapPtr& map);

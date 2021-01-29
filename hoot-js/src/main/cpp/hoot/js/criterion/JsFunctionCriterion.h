@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CUSTOMCRITERION_H
@@ -43,7 +43,7 @@ class JsFunctionCriterion : public ElementCriterion, public JsFunctionConsumer
 {
 public:
 
-  static std::string className() { return "hoot::JsFunctionCriterion"; }
+  static QString className() { return "hoot::JsFunctionCriterion"; }
 
   JsFunctionCriterion() = default;
   virtual ~JsFunctionCriterion() = default;
@@ -58,7 +58,9 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
-  virtual QString toString() const override { return ""; }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

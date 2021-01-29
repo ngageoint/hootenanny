@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TO_ENGLISH_TRANSLATION_COMPARISON_VISITOR_H
@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/rnd/visitors/ToEnglishTranslationVisitor.h>
 #include <hoot/core/algorithms/string/StringDistance.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 
 namespace hoot
 {
@@ -45,7 +45,7 @@ class ToEnglishTranslationComparisonVisitor : public ToEnglishTranslationVisitor
 
 public:
 
-  static std::string className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
+  static QString className() { return "hoot::ToEnglishTranslationComparisonVisitor"; }
 
   ToEnglishTranslationComparisonVisitor();
   virtual ~ToEnglishTranslationComparisonVisitor() = default;
@@ -67,7 +67,9 @@ public:
       QString::number(_numProcessedElements) + " different elements";
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

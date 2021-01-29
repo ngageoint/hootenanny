@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGCOUNTVISITOR_H
 #define TAGCOUNTVISITOR_H
@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 
 namespace hoot
 {
@@ -43,7 +43,7 @@ class TagCountVisitor : public ConstElementVisitor, public NumericStatistic
 {
 public:
 
-  static std::string className() { return "hoot::TagCountVisitor"; }
+  static QString className() { return "hoot::TagCountVisitor"; }
 
   TagCountVisitor();
   virtual ~TagCountVisitor() = default;
@@ -80,7 +80,9 @@ public:
     return average;
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef INWAYNODECRITERION_H
@@ -47,7 +47,7 @@ class InWayNodeCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::InWayNodeCriterion"; }
+  static QString className() { return "hoot::InWayNodeCriterion"; }
 
   InWayNodeCriterion() = default;
   InWayNodeCriterion(const OsmMap& map, const std::vector<long>& wayIds);
@@ -60,9 +60,9 @@ public:
   virtual QString getDescription() const
   { return "Identifies nodes contained in a specified set of ways"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

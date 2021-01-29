@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MEANWORDSETDISTANCE_H
 #define MEANWORDSETDISTANCE_H
@@ -54,7 +54,7 @@ public:
   MeanWordSetDistance();
   virtual ~MeanWordSetDistance() = default;
 
-  static std::string className() { return "hoot::MeanWordSetDistance"; }
+  static QString className() { return "hoot::MeanWordSetDistance"; }
 
   virtual double compare(const QString& s1, const QString& s2) const override;
 
@@ -64,6 +64,10 @@ public:
 
   virtual QString toString() const override
   { return QString("MeanWordSet %1 %2").arg(_p).arg(_d->toString()); }
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Returns a score based on the mean distance between two sets of words"; }

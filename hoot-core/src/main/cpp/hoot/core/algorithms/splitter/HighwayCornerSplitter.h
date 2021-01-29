@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef HIGHWAYCORNERSPLITTER_H
@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QMultiHash>
@@ -54,7 +53,7 @@ class HighwayCornerSplitter : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::HighwayCornerSplitter"; }
+  static QString className() { return "hoot::HighwayCornerSplitter"; }
 
   HighwayCornerSplitter();
   HighwayCornerSplitter(const std::shared_ptr<OsmMap>& map);
@@ -80,10 +79,11 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

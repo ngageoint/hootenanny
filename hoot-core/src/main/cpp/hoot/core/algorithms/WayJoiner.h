@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYJOINER_H
@@ -43,7 +43,7 @@ class WayJoiner : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::WayJoiner"; }
+  static QString className() { return "hoot::WayJoiner"; }
 
   WayJoiner();
   virtual ~WayJoiner() = default;
@@ -58,15 +58,23 @@ public:
    */
   virtual void setLeavePid(bool leavePid) { _leavePid = leavePid; }
   virtual bool getLeavePid() const { return _leavePid; }
+  virtual void setWritePidToChildId(bool write) { _writePidToChildId = write; }
+  virtual bool getWritePidToChildId() const { return _writePidToChildId; }
 
   virtual int getNumJoined() const { return _numJoined; }
 
   QHash<long, long> getJoinedWayIdMappings() const { return _joinedWayIdMappings; }
 
+  virtual QString toString() const override { return ""; }
+
 protected:
 
   /** Debugging flag to leave parent IDs intact for output */
   bool _leavePid;
+  // If enabled, the ID of any element with a parent ID will be updated with the parent ID's value.
+  // at the end of joinin. In the case of multiple elements with the same parent ID, only the first
+  // element's ID will be updated.
+  bool _writePidToChildId;
   /** Pointer to the map to work on */
   OsmMapPtr _map;
 
@@ -125,6 +133,11 @@ private:
    *    does nothing if _leavePid is true
    */
   void _resetParents();
+
+  /*
+   * @see _writePidToChildId
+   */
+  void _writeParentIdsToChildIds();
 };
 
 }

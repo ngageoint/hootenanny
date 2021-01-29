@@ -49,7 +49,7 @@ class HistogramVisitor : public ElementConstOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::HistogramVisitor"; }
+  static QString className() { return "hoot::HistogramVisitor"; }
 
   HistogramVisitor(Histogram& h) : _h(h) { }
   virtual ~HistogramVisitor() = default;
@@ -76,7 +76,9 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getClassName() const { return ""; }
+  virtual QString toString() const { return ""; }
+  virtual QString getName() const { return ""; }
 
 private:
 
@@ -155,16 +157,16 @@ double AngleHistogramExtractor::extract(const OsmMap& map, const ConstElementPtr
   return 1.0 - diff;
 }
 
-string AngleHistogramExtractor::getName() const
+QString AngleHistogramExtractor::getName() const
 {
-  string result = getClassName();
+  QString result = getClassName();
   if (_smoothing > 0.0)
   {
-    result += QString(" %2").arg(_smoothing, 0, 'g', 4).toStdString();
+    result += QString(" %2").arg(_smoothing, 0, 'g', 4);
   }
   if (_bins > 16)
   {
-    result += QString(" %2").arg(_bins, 0, 10, QChar('_')).toStdString();
+    result += QString(" %2").arg(_bins, 0, 10, QChar('_'));
   }
   return result;
 }

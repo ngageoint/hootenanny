@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MERGE_H
 #define MERGE_H
@@ -39,13 +39,13 @@ namespace hoot
 {
 
 /**
- * Mergers are created by the MergerFactory.
+ * Merges features together after matching. Mergers are created by the MergerFactory.
  */
 class Merger : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::Merger"; }
+  static QString className() { return "hoot::Merger"; }
 
   Merger() = default;
   virtual ~Merger() = default;
@@ -78,18 +78,6 @@ public:
   virtual void replace(ElementId oldEid, ElementId newEid) = 0;
 
   virtual QString toString() const = 0;
-
-  /**
-   * @see ApiEntityInfo
-   */
-  virtual QString getDescription() const = 0;
-
-  /**
-   * Returns the name of this merger
-   *
-   * @return a name string
-   */
-  virtual QString getName() const = 0;
 };
 
 typedef std::shared_ptr<Merger> MergerPtr;

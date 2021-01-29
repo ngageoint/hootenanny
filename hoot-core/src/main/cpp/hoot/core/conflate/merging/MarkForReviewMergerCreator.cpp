@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MarkForReviewMergerCreator.h"
 
@@ -67,11 +67,11 @@ bool MarkForReviewMergerCreator::createMergers(const MatchSet& matches,
       score = max<double>(match->getClassification().getReviewP(), score);
       reviewCount++;
       LOG_VART(reviewType);
-      LOG_VART(match->getMatchName());
+      LOG_VART(match->getName());
       LOG_VART(score);
-      if (reviewType.contains(match->getMatchName()) == false)
+      if (reviewType.contains(match->getName()) == false)
       {
-        reviewType.append(match->getMatchName());
+        reviewType.append(match->getName());
       }
     }
   }

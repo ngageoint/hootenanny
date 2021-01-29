@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RubberSheetDeriver.h"
@@ -58,7 +58,7 @@ void RubberSheetDeriver::derive(const QString& input1, const QString& input2,
 
   // make sure rubber sheeting isn't applied during cleaning.
   QStringList l = ConfigOptions().getMapCleanerTransforms();
-  l.removeAll(QString::fromStdString(RubberSheet::className()));
+  l.removeAll(RubberSheet::className());
   conf().set(MapCleaner::opsKey(), l);
   MapCleaner().apply(map);
 

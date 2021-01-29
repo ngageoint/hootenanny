@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef POI_POLYGON_INVALID_REVIEW_NODE_REMOVER_H
@@ -50,14 +50,16 @@ class PoiPolygonInvalidReviewNodeRemover : public ConstOsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonInvalidReviewNodeRemover"; }
+  static QString className() { return "hoot::PoiPolygonInvalidReviewNodeRemover"; }
 
   PoiPolygonInvalidReviewNodeRemover();
   virtual ~PoiPolygonInvalidReviewNodeRemover() = default;
 
   virtual void apply(const std::shared_ptr<OsmMap>& map);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const
   { return "Removes all reviewable POI/Polygon POIs and their reviews that are invalid"; }

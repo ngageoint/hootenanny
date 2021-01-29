@@ -22,12 +22,15 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SettingsJs.h"
 
 // hoot
 #include <hoot/core/util/Settings.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/ConfigUtils.h>
+
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/io/DataConvertJs.h>
 #include <hoot/js/util/StringUtilsJs.h>
@@ -65,6 +68,22 @@ void SettingsJs::Init(Handle<Object> exports)
                FunctionTemplate::New(current, loadJson)->GetFunction());
   settings->Set(String::NewFromUtf8(current, "loadJson"),
                 FunctionTemplate::New(current, loadJson)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "appendToList"),
+               FunctionTemplate::New(current, appendToList)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "appendToList"),
+                FunctionTemplate::New(current, appendToList)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "prependToList"),
+               FunctionTemplate::New(current, prependToList)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "prependToList"),
+                FunctionTemplate::New(current, prependToList)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "removeFromList"),
+               FunctionTemplate::New(current, removeFromList)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "removeFromList"),
+                FunctionTemplate::New(current, removeFromList)->GetFunction());
+  exports->Set(String::NewFromUtf8(current, "replaceInList"),
+               FunctionTemplate::New(current, replaceInList)->GetFunction());
+  settings->Set(String::NewFromUtf8(current, "replaceInList"),
+                FunctionTemplate::New(current, replaceInList)->GetFunction());
 }
 
 void SettingsJs::get(const FunctionCallbackInfo<Value>& args)
@@ -137,8 +156,123 @@ void SettingsJs::set(const FunctionCallbackInfo<Value>& args)
   }
   else
   {
-    args.GetReturnValue().Set(current->ThrowException(
-      Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
+  }
+}
+
+void SettingsJs::appendToList(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  Settings* settings = &conf();
+
+  if (args[0]->IsObject())
+  {
+    Local<Array> keys = args[0]->ToObject()->GetPropertyNames();
+    for (uint32_t i = 0; i < keys->Length(); i++)
+    {
+      Local<String> k = keys->Get(i)->ToString();
+      Local<String> v = args[0]->ToObject()->Get(k)->ToString();
+
+      QStringList settingVal = settings->getList(str(k));
+      settingVal.append(str(v));
+      settings->set(str(k), settingVal);
+    }
+    args.GetReturnValue().SetUndefined();
+  }
+  else
+  {
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
+  }
+}
+
+void SettingsJs::prependToList(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  Settings* settings = &conf();
+
+  if (args[0]->IsObject())
+  {
+    Local<Array> keys = args[0]->ToObject()->GetPropertyNames();
+    for (uint32_t i = 0; i < keys->Length(); i++)
+    {
+      Local<String> k = keys->Get(i)->ToString();
+      Local<String> v = args[0]->ToObject()->Get(k)->ToString();
+
+      QStringList settingVal = settings->getList(str(k));
+      settingVal.prepend(str(v));
+      settings->set(str(k), settingVal);
+    }
+    args.GetReturnValue().SetUndefined();
+  }
+  else
+  {
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
+  }
+}
+
+void SettingsJs::removeFromList(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  Settings* settings = &conf();
+
+  if (args[0]->IsObject())
+  {
+    Local<Array> keys = args[0]->ToObject()->GetPropertyNames();
+    for (uint32_t i = 0; i < keys->Length(); i++)
+    {
+      Local<String> k = keys->Get(i)->ToString();
+      Local<String> v = args[0]->ToObject()->Get(k)->ToString();
+
+      QStringList settingVal = settings->getList(str(k));
+      settingVal.removeAll(str(v));
+      settings->set(str(k), settingVal);
+    }
+    args.GetReturnValue().SetUndefined();
+  }
+  else
+  {
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
+  }
+}
+
+void SettingsJs::replaceInList(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  Settings* settings = &conf();
+
+  if (args[0]->IsObject())
+  {
+    Local<Array> keys = args[0]->ToObject()->GetPropertyNames();
+    for (uint32_t i = 0; i < keys->Length(); i++)
+    {
+      Local<String> k = keys->Get(i)->ToString();
+      Local<String> v = args[0]->ToObject()->Get(k)->ToString();
+
+      Settings::replaceListOptionEntryValues(*settings, str(k), str(v).split(";"));
+    }
+    args.GetReturnValue().SetUndefined();
+  }
+  else
+  {
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        Exception::TypeError(String::NewFromUtf8(current, "Expected a dict of settings"))));
   }
 }
 

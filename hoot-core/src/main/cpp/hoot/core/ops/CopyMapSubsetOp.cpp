@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "CopyMapSubsetOp.h"
 
@@ -30,11 +30,14 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 
 namespace hoot
 {
+
+HOOT_FACTORY_REGISTER(OsmMapOperation, CopyMapSubsetOp)
 
 class AddAllVisitor : public ConstElementVisitor
 {
@@ -92,7 +95,8 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
+virtual QString getClassName() const override { return ""; }
 
   std::set<ElementId>& getElementsAdded() { return _elementsAdded; }
 
@@ -104,6 +108,11 @@ private:
   ElementId _exempt;
   std::set<ElementId> _elementsAdded;
 };
+
+CopyMapSubsetOp::CopyMapSubsetOp() :
+_copyChildren(true)
+{
+}
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const set<ElementId>& eids) :
 _eids(eids),
@@ -142,19 +151,18 @@ _copyChildren(true)
 
 CopyMapSubsetOp::CopyMapSubsetOp(const ConstOsmMapPtr& from, const ElementCriterionPtr& crit) :
 _from(from),
-_crit(crit),
 _copyChildren(true)
 {
-  std::shared_ptr<UniqueElementIdVisitor> getIdVis(new UniqueElementIdVisitor());
-  FilteredVisitor idVis(_crit, getIdVis);
-  _from->visitRo(idVis);
-  _eids = getIdVis->getElementSet();
-  LOG_VART(_eids.size());
-  LOG_VART(_eids);
+  addCriterion(crit);
 }
 
 void CopyMapSubsetOp::apply(OsmMapPtr& map)
 {
+  if (!_from)
+  {
+    throw IllegalArgumentException("No source map set on CopyMapSubsetOp.");
+  }
+
   map->setProjection(_from->getProjection());
   LOG_VART(_copyChildren);
   AddAllVisitor v(_from, map, _copyChildren);
@@ -171,6 +179,23 @@ void CopyMapSubsetOp::apply(OsmMapPtr& map)
   std::set<ElementId> eids = v.getElementsAdded();
   LOG_VART(eids.size());
   _eidsCopied.insert(eids.begin(), eids.end());
+  //  Copy the cached rubbersheet if it exists
+  map->setCachedRubberSheet(_from->getCachedRubberSheet());
+}
+
+void CopyMapSubsetOp::addCriterion(const ElementCriterionPtr& crit)
+{
+  if (!_from)
+  {
+    throw IllegalArgumentException("No source map set on CopyMapSubsetOp.");
+  }
+  LOG_VART(crit);
+
+  std::shared_ptr<UniqueElementIdVisitor> getIdVis(new UniqueElementIdVisitor());
+  FilteredVisitor idVis(crit, getIdVis);
+  _from->visitRo(idVis);
+  _eids = getIdVis->getElementSet();
+  LOG_VART(_eids.size());
 }
 
 }

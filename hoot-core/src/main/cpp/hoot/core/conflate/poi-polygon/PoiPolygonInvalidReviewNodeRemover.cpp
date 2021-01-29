@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "PoiPolygonInvalidReviewNodeRemover.h"
@@ -177,8 +177,8 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
 QStringList PoiPolygonInvalidReviewNodeRemover::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(PoiCriterion::className()));
-  criteria.append(QString::fromStdString(BuildingCriterion::className()));
+  criteria.append(PoiCriterion::className());
+  criteria.append(BuildingCriterion::className());
   return criteria;
 }
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFLATE_UTILS_H
@@ -30,6 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 
 namespace hoot
 {
@@ -61,6 +62,21 @@ public:
    */
   static void writeDiff(const QString& mapUrl1, const QString& mapUrl2,
                         const geos::geom::Envelope& bounds, const QString& output);
+
+  /**
+   * Checks to see if an element can be conflated by any of the configured matchers for conflation.
+   *
+   * @param element element to examine
+   * @param map map containing the element
+   * @return true if the conflate matchers are configured with at least one matcher that
+   * can conflate the input element; false otherwise
+   */
+  static bool elementCanBeConflatedByActiveMatcher(
+    const ConstElementPtr& element, const ConstOsmMapPtr& map);
+
+private:
+
+  static QMap<QString, ElementCriterionPtr> _critCache;
 };
 
 }

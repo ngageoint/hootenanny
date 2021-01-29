@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PROJECTTOGEOGRAPHICVISITOR_H
 #define PROJECTTOGEOGRAPHICVISITOR_H
@@ -31,7 +31,7 @@
 #include <ogr_geometry.h>
 #include <ogr_spatialref.h>
 
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -42,7 +42,7 @@ class ProjectToGeographicVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::ProjectToGeographicVisitor"; }
+  static QString className() { return "hoot::ProjectToGeographicVisitor"; }
 
   ProjectToGeographicVisitor();
   virtual ~ProjectToGeographicVisitor();
@@ -54,7 +54,9 @@ public:
   virtual QString getDescription() const
   { return "Projects features to a geographic coordinate system"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

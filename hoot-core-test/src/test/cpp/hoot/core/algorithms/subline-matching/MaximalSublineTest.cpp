@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 // CPP Unit
 #include <cppunit/extensions/HelperMacros.h>
@@ -44,7 +44,7 @@
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -541,8 +541,9 @@ public:
       map->addWay(ws1);
       map->addWay(ws2);
 
-      ElementToGeometryConverter ec(map);
-      result = (ec.calculateLength(ws1) + ec.calculateLength(ws2)) / 2.0;
+      result =
+        (ElementGeometryUtils::calculateLength(ws1, map) +
+         ElementGeometryUtils::calculateLength(ws2, map)) / 2.0;
     }
     else
     {
@@ -554,7 +555,6 @@ public:
 
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalSublineTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MaximalSublineTest, "quick");
 
 }

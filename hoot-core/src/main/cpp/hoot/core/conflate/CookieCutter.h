@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef COOKIECUTTER_H
@@ -41,7 +41,7 @@ class CookieCutter
 {
 public:
 
-  static std::string className() { return "hoot::CookieCutter"; }
+  static QString className() { return "hoot::CookieCutter"; }
 
   CookieCutter(bool crop, double outputBuffer = 0.0, bool keepEntireFeaturesCrossingBounds = false,
                bool keepOnlyFeaturesInsideBounds = false, bool removeMissingElements = true);

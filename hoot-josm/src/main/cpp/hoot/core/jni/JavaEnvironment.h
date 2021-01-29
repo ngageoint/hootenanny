@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JAVA_ENVIRONMENT_H
 #define JAVA_ENVIRONMENT_H
@@ -49,7 +49,7 @@ class JavaEnvironment
 
 public:
 
-  static std::string className() { return "hoot::JavaEnvironment"; }
+  static QString className() { return "hoot::JavaEnvironment"; }
 
   virtual ~JavaEnvironment();
 

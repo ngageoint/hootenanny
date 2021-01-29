@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SUBLINEMATCHER_H
 #define SUBLINEMATCHER_H
@@ -42,7 +42,7 @@ class SublineMatcher : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::SublineMatcher"; }
+  static QString className() { return "hoot::SublineMatcher"; }
 
   SublineMatcher() = default;
   virtual ~SublineMatcher() = default;
@@ -59,12 +59,7 @@ public:
   virtual void setMinSplitSize(Meters minSplitSize) = 0;
   virtual void setHeadingDelta(Meters headingDelta) = 0;
 
-  /**
-   * Returns the matcher's class name
-   *
-   * @return class name string
-   */
-  virtual std::string getClassName() const = 0;
+  virtual QString toString() const override { return ""; }
 };
 
 typedef std::shared_ptr<SublineMatcher> SublineMatcherPtr;

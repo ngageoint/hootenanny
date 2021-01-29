@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementJs.h"
 
@@ -54,7 +54,7 @@ void ElementJs::_addBaseFunctions(Local<FunctionTemplate> tpl)
   Isolate* current = v8::Isolate::GetCurrent();
   HandleScope scope(current);
   tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-      String::NewFromUtf8(current, Element::className().data()));
+      String::NewFromUtf8(current, Element::className().toStdString().data()));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getCircularError"),
       FunctionTemplate::New(current, getCircularError));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "getElementId"),

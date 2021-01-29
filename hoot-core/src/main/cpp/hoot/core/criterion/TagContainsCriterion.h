@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TAGCONTAINSCRITERION_H
@@ -45,7 +45,7 @@ class TagContainsCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagContainsCriterion"; }
+  static QString className() { return "hoot::TagContainsCriterion"; }
 
   TagContainsCriterion();
   TagContainsCriterion(QString key, QString valueSubstring);
@@ -71,6 +71,10 @@ public:
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
 
   virtual QString toString() const override;
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

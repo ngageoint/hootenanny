@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "IdGeneratorJs.h"
 
@@ -61,20 +61,21 @@ void IdGeneratorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
-  vector<string> opNames =
+  vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(IdGenerator::className());
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
-    QByteArray utf8 = QString::fromStdString(opNames[i]).replace("hoot::", "").toUtf8();
+    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
     const char* n = utf8.data();
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
 
-    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::NewFromUtf8(current, IdGenerator::className().data()));
+    tpl->PrototypeTemplate()->Set(
+      PopulateConsumersJs::baseClass(),
+      String::NewFromUtf8(current, IdGenerator::className().toStdString().data()));
 
     target->Set(String::NewFromUtf8(current, n), tpl->GetFunction());
   }
@@ -85,11 +86,13 @@ void IdGeneratorJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
   if (className == "Object")
   {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-      "Invalid IdGenerator. Did you forget 'new'?"))));
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        HootExceptionJs::create(
+          IllegalArgumentException("Invalid IdGenerator. Did you forget 'new'?"))));
   }
   else
   {

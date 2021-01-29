@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "SpatialIndexer.h"
 
@@ -92,10 +92,10 @@ void SpatialIndexer::finalizeIndex()
 
 void SpatialIndexer::visit(const ConstElementPtr& e)
 {
-  if (e)
-  {
-    LOG_VART(e->getElementId());
-  }
+  //  Ignore NULL elements
+  if (!e && !_map) return;
+
+  LOG_VART(e->getElementId());
   if (e && (!_criterion || _criterion->isSatisfied(e)))
   {
     LOG_TRACE("is satisfied: " << e->getElementId());
@@ -103,7 +103,6 @@ void SpatialIndexer::visit(const ConstElementPtr& e)
     Box b(2);
     Meters searchRadius = _getSearchRadius(e);
     LOG_VART(searchRadius);
-    LOG_VART(_map == 0);
     std::shared_ptr<Envelope> env(e->getEnvelope(_map->shared_from_this()));
     if (!env->isNull())
     {

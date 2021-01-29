@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEMISSINGELEMENTSVISITOR_H
 #define REMOVEMISSINGELEMENTSVISITOR_H
@@ -41,7 +41,7 @@ class RemoveMissingElementsVisitor : public ConstElementVisitor, public OsmMapCo
 {
 public:
 
-  static std::string className() { return "hoot::RemoveMissingElementsVisitor"; }
+  static QString className() { return "hoot::RemoveMissingElementsVisitor"; }
 
   RemoveMissingElementsVisitor(const Log::WarningLevel& logLevel = Log::Trace,
                                const int maxReport = Log::getWarnMessageLimit());
@@ -65,7 +65,9 @@ public:
   virtual QString getDescription() const
   { return "Removes references to any elements that do not exist"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

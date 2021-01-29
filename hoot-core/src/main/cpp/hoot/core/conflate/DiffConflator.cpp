@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DiffConflator.h"
 
@@ -283,7 +283,7 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   roadSnapper.setMarkSnappedWays(true);
   LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
   roadSnapper.apply(_pMap);
-  LOG_INFO("\t" << roadSnapper.getCompletedStatusMessage());
+  LOG_DEBUG("\t" << roadSnapper.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
 
   // Since way splitting was done as part of the conflate pre ops previously run and we've now
@@ -293,14 +293,13 @@ long DiffConflator::_snapSecondaryRoadsBackToRef()
   wayJoiner.setConfiguration(conf());
   LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
   wayJoiner.apply(_pMap);
-  LOG_INFO("\t" << wayJoiner.getCompletedStatusMessage());
+  LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-way-joining");
 
   // No point in running way joining a second time in post conflate ops since we already did it here
   // (its configured in post ops by default), so let's remove it.
   ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(),
-    QString::fromStdString(WayJoinerOp::className()));
+    ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
 
   return roadSnapper.getNumFeaturesAffected();
 }
@@ -356,7 +355,7 @@ void DiffConflator::_removeMatches(const Status& status)
             (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e1)) &&
             // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
             // these to be removed from the diff output.
-            !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
+            !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
               _intraDatasetMatchOnlyElementIds.contains(pit->first)))
         {
           LOG_TRACE("Removing element involved in match: " << pit->first << "...");
@@ -367,7 +366,7 @@ void DiffConflator::_removeMatches(const Status& status)
             // see related comment above
             (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e2)) &&
             // see related comment above
-            !(match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
+            !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
              _intraDatasetMatchOnlyElementIds.contains(pit->second)))
         {
           LOG_TRACE("Removing element involved in match: " << pit->second << "...");
@@ -597,7 +596,7 @@ void DiffConflator::_calcAndStoreTagChanges()
       // up adding a conflation type other than poi/poly which matches differing geometry types at
       // some point then this will need to be updated.
 
-      if (match->getMatchName() != PoiPolygonMatch().getMatchName() &&
+      if (match->getName() != PoiPolygonMatch().getName() &&
           pOldElement->getElementType() != pNewElement->getElementType())
       {
         LOG_TRACE("Skipping conflate match with differing element types: " << match << "...");

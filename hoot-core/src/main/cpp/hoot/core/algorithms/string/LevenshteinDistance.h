@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LEVENSHTEINDISTANCE_H
@@ -46,7 +46,7 @@ class LevenshteinDistance : public StringDistance, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::LevenshteinDistance"; }
+  static QString className() { return "hoot::LevenshteinDistance"; }
 
   /**
    * @param alph See the levenshtein.distance.alpha configuration option for an explanation.
@@ -120,6 +120,10 @@ public:
 
   virtual QString getDescription() const override
   { return "Returns a string comparison score derived using Levenshtein Distance"; }
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

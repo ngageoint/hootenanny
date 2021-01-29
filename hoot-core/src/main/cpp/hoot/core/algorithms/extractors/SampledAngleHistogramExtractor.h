@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
 #define SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -52,10 +52,11 @@ public:
   SampledAngleHistogramExtractor();
   virtual ~SampledAngleHistogramExtractor() = default;
 
-  static std::string className() { return "hoot::SampledAngleHistogramExtractor"; }
+  static QString className() { return "hoot::SampledAngleHistogramExtractor"; }
 
-  virtual std::string getClassName() const override
-  { return SampledAngleHistogramExtractor::className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual void setConfiguration(const Settings& conf) override;
 

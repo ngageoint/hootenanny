@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RANGE_H
 #define RANGE_H
@@ -43,7 +43,7 @@ class Range
 {
 public:
 
-  static std::string className() { return "hoot::Range"; }
+  static QString className() { return "hoot::Range"; }
 
   Range() {}
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -122,7 +122,7 @@ public:
     uut.setOsmMap(map.get());
 
     // both elements completely outside the bounding box
-    CPPUNIT_ASSERT(!uut.isSatisfied(map->getNode(-1669783)));
+    CPPUNIT_ASSERT(!uut.isSatisfied(map->getNode(-1669779)));
     CPPUNIT_ASSERT(!uut.isSatisfied(map->getWay(-1669799)));
   }
 };

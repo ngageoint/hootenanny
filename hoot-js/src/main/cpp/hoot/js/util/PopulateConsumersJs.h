@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POPULATECONSUMERSJS_H
 #define POPULATECONSUMERSJS_H
@@ -58,7 +58,8 @@ class PopulateConsumersJs
 {
 public:
 
-  static v8::Local<v8::String> baseClass() { return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "baseClass"); }
+  static v8::Local<v8::String> baseClass()
+  { return v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), "baseClass"); }
 
   template <typename T>
   static void populateConsumers(T* consumer, const v8::FunctionCallbackInfo<v8::Value>& args)
@@ -82,34 +83,34 @@ public:
 
       if (obj->Has(baseClass()))
       {
-        if (str(obj->Get(baseClass())) == QString::fromStdString(ElementCriterion::className()))
+        if (str(obj->Get(baseClass())) == ElementCriterion::className())
         {
           populateCriterionConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(ElementVisitor::className()))
+        else if (str(obj->Get(baseClass())) == ElementVisitor::className())
         {
           populateVisitorConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(Element::className()))
+        else if (str(obj->Get(baseClass())) == Element::className())
         {
           populateElementConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(StringDistance::className()))
+        else if (str(obj->Get(baseClass())) == StringDistance::className())
         {
           populateStringDistanceConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(ValueAggregator::className()))
+        else if (str(obj->Get(baseClass())) == ValueAggregator::className())
         {
           populateValueAggregatorConsumer<T>(consumer, v);
         }
-        else if (str(obj->Get(baseClass())) == QString::fromStdString(OsmMap::className()))
+        else if (str(obj->Get(baseClass())) == OsmMap::className())
         {
           populateOsmMapConsumer<T>(consumer, v);
         }
         else
         {
-          throw IllegalArgumentException("Unexpected object passed to consumer " +
-                                         str(obj->Get(baseClass())));
+          throw IllegalArgumentException(
+            "Unexpected object passed to consumer " + str(obj->Get(baseClass())));
         }
       }
       else
@@ -166,7 +167,6 @@ public:
     LOG_TRACE("Populating criterion consumer...");
 
     ElementCriterionJs* obj = node::ObjectWrap::Unwrap<ElementCriterionJs>(v->ToObject());
-
     ElementCriterionConsumer* c = dynamic_cast<ElementCriterionConsumer*>(consumer);
 
     if (c == 0)
@@ -185,7 +185,6 @@ public:
     LOG_TRACE("Populating element consumer...");
 
     ElementJs* obj = node::ObjectWrap::Unwrap<ElementJs>(v->ToObject());
-
     ElementConsumer* c = dynamic_cast<ElementConsumer*>(consumer);
 
     if (c == 0)

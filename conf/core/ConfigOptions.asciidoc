@@ -723,6 +723,16 @@ The number of seconds plus or minus for random throttling of the OSM API writer.
 
 The text description that is written to the OSM API database with a changeset.
 
+=== changeset.ignore.bounds
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, changeset writers will ignore the `bounds` configuration option. Otherwise, only
+elements satisfying the configured geospatial bounds options will be used to generate changeset
+statements. Currently this primarily used by the Cut and Replace workflow, as it handles the bounds
+internally.
+
 === changeset.hashtags
 
 * Data Type: string
@@ -866,6 +876,14 @@ this list is empty, no circular error will be parsed from input features and a t
 * Default Value: `conf/core/ConfigOptions.asciidoc`
 
 Path to this file.  Only modified during testing the Hootenanny options command.
+
+=== conflate.mark.merge.created.multilinestring.relations
+
+* Data Type: bool
+* Default Value: `false`
+
+Marks any multilinestring relations created as a result of merging during conflation with a custom
+tag. Individual mergers must enable this option independently.
 
 === conflate.match.building.model
 
@@ -2674,6 +2692,14 @@ value is set to 0 a single polygon using the bounds of the source data is being 
 List of tag/value pairs of metatdata tags with default values to be distributed (import) or
 collected (export).
 
+=== multilinestring.relation.collapser.types
+
+* Data Type: list
+* Default Value: ``
+
+A list of type keys or key/value pairs eligible for moving from multilinestring relations to
+their relation members when using `MultilineStringRelationCollapser`.
+
 === name.criterion.case.sensitive
 
 * Data Type: bool
@@ -3946,7 +3972,7 @@ duplicate.
 * Data Type: int
 * Default Value: `-1`
 
-A random seed integer passed to the random number generator accessed by map operations and 
+A random seed integer passed to the random number generator accessed by map operations and
 visitors that modify elements randomly (used by PERTY, RandomMapCropper, etc.). to give consistent
 results over multiple runs. A value of -1 will generate a seed based on the time to provide
 pseudo-random results in the output.
@@ -4124,6 +4150,14 @@ considered to have a name match.
 
 Tag similarity threshold (0.0 to 1.0) at or above which an collection relation feature is considered
 to have similar tags.
+
+=== relation.with.members.of.type.criterion.allow.mixed.children
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, implementations of RelationWithMembersOfTypeCriterion will be satisfied if any member
+meets their member criterion. If disabled, all members must satisfy the member criterion.
 
 === relation.with.most.members.op.member.criterion
 
@@ -4890,7 +4924,7 @@ key/value pairs with ';' and surround the entire list in double quotes.
 * Default Value: `hoot::OverwriteTag2Merger`
 
 Specifies the default way of merging tags. This is used by most merge routines, but may be overriden
-depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the 
+depending on the specifics of the merger. 'hoot info --tag-mergers' displays information about the
 available mergers.
 
 === tag.merger.overwrite.accumulate.values.keys
@@ -5140,6 +5174,13 @@ SampledAngleHistogramExtractor
 Automatically calculates the search radius to be used during conflation of waterways using rubber
 sheet tie point distances.
 
+=== waterway.mark.merge.created.multilinestring.relations
+
+* Data Type: bool
+* Default Value: `true`
+
+River specific setting which overrides `conflate.mark.merge.created.multilinestring.relations`.
+
 === waterway.matcher.heading.delta
 
 * Data Type: double
@@ -5260,6 +5301,16 @@ If enabled, WayJoinerAdvanced will not consider the "alt_name" tag when performi
 * Default Value: `false`
 
 If enabled, WayJoinerOp will leave a way's parent ID populated after joining.
+
+=== way.joiner.write.parent.id.to.child.id
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, at the end of way joining `WayJoinerOp` will replace the ID of any element with a
+parent ID with the parent ID's value. In the case of multiple elements with the same parent ID, only
+the first element's ID will be updated. This can be useful when performing a bounded conflate and
+the source data has relation with some members falling outside of the bounds.
 
 === way.matcher.heading.delta
 

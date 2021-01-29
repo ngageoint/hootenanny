@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RubberSheet.h"
@@ -144,8 +144,8 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
           }
         }
 
-        std::shared_ptr<OsmMapConsumer> mapConsumer =
-          std::dynamic_pointer_cast<OsmMapConsumer>(crit);
+        std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+          std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
         LOG_VART(mapConsumer.get());
         if (mapConsumer)
         {
@@ -254,6 +254,8 @@ void RubberSheet::apply(std::shared_ptr<OsmMap>& map)
     _filterCalcAndApplyTransform(map);
   }
   _numProcessed = map->getWayCount();
+  //  Cache the rubbersheet for use later
+  map->setCachedRubberSheet(std::shared_ptr<RubberSheet>(this->clone()));
 }
 
 bool RubberSheet::_calcAndApplyTransform(OsmMapPtr& map)
@@ -460,8 +462,8 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
 {
   std::shared_ptr<DataFrame> df = _buildDataFrame(s);
 
-  vector<std::string> candidates;
-  if (_interpolatorClassName.empty())
+  vector<QString> candidates;
+  if (_interpolatorClassName.isEmpty())
   {
     candidates = Factory::getInstance().getObjectNamesByBase(Interpolator::className());
   }
@@ -663,10 +665,10 @@ bool RubberSheet::_findTies()
       "required minimum of " << _minimumTies << ", which is enough to perform rubbersheeting.");
 
     // experimentally determine the best interpolator.
-    _interpolatorClassName.clear();
+    _interpolatorClassName = "";
     _interpolator2to1 = _buildInterpolator(Status::Unknown2);
     // make sure we use the same interpolator for both directions.
-    _interpolatorClassName = _interpolator2to1->getClassName();
+    _interpolatorClassName = _interpolator2to1->getName();
     LOG_DEBUG(_interpolator2to1->toString());
     if (_ref == false)
     {
@@ -704,7 +706,7 @@ bool RubberSheet::_findTies()
 
     _interpolator1to2.reset();
     _interpolator2to1.reset();
-    _interpolatorClassName.clear();
+    _interpolatorClassName = "";
 
     return false;
   }
@@ -739,8 +741,7 @@ std::shared_ptr<Interpolator> RubberSheet::_readInterpolator(QIODevice& is)
   QString interpolatorClass;
   ds >> interpolatorClass;
   std::shared_ptr<Interpolator> result;
-  result.reset(Factory::getInstance().constructObject<Interpolator>(
-    interpolatorClass.toStdString()));
+  result.reset(Factory::getInstance().constructObject<Interpolator>(interpolatorClass));
   result->readInterpolator(is);
   return result;
 }
@@ -778,7 +779,7 @@ void RubberSheet::_writeInterpolator(
   ds << QString(projStr);
   delete [] projStr;
 
-  ds << QString::fromStdString(interpolator->getClassName());
+  ds << interpolator->getName();
   interpolator->writeInterpolator(os);
 }
 
@@ -802,8 +803,8 @@ vector<double> RubberSheet::calculateTiePointDistances()
 QStringList RubberSheet::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(LinearCriterion::className()));
-  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  criteria.append(LinearCriterion::className());
+  criteria.append(PolygonCriterion::className());
   return criteria;
 }
 

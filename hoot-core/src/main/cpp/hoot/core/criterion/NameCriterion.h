@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NAME_CRITERION_H
 #define NAME_CRITERION_H
@@ -47,7 +47,7 @@ class NameCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::NameCriterion"; }
+  static QString className() { return "hoot::NameCriterion"; }
 
   NameCriterion();
   NameCriterion(const QStringList& names, const bool caseSensitive = false,
@@ -71,8 +71,9 @@ public:
   void setCaseSensitive(bool caseSens) { _caseSensitive = caseSens; }
   void setPartialMatch(bool partialMatch) { _partialMatch = partialMatch; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

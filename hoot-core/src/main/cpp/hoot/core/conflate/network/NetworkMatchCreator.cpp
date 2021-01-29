@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkMatchCreator.h"
 
@@ -45,6 +45,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Standard
 #include <fstream>
@@ -91,6 +92,9 @@ void NetworkMatchCreator::createMatches(
 {
   QElapsedTimer timer;
   timer.start();
+
+  // The parent does some initialization we need.
+  MatchCreator::createMatches(map, matches, threshold);
 
   QString searchRadiusStr;
   const double searchRadius = ConfigOptions().getSearchRadiusHighway();
@@ -191,8 +195,10 @@ vector<CreatorDescription> NetworkMatchCreator::getAllCreators() const
   vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "Generates matchers that match roads with the Network Algorithm",
-      CreatorDescription::BaseFeatureType::Highway, false));
+      className(),
+      "Generates matchers that match roads with the Network Algorithm",
+      CreatorDescription::BaseFeatureType::Highway,
+      false));
   return result;
 }
 
@@ -218,6 +224,11 @@ std::shared_ptr<MatchThreshold> NetworkMatchCreator::getMatchThreshold()
                          config.getNetworkReviewThreshold()));
   }
   return _matchThreshold;
+}
+
+QStringList NetworkMatchCreator::getCriteria() const
+{
+  return QStringList(HighwayCriterion::className());
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAP_H
 #define OSMMAP_H
@@ -35,7 +35,7 @@
 
 // Hoot
 #include <hoot/core/elements/ElementProvider.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeMap.h>
 #include <hoot/core/elements/Relation.h>
@@ -62,21 +62,22 @@ namespace hoot
 namespace hoot
 {
 
+class ElementId;
+class IdSwap;
 class OsmMapIndex;
 class OsmMapListener;
-class ElementId;
 class Roundabout;
-class IdSwap;
+class RubberSheet;
 
 /**
  * The OsmMap contains all the information necessary to represent an OSM map. It holds the nodes,
  * ways, relations and an index to access them efficiently. It also provides a number of methods
  * for CRUD.
  *
- *  - In the long term it might be nice to remove the OsmIndex circular reference, but I
- *    haven't figured out a good way to do that. Possibly refactor into an OsmMap class
- *    and OsmData class. The OsmMap class maintains pointers to OsmData and an OsmIndex
- *    where neither directly references the other. (?)
+ *  In the long term it might be nice to remove the OsmIndex circular reference, but haven't
+ *  figured out a good way to do that. Possibly refactor into an OsmMap class and OsmData class. The
+ *  OsmMap class maintains pointers to OsmData and an OsmIndex where neither directly references the
+ *  other.
  */
 class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvider,
   public ElementIterator
@@ -88,7 +89,7 @@ class OsmMap : public std::enable_shared_from_this<OsmMap>, public ElementProvid
 
 public:
 
-  static std::string className() { return "hoot::OsmMap"; }
+  static QString className() { return "hoot::OsmMap"; }
 
   OsmMap();
 
@@ -97,7 +98,7 @@ public:
   explicit OsmMap(const std::shared_ptr<OGRSpatialReference>& srs);
   OsmMap(const std::shared_ptr<const OsmMap>&, const std::shared_ptr<OGRSpatialReference>& srs);
 
-  ~OsmMap();
+  ~OsmMap() = default;
 
   // GENERIC ELEMENT
 
@@ -341,6 +342,9 @@ public:
 
   void setEnableProgressLogging(bool enable) { _enableProgressLogging = enable; }
 
+  void setCachedRubberSheet(std::shared_ptr<RubberSheet> rubbersheet) { _cachedRubberSheet = rubbersheet; }
+  std::shared_ptr<RubberSheet> getCachedRubberSheet() const { return _cachedRubberSheet; }
+
 protected:
 
   mutable std::shared_ptr<IdGenerator> _idGen;
@@ -391,6 +395,8 @@ protected:
   NodeMap::const_iterator _currentNodeItr;
   WayMap::const_iterator _currentWayItr;
   RelationMap::const_iterator _currentRelationItr;
+
+  std::shared_ptr<RubberSheet> _cachedRubberSheet;
 
   void _copy(const std::shared_ptr<const OsmMap>& from);
 

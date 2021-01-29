@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __SINGLE_SIDED_NETWORK_MATCHER_H__
 #define __SINGLE_SIDED_NETWORK_MATCHER_H__
@@ -61,7 +61,7 @@ class SingleSidedNetworkMatcherTest;
 class SingleSidedNetworkMatcher : public NetworkMatcher
 {
 public:
-  static std::string className() { return "hoot::SingleSidedNetworkMatcher"; }
+  static QString className() { return "hoot::SingleSidedNetworkMatcher"; }
 
   const static double EPSILON;
 

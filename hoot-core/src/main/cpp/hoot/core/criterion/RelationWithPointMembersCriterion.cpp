@@ -22,13 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RelationWithPointMembersCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/PointCriterion.h>
 
 namespace hoot
 {
@@ -36,13 +37,23 @@ namespace hoot
 HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithPointMembersCriterion)
 
 RelationWithPointMembersCriterion::RelationWithPointMembersCriterion() :
-RelationWithGeometryMembersCriterion()
+RelationWithMembersOfTypeCriterion()
 {
 }
 
 RelationWithPointMembersCriterion::RelationWithPointMembersCriterion(ConstOsmMapPtr map) :
-RelationWithGeometryMembersCriterion(map)
+RelationWithMembersOfTypeCriterion(map)
 {
+}
+
+QString RelationWithPointMembersCriterion::getCriterion() const
+{
+  return PointCriterion::className();
+}
+
+GeometryTypeCriterion::GeometryType RelationWithPointMembersCriterion::getGeometryType() const
+{
+  return PointCriterion().getGeometryType();
 }
 
 }

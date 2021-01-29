@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POWER_LINE_WAY_NODE_CRITERION_H
 #define POWER_LINE_WAY_NODE_CRITERION_H
@@ -37,7 +37,7 @@ class PowerLineWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::PowerLineWayNodeCriterion"; }
+  static QString className() { return "hoot::PowerLineWayNodeCriterion"; }
 
   PowerLineWayNodeCriterion();
   PowerLineWayNodeCriterion(ConstOsmMapPtr map);
@@ -50,8 +50,9 @@ public:
 
   virtual QString getDescription() const override { return "Identifies power line nodes"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "LinearWaterwayCriterion.h"
@@ -40,7 +40,6 @@ HOOT_FACTORY_REGISTER(ElementCriterion, LinearWaterwayCriterion)
 bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   LOG_VART(e->getElementId());
-  //LOG_VART(e);
 
   // We were taking relations here at one point too. Just not convinced that we need to if all the
   // constituent linear features are properly tagged and extra processing time was being added. If
@@ -59,12 +58,13 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
   }
   else
   {
+    OsmSchema& schema = OsmSchema::getInstance();
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {
       const QString key = it.key();
       const QString val = it.value();
-      if (OsmSchema::getInstance().isAncestor(key, "waterway") ||
-          (key == "type" && OsmSchema::getInstance().isAncestor("waterway=" + val, "waterway")))
+      if (schema.isAncestor(key, "waterway") ||
+          (key == "type" && schema.isAncestor("waterway=" + val, "waterway")))
       {
         LOG_TRACE("passed crit");
         passedTagFilter = true;

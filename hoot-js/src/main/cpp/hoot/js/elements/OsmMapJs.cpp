@@ -30,7 +30,6 @@
 
 // hoot
 #include <hoot/core/ops/RemoveElementByEid.h>
-#include <hoot/core/elements/RelationMemberUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/js/JsRegistrar.h>
 #include <hoot/js/SystemNodeJs.h>
@@ -40,9 +39,6 @@
 #include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/js/visitors/ElementVisitorJs.h>
 #include <hoot/js/visitors/JsFunctionVisitor.h>
-#include <hoot/core/conflate/merging/RelationMerger.h>
-#include <hoot/core/elements/RelationMemberNodeCounter.h>
-#include <hoot/core/elements/ConnectedRelationMemberFinder.h>
 
 using namespace v8;
 
@@ -67,10 +63,12 @@ void OsmMapJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
+
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
   tpl->SetClassName(String::NewFromUtf8(current, "OsmMap"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
+
   // Prototype
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "clone"),
       FunctionTemplate::New(current, clone));
@@ -86,29 +84,12 @@ void OsmMapJs::Init(Handle<Object> target)
       FunctionTemplate::New(current, visit));
   tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "setIdGenerator"),
       FunctionTemplate::New(current, setIdGenerator));
+  tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "copyProjection"),
+      FunctionTemplate::New(current, copyProjection));
+
   tpl->PrototypeTemplate()->Set(
-    String::NewFromUtf8(current, "isMemberOfRelationType"),
-    FunctionTemplate::New(current, isMemberOfRelationType));
-  tpl->PrototypeTemplate()->Set(
-    String::NewFromUtf8(current, "isMemberOfRelationInCategory"),
-    FunctionTemplate::New(current, isMemberOfRelationInCategory));
-  tpl->PrototypeTemplate()->Set(
-    String::NewFromUtf8(current, "isMemberOfRelationWithTagKey"),
-    FunctionTemplate::New(current, isMemberOfRelationWithTagKey));
-  tpl->PrototypeTemplate()->Set(
-    String::NewFromUtf8(current, "mergeRelations"),
-    FunctionTemplate::New(current, mergeRelations));
-  tpl->PrototypeTemplate()->Set(
-    String::NewFromUtf8(current, "getNumRelationMemberNodes"),
-    FunctionTemplate::New(current, getNumRelationMemberNodes));
-  tpl->PrototypeTemplate()->Set(
-    String::NewFromUtf8(current, "relationsHaveConnectedWayMembers"),
-    FunctionTemplate::New(current, relationsHaveConnectedWayMembers));
-  tpl->PrototypeTemplate()->Set(
-    String::NewFromUtf8(current, "isMemberOfRelationSatisfyingCriterion"),
-    FunctionTemplate::New(current, isMemberOfRelationSatisfyingCriterion));
-  tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                String::NewFromUtf8(current, OsmMap::className().data()));
+    PopulateConsumersJs::baseClass(),
+    String::NewFromUtf8(current, OsmMap::className().toStdString().data()));
 
   _constructor.Reset(current, tpl->GetFunction());
   target->Set(String::NewFromUtf8(current, "OsmMap"), ToLocal(&_constructor));
@@ -124,21 +105,6 @@ Handle<Object> OsmMapJs::create(ConstOsmMapPtr map)
   from->_setMap(map);
 
   return scope.Escape(result);
-}
-
-void OsmMapJs::setIdGenerator(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  std::shared_ptr<IdGenerator> idGen =  toCpp<std::shared_ptr<IdGenerator>>(args[0]);
-  if (obj->getMap())
-  {
-    obj->getMap()->setIdGenerator(idGen);
-  }
-
-  args.GetReturnValue().SetUndefined();
 }
 
 Handle<Object> OsmMapJs::create(OsmMapPtr map)
@@ -292,152 +258,35 @@ void OsmMapJs::visit(const FunctionCallbackInfo<Value>& args)
   }
 }
 
-void OsmMapJs::isMemberOfRelationType(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  ElementId childId = toCpp<ElementId>(args[0]);
-  QString relationType = toCpp<QString>(args[1]);
-
-  const bool inRelationOfSpecifiedType =
-    RelationMemberUtils::isMemberOfRelationType(mapJs->getConstMap(), childId, relationType);
-
-  args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedType));
-}
-
-void OsmMapJs::isMemberOfRelationInCategory(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  ElementId childId = toCpp<ElementId>(args[0]);
-  QString schemaCategory = toCpp<QString>(args[1]);
-
-  const bool inRelationOfSpecifiedCategory =
-    RelationMemberUtils::isMemberOfRelationInCategory(
-      mapJs->getConstMap(), childId, schemaCategory);
-  LOG_VART(inRelationOfSpecifiedCategory);
-
-  args.GetReturnValue().Set(Boolean::New(current, inRelationOfSpecifiedCategory));
-}
-
-void OsmMapJs::isMemberOfRelationWithTagKey(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  ElementId childId = toCpp<ElementId>(args[0]);
-  QString tagKey = toCpp<QString>(args[1]);
-
-  const bool inRelationWithSpecifiedTagKey =
-    RelationMemberUtils::isMemberOfRelationWithTagKey(mapJs->getConstMap(), childId, tagKey);
-
-  args.GetReturnValue().Set(Boolean::New(current, inRelationWithSpecifiedTagKey));
-}
-
-void OsmMapJs::mergeRelations(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  ElementId elementId1 = toCpp<ElementId>(args[0]);
-  ElementId elementId2 = toCpp<ElementId>(args[1]);
-
-  RelationMerger merger;
-  merger.setOsmMap(mapJs->getMap().get());
-  try
-  {
-    merger.merge(elementId1, elementId2);
-
-    args.GetReturnValue().SetUndefined();
-  }
-  catch (const HootException& err)
-  {
-    LOG_VARE(err.getWhat());
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(err)));
-  }
-}
-
-void OsmMapJs::getNumRelationMemberNodes(const FunctionCallbackInfo<Value>& args)
+void OsmMapJs::setIdGenerator(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
   OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  ConstOsmMapPtr map = obj->getConstMap();
-  ElementId relationId = toCpp<ElementId>(args[0]);
-  ConstRelationPtr relation = map->getRelation(relationId.getId());
-  int numNodes = -1;
-  if (relation)
+  if (obj->getMap())
   {
-    RelationMemberNodeCounter counter;
-    counter.setOsmMap(map.get());
-    numNodes = counter.numNodes(relation);
+    obj->getMap()->setIdGenerator(toCpp<std::shared_ptr<IdGenerator>>(args[0]));
   }
-  args.GetReturnValue().Set(Number::New(current, numNodes));
+
+  args.GetReturnValue().SetUndefined();
 }
 
-void OsmMapJs::relationsHaveConnectedWayMembers(const FunctionCallbackInfo<Value>& args)
+void OsmMapJs::copyProjection(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  ElementId relationId1 = toCpp<ElementId>(args[0]);
-  ElementId relationId2 = toCpp<ElementId>(args[1]);
-  if (relationId1.getType() != ElementType::Relation ||
-      relationId2.getType() != ElementType::Relation)
+  OsmMapJs* obj = ObjectWrap::Unwrap<OsmMapJs>(args.This());
+  if (obj->getMap())
   {
-    throw IllegalArgumentException(
-      "Passed non-relation ID to relationsHaveConnectedWayMembers.");
-  }
-  ConstOsmMapPtr map = mapJs->getConstMap();
-
-  ConnectedRelationMemberFinder finder;
-  finder.setOsmMap(map.get());
-  args.GetReturnValue().Set(
-    Boolean::New(
-      current,
-        finder.haveConnectedWayMembers(
-          map->getRelation(relationId1.getId()), map->getRelation(relationId2.getId()))));
-}
-
-void OsmMapJs::isMemberOfRelationSatisfyingCriterion(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  OsmMapJs* mapJs = ObjectWrap::Unwrap<OsmMapJs>(args.This());
-  ElementId childId = toCpp<ElementId>(args[0]);
-  LOG_VART(childId);
-  QString critClassName = toCpp<QString>(args[1]);
-  LOG_VART(critClassName);
-
-  ElementCriterionPtr crit =
-    std::shared_ptr<ElementCriterion>(
-      Factory::getInstance().constructObject<ElementCriterion>(critClassName.trimmed()));
-  if (!crit)
-  {
-    throw IllegalArgumentException(
-      "isMemberOfRelationSatisfyingCriterion: invalid criterion: " + critClassName.trimmed());
-  }
-  std::shared_ptr<OsmMapConsumer> mapConsumer =
-    std::dynamic_pointer_cast<OsmMapConsumer>(crit);
-  LOG_VART(mapConsumer.get());
-  if (mapConsumer)
-  {
-    mapConsumer->setOsmMap(mapJs->getMap().get());
+    ConstOsmMapPtr mapToCopyFrom = toCpp<ConstOsmMapPtr>(args[0]);
+    obj->getMap()->setProjection(
+      std::shared_ptr<OGRSpatialReference>(
+        new OGRSpatialReference(*mapToCopyFrom->getProjection())));
   }
 
-  const bool isMember =
-    RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(mapJs->getConstMap(), childId, *crit);
-
-  args.GetReturnValue().Set(Boolean::New(current, isMember));
+  args.GetReturnValue().SetUndefined();
 }
 
 }

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPLACETAGVISITOR_H
 #define REPLACETAGVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 
 namespace hoot
@@ -51,7 +51,7 @@ public:
    * @brief className - get class name string
    * @return The namespace qualified class name
    */
-  static std::string className() { return "hoot::ReplaceTagVisitor"; }
+  static QString className() { return "hoot::ReplaceTagVisitor"; }
 
   /**
    * @brief ReplaceTagVisitor - default constructor
@@ -103,7 +103,9 @@ public:
     return "Replaced " + QString::number(_numAffected) + " element tags";
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

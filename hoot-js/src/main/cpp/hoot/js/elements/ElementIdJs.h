@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_ID_JS_H__
 #define __ELEMENT_ID_JS_H__
@@ -86,7 +86,7 @@ inline void toCpp(v8::Handle<v8::Value> v, ElementId& eid)
 
   QString className = str(obj->Get(PopulateConsumersJs::baseClass()));
   ElementIdJs* eidj = 0;
-  if (obj->InternalFieldCount() >= 1 && className == QString::fromStdString(ElementId::className()))
+  if (obj->InternalFieldCount() >= 1 && className == ElementId::className())
   {
     eidj = node::ObjectWrap::Unwrap<ElementIdJs>(obj);
   }

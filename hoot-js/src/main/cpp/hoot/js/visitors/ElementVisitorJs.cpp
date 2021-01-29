@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementVisitorJs.h"
 
@@ -51,21 +51,22 @@ void ElementVisitorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
-  vector<string> opNames =
+  vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(ElementVisitor::className());
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
-    QByteArray utf8 = QString::fromStdString(opNames[i]).replace("hoot::", "").toUtf8();
+    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
     const char* n = utf8.data();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(1);
     // Prototype
-    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::NewFromUtf8(current, ElementVisitor::className().data()));
+    tpl->PrototypeTemplate()->Set(
+       PopulateConsumersJs::baseClass(),
+       String::NewFromUtf8(current, ElementVisitor::className().toStdString().data()));
 
     Persistent<Function> constructor(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
@@ -77,7 +78,7 @@ void ElementVisitorJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  const QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
   LOG_VART(className);
   ElementVisitor* vis = Factory::getInstance().constructObject<ElementVisitor>(className);
   ElementVisitorJs* obj = new ElementVisitorJs(vis);

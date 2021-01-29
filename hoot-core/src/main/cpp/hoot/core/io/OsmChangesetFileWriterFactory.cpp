@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmChangesetFileWriterFactory.h"
 
@@ -49,7 +49,7 @@ std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWri
   LOG_VARD(url);
   LOG_VARD(osmApiDbUrl);
 
-  std::vector<std::string> names =
+  std::vector<QString> names =
     Factory::getInstance().getObjectNamesByBase(OsmChangesetFileWriter::className());
   std::shared_ptr<OsmChangesetFileWriter> writer;
   for (size_t i = 0; i < names.size() && !writer; ++i)
@@ -59,6 +59,13 @@ std::shared_ptr<OsmChangesetFileWriter> OsmChangesetFileWriterFactory::createWri
     if (writer->isSupported(url))
     {
       LOG_DEBUG("Using changeset output writer: " << names[i]);
+
+      Configurable* c = dynamic_cast<Configurable*>(writer.get());
+      if (c != 0)
+      {
+        c->setConfiguration(conf());
+      }
+
       if (url.endsWith(".osc.sql"))
       {
         if (osmApiDbUrl.isEmpty())

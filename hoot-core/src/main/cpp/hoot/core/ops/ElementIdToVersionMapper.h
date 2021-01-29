@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_ID_TO_VERSION_MAPPER_H
 #define ELEMENT_ID_TO_VERSION_MAPPER_H
@@ -39,7 +39,7 @@ class ElementIdToVersionMapper : public ConstOsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::ElementIdToVersionMapper"; }
+  static QString className() { return "hoot::ElementIdToVersionMapper"; }
 
   ElementIdToVersionMapper() = default;
   virtual ~ElementIdToVersionMapper() = default;
@@ -57,7 +57,9 @@ public:
   virtual QString getDescription() const
   { return "Maintains a mapping of element IDs to changeset versions"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

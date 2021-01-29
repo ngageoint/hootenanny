@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MultiLineStringSplitter.h"
 
@@ -32,7 +32,7 @@
 // hoot
 #include <hoot/core/algorithms/linearreference/MultiLineStringLocation.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
 #include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
@@ -101,7 +101,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
     {
       w->reverseOrder();
     }
-    if (ElementToGeometryConverter(map).calculateLength(w) > 0)
+    if (ElementGeometryUtils::calculateLength(w, map) > 0)
     {
       matches.push_back(w);
       LOG_TRACE("Adding " << w->getElementId() << " to map...");

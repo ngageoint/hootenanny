@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "NetworkDetails.h"
 
@@ -41,9 +41,10 @@
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -149,7 +150,7 @@ Radians NetworkDetails::calculateHeadingAtVertex(ConstNetworkEdgePtr e,
 Meters NetworkDetails::calculateLength(ConstNetworkEdgePtr e) const
 {
   assert(e->getMembers().size() == 1);
-  return ElementToGeometryConverter(_map).calculateLength(e->getMembers()[0]);
+  return ElementGeometryUtils::calculateLength(e->getMembers()[0], _map);
 }
 
 Meters NetworkDetails::calculateLength(ConstEdgeSublinePtr e) const
@@ -1079,7 +1080,7 @@ EdgeSublinePtr NetworkDetails::_toEdgeSubline(const WaySubline& ws, ConstNetwork
 {
   EdgeSublinePtr result;
 
-  Meters l = ElementToGeometryConverter(_map).calculateLength(ws.getWay());
+  Meters l = ElementGeometryUtils::calculateLength(ws.getWay(), _map);
   result.reset(new EdgeSubline(e, ws.getStart().calculateDistanceOnWay() / l,
     ws.getEnd().calculateDistanceOnWay() / l));
 

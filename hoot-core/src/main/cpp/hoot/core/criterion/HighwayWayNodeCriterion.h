@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAY_WAY_NODE_CRITERION_H
 #define HIGHWAY_WAY_NODE_CRITERION_H
@@ -37,7 +37,7 @@ class HighwayWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::HighwayWayNodeCriterion"; }
+  static QString className() { return "hoot::HighwayWayNodeCriterion"; }
 
   HighwayWayNodeCriterion();
   HighwayWayNodeCriterion(ConstOsmMapPtr map);
@@ -50,8 +50,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies highway nodes"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

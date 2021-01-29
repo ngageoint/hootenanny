@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AddHilbertReviewSortOrderOp.h"
 
@@ -140,7 +140,7 @@ int64_t AddHilbertReviewSortOrderOp::_calculateHilbertValue(
     ConstElementPtr element = map->getElement(*it);
     if (element)
     {
-      Envelope::AutoPtr te(element->getEnvelope(map));
+      std::unique_ptr<Envelope> te(element->getEnvelope(map));
       LOG_VART(env.get());
       if (env.get() == 0)
       {

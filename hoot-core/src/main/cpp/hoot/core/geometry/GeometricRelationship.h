@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef GEOMETRIC_RELATIONSHIP_H
 #define GEOMETRIC_RELATIONSHIP_H
@@ -39,7 +39,7 @@ namespace hoot
 /**
  * Enumeration mirroring the types of geometric comparisons availabe from geos::geom::Geometry
  *
- * Helpful link visually explaining the relationship:
+ * Helpful link visually explaining the relationships:
  *
  * https://gis.stackexchange.com/questions/217444/understanding-join-attributes-by-location-in-qgis
  */
@@ -54,10 +54,12 @@ public:
     Covers,
     Crosses,
     DisjointWith,
+    Equals,
     Intersects,
     IsWithin,
     Overlaps,
-    Touches
+    Touches,
+    Invalid
   } Type;
 
   GeometricRelationship() : _type(Contains) {}
@@ -80,6 +82,8 @@ public:
       return "Crosses";
     case GeometricRelationship::DisjointWith:
       return "DisjointWith";
+    case GeometricRelationship::Equals:
+      return "Equals";
     case GeometricRelationship::Intersects:
       return "Intersects";
     case GeometricRelationship::IsWithin:
@@ -111,6 +115,10 @@ public:
     else if (typeString == "disjointWith")
     {
       return DisjointWith;
+    }
+    else if (typeString == "equals")
+    {
+      return Equals;
     }
     else if (typeString == "intersects")
     {

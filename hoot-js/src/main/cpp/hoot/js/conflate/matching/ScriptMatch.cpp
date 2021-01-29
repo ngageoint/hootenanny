@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMatch.h"
 
@@ -133,7 +133,7 @@ void ScriptMatch::_calculateClassification(
   }
   catch (const NeedsReviewException& ex)
   {
-    LOG_VART(ex.getClassName());
+    LOG_VART(ex.getName());
     _p.setReview();
     _explainText = ex.getWhat();
   }

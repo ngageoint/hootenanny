@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "SchemaUtils.h"
@@ -40,8 +40,8 @@ bool SchemaUtils::anyElementsHaveType(const ConstOsmMapPtr& map)
 {
   return
     (int)FilteredVisitor::getStat(
-      std::shared_ptr<HasTypeCriterion>(new HasTypeCriterion()),
-      std::shared_ptr<ElementCountVisitor>(new ElementCountVisitor()), map) > 0;
+      ElementCriterionPtr(new HasTypeCriterion()),
+      ElementVisitorPtr(new ElementCountVisitor()), map) > 0;
 }
 
 }

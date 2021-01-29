@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef IN_BOUNDS_CRITERION_H
@@ -35,6 +35,7 @@
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 // GEOS
 #include <geos/geom/Envelope.h>
@@ -43,16 +44,19 @@
 namespace hoot
 {
 
+/*
+ * @todo genericize this to use GeometricRelationShip?
+ */
 class InBoundsCriterion : public ElementCriterion, public Boundable, public ConstOsmMapConsumer,
   public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::InBoundsCriterion"; }
+  static QString className() { return "hoot::InBoundsCriterion"; }
 
   InBoundsCriterion();
   InBoundsCriterion(const bool mustCompletelyContain);
-  virtual ~InBoundsCriterion() = default;
+  virtual ~InBoundsCriterion();
 
   /**
    * @see ElementCriterion
@@ -71,6 +75,9 @@ public:
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new InBoundsCriterion()); }
 
+  void setTreatWayNodesAsPartOfWays(const bool treatAsPartOfWays)
+  { _treatWayNodesAsPartOfWays = treatAsPartOfWays; }
+
   /**
    * @see ApiEntityInfo
    */
@@ -80,15 +87,22 @@ public:
   void setMustCompletelyContain(bool mustCompletelyContain)
   { _mustCompletelyContain = mustCompletelyContain; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 
+  // This map must be in the same coord sys as the bounds.
   ConstOsmMapPtr _map;
   std::shared_ptr<ElementToGeometryConverter> _elementConverter;
+  std::shared_ptr<WayNodeCriterion> _wayNodeCrit;
   // If false, the element can cross the bounds and still be considered within bounds.
   bool _mustCompletelyContain;
+  // If this is enabled, only the parent ways of way nodes are checked for bounds satisfaction.
+  bool _treatWayNodesAsPartOfWays;
+
+  bool _nonWayNodeInBounds(const ConstElementPtr& e) const;
 };
 
 }

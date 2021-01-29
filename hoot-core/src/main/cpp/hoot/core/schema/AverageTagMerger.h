@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef AVERAGETAGMERGER_H
 #define AVERAGETAGMERGER_H
@@ -36,7 +36,7 @@ class AverageTagMerger : public TagMerger
 {
 public:
 
-  static std::string className() { return "hoot::AverageTagMerger"; }
+  static QString className() { return "hoot::AverageTagMerger"; }
 
   AverageTagMerger() = default;
   virtual ~AverageTagMerger() = default;
@@ -46,7 +46,9 @@ public:
   virtual QString getDescription() const
   { return "Keeps tags from both features and overlapping tags are averaged together"; }
 
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef GEOMETRYMODIFIERVISITOR_H
@@ -31,7 +31,7 @@
 #include "GeometryModifierAction.h"
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMap.h>
 
@@ -58,19 +58,21 @@ public:
   void setActionDesc(GeometryModifierActionDesc actionDesc ) { _actionDesc = actionDesc; }
 
   // ElementVisitor
-  static std::string className() { return "hoot::GeometryModifierVisitor"; }
+  static QString className() { return "hoot::GeometryModifierVisitor"; }
   QString getDescription() const { return "Modifies map geometry as specified"; }
 
   // visits the element, checks if it matches the filter set in _actionDesc and
   // calls the action's process function
   virtual void visit(const ElementPtr& e) override;
 
-  // OperationStatusInfo
+  // OperationStatus
   virtual QString getInitStatusMessage() const { return "Modifying geometry..."; }
   virtual QString getCompletedStatusMessage() const
   { return "Modified " + QString::number(_numAffected) + " elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
   OsmMap* _pMap;

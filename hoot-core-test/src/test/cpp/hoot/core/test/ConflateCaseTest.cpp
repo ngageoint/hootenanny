@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ConflateCaseTest.h"
 
@@ -192,7 +192,7 @@ void ConflateCaseTest::runTest()
   // configures and cleans up the conf() environment
   TestSetup st(_confs);
 
-  if (ConfigOptions().getTestCaseConflateCmd().toStdString() == ConflateCmd::className())
+  if (ConfigOptions().getTestCaseConflateCmd() == ConflateCmd::className())
   {
     _runConflateCmd();
   }

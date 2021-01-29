@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MANIPULATORFEATUREEXTRACTOR_H
@@ -64,7 +64,7 @@ class MatchFeatureExtractor
 {
 public:
 
-  static std::string className() { return "hoot::MatchFeatureExtractor"; }
+  static QString className() { return "hoot::MatchFeatureExtractor"; }
 
   static int logWarnCount;
 

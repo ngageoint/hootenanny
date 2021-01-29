@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ELEMENT_H
 #define ELEMENT_H
@@ -67,7 +67,7 @@ class Element
 {
 public:
 
-  static std::string className() { return "hoot::Element"; }
+  static QString className() { return "hoot::Element"; }
 
   Element();
 
@@ -118,6 +118,7 @@ public:
   const Tags& getTags() const { return _getElementData().getTags(); }
   Tags& getTags() { return _getElementData().getTags(); }
   QString getTag(const QString& key) const { return _getElementData().getTags().get(key); }
+  bool hasTag(const QString& key) const { return _getElementData().getTags().contains(key); }
   int getTagCount() const { return _getElementData().getTags().size(); }
 
   bool hasCircularError() const { return _getElementData().hasCircularError(); }

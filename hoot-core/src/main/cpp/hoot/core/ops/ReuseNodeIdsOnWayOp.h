@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REUSE_NODE_IDS_ON_WAY_OP_H
 #define REUSE_NODE_IDS_ON_WAY_OP_H
@@ -46,7 +46,7 @@ class ReuseNodeIdsOnWayOp : public ConstOsmMapOperation, public ConstElementCons
 {
 public:
 
-  static std::string className() { return "hoot::ReuseNodeIdsOnWayOp"; }
+  static QString className() { return "hoot::ReuseNodeIdsOnWayOp"; }
 
   ReuseNodeIdsOnWayOp(ElementId from, ElementId to);
   ReuseNodeIdsOnWayOp() = default;
@@ -57,7 +57,9 @@ public:
 
   virtual QString getDescription() const { return "Reuses the node IDs from one way in another."; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

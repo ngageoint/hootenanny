@@ -94,6 +94,10 @@ public:
 
   virtual QString getDescription() const { return ""; }
 
+  virtual QString getName() const override { return ""; }
+
+virtual QString getClassName() const override { return ""; }
+
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new DeletableBuildingCriterion()); }
 
@@ -348,7 +352,8 @@ ElementId BuildingMerger::_getIdOfMoreComplexBuilding(
     LOG_VART(building1);
     nodeCount1 =
       (int)FilteredVisitor::getStat(
-        new NodeCriterion(), new ElementCountVisitor(), map, building1);
+        ElementCriterionPtr(new NodeCriterion()),
+        ElementVisitorPtr(new ElementCountVisitor()), map, building1);
   }
   LOG_VART(nodeCount1);
 
@@ -358,7 +363,8 @@ ElementId BuildingMerger::_getIdOfMoreComplexBuilding(
     LOG_VART(building2);
     nodeCount2 =
       (int)FilteredVisitor::getStat(
-        new NodeCriterion(), new ElementCountVisitor(), map, building2);
+        ElementCriterionPtr(new NodeCriterion()),
+        ElementVisitorPtr(new ElementCountVisitor()), map, building2);
   }
   LOG_VART(nodeCount2);
 

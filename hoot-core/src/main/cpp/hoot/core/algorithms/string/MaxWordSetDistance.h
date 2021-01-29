@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MAXWORDSETDISTANCE_H
 #define MAXWORDSETDISTANCE_H
@@ -41,7 +41,7 @@ class MaxWordSetDistance : public StringDistance, public StringDistanceConsumer,
 {
 public:
 
-  static std::string className() { return "hoot::MaxWordSetDistance"; }
+  static QString className() { return "hoot::MaxWordSetDistance"; }
 
   MaxWordSetDistance(StringDistancePtr d);
   MaxWordSetDistance() = default;
@@ -54,6 +54,10 @@ public:
   virtual void setStringDistance(const StringDistancePtr& sd) { _d = sd; }
 
   virtual QString toString() const override { return "MaxWordSet " + _d->toString(); }
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Returns a score based on the max (best) pairwise word comparison within two sets of words"; }

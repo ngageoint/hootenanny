@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef METADATAIMPORT_H
@@ -39,7 +39,7 @@ namespace hoot
 
 /*
  * MetadataImport imports a specific set of tags from one as 'dataset' specified way to all
- * elements containd in it.
+ * elements contained in it.
  *
  * A dataset is defined by the tag/value pair defined in the 'metadata.dataset.indicator.tag'
  * configuration variable. The key/value pair defines the tag and value expected from the
@@ -66,7 +66,7 @@ class MetadataImport : public MetadataOp
 {
 public:
 
-  static std::string className() { return "hoot::MetadataImport"; }
+  static QString className() { return "hoot::MetadataImport"; }
 
   MetadataImport() = default;
   virtual ~MetadataImport() = default;
@@ -74,7 +74,9 @@ public:
   // OsmMapOperation
   virtual QString getDescription() const override { return "Imports metadata"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

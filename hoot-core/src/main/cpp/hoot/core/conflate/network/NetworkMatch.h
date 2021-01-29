@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NETWORKMATCH_H
 #define NETWORKMATCH_H
@@ -44,7 +44,7 @@ class NetworkMatch : public Match
 {
 public:
 
-  static std::string className() { return "hoot::NetworkMatch"; }
+  static QString className() { return "hoot::NetworkMatch"; }
 
   NetworkMatch() = default;
   NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
@@ -70,7 +70,9 @@ public:
   /**
    * As new network matching routines are introduced this will need to be modified. E.g. Railway
    */
-  virtual QString getMatchName() const override { return HighwayMatch::MATCH_NAME; }
+  virtual QString getName() const override { return HighwayMatch::MATCH_NAME; }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual double getScore() const override { return getProbability(); }
 

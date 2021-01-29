@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ElementCriterionJs.h"
 
@@ -47,16 +47,87 @@ namespace hoot
 
 HOOT_JS_REGISTER(ElementCriterionJs)
 
+Persistent<Function> ElementCriterionJs::_constructor;
+
+void ElementCriterionJs::Init(Handle<Object> target)
+{
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
+  vector<QString> opNames =
+    Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
+
+  for (size_t i = 0; i < opNames.size(); i++)
+  {
+    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
+    const char* n = utf8.data();
+
+    // Prepare constructor template
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->InstanceTemplate()->SetInternalFieldCount(2);
+    // Prototype
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "addCriterion"),
+        FunctionTemplate::New(current, addCriterion));
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "isSatisfied"),
+        FunctionTemplate::New(current, isSatisfied));
+    tpl->PrototypeTemplate()->Set(
+      PopulateConsumersJs::baseClass(),
+      String::NewFromUtf8(current, ElementCriterion::className().toStdString().data()));
+
+    _constructor.Reset(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&_constructor));
+  }
+}
+
+void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
+  LOG_VART(className);
+  ElementCriterion* c = Factory::getInstance().constructObject<ElementCriterion>(className);
+  ElementCriterionJs* obj = new ElementCriterionJs(c);
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
+  obj->Wrap(args.This());
+
+  PopulateConsumersJs::populateConsumers<ElementCriterion>(c, args);
+
+  args.GetReturnValue().Set(args.This());
+}
+
+Handle<Object> ElementCriterionJs::New(ElementCriterionPtr c)
+{
+  Isolate* current = v8::Isolate::GetCurrent();
+  EscapableHandleScope scope(current);
+
+  Handle<Object> result = ToLocal(&_constructor)->NewInstance();
+  ElementCriterionJs* from = ObjectWrap::Unwrap<ElementCriterionJs>(result);
+  from->_c = c;
+  LOG_VART(c);
+
+  return scope.Escape(result);
+}
+
+void ElementCriterionJs::isSatisfied(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  ElementCriterionPtr ec = ObjectWrap::Unwrap<ElementCriterionJs>(args.This())->getCriterion();
+  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
+
+  args.GetReturnValue().Set(Boolean::New(current, ec->isSatisfied(e)));
+}
+
 void ElementCriterionJs::addCriterion(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
   ElementCriterionPtr addTo = ObjectWrap::Unwrap<ElementCriterionJs>(args.This())->getCriterion();
-
-  ElementCriterionPtr other = ObjectWrap::Unwrap<ElementCriterionJs>(args[0]->ToObject())->
-      getCriterion();
-
+  ElementCriterionPtr other =
+    ObjectWrap::Unwrap<ElementCriterionJs>(args[0]->ToObject())->getCriterion();
   std::shared_ptr<ElementCriterionConsumer> consumer =
     std::dynamic_pointer_cast<ElementCriterionConsumer>(addTo);
 
@@ -68,66 +139,9 @@ void ElementCriterionJs::addCriterion(const FunctionCallbackInfo<Value>& args)
   else
   {
     args.GetReturnValue().Set(current->ThrowException(
-      Exception::TypeError(String::NewFromUtf8(current, "This criterion doesn't support adding criterion."))));
+      Exception::TypeError(
+        String::NewFromUtf8(current, "This criterion doesn't support adding criterion."))));
   }
-}
-
-void ElementCriterionJs::Init(Handle<Object> target)
-{
-  Isolate* current = target->GetIsolate();
-  HandleScope scope(current);
-  vector<string> opNames =
-    Factory::getInstance().getObjectNamesByBase(ElementCriterion::className());
-
-  for (size_t i = 0; i < opNames.size(); i++)
-  {
-    QByteArray utf8 = QString::fromStdString(opNames[i]).replace("hoot::", "").toUtf8();
-    const char* n = utf8.data();
-
-    // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
-    tpl->InstanceTemplate()->SetInternalFieldCount(2);
-    // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "addCriterion"),
-        FunctionTemplate::New(current, addCriterion));
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "isSatisfied"),
-        FunctionTemplate::New(current, isSatisfied));
-    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::NewFromUtf8(current, ElementCriterion::className().data()));
-
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
-  }
-}
-
-void ElementCriterionJs::isSatisfied(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  ElementCriterionPtr ec = ObjectWrap::Unwrap<ElementCriterionJs>(args.This())->getCriterion();
-
-  ConstElementPtr e = ObjectWrap::Unwrap<ElementJs>(args[0]->ToObject())->getConstElement();
-
-  args.GetReturnValue().Set(Boolean::New(current, ec->isSatisfied(e)));
-}
-
-void ElementCriterionJs::New(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  const QString className = str(args.This()->GetConstructorName());
-  LOG_VART(className);
-  ElementCriterion* c = Factory::getInstance().constructObject<ElementCriterion>(className);
-  ElementCriterionJs* obj = new ElementCriterionJs(c);
-  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
-  obj->Wrap(args.This());
-
-  PopulateConsumersJs::populateConsumers<ElementCriterion>(c, args);
-
-  args.GetReturnValue().Set(args.This());
 }
 
 }

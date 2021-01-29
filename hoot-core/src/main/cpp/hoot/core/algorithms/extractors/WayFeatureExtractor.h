@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef WAYFEATUREEXTRACTOR_H
 #define WAYFEATUREEXTRACTOR_H
@@ -46,7 +46,7 @@ class WayFeatureExtractor : public FeatureExtractorBase, public ValueAggregatorC
 {
 public:
 
-  static std::string className() { return "hoot::WayFeatureExtractor"; }
+  static QString className() { return "hoot::WayFeatureExtractor"; }
 
   WayFeatureExtractor(ValueAggregatorPtr agg);
 
@@ -56,9 +56,9 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getClassName() const { return className(); }
 
-  virtual std::string getName() const;
+  virtual QString getName() const;
 
   virtual void setValueAggregator(const ValueAggregatorPtr& va) { _agg = va; }
 

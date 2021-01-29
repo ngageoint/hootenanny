@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ChangesetReplacementElementIdSynchronizer.h"
@@ -36,7 +36,6 @@
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/algorithms/extractors/RelationMemberSimilarityExtractor.h>
 
 namespace hoot
 {

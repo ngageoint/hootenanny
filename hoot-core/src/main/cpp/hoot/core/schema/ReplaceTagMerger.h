@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REPLACE_TAG_MERGER_H
 #define REPLACE_TAG_MERGER_H
@@ -40,7 +40,7 @@ class ReplaceTagMerger : public TagMerger
 {
 public:
 
-  static std::string className() { return "hoot::ReplaceTagMerger"; }
+  static QString className() { return "hoot::ReplaceTagMerger"; }
 
   /**
    * If swap is set to true then t1 will be overwritten with t2 values.
@@ -53,7 +53,8 @@ public:
 
   // leave empty to avoid duplicate tag mergers displayed by the info command
   virtual QString getDescription() const { return ""; }
-  virtual QString getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
   virtual void setConfiguration(const Settings& conf);
 
@@ -75,7 +76,7 @@ class ReplaceTag2Merger : public ReplaceTagMerger
 {
 public:
 
-  static std::string className() { return "hoot::ReplaceTag2Merger"; }
+  static QString className() { return "hoot::ReplaceTag2Merger"; }
 
   ReplaceTag2Merger() : ReplaceTagMerger(false) { }
   virtual ~ReplaceTag2Merger() = default;
@@ -86,7 +87,9 @@ public:
       "Completely replaces tags in the secondary feature with those from the reference feature";
   }
 
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 /**
@@ -97,7 +100,7 @@ class ReplaceTag1Merger : public ReplaceTagMerger
 {
 public:
 
-  static std::string className() { return "hoot::ReplaceTag1Merger"; }
+  static QString className() { return "hoot::ReplaceTag1Merger"; }
 
   ReplaceTag1Merger() : ReplaceTagMerger(true) { }
   virtual ~ReplaceTag1Merger() = default;
@@ -108,7 +111,9 @@ public:
       "Completely replaces tags in the reference feature with those from the secondary feature";
   }
 
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

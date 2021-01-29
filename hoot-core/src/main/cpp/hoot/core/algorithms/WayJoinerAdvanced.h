@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef WAYJOINER_ADVANCED_H
@@ -38,13 +38,13 @@ namespace hoot
 
 /**
  * An way joiner with extended features implemented to work with Attribute Conflation. Eventually
- * some of the logic could be moved up to WayJoinerBasic.
+ * some of the logic other than tag merging could be moved up to WayJoinerBasic.
  */
 class WayJoinerAdvanced : public WayJoiner
 {
 public:
 
-  static std::string className() { return "hoot::WayJoinerAdvanced"; }
+  static QString className() { return "hoot::WayJoinerAdvanced"; }
 
   typedef enum
   {
@@ -71,6 +71,10 @@ public:
    */
   virtual QString getDescription() const override
   { return "Extends WayJoinerBasic with additional join pre-conditions."; }
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 

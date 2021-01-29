@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "ReplaceRoundabouts.h"
@@ -38,6 +38,7 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 // Qt
 #include <QDebug>
@@ -101,6 +102,11 @@ void ReplaceRoundabouts::apply(std::shared_ptr<OsmMap>& pMap)
   _numAffected = 0;
 
   replaceRoundabouts(pMap);
+}
+
+QStringList ReplaceRoundabouts::getCriteria() const
+{
+  return QStringList(HighwayCriterion::className());
 }
 
 }

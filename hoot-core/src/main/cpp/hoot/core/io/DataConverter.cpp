@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DataConverter.h"
 
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/io/ElementStreamer.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -444,8 +444,8 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
 
   // Translation for going to OGR is always required and happens in the writer itself. It is not to
   // be done with convert ops, so let's ignore any translation ops that were specified.
-  _convertOps.removeAll(QString::fromStdString(SchemaTranslationOp::className()));
-  _convertOps.removeAll(QString::fromStdString(SchemaTranslationVisitor::className()));
+  _convertOps.removeAll(SchemaTranslationOp::className());
+  _convertOps.removeAll(SchemaTranslationVisitor::className());
   LOG_VARD(_convertOps);
 
   LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
@@ -611,11 +611,11 @@ void DataConverter::_setFromOgrOptions()
   // so let's merge them together.
   if (ConfigOptions().getOgr2osmMergeNearbyNodes())
   {
-    if (!_convertOps.contains(QString::fromStdString(DuplicateNodeRemover::className())))
+    if (!_convertOps.contains(DuplicateNodeRemover::className()))
     {
-      _convertOps.append(QString::fromStdString(DuplicateNodeRemover::className()));
+      _convertOps.append(DuplicateNodeRemover::className());
       // also run dupe way node removal
-      _convertOps.append(QString::fromStdString(RemoveDuplicateWayNodesVisitor::className()));
+      _convertOps.append(RemoveDuplicateWayNodesVisitor::className());
     }
   }
 
@@ -625,13 +625,13 @@ void DataConverter::_setFromOgrOptions()
   {
     // Building outline updating needs to happen after building part merging, or we can end up with
     // role verification warnings in JOSM.
-    if (!_convertOps.contains(QString::fromStdString(BuildingPartMergeOp::className())))
+    if (!_convertOps.contains(BuildingPartMergeOp::className()))
     {
-      _convertOps.append(QString::fromStdString(BuildingPartMergeOp::className()));
+      _convertOps.append(BuildingPartMergeOp::className());
     }
-    if (!_convertOps.contains(QString::fromStdString(BuildingOutlineUpdateOp::className())))
+    if (!_convertOps.contains(BuildingOutlineUpdateOp::className()))
     {
-      _convertOps.append(QString::fromStdString(BuildingOutlineUpdateOp::className()));
+      _convertOps.append(BuildingOutlineUpdateOp::className());
     }
   }
 }
@@ -664,8 +664,8 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   reader.setSchemaTranslationScript(_translation);
 
   // see similar note in _convertToOgr
-  _convertOps.removeAll(QString::fromStdString(SchemaTranslationOp::className()));
-  _convertOps.removeAll(QString::fromStdString(SchemaTranslationVisitor::className()));
+  _convertOps.removeAll(SchemaTranslationOp::className());
+  _convertOps.removeAll(SchemaTranslationVisitor::className());
   LOG_VARD(_convertOps);
 
   _setFromOgrOptions();
@@ -756,22 +756,21 @@ void DataConverter::_handleGeneralConvertTranslationOpts(const QString& output)
     //a previous check was done to make sure both a translation and export cols weren't specified
     assert(!_shapeFileColumnsSpecified());
 
-    if (!_convertOps.contains(QString::fromStdString(SchemaTranslationOp::className())) &&
-        !_convertOps.contains(QString::fromStdString(SchemaTranslationVisitor::className())))
+    if (!_convertOps.contains(SchemaTranslationOp::className()) &&
+        !_convertOps.contains(SchemaTranslationVisitor::className()))
     {
       // If a translation script was specified but not the translation op, we'll add auto add the op
       // as the first conversion operation. If the caller wants the translation done after some
       // other op, then they need to explicitly add it to the op list. Always adding the visitor
       // instead of the op, bc its streamable. However, if any other ops in the group aren't
       // streamable it won't matter anyway.
-      _convertOps.prepend(QString::fromStdString(SchemaTranslationVisitor::className()));
+      _convertOps.prepend(SchemaTranslationVisitor::className());
     }
-    else if (_convertOps.contains(QString::fromStdString(SchemaTranslationOp::className())))
+    else if (_convertOps.contains(SchemaTranslationOp::className()))
     {
       // replacing SchemaTranslationOp with SchemaTranslationVisitor for the reason mentioned above
       _convertOps.replaceInStrings(
-        QString::fromStdString(SchemaTranslationOp::className()),
-        QString::fromStdString(SchemaTranslationVisitor::className()));
+        SchemaTranslationOp::className(), SchemaTranslationVisitor::className());
     }
     LOG_VARD(_convertOps);
 

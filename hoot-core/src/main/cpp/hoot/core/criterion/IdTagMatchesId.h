@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ID_TAG_MATCHES_ID_H
 #define ID_TAG_MATCHES_ID_H
@@ -38,7 +38,7 @@ class IdTagMatchesId : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::IdTagMatchesId"; }
+  static QString className() { return "hoot::IdTagMatchesId"; }
 
   IdTagMatchesId() = default;
   virtual ~IdTagMatchesId() = default;
@@ -48,8 +48,9 @@ public:
   virtual QString getDescription() const
   { return "Determines whether an element's " + MetadataTags::HootId() + " tag matches its ID"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new IdTagMatchesId()); }
 };

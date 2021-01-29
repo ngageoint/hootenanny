@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ELEMENT_WAY_H__
 #define __ELEMENT_WAY_H__
@@ -46,7 +46,7 @@ class Way : public Element
 {
 public:
 
-  static std::string className() { return "hoot::Way"; }
+  static QString className() { return "hoot::Way"; }
 
   Way(Status s, long id, Meters circularError = ElementData::CIRCULAR_ERROR_EMPTY,
       long changeset = ElementData::CHANGESET_EMPTY,

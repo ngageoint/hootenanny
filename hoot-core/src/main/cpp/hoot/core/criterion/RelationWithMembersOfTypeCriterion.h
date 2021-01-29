@@ -22,16 +22,17 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef RELATION_WITH_GEOMETRY_MEMBERS_CRITERION_H
-#define RELATION_WITH_GEOMETRY_MEMBERS_CRITERION_H
+#ifndef RELATION_WITH_MEMBERS_OF_TYPE_CRITERION_H
+#define RELATION_WITH_MEMBERS_OF_TYPE_CRITERION_H
 
 // Hoot
 #include <hoot/core/criterion/GeometryTypeCriterion.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/Configurable.h>
 
 namespace hoot
 {
@@ -39,22 +40,24 @@ namespace hoot
 /**
  * Abstract class for identifying relations based on the geometry types of their children
  */
-class RelationWithGeometryMembersCriterion : public GeometryTypeCriterion,
-  public ConstOsmMapConsumer
+class RelationWithMembersOfTypeCriterion : public GeometryTypeCriterion,
+  public ConstOsmMapConsumer, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithGeometryMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithMembersOfTypeCriterion"; }
 
-  RelationWithGeometryMembersCriterion();
-  RelationWithGeometryMembersCriterion(ConstOsmMapPtr map);
-  virtual ~RelationWithGeometryMembersCriterion() = default;
+  RelationWithMembersOfTypeCriterion();
+  RelationWithMembersOfTypeCriterion(ConstOsmMapPtr map);
+  virtual ~RelationWithMembersOfTypeCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual QString getCriterion() const = 0;
 
   virtual void setOsmMap(const OsmMap* map);
+
+  virtual void setConfiguration(const Settings& conf);
 
   void setAllowMixedChildren(bool allow) { _allowMixedChildren = allow; }
 
@@ -74,4 +77,4 @@ private:
 };
 
 }
-#endif // RELATION_WITH_GEOMETRY_MEMBERS_CRITERION_H
+#endif // RELATION_WITH_MEMBERS_OF_TYPE_CRITERION_H

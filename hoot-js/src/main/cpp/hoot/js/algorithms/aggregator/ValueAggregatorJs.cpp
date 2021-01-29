@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ValueAggregatorJs.h"
 
@@ -49,23 +49,24 @@ void ValueAggregatorJs::Init(Handle<Object> target)
 {
   Isolate* current = target->GetIsolate();
   HandleScope scope(current);
-  vector<string> opNames =
+  vector<QString> opNames =
     Factory::getInstance().getObjectNamesByBase(ValueAggregator::className());
 
   for (size_t i = 0; i < opNames.size(); i++)
   {
-    QByteArray utf8 = QString::fromStdString(opNames[i]).replace("hoot::", "").toUtf8();
+    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
     const char* n = utf8.data();
 
     // Prepare constructor template
     Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
     tpl->InstanceTemplate()->SetInternalFieldCount(2);
     // Prototype
     tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "toString"),
         FunctionTemplate::New(current, toString));
-    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::NewFromUtf8(current, ValueAggregator::className().data()));
+    tpl->PrototypeTemplate()->Set(
+      PopulateConsumersJs::baseClass(),
+      String::NewFromUtf8(current, ValueAggregator::className().toStdString().data()));
 
     Persistent<Function> constructor(current, tpl->GetFunction());
     target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
@@ -77,7 +78,7 @@ void ValueAggregatorJs::New(const FunctionCallbackInfo<Value>& args)
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
-  QString className = str(args.This()->GetConstructorName());
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
 
   ValueAggregator* c = Factory::getInstance().constructObject<ValueAggregator>(className);
   ValueAggregatorJs* obj = new ValueAggregatorJs(ValueAggregatorPtr(c));

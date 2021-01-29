@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef SHAPEFILEWRITER_H
@@ -54,7 +54,7 @@ class ShapefileWriter : public OsmMapWriter, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ShapefileWriter"; }
+  static QString className() { return "hoot::ShapefileWriter"; }
 
   ShapefileWriter();
   virtual ~ShapefileWriter() = default;

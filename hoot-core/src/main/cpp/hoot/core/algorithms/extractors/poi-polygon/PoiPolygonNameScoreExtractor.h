@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POIPOLYGONNAMESCOREEXTRACTOR_H
 #define POIPOLYGONNAMESCOREEXTRACTOR_H
@@ -44,12 +44,14 @@ class PoiPolygonNameScoreExtractor : public FeatureExtractorBase, public Configu
 {
 public:
 
-  static std::string className() { return "hoot::PoiPolygonNameScoreExtractor"; }
+  static QString className() { return "hoot::PoiPolygonNameScoreExtractor"; }
 
   PoiPolygonNameScoreExtractor();
   virtual ~PoiPolygonNameScoreExtractor() = default;
 
-  virtual std::string getClassName() const { return PoiPolygonNameScoreExtractor::className(); }
+  virtual QString getClassName() const { return PoiPolygonNameScoreExtractor::className(); }
+
+  virtual QString getName() const { return className(); }
 
   /**
    * Returns a score from 0 to 1 representing the similarity of the feature names.  A score of -1

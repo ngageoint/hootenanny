@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef MINIDVISITOR_H
@@ -45,7 +45,7 @@ class MinIdVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static std::string className() { return "hoot::MinIdVisitor"; }
+  static QString className() { return "hoot::MinIdVisitor"; }
 
   MinIdVisitor() : _minId(std::numeric_limits<long>::max()) { }
   virtual ~MinIdVisitor() = default;
@@ -59,7 +59,9 @@ public:
   virtual QString getDescription() const
   { return "Returns the smallest element ID value found"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

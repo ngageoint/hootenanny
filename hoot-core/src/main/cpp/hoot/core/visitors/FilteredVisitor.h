@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FILTEREDVISITOR_H
 #define FILTEREDVISITOR_H
@@ -43,7 +43,7 @@ class FilteredVisitor : public ConstElementVisitor, public ConstOsmMapConsumer,
 
 public:
 
-  static std::string className() { return "hoot::FilteredVisitor"; }
+  static QString className() { return "hoot::FilteredVisitor"; }
 
   FilteredVisitor() : _criterion(0), _visitor(0) { }
   virtual ~FilteredVisitor() = default;
@@ -66,8 +66,8 @@ public:
 
   /**
    * Similar to above but this is convenient if you want to pass in a temporary criterion and
-   * visitor. In this case FilteredVisitor will take ownership of the criterion and visitor and
-   * delete it when destructed.
+   * visitor. WARNING: FilteredVisitor DOES NOT take ownership of the criterion and visitor and
+   * WON'T delete them when destructed.
    */
   FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor);
 
@@ -84,18 +84,22 @@ public:
 
   static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
                         const ConstOsmMapPtr& map);
+  static double getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
+                        const ConstOsmMapPtr& map, const ElementPtr& element);
   static double getStat(ElementCriterion* criterion, ElementVisitor* visitor,
                         const ConstOsmMapPtr& map, const ElementPtr& element);
 
   virtual QString getDescription() const { return ""; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 
   const ElementCriterion* _criterion;
-  const OsmMap* _map;
   ElementVisitor* _visitor;
+  const OsmMap* _map;
 };
 
 }

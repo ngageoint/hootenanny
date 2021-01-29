@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_CHANGESET_FILE_WRITER_FACTORY_H
 #define OSM_CHANGESET_FILE_WRITER_FACTORY_H
@@ -41,7 +41,7 @@ class OsmChangesetFileWriterFactory
 {
 public:
 
-  static std::string className() { return "hoot::OsmChangesetFileWriterFactory"; }
+  static QString className() { return "hoot::OsmChangesetFileWriterFactory"; }
 
   /**
    * Creates a writer capable of writing OSM changesets to a file

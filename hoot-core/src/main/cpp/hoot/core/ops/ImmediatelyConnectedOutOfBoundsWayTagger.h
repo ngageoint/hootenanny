@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMMEDIATELY_CONNECTED_OUT_OF_BOUNDS_WAY_TAGGER_H
 #define IMMEDIATELY_CONNECTED_OUT_OF_BOUNDS_WAY_TAGGER_H
@@ -49,7 +49,7 @@ class ImmediatelyConnectedOutOfBoundsWayTagger : public OsmMapOperation, public 
 {
 public:
 
-  static std::string className() { return "hoot::ImmediatelyConnectedOutOfBoundsWayTagger"; }
+  static QString className() { return "hoot::ImmediatelyConnectedOutOfBoundsWayTagger"; }
 
   ImmediatelyConnectedOutOfBoundsWayTagger();
   ImmediatelyConnectedOutOfBoundsWayTagger(const bool strictBounds);
@@ -73,13 +73,13 @@ public:
   { Boundable::setBounds(bounds); }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const
   { return "Adding tags to immediately connected out of bounds ways..."; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getCompletedStatusMessage() const
   {
@@ -99,7 +99,9 @@ public:
 
   long getNumTagged() const { return _numAffected; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

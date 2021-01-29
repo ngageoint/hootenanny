@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef LARGEWAYSPLITTER_H
@@ -46,7 +46,7 @@ class LargeWaySplitter
 {
 public:
 
-  static std::string className() { return "hoot::LargeWaySplitter"; }
+  static QString className() { return "hoot::LargeWaySplitter"; }
 
   static int logWarnCount;
 

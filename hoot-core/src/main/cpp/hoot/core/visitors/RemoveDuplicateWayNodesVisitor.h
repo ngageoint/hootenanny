@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef REMOVEDUPLICATEWAYNODESVISITOR_H
 #define REMOVEDUPLICATEWAYNODESVISITOR_H
 
 // Hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -48,7 +48,7 @@ class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsu
 {
 public:
 
-  static std::string className() { return "hoot::RemoveDuplicateWayNodesVisitor"; }
+  static QString className() { return "hoot::RemoveDuplicateWayNodesVisitor"; }
 
   RemoveDuplicateWayNodesVisitor() = default;
   virtual ~RemoveDuplicateWayNodesVisitor() = default;
@@ -79,7 +79,9 @@ public:
    */
   virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

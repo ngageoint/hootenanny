@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_GEOJSON_WRITER_H
 #define OSM_GEOJSON_WRITER_H
@@ -45,7 +45,7 @@ namespace hoot
 class OsmGeoJsonWriter : public OsmJsonWriter
 {
 public:
-  static std::string className() { return "hoot::OsmGeoJsonWriter"; }
+  static QString className() { return "hoot::OsmGeoJsonWriter"; }
 
   OsmGeoJsonWriter(int precision = ConfigOptions().getWriterPrecision());
   virtual ~OsmGeoJsonWriter() = default;

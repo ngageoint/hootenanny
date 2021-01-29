@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DELAUNAYINTERPOLATOR_H
 #define DELAUNAYINTERPOLATOR_H
@@ -52,7 +52,8 @@ namespace Tgs
 class DelaunayInterpolator : public BaseInterpolator
 {
 public:
-  static std::string className() { return "Tgs::DelaunayInterpolator"; }
+
+  static QString className() { return "Tgs::DelaunayInterpolator"; }
 
   DelaunayInterpolator();
 
@@ -63,13 +64,14 @@ public:
    */
   virtual double estimateError();
 
-  virtual std::string getClassName() const { return DelaunayInterpolator::className(); }
+  virtual QString getName() const { return className(); }
 
   virtual const std::vector<double>& interpolate(const std::vector<double>& point) const;
 
-  virtual std::string toString() const;
+  virtual QString toString() const;
 
 protected:
+
   /// The number of folds in cross validation
   int _kFold;
   std::shared_ptr<DelaunayTriangulation> _dt;

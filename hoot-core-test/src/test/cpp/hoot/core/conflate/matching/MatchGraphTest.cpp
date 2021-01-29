@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 /*
@@ -88,7 +88,8 @@ public:
     return _c;
   }
 
-  virtual QString getMatchName() const { return "Fake Match"; }
+  virtual QString getName() const { return "Fake Match"; }
+  virtual QString getClassName() const { return ""; }
 
   virtual double getProbability() const { return _p; }
 

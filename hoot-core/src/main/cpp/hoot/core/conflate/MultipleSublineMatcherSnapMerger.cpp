@@ -60,22 +60,22 @@ WaySublineMatchString MultipleSublineMatcherSnapMerger::_matchSubline(
   {
     LOG_TRACE(
       "Matching elements for merging: " << e1->getElementId() << ", " <<
-      e2->getElementId() << " with " << _sublineMatcher->getClassName() << " and " <<
+      e2->getElementId() << " with " << _sublineMatcher->getName() << " and " <<
       _sublineMatcher->getSublineMatcherName() << "...");
     try
     {
       match = _sublineMatcher->findMatch(map, e1, e2);
     }
-    catch (const RecursiveComplexityException&)
+    catch (const RecursiveComplexityException& e)
     {
       // If we receive this exception with the more accurate but sometimes slower maximal subline
       // matcher (assuming _sublineMatcher was configured to be Maximal), we'll try again with the
       // Frechet matcher, which is sometimes less accurate but usually much faster (assuming
       // _sublineMatcher2 was configured to be Frechet).
       LOG_TRACE(
-        "Encountered max recursive complexity. Re-matching river sublines for merging: " <<
+        e.getWhat() << " Re-matching river sublines for merging: " <<
         e1->getElementId() << ", " <<  e2->getElementId() << " with " <<
-        _sublineMatcher2->getClassName() << " and " << _sublineMatcher2->getSublineMatcherName() <<
+        _sublineMatcher2->getName() << " and " << _sublineMatcher2->getSublineMatcherName() <<
         "...");
       match = _sublineMatcher2->findMatch(map, e1, e2);
     }

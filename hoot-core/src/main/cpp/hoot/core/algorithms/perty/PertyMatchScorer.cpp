@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PertyMatchScorer.h"
 
@@ -222,7 +222,7 @@ OsmMapPtr PertyMatchScorer::_combineMapsAndPrepareForConflation(
     LOG_VARD(numTotalTags);
   }
 
-  if (ConfigOptions().getConflatePreOps().contains(QString::fromStdString(RubberSheet::className())))
+  if (ConfigOptions().getConflatePreOps().contains(RubberSheet::className()))
   {
     // move Unknown2 toward Unknown1
     conf().set(RubberSheet::refKey(), true);

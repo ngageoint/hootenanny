@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "FilteredVisitor.h"
 
@@ -40,25 +40,29 @@ HOOT_FACTORY_REGISTER(ElementVisitor, FilteredVisitor)
 
 FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor) :
   _criterion(&criterion),
-  _visitor(&visitor)
+  _visitor(&visitor),
+  _map(NULL)
 {
 }
 
 FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitorPtr visitor) :
   _criterion(&criterion),
-  _visitor(visitor.get())
+  _visitor(visitor.get()),
+  _map(NULL)
 {
 }
 
 FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor) :
   _criterion(criterion.get()),
-  _visitor(visitor.get())
+  _visitor(visitor.get()),
+  _map(NULL)
 {
 }
 
 FilteredVisitor::FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor) :
   _criterion(criterion),
-  _visitor(visitor)
+  _visitor(visitor),
+  _map(NULL)
 {
 }
 
@@ -129,6 +133,12 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr
   FilteredVisitor& filteredVis = const_cast<FilteredVisitor&>(filteredVisitor);
   map->visitRo(filteredVis);
   return stat->getStat();
+}
+
+double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr visitor,
+                                const ConstOsmMapPtr& map, const ElementPtr& element)
+{
+  return getStat(criterion.get(), visitor.get(), map, element);
 }
 
 double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* visitor,

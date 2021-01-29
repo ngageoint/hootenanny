@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef ONE_WAY_ROAD_STANDARDIZER_H
@@ -30,7 +30,6 @@
 
 // hoot
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -43,7 +42,7 @@ class OneWayRoadStandardizer : public ElementOsmMapVisitor
 
 public:
 
-  static std::string className() { return "hoot::OneWayRoadStandardizer"; }
+  static QString className() { return "hoot::OneWayRoadStandardizer"; }
 
   OneWayRoadStandardizer() = default;
   virtual ~OneWayRoadStandardizer() = default;
@@ -62,10 +61,11 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONFIGUTILS_H
@@ -30,6 +30,8 @@
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/geometry/GeometricRelationship.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
 
 // Qt
 #include <QStringList>
@@ -51,6 +53,37 @@ public:
    * @return true if any of the bounds options are enabled
    */
   static bool boundsOptionEnabled();
+
+  /**
+   * Gets the current configured bounds geometry
+   *
+   * @return a geometry
+   */
+  static std::shared_ptr<geos::geom::Geometry> getBounds();
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  static QString getBoundsString();
+
+  /**
+   * Determines which feature bounds checking relationship should be used based on the configured
+   * options for bounds
+   *
+   * @return a geometric relationship
+   */
+  static GeometricRelationship getBoundsRelationship();
+
+  /**
+   * Gets the current configured bounds condition
+   *
+   * @param map map in use for the current operation
+   * @return a criterion used for checking whether an element satisfies the current configured
+   * bounds condition
+   */
+  static std::shared_ptr<InBoundsCriterion> getBoundsFilter(const ConstOsmMapPtr& map);
 
   /**
    * Removes ApiTruncateTagVisitor from conflate ops if the corresponding config option is

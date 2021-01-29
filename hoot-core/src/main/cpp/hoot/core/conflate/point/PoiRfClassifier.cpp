@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiRfClassifier.h"
 
@@ -102,8 +102,7 @@ PoiRfClassifier::PoiRfClassifier()
   QStringList extractorNames;
   for (size_t i = 0; i < _extractors.size(); i++)
   {
-    extractorNames.append(QString::fromStdString(_extractors[i]->getName()).
-                          replace(QRegExp("[^\\w]"), "_"));
+    extractorNames.append(_extractors[i]->getName().replace(QRegExp("[^\\w]"), "_"));
   }
 
   QStringList missingExtractors;
@@ -126,8 +125,7 @@ PoiRfClassifier::PoiRfClassifier()
     {
       LOG_WARN(
         "An extractor used by the model is not being calculated. We will still try, but this will "
-        "undoubtably result in poor quality matches. Missing extractors:");
-      LOG_TRACE("Missing extractors: " << missingExtractors);
+        "undoubtably result in poor quality matches. Missing extractors: " << missingExtractors);
       LOG_TRACE("Available extractors: " << extractorNames);
     }
     else if (logWarnCount == Log::getWarnMessageLimit())
@@ -180,8 +178,8 @@ MatchClassification PoiRfClassifier::classify(const ConstOsmMapPtr& map,
 void PoiRfClassifier::_createAllExtractors()
 {
   _extractors.clear();
-  vector<std::string> extractorNames = Factory::getInstance().getObjectNamesByBase(
-    FeatureExtractor::className());
+  vector<QString> extractorNames =
+    Factory::getInstance().getObjectNamesByBase(FeatureExtractor::className());
   LOG_VART(extractorNames);
 
 //  for (size_t i = 0; i < extractorNames.size(); i++)
@@ -304,8 +302,7 @@ map<QString, double> PoiRfClassifier::getFeatures(const ConstOsmMapPtr& m,
     // if it isn't null then include it.
     if (!FeatureExtractor::isNull(v))
     {
-      QString factorName = QString::fromStdString(_extractors[i]->getName()).
-          replace(QRegExp("[^\\w]"), "_");
+      QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");
       result[factorName] = v;
     }
   }

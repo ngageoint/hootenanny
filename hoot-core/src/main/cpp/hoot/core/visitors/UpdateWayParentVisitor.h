@@ -22,12 +22,12 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef UPDATE_WAY_PARENT_VISITOR_H
 #define UPDATE_WAY_PARENT_VISITOR_H
 
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
@@ -37,7 +37,7 @@ class UpdateWayParentVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::UpdateWayParentVisitor"; }
+  static QString className() { return "hoot::UpdateWayParentVisitor"; }
 
   UpdateWayParentVisitor(long oldParentId, long newParentId);
   virtual ~UpdateWayParentVisitor() = default;
@@ -47,7 +47,9 @@ public:
   virtual QString getDescription() const override
   { return "Updates all way parent IDs to a new ID"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

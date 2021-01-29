@@ -46,7 +46,7 @@ class MultipleSublineMatcherSnapMerger : public LinearSnapMerger
 
 public:
 
-  static std::string className() { return "hoot::MultipleSublineMatcherSnapMerger"; }
+  static QString className() { return "hoot::MultipleSublineMatcherSnapMerger"; }
 
   MultipleSublineMatcherSnapMerger();
   MultipleSublineMatcherSnapMerger(
@@ -57,7 +57,9 @@ public:
 
   virtual QString getDescription() const { return "Merges ways with one or more subline matchers"; }
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 

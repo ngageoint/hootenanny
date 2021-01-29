@@ -22,14 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYMATCHCREATOR_H
 #define HIGHWAYMATCHCREATOR_H
 
 // hoot
 #include <hoot/core/conflate/matching/MatchCreator.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
 
 namespace hoot
 {
@@ -44,7 +43,7 @@ class HighwayMatchCreator : public MatchCreator
 
 public:
 
-  static std::string className() { return "hoot::HighwayMatchCreator"; }
+  static QString className() { return "hoot::HighwayMatchCreator"; }
 
   HighwayMatchCreator();
   virtual ~HighwayMatchCreator() = default;
@@ -57,7 +56,8 @@ public:
   /**
    * Search the provided map for highway matches and add the matches to the matches vector.
    */
-  virtual void createMatches(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
+  virtual void createMatches(
+    const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& matches,
     ConstMatchThresholdPtr threshold) override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
@@ -73,13 +73,12 @@ public:
 
   virtual std::shared_ptr<MatchThreshold> getMatchThreshold() override;
 
-  virtual QString getName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const override { return className(); }
 
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(HighwayCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
 private:
 

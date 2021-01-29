@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef TAG_ADVANCED_CRITERION_H
@@ -59,7 +59,7 @@ class TagAdvancedCriterion : public ElementCriterion, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagAdvancedCriterion"; }
+  static QString className() { return "hoot::TagAdvancedCriterion"; }
 
   TagAdvancedCriterion();
   TagAdvancedCriterion(const QString& filterJsonStrOrPath);
@@ -74,8 +74,9 @@ public:
   virtual QString getDescription() const
   { return "Identifies elements by tag using a set of advanced schema functionality"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

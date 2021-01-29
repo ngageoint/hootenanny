@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -50,7 +50,7 @@ class ConvertCmd : public BoundedCommand
 {
 public:
 
-  static string className() { return "hoot::ConvertCmd"; }
+  static QString className() { return "hoot::ConvertCmd"; }
 
   ConvertCmd() = default;
 
@@ -76,13 +76,12 @@ public:
 
     ConfigOptions configOpts(conf());
 
-    if (configOpts.getConvertOps().contains(QString::fromStdString(MapCropper::className())) &&
+    if (configOpts.getConvertOps().contains(MapCropper::className()) &&
         configOpts.getCropBounds().trimmed().isEmpty())
     {
       throw IllegalArgumentException(
-        "When using " + QString::fromStdString(MapCropper::className()) +
-        " with the convert command, the " + configOpts.getCropBoundsKey() +
-        " option must be specified.");
+        "When using " + MapCropper::className() + " with the convert command, the " +
+        configOpts.getCropBoundsKey() + " option must be specified.");
     }
 
     QStringList inputs;
@@ -99,7 +98,6 @@ public:
       // options. So, let's throw if we see a command line option at this point.
       if (arg.startsWith("--"))
       {
-        //break;
         throw IllegalArgumentException(
           QString("The convert command takes no inline options starting with '--'. All options ") +
           QString("are passed in as configuration options (-D)."));

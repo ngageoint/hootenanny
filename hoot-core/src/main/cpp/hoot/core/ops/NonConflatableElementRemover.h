@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NONCONFLATABLEELEMENTREMOVER_H
@@ -41,7 +41,7 @@ class NonConflatableElementRemover : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::NonConflatableElementRemover"; }
+  static QString className() { return "hoot::NonConflatableElementRemover"; }
 
   NonConflatableElementRemover() = default;
   virtual ~NonConflatableElementRemover() = default;
@@ -59,7 +59,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " unconflatable elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

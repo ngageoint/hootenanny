@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WeightedMetricDistanceExtractor.h"
@@ -102,10 +102,9 @@ double WeightedMetricDistanceExtractor::_extract(const OsmMap& map, const ConstW
   return _pointAgg->aggregate(distances);
 }
 
-string WeightedMetricDistanceExtractor::getName() const
+QString WeightedMetricDistanceExtractor::getName() const
 {
-  return getClassName() + (" way agg: " + _agg->toString() +
-                           " point agg: " + _pointAgg->toString()).toStdString();
+  return getClassName() + " way agg: " + _agg->toString() + " point agg: " + _pointAgg->toString();
 }
 
 void WeightedMetricDistanceExtractor::setPointAggregator(const QString& aggregator)

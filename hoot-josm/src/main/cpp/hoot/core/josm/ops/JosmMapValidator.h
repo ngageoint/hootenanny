@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JOSM_MAP_VALIDATOR_H
 #define JOSM_MAP_VALIDATOR_H
@@ -44,7 +44,7 @@ class JosmMapValidator : public JosmMapValidatorAbstract
 
 public:
 
-  static std::string className() { return "hoot::JosmMapValidator"; }
+  static QString className() { return "hoot::JosmMapValidator"; }
 
   JosmMapValidator() = default;
   virtual ~JosmMapValidator() = default;
@@ -55,10 +55,14 @@ public:
   virtual QString getDescription() const { return "Validates a map using JOSM"; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const
   { return "Validating elements with JOSM..."; }
+
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 
@@ -66,8 +70,6 @@ protected:
    * @see JosmMapValidatorAbstract
    */
   virtual OsmMapPtr _getUpdatedMap(OsmMapPtr& inputMap);
-
-  virtual std::string getClassName() const { return className(); }
 
 private:
 

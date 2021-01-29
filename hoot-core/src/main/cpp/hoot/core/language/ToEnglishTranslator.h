@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 
@@ -45,7 +45,7 @@ class ToEnglishTranslator : public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::ToEnglishTranslator"; }
+  static QString className() { return "hoot::ToEnglishTranslator"; }
 
   ToEnglishTranslator() = default;
   virtual ~ToEnglishTranslator() = default;

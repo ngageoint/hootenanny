@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmXmlChangesetFileWriter.h"
 
@@ -33,6 +33,10 @@
 #include <hoot/core/util/DateTimeUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
 
 // Qt
 #include <QFile>
@@ -47,12 +51,20 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmChangesetFileWriter, OsmXmlChangesetFileWriter)
 
 OsmXmlChangesetFileWriter::OsmXmlChangesetFileWriter() :
-_precision(ConfigOptions().getWriterPrecision()),
-_addTimestamp(ConfigOptions().getChangesetXmlWriterAddTimestamp()),
-_includeDebugTags(ConfigOptions().getWriterIncludeDebugTags()),
-_includeCircularErrorTags(ConfigOptions().getWriterIncludeCircularErrorTags()),
-_metadataAllowKeys(ConfigOptions().getChangesetMetadataAllowedTagKeys())
+OsmChangesetFileWriter(),
+_precision(16),
+_addTimestamp(false)
 {
+}
+
+void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
+{
+  ConfigOptions co(conf);
+  _precision = co.getWriterPrecision();
+  _addTimestamp = co.getChangesetXmlWriterAddTimestamp();
+  _includeDebugTags = co.getWriterIncludeDebugTags();
+  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
+  _changesetIgnoreBounds = co.getChangesetIgnoreBounds();
 }
 
 void OsmXmlChangesetFileWriter::_initStats()
@@ -90,6 +102,10 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
 {  
   LOG_DEBUG("Writing changeset to: " << path << "...");
 
+  LOG_VARD(_map1List.size());
+  LOG_VARD(_map2List.size());
+  assert(_map1List.size() == _map2List.size());
+
   QString filepath = path;
 
   _initIdCounters();
@@ -122,16 +138,31 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       "Deriving changes with changeset provider: " << i + 1 << " / " << changesetProviders.size() <<
       "...");
 
+    // Bounds checking requires a map. Grab the two input maps if they were passed in...one for
+    // each dataset, before changes and after.
+    ConstOsmMapPtr map1;
+    ConstOsmMapPtr map2;
+    if (_map1List.size() > 0)
+    {
+      map1 = _map1List.at(i);
+    }
+    if (_map2List.size() > 0)
+    {
+      map2 = _map2List.at(i);
+    }
+
     ChangesetProviderPtr changesetProvider = changesetProviders.at(i);
     LOG_VARD(changesetProvider->hasMoreChanges());
+    ConstElementPtr changeElement;
     while (changesetProvider->hasMoreChanges())
     {
       LOG_VART(changesetProvider->hasMoreChanges());
       LOG_TRACE("Reading next XML change...");
       _change = changesetProvider->readNextChange();
-      LOG_VART(_change.toString());
+      LOG_VART(_change);
+      changeElement = _change.getElement();
 
-      if (!_change.getElement())
+      if (!changeElement)
       {
         continue;
       }
@@ -144,11 +175,18 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       // to work well. Other options could be to favor certain change types over others. This check
       // must be here and not in ChangesetDeriver, as the problem has only been seen when combining
       // multiple derivers. You could make the argument to prevent these types of dupes from
-      // occurring before outputting this changeset file, but not quite sure how to do that yet, due
-      // to the fact that the changeset providers have a streaming interface.
-      if (_parsedChangeIds.contains(_change.getElement()->getElementId()))
+      // occurring before outputting the changeset file with this writer, but not quite sure how to
+      // do that yet, due to the fact that the changeset providers have a streaming interface.
+      if (_parsedChangeIds.contains(changeElement->getElementId()))
       {
         LOG_TRACE("Skipping change for element ID already having change: " << _change << "...");
+        continue;
+      }
+
+      // If a bounds was specified for calculating the changeset, honor it.
+      if (!_changesetIgnoreBounds && ConfigUtils::boundsOptionEnabled() &&
+          _failsBoundsCheck(changeElement, map1, map2))
+      {
         continue;
       }
 
@@ -158,7 +196,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
         if (last != Change::Unknown)
         {
           writer.writeEndElement();
-          _parsedChangeIds.append(_change.getElement()->getElementId());
+          _parsedChangeIds.append(changeElement->getElementId());
         }
         switch (_change.getType())
         {
@@ -187,17 +225,17 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
 
       if (_change.getType() != Change::Unknown)
       {
-        ElementType::Type type = _change.getElement()->getElementType().getEnum();
+        ElementType::Type type = changeElement->getElementType().getEnum();
         switch (type)
         {
           case ElementType::Node:
-            _writeNode(writer, _change.getElement(), _change.getPreviousElement());
+            _writeNode(writer, changeElement, _change.getPreviousElement());
             break;
           case ElementType::Way:
-            _writeWay(writer, _change.getElement(), _change.getPreviousElement());
+            _writeWay(writer, changeElement, _change.getPreviousElement());
             break;
           case ElementType::Relation:
-            _writeRelation(writer, _change.getElement(), _change.getPreviousElement());
+            _writeRelation(writer, changeElement, _change.getPreviousElement());
             break;
           default:
             throw IllegalArgumentException("Unexpected element type.");
@@ -214,7 +252,7 @@ void OsmXmlChangesetFileWriter::write(const QString& path,
       LOG_TRACE("Writing change end element...");
       writer.writeEndElement();
       last = Change::Unknown;
-      _parsedChangeIds.append(_change.getElement()->getElementId());
+      _parsedChangeIds.append(changeElement->getElementId());
     }
   }
 
@@ -439,15 +477,6 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
   }
 
   writer.writeEndElement();
-}
-
-void OsmXmlChangesetFileWriter::setConfiguration(const Settings &conf)
-{
-  ConfigOptions co(conf);
-  _precision = co.getWriterPrecision();
-  _addTimestamp = co.getChangesetXmlWriterAddTimestamp();
-  _includeDebugTags = co.getWriterIncludeDebugTags();
-  _includeCircularErrorTags = co.getWriterIncludeCircularErrorTags();
 }
 
 void OsmXmlChangesetFileWriter::_writeTags(QXmlStreamWriter& writer, Tags& tags,

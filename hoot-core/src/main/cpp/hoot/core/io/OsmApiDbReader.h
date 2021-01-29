@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBREADER_H
 #define OSMAPIDBREADER_H
@@ -40,7 +40,7 @@ class OsmApiDbReader : public ApiDbReader
 {
 public:
 
-  static std::string className() { return "hoot::OsmApiDbReader"; }
+  static QString className() { return "hoot::OsmApiDbReader"; }
 
   OsmApiDbReader();
   virtual ~OsmApiDbReader();

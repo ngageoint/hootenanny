@@ -98,7 +98,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
       const QString unstreamableMsg =
         "Unable to stream I/O due to op: " + opName + ". Loading entire map...";
 
-      if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
+      if (Factory::getInstance().hasBase<ElementCriterion>(opName))
       {
         ElementCriterionPtr criterion(
           Factory::getInstance().constructObject<ElementCriterion>(opName));
@@ -109,7 +109,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
           return false;
         }
       }
-      else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
+      else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
       {
         ElementVisitorPtr vis(
           Factory::getInstance().constructObject<ElementVisitor>(opName));
@@ -120,7 +120,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
           return false;
         }
       }
-      else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName.toStdString()))
+      else if (Factory::getInstance().hasBase<ConstElementVisitor>(opName))
       {
         ConstElementVisitorPtr vis(
           Factory::getInstance().constructObject<ConstElementVisitor>(opName));
@@ -160,7 +160,7 @@ ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
     {
       // Can this be cleaned up?
 
-      if (Factory::getInstance().hasBase<ElementCriterion>(opName.toStdString()))
+      if (Factory::getInstance().hasBase<ElementCriterion>(opName))
       {
         LOG_INFO("Initializing operation: " << opName << "...");
         ElementCriterionPtr criterion(
@@ -179,7 +179,7 @@ ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
 
         streamToFilter.reset(new ElementCriterionInputStream(streamToFilter, criterion));
       }
-      else if (Factory::getInstance().hasBase<ElementVisitor>(opName.toStdString()))
+      else if (Factory::getInstance().hasBase<ElementVisitor>(opName))
       {
         LOG_INFO("Initializing operation: " << opName << "...");
         ElementVisitorPtr visitor(Factory::getInstance().constructObject<ElementVisitor>(opName));

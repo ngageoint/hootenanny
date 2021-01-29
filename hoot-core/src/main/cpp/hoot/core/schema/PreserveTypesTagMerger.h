@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef PRESERVETYPESTAGMERGER_H
 #define PRESERVETYPESTAGMERGER_H
@@ -45,7 +45,7 @@ public:
 
   static QString ALT_TYPES_TAG_KEY;
 
-  static std::string className() { return "hoot::PreserveTypesTagMerger"; }
+  static QString className() { return "hoot::PreserveTypesTagMerger"; }
 
   /**
    * Constructor
@@ -64,7 +64,9 @@ public:
   virtual QString getDescription() const
   { return "Keeps tags from both features and preserves overlapping type tags"; }
 
-  virtual QString getClassName() const { return QString::fromStdString(className()); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual void setConfiguration(const Settings& conf);
 

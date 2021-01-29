@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -46,7 +47,7 @@ class ChangesetDeriveCmd : public BoundedCommand
 {
 public:
 
-  static std::string className() { return "hoot::ChangesetDeriveCmd"; }
+  static QString className() { return "hoot::ChangesetDeriveCmd"; }
 
   ChangesetDeriveCmd() = default;
 
@@ -118,12 +119,29 @@ public:
         QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
     }
 
+    // Note that we may need to eventually further restrict this to only data with relation having
+    // oob members due to full hydration (would then need to move this code to inside
+    // ChangesetCreator).
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      _updateConfigOptionsForBounds();
+    }
+
     ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
 
     LOG_STATUS(
       "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
+  }
+
+private:
+
+  void _updateConfigOptionsForBounds()
+  {
+    // If we're working with a bounds, we need to ensure that reference features outside of the
+    // bounds don't get deleted.
+    conf().set(ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey(), false);
   }
 };
 

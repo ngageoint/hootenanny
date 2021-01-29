@@ -22,15 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RELATION_WITH_POLYGON_MEMBERS_CRITERION_H
 #define RELATION_WITH_POLYGON_MEMBERS_CRITERION_H
 
 // Hoot
-#include <hoot/core/criterion/RelationWithGeometryMembersCriterion.h>
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/criterion/RelationWithMembersOfTypeCriterion.h>
 
 namespace hoot
 {
@@ -38,28 +37,29 @@ namespace hoot
 /**
  * Identifies relations with children having polygon geometries
  */
-class RelationWithPolygonMembersCriterion : public RelationWithGeometryMembersCriterion
+class RelationWithPolygonMembersCriterion : public RelationWithMembersOfTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::RelationWithPolygonMembersCriterion"; }
+  static QString className() { return "hoot::RelationWithPolygonMembersCriterion"; }
 
-  RelationWithPolygonMembersCriterion() = default;
+  RelationWithPolygonMembersCriterion();
   RelationWithPolygonMembersCriterion(ConstOsmMapPtr map);
   virtual ~RelationWithPolygonMembersCriterion() = default;
 
   virtual ElementCriterionPtr clone()
   { return ElementCriterionPtr(new RelationWithPolygonMembersCriterion(_map)); }
 
-  virtual QString getCriterion() const override { return "hoot::PolygonCriterion"; }
+  virtual QString getCriterion() const override;
 
   virtual QString getDescription() const
   { return "Identifies relations with children having polygon geometries"; }
 
-  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
+  virtual GeometryType getGeometryType() const;
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

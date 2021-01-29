@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef CONSTELEMENTVISITOR_H
 #define CONSTELEMENTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -49,7 +49,7 @@ public:
   ConstElementVisitor() = default;
   virtual ~ConstElementVisitor() = default;
 
-  static std::string className() { return "hoot::ConstElementVisitor"; }
+  static QString className() { return "hoot::ConstElementVisitor"; }
 
   virtual void visit(const ConstElementPtr& e) = 0;
 

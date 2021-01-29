@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
 #define IMPLICIT_POI_POLYGON_TYPE_TAGGER_H
@@ -41,7 +41,7 @@ class ImplicitPoiPolygonTypeTagger : public ImplicitPoiTypeTagger
 {
 public:
 
-  static std::string className() { return "hoot::ImplicitPoiPolygonTypeTagger"; }
+  static QString className() { return "hoot::ImplicitPoiPolygonTypeTagger"; }
 
   ImplicitPoiPolygonTypeTagger() = default;
   ImplicitPoiPolygonTypeTagger(const QString& databasePath);
@@ -55,7 +55,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Added " + QString::number(_numAffected) + " tags to POIs and polygons"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 

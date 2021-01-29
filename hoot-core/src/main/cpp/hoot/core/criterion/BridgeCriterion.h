@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef BRIDGE_CRITERION_H
@@ -41,7 +41,7 @@ class BridgeCriterion : public ElementCriterion
 {
 public:
 
-  static std::string className() { return "hoot::BridgeCriterion"; }
+  static QString className() { return "hoot::BridgeCriterion"; }
 
   BridgeCriterion() = default;
   virtual ~BridgeCriterion() = default;
@@ -52,8 +52,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies bridges"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

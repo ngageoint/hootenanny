@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapWriterFactory.h"
 
@@ -62,8 +62,7 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(writerOverride));
   }
 
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
+  vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   for (size_t i = 0; i < names.size() && !writer; ++i)
   {
     LOG_VART(names[i]);
@@ -89,18 +88,17 @@ std::shared_ptr<OsmMapWriter> OsmMapWriterFactory::createWriter(const QString& u
 QString OsmMapWriterFactory::getWriterName(const QString& url)
 {
   LOG_VARD(url);
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
+  vector<QString> names = Factory::getInstance().getObjectNamesByBase(OsmMapWriter::className());
   LOG_VARD(names.size());
   std::shared_ptr<OsmMapWriter> writer;
   for (size_t i = 0; i < names.size(); i++)
   {
-    const std::string name = names[i];
+    const QString name = names[i];
     LOG_VART(name);
     writer.reset(Factory::getInstance().constructObject<OsmMapWriter>(name));
     if (writer->isSupported(url))
     {
-      return QString::fromStdString(name);
+      return name;
     }
   }
   return "";

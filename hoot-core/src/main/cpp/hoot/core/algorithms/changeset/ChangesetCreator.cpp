@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ChangesetCreator.h"
 
@@ -53,6 +53,7 @@
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
 #include <hoot/core/util/FileUtils.h>
+#include <hoot/core/util/DbUtils.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>
@@ -110,10 +111,6 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
       "Ignoring OSM API database URL: " << _osmApiDbUrl << " for non-SQL changeset output...");
   }
 
-  LOG_DEBUG(
-    "Creating changeset from inputs: " << input1 << " and " << input2 << " to output: " <<
-    output << "...");
-
   // write the output dir now so we don't get a nasty surprise at the end of a long job that it
   // can't be written
   IoUtils::writeOutputDir(output);
@@ -122,7 +119,10 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   LOG_VARD(_singleInput);
   // both inputs must support streaming to use streaming I/O
   const bool useStreamingIo =
-    _inputIsStreamable(input1) && (_singleInput || _inputIsStreamable(input2));
+    // TODO: may be able to move this check to ElementStreamer::areValidStreamingOps
+    !ConfigUtils::boundsOptionEnabled() &&
+    _inputIsStreamable(input1) &&
+    (_singleInput || _inputIsStreamable(input2));
   LOG_VARD(useStreamingIo);
 
   // The number of steps here must be updated as you add/remove job steps in the logic.
@@ -155,11 +155,15 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
   _currentTaskNum = 1;
   Progress progress(ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running);
   const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
-
-  progress.set(
-    0.0,
+  QString msg =
     "Deriving output changeset: ..." + output.right(maxFilePrintLength) + " from inputs: ..." +
-    input1.right(maxFilePrintLength) + " and ..." + input2.right(maxFilePrintLength) + "...");
+    input1.right(maxFilePrintLength) + " and ..." + input2.right(maxFilePrintLength);
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    msg += " over bounds: ..." + ConfigUtils::getBoundsString().right(maxFilePrintLength);
+  }
+  msg += "...";
+  progress.set(0.0, msg);
 
   //sortedElements1 is the former state of the data
   ElementInputStreamPtr sortedElements1;
@@ -184,6 +188,8 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     OsmMapPtr map1(new OsmMap());
     OsmMapPtr map2(new OsmMap());
     _readInputsFully(input1, input2, map1, map2, progress);
+    _map1List.append(map1);
+    _map2List.append(map2);
 
     // TODO: There need to be checks here to only sort if the input isn't already sorted like
     // there are for the external sorting (e.g. pre-sorted PBF file).
@@ -283,6 +289,12 @@ void ChangesetCreator::create(
     LOG_VART(MapProjector::toWkt(map1->getProjection()));
     LOG_VART(MapProjector::toWkt(map2->getProjection()));
 
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      _map1List.append(map1);
+      _map2List.append(map2);
+    }
+
     // no need to implement application of ops for this logic path
 
     // sortedInputs1 is the former state of the data
@@ -317,10 +329,10 @@ bool ChangesetCreator::_inputIsSorted(const QString& input) const
     return false;
   }
 
-  //Streaming db inputs actually do not come back sorted, despite the order by id clause
-  //in the query (see ApiDb::selectElements). Otherwise, we'd skip sorting them too.
+  // Streaming db inputs actually do not come back sorted, despite the order by id clause
+  // in the query (see ApiDb::selectElements). Otherwise, we'd skip sorting them too.
 
-  //pbf sets a sort flag
+  // pbf sets a sort flag
   if (OsmPbfReader().isSupported(input) && OsmPbfReader().isSorted(input))
   {
     return true;
@@ -343,10 +355,8 @@ bool ChangesetCreator::_inputIsStreamable(const QString& input) const
     ConfigOptions().getElementSorterElementBufferSize() != -1;
 }
 
-void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& input1,
-                                                             const QString& input2,
-                                                             OsmMapPtr& map1, OsmMapPtr& map2,
-                                                             Progress progress)
+void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
+  const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
 {
   LOG_DEBUG("Handling unstreamable convert ops in memory...");
 
@@ -394,6 +404,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& inpu
     // input.
     IoUtils::loadMap(fullMap, input1, true, Status::Unknown2);
   }
+
   LOG_VARD(fullMap->getElementCount());
   OsmMapWriterFactory::writeDebugMap(fullMap, "after-initial-read-unstreamable-full-map");
   _currentTaskNum++;
@@ -437,9 +448,8 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(const QString& inpu
   _currentTaskNum++;
 }
 
-void ChangesetCreator::_handleStreamableConvertOpsInMemory(const QString& input1,
-                                                           const QString& input2, OsmMapPtr& map1,
-                                                           OsmMapPtr& map2, Progress progress)
+void ChangesetCreator::_handleStreamableConvertOpsInMemory(
+  const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
 {
   LOG_DEBUG("Handling streamable convert ops in memory...");
 
@@ -485,8 +495,8 @@ void ChangesetCreator::_handleStreamableConvertOpsInMemory(const QString& input1
   _currentTaskNum++;
 }
 
-void ChangesetCreator::_readInputsFully(const QString& input1, const QString& input2,
-                                        OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
+void ChangesetCreator::_readInputsFully(
+  const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
 {  
   LOG_VARD(ConfigOptions().getConvertOps().size());
   if (ConfigOptions().getConvertOps().size() > 0)
@@ -581,8 +591,8 @@ ElementInputStreamPtr ChangesetCreator::_getExternallySortedElements(const QStri
 
   ElementInputStreamPtr sortedElements;
 
-  //Some in these datasets may have status=3 if you're loading conflated data, so use
-  //reader.use.file.status and reader.keep.status.tag if you want to retain that value.
+  // Some in these datasets may have status=3 if you're loading conflated data, so use
+  // reader.use.file.status and reader.keep.status.tag if you want to retain that value.
 
   // Only sort if input isn't already sorted.
   if (!_inputIsSorted(input))
@@ -641,9 +651,9 @@ ElementInputStreamPtr ChangesetCreator::_getFilteredInputStream(const QString& i
     filteredInputStream.reset(new ElementVisitorInputStream(inputStream, visitors.at(0)));
   }
 
-  // Add convert ops supporting streaming into the pipeline, if there are any. TODO: Any
-  // OsmMapOperations in the bunch need to operate on the entire map made up of both inputs to
-  // work correctly.
+  // Add convert ops supporting streaming into the pipeline, if there are any.
+  // TODO: Any OsmMapOperations in the bunch need to operate on the entire map made up of both
+  // inputs to work correctly.
   return
     ElementStreamer::getFilteredInputStream(filteredInputStream, ConfigOptions().getConvertOps());
 }
@@ -660,9 +670,9 @@ ElementInputStreamPtr ChangesetCreator::_sortElementsExternally(const QString& i
   return sorted;
 }
 
-void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>& inputs1,
-                                              const QList<ElementInputStreamPtr>& inputs2,
-                                              const QString& output)
+void ChangesetCreator::_streamChangesetOutput(
+  const QList<ElementInputStreamPtr>& inputs1, const QList<ElementInputStreamPtr>& inputs2,
+  const QString& output)
 {
   LOG_VARD(inputs1.size());
   LOG_VARD(inputs2.size());
@@ -700,6 +710,15 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
 
   std::shared_ptr<OsmChangesetFileWriter> writer =
     OsmChangesetFileWriterFactory::getInstance().createWriter(output, _osmApiDbUrl);
+  // Changeset writing honors the bounds config opt, if specified. To do bounds checking a map is
+  // needed, so pass in maps to the changeset writer.
+  if (ConfigUtils::boundsOptionEnabled())
+  {
+    LOG_VARD(_map1List.size());
+    LOG_VARD(_map2List.size());
+    writer->setMap1List(_map1List);
+    writer->setMap2List(_map2List);
+  }
   writer->write(output, changesetProviders);
   if (_printDetailedStats)
   {
@@ -793,8 +812,8 @@ void ChangesetCreator::_streamChangesetOutput(const QList<ElementInputStreamPtr>
   }
 }
 
-void ChangesetCreator::_streamChangesetOutput(ElementInputStreamPtr input1,
-                                              ElementInputStreamPtr input2, const QString& output)
+void ChangesetCreator::_streamChangesetOutput(
+  ElementInputStreamPtr input1, ElementInputStreamPtr input2, const QString& output)
 {
   QList<ElementInputStreamPtr> input1List;
   input1List.append(input1);

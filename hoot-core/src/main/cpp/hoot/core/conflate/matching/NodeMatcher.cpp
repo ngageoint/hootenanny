@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "NodeMatcher.h"
@@ -68,10 +68,10 @@ QStringList NodeMatcher::getNetworkCriterionClassNames()
 {
   // TODO: Should LinearCriterion be added here?
   QStringList critClasses;
-  critClasses.append(QString::fromStdString(HighwayCriterion::className()));
-  critClasses.append(QString::fromStdString(LinearWaterwayCriterion::className()));
-  critClasses.append(QString::fromStdString(PowerLineCriterion::className()));
-  critClasses.append(QString::fromStdString(RailwayCriterion::className()));
+  critClasses.append(HighwayCriterion::className());
+  critClasses.append(LinearWaterwayCriterion::className());
+  critClasses.append(PowerLineCriterion::className());
+  critClasses.append(RailwayCriterion::className());
   return critClasses;
 }
 

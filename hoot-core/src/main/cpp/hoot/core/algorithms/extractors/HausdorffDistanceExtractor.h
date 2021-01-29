@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HAUSDORFFDISTANCEMATCHER_H
 #define HAUSDORFFDISTANCEMATCHER_H
@@ -45,7 +45,7 @@ namespace hoot
 class HausdorffDistanceExtractor : public AbstractDistanceExtractor
 {
 public:
-  static std::string className() { return "hoot::HausdorffDistanceExtractor"; }
+  static QString className() { return "hoot::HausdorffDistanceExtractor"; }
 
   HausdorffDistanceExtractor() = default;
   virtual ~HausdorffDistanceExtractor() = default;
@@ -53,7 +53,9 @@ public:
   virtual double distance(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
-  virtual std::string getClassName() const { return HausdorffDistanceExtractor::className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const { return HausdorffDistanceExtractor::className(); }
 
   virtual QString getDescription() const
   { return "Calculates the Hausdorff distance between two features"; }

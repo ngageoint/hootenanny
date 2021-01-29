@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "KernelEstimationInterpolator.h"
 
@@ -285,11 +285,11 @@ void KernelEstimationInterpolator::_readInterpolator(QIODevice& is)
   ds >> _stopDelta;
 }
 
-string KernelEstimationInterpolator::toString() const
+QString KernelEstimationInterpolator::toString() const
 {
   stringstream ss;
   ss << "Kernel estimation, sigma: " << _sigma;
-  return ss.str();
+  return QString::fromStdString(ss.str());
 }
 
 void KernelEstimationInterpolator::_writeInterpolator(QIODevice& os) const

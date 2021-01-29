@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDNODESINWAYFACTORY_H
 #define FINDNODESINWAYFACTORY_H
@@ -41,7 +41,7 @@ class FindNodesInWayFactory : public GeometryToElementConverter::NodeFactory
 {
 public:
 
-  static std::string className() { return "hoot::FindNodesInWayFactory"; }
+  static QString className() { return "hoot::FindNodesInWayFactory"; }
 
   FindNodesInWayFactory() = default;
   FindNodesInWayFactory(const ConstWayPtr& w);

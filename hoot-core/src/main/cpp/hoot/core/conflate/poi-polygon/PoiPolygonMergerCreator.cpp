@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonMergerCreator.h"
 
@@ -86,9 +86,9 @@ bool PoiPolygonMergerCreator::createMergers(
     {
       foundAPolygon = true;
     }
-    if (matchTypes.contains(m->getMatchName()) == false)
+    if (matchTypes.contains(m->getName()) == false)
     {
-      matchTypes.append(m->getMatchName());
+      matchTypes.append(m->getName());
     }
   }
   LOG_VART(foundAPoi);
@@ -147,7 +147,10 @@ vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
   result.push_back(
-    CreatorDescription(className(), "Generates mergers that merge POIs into polygons", false));
+    CreatorDescription(
+      className(),
+      "Generates mergers that merge POIs into polygons",
+      false));
   return result;
 }
 
@@ -349,7 +352,7 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
          ++matchSetItr)
     {
       ConstMatchPtr match = *matchSetItr;
-      const QString matchName = match->getMatchName();
+      const QString matchName = match->getName();
       if (matchNameFilterToUse.contains(matchName))
       {
         const std::set<std::pair<ElementId, ElementId>> matchPairs = match->getMatchPairs();
@@ -414,7 +417,7 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
            matchPairItr != matchPairs.end(); ++matchPairItr)
       {
         const std::pair<ElementId, ElementId> elementPair = *matchPairItr;
-        if (match->getMatchName() == PoiPolygonMatch::MATCH_NAME &&
+        if (match->getName() == PoiPolygonMatch::MATCH_NAME &&
             (elementIdsInvolvedInOverlappingMatch.contains(elementPair.first) ||
              elementIdsInvolvedInOverlappingMatch.contains(elementPair.second)))
         {
@@ -424,7 +427,7 @@ void PoiPolygonMergerCreator::convertSharedMatchesToReviews(
           mergers.push_back(
             MergerPtr(
               new MarkForReviewMerger(
-                matchPairs, "Inter-matcher overlapping matches", match->getMatchName(), 1.0)));
+                matchPairs, "Inter-matcher overlapping matches", match->getName(), 1.0)));
         }
         else
         {

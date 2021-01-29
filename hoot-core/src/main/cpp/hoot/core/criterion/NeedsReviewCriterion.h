@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NEEDSREVIEWCRITERION_H
 #define NEEDSREVIEWCRITERION_H
@@ -43,7 +43,7 @@ class NeedsReviewCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static std::string className() { return "hoot::NeedsReviewCriterion"; }
+  static QString className() { return "hoot::NeedsReviewCriterion"; }
 
   NeedsReviewCriterion() = default;
   NeedsReviewCriterion(ConstOsmMapPtr& map) : _map(map) { }
@@ -58,9 +58,9 @@ public:
 
   virtual QString getDescription() const { return "Identifies features that need to be reviewed"; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

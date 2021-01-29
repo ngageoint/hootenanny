@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVEREF2VISITOR_H
 #define REMOVEREF2VISITOR_H
@@ -30,7 +30,7 @@
 // hoot
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 // Qt
 #include <QMap>
@@ -53,7 +53,7 @@ public:
 
   typedef QMap<QString, ElementId> Ref1ToEid;
 
-  static std::string className() { return "hoot::RemoveRef2Visitor"; }
+  static QString className() { return "hoot::RemoveRef2Visitor"; }
 
   static int logWarnCount;
 
@@ -73,7 +73,9 @@ public:
   virtual QString getDescription() const
   { return "Removes REF2 tags when a criterion is met for both REF1 and REF2 elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RelationMemberUtils.h"
@@ -33,7 +33,8 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 namespace hoot
 {
@@ -256,6 +257,14 @@ std::vector<ConstRelationPtr> RelationMemberUtils::getContainingRelations(
   return relations;
 }
 
+QSet<long> RelationMemberUtils::getContainingRelationIds(
+  const ConstOsmMapPtr& map, const ElementId& childId)
+{
+  return
+    CollectionUtils::stdSetToQSet(
+      map->getIndex().getElementToRelationMap()->getRelationByElement(childId));
+}
+
 bool RelationMemberUtils::isMemberOfRelationSatisfyingCriterion(
   const ConstOsmMapPtr& map, const ElementId& childId, const ElementCriterion& criterion)
 {
@@ -294,6 +303,31 @@ int RelationMemberUtils::getMemberWayNodeCount(const ConstRelationPtr& relation,
     }
   }
   return count;
+}
+
+bool RelationMemberUtils::relationHasConflatableMember(
+  const ConstRelationPtr& relation, const ConstOsmMapPtr& map)
+{
+  if (!relation)
+  {
+    return false;
+  }
+
+  const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
+  for (size_t i = 0; i < relationMembers.size(); i++)
+  {
+    ConstElementPtr member = map->getElement(relationMembers[i].getElementId());
+    if (member)
+    {
+      LOG_VART(member->getElementId());
+
+      if (ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 }

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MULTI_USE_BUILDING_CRITERION_H
 #define MULTI_USE_BUILDING_CRITERION_H
@@ -40,7 +40,7 @@ class MultiUseBuildingCriterion : public GeometryTypeCriterion
 {
 public:
 
-  static std::string className() { return "hoot::MultiUseBuildingCriterion"; }
+  static QString className() { return "hoot::MultiUseBuildingCriterion"; }
 
   MultiUseBuildingCriterion() = default;
   virtual ~MultiUseBuildingCriterion() = default;
@@ -55,9 +55,9 @@ public:
   virtual GeometryType getGeometryType() const
   { return GeometryType::Polygon; }
 
-  virtual QString toString() const override
-  { return QString::fromStdString(className()).remove("hoot::"); }
+  virtual QString getName() const override { return className(); }
 
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

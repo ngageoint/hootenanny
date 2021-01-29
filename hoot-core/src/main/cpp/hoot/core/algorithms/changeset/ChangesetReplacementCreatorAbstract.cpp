@@ -313,6 +313,9 @@ OsmMapPtr ChangesetReplacementCreatorAbstract::_loadInputMap(
   // than the default. However, its been found that the way ApiDbReader returns relations can result
   // in returning far more data than needed, so now we crop after load regardless of the input
   // format.
+  // UPDATE 12/16/20: After working on #4299, I think this type of cropping here is leading to
+  // dropped features, although it does prevent unnecessary processing of data. This may need some
+  // rethinking of how this is implemented.
   IoUtils::cropToBounds(map, _replacementBounds, keepImmediatelyConnectedWaysOutsideBounds);
   LOG_STATUS(
     "Loaded " << mapName << " map from: ..." << inputUrl.right(_maxFilePrintLength) << " with " <<

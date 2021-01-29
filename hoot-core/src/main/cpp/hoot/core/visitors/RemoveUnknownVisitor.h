@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef REMOVE_UNKNOWN_VISITOR_H
 #define REMOVE_UNKNOWN_VISITOR_H
@@ -40,7 +40,7 @@ class RemoveUnknownVisitor : public ElementOsmMapVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveUnknownVisitor"; }
+  static QString className() { return "hoot::RemoveUnknownVisitor"; }
 
   virtual ~RemoveUnknownVisitor() = default;
 
@@ -69,7 +69,7 @@ class RemoveUnknown1Visitor : public RemoveUnknownVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveUnknown1Visitor"; }
+  static QString className() { return "hoot::RemoveUnknown1Visitor"; }
 
   RemoveUnknown1Visitor() : RemoveUnknownVisitor(Status::Unknown1) {}
   virtual ~RemoveUnknown1Visitor() = default;
@@ -79,7 +79,9 @@ public:
   virtual QString getDescription() const override
   { return "Removes all elements with a status of Unknown1"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 /**
@@ -89,7 +91,7 @@ class RemoveUnknown2Visitor : public RemoveUnknownVisitor
 {
 public:
 
-  static std::string className() { return "hoot::RemoveUnknown2Visitor"; }
+  static QString className() { return "hoot::RemoveUnknown2Visitor"; }
 
   RemoveUnknown2Visitor() : RemoveUnknownVisitor(Status::Unknown2) {}
   virtual ~RemoveUnknown2Visitor() = default;
@@ -99,7 +101,9 @@ public:
   virtual QString getDescription() const override
   { return "Removes all elements with a status of Unknown2"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

@@ -22,13 +22,13 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ADDUSERIDVISITOR_H
 #define ADDUSERIDVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -41,7 +41,7 @@ class AddUserIdVisitor : public ElementVisitor
 {
 public:
 
-  static std::string className() { return "hoot::AddUserIdVisitor"; }
+  static QString className() { return "hoot::AddUserIdVisitor"; }
 
   AddUserIdVisitor();
 
@@ -50,11 +50,12 @@ public:
    */
   virtual void visit(const ElementPtr& e);
 
-  virtual QString getDescription() const { return "Adds the user name and user id to elements as tags"; }
+  virtual QString getDescription() const
+  { return "Adds the user name and user id to elements as tags"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
 
-//private:
+  virtual QString getClassName() const override { return className(); }
 };
 
 }

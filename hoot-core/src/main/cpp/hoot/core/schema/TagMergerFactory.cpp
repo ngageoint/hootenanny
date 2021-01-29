@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "TagMergerFactory.h"
 
@@ -59,7 +59,7 @@ std::shared_ptr<TagMerger> TagMergerFactory::getMergerPtr(const QString& name)
   QHash<QString, std::shared_ptr<TagMerger>>::const_iterator it = _mergers.find(name);
   if (it == _mergers.end())
   {
-    result.reset(Factory::getInstance().constructObject<TagMerger>(name.toStdString()));
+    result.reset(Factory::getInstance().constructObject<TagMerger>(name));
     std::shared_ptr<Configurable> configurable = std::dynamic_pointer_cast<Configurable>(result);
     if (configurable)
     {

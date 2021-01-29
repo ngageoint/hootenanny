@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "BuildingMatchCreator.h"
 
@@ -45,6 +45,7 @@
 #include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
 
 // Standard
 #include <fstream>
@@ -117,7 +118,8 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -439,6 +441,9 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
   QElapsedTimer timer;
   timer.start();
 
+  // The parent does some initialization we need.
+  MatchCreator::createMatches(map, matches, threshold);
+
   QString searchRadiusStr;
   const double searchRadius = ConfigOptions().getSearchRadiusBuilding();
   if (searchRadius < 0)
@@ -471,7 +476,10 @@ std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
   std::vector<CreatorDescription> result;
   result.push_back(
     CreatorDescription(
-      className(), "Generates matchers that match buildings", CreatorDescription::Building, false));
+      className(),
+      "Generates matchers that match buildings",
+      CreatorDescription::Building,
+      false));
   return result;
 }
 
@@ -520,6 +528,11 @@ std::shared_ptr<MatchThreshold> BuildingMatchCreator::getMatchThreshold()
                          config.getBuildingReviewThreshold()));
   }
   return _matchThreshold;
+}
+
+QStringList BuildingMatchCreator::getCriteria() const
+{
+  return QStringList(BuildingCriterion::className());
 }
 
 }

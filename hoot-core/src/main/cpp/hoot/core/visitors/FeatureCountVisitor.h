@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef FEATURECOUNTVISITOR_H
@@ -42,7 +42,7 @@ class FeatureCountVisitor : public ConstElementVisitor, public SingleStatistic
 {
 public:
 
-  static std::string className() { return "hoot::FeatureCountVisitor"; }
+  static QString className() { return "hoot::FeatureCountVisitor"; }
 
   FeatureCountVisitor() : _count(0) { }
   virtual ~FeatureCountVisitor() = default;
@@ -56,7 +56,9 @@ public:
   virtual QString getDescription() const
   { return "Counts the number of elements having at least one information tag"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

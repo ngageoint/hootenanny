@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef HIGHWAYCLASSIFIER_H
 #define HIGHWAYCLASSIFIER_H
@@ -42,7 +42,7 @@ public:
   HighwayClassifier() = default;
   virtual ~HighwayClassifier() = default;
 
-  static std::string className() { return "hoot::HighwayClassifier"; }
+  static QString className() { return "hoot::HighwayClassifier"; }
 
   /**
    * Classifies the match type of a subline match and returns the results.

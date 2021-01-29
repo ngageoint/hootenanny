@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef RECURSIVEELEMENTREMOVER_H
 #define RECURSIVEELEMENTREMOVER_H
@@ -62,7 +62,7 @@ class RecursiveElementRemover : public ConstOsmMapOperation, public ConstElement
 {
 public:
 
-  static std::string className() { return "hoot::RecursiveElementRemover"; }
+  static QString className() { return "hoot::RecursiveElementRemover"; }
 
   /**
    * @param eid The element to recursively delete.
@@ -93,7 +93,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Removed " + QString::number(_numAffected) + " elements"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

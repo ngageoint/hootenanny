@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RIVER_MAXIMAL_SUBLINE_SETTING_OPTIMIZER_H
@@ -35,13 +35,16 @@ namespace hoot
 {
 
 /**
- * Determines settings to optimize river conflation's use of maximal subline matching
+ * Determines settings to optimize river conflation's use of maximal subline matching. The goal here
+ * is to prevent runaway conflate runtimes from occurring. We use river length as a measure of data
+ * complexity and use that to calculate an upper limit for how many times maximal subline matching
+ * can make recursive calls.
  */
 class RiverMaximalSublineSettingOptimizer
 {
 public:
 
-  static std::string className() { return "hoot::RiverMaximalSublineSettingOptimizer"; }
+  static QString className() { return "hoot::RiverMaximalSublineSettingOptimizer"; }
 
   RiverMaximalSublineSettingOptimizer();
   virtual ~RiverMaximalSublineSettingOptimizer() = default;

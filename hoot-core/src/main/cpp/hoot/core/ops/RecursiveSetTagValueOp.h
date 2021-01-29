@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RECURSIVE_SET_TAG_VALUE_OP_H
@@ -44,7 +44,7 @@ class RecursiveSetTagValueOp : public OsmMapOperation, public ElementCriterionCo
 {
 public:
 
-  static std::string className() { return "hoot::RecursiveSetTagValueOp"; }
+  static QString className() { return "hoot::RecursiveSetTagValueOp"; }
 
   RecursiveSetTagValueOp() = default;
   virtual ~RecursiveSetTagValueOp() = default;
@@ -91,16 +91,18 @@ public:
   { return "Adds or updates specific tags on elements and their children"; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const { return _tagger->getInitStatusMessage(); }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getCompletedStatusMessage() const { return _tagger->getCompletedStatusMessage(); }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

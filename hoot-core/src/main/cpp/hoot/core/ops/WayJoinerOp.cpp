@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayJoinerOp.h"
@@ -45,8 +45,10 @@ WayJoinerOp::WayJoinerOp()
 void WayJoinerOp::setConfiguration(const Settings& conf)
 {
   ConfigOptions options(conf);
+  LOG_VART(options.getWayJoiner());
   _wayJoiner.reset(Factory::getInstance().constructObject<WayJoiner>(options.getWayJoiner()));
   _wayJoiner->setLeavePid(options.getWayJoinerLeaveParentId());
+  _wayJoiner->setWritePidToChildId(options.getWayJoinerWriteParentIdToChildId());
 }
 
 void WayJoinerOp::apply(OsmMapPtr& map)
@@ -57,8 +59,8 @@ void WayJoinerOp::apply(OsmMapPtr& map)
 QStringList WayJoinerOp::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(QString::fromStdString(LinearCriterion::className()));
-  criteria.append(QString::fromStdString(PolygonCriterion::className()));
+  criteria.append(LinearCriterion::className());
+  criteria.append(PolygonCriterion::className());
   return criteria;
 }
 

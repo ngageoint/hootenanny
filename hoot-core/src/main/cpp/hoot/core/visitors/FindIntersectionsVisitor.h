@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef FINDINTERSECTIONSVISITOR_H
 #define FINDINTERSECTIONSVISITOR_H
@@ -43,7 +43,7 @@ class FindIntersectionsVisitor : public ConstElementVisitor, public OsmMapConsum
 {
 public:
 
-  static std::string className() { return "hoot::FindIntersectionsVisitor"; }
+  static QString className() { return "hoot::FindIntersectionsVisitor"; }
 
   FindIntersectionsVisitor() = default;
   virtual ~FindIntersectionsVisitor() = default;
@@ -66,7 +66,9 @@ public:
 
   virtual ElementCriterionPtr createCriterion(ConstOsmMapPtr map) = 0;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 
@@ -82,7 +84,7 @@ class FindHighwayIntersectionsVisitor : public FindIntersectionsVisitor
 {
 public:
 
-  static std::string className() { return "hoot::FindHighwayIntersectionsVisitor"; }
+  static QString className() { return "hoot::FindHighwayIntersectionsVisitor"; }
 
   FindHighwayIntersectionsVisitor() = default;
   virtual ~FindHighwayIntersectionsVisitor() = default;
@@ -105,7 +107,7 @@ class FindRailwayIntersectionsVisitor : public FindIntersectionsVisitor
 {
 public:
 
-  static std::string className() { return "hoot::FindRailwayIntersectionsVisitor"; }
+  static QString className() { return "hoot::FindRailwayIntersectionsVisitor"; }
 
   FindRailwayIntersectionsVisitor() = default;
   virtual ~FindRailwayIntersectionsVisitor() = default;

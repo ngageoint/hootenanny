@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef RUBBERSHEET_H
@@ -56,7 +56,7 @@ class RubberSheet : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::RubberSheet"; }
+  static QString className() { return "hoot::RubberSheet"; }
 
   /**
    * If this configuration setting is set to true then the first layer is treated as the reference
@@ -77,6 +77,8 @@ public:
 
   RubberSheet();
   virtual ~RubberSheet() = default;
+
+  RubberSheet* clone() const { return new RubberSheet(*this); }
 
   /**
    * @see OsmMapOperation
@@ -148,15 +150,17 @@ public:
     */
    virtual QStringList getCriteria() const;
 
-   virtual std::string getClassName() const { return className(); }
+   virtual QString getName() const { return className(); }
+
+   virtual QString getClassName() const override { return className(); }
 
    /**
-    * @see OperationStatusInfo
+    * @see OperationStatus
     */
    virtual QString getInitStatusMessage() const override { return "Rubbersheeting data..."; }
 
    /**
-    * @see OperationStatusInfo
+    * @see OperationStatus
     */
    virtual QString getCompletedStatusMessage() const override
    {
@@ -205,7 +209,7 @@ private:
   // used as a temporary in interpolating.
   std::vector<double> _matchPoint;
   std::shared_ptr<OGRSpatialReference> _projection;
-  std::string _interpolatorClassName;
+  QString _interpolatorClassName;
 
   double _searchRadius;
 

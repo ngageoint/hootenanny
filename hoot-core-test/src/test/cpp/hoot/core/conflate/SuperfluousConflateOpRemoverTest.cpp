@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
@@ -62,34 +62,34 @@ public:
   void runOpFilter1Test()
   { 
     TestUtils::runConflateOpReductionTest(
-      QStringList(QString::fromStdString(BuildingMatchCreator::className())), 2, 13, 11);
+      QStringList(BuildingMatchCreator::className()), 2, 13, 11);
   }
 
   void runOpFilter2Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(QString::fromStdString(HighwayMatchCreator::className())), 3, 14, 15);
+      QStringList(HighwayMatchCreator::className()), 3, 14, 15);
   }
 
   void runOpFilter3Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(QString::fromStdString(NetworkMatchCreator::className())), 3, 14, 15);
+      QStringList(NetworkMatchCreator::className()), 3, 14, 15);
   }
 
   void runOpFilter4Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(QString::fromStdString(PoiPolygonMatchCreator::className())), 2, 13, 11);
+      QStringList(PoiPolygonMatchCreator::className()), 2, 13, 11);
   }
 
   void runOpFilterCombinedTest()
   {
     QStringList matchCreators;
-    matchCreators.append(QString::fromStdString(BuildingMatchCreator::className()));
-    matchCreators.append(QString::fromStdString(HighwayMatchCreator::className()));
-    matchCreators.append(QString::fromStdString(NetworkMatchCreator::className()));
-    matchCreators.append(QString::fromStdString(PoiPolygonMatchCreator::className()));
+    matchCreators.append(BuildingMatchCreator::className());
+    matchCreators.append(HighwayMatchCreator::className());
+    matchCreators.append(NetworkMatchCreator::className());
+    matchCreators.append(PoiPolygonMatchCreator::className());
 
     TestUtils::runConflateOpReductionTest(matchCreators, 4, 15, 17);
   }

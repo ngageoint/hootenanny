@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef ZVALUE_H
 #define ZVALUE_H
@@ -37,7 +37,7 @@ class ZValue
 {
 public:
 
-  static std::string className() { return "hoot::ZValue"; }
+  static QString className() { return "hoot::ZValue"; }
 
   ZValue() {}
 

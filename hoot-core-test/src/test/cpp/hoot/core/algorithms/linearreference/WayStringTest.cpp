@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // Hoot
 #include <hoot/core/TestUtils.h>
 #include <hoot/core/algorithms/linearreference/WayString.h>
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/ElementGeometryUtils.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementCountVisitor.h>
 
@@ -314,8 +314,8 @@ public:
 
     // there was a bug at one point that modified the original way, make sure it didn't change
     // length.
-    HOOT_STR_EQUALS(70, ElementToGeometryConverter(map).calculateLength(w1));
-    HOOT_STR_EQUALS(40, ElementToGeometryConverter(map).calculateLength(wayCopy));
+    HOOT_STR_EQUALS(70, ElementGeometryUtils::calculateLength(w1, map));
+    HOOT_STR_EQUALS(40, ElementGeometryUtils::calculateLength(wayCopy, map));
     HOOT_STR_EQUALS("way(-2)\n"
                     "nodes: [3]{-1, -2, -4}\n"
                     "tags: name = w1\n"

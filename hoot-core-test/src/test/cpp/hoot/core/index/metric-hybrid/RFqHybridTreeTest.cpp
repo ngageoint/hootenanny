@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 // CPP Unit
@@ -77,6 +77,7 @@ public:
     _eid(eid),
     _name(name)
   {}
+
   RFqHybridDummyData(const Coordinate& c, const QString& name, ElementId eid) :
     _e(c.x, c.x, c.y, c.y),
     _eid(eid),
@@ -327,7 +328,8 @@ public:
     }
 
     virtual QString getDescription() const {return ""; }
-    virtual std::string getClassName() const { return ""; }
+    virtual QString getName() const { return ""; }
+    virtual QString getClassName() const { return ""; }
 
   private:
 

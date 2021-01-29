@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUILDINGPARTMERGEOP_H
 #define BUILDINGPARTMERGEOP_H
@@ -96,7 +96,7 @@ class BuildingPartMergeOp : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::BuildingPartMergeOp"; }
+  static QString className() { return "hoot::BuildingPartMergeOp"; }
 
 
   BuildingPartMergeOp(bool preserveTypes = false);
@@ -106,7 +106,9 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getDescription() const override
   { return "Merges individual building parts into a single building"; }

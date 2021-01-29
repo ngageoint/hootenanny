@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGSIMILARITYSCORER_H
 #define TAGSIMILARITYSCORER_H
@@ -39,7 +39,7 @@ class Tags;
 class TagDifferencer
 {
 public:
-  static std::string className() { return "hoot::TagDifferencer"; }
+  static QString className() { return "hoot::TagDifferencer"; }
 
   TagDifferencer() = default;
   virtual ~TagDifferencer() = default;
@@ -53,8 +53,8 @@ public:
    * The score returned should not be considered linear. If a = 1 and b = 0.01, then all you can
    * say is that a is more different than b, not that a is 100 times more different, etc.
    */
-  virtual double diff(const ConstOsmMapPtr& map, const ConstElementPtr& e1,
-    const ConstElementPtr& e2) const = 0;
+  virtual double diff(
+    const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2) const = 0;
 };
 
 }

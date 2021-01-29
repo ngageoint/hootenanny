@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef MATCH_H
 #define MATCH_H
@@ -57,7 +57,7 @@ class Match : public ApiEntityInfo
 {
 public:
 
-  static std::string className() { return "hoot::Match"; }
+  static QString className() { return "hoot::Match"; }
 
   Match() = default;
   virtual ~Match() = default;
@@ -84,7 +84,7 @@ public:
    * QString to return the name. This avoid constructing multiple duplicate QStrings (possibly
    * lots of duplicates).
    */
-  virtual QString getMatchName() const = 0;
+  virtual QString getName() const = 0;
 
   /**
    * Returns the score associated with this match. Score is a bit abstract at this point and may
@@ -111,8 +111,7 @@ public:
    * @return true if the two matches are conflicting; false otherwise
    */
   virtual bool isConflicting(
-    const std::shared_ptr<const Match>& other,
-    const ConstOsmMapPtr& map,
+    const std::shared_ptr<const Match>& other, const ConstOsmMapPtr& map,
     const QHash<QString, ConstMatchPtr>& matches = QHash<QString, ConstMatchPtr>()) const = 0;
 
   /**
@@ -141,16 +140,12 @@ public:
    */
   virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const = 0;
 
-  virtual QString toString() const = 0;
-
   /**
    * Returns this match's type.
    *
    * @return a match type
    */
   virtual MatchType getType() const;
-
-  virtual QString getDescription() const = 0;
 
   /**
    * Determines if this matches equals another match
@@ -177,6 +172,8 @@ public:
    */
   static QString matchPairsToString(
     const std::set<std::pair<ElementId, ElementId>>& matchPairs);
+
+  virtual QString toString() const = 0;
 
 protected:
 

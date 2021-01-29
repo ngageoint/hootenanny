@@ -22,32 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef ELEMENT_TO_GEOMETRY_CONVERTER_JS_H
-#define ELEMENT_TO_GEOMETRY_CONVERTER_JS_H
 
-//  Hoot
-#include <hoot/js/HootBaseJs.h>
+#include "RelationWithPowerLineMembersCriterion.h"
+
+// hoot
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/PowerLineCriterion.h>
 
 namespace hoot
 {
 
-class ElementToGeometryConverterJs : public HootBaseJs
+HOOT_FACTORY_REGISTER(ElementCriterion, RelationWithPowerLineMembersCriterion)
+
+RelationWithPowerLineMembersCriterion::RelationWithPowerLineMembersCriterion() :
+RelationWithMembersOfTypeCriterion()
 {
-public:
+}
 
- static void Init(v8::Handle<v8::Object> target);
+QString RelationWithPowerLineMembersCriterion::getCriterion() const
+{
+  return PowerLineCriterion::className();
+}
 
- virtual ~ElementToGeometryConverterJs() = default;
-
-private:
-
-  ElementToGeometryConverterJs() = default;
-
-  static void calculateLength(const v8::FunctionCallbackInfo<v8::Value>& args);
-};
+GeometryTypeCriterion::GeometryType RelationWithPowerLineMembersCriterion::getGeometryType() const
+{
+  return PowerLineCriterion().getGeometryType();
+}
 
 }
 
-#endif // ELEMENT_TO_GEOMETRY_CONVERTER_JS_H

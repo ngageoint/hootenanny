@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef BUILDING_LEVELS_VISITOR_H
@@ -31,7 +31,7 @@
 // hoot
 #include <hoot/core/elements/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 
 namespace hoot
@@ -44,7 +44,7 @@ class BuildingLevelsVisitor : public ConstElementVisitor, public NumericStatisti
 {
 public:
 
-  static std::string className() { return "hoot::BuildingLevelsVisitor"; }
+  static QString className() { return "hoot::BuildingLevelsVisitor"; }
 
   BuildingLevelsVisitor();
   virtual ~BuildingLevelsVisitor() = default;
@@ -69,7 +69,9 @@ public:
     return average;
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

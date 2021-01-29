@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "HighwayCornerSplitter.h"
@@ -36,6 +36,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 
 #include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -315,6 +316,11 @@ void HighwayCornerSplitter::setConfiguration(const Settings& conf)
   _splitRounded = options.getHighwayCornerSplitterRoundedSplit();
   _roundedThreshold = options.getHighwayCornerSplitterRoundedThreshold();
   _roundedMaxNodeCount = options.getHighwayCornerSplitterRoundedMaxNodeCount();
+}
+
+QStringList HighwayCornerSplitter::getCriteria() const
+{
+  return QStringList(HighwayCriterion::className());
 }
 
 }

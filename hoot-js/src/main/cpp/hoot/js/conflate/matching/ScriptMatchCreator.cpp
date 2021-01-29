@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "ScriptMatchCreator.h"
 
@@ -163,7 +163,8 @@ public:
   }
 
   virtual QString getDescription() const { return ""; }
-  virtual std::string getClassName() const { return ""; }
+  virtual QString getName() const { return ""; }
+  virtual QString getClassName() const override { return ""; }
 
   void checkForMatch(const std::shared_ptr<const Element>& e)
   {
@@ -717,7 +718,7 @@ void ScriptMatchCreator::setArguments(QStringList args)
   Context::Scope context_scope(_script->getContext(current));
   _script->loadScript(_scriptPath, "plugin");
   // bit of a hack...see MatchCreator.h...need to refactor
-  _description = QString::fromStdString(className()) + "," + args[0];
+  _description = className() + "," + args[0];
   _cachedScriptVisitor.reset();
   _scriptInfo = _getScriptDescription(_scriptPath);
 
@@ -793,6 +794,9 @@ void ScriptMatchCreator::createMatches(
   {
     throw IllegalArgumentException("The script must be set on the ScriptMatchCreator.");
   }
+
+  // The parent does some initialization we need.
+  MatchCreator::createMatches(map, matches, threshold);
 
   QElapsedTimer timer;
   timer.start();
@@ -870,6 +874,7 @@ void ScriptMatchCreator::createMatches(
   {
     matchType = "PointPolygon";
   }
+
   LOG_INFO(
     "Found " << StringUtils::formatLargeNumber(v.getNumMatchCandidatesFound()) << " " <<
     matchType << " match candidates and " <<
@@ -1022,7 +1027,7 @@ CreatorDescription ScriptMatchCreator::_getScriptDescription(QString path) const
   }
 
   QFileInfo fi(path);
-  result.className = (QString::fromStdString(className()) + "," + fi.fileName()).toStdString();
+  result.className = className() + "," + fi.fileName();
 
   return result;
 }
@@ -1079,7 +1084,7 @@ std::shared_ptr<MatchThreshold> ScriptMatchCreator::getMatchThreshold()
 QString ScriptMatchCreator::getName() const
 {
   QFileInfo scriptFileInfo(_scriptPath);
-  return QString::fromStdString(className()) + ";" + scriptFileInfo.fileName();
+  return className() + ";" + scriptFileInfo.fileName();
 }
 
 QStringList ScriptMatchCreator::getCriteria() const

@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMAPIDBSQLCHANGESETFILEWRITER_H
 #define OSMAPIDBSQLCHANGESETFILEWRITER_H
@@ -47,13 +47,16 @@ namespace hoot
 /**
  * Writes out a set of SQL commands, that when executed, will update the contents of
  * an OSM API database with an OSM changeset.
+ *
+ * This is useful when you want to work with changesets and  don't want a dependency on the OSM API
+ * app. Changesets also apply more quickly due to the lack of HTTP overhead.
  */
 class OsmApiDbSqlChangesetFileWriter : public OsmChangesetFileWriter
 {
 
 public:
 
-  static std::string className() { return "hoot::OsmApiDbSqlChangesetFileWriter"; }
+  static QString className() { return "hoot::OsmApiDbSqlChangesetFileWriter"; }
 
   OsmApiDbSqlChangesetFileWriter();
   OsmApiDbSqlChangesetFileWriter(const QUrl& url);
@@ -76,6 +79,9 @@ public:
     const ChangesetStatsFormat& /*format = StatisticsFormat::Text*/) const
   { throw NotImplementedException("Changeset statistics not implemented for SQL changesets."); }
 
+  virtual void setMap1List(const QList<ConstOsmMapPtr>& mapList) { _map1List = mapList; }
+  virtual void setMap2List(const QList<ConstOsmMapPtr>& mapList) { _map2List = mapList; }
+
   /**
    * @see ChangesetFileWriter
    */
@@ -89,6 +95,27 @@ public:
   void setOsmApiDbUrl(const QString& url) { _db.open(url); }
 
 private:
+
+  OsmApiDb _db;
+  QFile _outputSql;
+
+  long _changesetId;
+  geos::geom::Envelope _changesetBounds;
+
+  /** Settings from the config file */
+  double _changesetUserId;
+
+  // id mappings for created elements
+  QMap<ElementId, ElementId> _remappedIds;
+
+  // element IDs associated with a changes encountered
+  QList<ElementId> _parsedChangeIds;
+
+  friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
+
+  QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
+
+  void _setChangesetUserId(long id) { _changesetUserId = id; }
 
   void _createChangeSet();
   void _updateChangeset(const int numChanges);
@@ -120,33 +147,6 @@ private:
 
   void _deleteExistingElement(ConstElementPtr removedElement);
   void _deleteAll(const QString& tableName, const QString& idFieldName, const long id);
-
-  QString _getVisibleStr(const bool visible) const { return visible ? "true" : "false"; }
-
-  void setChangesetUserId(long id) { _changesetUserId = id; }
-
-  OsmApiDb _db;
-  QFile _outputSql;
-
-  long _changesetId;
-  geos::geom::Envelope _changesetBounds;
-
-  /** Settings from the config file */
-  double _changesetUserId;
-
-  bool _includeDebugTags;
-  bool _includeCircularErrorTags;
-
-  // id mappings for created elements
-  QMap<ElementId, ElementId> _remappedIds;
-
-  // element IDs associated with a changes encountered
-  QList<ElementId> _parsedChangeIds;
-
-  // list of metadata tag keys allowed to be written to the changeset
-  QStringList _metadataAllowKeys;
-
-  friend class ServiceOsmApiDbSqlChangesetFileWriterTest;
 };
 
 }

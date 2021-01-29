@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "WayJoinerAdvanced.h"
@@ -57,7 +57,8 @@ namespace hoot
 HOOT_FACTORY_REGISTER(WayJoiner, WayJoinerAdvanced)
 
 WayJoinerAdvanced::WayJoinerAdvanced() :
-_callingClass(QString::fromStdString(className()))
+WayJoiner::WayJoiner(),
+_callingClass(className())
 {
 }
 
@@ -122,8 +123,8 @@ void WayJoinerAdvanced::_joinParentChild()
     else
     {
       LOG_TRACE(
-        "Parent with ID: " << parent_id << " does not exist. Skipping join with " <<
-        way->getElementId());
+        "Parent: " << ElementId(ElementType::Way, parent_id) <<
+        " does not exist. Skipping join with " << way->getElementId());
     }
 
     // don't try to join if there are explicitly conflicting names; fix for #2888
@@ -306,7 +307,7 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
 
     if (!way)
     {
-      LOG_TRACE("Way with ID: " << id << " does not exist.");
+      LOG_TRACE(ElementId(ElementType::Way, id) << " does not exist.");
       continue;
     }
     else
@@ -371,7 +372,7 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
         else
         {
           //  Requeue the way and up the failure count
-          LOG_TRACE("Way with ID: " << id << " cannot be rejoined (1).");
+          LOG_TRACE(ElementId(ElementType::Way, id) << " cannot be rejoined (1).");
           way_ids.push_back(id);
           failure_count++;
         }
@@ -379,7 +380,7 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
       else
       {
         //  Requeue the way and up the failure count
-        LOG_TRACE("Way with ID: " << id << " cannot be rejoined (2).");
+        LOG_TRACE(ElementId(ElementType::Way, id) << " cannot be rejoined (2).");
         way_ids.push_back(id);
         failure_count++;
       }
@@ -431,7 +432,7 @@ void WayJoinerAdvanced::_rejoinSiblings(deque<long>& way_ids)
       }
     }
 
-    //  Remove the parent id tag from both of the ways, joinWays() gets the child, do the parent here
+    // Remove the parent id tag from both of the ways, joinWays() gets the child, do the parent here
     parent->resetPid();
   }
 }
@@ -445,8 +446,8 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
 
   LOG_VART(_callingClass);
   LOG_VART(_callingMethod);
-  LOG_VART(parent->getId());
-  LOG_VART(child->getId());
+  LOG_VART(parent->getElementId());
+  LOG_VART(child->getElementId());
   LOG_VART(parent->getStatus());
   LOG_VART(child->getStatus());
 

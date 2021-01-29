@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "RemoveEmptyAreasVisitor.h"
 
@@ -145,8 +145,8 @@ QStringList RemoveEmptyAreasVisitor::getCriteria() const
   QStringList criteria;
   // need to also add building here for unecessary conflation op removal purposes, since
   // AreaCriterion includes buildings in some instances
-  criteria.append(QString::fromStdString(BuildingCriterion::className()));
-  criteria.append(QString::fromStdString(AreaCriterion::className()));
+  criteria.append(BuildingCriterion::className());
+  criteria.append(AreaCriterion::className());
   return criteria;
 }
 

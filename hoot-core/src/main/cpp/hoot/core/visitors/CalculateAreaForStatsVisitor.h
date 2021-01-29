@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef CALCULATEAREAFORSTATSVISITOR_H
 #define CALCULATEAREAFORSTATSVISITOR_H
@@ -42,7 +42,7 @@ class CalculateAreaForStatsVisitor : public ElementConstOsmMapVisitor, public Si
 {
 public:
 
-  static std::string className() { return "hoot::CalculateAreaForStatsVisitor"; }
+  static QString className() { return "hoot::CalculateAreaForStatsVisitor"; }
 
   CalculateAreaForStatsVisitor() : _total(0) { }
   virtual ~CalculateAreaForStatsVisitor() = default;
@@ -61,7 +61,9 @@ public:
   // We don't use this outside of stats, so hide it from the info API.
   virtual QString getDescription() const { return ""; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef TAGRENAMEKEYVISITOR_H
 #define TAGRENAMEKEYVISITOR_H
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 
 namespace hoot
 {
@@ -41,7 +41,7 @@ class TagRenameKeyVisitor : public ElementVisitor, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::TagRenameKeyVisitor"; }
+  static QString className() { return "hoot::TagRenameKeyVisitor"; }
 
   TagRenameKeyVisitor() = default;
   virtual ~TagRenameKeyVisitor() = default;
@@ -62,7 +62,9 @@ public:
   void setOldKey(const QString& key) { _oldKey = key; }
   void setNewKey(const QString& key) { _newKey = key; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

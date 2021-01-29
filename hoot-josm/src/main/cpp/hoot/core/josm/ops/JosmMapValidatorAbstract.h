@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef JOSM_MAP_VALIDATOR_ABSTRACT_H
 #define JOSM_MAP_VALIDATOR_ABSTRACT_H
@@ -87,7 +87,7 @@ public:
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getCompletedStatusMessage() const { return _errorSummary; }
 

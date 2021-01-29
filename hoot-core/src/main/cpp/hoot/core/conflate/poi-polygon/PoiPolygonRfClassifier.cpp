@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonRfClassifier.h"
 
@@ -72,8 +72,7 @@ map<QString, double> PoiPolygonRfClassifier::getFeatures(const ConstOsmMapPtr& m
     // if it isn't null then include it.
     if (!FeatureExtractor::isNull(v))
     {
-      QString factorName =
-        QString::fromStdString(_extractors[i]->getName()).replace(QRegExp("[^\\w]"), "_");
+      QString factorName = _extractors[i]->getName().replace(QRegExp("[^\\w]"), "_");
       result[factorName] = v;
     }
   }

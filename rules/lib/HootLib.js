@@ -3,15 +3,10 @@
  * @file
  * @par Hoot JavaScript API
  *
- * The HootLib contains a number of convenience functions for wrapping internal
- * Hootenanny operations. This makes the code a little easier for the
- * non-developer and adds sugar coating, although a little naughty wrapping
- * for the more experienced developer.
- */
-
-/*
- * The comments within this file are used to generate user documentation. Please
- * keep this in mind while adding comments.
+ * The HootLib contains a number of convenience functions for wrapping internal Hootenanny
+ * operations. This makes the code a little easier for the non-developer and adds sugar coating,
+ * although a little naughty wrapping for the more experienced developer.  The comments within this
+ * file are used to generate user documentation. Please keep this in mind while adding comments.
  */
 
 /**
@@ -46,7 +41,8 @@ function getRelatedTags(relateToKvp, d) {
     var result = [];
     for (var k in d) {
         var kvp = k + '=' + d[k];
-        // This would need to be updated for features other than POI before it could be used outside of Poi.js.
+        // This would need to be updated for features other than POI before it could be used outside
+        // of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.score(relateToKvp, kvp) > 0) {
                 result.push(kvp);
@@ -78,7 +74,8 @@ function getTagsByCategory(category, d) {
     for (var k in d) {
         var kvp = k + '=' + d[k];
         // if it is not a generic type
-        // This would need to be updated for features other than POI before it could be used outside of Poi.js.
+        // This would need to be updated for features other than POI before it could be used outside
+        // of Poi.js.
         if (kvp != "poi=yes" && kvp != "place=locality") {
             if (hoot.OsmSchema.getCategories(kvp).indexOf(category) >= 0) {
                 result.push(kvp);
@@ -171,7 +168,7 @@ function bothElementsHaveName(e1, e2)
  */
 function isMemberOfRelationType(map, childElementId, relationType)
 {
-  return map.isMemberOfRelationType(childElementId, relationType);
+  return hoot.RelationMemberUtils.isMemberOfRelationType(childElementId, relationType, map);
 }
 
 /**
@@ -179,7 +176,7 @@ function isMemberOfRelationType(map, childElementId, relationType)
  */
 function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
 {
-  return map.isMemberOfRelationInCategory(childElementId, schemaCategory);
+  return hoot.RelationMemberUtils.isMemberOfRelationInCategory(map, childElementId, schemaCategory);
 }
 
 /**
@@ -187,7 +184,7 @@ function isMemberOfRelationInCategory(map, childElementId, schemaCategory)
  */
 function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
 {
-  return map.isMemberOfRelationWithTagKey(childElementId, tagKey);
+  return hoot.RelationMemberUtils.isMemberOfRelationWithTagKey(map, childElementId, tagKey);
 }
 
 /*
@@ -195,7 +192,7 @@ function isMemberOfRelationWithTagKey(map, childElementId, tagKey)
  */
 function isMemberOfRelationSatisfyingCriterion(map, childElementId, criterionClassName)
 {
-  return map.isMemberOfRelationSatisfyingCriterion(childElementId, criterionClassName);
+  return hoot.RelationMemberUtils.isMemberOfRelationSatisfyingCriterion(map, childElementId, criterionClassName);
 }
 
 /**
@@ -357,7 +354,7 @@ function removeElement(map, e)
  */
 function mergeRelations(map, elementId1, elementId2)
 {
-  return map.mergeRelations(elementId1, elementId2);
+  return hoot.RelationMerger.mergeRelations(map, elementId1, elementId2);
 }
 
 /**
@@ -365,7 +362,7 @@ function mergeRelations(map, elementId1, elementId2)
  */
 function getNumRelationMemberNodes(map, relationId)
 {
-  return map.getNumRelationMemberNodes(relationId);
+  return hoot.RelationMemberUtils.getNumRelationMemberNodes(map, relationId);
 }
 
 /**
@@ -373,7 +370,7 @@ function getNumRelationMemberNodes(map, relationId)
  */
 function relationsHaveConnectedWayMembers(map, relationId1, relationId2)
 {
-  return map.relationsHaveConnectedWayMembers(relationId1, relationId2);
+  return hoot.RelationMemberUtils.relationsHaveConnectedWayMembers(map, relationId1, relationId2);
 }
 
 /**
@@ -386,7 +383,8 @@ function snapWays(sublineMatcher, map, pairs, replaced, matchedBy)
 }
 
 /**
- * Another approach to snapping ways, which allows for using multiple subline matchers. See notes in ?
+ * Another approach to snapping ways, which allows for using multiple subline matchers. See related
+   notes in the mergeSets method of River.js.
  */
 function snapWays2(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatcher2)
 {
@@ -394,8 +392,8 @@ function snapWays2(sublineMatcher, map, pairs, replaced, matchedBy, sublineMatch
 }
 
 /**
- * Uses the SearchRadiusCalculator to automatically calculate a search radius based on tie points found
- * in the two input datasets.
+ * Uses the SearchRadiusCalculator to automatically calculate a search radius based on tie points
+   found in the two input datasets.
  *
  * @param map Map that contains the input datasets to be conflated
  * @param rubberSheetRef If true, the source layer will be moved toward the reference layer during
@@ -555,4 +553,20 @@ function getPoiSearchRadii()
 function getRiverMaxSublineRecursions(map)
 {
   return hoot.RiverMaximalSublineSettingOptimizer.getFindBestMatchesMaxRecursions(map);
+}
+
+/*
+ * Determines if an element has a particular geometric relationship with a bounds
+ */
+function haveGeometricRelationship(e, bounds, relationship, map)
+{
+  return hoot.ElementGeometryUtils.haveGeometricRelationship(e, bounds, relationship, map);
+}
+
+/*
+ * Determines if a relation has any member conflatable by the current conflation configuration
+ */
+function relationHasConflatableMember(element, map)
+{
+  return hoot.RelationMemberUtils.relationHasConflatableMember(element, map);
 }

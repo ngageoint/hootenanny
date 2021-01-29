@@ -23,7 +23,7 @@
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef BUFFEREDOVERLAPEXTRACTOR_H
 #define BUFFEREDOVERLAPEXTRACTOR_H
@@ -62,11 +62,11 @@ public:
    */
   explicit BufferedOverlapExtractor(double bufferPortion);
 
-  static std::string className() { return "hoot::BufferedOverlapExtractor"; }
+  static QString className() { return "hoot::BufferedOverlapExtractor"; }
 
-  virtual std::string getClassName() const override { return BufferedOverlapExtractor::className(); }
+  virtual QString getClassName() const override { return BufferedOverlapExtractor::className(); }
 
-  virtual std::string getName() const override;
+  virtual QString getName() const override;
 
   virtual void setConfiguration(const Settings& conf);
 

@@ -50,11 +50,10 @@ LinearTagOnlyMerger::LinearTagOnlyMerger(const std::set<std::pair<ElementId, Ele
                                            std::shared_ptr<PartialNetworkMerger> networkMerger) :
 LinearSnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
 _performBridgeGeometryMerging(
-ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
+  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
 _networkMerger(networkMerger)
 {
   _removeTagsFromWayMembers = false;
-  _markAddedMultilineStringRelations = true;
 }
 
 LinearTagOnlyMerger::LinearTagOnlyMerger(
@@ -62,10 +61,9 @@ LinearTagOnlyMerger::LinearTagOnlyMerger(
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
 LinearSnapMerger(pairs, sublineMatcher),
 _performBridgeGeometryMerging(
-ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
+  ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges())
 {
   _removeTagsFromWayMembers = false;
-  _markAddedMultilineStringRelations = true;
 }
 
 void LinearTagOnlyMerger::_determineKeeperFeature(
@@ -126,7 +124,7 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
     LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
 
     bool needsReview = false;
-    std::string mergerName;
+    QString mergerName;
     if (!_networkMerger)
     {
       mergerName = LinearSnapMerger::className();

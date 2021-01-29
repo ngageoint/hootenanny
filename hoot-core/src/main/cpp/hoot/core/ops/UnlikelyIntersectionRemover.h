@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNLIKELYINTERSECTIONREMOVER_H
@@ -31,7 +31,6 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/criterion/LinearCriterion.h>
 
 // Standard
 #include <set>
@@ -54,7 +53,7 @@ class UnlikelyIntersectionRemover : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::UnlikelyIntersectionRemover"; }
+  static QString className() { return "hoot::UnlikelyIntersectionRemover"; }
 
   UnlikelyIntersectionRemover() = default;
   virtual ~UnlikelyIntersectionRemover() = default;
@@ -78,10 +77,11 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    */
-  virtual QStringList getCriteria() const
-  { return QStringList(QString::fromStdString(LinearCriterion::className())); }
+  virtual QStringList getCriteria() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 protected:
 

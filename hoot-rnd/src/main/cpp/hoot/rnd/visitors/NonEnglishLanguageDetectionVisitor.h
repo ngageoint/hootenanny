@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef NON_ENGLISH_LANGUAGE_DETECTION_VISITOR_H
@@ -30,7 +30,7 @@
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/elements/ElementVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/rnd/language/LanguageDetector.h>
 #include <hoot/rnd/language/LanguageInfoProvider.h>
 
@@ -53,7 +53,7 @@ class NonEnglishLanguageDetectionVisitor : public ElementVisitor, public Configu
 
 public:
 
-  static std::string className() { return "hoot::NonEnglishLanguageDetectionVisitor"; }
+  static QString className() { return "hoot::NonEnglishLanguageDetectionVisitor"; }
 
   NonEnglishLanguageDetectionVisitor();
   virtual ~NonEnglishLanguageDetectionVisitor();
@@ -71,7 +71,9 @@ public:
   virtual QString getInitStatusMessage() const;
   virtual QString getCompletedStatusMessage() const;
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

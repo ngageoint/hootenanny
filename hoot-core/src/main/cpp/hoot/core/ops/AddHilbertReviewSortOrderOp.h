@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef __ADD_HILBERT_REVIEW_SORT_ORDER_H__
 #define __ADD_HILBERT_REVIEW_SORT_ORDER_H__
@@ -39,7 +39,7 @@ class AddHilbertReviewSortOrderOp : public OsmMapOperation
 {
 public:
 
-  static std::string className() { return "hoot::AddHilbertReviewSortOrderOp"; }
+  static QString className() { return "hoot::AddHilbertReviewSortOrderOp"; }
 
   static int logWarnCount;
 
@@ -48,7 +48,9 @@ public:
 
   virtual void apply(OsmMapPtr& map);
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   virtual QString getInitStatusMessage() const
   { return "Adding geospatial sorting tags to review relations..."; }

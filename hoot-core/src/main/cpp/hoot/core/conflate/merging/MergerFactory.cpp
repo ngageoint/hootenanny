@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "MergerFactory.h"
 
@@ -106,9 +106,7 @@ vector<CreatorDescription> MergerFactory::getAllAvailableCreators() const
   vector<CreatorDescription> result;
 
   // get all match creators from the factory
-  vector<std::string> names =
-    Factory::getInstance().getObjectNamesByBase(MergerCreator::className());
-
+  vector<QString> names = Factory::getInstance().getObjectNamesByBase(MergerCreator::className());
   for (size_t i = 0; i < names.size(); i++)
   {
     // get all names known by this creator.
@@ -170,6 +168,7 @@ void MergerFactory::registerDefaultCreators()
 
       if (args.size() > 0)
       {
+        // TODO: Is this actually used on any MergerCreators?
         mc->setArguments(args);
       }
     }

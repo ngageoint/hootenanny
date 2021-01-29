@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef LENGTHOFWAYSVISITOR_H
 #define LENGTHOFWAYSVISITOR_H
@@ -44,7 +44,7 @@ class LengthOfWaysVisitor : public ElementConstOsmMapVisitor, public NumericStat
 {
 public:
 
-  static std::string className() { return "hoot::LengthOfWaysVisitor"; }
+  static QString className() { return "hoot::LengthOfWaysVisitor"; }
 
   LengthOfWaysVisitor();
   virtual ~LengthOfWaysVisitor() = default;
@@ -68,7 +68,9 @@ public:
     return average;
   }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

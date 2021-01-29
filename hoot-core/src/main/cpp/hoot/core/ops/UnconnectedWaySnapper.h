@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #ifndef UNCONNECTED_WAY_SNAPPER
@@ -76,7 +76,7 @@ class UnconnectedWaySnapper : public OsmMapOperation, public Configurable
 {
 public:
 
-  static std::string className() { return "hoot::UnconnectedWaySnapper"; }
+  static QString className() { return "hoot::UnconnectedWaySnapper"; }
 
   UnconnectedWaySnapper();
   virtual ~UnconnectedWaySnapper() = default;
@@ -98,24 +98,26 @@ public:
                                        const WayPtr& connectTo);
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getInitStatusMessage() const
   { return "Snapping unconnected ways to the nearest way..."; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getCompletedStatusMessage() const
   { return "Snapped " + QString::number(_numAffected) + " unconnected ways."; }
 
   /**
-   * @see OperationStatusInfo
+   * @see OperationStatus
    */
   virtual QString getDescription() const
   { return "Snaps unconnected ways to the nearest way."; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
   /**
    * @see Configurable

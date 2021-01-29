@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "OsmMapOperationJs.h"
 
@@ -53,13 +53,64 @@ namespace hoot
 
 HOOT_JS_REGISTER(OsmMapOperationJs)
 
+void OsmMapOperationJs::Init(Handle<Object> target)
+{
+  Isolate* current = target->GetIsolate();
+  HandleScope scope(current);
+  vector<QString> opNames =
+    Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
+
+  for (size_t i = 0; i < opNames.size(); i++)
+  {
+    QByteArray utf8 = opNames[i].replace("hoot::", "").toUtf8();
+    const char* n = utf8.data();
+    // Prepare constructor template
+    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
+    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].toStdString().data()));
+    tpl->InstanceTemplate()->SetInternalFieldCount(2);
+    // Prototype
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
+        FunctionTemplate::New(current, apply));
+    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "applyAndGetResult"),
+        FunctionTemplate::New(current, applyAndGetResult));
+    tpl->PrototypeTemplate()->Set(
+      PopulateConsumersJs::baseClass(),
+      String::NewFromUtf8(current, OsmMapOperation::className().toStdString().data()));
+
+    Persistent<Function> constructor(current, tpl->GetFunction());
+    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
+  }
+}
+
+void OsmMapOperationJs::New(const FunctionCallbackInfo<Value>& args)
+{
+  Isolate* current = args.GetIsolate();
+  HandleScope scope(current);
+
+  const QString className = "hoot::" + str(args.This()->GetConstructorName());
+  if (className == "Object")
+  {
+    args.GetReturnValue().Set(
+      current->ThrowException(
+        HootExceptionJs::create(
+          IllegalArgumentException("Invalid OsmMapOperation. Did you forget 'new'?"))));
+  }
+  OsmMapOperation* op = Factory::getInstance().constructObject<OsmMapOperation>(className);
+  OsmMapOperationJs* obj = new OsmMapOperationJs(op);
+  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
+  obj->Wrap(args.This());
+
+  PopulateConsumersJs::populateConsumers<OsmMapOperation>(op, args);
+
+  args.GetReturnValue().Set(args.This());
+}
+
 void OsmMapOperationJs::apply(const FunctionCallbackInfo<Value>& args)
 {
   Isolate* current = args.GetIsolate();
   HandleScope scope(current);
 
   OsmMapOperationJs* op = ObjectWrap::Unwrap<OsmMapOperationJs>(args.This());
-
   OsmMapPtr& map = ObjectWrap::Unwrap<OsmMapJs>(args[0]->ToObject())->getMap();
 
   op->getMapOp()->apply(map);
@@ -95,55 +146,6 @@ void OsmMapOperationJs::applyAndGetResult(const FunctionCallbackInfo<Value>& arg
   {
     throw HootException("Unsupported OsmMapOperation result type encountered by Javascript API.");
   }
-}
-
-void OsmMapOperationJs::Init(Handle<Object> target)
-{
-  Isolate* current = target->GetIsolate();
-  HandleScope scope(current);
-  vector<string> opNames =
-    Factory::getInstance().getObjectNamesByBase(OsmMapOperation::className());
-
-  for (size_t i = 0; i < opNames.size(); i++)
-  {
-    QByteArray utf8 = QString::fromStdString(opNames[i]).replace("hoot::", "").toUtf8();
-    const char* n = utf8.data();
-    // Prepare constructor template
-    Local<FunctionTemplate> tpl = FunctionTemplate::New(current, New);
-    tpl->SetClassName(String::NewFromUtf8(current, opNames[i].data()));
-    tpl->InstanceTemplate()->SetInternalFieldCount(2);
-    // Prototype
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "apply"),
-        FunctionTemplate::New(current, apply));
-    tpl->PrototypeTemplate()->Set(String::NewFromUtf8(current, "applyAndGetResult"),
-        FunctionTemplate::New(current, applyAndGetResult));
-    tpl->PrototypeTemplate()->Set(PopulateConsumersJs::baseClass(),
-                                  String::NewFromUtf8(current, OsmMapOperation::className().data()));
-
-    Persistent<Function> constructor(current, tpl->GetFunction());
-    target->Set(String::NewFromUtf8(current, n), ToLocal(&constructor));
-  }
-}
-
-void OsmMapOperationJs::New(const FunctionCallbackInfo<Value>& args)
-{
-  Isolate* current = args.GetIsolate();
-  HandleScope scope(current);
-
-  QString className = str(args.This()->GetConstructorName());
-  if (className == "Object")
-  {
-    args.GetReturnValue().Set(current->ThrowException(HootExceptionJs::create(IllegalArgumentException(
-      "Invalid OsmMapOperation. Did you forget 'new'?"))));
-  }
-  OsmMapOperation* op = Factory::getInstance().constructObject<OsmMapOperation>(className);
-  OsmMapOperationJs* obj = new OsmMapOperationJs(op);
-  //  node::ObjectWrap::Wrap takes ownership of the pointer in a v8::Persistent<v8::Object>
-  obj->Wrap(args.This());
-
-  PopulateConsumersJs::populateConsumers<OsmMapOperation>(op, args);
-
-  args.GetReturnValue().Set(args.This());
 }
 
 }

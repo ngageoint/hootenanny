@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSM_CHANGESET_FILE_WRITER_H
 #define OSM_CHANGESET_FILE_WRITER_H
@@ -31,6 +31,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
@@ -38,16 +39,16 @@ namespace hoot
 /**
  * Interface for classes which write changesets to a file
  *
- * There may be some redundancy with this and OsmChangeWriter.
+ * @todo There may be some redundancy with this and OsmChangeWriter.
  */
 class OsmChangesetFileWriter : public Configurable
 {
 
 public:
 
-  static std::string className() { return "hoot::OsmChangesetFileWriter"; }
+  static QString className() { return "hoot::OsmChangesetFileWriter"; }
 
-  OsmChangesetFileWriter() = default;
+  OsmChangesetFileWriter();
   virtual ~OsmChangesetFileWriter() = default;
 
   /**
@@ -88,6 +89,45 @@ public:
    * @see Configurable
    */
   virtual void setConfiguration(const Settings& conf) = 0;
+
+  /**
+   * Sets all maps corresponding to the former state of the datasets
+   *
+   * @todo These map setters feel a little kludgy...maybe use a new map list interface, similar to
+   * OsmMapConsumer?
+   */
+  virtual void setMap1List(const QList<ConstOsmMapPtr>& /*map*/) {}
+
+  /**
+   * Sets all maps corresponding to the changed state of the datasets
+   */
+  virtual void setMap2List(const QList<ConstOsmMapPtr>& /*map*/) {}
+
+protected:
+
+  // used for bounds checking
+  QList<ConstOsmMapPtr> _map1List;
+  QList<ConstOsmMapPtr> _map2List;
+
+  bool _includeDebugTags;
+  bool _includeCircularErrorTags;
+
+  // list of metadata tag keys allowed to be written to the changeset
+  QStringList _metadataAllowKeys;
+
+  // overrides bounds checking
+  bool _changesetIgnoreBounds;
+
+  /*
+   * Determines if an change element satisfies the configured bounds requirement
+   *
+   * @param element the element to check
+   * @param map1 before changes map
+   * @param map2 after changes map
+   * @return true if the element passes the configured bounds requirement; false otherwise
+   */
+  bool _failsBoundsCheck(
+    const ConstElementPtr& element, const ConstOsmMapPtr& map1, const ConstOsmMapPtr& map2) const;
 };
 
 }

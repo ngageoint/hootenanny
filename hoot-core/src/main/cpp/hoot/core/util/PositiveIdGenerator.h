@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef POSITIVEIDGENERATOR_H
 #define POSITIVEIDGENERATOR_H
@@ -41,7 +41,7 @@ class PositiveIdGenerator : public IdGenerator
 {
 public:
 
-  static std::string className() { return "hoot::PositiveIdGenerator"; }
+  static QString className() { return "hoot::PositiveIdGenerator"; }
 
   PositiveIdGenerator() { reset(); }
 

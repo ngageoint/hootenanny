@@ -22,14 +22,14 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef SETTAGVALUEVISITOR_H
 #define SETTAGVALUEVISITOR_H
 
 // hoot
 #include <hoot/core/util/Configurable.h>
-#include <hoot/core/info/OperationStatusInfo.h>
+#include <hoot/core/info/OperationStatus.h>
 #include <hoot/core/visitors/MultipleCriterionConsumerVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -44,7 +44,7 @@ class SetTagValueVisitor : public MultipleCriterionConsumerVisitor, public Confi
 {
 public:
 
-  static std::string className() { return "hoot::SetTagValueVisitor"; }
+  static QString className() { return "hoot::SetTagValueVisitor"; }
 
   SetTagValueVisitor();
   SetTagValueVisitor(
@@ -68,7 +68,9 @@ public:
   virtual QString getCompletedStatusMessage() const
   { return "Updated " + StringUtils::formatLargeNumber(_numAffected) + " tags"; }
 
-  virtual std::string getClassName() const { return className(); }
+  virtual QString getName() const { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 

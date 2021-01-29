@@ -54,7 +54,7 @@ class MaximalSubline
 {
 public:
 
-  static std::string className() { return "hoot::MaximalSubline"; }
+  static QString className() { return "hoot::MaximalSubline"; }
 
   class MatchCriteria
   {
