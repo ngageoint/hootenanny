@@ -114,15 +114,11 @@ if diff $OUTPUT_DIR/output_unified_changeset_stats.json $INPUT_DIR/output_unifie
   echo ""
   echo "Changeset Unified Stats Files Match"
   echo ""
-  OUT=`cat $OUTPUT_DIR/output_unified_changeset_stats.json`
-  echo "out: " $OUT
 else
   echo ""
   echo "Changeset Unified Stats Files Don't Match"
   echo ""
-  OUT=`cat $OUTPUT_DIR/output_unified_changeset_stats.json`
-  echo "out: " $OUT
-  #diff $OUTPUT_DIR/output_unified_changeset_stats.json $INPUT_DIR/output_unified_changeset_stats.json
+  diff $OUTPUT_DIR/output_unified_changeset_stats.json $INPUT_DIR/output_unified_changeset_stats.json
 fi
 
 # Check changeset stats output
@@ -133,15 +129,11 @@ if diff $OUTPUT_DIR/output_changeset_stats.json $INPUT_DIR/output_changeset_stat
   echo ""
   echo "Changeset Stats Files Match"
   echo ""
-  OUT=`cat $OUTPUT_DIR/output_changeset_stats.json`
-  echo "out: " $OUT
 else
   echo ""
   echo "Changeset Stats Files Don't Match"
   echo ""
-  OUT=`cat $OUTPUT_DIR/output_changeset_stats.json`
-  echo "out: " $OUT
-  #diff $OUTPUT_DIR/output_changeset_stats.json $INPUT_DIR/output_changeset_stats.json
+  diff $OUTPUT_DIR/output_changeset_stats.json $INPUT_DIR/output_changeset_stats.json
 fi
 
 # Check to make sure we don't bomb out on empty files
