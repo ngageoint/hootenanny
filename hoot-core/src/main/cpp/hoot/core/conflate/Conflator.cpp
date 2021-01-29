@@ -283,6 +283,10 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
   {
     _writeStats(result, input1Cso, input2Cso, output);
   }
+  if (_displayChangesetStats)
+  {
+    _writeChangesetStats();
+  }
 
   _progress->set(
     1.0, Progress::JobState::Successful,
@@ -509,44 +513,37 @@ void Conflator::_writeStats(
     std::cout << "stats = (stat) OR (input map 1 stat) (input map 2 stat) (output map stat) in file: " <<
       _outputStatsFile << std::endl;
   }
+}
 
-  if (_displayChangesetStats)
+void Conflator::_writeChangesetStats()
+{
+  if (_outputChangesetStatsFile.isEmpty())
   {
-    // TODO: remove
-    LOG_WARN(_outputChangesetStatsFile);
-    if (_outputChangesetStatsFile.isEmpty())
+    // output to display
+    LOG_STATUS("Changeset Geometry Stats:\n" << _diffConflator.getGeometryChangesetStats());
+    if (_diffConflator.conflatingTags())
     {
-      // output to display
-      LOG_STATUS("Changeset Geometry Stats:\n" << _diffConflator.getGeometryChangesetStats());
+      LOG_STATUS("\nChangeset Tag Stats:\n" << _diffConflator.getTagChangesetStats() << "\n");
+    }
+  }
+  else
+  {
+    // output to file
+    if (_diffConflateSeparateOutput)
+    {
+      // output separate files for geometry and tag change stats
+      FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getGeometryChangesetStats());
       if (_diffConflator.conflatingTags())
       {
-        LOG_STATUS("\nChangeset Tag Stats:\n" << _diffConflator.getTagChangesetStats() << "\n");
+        QString tagsOutFile = _outputChangesetStatsFile.replace(".json", "");
+        tagsOutFile.append(".tags.json");
+        FileUtils::writeFully(tagsOutFile, _diffConflator.getTagChangesetStats());
       }
     }
     else
     {
-      // output to file
-      if (_diffConflateSeparateOutput)
-      {
-        // output separate files for geometry and tag change stats
-        FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getGeometryChangesetStats());
-        if (_diffConflator.conflatingTags())
-        {
-          QString tagsOutFile = _outputChangesetStatsFile.replace(".json", "");
-          tagsOutFile.append(".tags.json");
-          // TODO: remove
-          LOG_VARW(tagsOutFile);
-          LOG_VARW(_diffConflator.getTagChangesetStats());
-          FileUtils::writeFully(tagsOutFile, _diffConflator.getTagChangesetStats());
-        }
-      }
-      else
-      {
-        // output a single stats file with both geometry and tags change stats
-        // TODO: remove
-        LOG_VARW(_diffConflator.getUnifiedChangesetStats());
-        FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getUnifiedChangesetStats());
-      }
+      // output a single stats file with both geometry and tags change stats
+      FileUtils::writeFully(_outputChangesetStatsFile, _diffConflator.getUnifiedChangesetStats());
     }
   }
 }
