@@ -166,6 +166,7 @@ void CumulativeConflator2::_resetInitConfig()
   QStringList tempArgs = _args;
   Settings::parseCommonArguments(tempArgs);
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+  LOG_VARD(ConfigOptions().getMatchCreators());
 }
 
 CumulativeConflator2::ScoreType CumulativeConflator2::scoreTypeFromString(QString& scoreTypeStr)

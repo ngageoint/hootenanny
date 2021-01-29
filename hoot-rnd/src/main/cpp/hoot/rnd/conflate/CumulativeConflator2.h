@@ -43,7 +43,7 @@ namespace hoot
  * - forward and reverse (--reverse-inputs)
  *   - div road is more gnarly using forward; rest is similar
  * - unifying vs network (from existing options)
- *   -
+ *   - network oddly is not merging nearly as much; may be due to the small aoi
  * - match/review thresh adjustment (from existing options)
  *   -
  * - drop reviews and/or drop secondary features involved in reviews in output? (post conflate op)
