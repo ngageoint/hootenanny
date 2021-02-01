@@ -70,72 +70,6 @@ public:
   {
     // process optional params
 
-    QStringList geometryFilters;
-    if (args.contains("--geometry-filters"))
-    {
-      const int optionNameIndex = args.indexOf("--geometry-filters");
-      geometryFilters = args.at(optionNameIndex + 1).trimmed().split(";");
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-    }
-    LOG_VARD(geometryFilters);
-
-    QStringList replacementFilters;
-    if (args.contains("--replacement-filters"))
-    {
-      const int optionNameIndex = args.indexOf("--replacement-filters");
-      replacementFilters = args.at(optionNameIndex + 1).trimmed().split(";");
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-    }
-    LOG_VARD(replacementFilters);
-
-    bool chainReplacementFilters = false;
-    if (args.contains("--chain-replacement-filters"))
-    {
-      chainReplacementFilters = true;
-      args.removeAll("--chain-replacement-filters");
-    }
-    LOG_VARD(chainReplacementFilters);
-
-    QStringList replacementFilterOptions;
-    if (args.contains("--replacement-filter-options"))
-    {
-      const int optionNameIndex = args.indexOf("--replacement-filter-options");
-      replacementFilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-    }
-    LOG_VARD(replacementFilterOptions);
-
-    QStringList retainmentFilters;
-    if (args.contains("--retainment-filters"))
-    {
-      const int optionNameIndex = args.indexOf("--retainment-filters");
-      retainmentFilters = args.at(optionNameIndex + 1).trimmed().split(";");
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-    }
-    LOG_VARD(retainmentFilters);
-
-    bool chainRetainmentFilters = false;
-    if (args.contains("--chain-retainment-filters"))
-    {
-      chainRetainmentFilters = true;
-      args.removeAll("--chain-retainment-filters");
-    }
-    LOG_VARD(chainRetainmentFilters);
-
-    QStringList retainmentFilterOptions;
-    if (args.contains("--retainment-filter-options"))
-    {
-      const int optionNameIndex = args.indexOf("--retainment-filter-options");
-      retainmentFilterOptions = args.at(optionNameIndex + 1).trimmed().split(";");
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-    }
-    LOG_VARD(retainmentFilterOptions);
-
     bool enableWaySnapping = false;
     if (args.contains("--enable-way-snapping"))
     {
@@ -251,14 +185,6 @@ public:
     }
     LOG_VARD(boundInterpretation);
     changesetCreator->setBoundsInterpretation(boundInterpretation);
-    changesetCreator->setGeometryFilters(geometryFilters);
-    // chain param must be set before the filters themselves
-    changesetCreator->setChainReplacementFilters(chainReplacementFilters);
-    changesetCreator->setReplacementFilters(replacementFilters);
-    changesetCreator->setReplacementFilterOptions(replacementFilterOptions);
-    changesetCreator->setChainRetainmentFilters(chainRetainmentFilters);
-    changesetCreator->setRetainmentFilters(retainmentFilters);
-    changesetCreator->setRetainmentFilterOptions(retainmentFilterOptions);
     changesetCreator->setEnableWaySnapping(enableWaySnapping);
     changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
 
