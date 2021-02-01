@@ -35,11 +35,6 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OneWayCriterion)
 
-OneWayCriterion::OneWayCriterion(bool isOneWay) :
-_isOneWay(isOneWay)
-{
-}
-
 bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
   if (e->getElementType() == ElementType::Way)

@@ -120,6 +120,7 @@ protected:
 
   QString _description;
   // This var allows for matching against only a subset of features in the input data.
+  //
   // At this time, each match creator will need to add explicit logic to use this filter in their
   // isMatchCandidate method (if they call into a match visitor, then in that class's
   // isMatchCandidate method). There may eventually be a cleaner way to do it.

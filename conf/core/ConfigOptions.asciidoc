@@ -877,6 +877,20 @@ this list is empty, no circular error will be parsed from input features and a t
 
 Path to this file.  Only modified during testing the Hootenanny options command.
 
+=== conflate.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+TODO
+
+=== conflate.element.criterion.negate
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
 === conflate.mark.merge.created.multilinestring.relations
 
 * Data Type: bool
@@ -1046,8 +1060,8 @@ testing purposes only.
 * Data Type: string
 * Default Value: ``
 
-A JSON tag filter that is applied to filter features before conflation.  See the Hootenanny
-User Guide "Feature Filtering" section for filter usage examples.
+A JSON tag filter that is applied to filter features before conflation. See the Hootenanny User
+Guide "Feature Filtering" section for filter usage examples.
 
 === conflate.use.data.source.ids.1
 
@@ -4889,9 +4903,9 @@ E.g. "highway=road;amenity=school"
 * Data Type: string
 * Default Value: ``
 
-The plugin name of an element criterion used to select tags to keep/remove used by
-KeepTagsVisitor/RemoveTagsVisitor.  To pass in complex nested criteria for tag filtering, use the
-Hootenanny Javascript interface instead.
+The class name of an element criterion used to select tags to keep/remove used by
+RemoveTagsVisitor.  To pass in complex nested criteria for tag filtering, use the Hootenanny
+Javascript interface instead.
 
 === tag.filter.keys
 

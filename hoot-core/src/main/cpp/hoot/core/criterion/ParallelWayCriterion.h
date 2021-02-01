@@ -63,10 +63,9 @@ public:
   virtual QString getDescription() const
   { return "Identifies ways that are parallel to each other"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Line; }
 
- virtual QString getName() const override { return className(); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getClassName() const override { return className(); }
 

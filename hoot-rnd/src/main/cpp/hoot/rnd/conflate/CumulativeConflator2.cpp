@@ -36,6 +36,9 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/criterion/DualHighwayCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/conflate/highway/HighwayMatchCreator.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -65,19 +68,16 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
   {
     sortFlags = QDir::Name | QDir::Reversed;
   }
-  const QStringList inputs = input.entryList(QDir::Files, sortFlags);
-
-//  if (!_addTagsInput.isEmpty())
-//  {
-
-//  }
-
-//  if (_inputSortScoreType != ScoreType::None)
-//  {
-
-//  }
+  QStringList inputs = input.entryList(QDir::Files, sortFlags);
 
   QFileInfo outputInfo(output);
+
+  bool conflateDividedRoadsOnlyOnce = !_addTagsInput.isEmpty();
+  if (conflateDividedRoadsOnlyOnce)
+  {
+    _transferTagsToFirstInput(inputs, QDir(outputInfo.path()));
+    //return;
+  }
 
   QString tempOutput;
   QString outId;
@@ -118,6 +118,16 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
     QFileInfo input2Info(input2);
     QFileInfo tempOutputInfo(tempOutput);
 
+    if (conflateDividedRoadsOnlyOnce)
+    {
+      // Create a conflate filter to prevent conflating all div roads, so we'll just end up with div
+      // roads from the first input. This must be set for each loop iteration, since we're
+      // rebuilding the config for each conflation.
+      conf().set(
+        ConfigOptions::getConflateElementCriterionKey(), DualHighwayCriterion::className());
+      conf().set(ConfigOptions::getConflateElementCriterionNegateKey(), true);
+    }
+
     if (!_isDifferential)
     {
       conflateTimer.restart();
@@ -129,20 +139,10 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
       conflator.conflate(input1, input2, tempOutput);
       LOG_STATUS("Conflation took: " << StringUtils::millisecondsToDhms(conflateTimer.elapsed()));
     }
-//    else
-//    {
-
-//    }
-
-//    if (_runEnsemble)
-//    {
-
-//    }
-
-//    if (_scoreOutput)
-//    {
-
-//    }
+    else
+    {
+      throw IllegalArgumentException();
+    }
 
     if (i != 1 && !_keepIntermediateOutputs)
     {
@@ -154,6 +154,30 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
 
     _resetInitConfig();
   }
+}
+
+void CumulativeConflator2::_transferTagsToFirstInput(QStringList& inputs, const QDir& output)
+{
+  // We're trying to minimize the conflation of divided highways due to their difficulty. Use
+  // attribute conflate to transfer OSM road tags over to our first input.
+
+  QFileInfo tagInputInfo(_addTagsInput);
+  QString attributeConflatedOut = output.absolutePath() + "/out-attribute.osm";
+  QFileInfo outInfo(attributeConflatedOut);
+  LOG_STATUS(
+    "Performing tag transfer step for " << inputs.at(0) << " and " << tagInputInfo.fileName() <<
+    "; writing output to " << outInfo.fileName() << "...");
+
+  //Conflator attributeConflator;
+  //conf().clear();
+  conf().loadJson("AttributeConflation.conf");
+  //conf().loadJson("UnifyingAlgorithm.conf"); // TODO: update for Network
+  Conflator().conflate(inputs.at(0), _addTagsInput, attributeConflatedOut);
+
+  // Modify the location of the first input to be our conflated file with tags added.
+  inputs[0] = attributeConflatedOut;
+
+  _resetInitConfig();  // This gets us back to our initial conflate settings.
 }
 
 void CumulativeConflator2::_resetInitConfig()

@@ -85,6 +85,14 @@ public:
   std::vector<std::shared_ptr<MatchCreator>> getCreators() const { return _creators; }
 
   /**
+   * TODO
+   *
+   * @param name
+   * @return
+   */
+  std::shared_ptr<MatchCreator> getCreatorByName(const QString& name);
+
+  /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
   void registerCreator(const std::shared_ptr<MatchCreator>& creator)
@@ -111,7 +119,11 @@ public:
 private:
 
   // allows for matching a subset of the input data
-  QString _tagFilter;
+  QString _tagFilterJson;
+  // TODO
+  QString _critFilterClassName;
+  // TODO
+  bool _negateCritFilter;
 
   std::vector<std::shared_ptr<MatchCreator>> _creators;
 
@@ -121,7 +133,8 @@ private:
   void _checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
                                    const std::shared_ptr<geos::geom::Geometry>& bounds) const;
   void _setMatchCreators(QStringList matchCreatorsList);
-  void _setTagFilter(QString filter) { _tagFilter = filter; }
+  ElementCriterionPtr _createFilter();
+  void _setTagFilterJson(QString json) { _tagFilterJson = json; }
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;

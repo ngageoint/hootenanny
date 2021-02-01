@@ -45,7 +45,8 @@ namespace hoot
  * - unifying vs network (from existing options)
  *   - network oddly is not merging nearly as much; may be due to the small aoi
  * - pre-attribute conflate against osm option to get div road tags on first input
- *   (--add-tags <source-file>); also tag anything that overlaps/cross the osm div road?
+ *   (--add-tags <source-file>); also prevent anything from conflating that overlaps/cross the osm
+ *   div road?
  *   -
  * - match/review thresh adjustment (from existing options)
  * - drop reviews and/or drop secondary features involved in reviews in output? (post conflate op)
@@ -136,6 +137,8 @@ private:
   void _resetInitConfig();
 
   static ScoreType _scoreTypeFromString(QString& scoreTypeStr);
+
+  void _transferTagsToFirstInput(QStringList& inputs, const QDir& output);
 };
 
 }
