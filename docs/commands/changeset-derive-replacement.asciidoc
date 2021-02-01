@@ -4,12 +4,9 @@
 === Description
 
 The +changeset-derive-replacement+ command creates an OSM changeset file that represents the difference between two 
-OSM datasets within a specified bounds, where the data from the second specified input dataset (secondary layer) replaces 
-data in the first specified dataset (reference layer). 
-
-Additional filtering may be applied to the secondary input to control which types of features from it are used for 
-replacement. Likewise, additional filtering may be applied to the reference input to prevent certain types of features 
-from being replaced.
+OSM datasets within a specified bounds, where the data from the second specified input dataset (secondary layer) 
+completely replaces data in the first specified dataset (reference layer). Since the command replaces all data,
+inputs should be pre-filtered in situations where it is not desirable to replace all of the data.  
  
 The feature replacement algorithm used by this command allows for avoiding unnecessary clipping of features when 
 such modification are undesirable and also stitching up seams in the data when features must be clipped. The output 
@@ -62,6 +59,9 @@ changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabase
 
 The high level workflow for the command looks like the following:
 
+* Pre-filter input 1 reference map data to control what types of elements are replaced using the `convert` command (optional)
+* Pre-filter input 2 secondary map data to control what types of elements are added to the final output using the 
+  `convert` command (optional)
 * Load the input 1 reference map (data you are replacing) at the specified bounds
 * Load the input 2 secondary map (data you are using as replacement) at the specified bounds
 * Cut data out of the reference map for each feature geometry type being replaced. If performing full replacement, the 
@@ -77,6 +77,9 @@ All inputs must support bounded reading. To list the Hootenanny input formats th
 -----
 hoot info --formats --input-bounded
 -----
+
+If you wish to replace only a subset of your data (e.g. only buildings), both sets of input data should be filtered prior
+to using this command to perform the data replacement.
 
 Unless the reference data is being read from a direct connection to an OSM API database (osmapidb://), reference input 
 datasets containing linear data should be slightly larger than the replacement bounds, so as not to drop connected linear 

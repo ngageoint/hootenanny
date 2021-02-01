@@ -79,18 +79,9 @@ public:
     const QString& input1, const QString& input2,
     const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
 
-  // Currently, this only supports geometry filters (additional filters are broken right now
-  // anyway: #4267).
   virtual void setGeometryFilters(const QStringList& filterClassNames) override;
-  virtual void setReplacementFilters(const QStringList& /*filterClassNames*/) override {}
-  virtual void setChainReplacementFilters(const bool /*chain*/) override {}
-  virtual void setReplacementFilterOptions(const QStringList& /*optionKvps*/) override {}
-  virtual void setRetainmentFilters(const QStringList& /*filterClassNames*/) override {}
-  virtual void setChainRetainmentFilters(const bool /*chain*/) override {}
-  virtual void setRetainmentFilterOptions(const QStringList& /*optionKvps*/) override {}
 
-  virtual QString toString() const override
-    { return className().remove("hoot::"); }
+  virtual QString toString() const override { return className().remove("hoot::"); }
 
 protected:
 

@@ -61,6 +61,13 @@ public:
   virtual int runSimple(QStringList& args) override
   {
     LOG_VARD(args);
+
+    if (args.size() == 0)
+    {
+      std::cout << getHelp() << std::endl << std::endl;
+      return 0;
+    }
+
     run(args);
 
     return 0;
