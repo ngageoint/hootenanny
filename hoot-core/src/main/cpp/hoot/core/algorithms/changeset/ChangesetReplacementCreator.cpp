@@ -498,8 +498,7 @@ OsmMapPtr ChangesetReplacementCreator::_loadAndFilterSecMap()
   // up modifying anything else.
   if (_geometryTypeFilter)
   {
-    const Settings secFilterSettings =
-      _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
+    const Settings secFilterSettings = conf();
     _filterFeatures(
       secMap, _geometryTypeFilter, GeometryTypeCriterion::Unknown, secFilterSettings,
       _changesetId + "-sec-after-pruning");

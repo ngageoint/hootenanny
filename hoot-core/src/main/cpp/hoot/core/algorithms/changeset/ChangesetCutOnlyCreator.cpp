@@ -128,11 +128,11 @@ void ChangesetCutOnlyCreator::create(
   // If a retainment filter was specified, we'll AND it together with each geometry type filter to
   // further restrict what reference data gets replaced in the final changeset.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
-    _getCombinedFilters(_retainmentFilter);
+    _getCombinedFilters(/*_retainmentFilter*/ChainCriterionPtr());
   // If a replacement filter was specified, we'll AND it together with each geometry type filter to
   // further restrict what secondary replacement data goes into the final changeset.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
-    _getCombinedFilters(_replacementFilter);
+    _getCombinedFilters(/*_replacementFilter*/ChainCriterionPtr());
 
   // DIFF CALCULATION
 
@@ -324,8 +324,7 @@ void ChangesetCutOnlyCreator::_processMaps(
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
-  const Settings secFilterSettings =
-    _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
+  const Settings secFilterSettings = conf();
   _filterFeatures(
     secMap, secFeatureFilter, geometryType, secFilterSettings,
     _changesetId + "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
