@@ -169,7 +169,7 @@ void CumulativeConflator2::_resetInitConfig()
   LOG_VARD(ConfigOptions().getMatchCreators());
 }
 
-CumulativeConflator2::ScoreType CumulativeConflator2::scoreTypeFromString(QString& scoreTypeStr)
+CumulativeConflator2::ScoreType CumulativeConflator2::_scoreTypeFromString(QString& scoreTypeStr)
 {
   scoreTypeStr = scoreTypeStr.toLower().trimmed();
   if (scoreTypeStr == "raster")

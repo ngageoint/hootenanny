@@ -44,21 +44,28 @@ namespace hoot
  *   - div road is more gnarly using forward; rest is similar
  * - unifying vs network (from existing options)
  *   - network oddly is not merging nearly as much; may be due to the small aoi
- * - match/review thresh adjustment (from existing options)
- *   -
- * - drop reviews and/or drop secondary features involved in reviews in output? (post conflate op)
- * - use something similar to SmallHighwayMerger to throw out any short two node ways in output?
- *   (post conflate op)
- * - throw out unmatched secondary features that cross over / overlap previously conflated data?
- *   (post conflate op)
  * - pre-attribute conflate against osm option to get div road tags on first input
  *   (--add-tags <source-file>); also tag anything that overlaps/cross the osm div road?
+ *   -
+ * - match/review thresh adjustment (from existing options)
+ * - drop reviews and/or drop secondary features involved in reviews in output? (post conflate op)
+ *   -
+ * - auto merge reviews?
+ * - throw out unmatched secondary features that cross over / overlap previously conflated data?
+ *   (post conflate op)
+ *   -
+ * - use something similar to SmallHighwayMerger to throw out any short two node ways in output?
+ *   (post conflate op)
+ *   -
  * - sort inputs by raster or graph score (--sort-inputs-by-score <type>)
+ *   -
  * - score outputs with logic from compare command and throw out result if score doesn't get any
  *   better (--score-output)
+ *   -
  * - option for diff conflate and merge workflow (--differential)
+ *   -
  * - alg ensemble approach tied to score (--ensemble)
- *
+ *   -
  * - avg conflate?
  *
  * hoot conflate-cumulative --status
@@ -102,14 +109,6 @@ public:
    */
   void conflate(const QDir& input, const QString& output);
 
-  /**
-   * TODO
-   *
-   * @param scoreTypeStr
-   * @return
-   */
-  static ScoreType scoreTypeFromString(QString& scoreTypeStr);
-
   void setReverseInputs(bool reverse) { _reverseInputs = reverse; }
   void setScoreOutput(bool score) { _scoreOutput = score; }
   void setDifferential(bool isDifferential) { _isDifferential = isDifferential; }
@@ -119,7 +118,7 @@ public:
   void setArgs(const QStringList& args) { _args = args; }
   void setKeepIntermediateOutputs(bool keep) { _keepIntermediateOutputs = keep; }
   void setInputSortScoreType(QString scoreTypeStr)
-  { _inputSortScoreType = scoreTypeFromString(scoreTypeStr); }
+  { _inputSortScoreType = _scoreTypeFromString(scoreTypeStr); }
 
 private:
 
@@ -135,6 +134,8 @@ private:
   QStringList _args;
 
   void _resetInitConfig();
+
+  static ScoreType _scoreTypeFromString(QString& scoreTypeStr);
 };
 
 }
