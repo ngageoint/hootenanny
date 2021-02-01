@@ -91,66 +91,6 @@ ChangesetReplacementCreatorAbstract()
   _numTotalTasks++; // changeset derivation
 }
 
-void ChangesetCutOnlyCreator::setGeometryFilters(const QStringList& filterClassNames)
-{
-  LOG_VART(filterClassNames);
-  if (!filterClassNames.isEmpty())
-  {
-    _geometryFiltersSpecified = true;
-    _geometryTypeFilters.clear();
-    _linearFilterClassNames.clear();
-
-    for (int i = 0; i < filterClassNames.size(); i++)
-    {
-      const QString filterClassName = filterClassNames.at(i);
-      LOG_VART(filterClassName);
-
-      // Fail if the filter doesn't map to a geometry type.
-      std::shared_ptr<GeometryTypeCriterion> filter =
-        std::dynamic_pointer_cast<GeometryTypeCriterion>(
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(filterClassName)));
-      if (!filter)
-      {
-        throw IllegalArgumentException(
-          "Invalid feature geometry type filter: " + filterClassName +
-          ". Filter must be a GeometryTypeCriterion.");
-      }
-
-      ElementCriterionPtr currentFilter = _geometryTypeFilters[filter->getGeometryType()];
-      if (!currentFilter)
-      {
-        _geometryTypeFilters[filter->getGeometryType()] = filter;
-      }
-      else
-      {
-        _geometryTypeFilters[filter->getGeometryType()] =
-          OrCriterionPtr(new OrCriterion(currentFilter, filter));
-      }
-
-      if (filter->getGeometryType() == GeometryTypeCriterion::GeometryType::Line)
-      {
-        _linearFilterClassNames.append(filterClassName);
-      }
-    }
-  }
-
-  // have to call this method to keep filtering from erroring...shouldn't have to...should just init
-  // itself internally when no geometry filters are specified
-  LOG_VART(_geometryTypeFilters.size());
-  if (_geometryTypeFilters.isEmpty())
-  {
-    _geometryFiltersSpecified = false;
-    _geometryTypeFilters = _getDefaultGeometryFilters();
-    _linearFilterClassNames =
-      ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
-        GeometryTypeCriterion::GeometryType::Line);
-  }
-
-  LOG_VARD(_geometryTypeFilters.size());
-  LOG_VART(_linearFilterClassNames);
-}
-
 void ChangesetCutOnlyCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)

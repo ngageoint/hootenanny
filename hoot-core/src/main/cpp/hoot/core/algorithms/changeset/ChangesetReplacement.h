@@ -57,7 +57,7 @@ public:
    * The manner in which replacement boundary conditions are handled. See the
    * changeset-derive-replacement CLI doc for more detail.
    *
-   * @todo remove Hybrid
+   * @todo remove Hybrid; not used anywhere
    */
   enum BoundsInterpretation
   {
@@ -94,7 +94,6 @@ public:
 
   virtual void setFullReplacement(const bool full) = 0;
   virtual void setBoundsInterpretation(const BoundsInterpretation& interpretation) = 0;
-  virtual void setGeometryFilters(const QStringList& filterClassNames) = 0;
   virtual void setEnableWaySnapping(const bool enable) = 0;
   virtual void setChangesetId(const QString& id) = 0;
 

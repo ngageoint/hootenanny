@@ -77,63 +77,6 @@ ChangesetReplacementCreatorAbstract()
   _setGlobalOpts();
 }
 
-void ChangesetReplacementCreator::setGeometryFilters(const QStringList& filterClassNames)
-{
-  LOG_VART(filterClassNames);
-  if (!filterClassNames.isEmpty())
-  {
-    _geometryFiltersSpecified = true;
-    _geometryTypeFilter.reset();
-    _linearFilterClassNames.clear();
-
-    for (int i = 0; i < filterClassNames.size(); i++)
-    {
-      const QString filterClassName = filterClassNames.at(i);
-      LOG_VART(filterClassName);
-
-      // Fail if the filter doesn't map to a geometry type.
-      std::shared_ptr<GeometryTypeCriterion> filter =
-        std::dynamic_pointer_cast<GeometryTypeCriterion>(
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(filterClassName)));
-      if (!filter)
-      {
-        throw IllegalArgumentException(
-          "Invalid feature geometry type filter: " + filterClassName +
-          ". Filter must be a GeometryTypeCriterion.");
-      }
-
-      if (!_geometryTypeFilter)
-      {
-        _geometryTypeFilter = filter;
-      }
-      else
-      {
-        _geometryTypeFilter = OrCriterionPtr(new OrCriterion(_geometryTypeFilter, filter));
-      }
-
-      if (filter->getGeometryType() == GeometryTypeCriterion::GeometryType::Line)
-      {
-        _linearFilterClassNames.append(filterClassName);
-      }
-    }
-  }
-
-  // have to call this method to keep filtering from erroring...shouldn't have to...should just init
-  // itself internally when no geometry filters are specified)
-  if (!_geometryTypeFilter)
-  {
-    _geometryFiltersSpecified = false;
-    _linearFilterClassNames =
-      ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
-        GeometryTypeCriterion::GeometryType::Line);
-  }
-  _linearFilterClassNames.removeAll(LinearCriterion::className());
-
-  LOG_VARD(_geometryTypeFilters.size());
-  LOG_VART(_linearFilterClassNames);
-}
-
 void ChangesetReplacementCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)

@@ -79,8 +79,6 @@ public:
     const QString& input1, const QString& input2,
     const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output) override;
 
-  virtual void setGeometryFilters(const QStringList& filterClassNames) override;
-
   virtual QString toString() const override { return className().remove("hoot::"); }
 
 protected:
