@@ -22,31 +22,34 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef ABSTRACT_CONFLATOR_H
-#define ABSTRACT_CONFLATOR_H
+#ifndef CUMULATIVE_CONFLATOR_2_H
+#define CUMULATIVE_CONFLATOR_2_H
 
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
 
 /**
- * TODO: This is going to be a high level class to remove complexity from ConflateCmd and make that
- * logic callable elsewhere.
+ * Allows for conflating more than two inputs in a cumulative fashion.
  */
-class AbstractConflator
+class CumulativeConflator2
 {
-
 public:
 
-  AbstractConflator();
-
+  /**
+   * Conflates three or more input files in a cumulative fashion.
+   *
+   * @param inputs input file paths to conflate
+   * @param output output file path to write conflated data
+   */
+  static void conflate(const QStringList& inputs, const QString& output);
 };
 
 }
 
-#endif // ABSTRACT_CONFLATOR_H
+#endif // CUMULATIVE_CONFLATOR_2_H

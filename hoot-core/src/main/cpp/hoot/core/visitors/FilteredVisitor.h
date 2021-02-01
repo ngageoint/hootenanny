@@ -98,8 +98,8 @@ public:
 private:
 
   const ElementCriterion* _criterion;
-  const OsmMap* _map;
   ElementVisitor* _visitor;
+  const OsmMap* _map;
 };
 
 }

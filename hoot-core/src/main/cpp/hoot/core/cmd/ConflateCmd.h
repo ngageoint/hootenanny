@@ -29,11 +29,7 @@
 #define CONFLATECMD_H
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/cmd/BoundedCommand.h>
-
-// Standard
-#include <fstream>
 
 // Qt
 #include <QString>
@@ -45,9 +41,6 @@ class SingleStat;
 
 /**
  * Executes conflation
- *
- * @todo move the input parsing to a separate method and assign the parsed inputs to member
- * variables
  */
 class ConflateCmd : public BoundedCommand
 {
@@ -56,9 +49,7 @@ public:
 
   static QString className() { return "hoot::ConflateCmd"; }
 
-  static const QString JOB_SOURCE;
-
-  ConflateCmd();
+  ConflateCmd() = default;
 
   virtual QString getName() const override { return "conflate"; }
 
@@ -67,21 +58,7 @@ public:
 
   virtual int runSimple(QStringList& args) override;
 
-  void setFilterOps(bool filter) { _filterOps = filter; }
-
 private:
-
-  int _numTotalTasks;
-  bool _filterOps;
-
-  void _updateConfigOptionsForAttributeConflation();
-  void _updateConfigOptionsForDifferentialConflation();
-  void _updateConfigOptionsForBounds();
-  void _disableRoundaboutRemoval();
-  void _checkForTagValueTruncationOverride();
-
-  float _getJobPercentComplete(const int currentTaskNum) const;
-  float _getTaskWeight() const;
 
   friend class TestUtils;
 };
