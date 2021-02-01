@@ -125,14 +125,11 @@ void ChangesetCutOnlyCreator::create(
   _setGlobalOpts();
   _printJobDescription();
 
-  // If a retainment filter was specified, we'll AND it together with each geometry type filter to
-  // further restrict what reference data gets replaced in the final changeset.
+  // Make some adjustments to the default filters before using.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
-    _getCombinedFilters(/*_retainmentFilter*/ChainCriterionPtr());
-  // If a replacement filter was specified, we'll AND it together with each geometry type filter to
-  // further restrict what secondary replacement data goes into the final changeset.
+    _getFilters();
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
-    _getCombinedFilters(/*_replacementFilter*/ChainCriterionPtr());
+    _getFilters();
 
   // DIFF CALCULATION
 
@@ -643,125 +640,60 @@ bool ChangesetCutOnlyCreator::_roadFilterExists() const
 }
 
 QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-  ChangesetCutOnlyCreator::_getCombinedFilters(
-    std::shared_ptr<ChainCriterion> nonGeometryFilter)
+  ChangesetCutOnlyCreator::_getFilters()
 {
-  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> combinedFilters;
-  LOG_VART(nonGeometryFilter.get());
-  // TODO: may be able to consolidate this duplicated filter handling code inside the if/else
-  if (nonGeometryFilter)
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> filters;
+  LOG_VARD(_geometryTypeFilters.size());
+  if (_geometryTypeFilters.isEmpty())
   {
-    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
-         _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
-    {
-      GeometryTypeCriterion::GeometryType geomType = itr.key();
-      LOG_VART(GeometryTypeCriterion::typeToString(geomType));
-      ElementCriterionPtr geometryCrit = itr.value();
-
-      // Roundabouts are classified in hoot as a poly type due to being closed ways. We want to
-      // make sure they get procesed with the linear features, however, and not with the polys. If
-      // they don't, they won't get snapped back to other roads in the output. So if roads were part
-      // of the specified geometry filter, we'll move roundabouts from the poly to the linear
-      // filter. If no roads were specified in the geometry filter, then roads have been explicitly
-      // excluded and we do nothing here. So far this is the only instance where a geometry
-      // re-classification for a feature is necessary. If other instances of this occur things could
-      // get messy really quick, but we'll only worry about that if it actually happens.
-
-      // UPDATE 8/17/20: Used to do this just for roundabouts, but there are some highway types
-      // (e.g. highway=pedstrian) that can be polys. Really, probably just need some generic way to
-      // make sure no elements of the same type get processed in separate geometry handling loops
-      // instead of code like this.
-
-      ElementCriterionPtr updatedGeometryCrit;
-      LOG_VART(_roadFilterExists());
-      if (_roadFilterExists())
-      {
-        if (geomType == GeometryTypeCriterion::GeometryType::Line)
-        {
-          LOG_TRACE("Adding roundabouts to line filter due to presence of road filter...");
-          updatedGeometryCrit.reset(
-            new OrCriterion(
-              geometryCrit,
-              std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())));
-        }
-        else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
-        {
-          LOG_TRACE("Removing roundabouts from polygon filter due to presence of road filter...");
-          updatedGeometryCrit.reset(
-            new ChainCriterion(
-              geometryCrit,
-              NotCriterionPtr(
-                new NotCriterion(
-                  std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())))));
-        }
-      }
-      else
-      {
-        updatedGeometryCrit = geometryCrit;
-      }
-      LOG_VART(updatedGeometryCrit->toString());
-
-      combinedFilters[geomType] =
-        ChainCriterionPtr(new ChainCriterion(updatedGeometryCrit, nonGeometryFilter));
-      LOG_TRACE("New combined filter: " << combinedFilters[geomType]->toString());
-    }
+    _geometryTypeFilters = _getDefaultGeometryFilters();
+    // It should be ok that the roundabout filter doesn't get added here, since this list is only
+    // for by unconnected way snapping and roundabouts don't fall into that category.
+    _linearFilterClassNames =
+      ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
+        GeometryTypeCriterion::GeometryType::Line);
   }
-  else
+
+  for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
+       _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
   {
-    LOG_VARD(_geometryTypeFilters.size());
-    if (_geometryTypeFilters.isEmpty())
+    GeometryTypeCriterion::GeometryType geomType = itr.key();
+    LOG_VART(GeometryTypeCriterion::typeToString(geomType));
+    ElementCriterionPtr geometryCrit = itr.value();
+
+    // See roundabouts handling note in the preceding if statement for more detail. Here we're
+    // doing the same thing, except we don't care if a road filter was specified or not since this
+    // block of code only gets executed if no geometry filters were specified at all and we're
+    // using the defaults.
+
+    ElementCriterionPtr updatedGeometryCrit;
+    if (geomType == GeometryTypeCriterion::GeometryType::Line)
     {
-      _geometryTypeFilters = _getDefaultGeometryFilters();
-      // It should be ok that the roundabout filter doesn't get added here, since this list is only
-      // for by unconnected way snapping and roundabouts don't fall into that category.
-      _linearFilterClassNames =
-        ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Line);
+      LOG_TRACE("Adding roundabouts to line filter...");
+      updatedGeometryCrit.reset(
+        new OrCriterion(
+          geometryCrit, std::shared_ptr<HighwayCriterion>(new HighwayCriterion())));
     }
-
-    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
-         _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
+    else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
     {
-      GeometryTypeCriterion::GeometryType geomType = itr.key();
-      LOG_VART(GeometryTypeCriterion::typeToString(geomType));
-      ElementCriterionPtr geometryCrit = itr.value();
-
-      // See roundabouts handling note in the preceding if statement for more detail. Here we're
-      // doing the same thing, except we don't care if a road filter was specified or not since this
-      // block of code only gets executed if no geometry filters were specified at all and we're
-      // using the defaults.
-
-      ElementCriterionPtr updatedGeometryCrit;
-      if (geomType == GeometryTypeCriterion::GeometryType::Line)
-      {
-        LOG_TRACE("Adding roundabouts to line filter...");
-        updatedGeometryCrit.reset(
-          new OrCriterion(
-            geometryCrit,
-            std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())));
-      }
-      else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
-      {
-        LOG_TRACE("Removing roundabouts from polygon filter...");
-        updatedGeometryCrit.reset(
-          new ChainCriterion(
-            geometryCrit,
-            NotCriterionPtr(
-              new NotCriterion(
-                std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())))));
-      }
-      else
-      {
-        updatedGeometryCrit = geometryCrit;
-      }
-      LOG_VART(updatedGeometryCrit->toString());
-
-      combinedFilters[geomType] = updatedGeometryCrit;
-      LOG_TRACE("New combined filter: " << combinedFilters[geomType]->toString());
+      LOG_TRACE("Removing roads from polygon filter...");
+      updatedGeometryCrit.reset(
+        new ChainCriterion(
+          geometryCrit,
+          NotCriterionPtr(
+            new NotCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion())))));
     }
+    else
+    {
+      updatedGeometryCrit = geometryCrit;
+    }
+    LOG_VART(updatedGeometryCrit->toString());
+
+    filters[geomType] = updatedGeometryCrit;
+    LOG_TRACE("New filter: " << filters[geomType]->toString());
   }
-  LOG_VARD(combinedFilters.size());
-  return combinedFilters;
+  LOG_VARD(filters.size());
+  return filters;
 }
 
 OsmMapPtr ChangesetCutOnlyCreator::_loadRefMap(

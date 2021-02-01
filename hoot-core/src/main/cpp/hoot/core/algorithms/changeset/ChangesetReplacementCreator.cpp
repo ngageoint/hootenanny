@@ -31,7 +31,6 @@
 
 #include <hoot/core/algorithms/changeset/ChangesetCreator.h>
 
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>

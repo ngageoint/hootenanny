@@ -36,9 +36,7 @@ namespace hoot
 /**
  * Single geometry pass version of ChangesetReplacement, which solves the bug in handling relations
  * with children of mixed geometry types. This drops support for overlapping only replacement and
- * strict bounds handling, as they are not useful for replacements within a task grid. This
- * temporarily drops support for the additional filters (they were broken anyway), and they will be
- * restored as part of #4267.
+ * strict bounds handling, as they are not useful for replacements within a task grid.
  */
 class ChangesetReplacementCreator : public ChangesetReplacementCreatorAbstract
 {
