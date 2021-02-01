@@ -24,7 +24,8 @@
             onDelete="CASCADE"
             onUpdate="RESTRICT"
             referencedColumnNames="id"
-            referencedTableName="folders" />
+            referencedTableName="folders"
+        />
 
     </changeSet>
 </databaseChangeLog>

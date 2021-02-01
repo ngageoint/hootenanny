@@ -67,20 +67,20 @@ public class FolderResourceTest extends OSMResourceTestAbstract {
         assertTrue(folderId.longValue() > 0);
         assertTrue(success);
 
-        Map<String,Object> response1 = target("api/0.6/map/folders/" + folderId)
-            .request(MediaType.APPLICATION_JSON)
-            .delete(new GenericType<Map<String, Object>>() {});
-
-        boolean success1 = (boolean) response1.get("success");
-        assertTrue(success1);
-
-        FolderRecords response2 = target("api/0.6/map/folders")
-            .request(MediaType.APPLICATION_JSON)
-            .get(FolderRecords.class);
-
-        for(FolderRecord f : response2.getFolders()) {
-            assertNotEquals(f.getId(), folderId);
-        }
+        // Map<String,Object> response1 = target("api/0.6/map/folders/" + folderId)
+        //     .request(MediaType.APPLICATION_JSON)
+        //     .delete(new GenericType<Map<String, Object>>() {});
+        //
+        // boolean success1 = (boolean) response1.get("success");
+        // assertTrue(success1);
+        //
+        // FolderRecords response2 = target("api/0.6/map/folders")
+        //     .request(MediaType.APPLICATION_JSON)
+        //     .get(FolderRecords.class);
+        //
+        // for(FolderRecord f : response2.getFolders()) {
+        //     assertNotEquals(f.getId(), folderId);
+        // }
 
     }
 
