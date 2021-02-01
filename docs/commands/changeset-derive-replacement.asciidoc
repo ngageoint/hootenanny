@@ -36,23 +36,6 @@ the configuration (see `changeset.replacement.retain.replacing.data.ids`).
 * +output+                       - Changeset output location; must be a changeset .osc or .osc.sql file.
 * +osmApiDatabaseUrl+            - Target OSM API database where the derived changeset is to be applied, used to 
                                    maintain element ID continuity. Required only if the changeset output format is .osc.sql. 
-* +--geometry-filters+           - Optional criteria used to control the geometry type of the features that are replaced. 
-                                   When this option is omitted, features of all geometry types are replaced by features of 
-                                   a like geometry type. See the "Geometry Filtering" section for more detail.
-* +--replacement-filters+        - Optional filtering criteria beyond what is specified in +--geometry-filters+ for 
-                                   determining which features 
-                                   are used for replacement. See the "Replacement Filtering" section for more detail.
-* +--chain-replacement-filters+  - Determines how the criteria specified in +--replacement-filters+ are logically applied. 
-                                   See the "Replacement Filtering" section for more detail.
-* +--replacement-filter-options+ - Optional configuration options for the filters specified in +--replacement-filters+. See 
-                                   the "Replacement Filtering" section for more detail.
-* +--retainment-filters+         - Optional filtering criteria beyond what is specified in +--geometry-filters+ for 
-                                   determining which features are exempt from replacement. See the "Retainment 
-                                   Filtering" section for more detail.
-* +--chain-retainment-filters+   - Determines how the criteria specified in +--retainment-filters+ are logically applied. 
-                                   See the "Retainment Filtering" section for more detail.
-* +--retainment-filter-options+  - Optional configuration options for the filters specified in +--retainment-filters+. See 
-                                   the "Retainment Filtering" section for more detail.
 * +--enable-way-snapping+        - Optionally snap unconnected ways in the replacement data to the data being replaced. 
                                    This is generally used
                                    to smooth out ways at the edge of the replacement boundary when the dataset used 
@@ -67,7 +50,7 @@ the configuration (see `changeset.replacement.retain.replacing.data.ids`).
 === Usage
 
 --------------------------------------
-changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--geometry-filters] [--replacement-filters] [--chain-replacement-filters] [--replacement-filter-options] [--enable-way-snapping] [--stats filename] [--write-bounds]
+changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabaseUrl] [--enable-way-snapping] [--stats filename] [--write-bounds]
 --------------------------------------
 
 === Examples
@@ -80,14 +63,12 @@ changeset-derive-replacement (input1) (input2) (bounds) (output) [osmApiDatabase
 The high level workflow for the command looks like the following:
 
 * Load the input 1 reference map (data you are replacing) at the specified bounds
-* Filter the reference map based on geometry and/or other filters (optional)
 * Load the input 2 secondary map (data you are using as replacement) at the specified bounds
-* Filter the secondary map based on geometry and/or other filters (optional)
 * Cut data out of the reference map for each feature geometry type being replaced. If performing full replacement, the 
   shape cut out covers the entire specified bounds. If performing overlapping only replacement, the shape cut out is the 
   shape of the secondary data used for replacement.
 * Combine the cut out reference data back with the replacement data from the secondary map
-* Snap replacement linear features that are disconnected at the specified bounds seam back to the reference data
+* Snap replacement linear features that are disconnected at the specified bounds seam back to the reference data (optional)
 * Derive a difference changeset between the new map with replacement data added and the original reference map with removed data
 
 === Input Data
@@ -121,8 +102,8 @@ Alternatively, when removing data without replacing it with new data (cut only w
 
 * Point features: Only point features completely inside the specified bounds are replaced.
 * Linear features: Only sections of linear features within the specified bounds are modified, and they may be cut where 
-  they cross the bounds 
-  and optionally joined back up with reference data via way snapping (see "Unconnected Way Snapping" section).
+  they cross the bounds and optionally joined back up with reference data via way snapping (see "Unconnected Way 
+  Snapping" section).
 * Polygon features: Only polygon features completely inside the specified bounds are replaced. Polygon features are never 
   split.
 
@@ -135,52 +116,6 @@ replacement bounds from deletion in the output changeset. The method to protect 
 can be done before the call to this command. 
 
 Hootenanny will automatically add the +hoot:change:exclude:delete=yes+ tag to such reference ways for XML, JSON, OSM API database, and Hootenanny API database inputs only. To do so the reference input must be sufficiently larger than the replacement bounds. If this option is specified, Hootenanny will not automatically tag such ways, and the caller of this command is responsible for tagging such reference ways with the hoot:change:exclude:delete=yes+ tag. 
-
-=== Filtering
-
-==== Geometry Filtering
-
-The +--geometry-filters+ option controls replacement feature filtering by geometry type and can be used to determine both 
-the geometry type of the features that are replaced in the reference dataset and those that are used as replacement from 
-the secondary dataset. The criteria specified must be one or more Hootenanny geometry type criterion derived class names 
-(e.g. "hoot::BuildingCriterion" or "hoot::PointCriteron"). A feature may pass the geometry filter by satisfying any one criterion in a list of specified criteria. See the https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[examples]. If no geometry filter is specified, features of all geometry 
-types within the bounds will be replaced.
-
-To see a list of valid geometry type criteria for use in a geometry type filter:
------
-hoot info --geometry-type-criteria
------
-
-==== Replacement Filtering
-
-The +--replacement-filters+ option allows for further restricting the features from the secondary dataset added to the 
-output beyond geometry type filtering. One or more Hooteannny criterion class names can be used, and none of the criteria specified may be geometry type criteria (use +--geometry-filters+ for that purpose instead). See the 
-https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[examples].
-
-To see a list of available filtering criteria:
------
-hoot info --filters
------ 
-
-The behavior of +--replacement-filters+ is further configurable by the +--chain-replacement-filters+ option. If that option 
-is specified, a secondary feature must pass all criteria specified in +--replacement-filters+ in order to be included in 
-the changeset output. If that option is omitted, a secondary feature must pass only one criterion specified in 
-+--replacement-filters+ in order to be included in the changeset output.
-
-Hootenanny configuration options may be passed in separately to the criteria specified in +--replacement-filters+ via 
-the +--replacement-filter-options+ parameter. That option's value takes the form 
-"<option name 1>=<option value 1>;<option name 2>=<option value 2>...". See the 
-https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[examples].
-
-==== Retainment Filtering
-
-The +--retainment-filters+ option allows for further restricting the features from the reference dataset that are replaced 
-in the output beyond geometry type filtering. One or more Hooteannny criterion class names can be used, and none of the criteria specified may be geometry type criteria (use +--geometry-filters+ for that purpose instead). See the 
-https://github.com/ngageoint/hootenanny/blob/master/docs/user/CommandLineExamples.asciidoc#applying-changes[examples] and 
-the "Replacement Filtering" section for detail on how to list available filters.
-
-+--retainment-filters+ has a chaining option, +--chain-retainment-filters+, that behaves in the same way for retainment 
-as replacement filter chaining behaves. Configuration options may also be passed in to retainment filtering, using +--replacement-filter-options+, in a similar fashion to how they are passed in during replacement filtering.
 
 === Unconnected Way Snapping
 
