@@ -2,46 +2,41 @@
 set -e
 
 # This script tests the replacement changeset generation workflow for various geometry types. It is called from the
-# ServiceChangesetReplacement*.sh tests.
+# ServiceChangesetReplacement*.sh tests. All resultant changesets are written back to an OSM API database, as that allows 
+# for ease of visual inspection of the changes and makes debugging easier.
 #
-# All resultant changesets are written back to an OSM API database, as that allows for ease of visual inspection of the changes and makes
-# debugging easier.
+# When examining test outputs, ensure that all element changes made honor the specified bounds. Also, pay close 
+# attention to the modify change counts, as you can end up with output that looks correct but isn't due to ways being 
+# deleted and re-created when they should have been modified.
 #
-# Pay close attention to the modify change counts, as you can end up with output that looks correct but isn't due to ways being deleted and
-# re-created when they should have been modified.
-#
-# UPDATE 11/16/20: Going forward, its best to write these types of tests as part of ServiceChangesetReplacementGridTest rather than use this
-# test. If you need to synthesize replacement data with perty (e.g. ServiceChangesetReplacementBuildingTest.sh) or want to test something
-# specific in the CLI, however, then you will need to use this script.
+# UPDATE 11/16/20: Going forward, its best to write these types of tests as part of ServiceChangesetReplacementGridTest 
+# rather than use this test. If you need to synthesize replacement data with perty 
+# (e.g. ServiceChangesetReplacementBuildingTest.sh) or want to test something specific in the CLI, however, then you will 
+# need to use this script.
 
 # Input Parameters (see changeset-derive-replacement command doc for more detail):
 # 1  - test name
 # 2  - ref input file path
-# 3  - sec input file path - (use "test-files/Empty.osm" for cut only; that's hackish, but we already use the existing of an empty second
-#                            input to determine whether generate the second input via perturbation)
+# 3  - sec input file path - (use "test-files/Empty.osm" for cut only; that's hackish, but we already use the existing of 
+#      an empty second input to determine whether generate the second input via perturbation)
 # 4  - replacement aoi - what section is being replaced; matches bounds format
 # 5  - crop aoi - an initial rectangular aoi to crop both datasets down to in order to save processing time; matches bounds
 #                 rectangular envelope format only use a global bounds to bypass cropping completely: "-180,-90,180,90"
-# 6  - geometry filters - what types of geometries are being replaced?; delimited ElementCriterion class name list; leave empty to bypass
-# 7  - replacement filters - what types of features are we removing?; delimited ElementCriterion class name list; leave empty to bypass
-# 8  - chain replacement filters together (logical AND)?; true or false
-# 9  - replacement filter options - semicolon delimited list of config opts to be applied to the replacement filters only; leave empty to
-#                                   bypass
-# 10 - retainment filters - what types of features are we keeping?; delimited ElementCriterion class name list; leave empty to bypass
-# 11 - chain retainment filters together (logical AND)?; true or false
-# 12 - retainment filter options - semicolon delimited list of config opts to be applied to the retainment filters only; leave empty to bypass
-# 13 - way snapping - snap unconnected ways between replacement data and data being replaced?; may be useful if linear data varies greatly 
-#                     between the two
-# 14 - way snap tolerance (m) - how far can we snap ways to other ways?; leave empty to specify 0.0m
-# 15 - way snap node tolerance (m) - how far can we snap way nodes directly to other way nodes?; leave empty to specify 0.0m
-# 16 - extra params; anything extra params or config options you want to pass in for a custom config; applied to all commands
+# 6  - input filter - what types of elements are being replaced?; delimited ElementCriterion class name list; leave 
+#                     empty to bypass and replace elements of any type
+# 7 - way snapping - snap unconnected ways between replacement data and data being replaced?; may be useful if linear 
+#                     data varies greatly between the two
+# 8 - way snap tolerance (m) - how far can we snap ways to other ways?; leave empty to specify 0.0m
+# 9 - way snap node tolerance (m) - how far can we snap way nodes directly to other way nodes?; leave empty to specify 0.0m
+# 10 - extra params; anything extra params or config options you want to pass in for a custom config; applied to all commands
 
 # PROCESS INPUTS
 
 TEST_NAME=$1
 echo "test name: " $TEST_NAME
 
-# There may be multiple source files delimited with ';'. For multiple file inputs we'll run multiple consecutive replacements in a loop.
+# There may be multiple source files delimited with ';'. For multiple file inputs we'll run multiple consecutive replacements 
+# in a loop.
 SOURCE_FILE_1=$2
 echo "source file 1: " $SOURCE_FILE_1
 
@@ -54,8 +49,9 @@ if [[ "$CROP_AOI" == "-180,-90,180,90" ]]; then # If a global crop bounds was pa
 fi
 
 SOURCE_FILE_2=$3
-# If the second source file input parameter was not passed in, we'll perturb the first input source file and use the original data for the
-# secondary and the perturbed for the ref.
+# If the second source file input parameter was not passed in, we'll perturb the first input source file and use the 
+# original data for the secondary and the perturbed for the ref. Tagging the inputs make it easier to determine
+# which features are reference or secondary in the replaced output.
 if [ "$SOURCE_FILE_2" == "" ]; then
   SOURCE_FILE_2=$SOURCE_FILE_1
   if [ "$CROP_OPTS" == "" ]; then
@@ -84,60 +80,17 @@ REPLACEMENT_AOI=$4
 echo "replacement aoi: " $REPLACEMENT_AOI
 
 if [ "$6" == "" ]; then
-  GEOMETRY_FILTERS=""
-  TAG_ELEMENT_CRITERIA="hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion"
+  INPUT_FILTER=""
 else
-  GEOMETRY_FILTERS=" --geometry-filters "$6
-  TAG_ELEMENT_CRITERIA=$6
+  # If a input filter was specified we'll remove everything that doesn't pass the specified filter,
+  # by placing a RemoveElementsVisitor as the very first op and negating the criterion.
+  INPUT_FILTER=$6
+  REF_CONVERT_OPS="hoot::RemoveElementsVisitor;"$REF_CONVERT_OPS
+  SEC_CONVERT_OPS="hoot::RemoveElementsVisitor;"$SEC_CONVERT_OPS
 fi
-echo "geometry filters: " $GEOMETRY_FILTERS
-echo "tag element criteria: " $TAG_ELEMENT_CRITERIA
+echo "input filter: " $INPUT_FILTER
 
-if [ "$7" == "" ]; then
-  REPLACEMENT_FILTERS=""
-else
-  REPLACEMENT_FILTERS=" --replacement-filters "$7
-fi
-echo "replacement filters: " $REPLACEMENT_FILTERS
-
-CHAIN_REPLACEMENT_FILTERS=$8
-if [ "$CHAIN_REPLACEMENT_FILTERS" == "true" ]; then
-  CHAIN_REPLACEMENT_FILTERS="--chain-replacement-filters"
-else
-  CHAIN_REPLACEMENT_FILTERS=""
-fi
-echo "chain replacement filters: " $CHAIN_REPLACEMENT_FILTERS
-
-if [ "$9" == "" ]; then
-  REPLACEMENT_FILTER_OPTIONS=""
-else
-  REPLACEMENT_FILTER_OPTIONS=" --replacement-filter-options "$9
-fi
-echo "replacement filter options: " $REPLACEMENT_FILTER_OPTIONS
-
-if [ "${10}" == "" ]; then
-  RETAINMENT_FILTERS=""
-else
-  RETAINMENT_FILTERS=" --retainment-filters "${10}
-fi
-echo "retainment filters: " $REPLACEMENT_FILTERS
-
-CHAIN_RETAINMENT_FILTERS=${11}
-if [ "$CHAIN_RETAINMENT_FILTERS" == "true" ]; then
-  CHAIN_RETAINMENT_FILTERS="--chain-retainment-filters"
-else
-  CHAIN_RETAINMENT_FILTERS=""
-fi
-echo "chain retainment filters: " $CHAIN_RETAINMENT_FILTERS
-
-if [ "${12}" == "" ]; then
-  RETAINMENT_FILTER_OPTIONS=""
-else
-  RETAINMENT_FILTER_OPTIONS=" --retainment-filter-options "${12}
-fi
-echo "retainment filter options: " $RETAINMENT_FILTER_OPTIONS
-
-ENABLE_WAY_SNAPPING=${13}
+ENABLE_WAY_SNAPPING=$7
 if [ "$ENABLE_WAY_SNAPPING" == "true" ]; then
   ENABLE_WAY_SNAPPING="--enable-way-snapping"
 else
@@ -145,21 +98,21 @@ else
 fi
 echo "enable way snapping: " $ENABLE_WAY_SNAPPING
 
-if [ "${14}" == "" ]; then
+if [ "$8" == "" ]; then
   WAY_SNAP_TOLERANCE="0.0"
 else
-  WAY_SNAP_TOLERANCE=${14}
+  WAY_SNAP_TOLERANCE=$8
 fi
 echo "way snap tolerance: " $WAY_SNAP_TOLERANCE
 
-if [ "${15}" == "" ]; then
+if [ "$9" == "" ]; then
   EXISTING_WAY_NODE_TOLERANCE="0.0"
 else
-  EXISTING_WAY_NODE_TOLERANCE=${15}
+  EXISTING_WAY_NODE_TOLERANCE=$9
 fi
 echo "existing way node tolerance: " $EXISTING_WAY_NODE_TOLERANCE
 
-EXTRA_PARAMS=${16}
+EXTRA_PARAMS=${10}
 echo "extra params: " $EXTRA_PARAMS
 
 # SET UP TEST FILES
@@ -181,10 +134,10 @@ HOOT_EMAIL="${TEST_NAME}@hoottestcpp.org"
 
 # SET UP HOOT CONFIGURATION
 
-# Had to set changeset.max.size to a large number due to the fact with certain larger datasets (debugging data only being larger than we
-# would include in actual tests) the osm api db bulk inserter would write multiple changesets for the input data and then the sql changeset
-# applier would pick up the wrong latest changeset ID. Worth fixing, but since we only use sql changesets internally for testing...not that
-# big of a deal for now.
+# Had to set changeset.max.size to a large number due to the fact with certain larger datasets (debugging data only being 
+# larger than we would include in actual tests) the osm api db bulk inserter would write multiple changesets for the input 
+# data and then the sql changeset applier would pick up the wrong latest changeset ID. Worth fixing, but since we only use 
+# sql changesets internally for testing...not that big of a deal for now.
 
 # debug.maps.remove.missing.elements=false is useful for debugging but it can make output unviewable in JOSM.
 # bounds.remove.missing.elements=false ensures that we don't drop any missing elements except when writing out our debug maps.
@@ -225,11 +178,9 @@ else
 fi
 echo ""
 scripts/database/CleanAndInitializeOsmApiDb.sh
-hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
-# To get a test more accurate to the production environment, use this instead of the line above.
-#hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm $SOURCE_FILE_1 $REF_DB_INPUT
-# Don't remove missing elements for these file conversions (even if you need to view them in JOSM), since they are the input data and we
-# want to see any errors caused by them having missing elements.
+hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS $CROP_OPTS $PERTY_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-ref-xml.osm -D reader.use.data.source.ids=false -D id.generator=hoot::PositiveIdGenerator -D convert.ops=$REF_CONVERT_OPS -D remove.elements.visitor.element.criteria=$INPUT_FILTER -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D remove.elements.visitor.chain.element.criteria=true -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 1" $SOURCE_FILE_1 $REF_DB_INPUT
+# Don't remove missing elements for these file conversions (even if you need to view them in JOSM), since they are the 
+# input data and we want to see any errors caused by them having missing elements.
 echo ""
 echo "Writing the reference dataset from the osm apidb to an xml file: $REF_XML_INPUT (contains features to be replaced)..."
 echo ""
@@ -241,9 +192,7 @@ else
   echo "Cropping the secondary dataset from: $SOURCE_FILE_2 to: $CROP_AOI, then writing it to an xml file: $SEC_XML_INPUT (contains features to replace with)..."
 fi
 echo ""
-hoot convert $LOG_LEVEL $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D set.tag.value.visitor.element.criteria=$TAG_ELEMENT_CRITERIA -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
-# To get a test more accurate to the production environment, use this instead of the line above.
-#hoot convert $LOG_LEVEL $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm $SOURCE_FILE_2 $SEC_XML_INPUT
+hoot convert $LOG_LEVEL $GENERAL_OPTS $CROP_OPTS -D debug.maps.filename=$OUT_DIR/data-prep-sec-xml.osm -D reader.use.data.source.ids=false -D convert.ops=$SEC_CONVERT_OPS -D remove.elements.visitor.element.criteria=$INPUT_FILTER -D remove.elements.visitor.recursive=true -D element.criterion.negate=true -D remove.elements.visitor.chain.element.criteria=true -D set.tag.value.visitor.keys=$CUSTOM_TAG_KEY -D set.tag.value.visitor.values=$CUSTOM_TAG_VAL" 2" $SOURCE_FILE_2 $SEC_XML_INPUT
 
 # CHANGESET DERIVATION
 
@@ -269,9 +218,8 @@ echo ""
 echo "Reading the entire reference dataset out of the osm api db to: $OUT_XML for verification..."
 echo ""
 hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D convert.ops="hoot::RemoveMissingElementsVisitor" -D debug.maps.filename=$OUT_DIR/final-write-xml.osm $OSM_API_DB_URL $OUT_DIR/$OUT_XML
-#hoot convert $LOG_LEVEL $GENERAL_OPTS $DB_OPTS -D debug.maps.filename=$OUT_DIR/final-write-xml.osm $OSM_API_DB_URL $OUT_DIR/$OUT_XML
 # Not completely sure what the differences between the xml output and db output are yet, but the output maps look identical.
 hoot diff $LOG_LEVEL $GENERAL_OPTS $IN_DIR/$OUT_XML $OUT_DIR/$OUT_XML
 
-# Delete the user
+# CLEANUP
 psql $PSQL_DB_AUTH -d $DB_NAME -c "DELETE FROM users WHERE email='$HOOT_EMAIL';" > /dev/null

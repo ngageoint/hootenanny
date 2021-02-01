@@ -168,9 +168,6 @@ protected:
   // controls cropping
   BoundsOptions _boundsOpts;
 
-  // Configuration options to pass to the filters in _replacementFilter.
-  Settings _replacementFilterOptions;
-
   // determines if the current changeset map generation pass contains only linear features
   bool _currentChangeDerivationPassIsLinear;
 
@@ -189,25 +186,6 @@ protected:
 
   // A list of linear geometry criterion classes to apply way snapping to.
   QStringList _linearFilterClassNames;
-
-  // One or more non-geometry criteria to be combined with the geometry type filters for the
-  // secondary input. Allows for further restriction of the secondary data that makes it to output.
-  std::shared_ptr<ChainCriterion> _replacementFilter;
-
-  // If true, the filters specified in _replacementFilter are AND'd together. Otherwise, they're OR'd
-  // together.
-  bool _chainReplacementFilters;
-
-  // One or more non-geometry criteria to be combined with the geometry type filters for the
-  // reference input. Allows for further restriction of the ref data that gets replaced.
-  std::shared_ptr<ChainCriterion> _retainmentFilter;
-
-  // If true, the filters specified in _retainmentFilter are AND'd together. Otherwise, they're OR'd
-  // together.
-  bool _chainRetainmentFilters;
-
-  // Configuration options to pass to the filters in _retainmentFilter.
-  Settings _retainmentFilterOptions;
 
   bool _enableWaySnapping;
 

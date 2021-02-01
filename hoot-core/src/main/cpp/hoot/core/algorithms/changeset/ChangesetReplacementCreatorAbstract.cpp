@@ -86,8 +86,6 @@ const QString ChangesetReplacementCreatorAbstract::JOB_SOURCE = "ChangesetDerive
 ChangesetReplacementCreatorAbstract::ChangesetReplacementCreatorAbstract() :
 _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax() * 1.5),
 _geometryFiltersSpecified(false),
-_chainReplacementFilters(false),
-_chainRetainmentFilters(false),
 _enableWaySnapping(false),
 _changesetId("1"),
 _numChanges(0),
@@ -129,24 +127,6 @@ void ChangesetReplacementCreatorAbstract::_printJobDescription() const
   QString boundsStr = "Bounds calculation is " +
     _boundsInterpretationToString(_boundsInterpretation);
   const QString replacementTypeStr = _fullReplacement ? "full" : "overlapping only";
-  QString geometryFiltersStr = "are ";
-  if (!_geometryFiltersSpecified)
-  {
-    geometryFiltersStr += "not ";
-  }
-  geometryFiltersStr += "specified";
-  QString replacementFiltersStr = "is ";
-  if (!_replacementFilter)
-  {
-    replacementFiltersStr += "not ";
-  }
-  replacementFiltersStr += "specified";
-  QString retainmentFiltersStr = "is ";
-  if (!_retainmentFilter)
-  {
-    retainmentFiltersStr += "not ";
-  }
-  retainmentFiltersStr += "specified";
   QString waySnappingStr = "is ";
   if (!_enableWaySnapping)
   {
@@ -174,9 +154,6 @@ void ChangesetReplacementCreatorAbstract::_printJobDescription() const
   str = "";
   str += "\nBounds interpretation: " + boundsStr;
   str += "\nReplacement is: " + replacementTypeStr;
-  str += "\nGeometry filters: " + geometryFiltersStr;
-  str += "\nReplacement filter: " + replacementFiltersStr;
-  str += "\nRetainment filter: " + retainmentFiltersStr;
   str += "\nWay snapping: " + waySnappingStr;
   str += "\nCropping database inputs after read: " + cropDbInputOnReadStr;
   LOG_INFO(str);
@@ -230,14 +207,6 @@ void ChangesetReplacementCreatorAbstract::_validateInputs()
     {
       throw HootException("Unable to remove changeset output file: " + _output);
     }
-  }
-
-  LOG_VARD(_fullReplacement);
-  if (_fullReplacement && _retainmentFilter)
-  {
-    throw IllegalArgumentException(
-      "Both full reference data replacement and a reference data retainment filter may not "
-      "be specified for replacement changeset derivation.");
   }
 
   if (ConfigOptions().getConvertOps().size() > 0)
