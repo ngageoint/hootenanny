@@ -236,15 +236,15 @@ void DataConverter::convert(const QStringList& inputs, const QString& output)
 
   // We require that a translation be present when converting to OGR, the translation direction be
   // to OGR or unspecified, and that only one input is specified.
-  if (inputs.size() == 1 && IoUtils::isSupportedOgrFormat(output, true) &&
+  if (IoUtils::isSupportedOgrFormat(output, true) &&
       !_translation.isEmpty() &&
       (_translationDirection.isEmpty() || _translationDirection == "toogr"))
   {
-    _convertToOgr(inputs.at(0), output);
+    _convertToOgr(inputs, output);
   }
   // We require that a translation be present when converting from OGR, the translation direction be
   // to OSM or unspecified, and multiple inputs are supported.
-  else if (inputs.size() >= 1 && IoUtils::areSupportedOgrFormats(inputs, true) &&
+  else if (IoUtils::areSupportedOgrFormats(inputs, true) &&
            !_translation.isEmpty() &&
            (_translationDirection.isEmpty() || _translationDirection == "toosm"))
   {
@@ -364,7 +364,7 @@ void DataConverter::_fillElementCache(const QString& inputUrl, ElementCachePtr c
   LOG_DEBUG("Done Reading");
 }
 
-void DataConverter::_transToOgrMT(const QString& input, const QString& output)
+void DataConverter::_transToOgrMT(const QStringList& inputs, const QString& output)
 {
   LOG_DEBUG("_transToOgrMT");
 
@@ -380,9 +380,17 @@ void DataConverter::_transToOgrMT(const QString& input, const QString& output)
          std::vector<ScriptToOgrSchemaTranslator::TranslatedFeature>>> transFeaturesQ;
   bool finishedTranslating = false;
 
-  // Read all elements
-  // TODO: We should figure out a way to make this not-memory bound in the future
-  _fillElementCache(input, pElementCache, elementQ);
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    QString input = inputs.at(i).trimmed();
+
+    LOG_DEBUG("Reading: " << input);
+
+    // Read all elements from an input
+    // TODO: We should figure out a way to make this not-memory bound in the future
+    _fillElementCache(input, pElementCache, elementQ);
+  }
+
   LOG_DEBUG("Element Cache Filled");
 
   // Note the OGR writer is the slowest part of this whole operation, but it's relatively opaque
@@ -416,7 +424,7 @@ void DataConverter::_transToOgrMT(const QString& input, const QString& output)
   writerThread.wait();
 }
 
-void DataConverter::_convertToOgr(const QString& input, const QString& output)
+void DataConverter::_convertToOgr(const QStringList& inputs, const QString& output)
 {
   LOG_DEBUG("_convertToOgr (formerly known as osm2ogr)");
 
@@ -448,8 +456,10 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
   _convertOps.removeAll(SchemaTranslationVisitor::className());
   LOG_VARD(_convertOps);
 
-  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(input));
-  if (OsmMapReaderFactory::hasElementInputStream(input) &&
+  //check to see if all of the i/o can be streamed
+  LOG_VARD(OsmMapReaderFactory::hasElementInputStream(inputs));
+
+  if (OsmMapReaderFactory::hasElementInputStream(inputs) &&
       // multithreaded code doesn't support conversion ops. could it?
       // TODO: if we have a single convert op that is a SchemaTranslationOp or
       // SchemaTranslationVisitor should we pop it off and then run multithreaded with that
@@ -458,23 +468,33 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
       // multithreaded code doesn't support a bounds...not sure if it could be made to at some point
       !ConfigUtils::boundsOptionEnabled())
   {
-    _progress.set(0.0, "Loading and translating map: ..." + input.right(_printLengthMax) + "...");
-    _transToOgrMT(input, output);
+    _progress.set(0.0, "Loading and translating maps: ...");
+    _transToOgrMT(inputs, output);
   }
   else
   {
     // The number of task steps here must be updated as you add/remove job steps in the logic.
-    int numSteps = 2;
+    int numTasks = 2;
     if (_convertOps.size() > 0)
     {
-      numSteps++;
+      numTasks++;
     }
-    int currentStep = 1;
+    int currentTask = 1;
+    const float taskWeight = 1.0 / (float)numTasks;
 
-    _progress.set(0.0, "Loading map: ..." + input.right(_printLengthMax) + "...");
+    Progress inputLoadProgress(
+      ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running, 0.0, taskWeight);
     OsmMapPtr map(new OsmMap());
-    IoUtils::loadMap(map, input, true);
-    currentStep++;
+    for (int i = 0; i < inputs.size(); i++)
+    {
+      inputLoadProgress.setFromRelative(
+        (float)i / (float)inputs.size(), Progress::JobState::Running,
+        "Loading map: ..." + inputs.at(i).right(_printLengthMax) + "...");
+      IoUtils::loadMap(
+        map, inputs.at(i), ConfigOptions().getReaderUseDataSourceIds(),
+        Status::fromString(ConfigOptions().getReaderSetDefaultStatus()));
+    }
+    currentTask++;
 
     if (_convertOps.size() > 0)
     {
@@ -484,9 +504,9 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
       convertOps.setProgress(
         Progress(
           ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-          (float)(currentStep - 1) / (float)numSteps, 1.0 / (float)numSteps));
+          (float)(currentTask - 1) / (float)numTasks, 1.0 / (float)numTasks));
       convertOps.apply(map);
-      currentStep++;
+      currentTask++;
       LOG_STATUS(
         "Convert operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
         " total.");
@@ -495,7 +515,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
     QElapsedTimer timer;
     timer.start();
     _progress.set(
-      (float)(currentStep - 1) / (float)numSteps,
+      (float)(currentTask - 1) / (float)numTasks,
       "Writing map: ..." + output.right(_printLengthMax) + "...");
     MapProjector::projectToWgs84(map);
     std::shared_ptr<OgrWriter> writer(new OgrWriter());
@@ -503,7 +523,7 @@ void DataConverter::_convertToOgr(const QString& input, const QString& output)
     writer->open(output);
     writer->write(map);
     writer->close();
-    currentStep++;
+    currentTask++;
 
     LOG_INFO(
       "Wrote " << StringUtils::formatLargeNumber(map->getElementCount()) <<
