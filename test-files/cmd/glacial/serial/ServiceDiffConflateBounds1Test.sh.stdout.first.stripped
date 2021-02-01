@@ -1,0 +1,23 @@
+ setval 
+--------
+      1
+(1 row)
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=40.9945562, max_lat=41.0367375, min_lon=-117.722977, max_lon=-117.6071629, num_changes=63
+Node(s) Created: 45
+Node(s) Modified: 0
+Node(s) Deleted: 0
+Way(s) Created: 8
+Way(s) Modified: 4
+Way(s) Deleted: 0
+Relation(s) Created: 1
+Relation(s) Modified: 5
+Relation(s) Deleted: 0
+Total Creations: 54
+Total Modifications: 9
+Total Deletions: 0
+WARN - in Relation(1161)...
+WARN - in Relation(1318)...
+WARN - in Relation(1318)...
+WARN - hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...

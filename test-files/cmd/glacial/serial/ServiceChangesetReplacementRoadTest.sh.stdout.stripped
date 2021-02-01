@@ -1,0 +1,56 @@
+test name:  ServiceChangesetReplacementRoadTest
+source file 1:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
+crop aoi:  -71.4809,42.4808,-71.45688,42.49368
+source file 2:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
+REF_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp
+SEC_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
+replacement aoi:  -71.4698,42.4866,-71.4657,42.4902
+geometry filters:  --geometry-filters hoot::HighwayCriterion
+tag element criteria:  hoot::HighwayCriterion
+replacement filters: 
+chain replacement filters: 
+replacement filter options: 
+retainment filters: 
+chain retainment filters: 
+retainment filter options: 
+enable way snapping:  --enable-way-snapping
+way snap tolerance:  20.0
+existing way node tolerance:  20.0
+extra params: 
+
+Cropping the reference dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an osm api db (contains features to be replaced)...
+
+ setval 
+--------
+      1
+(1 row)
+
+
+Writing the reference dataset from the osm apidb to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoadTest/ref-perturbed-original.osm (contains features to be replaced)...
+
+
+Cropping the secondary dataset from: test-files/BostonSubsetRoadBuilding_FromOsm.osm to: -71.4809,42.4808,-71.45688,42.49368, then writing it to an xml file: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoadTest/sec-original.osm (contains features to replace with)...
+
+
+Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetReplacementRoadTest/ref-perturbed-original.osm and test-output/cmd/glacial/serial/ServiceChangesetReplacementRoadTest/sec-original.osm over: -71.4698,42.4866,-71.4657,42.4902, to file: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoadTest/ServiceChangesetReplacementRoadTest-changeset-xml.osc.sql that replaces features in the reference dataset with those from a secondary dataset...
+
+
+Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementRoadTest/ServiceChangesetReplacementRoadTest-changeset-xml.osc.sql to the reference data in the osm api db...
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=42.482708, max_lat=42.491551, min_lon=-71.4732999, max_lon=-71.460611, num_changes=291
+Node(s) Created: 138
+Node(s) Modified: 1
+Node(s) Deleted: 136
+Way(s) Created: 7
+Way(s) Modified: 2
+Way(s) Deleted: 7
+Relation(s) Created: 0
+Relation(s) Modified: 0
+Relation(s) Deleted: 0
+Total Creations: 145
+Total Modifications: 3
+Total Deletions: 143
+
+Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementRoadTest-xml-replaced.osm for verification...
+

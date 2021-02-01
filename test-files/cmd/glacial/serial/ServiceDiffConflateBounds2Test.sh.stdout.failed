@@ -1,0 +1,153 @@
+ setval 
+--------
+      1
+(1 row)
+
+Changeset(s) Created: 1
+Changeset Details: min_lat=40.94474, max_lat=41.0367375, min_lon=-117.7590489, max_lon=-117.6071629, num_changes=287
+Node(s) Created: 271
+Node(s) Modified: 0
+Node(s) Deleted: 0
+Way(s) Created: 9
+Way(s) Modified: 1
+Way(s) Deleted: 0
+Relation(s) Created: 5
+Relation(s) Modified: 1
+Relation(s) Deleted: 0
+Total Creations: 285
+Total Modifications: 2
+Total Deletions: 0
+22:39:17.516 WARN   .../hoot/core/io/OsmXmlReader.cpp( 717) Skipping missing Way(217227) in Relation(1318)...
+22:39:17.517 WARN   .../hoot/core/io/OsmXmlReader.cpp( 717) Skipping missing Way(217228) in Relation(1318)...
+22:39:17.517 WARN   .../hoot/core/io/OsmXmlReader.cpp( 717) Skipping missing Way(217229) in Relation(1318)...
+22:39:17.517 WARN   .../hoot/core/io/OsmXmlReader.cpp( 721) hoot::OsmXmlReader: Reached the maximum number of allowed warning messages for this class set by the setting log.warn.message.limit.  Silencing additional warning messages for this class...
+22:39:18.070 WARN   ...core/scoring/MapComparator.cpp( 245) Member role does not match. relation(1161)
+type: route
+members:   Entry: role: <no role>, eid: Way(6624)
+  Entry: role: <no role>, eid: Way(6639)
+  Entry: role: <no role>, eid: Way(6638)
+  Entry: role: <no role>, eid: Way(6628)
+  Entry: role: <no role>, eid: Way(6644)
+  Entry: role: <no role>, eid: Way(6653)
+  Entry: role: <no role>, eid: Way(6625)
+  Entry: role: <no role>, eid: Way(6648)
+  Entry: role: <no role>, eid: Way(6647)
+  Entry: role: <no role>, eid: Way(6652)
+  Entry: role: <no role>, eid: Way(6645)
+  Entry: role: <no role>, eid: Way(6626)
+  Entry: role: <no role>, eid: Way(6622)
+
+tags: hoot:status = 1
+to = Winnemucca, Nevada
+from = Portola, California
+route = railway
+name = Winnemucca Subdivision
+source:datetime = 2015-04-06T19:38:31.000Z
+operator = Union Pacific Railroad
+status: unknown1
+version: 1
+visible: 1
+circular error: 15 vs. relation(1161)
+type: route
+members:   Entry: role: , eid: Way(6624)
+  Entry: role: , eid: Way(6639)
+  Entry: role: , eid: Way(6638)
+  Entry: role: , eid: Way(6628)
+  Entry: role: , eid: Way(6644)
+  Entry: role: , eid: Way(6653)
+  Entry: role: , eid: Way(6625)
+  Entry: role: , eid: Way(6648)
+  Entry: role: , eid: Way(6647)
+  Entry: role: , eid: Way(6652)
+  Entry: role: , eid: Way(6645)
+  Entry: role: , eid: Way(6626)
+  Entry: role: , eid: Way(6622)
+
+tags: hoot:status = 1
+to = Winnemucca, Nevada
+from = Portola, California
+route = railway
+name = Winnemucca Subdivision
+source:datetime = 2015-04-06T19:38:31.000Z
+operator = Union Pacific Railroad
+status: unknown1
+version: 1
+visible: 1
+circular error: 15
+22:39:18.070 WARN   ...core/scoring/MapComparator.cpp( 245) Member role does not match. relation(670)
+type: route
+members:   Entry: role: <no role>, eid: Way(3221)
+  Entry: role: <no role>, eid: Way(3247)
+  Entry: role: <no role>, eid: Way(3248)
+  Entry: role: <no role>, eid: Way(3243)
+
+tags: hoot:status = 1
+route = road
+ref = 795
+network = US:NV
+source:datetime = 2013-11-26T13:39:21.000Z
+status: unknown1
+version: 1
+visible: 1
+circular error: 15 vs. relation(670)
+type: route
+members:   Entry: role: , eid: Way(3221)
+  Entry: role: , eid: Way(3247)
+  Entry: role: , eid: Way(3248)
+  Entry: role: , eid: Way(3243)
+
+tags: hoot:status = 1
+route = road
+ref = 795
+network = US:NV
+source:datetime = 2013-11-26T13:39:21.000Z
+status: unknown1
+version: 1
+visible: 1
+circular error: 15
+22:39:18.070 WARN   ...core/scoring/MapComparator.cpp( 245) Member role does not match. relation(672)
+type: route
+members:   Entry: role: <no role>, eid: Way(3228)
+  Entry: role: forward, eid: Way(3227)
+  Entry: role: forward, eid: Way(3229)
+  Entry: role: forward, eid: Way(3212)
+  Entry: role: forward, eid: Way(3225)
+  Entry: role: forward, eid: Way(3230)
+  Entry: role: forward, eid: Way(3218)
+  Entry: role: forward, eid: Way(3237)
+  Entry: role: forward, eid: Way(3213)
+  Entry: role: forward, eid: Way(3238)
+  Entry: role: <no role>, eid: Way(3226)
+
+tags: hoot:status = 1
+route = road
+ref = 289
+network = US:NV
+source:datetime = 2011-08-09T13:02:43.000Z
+status: unknown1
+version: 1
+visible: 1
+circular error: 15 vs. relation(672)
+type: route
+members:   Entry: role: , eid: Way(3228)
+  Entry: role: forward, eid: Way(3227)
+  Entry: role: forward, eid: Way(3229)
+  Entry: role: forward, eid: Way(3212)
+  Entry: role: forward, eid: Way(3225)
+  Entry: role: forward, eid: Way(3230)
+  Entry: role: forward, eid: Way(3218)
+  Entry: role: forward, eid: Way(3237)
+  Entry: role: forward, eid: Way(3213)
+  Entry: role: forward, eid: Way(3238)
+  Entry: role: , eid: Way(3226)
+
+tags: hoot:status = 1
+route = road
+ref = 289
+network = US:NV
+source:datetime = 2011-08-09T13:02:43.000Z
+status: unknown1
+version: 1
+visible: 1
+circular error: 15
+22:39:18.070 WARN   ...core/scoring/MapComparator.cpp( 245) More than 3 errors, suppressing errors.

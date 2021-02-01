@@ -1,0 +1,21 @@
+Received signal 11 <unknown> 000000000000
+
+==== C stack trace ===============================
+
+ [0x7f1ba545c0e6]
+ [0x7f1ba545c954]
+ [0x7f1ba2ad95f0]
+ [0x7f1ba75bb1fb]
+ [0x7f1ba75bae0e]
+ [0x7f1ba75baafc]
+ [0x7f1ba75ba0e2]
+ [0x7f1ba6d4fced]
+ [0x7f1ba69100ec]
+ [0x7f1ba6bd1fdc]
+ [0x7f1ba67af8d2]
+ [0x7f1ba679633c]
+ [0x000000404def]
+ [0x7f1ba1efe505]
+ [0x0000004052e5]
+[end of stack trace]
+/ramdisk/hoot/bin/HootEnv.sh: line 23: 20653 Segmentation fault      "$@"
