@@ -55,7 +55,7 @@ public:
 
   /**
    * The manner in which replacement boundary conditions are handled. See the
-   * changeset-derive-replacement CLI doc for more detail.
+   * changeset-derive CLI doc for more detail.
    *
    * @todo remove Hybrid; not used anywhere
    */
