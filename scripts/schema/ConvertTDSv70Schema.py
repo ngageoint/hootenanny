@@ -291,8 +291,11 @@ def addImgAttrs(schema):
         #                                         'length':'256'.encode('utf8'),
         #                                         'optional':'R'
         #                                         }
-        schema[featureName]['columns']['AEI'] = {}
-        schema[featureName]['columns']['AEI'] = {'name':'AEI','desc':'Acquisition Event Identifier','type':'String',
+        schema[featureName]['columns']['image_id'] = {}
+        schema[featureName]['columns']['image_id'] = {'name':'image_id','desc':'Image Id','type':'String',
+                                                'defValue':'No Information','length':'254','optional':'R'}
+        schema[featureName]['columns']['legacy_id'] = {}
+        schema[featureName]['columns']['legacy_id'] = {'name':'legacy_id','desc':'Legacy Image Id','type':'String',
                                                 'defValue':'No Information','length':'254','optional':'R'}
         schema[featureName]['columns']['early_date'] = {}
         schema[featureName]['columns']['early_date'] = {'name':'early_date','desc':'Earliest image date in mosaic','type':'String',
