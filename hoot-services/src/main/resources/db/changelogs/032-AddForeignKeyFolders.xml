@@ -21,7 +21,7 @@
             constraintName="fk_folders_parent_id"
             deferrable="true"
             initiallyDeferred="true"
-            onDelete="CASCADE"
+            onDelete="NO ACTION"
             onUpdate="RESTRICT"
             referencedColumnNames="id"
             referencedTableName="folders"
