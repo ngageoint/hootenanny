@@ -134,11 +134,11 @@ private:
 
   QStringList _args;
 
-  void _resetInitConfig();
+  void _resetInitConfig(const QStringList& args);
 
   static ScoreType _scoreTypeFromString(QString& scoreTypeStr);
 
-  void _transferTagsToFirstInput(QStringList& inputs, const QDir& output);
+  void _transferTagsToFirstInput(const QDir& inputDir, QStringList& inputs, const QDir& output);
 };
 
 }

@@ -75,7 +75,7 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
   bool conflateDividedRoadsOnlyOnce = !_addTagsInput.isEmpty();
   if (conflateDividedRoadsOnlyOnce)
   {
-    _transferTagsToFirstInput(inputs, QDir(outputInfo.path()));
+    _transferTagsToFirstInput(input, inputs, QDir(outputInfo.path()));
     //return;
   }
 
@@ -152,11 +152,12 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
 
     input1 = tempOutput;
 
-    _resetInitConfig();
+    _resetInitConfig(_args);
   }
 }
 
-void CumulativeConflator2::_transferTagsToFirstInput(QStringList& inputs, const QDir& output)
+void CumulativeConflator2::_transferTagsToFirstInput(
+  const QDir& inputDir, QStringList& inputs, const QDir& output)
 {
   // We're trying to minimize the conflation of divided highways due to their difficulty. Use
   // attribute conflate to transfer OSM road tags over to our first input.
@@ -168,26 +169,28 @@ void CumulativeConflator2::_transferTagsToFirstInput(QStringList& inputs, const 
     "Performing tag transfer step for " << inputs.at(0) << " and " << tagInputInfo.fileName() <<
     "; writing output to " << outInfo.fileName() << "...");
 
-  //Conflator attributeConflator;
-  //conf().clear();
-  conf().loadJson("AttributeConflation.conf");
+  QStringList args = _args;
+  // TODO: update for Network
+  args.replaceInStrings("ReferenceConflation.conf", "AttributeConflation.conf");
+  _resetInitConfig(args);
+  //conf().loadJson("AttributeConflation.conf");
   //conf().loadJson("UnifyingAlgorithm.conf"); // TODO: update for Network
-  Conflator().conflate(inputs.at(0), _addTagsInput, attributeConflatedOut);
+  Conflator().conflate(inputDir.path() + "/" + inputs.at(0), _addTagsInput, attributeConflatedOut);
 
   // Modify the location of the first input to be our conflated file with tags added.
   inputs[0] = attributeConflatedOut;
 
-  _resetInitConfig();  // This gets us back to our initial conflate settings.
+  _resetInitConfig(_args);  // This gets us back to our initial conflate settings.
 }
 
-void CumulativeConflator2::_resetInitConfig()
+void CumulativeConflator2::_resetInitConfig(const QStringList& args)
 {
   MatchFactory::getInstance().reset();
   MergerFactory::getInstance().reset();
   TagMergerFactory::getInstance().reset();
   conf().clear();
   ConfigOptions::populateDefaults(conf());
-  QStringList tempArgs = _args;
+  QStringList tempArgs = args;
   Settings::parseCommonArguments(tempArgs);
   conf().set("HOOT_HOME", getenv("HOOT_HOME"));
   LOG_VARD(ConfigOptions().getMatchCreators());
