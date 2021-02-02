@@ -18,10 +18,10 @@ pipeline {
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
-        booleanParam(name: 'Core_tests', defaultValue: true)
-        booleanParam(name: 'Services_tests', defaultValue: true)
-        booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
-        booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
+        booleanParam(name: 'Core_tests', defaultValue: false)
+        booleanParam(name: 'Services_tests', defaultValue: false)
+        booleanParam(name: 'UI_hoot1_tests', defaultValue: false)
+        booleanParam(name: 'UI_hoot2_tests', defaultValue: false)
         booleanParam(name: 'Sonar', defaultValue: false)
         booleanParam(name: 'Halt_on_failure', defaultValue: true)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
@@ -168,7 +168,9 @@ pipeline {
                 }
             }
             steps{
-                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar \
+                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; \
+                        JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
+                        mvn sonar:sonar \
                         -Dsonar.host.url=https://sonarcloud.io \
                         -Dsonar.organization=hootenanny \
                         -Dsonar.login=${env.SONAR_CLOUD_KEY} \
