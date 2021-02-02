@@ -114,6 +114,7 @@ public:
   void setScoreOutput(bool score) { _scoreOutput = score; }
   void setDifferential(bool isDifferential) { _isDifferential = isDifferential; }
   void setAddTagsInput(QString addTagsInput) { _addTagsInput = addTagsInput; }
+  void setLeaveAddedTags(bool leave) { _leaveAddedTags = leave; }
   void setRunEnsemble(bool runEnsemble) { _runEnsemble = runEnsemble; }
   void setMaxIterations(int max) { _maxIterations = max; }
   void setArgs(const QStringList& args) { _args = args; }
@@ -127,6 +128,7 @@ private:
   bool _scoreOutput;
   bool _isDifferential;
   QString _addTagsInput;
+  bool _leaveAddedTags;
   bool _runEnsemble;
   int _maxIterations;
   bool _keepIntermediateOutputs;
@@ -134,11 +136,12 @@ private:
 
   QStringList _args;
 
-  void _resetInitConfig(const QStringList& args);
-
   static ScoreType _scoreTypeFromString(QString& scoreTypeStr);
 
+  void _resetInitConfig(const QStringList& args);
+
   void _transferTagsToFirstInput(const QDir& inputDir, QStringList& inputs, const QDir& output);
+  void _removeAttributeAddedTags(const QString& url);
 };
 
 }

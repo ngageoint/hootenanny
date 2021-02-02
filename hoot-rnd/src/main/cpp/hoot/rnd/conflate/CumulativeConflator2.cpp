@@ -39,6 +39,10 @@
 #include <hoot/core/criterion/DualHighwayCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/conflate/highway/HighwayMatchCreator.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/visitors/SetTagValueVisitor.h>
+#include <hoot/core/visitors/KeepTagsVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -50,6 +54,7 @@ CumulativeConflator2::CumulativeConflator2() :
 _reverseInputs(false),
 _scoreOutput(false),
 _isDifferential(false),
+_leaveAddedTags(false),
 _runEnsemble(false),
 _maxIterations(-1),
 _keepIntermediateOutputs(false),
@@ -154,46 +159,12 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
 
     _resetInitConfig(_args);
   }
-}
 
-void CumulativeConflator2::_transferTagsToFirstInput(
-  const QDir& inputDir, QStringList& inputs, const QDir& output)
-{
-  // We're trying to minimize the conflation of divided highways due to their difficulty. Use
-  // attribute conflate to transfer OSM road tags over to our first input.
-
-  QFileInfo tagInputInfo(_addTagsInput);
-  QString attributeConflatedOut = output.absolutePath() + "/out-attribute.osm";
-  QFileInfo outInfo(attributeConflatedOut);
-  LOG_STATUS(
-    "Performing tag transfer step for " << inputs.at(0) << " and " << tagInputInfo.fileName() <<
-    "; writing output to " << outInfo.fileName() << "...");
-
-  QStringList args = _args;
-  // TODO: update for Network
-  args.replaceInStrings("ReferenceConflation.conf", "AttributeConflation.conf");
-  _resetInitConfig(args);
-  //conf().loadJson("AttributeConflation.conf");
-  //conf().loadJson("UnifyingAlgorithm.conf"); // TODO: update for Network
-  Conflator().conflate(inputDir.path() + "/" + inputs.at(0), _addTagsInput, attributeConflatedOut);
-
-  // Modify the location of the first input to be our conflated file with tags added.
-  inputs[0] = attributeConflatedOut;
-
-  _resetInitConfig(_args);  // This gets us back to our initial conflate settings.
-}
-
-void CumulativeConflator2::_resetInitConfig(const QStringList& args)
-{
-  MatchFactory::getInstance().reset();
-  MergerFactory::getInstance().reset();
-  TagMergerFactory::getInstance().reset();
-  conf().clear();
-  ConfigOptions::populateDefaults(conf());
-  QStringList tempArgs = args;
-  Settings::parseCommonArguments(tempArgs);
-  conf().set("HOOT_HOME", getenv("HOOT_HOME"));
-  LOG_VARD(ConfigOptions().getMatchCreators());
+  if (conflateDividedRoadsOnlyOnce && !_leaveAddedTags)
+  {
+    // TODO: hack specific to current use case; generalize
+    _removeAttributeAddedTags(output);
+  }
 }
 
 CumulativeConflator2::ScoreType CumulativeConflator2::_scoreTypeFromString(QString& scoreTypeStr)
@@ -211,6 +182,65 @@ CumulativeConflator2::ScoreType CumulativeConflator2::_scoreTypeFromString(QStri
   {
     throw IllegalArgumentException("Invalid score type string: " + scoreTypeStr);
   }
+}
+
+void CumulativeConflator2::_resetInitConfig(const QStringList& args)
+{
+  MatchFactory::getInstance().reset();
+  MergerFactory::getInstance().reset();
+  TagMergerFactory::getInstance().reset();
+  conf().clear();
+  ConfigOptions::populateDefaults(conf());
+  QStringList tempArgs = args;
+  Settings::parseCommonArguments(tempArgs);
+  conf().set("HOOT_HOME", getenv("HOOT_HOME"));
+  LOG_VARD(ConfigOptions().getMatchCreators());
+}
+
+void CumulativeConflator2::_transferTagsToFirstInput(
+  const QDir& inputDir, QStringList& inputs, const QDir& output)
+{
+  // We're trying to minimize the conflation of divided highways due to their difficulty. Use
+  // attribute conflate to transfer OSM road tags over to our first input.
+
+  QFileInfo tagInputInfo(_addTagsInput);
+  QString attributeConflatedOut = output.absolutePath() + "/out-attribute.osm";
+  QFileInfo outInfo(attributeConflatedOut);
+  LOG_STATUS(
+    "Performing tag transfer step for " << inputs.at(0) << " and " << tagInputInfo.fileName() <<
+    "; writing output to " << outInfo.fileName() << "...");
+
+  QStringList args = _args;
+  args.replaceInStrings("ReferenceConflation.conf", "AttributeConflation.conf");
+  _resetInitConfig(args);
+  LOG_VARD(ConfigOptions().getWayJoiner());
+  Conflator().conflate(inputDir.path() + "/" + inputs.at(0), _addTagsInput, attributeConflatedOut);
+
+  // Modify the location of the first input to be our conflated file with tags added.
+  inputs[0] = attributeConflatedOut;
+
+  _resetInitConfig(_args);  // This gets us back to our initial conflate settings.
+}
+
+void CumulativeConflator2::_removeAttributeAddedTags(const QString& url)
+{
+  OsmMapPtr map(new OsmMap());
+  OsmMapReaderFactory::read(map, true, true, url);
+
+  SetTagValueVisitor roadUpdater("highway", "road");
+  map->visitWaysRw(roadUpdater);
+
+  // TODO: derive this list from the input files or read from config
+  QStringList keysToKeep;
+  keysToKeep.append("hoot:layername");
+  keysToKeep.append("inferred_speed_mph");
+  keysToKeep.append("length_m");
+  keysToKeep.append("source:ingest:datetime");
+  keysToKeep.append("travel_time_s");
+  KeepTagsVisitor tagPreserver(keysToKeep);
+  map->visitWaysRw(tagPreserver);
+
+  OsmMapWriterFactory::write(map, url);
 }
 
 }
