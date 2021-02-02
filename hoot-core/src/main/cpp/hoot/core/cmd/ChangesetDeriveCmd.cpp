@@ -60,8 +60,7 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    QElapsedTimer timer;
-    timer.start();
+    _timer.start();
 
     LOG_VARD(args);
 
@@ -84,22 +83,19 @@ public:
       args.removeAll("--enable-way-snapping");
     }
     LOG_VARD(enableWaySnapping);
+
     if (!isReplacement && enableWaySnapping)
     {
       throw IllegalArgumentException(
         "The --enable-way-snapping option is only valid when the --replacement option is specified.");
     }
 
-    bool printStats = false;
     QString outputStatsFile;
-    _processStatsParams(args, printStats, outputStatsFile);
+    _processStatsParams(args, outputStatsFile);
 
     LOG_VARD(args);
-    if (args.size() < 3 || args.size() > 4)
-    {
-      std::cout << getHelp() << std::endl << std::endl;
-      throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
-    }
+
+    // process required params
 
     const QString input1 = args[0].trimmed();
     const QString input2 = args[1].trimmed();
@@ -125,65 +121,25 @@ public:
 
     if (!isReplacement)
     {
-      // Note that we may need to eventually further restrict this to only data with relation having
-      // oob members due to full hydration (would then need to move this code to inside
-      // ChangesetCreator).
-      if (ConfigUtils::boundsOptionEnabled())
-      {
-        _updateConfigOptionsForBounds();
-      }
-
-      ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
+      _deriveStandardChangeset(input1, input2, output, outputStatsFile, osmApiDbUrl);
     }
     else
     {
-      const bool isCutOnly = input2.isEmpty();
-      QString implementation = ConfigOptions().getChangesetReplacementImplementation();
-      if (isCutOnly)
-      {
-        implementation = ConfigOptions().getChangesetReplacementCutOnlyImplementation();
-      }
-      LOG_VARD(implementation);
-      std::shared_ptr<ChangesetReplacement> changesetCreator(
-        Factory::getInstance().constructObject<ChangesetReplacement>(implementation));
-      changesetCreator->setFullReplacement(true);
-      ChangesetReplacement::BoundsInterpretation boundInterpretation =
-        ChangesetReplacement::BoundsInterpretation::Lenient;
-      if (isCutOnly)
-      {
-        boundInterpretation = ChangesetReplacement::BoundsInterpretation::Strict;
-      }
-      LOG_VARD(boundInterpretation);
-      changesetCreator->setBoundsInterpretation(boundInterpretation);
-      changesetCreator->setEnableWaySnapping(enableWaySnapping);
-      changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
-
-      std::shared_ptr<geos::geom::Polygon> bounds;
-      if (ConfigUtils::boundsOptionEnabled())
-      {
-        bounds = std::dynamic_pointer_cast<geos::geom::Polygon>(ConfigUtils::getBounds());
-      }
-      else
-      {
-        bounds = GeometryUtils::polygonFromString("-180,-90,180,90");
-      }
-
-      changesetCreator->create(input1, input2, bounds, output);
+      _deriveReplacementChangeset(
+        input1, input2, output, outputStatsFile, osmApiDbUrl, enableWaySnapping);
     }
-
-    LOG_STATUS(
-      "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 
     return 0;
   }
 
 private:
 
-  void _processStatsParams(QStringList& args, bool& printStats, QString& outputStatsFile)
+  QElapsedTimer _timer;
+
+  void _processStatsParams(QStringList& args, QString& outputStatsFile)
   {
     if (args.contains("--stats"))
     {
-      printStats = true;
       const int statsIndex = args.indexOf("--stats");
       // See similar note in ChangesetDeriveCmd.
       if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
@@ -202,8 +158,71 @@ private:
       }
       args.removeAll("--stats");
     }
-    LOG_VARD(printStats);
     LOG_VARD(outputStatsFile);
+  }
+
+  void _deriveStandardChangeset(
+    const QString& input1, const QString& input2, const QString& output,
+    const QString& outputStatsFile, const QString& osmApiDbUrl)
+  {
+    const int maxFilePrintLength = ConfigOptions().getProgressVarPrintLengthMax();
+    LOG_STATUS(
+      "Generating standard changeset for inputs: ..." << input1.right(maxFilePrintLength) <<
+      " and ..." << input2.right(maxFilePrintLength) << " and output: ..." <<
+      output.right(maxFilePrintLength));
+
+    // Note that we may need to eventually further restrict this to only data with relation having
+    // oob members due to full hydration (would then need to move this code to inside
+    // ChangesetCreator).
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      _updateConfigOptionsForBounds();
+    }
+
+    ChangesetCreator(!outputStatsFile.isEmpty(), outputStatsFile, osmApiDbUrl)
+      .create(output, input1, input2);
+
+    LOG_STATUS(
+      "Changeset generated in " << StringUtils::millisecondsToDhms(_timer.elapsed()) << " total.");
+  }
+
+  void _deriveReplacementChangeset(
+    const QString& input1, const QString& input2, const QString& output,
+    const QString& outputStatsFile, const QString& osmApiDbUrl, const bool enableWaySnapping)
+  {
+    const bool isCutOnly = input2.isEmpty();
+    QString implementation = ConfigOptions().getChangesetReplacementImplementation();
+    if (isCutOnly)
+    {
+      implementation = ConfigOptions().getChangesetReplacementCutOnlyImplementation();
+    }
+    LOG_VARD(implementation);
+    std::shared_ptr<ChangesetReplacement> changesetCreator(
+      Factory::getInstance().constructObject<ChangesetReplacement>(implementation));
+    changesetCreator->setFullReplacement(true);
+    ChangesetReplacement::BoundsInterpretation boundInterpretation =
+      ChangesetReplacement::BoundsInterpretation::Lenient;
+    if (isCutOnly)
+    {
+      boundInterpretation = ChangesetReplacement::BoundsInterpretation::Strict;
+    }
+    LOG_VARD(boundInterpretation);
+    changesetCreator->setBoundsInterpretation(boundInterpretation);
+    changesetCreator->setEnableWaySnapping(enableWaySnapping);
+    changesetCreator->setChangesetOptions(
+      !outputStatsFile.isEmpty(), outputStatsFile, osmApiDbUrl);
+
+    std::shared_ptr<geos::geom::Polygon> bounds;
+    if (ConfigUtils::boundsOptionEnabled())
+    {
+      bounds = std::dynamic_pointer_cast<geos::geom::Polygon>(ConfigUtils::getBounds());
+    }
+    else
+    {
+      bounds = GeometryUtils::polygonFromString("-180,-90,180,90");
+    }
+
+    changesetCreator->create(input1, input2, bounds, output);
   }
 
   void _updateConfigOptionsForBounds()
