@@ -37,6 +37,11 @@
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/GeometricRelationship.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/CriterionUtils.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
 
 namespace hoot
 {
@@ -61,17 +66,32 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
   _numRoads = 0; // all roads
   _map = map;
   _markedRoads.clear();
+
+  // If there are no polygons in the input, then skip initialization of the road crossing poly
+  // rules, since the road index creation can be expensive when calling conflation in a loop.
+  ElementCriterionPtr polyCrit(new PolygonCriterion(_map));
+  ElementCriterionPtr tagCrit(
+    std::shared_ptr<NotCriterion>(
+      new NotCriterion(std::shared_ptr<TagKeyCriterion>(new TagKeyCriterion("highway")))));
+  ElementCriterionPtr crit(new ChainCriterion(polyCrit, tagCrit));
+  if (FilteredVisitor::getStat(crit, ConstElementVisitorPtr(new ElementCountVisitor()), _map) == 0)
+  {
+    LOG_DEBUG("No polygons found in input map. Skipping marking roads for review.");
+    return;
+  }
+
   _crossingRules = RoadCrossingPolyRule::readRules(_crossingRulesFile, _map);
 
   ReviewMarker reviewMarker;
   const WayMap& ways = _map->getWays();
+  HighwayCriterion highwayCrit(_map);
   for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
   {
     WayPtr way = waysItr->second;
     LOG_VART(way->getElementId());
 
     // for each road
-    if (HighwayCriterion(_map).isSatisfied(way))
+    if (highwayCrit.isSatisfied(way))
     {
       // for each road crossing poly rule
       for (QList<RoadCrossingPolyRule>::const_iterator rulesItr = _crossingRules.begin();
@@ -91,7 +111,7 @@ void RoadCrossingPolyReviewMarker::apply(const OsmMapPtr& map)
           // get all nearby polys to the road that pass our poly filter
           const std::set<ElementId> neighborIdsSet =
             SpatialIndexer::findNeighbors(
-                *env, rule.getIndex(), rule.getIndexToEid(), _map, ElementType::Way, false);
+              *env, rule.getIndex(), rule.getIndexToEid(), _map, ElementType::Way, false);
           LOG_VART(neighborIdsSet.size());
 
           // for each nearby poly

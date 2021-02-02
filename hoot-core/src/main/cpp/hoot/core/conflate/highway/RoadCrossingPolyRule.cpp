@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "RoadCrossingPolyRule.h"
@@ -306,7 +306,7 @@ void RoadCrossingPolyRule::createIndex()
   std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
   _index.reset(new Tgs::HilbertRTree(mps, 2));
 
-  // Only index elements satisfy isMatchCandidate
+  // Only index elements that satisfy isMatchCandidate.
   std::function<bool (ConstElementPtr e)> f =
     std::bind(&RoadCrossingPolyRule::_isMatchCandidate, this, std::placeholders::_1);
   std::shared_ptr<ArbitraryCriterion> pCrit(new ArbitraryCriterion(f));

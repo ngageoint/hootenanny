@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef DATACONVERTER_H
 #define DATACONVERTER_H
@@ -133,7 +133,12 @@ private:
   void _validateInput(const QStringList& inputs, const QString& output);
 
   // converts from any input to an OGR output; a translation is required
-  void _convertToOgr(const QString& input, const QString& output);
+  void _convertToOgr(const QStringList& inputs, const QString& output);
+
+  // _convertToOgr will call this to run the translator in a separate thread for a performance
+  // increase if certain pre-conditions are met.
+  void _transToOgrMT(const QStringList& inputs, const QString& output);
+
   // converts from an OGR input to any output; a translation is required
   void _convertFromOgr(const QStringList& inputs, const QString& output);
 
@@ -146,9 +151,6 @@ private:
 
   void _fillElementCache(const QString& inputUrl, ElementCachePtr cachePtr,
                          QQueue<ElementPtr>& workQ);
-  // _convertToOgr will call this to run the translator in a separate thread for a performance
-  // increase if certain pre-conditions are met.
-  void _transToOgrMT(const QString& input, const QString& output);
 
   /*
    * Attempts to determine the relative weighting of each layer in an OGR data source based on

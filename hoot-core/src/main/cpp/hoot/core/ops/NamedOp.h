@@ -35,6 +35,7 @@
 
 // Qt
 #include <QStringList>
+#include <QMap>
 
 namespace hoot
 {

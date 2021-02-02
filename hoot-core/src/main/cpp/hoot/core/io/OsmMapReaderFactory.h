@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef OSMMAPREADERFACTORY_H
 #define OSMMAPREADERFACTORY_H
@@ -64,6 +64,8 @@ public:
   static bool hasPartialReader(const QString& url);
 
   static bool hasElementInputStream(const QString& url);
+
+  static bool hasElementInputStream(const QStringList& inputs);
 
   static void read(const std::shared_ptr<OsmMap>& map, const QString& url, bool useFileId = true,
                    Status defaultStatus = Status::Invalid);

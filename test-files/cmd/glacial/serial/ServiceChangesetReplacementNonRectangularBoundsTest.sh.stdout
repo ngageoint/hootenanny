@@ -5,14 +5,7 @@ source file 2:  test-files/BostonSubsetRoadBuilding_FromOsm.osm
 REF_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor;hoot::PertyOp
 SEC_CONVERT_OPS:  hoot::MapCropper;hoot::SetTagValueVisitor
 replacement aoi:  -71.4745,42.4841;-71.4669,42.4918;-71.4619,42.4839;-71.4745,42.4841
-geometry filters: 
-tag element criteria:  hoot::BuildingCriterion;hoot::HighwayCriterion;hoot::PoiCriterion
-replacement filters: 
-chain replacement filters: 
-replacement filter options: 
-retainment filters: 
-chain retainment filters: 
-retainment filter options: 
+input filter: 
 enable way snapping:  --enable-way-snapping
 way snap tolerance:  5.0
 existing way node tolerance:  0.5
@@ -38,18 +31,18 @@ Deriving a changeset between test-output/cmd/glacial/serial/ServiceChangesetRepl
 Applying the changeset: test-output/cmd/glacial/serial/ServiceChangesetReplacementNonRectangularBoundsTest/ServiceChangesetReplacementNonRectangularBoundsTest-changeset-xml.osc.sql to the reference data in the osm api db...
 
 Changeset(s) Created: 1
-Changeset Details: min_lat=42.4808, max_lat=42.491551, min_lon=-71.4735879, max_lon=-71.4599259, num_changes=3515
+Changeset Details: min_lat=42.4808, max_lat=42.491551, min_lon=-71.4735879, max_lon=-71.4599259, num_changes=3510
 Node(s) Created: 1,589
-Node(s) Modified: 4
+Node(s) Modified: 0
 Node(s) Deleted: 1,585
 Way(s) Created: 167
-Way(s) Modified: 1
+Way(s) Modified: 0
 Way(s) Deleted: 169
 Relation(s) Created: 0
 Relation(s) Modified: 0
 Relation(s) Deleted: 0
 Total Creations: 1,756
-Total Modifications: 5
+Total Modifications: 0
 Total Deletions: 1,754
 
 Reading the entire reference dataset out of the osm api db to: ServiceChangesetReplacementNonRectangularBoundsTest-xml-replaced.osm for verification...
