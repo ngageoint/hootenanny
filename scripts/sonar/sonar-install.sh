@@ -2,9 +2,9 @@
 set -e
 
 # Main sonar scanner
-SONAR_VERSION=4.4.0.2170
+#SONAR_VERSION=4.4.0.2170
 #SONAR_VERSION=4.5.0.2216
-#SONAR_VERSION=4.6.0.2311 # Requires Java 11
+SONAR_VERSION=4.6.0.2311 # Requires Java 11
 SONAR_CLI=sonar-scanner-cli-$SONAR_VERSION-linux
 SONAR_PKG=sonar-scanner-$SONAR_VERSION-linux
 SONAR_ZIP=$SONAR_CLI.zip
@@ -52,5 +52,8 @@ if [ ! -f $SONAR_PATH/bin/$SONAR_BLD_PKG-64 ]; then
     rm -rf $SONAR_BLD_PKG
 fi
 
+# Install Java 11 for the scan only
+sudo yum install -y java-11-openjdk java-11-openjdk-devel
+
 # Display the installed sonar version
-sonar-scanner --version
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk sonar-scanner --version
