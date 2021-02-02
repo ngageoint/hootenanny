@@ -87,13 +87,19 @@ public:
       isDifferential = true;
       args.removeAll("--differential");
     }
-    QString addTagsInput;
-    if (args.contains("--add-tags"))
+    QString transferTagsInput;
+    if (args.contains("--transfer-tags"))
     {
-      const int optionNameIndex = args.indexOf("--add-tags");
-      addTagsInput = args.at(optionNameIndex + 1).trimmed();
+      const int optionNameIndex = args.indexOf("--transfer-tags");
+      transferTagsInput = args.at(optionNameIndex + 1).trimmed();
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
+    }
+    bool leaveTransferredTags = false;
+    if (args.contains("--leave-transferred-tags"))
+    {
+      leaveTransferredTags = true;
+      args.removeAll("--leave-transferred-tags");
     }
     bool ensemble = false;
     if (args.contains("--ensemble"))
@@ -144,7 +150,8 @@ public:
     conflator.setReverseInputs(reverseInputs);
     conflator.setScoreOutput(scoreOutput);
     conflator.setDifferential(isDifferential);
-    conflator.setAddTagsInput(addTagsInput);
+    conflator.setTransferTagsInput(transferTagsInput);
+    conflator.setLeaveTransferredTags(leaveTransferredTags);
     conflator.setRunEnsemble(ensemble);
     conflator.setMaxIterations(maxIterations);
     conflator.setKeepIntermediateOutputs(keepIntermediateOutputs);

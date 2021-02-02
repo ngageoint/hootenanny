@@ -58,11 +58,16 @@ _map(map)
 void DualHighwayCriterion::setOsmMap(const OsmMap* map)
 {
   _map = map->shared_from_this();
-  _createIndex();
+  if (!_index)
+  {
+    _createIndex();
+  }
 }
 
 void DualHighwayCriterion::_createIndex()
 {
+  LOG_DEBUG("Creating spatial index...");
+
   // No tuning done - see #3054
   std::shared_ptr<Tgs::MemoryPageStore> mps(new Tgs::MemoryPageStore(728));
   _index.reset(new Tgs::HilbertRTree(mps, 2));
@@ -90,7 +95,6 @@ bool DualHighwayCriterion::_isMatchCandidate(ConstElementPtr element) const
   {
     return false;
   }
-  LOG_VART(element->getElementId());
   // TODO
   return OneWayCriterion().isSatisfied(element) && HighwayCriterion(_map).isSatisfied(element);
 }
@@ -103,6 +107,7 @@ bool DualHighwayCriterion::isSatisfied(const ConstElementPtr& element) const
   }
   LOG_VART(element->getElementId());
 
+  LOG_VART(_isMatchCandidate(element));
   if (!_isMatchCandidate(element))
   {
     return false;

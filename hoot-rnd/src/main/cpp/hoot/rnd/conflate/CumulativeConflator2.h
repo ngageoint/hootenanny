@@ -31,6 +31,7 @@
 // Qt
 #include <QStringList>
 #include <QDir>
+#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -45,8 +46,8 @@ namespace hoot
  * - unifying vs network (from existing options)
  *   - network oddly is not merging nearly as much; may be due to the small aoi
  * - pre-attribute conflate against osm option to get div road tags on first input
- *   (--add-tags <source-file>); also prevent anything from conflating that overlaps/cross the osm
- *   div road?
+ *   (--transfer-tags <source-file>); also prevent anything from conflating that overlaps/cross
+ *   the osm div road?
  *   -
  * - match/review thresh adjustment (from existing options)
  * - drop reviews and/or drop secondary features involved in reviews in output? (post conflate op)
@@ -113,8 +114,8 @@ public:
   void setReverseInputs(bool reverse) { _reverseInputs = reverse; }
   void setScoreOutput(bool score) { _scoreOutput = score; }
   void setDifferential(bool isDifferential) { _isDifferential = isDifferential; }
-  void setAddTagsInput(QString addTagsInput) { _addTagsInput = addTagsInput; }
-  void setLeaveAddedTags(bool leave) { _leaveAddedTags = leave; }
+  void setTransferTagsInput(QString input) { _transferTagsInput = input; }
+  void setLeaveTransferredTags(bool leave) { _leaveTransferredTags = leave; }
   void setRunEnsemble(bool runEnsemble) { _runEnsemble = runEnsemble; }
   void setMaxIterations(int max) { _maxIterations = max; }
   void setArgs(const QStringList& args) { _args = args; }
@@ -127,8 +128,8 @@ private:
   bool _reverseInputs;
   bool _scoreOutput;
   bool _isDifferential;
-  QString _addTagsInput;
-  bool _leaveAddedTags;
+  QString _transferTagsInput;
+  bool _leaveTransferredTags;
   bool _runEnsemble;
   int _maxIterations;
   bool _keepIntermediateOutputs;
@@ -136,12 +137,19 @@ private:
 
   QStringList _args;
 
+  static const int FILE_NUMBER_PAD_SIZE = 3;
+
+  QElapsedTimer _conflateTimer;
+
   static ScoreType _scoreTypeFromString(QString& scoreTypeStr);
+  int _getNumIterations(const QStringList& inputs) const;
 
   void _resetInitConfig(const QStringList& args);
+  void _initDropDividedRoadsConfig();
 
-  void _transferTagsToFirstInput(const QDir& inputDir, QStringList& inputs, const QDir& output);
-  void _removeAttributeAddedTags(const QString& url);
+  void _transferTagsToInputs(const QDir& input, QStringList& inputs, const QString& output);
+  void _transferTags(const QString& input, QString& modifiedInput);
+  void _removeTransferredTags(const QString& url);
 };
 
 }

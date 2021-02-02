@@ -124,7 +124,6 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
       // didn't have any negative impact on the rest of the code...could still be worth looking
       // into, though.
       LOG_TRACE("Removing element: " << e->getElementId() << " non-recursively...");
-      //RemoveElementByEid::removeUnusedElementsOnly(_map->shared_from_this(), e->getElementId());
       RemoveElementByEid::removeElement(_map->shared_from_this(), e->getElementId());
     }
     _numAffected++;

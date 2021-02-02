@@ -37,6 +37,11 @@ HOOT_FACTORY_REGISTER(ElementCriterion, OneWayCriterion)
 
 bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  if (!e)
+  {
+    return false;
+  }
+
   if (e->getElementType() == ElementType::Way)
   {
     const QString oneway = e->getTags()["oneway"].toLower();
