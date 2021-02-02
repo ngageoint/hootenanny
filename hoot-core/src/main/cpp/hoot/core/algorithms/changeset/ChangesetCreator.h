@@ -71,11 +71,10 @@ public:
    * Constructor
    *
    * @param printStats prints statistics for the output changeset
-   * @param statsOutputFile optional file to output the changeset statistics to
+   * @param statsOutputFile optional file to output the changeset statistics to; if empty, stats
+   * go to stdout
    * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
    * the output changeset is of type .osc.sql.
-   * @todo having printDetailedStats and statsOutputFile kind of redundant; really only need
-   * statsOutputFile
    */
   ChangesetCreator(
     const bool printDetailedStats = false, const QString& statsOutputFile = "",

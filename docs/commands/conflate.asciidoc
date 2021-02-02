@@ -19,9 +19,11 @@ changeset will be written, instead of an OSM map.
                         +--differential++ option is used.
 * +--separate-output+ - Write separate output files for geometry and tag changes. Valid only when the +--differential++ and +--include-tags++ 
                         options are used.
-* +--stats+           - Displays map statistics and may be optionally followed by an output JSON file name
-* +--changeset-stats+ - Displays changeset statistics and may be optionally followed by an output JSON file name. Valid only if the 
-                        +--differential+ option is specified and the output format is .osc. If the +--include-tags++ option is specified, tag
+* +--stats+           - Displays map statistics and may be optionally followed by an output JSON file name. If a file is 
+                        not specified, statistics are printed to the screen.
+* +--changeset-stats+ - Displays changeset statistics and may be optionally followed by an output JSON file name. If a file 
+                        is not specified, statistics are printed to the screen. Valid only if the +--differential+ option 
+                        is specified and the output format is .osc. If the +--include-tags++ option is specified, tag
                         changeset statistics are also output.
 * +--write-bounds+    - If the `bounds` configuration option is specified, optionally outputs a file containing the input bounds.
                         The location of the file is controlled via the `bounds.output.file` configuration option.

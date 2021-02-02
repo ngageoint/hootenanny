@@ -31,7 +31,8 @@ second should be the newer dataset.
                             different linear data than the data being replaced. This option is ignored when using the cut 
                             only replacement workflow (no second input).
 * +--stats+               - Displays changeset statistics and may be optionally followed by an output JSON file name to write 
-                            the statistics to. Valid when writing the .osc changeset output format only.
+                            the statistics to. If a file is not specified, statistics are printed to the screen. Valid 
+                            when writing the .osc changeset output format only.
 * +--write-bounds+        - If the `bounds` configuration option is specified, optionally outputs a file containing the 
                             input bounds. The location of the file is controlled via the `bounds.output.file` 
                             configuration option.
