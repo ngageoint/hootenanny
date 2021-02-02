@@ -1645,7 +1645,7 @@ long HootApiDb::insertFolder(const QString& displayName, const long parentId, co
       " RETURNING id");
   }
   _insertFolder->bindValue(":displayName", displayName);
-  _insertFolder->bindValue(":parentId", parentId == -1 ? QVariant(QVariant::LongLong) : (qlonglong)parentId);
+  _insertFolder->bindValue(":parentId", parentId == -1 ? QVariant() : (qlonglong)parentId);
   _insertFolder->bindValue(":userId", (qlonglong)userId);
   _insertFolder->bindValue(":public", isPublic);
   return _insertRecord(*_insertFolder);
