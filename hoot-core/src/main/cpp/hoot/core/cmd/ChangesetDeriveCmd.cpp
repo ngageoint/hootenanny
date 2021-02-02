@@ -32,6 +32,8 @@
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/algorithms/changeset/ChangesetReplacement.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QFileInfo>
@@ -54,53 +56,55 @@ public:
   virtual QString getName() const override { return "changeset-derive"; }
 
   virtual QString getDescription() const override
-  { return "Creates an OSM changeset representing the difference between two maps"; }
+  { return "Creates a changeset representing the difference between two maps"; }
 
   virtual int runSimple(QStringList& args) override
   {
     QElapsedTimer timer;
     timer.start();
 
+    LOG_VARD(args);
+
     BoundedCommand::runSimple(args);
+
+    // process optional params
+
+    bool isReplacement = false;
+    if (args.contains("--replacement"))
+    {
+      isReplacement = true;
+      args.removeAll("--replacement");
+    }
+    LOG_VARD(isReplacement);
+
+    bool enableWaySnapping = false;
+    if (args.contains("--enable-way-snapping"))
+    {
+      enableWaySnapping = true;
+      args.removeAll("--enable-way-snapping");
+    }
+    LOG_VARD(enableWaySnapping);
+    if (!isReplacement && enableWaySnapping)
+    {
+      throw IllegalArgumentException(
+        "The --enable-way-snapping option is only valid when the --replacement option is specified.");
+    }
 
     bool printStats = false;
     QString outputStatsFile;
-    if (args.contains("--stats"))
-    {
-      printStats = true;
-      const int statsIndex = args.indexOf("--stats");
-      LOG_VARD(statsIndex);
-      // See similar note in ConflateCmd's parsing of --changeset-stats.
-      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
-          !args[statsIndex + 1].startsWith("--"))
-      {
-        outputStatsFile = args[statsIndex + 1];
-        LOG_VARD(outputStatsFile);
-        QFileInfo statsInfo(outputStatsFile);
-        LOG_VARD(statsInfo.completeSuffix());
-        if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
-        {
-          outputStatsFile = "";
-        }
-        else
-        {
-          args.removeAll(outputStatsFile);
-        }
-      }
-      args.removeAll("--stats");
-    }
-    LOG_VARD(printStats);
-    LOG_VARD(outputStatsFile);
+    _processStatsParams(args, printStats, outputStatsFile);
 
+    LOG_VARD(args);
     if (args.size() < 3 || args.size() > 4)
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes three or four parameters.").arg(getName()));
     }
 
-    const QString input1 = args[0];
-    const QString input2 = args[1];
-    const QString output = args[2];
+    const QString input1 = args[0].trimmed();
+    const QString input2 = args[1].trimmed();
+    const QString output = args[2].trimmed();
+
     QString osmApiDbUrl;
     if (output.endsWith(".osc.sql"))
     {
@@ -119,15 +123,53 @@ public:
         QString("%1 with output: " + output + " takes three parameters.").arg(getName()));
     }
 
-    // Note that we may need to eventually further restrict this to only data with relation having
-    // oob members due to full hydration (would then need to move this code to inside
-    // ChangesetCreator).
-    if (ConfigUtils::boundsOptionEnabled())
+    if (!isReplacement)
     {
-      _updateConfigOptionsForBounds();
-    }
+      // Note that we may need to eventually further restrict this to only data with relation having
+      // oob members due to full hydration (would then need to move this code to inside
+      // ChangesetCreator).
+      if (ConfigUtils::boundsOptionEnabled())
+      {
+        _updateConfigOptionsForBounds();
+      }
 
-    ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
+      ChangesetCreator(printStats, outputStatsFile, osmApiDbUrl).create(output, input1, input2);
+    }
+    else
+    {
+      const bool isCutOnly = input2.isEmpty();
+      QString implementation = ConfigOptions().getChangesetReplacementImplementation();
+      if (isCutOnly)
+      {
+        implementation = ConfigOptions().getChangesetReplacementCutOnlyImplementation();
+      }
+      LOG_VARD(implementation);
+      std::shared_ptr<ChangesetReplacement> changesetCreator(
+        Factory::getInstance().constructObject<ChangesetReplacement>(implementation));
+      changesetCreator->setFullReplacement(true);
+      ChangesetReplacement::BoundsInterpretation boundInterpretation =
+        ChangesetReplacement::BoundsInterpretation::Lenient;
+      if (isCutOnly)
+      {
+        boundInterpretation = ChangesetReplacement::BoundsInterpretation::Strict;
+      }
+      LOG_VARD(boundInterpretation);
+      changesetCreator->setBoundsInterpretation(boundInterpretation);
+      changesetCreator->setEnableWaySnapping(enableWaySnapping);
+      changesetCreator->setChangesetOptions(printStats, outputStatsFile, osmApiDbUrl);
+
+      std::shared_ptr<geos::geom::Polygon> bounds;
+      if (ConfigUtils::boundsOptionEnabled())
+      {
+        bounds = std::dynamic_pointer_cast<geos::geom::Polygon>(ConfigUtils::getBounds());
+      }
+      else
+      {
+        bounds = GeometryUtils::polygonFromString("-180,-90,180,90");
+      }
+
+      changesetCreator->create(input1, input2, bounds, output);
+    }
 
     LOG_STATUS(
       "Changeset generated in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
@@ -137,9 +179,36 @@ public:
 
 private:
 
+  void _processStatsParams(QStringList& args, bool& printStats, QString& outputStatsFile)
+  {
+    if (args.contains("--stats"))
+    {
+      printStats = true;
+      const int statsIndex = args.indexOf("--stats");
+      // See similar note in ChangesetDeriveCmd.
+      if (statsIndex != -1 && statsIndex != (args.size() - 1) &&
+          !args[statsIndex + 1].startsWith("--"))
+      {
+        outputStatsFile = args[statsIndex + 1];
+        QFileInfo statsInfo(outputStatsFile);
+        if (!ChangesetStatsFormat::isValidFileOutputFormat(statsInfo.completeSuffix()))
+        {
+          outputStatsFile = "";
+        }
+        else
+        {
+          args.removeAll(outputStatsFile);
+        }
+      }
+      args.removeAll("--stats");
+    }
+    LOG_VARD(printStats);
+    LOG_VARD(outputStatsFile);
+  }
+
   void _updateConfigOptionsForBounds()
   {
-    // If we're working with a bounds, we need to ensure that reference features outside of the
+    // If we're working within a bounds, we need to ensure that reference features outside of the
     // bounds don't get deleted.
     conf().set(ConfigOptions::getChangesetAllowDeletingReferenceFeaturesKey(), false);
   }

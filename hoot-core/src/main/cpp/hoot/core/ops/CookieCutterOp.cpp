@@ -70,11 +70,11 @@ void CookieCutterOp::apply(std::shared_ptr<OsmMap>& map)
   const Status cutterMapStatus = Status::Unknown1;
   const Status doughMapStatus = Status::Unknown2;
 
-  // When working on the changeset-derive-replacement command, it seemed like there were several
-  // places in here where data was being projected properly. This class didn't end up being used
-  // to support that command, so I've commented out the reprojection code that was temporarily
-  // needed. It may be worth taking another look at CookieCutterOp to make sure its behaving
-  // correctly regarding the input/output data projections
+  // When working on Cut and Replace, it seemed like there were several places in here where data
+  // was being projected properly. This class didn't end up being used to support that command, so
+  // I've commented out the reprojection code that was temporarily needed. It may be worth taking
+  // another look at CookieCutterOp to make sure its behaving correctly regarding the input/output
+  // data projections
 
   // Remove elements with the dough status out of the full input map and create a new map, which
   // will be our cutter shape map.
