@@ -25,13 +25,14 @@
  * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef DUAL_HIGHWAY_CRITERION_H
-#define DUAL_HIGHWAY_CRITERION_H
+#ifndef DUAL_HIGHWAY_MARKER_H
+#define DUAL_HIGHWAY_MARKER_H
 
 // Hoot
-#include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/ConstOsmMapOperation.h>
+#include <hoot/core/util/Configurable.h>
+#include <hoot/core/util/StringUtils.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -41,45 +42,62 @@ namespace hoot
 
 /**
  * TODO
- *
- * This creation of the needed map index for this is an expensive operation, so instances of this
- * class should be cached for repeated operation on the same map.
  */
-class DualHighwayCriterion : public ElementCriterion
+class DualHighwayMarker : public ConstOsmMapOperation, public Configurable
 {
 public:
 
-  static QString className() { return "hoot::DualHighwayCriterion"; }
+  static QString className() { return "hoot::DualHighwayMarker"; }
 
-  DualHighwayCriterion() = default;
-  DualHighwayCriterion(ConstOsmMapPtr map);
-  virtual ~DualHighwayCriterion() = default;
+  DualHighwayMarker();
+  virtual ~DualHighwayMarker() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+  /**
+   * @see ConstOsmMapOperation
+   */
+  void apply(const OsmMapPtr& map) override;
 
-  virtual ElementCriterionPtr clone()
-  { return ElementCriterionPtr(new DualHighwayCriterion(_map)); }
+  /**
+   * @see Configurable
+   */
+  virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getDescription() const { return "TODO"; }
+  virtual QString getInitStatusMessage() const { return "Marking dual highways..."; }
 
-  virtual void setOsmMap(const OsmMap* map);
+  virtual QString getCompletedStatusMessage() const
+  {
+    return "Marked " + StringUtils::formatLargeNumber(_numAffected) + " dual highways.";
+  }
 
-  virtual QString getName() const override { return className(); }
+  virtual QString getDescription() const { return "Marks dual highways with a custom tag."; }
+
+  virtual QString getName() const { return className(); }
 
   virtual QString getClassName() const override { return className(); }
 
-private:
+  /**
+   * @see FilteredByGeometryTypeCriteria
+   */
+  virtual QStringList getCriteria() const;
 
-  ConstOsmMapPtr _map;
+ private:
+
+  OsmMapPtr _map;
+
+  // TODO
+  double _minParallelScore;
 
   // spatial indexes
   std::shared_ptr<Tgs::HilbertRTree> _index;
   std::deque<ElementId> _indexToEid;
 
-  void _createIndex();
-  bool _isMatchCandidate(ConstElementPtr element) const;
+  int _taskStatusUpdateInterval;
+
   Meters _getSearchRadius(const ConstElementPtr& e) const;
+  bool _isMatchCandidate(ConstElementPtr element) const;
+  void _createIndex();
 };
 
 }
-#endif // DUAL_HIGHWAY_CRITERION_H
+
+#endif // DUAL_HIGHWAY_MARKER_H

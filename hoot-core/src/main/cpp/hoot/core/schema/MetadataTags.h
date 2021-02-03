@@ -221,6 +221,11 @@ public:
   inline static const QString HootDuplicate()           { return "hoot:duplicate"; }
 
   /**
+   * TODO
+   */
+  inline static const QString HootDualHighway()         { return "hoot:dual_highway"; }
+
+  /**
    * Identifies features snapped with UnconnectedWaySnapper
    *
    * values in use:

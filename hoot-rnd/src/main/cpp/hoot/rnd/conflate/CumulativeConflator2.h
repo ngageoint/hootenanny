@@ -66,7 +66,6 @@ public:
   void setDifferential(bool isDifferential) { _isDifferential = isDifferential; }
   void setTransferTagsInput(QString input) { _transferTagsInput = input; }
   void setLeaveTransferredTags(bool leave) { _leaveTransferredTags = leave; }
-  void setRunEnsemble(bool runEnsemble) { _runEnsemble = runEnsemble; }
   void setMaxIterations(int max) { _maxIterations = max; }
   void setArgs(const QStringList& args) { _args = args; }
   void setKeepIntermediateOutputs(bool keep) { _keepIntermediateOutputs = keep; }
@@ -80,7 +79,6 @@ private:
   bool _isDifferential;
   QString _transferTagsInput;
   bool _leaveTransferredTags;
-  bool _runEnsemble;
   int _maxIterations;
   bool _keepIntermediateOutputs;
   ScoreType _inputSortScoreType;

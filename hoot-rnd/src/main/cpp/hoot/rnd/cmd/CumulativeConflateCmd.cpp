@@ -101,12 +101,6 @@ public:
       leaveTransferredTags = true;
       args.removeAll("--leave-transferred-tags");
     }
-    bool ensemble = false;
-    if (args.contains("--ensemble"))
-    {
-      ensemble = true;
-      args.removeAll("--ensemble");
-    }
     int maxIterations = -1;
     if (args.contains("--max-iterations"))
     {
@@ -152,7 +146,6 @@ public:
     conflator.setDifferential(isDifferential);
     conflator.setTransferTagsInput(transferTagsInput);
     conflator.setLeaveTransferredTags(leaveTransferredTags);
-    conflator.setRunEnsemble(ensemble);
     conflator.setMaxIterations(maxIterations);
     conflator.setKeepIntermediateOutputs(keepIntermediateOutputs);
     if (!inputSortScoreType.isEmpty())

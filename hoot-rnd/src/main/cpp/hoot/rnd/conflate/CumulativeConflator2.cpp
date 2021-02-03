@@ -36,7 +36,7 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/criterion/DualHighwayCriterion.h>
+#include <hoot/rnd/criterion/DualHighwayCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/conflate/highway/HighwayMatchCreator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -46,6 +46,9 @@
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/rnd/ops/DualHighwayMarker.h>
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot
 {
@@ -55,7 +58,6 @@ _reverseInputs(false),
 _scoreOutput(false),
 _isDifferential(false),
 _leaveTransferredTags(false),
-_runEnsemble(false),
 _maxIterations(-1),
 _keepIntermediateOutputs(false),
 _inputSortScoreType(ScoreType::None)
@@ -201,21 +203,29 @@ void CumulativeConflator2::_resetInitConfig(const QStringList& args)
 
 void CumulativeConflator2::_initDropDividedRoadsConfig()
 {
-  // Set the conflate config up to drop all secondary divided roads from input before conflation,
-  // which leaves us just with divided roads from the first input.
-  conf().prepend(
-    ConfigOptions::getConflatePreOpsKey(), QStringList(RemoveElementsVisitor::className()));
-//  conf().set(
-//    ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(),
-//    DualHighwayCriterion::className() + ";" + StatusCriterion::className());
+  // Set the conflate config up to tag all divided roads first. Then, drop all secondary roads
+  // tagged as divided from input before conflation. That leaves us just with divided roads from the
+  // first input.
+  //
+  // Tried doing this with an ElementCriterion but ended up with some stability issues, so ended up
+  // doing it with a tagging pre-op.
+
+  // Add this to the map cleaner transforms just after the initial op, which reprojects to ortho,
+  // since DualHighwayMarker needs the map to be in orth. Strange that if you try to pass in a
+  // pre-built string list here, the list doesn't actually get updated.
+  ConfigUtils::insertListOpEntry(
+    ConfigOptions::getMapCleanerTransformsKey(), RemoveElementsVisitor::className(), 1);
+  ConfigUtils::insertListOpEntry(
+    ConfigOptions::getMapCleanerTransformsKey(), DualHighwayMarker::className(), 1);
   conf().set(
     ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(),
-    OneWayCriterion::className() + ";" + StatusCriterion::className());
+    TagCriterion::className() + ";" + StatusCriterion::className());
   conf().set(ConfigOptions::getStatusCriterionStatusKey(), "Unknown2");
   conf().set(ConfigOptions::getRemoveElementsVisitorChainElementCriteriaKey(), true);
   conf().set(ConfigOptions::getRemoveElementsVisitorRecursiveKey(), true);
+  conf().set(ConfigOptions::getTagCriterionKvpsKey(), MetadataTags::HootDualHighway() + "=yes");
 
-  LOG_VARD(ConfigOptions().getConflatePreOps());
+  LOG_VARD(ConfigOptions().getMapCleanerTransforms());
 }
 
 void CumulativeConflator2::_transferTagsToInputs(
@@ -235,7 +245,7 @@ void CumulativeConflator2::_transferTagsToInputs(
   {
     const QString outId =
       StringUtils::padFrontOfNumberStringWithZeroes(i + 1, FILE_NUMBER_PAD_SIZE);
-    const QString tagTransferredInput = "in-attribute-" + outId + ".osm";
+    const QString tagTransferredInput = "in-tag-transfer-" + outId + ".osm";
     QString tagTransferredInputFullPath = outputInfo.path() + "/" + tagTransferredInput;
 
     LOG_STATUS("******************************************************");

@@ -104,6 +104,15 @@ public:
    * @param entryToRemove value of the list member from the configuration option to remove
    */
   static void removeListOpEntry(const QString& opName, const QString& entryToRemove);
+
+  /**
+   * TODO
+   *
+   * @param opName
+   * @param opEntry
+   * @param index
+   */
+  static void insertListOpEntry(const QString& opName, const QString& opEntry, const int index);
 };
 
 }
