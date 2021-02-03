@@ -57,7 +57,7 @@ ElementCriterionPtr CriterionUtils::_getCrit(const QString& criterionClassName)
   if (!crit)
   {
     throw IllegalArgumentException(
-      "Invalid criterion passed to PoiPolygonInfoCache::hasCriterion: " + criterionClassName);
+      "Invalid criterion passed to CriterionUtils::hasCriterion: " + criterionClassName);
   }
   return crit;
 }

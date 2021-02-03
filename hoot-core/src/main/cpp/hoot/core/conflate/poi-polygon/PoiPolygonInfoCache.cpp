@@ -159,8 +159,6 @@ void PoiPolygonInfoCache::_incrementCacheSizeCount(const QString& cacheTypeKey)
   }
 }
 
-/////////////////NOT POI/POLY SPECIFIC///////////////////
-
 std::shared_ptr<geos::geom::Geometry> PoiPolygonInfoCache::_getGeometry(
   const ConstElementPtr& element)
 {
@@ -496,8 +494,6 @@ ElementCriterionPtr PoiPolygonInfoCache::_getCrit(const QString& criterionClassN
 
   return crit;
 }
-
-/////////////////POI/POLY SPECIFIC/////////////////
 
 bool PoiPolygonInfoCache::isType(const ConstElementPtr& element, const PoiPolygonSchemaType& type)
 {

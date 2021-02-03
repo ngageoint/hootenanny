@@ -67,11 +67,6 @@ typedef std::shared_ptr<PoiPolygonInfoCache> PoiPolygonInfoCachePtr;
  * Its worth noting that if you are doing performance tweaks on a Vagrant VM, the runtimes may vary
  * with subsequent executions of the exact same conflate job. So in that case, its best to look for
  * tweaks with fairly large improvements and ignore the smaller performance improvements.
- *
- * Some of the geometry comparisons in this class could be abstracted out beyond poi/poly geoms and
- * moved into a class like OsmGeometryUtils if we ever need them to be used with other conflation
- * algs. If that's done there will be some work to make any caching being performed work across unit
- * tests.
  */
 class PoiPolygonInfoCache : public Configurable
 {
@@ -89,6 +84,7 @@ public:
    * @param element1 the first element to measure distance from
    * @param element2 the second element to measure distance from
    * @return the distance between the two elements or -1.0 if the distance could not be calculated
+   * @todo move to ElementGeometryUtils backed with cache?
    */
   double getDistance(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
@@ -97,6 +93,7 @@ public:
    *
    * @param element the feature to calculate the area of
    * @return the area of the feature or -1.0 if the area could not be calculated
+   * @todo move to ElementGeometryUtils backed with cache?
    */
   double getArea(const ConstElementPtr& element);
 
@@ -107,6 +104,7 @@ public:
    * @param containedElement the element to check if contained by containingElement
    * @return true if containingElement contains the containedElement geographicaly; false otherwise
    * or if the containment could not be calculated
+   * @todo move to ElementGeometryUtils backed with cache?
    */
   bool elementContains(const ConstElementPtr& containingElement,
                        const ConstElementPtr& containedElement);
@@ -118,6 +116,7 @@ public:
    * @param element2 the second element to examine
    * @return true if the two elements intersect; false otherwise or if the intersection could not
    * be calculated
+   * @todo move to ElementGeometryUtils backed with cache?
    */
   bool elementsIntersect(const ConstElementPtr& element1, const ConstElementPtr& element2);
 
@@ -139,6 +138,7 @@ public:
    * @param criterionClassName class name of the ElementCriterion to determine membership of
    * @return true if the element has the criterion; false otherwise
    * @throws if the criterion class name is invalid
+   * @todo same as CriterionUtils::hasCriterion with added cache?
    */
   bool hasCriterion(const ConstElementPtr& element, const QString& criterionClassName);
 
@@ -148,6 +148,7 @@ public:
    *
    * @param element the element to examine
    * @return true if the element has more than one type; false otherwise
+   * @todo same as OsmSchema::hasMoreThanOneType with added cache?
    */
   bool hasMoreThanOneType(const ConstElementPtr& element);
 
@@ -156,6 +157,7 @@ public:
    *
    * @param element the element to examine
    * @return true if the element has a poi/poly related type; false otherwise
+   * @todo simply wraps PoiPolygonSchema::hasRelatedType
    */
   bool hasRelatedType(const ConstElementPtr& element);
 
@@ -164,6 +166,7 @@ public:
    *
    * @param element the element to examine
    * @return a number of addresses
+   * @todo simply wraps AddressParser method
    */
   int numAddresses(const ConstElementPtr& element);
 
@@ -173,6 +176,7 @@ public:
    * @param parent the parent element
    * @param memberId the element ID of the child
    * @return true if parent has the element with memberId as a child; false otherwise
+   * @todo move cache backing part to similar RelationMemberUtils method
    */
   bool containsMember(const ConstElementPtr& parent, const ElementId& memberId);
 
@@ -225,9 +229,9 @@ private:
   QHash<QString, ElementCriterionPtr> _criterionCache;
 
   // QCache doesn't play nicely with shared pointers created elsewhere...tried using them with it
-  // for _geometryCache but failed. Another alternative was to modify ElementToGeometryConverter to also
-  // allow for returing Geometry raw pointers in addition to shared pointers...tried that and failed
-  // as well. Decided to use LruCache for this one instead.
+  // for _geometryCache but failed. Another alternative was to modify ElementToGeometryConverter to
+  // also allow for returing Geometry raw pointers in addition to shared pointers...tried that and
+  // failed as well. Decided to use LruCache for this one instead.
   std::shared_ptr<Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>> _geometryCache;
 
   QCache<ElementId, bool> _hasMoreThanOneTypeCache;
