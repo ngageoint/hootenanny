@@ -205,9 +205,9 @@ void CumulativeConflator2::_initDropDividedRoadsConfig()
   // which leaves us just with divided roads from the first input.
   conf().prepend(
     ConfigOptions::getConflatePreOpsKey(), QStringList(RemoveElementsVisitor::className()));
-/*  conf().set(
-    ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(),
-    DualHighwayCriterion::className() + ";" + StatusCriterion::className())*/;
+//  conf().set(
+//    ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(),
+//    DualHighwayCriterion::className() + ";" + StatusCriterion::className());
   conf().set(
     ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(),
     OneWayCriterion::className() + ";" + StatusCriterion::className());
@@ -233,15 +233,15 @@ void CumulativeConflator2::_transferTagsToInputs(
   const int numIterations = _getNumIterations(inputs);
   for (int i = 0; i < numIterations; i++)
   {
-    LOG_STATUS("******************************************************");
-    LOG_STATUS(
-      "Performing tag transfer (" << (i + 1) << "/" << numIterations << ") for " << inputs.at(i) <<
-      " from " << tagInputInfo.fileName() << " to " << tagTransferredInput << "...");
-
     const QString outId =
       StringUtils::padFrontOfNumberStringWithZeroes(i + 1, FILE_NUMBER_PAD_SIZE);
     const QString tagTransferredInput = "in-attribute-" + outId + ".osm";
     QString tagTransferredInputFullPath = outputInfo.path() + "/" + tagTransferredInput;
+
+    LOG_STATUS("******************************************************");
+    LOG_STATUS(
+      "Performing tag transfer (" << (i + 1) << "/" << numIterations << ") for " << inputs.at(i) <<
+      " from " << tagInputInfo.fileName() << " to " << tagTransferredInput << "...");
 
     _conflateTimer.restart();
     Conflator().conflate(
