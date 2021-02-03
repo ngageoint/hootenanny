@@ -79,8 +79,9 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
   if (transferTags)
   {
     // We're trying to minimize the conflation of divided highways due to their difficulty. Use
-    // attribute conflate to transfer OSM road tags over to our input. We'll use that information
-    // to exclude adding any additional divided roads to output beyond what's in the first input.
+    // attribute conflate to transfer OSM road tags over to our input. We'll later use that
+    // information to exclude adding any additional divided roads to output beyond what's in the
+    // first input.
     _transferTagsToInputs(input, inputs, output);
     _initDropDividedRoadsConfig();
   }
@@ -177,6 +178,10 @@ CumulativeConflator2::ScoreType CumulativeConflator2::_scoreTypeFromString(QStri
   else if (scoreTypeStr == "graph")
   {
     return ScoreType::Graph;
+  }
+  else if (scoreTypeStr == "angle")
+  {
+    return ScoreType::Angle;
   }
   else
   {

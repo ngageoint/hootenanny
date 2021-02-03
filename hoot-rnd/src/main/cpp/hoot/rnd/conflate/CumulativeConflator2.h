@@ -38,6 +38,23 @@ namespace hoot
 
 /**
  * Allows for conflating maps in a cumulative fashion.
+ *
+ * hoot conflate-cumulative --status
+ * -C ReferenceConflation.conf \
+ * -C UnifyingAlgorithm.conf \
+ * -D uuid.helper.repeatable=true -D writer.include.debug.tags=true \
+ * -D log.class.filter="CumulativeConflator2;ConflateCumulativeCmd" \
+ * -D match.creators="hoot::HighwayMatchCreator" \
+ * -D merger.creators="hoot::HighwayMergerCreator" \
+ * -D bounds="8.4762,12.0504,8.4793,12.0526" \
+ * -D bounds.keep.entire.features.crossing.bounds=false \
+ * -D direction.finder.angle.threshold=179.0 \
+ * /home/vagrant/hoot/tmp/kano_033133330302/input/ \
+ * /home/vagrant/hoot/tmp/kano_033133330302/output/out-kano-final.osm \
+ * --keep-intermediate-outputs \
+ * --reverse-inputs \
+ * --max-iterations -1 \
+ * --transfer-tags /home/vagrant/hoot/tmp/kano-osm-cropped-2.osm
  */
 class CumulativeConflator2
 {
@@ -47,7 +64,8 @@ public:
   {
     None = 0,
     Raster,
-    Graph
+    Graph,
+    Angle
   }
   ScoreType;
 
