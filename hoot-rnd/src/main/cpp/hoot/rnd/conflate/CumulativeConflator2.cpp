@@ -36,9 +36,6 @@
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/rnd/criterion/DualHighwayCriterion.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/conflate/highway/HighwayMatchCreator.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/visitors/SetTagValueVisitor.h>

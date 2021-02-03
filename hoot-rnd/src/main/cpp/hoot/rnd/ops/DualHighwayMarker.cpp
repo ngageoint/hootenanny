@@ -60,7 +60,7 @@ _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval())
 void DualHighwayMarker::setConfiguration(const Settings& conf)
 {
   ConfigOptions confOpts(conf);
-  _minParallelScore = confOpts.getDualHighwayMarkerParallelScoreThreshold;
+  _minParallelScore = confOpts.getDualHighwayMarkerParallelScoreThreshold();
 }
 
 Meters DualHighwayMarker::_getSearchRadius(const ConstElementPtr& e) const
