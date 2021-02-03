@@ -57,8 +57,6 @@ public:
    * @param map map owning the input elements
    * @return true if the two elements have the specified geometric relationship; false otherwise or
    * if the relationship could not be calculated
-   * @todo should eventually back this with a cache, as is done in PoiPolygonInfoCache (or merge
-   * the two)
    */
   static bool haveGeometricRelationship(
     const ConstElementPtr& element1, const ConstElementPtr& element2,
