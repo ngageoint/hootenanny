@@ -38,56 +38,6 @@ namespace hoot
 
 /**
  * Allows for conflating maps in a cumulative fashion.
- *
- * @todo Test the following:
- *
- * - forward and reverse (--reverse-inputs)
- *   - div road is more gnarly using forward; rest is similar
- * - unifying vs network (from existing options)
- *   - network oddly is not merging nearly as much; may be due to the small aoi
- * - pre-attribute conflate against osm option to get div road tags on first input
- *   (--transfer-tags <source-file>); also prevent anything from conflating that overlaps/cross
- *   the osm div road?
- *   -
- * - match/review thresh adjustment (from existing options)
- * - drop reviews and/or drop secondary features involved in reviews in output? (post conflate op)
- *   -
- * - auto merge reviews?
- * - throw out unmatched secondary features that cross over / overlap previously conflated data?
- *   (post conflate op)
- *   -
- * - use something similar to SmallHighwayMerger to throw out any short two node ways in output?
- *   (post conflate op)
- *   -
- * - sort inputs by raster or graph score (--sort-inputs-by-score <type>)
- *   -
- * - score outputs with logic from compare command and throw out result if score doesn't get any
- *   better (--score-output)
- *   -
- * - option for diff conflate and merge workflow (--differential)
- *   -
- * - alg ensemble approach tied to score (--ensemble)
- *   -
- * - avg conflate?
- *
- * hoot conflate-cumulative --status
- *   -C ReferenceConflation.conf \
- *   -C UnifyingAlgorithm.conf \
- *   -D uuid.helper.repeatable=true \
- *   -D writer.include.debug.tags=true \
- *   -D log.class.filter="CumulativeConflator2;ConflateCumulativeCmd" \
- *   -D match.creators="hoot::HighwayMatchCreator" \
- *   -D merger.creators="hoot::HighwayMergerCreator" \
- *   -D bounds="8.4762,12.0504,8.4793,12.0526" \
- *   -D bounds.keep.entire.features.crossing.bounds=false \
- *   -D highway.match.threshold=0.161 \
- *   -D highway.review.threshold=0.25 \
- *   -D highway.miss.threshold=0.999 \
- *   /home/vagrant/hoot/tmp/kano_033133330302/input/ \
- *   /home/vagrant/hoot/tmp/kano_033133330302/output/kano-final.osm \
- *   --keep-intermediate-outputs \
- *   --reverse-inputs \
- *   --max-iterations -1
  */
 class CumulativeConflator2
 {
@@ -148,7 +98,6 @@ private:
   void _initDropDividedRoadsConfig();
 
   void _transferTagsToInputs(const QDir& input, QStringList& inputs, const QString& output);
-  void _transferTags(const QString& input, QString& modifiedInput);
   void _removeTransferredTags(const QString& url);
 };
 

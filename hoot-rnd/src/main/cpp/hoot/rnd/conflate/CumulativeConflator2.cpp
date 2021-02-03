@@ -45,6 +45,7 @@
 #include <hoot/core/visitors/KeepTagsVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/criterion/StatusCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
 
 namespace hoot
 {
@@ -206,9 +207,10 @@ void CumulativeConflator2::_initDropDividedRoadsConfig()
     ConfigOptions::getConflatePreOpsKey(), QStringList(RemoveElementsVisitor::className()));
   conf().set(
     ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(),
-    DualHighwayCriterion::className() + ";" + StatusCriterion::className());
+    /*DualHighwayCriterion::className()*/OneWayCriterion::className() + ";" + StatusCriterion::className());
   conf().set(ConfigOptions::getStatusCriterionStatusKey(), "Unknown2");
   conf().set(ConfigOptions::getRemoveElementsVisitorChainElementCriteriaKey(), true);
+  conf().set(ConfigOptions::getRemoveElementsVisitorRecursiveKey(), true);
 
   LOG_VARD(ConfigOptions().getConflatePreOps());
 }
@@ -222,6 +224,7 @@ void CumulativeConflator2::_transferTagsToInputs(
   _resetInitConfig(args);
   LOG_VARD(ConfigOptions().getWayJoiner());
 
+  QFileInfo tagInputInfo(_transferTagsInput);
   QFileInfo outputInfo(output);
   QStringList modifiedInputs;
   const int numIterations = _getNumIterations(inputs);
@@ -232,26 +235,20 @@ void CumulativeConflator2::_transferTagsToInputs(
     const QString tagTransferredInput = "in-attribute-" + outId + ".osm";
     QString tagTransferredInputFullPath = outputInfo.path() + "/" + tagTransferredInput;
 
-    _transferTags(input.path() + "/" + inputs.at(i), tagTransferredInputFullPath);
+    LOG_STATUS("******************************************************");
+    LOG_STATUS(
+      "Performing tag transfer (" << (i + 1) << "/" << numIterations << ") for " << inputs.at(i) <<
+      " from " << tagInputInfo.fileName() << " to " << tagTransferredInput << "...");
+    _conflateTimer.restart();
+    Conflator().conflate(
+      input.path() + "/" + inputs.at(i), _transferTagsInput, tagTransferredInputFullPath);
+    LOG_STATUS("Transfer took: " << StringUtils::millisecondsToDhms(_conflateTimer.elapsed()));
+
     modifiedInputs.append(tagTransferredInput);
   }
   inputs = modifiedInputs;
 
   _resetInitConfig(_args);  // This gets us back to our initial conflate settings.
-}
-
-void CumulativeConflator2::_transferTags(const QString& input, QString& modifiedInput)
-{
-  QFileInfo inputInfo(input);
-  QFileInfo tagInputInfo(_transferTagsInput);
-  QFileInfo modifiedInputInfo(modifiedInput);
-  _conflateTimer.restart();
-  LOG_STATUS("******************************************************");
-  LOG_STATUS(
-    "Performing tag transfer for " << inputInfo.fileName() << " from " <<
-    tagInputInfo.fileName() << " to " << modifiedInputInfo.fileName() << "...");
-  Conflator().conflate(input, _transferTagsInput, modifiedInput);
-  LOG_STATUS("Transfer took: " << StringUtils::millisecondsToDhms(_conflateTimer.elapsed()));
 }
 
 void CumulativeConflator2::_removeTransferredTags(const QString& url)
@@ -267,6 +264,7 @@ void CumulativeConflator2::_removeTransferredTags(const QString& url)
 
   // TODO: derive this list from the input files or read from config
   QStringList keysToKeep;
+  keysToKeep.append("highway");
   keysToKeep.append("hoot:layername");
   keysToKeep.append("inferred_speed_mph");
   keysToKeep.append("length_m");
