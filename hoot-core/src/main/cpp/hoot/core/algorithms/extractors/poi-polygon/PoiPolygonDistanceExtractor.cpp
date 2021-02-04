@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "PoiPolygonDistanceExtractor.h"
 
@@ -57,7 +57,8 @@ double PoiPolygonDistanceExtractor::extract(const OsmMap& /*map*/, const ConstEl
   LOG_VART(poi->getElementId());
   LOG_VART(poly->getElementId());
 
-  //to suppress the ElementToGeometryConverter poly warnings...warnings worth looking into at some point
+  // to suppress the ElementToGeometryConverter poly warnings...warnings worth looking into at some
+  // point
   //DisableLog dl(Log::Warn);
 
   return _infoCache->getDistance(poly, poi);

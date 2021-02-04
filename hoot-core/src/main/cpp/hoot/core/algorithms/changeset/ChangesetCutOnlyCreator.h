@@ -39,9 +39,6 @@ class Settings;
 
 /**
  * This is the cut only version of C&R.
- *
- * TODO: Some of the simplification that has been applied to ChangesetReplacementCreator can also
- * probably be applied to this class.
  */
 class ChangesetCutOnlyCreator : public ChangesetReplacementCreatorAbstract
 {
@@ -78,16 +75,7 @@ public:
     const QString& input1, const QString& input2,
     const std::shared_ptr<geos::geom::Polygon>& bounds, const QString& output);
 
-  virtual void setGeometryFilters(const QStringList& filterClassNames);
-  virtual void setReplacementFilters(const QStringList& filterClassNames);
-  virtual void setChainReplacementFilters(const bool chain) { _chainReplacementFilters = chain; }
-  virtual void setReplacementFilterOptions(const QStringList& optionKvps);
-  virtual void setRetainmentFilters(const QStringList& filterClassNames);
-  virtual void setChainRetainmentFilters(const bool chain) { _chainRetainmentFilters = chain; }
-  virtual void setRetainmentFilterOptions(const QStringList& optionKvps);
-
-  virtual QString toString() const override
-    { return className().remove("hoot::"); }
+  virtual QString toString() const override { return className().remove("hoot::"); }
 
 protected:
 
@@ -108,13 +96,8 @@ private:
   /*
    * Combines filters in _geometryTypeFilters with _replacementFilter.
    */
-  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getCombinedFilters(
-    std::shared_ptr<ChainCriterion> nonGeometryFilter);
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> _getFilters();
   bool _roadFilterExists() const;
-  void _setInputFilter(
-    std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
-    const bool chainFilters);
-  void _setInputFilterOptions(Settings& opts, const QStringList& optionKvps);
 
   OsmMapPtr _loadRefMap(const GeometryTypeCriterion::GeometryType& geometryType);
   OsmMapPtr _loadSecMap(const GeometryTypeCriterion::GeometryType& geometryType);

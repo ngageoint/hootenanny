@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
 #include "CriterionUtils.h"
@@ -57,7 +57,7 @@ ElementCriterionPtr CriterionUtils::_getCrit(const QString& criterionClassName)
   if (!crit)
   {
     throw IllegalArgumentException(
-      "Invalid criterion passed to PoiPolygonInfoCache::hasCriterion: " + criterionClassName);
+      "Invalid criterion passed to CriterionUtils::hasCriterion: " + criterionClassName);
   }
   return crit;
 }

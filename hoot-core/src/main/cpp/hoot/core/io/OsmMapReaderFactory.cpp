@@ -59,6 +59,20 @@ bool OsmMapReaderFactory::hasElementInputStream(const QString& url)
   return result;
 }
 
+bool OsmMapReaderFactory::hasElementInputStream(const QStringList& inputs)
+{
+  for (int i = 0; i < inputs.size(); i++)
+  {
+    if (!hasElementInputStream(inputs.at(i)))
+    {
+      LOG_INFO(
+        "Unable to stream Inputs due to input: " << inputs.at(i).right(25) << ". Loading entire map...");
+      return false;
+    }
+  }
+  return true;
+}
+
 bool OsmMapReaderFactory::hasPartialReader(const QString& url)
 {
   bool result = false;

@@ -91,183 +91,6 @@ ChangesetReplacementCreatorAbstract()
   _numTotalTasks++; // changeset derivation
 }
 
-void ChangesetCutOnlyCreator::setGeometryFilters(const QStringList& filterClassNames)
-{
-  LOG_VART(filterClassNames);
-  if (!filterClassNames.isEmpty())
-  {
-    _geometryFiltersSpecified = true;
-    _geometryTypeFilters.clear();
-    _linearFilterClassNames.clear();
-
-    for (int i = 0; i < filterClassNames.size(); i++)
-    {
-      const QString filterClassName = filterClassNames.at(i);
-      LOG_VART(filterClassName);
-
-      // Fail if the filter doesn't map to a geometry type.
-      std::shared_ptr<GeometryTypeCriterion> filter =
-        std::dynamic_pointer_cast<GeometryTypeCriterion>(
-          std::shared_ptr<ElementCriterion>(
-            Factory::getInstance().constructObject<ElementCriterion>(filterClassName)));
-      if (!filter)
-      {
-        throw IllegalArgumentException(
-          "Invalid feature geometry type filter: " + filterClassName +
-          ". Filter must be a GeometryTypeCriterion.");
-      }
-
-      ElementCriterionPtr currentFilter = _geometryTypeFilters[filter->getGeometryType()];
-      if (!currentFilter)
-      {
-        _geometryTypeFilters[filter->getGeometryType()] = filter;
-      }
-      else
-      {
-        _geometryTypeFilters[filter->getGeometryType()] =
-          OrCriterionPtr(new OrCriterion(currentFilter, filter));
-      }
-
-      if (filter->getGeometryType() == GeometryTypeCriterion::GeometryType::Line)
-      {
-        _linearFilterClassNames.append(filterClassName);
-      }
-    }
-  }
-
-  // have to call this method to keep filtering from erroring...shouldn't have to...should just init
-  // itself internally when no geometry filters are specified
-  LOG_VART(_geometryTypeFilters.size());
-  if (_geometryTypeFilters.isEmpty())
-  {
-    _geometryFiltersSpecified = false;
-    _geometryTypeFilters = _getDefaultGeometryFilters();
-    _linearFilterClassNames =
-      ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
-        GeometryTypeCriterion::GeometryType::Line);
-  }
-
-  LOG_VARD(_geometryTypeFilters.size());
-  LOG_VART(_linearFilterClassNames);
-}
-
-void ChangesetCutOnlyCreator::_setInputFilter(
-  std::shared_ptr<ChainCriterion>& inputFilter, const QStringList& filterClassNames,
-  const bool chainFilters)
-{
-  LOG_VARD(filterClassNames.size());
-  if (!filterClassNames.isEmpty())
-  {
-    LOG_VARD(chainFilters);
-    if (!chainFilters)
-    {
-      inputFilter.reset(new OrCriterion());
-    }
-    else
-    {
-      inputFilter.reset(new ChainCriterion());
-    }
-
-    for (int i = 0; i < filterClassNames.size(); i++)
-    {
-      const QString filterClassName = filterClassNames.at(i);
-      LOG_VARD(filterClassName);
-
-      ElementCriterionPtr crit;
-      try
-      {
-        crit.reset(Factory::getInstance().constructObject<ElementCriterion>(filterClassName));
-      }
-      catch (const boost::bad_any_cast&)
-      {
-      }
-      if (!crit)
-      {
-        throw IllegalArgumentException(
-          "Invalid additional input filter: " + filterClassName +
-          ". Filter must be a ElementCriterion.");
-      }
-
-      // Fail if the filter maps to a geometry type.
-      std::shared_ptr<GeometryTypeCriterion> geometryTypeFilter;
-      try
-      {
-        geometryTypeFilter = std::dynamic_pointer_cast<GeometryTypeCriterion>(crit);
-      }
-      catch (const boost::bad_any_cast&)
-      {
-      }
-      if (geometryTypeFilter)
-      {
-        throw IllegalArgumentException(
-          "Invalid additional input filter: " + filterClassName +
-          ". May not be a GeometryTypeCriterion.");
-      }
-
-      inputFilter->addCriterion(crit);
-    }
-
-    LOG_VARD(inputFilter->toString());
-  }
-}
-
-void ChangesetCutOnlyCreator::setReplacementFilters(const QStringList& filterClassNames)
-{
-  LOG_VART(filterClassNames.size());
-  if (filterClassNames.size() > 0)
-  {
-    LOG_TRACE("Creating replacement filter...");
-    _setInputFilter(_replacementFilter, filterClassNames, _chainReplacementFilters);
-  }
-}
-
-void ChangesetCutOnlyCreator::setRetainmentFilters(const QStringList& filterClassNames)
-{
-  LOG_VARD(filterClassNames.size());
-  if (filterClassNames.size() > 0)
-  {
-    LOG_DEBUG("Creating retainment filter...");
-    _setInputFilter(_retainmentFilter, filterClassNames, _chainRetainmentFilters);
-  }
-}
-
-void ChangesetCutOnlyCreator::_setInputFilterOptions(Settings& opts,
-                                                     const QStringList& optionKvps)
-{
-  LOG_VART(optionKvps.size());
-  opts = conf();
-  const int optsSizeBefore = opts.size();
-  for (int i = 0; i < optionKvps.size(); i++)
-  {
-    const QString kvp = optionKvps.at(i);
-    // split on the first occurrence of '=' since the opt value itself could have an '=' in it
-    const int firstEqualOccurrence = kvp.indexOf("=");
-    if (firstEqualOccurrence == -1)
-    {
-      throw IllegalArgumentException("Invalid filter configuration option: " + kvp);
-    }
-    const QString key = kvp.mid(0, firstEqualOccurrence).trimmed().remove("\"").remove("'");
-    LOG_VART(key);
-    const QString val = kvp.mid(firstEqualOccurrence + 2).trimmed().remove("\"").remove("'");
-    LOG_VART(val);
-    opts.set(key, val);
-  }
-  const int optsSizeAfter = opts.size() - optsSizeBefore;
-  LOG_DEBUG("Opts size after adding custom opts: " << optsSizeAfter);
-}
-
-void ChangesetCutOnlyCreator::setReplacementFilterOptions(const QStringList& optionKvps)
-{
-  LOG_DEBUG("Creating replacement filter options...");
-  _setInputFilterOptions(_replacementFilterOptions, optionKvps);
-}
-
-void ChangesetCutOnlyCreator::setRetainmentFilterOptions(const QStringList& optionKvps)
-{
-  LOG_DEBUG("Creating retainment filter options...");
-  _setInputFilterOptions(_retainmentFilterOptions, optionKvps);
-}
-
 void ChangesetCutOnlyCreator::create(
   const QString& input1, const QString& input2, const geos::geom::Envelope& bounds,
   const QString& output)
@@ -302,14 +125,11 @@ void ChangesetCutOnlyCreator::create(
   _setGlobalOpts();
   _printJobDescription();
 
-  // If a retainment filter was specified, we'll AND it together with each geometry type filter to
-  // further restrict what reference data gets replaced in the final changeset.
+  // Make some adjustments to the default filters before using.
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> refFilters =
-    _getCombinedFilters(_retainmentFilter);
-  // If a replacement filter was specified, we'll AND it together with each geometry type filter to
-  // further restrict what secondary replacement data goes into the final changeset.
+    _getFilters();
   const QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> secFilters =
-    _getCombinedFilters(_replacementFilter);
+    _getFilters();
 
   // DIFF CALCULATION
 
@@ -501,8 +321,7 @@ void ChangesetCutOnlyCreator::_processMaps(
 
   // Prune the sec dataset down to just the feature types specified by the filter, so we don't end
   // up modifying anything else.
-  const Settings secFilterSettings =
-    _replacementFilterOptions.size() == 0 ? conf() : _replacementFilterOptions;
+  const Settings secFilterSettings = conf();
   _filterFeatures(
     secMap, secFeatureFilter, geometryType, secFilterSettings,
     _changesetId + "sec-after-" + GeometryTypeCriterion::typeToString(geometryType) + "-pruning");
@@ -821,125 +640,60 @@ bool ChangesetCutOnlyCreator::_roadFilterExists() const
 }
 
 QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>
-  ChangesetCutOnlyCreator::_getCombinedFilters(
-    std::shared_ptr<ChainCriterion> nonGeometryFilter)
+  ChangesetCutOnlyCreator::_getFilters()
 {
-  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> combinedFilters;
-  LOG_VART(nonGeometryFilter.get());
-  // TODO: may be able to consolidate this duplicated filter handling code inside the if/else
-  if (nonGeometryFilter)
+  QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr> filters;
+  LOG_VARD(_geometryTypeFilters.size());
+  if (_geometryTypeFilters.isEmpty())
   {
-    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
-         _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
-    {
-      GeometryTypeCriterion::GeometryType geomType = itr.key();
-      LOG_VART(GeometryTypeCriterion::typeToString(geomType));
-      ElementCriterionPtr geometryCrit = itr.value();
-
-      // Roundabouts are classified in hoot as a poly type due to being closed ways. We want to
-      // make sure they get procesed with the linear features, however, and not with the polys. If
-      // they don't, they won't get snapped back to other roads in the output. So if roads were part
-      // of the specified geometry filter, we'll move roundabouts from the poly to the linear
-      // filter. If no roads were specified in the geometry filter, then roads have been explicitly
-      // excluded and we do nothing here. So far this is the only instance where a geometry
-      // re-classification for a feature is necessary. If other instances of this occur things could
-      // get messy really quick, but we'll only worry about that if it actually happens.
-
-      // UPDATE 8/17/20: Used to do this just for roundabouts, but there are some highway types
-      // (e.g. highway=pedstrian) that can be polys. Really, probably just need some generic way to
-      // make sure no elements of the same type get processed in separate geometry handling loops
-      // instead of code like this.
-
-      ElementCriterionPtr updatedGeometryCrit;
-      LOG_VART(_roadFilterExists());
-      if (_roadFilterExists())
-      {
-        if (geomType == GeometryTypeCriterion::GeometryType::Line)
-        {
-          LOG_TRACE("Adding roundabouts to line filter due to presence of road filter...");
-          updatedGeometryCrit.reset(
-            new OrCriterion(
-              geometryCrit,
-              std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())));
-        }
-        else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
-        {
-          LOG_TRACE("Removing roundabouts from polygon filter due to presence of road filter...");
-          updatedGeometryCrit.reset(
-            new ChainCriterion(
-              geometryCrit,
-              NotCriterionPtr(
-                new NotCriterion(
-                  std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())))));
-        }
-      }
-      else
-      {
-        updatedGeometryCrit = geometryCrit;
-      }
-      LOG_VART(updatedGeometryCrit->toString());
-
-      combinedFilters[geomType] =
-        ChainCriterionPtr(new ChainCriterion(updatedGeometryCrit, nonGeometryFilter));
-      LOG_TRACE("New combined filter: " << combinedFilters[geomType]->toString());
-    }
+    _geometryTypeFilters = _getDefaultGeometryFilters();
+    // It should be ok that the roundabout filter doesn't get added here, since this list is only
+    // for by unconnected way snapping and roundabouts don't fall into that category.
+    _linearFilterClassNames =
+      ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
+        GeometryTypeCriterion::GeometryType::Line);
   }
-  else
+
+  for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
+       _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
   {
-    LOG_VARD(_geometryTypeFilters.size());
-    if (_geometryTypeFilters.isEmpty())
+    GeometryTypeCriterion::GeometryType geomType = itr.key();
+    LOG_VART(GeometryTypeCriterion::typeToString(geomType));
+    ElementCriterionPtr geometryCrit = itr.value();
+
+    // See roundabouts handling note in the preceding if statement for more detail. Here we're
+    // doing the same thing, except we don't care if a road filter was specified or not since this
+    // block of code only gets executed if no geometry filters were specified at all and we're
+    // using the defaults.
+
+    ElementCriterionPtr updatedGeometryCrit;
+    if (geomType == GeometryTypeCriterion::GeometryType::Line)
     {
-      _geometryTypeFilters = _getDefaultGeometryFilters();
-      // It should be ok that the roundabout filter doesn't get added here, since this list is only
-      // for by unconnected way snapping and roundabouts don't fall into that category.
-      _linearFilterClassNames =
-        ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
-          GeometryTypeCriterion::GeometryType::Line);
+      LOG_TRACE("Adding roundabouts to line filter...");
+      updatedGeometryCrit.reset(
+        new OrCriterion(
+          geometryCrit, std::shared_ptr<HighwayCriterion>(new HighwayCriterion())));
     }
-
-    for (QMap<GeometryTypeCriterion::GeometryType, ElementCriterionPtr>::const_iterator itr =
-         _geometryTypeFilters.begin(); itr != _geometryTypeFilters.end(); ++itr)
+    else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
     {
-      GeometryTypeCriterion::GeometryType geomType = itr.key();
-      LOG_VART(GeometryTypeCriterion::typeToString(geomType));
-      ElementCriterionPtr geometryCrit = itr.value();
-
-      // See roundabouts handling note in the preceding if statement for more detail. Here we're
-      // doing the same thing, except we don't care if a road filter was specified or not since this
-      // block of code only gets executed if no geometry filters were specified at all and we're
-      // using the defaults.
-
-      ElementCriterionPtr updatedGeometryCrit;
-      if (geomType == GeometryTypeCriterion::GeometryType::Line)
-      {
-        LOG_TRACE("Adding roundabouts to line filter...");
-        updatedGeometryCrit.reset(
-          new OrCriterion(
-            geometryCrit,
-            std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())));
-      }
-      else if (geomType == GeometryTypeCriterion::GeometryType::Polygon)
-      {
-        LOG_TRACE("Removing roundabouts from polygon filter...");
-        updatedGeometryCrit.reset(
-          new ChainCriterion(
-            geometryCrit,
-            NotCriterionPtr(
-              new NotCriterion(
-                std::shared_ptr</*Roundabout*/HighwayCriterion>(new /*Roundabout*/HighwayCriterion())))));
-      }
-      else
-      {
-        updatedGeometryCrit = geometryCrit;
-      }
-      LOG_VART(updatedGeometryCrit->toString());
-
-      combinedFilters[geomType] = updatedGeometryCrit;
-      LOG_TRACE("New combined filter: " << combinedFilters[geomType]->toString());
+      LOG_TRACE("Removing roads from polygon filter...");
+      updatedGeometryCrit.reset(
+        new ChainCriterion(
+          geometryCrit,
+          NotCriterionPtr(
+            new NotCriterion(std::shared_ptr<HighwayCriterion>(new HighwayCriterion())))));
     }
+    else
+    {
+      updatedGeometryCrit = geometryCrit;
+    }
+    LOG_VART(updatedGeometryCrit->toString());
+
+    filters[geomType] = updatedGeometryCrit;
+    LOG_TRACE("New filter: " << filters[geomType]->toString());
   }
-  LOG_VARD(combinedFilters.size());
-  return combinedFilters;
+  LOG_VARD(filters.size());
+  return filters;
 }
 
 OsmMapPtr ChangesetCutOnlyCreator::_loadRefMap(

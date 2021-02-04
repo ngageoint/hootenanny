@@ -564,8 +564,15 @@ tds70 = {
     // Drop the FCSUBTYPE since we don't use it
     if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
+    // Backward compatibility
+    if (attrs.AEI)
+    {
+      attrs.image_id = attrs.AEI;
+      delete attrs.AEI;
+    }
+
     // Drop the mosaic tag if we don't have an image id
-    if (attrs.AEI == 'No Information') delete attrs.img_mosaic;
+    if (attrs.image_id == 'No Information') delete attrs.img_mosaic;
 
     // List of data values to drop/ignore
     var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };

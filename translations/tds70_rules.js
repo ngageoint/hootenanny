@@ -166,8 +166,8 @@ tds70.rules = {
     'ZSAX_RX0':'security:dissemination_control:ic', // Restriction Information : Security Attributes Group <resource dissemination controls>
     'ZSAX_RX3':'security:dissemination_control:non_ic', // Restriction Information : Security Attributes Group <resource non-intelligence community markings>
     'ZSAX_RX4':'security:resource_owner', // Restriction Information : Security Attributes Group <resource owner-producer>
-    'AEI':'source:imagery:id', // Acquisition Event Identifier. AKA image_id - non-spec
-    'img_layer':'source:imagery:layerName', // Layer name - non-spec
+    'imagery_id':'source:imagery:id', // Image_id - non-spec
+    'legacy_id':'source:imagery:legacy_id', // Image_id - non-spec    'img_layer':'source:imagery:layerName', // Layer name - non-spec
     'early_date':'source:imagery:earliestDate', // Earliest image in a mosaic - non-spec
     'late_date':'source:imagery:latestDate', // Latest image in a mosaic - non-spec
     'PFI':'source:imagery:sensor', // Acquisition Platform Identifier - non-spec
@@ -4109,8 +4109,8 @@ tds70.rules = {
     'BA000_VDR':80,'BEN':15,'BRN':24,'CID':20,'ETZ':24,'GB052_RIDH':14,'GB052_RIDL':14,'IKO':14,'MDE':20,'NA8':80,
     'RIN_RTN':24,'RIN_RTN2':24,'RIN_RTN3':24,'UFI':254,'URI':254,'VOI':14,'WPI':14,'ZI001_SDV':20,'ZI001_VSD':20,
     'ZI002_UFI':254,'ZI005_FNA':200,'ZI005_FNA2':200,'ZI005_NFN':18,'ZI005_NFN2':18,'ZSAX_RS0':14,'ZSAX_RX0':254,
-    'ZSAX_RX3':254, 'ZSAX_RX4':254, 'AEI':254, 'earlyDate':20, 'lateDate':20, 'img_layer':254, 'img_mosaic':3,
-    'PFI':15
+    'ZSAX_RX3':254, 'ZSAX_RX4':254, 'imagery_id':254, 'legacy_id':254, 'earlyDate':20, 'lateDate':20, 'img_layer':254,
+    'img_mosaic':3, 'PFI':15
   },
   // ##### End of txtLength #####
 
