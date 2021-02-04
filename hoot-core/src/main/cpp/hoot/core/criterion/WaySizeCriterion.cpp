@@ -22,42 +22,35 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#include "DisconnectedWayCriterion.h"
+#include "WaySizeCriterion.h"
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, DisconnectedWayCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, WaySizeCriterion)
 
-DisconnectedWayCriterion::DisconnectedWayCriterion()
+WaySizeCriterion::WaySizeCriterion(
+  const int comparisonSize, const NumericComparisonType& numericComparisonType) :
+_comparisonSize(comparisonSize),
+_numericComparisonType(numericComparisonType)
 {
 }
 
-DisconnectedWayCriterion::DisconnectedWayCriterion(ConstOsmMapPtr map) :
-_map(map)
+bool WaySizeCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-}
-
-bool DisconnectedWayCriterion::isSatisfied(const ConstElementPtr& e) const
-{
-  if (!_map)
-  {
-    throw IllegalArgumentException("No map set on " + className());
-  }
-
   if (e && e->getElementType() == ElementType::Way)
   {
     LOG_VART(e->getElementId());
-    ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
-    LOG_VART(way->getNodeCount());
-    LOG_VART(WayUtils::hasConnectedWays(way->getId(), _map));
-    return way->getNodeCount() > 0 && !WayUtils::hasConnectedWays(way->getId(), _map);
+    return
+      _numericComparisonType.satisfiesComparison(
+        (std::dynamic_pointer_cast<const Way>(e))->getNodeCount(), _comparisonSize);
   }
   return false;
 }

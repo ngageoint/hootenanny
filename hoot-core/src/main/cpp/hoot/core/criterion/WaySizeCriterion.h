@@ -22,65 +22,49 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef NUMERIC_COMPARISON_TYPE_H
-#define NUMERIC_COMPARISON_TYPE_H
+#ifndef WAY_SIZE_CRITERION_H
+#define WAY_SIZE_CRITERION_H
 
-// Hoot
-#include <hoot/core/util/HootException.h>
-
-// Qt
-#include <QString>
+// hoot
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/util/NumericComparisonType.h>
 
 namespace hoot
 {
 
-/**
- * Enumeration dealing with comparisons between numeric values
- */
-class NumericComparisonType
+class WaySizeCriterion : public ElementCriterion
 {
-
 public:
 
-  typedef enum Type
-  {
-    EqualTo = 0,
-    LessThan,
-    LessThanOrEqualTo,
-    GreaterThan,
-    GreaterThanOrEqualTo
-  } Type;
+  static QString className() { return "hoot::WaySizeCriterion"; }
 
-  NumericComparisonType();
-  NumericComparisonType(Type type);
-  NumericComparisonType(int type);
-
-  bool operator==(NumericComparisonType t) const;
-  bool operator!=(NumericComparisonType t) const;
-
-  Type getEnum() const { return _type; }
-
-  QString toString() const;
-  static Type fromString(QString typeString);
+  WaySizeCriterion() = default;
+  WaySizeCriterion(const int comparisonSize, const NumericComparisonType& numericComparisonType);
+  virtual ~WaySizeCriterion() = default;
 
   /**
-   * TODO
-   *
-   * @param valueToEvaluate
-   * @param comparisonValue
-   * @return
+   * @see ElementCriterion
    */
-  bool satisfiesComparison(const double valueToEvaluate, const double comparisonValue) const;
+  virtual bool isSatisfied(const ConstElementPtr& e) const override;
+
+  virtual ElementCriterionPtr clone() override
+  { return ElementCriterionPtr(new WaySizeCriterion()); }
+
+  virtual QString getDescription() const override
+  { return "Identifies that meet a size threshold"; }
+
+  virtual QString getName() const override { return className(); }
+
+  virtual QString getClassName() const override { return className(); }
 
 private:
 
-  NumericComparisonType::Type _type;
-
-  static Type intToType(const int intType);
+  int _comparisonSize;
+  NumericComparisonType _numericComparisonType;
 };
 
 }
 
-#endif // NUMERIC_COMPARISON_TYPE_H
+#endif // WAY_SIZE_CRITERION_H
