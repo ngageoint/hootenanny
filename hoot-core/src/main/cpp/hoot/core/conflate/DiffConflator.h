@@ -42,6 +42,7 @@
 
 // tgs
 #include <tgs/HashMap.h>
+#include <tgs/System/Timer.h>
 
 // Qt
 #include <QString>
@@ -227,11 +228,17 @@ private:
   QString _tagChangesetStats;
   QString _unifiedChangesetStats;
 
+  Tgs::Timer _timer;
+
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
    * might be thrown during apply() clean up the leftovers nicely (albeit delayed).
    */
   void _reset();
+
+  void _discardUnconflatableElements();
+
+  void _findMatches();
 
   void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr> matches);
 
@@ -260,6 +267,10 @@ private:
 
   QSet<ElementId> _getElementIdsInvolvedInOnlyIntraDatasetMatches(
     const std::vector<ConstMatchPtr>& matches);
+
+  void _removeRefData();
+
+  void _removeMetadataTags();
 };
 
 }

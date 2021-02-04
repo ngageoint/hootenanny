@@ -62,9 +62,6 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
 
-// tgs
-#include <tgs/System/Timer.h>
-
 // Qt
 #include <QElapsedTimer>
 
@@ -112,6 +109,11 @@ void DiffConflator::_reset()
   _pMap.reset();
   _pTagChanges.reset();
   _numSnappedWays = 0;
+
+  _geometryChangesetStats = "";
+  _tagChangesetStats = "";
+  _unifiedChangesetStats = "";
+  _numUnconflatableElementsDiscarded = 0;
 }
 
 void DiffConflator::setConfiguration(const Settings& conf)
@@ -125,65 +127,27 @@ void DiffConflator::apply(OsmMapPtr& map)
 {
   LOG_INFO("Calculating differential output...");
 
-  Timer timer;
-  _reset();
+  // This status progress reporting could get way more granular, but we'll go with this for now to
+  // avoid overloading users with status.
   int currentStep = 1;  // tracks the current job task step for progress reporting
-  _numSnappedWays = 0;
-  _geometryChangesetStats = "";
-  _tagChangesetStats = "";
-  _unifiedChangesetStats = "";
-  _numUnconflatableElementsDiscarded = 0;
-
+  _updateProgress(currentStep - 1, "Matching features...");
+  _reset();
   // Store the map, as we might need it for tag diff later.
   _pMap = map;
 
-  // This status progress reporting could get way more granular, but we'll go with this for now to
-  // avoid overloading users with status.
-
-  _updateProgress(currentStep - 1, "Matching features...");
-
-  // If we skip this part, then any non-matchable data will simply pass through to output.
+  // If we skip this part, then any unmatchable data will simply pass through to output, which can
+  // be useful during debugging.
   if (ConfigOptions().getDifferentialRemoveUnconflatableData())
   {
-    LOG_STATUS("Discarding unconflatable elements...");
-    const int mapSizeBefore = _pMap->size();
-    NonConflatableElementRemover().apply(_pMap);
-    MemoryUsageChecker::getInstance().check();
-    _stats.append(
-      SingleStat("Remove Non-conflatable Elements Time (sec)", timer.getElapsedAndRestart()));
-    OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
-    _numUnconflatableElementsDiscarded = mapSizeBefore - _pMap->size();
-    LOG_INFO(
-      "Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
-      " unconflatable elements.");
+    _discardUnconflatableElements();
   }
 
-  // will reproject only if necessary
-  MapProjector::projectToPlanar(_pMap);
-  _stats.append(SingleStat("Project to Planar Time (sec)", timer.getElapsedAndRestart()));
+  MapProjector::projectToPlanar(_pMap); // will actually reproject here only if necessary
+  _stats.append(SingleStat("Project to Planar Time (sec)", _timer.getElapsedAndRestart()));
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-projecting-to-planar");
 
   // find all the matches in this map
-  _intraDatasetMatchOnlyElementIds.clear();
-  _intraDatasetElementIdsPopulated = false;
-  if (_matchThreshold.get())
-  {
-    _matchFactory.createMatches(_pMap, _matches, _bounds, _matchThreshold);
-  }
-  else
-  {
-    _matchFactory.createMatches(_pMap, _matches, _bounds);
-  }
-  MemoryUsageChecker::getInstance().check();
-  LOG_DEBUG(
-    "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
-    " Differential Conflation match conflicts to be removed.");
-  double findMatchesTime = timer.getElapsedAndRestart();
-  _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
-  _stats.append(SingleStat("Number of Matches Found", _matches.size()));
-  _stats.append(SingleStat("Number of Matches Found per Second",
-    (double)_matches.size() / findMatchesTime));
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-matching");
+  _findMatches();
 
   currentStep++;
 
@@ -193,9 +157,12 @@ void DiffConflator::apply(OsmMapPtr& map)
     // because that operation deletes all of the info needed for calculating the tag diff.
     _updateProgress(currentStep - 1, "Storing tag differentials...");
     _calcAndStoreTagChanges();
-    MemoryUsageChecker::getInstance().check();
     currentStep++;
   }
+
+  // Get rid of everything from the ref1 map that matched something in the ref2 map. Note, there is
+  // a deficiency here in that partial matches won't lead to only partial features in ref 1 being
+  // dropped...the entire feature will be dropped, including the parts that didn't match (#4311).
 
   QString message = "Dropping match conflicts";
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
@@ -221,43 +188,52 @@ void DiffConflator::apply(OsmMapPtr& map)
 
   if (ConfigOptions().getDifferentialRemoveReferenceData())
   {
-    // _pMap at this point contains all of input1, we are going to delete everything left that
-    // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
-    // differential that we want.
-    _removeMatches(Status::Unknown1);
-    MemoryUsageChecker::getInstance().check();
-
-    LOG_INFO("\tRemoving all reference elements...");
-
-    // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed
-    // to properly generate the changeset and keep sec ways snapped in the final output.
-    ElementCriterionPtr refCrit(new TagKeyCriterion(MetadataTags::Ref1()));
-    ElementCriterionPtr notSnappedCrit(
-      NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
-    ElementCriterionPtr removeCrit(ChainCriterionPtr(new ChainCriterion(refCrit, notSnappedCrit)));
-
-    RemoveElementsVisitor removeRef1Visitor;
-    removeRef1Visitor.setRecursive(true);
-    removeRef1Visitor.addCriterion(removeCrit);
-    const int mapSizeBefore = _pMap->size();
-    _pMap->visitRw(removeRef1Visitor);
-    MemoryUsageChecker::getInstance().check();
-    OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
-
-    LOG_DEBUG(
-      "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
-      " reference elements...");
+    _removeRefData();
   }
 
   if (!ConfigOptions().getWriterIncludeDebugTags())
   {
-    QStringList tagKeysToRemove;
-    tagKeysToRemove.append(MetadataTags::Ref1());
-    tagKeysToRemove.append(MetadataTags::Ref2());
-    tagKeysToRemove.append(MetadataTags::HootSnapped());
-    RemoveTagsVisitor tagRemover(tagKeysToRemove);
-    map->visitRw(tagRemover);
+    _removeMetadataTags();
   }
+}
+
+void DiffConflator::_discardUnconflatableElements()
+{
+  LOG_STATUS("Discarding unconflatable elements...");
+  const int mapSizeBefore = _pMap->size();
+  NonConflatableElementRemover().apply(_pMap);
+  MemoryUsageChecker::getInstance().check();
+  _stats.append(
+    SingleStat("Remove Non-conflatable Elements Time (sec)", _timer.getElapsedAndRestart()));
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing non-conflatable");
+  _numUnconflatableElementsDiscarded = mapSizeBefore - _pMap->size();
+  LOG_INFO(
+    "Discarded " << StringUtils::formatLargeNumber(_numUnconflatableElementsDiscarded) <<
+    " unconflatable elements.");
+}
+
+void DiffConflator::_findMatches()
+{
+  _intraDatasetMatchOnlyElementIds.clear();
+  _intraDatasetElementIdsPopulated = false;
+  if (_matchThreshold.get())
+  {
+    _matchFactory.createMatches(_pMap, _matches, _bounds, _matchThreshold);
+  }
+  else
+  {
+    _matchFactory.createMatches(_pMap, _matches, _bounds);
+  }
+  MemoryUsageChecker::getInstance().check();
+  LOG_DEBUG(
+    "Found: " << StringUtils::formatLargeNumber(_matches.size()) <<
+    " Differential Conflation match conflicts to be removed.");
+  double findMatchesTime = _timer.getElapsedAndRestart();
+  _stats.append(SingleStat("Find Matches Time (sec)", findMatchesTime));
+  _stats.append(SingleStat("Number of Matches Found", _matches.size()));
+  _stats.append(SingleStat("Number of Matches Found per Second",
+    (double)_matches.size() / findMatchesTime));
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-matching");
 }
 
 void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
@@ -484,6 +460,36 @@ void DiffConflator::_removeMatches(const Status& status)
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-" + status.toString() + "-matches");
 }
 
+void DiffConflator::_removeRefData()
+{
+  LOG_INFO("\tRemoving all reference elements...");
+
+  // _pMap at this point contains all of input1, we are going to delete everything left that
+  // belongs to a match pair. Then we will delete all remaining input1 items...leaving us with the
+  // differential that we want.
+  _removeMatches(Status::Unknown1);
+  MemoryUsageChecker::getInstance().check();
+
+  // Now remove input1 elements. Don't remove any features involved in a snap, as they are needed
+  // to properly generate the changeset and keep sec ways snapped in the final output.
+  ElementCriterionPtr refCrit(new TagKeyCriterion(MetadataTags::Ref1()));
+  ElementCriterionPtr notSnappedCrit(
+    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
+  ElementCriterionPtr removeCrit(ChainCriterionPtr(new ChainCriterion(refCrit, notSnappedCrit)));
+
+  RemoveElementsVisitor removeRef1Visitor;
+  removeRef1Visitor.setRecursive(true);
+  removeRef1Visitor.addCriterion(removeCrit);
+  const int mapSizeBefore = _pMap->size();
+  _pMap->visitRw(removeRef1Visitor);
+  MemoryUsageChecker::getInstance().check();
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-ref-elements");
+
+  LOG_DEBUG(
+    "Removed " << StringUtils::formatLargeNumber(mapSizeBefore - _pMap->size()) <<
+    " reference elements...");
+}
+
 void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges)
 {
   while (pChanges->hasMoreChanges())
@@ -625,6 +631,7 @@ void DiffConflator::_calcAndStoreTagChanges()
     " matches in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << ".");
 
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
+  MemoryUsageChecker::getInstance().check();
 }
 
 bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags) const
@@ -830,6 +837,16 @@ void DiffConflator::_updateProgress(const int currentStep, const QString message
     _progress.setFromRelative(
       (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
   }
+}
+
+void DiffConflator::_removeMetadataTags()
+{
+  QStringList tagKeysToRemove;
+  tagKeysToRemove.append(MetadataTags::Ref1());
+  tagKeysToRemove.append(MetadataTags::Ref2());
+  tagKeysToRemove.append(MetadataTags::HootSnapped());
+  RemoveTagsVisitor tagRemover(tagKeysToRemove);
+  _pMap->visitRw(tagRemover);
 }
 
 }
