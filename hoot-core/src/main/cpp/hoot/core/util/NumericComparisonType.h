@@ -66,11 +66,12 @@ public:
   static Type fromString(QString typeString);
 
   /**
-   * TODO
+   * Determines if a value satisfies this numeric comparison
    *
-   * @param valueToEvaluate
-   * @param comparisonValue
-   * @return
+   * @param valueToEvaluate the value to evaluate
+   * @param comparisonValue the value to evaluate against
+   * @return true if valueToEvaluate satisfies the configured relationship with comparisonValue;
+   * false otherwise
    */
   bool satisfiesComparison(const double valueToEvaluate, const double comparisonValue) const;
 

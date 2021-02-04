@@ -57,7 +57,9 @@ bool DisconnectedWayCriterion::isSatisfied(const ConstElementPtr& e) const
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     LOG_VART(way->getNodeCount());
     LOG_VART(WayUtils::hasConnectedWays(way->getId(), _map));
-    return way->getNodeCount() > 0 && !WayUtils::hasConnectedWays(way->getId(), _map);
+    return
+      way->getNodeCount() > 0 && !way->isClosedArea() &&
+      !WayUtils::hasConnectedWays(way->getId(), _map);
   }
   return false;
 }
