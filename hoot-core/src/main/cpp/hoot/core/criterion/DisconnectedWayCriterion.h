@@ -62,7 +62,7 @@ public:
   { return ElementCriterionPtr(new DisconnectedWayCriterion(_map)); }
 
   virtual QString getDescription() const override
-  { return "Identifies way that are connected to no other ways"; }
+  { return "Identifies ways that are connected to no other ways"; }
 
   virtual QString getName() const override { return className(); }
 
