@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "AttributeValueCriterion.h"
 
@@ -151,21 +151,9 @@ bool AttributeValueCriterion::_satisfiesComparison(const QVariant& val) const
       return false;
     }
 
-    switch (_comparisonType)
-    {
-      case NumericComparisonType::EqualTo:
-        return numericVal == _comparisonVal.toDouble();
-      case NumericComparisonType::LessThan:
-        return numericVal < _comparisonVal.toDouble();
-      case NumericComparisonType::LessThanOrEqualTo:
-        return numericVal <= _comparisonVal.toDouble();
-      case NumericComparisonType::GreaterThan:
-        return numericVal > _comparisonVal.toDouble();
-      case NumericComparisonType::GreaterThanOrEqualTo:
-        return numericVal >= _comparisonVal.toDouble();
-      default:
-        throw IllegalArgumentException("Invalid comparison type: " + _comparisonType);
-    }
+    return
+      NumericComparisonType(_comparisonType).satisfiesComparison(
+        numericVal, _comparisonVal.toDouble());
   }
   else
   {

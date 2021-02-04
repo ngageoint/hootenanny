@@ -82,7 +82,9 @@ private:
 
   // the number of orphaned nodes found in the final output if _tagQualityIssues=true
   int _orphanedNodes;
-  // the number of disconnected ways found in the final output if _tagQualityIssues=true
+  // the number of disconnected ways found in the final output if _tagQualityIssues=true; Clearly,
+  // disconnected ways can be valid features. Monitoring a sudden increase of them in output can
+  // indicate the presence of a new conflate problem.
   int _disconnectedWays;
   // the number of empty ways found in the final output if _tagQualityIssues=true
   int _emptyWays;

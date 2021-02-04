@@ -22,47 +22,38 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef DISCONNECTED_WAY_CRITERION_H
-#define DISCONNECTED_WAY_CRITERION_H
+#ifndef WAY_SIZE_CRITERION_H
+#define WAY_SIZE_CRITERION_H
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/NumericComparisonType.h>
 
 namespace hoot
 {
 
-/**
- * @todo implement OperationStatus
- */
-class DisconnectedWayCriterion : public ElementCriterion, public ConstOsmMapConsumer
+class WaySizeCriterion : public ElementCriterion
 {
 public:
 
-  static QString className() { return "hoot::DisconnectedWayCriterion"; }
+  static QString className() { return "hoot::WaySizeCriterion"; }
 
-  DisconnectedWayCriterion();
-  DisconnectedWayCriterion(ConstOsmMapPtr map);
-  virtual ~DisconnectedWayCriterion() = default;
+  WaySizeCriterion() = default;
+  WaySizeCriterion(const int comparisonSize, const NumericComparisonType& numericComparisonType);
+  virtual ~WaySizeCriterion() = default;
 
   /**
    * @see ElementCriterion
    */
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  /**
-   * @see ConstOsmMapConsumer
-   */
-  virtual void setOsmMap(const OsmMap* map) override { _map = map->shared_from_this(); }
-
   virtual ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new DisconnectedWayCriterion(_map)); }
+  { return ElementCriterionPtr(new WaySizeCriterion()); }
 
   virtual QString getDescription() const override
-  { return "Identifies ways that are connected to no other ways"; }
+  { return "Identifies that meet a size threshold"; }
 
   virtual QString getName() const override { return className(); }
 
@@ -70,9 +61,10 @@ public:
 
 private:
 
-  ConstOsmMapPtr _map;
+  int _comparisonSize;
+  NumericComparisonType _numericComparisonType;
 };
 
 }
 
-#endif // DISCONNECTED_WAY_CRITERION_H
+#endif // WAY_SIZE_CRITERION_H
