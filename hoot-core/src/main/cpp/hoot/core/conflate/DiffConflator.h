@@ -31,7 +31,6 @@
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
 #include <hoot/core/conflate/matching/Match.h>
-#include <hoot/core/conflate/matching/MatchGraph.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/info/SingleStat.h>
 #include <hoot/core/ops/OsmMapOperation.h>
@@ -39,7 +38,7 @@
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ProgressReporter.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/io/OsmChangesetFileWriter.h>
+#include <hoot/core/io/ChangesetStatsFormat.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -54,19 +53,12 @@ class MatchFactory;
 class MatchThreshold;
 
 /**
- * Re-entrant but not thread safe.
- *
- * While this object is serializable it doesn't maintain state across serialization. It simply
- * uses the default configuration. This should probably be made more robust in the future, but
- * works fine for now.
- *
  * The idea behind the Differential Conflator is to do the "easy" conflation - to essentially
  * ignore anything that would be a possible conflict. The proposed conops are to conflate
- * input1 and input2, and have hoot spit out everything from input2, with anything that would
- * conflict with input1 removed. Is it really a conflation operation? No, because nothing gets
- * merged. It's not a true diff, either, because it won't tell you stuff that was in input1, but
- * not input2. It's basically answering the question: what can I super-easily merge from dataset2
- * into dataset1?
+ * input1 and input2, and spit out everything from input2, with anything that would conflict with
+ * input1 removed. Is it really a conflation operation? No, because nothing gets merged. It's not a
+ * true diff, either, because it won't tell you stuff that was in input1, but not input2. It's
+ * basically answering the question: what can I super-easily merge from dataset2 into dataset1?
  *
  * The diff conflator also supports calculating a tag differential, but again this is approached
  * from a, "What updates are in the second dataset?" perspective. To this end, the conflator
@@ -76,9 +68,9 @@ class MatchThreshold;
  * element replace the tags from the input1 element. The output from the tag-differencing
  * will always be an osm changeset (*.osc).
  *
- * getTagDiff gets the tag differential between the maps. To do this, we look through all of the
- * matches, and compare tags. A set of newer tags is returned as a changeset (because updating the
- * tags requires a modify operation).
+ * Re-entrant but not thread safe. While this object is serializable, it doesn't maintain state
+ * across serialization. It simply uses the default configuration. This should probably be made
+ * more robust in the future, but works fine for now.
  */
 class DiffConflator : public OsmMapOperation, public Boundable, public Configurable,
   public ProgressReporter
@@ -133,15 +125,18 @@ public:
   virtual void setConfiguration(const Settings &conf);
 
   virtual QString getDescription() const
-  { return "Conflates two maps into a single map based on the difference between the inputs"; }
+  { return "Creates a map with features from the second input which are not in the first"; }
 
   /**
    * @brief getTagDiff - Gets the tag differential that was calculated during the
    * conflation. This will be a list of 'modify' changes that contain tag updates
    * for elements that matched between the input maps.
+   *
+   * To calculate these changes we look through all of the matches, and compare tags. A set of newer
+   * tags is returned as a changeset (because updating the tags requires a modify operation).
    * @return - A changeset provider that can be used with ChangesetWriter classes
    */
-  MemChangesetProviderPtr getTagDiff();
+  MemChangesetProviderPtr getTagDiff() { return _pTagChanges; }
 
   /**
    * @brief storeOriginalMap - Stores the original map. This is necessary
@@ -240,8 +235,8 @@ private:
 
   void _validateConflictSubset(const ConstOsmMapPtr& map, std::vector<ConstMatchPtr> matches);
 
-  void _printMatches(std::vector<ConstMatchPtr> matches);
-  void _printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter);
+  void _printMatches(std::vector<ConstMatchPtr> matches) const;
+  void _printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter) const;
 
   ChangesetProviderPtr _getChangesetFromMap(OsmMapPtr pMap);
 
@@ -250,7 +245,7 @@ private:
 
   // Decides if the newTags should replace the oldTags. Among other things, it checks the
   // differential.tag.ignore.list
-  bool _tagsAreDifferent(const Tags& oldTags, const Tags& newTags);
+  bool _tagsAreDifferent(const Tags& oldTags, const Tags& newTags) const;
 
   // Creates a change object using the original element and new tags
   Change _getChange(ConstElementPtr pOldElement, ConstElementPtr pNewElement);

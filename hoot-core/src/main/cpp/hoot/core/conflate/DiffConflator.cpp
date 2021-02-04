@@ -28,17 +28,13 @@
 
 // hoot
 #include <hoot/core/algorithms/changeset/MultipleChangesetProvider.h>
-#include <hoot/core/conflate/matching/GreedyConstrainedMatches.h>
-#include <hoot/core/conflate/matching/MatchClassification.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/PoiCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -59,20 +55,14 @@
 #include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
 #include <hoot/core/criterion/ChainCriterion.h>
-#include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
-
-// standard
-#include <algorithm>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
 
 // tgs
-#include <tgs/System/SystemInfo.h>
-#include <tgs/System/Time.h>
 #include <tgs/System/Timer.h>
 
 // Qt
@@ -116,22 +106,19 @@ DiffConflator::~DiffConflator()
   _reset();
 }
 
+void DiffConflator::_reset()
+{
+  _matches.clear();
+  _pMap.reset();
+  _pTagChanges.reset();
+  _numSnappedWays = 0;
+}
+
 void DiffConflator::setConfiguration(const Settings& conf)
 {
   _settings = conf;
   _matchThreshold.reset();
   _reset();
-}
-
-void DiffConflator::_updateProgress(const int currentStep, const QString message)
-{
-  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
-  // just an empty progress object, and we shouldn't log progress.
-  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
-  {
-    _progress.setFromRelative(
-      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
-  }
 }
 
 void DiffConflator::apply(OsmMapPtr& map)
@@ -273,110 +260,56 @@ void DiffConflator::apply(OsmMapPtr& map)
   }
 }
 
-long DiffConflator::_snapSecondaryRoadsBackToRef()
+void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
 {
-  UnconnectedWaySnapper roadSnapper;
-  roadSnapper.setConfiguration(conf());
-  // The ref snapped features must be marked to prevent their removal before changeset generation
-  // later on.
-  roadSnapper.setMarkSnappedNodes(true);
-  roadSnapper.setMarkSnappedWays(true);
-  LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
-  roadSnapper.apply(_pMap);
-  LOG_DEBUG("\t" << roadSnapper.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
+  // Check map to make sure it contains only Unknown1 elements
+  // TODO: valid and conflated could be in here too, should we check for them as well?
+  ElementCriterionPtr pStatusCrit(new StatusCriterion(Status::Unknown2));
+  CriterionCountVisitor countVtor(pStatusCrit);
+  pMap->visitRo(countVtor);
 
-  // Since way splitting was done as part of the conflate pre ops previously run and we've now
-  // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
-  // If not, some ref linear data may incorrectly drop out of the diff.
-  WayJoinerOp wayJoiner;
-  wayJoiner.setConfiguration(conf());
-  LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
-  wayJoiner.apply(_pMap);
-  LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-way-joining");
+  if (countVtor.getCount() > 0)
+  {
+    // Not something a user can generally cause - more likely it's a misuse of this class.
+    throw IllegalArgumentException(
+      "Map elements with Status::Unknown2 found when storing original map for diff conflation. "
+      "This can cause unpredictable results. The original map should contain only Status::Unknown1 "
+      "elements. ");
+  }
 
-  // No point in running way joining a second time in post conflate ops since we already did it here
-  // (its configured in post ops by default), so let's remove it.
-  ConfigUtils::removeListOpEntry(
-    ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
+  // Use the copy constructor to copy the entire map.
+  _pOriginalMap.reset(new OsmMap(pMap));
 
-  return roadSnapper.getNumFeaturesAffected();
+  // We're storing this part off for potential use later on if any roads get snapped after
+  // conflation. Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
+  // TODO: Can we filter this down to whatever feature type the snapping is configured for?
+  std::shared_ptr<NotCriterion> crit(
+    new NotCriterion(ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref2()))));
+  CopyMapSubsetOp mapCopier(pMap, crit);
+  _pOriginalRef1Map.reset(new OsmMap());
+  mapCopier.apply(_pOriginalRef1Map);
 }
 
-void DiffConflator::_removeMatches(const Status& status)
+std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
 {
-  LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
+  // Conflation requires all data to be in memory, so no point in adding support for the
+  // ExternalMergeElementSorter here.
+  InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
+  InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
+  std::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
+  //  Deriving changesets for differential shouldn't include any deletes, create and modify only
+  delta->setAllowDeletingReferenceFeatures(false);
+  return delta;
+}
 
-  const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
-  LOG_VARD(treatReviewsAsMatches);
-
-  if (!_intraDatasetElementIdsPopulated)
-  {
-    _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
-    _intraDatasetElementIdsPopulated = true;
-  }
-
-  ElementCriterionPtr notSnappedCrit(
-    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
-
-  for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
-  {
-    ConstMatchPtr match = *mit;
-    if (treatReviewsAsMatches || match->getType() != MatchType::Review)
-    {
-      LOG_VART(match);
-      LOG_VART(match->getClassification().getMissP());
-      LOG_VART(match->getClassification().getReviewP());
-
-      std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
-      for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
-           pit != pairs.end(); ++pit)
-      {  
-        ElementPtr e1;
-        ElementPtr e2;
-
-        if (!pit->first.isNull())
-        {
-          LOG_VART(pit->first);
-          e1 = _pMap->getElement(pit->first);
-
-        }
-        if (!pit->second.isNull())
-        {
-          LOG_VART(pit->second);
-          e2 = _pMap->getElement(pit->second);
-        }
-
-        if (e1 &&
-            e1->getStatus() == status &&
-            // We don't want to remove any ref snapped ways here. They need to be included in the
-            // resulting diff in order to be properly updated in the final output.
-            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e1)) &&
-            // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
-            // these to be removed from the diff output.
-            !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
-              _intraDatasetMatchOnlyElementIds.contains(pit->first)))
-        {
-          LOG_TRACE("Removing element involved in match: " << pit->first << "...");
-          RecursiveElementRemover(pit->first).apply(_pMap);
-        }
-        if (e2 &&
-            e2->getStatus() == status &&
-            // see related comment above
-            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e2)) &&
-            // see related comment above
-            !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
-             _intraDatasetMatchOnlyElementIds.contains(pit->second)))
-        {
-          LOG_TRACE("Removing element involved in match: " << pit->second << "...");
-          RecursiveElementRemover(pit->second).apply(_pMap);
-        }
-      }
-    }
-  }
-
-  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-" + status.toString() + "-matches");
+void DiffConflator::markInputElements(OsmMapPtr pMap)
+{
+  // Mark input1 elements
+  Settings visitorConf;
+  visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
+  std::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
+  pRef1v->setConfiguration(visitorConf);
+  pMap->visitRw(*pRef1v);
 }
 
 QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
@@ -445,49 +378,110 @@ QSet<ElementId> DiffConflator::_getElementIdsInvolvedInOnlyIntraDatasetMatches(
   return elementIds;
 }
 
-MemChangesetProviderPtr DiffConflator::getTagDiff()
+long DiffConflator::_snapSecondaryRoadsBackToRef()
 {
-  return _pTagChanges;
+  UnconnectedWaySnapper roadSnapper;
+  roadSnapper.setConfiguration(conf());
+  // The ref snapped features must be marked to prevent their removal before changeset generation
+  // later on.
+  roadSnapper.setMarkSnappedNodes(true);
+  roadSnapper.setMarkSnappedWays(true);
+  LOG_INFO("\t" << roadSnapper.getInitStatusMessage());
+  roadSnapper.apply(_pMap);
+  LOG_DEBUG("\t" << roadSnapper.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-road-snapping");
+
+  // Since way splitting was done as part of the conflate pre ops previously run and we've now
+  // snapped unconnected ways, we need to rejoin any split ways *before* we remove reference data.
+  // If not, some ref linear data may incorrectly drop out of the diff.
+  WayJoinerOp wayJoiner;
+  wayJoiner.setConfiguration(conf());
+  LOG_INFO("\t" << wayJoiner.getInitStatusMessage());
+  wayJoiner.apply(_pMap);
+  LOG_DEBUG("\t" << wayJoiner.getCompletedStatusMessage());
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-way-joining");
+
+  // No point in running way joining a second time in post conflate ops since we already did it here
+  // (its configured in post ops by default), so let's remove it.
+  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getConflatePostOpsKey(), WayJoinerOp::className());
+
+  return roadSnapper.getNumFeaturesAffected();
 }
 
-void DiffConflator::storeOriginalMap(OsmMapPtr& pMap)
+void DiffConflator::_removeMatches(const Status& status)
 {
-  // Check map to make sure it contains only Unknown1 elements
-  // TODO: valid and conflated could be in here too, should we check for them as well?
-  ElementCriterionPtr pStatusCrit(new StatusCriterion(Status::Unknown2));
-  CriterionCountVisitor countVtor(pStatusCrit);
-  pMap->visitRo(countVtor);
+  LOG_DEBUG("\tRemoving match elements with status: " << status.toString() << "...");
 
-  if (countVtor.getCount() > 0)
+  const bool treatReviewsAsMatches = ConfigOptions().getDifferentialTreatReviewsAsMatches();
+  LOG_VARD(treatReviewsAsMatches);
+
+  if (!_intraDatasetElementIdsPopulated)
   {
-    // Not something a user can generally cause - more likely it's a misuse of this class.
-    throw IllegalArgumentException(
-      "Map elements with Status::Unknown2 found when storing original map for diff conflation. "
-      "This can cause unpredictable results. The original map should contain only Status::Unknown1 "
-      "elements. ");
+    _intraDatasetMatchOnlyElementIds = _getElementIdsInvolvedInOnlyIntraDatasetMatches(_matches);
+    _intraDatasetElementIdsPopulated = true;
   }
 
-  // Use the copy constructor to copy the entire map.
-  _pOriginalMap.reset(new OsmMap(pMap));
+  ElementCriterionPtr notSnappedCrit(
+    NotCriterionPtr(new NotCriterion(new TagKeyCriterion(MetadataTags::HootSnapped()))));
 
-  // We're storing this part off for potential use later on if any roads get snapped after
-  // conflation. Get rid of ref2 and children. See additional comments in _getChangesetFromMap.
-  // TODO: Can we filter this down to whatever feature type the snapping is configured for?
-  std::shared_ptr<NotCriterion> crit(
-    new NotCriterion(ElementCriterionPtr(new TagKeyCriterion(MetadataTags::Ref2()))));
-  CopyMapSubsetOp mapCopier(pMap, crit);
-  _pOriginalRef1Map.reset(new OsmMap());
-  mapCopier.apply(_pOriginalRef1Map);
-}
+  for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
+  {
+    ConstMatchPtr match = *mit;
+    if (treatReviewsAsMatches || match->getType() != MatchType::Review)
+    {
+      LOG_VART(match);
+      LOG_VART(match->getClassification().getMissP());
+      LOG_VART(match->getClassification().getReviewP());
 
-void DiffConflator::markInputElements(OsmMapPtr pMap)
-{
-  // Mark input1 elements
-  Settings visitorConf;
-  visitorConf.set(ConfigOptions::getAddRefVisitorInformationOnlyKey(), "false");
-  std::shared_ptr<AddRef1Visitor> pRef1v(new AddRef1Visitor());
-  pRef1v->setConfiguration(visitorConf);
-  pMap->visitRw(*pRef1v);
+      std::set<std::pair<ElementId, ElementId>> pairs = match->getMatchPairs();
+      for (std::set<std::pair<ElementId, ElementId>>::iterator pit = pairs.begin();
+           pit != pairs.end(); ++pit)
+      {
+        ElementPtr e1;
+        ElementPtr e2;
+
+        if (!pit->first.isNull())
+        {
+          LOG_VART(pit->first);
+          e1 = _pMap->getElement(pit->first);
+
+        }
+        if (!pit->second.isNull())
+        {
+          LOG_VART(pit->second);
+          e2 = _pMap->getElement(pit->second);
+        }
+
+        if (e1 &&
+            e1->getStatus() == status &&
+            // We don't want to remove any ref snapped ways here. They need to be included in the
+            // resulting diff in order to be properly updated in the final output.
+            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e1)) &&
+            // poi/poly is the only conflation type that allows intra-dataset matches. We don't want
+            // these to be removed from the diff output.
+            !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
+              _intraDatasetMatchOnlyElementIds.contains(pit->first)))
+        {
+          LOG_TRACE("Removing element involved in match: " << pit->first << "...");
+          RecursiveElementRemover(pit->first).apply(_pMap);
+        }
+        if (e2 &&
+            e2->getStatus() == status &&
+            // see related comment above
+            (status != Status::Unknown1 || notSnappedCrit->isSatisfied(e2)) &&
+            // see related comment above
+            !(match->getName() == PoiPolygonMatch::MATCH_NAME &&
+             _intraDatasetMatchOnlyElementIds.contains(pit->second)))
+        {
+          LOG_TRACE("Removing element involved in match: " << pit->second << "...");
+          RecursiveElementRemover(pit->second).apply(_pMap);
+        }
+      }
+    }
+  }
+
+  OsmMapWriterFactory::writeDebugMap(_pMap, "after-removing-" + status.toString() + "-matches");
 }
 
 void DiffConflator::addChangesToMap(OsmMapPtr pMap, ChangesetProviderPtr pChanges)
@@ -633,7 +627,7 @@ void DiffConflator::_calcAndStoreTagChanges()
   OsmMapWriterFactory::writeDebugMap(_pMap, "after-storing-tag-changes");
 }
 
-bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags)
+bool DiffConflator::_tagsAreDifferent(const Tags& oldTags, const Tags& newTags) const
 {
   // Always ignore metadata tags and then allow additional tags to be ignored on a case by case
   // basis.
@@ -675,46 +669,6 @@ Change DiffConflator::_getChange(ConstElementPtr pOldElement, ConstElementPtr pN
 
   // Create the change
   return Change(Change::Modify, pChangeElement);
-}
-
-void DiffConflator::_reset()
-{
-  _matches.clear();
-  _pMap.reset();
-  _pTagChanges.reset();
-  _numSnappedWays = 0;
-}
-
-void DiffConflator::_printMatches(vector<ConstMatchPtr> matches)
-{
-  for (size_t i = 0; i < matches.size(); i++)
-  {
-    LOG_DEBUG(matches[i]->toString());
-  }
-}
-
-void DiffConflator::_printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter)
-{
-  for (size_t i = 0; i < matches.size(); i++)
-  {
-    ConstMatchPtr match = matches[i];
-    if (match->getType() == typeFilter)
-    {
-      LOG_DEBUG(match);
-    }
-  }
-}
-
-std::shared_ptr<ChangesetDeriver> DiffConflator::_sortInputs(OsmMapPtr pMap1, OsmMapPtr pMap2)
-{
-  // Conflation requires all data to be in memory, so no point in adding support for the
-  // ExternalMergeElementSorter here.
-  InMemoryElementSorterPtr sorted1(new InMemoryElementSorter(pMap1));
-  InMemoryElementSorterPtr sorted2(new InMemoryElementSorter(pMap2));
-  std::shared_ptr<ChangesetDeriver> delta(new ChangesetDeriver(sorted1, sorted2));
-  //  Deriving changesets for differential shouldn't include any deletes, create and modify only
-  delta->setAllowDeletingReferenceFeatures(false);
-  return delta;
 }
 
 ChangesetProviderPtr DiffConflator::_getChangesetFromMap(OsmMapPtr pMap)
@@ -826,8 +780,8 @@ void DiffConflator::writeChangeset(
 
 void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats)
 {
-  // Differential specific stats - get some numbers for our output
-  // TODO: This should be more generic and handle all feature types.
+  // Differential specific stats
+  // TODO: These should be rolled in with the other conflate stats.
 
   ElementCriterionPtr pPoiCrit(new PoiCriterion());
   CriterionCountVisitor poiCounter;
@@ -844,6 +798,38 @@ void DiffConflator::calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stat
   LengthOfWaysVisitor lengthVisitor;
   pResultMap->visitRo(lengthVisitor);
   stats.append((SingleStat("Km of New Roads", lengthVisitor.getStat() / 1000.0)));
+}
+
+void DiffConflator::_printMatches(vector<ConstMatchPtr> matches) const
+{
+  for (size_t i = 0; i < matches.size(); i++)
+  {
+    LOG_DEBUG(matches[i]->toString());
+  }
+}
+
+void DiffConflator::_printMatches(
+  std::vector<ConstMatchPtr> matches, const MatchType& typeFilter) const
+{
+  for (size_t i = 0; i < matches.size(); i++)
+  {
+    ConstMatchPtr match = matches[i];
+    if (match->getType() == typeFilter)
+    {
+      LOG_DEBUG(match);
+    }
+  }
+}
+
+void DiffConflator::_updateProgress(const int currentStep, const QString message)
+{
+  // Always check for a valid task weight and that the job was set to running. Otherwise, this is
+  // just an empty progress object, and we shouldn't log progress.
+  if (_progress.getTaskWeight() != 0.0 && _progress.getState() == Progress::JobState::Running)
+  {
+    _progress.setFromRelative(
+      (float)currentStep / (float)getNumSteps(), Progress::JobState::Running, message);
+  }
 }
 
 }
