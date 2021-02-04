@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #ifndef NUMERIC_COMPARISON_TYPE_H
 #define NUMERIC_COMPARISON_TYPE_H
@@ -66,11 +66,12 @@ public:
   static Type fromString(QString typeString);
 
   /**
-   * TODO
+   * Determines if a value satisfies this numeric comparison
    *
-   * @param valueToEvaluate
-   * @param comparisonValue
-   * @return
+   * @param valueToEvaluate the value to evaluate
+   * @param comparisonValue the value to evaluate against
+   * @return true if valueToEvaluate satisfies the configured relationship with comparisonValue;
+   * false otherwise
    */
   bool satisfiesComparison(const double valueToEvaluate, const double comparisonValue) const;
 

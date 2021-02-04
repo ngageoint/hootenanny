@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. DigitalGlobe
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 #include "DisconnectedWayCriterion.h"
 
@@ -57,7 +57,9 @@ bool DisconnectedWayCriterion::isSatisfied(const ConstElementPtr& e) const
     ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e);
     LOG_VART(way->getNodeCount());
     LOG_VART(WayUtils::hasConnectedWays(way->getId(), _map));
-    return way->getNodeCount() > 0 && !WayUtils::hasConnectedWays(way->getId(), _map);
+    return
+      way->getNodeCount() > 0 && !way->isClosedArea() &&
+      !WayUtils::hasConnectedWays(way->getId(), _map);
   }
   return false;
 }
