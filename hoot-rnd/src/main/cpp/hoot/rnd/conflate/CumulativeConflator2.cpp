@@ -238,7 +238,13 @@ void CumulativeConflator2::_transferTagsToInputs(
   // TODO: use case specific
   args.replaceInStrings("ReferenceConflation.conf", "AttributeConflation.conf");
   _resetInitConfig(args);
+  // If this is in the pre ops, its cleaner if we don't use it during AC and just use during the
+  // ref conflate. It will go back into the pre ops for ref conflate when the original config is
+  // re-established after AC.
+  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getConflatePreOpsKey(), SmallDisconnectedWayRemover::className());
   LOG_VARD(ConfigOptions().getWayJoiner());
+  LOG_VARD(ConfigOptions().getConflatePreOps());
 
   QFileInfo tagInputInfo(_transferTagsInput);
   QFileInfo outputInfo(output);
