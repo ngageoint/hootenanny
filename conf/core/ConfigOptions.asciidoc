@@ -4617,6 +4617,13 @@ shape file and cannot be used in combination with a translation.  If this option
 then the list of columns will be automatically determined based on the most frequently populated
 tags.
 
+=== small.disconnected.way.remover.max.size
+
+* Data Type: int
+* Default Value: `-1`
+
+TODO
+
 === small.highway.merger.diff
 
 * Data Type: string

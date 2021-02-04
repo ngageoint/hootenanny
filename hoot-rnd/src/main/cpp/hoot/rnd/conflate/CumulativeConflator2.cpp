@@ -46,6 +46,7 @@
 #include <hoot/rnd/ops/DualHighwayMarker.h>
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/rnd/ops/SmallDisconnectedWayRemover.h>
 
 namespace hoot
 {
