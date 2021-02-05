@@ -57,3 +57,19 @@ sudo yum install -y java-11-openjdk java-11-openjdk-devel
 
 # Display the installed sonar version
 JAVA_HOME=/usr/lib/jvm/java-11-openjdk sonar-scanner --version
+
+# In order to run correctly in sonar, pre-compiled headers need to be turned off
+for FILENAME in \
+  "hoot-core/hoot-core.pro" \
+  "hoot-core-test/hoot-core-test.pro" \
+  "hoot-hadoop/hoot-hadoop.pro" \
+  "hoot-josm/hoot-josm.pro" \
+  "hoot-js/hoot-js.pro" \
+  "hoot-rnd/hoot-rnd.pro" \
+  "hoot-swig/hoot-swig.pro" \
+  "tgs/src/test/cpp/tgs/TgsTest.pro" \
+  "tgs/src/test/cpp/tgs/TgsTestLib.pro" \
+  "tgs/tgs.pro"
+do
+  sed -i "s/^PRECOMPILED_HEADER.*$//g" $FILENAME
+done
