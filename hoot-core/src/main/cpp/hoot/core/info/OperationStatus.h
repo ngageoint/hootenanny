@@ -44,7 +44,7 @@ class OperationStatus
 {
 public:
 
-  OperationStatus() = default;
+  OperationStatus() : _numAffected(0), _numProcessed(0) { }
   virtual ~OperationStatus() = default;
 
   /**
@@ -66,14 +66,22 @@ public:
    *
    * @return a number of elements
    */
-  virtual long getNumFeaturesAffected() const = 0;
+  virtual long getNumFeaturesAffected() const { return _numAffected; }
 
   /**
    * Returns the number of elements processed by the visitor
    *
    * @return a number of elements
    */
-  virtual long getNumFeaturesProcessed() const = 0;
+  virtual long getNumFeaturesProcessed() const { return _numProcessed; }
+
+protected:
+
+  /** Number of elements the operation actually counted or modified */
+  long _numAffected;
+  /** Number of elements the operation processed in total */
+  long _numProcessed;
+
 };
 
 }

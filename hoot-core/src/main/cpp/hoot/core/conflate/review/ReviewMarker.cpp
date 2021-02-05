@@ -90,7 +90,7 @@ QString ReviewMarker::getReviewType(const ConstOsmMapPtr& map, ReviewUid uid)
   return map->getRelation(uid.getId())->getTags()[MetadataTags::HootReviewType()];
 }
 
-set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map)
+set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr& map)
 {
   set<ElementId> result;
 
@@ -108,9 +108,15 @@ set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &m
 }
 
 set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr& map,
-  ConstElementPtr e1)
+                                                         ConstElementPtr e1)
 {
   return _getReviewRelations(map, e1->getElementId());
+}
+
+set<ReviewMarker::ReviewUid> ReviewMarker::getReviewUids(const ConstOsmMapPtr &map,
+                                                         ReviewUid uid)
+{
+  return _getReviewRelations(map, uid);
 }
 
 bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1)
@@ -138,7 +144,7 @@ bool ReviewMarker::isNeedsReview(const ConstOsmMapPtr& map, ConstElementPtr e1, 
   return intersection.size() >= 1;
 }
 
-bool ReviewMarker::isReview(ConstElementPtr e)
+bool ReviewMarker::isReview(const ConstElementPtr& e)
 {
   bool result = false;
   if (e->getElementType() == ElementType::Relation)
@@ -151,7 +157,7 @@ bool ReviewMarker::isReview(ConstElementPtr e)
   return result;
 }
 
-bool ReviewMarker::isReviewUid(const ConstOsmMapPtr &map, ReviewUid uid)
+bool ReviewMarker::isReviewUid(const ConstOsmMapPtr& map, ReviewUid uid)
 {
   return isReview(map->getElement(uid));
 }

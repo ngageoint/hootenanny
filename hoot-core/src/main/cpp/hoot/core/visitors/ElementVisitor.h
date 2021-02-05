@@ -54,7 +54,7 @@ public:
 
   static QString className() { return "hoot::ElementVisitor"; }
 
-  ElementVisitor() : _numAffected(0), _numProcessed(0) { }
+  ElementVisitor() = default;
   virtual ~ElementVisitor() = default;
 
   /**
@@ -67,22 +67,12 @@ public:
   /**
    * @see OperationStatus
    */
-  long getNumFeaturesAffected() const override { return _numAffected; }
+  QString getInitStatusMessage() const override { return ""; }
 
   /**
    * @see OperationStatus
    */
-  long getNumFeaturesProcessed() const override { return _numProcessed; }
-
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getInitStatusMessage() const override { return ""; }
-
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getCompletedStatusMessage() const override { return ""; }
+  QString getCompletedStatusMessage() const override { return ""; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -92,15 +82,10 @@ public:
    * they are run against during conflation should populate this list. The list is treated in a
    * logical OR fashion.
    */
-  virtual QStringList getCriteria() const override { return QStringList(); }
+  QStringList getCriteria() const override { return QStringList(); }
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 
-protected:
-
-  // These will only be used by those implementing OperationStatus.
-  long _numAffected;    // how many elements the operation actually counted or did something to
-  long _numProcessed;   // how many elements the operation processed total
 };
 
 typedef std::shared_ptr<ElementVisitor> ElementVisitorPtr;

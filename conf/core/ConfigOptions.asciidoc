@@ -1677,7 +1677,7 @@ The way subline string matcher to use when determining matching sublines for hig
 * Default Value: ``
 
 OpenstreetMap OAuth Consumer Key found after registering Hootenanny with OpenstreetMap (or its
-derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+derivatives) at `http://<OSM Domain>/user/<your username>/oauth_clients`
 
 === hoot.osm.auth.consumer.secret
 
@@ -1685,7 +1685,7 @@ derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
 * Default Value: ``
 
 OpenstreetMap OAuth Private Consumer Key found after registering Hootenanny with OpenstreetMap (or
-its derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+its derivatives) at `http://<OSM Domain>/user/<your username>/oauth_clients`
 
 === hoot.osm.auth.access.token
 
@@ -4249,6 +4249,16 @@ The tag the ReplaceTagVisitor replaces, of the form key=value.
 * Default Value: ``
 
 The tag the ReplaceTagVisitor uses as a replacement tag; of the form key=value.
+
+=== resolve.review.type
+
+* Data Type: string
+* Default Value: `keep`
+
+Post conflation operation with either keep all reviews, remove all reviews, or resolve all
+reviews.  The default of `keep` won't change the current functionality.
+
+Note: Valid values only include `keep`, `remove`, `resolve`
 
 === review.score.criterion.invert.thresholding
 

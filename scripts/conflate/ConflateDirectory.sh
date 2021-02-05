@@ -1,10 +1,26 @@
 #!/bin/bash
 set -e
 
+function usage() {
+  echo "Usage: ConflateDirectory.sh [OPTIONS...] [START POSITION] DIRECTORY..."
+  echo ""
+  echo "  -h, --help         show usage"
+  echo "  --network          use Hootenanny network conflation algorithm"
+  echo "  --parallel         run conflation jobs in parallel"
+  echo "  --resolve          resolve reviews automatically"
+}
+
 START_POSITION=0
 ALGORITHM_CONF="UnifyingAlgorithm.conf -D match.creators=hoot::HighwayMatchCreator -D merger.creators=hoot::HighwayMergerCreator"
 FILE_PATH=
 PARALLEL="no"
+RESOLVE_REVIEWS=
+
+if [ $# -eq 0 ]
+then
+  usage
+  exit
+fi
 
 for ARGUMENT in "$@"
 do
@@ -22,6 +38,13 @@ do
   elif [ $ARGUMENT == "--parallel" ]
   then
     PARALLEL="yes"
+  elif [ $ARGUMENT == "--resolve" ]
+  then
+    RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp"
+  elif [ $ARGUMENT == "-h" || $ARGUMENT == "--help" ]
+  then
+    usage
+    exit
   else
     echo "Invalid argument: $ARGUMENT"
   fi
@@ -54,6 +77,7 @@ HOOT_OPTS+=" -D conflate.pre.ops=hoot::MapCleaner"
 HOOT_OPTS+=" -D highway.review.threshold=1.0"
 HOOT_OPTS+=" -D highway.match.threshold=0.5"
 HOOT_OPTS+=" -D highway.miss.threshold=0.7"
+HOOT_OPTS+=$RESOLVE_REVIEWS
 
 if [ $PARALLEL == "no" ]
 then
