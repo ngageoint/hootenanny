@@ -351,6 +351,8 @@ void DataConverter::_fillElementCache(const QString& inputUrl, ElementCachePtr c
   while (streamReader->hasMoreElements())
   {
     ElementPtr pNewElement = streamReader->readNextElement();
+    if (!pNewElement)
+      continue;
     if (notGeographic)
     {
       visitor.visit(pNewElement);
