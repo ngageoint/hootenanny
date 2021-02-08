@@ -50,7 +50,7 @@ namespace hoot
  * -D bounds.keep.entire.features.crossing.bounds=false \
  * -D conflate.pre.ops++="hoot::SmallDisconnectedWayRemover" \
  * -D small.disconnected.way.remover.max.size=2
- * -D direction.finder.angle.threshold=179.0 \
+ * -D dual.highway.marker.mark.crossing.roads=true \
  * /home/vagrant/hoot/tmp/kano_033133330302/input/ \
  * /home/vagrant/hoot/tmp/kano_033133330302/output/out-kano-final.osm \
  * --keep-intermediate-outputs \

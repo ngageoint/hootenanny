@@ -214,19 +214,21 @@ void CumulativeConflator2::_initDropDividedRoadsConfig()
   // doing it with a tagging pre-op.
 
   // Add this to the map cleaner transforms just after the initial op, which reprojects to ortho,
-  // since DualHighwayMarker needs the map to be in orth. Strange that if you try to pass in a
+  // since DualHighwayMarker needs the map to be in ortho. Strange that if you try to pass in a
   // pre-built string list here, the list doesn't actually get updated.
   ConfigUtils::insertListOpEntry(
-    ConfigOptions::getMapCleanerTransformsKey(), RemoveElementsVisitor::className(), 1);
-  ConfigUtils::insertListOpEntry(
     ConfigOptions::getMapCleanerTransformsKey(), DualHighwayMarker::className(), 1);
+  ConfigUtils::insertListOpEntry(
+    ConfigOptions::getMapCleanerTransformsKey(), RemoveElementsVisitor::className(), 2);
   conf().set(
     ConfigOptions::getRemoveElementsVisitorElementCriteriaKey(),
     TagCriterion::className() + ";" + StatusCriterion::className());
   conf().set(ConfigOptions::getStatusCriterionStatusKey(), "Unknown2");
   conf().set(ConfigOptions::getRemoveElementsVisitorChainElementCriteriaKey(), true);
   conf().set(ConfigOptions::getRemoveElementsVisitorRecursiveKey(), true);
-  conf().set(ConfigOptions::getTagCriterionKvpsKey(), MetadataTags::HootDualHighway() + "=yes");
+  conf().set(
+    ConfigOptions::getTagCriterionKvpsKey(),
+    MetadataTags::HootDualHighway() + "=yes;" + MetadataTags::HootDualHighwayCrossing() + "=yes");
 
   LOG_VARD(ConfigOptions().getMapCleanerTransforms());
 }

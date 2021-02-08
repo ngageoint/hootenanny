@@ -1292,6 +1292,20 @@ searching for nodes.
 Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
 specified by 'distance.node.criterion.center'.
 
+=== dual.highway.marker.mark.crossing.roads
+
+* Data Type: bool
+* Default Value: `false`
+
+TODO
+
+=== dual.highway.marker.crossing.roads.parallel.score.threshold
+
+* Data Type: double
+* Default Value: `0.4`
+
+TODO
+
 === dual.highway.marker.parallel.score.threshold
 
 * Data Type: double

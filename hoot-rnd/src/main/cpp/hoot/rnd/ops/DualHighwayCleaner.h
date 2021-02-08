@@ -25,15 +25,14 @@
  * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
 
-#ifndef DUAL_HIGHWAY_MARKER_H
-#define DUAL_HIGHWAY_MARKER_H
+#ifndef DUAL_HIGHWAY_CLEANER_H
+#define DUAL_HIGHWAY_CLEANER_H
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/ConstOsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/conflate/ConflateInfoCache.h>
 
 // tgs
 #include <tgs/RStarTree/HilbertRTree.h>
@@ -87,14 +86,6 @@ public:
 
   // TODO
   double _minParallelScore;
-  // TODO
-  bool _markCrossingRoads;
-  // TODO
-  double _maxCrossingRoadsParallelScore;
-  // TODO
-  int _numCrossing;
-  // TODO
-  std::shared_ptr<ConflateInfoCache> _elementInfo;
 
   // spatial indexes
   std::shared_ptr<Tgs::HilbertRTree> _index;
@@ -105,10 +96,8 @@ public:
   Meters _getSearchRadius(const ConstElementPtr& e) const;
   bool _isMatchCandidate(ConstElementPtr element) const;
   void _createIndex();
-
-  void _markRoadsCrossingDividedRoads(const ConstWayPtr& divRoad1, const ConstWayPtr& divRoad2);
 };
 
 }
 
-#endif // DUAL_HIGHWAY_MARKER_H
+#endif // DUAL_HIGHWAY_CLEANER_H
