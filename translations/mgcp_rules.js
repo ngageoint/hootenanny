@@ -47,13 +47,13 @@ mgcp.rules = {
     // MGCP TRDv4 Only FCODES
     // These are used for both import and export
     ['F_CODE','AA012','landuse','quarry'], // Quarry - NFDD AA010
-    ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230 or AA054 based on Product type
     ['F_CODE','AC000','facility','processing'], // Processing Facility - NFDD AL010
-    // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
+    // ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
     ['F_CODE','AJ010','farm:irrigation','centre_pivot'], // Circular Irrigation System - FCODE Retired
     ['F_CODE','AK190','man_made','recreational_pier'], // Recreational Pier - NFDD BB081
+    ['F_CODE','AL015','building','yes'], // Building - changed to AL013
     ['F_CODE','AL210','route:protection','yes'], // Protection Shed - NFDD AL211
     ['F_CODE','AT030','power','line'], // Power Line - NFDD AT005
     ['F_CODE','AT050','use','communication'], // Communication Station - No replacement code

@@ -1263,6 +1263,15 @@ translate = {
   },
 
 
+  // makeLayerNameLookup - build a lookup table for FCODE to LayerName
+  makeFcodeList : function(schema)
+  {
+    var lookup = [];
+    schema.forEach( function (item) { if (lookup.indexOf(item.fcode) == -1) lookup.push(item.fcode); });
+    return lookup;
+  },
+
+
   // addReviewFeature - Add Review features to a schema
   addReviewFeature: function(schema)
   {
