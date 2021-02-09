@@ -48,8 +48,9 @@ namespace hoot
  * -D merger.creators="hoot::HighwayMergerCreator" \
  * -D bounds="8.4762,12.0504,8.4793,12.0526" \
  * -D bounds.keep.entire.features.crossing.bounds=false \
- * -D conflate.pre.ops++="hoot::SmallDisconnectedWayRemover" \
- * -D small.disconnected.way.remover.max.size=2
+ * -D conflate.pre.ops+="hoot::SmallDisconnectedWayRemover" \
+ * -D small.disconnected.way.remover.max.node.count=2 \
+ * -D small.disconnected.way.remover.max.length=20.0 \
  * -D dual.highway.marker.mark.crossing.roads=true \
  * /home/vagrant/hoot/tmp/kano_033133330302/input/ \
  * /home/vagrant/hoot/tmp/kano_033133330302/output/out-kano-final.osm \

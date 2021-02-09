@@ -4641,10 +4641,17 @@ shape file and cannot be used in combination with a translation.  If this option
 then the list of columns will be automatically determined based on the most frequently populated
 tags.
 
-=== small.disconnected.way.remover.max.size
+=== small.disconnected.way.remover.max.node.count
 
 * Data Type: int
-* Default Value: `-1`
+* Default Value: `2`
+
+TODO
+
+=== small.disconnected.way.remover.max.length
+
+* Data Type: double
+* Default Value: `2.0`
 
 TODO
 

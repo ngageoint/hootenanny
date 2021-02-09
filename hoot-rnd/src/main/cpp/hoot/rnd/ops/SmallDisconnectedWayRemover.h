@@ -47,7 +47,7 @@ public:
   static QString className() { return "hoot::SmallDisconnectedWayRemover"; }
 
   SmallDisconnectedWayRemover();
-  SmallDisconnectedWayRemover(const int maxWaySize);
+  SmallDisconnectedWayRemover(const int maxWayLength, const int maxWayNodeCount);
   virtual ~SmallDisconnectedWayRemover() = default;
 
   /**
@@ -84,7 +84,9 @@ public:
   OsmMapPtr _map;
 
   // TODO
-  int _maxWaySize;
+  int _maxWayLength;
+  // TODO
+  int _maxWayNodeCount;
 };
 
 }
