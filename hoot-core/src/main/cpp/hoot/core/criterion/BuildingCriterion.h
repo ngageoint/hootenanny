@@ -54,8 +54,7 @@ public:
 
   bool isSatisfied(const Tags& tags, const ElementType& elementType) const;
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Polygon; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
 
   virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
 

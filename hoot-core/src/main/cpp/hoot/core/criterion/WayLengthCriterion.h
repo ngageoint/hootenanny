@@ -24,25 +24,29 @@
  *
  * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef WAY_SIZE_CRITERION_H
-#define WAY_SIZE_CRITERION_H
+#ifndef WAY_LENGTH_CRITERION_H
+#define WAY_LENGTH_CRITERION_H
 
 // hoot
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/NumericComparisonType.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class WaySizeCriterion : public ElementCriterion
+class WayLengthCriterion : public ElementCriterion, public ConstOsmMapConsumer
 {
 public:
 
-  static QString className() { return "hoot::WaySizeCriterion"; }
+  static QString className() { return "hoot::WayLengthCriterion"; }
 
-  WaySizeCriterion() = default;
-  WaySizeCriterion(const int comparisonSize, const NumericComparisonType& numericComparisonType);
-  virtual ~WaySizeCriterion() = default;
+  WayLengthCriterion();
+  WayLengthCriterion(ConstOsmMapPtr map);
+  WayLengthCriterion(const double comparisonLength,
+                     const NumericComparisonType& numericComparisonType, ConstOsmMapPtr map);
+  virtual ~WayLengthCriterion() = default;
 
   /**
    * @see ElementCriterion
@@ -50,21 +54,25 @@ public:
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
   virtual ElementCriterionPtr clone() override
-  { return ElementCriterionPtr(new WaySizeCriterion()); }
+  { return ElementCriterionPtr(new WayLengthCriterion(_map)); }
 
   virtual QString getDescription() const override
-  { return "Identifies that meet a size threshold"; }
+  { return "Identifies ways that meet a length threshold"; }
 
   virtual QString getName() const override { return className(); }
 
   virtual QString getClassName() const override { return className(); }
 
+  virtual void setOsmMap(const OsmMap* map) { _map = map->shared_from_this(); }
+
 private:
 
-  int _comparisonSize;
+  double _comparisonLength;
   NumericComparisonType _numericComparisonType;
+
+  ConstOsmMapPtr _map;
 };
 
 }
 
-#endif // WAY_SIZE_CRITERION_H
+#endif // WAY_LENGTH_CRITERION_H
