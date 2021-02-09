@@ -106,6 +106,9 @@ void DualHighwayMarker::_createIndex()
 
 void DualHighwayMarker::apply(const OsmMapPtr& map)
 {
+  LOG_VARD(_minParallelScore);
+  LOG_VARD(_markCrossingRoads);
+  LOG_VARD(_maxCrossingRoadsParallelScore);
   _numAffected = 0;
   _numProcessed = 0;
   _map = map;
@@ -116,7 +119,7 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
   for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
   {
     WayPtr road = waysItr->second;
-    LOG_VART(road->getElementId());
+    LOG_VARD(road->getElementId());
 
     if (!road || !_isMatchCandidate(road))
     {
@@ -124,37 +127,50 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
     }
 
     std::shared_ptr<geos::geom::Envelope> env(road->getEnvelope(_map));
-    LOG_VART(env);
+    LOG_VARD(env);
     const std::set<ElementId> neighborIds =
       SpatialIndexer::findNeighbors(*env, _index, _indexToEid, _map, ElementType::Way, false);
-    LOG_VART(neighborIds.size());
+    LOG_VARD(neighborIds.size());
 
     for (std::set<ElementId>::const_iterator neighborsItr = neighborIds.begin();
          neighborsItr != neighborIds.end(); ++neighborsItr)
     {
-      LOG_VART(*neighborsItr);
+      LOG_VARD(*neighborsItr);
       WayPtr neighborRoad = std::dynamic_pointer_cast<Way>(_map->getElement(*neighborsItr));
       // No match candidate check needed here, as the index takes care of that for us.
       if (neighborRoad)
       {
+        LOG_DEBUG(
+          "Determining if " << road->getElementId() << " and " << neighborRoad->getElementId() <<
+          " are a divided highway pair...");
+
         const double parallelScore = ParallelScoreExtractor().extract(*_map, road, neighborRoad);
-        LOG_VART(parallelScore);
+        LOG_VARD(parallelScore);
         const bool roadsInSameDirection =
           DirectionFinder::isSimilarDirection2(_map, road, neighborRoad);
-        LOG_VART(roadsInSameDirection);
+        LOG_VARD(roadsInSameDirection);
 
         // TODO: explain
         if (parallelScore >= _minParallelScore && !roadsInSameDirection)
         {
+          bool eitherRoadTagged = false;
           if (road->getTags()[MetadataTags::HootDualHighway()] != "yes")
           {
             road->getTags().set(MetadataTags::HootDualHighway(), "yes");
             _numAffected++;
+            eitherRoadTagged = true;
           }
           if (neighborRoad->getTags()[MetadataTags::HootDualHighway()] != "yes")
           {
             neighborRoad->getTags().set(MetadataTags::HootDualHighway(), "yes");
             _numAffected++;
+            eitherRoadTagged = true;
+          }
+          if (eitherRoadTagged)
+          {
+            LOG_DEBUG(
+              road->getElementId() << " and " << neighborRoad->getElementId() <<
+              " are a divided highway pair.");
           }
 
           if (_markCrossingRoads && road->getTags()[MetadataTags::HootDualHighway()] == "yes" &&
@@ -168,47 +184,57 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
       }
     }
   }
-  LOG_VARD(_numAffected);
-  LOG_VARD(_numCrossing);
+  LOG_VARS(_numAffected);
+  LOG_VARS(_numCrossing);
 }
 
 void DualHighwayMarker::_markRoadsCrossingDividedRoads(
   const ConstWayPtr& divRoad1, const ConstWayPtr& divRoad2)
 {
-  LOG_TRACE(
+  LOG_DEBUG(
     "Attempting to remove roads crossing over divided roads " << divRoad1->getElementId() <<
-    " and " << divRoad2->getElementId() << "...")
+    " and " << divRoad2->getElementId() << "...");
 
-  // Get all the roads connected to the first of the divided road pair.
+  // Get all the roads connected to the first of the divided road pair (anything connected to road 2
+  // can be dealt with in a separate call to this method pasing it in as the first road parameter
+  // instead).
   const QSet<long> connectedWaysToRoad1 = WayUtils::getConnectedWays(divRoad1->getId(), _map);
-  LOG_VART(connectedWaysToRoad1);
+  LOG_VARD(connectedWaysToRoad1);
   for (QSet<long>::const_iterator connectedWaysToRoad1Itr = connectedWaysToRoad1.begin();
        connectedWaysToRoad1Itr != connectedWaysToRoad1.end(); ++connectedWaysToRoad1Itr)
   {
     WayPtr wayConnectedToRoad1 = _map->getWay(*connectedWaysToRoad1Itr);
     if (wayConnectedToRoad1)
     {
-      LOG_VART(wayConnectedToRoad1->getElementId());
+      LOG_VARD(wayConnectedToRoad1->getElementId());
     }
-    // Make sure its a road and hasn't already been marked.
+    // Make sure this connecting road is actually a road and hasn't already been marked as a
+    // connecting road.
     if (wayConnectedToRoad1 &&
         wayConnectedToRoad1->getTags()[MetadataTags::HootDualHighwayCrossing()] != "yes" &&
         HighwayCriterion(_map).isSatisfied(wayConnectedToRoad1))
     {
-      // Keep only those which have a single end connected to the first in the divided road pair.
       long connectedEndId = 0;
       long oppositeEndId = 0;
       const long firstNodeEndId = wayConnectedToRoad1->getFirstNodeId();
       const long lastNodeEndId = wayConnectedToRoad1->getLastNodeId();
       const bool road1ContainsFirstNode = divRoad1->containsNodeId(firstNodeEndId);
       const bool road1ContainsLastNode = divRoad1->containsNodeId(lastNodeEndId);
+      const bool road2ContainsFirstNode = divRoad2->containsNodeId(firstNodeEndId);
+      const bool road2ContainsLastNode = divRoad2->containsNodeId(lastNodeEndId);
+      LOG_VARD(firstNodeEndId);
+      LOG_VARD(lastNodeEndId);
+      LOG_VARD(road1ContainsFirstNode);
+      LOG_VARD(road1ContainsLastNode);
+      LOG_VARD(road2ContainsFirstNode);
+      LOG_VARD(road2ContainsLastNode);
 
-      LOG_VART(firstNodeEndId);
-      LOG_VART(lastNodeEndId);
-      LOG_VART(road1ContainsFirstNode);
-      LOG_VART(road1ContainsLastNode);
-
-      if (road1ContainsFirstNode && road1ContainsLastNode)
+      // Keep only connected roads which have a single end connected to the first road in the
+      // divided road pair and no ends connected to the second divided road in the pair (anything
+      // connected to road 2 can be dealt with in a separate call to this method pasing it in as the
+      // first road parameter instead).
+      if ((road1ContainsFirstNode && road1ContainsLastNode) || road2ContainsFirstNode ||
+          road2ContainsLastNode)
       {
         continue;
       }
@@ -222,42 +248,42 @@ void DualHighwayMarker::_markRoadsCrossingDividedRoads(
         connectedEndId = lastNodeEndId;
         oppositeEndId = firstNodeEndId;
       }
-      LOG_VART(connectedEndId);
-      LOG_VART(oppositeEndId);
+      LOG_VARD(connectedEndId);
+      LOG_VARD(oppositeEndId);
       if (connectedEndId == 0)
       {
         continue;
       }
 
-      // Keep only those whose opposite end is closer to the other divided road in the pair than
-      // the one in the pair its connected to (in between the two roads).
+      // Keep only connecting roads whose opposite end is closer to the second divided road in the
+      // pair than the one in the pair its connected to (its in between the two roads).
       ConstNodePtr connectedNodeEnd = _map->getNode(connectedEndId);
       ConstNodePtr oppositeNodeEnd = _map->getNode(oppositeEndId);
       if (connectedNodeEnd && oppositeNodeEnd)
       {
         const double distanceBetweenOppositeEndAndOtherDivRoad =
           _elementInfo->getDistance(oppositeNodeEnd, divRoad2);
-        LOG_VART(distanceBetweenOppositeEndAndOtherDivRoad);
-        const double distanceBetweenConnectedEndAndDivRoad =
-          _elementInfo->getDistance(connectedNodeEnd, divRoad1);
-        LOG_VART(distanceBetweenConnectedEndAndDivRoad);
-        if (distanceBetweenOppositeEndAndOtherDivRoad >= distanceBetweenConnectedEndAndDivRoad)
+        LOG_VARD(distanceBetweenOppositeEndAndOtherDivRoad);
+        const double distanceBetweenConnectedEndAndOtherDivRoad =
+          _elementInfo->getDistance(connectedNodeEnd, divRoad2);
+        LOG_VARD(distanceBetweenConnectedEndAndOtherDivRoad);
+        if (distanceBetweenOppositeEndAndOtherDivRoad >= distanceBetweenConnectedEndAndOtherDivRoad)
         {
           continue;
         }
       }
 
-      // Keep only those that are mostly perpendicular with the two div roads.
+      // Keep only connecting roads that are mostly perpendicular with the two div roads.
       const double parallelScoreWithRoad1 =
         ParallelScoreExtractor().extract(*_map, divRoad1, wayConnectedToRoad1);
-      LOG_VART(parallelScoreWithRoad1);
+      LOG_VARD(parallelScoreWithRoad1);
       const double parallelScoreWithRoad2 =
         ParallelScoreExtractor().extract(*_map, divRoad2, wayConnectedToRoad1);
-      LOG_VART(parallelScoreWithRoad2);
+      LOG_VARD(parallelScoreWithRoad2);
       if (parallelScoreWithRoad1 <= _maxCrossingRoadsParallelScore &&
           parallelScoreWithRoad2 <= _maxCrossingRoadsParallelScore)
       {
-        LOG_TRACE(
+        LOG_DEBUG(
           "Marking " << wayConnectedToRoad1->getElementId() << " as crossing dual highway...");
         wayConnectedToRoad1->getTags().set(MetadataTags::HootDualHighwayCrossing(), "yes");
         _numCrossing++;
