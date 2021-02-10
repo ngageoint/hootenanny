@@ -404,7 +404,8 @@ void DiffConflator::_removeMatches(const Status& status)
   for (std::vector<ConstMatchPtr>::iterator mit = _matches.begin(); mit != _matches.end(); ++mit)
   {
     ConstMatchPtr match = *mit;
-    if (treatReviewsAsMatches || match->getType() != MatchType::Review)
+    if (match->getType() == MatchType::Match ||
+       (treatReviewsAsMatches && match->getType() == MatchType::Review))
     {
       LOG_VART(match);
       LOG_VART(match->getClassification().getMissP());
