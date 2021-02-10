@@ -1825,6 +1825,12 @@ tds70 = {
       }
     } // End Highway & Railway construction
 
+    // Embankments & Railways
+    if (tags.embankment == 'yes' && geometryType == 'Area')
+    {
+      if (tags.railway) delete tags.railway;
+    }
+
     // Now set the relative levels and transportation types for various features
     if (tags.highway || tags.railway)
     {
@@ -2341,7 +2347,7 @@ tds70 = {
     if (tds70.configIn.OgrDebugDumptags == 'true') translate.debugOutput(attrs,layerName,geometryType,'','In attrs: ');
 
     // See if we have an o2s_X layer and try to unpack it.
-    if (layerName.indexOf('o2s_') > -1)
+    if (~layerName.indexOf('o2s_'))
     {
       tags = translate.parseO2S(attrs);
 
@@ -2553,6 +2559,8 @@ tds70 = {
     // Pre Processing
     tds70.applyToOgrPreProcessing(tags, attrs, geometryType);
 
+    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(tags,'',geometryType,elementType,'After Pre: ');
+
     // Make a copy of the input tags so we can remove them as they get translated. What is left is
     // the not used tags.
     // not in v8 yet: // var tTags = Object.assign({},tags);
@@ -2571,6 +2579,7 @@ tds70 = {
     // Apply the fuzzy rules
     // NOTE: This deletes tags as they are used
     translate.applyOne2OneQuiet(notUsedTags, attrs, tds70.fuzzy,{'k':'v'});
+    if (tds70.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Not used 0: ');
 
     // Translate the XXX:2, XXX2, XXX:3 etc attributes
     // Note: This deletes tags as they are used
@@ -2644,10 +2653,10 @@ tds70 = {
 
         // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
         // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,253),
-          tag2:str.substring(253,506),
-          tag3:str.substring(506,759),
-          tag4:str.substring(759,1012)};
+        attrs = {tag1:str.substring(0,225),
+          tag2:str.substring(225,450),
+          tag3:str.substring(450,675),
+          tag4:str.substring(675,900)};
       }
       else
       {

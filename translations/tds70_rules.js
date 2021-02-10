@@ -3436,7 +3436,7 @@ tds70.rules = {
     // ZI017_RRA - Track Information : Railway Power Method
     // ['ZI017_RRA','-999999',undefined,undefined], // No Information
     ['ZI017_RRA','1','electrified','rail'], // Electrified Track
-    ['ZI017_RRA','3','electrified','overhead'], // Overhead Electrified
+    ['ZI017_RRA','3','electrified','contact_line'], // Overhead Electrified
     ['ZI017_RRA','4','electrified','no'], // Non-electrified
     ['ZI017_RRA','999','electrified','other'], // Other
 
@@ -3727,6 +3727,7 @@ tds70.rules = {
     ['FFN','999','social_facility','other'],
     ['FFN','999','tourism','other'],
 
+    [undefined,undefined,'embankment','no'], // Spelling this out so it gets dropped
     ['FIC','1','embankment:type','mound'], // Mound
     ['FIC','1','embankment:type','berm'],
     ['FIC','1','embankment','berm'],
