@@ -86,15 +86,16 @@ tds70 = {
     }
 
     // OK, now we build a new schema
-    var newSchema = [];
-    var layerName = '';
-    var fCode = '';
+    let newSchema = [];
+    let layerName = '';
+    let fCode = '';
 
     // Go through the fcode/layer list, find all of the layers and build a skeleton schema
     // layerList is used to keep track of what we have already seen
-    var layerList = [];
-    var geomType = '';
-    for (var fc in tds70.rules.thematicGroupList)
+    let layerList = [];
+    let geomType = '';
+
+    for (let fc in tds70.rules.thematicGroupList)
     {
       layerName = tds70.rules.thematicGroupList[fc];
       if (~layerList.indexOf(layerName)) continue;  // Funky use of ~ instead of '!== -1'
@@ -122,8 +123,8 @@ tds70 = {
     } // End fc loop
 
     // Loop through the old schema and populate the new one
-    var newSchemaLen = newSchema.length; // cached as we use this a lot
-    for (var os = 0, osLen = tds70.rawSchema.length; os < osLen; os++)
+    let newSchemaLen = newSchema.length; // cached as we use this a lot
+    for (let os = 0, osLen = tds70.rawSchema.length; os < osLen; os++)
     {
       // The table looks like:
       // 'PGB230':'AeronauticPnt', // AircraftHangar
@@ -136,7 +137,7 @@ tds70 = {
       layerName = tds70.rules.thematicGroupList[fCode];
 
       // Loop through the new schema and find the right layer
-      for (var ns = 0; ns < newSchemaLen; ns++)
+      for (let ns = 0; ns < newSchemaLen; ns++)
       {
         // If we find the layer, populate it
         if (newSchema[ns].name == layerName)
@@ -144,11 +145,12 @@ tds70 = {
           // now start adding attrs from the raw schema. This Is Not Pretty
 
           // Loop through the columns in the OLD schema
-          for (var cos = 0, cosLen = tds70.rawSchema[os].columns.length; cos < cosLen; cos++)
+          for (let cos = 0, cosLen = tds70.rawSchema[os].columns.length; cos < cosLen; cos++)
           {
-            var same = false;
+            let same = false;
+
             // Loop through the columns in the NEW schema
-            for (var cns = 0, cnsLen = newSchema[ns].columns.length; cns < cnsLen; cns++)
+            for (let cns = 0, cnsLen = newSchema[ns].columns.length; cns < cnsLen; cns++)
             {
               // If the attribute names match then we can ignore it, unless it is enumerated
               if (tds70.rawSchema[os].columns[cos].name == newSchema[ns].columns[cns].name)
@@ -158,11 +160,11 @@ tds70 = {
 
                 // Now for some more uglyness....
                 // loop through the enumerated values  in the OLD schema
-                for (var oen = 0, oenlen = tds70.rawSchema[os].columns[cos].enumerations.length; oen < oenlen; oen++)
+                for (let oen = 0, oenlen = tds70.rawSchema[os].columns[cos].enumerations.length; oen < oenlen; oen++)
                 {
-                  var esame = false;
+                  let esame = false;
                   // Loop through the enumerated values in the NEW schema
-                  for (var nen = 0, nenlen = newSchema[ns].columns[cns].enumerations.length; nen < nenlen; nen++)
+                  for (let nen = 0, nenlen = newSchema[ns].columns[cns].enumerations.length; nen < nenlen; nen++)
                   {
                     // If the names match, ignore it
                     if (tds70.rawSchema[os].columns[cos].enumerations[oen].name == newSchema[ns].columns[cns].enumerations[nen].name)
@@ -239,9 +241,9 @@ tds70 = {
 
     // First, use the lookup table to quickly drop all attributes that are not part of the feature.
     // This is quicker than going through the Schema due to the way the Schema is arranged
-    var attrList = tds70.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+    const attrList = tds70.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
-    var othList = {};
+    let othList = {};
 
     if (attrs.OTH)
     {
@@ -251,9 +253,9 @@ tds70 = {
 
     if (attrList != undefined)
     {
-      for (var val in attrs)
+      for (let val in attrs)
       {
-        if (attrList.indexOf(val) == -1)
+        if (!attrList.includes(val))
         {
           if (val in othList)
           {
@@ -281,7 +283,7 @@ tds70 = {
           if (attrs[val].length > tds70.rules.txtLength[val])
           {
             // First try splitting the attribute and grabbing the first value
-            var tStr = attrs[val].split(';');
+            let tStr = attrs[val].split(';');
             if (tStr[0].length <= tds70.rules.txtLength[val])
             {
               attrs[val] = tStr[0];
@@ -310,9 +312,9 @@ tds70 = {
     }
 
     // No quick and easy way to do this unless we build yet another lookup table
-    var feature = {};
+    let feature = {};
 
-    for (var i=0, sLen = tds70.rawSchema.length; i < sLen; i++)
+    for (let i=0, sLen = tds70.rawSchema.length; i < sLen; i++)
     {
       if (tds70.rawSchema[i].fcode == attrs.F_CODE && tds70.rawSchema[i].geom == geometryType)
       {
@@ -323,30 +325,30 @@ tds70 = {
     }
 
     // Now validate the Enumerated values
-    for (var i=0, cLen = feature['columns'].length; i < cLen; i++)
+    for (let i=0, cLen = feature['columns'].length; i < cLen; i++)
     {
       // Skip non enumeratied attributes
       if (feature.columns[i].type !== 'enumeration') continue;
 
-      var enumName = feature.columns[i].name;
+      let enumName = feature.columns[i].name;
 
       // Skip stuff that is missing and will end up as a default value
       if (!(attrs[enumName])) continue;
 
-      var attrValue = attrs[enumName];
-      var enumList = feature.columns[i].enumerations;
-      var enumValueList = [];
+      const attrValue = attrs[enumName];
+      const enumList = feature.columns[i].enumerations;
+      let enumValueList = [];
 
       // Pull all of the values out of the enumerated list to make life easier
-      for (var j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
+      for (let j=0, elen = enumList.length; j < elen; j++) enumValueList.push(enumList[j].value);
 
       // If we DONT have the value in the list, add it to the OTH or MEMO field
-      if (enumValueList.indexOf(attrValue) == -1)
+      if (!enumValueList.includes(attrValue))
       {
-        var othVal = '(' + enumName + ':' + attrValue + ')';
+        let othVal = '(' + enumName + ':' + attrValue + ')';
 
         // No "Other" value. Push to the Memo field
-        if (enumValueList.indexOf('999') == -1)
+        if (!enumValueList.includes('999'))
         {
           // Set the offending enumerated value to the default value
           attrs[enumName] = feature.columns[i].defValue;
@@ -375,13 +377,12 @@ tds70 = {
   // validateTDSAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
   validateTDSAttrs: function(gFcode, attrs) {
 
-    var tdsAttrList = tdsAttrLookup[tds70.rules.thematicGroupList[gFcode]];
-    var AttrList = tds70.AttrLookup[gFcode];
+    const tdsAttrList = tdsAttrLookup[tds70.rules.thematicGroupList[gFcode]];
+    const AttrList = tds70.AttrLookup[gFcode];
 
-    for (var i = 0, len = tdsAttrList.length; i < len; i++)
+    for (let i = 0, len = tdsAttrList.length; i < len; i++)
     {
-      if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
-      //if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
+      if (!AttrList.includes(tdsAttrList[i])) attrs[tdsAttrList[i]] = undefined;
     }
   }, // End validateTDSAttrs
 
@@ -391,7 +392,7 @@ tds70 = {
   manyFeatures: function(geometryType, tags, attrs,transMap)
   {
     // Add the first feature to the structure that we return
-    var returnData = [{attrs:attrs, tableName:''}];
+    let returnData = [{attrs:attrs, tableName:''}];
 
     // Quit early if we don't need to check anything. We are only looking at linework
     if (geometryType !== 'Line') return returnData;
@@ -403,9 +404,9 @@ tds70 = {
     if (!(tags.bridge || tags.tunnel || tags.embankment || tags.cutting || tags.ford)) return returnData;
 
     // We are going to make another feature so copy tags and trash the UUID so it gets a new one
-    var newFeatures = [];
-    var newAttributes = {};
-    var nTags = JSON.parse(JSON.stringify(tags));
+    let newFeatures = [];
+    let newAttributes = {};
+    let nTags = JSON.parse(JSON.stringify(tags));
     delete nTags.uuid;
     delete nTags['hoot:id'];
 
@@ -514,7 +515,7 @@ tds70 = {
     }
 
     // Loop through the new features and process them.
-    for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
+    for (let i = 0, nFeat = newFeatures.length; i < nFeat; i++)
     {
       // pre processing
       tds70.applyToOgrPreProcessing(newFeatures[i]['tags'], newFeatures[i]['attrs'], geometryType);
@@ -545,7 +546,7 @@ tds70 = {
       tags['transport:type'] = 'railway';
       if (geometry == 'Point') delete tags.railway;
     }
-    else if (tags.highway && ['path','pedestrian','steps','trail'].indexOf(tags.highway) > -1)
+    else if (tags.highway && ['path','pedestrian','steps','trail'].includes(tags.highway))
     {
       tags['transport:type'] = 'pedestrian';
       if (geometry == 'Point') delete tags.highway;
@@ -567,20 +568,26 @@ tds70 = {
     // Drop the mosaic tag if we don't have an image id
     if (attrs.AEI == 'No Information') delete attrs.img_mosaic;
 
+    // We can assume that everything is "fintacl/unctional" unless we are told that it isn't
+    if (attrs.PCF == '2')
+    {
+      delete attrs.PCF;
+    }
+
     // List of data values to drop/ignore
-    var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
+    const ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
 
     // List of attributes that can't have '0' as a value
-    var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
+    const noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
 
     // This is a handy loop. We use it to:
     // 1) Remove all of the "No Information" and -999999 fields
     // 2) Convert all of the Attrs to uppercase - if needed
-    for (var col in attrs)
+    for (let col in attrs)
     {
       // slightly ugly but we would like to account for: 'No Information','noInformation' etc
       // First, push to lowercase
-      var attrValue = attrs[col].toString().toLowerCase();
+      let attrValue = attrs[col].toString().toLowerCase();
 
       // Get rid of the spaces in the text
       attrValue = attrValue.replace(/\s/g, '');
@@ -593,7 +600,7 @@ tds70 = {
       }
 
       // Remove attributes with '0' values if they can't be '0'
-      if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
+      if (noZeroList.includes(col) && attrs[col] == '0')
       {
         delete attrs[col];
         continue;
@@ -615,7 +622,7 @@ tds70 = {
     // Doing this after the main cleaning loop so all of the -999999 values are
     // already gone and we can just check for existance.
 
-    for (var i in tds70.rules.closureList)
+    for (let i in tds70.rules.closureList)
     {
       if (attrs[i])
       {
@@ -652,11 +659,11 @@ tds70 = {
     {
       // Time to find an FCODE based on the filename
       // Funky but it makes life easier
-      var llayerName = layerName.toString().toLowerCase();
+      const llayerName = layerName.toString().toLowerCase();
 
-      for (var row in tds70.rules.fCodeMap)
+      for (let row in tds70.rules.fCodeMap)
       {
-        for (var val in tds70.rules.fCodeMap[row][1])
+        for (let val in tds70.rules.fCodeMap[row][1])
         {
           if (llayerName.match(tds70.rules.fCodeMap[row][1][val]))
           {
@@ -676,11 +683,11 @@ tds70 = {
     // Unpack the ZI006_MEM field
     if (tags.note)
     {
-      var tObj = translate.unpackMemo(tags.note);
+      const tObj = translate.unpackMemo(tags.note);
 
       if (tObj.tags !== '')
       {
-        var tTags = JSON.parse(tObj.tags);
+        const tTags = JSON.parse(tObj.tags);
         for (i in tTags)
         {
           // Debug
@@ -693,12 +700,12 @@ tds70 = {
         {
           if (tags[i] in tds70.fcodeLookupOut[i])
           {
-            var row = tds70.fcodeLookupOut[i][tags[i]];
+            const row = tds70.fcodeLookupOut[i][tags[i]];
 
             // Now find the "real" tag that comes frm the FCode
             if (row[1] in tds70.fcodeLookup['F_CODE'])
             {
-              var row2 = tds70.fcodeLookup['F_CODE'][row[1]];
+              const row2 = tds70.fcodeLookup['F_CODE'][row[1]];
               // If the tags match, delete it
               if (tags[row2[0]] && (tags[row2[0]] == row2[1]))
               {
@@ -778,8 +785,8 @@ tds70 = {
     // New TDSv61 Attribute - ROR (Road Interchange Ramp)
     if (tags.highway && tags.interchange_ramp == 'yes')
     {
-      var roadList = ['motorway','trunk','primary','secondary','tertiary'];
-      if (roadList.indexOf(tags.highway) !== -1) tags.highway = tags.highway + '_link';
+      const roadList = ['motorway','trunk','primary','secondary','tertiary'];
+      if (roadList.includes(tags.highway)) tags.highway = tags.highway + '_link';
     }
 
     // Add the LayerName to the source
@@ -803,7 +810,7 @@ tds70 = {
       //
       // Rules format:  ["test expression","output result"];
       // Note: t = tags, a = attrs and attrs can only be on the RHS
-      var rulesList = [
+      const rulesList = [
         ['t.barrier == "dragons_teeth" && !(t.tank_trap)','t.barrier = "tank_trap"; t.tank_trap = "dragons_teeth"'],
         ['t["bridge:movable"] && t["bridge:movable"] !== "no" && t["bridge:movable"] !== "unknown"','t.bridge = "movable"'],
         ['t.navigationaid && !(t.aeroway)','t.aeroway = "navigationaid"'],
@@ -852,7 +859,7 @@ tds70 = {
 
     // translate.applyComplexRules(tags,attrs,tds70.osmPostRules);
     // Pulling this out of translate
-    for (var i = 0, rLen = tds70.osmPostRules.length; i < rLen; i++)
+    for (let i = 0, rLen = tds70.osmPostRules.length; i < rLen; i++)
     {
       if (tds70.osmPostRules[i][0](tags)) tds70.osmPostRules[i][1](tags,attrs);
     }
@@ -958,8 +965,8 @@ tds70 = {
         tags.substance = tags.product;
         delete tags.product;
 
-        var petroleum = ['gas','liquefied_petroleum_gas_(lpg)','petroleum','coalbed_methane','natural_gas_condensate'];
-        if (petroleum.indexOf(tags.substance) > -1) tags.man_made = 'petroleum_well';
+        const petroleum = ['gas','liquefied_petroleum_gas_(lpg)','petroleum','coalbed_methane','natural_gas_condensate'];
+        if (petroleum.includes(tags.substance)) tags.man_made = 'petroleum_well';
       }
       break;
 
@@ -1040,34 +1047,19 @@ tds70 = {
       break;
     } // End switch F_CODE
 
-    // Fix up lifestyle tags.
-    // This needs to be expanded to handle all of the options.
-    //      ['PCF','1','condition','construction'], // Construction
-    //      ['PCF','2','condition','functional'], // Intact in spec, using for MGCP compatibility
-    //      ['PCF','3','condition','abandoned'], // Unmaintained in spec
-    //      ['PCF','4','condition','damaged'], // Damaged
-    //      ['PCF','5','condition','dismantled'], // Dismantled
-    //      ['PCF','6','condition','destroyed'], // Destroyed
-    if (tags.condition)
+    // Custom rule for mobile bridges
+    // We set it to unknown on export if we don't have an opening type.
+    if (tags['bridge:movable'] == 'unknown')
     {
-      if (tags.condition == 'construction')
+      if (tags.bridge = 'yes')
       {
-        // if (tags.highway && attrs.F_CODE == 'AP030')
-        if (tags.highway)
-        {
-          tags.construction = tags.highway;
-          tags.highway = 'construction';
-          delete tags.condition;
-        }
-        else if (tags.railway)
-        {
-          tags.construction = tags.railway;
-          tags.railway = 'construction';
-          delete tags.condition;
-        }
-      } // End Construction
+        tags.bridge = 'movable';
+      }
+      delete tags['bridge:movable']
+    }
 
-    } // End Condition tags
+    // Fix up lifestyle tags
+    translate.lifecycleToOsm(tags,attrs);
 
     // Not sure about adding a Highway tag to this.
     // if (attrs.F_CODE == 'AQ040' && !(tags.highway)) tags.highway = 'yes';
@@ -1113,13 +1105,13 @@ tds70 = {
     }
 
     // Fix the ZI020_GE4X Values
-    var ge4meta = ['addr:country','addr:country:second','addr:country:third','addr:country:fourth'];
+    const ge4meta = ['addr:country','addr:country:second','addr:country:third','addr:country:fourth'];
 
-    for (var i=0, iLen=ge4meta.length; i < iLen; i++)
+    for (let i=0, iLen=ge4meta.length; i < iLen; i++)
     {
       if (tags[ge4meta[i]])
       {
-        var country = translate.findCountryCode('c2',tags[ge4meta[i]]);
+        const country = translate.findCountryCode('c2',tags[ge4meta[i]]);
         if (country !== '')
         {
           tags[ge4meta[i]] = country;
@@ -1153,14 +1145,13 @@ tds70 = {
     // Adding this because we might not be reading from OSM
     if (tags.other_tags)
     {
-      var tList = tags.other_tags.toString().replace(/\\/g,'').replace(/\"/g,'"').split('","');
+      const tList = tags.other_tags.toString().replace(/\\/g,'').replace(/\"/g,'"').split('","');
 
       delete tags.other_tags;
 
-      for (var val in tList)
+      for (let val in tList)
       {
-        vList = tList[val].split('"=>"');
-
+        const vList = tList[val].split('"=>"');
         tags[vList[0].replace('"','')] = vList[1].replace('"','');
 
         // Debug
@@ -1169,94 +1160,18 @@ tds70 = {
     }
 
     // Initial cleanup
-    for (var i in tags)
+    for (let i in tags)
     {
-      // Remove empty tags
-      if (tags[i] == '')
-      {
-        delete tags[i];
-        continue;
-      }
+      if (tags[i] == '') delete tags[i]; // I don't think we need to do this.
+    }
 
-      // Convert "abandoned:XXX" and "disused:XXX"features
-      if ((i.indexOf('abandoned:') == 0) || (i.indexOf('disused:') == 0))
-      {
-        var tTag = i.replace('abandoned:','').replace('disused:','');
-        tags[tTag] = tags[i];
-        tags.condition = 'abandoned';
-        delete tags[i];
-        continue;
-      }
-
-      // Convert "construction:XXX" features
-      if (i.indexOf('construction:') == 0)
-      {
-        var tTag = i.replace('construction:','');
-        tags[tTag] = tags[i];
-        tags.condition = 'construction';
-        delete tags[i];
-        continue;
-      }
-
-    } // End Cleanup loop
-
-    // Lifecycle tags
-    var cycleList = {'highway':'road','bridge':'yes','railway':'rail','building':'yes'};
-    for (var typ in cycleList)
-    {
-      switch (tags[typ])
-      {
-      case undefined: // Break early if no value
-        break;
-
-      case 'construction':
-        if (tags.construction)
-        {
-          tags[typ] = tags.construction;
-          delete tags.construction;
-        }
-        else
-        {
-          tags[typ] = cycleList[typ];
-        }
-        tags.condition = 'construction';
-        break;
-
-      case 'proposed':
-        if (tags.proposed)
-        {
-          tags[typ] = tags.proposed;
-          delete tags.proposed;
-        }
-        else
-        {
-          tags[typ] = cycleList[typ];
-        }
-        tags.condition = 'proposed';
-        break;
-
-      case 'abandoned':
-      case 'disused':
-        tags[typ] = cycleList[typ];
-        tags.condition = 'abandoned';
-        break;
-
-      case 'destroyed':
-        tags[typ] = cycleList[typ];
-        tags.condition = 'destroyed';
-        break;
-
-      case 'demolished':
-        tags[typ] = cycleList[typ];
-        tags.condition = 'dismantled';
-        break;
-      }
-    } // End cycleList
+    // Unpack lifecycle tags
+    translate.lifecycleToOgr(tags);
 
     if (tds70.tdsPreRules == undefined)
     {
       // See ToOsmPostProcessing for more details about rulesList.
-      var rulesList = [
+      const rulesList = [
         ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
         ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
@@ -1320,7 +1235,7 @@ tds70 = {
     // Apply the rulesList.
     // translate.applyComplexRules(tags,attrs,tds70.tdsPreRules);
     // Pulling this out of translate
-    for (var i = 0, rLen = tds70.tdsPreRules.length; i < rLen; i++)
+    for (let i = 0, rLen = tds70.tdsPreRules.length; i < rLen; i++)
     {
       if (tds70.tdsPreRules[i][0](tags)) tds70.tdsPreRules[i][1](tags,attrs);
     }
@@ -1354,7 +1269,7 @@ tds70 = {
     // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
     // are not buildings.
     // Taking "place_of_worship" out of this and making it a building
-    var notBuildingList = [
+    const notBuildingList = [
       'artwork','atm','bbq','bench','bicycle_parking','bicycle_rental','biergarten','boat_sharing','car_sharing',
       'charging_station','clock','compressed_air','dog_bin','dog_waste_bin','drinking_water','emergency_phone',
       'ferry_terminal','fire_hydrant','fountain','game_feeding','grass_strip','grit_bin','hunting_stand','hydrant',
@@ -1364,13 +1279,13 @@ tds70 = {
       'fuel' // NOTE: Fuel goes to a different F_CODE
     ]; // End notBuildingList
 
-    if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
+    if (!(tags.facility) && tags.amenity && !(tags.building) && (!notBuildingList.includes(tags.amenity))) attrs.F_CODE = 'AL013';
 
     // going out on a limb and processing OSM specific tags:
     // - Building == a thing,
     // - Amenity == The area around a thing
     // Note: amenity=place_of_worship is a special case. It _should_ have an associated building tag
-    var facilityList = {
+    const facilityList = {
       'school':'850','university':'855','college':'857','hospital':'860'
     };
 
@@ -1408,16 +1323,16 @@ tds70 = {
     // Churches etc
     if (tags.building && ! tags.amenity)
     {
-      var how = [ 'church','chapel','cathedral','mosque','pagoda','shrine','temple',
+      const how = [ 'church','chapel','cathedral','mosque','pagoda','shrine','temple',
         'synagogue','tabernacle','stupa'];
-      if (how.indexOf(tags.building) > -1)
+      if (how.includes(tags.building))
       {
         tags.amenity = 'place_of_worship';
       }
 
-      var rc = [ 'mission','religious_community','seminary','convent','monastry',
+      const rc = [ 'mission','religious_community','seminary','convent','monastry',
         'noviciate','hermitage','retrest','marabout'];
-      if (rc.indexOf(tags.building) > -1)
+      if (rc.includes(tags.building))
       {
         tags.use = 'religious_activities';
       }
@@ -1709,17 +1624,17 @@ tds70 = {
     // standard one2one rules
     if (!(attrs.F_CODE) && tds70.fcodeLookup)
     {
-      for (var col in tags)
+      for (let col in tags)
       {
-        var value = tags[col];
+        const value = tags[col];
         if (col in tds70.fcodeLookup && (value in tds70.fcodeLookup[col]))
         {
-          var row = tds70.fcodeLookup[col][value];
+          const row = tds70.fcodeLookup[col][value];
           attrs.F_CODE = row[1];
         }
         else if (col in tds70.fcodeLookupOut && (value in tds70.fcodeLookupOut[col]))
         {
-          var row = tds70.fcodeLookupOut[col][value];
+          const row = tds70.fcodeLookupOut[col][value];
           attrs.F_CODE = row[1];
         }
       }
@@ -1728,7 +1643,7 @@ tds70 = {
     // If we still don't have an FCODE, try looking for individual elements
     if (!attrs.F_CODE)
     {
-      var fcodeMap = {
+      const fcodeMap = {
         'highway':'AP030','railway':'AN010','building':'AL013','ford':'BH070',
         'waterway':'BH140','bridge':'AQ040','railway:in_road':'AN010',
         'barrier':'AP040','tourism':'AL013','junction':'AP020',
@@ -1736,7 +1651,7 @@ tds70 = {
         'shop':'AL015','office':'AL015'
       };
 
-      for (var i in fcodeMap)
+      for (let i in fcodeMap)
       {
         if (i in tags)
         {
@@ -1747,9 +1662,9 @@ tds70 = {
     }
 
     // Sort out PYM vs ZI032_PYM vs MCC vs VCM - Ugly
-    var pymList = [ 'AL110','AL241','AQ055','AQ110','AT042'];
+    const pymList = [ 'AL110','AL241','AQ055','AQ110','AT042'];
 
-    var vcmList = [ 'AA040','AC020','AD010','AD025','AD030','AD041','AD050','AF010',
+    const vcmList = [ 'AA040','AC020','AD010','AD025','AD030','AD041','AD050','AF010',
       'AF020','AF021','AF030','AF040','AF070','AH055','AJ050','AJ051',
       'AJ080','AJ085','AL010','AL013','AL019','AL080','AM011','AM020',
       'AM030','AM070','AN076','AQ040','AQ045','AQ060','AQ116','BC050',
@@ -1757,12 +1672,12 @@ tds70 = {
 
     if (tags.material)
     {
-      if (pymList.indexOf(attrs.F_CODE) !== -1)
+      if (pymList.includes(attrs.F_CODE))
       {
         tags['tower:material'] = tags.material;
         delete tags.material;
       }
-      else if (vcmList.indexOf(attrs.F_CODE) !== -1)
+      else if (vcmList.includes(attrs.F_CODE))
       {
         tags['material:vertical'] = tags.material;
         delete tags.material;
@@ -1818,7 +1733,7 @@ tds70 = {
       }
     } // End Highway & Railway construction
 
-    // Now set the relative levels and transportation types for various features
+    // Now set the relative levels and transportation types for letious features
     if (tags.highway || tags.railway)
     {
       if (tags.bridge && tags.bridge !== 'no')
@@ -1857,7 +1772,7 @@ tds70 = {
     } // End if highway || railway
 
     // Debug
-    // for (var i in tags) print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
+    // for (let i in tags) print('End PreProc Tags: ' + i + ': :' + tags[i] + ':');
     // Tag changed
 
     if (tags.vertical_obstruction_identifier)
@@ -1929,13 +1844,13 @@ tds70 = {
     if (!tags.name) translate.swapName(tags);
 
     // Handle retired country tags
-    var ge4meta = {
+    const ge4meta = {
       'is_in:country_code':'addr:country',
       'country_code:second':'addr:country:second',
       'country_code:third':'addr:country:third',
       'country_code:fourth':'addr:country:fourth'};
 
-    for (var i in ge4meta)
+    for (let i in ge4meta)
     {
       if (tags[i])
       {
@@ -1981,7 +1896,7 @@ tds70 = {
     // with similar names and roughly the same attributes. Bleah!
     if (tds70.rules.swapListOut[attrs.F_CODE])
     {
-      for (var i in tds70.rules.swapListOut[attrs.F_CODE])
+      for (let i in tds70.rules.swapListOut[attrs.F_CODE])
       {
         if (i in attrs)
         {
@@ -1994,7 +1909,7 @@ tds70 = {
     // Sort out the UUID
     if (attrs.UFI)
     {
-      var str = attrs['UFI'].split(';');
+      const str = attrs['UFI'].split(';');
       attrs.UFI = str[0].replace('{','').replace('}','');
     }
     else if (tags['hoot:id'])
@@ -2007,7 +1922,7 @@ tds70 = {
     }
 
     // Add Weather Restrictions to transportation features
-    if (['AP010','AP030','AP050'].indexOf(attrs.FCODE > -1) && !attrs.ZI016_WTC )
+    if (['AP010','AP030','AP050'].includes(attrs.FCODE) && !attrs.ZI016_WTC )
     {
       switch (tags.highway)
       {
@@ -2144,7 +2059,7 @@ tds70 = {
 
     // RLE vs LOC: Need to deconflict this for various features.
     // This is the list of features that can be "Above Surface". Other features use RLE (Relative Level) instead.
-    if (attrs.LOC == '45' && (['AT005','AQ113','BH065','BH110'].indexOf(attrs.TRS) == -1))
+    if (attrs.LOC == '45' && (!['AT005','AQ113','BH065','BH110'].includes(attrs.TRS)))
     {
       attrs.RLE = '2'; // Raised above surface
       attrs.LOC = '44'; // On Surface
@@ -2155,9 +2070,9 @@ tds70 = {
     {
       if (attrs.TRS && attrs.TRS == '13') attrs.TRS = '3';
 
-      if (attrs.TRS && (['3','4','6','11','21','22','999'].indexOf(attrs.TRS) == -1))
+      if (attrs.TRS && (!['3','4','6','11','21','22','999'].includes(attrs.TRS)))
       {
-        var othVal = '(TRS:' + attrs.TRS + ')';
+        const othVal = '(TRS:' + attrs.TRS + ')';
         attrs.OTH = translate.appendValue(attrs.OTH,othVal,' ');
         attrs.TRS = '999';
 
@@ -2203,13 +2118,13 @@ tds70 = {
 
     // Fix the ZI020_GE4X Values
     // NOTE: This is the opposite to what is done in the toOSM post processing
-    var ge4attr = ['ZI020_GE4','ZI020_GE42','ZI020_GE43','ZI020_GE44'];
-    for (var i=0, iLen=ge4attr.length; i < iLen; i++)
+    const ge4attr = ['ZI020_GE4','ZI020_GE42','ZI020_GE43','ZI020_GE44'];
+    for (let i=0, iLen=ge4attr.length; i < iLen; i++)
     {
       if (attrs[ge4attr[i]])
       {
         // First, try the 2char country code
-        var urn = translate.convertCountryCode('c2','urn',attrs[ge4attr[i]]);
+        const urn = translate.convertCountryCode('c2','urn',attrs[ge4attr[i]]);
 
         // If nothing, try searching all of the fields to get a match
         if (urn == '') urn = translate.findCountryCode('urn',attrs[ge4attr[i]]);
@@ -2388,11 +2303,11 @@ tds70 = {
     translate.untangleAttributes(attrs,tags,tds70);
 
     // Debug:
-    if (tds70.configIn.OgrDebugDumptags == 'true')
-    {
-      translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
-      translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
-    }
+    // if (tds70.configIn.OgrDebugDumptags == 'true')
+    // {
+    //   translate.debugOutput(attrs,layerName,geometryType,'','Untangle attrs: ');
+    //   translate.debugOutput(tags,layerName,geometryType,'','Untangle tags: ');
+    // }
 
     // pre processing
     tds70.applyToOsmPreProcessing(attrs, layerName, geometryType);
@@ -2400,7 +2315,7 @@ tds70 = {
     // Use the FCODE to add some tags
     if (attrs.F_CODE)
     {
-      var ftag = tds70.fcodeLookup['F_CODE'][attrs.F_CODE];
+      const ftag = tds70.fcodeLookup['F_CODE'][attrs.F_CODE];
       if (ftag)
       {
         tags[ftag[0]] = ftag[1];
@@ -2415,8 +2330,8 @@ tds70 = {
 
     // Make a copy of the input attributes so we can remove them as they get translated. Looking at what
     // isn't used in the translation - this should end up empty.
-    // not in v8 yet: // var tTags = Object.assign({},tags);
-    var notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
+    // not in v8 yet: // let tTags = Object.assign({},tags);
+    let notUsedAttrs = (JSON.parse(JSON.stringify(attrs)));
     delete notUsedAttrs.F_CODE;
 
     // apply the simple number and text biased rules
@@ -2461,9 +2376,9 @@ tds70 = {
   // This is the main routine to convert _TO_ TDS
   toOgr : function(tags, elementType, geometryType)
   {
-    var tableName = ''; // The final table name
-    var returnData = []; // The array of features to return
-    var transMap = {}; // A map of translated attributes
+    let tableName = ''; // The final table name
+    let returnData = []; // The array of features to return
+    let transMap = {}; // A map of translated attributes
     attrs = {}; // The output attributes
     attrs.F_CODE = ''; // Initial setup
 
@@ -2488,7 +2403,7 @@ tds70 = {
     // Check if we have a schema. This is a quick way to workout if various lookup tables have been built
     if (tds70.rawSchema == undefined)
     {
-      var tmp_schema = tds70.getDbSchema();
+      const tmp_schema = tds70.getDbSchema();
     }
 
     // Start processing here
@@ -2531,9 +2446,9 @@ tds70 = {
       tds70.fuzzy = schemaTools.generateToOgrTable(tds70.rules.fuzzyTable);
 
       // Debug
-      //             for (var k1 in tds70.fuzzy)
+      //             for (let k1 in tds70.fuzzy)
       //             {
-      //                 for (var v1 in tds70.fuzzy[k1])
+      //                 for (let v1 in tds70.fuzzy[k1])
       //                 {
       //                     print(JSON.stringify([k1, v1, tds70.fuzzy[k1][v1][0], tds70.fuzzy[k1][v1][1], tds70.fuzzy[k1][v1][2]]));
       //                 }
@@ -2548,8 +2463,8 @@ tds70 = {
 
     // Make a copy of the input tags so we can remove them as they get translated. What is left is
     // the not used tags.
-    // not in v8 yet: // var tTags = Object.assign({},tags);
-    var notUsedTags = (JSON.parse(JSON.stringify(tags)));
+    // not in v8 yet: // const tTags = Object.assign({},tags);
+    let notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
     if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
@@ -2588,7 +2503,7 @@ tds70 = {
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
     // push the feature to o2s layer
-    var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
+    const gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
     if (!(tds70.AttrLookup[gFcode.toUpperCase()]))
     {
@@ -2624,8 +2539,8 @@ tds70 = {
       }
 
       // Convert all of the Tags to a string so we can jam it into an attribute
-      // var str = JSON.stringify(tags);
-      var str = JSON.stringify(tags,Object.keys(tags).sort());
+      // const str = JSON.stringify(tags);
+      const str = JSON.stringify(tags,Object.keys(tags).sort());
 
       // Shapefiles can't handle fields > 254 chars.
       // If the tags are > 254 char, split into pieces. Not pretty but stops errors.
@@ -2659,11 +2574,11 @@ tds70 = {
       //returnData.push({attrs: attrs, tableName: ''});
 
       // Now go through the features and clean them up.
-      var gType = geometryType.toString().charAt(0);
-      for (var i = 0, fLen = returnData.length; i < fLen; i++)
+      const gType = geometryType.toString().charAt(0);
+      for (let i = 0, fLen = returnData.length; i < fLen; i++)
       {
         // Make sure that we have a valid FCODE
-        var gFcode = gType + returnData[i]['attrs']['F_CODE'];
+        const gFcode = gType + returnData[i]['attrs']['F_CODE'];
         if (tds70.AttrLookup[gFcode.toUpperCase()])
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
@@ -2672,7 +2587,7 @@ tds70 = {
           // If we have unused tags, add them to the memo field.
           if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
           {
-            var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
+            const tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
           }
 
@@ -2707,11 +2622,11 @@ tds70 = {
       // If we have unused tags, throw them into the "extra" layer
       if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'file')
       {
-        var extraFeature = {};
+        let extraFeature = {};
         extraFeature.tags = JSON.stringify(notUsedTags);
         extraFeature.uuid = attrs.UFI;
 
-        var extraName = 'extra_' + geometryType.toString().charAt(0);
+        const extraName = 'extra_' + geometryType.toString().charAt(0);
 
         returnData.push({attrs: extraFeature, tableName: extraName});
       } // End notUsedTags
@@ -2719,7 +2634,7 @@ tds70 = {
       // Look for Review tags and push them to a review layer if found
       if (tags['hoot:review:needs'] == 'yes')
       {
-        var reviewAttrs = {};
+        let reviewAttrs = {};
 
         // Note: Some of these may be "undefined"
         reviewAttrs.note = tags['hoot:review:note'];
@@ -2727,7 +2642,7 @@ tds70 = {
         reviewAttrs.uuid = tags.uuid;
         reviewAttrs.source = tags['hoot:review:source'];
 
-        var reviewTable = 'review_' + geometryType.toString().charAt(0);
+        const reviewTable = 'review_' + geometryType.toString().charAt(0);
         returnData.push({attrs: reviewAttrs, tableName: reviewTable});
       } // End ReviewTags
     } // End else We have a feature
@@ -2735,7 +2650,7 @@ tds70 = {
     // Debug:
     if (tds70.configOut.OgrDebugDumptags == 'true')
     {
-      for (var i = 0, fLen = returnData.length; i < fLen; i++)
+      for (let i = 0, fLen = returnData.length; i < fLen; i++)
       {
         print('TableName ' + i + ': ' + returnData[i]['tableName'] + '  FCode: ' + returnData[i]['attrs']['F_CODE'] + '  Geom: ' + geometryType);
         translate.debugOutput(returnData[i]['attrs'],'',geometryType,elementType,'Out attrs: ');

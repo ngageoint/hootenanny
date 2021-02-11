@@ -3706,6 +3706,10 @@ tds70.rules = {
   // One2one translation table for converting "Other" OSM attributes to TDS
   // This is for Export only. The values are swapped before use
   one2oneOut : [
+    ['PCF','3','condition','disused'], // Unmaintained in spec
+    ['PCF','6','condition','demolished'], // Destroyed
+    ['PCF','6','condition','razed'], // Destroyed
+
     ['ZSAX_RS0','U','security:classification','UNCLASSIFIED'],
     ['ZSAX_RS0','R','security:classification','RESTRICTED'],
     ['ZSAX_RS0','C','security:classification','CONFIDENTIAL'],

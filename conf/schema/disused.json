@@ -1,0 +1,48 @@
+[
+    {
+        "geometries": ["node", "area"],
+        "isA": "poi",
+        "name": "disused:building=*",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "building",
+            "weight": 0.6
+        }
+    },
+    {
+        "geometries": ["node", "area"],
+        "isA": "poi",
+        "name": "disused:shop=*",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "shop",
+            "weight": 0.6
+        }
+    },
+    {
+        "geometries": ["node", "area"],
+        "isA": "poi",
+        "name": "disused:amenity=*",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity",
+            "weight": 0.6
+        }
+    },
+    {
+        "geometries": ["node", "area"],
+        "isA": "poi",
+        "name": "disused:man_made=*",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "man_made",
+            "weight": 0.6
+        }
+    },
+    {
+        "geometries": ["node", "area"],
+        "isA": "landuse",
+        "name": "disused:landuse=*",
+        "objectType": "tag"
+    }
+]

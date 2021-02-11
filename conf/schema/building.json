@@ -172,11 +172,6 @@
     },
     {
         "isA": "building",
-        "name": "building=house",
-        "objectType": "tag"
-    },
-    {
-        "isA": "building",
         "name": "building=museum",
         "objectType": "tag",
         "similarTo": {
@@ -193,12 +188,54 @@
         "objectType": "tag"
     },
     {
+        "aliases": [
+            "building=garages"
+        ],
         "categories": [
             "poi"
         ],
         "isA": "building",
         "name": "building=garage",
         "objectType": "tag"
+    },
+    {
+        "aliases": [
+            "building=residential", "building=detatched"
+        ],
+        "categories": [
+            "poi"
+        ],
+        "isA": "building",
+        "name": "building=house",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi"
+        ],
+        "isA": "building",
+        "name": "building=hut",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi"
+        ],
+        "isA": "building",
+        "name": "building=shed",
+        "objectType": "tag"
+    },
+    {
+        "categories": [
+            "poi"
+        ],
+        "isA": "building",
+        "name": "building=commercial",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "shop",
+            "weight": 0.7
+        }
     },
     {
         "categories": [

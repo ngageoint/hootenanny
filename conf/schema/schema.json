@@ -1,324 +1,114 @@
 [
-    {
-        "import": "abandoned.json"
-    },
-    {
-        "import": "accuracy.json"
-    },
-    {
-        "import": "addr.json"
-    },
-    {
-        "import": "address.json"
-    },
-    {
-        "import": "aeroway.json"
-    },
-    {
-        "import": "all_weather.json"
-    },
-    {
-        "import": "amenity.json"
-    },
-    {
-        "import": "angle.json"
-    },
-    {
-        "import": "artwork_type.json"
-    },
-    {
-        "import": "attribution.json"
-    },
-    {
-        "import": "barrier.json"
-    },
-    {
-        "import": "boundary.json"
-    },
-    {
-        "import": "brand.json"
-    },
-    {
-        "import": "bridge.json"
-    },
-    {
-        "import": "bridge_tunnel.json"
-    },
-    {
-        "import": "building.json"
-    },
-    {
-        "import": "building_place_of_worship.json"
-    },
-    {
-        "import": "capacity.json"
-    },
-    {
-        "import": "capital.json"
-    },
-    {
-        "import": "cemetery.json"
-    },
-    {
-        "import": "circumference.json"
-    },
-    {
-        "import": "colour.json"
-    },
-    {
-        "import": "comment.json"
-    },
-    {
-        "import": "contact.json"
-    },
-    {
-        "import": "created_by.json"
-    },
-    {
-        "import": "cuisine.json"
-    },
-    {
-        "import": "denomination.json"
-    },
-    {
-        "import": "description.json"
-    },
-    {
-        "import": "destination.json"
-    },
-    {
-        "import": "destroyed.json"
-    },
-    {
-        "import": "divider.json"
-    },
-    {
-        "import": "ele.json"
-    },
-    {
-        "import": "email.json"
-    },
-    {
-        "import": "emergency.json"
-    },
-    {
-        "import": "error.json"
-    },
-    {
-        "import": "facility.json"
-    },
-    {
-        "import": "FCODE.json"
-    },
-    {
-        "import": "feature_area.json"
-    },
-    {
-        "import": "fire_hydrant.json"
-    },
-    {
-        "import": "fixme.json"
-    },
-    {
-        "import": "frequency.json"
-    },
-    {
-        "import": "gauge.json"
-    },
-    {
-        "import": "golf.json"
-    },
-    {
-        "import": "height.json"
-    },
-    {
-        "import": "highway.json"
-    },
-    {
-        "import": "historic.json"
-    },
+    { "import": "abandoned.json" },
+    { "import": "accuracy.json" },
+    { "import": "addr.json" },
+    { "import": "address.json" },
+    { "import": "aeroway.json" },
+    { "import": "all_weather.json" },
+    { "import": "amenity.json" },
+    { "import": "angle.json" },
+    { "import": "artwork_type.json" },
+    { "import": "attribution.json" },
+    { "import": "barrier.json" },
+    { "import": "boundary.json" },
+    { "import": "brand.json" },
+    { "import": "bridge.json" },
+    { "import": "bridge_tunnel.json" },
+    { "import": "building.json" },
+    { "import": "building_place_of_worship.json" },
+    { "import": "capacity.json" },
+    { "import": "capital.json" },
+    { "import": "cemetery.json" },
+    { "import": "circumference.json" },
+    { "import": "colour.json" },
+    { "import": "comment.json" },
+    { "import": "contact.json" },
+    { "import": "created_by.json" },
+    { "import": "cuisine.json" },
+    { "import": "disused.json" },
+    { "import": "demolished.json" },
+    { "import": "denomination.json" },
+    { "import": "description.json" },
+    { "import": "destination.json" },
+    { "import": "destroyed.json" },
+    { "import": "divider.json" },
+    { "import": "ele.json" },
+    { "import": "email.json" },
+    { "import": "emergency.json" },
+    { "import": "error.json" },
+    { "import": "facility.json" },
+    { "import": "FCODE.json" },
+    { "import": "feature_area.json" },
+    { "import": "fire_hydrant.json" },
+    { "import": "fixme.json" },
+    { "import": "frequency.json" },
+    { "import": "gauge.json" },
+    { "import": "golf.json" },
+    { "import": "height.json" },
+    { "import": "highway.json" },
+    { "import": "historic.json" },
     {
         "#": "hoot.json conflicts with a file in the conf dir and causes hadoop tests to fail.",
         "import": "hoot_tags.json"
     },
-    {
-        "import": "industrial.json"
-    },
-    {
-        "import": "int_ref.json"
-    },
-    {
-        "import": "is_divided.json"
-    },
-    {
-        "import": "is_in.json"
-    },
-    {
-        "import": "junction.json"
-    },
-    {
-        "import": "landuse.json"
-    },
-    {
-        "import": "lanes.json"
-    },
-    {
-        "import": "leisure.json"
-    },
-    {
-        "import": "length.json"
-    },
-    {
-        "import": "license.json"
-    },
-    {
-        "import": "man_made.json"
-    },
-    {
-        "import": "maxspeed.json"
-    },
-    {
-        "import": "metadata.json"
-    },
-    {
-        "import": "military.json"
-    },
-    {
-        "import": "min_height.json"
-    },
-    {
-        "import": "mountain_pass.json"
-    },
-    {
-        "import": "name.json"
-    },
-    {
-        "import": "natural.json"
-    },
-    {
-        "import": "network.json"
-    },
-    {
-        "import": "note.json"
-    },
-    {
-        "import": "office.json"
-    },
-    {
-        "import": "old_ref.json"
-    },
-    {
-        "import": "oneway.json"
-    },
-    {
-        "import": "opening_hours.json"
-    },
-    {
-        "import": "operator.json"
-    },
-    {
-        "import": "parking.json"
-    },
-    {
-        "import": "place.json"
-    },
-    {
-        "import": "poi.json"
-    },
-    {
-        "import": "power.json"
-    },
-    {
-        "import": "public_transport.json"
-    },
-    {
-        "import": "railway.json"
-    },
-    {
-        "import": "ref.json"
-    },
-    {
-        "import": "REF1.json"
-    },
-    {
-        "import": "REF2.json"
-    },
-    {
-        "import": "religion.json"
-    },
-    {
-        "import": "road_marking.json"
-    },
-    {
-        "import": "roof.json"
-    },
-    {
-        "import": "route.json"
-    },
-    {
-        "import": "seamark.json"
-    },
-    {
-        "import": "security.json"
-    },
-    {
-        "import": "shop.json"
-    },
-    {
-        "import": "slope.json"
-    },
-    {
-        "import": "source.json"
-    },
-    {
-        "import": "sport.json"
-    },
-    {
-        "import": "start_date.json"
-    },
-    {
-        "import": "station.json"
-    },
-    {
-        "import": "surface.json"
-    },
-    {
-        "import": "survey.json"
-    },
-    {
-        "import": "tourism.json"
-    },
-    {
-        "import": "transport.json"
-    },
-    {
-        "import": "tunnel.json"
-    },
-    {
-        "import": "url.json"
-    },
-    {
-        "import": "use.json"
-    },
-    {
-        "import": "uuid.json"
-    },
-    {
-        "import": "water.json"
-    },
-    {
-        "import": "waterway.json"
-    },
-    {
-        "import": "website.json"
-    },
-    {
-        "import": "wetland.json"
-    },
-    {
-        "import": "width.json"
-    },
-    {
-        "import": "wikipedia.json"
-    }
+    { "import": "industrial.json" },
+    { "import": "int_ref.json" },
+    { "import": "is_divided.json" },
+    { "import": "is_in.json" },
+    { "import": "junction.json" },
+    { "import": "landuse.json" },
+    { "import": "lanes.json" },
+    { "import": "leisure.json" },
+    { "import": "length.json" },
+    { "import": "license.json" },
+    { "import": "man_made.json" },
+    { "import": "maxspeed.json" },
+    { "import": "metadata.json" },
+    { "import": "military.json" },
+    { "import": "min_height.json" },
+    { "import": "mountain_pass.json" },
+    { "import": "name.json" },
+    { "import": "natural.json" },
+    { "import": "network.json" },
+    { "import": "note.json" },
+    { "import": "office.json" },
+    { "import": "old_ref.json" },
+    { "import": "oneway.json" },
+    { "import": "opening_hours.json" },
+    { "import": "operator.json" },
+    { "import": "parking.json" },
+    { "import": "place.json" },
+    { "import": "poi.json" },
+    { "import": "power.json" },
+    { "import": "public_transport.json" },
+    { "import": "railway.json" },
+    { "import": "ref.json" },
+    { "import": "REF1.json" },
+    { "import": "REF2.json" },
+    { "import": "religion.json" },
+    { "import": "road_marking.json" },
+    { "import": "roof.json" },
+    { "import": "route.json" },
+    { "import": "seamark.json" },
+    { "import": "security.json" },
+    { "import": "shop.json" },
+    { "import": "slope.json" },
+    { "import": "source.json" },
+    { "import": "sport.json" },
+    { "import": "start_date.json" },
+    { "import": "station.json" },
+    { "import": "surface.json" },
+    { "import": "survey.json" },
+    { "import": "tourism.json" },
+    { "import": "transport.json" },
+    { "import": "tunnel.json" },
+    { "import": "url.json" },
+    { "import": "use.json" },
+    { "import": "uuid.json" },
+    { "import": "water.json" },
+    { "import": "waterway.json" },
+    { "import": "website.json" },
+    { "import": "wetland.json" },
+    { "import": "width.json" },
+    { "import": "wikipedia.json" }
 ]

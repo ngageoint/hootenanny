@@ -33,7 +33,7 @@ translate = {
   createLookup : function(one2one)
   {
     // build a more efficient lookup
-    var lookup = {};
+    let lookup = {};
 
     one2one.forEach( function(item) {
       // Taking this out to keep the 'undefined' values so that they get found then dropped during the transtion
@@ -67,7 +67,7 @@ translate = {
   // Given a list of strings create a dictionary of those strings that point to trues.
   createBoolLookup: function(list)
   {
-    var lookup = {};
+    let lookup = {};
     for (l in list)
     {
       lookup[l] = true;
@@ -99,13 +99,13 @@ translate = {
   joinList : function(listA,listB)
   {
     // Objects are passed by reference so we need to copy the lot
-    // Can't just do: var newList = listA;
+    // Can't just do: let newList = listA;
 
     // In QT, this is fractionally slower than a simple loop
     // In v8 this is faster.
-    var newList = JSON.parse(JSON.stringify(listA));
+    let newList = JSON.parse(JSON.stringify(listA));
 
-    for (var i in listB)
+    for (let i in listB)
     {
       newList[i] = listB[i];
     }
@@ -117,9 +117,9 @@ translate = {
   // Swap keys and values in a list
   flipList : function(inList)
   {
-    var newList = {};
+    let newList = {};
 
-    for (var i in inList)
+    for (let i in inList)
     {
       newList[inList[i]] = i;
     }
@@ -132,7 +132,7 @@ translate = {
   createBackwardsLookup : function(one2one)
   {
     // build a more efficient lookup
-    var lookup = {};
+    let lookup = {};
 
     one2one.forEach( function(item) {
       if (item[2]) // Make sure it isn't 'undefined'
@@ -158,15 +158,15 @@ translate = {
   // Apply one to one translations - used for import and export
   applyOne2One : function(inList, outList, lookup, fCodeList, transMap = [])
   {
-    var endChar = '',
+    let endChar = '',
       tAttrib = '',
       row = [];
 
-    var kList = Object.keys(inList).sort();
-    for (var i=0, kLen=kList.length; i < kLen; i++)
+    const kList = Object.keys(inList).sort();
+    for (let i=0, kLen=kList.length; i < kLen; i++)
     {
-      var key = kList[i];
-      var value = inList[key];
+      const key = kList[i];
+      const value = inList[key];
       if (key in lookup)
       {
         if (value in lookup[key])
@@ -243,7 +243,7 @@ translate = {
         }
         else
         {
-          // Removing the var test for a while.
+          // Removing the test for a while.
           // if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + key + '=' + value + ')');
           hoot.logTrace('Column not found:: (' + key + '=' + value + ')');
         }
@@ -255,13 +255,13 @@ translate = {
   // Apply one to one translations and don't report errors: missing columns etc
   applyOne2OneQuiet : function(inList, outList, lookup, transMap = [])
   {
-    var row = [];
+    let row = [];
 
-    var kList = Object.keys(inList).sort();
-    for (var i=0, kLen=kList.length; i < kLen; i++)
+    const kList = Object.keys(inList).sort();
+    for (let i=0, kLen=kList.length; i < kLen; i++)
     {
-      var key = kList[i];
-      var value = inList[key];
+      const key = kList[i];
+      const value = inList[key];
       if (key in lookup)
       {
         if (value in lookup[key])
@@ -293,17 +293,17 @@ translate = {
   // This version populates the OTH field for values that are not in the rules
   applyTdsOne2One : function(inList, outList, lookup, fCodeList,transmap = [])
   {
-    var endChar = '',
+    let endChar = '',
       tAttrib = '',
       otherVal = '',
       othVal = '',
       value = '';
 
-    var kList = Object.keys(inList).sort();
-    for (var i=0, kLen=kList.length; i < kLen; i++)
+    const kList = Object.keys(inList).sort();
+    for (let i=0, kLen=kList.length; i < kLen; i++)
     {
-      var key = kList[i];
-      var value = inList[key];
+      const key = kList[i];
+      const value = inList[key];
 
       // Debug
       // print('key: ' + key + '  value: ' + value);
@@ -314,7 +314,7 @@ translate = {
         // print('key in Lookup');
         if (value in lookup[key])
         {
-          var row = lookup[key][value];
+          const row = lookup[key][value];
 
           // Debug:
           // print('row[0]=' + row[0] + '  row[0]+endChar=' + row[0] + endChar);
@@ -427,11 +427,11 @@ translate = {
   // NOTE: We are assumeing that this will not go past 9....
   incrementTag: function (tag)
   {
-    var endChar = tag.charAt(tag.length - 1);
+    const endChar = tag.charAt(tag.length - 1);
 
     if (!isNaN(endChar))
     {
-      // var newNum = parseInt(endChar) + 1;
+      // let newNum = parseInt(endChar) + 1;
       return tag.substring(0,(tag.length - 1)) + (parseInt(endChar) + 1);
     }
     else
@@ -444,24 +444,24 @@ translate = {
   // Translate XX2, XX3 etc attributes
   fix23Attr: function (inAttrs, outTags, lookup)
   {
-    for (var col in inAttrs)
+    for (let col in inAttrs)
     {
       if (col == 'F_CODE') continue;
 
       // The OTH unpacker handles these
       if (inAttrs[col] == '999') continue;
 
-      var endChar = col.charAt(col.length - 1);
-      var value = inAttrs[col];
+      const endChar = col.charAt(col.length - 1);
+      const value = inAttrs[col];
 
       // Yes, there are attributes that go to 5. But, not to 11
       if (['2','3','4','5'].indexOf(endChar) > -1)
       {
-        var tAttrib = col.slice(0,-1);
+        const tAttrib = col.slice(0,-1);
 
         if (tAttrib in lookup && value in lookup[tAttrib])
         {
-          var row = lookup[tAttrib][value];
+          const row = lookup[tAttrib][value];
 
           if (row[0])
           {
@@ -493,15 +493,15 @@ translate = {
   // NOTE: We also handle XXX2, XXX3 etc since we need to be backwards compatible
   fix23Tags: function (inTags, outAttrs, lookup)
   {
-    for (var col in inTags)
+    for (let col in inTags)
     {
-      var endChar = col.charAt(col.length - 1);
-      var value = inTags[col];
+      const endChar = col.charAt(col.length - 1);
+      const value = inTags[col];
 
       // Yes, there are attributes that go to 5. But, not to 11
       if (['2','3','4','5'].indexOf(endChar) > -1)
       {
-        var tAttrib = '';
+        let tAttrib = '';
 
         if (col.charAt(col.length - 2) == ':')
         {
@@ -527,7 +527,7 @@ translate = {
         {
           if (value in lookup[tAttrib])
           {
-            var row = lookup[tAttrib][value];
+            const row = lookup[tAttrib][value];
 
             if (row[0])
             {
@@ -539,7 +539,7 @@ translate = {
           } // End value in lookup
           else if (value !== '') // Being defensive...
           {
-            var otherVal = lookup[tAttrib]['other'];
+            const otherVal = lookup[tAttrib]['other'];
 
             if (otherVal)
             {
@@ -568,13 +568,167 @@ translate = {
   }, // End fix23Tags
 
 
+  // Unpack lifecycle tags when exporting to Ogr
+  // E.g. disused:building=house  -->  condition=disused, building=house
+  lifecycleToOgr : function(tags)
+  {
+    // First, handle things like: highway=construction,  railway=disused
+    const customList = {'highway':'road','bridge':'yes','railway':'rail','building':'yes','tunnel':'yes'};
+    const lifeList = ['proposed','construction','disused','abandoned','demolished','destroyed','razed'];
+
+    // Handle: highway=construction, construction=motorway
+    for (let life of lifeList)
+    {
+      if (! tags[life]) continue;
+
+      if (tags.condition)
+      {
+        hoot.logWarn('Life: changeing ' + tags[life] + ' to ' + tags.condition);
+      }
+      else
+      {
+        tags.condition = life;
+      }
+    }
+
+    // for (let typ in customList)
+    // {
+    //   switch (tags[typ])
+    //   {
+    //   case undefined: // Break early if no value
+    //     break;
+
+    //   case 'construction':
+    //     if (tags.construction)
+    //     {
+    //       tags[typ] = tags.construction;
+    //       delete tags.construction;
+    //     }
+    //     else
+    //     {
+    //       tags[typ] = customList[typ];
+    //     }
+    //     tags.condition = 'construction';
+    //     break;
+
+    //   case 'proposed':
+    //     if (tags.proposed)
+    //     {
+    //       tags[typ] = tags.proposed;
+    //       delete tags.proposed;
+    //     }
+    //     else
+    //     {
+    //       tags[typ] = customList[typ];
+    //     }
+    //     tags.condition = 'proposed';
+    //     break;
+
+    //   case 'abandoned':
+    //   case 'disused':
+    //     tags[typ] = customList[typ];
+    //     tags.condition = 'abandoned';
+    //     break;
+
+    //   case 'demolished':
+    //     tags[typ] = customList[typ];
+    //     tags.condition = 'dismantled';
+    //     break;
+
+    //   case 'destroyed':
+    //     tags[typ] = customList[typ];
+    //     tags.condition = 'destroyed';
+    //     break;
+    //   }
+    // } // End customList
+
+print('About to loop');
+
+    // Initial cleanup
+    for (let tag in tags)
+    {
+      for (let life of lifeList)
+      {
+print('  loop: tag:' + tag + '  life:' + life)
+        if (tag.indexOf(life + ':') == 0)
+        {
+print('Got life:')
+
+          const tTag = tag.replace(life + ':','');
+          // if (tags[tTag] && lifeList.indexOf() > -1)
+
+print('life: tTag:' + tTag + '=' + tags[tag]);
+
+          if (tags[tTag] && lifeList.includes(tags[tTag]))
+          {
+            hoot.logError('Clash: ' + tTag + ' already exists and is ' + tags[tTag] + '  Tried to change it to: ' + tags[tag]);
+          }
+          else
+          {
+            hoot.logWarn('Include: ' + tTag + ' is ' + tags[tTag] + '  changed it to: ' + tags[tag]);
+            tags[tTag] = tags[tag];
+          }
+
+          tags.condition = life;
+          delete tags[tag];
+        }
+      }
+    }
+
+  }, // End lifecycleToOgr
+
+
+  // Re-pack lifecycle tags when converting to OSM
+  // E.g. condition=disused, building=house --> disused:building=house
+  lifecycleToOsm : function(tags,attrs)
+  {
+    // Exit early if we don't have a lifecycle tag
+    if (!tags.condition || tags.condition == 'functional') return;
+
+    const aliasList = {'disused':'abandoned','demolished':'dismantled','razed':'destroyed'}
+    for (const item in aliasList)
+    {
+      if (! tags[item]) continue;
+
+      // Debug
+      // print('life: alias:' + item + ' = ' + tags[item] + '  condition: ' + tags.condition);
+      // // Stomp on the condition based on a dedicated tag
+      // tags.condition = tags[item];
+      // delete tags[item];
+    }
+
+    // 1) Fix the XXX=YYY versions
+    const customList = ['highway','bridge','railway','building','tunnel'];
+    for (const item of customList)
+    {
+      if (! tags[item]) continue;
+
+      print('life: item:' + item + '='+ tags[item] + '  condition: ' + tags.condition);
+
+      if (tags[tags.condition])
+      {
+        hoot.logError('life: Overwriting :' + tags[tags.condition] + ':=:' + tags.condition + ': with :' + tags[item] + ':');
+      }
+      tags[tags.condition] = tags[item];
+      tags[item] = tags.condition;
+      delete tags.condition;
+      return;
+    }
+
+    // Now do the <status>:thing = YYY
+    print('lifeCycle: Start custom rules for: ' + tags.condition);
+
+
+  }, // End lifecycleToOsm
+
+
   // Parse o2s_X tags
   parseO2S : function(attrs)
   {
-    var outTags = {};
+    let outTags = {};
 
     // Check if the tags got split
-    var tTags = attrs.tag1;
+    let tTags = attrs.tag1;
     if (attrs.tag2) tTags = tTags + attrs.tag2;
     if (attrs.tag3) tTags = tTags + attrs.tag3;
     if (attrs.tag4) tTags = tTags + attrs.tag4;
@@ -599,13 +753,13 @@ translate = {
       if (tTags.charAt(0) == '"') tTags = tTags.slice(1);
       if (tTags.charAt(tTags.length-1) == '"') tTags = tTags.slice(-1);
 
-      var tArray = tTags.split('","');
+      const tArray = tTags.split('","');
 
-      for (var i in tArray)
+      for (let i in tArray)
       {
         // Now split each key:value pair and only keep complete pairs
         // Each pair should look like: building":"yes
-        var j = tArray[i].split('":"');
+        const j = tArray[i].split('":"');
         if (j[1])
         {
           outTags[j[0]] = j[1];
@@ -620,9 +774,9 @@ translate = {
   // Parse the note:extra tag and return an associative array of key/value pairs
   parseNoteExtra : function(rawNote)
   {
-    var outList = {};//,tmpList = rawNote.split(';');
+    let outList = {};//,tmpList = rawNote.split(';');
 
-    // for (var i = 0, len = tmpList.length; i < len; i++)
+    // for (let i = 0, len = tmpList.length; i < len; i++)
     // {
     //     noteVal = tmpList[i].split(':'); // Split into Key/Value
 
@@ -631,7 +785,7 @@ translate = {
     // }
 
     rawNote.split(';').forEach( function (item) {
-      var noteVal = item.split(':'); // Split into Key/Value
+      const noteVal = item.split(':'); // Split into Key/Value
       // If we have a Key then add it to the output
       if (noteVal[0]) outList[noteVal[0]] = noteVal[1];
     });
@@ -645,7 +799,7 @@ translate = {
   //      (<Attr>:<Value>) (<Attr>:<Value>.....)
   parseOTH : function(rawOTH)
   {
-    // var othVal = [],
+    // let othVal = [],
     //     outList = {},
     //     tVal = '',
     //     tVal = rawOTH.replace(/\) \(/g,'#'); // Swap ') (' for #)
@@ -654,7 +808,7 @@ translate = {
 
     //     tmpList = tVal.split('#'); // Split on #
 
-    // for (var i = 0, len = tmpList.length; i < len; i++)
+    // for (let i = 0, len = tmpList.length; i < len; i++)
     // {
     //     othVal = tmpList[i].split(':'); // Split into Key/Value
 
@@ -662,19 +816,19 @@ translate = {
     //     if (othVal[0] && othVal[1]) outList[othVal[0]] = othVal[1];
     // }
 
-    var outList = {};
+    let outList = {};
 
     // 1) Swap ') (' for #)
     // 2) Get rid of ( and )
     // 3) Split on '#'
     rawOTH.replace(/\) \(/g,'#').replace(/[\(\)]/g,'').split('#').forEach( function (item) {
-      var othVal = item.split(':'); // Split into Key/Value
+      const othVal = item.split(':'); // Split into Key/Value
       // If we have a Key _and_ a value, then add it to the output
       if (othVal[0] && othVal[1]) outList[othVal[0]] = othVal[1];
     });
 
     // Debug:
-    // for (var j in outList) print('parseOTH: k=  :' + j + ':  v= :' + outList[j] + ':');
+    // for (let j in outList) print('parseOTH: k=  :' + j + ':  v= :' + outList[j] + ':');
 
     return outList;
   },
@@ -682,12 +836,12 @@ translate = {
 
   packOTH : function(rawList)
   {
-    var othVal = '',
+    let othVal = '',
       othField = '';
 
     // Now sort the list. Not needed for the spec but it makes life easier when comparing attributes in the output
-    var tList = Object.keys(rawList).sort();
-    for (var i = 0, fLen = tList.length; i < fLen; i++)
+    const tList = Object.keys(rawList).sort();
+    for (let i = 0, fLen = tList.length; i < fLen; i++)
     {
       othVal = '(' + tList[i] + ':' + rawList[tList[i]] + ')';
       othField = translate.appendValue(othField, othVal, ' ');
@@ -700,13 +854,13 @@ translate = {
   // Process OTH values and convert them to tags
   processOTH : function(attrs, tags, lookup)
   {
-    var othList = translate.parseOTH(attrs.OTH),
+    let othList = translate.parseOTH(attrs.OTH),
       key = [],
       tAttrib = '',
       tValue = '',
       endChar = '';
 
-    for (var i in othList)
+    for (let i in othList)
     {
       // Debug:
       // print('processOTH i: ' + i + '  atr= :' + attrs[i] + ':');
@@ -786,10 +940,10 @@ translate = {
     } // End for i
 
     // Now rebuild the "note:oth" tag with whatever is left in othList
-    var othVal = '';
+    let othVal = '';
     delete tags['note:oth'];
 
-    for (var i in othList)
+    for (let i in othList)
     {
       othVal = '(' + i + ':' + othList[i] + ')';
       tags['note:oth'] = translate.appendValue(tags['note:oth'],othVal,' ');
@@ -800,14 +954,14 @@ translate = {
   // Unpack <OSM>XXX</OSM> from TXT/MEMO fields
   unpackMemo : function(rawMemo)
   {
-    var tgs = '';
-    var txt = '';
+    let tgs = '';
+    let txt = '';
 
-    var sIndex = rawMemo.indexOf('<OSM>');
+    const sIndex = rawMemo.indexOf('<OSM>');
 
     if (sIndex > -1)
     {
-      var eIndex = rawMemo.indexOf('</OSM>');
+      const eIndex = rawMemo.indexOf('</OSM>');
 
       if (eIndex > -1)
       {
@@ -875,7 +1029,7 @@ translate = {
   // http://wiki.openstreetmap.org/wiki/Overpass_turbo/Polygon_Features
   isOsmArea : function(tags)
   {
-    var result = false;
+    let result = false;
 
     if (translate.areaList == undefined)
     {
@@ -926,7 +1080,7 @@ translate = {
     else
     {
       // Now loop through the tags
-      for (var i in tags)
+      for (let i in tags)
       {
         if (i in translate.areaList)
         {
@@ -956,7 +1110,7 @@ translate = {
      */
   isEmpty : function(v)
   {
-    var result = false;
+    let result = false;
     if (v === '' || v === undefined)
     {
       result = true;
@@ -968,7 +1122,7 @@ translate = {
   // isOK - A combination of isNumber and IsUnknown to make life easier for value checks
   isOK : function(v)
   {
-    var result = true;
+    let result = true;
 
     if (v === '' || v === '0' || v == 0.0 || v == -32768.0 || v == -32767.0 || v === '-999999' || v === undefined)
     {
@@ -988,10 +1142,10 @@ translate = {
   // This is a bit backwards: If it is Unknown it is true...
   isUnknown : function(v)
   {
-    var result = false;
+    let result = false;
 
     // Exploit the object
-    var dropList = {'No Information':1,
+    let dropList = {'No Information':1,
       'UNK':1, 'Unk':1,
       'N_A':1, 'N/A':1,'NA':1,
       '-999999':1,
@@ -1024,9 +1178,9 @@ translate = {
   // Chop a datetime field down to a single value and get it to 20 characters long for export to MGCP & TDS
   chopDateTime : function(rawDateTime)
   {
-    var finalDateTime = '';
+    let finalDateTime = '';
 
-    var tmpList = rawDateTime.split(';');
+    let tmpList = rawDateTime.split(';');
 
     // NOTE: This is a workaround untill we can get the "reference dataset" datetime
     // Sort the list so we grab the earliest date.
@@ -1061,7 +1215,7 @@ translate = {
   txtToOSM : function(attrs, tags, rules)
   {
     // Convert Attrs to Tags
-    for (var i in rules)
+    for (let i in rules)
     {
       if (i in attrs)
       {
@@ -1078,7 +1232,7 @@ translate = {
   txtToOgr : function(attrs, tags, rules, transMap)
   {
     // convert Tags to Attrs
-    for (var i in rules)
+    for (let i in rules)
     {
       if (rules[i] in tags)
       {
@@ -1111,7 +1265,7 @@ translate = {
   numToOSM : function(attrs, tags, rules)
   {
     // Convert Attrs to Tags
-    for (var i in rules)
+    for (let i in rules)
     {
       if (i in attrs)
       {
@@ -1135,12 +1289,12 @@ translate = {
   numToOgr : function(attrs, tags, rules, intList, transMap)
   {
     // convert Tags to Attrs
-    for (var i in rules)
+    for (let i in rules)
     {
       if (rules[i] in tags)
       {
         // Strip out anything that is not a number. Get rid of 125m etc
-        var tNum = tags[rules[i]].replace(/-[^0-9\\.]+/g, '');
+        let tNum = tags[rules[i]].replace(/-[^0-9\\.]+/g, '');
 
         if (translate.isNumber(tNum))
         {
@@ -1148,7 +1302,7 @@ translate = {
           if (intList.indexOf(i) > -1)
           {
             // Quick bitwise or to strip off anything after the decimal
-            var tInt = tNum | 0;
+            const tInt = tNum | 0;
 
             // Back to a string for a comparison
             if ((tInt + '') !== tNum)
@@ -1178,7 +1332,7 @@ translate = {
   // Build the lookup table for the applyComplexRules function
   buildComplexRules : function (rawList)
   {
-    var rulesFunction = [];
+    let rulesFunction = [];
 
     rawList.forEach( function (item) {
       rulesFunction.push([new Function('t', 'return ' + item[0]), new Function('t','a', item[1])]);
@@ -1196,16 +1350,16 @@ translate = {
   applyComplexRules : function(tgs, atrs, rulesList)
   {
     /*
-        var rulesFunction = [];
+        let rulesFunction = [];
 
-        for (var i = 0, rLen = rulesList.length; i < rLen; i++)
+        for (let i = 0, rLen = rulesList.length; i < rLen; i++)
         {
             rulesFunction.push([new Function('t', 'return ' + rulesList[i][0]), new Function('t','a', rulesList[i][1])]);
         }
 
         function applyRules(t,a)
         {
-            for (var i = 0, rLen = rulesFunction.length; i < rLen; i++)
+            for (let i = 0, rLen = rulesFunction.length; i < rLen; i++)
             {
                 if (rulesFunction[i][0](t)) rulesFunction[i][1](t,a);
             }
@@ -1220,7 +1374,7 @@ translate = {
   // makeAttrLookup - build a lookup table for layers and Attrs
   makeTdsAttrLookup : function(schema)
   {
-    var lookup = {};
+    let lookup = {};
 
     schema.forEach( function (item) {
       lookup[item.name] = [];
@@ -1236,12 +1390,12 @@ translate = {
   // makeAttrLookup - build a lookup table for FCODEs and Attrs
   makeAttrLookup : function(schema)
   {
-    var lookup = {};
+    let lookup = {};
 
     // Add the attrArray to the list as <geom><FCODE>:[array]
     // Eg[L,A,P]AP030:[array]
     schema.forEach( function (item) {
-      var iName = item.geom.charAt(0) + item.fcode;
+      const iName = item.geom.charAt(0) + item.fcode;
       lookup[iName] = [];
       item.columns.forEach( function (column) {
         lookup[iName].push(column.name);
@@ -1255,7 +1409,7 @@ translate = {
   // makeLayerNameLookup - build a lookup table for FCODE to LayerName
   makeLayerNameLookup : function(schema)
   {
-    var lookup = {};
+    let lookup = {};
 
     schema.forEach( function (item) {lookup[item.geom.charAt(0) + item.fcode] = item.name;});
 
@@ -1392,11 +1546,11 @@ translate = {
   // debugOutput - Dump out tags or attributes to figure out what is going on
   debugOutput : function(values,layerName,geometryType,elementType,text)
   {
-    var kList = Object.keys(values).sort();
+    const kList = Object.keys(values).sort();
     if (kList.length > 0)
     {
       print('LayerName: ' + layerName + '  Geometry: ' + geometryType + '  Element Type: ' + elementType);
-      for (var i = 0, fLen = kList.length; i < fLen; i++) if (values[kList[i]]) print(text + kList[i] + ': :' + values[kList[i]] + ':');
+      for (let i = 0, fLen = kList.length; i < fLen; i++) if (values[kList[i]]) print(text + kList[i] + ': :' + values[kList[i]] + ':');
     }
   }, // End debugOutput
 
@@ -1404,7 +1558,7 @@ translate = {
   // dumpLookup - Dump a Lookup table so we can check it
   dumpLookup : function(lookupTable)
   {
-    for (var i in lookupTable)
+    for (let i in lookupTable)
     {
       print('Key: ' + i + '  Value: ' + lookupTable[i]);
     }
@@ -1414,8 +1568,8 @@ translate = {
   // dumpOne2OneLookup - Dump a Lookup table so we can check it
   dumpOne2OneLookup : function(lookupTable)
   {
-    for (var i in lookupTable)
-      for (var j in lookupTable[i])
+    for (let i in lookupTable)
+      for (let j in lookupTable[i])
       {
         print('I:' + i + '  J:' + j + '  ' + lookupTable[i][j][0] + ' = ' + lookupTable[i][j][1]);
       }
@@ -1447,9 +1601,9 @@ translate = {
   {
     if (changeString == '') return;
 
-    var override = JSON.parse(changeString);
+    const override = JSON.parse(changeString);
 
-    for (var i in override)
+    for (let i in override)
     {
       // Delete: Remove a tag
       if (override[i] == '')
@@ -1461,7 +1615,7 @@ translate = {
       // Modify: change a tag value ONLY if the tag already exists
       else if (i.charAt(0) == '#')
       {
-        var tag = i.slice(1);
+        const tag = i.slice(1);
         if (values[tag]) values[tag] = override[i];
       }
       // Add/Modify: change or add a tag
@@ -1476,9 +1630,9 @@ translate = {
 
 
   getMaxAsString: function(value1, value2) {
-    var maxVal;
-    var val1 = parseInt(value1);
-    var val2 = parseInt(value2);
+    let maxVal;
+    const val1 = parseInt(value1);
+    const val2 = parseInt(value2);
 
     if (!val1) {
       maxVal = value2;
@@ -1499,11 +1653,11 @@ translate = {
     // We need to unpack this before we can do anything.
     if (attrs.other_tags)
     {
-      var tList = tags.other_tags.toString().replace(/\\/g,'').replace(/\"/g,'"').split('","');
+      const tList = tags.other_tags.toString().replace(/\\/g,'').replace(/\"/g,'"').split('","');
 
       delete attrs.other_tags;
 
-      for (var val in tList)
+      for (let val in tList)
       {
         vList = tList[val].split('"=>"');
 
@@ -1514,10 +1668,10 @@ translate = {
       }
     }
 
-    for (var col in attrs)
+    for (let col in attrs)
     {
       // Sort out FCODE funkyness:  f_CODE, F_Code etc
-      var tKey = col.toUpperCase();
+      let tKey = col.toUpperCase();
       tKey = tKey.replace(/\s/g, '').replace(/_/g, '');
 
       if (tKey == 'FCODE' && col !== 'F_CODE')
@@ -1876,8 +2030,8 @@ translate = {
   convertCountryCode: function(from,to,value) {
     if (!value || value == '') return '';
 
-    var output = '';
-    for (var i = 0, iLen = translate.countryTable.length; i < iLen; i++){
+    let output = '';
+    for (let i = 0, iLen = translate.countryTable.length; i < iLen; i++){
       if (translate.countryTable[i][from] == value)
       {
         output = translate.countryTable[i][to];
@@ -1893,8 +2047,8 @@ translate = {
   convertLocalNameCountryCode: function(to,value) {
     if (!value || value == '') return '';
 
-    var output = '';
-    for (var i = 0, iLen = translate.countryTable.length; i < iLen; i++){
+    let output = '';
+    for (let i = 0, iLen = translate.countryTable.length; i < iLen; i++){
       if (translate.countryTable[i]['lN'])
       {
         if (value in translate.countryTable[i]['lN'])
@@ -1914,8 +2068,8 @@ translate = {
   findCountryCode: function(to,value) {
     if (!value || value == '') return '';
 
-    var output = '';
-    for (var i = 0, iLen = translate.countryTable.length; i < iLen; i++){
+    let output = '';
+    for (let i = 0, iLen = translate.countryTable.length; i < iLen; i++){
       if (translate.countryTable[i]['sN'] == value ||
           translate.countryTable[i]['n'] == value.toUpperCase() ||
           translate.countryTable[i]['fN'] == value ||
@@ -2194,8 +2348,8 @@ translate = {
   convertLanguageCode: function(from,to,value) {
     if (!value || value == '') return '';
 
-    var output = '';
-    for (var i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
+    let output = '';
+    for (let i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
       if (translate.languageCodes[i][from] == value)
       {
         output = translate.languageCodes[i][to];
@@ -2212,8 +2366,8 @@ translate = {
   findLanguage2Code: function(value) {
     if (!value || value == '') return '';
 
-    var output = '';
-    for (var i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
+    let output = '';
+    for (let i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
       if (translate.languageCodes[i]['a3b'] == value ||
           translate.languageCodes[i]['a3t'] == value)
       {
@@ -2223,7 +2377,7 @@ translate = {
     }
 
     if (value.length > 3)
-      for (var i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
+      for (let i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
         if (translate.languageCodes[i]['n'].indexOf(value) > -1)
         {
           output = translate.languageCodes[i]['a2'];
@@ -2240,8 +2394,8 @@ translate = {
   findLanguageName: function(value) {
     if (!value || value == '') return '';
 
-    var output = '';
-    for (var i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
+    let output = '';
+    for (let i = 0, iLen = translate.languageCodes.length; i < iLen; i++){
       if (translate.languageCodes[i]['a3b'] == value ||
           translate.languageCodes[i]['a3t'] == value ||
           translate.languageCodes[i]['a2'] == value)

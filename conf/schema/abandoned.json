@@ -16,5 +16,51 @@
             "name": "place=populated",
             "weight": 0.4
         }
+    },
+    {
+        "geometries": ["node","area"],
+        "isA": "poi",
+        "name": "abandoned:building=*",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "building",
+            "weight": 0.4
+        }
+    },
+    {
+        "geometries": ["node","area"],
+        "isA": "poi",
+        "name": "abandoned:shop=*",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "shop",
+            "weight": 0.4
+        }
+    },
+    {
+        "geometries": ["node","area"],
+        "isA": "poi",
+        "name": "abandoned:amenity=*",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "amenity",
+            "weight": 0.4
+        }
+    },
+    {
+        "geometries": ["node","area"],
+        "isA": "poi",
+        "name": "abandoned:man_made=*",
+        "objectType": "tag",
+        "similarTo": {
+            "name": "man_made",
+            "weight": 0.4
+        }
+    },
+    {
+        "geometries": ["node","area"],
+        "isA": "landuse",
+        "name": "abandoned:landuse=*",
+        "objectType": "tag"
     }
 ]
