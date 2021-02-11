@@ -109,14 +109,14 @@ pipeline {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
+                // Until PCH support is fixed in Sonar, run this to fix
+                sh "sed -i 's|make \$SILENT_MAKE clean|make \$SILENT_MAKE clean \&\& ./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
                 script {
                     if (env.BRANCH_NAME == "master") {
                         // Compile instrumented code for master branch which allows for calculating coverage
                         sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
                     }
                 }
-                // Until PCH support is fixed in Sonar, run this to fix
-                sh "sed -i 's/make $SILENT_MAKE clean/make $SILENT_MAKE clean && ./scripts/sonar/sonar-prep.makefile.sh' VagrantBuild.sh"
             }
         }
         stage("Build") {
