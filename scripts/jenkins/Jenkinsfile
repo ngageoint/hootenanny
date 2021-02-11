@@ -115,6 +115,8 @@ pipeline {
                         sh "sed -i 's/--with-uitests/--with-uitests --with-coverage/g' VagrantBuild.sh"
                     }
                 }
+                // Until PCH support is fixed in Sonar, run this to fix
+                sh "sed -i 's/make $SILENT_MAKE clean/make $SILENT_MAKE clean && ./scripts/sonar/sonar-prep.makefile.sh' VagrantBuild.sh"
             }
         }
         stage("Build") {
