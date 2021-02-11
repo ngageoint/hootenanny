@@ -6,7 +6,11 @@ set -e
 #hoot-cmd/Makefile
 # none
 #hoot-core/Makefile
-sed -i "s|(CXX) -c -include tmp/release/HootCore|(CXX) -c -include src/main/cpp/hoot/core/HootCoreStable.h|g" hoot-core/Makefile
+if [ -f hoot-core/Makefile ]; then
+  sed -i "s|(CXX) -c -include tmp/release/HootCore|(CXX) -c -include src/main/cpp/hoot/core/HootCoreStable.h|g" hoot-core/Makefile
+else
+  echo "hoot-core/Makefile doesn't exist yet!"
+fi
 #hoot-core/Makefile.qmake
 #sed -i "s|(CXX) -c -include tmp/release/HootCore|(CXX) -c -include src/main/cpp/hoot/core/HootCoreStable.h|g" hoot-core/Makefile.qmake
 #hoot-core-test/Makefile
