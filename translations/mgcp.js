@@ -338,56 +338,7 @@ mgcp = {
 
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
   {
-    // Drop the FCSUBTYPE since we don't use it
-    if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
-    // The swap list. These are the same attr, just named differently
-    // These may get converted back on output
-    var swapList = {
-        'CPYRT_NOTE':'CCN',
-        'SRC_INFO':'SDP',
-        'SRC_DATE':'SDV',
-        'SMC':'MCC'
-        };
-
-    // List of data values to drop/ignore
-    var ignoreList = { '-32765':1,'-32767':1,'-32768':1,
-               '998':1,'-999999':1,
-               'n_a':1,'noinformation':1,'unknown':1,'unk':1 };
-
-    // Unit conversion. Some attributes are in centimetres, others in decimetres
-    // var unitList = { 'GAW':100,'HCA':10,'WD1':10,'WD2':10,'WD3':10,'WT2':10 };
-
-    for (var col in attrs)
-    {
-      // slightly ugly but we would like to account for: 'No Information','noInformation' etc
-      // First, push to lowercase
-      var attrValue = attrs[col].toString().toLowerCase();
-
-      // Get rid of the spaces in the text
-      attrValue = attrValue.replace(/\s/g, '');
-
-      // Wipe out the useless values
-      // if (attrs[col] == '-32768' || attrValue == 'unk' || attrValue == 'n_a' || attrValue == 'noinformation' || attrs[col] == '')
-      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
-      {
-        // debug: Comment this out to leave all of the No Info stuff in for testing
-        delete attrs[col];
-        continue;
-      }
-
-      // Sort out units - if needed
-      // if (col in unitList) attrs[col] = attrs[col] / unitList[col];
-
-      // Now see if we need to swap attr names
-      if (col in swapList)
-      {
-        // print('Swapped: ' + swapList[i]); // debug
-        attrs[swapList[col]] = attrs[col];
-        delete attrs[col];
-        continue
-      }
-    } // End col in attrs loop
 
     if (attrs.F_CODE)
     {
@@ -498,7 +449,7 @@ mgcp = {
     } // End of Find an FCode
 
     // The FCODE for Buildings is different. TDS uses AL013
-    if (attrs.F_CODE == 'AL015') attrs.F_CODE = 'AL013';
+    // if (attrs.F_CODE == 'AL015') attrs.F_CODE = 'AL013';
 
     // Swap the F_CODE for a Ferry Terminal
     if (attrs.F_CODE == 'AQ125' && attrs.TRS == '7')
@@ -809,7 +760,7 @@ mgcp = {
         if (!tags['tower:type']) tags['tower:type'] = 'cooling';
         break;
 
-      case 'AL013': // Building  NOTE this is the TDS F_CODE for Building. This was swapped during pre-processing
+      case 'AL015': // Building
         if (tags.surface == 'unknown') delete tags.surface;
         break;
 
@@ -1485,7 +1436,12 @@ mgcp = {
     if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL015';
 
     // The FCODE for Buildings changed...
-    if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
+    if (attrs.F_CODE == 'AL013')
+    {
+      // Debug
+      print('Swapped AL013');
+      attrs.F_CODE = 'AL015';
+    }
 
     // Tag changed
     if (tags.vertical_obstruction_identifier)
@@ -1655,7 +1611,7 @@ mgcp = {
       var fcodeMap = {
         'highway':'AP030','railway':'AN010','building':'AL015',
         'ford':'BH070','waterway':'BH140','bridge':'AQ040','tomb':'AL036',
-        'railway:in_road':'AN010','tourism':'AL013','mine:access':'AA010',
+        'railway:in_road':'AN010','tourism':'AL015','mine:access':'AA010',
         'cutting':'DB070','shop':'AL015','office':'AL015'
       };
 
@@ -2097,6 +2053,57 @@ mgcp = {
       for (var i in mgcp.rules.numBiasedV4) mgcp.rules.numBiased[i] = mgcp.rules.numBiasedV4[i];
       for (var i in mgcp.rules.numBiasedV3) mgcp.rules.numBiased[i] = mgcp.rules.numBiasedV3[i];
     }
+
+    // Clean up BEFORE trying to untangle
+    if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+    if (attrs.FCSubtype) delete attrs.FCSubtype;
+
+    // The swap list. These are the same attr, just named differently
+    // These may get converted back on output
+    var swapList = {
+        'CPYRT_NOTE':'CCN',
+        'SRC_INFO':'SDP',
+        'SRC_DATE':'SDV',
+        'SMC':'MCC'
+        };
+
+    // List of data values to drop/ignore
+    var ignoreList = { '-32765':1,'-32767':1,'-32768':1,
+               '998':1,'-999999':1,'fcsubtype':1,
+               'n_a':1,'n/a':1,'noinformation':1,'unknown':1,'unk':1 };
+
+    // Unit conversion. Some attributes are in centimetres, others in decimetres
+    // var unitList = { 'GAW':100,'HCA':10,'WD1':10,'WD2':10,'WD3':10,'WT2':10 };
+    for (var col in attrs)
+    {
+      // slightly ugly but we would like to account for: 'No Information','noInformation' etc
+      // First, push to lowercase
+      var attrValue = attrs[col].toString().toLowerCase();
+
+      // Get rid of the spaces in the text
+      attrValue = attrValue.replace(/\s/g, '');
+
+      // Wipe out the useless values
+      // if (attrs[col] == '-32768' || attrValue == 'unk' || attrValue == 'n_a' || attrValue == 'noinformation' || attrs[col] == '')
+      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
+      {
+        // debug: Comment this out to leave all of the No Info stuff in for testing
+        delete attrs[col];
+        continue;
+      }
+
+      // Sort out units - if needed
+      // if (col in unitList) attrs[col] = attrs[col] / unitList[col];
+
+      // Now see if we need to swap attr names
+      if (col in swapList)
+      {
+        // print('Swapped: ' + swapList[i]); // debug
+        attrs[swapList[col]] = attrs[col];
+        delete attrs[col];
+        continue
+      }
+    } // End col in attrs loop
 
     // Untangle MGCP attributes & OSM tags
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import

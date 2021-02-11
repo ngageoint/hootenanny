@@ -1554,6 +1554,9 @@ translate = {
         continue;
       }
 
+      // No need to look for this
+      if (col == 'F_CODE') continue
+
       // See if the tag is a valid TDS attribute
       if (~spec.rules.ignoreList.indexOf(col) ||
           col in spec.rules.numBiased ||
@@ -1575,6 +1578,7 @@ translate = {
       }
 
       // Not an Attribute so push it to the tags object
+      // print('Pushing: ' + col);
       tags[col] = attrs[col];
       delete attrs[col];
     }
