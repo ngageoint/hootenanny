@@ -110,7 +110,7 @@ pipeline {
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
                 // Until PCH support is fixed in Sonar, run this to fix
-                sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\n./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
+                sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\necho Updating PCH\\n./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
                 script {
                     if (env.BRANCH_NAME == "master") {
                         // Compile instrumented code for master branch which allows for calculating coverage
