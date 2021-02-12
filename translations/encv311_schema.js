@@ -8813,7 +8813,7 @@ getDbSchema: function()
         {value:"116",name:"S-JYSK"}, 
         {value:"117",name:"Voirol 1950"}, 
         {value:"118",name:"Average Terrestrial System 1977"}, 
-        {value:"119",name:"Compensation G\E9od\E9sique du Qu\E9bec 1977"}, 
+        {value:"119",name:"Compensation Géodésique du Québec 1977"}, 
         {value:"120",name:"Finnish (KKJ)"}, 
         {value:"121",name:"Ordnance Survey of Ireland"}, 
         {value:"122",name:"Revised Kertau"}, 
