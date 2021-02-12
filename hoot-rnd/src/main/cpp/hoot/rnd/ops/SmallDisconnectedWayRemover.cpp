@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/criterion/WayNodeCountCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
 
 namespace hoot
 {
@@ -68,14 +69,17 @@ void SmallDisconnectedWayRemover::apply(OsmMapPtr& map)
   _map = map;
   LOG_VART(_maxWayLength);
 
-  // remove ways above a certain size
+  // length calc requires planar
+  MapProjector::projectToPlanar(_map);
+
+  // remove ways at or below a certain size
   std::shared_ptr<WayLengthCriterion> lengthCrit(
     new WayLengthCriterion(_maxWayLength, NumericComparisonType::LessThanOrEqualTo, _map));
-  // remove ways having a node count above a certain amount
+  // remove ways having a node count at or below a certain amount
   std::shared_ptr<WayNodeCountCriterion> nodeCountCrit(
     new WayNodeCountCriterion(_maxWayNodeCount, NumericComparisonType::LessThanOrEqualTo));
   ChainCriterionPtr wayCrit(new ChainCriterion(lengthCrit, nodeCountCrit));
-  // require that ways be disconnected to be removed
+  // require that ways be disconnected from other ways to be removed
   std::shared_ptr<DisconnectedWayCriterion> disconnectedCrit(new DisconnectedWayCriterion(_map));
   ChainCriterionPtr crit(new ChainCriterion(wayCrit, disconnectedCrit));
 

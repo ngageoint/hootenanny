@@ -50,7 +50,7 @@ namespace hoot
  * -D bounds="8.4762,12.0504,8.4793,12.0526" \
  * -D bounds.keep.entire.features.crossing.bounds=false \
  * -D conflate.pre.ops+="hoot::SmallDisconnectedWayRemover" \
- * -D small.disconnected.way.remover.max.node.count=2 \
+ * -D small.disconnected.way.remover.max.node.count=3 \
  * -D small.disconnected.way.remover.max.length=20.0 \
  * -D dual.highway.marker.mark.crossing.roads=true \
  * /home/vagrant/hoot/tmp/kano_033133330302/input/ \
@@ -59,6 +59,9 @@ namespace hoot
  * --reverse-inputs \
  * --max-iterations -1 \
  * --transfer-tags /home/vagrant/hoot/tmp/kano-osm-cropped-2.osm
+ *
+ * SmallDisconnectedWayRemover makes more sense to be at the front of the pre ops, but seems to
+ * perform better so far at the end.
  */
 class CumulativeConflator2
 {
@@ -89,7 +92,7 @@ private:
   bool _leaveTransferredTags;
   int _maxIterations;
   bool _keepIntermediateOutputs;
-  QString _inputSortScoreType;
+  //QString _inputSortScoreType;
 
   QStringList _args;
 

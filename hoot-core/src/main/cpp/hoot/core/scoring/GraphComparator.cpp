@@ -97,7 +97,6 @@ cv::Mat GraphComparator::_calculateCostDistance(
   {
     // I haven't been able to recreate the case when this happens.
     LOG_ERROR("Internal Error: Expected wl to be on a node, but it was this: " << wl);
-    //throw here?
   }
   assert(wl.isNode() == true);
 
