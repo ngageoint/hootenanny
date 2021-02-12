@@ -19,9 +19,14 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. Maxaryrights will be updated automatically.
+ * This will properly maintain the copyright information. Maxar
+ * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 Maxar (http://www.maxar.com/)CP Conversion
+ * @copyright Copyright (C) 2013, 2014, 2021 Maxar (http://www.maxar.com/)
+ */
+ 
+//
+// MGCP Conversion
 //
 
 hoot.require('config')
