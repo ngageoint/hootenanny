@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019 Maxar (http://www.maxar.com/)
  */
 
  ////
@@ -8813,7 +8813,7 @@ getDbSchema: function()
         {value:"116",name:"S-JYSK"}, 
         {value:"117",name:"Voirol 1950"}, 
         {value:"118",name:"Average Terrestrial System 1977"}, 
-        {value:"119",name:"Compensation Géodésique du Québec 1977"}, 
+        {value:"119",name:"Compensation G\E9od\E9sique du Qu\E9bec 1977"}, 
         {value:"120",name:"Finnish (KKJ)"}, 
         {value:"121",name:"Ordnance Survey of Ireland"}, 
         {value:"122",name:"Revised Kertau"}, 

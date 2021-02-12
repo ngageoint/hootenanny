@@ -1,7 +1,6 @@
 :imagesdir: ./algorithms
 
 = Hootenanny Algorithms
-DigitalGlobe, Inc.
 
 include::algorithms/Introduction.asciidoc[]
 include::algorithms/ExistingTechnology.asciidoc[]

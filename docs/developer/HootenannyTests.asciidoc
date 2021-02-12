@@ -507,7 +507,7 @@ location).
 
 The Regression Tests run Hootenanny command line operations against specific datasets to measure
 Hootenanny performance against particular scenarios.  The tests are run against non-public data and,
-therefore, are kept in a private DigitalGlobe repository and run on a nightly basis only.  For
+therefore, are kept in a private Maxar repository and run on a nightly basis only.  For
 more information about the tests, create an issue at https://github.com/ngageoint/hootenanny.
 
 If you have access to the regression test repository and wish to run them locally, create an issue at https://github.com/ngageoint/hootenanny.
@@ -519,7 +519,7 @@ hoot-tests/release_test.child/jakarta-spaghetti.release as an example.
 === Load Tests
 
 The Load Tests test the scalability of the Hootenanny web services code and are run as part of the
-nightly tests in a private DigitalGlobe repository.  These tests currently are not meant to be run
+nightly tests in a private Maxar repository.  These tests currently are not meant to be run
 in a local development environment.
 
 When run, the tests output an image with graph metrics on Hootenanny scalability for increasing

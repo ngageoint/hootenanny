@@ -19,14 +19,9 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
- * copyrights will be updated automatically.
+ * This will properly maintain the copyright information. Maxaryrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
- */
-
-//
-// MGCP Conversion
+ * @copyright Copyright (C) 2013, 2014 Maxar (http://www.maxar.com/)CP Conversion
 //
 
 hoot.require('config')
