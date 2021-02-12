@@ -18,10 +18,10 @@ pipeline {
         booleanParam(name: 'Hoot_provision', defaultValue: true)
         booleanParam(name: 'Configure_Tests', defaultValue: false)
         booleanParam(name: 'Build', defaultValue: true)
-        booleanParam(name: 'Core_tests', defaultValue: false)
-        booleanParam(name: 'Services_tests', defaultValue: false)
-        booleanParam(name: 'UI_hoot1_tests', defaultValue: false)
-        booleanParam(name: 'UI_hoot2_tests', defaultValue: false)
+        booleanParam(name: 'Core_tests', defaultValue: true)
+        booleanParam(name: 'Services_tests', defaultValue: true)
+        booleanParam(name: 'UI_hoot1_tests', defaultValue: true)
+        booleanParam(name: 'UI_hoot2_tests', defaultValue: true)
         booleanParam(name: 'Sonar', defaultValue: false)
         booleanParam(name: 'Halt_on_failure', defaultValue: true)
         string(name: 'Box', defaultValue: 'default', description: 'Vagrant Box')
@@ -33,7 +33,7 @@ pipeline {
     environment {
         SYS_URL = 'UNKOWN'
         SYS_VER = 'UNKOWN'
-        BUILD_VERBOSE = 'yes'
+        BUILD_VERBOSE = 'no'
         BUILD_DEBUG = 'no'
         HOOT_AWS_ENV_TAG="${params.HOOT_AWS_ENV_TAG}"
         HOOT_AWS_USE_TAG="${params.HOOT_AWS_USE_TAG}"
@@ -110,8 +110,7 @@ pipeline {
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
                 // Until PCH support is fixed in Sonar, run this to fix
-//              sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\n./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
-                sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\n./scripts/sonar/sonar-prep-makefile.sh\\ncat hoot-core/Makefile|g' VagrantBuild.sh"
+                sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\n./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
                 script {
                     if (env.BRANCH_NAME == "master") {
                         // Compile instrumented code for master branch which allows for calculating coverage
@@ -216,14 +215,14 @@ pipeline {
         failure {
             script {
                 buildFailed = "yes"
-//                notifySlack("FAILURE", "#builds_hoot")
-//                // Copy over any UI failure screenshots and send to slack
-//                sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
-//                postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
-//                // Copy over the test-output directory and add it to the artifacts
-//                sh "vagrant ssh ${params.Box} -c 'cd hoot; tar czf failed-test-output.tar.gz test-output'"
-//                sh "vagrant scp ${params.Box}:~/hoot/failed-test-output.tar.gz ./"
-//                archiveArtifacts artifacts: '**/failed-test-output.tar.gz'
+                notifySlack("FAILURE", "#builds_hoot")
+                // Copy over any UI failure screenshots and send to slack
+                sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
+                postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
+                // Copy over the test-output directory and add it to the artifacts
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; tar czf failed-test-output.tar.gz test-output || touch failed-test-output.tar.gz'"
+                sh "vagrant scp ${params.Box}:~/hoot/failed-test-output.tar.gz ./"
+                archiveArtifacts artifacts: '**/failed-test-output.tar.gz'
                 // Copy over the failed sonar file
                 sh "vagrant scp ${params.Box}:~/hoot/sonar-cfamily-reproducer.zip ./ || touch sonar-cfamily-reproducer.zip"
                 archiveArtifacts artifacts: '**/sonar-cfamily-reproducer.zip'
