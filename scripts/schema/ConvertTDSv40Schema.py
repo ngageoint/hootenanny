@@ -21,10 +21,10 @@
  #* The following copyright notices are generated automatically. If you
  #* have a new notice to add, please use the format:
  #* " * @copyright Copyright ..."
- #* This will properly maintain the copyright information. DigitalGlobe
+ #* This will properly maintain the copyright information. Maxar
  #* copyrights will be updated automatically.
  #*
- #* @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com/)
+ #* @copyright Copyright (C) 2012, 2013 Maxar (http://www.maxar.com/)
  #*/
 
 
@@ -1126,7 +1126,7 @@ text_NSP = {
     'CIB 1':'ngaControlledImageBase1',
     'Commercial Data':'commercialData',
     'DAFIF':'ngaDigitalAirFltInfoFile',
-    'DigitalGlobe Imagery':'digitalGlobeImagery',
+    'Maxar Imagery':'digitalGlobeImagery',
     'DNC':'ngaDigitalNauticalChart',
     'DVOF':'ngaDigitalVertObstruction',
     'FFD':'ngaFoundationFeatureData',
@@ -1154,7 +1154,7 @@ text_NSP = {
 # Spatial Source Type
 text_SSY = {
     'CIB 1':'ngaControlledImageBase1',
-    'DigitalGlobe Imagery':'digitalGlobeImagery',
+    'Maxar Imagery':'digitalGlobeImagery',
     'DNC':'ngaDigitalNauticalChart',
     'FFD':'ngaFoundationFeatureData',
     'GeoEye-1 Imagery':'geoEye1',
