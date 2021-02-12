@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef FILTERED_BY_GEOMETRY_TYPE_CRITERIA_H
 #define FILTERED_BY_GEOMETRY_TYPE_CRITERIA_H

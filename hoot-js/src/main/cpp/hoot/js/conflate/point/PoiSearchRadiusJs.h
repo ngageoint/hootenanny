@@ -22,7 +22,7 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef POI_SEARCH_RADIUS_JS_H
 #define POI_SEARCH_RADIUS_JS_H
