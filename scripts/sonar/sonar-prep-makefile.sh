@@ -13,7 +13,12 @@ else
   echo "hoot-core/Makefile doesn't exist yet!"
 fi
 #hoot-core/Makefile.qmake
-#sed -i "s|(CXX) -c -include tmp/release/HootCore|(CXX) -c -include src/main/cpp/hoot/core/HootCoreStable.h|g" $HOOT_HOME/hoot-core/Makefile.qmake
+if [ -f $HOOT_HOME/hoot-core/Makefile.qmake ]; then
+  echo "hoot-core/Makefile.qmake"
+  sed -i "s|(CXX) -c -include tmp/release/HootCore|(CXX) -c -include src/main/cpp/hoot/core/HootCoreStable.h|g" $HOOT_HOME/hoot-core/Makefile.qmake
+else
+  echo "hoot-core/Makefile.qmake doesn't exist yet!"
+fi
 #hoot-core-test/Makefile
 if [ -f $HOOT_HOME/hoot-core-test/Makefile ]; then
   echo "hoot-core-test/Makefile"

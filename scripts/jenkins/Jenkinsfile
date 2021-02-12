@@ -33,7 +33,7 @@ pipeline {
     environment {
         SYS_URL = 'UNKOWN'
         SYS_VER = 'UNKOWN'
-        BUILD_VERBOSE = 'no'
+        BUILD_VERBOSE = 'yes'
         BUILD_DEBUG = 'no'
         HOOT_AWS_ENV_TAG="${params.HOOT_AWS_ENV_TAG}"
         HOOT_AWS_USE_TAG="${params.HOOT_AWS_USE_TAG}"
