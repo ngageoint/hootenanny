@@ -54,7 +54,7 @@ public:
   virtual QString getName() const override { return "conflate-cumulative"; }
 
   virtual QString getDescription() const override
-  { return "Conflates maps in a cumulative fashion (experimental)"; }
+  { return "Conflates multiple maps in a cumulative fashion (experimental)"; }
 
   virtual QString getType() const { return "rnd"; }
 
@@ -74,18 +74,6 @@ public:
     {
       reverseInputs = true;
       args.removeAll("--reverse-inputs");
-    }
-    bool scoreOutput = false;
-    if (args.contains("--score-output"))
-    {
-      scoreOutput = true;
-      args.removeAll("--score-output");
-    }
-    bool isDifferential = false;
-    if (args.contains("--differential"))
-    {
-      isDifferential = true;
-      args.removeAll("--differential");
     }
     QString transferTagsInput;
     if (args.contains("--transfer-tags"))
@@ -120,14 +108,14 @@ public:
       keepIntermediateOutputs = true;
       args.removeAll("--keep-intermediate-outputs");
     }
-    QString inputSortScoreType;
-    if (args.contains("--sort-inputs-by-score"))
-    {
-      const int optionNameIndex = args.indexOf("--sort-inputs-by-score");
-      inputSortScoreType = args.at(optionNameIndex + 1).trimmed();
-      args.removeAt(optionNameIndex + 1);
-      args.removeAt(optionNameIndex);
-    }
+//    QString inputSortScoreType;
+//    if (args.contains("--sort-inputs-by-score"))
+//    {
+//      const int optionNameIndex = args.indexOf("--sort-inputs-by-score");
+//      inputSortScoreType = args.at(optionNameIndex + 1).trimmed();
+//      args.removeAt(optionNameIndex + 1);
+//      args.removeAt(optionNameIndex);
+//    }
 
     if (args.size() != 2)
     {
@@ -142,16 +130,14 @@ public:
     }
 
     conflator.setReverseInputs(reverseInputs);
-    conflator.setScoreOutput(scoreOutput);
-    conflator.setDifferential(isDifferential);
     conflator.setTransferTagsInput(transferTagsInput);
     conflator.setLeaveTransferredTags(leaveTransferredTags);
     conflator.setMaxIterations(maxIterations);
     conflator.setKeepIntermediateOutputs(keepIntermediateOutputs);
-    if (!inputSortScoreType.isEmpty())
-    {
-      conflator.setInputSortScoreType(inputSortScoreType);
-    }
+//    if (!inputSortScoreType.isEmpty())
+//    {
+//      conflator.setInputSortScoreType(inputSortScoreType);
+//    }
     conflator.conflate(input, args[1]);
 
     LOG_STATUS(

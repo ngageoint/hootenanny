@@ -47,18 +47,17 @@
 #include <hoot/core/criterion/TagCriterion.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/rnd/ops/SmallDisconnectedWayRemover.h>
+#include <hoot/core/algorithms/extractors/FeatureExtractor.h>
+#include <hoot/core/scoring/BaseComparator.h>
 
 namespace hoot
 {
 
 CumulativeConflator2::CumulativeConflator2() :
 _reverseInputs(false),
-_scoreOutput(false),
-_isDifferential(false),
 _leaveTransferredTags(false),
 _maxIterations(-1),
-_keepIntermediateOutputs(false),
-_inputSortScoreType(ScoreType::None)
+_keepIntermediateOutputs(false)
 {
 }
 
@@ -120,21 +119,14 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
     QFileInfo input2Info(input2);
     QFileInfo tempOutputInfo(tempOutput);
 
-    if (!_isDifferential)
-    {
-      _conflateTimer.restart();
-      LOG_STATUS("******************************************************");
-      LOG_STATUS(
-        "Conflating (" << i << "/" << numIterations << ") " << input1Info.fileName() <<
-        " with " << input2Info.fileName() << " and writing output to " <<
-        tempOutputInfo.fileName() << "...");
-      Conflator().conflate(input1, input2, tempOutput);
-      LOG_STATUS("Conflation took: " << StringUtils::millisecondsToDhms(_conflateTimer.elapsed()));
-    }
-    else
-    {
-      throw IllegalArgumentException();
-    }
+    _conflateTimer.restart();
+    LOG_STATUS("******************************************************");
+    LOG_STATUS(
+      "Conflating (" << i << "/" << numIterations << ") " << input1Info.fileName() <<
+      " with " << input2Info.fileName() << " and writing output to " <<
+      tempOutputInfo.fileName() << "...");
+    Conflator().conflate(input1, input2, tempOutput);
+    LOG_STATUS("Conflation took: " << StringUtils::millisecondsToDhms(_conflateTimer.elapsed()));
 
     if (i != 1 && !_keepIntermediateOutputs)
     {
@@ -167,27 +159,6 @@ int CumulativeConflator2::_getNumIterations(const QStringList& inputs) const
     numIterations = _maxIterations;
   }
   return numIterations;
-}
-
-CumulativeConflator2::ScoreType CumulativeConflator2::_scoreTypeFromString(QString& scoreTypeStr)
-{
-  scoreTypeStr = scoreTypeStr.toLower().trimmed();
-  if (scoreTypeStr == "raster")
-  {
-    return ScoreType::Raster;
-  }
-  else if (scoreTypeStr == "graph")
-  {
-    return ScoreType::Graph;
-  }
-  else if (scoreTypeStr == "angle")
-  {
-    return ScoreType::Angle;
-  }
-  else
-  {
-    throw IllegalArgumentException("Invalid score type string: " + scoreTypeStr);
-  }
 }
 
 void CumulativeConflator2::_resetInitConfig(const QStringList& args)

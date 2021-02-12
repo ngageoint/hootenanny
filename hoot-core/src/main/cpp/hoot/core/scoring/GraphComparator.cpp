@@ -79,8 +79,8 @@ GraphComparator::GraphComparator(OsmMapPtr map1, OsmMapPtr map2) :
   _init();
 }
 
-cv::Mat GraphComparator::_calculateCostDistance(OsmMapPtr map, Coordinate c, double& maxGraphCost,
-                                                const RandomPtr& random)
+cv::Mat GraphComparator::_calculateCostDistance(
+  OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random)
 {
   // make a copy of the map so we can manipulate it.
   map.reset(new OsmMap(map));
@@ -171,10 +171,12 @@ double GraphComparator::compareMaps()
     WorkInfo info;
     info.index = i;
     // generate a random source point
-    info.coord.x = Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
-          _projectedBounds.MinX;
-    info.coord.y = Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
-          _projectedBounds.MinY;
+    info.coord.x =
+      Random::instance()->generateUniform() * (_projectedBounds.MaxX - _projectedBounds.MinX) +
+        _projectedBounds.MinX;
+    info.coord.y =
+      Random::instance()->generateUniform() * (_projectedBounds.MaxY - _projectedBounds.MinY) +
+        _projectedBounds.MinY;
     // pick one map as the reference map
     if (Random::instance()->coinToss())
       info.referenceMap = _mapP1;
@@ -254,9 +256,12 @@ void GraphComparator::_graphCompareThreadFunc()
         diffData[j] = fabs(image1Data[j] - image2Data[j]);
 
       FileUtils::makeDir("test-output/route-image");
-      QString s1 = QString("test-output/route-image/route-%1-a.png").arg(info.index, 3, 10, QChar('0'));
-      QString s2 = QString("test-output/route-image/route-%1-b.png").arg(info.index, 3, 10, QChar('0'));
-      QString sdiff = QString("test-output/route-image/route-%1-diff.png").arg(info.index, 3, 10, QChar('0'));
+      QString s1 =
+        QString("test-output/route-image/route-%1-a.png").arg(info.index, 3, 10, QChar('0'));
+      QString s2 =
+        QString("test-output/route-image/route-%1-b.png").arg(info.index, 3, 10, QChar('0'));
+      QString sdiff =
+        QString("test-output/route-image/route-%1-diff.png").arg(info.index, 3, 10, QChar('0'));
       _saveImage(image1, s1, maxGraphCost * 3);
       _saveImage(image2, s2, maxGraphCost * 3);
       _saveImage(diff, sdiff, maxGraphCost * 3);
@@ -329,10 +334,14 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
   std::shared_ptr<OGRSpatialReference> srs(new OGRSpatialReference());
   srs->importFromEPSG(900913);
 
-  Coordinate c1 = MapProjector::project(Coordinate(_projectedBounds.MinX, _projectedBounds.MinY), map->getProjection(), srs);
+  Coordinate c1 =
+    MapProjector::project(
+      Coordinate(_projectedBounds.MinX, _projectedBounds.MinY), map->getProjection(), srs);
   cout << "coord " << c1.x << ", " << c1.y << endl;
 
-  Coordinate c2 = MapProjector::project(Coordinate(_projectedBounds.MaxX, _projectedBounds.MaxY), map->getProjection(), srs);
+  Coordinate c2 =
+    MapProjector::project(
+      Coordinate(_projectedBounds.MaxX, _projectedBounds.MaxY), map->getProjection(), srs);
   cout << "coord2 " << c2.x << ", " << c2.y << endl;
 
   printf("POSITION_Y=%f\n", (c1.y + c2.y) / 2.0);
@@ -420,7 +429,8 @@ void GraphComparator::_init()
   _debugImages = false;
 }
 
-cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost)
+cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp,
+                                     double& maxGraphCost)
 {
   const WayMap& ways = map->getWays();
 

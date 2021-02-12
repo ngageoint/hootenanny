@@ -37,12 +37,13 @@ namespace hoot
 {
 
 /**
- * Allows for conflating maps in a cumulative fashion.
+ * Allows for conflating multiple maps in a cumulative fashion.
  *
- * hoot conflate-cumulative --status
+ * hoot conflate-cumulative --status \
  * -C ReferenceConflation.conf \
  * -C UnifyingAlgorithm.conf \
- * -D uuid.helper.repeatable=true -D writer.include.debug.tags=true \
+ * -D uuid.helper.repeatable=true \
+ * -D writer.include.debug.tags=true \
  * -D log.class.filter="CumulativeConflator2;ConflateCumulativeCmd" \
  * -D match.creators="hoot::HighwayMatchCreator" \
  * -D merger.creators="hoot::HighwayMergerCreator" \
@@ -63,19 +64,10 @@ class CumulativeConflator2
 {
 public:
 
-  typedef enum ScoreType
-  {
-    None = 0,
-    Raster,
-    Graph,
-    Angle
-  }
-  ScoreType;
-
   CumulativeConflator2();
 
   /**
-   * Conflates maps in a cumulative fashion.
+   * Conflates multiple maps in a cumulative fashion.
    *
    * @param input input directory with files to conflate
    * @param output output path to write conflated data
@@ -83,26 +75,21 @@ public:
   void conflate(const QDir& input, const QString& output);
 
   void setReverseInputs(bool reverse) { _reverseInputs = reverse; }
-  void setScoreOutput(bool score) { _scoreOutput = score; }
-  void setDifferential(bool isDifferential) { _isDifferential = isDifferential; }
   void setTransferTagsInput(QString input) { _transferTagsInput = input; }
   void setLeaveTransferredTags(bool leave) { _leaveTransferredTags = leave; }
   void setMaxIterations(int max) { _maxIterations = max; }
   void setArgs(const QStringList& args) { _args = args; }
   void setKeepIntermediateOutputs(bool keep) { _keepIntermediateOutputs = keep; }
-  void setInputSortScoreType(QString scoreTypeStr)
-  { _inputSortScoreType = _scoreTypeFromString(scoreTypeStr); }
+  //void setInputSortScoreType(QString scoreTypeStr) { _inputSortScoreType = scoreTypeStr; }
 
 private:
 
   bool _reverseInputs;
-  bool _scoreOutput;
-  bool _isDifferential;
   QString _transferTagsInput;
   bool _leaveTransferredTags;
   int _maxIterations;
   bool _keepIntermediateOutputs;
-  ScoreType _inputSortScoreType;
+  QString _inputSortScoreType;
 
   QStringList _args;
 
@@ -110,7 +97,6 @@ private:
 
   QElapsedTimer _conflateTimer;
 
-  static ScoreType _scoreTypeFromString(QString& scoreTypeStr);
   int _getNumIterations(const QStringList& inputs) const;
 
   void _resetInitConfig(const QStringList& args);

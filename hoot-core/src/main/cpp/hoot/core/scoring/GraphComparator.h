@@ -50,6 +50,7 @@ class Way;
 class GraphComparator : public BaseComparator
 {
 public:
+
   GraphComparator(OsmMapPtr map1, OsmMapPtr map2);
 
   virtual ~GraphComparator() = default;
@@ -60,22 +61,19 @@ public:
    * Returns the 90% confidence interval.
    */
   double getConfidenceInterval() { return _ci; }
-
   double getMeanScore() { return _mean; }
-
   double getMedianScore() { return _median; }
-
   double getStandardDeviation() { return _s; }
 
   void setDebugImages(bool di) { _debugImages = di; }
-
   void setIterations(int i) { _iterations = i; }
-
   void setMaxThreads(int t) { _maxThreads = t; }
 
-  void drawCostDistance(OsmMapPtr map, std::vector<geos::geom::Coordinate>& c, QString output, double& maxGraphCost);
+  void drawCostDistance(
+    OsmMapPtr map, std::vector<geos::geom::Coordinate>& c, QString output, double& maxGraphCost);
 
 private:
+
   /** Number of times to iterate of the map calculating scores */
   int _iterations;
   /** Median score of all iterations */
@@ -110,7 +108,8 @@ private:
    */
   void _graphCompareThreadFunc();
 
-  cv::Mat _calculateCostDistance(OsmMapPtr map, geos::geom::Coordinate c, double& maxGraphCost, const Tgs::RandomPtr& random);
+  cv::Mat _calculateCostDistance(
+    OsmMapPtr map, geos::geom::Coordinate c, double& maxGraphCost, const Tgs::RandomPtr& random);
 
   void _calculateRasterCost(cv::Mat& mat, const Tgs::RandomPtr& random);
 
@@ -121,8 +120,9 @@ private:
 
   cv::Mat _paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp, double& maxGraphCost);
 
-  void _paintWay(cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction,
-    double startCost, double endCost);
+  void _paintWay(
+    cv::Mat& mat, ConstOsmMapPtr map, WayPtr way, double friction, double startCost,
+    double endCost);
 };
 
 }

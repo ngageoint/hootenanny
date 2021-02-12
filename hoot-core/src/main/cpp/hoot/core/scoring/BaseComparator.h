@@ -54,12 +54,12 @@ namespace hoot
 class OsmMap;
 
 /**
- * Compares two OSM maps for consistency of vector location and density. The resulting score is a
- * value from 0 to 1 where 1 is an exact match and 0 is completely different.
+ * Base class for map comparators which determine a particular similarity score for two maps
  */
 class BaseComparator
 {
 public:
+
   /**
    * Takes two maps for comparison as input
    */
@@ -83,7 +83,8 @@ protected:
 
   double _calculateError(const cv::Mat& image1, const cv::Mat& image2);
 
-  geos::geom::Coordinate _findNearestPointOnFeature(const std::shared_ptr<OsmMap>& map, const geos::geom::Coordinate& c);
+  geos::geom::Coordinate _findNearestPointOnFeature(
+    const std::shared_ptr<OsmMap>& map, const geos::geom::Coordinate& c);
 
   virtual void _init(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2);
 

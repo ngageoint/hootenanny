@@ -44,6 +44,7 @@ class OsmMap;
 class RasterComparator : public BaseComparator
 {
 public:
+
   /**
    * Takes two maps for comparison as input
    */
