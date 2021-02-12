@@ -25,6 +25,8 @@
  * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
+package hoot.services.controllers.jobs;
+
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
