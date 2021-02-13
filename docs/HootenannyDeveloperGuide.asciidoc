@@ -1,7 +1,6 @@
 :imagesdir: ./developer
 
 = Hootenanny Developer Guide
-DigitalGlobe, Inc.
 
 include::developer/HootenannyBuild.asciidoc[]
 include::developer/HootenannyDeveloperIDESetup.asciidoc[]

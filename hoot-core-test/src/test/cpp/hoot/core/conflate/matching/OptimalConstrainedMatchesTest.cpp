@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 // Hoot
@@ -155,7 +155,7 @@ public:
   void runFindSubgraphsTest()
   {
     // See this for a visual.
-    // https://insightcloud.digitalglobe.com/redmine/attachments/download/1638/Hootenanny%20-%20Graph%20Based%20Conflation%20-%202013-06-21.pptx
+    // Hootenanny-Graph Based Conflation-2013-06-21.pptx on Redmine
     ElementId a1 = ElementId::way(1);
     ElementId a2 = ElementId::way(2);
     ElementId a3 = ElementId::way(3);
