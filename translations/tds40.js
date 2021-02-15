@@ -2343,7 +2343,7 @@ cleanAttrs : function (attrs)
       tds40.lookup = translate.createLookup(tds40.rules.one2one);
     }
 
-    // Cleanput the usless values
+    // Clean out the usless values
     tds40.cleanAttrs(attrs);
 
     // Untangle TDS attributes & OSM tags

@@ -2438,7 +2438,7 @@ tds61 = {
       tds61.lookup = translate.createLookup(tds61.rules.one2one);
     }
 
-    // Cleanput the usless values
+    // Clean out the usless values
     tds61.cleanAttrs(attrs);
 
     // Untangle TDS attributes & OSM tags

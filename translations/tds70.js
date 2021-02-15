@@ -2393,7 +2393,7 @@ tds70 = {
       // translate.dumpOne2OneLookup(tds70.lookup);
     }
 
-    // Cleanput the usless values
+    // Clean out the usless values
     tds70.cleanAttrs(attrs);
 
     // Untangle TDS attributes & OSM tags.
