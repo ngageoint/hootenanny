@@ -145,8 +145,8 @@ public class FolderResourceTest extends OSMResourceTestAbstract {
             FolderRecord childFolder = response3.getFolderById(childFolderId.longValue());
             FolderRecord parentFolder = response3.getFolderById(parentFolderId.longValue());
 
-            Assert.assertEquals(childFolder.getParentId(), parentFolder.getId());
-            Assert.assertEquals(0, parentFolder.getParentId());
+            Assert.assertEquals(childFolder.getParentId().longValue(), parentFolder.getId());
+            Assert.assertEquals(0, parentFolder.getParentId().longValue());
 
             Map<String,Object> response4 = target("api/0.6/map/folders/" + parentFolderId)
                     .request(MediaType.APPLICATION_JSON)
@@ -160,19 +160,9 @@ public class FolderResourceTest extends OSMResourceTestAbstract {
                     .get(FolderRecords.class);
 
             childFolder = response5.getFolderById(childFolderId.longValue());
-            Assert.assertEquals(0, childFolder.getParentId());
+            Assert.assertEquals(0, childFolder.getParentId().longValue());
 
 
     }
-
-//    public void testGetFolderMaps() {
-//        Map<String,Object> response = target("api/0.6/map/folders/add/0/testFolder" + Long.toString(System.currentTimeMillis()))
-//                .request(MediaType.APPLICATION_JSON)
-//                .post(Entity.entity("", MediaType.TEXT_PLAIN), new GenericType<Map<String, Object>>() {});
-//            Number parentFolderId = (Number) response.get("folderId");
-//            boolean success = (boolean) response.get("success");
-//            assertTrue(parentFolderId.longValue() > 0);
-//            assertTrue(success);
-//    }
 
 }
