@@ -47,7 +47,7 @@ dnc.rules = {
     ['F_CODE','AF040','man_made','crane'], // Crane
     ['F_CODE','AF070','man_made','flare'], // Flare Pipe
     ['F_CODE','AH010','bastion','yes'], // Bastion/Rampart - not in NAS
-    ['F_CODE','AH050','site:type','fortification'], // Fortification - not in NAS
+    ['F_CODE','AH050','military','bunker'], // Fortification - not in NAS
     ['F_CODE','AJ050','man_made','windmill'], // Windmill
     ['F_CODE','AK020','tourism','theme_park_attraction'], // Amusement Park Attraction
     ['F_CODE','AK040','leisure','pitch'], // Athletic Field, Sports Ground
