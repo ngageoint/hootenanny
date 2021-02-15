@@ -2,8 +2,7 @@
 set -e
 
 # Main sonar scanner
-SONAR_VERSION=4.5.0.2216
-#SONAR_VERSION=4.6.0.2311 # Requires Java 11
+SONAR_VERSION=4.6.0.2311 # Requires Java 11
 SONAR_CLI=sonar-scanner-cli-$SONAR_VERSION-linux
 SONAR_PKG=sonar-scanner-$SONAR_VERSION-linux
 SONAR_ZIP=$SONAR_CLI.zip
@@ -51,5 +50,25 @@ if [ ! -f $SONAR_PATH/bin/$SONAR_BLD_PKG-64 ]; then
     rm -rf $SONAR_BLD_PKG
 fi
 
+# Install Java 11 for the scan only
+sudo yum install -y java-11-openjdk java-11-openjdk-devel
+
 # Display the installed sonar version
-sonar-scanner --version
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk sonar-scanner --version
+
+# In order to run correctly in sonar, pre-compiled headers need to be turned off
+# Remove when https://jira.sonarsource.com/browse/CPP-2897 is resolved
+for FILENAME in \
+  "hoot-core/hoot-core.pro" \
+  "hoot-core-test/hoot-core-test.pro" \
+  "hoot-hadoop/hoot-hadoop.pro" \
+  "hoot-josm/hoot-josm.pro" \
+  "hoot-js/hoot-js.pro" \
+  "hoot-rnd/hoot-rnd.pro" \
+  "hoot-swig/hoot-swig.pro" \
+  "tgs/src/test/cpp/tgs/TgsTest.pro" \
+  "tgs/src/test/cpp/tgs/TgsTestLib.pro" \
+  "tgs/tgs.pro"
+do
+  sed -i "s/^PRECOMPILED_HEADER.*$//g" $FILENAME
+done

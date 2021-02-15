@@ -127,4 +127,4 @@ if [ -d $HOOT_HOME/.scannerwork ]; then
 fi
 
 # run the actual scanner
-sonar-scanner $DEBUG_MODE "${OPTIONS[@]}"
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk sonar-scanner $DEBUG_MODE "${OPTIONS[@]}"
