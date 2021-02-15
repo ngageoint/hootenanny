@@ -76,6 +76,11 @@ if $mergePort.nil?
   $mergePort = 8096
 end
 
+$nodeExportPort = ENV['NODE_EXPORT_PORT']
+if $nodeExportPort.nil?
+  $nodeExportPort = 8101
+end
+
 Vagrant.configure(2) do |config|
 
   def aws_provider(config, os, vbox)
@@ -169,6 +174,7 @@ Vagrant.configure(2) do |config|
       config.vm.network "forwarded_port", guest: 8080, host: $tomcatPort  # Tomcat service
       config.vm.network "forwarded_port", guest: 8094, host: $transPort  # NodeJS Translation service
       config.vm.network "forwarded_port", guest: 8096, host: $mergePort  # NodeJS Merge service
+      config.vm.network "forwarded_port", guest: 8101, host: $nodeExportPort  # NodeJS export service
     end
   end
 

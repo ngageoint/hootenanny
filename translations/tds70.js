@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2018, 2019 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -564,8 +564,15 @@ tds70 = {
     // Drop the FCSUBTYPE since we don't use it
     if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
+    // Backward compatibility
+    if (attrs.AEI)
+    {
+      attrs.image_id = attrs.AEI;
+      delete attrs.AEI;
+    }
+
     // Drop the mosaic tag if we don't have an image id
-    if (attrs.AEI == 'No Information') delete attrs.img_mosaic;
+    if (attrs.image_id == 'No Information') delete attrs.img_mosaic;
 
     // List of data values to drop/ignore
     var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };

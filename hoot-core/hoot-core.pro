@@ -37,6 +37,7 @@ OTHER_FILES = \
     ../conf/core/ConfigOptions.asciidoc \
     ../scripts/jenkins/Jenkinsfile \
     $$files(../scripts/copyright/*, true) \
+    $$files(../scripts/sonar/*, true) \
     ../sonar-project.properties \
     $$files(../Vagrant*)
 

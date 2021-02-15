@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_CREATOR_H
 #define CHANGESET_CREATOR_H
@@ -71,7 +71,8 @@ public:
    * Constructor
    *
    * @param printStats prints statistics for the output changeset
-   * @param statsOutputFile optional file to output the changeset statistics to
+   * @param statsOutputFile optional file to output the changeset statistics to; if empty, stats
+   * go to stdout
    * @param osmApiDbUrl URL to an OSM API database used to calculate element IDs; required only if
    * the output changeset is of type .osc.sql.
    */

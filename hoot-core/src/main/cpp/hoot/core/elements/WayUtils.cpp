@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "WayUtils.h"
@@ -149,16 +149,21 @@ QSet<long> WayUtils::getConnectedWays(const long wayId, const ConstOsmMapPtr& ma
   ConstWayPtr way = map->getWay(wayId);
   if (way)
   {
+    LOG_VART(way->getElementId());
     const std::vector<long>& wayNodeIds = way->getNodeIds();
     for (size_t i = 0; i < wayNodeIds.size(); i++)
     {
       const long wayNodeId = wayNodeIds.at(i);
+      LOG_VART(wayNodeId);
       const QSet<long>& idsOfWaysContainingNode =
         CollectionUtils::stdSetToQSet(map->getIndex().getNodeToWayMap()->getWaysByNode(wayNodeId));
-      connectedWayIds = connectedWayIds.unite(idsOfWaysContainingNode);
+      connectedWayIds.unite(idsOfWaysContainingNode);
     }
   }
 
+  // Don't include the way we're examining.
+  connectedWayIds.remove(wayId);
+  LOG_VART(connectedWayIds);
   return connectedWayIds;
 }
 
@@ -199,8 +204,8 @@ geos::geom::Coordinate WayUtils::closestWayCoordToNode(
     return geos::geom::Coordinate();
   }
 
-  // add the first and last coords in (one or both could already be there, but it won't hurt if
-  // they're duplicated)
+  // Add the first and last coords in. One or both could already be there, but it won't hurt if
+  // they're duplicated.
   ConstNodePtr firstNode = map->getNode(way->getFirstNodeId());
   ConstNodePtr lastNode = map->getNode(way->getLastNodeId());
   if (!firstNode || !lastNode)

@@ -200,9 +200,9 @@ echo ""
 echo "Deriving a changeset between $REF_XML_INPUT and $SEC_XML_INPUT over: $REPLACEMENT_AOI, to file: $CHANGESET_XML that replaces features in the reference dataset with those from a secondary dataset..."
 echo ""
 if [ "$SOURCE_FILE_2" == "test-files/Empty.osm" ]; then
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS $ENABLE_WAY_SNAPPING --write-bounds
+  hoot changeset-derive $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D bounds=$REPLACEMENT_AOI -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT "" $CHANGESET_XML $REF_DB_INPUT $ENABLE_WAY_SNAPPING --write-bounds --replacement
 else
-  hoot changeset-derive-replacement $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $REPLACEMENT_AOI $CHANGESET_XML $REF_DB_INPUT $GEOMETRY_FILTERS $REPLACEMENT_FILTERS $CHAIN_REPLACEMENT_FILTERS $REPLACEMENT_FILTER_OPTIONS $ENABLE_WAY_SNAPPING --write-bounds
+  hoot changeset-derive $LOG_LEVEL $GENERAL_OPTS $CHANGESET_DERIVE_OPTS -D bounds=$REPLACEMENT_AOI -D debug.maps.filename=$OUT_DIR/changeset-derive-xml.osm $REF_XML_INPUT $SEC_XML_INPUT $CHANGESET_XML $REF_DB_INPUT $ENABLE_WAY_SNAPPING --write-bounds --replacement
 fi
 
 # CHANGESET APPLICATION

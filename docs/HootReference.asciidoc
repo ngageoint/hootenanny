@@ -1,6 +1,5 @@
 
 = Hootenanny Reference Documentation
-DigitalGlobe, Inc.
 
 include::JavascriptOverview.asciidoc[]
 include::tmp/RulesLib.asciidoc[]

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * ' * @copyright Copyright ...'
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014 Maxar (http://www.maxar.com/)
  */
 
 //
@@ -244,7 +244,7 @@ function translateToOgr(tags, elementType, geometryType)
 
   // Find how much text we need to split and store
   tagsLength = 0;
-  for (var i = tagsList.length - 1; i >= 0; --i)
+  for (var i = 0; i < tagsList.length; i++)
   {
     // Debug
     // print('len: ' + tagsList[i].length + '  tag: ' + tagsList[i]);
@@ -278,7 +278,7 @@ function translateToOgr(tags, elementType, geometryType)
       tags[tName] = tagsList.pop();
 
       // Loop through the list of tags and try to append them
-      for (var i = 0; i < tagsList.length; i++)
+      for (var i = tagsList.length - 1; i >= 0; i--)
       {
         if ((1 + tagsList[i].length + tags[tName].length) < 254)
         {

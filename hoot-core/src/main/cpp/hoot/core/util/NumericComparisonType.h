@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NUMERIC_COMPARISON_TYPE_H
 #define NUMERIC_COMPARISON_TYPE_H
@@ -53,66 +53,33 @@ public:
     GreaterThanOrEqualTo
   } Type;
 
-  NumericComparisonType() : _type(EqualTo) {}
-  NumericComparisonType(Type type) : _type(type) {}
+  NumericComparisonType();
+  NumericComparisonType(Type type);
+  NumericComparisonType(int type);
 
-  bool operator==(NumericComparisonType t) const { return t._type == _type; }
-  bool operator!=(NumericComparisonType t) const { return t._type != _type; }
+  bool operator==(NumericComparisonType t) const;
+  bool operator!=(NumericComparisonType t) const;
 
   Type getEnum() const { return _type; }
 
-  QString toString() const
-  {
-    switch (_type)
-    {
-    case NumericComparisonType::EqualTo:
-      return "EqualTo";
-    case NumericComparisonType::LessThan:
-      return "LessThan";
-    case NumericComparisonType::LessThanOrEqualTo:
-      return "LessThanOrEqualTo";
-    case NumericComparisonType::GreaterThan:
-      return "GreaterThan";
-    case NumericComparisonType::GreaterThanOrEqualTo:
-      return "GreaterThanOrEqualTo";
-    default:
-      return QString("Unknown (%1)").arg(_type);
-    }
-  }
+  QString toString() const;
+  static Type fromString(QString typeString);
 
-  static Type fromString(QString typeString)
-  {
-    typeString = typeString.toLower().trimmed();
-    if (typeString == "equalto")
-    {
-      return EqualTo;
-    }
-    else if (typeString == "lessthan")
-    {
-      return LessThan;
-    }
-    else if (typeString == "lessthanorequalto")
-    {
-      return LessThanOrEqualTo;
-    }
-    else if (typeString == "greaterthan")
-    {
-      return GreaterThan;
-    }
-    else if (typeString == "greaterthanorequalto")
-    {
-      return GreaterThanOrEqualTo;
-    }
-    else
-    {
-      throw IllegalArgumentException("Invalid numeric comparison type string: " + typeString);
-    }
-  }
+  /**
+   * Determines if a value satisfies this numeric comparison
+   *
+   * @param valueToEvaluate the value to evaluate
+   * @param comparisonValue the value to evaluate against
+   * @return true if valueToEvaluate satisfies the configured relationship with comparisonValue;
+   * false otherwise
+   */
+  bool satisfiesComparison(const double valueToEvaluate, const double comparisonValue) const;
 
 private:
 
   NumericComparisonType::Type _type;
 
+  static Type intToType(const int intType);
 };
 
 }

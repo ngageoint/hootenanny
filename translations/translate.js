@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014 Maxar (http://www.maxar.com/)
  */
 
 //
@@ -1259,6 +1259,15 @@ translate = {
 
     schema.forEach( function (item) {lookup[item.geom.charAt(0) + item.fcode] = item.name;});
 
+    return lookup;
+  },
+
+
+  // makeLayerNameLookup - build a lookup table for FCODE to LayerName
+  makeFcodeList : function(schema)
+  {
+    var lookup = [];
+    schema.forEach( function (item) { if (lookup.indexOf(item.fcode) == -1) lookup.push(item.fcode); });
     return lookup;
   },
 

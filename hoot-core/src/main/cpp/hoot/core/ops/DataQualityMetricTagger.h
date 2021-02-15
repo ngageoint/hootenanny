@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef _DATA_QUALITY_METRIC_TAGGER_H_
 #define _DATA_QUALITY_METRIC_TAGGER_H_
@@ -82,7 +82,9 @@ private:
 
   // the number of orphaned nodes found in the final output if _tagQualityIssues=true
   int _orphanedNodes;
-  // the number of disconnected ways found in the final output if _tagQualityIssues=true
+  // the number of disconnected ways found in the final output if _tagQualityIssues=true; Clearly,
+  // disconnected ways can be valid features. Monitoring a sudden increase of them in output can
+  // indicate the presence of a new conflate problem.
   int _disconnectedWays;
   // the number of empty ways found in the final output if _tagQualityIssues=true
   int _emptyWays;

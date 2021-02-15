@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -47,6 +47,9 @@ mgcp = {
 
   // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
   mgcp.layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
+
+  // Quick lookup list for valid FCODES Note: This is <GLOBAL>
+  mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
 
   // Now add an o2s[A,L,P] feature to the mgcp.rawSchema
   // We can drop features but this is a nice way to see what we would drop
@@ -2215,10 +2218,9 @@ mgcp = {
     {
 
       // Order is important:
-      // First the MGCPv4 FCODES, then the common ones. This ensures that the common ones don't
-      // stomp on the V4 ones
-      // mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,mgcp.rules.fcodeOne2oneOut);
-      mgcp.rules.fcodeOne2oneV4.push.apply(mgcp.rules.fcodeOne2oneV4,fcodeCommon.one2one);
+      // Start with the TRD4 specific FCODES and then add the valid MGCP ones from the common list
+      fcodeCommon.one2one.forEach( function(item) { if (~mgcp.fcodeList.indexOf(item[1])) mgcp.rules.fcodeOne2oneV4.push(item); });
+
       mgcp.fcodeLookup = translate.createBackwardsLookup(mgcp.rules.fcodeOne2oneV4);
 
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one

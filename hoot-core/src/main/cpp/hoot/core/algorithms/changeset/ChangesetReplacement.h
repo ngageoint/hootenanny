@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef CHANGESET_REPLACEMENT_H
 #define CHANGESET_REPLACEMENT_H
@@ -55,7 +55,7 @@ public:
 
   /**
    * The manner in which replacement boundary conditions are handled. See the
-   * changeset-derive-replacement CLI doc for more detail.
+   * changeset-derive CLI doc for more detail.
    *
    * @todo remove Hybrid; not used anywhere
    */
