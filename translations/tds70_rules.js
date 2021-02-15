@@ -63,6 +63,7 @@ tds70.rules = {
     ['F_CODE','AL241','tower','communication'],
     ['F_CODE','AL241','tower','yes'],
     ['F_CODE','AM080','tower:type','water'],
+    ['F_CODE','AN060','railway','yard'], // Backup for landuse=railway
     ['F_CODE','AP030','highway','motorway'], // Limited Access Motorway
     ['F_CODE','AP030','highway','motorway_link'], // Limited Access Motorway
     ['F_CODE','AP030','highway','primary'],
