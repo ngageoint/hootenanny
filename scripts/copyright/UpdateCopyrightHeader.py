@@ -247,11 +247,11 @@ try:
       elif inHeaderBlock:
         print("Skipping line in existing header block!" if options.debugMode else '')
         if line.startswith(" * @copyright"):
-            if "DigitalGlobe" not in line:
+            if "Maxar" not in line:
                 copyrights.append(line.rstrip())
-            elif "DigitalGlobe" in line: # New condition. Purpose: extract existing copyright years. (By Dave Emmith, 2-2-2017)
-                # Set the pattern to get the years from ...  * @copyright Copyright (C) 2012, 2013 DigitalGlobe (http://www.digitalglobe.com)
-                p = re.compile("\(C\)\s*(.*?)\s*DigitalGlobe")
+            elif "Maxar" in line: # New condition. Purpose: extract existing copyright years. (By Dave Emmith, 2-2-2017)
+                # Set the pattern to get the years from ...  * @copyright Copyright (C) 2012, 2013 Maxar (http://www.maxar.com)
+                p = re.compile("\(C\)\s*(.*?)\s*Maxar")
                 # Search 'line' for the pattern.
                 m = p.search(line)
                 # If there is a match then assign it to existingCopyrightYears
@@ -273,7 +273,7 @@ try:
     print("\texistingCopyrightYears: " + existingCopyrightYears if options.debugMode else '')
     if (copyrightYears == existingCopyrightYears):
         print("\tcopyrightYears match existingCopyrightYears" if options.debugMode else '')
-        copyrights.append(" * @copyright Copyright (C) " + copyrightYears + " DigitalGlobe (http://www.digitalglobe.com/)")
+        copyrights.append(" * @copyright Copyright (C) " + copyrightYears + " Maxar (http://www.maxar.com/)")
     else:
         print("\tcopyrightYears do NOT match existingCopyrightYears" if options.debugMode else '')
         if existingCopyrightYears != "":
@@ -286,10 +286,10 @@ try:
                 # years and run them through the sorting and deduping process (ignores any overlap and sorts the years).
                 combinedCopyrightYears = sortDedupeYears(existingCopyrightYears + ", " + copyrightYears)
                 print("\tcombinedCopyrightYears: " + combinedCopyrightYears if options.debugMode else '')
-                copyrights.append(" * @copyright Copyright (C) " + combinedCopyrightYears + " DigitalGlobe (http://www.digitalglobe.com/)")
+                copyrights.append(" * @copyright Copyright (C) " + combinedCopyrightYears + " Maxar (http://www.maxar.com/)")
                 updateNeeded = True
         else:
-            copyrights.append(" * @copyright Copyright (C) " + copyrightYears + " DigitalGlobe (http://www.digitalglobe.com/)")
+            copyrights.append(" * @copyright Copyright (C) " + copyrightYears + " Maxar (http://www.maxar.com/)")
             updateNeeded = True
     
     # Assemble the header lines.

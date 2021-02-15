@@ -10,7 +10,7 @@ The following sections describe how we evaluate the results using three differen
 
 === Location & Completeness Score
 
-The location and completeness score determines how closely two sets of geometries match. It is a combined score that drops if one data set is more complete than the other or if the geometries have significant differences in location or shape. We refer to the method as the _Shuey Method,_ as it was inspired by DigitalGlobe Senior Geospatial Scientist Chad Shuey. The routine is fairly resilient to minor perturbations but does not detect more complex problems such as missing intersections or one-way streets.  The images in <<ExplLocationCompletenessScore>> show some of the intermediate results for a simple example.
+The location and completeness score determines how closely two sets of geometries match. It is a combined score that drops if one data set is more complete than the other or if the geometries have significant differences in location or shape. We refer to the method as the _Shuey Method,_ as it was inspired by Senior Geospatial Scientist Chad Shuey. The routine is fairly resilient to minor perturbations but does not detect more complex problems such as missing intersections or one-way streets.  The images in <<ExplLocationCompletenessScore>> show some of the intermediate results for a simple example.
 
 [[ExplLocationCompletenessScore]]
 .Intermediate Steps of Location & Completeness Score
@@ -34,13 +34,13 @@ The final score is a value of 0 to 1 and is calculated as the following equation
 
 The toy example in <<Equation1>> gives a score of 0.882.
 
-===  Routing Score
+===  Routing Score
 
 The routing score determines how similar routes calculated on the two input datasets agree. This test is designed to simulate how a user would approach a routing problem and determine the difference they would see in the two outputs.
 
 The routing score takes the following complexities into consideration:
 
-* Speed of the road – In many cases this is not explicitly defined in the data, so it is  extrapolated based on the road category.
+* Speed of the road – In many cases this is not explicitly defined in the data, so it is  extrapolated based on the road category.
 * One-way streets
 * Intersections – No turns are allowed on roads that intersect without an explicit intersection (e.g., bridges and tunnels).
 
@@ -82,13 +82,13 @@ The following steps are used to calculate the overall Attribution Score.
 3. The highest scoring feature comparison within the 10m buffer is recorded. If there are not two features within 10m, a new random point is generated.
 4. Repeat the above steps many times (currently 300) and calculate the mean and 90% confidence interval of the resulting scores.
 
-===  Results
+===  Results
 
 The following sections outline three test scenarios picked to exercise different aspects of Hootenanny. The final section draws conclusions based on the test results. We selected scenarios that show combination of more than two sources, urban and rural environments, and complex topologies such as interchanges.
 
 ==== Easy Roads
 
-The _Easy Roads_ test scenario was picked for its good geometry and straightforward topology. It was the first data set that we attempted to solve with Hootenanny, and it provided invaluable insight into the conflation problem.  The simplicity of the data yielded evaluation scores that were high.
+The _Easy Roads_ test scenario was picked for its good geometry and straightforward topology. It was the first data set that we attempted to solve with Hootenanny, and it provided invaluable insight into the conflation problem.  The simplicity of the data yielded evaluation scores that were high.
 
 [[EasyRoads]]
 .Easy Roads Rendering
@@ -124,12 +124,12 @@ image::images/image012.png[]
  +
 *_Attribute_*
 
-There are no attribute scores for the manually conflated data, as we have only one data set with merged attributes.  Attribute scores improve dramatically in the Conflated data compared to both OSM and UFD due to the rich naming information present in OSM and the rich attribution in UFD (surface and lane count). Combining the two values improves the overall scores.
+There are no attribute scores for the manually conflated data, as we have only one data set with merged attributes.  Attribute scores improve dramatically in the Conflated data compared to both OSM and UFD due to the rich naming information present in OSM and the rich attribution in UFD (surface and lane count). Combining the two values improves the overall scores.
  +
  +
 *_Route_*
 
-The Routing scores improve over UFD, but get worse compared to OSM. UFD is not intended for routing, so the intersections have to be inferred based on the location of end points. This tends to over-connect the UFD resulting in poor routing scores. When the over-connected UFD data gets conflated with OSM, it causes the scores to decrease.  The routing score is still within the 90% confidence interval of the manually conflated data.
+The Routing scores improve over UFD, but get worse compared to OSM. UFD is not intended for routing, so the intersections have to be inferred based on the location of end points. This tends to over-connect the UFD resulting in poor routing scores. When the over-connected UFD data gets conflated with OSM, it causes the scores to decrease.  The routing score is still within the 90% confidence interval of the manually conflated data.
  +
  +
 *_Location_*
@@ -141,7 +141,7 @@ Finally, you can see the Location & Completeness score improves slightly over UF
 
 The scores for Spaghetti Bowl were within the 90% confidence interval for the manually conflated data and better than the two input data sets in all but the routing case. We will cover some ideas in <<HootExplFutureWork>> that may improve the routing scores even with erroneous input data.
 
-The conflation runtime for this test was approximately 10 seconds.  The first manual conflation took approximately 29 hours. This dramatic speed improvement is consistent across the three test scenarios. The second manual conflation did not include attribute conflation so that time is not meaningful.
+The conflation runtime for this test was approximately 10 seconds.  The first manual conflation took approximately 29 hours. This dramatic speed improvement is consistent across the three test scenarios. The second manual conflation did not include attribute conflation so that time is not meaningful.
 
 ==== City Edge
 
@@ -180,7 +180,7 @@ The Location & Completeness score performs as expected. The FFD + UFD show a dra
  +
 *_Overall_*
 
-Conflation scoring for this data set was very close to the manual scores and higher than all the input data in every meaningful way. The conflation runtime for this test was approximately 11 seconds.  The first manual conflation took approximately 10 hours and the second took approximately 9 hours.
+Conflation scoring for this data set was very close to the manual scores and higher than all the input data in every meaningful way. The conflation runtime for this test was approximately 11 seconds.  The first manual conflation took approximately 10 hours and the second took approximately 9 hours.
 
 ==== Evaluation Conclusions
 
@@ -203,5 +203,5 @@ image::images/image016.png[]
 | *Iraq All* | - | - | 3hrs 40min | -
 |======
 
-While the artifacts sometimes introduced by automated conflation can be very noticeable to the human eye, we feel that the high scores on objective metrics and the dramatic reduction in cost makes automated conflation well suited to problems that are constrained by time or money. Post-processing and semi-automated tools could be developed to enable analysts to correct these issues.  Over time the conflation logic could be refined to capture some of these cases to reduce the post-processing level of effort.  
+While the artifacts sometimes introduced by automated conflation can be very noticeable to the human eye, we feel that the high scores on objective metrics and the dramatic reduction in cost makes automated conflation well suited to problems that are constrained by time or money. Post-processing and semi-automated tools could be developed to enable analysts to correct these issues.  Over time the conflation logic could be refined to capture some of these cases to reduce the post-processing level of effort.  
 
