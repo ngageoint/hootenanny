@@ -42,7 +42,6 @@ class Element;
  *
  * This extractor uses the feature with more overlap to calculate the percentage overlap. For
  * instance if you have a small feature contained within a larger feature, the result will be 1.0.
- *
  * If either feature has an area of zero, then zero is returned.
  *
  * @author RoadMatcher

@@ -42,7 +42,7 @@ class Histogram;
  *
  * - The angle is sampled at a configurable distance along the way
  * - The distance from the sampled location on the way to look to calculate the heading is
- * configurable
+ *   configurable.
  * - 8 bins are used in the histogram.
  */
 class SampledAngleHistogramExtractor : public AngleHistogramExtractor

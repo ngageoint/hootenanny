@@ -50,9 +50,13 @@ namespace hoot
  * -D bounds="8.4762,12.0504,8.4793,12.0526" \
  * -D bounds.keep.entire.features.crossing.bounds=false \
  * -D conflate.pre.ops+="hoot::SmallDisconnectedWayRemover" \
+ * -D conflate.post.ops+="hoot::UnconnectedWaySnapper" \
  * -D small.disconnected.way.remover.max.node.count=3 \
  * -D small.disconnected.way.remover.max.length=20.0 \
  * -D dual.highway.marker.mark.crossing.roads=true \
+ * -D snap.unconnected.ways.snap.tolerance=7.0 \
+ * -D snap.unconnected.ways.snap.way.statuses=Input1 \
+ * -D snap.unconnected.ways.snap.to.way.statuses=Input1 \
  * /home/vagrant/hoot/tmp/kano_033133330302/input/ \
  * /home/vagrant/hoot/tmp/kano_033133330302/output/out-kano-final.osm \
  * --keep-intermediate-outputs \
@@ -62,6 +66,11 @@ namespace hoot
  *
  * SmallDisconnectedWayRemover makes more sense to be at the front of the pre ops, but seems to
  * perform better so far at the end.
+ *
+ * UnconnectedWaySnapper makes more sense to be a pre op but has much better runtime performance as
+ * a post op. Input1 only is used as the snap source/target, since the input data is known to be
+ * incomplete in areas, and if Input2 is used instead, you will lose snapping against the initial
+ * Input1 layer.
  */
 class CumulativeConflator2
 {
