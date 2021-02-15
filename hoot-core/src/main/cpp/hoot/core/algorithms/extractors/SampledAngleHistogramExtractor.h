@@ -43,13 +43,14 @@ class Histogram;
  * - The angle is sampled at a configurable distance along the way
  * - The distance from the sampled location on the way to look to calculate the heading is
  *   configurable.
- * - 8 bins are used in the histogram.
+ * - A lower default value of 8 bins is used for the histogram.
  */
 class SampledAngleHistogramExtractor : public AngleHistogramExtractor
 {
 public:
 
   SampledAngleHistogramExtractor();
+  SampledAngleHistogramExtractor(Radians smoothing, unsigned int bins = 8);
   virtual ~SampledAngleHistogramExtractor() = default;
 
   static QString className() { return "hoot::SampledAngleHistogramExtractor"; }

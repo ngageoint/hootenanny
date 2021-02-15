@@ -88,7 +88,7 @@ void SmallDisconnectedWayRemover::apply(OsmMapPtr& map)
   const WayMap& ways = _map->getWays();
   for (WayMap::const_iterator waysItr = ways.begin(); waysItr != ways.end(); ++waysItr)
   {
-    WayPtr way = waysItr->second;
+    ConstWayPtr way = waysItr->second;
     _numProcessed++;
     if (!way)
     {

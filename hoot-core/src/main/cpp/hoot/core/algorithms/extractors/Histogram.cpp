@@ -137,7 +137,26 @@ QString Histogram::toString() const
   QStringList l;
   for (size_t i = 0; i < _bins.size(); ++i)
   {
-    l << QString::fromUtf8("%1°: %2").arg(toDegrees(getBinCenter(i))).arg(_bins[i]);
+    l <<
+      QString("%1°: %2")
+        .arg(QString::number(toDegrees(getBinCenter(i)), 'g', 6))
+        .arg(QString::number(_bins[i], 'g', 6));
+  }
+  return l.join(", ");
+}
+
+QString Histogram::printPositiveBins() const
+{
+  QStringList l;
+  for (size_t i = 0; i < _bins.size(); ++i)
+  {
+    if (_bins[i] > 0.0)
+    {
+      l <<
+        QString("%1°: %2")
+          .arg(QString::number(toDegrees(getBinCenter(i)), 'g', 6))
+          .arg(QString::number(_bins[i], 'g', 6));
+    }
   }
   return l.join(", ");
 }

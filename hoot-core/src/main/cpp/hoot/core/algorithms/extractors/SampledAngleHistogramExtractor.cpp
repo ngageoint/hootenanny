@@ -144,9 +144,15 @@ private:
   }
 };
 
-SampledAngleHistogramExtractor::SampledAngleHistogramExtractor()
+SampledAngleHistogramExtractor::SampledAngleHistogramExtractor() :
+AngleHistogramExtractor()
 {
   setConfiguration(conf());
+}
+
+SampledAngleHistogramExtractor::SampledAngleHistogramExtractor(Radians smoothing, unsigned int bins) :
+AngleHistogramExtractor(smoothing, bins)
+{
 }
 
 void SampledAngleHistogramExtractor::setConfiguration(const Settings& conf)
@@ -157,14 +163,13 @@ void SampledAngleHistogramExtractor::setConfiguration(const Settings& conf)
   setHeadingDelta(config.getWayMatcherHeadingDelta());
 }
 
-Histogram* SampledAngleHistogramExtractor::_createHistogram(const OsmMap& map,
-                                                            const ConstElementPtr& e) const
+Histogram* SampledAngleHistogramExtractor::_createHistogram(
+  const OsmMap& map, const ConstElementPtr& e) const
 {
-  Histogram* result = new Histogram(8);
+  Histogram* result = new Histogram(_bins);
   SampledAngleHistogramVisitor v(*result, _sampleDistance, _headingDelta);
   v.setOsmMap(&map);
   e->visitRo(map, v);
-  LOG_VART(result->numBins());
   return result;
 }
 

@@ -78,12 +78,18 @@ public:
 
   QString toString() const;
 
+  /**
+   * TODO
+   *
+   * @return
+   */
+  QString printPositiveBins() const;
+
 private:
 
   std::vector<double> _bins;
 
   Radians _getBinAngle(size_t i);
-
 };
 
 }

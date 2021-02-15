@@ -68,17 +68,31 @@ public:
   virtual double extract(const OsmMap& map, const std::shared_ptr<const Element>& target,
     const std::shared_ptr<const Element>& candidate) const override;
 
+  void setBins(int bins) { _bins = bins; }
   void setSmoothing(Radians sigma) { _smoothing = sigma; }
 
   virtual QString getDescription() const
   { return "Calculates the angle of each line segment and adds it to a histogram"; }
 
+  /**
+   * TODO
+   *
+   * @param map
+   * @param e
+   * @return
+   */
+  std::shared_ptr<Histogram> getNormalizedHistogram(
+    const OsmMap& map, const ConstElementPtr& element) const;
+
 protected:
+
+  unsigned int _bins;
 
   virtual Histogram* _createHistogram(const OsmMap& map, const ConstElementPtr& e) const;
 
+private:
+
   Radians _smoothing;
-  unsigned int _bins;
 };
 
 }
