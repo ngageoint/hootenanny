@@ -125,12 +125,12 @@ private:
       LOG_VART(lastLoc);
       for (size_t i = 1; i < discretizedLocs.size(); i++)
       {
-        //select a loc sampledDistance meters along the way
+        // select a loc sampledDistance meters along the way
         WayLocation currentLoc = discretizedLocs.at(i);
         LOG_VART(currentLoc);
         const double distance = currentLoc.getCoordinate().distance(lastLoc.getCoordinate());
         LOG_VART(distance);
-        //calculate the heading using some distance around the way
+        // calculate the heading using some distance around the way
         const double theta = WayHeading::calculateHeading(currentLoc, _headingDelta);
         LOG_VART(theta);
         if (! ::qIsNaN(theta))
