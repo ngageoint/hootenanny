@@ -167,6 +167,9 @@ ElementCriterionPtr MatchFactory::_createFilter()
 {
   ElementCriterionPtr filter;
 
+  // Offering the option here to use both a tag criterion and another criterion of any type. Perhaps
+  // these can be combined into one.
+
   ElementCriterionPtr tagFilter;
   if (!_tagFilterJson.trimmed().isEmpty())
   {
@@ -178,7 +181,6 @@ ElementCriterionPtr MatchFactory::_createFilter()
   ElementCriterionPtr critFilter;
   if (!_critFilterClassName.trimmed().isEmpty())
   {
-    // TODO
     ElementCriterionPtr elementCrit(
       Factory::getInstance().constructObject<ElementCriterion>(_critFilterClassName));
     if (_negateCritFilter)

@@ -63,10 +63,7 @@ public:
   virtual QString getInitStatusMessage() const { return "Removing unlikely roads..."; }
 
   virtual QString getCompletedStatusMessage() const
-  {
-    return
-      "Removed " + StringUtils::formatLargeNumber(_numAffected) + " unlikely roads.";
-  }
+  { return "Removed " + StringUtils::formatLargeNumber(_numAffected) + " unlikely roads."; }
 
   virtual QString getDescription() const
   { return "Removes road features that are very likely not roads"; }
@@ -82,15 +79,17 @@ public:
 
 private:
 
-  // TODO
+  // max length a way can have to be eligible for removal
   int _maxWayLength;
-  // TODO
+  // number of histogram bins to use with the angle extractor used to calc heading variance
   int _numHistogramBins;
-  // TODO
+  // heading delta to use with the angle extractor used to calc heading variance; see
+  // SampledAngleHistogramExtractor
   double _headingDelta;
-  // TODO
+  // sample distance to use with the angle extractor used to calc heading variance; see
+  // SampledAngleHistogramExtractor
   Meters _sampleDistance;
-  // TODO
+  // heading variance at or above which a way may be eligible for removal
   double _maxHeadingVariance;
 
   ElementCriterionPtr _getRemovalCrit(const ConstOsmMapPtr& map);

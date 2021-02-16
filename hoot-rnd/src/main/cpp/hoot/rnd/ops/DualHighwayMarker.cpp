@@ -80,7 +80,6 @@ bool DualHighwayMarker::_isMatchCandidate(ConstElementPtr element) const
   {
     return false;
   }
-  // TODO
   return OneWayCriterion().isSatisfied(element) && HighwayCriterion(_map).isSatisfied(element);
 }
 

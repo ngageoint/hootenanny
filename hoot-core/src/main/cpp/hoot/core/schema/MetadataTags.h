@@ -221,12 +221,12 @@ public:
   inline static const QString HootDuplicate()           { return "hoot:duplicate"; }
 
   /**
-   * TODO
+   * Used to mark roads that are divided highways
    */
   inline static const QString HootDualHighway()         { return "hoot:dual_highway"; }
 
   /**
-   * TODO
+   * Used to mark roads that cross divided highways
    */
   inline static const QString HootDualHighwayCrossing() { return "hoot:dual_highway_crossing"; }
 

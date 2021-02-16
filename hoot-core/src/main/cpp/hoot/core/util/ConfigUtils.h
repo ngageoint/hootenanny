@@ -62,9 +62,9 @@ public:
   static std::shared_ptr<geos::geom::Geometry> getBounds();
 
   /**
-   * TODO
+   * Returns a string representing the currently configured bounds
    *
-   * @return
+   * @return a string
    */
   static QString getBoundsString();
 
@@ -106,11 +106,11 @@ public:
   static void removeListOpEntry(const QString& opName, const QString& entryToRemove);
 
   /**
-   * TODO
+   * Inserts an entry into a list configuration option
    *
-   * @param opName
-   * @param opEntry
-   * @param index
+   * @param opName name of the configuration option being modified
+   * @param opEntry value of the configuration option entry to add
+   * @param index zero based index within the list configuration option to add the entry
    */
   static void insertListOpEntry(const QString& opName, const QString& opEntry, const int index);
 };

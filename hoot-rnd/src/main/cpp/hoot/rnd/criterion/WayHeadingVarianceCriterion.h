@@ -61,15 +61,15 @@ public:
   { return ElementCriterionPtr(new WayHeadingVarianceCriterion(_map)); }
 
   /**
-   * TODO
+   * Determines the largest single heading variance for a way
    *
-   * @param way
-   * @return
+   * @param way the way to examine
+   * @return a variance in degrees
    */
   Degrees getLargestHeadingVariance(const ConstWayPtr& way) const;
 
   virtual QString getDescription() const override
-  { return "TODO"; }
+  { return "Identifies ways that meet a heading variance threshold"; }
 
   virtual QString getName() const override { return className(); }
 

@@ -76,12 +76,17 @@ public:
    */
   void smooth(Radians sigma);
 
+  /**
+   * Creates a printable string for all histogram bins
+   *
+   * @return a histogram string
+   */
   QString toString() const;
 
   /**
-   * TODO
+   * Creates a printable string for histogram bins with positive values only
    *
-   * @return
+   * @return a histogram string
    */
   QString printPositiveBins() const;
 

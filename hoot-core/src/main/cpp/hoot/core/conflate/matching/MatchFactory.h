@@ -85,10 +85,10 @@ public:
   std::vector<std::shared_ptr<MatchCreator>> getCreators() const { return _creators; }
 
   /**
-   * TODO
+   * Returns a MatchCreator with the specified name
    *
-   * @param name
-   * @return
+   * @param name name of the match creator to return
+   * @return a match creator
    */
   std::shared_ptr<MatchCreator> getCreatorByName(const QString& name);
 
@@ -118,11 +118,9 @@ public:
 
 private:
 
-  // allows for matching a subset of the input data
+  // These allow for matching a subset of the input data.
   QString _tagFilterJson;
-  // TODO
   QString _critFilterClassName;
-  // TODO
   bool _negateCritFilter;
 
   std::vector<std::shared_ptr<MatchCreator>> _creators;

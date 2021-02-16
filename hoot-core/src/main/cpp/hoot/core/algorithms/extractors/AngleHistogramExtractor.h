@@ -75,11 +75,11 @@ public:
   { return "Calculates the angle of each line segment and adds it to a histogram"; }
 
   /**
-   * TODO
+   * Creates a normalized heading variance histogram for an element
    *
-   * @param map
-   * @param e
-   * @return
+   * @param map map owning the element
+   * @param e the element for which to create the histogram
+   * @return a heading variance histogram
    */
   std::shared_ptr<Histogram> getNormalizedHistogram(
     const OsmMap& map, const ConstElementPtr& element) const;

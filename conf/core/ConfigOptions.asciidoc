@@ -882,14 +882,14 @@ Path to this file.  Only modified during testing the Hootenanny options command.
 * Data Type: string
 * Default Value: ``
 
-TODO
+Criteria used for filtering elements before conflating them.
 
 === conflate.element.criterion.negate
 
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+Negates conflate.element.criterion.
 
 === conflate.mark.merge.created.multilinestring.relations
 
@@ -1297,21 +1297,23 @@ specified by 'distance.node.criterion.center'.
 * Data Type: bool
 * Default Value: `false`
 
-TODO
+If enabled, DualHighwayMarker will tag roads crossing between divided roads in addition to the
+divided roads themselves.
 
 === dual.highway.marker.crossing.roads.parallel.score.threshold
 
 * Data Type: double
 * Default Value: `0.4`
 
-TODO
+How perpendicular a road must be to a divided road to be considered as crossing it, with 0.0 being
+the most perpendicular and 1.0 being the least.
 
 === dual.highway.marker.parallel.score.threshold
 
 * Data Type: double
 * Default Value: `0.9`
 
-TODO
+How parallel two
 
 === dual.highway.splitter.driving.side
 
@@ -4646,14 +4648,15 @@ tags.
 * Data Type: int
 * Default Value: `2`
 
-TODO
+The maximum number of nodes a way can have to be considered for removal by
+SmallDisconnectedWayRemover.
 
 === small.disconnected.way.remover.max.length
 
 * Data Type: double
 * Default Value: `2.0`
 
-TODO
+The maximum length a way can have to be considered for removal by SmallDisconnectedWayRemover.
 
 === small.highway.merger.diff
 
@@ -5214,35 +5217,36 @@ problematic if you're doing testing or expecting repeatable output for other.
 * Data Type: double
 * Default Value: `5.0`
 
-TODO
+Way heading delta used by UnlikelyRoadRemover. See `way.matcher.heading.delta`.
 
 === unlikely.road.remover.max.heading.variance
 
 * Data Type: double
 * Default Value: `60.0`
 
-TODO
+The heading variance a road may have at or above which it will be considered for removal by
+UnlikelyRoadRemover.
 
 === unlikely.road.remover.max.length
 
 * Data Type: double
 * Default Value: `25.0`
 
-TODO
+The maximum length a road may have to be considered for removal by UnlikelyRoadRemover.
 
 === unlikely.road.remover.num.bins
 
 * Data Type: int
 * Default Value: `16`
 
-TODO
+Number of histogram bins used by UnlikelyRoadRemover. See `angle.histogram.extractor.bins`.
 
 === unlikely.road.remover.sample.distance
 
 * Data Type: double
 * Default Value: `1.0`
 
-TODO
+Way sample distance used by UnlikelyRoadRemover. See `way.angle.sample.distance`.
 
 === uuid.helper.repeatable
 
