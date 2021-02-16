@@ -42,7 +42,7 @@ namespace hoot
 {
 
 /**
- * TODO
+ * Detects and marks divided roads with a custom tag
  */
 class DualHighwayMarker : public ConstOsmMapOperation, public Configurable
 {
@@ -85,15 +85,16 @@ public:
 
   OsmMapPtr _map;
 
-  // TODO
+  // how parallel two roads must be to be considered as part of the same divided highway
   double _minParallelScore;
-  // TODO
+  // determines whether roads crossing divided roads are also marked
   bool _markCrossingRoads;
-  // TODO
+  // how perpendicular a road intersecting a divided road must be to be considered as crossing
+  // between it
   double _maxCrossingRoadsParallelScore;
-  // TODO
+  // the number of crossing roads detected
   int _numCrossing;
-  // TODO
+  // used to cache element distance vals
   std::shared_ptr<ConflateInfoCache> _elementInfo;
 
   // spatial indexes

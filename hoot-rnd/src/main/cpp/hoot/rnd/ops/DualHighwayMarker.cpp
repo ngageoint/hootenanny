@@ -125,6 +125,7 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
       continue;
     }
 
+    // Get all the one way roads near the current road within our search radius.
     std::shared_ptr<geos::geom::Envelope> env(road->getEnvelope(_map));
     LOG_VART(env);
     const std::set<ElementId> neighborIds =
@@ -149,7 +150,8 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
           DirectionFinder::isSimilarDirection2(_map, road, neighborRoad);
         LOG_VART(roadsInSameDirection);
 
-        // TODO: explain
+        // If the neighboring road is parallel to our road and going in the opposite direction,
+        // mark the pair as part of the same divided highway.
         if (parallelScore >= _minParallelScore && !roadsInSameDirection)
         {
           bool eitherRoadTagged = false;
@@ -175,7 +177,9 @@ void DualHighwayMarker::apply(const OsmMapPtr& map)
           if (_markCrossingRoads && road->getTags()[MetadataTags::HootDualHighway()] == "yes" &&
               neighborRoad->getTags()[MetadataTags::HootDualHighway()] == "yes")
           {
-            // TODO
+            // Optionally, also mark any roads crossing between the divided roads with a custom tag.
+            // This needs to be done twice in a mirrored fashion to detect all of the crossing
+            // roads.
             _markRoadsCrossingDividedRoads(road, neighborRoad);
             _markRoadsCrossingDividedRoads(neighborRoad, road);
           }
@@ -195,7 +199,7 @@ void DualHighwayMarker::_markRoadsCrossingDividedRoads(
     " and " << divRoad2->getElementId() << "...");
 
   // Get all the roads connected to the first of the divided road pair (anything connected to road 2
-  // can be dealt with in a separate call to this method pasing it in as the first road parameter
+  // can be dealt with in a separate call to this method passing it in as the first road parameter
   // instead).
   const QSet<long> connectedWaysToRoad1 = WayUtils::getConnectedWays(divRoad1->getId(), _map);
   LOG_VART(connectedWaysToRoad1);
