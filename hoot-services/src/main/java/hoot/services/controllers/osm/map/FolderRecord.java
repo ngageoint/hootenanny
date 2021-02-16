@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat;
 
 public class FolderRecord {
     private long id;
-    private long parentId;
+    private Long parentId;
     private String name;
     private long userId;
     private boolean isPublic;
@@ -57,11 +57,11 @@ public class FolderRecord {
         this.id = id;
     }
 
-    public long getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(long parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
