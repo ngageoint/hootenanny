@@ -88,7 +88,7 @@ public class FolderResource {
             return true;
         }
         // If its public & attached to root (0)
-        if(f.isPublic() && f.getParentId().equals(0L)) {
+        if(f.isPublic() && f.getParentId() != null && f.getParentId().equals(0L)) {
             return true;
         }
         // if we have a user, and folder is private, but its owned by this user:
@@ -100,7 +100,7 @@ public class FolderResource {
         Folders parentFolder = null;
         for(Folders currentFolder : folders) {
             // if we find it, stop:
-            if(f.getParentId().equals(currentFolder.getId())) {
+            if(f.getParentId() != null && f.getParentId().equals(currentFolder.getId())) {
                 parentFolder = currentFolder;
                 break;
             }
