@@ -488,7 +488,7 @@ public class DbUtils {
             JSONObject expectedObj;
 
             try {
-                sourceInfo = sourceInfo.replace("\\", ""); // have to unescape
+                sourceInfo = sourceInfo.replace("\\", "").replace("\"{", "{").replace("}\"", "}"); // have to unescape
                 expectedObj = (JSONObject) parser.parse(sourceInfo);
             }
             catch (ParseException e) {
