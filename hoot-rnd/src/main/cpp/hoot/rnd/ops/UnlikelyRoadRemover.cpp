@@ -34,6 +34,8 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/criterion/WayLengthCriterion.h>
 #include <hoot/rnd/criterion/WayHeadingVarianceCriterion.h>
+#include <hoot/core/criterion/RoundaboutCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 namespace hoot
 {
@@ -43,21 +45,20 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, UnlikelyRoadRemover)
 UnlikelyRoadRemover::UnlikelyRoadRemover() :
 _maxWayLength(25.0),
 _numHistogramBins(16),
-_headingDelta(20.0),
-_sampleDistance(15.0),
+_headingDelta(5.0),
+_sampleDistance(1.0),
 _maxHeadingVariance(60.0)
 {
 }
 
-void UnlikelyRoadRemover::setConfiguration(const Settings& /*conf*/)
+void UnlikelyRoadRemover::setConfiguration(const Settings& conf)
 {
-  //ConfigOptions confOpts(conf);
-  // TODO: set these from config
-  _maxWayLength = 25.0;
-  _numHistogramBins = 72;
-  _headingDelta = 1.0;
-  _sampleDistance = 1.0;
-  _maxHeadingVariance = 60.0;
+  ConfigOptions confOpts(conf);
+  _maxWayLength = confOpts.getUnlikelyRoadRemoverMaxLength();
+  _numHistogramBins = confOpts.getUnlikelyRoadRemoverNumBins();
+  _headingDelta = confOpts.getUnlikelyRoadRemoverHeadingDelta();
+  _sampleDistance = confOpts.getUnlikelyRoadRemoverSampleDistance();
+  _maxHeadingVariance = confOpts.getUnlikelyRoadRemoverMaxHeadingVariance();
 }
 
 ElementCriterionPtr UnlikelyRoadRemover::_getRemovalCrit(const ConstOsmMapPtr& map)
@@ -65,17 +66,24 @@ ElementCriterionPtr UnlikelyRoadRemover::_getRemovalCrit(const ConstOsmMapPtr& m
   // remove ways at or below a certain size
   std::shared_ptr<WayLengthCriterion> lengthCrit(
     new WayLengthCriterion(_maxWayLength, NumericComparisonType::LessThanOrEqualTo, map));
+  // remove ways whose heading (in degrees) varies at or above a certain amount
   std::shared_ptr<WayHeadingVarianceCriterion> headingCrit(
     new WayHeadingVarianceCriterion(
-      _maxHeadingVariance, NumericComparisonType::LessThanOrEqualTo, map));
+      _maxHeadingVariance, NumericComparisonType::GreaterThanOrEqualTo, map));
   headingCrit->setNumHistogramBins(_numHistogramBins);
   headingCrit->setSampleDistance(_sampleDistance);
   headingCrit->setHeadingDelta(_headingDelta);
-  ChainCriterionPtr wayCrit(new ChainCriterion(lengthCrit, headingCrit));
+  ChainCriterionPtr chainedWayCrit(new ChainCriterion(lengthCrit, headingCrit));
+
   // make sure only roads are removed
   std::shared_ptr<HighwayCriterion> roadCrit(new HighwayCriterion(map));
-  ChainCriterionPtr crit(new ChainCriterion(wayCrit, roadCrit));
-  return crit;
+  // Don't consider roundabouts, since their headings will obviously vary quite a bit as you go
+  // around them.
+  std::shared_ptr<NotCriterion> roundaboutCrit(
+    new NotCriterion(std::shared_ptr<RoundaboutCriterion>(new RoundaboutCriterion())));
+  ChainCriterionPtr chainedRoadCrit(new ChainCriterion(roadCrit, roundaboutCrit));
+
+  return ChainCriterionPtr(new ChainCriterion(chainedWayCrit, chainedRoadCrit));
 }
 
 void UnlikelyRoadRemover::apply(OsmMapPtr& map)
@@ -96,7 +104,7 @@ void UnlikelyRoadRemover::apply(OsmMapPtr& map)
     {
       continue;
     }
-    LOG_VARD(way->getElementId());
+    LOG_VART(ElementId::way(way->getId()));
 
     wayIdsToRemove.insert(way->getId());
   }
@@ -105,11 +113,10 @@ void UnlikelyRoadRemover::apply(OsmMapPtr& map)
   for (std::set<long>::const_iterator wayIdsItr = wayIdsToRemove.begin();
        wayIdsItr != wayIdsToRemove.end(); ++wayIdsItr)
   {
-    const long wayId = *wayIdsItr;
-    LOG_VART(wayId);
-    RecursiveElementRemover(ElementId::way(wayId)).apply(map);
+    RecursiveElementRemover(ElementId::way(*wayIdsItr)).apply(map);
     _numAffected++;
   }
+  LOG_VART(_numAffected);
 }
 
 QStringList UnlikelyRoadRemover::getCriteria() const

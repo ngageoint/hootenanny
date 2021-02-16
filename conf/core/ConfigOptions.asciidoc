@@ -5209,6 +5209,41 @@ is changing between runs and GLPK isn't finding an optimal solution then this is
 different output.  Just because the output is changing doesn't mean it is wrong, but this can be
 problematic if you're doing testing or expecting repeatable output for other.
 
+=== unlikely.road.remover.heading.delta
+
+* Data Type: double
+* Default Value: `5.0`
+
+TODO
+
+=== unlikely.road.remover.max.heading.variance
+
+* Data Type: double
+* Default Value: `60.0`
+
+TODO
+
+=== unlikely.road.remover.max.length
+
+* Data Type: double
+* Default Value: `25.0`
+
+TODO
+
+=== unlikely.road.remover.num.bins
+
+* Data Type: int
+* Default Value: `16`
+
+TODO
+
+=== unlikely.road.remover.sample.distance
+
+* Data Type: double
+* Default Value: `1.0`
+
+TODO
+
 === uuid.helper.repeatable
 
 * Data Type: bool

@@ -39,7 +39,7 @@ namespace hoot
 {
 
 /**
- * Removes road features that are very likely not roads at all
+ * Removes road features that are very likely not roads
  */
 class UnlikelyRoadRemover : public OsmMapOperation, public Configurable
 {
@@ -69,7 +69,7 @@ public:
   }
 
   virtual QString getDescription() const
-  { return "Removes road features that are very likely not roads at all"; }
+  { return "Removes road features that are very likely not roads"; }
 
   virtual QString getName() const { return className(); }
 

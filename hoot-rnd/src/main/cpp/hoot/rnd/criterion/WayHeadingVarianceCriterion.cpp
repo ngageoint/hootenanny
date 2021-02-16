@@ -30,6 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/algorithms/extractors/Histogram.h>
 
 namespace hoot
 {
@@ -48,7 +49,7 @@ _map(map)
 }
 
 WayHeadingVarianceCriterion::WayHeadingVarianceCriterion(
-  const double comparisonVariance, const NumericComparisonType& numericComparisonType,
+  const Degrees comparisonVariance, const NumericComparisonType& numericComparisonType,
   ConstOsmMapPtr map) :
 _comparisonVariance(comparisonVariance),
 _numericComparisonType(numericComparisonType),
@@ -65,15 +66,34 @@ void WayHeadingVarianceCriterion::setSampleDistance(const Meters distance)
 {
   _sampledAngleHist.setSampleDistance(distance);
 }
-void WayHeadingVarianceCriterion::setHeadingDelta(const double delta)
+void WayHeadingVarianceCriterion::setHeadingDelta(const Degrees delta)
 {
   _sampledAngleHist.setHeadingDelta(delta);
 }
 
-double WayHeadingVarianceCriterion::getLargestHeadingVariance(const ConstWayPtr& /*way*/) const
+Degrees WayHeadingVarianceCriterion::getLargestHeadingVariance(const ConstWayPtr& way) const
 {
-  // TODO: finish
-  return -1.0;
+  std::shared_ptr<Histogram> hist = _sampledAngleHist.getNormalizedHistogram(*_map, way);
+  const std::vector<double> bins = hist->getBins();
+  Degrees lowestAngle = -1.0;
+  Degrees largestDiff = -1.0;
+  for (size_t i = 0; i < bins.size(); ++i)
+  {
+    if (bins[i] > 0.0)
+    {
+      const Degrees heading = toDegrees(hist->getBinCenter(i));
+      if (lowestAngle == -1.0)
+      {
+        lowestAngle = heading;
+      }
+      else
+      {
+        largestDiff = heading - lowestAngle;
+      }
+    }
+  }
+  LOG_TRACE("Largest diff for " << way->getElementId() << ": " << largestDiff);
+  return largestDiff;
 }
 
 bool WayHeadingVarianceCriterion::isSatisfied(const ConstElementPtr& e) const

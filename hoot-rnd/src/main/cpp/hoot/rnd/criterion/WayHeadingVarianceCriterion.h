@@ -48,7 +48,7 @@ public:
   WayHeadingVarianceCriterion();
   WayHeadingVarianceCriterion(ConstOsmMapPtr map);
   WayHeadingVarianceCriterion(
-    const double comparisonVariance, const NumericComparisonType& numericComparisonType,
+    const Degrees comparisonVariance, const NumericComparisonType& numericComparisonType,
     ConstOsmMapPtr map);
   virtual ~WayHeadingVarianceCriterion() = default;
 
@@ -66,7 +66,7 @@ public:
    * @param way
    * @return
    */
-  double getLargestHeadingVariance(const ConstWayPtr& way) const;
+  Degrees getLargestHeadingVariance(const ConstWayPtr& way) const;
 
   virtual QString getDescription() const override
   { return "TODO"; }
@@ -79,13 +79,13 @@ public:
 
   void setNumHistogramBins(const int numBins);
   void setSampleDistance(const Meters distance);
-  void setHeadingDelta(const double delta);
+  void setHeadingDelta(const Degrees delta);
 
 private:
 
   SampledAngleHistogramExtractor _sampledAngleHist;
 
-  double _comparisonVariance;
+  Degrees _comparisonVariance;
   NumericComparisonType _numericComparisonType;
 
   ConstOsmMapPtr _map;
