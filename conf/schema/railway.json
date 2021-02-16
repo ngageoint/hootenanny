@@ -232,6 +232,13 @@
         ]
     },
     {
+        "geometries": [ "area" ],
+        "isA": "railway",
+        "name": "railway=yard",
+        "objectType": "tag",
+        "similarTo": [ { "name": "landuse=railway", "weight": 0.8 } ]
+    },
+    {
         "geometries": [
             "linestring"
         ],

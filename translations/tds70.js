@@ -236,7 +236,6 @@ tds70 = {
   // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the
   //                feature, checking values and populateing the OTH field.
   validateAttrs: function(geometryType,attrs,notUsed,transMap) {
-
     // First, use the lookup table to quickly drop all attributes that are not part of the feature.
     // This is quicker than going through the Schema due to the way the Schema is arranged
     var attrList = tds70.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
@@ -374,7 +373,6 @@ tds70 = {
 
   // validateTDSAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
   validateTDSAttrs: function(gFcode, attrs) {
-
     var tdsAttrList = tdsAttrLookup[tds70.rules.thematicGroupList[gFcode]];
     var AttrList = tds70.AttrLookup[gFcode];
 

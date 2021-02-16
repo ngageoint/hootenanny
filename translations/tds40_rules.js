@@ -3994,15 +3994,76 @@ tds40.rules = {
   // One2one translation table for converting "Other" OSM attributes to NFDD
   // This is for Export only. The values are swapped before use
   one2oneOut : [
-    // ZSAX_RS0 - Restriction Information : Security Attributes Group (resource classification)
-    ['ZSAX_RS0','U','security:classification','U'],
-    ['ZSAX_RS0','R','security:classification','R'],
-    ['ZSAX_RS0','C','security:classification','C'],
-    ['ZSAX_RS0','S','security:classification','S'],
-    ['ZSAX_RS0','TS','security:classification','TS'],
+    // [undefined,undefined,'amenity','college'], //  converted in pre processing
+    // [undefined,undefined,'amenity','hospital'], //  converted in pre processing
+    // [undefined,undefined,'amenity','school'], //  converted in pre processing
+    // [undefined,undefined,'amenity','university'], //  converted in pre processing
+    [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
+    [undefined,undefined,'building','industrial'], // Industrial
+    [undefined,undefined,'historic','yes'], // Not a good translation, push to o2s
+    [undefined,undefined,'man_made','works'], // Works
+    [undefined,undefined,'natural','water'], // to get rid of errors
 
-    // OTH Filler.  These are to build OTH values
-    ['RTN_ROI','999','highway','other'],
+    ['CAA','-999999','operator','unknown'],
+
+    // ['FFN','-999999','building','yes'], // Map to No Information
+    // ['FFN','851','isced:level','1'], // Primary Education
+    // ['FFN','852','isced:level','2,3'], // Secondary Education
+    // ['FFN','922','tourism','theme_park'], // Amusement
+    // ['FFN','999','landuse','institutional'],
+    ['FFN','122','man_made','winery'], // Winery
+    ['FFN','190','use','oil_gas_facility'],
+    ['FFN','2','building','farm'], // Agriculture
+    ['FFN','440','office','company'], // Commerce
+    ['FFN','440','office','yes'], // Commerce
+    ['FFN','464','shop','books'], // Specialized Store
+    ['FFN','464','shop','car'], // Specialized Store
+    ['FFN','464','shop','motorcycle'], // Specialized Store
+    ['FFN','465','shop','general'], // Non-specialized Store
+    ['FFN','480','amenity','transportation'], // Transport
+    ['FFN','480','building','transportation_outbuilding'], // Transportation
+    ['FFN','481','aeroway','terminal'], // Terminal
+    ['FFN','481','man_made','depot'], // not a good fit for depot terminal
+    ['FFN','482','amenity','bus_station'], // Station
+    ['FFN','530','building','warehouse'],
+    ['FFN','550','building','dwelling'], // Accomodation
+    ['FFN','552','leisure','ski_resort'], // Resort Hotel
+    ['FFN','558','building','dependents_housing'], // Dependents Housing
+    ['FFN','563','building','house'], // Residence
+    ['FFN','572','amenity','cafe'], // Restaurant
+    ['FFN','572','amenity','fast_food'], // Restaurant
+    ['FFN','572','building','restaurant'], // Restaurant
+    ['FFN','610','building','communication'],
+    ['FFN','610','office','telecommunication'], // telecommunication
+    ['FFN','640','shop','bureau_de_change'], // Financial Services
+    ['FFN','760','amenity','office'], // Business and Personal Support Services
+    ['FFN','775','tourism','information'], // Travel Agency
+    ['FFN','811','amenity','government_administration_building'],
+    ['FFN','811','building','public_service_outbuilding'], // Government - Not Good
+    ['FFN','815','building','palace'], // Palace
+    ['FFN','827','amenity','embassy'], // Embassy
+    ['FFN','831','amenity','courthouse'], // Public Order - from spec
+    ['FFN','835','building','military'],
+    ['FFN','835','military','barracks'], // Military
+    ['FFN','835','military','military_outbuilding'], // Military
+    ['FFN','843','amenity','jail'], // Imprisonment
+    ['FFN','850','amenity','education'], // Education
+    ['FFN','850','amenity','kindergarten'], // Education
+    ['FFN','850','building','school'],
+    ['FFN','850','isced:level','0'], // Education
+    ['FFN','852','isced:level','2'], // Secondary Education
+    ['FFN','852','isced:level','3'], // Secondary Education
+    ['FFN','857','building','college'], // Vocational Education
+    ['FFN','860','amenity','clinic'], // Human Health Activities
+    ['FFN','860','amenity','medical'], // Human Health Activities
+    ['FFN','860','building','hospital'], // Human Health Activities
+    ['FFN','890','amenity','cultural'], // Cultural, Arts and Entertainment
+    ['FFN','900','tourism','yes'], // Sports, Amusement and Recreation
+    ['FFN','909','amenity','casino'], // Gambling
+    ['FFN','912','leisure','sports_complex'], // Sports Centre
+    ['FFN','923','sport','10pin'], // Hobbies and/or Leisure Activities
+    ['FFN','970','amenity','townhall'], // Meeting Place
+    ['FFN','980','building','cemetery_building'], // Death care services
     ['FFN','999','amenity','other'],
     ['FFN','999','building','other'],
     ['FFN','999','camp:type','other'],
@@ -4016,9 +4077,9 @@ tds40.rules = {
     ['FFN','999','social_facility','other'],
     ['FFN','999','tourism','other'],
 
-    ['FIC','1','embankment:type','mound'], // Mound
-    ['FIC','1','embankment:type','berm'],
     ['FIC','1','embankment','berm'], // Dyke
+    ['FIC','1','embankment:type','berm'],
+    ['FIC','1','embankment:type','mound'], // Mound
     ['FIC','2','embankment:type','fill'], // Fill
     ['FIC','3','embankment','dyke'], // Dyke
     ['FIC','3','embankment:type','dyke'], // Dyke
@@ -4026,125 +4087,51 @@ tds40.rules = {
     ['FIC','6','embankment:type','divider'], // Divider
     ['FIC','999','embankment:type','other'], // Other
 
-    // Fix up the building/use tags from FFN
-    [undefined,undefined,'building','industrial'], // Industrial
-    [undefined,undefined,'man_made','works'], // Works
-    ['FFN','2','building','farm'], // Agriculture
-
-    ['FFN','827','amenity','embassy'], // Embassy
-
-    ['FFN','850','building','school'],
-    ['FFN','850','isced:level','0'], // Education
-    ['FFN','850','amenity','kindergarten'], // Education
-    // ['FFN','851','isced:level','1'], // Primary Education
-    ['FFN','852','isced:level','2'], // Secondary Education
-    ['FFN','852','isced:level','3'], // Secondary Education
-    // ['FFN','852','isced:level','2,3'], // Secondary Education
-    ['FFN','857','building','college'], // Vocational Education
-
-    ['FFN','572','amenity','cafe'], // Restaurant
-    ['FFN','572','building','restaurant'], // Restaurant
-
-    // Extra road stuff
-    ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
-    ['ZI016_ROC','2','surface','unpaved'], // Stabilized earth
-    ['ZI016_ROC','1','surface','dirt'], // Unimproved
-    ['ZI016_ROC','1','surface','earth'], // Unimproved
-
-    // Backward compatibility for 'oil'
-    ['ZI014_PPO','83','product','oil'], // Petroleum
-    ['ZI014_PPO','83','product','fuel'], // Close...
+    ['IWT','4','man_made','reservoir'], // Reservoir
 
     ['MCC','2','material','aluminum'], // Aluminum
-    ['PYM','1','tower:material','aluminum'], // Aluminum
-    ['VCM','2','material:vertical','aluminum'], // Aluminum
-    ['ZI014_PPO','2','product','aluminum'], // Aluminum
-    ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
-
-    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
-    ['VDT','ngvd29','source:datum:vertical','national_geodetic_source:datum:vertical_1929'], // National Geodetic Vertical Datum (NGVD) 1929
-    ['VDT','navd88','source:datum:vertical','north_american_source:datum:vertical_1988'], // North American Vertical Datum (NAVD) 1988
-
-    // Fix up some of the Defaults
-    // ['FFN','-999999','building','yes'], // Map to No Information
-    // ['RRC','-999999','railway','rail'], // Map to No Information
-    [undefined,undefined,'natural','water'], // to get rid of errors
-
-    // From MGCP
-    ['FFN','480','building','transportation_outbuilding'], // Transportation
-    ['FFN','481','man_made','depot'], // not a good fit for depot terminal
-    ['FFN','550','building','dwelling'], // Accomodation
-    ['FFN','811','building','public_service_outbuilding'], // Government - Not Good
-    ['FFN','811','amenity','government_administration_building'],
-    ['FFN','835','military','military_outbuilding'], // Military
-    ['FFN','835','military','barracks'], // Military
-    ['FFN','843','amenity','jail'], // Imprisonment
-    ['FFN','980','building','cemetery_building'], // Death care services
-    ['ZI014_PPO','-999999','product','unknown'], // Unknown
-    //     [undefined,undefined,'amenity','school'], //  converted in pre processing
-    //     [undefined,undefined,'amenity','hospital'], //  converted in pre processing
-    //     [undefined,undefined,'amenity','university'], //  converted in pre processing
-    //     [undefined,undefined,'amenity','college'], //  converted in pre processing
-    [undefined,undefined,'amenity','house_of_worship'], //  converted in pre processing
-
-    ['IWT','4','man_made','reservoir'], // Reservoir
 
     ['ONE','1001','oneway','-1'], // Yes, it is one way but it is reversed from the drawing order
 
-    // From UFD
-    ['CAA','-999999','operator','unknown'],
-    ['FFN','190','use','oil_gas_facility'],
+    ['PCF','2','condition','intact'], // MGCP compatibility
 
-    // From UTP
-    // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
-    ['FFN','482','amenity','bus_station'], // Station
-    ['FFN','831','amenity','courthouse'], // Public Order - from spec
-    ['FFN','610','building','communication'],
-    ['FFN','530','building','warehouse'],
-    ['FFN','835','building','military'],
-    // ['FFN','999','landuse','institutional'],
+    ['PYM','1','tower:material','aluminum'], // Aluminum
 
-    // From NAVTEQ
-    ['FFN','122','man_made','winery'], // Winery
-    ['FFN','440','office','company'], // Commerce
-    ['FFN','440','office','yes'], // Commerce
-    ['FFN','464','shop','car'], // Specialized Store
-    ['FFN','464','shop','motorcycle'], // Specialized Store
-    ['FFN','465','shop','general'], // Non-specialized Store
-    ['FFN','480','amenity','transportation'], // Transport
-    ['FFN','481','aeroway','terminal'], // Terminal
-    ['FFN','552','leisure','ski_resort'], // Resort Hotel
-    ['FFN','572','amenity','fast_food'], // Restaurant
-    ['FFN','775','tourism','information'], // Travel Agency
-    ['FFN','850','amenity','education'], // Education
-    ['FFN','860','building','hospital'], // Human Health Activities
-    ['FFN','860','amenity','clinic'], // Human Health Activities
-    ['FFN','860','amenity','medical'], // Human Health Activities
-    ['FFN','890','amenity','cultural'], // Cultural, Arts and Entertainment
-    ['FFN','900','tourism','yes'], // Sports, Amusement and Recreation
-    // ['FFN','922','tourism','theme_park'], // Amusement
-    ['FFN','923','sport','10pin'], // Hobbies and/or Leisure Activities
-    ['FFN','909','amenity','casino'], // Gambling
-    ['FFN','912','leisure','sports_complex'], // Sports Centre
-    ['FFN','970','amenity','townhall'], // Meeting Place
-    [undefined,undefined,'historic','yes'], // Not a good translation, push to o2s
+    // ['RRC','-999999','railway','rail'], // Map to No Information
 
-    // ### From OSM - This list could never end.....
-    ['FFN','464','shop','books'], // Specialized Store
-    ['FFN','563','building','house'], // Residence
-    ['FFN','558','building','dependents_housing'], // Dependents Housing
-    ['FFN','610','office','telecommunication'], // telecommunication
-    ['FFN','640','shop','bureau_de_change'], // Financial Services
-    ['FFN','760','amenity','office'], // Business and Personal Support Services
-    ['FFN','815','building','palace'], // Palace
+    ['RTN_ROI','999','highway','other'],
 
-    // TRE - Foliage Type
     // ['TRE','-999999',undefined,undefined], // No Information
     ['TRE','1','wood','deciduous'], // Deciduous
     ['TRE','2','wood','evergreen'], // Evergreen
     ['TRE','3','wood','mixed'], // Mixed
     ['TRE','999','wood','other'], // Other
 
+    // ['TTC','999','tower:type','radar'], //  Radar Tower -> Other
+
+    ['VCM','2','material:vertical','aluminum'], // Aluminum
+
+    ['VDT','meanSeaLevel','source:datum:vertical','mean_sea_level_(msl)'], // Mean Sea Level (MSL)
+    ['VDT','navd88','source:datum:vertical','north_american_source:datum:vertical_1988'], // North American Vertical Datum (NAVD) 1988
+    ['VDT','ngvd29','source:datum:vertical','national_geodetic_source:datum:vertical_1929'], // National Geodetic Vertical Datum (NGVD) 1929
+
+    ['ZI014_PPO','-999999','product','unknown'], // Unknown
+    ['ZI014_PPO','2','product','aluminum'], // Aluminum
+    ['ZI014_PPO','83','product','fuel'], // Close...
+    ['ZI014_PPO','83','product','oil'], // Petroleum
+
+    ['ZI014_PRW','1','raw_material','aluminum'], // Aluminum
+
+    ['ZI016_ROC','1','surface','dirt'], // Unimproved
+    ['ZI016_ROC','1','surface','earth'], // Unimproved
+    ['ZI016_ROC','2','surface','unpaved'], // Stabilized earth
+    ['ZI016_ROC','9','surface','paved'], // Paved/Asphalt from OSM
+
+    ['ZSAX_RS0','C','security:classification','C'],
+    ['ZSAX_RS0','R','security:classification','R'],
+    ['ZSAX_RS0','S','security:classification','S'],
+    ['ZSAX_RS0','TS','security:classification','TS'],
+    ['ZSAX_RS0','U','security:classification','U'],
   ], // End one2oneOut
 
   // ##### End of One2One Rules #####

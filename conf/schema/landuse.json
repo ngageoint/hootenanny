@@ -188,6 +188,14 @@
         "geometries": [
             "area"
         ],
+        "isA": "landuse",
+        "name": "landuse=railway",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [
+            "area"
+        ],
         "categories": [
             "poi"
         ],

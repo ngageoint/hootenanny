@@ -470,6 +470,7 @@ gifd.rules = {
     'LC4':'mlc:tracked', // Load Class Type 4
     'LEG':'length', // Length/Diameter in Meters With Greater Precision
     'LEN_':'length', // Length/Diameter
+    'LEN':'length', // Length/Diameter
     'LNU':'length:interior_useable', // Useable Length
     'LOG':'gradient:length', // Length of Gradient
     'LRP':'raw:LRP', // Length of Range With greater than 1 NM resolution

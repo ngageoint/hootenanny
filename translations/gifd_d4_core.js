@@ -33,10 +33,6 @@ gifd = {
   // ##### Start of the xxToOsmxx Block #####
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
   {
-    // #####
-    // This is from MGCP & some TDS
-    // #####
-
     // Drop the FCSUBTYPE since we don't use it
     if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
 
@@ -163,6 +159,12 @@ gifd = {
 
     // The FCODE for Buildings is different. TDS uses AL013
     if (attrs.F_CODE == 'AL015') attrs.F_CODE = 'AL013';
+
+    if attrs['USE_']
+    {
+      attrs.USE = attrs['USE_'];
+      delete attrs['USE_'];
+    }
 
   }, // End of applyToOsmPreProcessing
 
