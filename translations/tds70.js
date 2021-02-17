@@ -557,9 +557,8 @@ tds70 = {
     }
   },
 
-  // #####################################################################################################
-  // ##### Start of the xxToOsmxx Block #####
-  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  // Clean up the attributes
+  cleanAttrs : function (attrs)
   {
     // Drop the FCSUBTYPE since we don't use it
     if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
@@ -636,7 +635,12 @@ tds70 = {
         }
       }
     } // End closureList
+  }, // End cleanAttrrs
 
+  // #####################################################################################################
+  // ##### Start of the xxToOsmxx Block #####
+  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  {
     // Tag retired
     if (tags.controlling_authority)
     {
@@ -893,11 +897,9 @@ tds70 = {
 
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
-    if ((attrs.F_CODE == 'AL013' || attrs.F_CODE == 'AH055') && !(tags.building))
-    {
-      tags.building = 'yes';
-    }
+    if (attrs.F_CODE == 'AH055' && !(tags.building)) tags.building = 'bunker';
 
+    if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
 
     // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
     if (tags.building == 'yes' && tags.use)
@@ -1296,6 +1298,7 @@ tds70 = {
         ['t.man_made == "launch_pad"','delete t.man_made; t.aeroway="launchpad"'],
         ['t.median == "yes"','t.is_divided = "yes"'],
         ['t.military == "barracks"','t.use = "dormitory"'],
+        ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
         ['t.natural == "desert" && t.surface','t.desert_surface = t.surface; delete t.surface'],
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
@@ -2389,6 +2392,9 @@ tds70 = {
       // Debug
       // translate.dumpOne2OneLookup(tds70.lookup);
     }
+
+    // Clean out the usless values
+    tds70.cleanAttrs(attrs);
 
     // Untangle TDS attributes & OSM tags.
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import

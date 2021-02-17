@@ -39,7 +39,7 @@ gifd.rules = {
     ['F_CODE','AF010','raw:F_CODE','AF010'], // Chimney/Smokestack
     ['F_CODE','AH010','raw:F_CODE','AH010'], // Bastion/Rampart/Fortification
     ['F_CODE','AH020','raw:F_CODE','AH020'], // Trench
-    ['F_CODE','AH050','raw:F_CODE','AH050'], // Fortification
+    ['F_CODE','AH050','military','bunker'], // Fortification
     ['F_CODE','AK050','sport','tennis'], // Tennis Court - Valid NFDD but not in TDS Spec
     ['F_CODE','AK123','raw:F_CODE','AK123'], // Park Bench
     ['F_CODE','AK124','raw:F_CODE','AK124'], // Picnic Table
