@@ -40,6 +40,7 @@
 
 // tgs
 #include <tgs/HashMap.h>
+#include <tgs/System/Timer.h>
 
 // Qt
 #include <QString>
@@ -85,6 +86,9 @@ public:
 
   QList<SingleStat> getStats() const { return _stats; }
 
+  /**
+   * @see Configurable
+   */
   virtual void setConfiguration(const Settings &conf) override;
 
   /**
@@ -100,38 +104,47 @@ public:
 
 private:
 
+  OsmMapPtr _map;
+
   const MatchFactory& _matchFactory;
   std::shared_ptr<MatchThreshold> _matchThreshold;
-  std::shared_ptr<MergerFactory> _mergerFactory;
-  Settings _settings;   // Why is this needed?
-  HashMap<ElementId, std::vector<MergerPtr>> _e2m;
   std::vector<ConstMatchPtr> _matches;
+
+  std::shared_ptr<MergerFactory> _mergerFactory;
+  HashMap<ElementId, std::vector<MergerPtr>> _e2m;
   std::vector<MergerPtr> _mergers;
 
   QList<SingleStat> _stats;
 
+  Settings _settings;   // Why is this needed?
+
   int _taskStatusUpdateInterval;
   Progress _progress;
+  int _currentStep;
+  Tgs::Timer _timer;
 
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 
-  void _addReviewAndScoreTags(const OsmMapPtr &map, const std::vector<ConstMatchPtr> &matches);
+  void _createMatches();
+  MatchSetVector _optimizeMatches();
+  void _removeWholeGroups(MatchSetVector& matchSets);
+  void _addReviewAndScoreTags();
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
 
-  /**
+  void _createMergers(
+    MatchSetVector& matchSets, std::vector<MergerPtr>& relationMergers);
+  /*
    * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This
    * is helpful when replacing element ids with new ids.
    *
-   * @optimize It may make sense to write a custom multi-map for storing values. Check out this
+   * @todo It may make sense to write a custom multi-map for storing values. Check out this
    * for an example:
    * http://stackoverflow.com/questions/10064422/java-on-memory-efficient-key-value-store
    */
   void _mapElementIdsToMergers();
-
-  void _removeWholeGroups(std::vector<ConstMatchPtr> &matches, MatchSetVector &matchSets,
-    const OsmMapPtr &map);
-
   void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
+  void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
+  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
 
   /**
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
@@ -144,8 +157,6 @@ private:
   QString _matchSetToString(const MatchSet& matchSet) const;
 
   void _updateProgress(const int currentStep, const QString message);
-
-  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
 };
 
 }
