@@ -37,11 +37,7 @@ namespace hoot
 /**
  * The ReplaceTagVisitor class replaces matching tags with the specified replacement tag.
  *
- * This was written for the building outline project: the input data had tag BUILDING=yes, but the
- * output data needed to have tag building=yes.
- *
- * Feel free to extend this class. Maybe add a flag for case-insensitive matching. Or support for
- * wildcards.
+ * @todo Bring this class more in line with the options available in SetTagValueVisitor.
  */
 class ReplaceTagVisitor : public ElementVisitor, public Configurable
 {

@@ -44,7 +44,7 @@ class OsmMap;
 class Way;
 
 /**
- * Splits all "divided=yes" highways into two oneway streets. All intersections should be split
+ * Splits all "divided=yes" highways into two one way streets. All intersections should be split
  * before this method is called. Failure to do so will result in undefined behavior. A number of
  * assumptions must be made to do this including assumptions about the direction of travel on
  * roads (right or left hand drivers).

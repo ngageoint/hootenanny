@@ -63,12 +63,14 @@ public:
   virtual QString getDescription() const
   { return "Identifies ways that are parallel to each other"; }
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Line; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Line; }
 
- virtual QString getName() const override { return className(); }
+  virtual QString getName() const override { return className(); }
 
   virtual QString getClassName() const override { return className(); }
+
+  static bool isParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
+  static bool notParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
 
 private:
 
