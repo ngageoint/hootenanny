@@ -69,6 +69,20 @@ class MatchThreshold;
  * element replace the tags from the input1 element. The output from the tag-differencing
  * will always be an osm changeset (*.osc).
  *
+ * Workflow Steps as of 2/5/21:
+ *
+ * - Store off original map and ref1
+ * - Mark ref1 inputs
+ * - Remove unconflatable elements (optional; enabled by default; only turned off for debugging)
+ * - Find matches
+ * - Calc tag diff against the matches (optional; used when --separate-output is specified)
+ * - Remove secondary match elements
+ * - Snap secondary roads back to ref roads (optional; not enabled by default)
+ * - Remove ref match elements
+ * - Remove some metadata tags
+ * - Get the tag diff (optional; used when --separate-output is specified)
+ * - Add tag changes to back to the map (optional; used when --separate-output is specified)
+ *
  * Re-entrant but not thread safe. While this object is serializable, it doesn't maintain state
  * across serialization. It simply uses the default configuration. This should probably be made
  * more robust in the future, but works fine for now.
