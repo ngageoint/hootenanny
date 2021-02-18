@@ -63,7 +63,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -98,6 +98,7 @@ public class AdvancedConflationOptionsResource {
         put("horizontal", HORIZONTAL_CONFLATION_PATH);
         put("network", NETWORK_CONFLATION_PATH);
         put("differential", DIFFERENTIAL_CONFLATION_PATH);
+        put("differential w/Tags", DIFFERENTIAL_CONFLATION_PATH);
     }};
 
     private static Map<String, Map<String, String>> confOptionsMap = null;
@@ -123,7 +124,7 @@ public class AdvancedConflationOptionsResource {
                     }
                 }
 
-                conflationOptions.put(conf.getKey(), uiConfOptions);
+                conflationOptions.put(conf.getKey().toLowerCase(), uiConfOptions);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -133,9 +134,9 @@ public class AdvancedConflationOptionsResource {
     }
 
     public static List<String> getConflationTypes() {
-        List<String> conflationTypes = new ArrayList<String>(){{ add("Differential w/Tags"); }};
+        List<String> conflationTypes = new ArrayList<String>();
         conflationTypes.addAll(confMap.keySet().stream().map(type -> {
-                return WordUtils.capitalizeFully(type);
+                return StringUtils.capitalize(type);
             }).collect(Collectors.toList())
         );
 

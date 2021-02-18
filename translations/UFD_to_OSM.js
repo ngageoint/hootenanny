@@ -42,7 +42,7 @@ ufd = {
     ['F_CODE','AA050','man_made','well'], // Well - NFDD BH230
     ['F_CODE','AC000','facility','yes'], // Processing/Treatment Plant - NFDD AL010
     ['F_CODE','AE010','facility','yes'], // Assembly Plant - NFDD AL010
-    ['F_CODE','AH050','site:type','fortification'], // Fortification - FCODE Retired
+    ['F_CODE','AH050','military','bunker'], // Fortification - FCODE Retired
     ['F_CODE','AK190','man_made','recreational_pier'], // Fishing Pier/Promenade Pier - NFDD BB081
     ['F_CODE','AL015',undefined,undefined], // Building - NFDD AL013 - To Stop Warnings
     ['F_CODE','AL045',undefined,undefined], // Complex Outline - No FCODE. Converted to landuse
@@ -3592,6 +3592,18 @@ ufd = {
             tags.man_made = 'water_well';
             delete tags.product;
             break;
+        }
+        break;
+
+      case 'AH050': // Fortification
+        // Castles are not Bunkers but they get stored in the same layer
+        if (tags.military == 'bunker' && tags.historic == 'castle')
+        {
+          delete tags.military;
+        }
+        else if (!tags.building)
+        {
+          tags.building = 'bunker';
         }
         break;
 
