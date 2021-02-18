@@ -168,10 +168,10 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
       elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, map, replaced);
 }
 
-bool LinearTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
-                                      ElementPtr elementWithTagsToRemove,
-                                      const bool removeSecondaryElement, const OsmMapPtr& map,
-                                      std::vector<std::pair<ElementId, ElementId>>& replaced)
+bool LinearTagOnlyMerger::_mergeWays(
+  ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
+  const bool removeSecondaryElement, const OsmMapPtr& map,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {

@@ -39,7 +39,7 @@ class ConstElementVisitor;
 /**
  * Represents a section of a way.
  *
- * If the start is after the end the WaySubline is considered to be backwards. This can be handy
+ * If the start is after the end, the WaySubline is considered to be backwards. This can be handy
  * when representing strings of ways.
  */
 class WaySubline
@@ -123,7 +123,7 @@ public:
    * @param map - pointer to OsmMap object
    * @param nf - pointer (if available) to NodeFactory object
    * @param reuse - flag for reusing way id or getting a new one from the map
-   * @return
+   * @return todo
    */
   WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = 0,
                bool reuse = false) const;

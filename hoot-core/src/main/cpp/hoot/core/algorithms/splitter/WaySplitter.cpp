@@ -163,5 +163,4 @@ vector<WayPtr> WaySplitter::split(WayLocation& splitPoint)
   return result;
 }
 
-
 }

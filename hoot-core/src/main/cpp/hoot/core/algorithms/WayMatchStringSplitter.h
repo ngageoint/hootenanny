@@ -41,21 +41,23 @@ public:
   /**
    * Traverses all mappings, splits ways where appropriate and updates the subline mappings in
    * place.
-   * Throws NeedsReviewException
+   *
+   * @throws NeedsReviewException
    */
-  void applySplits(OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>> &replaced,
+  void applySplits(
+    OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>>& replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);
 
 private:
 
   static QString _overlyAggressiveMergeReviewText;
 
-  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex(WayNumber wn, OsmMapPtr map,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
+  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex(
+    WayNumber wn, OsmMapPtr map, QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
 
-  void _splitWay(WayNumber wn, OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>> &replaced,
+  void _splitWay(
+    WayNumber wn, OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>>& replaced,
     QList<WayMatchStringMerger::SublineMappingPtr> mappings);
-
 };
 
 }
