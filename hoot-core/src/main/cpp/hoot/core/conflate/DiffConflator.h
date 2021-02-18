@@ -234,6 +234,7 @@ private:
 
   Progress _progress;
   int _taskStatusUpdateInterval;
+  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   long _numSnappedWays;
   long _numUnconflatableElementsDiscarded;

@@ -72,6 +72,9 @@ namespace hoot
 {
 
 int DiffConflator::logWarnCount = 0;
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// produce a very large number of output files.
+const bool DiffConflator::WRITE_DETAILED_DEBUG_MAPS = false;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DiffConflator)
 
