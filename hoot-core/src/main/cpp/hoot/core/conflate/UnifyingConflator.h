@@ -76,7 +76,6 @@ protected:
   virtual void _createMergers(
     MatchSetVector& matchSets, std::vector<MergerPtr>& relationMergers);
   virtual void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
-  virtual void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
 
 private:
 

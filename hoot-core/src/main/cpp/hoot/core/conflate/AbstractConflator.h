@@ -93,18 +93,19 @@ protected:
 
   QList<SingleStat> _stats;
 
-  Settings _settings;   // Why is this needed?
+  Settings _settings;   // TODO: Why is this needed?
 
   int _taskStatusUpdateInterval;
   Progress _progress;
   int _currentStep;
   Tgs::Timer _timer;
+  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   /*
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
    * might be thrown during apply() clean up the leftovers nicely (albeit delayed).
    */
-  void _reset();
+  virtual void _reset();
 
   virtual void _createMatches();
   virtual MatchSetVector _optimizeMatches();
@@ -121,8 +122,8 @@ protected:
    */
   void _mapElementIdsToMergers();
   void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
+  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
   virtual void _mergeFeatures(const std::vector<MergerPtr>& relationMergers) = 0;
-  virtual void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map) = 0;
 
   void _updateProgress(const int currentStep, const QString message);
 

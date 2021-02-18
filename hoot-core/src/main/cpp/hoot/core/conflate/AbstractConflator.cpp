@@ -50,6 +50,10 @@
 namespace hoot
 {
 
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// produce a very large number of output files.
+const bool AbstractConflator::WRITE_DETAILED_DEBUG_MAPS = false;
+
 AbstractConflator::AbstractConflator() :
 _matchFactory(MatchFactory::getInstance()),
 _settings(Settings::getInstance()),
@@ -284,6 +288,48 @@ void AbstractConflator::_replaceElementIds(
       }
       // Don't need to hold on to the old reference any more.
       _e2m.erase(it->first);
+    }
+  }
+}
+
+void AbstractConflator::_applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map)
+{
+  std::vector<std::pair<ElementId, ElementId>> replaced;
+  for (size_t i = 0; i < mergers.size(); ++i)
+  {
+    MergerPtr merger = mergers[i];
+    const QString msg =
+      "Applying merger: " + merger->getName() + " " + StringUtils::formatLargeNumber(i + 1) +
+      " / " + StringUtils::formatLargeNumber(mergers.size());
+    // There are way more log statements generated from this than we normally want to see, so just
+    // info out a subset. If running in debug, then you'll see all of them which can be useful.
+    if (i != 0 && i % 10 == 0)
+    {
+      PROGRESS_INFO(msg);
+    }
+    else
+    {
+      LOG_DEBUG(msg);
+    }
+
+    // We require that each individual merger set the option to mark merge created relations, so
+    // disable this option as each merger is processed.
+    conf().set(ConfigOptions::getConflateMarkMergeCreatedMultilinestringRelationsKey(), false);
+
+    merger->apply(map, replaced);
+
+    LOG_VART(replaced);
+    LOG_VART(map->size());
+
+    // update any mergers that reference the replaced values
+    _replaceElementIds(replaced);
+    replaced.clear();
+    LOG_VART(merger->getImpactedElementIds());
+
+    if (WRITE_DETAILED_DEBUG_MAPS)
+    {
+      OsmMapWriterFactory::writeDebugMap(
+        map, "after-merge-" + merger->getName() + "-#" + StringUtils::formatLargeNumber(i + 1));
     }
   }
 }
