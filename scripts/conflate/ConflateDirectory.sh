@@ -41,7 +41,7 @@ do
   elif [ $ARGUMENT == "--resolve" ]
   then
     RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp"
-  elif [ $ARGUMENT == "-h" || $ARGUMENT == "--help" ]
+  elif [ $ARGUMENT == "-h" ] || [ $ARGUMENT == "--help" ]
   then
     usage
     exit
