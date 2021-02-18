@@ -52,7 +52,7 @@ class MergerFactory;
 class ElementId;
 
 /**
- * TODO
+ * Base class for conflators
  */
 class AbstractConflator : public OsmMapOperation, public Boundable, public Configurable,
   public ProgressReporter
