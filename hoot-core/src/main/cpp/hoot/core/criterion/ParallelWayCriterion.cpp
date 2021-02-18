@@ -146,4 +146,20 @@ bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
   return false;
 }
 
+bool ParallelWayCriterion::isParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2)
+{
+  if (e1->getElementType() != ElementType::Way)
+    return false;
+  ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e1);
+  return ParallelWayCriterion(map, way, true).isSatisfied(e2);
+}
+
+bool ParallelWayCriterion::notParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2)
+{
+  if (e1->getElementType() != ElementType::Way)
+    return false;
+  ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e1);
+  return ParallelWayCriterion(map, way, false).isSatisfied(e2);
+}
+
 }

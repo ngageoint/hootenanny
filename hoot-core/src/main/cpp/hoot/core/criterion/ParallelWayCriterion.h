@@ -69,6 +69,9 @@ public:
 
   virtual QString getClassName() const override { return className(); }
 
+  static bool isParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
+  static bool notParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2);
+
 private:
 
   ConstOsmMapPtr _map;
