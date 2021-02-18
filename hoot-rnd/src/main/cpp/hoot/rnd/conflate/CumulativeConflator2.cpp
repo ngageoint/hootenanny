@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "CumulativeConflator2.h"
@@ -49,6 +49,7 @@
 #include <hoot/rnd/ops/SmallDisconnectedWayRemover.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractor.h>
 #include <hoot/core/scoring/BaseComparator.h>
+#include <hoot/rnd/ops/UnlikelyRoadRemover.h>
 
 namespace hoot
 {
@@ -211,11 +212,14 @@ void CumulativeConflator2::_transferTagsToInputs(
   // TODO: use case specific
   args.replaceInStrings("ReferenceConflation.conf", "AttributeConflation.conf");
   _resetInitConfig(args);
-  // If this is in the pre ops, its cleaner if we don't use it during AC and just use during the
+  // If this is in the pre ops, its cleaner if we don't use it during AC and just use it during the
   // ref conflate. It will go back into the pre ops for ref conflate when the original config is
   // re-established after AC.
+  // TODO: kludgy
   ConfigUtils::removeListOpEntry(
     ConfigOptions::getConflatePreOpsKey(), SmallDisconnectedWayRemover::className());
+  ConfigUtils::removeListOpEntry(
+    ConfigOptions::getConflatePreOpsKey(), UnlikelyRoadRemover::className());
   LOG_VARD(ConfigOptions().getWayJoiner());
   LOG_VARD(ConfigOptions().getConflatePreOps());
 

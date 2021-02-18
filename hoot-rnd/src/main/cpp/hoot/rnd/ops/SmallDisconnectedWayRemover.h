@@ -83,9 +83,9 @@ public:
 
   OsmMapPtr _map;
 
-  // TODO
+  // max length a way can have to be eligible for removal
   int _maxWayLength;
-  // TODO
+  // max node count a way can have to be eligible for removal
   int _maxWayNodeCount;
 };
 

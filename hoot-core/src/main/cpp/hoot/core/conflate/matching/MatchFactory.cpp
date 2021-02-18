@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "MatchFactory.h"
 
@@ -167,6 +167,9 @@ ElementCriterionPtr MatchFactory::_createFilter()
 {
   ElementCriterionPtr filter;
 
+  // Offering the option here to use both a tag criterion and another criterion of any type. Perhaps
+  // these can be combined into one.
+
   ElementCriterionPtr tagFilter;
   if (!_tagFilterJson.trimmed().isEmpty())
   {
@@ -178,7 +181,6 @@ ElementCriterionPtr MatchFactory::_createFilter()
   ElementCriterionPtr critFilter;
   if (!_critFilterClassName.trimmed().isEmpty())
   {
-    // TODO
     ElementCriterionPtr elementCrit(
       Factory::getInstance().constructObject<ElementCriterion>(_critFilterClassName));
     if (_negateCritFilter)

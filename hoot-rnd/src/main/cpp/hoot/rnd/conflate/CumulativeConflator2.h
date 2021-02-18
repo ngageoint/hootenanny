@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CUMULATIVE_CONFLATOR_2_H
@@ -39,29 +39,42 @@ namespace hoot
 /**
  * Allows for conflating multiple maps in a cumulative fashion.
  *
+ * Sample test command:
+ *
  * hoot conflate-cumulative --status \
- * -C ReferenceConflation.conf \
- * -C UnifyingAlgorithm.conf \
- * -D uuid.helper.repeatable=true \
- * -D writer.include.debug.tags=true \
- * -D log.class.filter="CumulativeConflator2;ConflateCumulativeCmd" \
- * -D match.creators="hoot::HighwayMatchCreator" \
- * -D merger.creators="hoot::HighwayMergerCreator" \
- * -D bounds="8.4762,12.0504,8.4793,12.0526" \
- * -D bounds.keep.entire.features.crossing.bounds=false \
- * -D conflate.pre.ops+="hoot::SmallDisconnectedWayRemover" \
- * -D small.disconnected.way.remover.max.node.count=3 \
- * -D small.disconnected.way.remover.max.length=20.0 \
- * -D dual.highway.marker.mark.crossing.roads=true \
- * /home/vagrant/hoot/tmp/kano_033133330302/input/ \
- * /home/vagrant/hoot/tmp/kano_033133330302/output/out-kano-final.osm \
- * --keep-intermediate-outputs \
- * --reverse-inputs \
- * --max-iterations -1 \
- * --transfer-tags /home/vagrant/hoot/tmp/kano-osm-cropped-2.osm
+ *   -C ReferenceConflation.conf \
+ *   -C UnifyingAlgorithm.conf \
+ *   -D uuid.helper.repeatable=true \
+ *   -D writer.include.debug.tags=true \
+ *   -D log.class.filter="CumulativeConflator2;ConflateCumulativeCmd" \
+ *   -D match.creators="hoot::HighwayMatchCreator" \
+ *   -D merger.creators="hoot::HighwayMergerCreator" \
+ *   -D bounds="8.4762,12.0504,8.4793,12.0526" \
+ *   -D bounds.keep.entire.features.crossing.bounds=false \
+ *   -D conflate.pre.ops+="hoot::SmallDisconnectedWayRemover;hoot::UnlikelyRoadRemover" \
+ *   -D conflate.post.ops+="hoot::UnconnectedWaySnapper" \
+ *   -D small.disconnected.way.remover.max.node.count=3 \
+ *   -D small.disconnected.way.remover.max.length=20.0 \
+ *   -D dual.highway.marker.mark.crossing.roads=true \
+ *   -D snap.unconnected.ways.snap.tolerance=7.0 \
+ *   -D snap.unconnected.ways.snap.way.statuses=Input1 \
+ *   -D snap.unconnected.ways.snap.to.way.statuses=Input1 \
+ *   -D unlikely.road.remover.max.heading.variance=60.0 \
+ *   -D unlikely.road.remover.max.length=25.0 \
+ *   /home/vagrant/hoot/tmp/kano_033133330302/input/ \
+ *   /home/vagrant/hoot/tmp/kano_033133330302/output/out-kano-final.osm \
+ *   --keep-intermediate-outputs \
+ *   --reverse-inputs \
+ *   --max-iterations -1 \
+ *   --transfer-tags /home/vagrant/hoot/tmp/kano-osm-cropped-2.osm
  *
  * SmallDisconnectedWayRemover makes more sense to be at the front of the pre ops, but seems to
  * perform better so far at the end.
+ *
+ * UnconnectedWaySnapper makes more sense to be a pre op but has much better runtime performance as
+ * a post op. Input1 only is used as the snap source/target, since the input data is known to be
+ * incomplete in areas, and if Input2 is used instead, you will lose snapping against the initial
+ * Input1 layer.
  */
 class CumulativeConflator2
 {

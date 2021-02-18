@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFIGUTILS_H
@@ -62,9 +62,9 @@ public:
   static std::shared_ptr<geos::geom::Geometry> getBounds();
 
   /**
-   * TODO
+   * Returns a string representing the currently configured bounds
    *
-   * @return
+   * @return a string
    */
   static QString getBoundsString();
 
@@ -106,11 +106,11 @@ public:
   static void removeListOpEntry(const QString& opName, const QString& entryToRemove);
 
   /**
-   * TODO
+   * Inserts an entry into a list configuration option
    *
-   * @param opName
-   * @param opEntry
-   * @param index
+   * @param opName name of the configuration option being modified
+   * @param opEntry value of the configuration option entry to add
+   * @param index zero based index within the list configuration option to add the entry
    */
   static void insertListOpEntry(const QString& opName, const QString& opEntry, const int index);
 };

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef METADATA_TAGS_H
@@ -221,12 +221,12 @@ public:
   inline static const QString HootDuplicate()           { return "hoot:duplicate"; }
 
   /**
-   * TODO
+   * Used to mark roads that are divided highways
    */
   inline static const QString HootDualHighway()         { return "hoot:dual_highway"; }
 
   /**
-   * TODO
+   * Used to mark roads that cross divided highways
    */
   inline static const QString HootDualHighwayCrossing() { return "hoot:dual_highway_crossing"; }
 

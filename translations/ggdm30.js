@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -562,10 +562,8 @@ ggdm30 = {
     }
   },
 
-
-  // #####################################################################################################
-  // ##### Start of the xxToOsmxx Block #####
-  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  // Clean up the attributes
+  cleanAttrs : function (attrs)
   {
     // Drop the FCSUBTYPE since we don't use it
     if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
@@ -647,7 +645,12 @@ ggdm30 = {
         }
       }
     } // End closureList
+  }, // End cleanAttrs
 
+  // #####################################################################################################
+  // ##### Start of the xxToOsmxx Block #####
+  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  {
     // Now find an F_CODE
     if (attrs.F_CODE)
     {
@@ -897,10 +900,8 @@ ggdm30 = {
     // Military fixes
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
-    if ((attrs.F_CODE == 'AL013' || attrs.F_CODE == 'AH055') && !(tags.building))
-    {
-      tags.building = 'yes';
-    }
+    if (attrs.F_CODE == 'AH055' && !(tags.building)) tags.building = 'bunker';
+    if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
 
     // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
     if (tags.building == 'yes' && tags.use)
@@ -946,8 +947,6 @@ ggdm30 = {
         tags.amenity = 'college';
       }
     }
-
-
 
     // A facility is an area. Therefore "use" becomes "amenity". "Building" becomes "landuse"
     if (tags.facility && tags.use)
@@ -1298,6 +1297,7 @@ ggdm30 = {
         ['t.man_made == "launch_pad"','delete t.man_made; t.aeroway="launchpad"'],
         ['t.median == "yes"','t.is_divided = "yes"'],
         ['t.military == "barracks"','t.use = "dormitory"'],
+        ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
         ['t.natural == "desert" && t.surface','t.desert_surface = t.surface; delete t.surface'],
         ['t.natural == "sinkhole"','a.F_CODE = "BH145"; t["water:sink:type"] = "sinkhole"; delete t.natural'],
         ['t.natural == "spring" && !(t["spring:type"])','t["spring:type"] = "spring"'],
@@ -1321,15 +1321,15 @@ ggdm30 = {
         ['t.waterway == "riverbank"','t.waterway = "river"']
       ];
 
-      ggdm30.tdsPreRules = translate.buildComplexRules(rulesList);
+      ggdm30.ggdmPrePules = translate.buildComplexRules(rulesList);
     }
 
     // Apply the rulesList
-    //translate.applyComplexRules(tags,attrs,ggdm30.tdsPreRules);
+    //translate.applyComplexRules(tags,attrs,ggdm30.ggdmPrePules);
     // Pulling this out of translate
-    for (var i = 0, rLen = ggdm30.tdsPreRules.length; i < rLen; i++)
+    for (var i = 0, rLen = ggdm30.ggdmPrePules.length; i < rLen; i++)
     {
-      if (ggdm30.tdsPreRules[i][0](tags)) ggdm30.tdsPreRules[i][1](tags,attrs);
+      if (ggdm30.ggdmPrePules[i][0](tags)) ggdm30.ggdmPrePules[i][1](tags,attrs);
     }
 
     // Fix Keeps and Martello Towers
@@ -2276,6 +2276,9 @@ ggdm30 = {
 
       ggdm30.lookup = translate.createLookup(ggdm30.rules.one2one);
     }
+
+    // Cleanput the usless values
+    ggdm30.cleanAttrs(attrs);
 
     // pre processing
     ggdm30.applyToOsmPreProcessing(attrs, layerName, geometryType);

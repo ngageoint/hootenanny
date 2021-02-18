@@ -5,7 +5,7 @@ This is just one possible way to configure IDE's for developing in Hootenanny.  
 
 *Some of this has been automated in scripts/InstallHootDevelopmentEnvironment.sh.  All steps are still listed here in case you want to do them manually.  Note that the script relies on Tomcat 7 instead of Tomcat 6, as these instructions do, in order to automate the Eclipse installation.*
 
-You should have already installed both Java and Tomcat as is described in installing the dependencies "here":https://insightcloud.digitalglobe.com/redmine/projects/hootenany/wiki/Developer_-_Build_Hootenanny#Dependencies.
+You should have already installed both Java and Tomcat as is described in installing the dependencies "here":https://github.com/ngageoint/hootenanny/blob/master/docs/developer/HootenannyBuild.asciidoc.
 
 === Hootenanny Core
 
@@ -254,5 +254,5 @@ sudo service tomcat8 stop
 
 ==== Running Unit and Integrations Test from Eclipse
 
-Sometimes running these from inside Eclipse is more convenient than doing it from the command line.  The Hootenanny Java test environment is very similar to the link:$$https://insightcloud.digitalglobe.com/redmine/projects/mrgeo/wiki/UnitTests$$[MrGeo Java test environment].  Reading that documentation should tell you what you need to know.  In a nutshell, right-clicking tests under src/test/java and selecting Run As -> JUnit test is what you want to do.
+Sometimes running these from inside Eclipse is more convenient than doing it from the command line. In a nutshell, right-clicking tests under src/test/java and selecting Run As -> JUnit test is what you want to do.
 

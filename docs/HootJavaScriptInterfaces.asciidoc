@@ -1,7 +1,6 @@
 
 Hootenanny Javascript Interfaces
 ================================
-DigitalGlobe, Inc.
 
 include::JavascriptOverview.asciidoc[]
 include::tmp/RulesLib.asciidoc[]

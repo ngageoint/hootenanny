@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -236,43 +236,43 @@ gifd = {
       // Rules format:  ["test expression","output result"];
       // Note: t = tags, a = attrs and attrs can only be on the RHS
       var rulesList = [
-        ['t[\'bridge:movable\'] && t[\'bridge:movable\'] !== \'no\' && t[\'bridge:movable\'] !== \'unknown\'','t.bridge = \'movable\''],
-        ['t.navigationaid && !(t.aeroway)','t.aeroway = \'navigationaid\''],
-        ['t.amenity == \'stop\' && t[\'transport:type\'] == \'bus\'','t.highway = \'bus_stop\''],
-        ['t.diplomatic && !(t.amenity)','t.amenity = \'embassy\''],
-        ['t.boundary == \'protected_area\' && !(t.protect_class)','t.protect_class = \'4\''],
-        ['t.bunker_type && !(t.military)','t.military = \'bunker\''],
-        ['t.control_tower == \'yes\' && t.use == \'air_traffic_control\'','t[\'tower:type\'] = \'observation\''],
-        ['t.crossing == \'tank\'','t.highway = \'crossing\''],
-        ['t.desert_surface','t.surface = t.desert_surface; delete t.desert_surface'],
-        ['t.dock && !(t.waterway)','t.waterway = \'dock\''],
-        ['t.drive_in == \'yes\'','t.amenity = \'cinema\''],
-        ['t[\'generator:source\']','t.power = \'generator\''],
-        ['t[\'glacier:type\'] == \'icecap\' && t.natural == \'glacier\'','delete t.natural'],
-        ['t.golf == \'driving_range\' && !(t.leisure)','t.leisure = \'golf_course\''],
-        ['t.historic == \'castle\' && !(t.ruins) && !(t.building)','t.building = \'yes\''],
-        ['t.in_tunnel == \'yes\' && !(t.tunnel)','t.tunnel = \'yes\'; delete t.in_tunnel'],
-        ['t.industrial && !(t.landuse)','t.landuse = \'industrial\''],
-        ['(t.landuse == \'built_up_area\' || t.place == \'settlement\') && t.building','t[\'settlement:type\'] = t.building; delete t.building'],
-        ['t.leisure == \'stadium\'','t.building = \'yes\''],
-        ['t[\'material:vertical\']','t.material = t[\'material:vertical\']; delete t[\'material:vertical\']'],
-        ['t[\'monitoring:weather\'] == \'yes\'','t.man_made = \'monitoring_station\''],
-        ['t.on_bridge == \'yes\' && !(t.bridge)','t.bridge = \'yes\'; delete t.on_bridge'],
-        ['t.public_transport == \'station\' && t[\'transport:type\'] == \'railway\'','t.railway = \'station\''],
-        ['t.public_transport == \'station\' && t[\'transport:type\'] == \'bus\'','t.bus = \'yes\''],
-        ['t.protect_class && !(t.boundary)','t.boundary = \'protected_area\''],
-        ['t.pylon ==\'yes\' && t[\'cable:type\'] == \'cableway\'',' t.aerialway = \'pylon\''],
-        ['t.pylon ==\'yes\' && t[\'cable:type\'] == \'power\'',' t.power = \'tower\''],
-        ['t.sidetrack && !(t.railway)','t.railway = \'rail\''],
-        ['t.sidetrack && !(t.service)','t.service = \'siding\''],
-        ['t.social_facility','t.amenity = \'social_facility\'; t[\'social_facility:for\'] = t.social_facility; t.social_facility = \'shelter\''],
-        ['t[\'theatre:type\'] && !(t.amenity)','t.amenity = \'theatre\''],
-        ['t[\'tower:material\']','t.material = t[\'tower:material\']; delete t[\'tower:material\']'],
-        ['t[\'tower:type\'] && !(t.man_made)','t.man_made = \'tower\''],
-        ['t.use == \'islamic_prayer_hall\' && !(t.amenity)','t.amenity = \'place_of_worship\''],
-        ['t.water || t.landuse == \'basin\'','t.natural = \'water\''],
-        ['t.wetland && !(t.natural)','t.natural = \'wetland\''],
-        ['t[\'width:minimum_traveled_way\'] && !(t.width)','t.width = t[\'width:minimum_traveled_way\']']
+        ["t['bridge:movable'] && t['bridge:movable'] !== 'no' && t['bridge:movable'] !== 'unknown'","t.bridge = 'movable'"],
+        ["t.navigationaid && !(t.aeroway)","t.aeroway = 'navigationaid'"],
+        ["t.amenity == 'stop' && t['transport:type'] == 'bus'","t.highway = 'bus_stop'"],
+        ["t.diplomatic && !(t.amenity)","t.amenity = 'embassy'"],
+        ["t.boundary == 'protected_area' && !(t.protect_class)","t.protect_class = '4'"],
+        ["t.bunker_type && !(t.military)","t.military = 'bunker'"],
+        ["t.control_tower == 'yes' && t.use == 'air_traffic_control'","t['tower:type'] = 'observation'"],
+        ["t.crossing == 'tank'","t.highway = 'crossing'"],
+        ["t.desert_surface","t.surface = t.desert_surface; delete t.desert_surface"],
+        ["t.dock && !(t.waterway)","t.waterway = 'dock'"],
+        ["t.drive_in == 'yes'","t.amenity = 'cinema'"],
+        ["t['generator:source']","t.power = 'generator'"],
+        ["t['glacier:type'] == 'icecap' && t.natural == 'glacier'","delete t.natural"],
+        ["t.golf == 'driving_range' && !(t.leisure)","t.leisure = 'golf_course'"],
+        ["t.historic == 'castle' && !(t.ruins) && !(t.building)","t.building = 'yes'"],
+        ["t.in_tunnel == 'yes' && !(t.tunnel)","t.tunnel = 'yes'; delete t.in_tunnel"],
+        ["t.industrial && !(t.landuse)","t.landuse = 'industrial'"],
+        ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
+        ["t.leisure == 'stadium'","t.building = 'yes'"],
+        ["t['material:vertical']","t.material = t['material:vertical']; delete t['material:vertical']"],
+        ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
+        ["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
+        ["t.public_transport == 'station' && t['transport:type'] == 'railway'","t.railway = 'station'"],
+        ["t.public_transport == 'station' && t['transport:type'] == 'bus'","t.bus = 'yes'"],
+        ["t.protect_class && !(t.boundary)","t.boundary = 'protected_area'"],
+        ["t.pylon =='yes' && t['cable:type'] == 'cableway'"," t.aerialway = 'pylon'"],
+        ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
+        ["t.sidetrack && !(t.railway)","t.railway = 'rail'"],
+        ["t.sidetrack && !(t.service)","t.service = 'siding'"],
+        ["t.social_facility","t.amenity = 'social_facility'; t['social_facility:for'] = t.social_facility; t.social_facility = 'shelter'"],
+        ["t['theatre:type'] && !(t.amenity)","t.amenity = 'theatre'"],
+        ["t['tower:material']","t.material = t['tower:material']; delete t['tower:material']"],
+        ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
+        ["t.use == 'islamic_prayer_hall' && !(t.amenity)","t.amenity = 'place_of_worship'"],
+        ["t.water || t.landuse == 'basin'","t.natural = 'water'"],
+        ["t.wetland && !(t.natural)","t.natural = 'wetland'"],
+        ["t['width:minimum_traveled_way'] && !(t.width)","t.width = t['width:minimum_traveled_way']"]
       ];
 
       gifd.osmPostRules = translate.buildComplexRules(rulesList);
@@ -332,6 +332,18 @@ gifd = {
 
     case 'AF030': // Cooling Tower
       if (!tags['tower:type']) tags['tower:type'] = 'cooling';
+      break;
+
+    case 'AH050': // Fortification
+      // Castles are not Bunkers but they get stored in the same layer
+      if (tags.military == 'bunker' && tags.historic == 'castle')
+      {
+        delete tags.military;
+      }
+      else if (!tags.building)
+      {
+        tags.building = 'bunker';
+      }
       break;
 
     case 'AL013': // Building  NOTE this is the TDS F_CODE for Building. This was swapped during pre-processing
