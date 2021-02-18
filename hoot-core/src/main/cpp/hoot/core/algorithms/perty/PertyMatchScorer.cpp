@@ -261,7 +261,7 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
   //preOps.apply(conflationCopy);
 
   UnifyingConflator conflator;
-  conflator.setConfiguration(_settings);
+  //conflator.setConfiguration(_settings);
   conflator.apply(conflationCopy);
   OsmMapWriterFactory::writeDebugMap(conflationCopy, "perty-conflated-map");
 

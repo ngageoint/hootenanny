@@ -31,7 +31,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Boundable.h>
-#include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/ProgressReporter.h>
 #include <hoot/core/info/SingleStat.h>
 #include <hoot/core/conflate/merging/Merger.h>
@@ -44,18 +43,14 @@
 namespace hoot
 {
 
-class Match;
-class MatchClassification;
 class MatchFactory;
 class MatchThreshold;
 class MergerFactory;
-class ElementId;
 
 /**
  * Base class for conflators
  */
-class AbstractConflator : public OsmMapOperation, public Boundable, public Configurable,
-  public ProgressReporter
+class AbstractConflator : public OsmMapOperation, public Boundable, public ProgressReporter
 {
 public:
 
@@ -74,11 +69,6 @@ public:
 
   virtual void setProgress(Progress progress) override { _progress = progress; }
 
-  /**
-   * @see Configurable
-   */
-  virtual void setConfiguration(const Settings &conf) override;
-
 protected:
 
   OsmMapPtr _map;
@@ -93,13 +83,9 @@ protected:
 
   QList<SingleStat> _stats;
 
-  Settings _settings;   // TODO: Why is this needed?
-
   int _taskStatusUpdateInterval;
-  Progress _progress;
   int _currentStep;
   Tgs::Timer _timer;
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   /*
    * Cleans up any resources used by the object during conflation. This also makes exceptions that
@@ -128,6 +114,10 @@ protected:
   void _updateProgress(const int currentStep, const QString message);
 
 private:
+
+  Progress _progress;
+
+  static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   void _removeWholeGroups(MatchSetVector& matchSets);
 

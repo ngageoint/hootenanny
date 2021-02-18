@@ -30,15 +30,12 @@
 // hoot
 #include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/algorithms/changeset/MemChangesetProvider.h>
-#include <hoot/core/conflate/matching/Match.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/io/ChangesetStatsFormat.h>
 #include <hoot/core/conflate/AbstractConflator.h>
 
 namespace hoot
 {
 
-class MatchFactory;
 class MatchThreshold;
 
 /**

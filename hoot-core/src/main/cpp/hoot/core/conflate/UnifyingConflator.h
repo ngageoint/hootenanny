@@ -33,12 +33,7 @@
 namespace hoot
 {
 
-class Match;
-class MatchClassification;
-class MatchFactory;
 class MatchThreshold;
-class MergerFactory;
-class ElementId;
 
 /**
  * A different conflation algorithm compared to the original greedy conflation alg. This is named

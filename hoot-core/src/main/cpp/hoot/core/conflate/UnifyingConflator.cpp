@@ -35,7 +35,6 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/conflate/matching/MatchClassification.h>
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
@@ -238,7 +237,7 @@ void UnifyingConflator::_addScoreTags(const ElementPtr& e, const MatchClassifica
 
 void UnifyingConflator::_addReviewAndScoreTags()
 {
-  if (ConfigOptions(_settings).getWriterIncludeConflateScoreTags())
+  if (ConfigOptions().getWriterIncludeConflateScoreTags())
   {
     for (size_t i = 0; i < _matches.size(); i++)
     {

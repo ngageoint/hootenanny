@@ -35,7 +35,6 @@
 #include <hoot/core/conflate/matching/OptimalConstrainedMatches.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/ElementId.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
@@ -56,7 +55,6 @@ const bool AbstractConflator::WRITE_DETAILED_DEBUG_MAPS = false;
 
 AbstractConflator::AbstractConflator() :
 _matchFactory(MatchFactory::getInstance()),
-_settings(Settings::getInstance()),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _currentStep(1)
 {
@@ -66,7 +64,6 @@ _currentStep(1)
 AbstractConflator::AbstractConflator(const std::shared_ptr<MatchThreshold>& matchThreshold) :
 _matchFactory(MatchFactory::getInstance()),
 _matchThreshold(matchThreshold),
-_settings(Settings::getInstance()),
 _taskStatusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval()),
 _currentStep(1)
 {
@@ -92,15 +89,6 @@ void AbstractConflator::_reset()
   _e2m.clear();
   _matches.clear();
   _mergers.clear();
-}
-
-void AbstractConflator::setConfiguration(const Settings &conf)
-{
-  _settings = conf;
-
-  _matchThreshold.reset();
-  _mergerFactory.reset();
-  _reset();
 }
 
 void AbstractConflator::_createMatches()
@@ -153,10 +141,10 @@ MatchSetVector AbstractConflator::_optimizeMatches()
     OptimalConstrainedMatches cm(_map);
     std::vector<ConstMatchPtr> cmMatches;
 
-    if (ConfigOptions(_settings).getUnifyEnableOptimalConstrainedMatches())
+    if (ConfigOptions().getUnifyEnableOptimalConstrainedMatches())
     {
       cm.addMatches(_matches.begin(), _matches.end());
-      cm.setTimeLimit(ConfigOptions(_settings).getUnifyOptimizerTimeLimit());
+      cm.setTimeLimit(ConfigOptions().getUnifyOptimizerTimeLimit());
       double cmStart = Tgs::Time::getTime();
       try
       {
