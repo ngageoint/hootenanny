@@ -47,7 +47,7 @@ class FindNodesInWayFactory;
 class WayLocation;
 
 /**
- * TODO
+ * Splits ways
  *
  * @todo Not all of the methods add the split parent ID...more may need to.
  */
@@ -55,10 +55,7 @@ class WaySplitter
 {
 public:
 
-  /**
-   * Find the subline in a based on b
-   */
-  WaySplitter(const OsmMapPtr& map, WayPtr a);
+  WaySplitter(const OsmMapPtr& map, WayPtr way);
 
   /**
    * Creates a split for each way location (+1) and returns the new ways.
@@ -105,19 +102,19 @@ public:
   static void split(const OsmMapPtr& map, const WayPtr& w, double maxSize);
 
   /**
-   * TODO
+   * Splits a way into smaller ways
    *
-   * @param map
-   * @param a
-   * @param splitPoint
-   * @return
+   * @param map map owning the way
+   * @param way the way to split
+   * @param splitPoint the point at which to split the way
+   * @return the split ways
    */
-  static std::vector<WayPtr> split(const OsmMapPtr& map, WayPtr a, WayLocation& splitPoint);
+  static std::vector<WayPtr> split(const OsmMapPtr& map, WayPtr way, WayLocation& splitPoint);
 
 private:
 
   OsmMapPtr _map;
-  WayPtr _a;
+  WayPtr _way;
   std::shared_ptr<FindNodesInWayFactory> _nf;
 
   NodePtr _createNode(const geos::geom::Coordinate& c);

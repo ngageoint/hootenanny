@@ -37,17 +37,19 @@ namespace hoot
 class WayLocation;
 
 /**
- * TODO
+ * Removes sublines of ways
  */
 class WaySublineRemover
 {
 public:
 
   /**
-   * TODO
+   * Removes a subline from a way
    *
-   * @param subline
-   * @param map
+   * @param way the way to modify
+   * @param start the starting point at which to remove a subline
+   * @param end the ending point at which to remove a subline
+   * @param map the map owring the way
    */
   static void remove(WayPtr way, WayLocation& start, WayLocation& end, const OsmMapPtr& map);
 };
