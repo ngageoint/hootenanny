@@ -119,10 +119,10 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     }
     else
     {
-      // This originally called removeUnusedElementsOnly but was getting some unexpected results
-      // when using it with C&R and changed it over to removeElement, which solved the problem and
-      // didn't have any negative impact on the rest of the code...could still be worth looking
-      // into, though.
+      // This originally called RemoveElementByEid::removeUnusedElementsOnly but was getting some
+      // unexpected results when using it with C&R and changed it over to removeElement, which
+      // solved the problem and didn't have any negative impact on the rest of the code...could
+      // still be worth looking into, though.
       LOG_TRACE("Removing element: " << e->getElementId() << " non-recursively...");
       RemoveElementByEid::removeElement(_map->shared_from_this(), e->getElementId());
     }
@@ -130,7 +130,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
   }
   else
   {
-    LOG_TRACE("Not removing element: " << e->getElementId());
+    LOG_DEBUG("Not removing element: " << e->getElementId());
   }
   _numProcessed++;
 }

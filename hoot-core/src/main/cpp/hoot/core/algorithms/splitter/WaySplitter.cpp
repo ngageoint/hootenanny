@@ -46,29 +46,29 @@ using namespace std;
 namespace hoot
 {
 
-WaySplitter::WaySplitter(const OsmMapPtr& map, WayPtr a) :
+WaySplitter::WaySplitter(const OsmMapPtr& map, WayPtr way) :
   _map(map)
 {
-  _a = a;
-  _nf.reset(new FindNodesInWayFactory(a));
+  _way = way;
+  _nf.reset(new FindNodesInWayFactory(_way));
 }
 
 vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl)
 {
   vector<WayPtr> result;
-  WayLocation last = WayLocation(_map, _a, 0, 0.0);
+  WayLocation last = WayLocation(_map, _way, 0, 0.0);
 
   result.resize(wl.size() + 1);
 
   for (size_t i = 0; i < wl.size(); i++)
   {
-    assert(wl[i].getWay() == _a);
+    assert(wl[i].getWay() == _way);
     WayLocation curr = wl[i];
 
     if (last.compareTo(curr) != 0)
     {
       result[i] = WaySubline(last, curr).toWay(_map, _nf.get());
-      result[i]->setPid(_a->getId());
+      result[i]->setPid(_way->getId());
       if (result[i]->getNodeCount() == 0)
       {
         result[i].reset();
@@ -77,11 +77,11 @@ vector<WayPtr> WaySplitter::createSplits(const vector<WayLocation>& wl)
     last = curr;
   }
 
-  WayLocation end(_map, _a, _a->getNodeCount() - 1, 0.0);
+  WayLocation end(_map, _way, _way->getNodeCount() - 1, 0.0);
   if (last.compareTo(end) != 0)
   {
     WayPtr w = WaySubline(last, end).toWay(_map, _nf.get());
-    w->setPid(_a->getId());
+    w->setPid(_way->getId());
     result[result.size() - 1] = w;
   }
 
@@ -112,9 +112,9 @@ WayPtr WaySplitter::createSubline(const WaySubline& subline, vector<WayPtr>& scr
   return splits[1];
 }
 
-vector<WayPtr> WaySplitter::split(const OsmMapPtr& map, WayPtr a, WayLocation& splitPoint)
+vector<WayPtr> WaySplitter::split(const OsmMapPtr& map, WayPtr way, WayLocation& splitPoint)
 {
-  WaySplitter s(map, a);
+  WaySplitter s(map, way);
   return s.split(splitPoint);
 }
 
@@ -142,26 +142,25 @@ vector<WayPtr> WaySplitter::split(WayLocation& splitPoint)
 
   if (splitPoint.isFirst() || splitPoint.isLast())
   {
-    result.push_back(_a);
+    result.push_back(_way);
   }
   else
   {
-    WayLocation first(_map, _a, 0, 0.0);
-    WayLocation last(_map, _a, _a->getNodeCount() - 1, 0.0);
+    WayLocation first(_map, _way, 0, 0.0);
+    WayLocation last(_map, _way, _way->getNodeCount() - 1, 0.0);
 
     result.push_back(WaySubline(first, splitPoint).toWay(_map, _nf.get(), true));
     result.push_back(WaySubline(splitPoint, last).toWay(_map, _nf.get(), false));
 
     //  Record the parent id for the way joiner
-    result[1]->setPid(_a->getId());
+    result[1]->setPid(_way->getId());
 
-    RemoveWayByEid::removeWay(_map, _a->getId());
+    RemoveWayByEid::removeWay(_map, _way->getId());
     _map->addWay(result[0]);
     _map->addWay(result[1]);
   }
 
   return result;
 }
-
 
 }

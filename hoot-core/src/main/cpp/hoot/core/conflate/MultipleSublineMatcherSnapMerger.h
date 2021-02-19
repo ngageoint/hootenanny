@@ -36,7 +36,7 @@ namespace hoot
 class WaySublineMatchString;
 
 /**
- * Merges way features potentially using multiple subline matcher
+ * Merges way features potentially using multiple subline matchers
  *
  * This class primarily exists so that we can select a subline matcher based on properties of the
  * input data for runtime performance reasons.

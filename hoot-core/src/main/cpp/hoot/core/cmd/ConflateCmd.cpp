@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/conflate/ConflateExecutor.h>
 
 // Qt
 #include <QFileInfo>
@@ -47,7 +47,7 @@ int ConflateCmd::runSimple(QStringList& args)
 {
   BoundedCommand::runSimple(args);
 
-  Conflator conflator;
+  ConflateExecutor conflator;
 
   // This parsing is for map stats. Changeset stats args for differential are processed further down
   // below.

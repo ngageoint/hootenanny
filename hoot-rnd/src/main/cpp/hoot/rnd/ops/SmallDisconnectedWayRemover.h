@@ -39,7 +39,9 @@ namespace hoot
 {
 
 /**
- * Removes small and disconnected ways
+ * Removes small and disconnected ways.
+ *
+ * This is primarily useful for using with incompletely collected data e.g. extracted features.
  */
 class SmallDisconnectedWayRemover : public OsmMapOperation, public Configurable
 {

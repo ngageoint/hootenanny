@@ -136,8 +136,8 @@ HOOT_EMAIL="${TEST_NAME}@hoottestcpp.org"
 
 # Had to set changeset.max.size to a large number due to the fact with certain larger datasets (debugging data only being 
 # larger than we would include in actual tests) the osm api db bulk inserter would write multiple changesets for the input 
-# data and then the sql changeset applier would pick up the wrong latest changeset ID. Worth fixing, but since we only use 
-# sql changesets internally for testing...not that big of a deal for now.
+# data and then the sql changeset applier would pick up the wrong latest changeset ID. Possibly worth fixing (part of 
+# #4171), but since we only use sql changesets internally for testing...not that big of a deal for now.
 
 # debug.maps.remove.missing.elements=false is useful for debugging but it can make output unviewable in JOSM.
 # bounds.remove.missing.elements=false ensures that we don't drop any missing elements except when writing out our debug maps.

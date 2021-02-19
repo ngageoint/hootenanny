@@ -41,6 +41,9 @@ namespace hoot
 
 /**
  * Removes road features that are very likely not roads
+ *
+ * This is primarily useful for using with incompletely collected data (e.g. extracted features) or
+ * data that has been poorly merged during conflation due to its complexity.
  */
 class UnlikelyRoadRemover : public OsmMapOperation, public Configurable
 {

@@ -43,7 +43,8 @@ namespace hoot
 {
 
 /**
- * Detects and marks divided roads with a custom tag
+ * Detects and marks divided roads with a custom tag. At a minimum, a oneway=yes tag must be
+ * present on a road in order for it to be detected.
  */
 class DualHighwayMarker : public ConstOsmMapOperation, public Configurable
 {

@@ -124,7 +124,7 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
     }
     else
     {
-      // If one match completely contains the rest, use the larger match.  This may need to be
+      // If one match completely contains the rest, use the larger match. This may need to be
       // reverted as we play with more data, but at this point it seems like a reasonable heuristic.
       if (const NetworkMatch* larger = _getLargestContainer(matches))
       {

@@ -22,44 +22,39 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef WAYMATCHSTRINGSPLITTER_H
-#define WAYMATCHSTRINGSPLITTER_H
 
-#include <hoot/core/algorithms/WayMatchStringMerger.h>
+#ifndef WAY_SUBLINE_REMOVER_H
+#define WAY_SUBLINE_REMOVER_H
+
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
 
 namespace hoot
 {
 
-class WayMatchStringSplitter
+class WayLocation;
+
+/**
+ * Removes sublines of ways
+ */
+class WaySublineRemover
 {
 public:
 
-  WayMatchStringSplitter();
-
   /**
-   * Traverses all mappings, splits ways where appropriate and updates the subline mappings in
-   * place.
+   * Removes a subline from a way
    *
-   * @throws NeedsReviewException
+   * @param way the way to modify
+   * @param start the starting point at which to remove a subline
+   * @param end the ending point at which to remove a subline
+   * @param map the map owring the way
    */
-  void applySplits(
-    OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>>& replaced,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings);
-
-private:
-
-  static QString _overlyAggressiveMergeReviewText;
-
-  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex(
-    WayNumber wn, OsmMapPtr map, QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
-
-  void _splitWay(
-    WayNumber wn, OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>>& replaced,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings);
+  static void remove(WayPtr way, WayLocation& start, WayLocation& end, const OsmMapPtr& map);
 };
 
 }
 
-#endif // WAYMATCHSTRINGSPLITTER_H
+#endif // WAY_SUBLINE_REMOVER_H
