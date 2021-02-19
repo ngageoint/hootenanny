@@ -51,7 +51,7 @@
         "geometries": [
             "node",
             "area",
-            "way",
+            "linestring",
             "relation"
         ],
         "influence": 1,
@@ -74,9 +74,7 @@
         }
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node","area"],
         "isA": "public_transport",
         "name": "public_transport=station",
         "objectType": "tag",

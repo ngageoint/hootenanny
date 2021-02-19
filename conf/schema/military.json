@@ -12,7 +12,7 @@
     },
     {
         "description": "TODO: can't find this in the OSM schema",
-        "geometries": ["way"],
+        "geometries": ["linestring"],
         "isA": "military",
         "name": "military=revetment",
         "objectType": "tag"
@@ -27,6 +27,12 @@
         "geometries": ["node","area"],
         "isA": "military",
         "name": "military=danger_area",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["node","area"],
+        "isA": "military",
+        "name": "military=range",
         "objectType": "tag"
     },
     {

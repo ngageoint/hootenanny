@@ -19,6 +19,12 @@
         }
     },
     {
+        "geometries": ["node","area"],
+        "isA": "historic",
+        "name": "historic=archaeological_site",
+        "objectType": "tag"
+    },
+    {
         "isA": "historic",
         "name": "historic=memorial",
         "objectType": "tag",
@@ -51,6 +57,7 @@
         }
     },
     {
+        "geometries": ["node","linestring","area"],
         "isA": "historic",
         "name": "historic=ruins",
         "objectType": "tag",

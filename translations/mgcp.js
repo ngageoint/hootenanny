@@ -656,7 +656,7 @@ mgcp = {
       ["t.leisure == 'stadium'","t.building = 'yes'"],
       ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
       ["t.natural =='spring' && t['spring:type'] == 'spring'","delete t['spring:type']"],
-      ["t.public_transport == 'station'","t.bus = 'yes'"],
+      // ["t.public_transport == 'station'","t.bus = 'yes'"],
       ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
       ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
@@ -821,8 +821,13 @@ mgcp = {
       case 'AQ125': // Transportation Station
         if (tags.amenity == 'ferry_terminal')
         {
-          attrs.TRS = '7';
-          if (tags.bus) delete tags.bus;
+          tags['transport:type'] = 'maritime';
+          delete tags.bus;
+        }
+        if (!tags.amenity)
+        {
+          tags.bus = 'yes';
+          tags.amenity = 'bus_station';
         }
         break;
 
@@ -860,6 +865,11 @@ mgcp = {
           tags.natural = 'tree_row';
         }
         break;
+
+      case 'FA015': // Firing Range
+        if (! tags.landuse) tags.landuse = 'military';
+        break;
+
     } // End switch FCODE
 
     // Sort out TRS (Transport Type)
@@ -917,7 +927,7 @@ mgcp = {
     if (geometryType == 'Area' && ! translate.isOsmArea(tags))
     {
       // Debug
-      // print('Adding area=yes');
+      print('Adding area=yes');
       tags.area = 'yes';
     }
 
@@ -1076,6 +1086,7 @@ mgcp = {
       ["t.amenity == 'ferry_terminal'","t['transport:type'] = 'maritime'"],
       ["t.aeroway == 'navigationaid' && t.navigationaid","delete t.navigationaid"],
       ["t.barrier == 'tank_trap' && t.tank_trap == 'dragons_teeth'","t.barrier = 'dragons_teeth'; delete t.tank_trap"],
+      ["t.bus == 'yes'","t['transport:type'] = 'bus'"],
       ["t.communication == 'line'","t['cable:type'] = 'communication'"],
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
       // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
@@ -1179,7 +1190,7 @@ mgcp = {
         break;
 
       case 'military':
-        tags.military = 'installation';
+        if (tags.military !== 'range') tags.military = 'installation';
         delete tags.landuse;
         break;
 
@@ -1188,7 +1199,6 @@ mgcp = {
         tags.landuse = 'built_up_area';
         break;
     } // End switch landuse
-
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
@@ -1236,6 +1246,19 @@ mgcp = {
 
       if (tags.product == 'unknown') delete tags.product;
     }
+
+    // Fix up bus,train & ferry stations
+    if (tags.public_transport == 'station')
+    {
+      if (tags.amenity == 'bus_station' || tags.bus == 'yes')
+      {
+        delete tags.amenity;
+        delete tags.bus;
+        tags['transport:type'] = 'bus';
+      }
+
+    }
+
 
     // More facilities
     switch (tags.amenity)
@@ -1654,7 +1677,7 @@ mgcp = {
     // if (attrs.F_CODE == 'AN010' && tags.railway == 'yes') attrs.RRC = '0';
 
     // Not a great fit
-    if (tags.public_transportation == 'station' && tags.bus == 'yes') attrs.FFN = '481';
+    if (tags.public_transport == 'station' && tags.bus == 'yes') attrs.FFN = '481';
 
     // Mapping Senior Citizens home to Accomodation. Not great
     if (tags.amenity == 'social_facility' && tags['social_facility:for'] == 'senior') attrs.FFN = 550;
@@ -2320,7 +2343,7 @@ mgcp = {
           if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'attribute')
           {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
+            returnData[i]['attrs']['TXT'] = translate.appendValue(returnData[i]['attrs']['TXT'],tStr,';');
           }
 
           returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];

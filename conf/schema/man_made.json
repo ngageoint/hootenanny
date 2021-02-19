@@ -95,9 +95,7 @@
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["node","linestring","area"],
         "isA": "man_made",
         "name": "man_made=grain_elevator",
         "objectType": "tag"
