@@ -22,44 +22,39 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef WAYMATCHSTRINGSPLITTER_H
-#define WAYMATCHSTRINGSPLITTER_H
 
-#include <hoot/core/algorithms/WayMatchStringMerger.h>
+#include "WaySublineRemover.h"
+
+// Hoot
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+
+// Standard
+#include <vector>
 
 namespace hoot
 {
 
-class WayMatchStringSplitter
+void WaySublineRemover::remove(
+  WayPtr way, WayLocation& start, WayLocation& end, const OsmMapPtr& map)
 {
-public:
+  LOG_TRACE(
+    "Removing subline for: " << way->getElementId() << " starting at: " << start <<
+    " and ending at: " << end << "...");
 
-  WayMatchStringSplitter();
+  WaySplitter splitter(map, way);
+  // split at start
+  splitter.split(start);
+  // split at end
+  const std::vector<WayPtr> splitWays = splitter.split(end);
+  LOG_VART(splitWays);
 
-  /**
-   * Traverses all mappings, splits ways where appropriate and updates the subline mappings in
-   * place.
-   *
-   * @throws NeedsReviewException
-   */
-  void applySplits(
-    OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>>& replaced,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings);
-
-private:
-
-  static QString _overlyAggressiveMergeReviewText;
-
-  QMultiMap<WayPtr, WayMatchStringMerger::SublineMappingPtr> _buildWayIndex(
-    WayNumber wn, OsmMapPtr map, QList<WayMatchStringMerger::SublineMappingPtr> mappings) const;
-
-  void _splitWay(
-    WayNumber wn, OsmMapPtr map, std::vector<std::pair<ElementId, ElementId>>& replaced,
-    QList<WayMatchStringMerger::SublineMappingPtr> mappings);
-};
-
+  // remove middle section
+  RecursiveElementRemover(splitWays.at(0)->getElementId()).apply(map);
 }
 
-#endif // WAYMATCHSTRINGSPLITTER_H
+}

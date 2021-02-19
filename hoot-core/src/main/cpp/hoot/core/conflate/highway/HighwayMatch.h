@@ -46,7 +46,7 @@ class SublineStringMatcher;
 class ElementId;
 
 /**
- * Matches two highway elements.
+ * Matches two road elements
  */
 class HighwayMatch : public Match, public MatchDetails
 {

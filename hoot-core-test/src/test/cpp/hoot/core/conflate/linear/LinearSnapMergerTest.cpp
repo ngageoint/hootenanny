@@ -428,9 +428,10 @@ public:
     HOOT_FILE_EQUALS(_inputPath + testFileName, _outputPath + testFileName);
   }
 
-  //simple test to make sure review note/type strings don't get interchanged
   void reviewMarkingTest()
   {
+    // simple test to make sure review note/type strings don't get interchanged
+
     OsmMapPtr map = createMap();
 
     Coordinate w1c[] = { Coordinate(0, 0), Coordinate(100, 0), Coordinate::getNull() };
@@ -454,7 +455,7 @@ public:
     merger._markNeedsReview(map, w1, w2, "a review note", "a review type");
 
     CPPUNIT_ASSERT_EQUAL((size_t)1, map->getRelations().size());
-    //will throw an exception on failure
+    // will throw an exception on failure
     ConstRelationPtr reviewRelation =
       std::dynamic_pointer_cast<Relation>(
         TestUtils::getElementWithTag(map, MetadataTags::HootReviewNote(), "a review note"));

@@ -39,9 +39,7 @@ class WaySublineMatch
 public:
 
   WaySublineMatch();
-
   WaySublineMatch(const WaySublineMatch& other, const ConstOsmMapPtr &newMap);
-
   WaySublineMatch(const WaySubline& ws1, const WaySubline& ws2, bool reversed = false);
 
   /**
@@ -50,11 +48,9 @@ public:
   Meters getLength() const { return (getSubline1().getLength() + getSubline2().getLength()) / 2.0; }
 
   const WaySubline& getSubline1() const { return _ws1; }
-
   const WaySubline& getSubline2() const { return _ws2; }
 
   WaySublineCollection getSublineString1() const;
-
   WaySublineCollection getSublineString2() const;
 
   bool isReverseMatch() const { return _reversed; }

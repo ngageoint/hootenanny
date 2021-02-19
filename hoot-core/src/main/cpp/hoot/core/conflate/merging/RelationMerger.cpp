@@ -39,7 +39,7 @@ namespace hoot
 {
 
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// a very large number of files.
+// produce a very large number of output files.
 const bool RelationMerger::WRITE_DETAILED_DEBUG_MAPS = false;
 
 RelationMerger::RelationMerger() :

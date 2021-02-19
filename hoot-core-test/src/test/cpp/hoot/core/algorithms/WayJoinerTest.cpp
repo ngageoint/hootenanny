@@ -162,7 +162,6 @@ public:
     Settings conf;
     //  Use the Advanced way joiner
     conf.set(ConfigOptions::getWayJoinerKey(), WayJoinerAdvanced::className());
-    conflator.setConfiguration(conf);
     conflator.apply(map);
 
     NamedOp(ConfigOptions().getConflatePostOps()).apply(map);

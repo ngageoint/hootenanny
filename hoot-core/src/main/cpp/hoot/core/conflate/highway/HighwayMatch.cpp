@@ -60,9 +60,8 @@ const QString HighwayMatch::MATCH_NAME = "Highway";
 QString HighwayMatch::_noMatchingSubline = "No valid matching subline found.";
 
 HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher,
-  const ConstOsmMapPtr& map, const ElementId& eid1, const ElementId& eid2,
-  ConstMatchThresholdPtr mt) :
+  const std::shared_ptr<SublineStringMatcher>& sublineMatcher, const ConstOsmMapPtr& map,
+  const ElementId& eid1, const ElementId& eid2, ConstMatchThresholdPtr mt) :
   Match(mt),
   _classifier(classifier),
   _eid1(eid1),
@@ -126,10 +125,9 @@ HighwayMatch::HighwayMatch(const std::shared_ptr<HighwayClassifier>& classifier,
   LOG_VART(_explainText);
 }
 
-void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(QStringList& description,
-                                                                        const ConstOsmMapPtr& map,
-                                                                        const ConstElementPtr e1,
-                                                                        const ConstElementPtr e2)
+void HighwayMatch::_updateNonMatchDescriptionBasedOnGeometricProperties(
+  QStringList& description, const ConstOsmMapPtr& map, const ConstElementPtr e1,
+  const ConstElementPtr e2)
 {
   //  Check the Angle Histogram
   double angle = AngleHistogramExtractor().extract(*map, e1, e2);
@@ -264,8 +262,8 @@ bool HighwayMatch::isConflicting(
   }
 }
 
-bool HighwayMatch::_isOrderedConflicting(const ConstOsmMapPtr& map, ElementId sharedEid,
-  ElementId other1, ElementId other2) const
+bool HighwayMatch::_isOrderedConflicting(
+  const ConstOsmMapPtr& map, ElementId sharedEid, ElementId other1, ElementId other2) const
 {
   set<ElementId> eids;
   eids.insert(sharedEid);

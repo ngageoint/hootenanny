@@ -25,8 +25,8 @@
  * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-#ifndef CONFLATOR_H
-#define CONFLATOR_H
+#ifndef CONFLATE_EXECUTOR_H
+#define CONFLATE_EXECUTOR_H
 
 // Hoot
 #include <hoot/core/conflate/DiffConflator.h>
@@ -48,14 +48,14 @@ namespace hoot
  *
  * @todo refactor the stats display logic into its own class?
  */
-class Conflator
+class ConflateExecutor
 {
 
 public:
 
   static const QString JOB_SOURCE;
 
-  Conflator();
+  ConflateExecutor();
 
   /**
    * Conflates to inputs and writes the conflated data to an output
@@ -128,4 +128,4 @@ private:
 
 }
 
-#endif // CONFLATOR_H
+#endif // CONFLATE_EXECUTOR_H
