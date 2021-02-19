@@ -221,6 +221,16 @@ public:
   inline static const QString HootDuplicate()           { return "hoot:duplicate"; }
 
   /**
+   * Used to mark roads that are divided highways
+   */
+  inline static const QString HootDualHighway()         { return "hoot:dual_highway"; }
+
+  /**
+   * Used to mark roads that cross divided highways
+   */
+  inline static const QString HootDualHighwayCrossing() { return "hoot:dual_highway_crossing"; }
+
+  /**
    * Identifies features snapped with UnconnectedWaySnapper
    *
    * values in use:

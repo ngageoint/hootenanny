@@ -34,6 +34,8 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/TagAdvancedCriterion.h>
 #include <hoot/core/conflate/matching/OptionsValidator.h>
+#include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
 
 //Qt
 #include <QString>
@@ -44,7 +46,8 @@ using namespace std;
 namespace hoot
 {
 
-MatchFactory::MatchFactory()
+MatchFactory::MatchFactory() :
+_negateCritFilter(false)
 {
   setConfiguration(conf());
 }
@@ -124,6 +127,21 @@ vector<CreatorDescription> MatchFactory::getAllAvailableCreators() const
   return result;
 }
 
+std::shared_ptr<MatchCreator> MatchFactory::getCreatorByName(const QString& name)
+{
+  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator matchCreatorsItr =
+         _creators.begin();
+       matchCreatorsItr != _creators.end(); ++matchCreatorsItr)
+  {
+    std::shared_ptr<MatchCreator> matchCreator = *matchCreatorsItr;
+    if (matchCreator->getName() == name)
+    {
+      return matchCreator;
+    }
+  }
+  return std::shared_ptr<MatchCreator>();
+}
+
 void MatchFactory::registerCreator(const QString& c)
 {
   QStringList args = c.split(",");
@@ -134,15 +152,7 @@ void MatchFactory::registerCreator(const QString& c)
     args.removeFirst();
     std::shared_ptr<MatchCreator> mc(
       Factory::getInstance().constructObject<MatchCreator>(className));
-
-    ElementCriterionPtr filter;
-    if (!_tagFilter.trimmed().isEmpty())
-    {
-      // We're specifically checking for an option to feed this tag criterion. Additional combined
-      // criteria can be added to this match creator if needed.
-      filter.reset(new TagAdvancedCriterion(_tagFilter));
-    }
-    mc->setFilter(filter);
+    mc->setFilter(_createFilter());
 
     registerCreator(mc);
 
@@ -151,6 +161,52 @@ void MatchFactory::registerCreator(const QString& c)
       mc->setArguments(args);
     }
   }
+}
+
+ElementCriterionPtr MatchFactory::_createFilter()
+{
+  ElementCriterionPtr filter;
+
+  // Offering the option here to use both a tag criterion and another criterion of any type. Perhaps
+  // these can be combined into one.
+
+  ElementCriterionPtr tagFilter;
+  if (!_tagFilterJson.trimmed().isEmpty())
+  {
+    // We're specifically checking for an option to feed this tag criterion. Additional combined
+    // criteria can be added to this match creator if needed.
+    tagFilter.reset(new TagAdvancedCriterion(_tagFilterJson));
+  }
+
+  ElementCriterionPtr critFilter;
+  if (!_critFilterClassName.trimmed().isEmpty())
+  {
+    ElementCriterionPtr elementCrit(
+      Factory::getInstance().constructObject<ElementCriterion>(_critFilterClassName));
+    if (_negateCritFilter)
+    {
+      critFilter.reset(new NotCriterion(elementCrit));
+    }
+    else
+    {
+      critFilter = elementCrit;
+    }
+  }
+
+  if (tagFilter && critFilter)
+  {
+    filter.reset(new ChainCriterion(tagFilter, critFilter));
+  }
+  else if (tagFilter)
+  {
+    filter = tagFilter;
+  }
+  else if (critFilter)
+  {
+    filter = critFilter;
+  }
+
+  return filter;
 }
 
 void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
@@ -168,7 +224,10 @@ void MatchFactory::_setMatchCreators(QStringList matchCreatorsList)
 
 void MatchFactory::setConfiguration(const Settings& s)
 {
-  _tagFilter = ConfigOptions(s).getConflateTagFilter();
+  ConfigOptions configOpts(s);
+  _tagFilterJson = configOpts.getConflateTagFilter();
+  _critFilterClassName = configOpts.getConflateElementCriterion();
+  _negateCritFilter = configOpts.getConflateElementCriterionNegate();
 }
 
 MatchFactory& MatchFactory::getInstance()
@@ -200,7 +259,9 @@ MatchFactory& MatchFactory::getInstance()
 void MatchFactory::reset()
 {
   _creators.clear();
-  _tagFilter = "";
+  _tagFilterJson = "";
+  _critFilterClassName = "";
+  _negateCritFilter = false;
 }
 
 QString MatchFactory::getCreatorsStr() const

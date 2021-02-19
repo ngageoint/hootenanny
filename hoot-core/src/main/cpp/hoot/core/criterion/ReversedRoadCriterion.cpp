@@ -38,8 +38,9 @@ HOOT_FACTORY_REGISTER(ElementCriterion, ReversedRoadCriterion)
 
 bool ReversedRoadCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  // only time reversed road relations have been seen so far is as a result of cropping, but think
-  // that still needs to be supported
+  // The only time reversed road relations have been seen so far is as a result of cropping, but
+  // think that it still needs to be supported.
+
   if (!HighwayCriterion(_map).isSatisfied(e))
   {
     return false;

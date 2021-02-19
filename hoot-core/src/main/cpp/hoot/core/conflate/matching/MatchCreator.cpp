@@ -45,7 +45,19 @@ _boundsAddedToFilter(false)
 void MatchCreator::createMatches(
   const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& /*matches*/,
   ConstMatchThresholdPtr /*threshold*/)
-{
+{    
+  if (_filter)
+  {
+    // We weren't able to set the map when this filter was created by MatchFactory b/c we didn't
+    // have one yet.
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+      std::dynamic_pointer_cast<ConstOsmMapConsumer>(_filter);
+    if (mapConsumer)
+    {
+      mapConsumer->setOsmMap(map.get());
+    }
+  }
+
   if (!_boundsAddedToFilter && ConfigUtils::boundsOptionEnabled())
   {
     // The default behavior is to match against everything in the input unless a bounds is
