@@ -56,7 +56,7 @@ void ShortestPath::calculateCost()
     _queue.pop();
 
     for (QMultiHash<long, DirectedGraph::Edge>::const_iterator it = edges.find(top.id);
-      it != edges.end() && it.key() == top.id; ++it)
+         it != edges.end() && it.key() == top.id; ++it)
     {
       double c = top.cost + it.value().weight;
       long nId = it.value().to;
