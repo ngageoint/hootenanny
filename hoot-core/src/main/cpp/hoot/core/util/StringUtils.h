@@ -287,6 +287,13 @@ public:
   static QString splitAndGetAtIndex(
     const QString& input, const QRegExp& splitExp, const int index);
 
+  /**
+   * TODO
+   *
+   * @param strList
+   */
+  static void reverse(QStringList& strList);
+
 private:
 
   static QString _splitAndRemoveAtIndex(
