@@ -37,11 +37,6 @@ class MapCompareUtils
 {
 public:
 
-  // TODO: remove
-  static void getAttributeComparisonFinalScores(
-    OsmMapPtr map1, OsmMapPtr map2, OsmMapPtr outMap, int& mean, int& confidence,
-    const int numIterations);
-
   /**
    * TODO
    *

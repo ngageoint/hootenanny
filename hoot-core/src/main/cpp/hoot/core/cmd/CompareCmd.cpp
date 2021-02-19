@@ -70,17 +70,16 @@ public:
     OsmMapPtr outMap = loadMap(out);
 
     int aic, aim;
-    MapCompareUtils::getAttributeComparisonFinalScores(map1, map2, outMap, aim, aic, 600);
-//    MapCompareUtils::getAttributeComparisonFinalScores(map1, outMap, aim, aic, 600);
-//    if (map2 != 0)
-//    {
-//      int aic2, aim2;
-//      MapCompareUtils::getAttributeComparisonFinalScores(map2, outMap, aim2, aic2, 600);
-//      aic2 += aic;
-//      aim2 += aim;
-//      aic /= 2;
-//      aim /= 2;
-//    }
+    MapCompareUtils::getAttributeComparisonFinalScores(map1, outMap, aim, aic, 600);
+    if (map2 != 0)
+    {
+      int aic2, aim2;
+      MapCompareUtils::getAttributeComparisonFinalScores(map2, outMap, aim2, aic2, 600);
+      aic += aic2;
+      aim += aim2;
+      aic /= 2;
+      aim /= 2;
+    }
     cout << "Attribute Score: " << aim <<
             " +/-" << aic << " (" << aim - aic << " to " << aim + aic << ")" << endl;
 

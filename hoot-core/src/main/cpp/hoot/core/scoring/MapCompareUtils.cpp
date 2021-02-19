@@ -35,39 +35,6 @@ namespace hoot
 {
 
 void MapCompareUtils::getAttributeComparisonFinalScores(
-  OsmMapPtr map1, OsmMapPtr map2, OsmMapPtr outMap, int& mean, int& confidence,
-  const int numIterations)
-{
-  Tgs::Random::instance()->seed(100);
-
-  {
-    AttributeComparator attr(map1, outMap);
-    attr.setIterations(numIterations);
-    attr.compareMaps();
-    int thisConfidence = convertRawScoreToFinalScore(attr.getConfidenceInterval());
-    int thisMean = convertRawScoreToFinalScore(attr.getMeanScore());
-
-    confidence = thisConfidence;
-    mean = thisMean;
-  }
-
-  if (map2 != 0)
-  {
-    AttributeComparator attr(map2, outMap);
-    attr.setIterations(numIterations);
-    attr.compareMaps();
-    int thisConfidence = convertRawScoreToFinalScore(attr.getConfidenceInterval());
-    int thisMean = convertRawScoreToFinalScore(attr.getMeanScore());
-
-    confidence += thisConfidence;
-    mean += thisMean;
-
-    confidence /= 2;
-    mean /= 2;
-  }
-}
-
-void MapCompareUtils::getAttributeComparisonFinalScores(
   OsmMapPtr map1, OsmMapPtr map2, int& mean, int& confidence, const int numIterations)
 {
   Tgs::Random::instance()->seed(100);
