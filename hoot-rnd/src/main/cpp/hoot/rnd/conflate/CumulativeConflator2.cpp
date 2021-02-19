@@ -31,7 +31,7 @@
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Settings.h>
-#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/conflate/ConflateExecutor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/schema/TagMergerFactory.h>
@@ -126,7 +126,7 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
       "Conflating (" << i << "/" << numIterations << ") " << input1Info.fileName() <<
       " with " << input2Info.fileName() << " and writing output to " <<
       tempOutputInfo.fileName() << "...");
-    Conflator().conflate(input1, input2, tempOutput);
+    ConflateExecutor().conflate(input1, input2, tempOutput);
     LOG_STATUS("Conflation took: " << StringUtils::millisecondsToDhms(_conflateTimer.elapsed()));
 
     if (i != 1 && !_keepIntermediateOutputs)
@@ -240,7 +240,7 @@ void CumulativeConflator2::_transferTagsToInputs(
       " from " << tagInputInfo.fileName() << " to " << tagTransferredInput << "...");
 
     _conflateTimer.restart();
-    Conflator().conflate(
+    ConflateExecutor().conflate(
       input.path() + "/" + inputs.at(i), _transferTagsInput, tagTransferredInputFullPath);
 
     modifiedInputs.append(tagTransferredInput);
