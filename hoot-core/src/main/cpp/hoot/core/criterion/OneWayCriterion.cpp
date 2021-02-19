@@ -35,13 +35,13 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(ElementCriterion, OneWayCriterion)
 
-OneWayCriterion::OneWayCriterion(bool isOneWay) :
-_isOneWay(isOneWay)
-{
-}
-
 bool OneWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {
+  if (!e)
+  {
+    return false;
+  }
+
   if (e->getElementType() == ElementType::Way)
   {
     const QString oneway = e->getTags()["oneway"].toLower();

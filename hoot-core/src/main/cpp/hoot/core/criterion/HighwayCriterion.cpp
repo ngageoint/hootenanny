@@ -40,6 +40,11 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HighwayCriterion)
 
 bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 {
+  if (!element)
+  {
+    return false;
+  }
+
   LOG_VART(element->getElementId());
   //LOG_VART(element);
 

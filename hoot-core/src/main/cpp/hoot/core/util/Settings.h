@@ -56,9 +56,9 @@ class Settings
 {
 public:
 
-  // Technically, this is a Singleton and this constructor should not be publicly accessible.  There
+  // Technically, this is a Singleton and this constructor should not be publicly accessible. There
   // does seem to be a use case for passing around temporary settings, though, which then makes
-  // sense for it to remain public.  Possibly, we need a separate class for HootSettings that would
+  // sense for it to remain public. Possibly, we need a separate class for HootSettings that would
   // then be a true Singleton?
   Settings();
 
@@ -102,7 +102,7 @@ public:
   double getDouble(const QString& key) const;
   double getDouble(const QString& key, double defaultValue) const;
   double getDouble(const QString& key, double defaultValue, double minValue,
-                   double maxValue ) const;
+                   double maxValue) const;
   /**
    * Returns the double represented in the supplied string. Where necessary variables will be
    * resolved.

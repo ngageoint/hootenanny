@@ -94,7 +94,7 @@ public:
 
   virtual QString getDescription() const { return ""; }
   virtual QString getName() const { return ""; }
-virtual QString getClassName() const override { return className(); }
+  virtual QString getClassName() const override { return className(); }
 
 private:
 
@@ -125,12 +125,12 @@ private:
       LOG_VART(lastLoc);
       for (size_t i = 1; i < discretizedLocs.size(); i++)
       {
-        //select a loc sampledDistance meters along the way
+        // select a loc sampledDistance meters along the way
         WayLocation currentLoc = discretizedLocs.at(i);
         LOG_VART(currentLoc);
         const double distance = currentLoc.getCoordinate().distance(lastLoc.getCoordinate());
         LOG_VART(distance);
-        //calculate the heading using some distance around the way
+        // calculate the heading using some distance around the way
         const double theta = WayHeading::calculateHeading(currentLoc, _headingDelta);
         LOG_VART(theta);
         if (! ::qIsNaN(theta))
@@ -144,9 +144,15 @@ private:
   }
 };
 
-SampledAngleHistogramExtractor::SampledAngleHistogramExtractor()
+SampledAngleHistogramExtractor::SampledAngleHistogramExtractor() :
+AngleHistogramExtractor()
 {
   setConfiguration(conf());
+}
+
+SampledAngleHistogramExtractor::SampledAngleHistogramExtractor(Radians smoothing, unsigned int bins) :
+AngleHistogramExtractor(smoothing, bins)
+{
 }
 
 void SampledAngleHistogramExtractor::setConfiguration(const Settings& conf)
@@ -157,14 +163,13 @@ void SampledAngleHistogramExtractor::setConfiguration(const Settings& conf)
   setHeadingDelta(config.getWayMatcherHeadingDelta());
 }
 
-Histogram* SampledAngleHistogramExtractor::_createHistogram(const OsmMap& map,
-                                                            const ConstElementPtr& e) const
+Histogram* SampledAngleHistogramExtractor::_createHistogram(
+  const OsmMap& map, const ConstElementPtr& e) const
 {
-  Histogram* result = new Histogram(8);
+  Histogram* result = new Histogram(_bins);
   SampledAngleHistogramVisitor v(*result, _sampleDistance, _headingDelta);
   v.setOsmMap(&map);
   e->visitRo(map, v);
-  LOG_VART(result->numBins());
   return result;
 }
 

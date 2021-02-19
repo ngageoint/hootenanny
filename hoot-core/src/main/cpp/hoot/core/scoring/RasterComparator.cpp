@@ -50,8 +50,39 @@ using namespace std;
 namespace hoot
 {
 
-RasterComparator::RasterComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2) :
-      BaseComparator(map1, map2)
+class PaintVisitor : public ConstElementVisitor
+{
+public:
+
+  PaintVisitor(OsmMapPtr map, GeometryPainter& gp, QPainter& pt, QMatrix& m) :
+    _map(map), _gp(gp), _pt(pt), _m(m) { }
+  virtual ~PaintVisitor() = default;
+
+  virtual void visit(const ConstElementPtr& e)
+  {
+    vector<ConstWayPtr> ways = WaysVisitor::extractWays(_map, e);
+
+    for (size_t i = 0; i < ways.size(); i++)
+    {
+      _gp.drawWay(_pt, _map.get(), ways[i].get(), _m);
+    }
+  }
+
+  virtual QString getDescription() const { return ""; }
+  virtual QString getName() const { return ""; }
+  virtual QString getClassName() const override { return ""; }
+
+private:
+
+  OsmMapPtr _map;
+  GeometryPainter& _gp;
+  QPainter& _pt;
+  QMatrix& _m;
+};
+
+RasterComparator::RasterComparator(
+  const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2) :
+BaseComparator(map1, map2)
 {
 }
 
@@ -116,36 +147,6 @@ void RasterComparator::_dumpImage(cv::Mat& image)
     printf("\n");
   }
 }
-
-class PaintVisitor : public ConstElementVisitor
-{
-public:
-
-  PaintVisitor(OsmMapPtr map, GeometryPainter& gp, QPainter& pt, QMatrix& m) :
-    _map(map), _gp(gp), _pt(pt), _m(m) { }
-  virtual ~PaintVisitor() = default;
-
-  virtual void visit(const ConstElementPtr& e)
-  {
-    vector<ConstWayPtr> ways = WaysVisitor::extractWays(_map, e);
-
-    for (size_t i = 0; i < ways.size(); i++)
-    {
-      _gp.drawWay(_pt, _map.get(), ways[i].get(), _m);
-    }
-  }
-
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
-
-private:
-
-  OsmMapPtr _map;
-  GeometryPainter& _gp;
-  QPainter& _pt;
-  QMatrix& _m;
-};
 
 void RasterComparator::_renderImage(const std::shared_ptr<OsmMap>& map, cv::Mat& image)
 {
