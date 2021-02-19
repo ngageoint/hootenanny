@@ -62,10 +62,18 @@ public:
   int compareMaps(QString in1, QString in2, QString out)
   {
     OsmMapPtr map1 = loadMap(in1);
+    if (map1->isEmpty())
+    {
+      return -1;
+    }
     OsmMapPtr map2;
     if (in2 != "")
     {
       map2 = loadMap(in2);
+      if (map2->isEmpty())
+      {
+        return -1;
+      }
     }
     OsmMapPtr outMap = loadMap(out);
 

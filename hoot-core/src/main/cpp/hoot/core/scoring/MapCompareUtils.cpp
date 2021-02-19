@@ -37,6 +37,11 @@ namespace hoot
 void MapCompareUtils::getAttributeComparisonFinalScores(
   const OsmMapPtr& map1, const OsmMapPtr& map2, int& mean, int& confidence, const int numIterations)
 {
+  if (map1->isEmpty() || map2->isEmpty())
+  {
+    throw EmptyMapInputException();
+  }
+
   Tgs::Random::instance()->seed(100);
 
   {
@@ -63,6 +68,11 @@ int MapCompareUtils::getAttributeComparisonFinalScore(
 void MapCompareUtils::getGraphComparisonRawScores(
   const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean, double& confidence)
 {
+  if (map1->isEmpty() || map2->isEmpty())
+  {
+    throw EmptyMapInputException();
+  }
+
   Tgs::Random::instance()->seed(0);
   GraphComparator graph(map1, map2);
   graph.setDebugImages(ConfigOptions().getScoreGraphDebugImages());
@@ -88,6 +98,11 @@ int MapCompareUtils::getGraphComparisonFinalScore(const OsmMapPtr& map1, const O
 void MapCompareUtils::getRasterComparisonRawScores(
   const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean)
 {
+  if (map1->isEmpty() || map2->isEmpty())
+  {
+    throw EmptyMapInputException();
+  }
+
   RasterComparator raster(map1, map2);
   raster.setPixelSize(5);
   mean += raster.compareMaps();
