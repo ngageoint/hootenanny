@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SMALLEROVERLAPEXTRACTOR_H
 #define SMALLEROVERLAPEXTRACTOR_H
@@ -42,7 +42,6 @@ class Element;
  *
  * This extractor uses the feature with more overlap to calculate the percentage overlap. For
  * instance if you have a small feature contained within a larger feature, the result will be 1.0.
- *
  * If either feature has an area of zero, then zero is returned.
  *
  * @author RoadMatcher

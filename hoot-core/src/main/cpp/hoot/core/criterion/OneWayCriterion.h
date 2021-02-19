@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef ONEWAYCRITERION_H
@@ -43,7 +43,7 @@ public:
 
   static QString className() { return "hoot::OneWayCriterion"; }
 
-  OneWayCriterion(bool isOneWay = true);
+  OneWayCriterion() = default;
   virtual ~OneWayCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
@@ -58,10 +58,6 @@ public:
   virtual QString getName() const override { return className(); }
 
   virtual QString getClassName() const override { return className(); }
-
-private:
-
-  bool _isOneWay;
 };
 
 }

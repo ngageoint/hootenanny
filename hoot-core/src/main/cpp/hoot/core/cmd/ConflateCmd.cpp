@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ConflateCmd.h"
@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/Conflator.h>
+#include <hoot/core/conflate/ConflateExecutor.h>
 
 // Qt
 #include <QFileInfo>
@@ -47,7 +47,7 @@ int ConflateCmd::runSimple(QStringList& args)
 {
   BoundedCommand::runSimple(args);
 
-  Conflator conflator;
+  ConflateExecutor conflator;
 
   // This parsing is for map stats. Changeset stats args for differential are processed further down
   // below.

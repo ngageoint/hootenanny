@@ -19,37 +19,42 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
-#ifndef CUMULATIVECONFLATOR_H
-#define CUMULATIVECONFLATOR_H
+#include "WaySublineRemover.h"
 
-// Qt
-#include <QStringList>
+// Hoot
+#include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+
+// Standard
+#include <vector>
 
 namespace hoot
 {
 
-/**
- * Allows for conflating more than two inputs in a cumulative fashion.
- */
-class CumulativeConflator
+void WaySublineRemover::remove(
+  WayPtr way, WayLocation& start, WayLocation& end, const OsmMapPtr& map)
 {
-public:
+  LOG_TRACE(
+    "Removing subline for: " << way->getElementId() << " starting at: " << start <<
+    " and ending at: " << end << "...");
 
-  /**
-   * Conflates three or more input files in a cumulative fashion.
-   *
-   * @param inputs input file paths to conflate
-   * @param output output file path to write conflated data
-   */
-  static void conflate(const QStringList& inputs, const QString& output);
-};
+  WaySplitter splitter(map, way);
+  // split at start
+  splitter.split(start);
+  // split at end
+  const std::vector<WayPtr> splitWays = splitter.split(end);
+  LOG_VART(splitWays);
 
+  // remove middle section
+  RecursiveElementRemover(splitWays.at(0)->getElementId()).apply(map);
 }
 
-#endif // CUMULATIVECONFLATOR_H
+}

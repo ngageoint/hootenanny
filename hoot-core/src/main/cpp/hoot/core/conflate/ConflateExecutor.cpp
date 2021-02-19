@@ -19,13 +19,13 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
-#include "Conflator.h"
+#include "ConflateExecutor.h"
 
 // Hoot
 #include <hoot/core/conflate/UnifyingConflator.h>
@@ -63,9 +63,9 @@
 namespace hoot
 {
 
-const QString Conflator::JOB_SOURCE = "Conflate";
+const QString ConflateExecutor::JOB_SOURCE = "Conflate";
 
-Conflator::Conflator() :
+ConflateExecutor::ConflateExecutor() :
 _isDiffConflate(false),
 _diffConflateSeparateOutput(false),
 _displayStats(false),
@@ -77,7 +77,7 @@ _maxFilePrintLength(ConfigOptions().getProgressVarPrintLengthMax())
 {
 }
 
-void Conflator::_initConfig()
+void ConflateExecutor::_initConfig()
 {
   ConfigUtils::checkForTagValueTruncationOverride();
   QStringList allOps = ConfigOptions().getConflatePreOps();
@@ -117,7 +117,7 @@ void Conflator::_initConfig()
   }
 }
 
-void Conflator::_initTaskCount()
+void ConflateExecutor::_initTaskCount()
 {
   // The number of steps here must be updated as you add/remove job steps in the logic.
   _numTotalTasks = 5;
@@ -143,7 +143,7 @@ void Conflator::_initTaskCount()
   _currentTask = 1;
 }
 
-void Conflator::conflate(const QString& input1, const QString& input2, QString& output)
+void ConflateExecutor::conflate(const QString& input1, const QString& input2, QString& output)
 {
   Tgs::Timer totalTime;
   _taskTimer.reset();
@@ -297,8 +297,8 @@ void Conflator::conflate(const QString& input1, const QString& input2, QString& 
     output.right(_maxFilePrintLength));
 }
 
-void Conflator::_load(const QString& input1, const QString& input2, OsmMapPtr& map,
-                      const bool isChangesetOut)
+void ConflateExecutor::_load(const QString& input1, const QString& input2, OsmMapPtr& map,
+                             const bool isChangesetOut)
 {
   //  Loading order is important if datasource IDs 2 is true but 1 is not
   if (!ConfigOptions().getConflateUseDataSourceIds1() &&
@@ -359,7 +359,7 @@ void Conflator::_load(const QString& input1, const QString& input2, OsmMapPtr& m
   MemoryUsageChecker::getInstance().check();
 }
 
-void Conflator::_runConflate(OsmMapPtr& map)
+void ConflateExecutor::_runConflate(OsmMapPtr& map)
 {
   if (_isDiffConflate)
   {
@@ -388,7 +388,7 @@ void Conflator::_runConflate(OsmMapPtr& map)
   _currentTask++;
 }
 
-void Conflator::_runConflateOps(OsmMapPtr& map, const bool runPre)
+void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
 {
   QStringList opNames;
   QString opStr;
@@ -428,7 +428,7 @@ void Conflator::_runConflateOps(OsmMapPtr& map, const bool runPre)
     StringUtils::millisecondsToDhms(opsTimer.elapsed()) << " total.");
 }
 
-void Conflator::_writeOutput(OsmMapPtr& map, QString& output, const bool isChangesetOutput)
+void ConflateExecutor::_writeOutput(OsmMapPtr& map, QString& output, const bool isChangesetOutput)
 {
   // Figure out what to write
   _progress->set(
@@ -470,7 +470,7 @@ void Conflator::_writeOutput(OsmMapPtr& map, QString& output, const bool isChang
   _currentTask++;
 }
 
-void Conflator::_writeStats(
+void ConflateExecutor::_writeStats(
   OsmMapPtr& map, const CalculateStatsOp& input1Cso, const CalculateStatsOp& input2Cso,
   const QString& outputFileName)
 {
@@ -515,7 +515,7 @@ void Conflator::_writeStats(
   }
 }
 
-void Conflator::_writeChangesetStats()
+void ConflateExecutor::_writeChangesetStats()
 {
   if (_outputChangesetStatsFile.isEmpty())
   {
@@ -548,17 +548,17 @@ void Conflator::_writeChangesetStats()
   }
 }
 
-float Conflator::_getTaskWeight() const
+float ConflateExecutor::_getTaskWeight() const
 {
   return 1.0 / (float)_numTotalTasks;
 }
 
-float Conflator::_getJobPercentComplete(const int currentTaskNum) const
+float ConflateExecutor::_getJobPercentComplete(const int currentTaskNum) const
 {
   return (float)currentTaskNum / (float)_numTotalTasks;
 }
 
-void Conflator::_disableRoundaboutRemoval()
+void ConflateExecutor::_disableRoundaboutRemoval()
 {
   // This applies to both Attribute and Differential Conflation.
 
@@ -582,7 +582,7 @@ void Conflator::_disableRoundaboutRemoval()
     ConfigOptions::getConflatePostOpsKey(), ReplaceRoundabouts::className());
 }
 
-void Conflator::_updateConfigOptionsForAttributeConflation()
+void ConflateExecutor::_updateConfigOptionsForAttributeConflation()
 {
   // These are some custom adjustments to config opts that must be done for Attribute Conflation.
   // There may be a way to eliminate these by adding more custom behavior to the UI.
@@ -602,7 +602,7 @@ void Conflator::_updateConfigOptionsForAttributeConflation()
   }
 }
 
-void Conflator::_updateConfigOptionsForDifferentialConflation()
+void ConflateExecutor::_updateConfigOptionsForDifferentialConflation()
 {
   // This is for custom adjustments to config opts that must be done for Differential Conflation.
 
@@ -612,7 +612,7 @@ void Conflator::_updateConfigOptionsForDifferentialConflation()
     ConfigOptions::getConflatePostOpsKey(), RoadCrossingPolyReviewMarker::className());
 }
 
-void Conflator::_updateConfigOptionsForBounds()
+void ConflateExecutor::_updateConfigOptionsForBounds()
 {
   // If we're working with a bounds, we need to ensure that IDs of the original ref parents created
   // by a split operation are applied to their split children.

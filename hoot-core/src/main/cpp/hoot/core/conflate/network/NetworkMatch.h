@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NETWORKMATCH_H
 #define NETWORKMATCH_H
@@ -47,7 +47,8 @@ public:
   static QString className() { return "hoot::NetworkMatch"; }
 
   NetworkMatch() = default;
-  NetworkMatch(const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
+  NetworkMatch(
+    const ConstNetworkDetailsPtr& details, ConstEdgeMatchPtr edgeMatch,
     double score, ConstMatchThresholdPtr mt, double scoringFunctionMax,
     double scoringFunctionCurveMidpointX, double scoringFunctionCurveSteepness);
   virtual ~NetworkMatch() = default;
@@ -93,19 +94,10 @@ public:
   virtual bool isWholeGroup() const override { return true; }
 
   /**
-   * Returns a set of pairs that this match represents. For instance, if this match represents
-   * a merge lane on a highway then there are three ways involved in each input data set. The
-   * lower part of the highway, the upper part of the highway and the merge lane. Each of these
-   * ways will be matched to an equivalent way in the other data set so this will return a set
-   * of three pairs.
-   *
-   * In some cases, such as buildings, a single element may be matched multiple times and show up
-   * in multiple pairs.
-   *
-   * In general Unknown1 should be the status of the first element and Unknown2 the status of the
-   * second element.
+   * @see Match
    */
-  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override { return _pairs; }
+  virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override
+  { return _pairs; }
 
   virtual QString toString() const override;
 
@@ -115,7 +107,8 @@ public:
 
   bool contains(const NetworkMatch* other) const;
 
-  virtual QString getDescription() const override { return "Matches roads with the Network Algorithm"; }
+  virtual QString getDescription() const override
+  { return "Matches roads with the Network Algorithm"; }
 
 protected:
 

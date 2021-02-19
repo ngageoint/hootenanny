@@ -19,11 +19,11 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
 #define SAMPLED_ANGLE_HISTOGRAM_EXTRACTOR_H
@@ -38,18 +38,19 @@ namespace hoot
 class Histogram;
 
 /**
- * Similar to the AngleHistogramExtractor with the following differences:
+ * Similar to AngleHistogramExtractor with the following differences:
  *
- * - The angle is sampled at a configurable distance along the way
+ * - The angle is sampled at a configurable distance along the way.
  * - The distance from the sampled location on the way to look to calculate the heading is
- * configurable
- * - 8 bins are used in the histogram.
+ *   configurable.
+ * - A lower default value of bins is used for the histogram.
  */
 class SampledAngleHistogramExtractor : public AngleHistogramExtractor
 {
 public:
 
   SampledAngleHistogramExtractor();
+  SampledAngleHistogramExtractor(Radians smoothing, unsigned int bins = 8);
   virtual ~SampledAngleHistogramExtractor() = default;
 
   static QString className() { return "hoot::SampledAngleHistogramExtractor"; }

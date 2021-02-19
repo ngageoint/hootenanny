@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef NETWORKDETAILS_H
 #define NETWORKDETAILS_H
@@ -120,7 +120,6 @@ public:
   double getEdgeStringMatchScore(ConstEdgeStringPtr e1, ConstEdgeStringPtr e2);
 
   virtual geos::geom::Envelope getEnvelope(ConstNetworkEdgePtr e) const;
-
   virtual geos::geom::Envelope getEnvelope(ConstNetworkVertexPtr v) const;
 
   ConstOsmMapPtr getMap() const { return _map; }
@@ -130,15 +129,10 @@ public:
   double getPartialEdgeMatchScore(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
 
   Meters getSearchRadius(ConstNetworkEdgePtr e1) const;
-
   Meters getSearchRadius(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
   Meters getSearchRadius(ConstNetworkVertexPtr v1) const;
-
   Meters getSearchRadius(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2) const;
-
   Meters getSearchRadius(ConstWayStringPtr ws1, ConstWayStringPtr ws2) const;
-
   Meters getSearchRadius(ConstWayPtr w1, ConstWayPtr w2) const;
 
   /**
@@ -150,7 +144,6 @@ public:
   bool hasConfidentTiePoint(ConstNetworkVertexPtr v);
 
   bool isCandidateMatch(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2);
-
   bool isCandidateMatch(ConstNetworkVertexPtr v1, ConstNetworkVertexPtr v2);
 
   /**
@@ -176,7 +169,6 @@ public:
    * generally add too much noise.
    */
   bool isStringCandidate(ConstNetworkEdgePtr e1, ConstNetworkEdgePtr e2) const;
-
   bool isStringCandidate(ConstEdgeStringPtr es, ConstEdgeSublinePtr esl) const;
 
   ConstWayPtr toWay(ConstNetworkEdgePtr e) const;

@@ -98,18 +98,19 @@ pipeline {
                 anyOf {
                     // Configure for sonar if user selected it, pull-request, or nightly run of master
                     expression { return params.Sonar }
-//  Disable sonar until it works
-//                    changeRequest()
-//                    allOf {
-//                        triggeredBy 'TimerTrigger'
-//                        branch 'master'
-//                    }
+                    changeRequest()
+                    allOf {
+                        triggeredBy 'TimerTrigger'
+                        branch 'master'
+                    }
                 }
             }
             steps {
                 sh "vagrant ssh ${params.Box} -c 'cd hoot; ./scripts/sonar/sonar-install.sh'"
                 // Compile with build watcher to allow for sonar scanning in subsequent steps
                 sh "sed -i 's/^make \$SILENT_MAKE -j\$(nproc)\$/build-wrapper-linux-x86-64 --out-dir bw-output make \$SILENT_MAKE -j\$(nproc)/' VagrantBuild.sh"
+                // Until PCH support is fixed in Sonar, run this to fix
+                sh "sed -i 's|^make \$SILENT_MAKE clean|make \$SILENT_MAKE clean\\n./scripts/sonar/sonar-prep-makefile.sh|g' VagrantBuild.sh"
                 script {
                     if (env.BRANCH_NAME == "master") {
                         // Compile instrumented code for master branch which allows for calculating coverage
@@ -161,16 +162,17 @@ pipeline {
             when {
                 anyOf {
                     expression { return params.Sonar }
-//  Disable sonar until it works
-//                    changeRequest()
-//                    allOf {
-//                        triggeredBy 'TimerTrigger'
-//                        branch 'master'
-//                    }
+                    changeRequest()
+                    allOf {
+                        triggeredBy 'TimerTrigger'
+                        branch 'master'
+                    }
                 }
             }
             steps{
-                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; mvn sonar:sonar \
+                    sh "vagrant ssh ${params.Box} -c 'cd hoot; ./SetupEnv.sh; cd hoot-services; \
+                        JAVA_HOME=/usr/lib/jvm/java-11-openjdk \
+                        mvn sonar:sonar \
                         -Dsonar.host.url=https://sonarcloud.io \
                         -Dsonar.organization=hootenanny \
                         -Dsonar.login=${env.SONAR_CLOUD_KEY} \
@@ -218,9 +220,12 @@ pipeline {
                 sh "vagrant scp ${params.Box}:~/hoot/test-files/ui/screenshot_*.png ./test-files/ui/"
                 postSlack("${env.WORKSPACE}/test-files/ui/", "screenshot_*.png", "${env.JENKINS_BOT_TOKEN}", "#builds_hoot")
                 // Copy over the test-output directory and add it to the artifacts
-                sh "vagrant ssh ${params.Box} -c 'cd hoot; tar czf failed-test-output.tar.gz test-output'"
+                sh "vagrant ssh ${params.Box} -c 'cd hoot; tar czf failed-test-output.tar.gz test-output || touch failed-test-output.tar.gz'"
                 sh "vagrant scp ${params.Box}:~/hoot/failed-test-output.tar.gz ./"
                 archiveArtifacts artifacts: '**/failed-test-output.tar.gz'
+                // Copy over the failed sonar file
+                sh "vagrant scp ${params.Box}:~/hoot/sonar-cfamily-reproducer.zip ./ || touch sonar-cfamily-reproducer.zip"
+                archiveArtifacts artifacts: '**/sonar-cfamily-reproducer.zip'
             }
         }
         cleanup {

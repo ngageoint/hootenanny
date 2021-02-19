@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "RemoveElementsVisitor.h"
 
@@ -119,19 +119,18 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     }
     else
     {
-      // This originally called removeUnusedElementsOnly but was getting some unexpected results
-      // when using it with C&R and changed it over to removeElement, which solved the problem and
-      // didn't have any negative impact on the rest of the code...could still be worth looking
-      // into, though.
+      // This originally called RemoveElementByEid::removeUnusedElementsOnly but was getting some
+      // unexpected results when using it with C&R and changed it over to removeElement, which
+      // solved the problem and didn't have any negative impact on the rest of the code...could
+      // still be worth looking into, though.
       LOG_TRACE("Removing element: " << e->getElementId() << " non-recursively...");
-      //RemoveElementByEid::removeUnusedElementsOnly(_map->shared_from_this(), e->getElementId());
       RemoveElementByEid::removeElement(_map->shared_from_this(), e->getElementId());
     }
     _numAffected++;
   }
   else
   {
-    LOG_TRACE("Not removing element: " << e->getElementId());
+    LOG_DEBUG("Not removing element: " << e->getElementId());
   }
   _numProcessed++;
 }

@@ -15,7 +15,7 @@ The scores provided give an idea of similarity between maps. A score of 1000 mea
 The following variables are provided in the score result:
 
 * Raster Score (AKA Location & Completeness) - A metric describing how complete the data is and how close the features are together
-* Graph Score (AKA Routing)                  - A metric describing how close similar the maps would be if used to perform routing analytics
+* Graph Score (AKA Routing)                  - A metric describing how similar the maps would be if used to perform routing analytics
 * Attribute Score                            - A metric describing how similar the attributes are between the two maps
 
 === Usage

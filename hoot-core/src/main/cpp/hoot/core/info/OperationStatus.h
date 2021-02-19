@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef OPERATION_STATUS_H
 #define OPERATION_STATUS_H
@@ -44,7 +44,7 @@ class OperationStatus
 {
 public:
 
-  OperationStatus() = default;
+  OperationStatus() : _numAffected(0), _numProcessed(0) { }
   virtual ~OperationStatus() = default;
 
   /**
@@ -66,14 +66,22 @@ public:
    *
    * @return a number of elements
    */
-  virtual long getNumFeaturesAffected() const = 0;
+  virtual long getNumFeaturesAffected() const { return _numAffected; }
 
   /**
    * Returns the number of elements processed by the visitor
    *
    * @return a number of elements
    */
-  virtual long getNumFeaturesProcessed() const = 0;
+  virtual long getNumFeaturesProcessed() const { return _numProcessed; }
+
+protected:
+
+  /** Number of elements the operation actually counted or modified */
+  long _numAffected;
+  /** Number of elements the operation processed in total */
+  long _numProcessed;
+
 };
 
 }

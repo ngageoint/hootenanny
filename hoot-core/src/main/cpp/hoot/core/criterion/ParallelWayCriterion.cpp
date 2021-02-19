@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "ParallelWayCriterion.h"
@@ -144,6 +144,22 @@ bool ParallelWayCriterion::isSatisfied(const ConstElementPtr& e) const
     return parallel == _isParallel;
   }
   return false;
+}
+
+bool ParallelWayCriterion::isParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2)
+{
+  if (e1->getElementType() != ElementType::Way)
+    return false;
+  ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e1);
+  return ParallelWayCriterion(map, way, true).isSatisfied(e2);
+}
+
+bool ParallelWayCriterion::notParallel(const ConstOsmMapPtr& map, const ConstElementPtr& e1, const ConstElementPtr& e2)
+{
+  if (e1->getElementType() != ElementType::Way)
+    return false;
+  ConstWayPtr way = std::dynamic_pointer_cast<const Way>(e1);
+  return ParallelWayCriterion(map, way, false).isSatisfied(e2);
 }
 
 }

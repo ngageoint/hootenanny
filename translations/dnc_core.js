@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -538,7 +538,7 @@ dnc = {
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
   {
     // List of data values to drop/ignore
-    var ignoreList = { 'UNK':1, 'N/A':1, 'noinformation':1, '-32768':1, '-2147483648':1 };
+    var ignoreList = { 'UNK':1, 'N/A':1, 'noinformation':1, '-32768':1, '-2147483648':1, '-21474836':1};
 
     // This is a handy loop. We use it to:
     // 1) Remove all of the "No Information" and -999999 fields
@@ -606,10 +606,28 @@ dnc = {
       }
     } // End process attrs.OSM_TAGS
 
-    // DNC doesn't have a lot of info for land features
-    if (attrs.F_CODE == 'AP020') tags.junction = 'yes';
-    if (attrs.F_CODE == 'AP030') tags.highway = 'road';
-    if (attrs.F_CODE == 'BH140') tags.waterway = 'river';
+    // F_CODE specific tags
+    switch (attrs.F_CODE)
+    {
+      case undefined: // Should not break here...
+        break;
+
+      case 'AH050':
+        tags.building = 'bunker';
+        break;
+
+      case 'AP020':
+        tags.junction = 'yes';
+        break;
+
+      case 'AP030':
+        tags.highway = 'road';
+        break;
+
+      case 'BH140':
+        tags.waterway = 'river';
+        break;
+    }
 
     // The Data Quality layer doesn't have an F_CODE
     if (layerName.toLowerCase() == 'dqyarea_dqy') tags['source:metadata'] = 'dataset';
@@ -829,6 +847,7 @@ dnc = {
       // Rules format:  ["test expression","output result"];
       // Note: t = tags, a = attrs and attrs can only be on the RHS
       var rulesList = [
+        ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
         ['t["radar:use"] == "early_warning" && t.man_made == "radar_station"','delete t.man_made'],
         ['t.water == "tidal"','t.tidal = "yes";delete t.water']
       ];

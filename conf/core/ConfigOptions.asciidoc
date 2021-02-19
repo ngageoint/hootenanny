@@ -434,17 +434,17 @@ precendence over the `bounds` setting for Hootenanny API database data sources o
 * Data Type: bool
 * Default Value: `true`
 
-If true, will not break apart features crossing the convert bounds. This is analagous to
-crop.keep.entire.features.crossing.bounds used with the crop command, but used with the convert
-command only and kept as a separate option with a different default value.
+If enabled, operations supporting the `bounds` option other than `crop` will not break apart
+features crossing the specified. This is analagous to crop.keep.entire.features.crossing.bounds used
+with the `crop` command.
 
 === bounds.keep.immediately.connected.ways.outside.bounds
 
 * Data Type: bool
 * Default Value: `false`
 
-If enabled, bounded queries will also return ways that are outside of `bounds` but
-immediately connected to ways crossing or within the bounds. Can be used in conjunction with
+If enabled, APIDB readers will also return ways that are outside of `bounds` but immediately
+connected to ways crossing or within the bounds. Can be used in conjunction with
 `bounds.tag.immediately.connected.out.of.bounds.ways`. Not supported by all readers.
 
 === bounds.keep.only.features.inside.bounds
@@ -452,9 +452,9 @@ immediately connected to ways crossing or within the bounds. Can be used in conj
 * Data Type: bool
 * Default Value: `false`
 
-If true, will throw out any features that do not fall completely within the convert bounds. This is
-analagous to crop.keep.entire.features.crossing.bounds used with the crop command, but used with
-the commands supporting the `bounds` option only and kept as a separate option.
+If enabled, operations supporting the `bounds` option other than `crop` will throw out any features
+that do not fall completely within the specified bounds. This is analagous to
+crop.keep.entire.features.crossing.bounds used with the crop command.
 
 === bounds.osm.api.database
 
@@ -877,6 +877,20 @@ this list is empty, no circular error will be parsed from input features and a t
 
 Path to this file.  Only modified during testing the Hootenanny options command.
 
+=== conflate.element.criterion
+
+* Data Type: string
+* Default Value: ``
+
+Criteria used for filtering elements before conflating them.
+
+=== conflate.element.criterion.negate
+
+* Data Type: bool
+* Default Value: `false`
+
+Negates conflate.element.criterion.
+
 === conflate.mark.merge.created.multilinestring.relations
 
 * Data Type: bool
@@ -1046,8 +1060,8 @@ testing purposes only.
 * Data Type: string
 * Default Value: ``
 
-A JSON tag filter that is applied to filter features before conflation.  See the Hootenanny
-User Guide "Feature Filtering" section for filter usage examples.
+A JSON tag filter that is applied to filter features before conflation. See the Hootenanny User
+Guide "Feature Filtering" section for filter usage examples.
 
 === conflate.use.data.source.ids.1
 
@@ -1277,6 +1291,29 @@ searching for nodes.
 
 Distance in meters that the DistanceNodeCriterion should search for nodes out from a center
 specified by 'distance.node.criterion.center'.
+
+=== dual.highway.marker.mark.crossing.roads
+
+* Data Type: bool
+* Default Value: `false`
+
+If enabled, DualHighwayMarker will tag roads crossing between divided roads in addition to the
+divided roads themselves.
+
+=== dual.highway.marker.crossing.roads.parallel.score.threshold
+
+* Data Type: double
+* Default Value: `0.4`
+
+How perpendicular a road must be to a divided road to be considered as crossing it, with 0.0 being
+the most perpendicular and 1.0 being the least.
+
+=== dual.highway.marker.parallel.score.threshold
+
+* Data Type: double
+* Default Value: `0.9`
+
+How parallel two
 
 === dual.highway.splitter.driving.side
 
@@ -1656,7 +1693,7 @@ The way subline string matcher to use when determining matching sublines for hig
 * Default Value: ``
 
 OpenstreetMap OAuth Consumer Key found after registering Hootenanny with OpenstreetMap (or its
-derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+derivatives) at `http://<OSM Domain>/user/<your username>/oauth_clients`
 
 === hoot.osm.auth.consumer.secret
 
@@ -1664,7 +1701,7 @@ derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
 * Default Value: ``
 
 OpenstreetMap OAuth Private Consumer Key found after registering Hootenanny with OpenstreetMap (or
-its derivatives) at http://<OSM Domain>/user/<your username>/oauth_clients
+its derivatives) at `http://<OSM Domain>/user/<your username>/oauth_clients`
 
 === hoot.osm.auth.access.token
 
@@ -4596,6 +4633,21 @@ shape file and cannot be used in combination with a translation.  If this option
 then the list of columns will be automatically determined based on the most frequently populated
 tags.
 
+=== small.disconnected.way.remover.max.node.count
+
+* Data Type: int
+* Default Value: `2`
+
+The maximum number of nodes a way can have to be considered for removal by
+SmallDisconnectedWayRemover.
+
+=== small.disconnected.way.remover.max.length
+
+* Data Type: double
+* Default Value: `2.0`
+
+The maximum length a way can have to be considered for removal by SmallDisconnectedWayRemover.
+
 === small.highway.merger.diff
 
 * Data Type: string
@@ -4889,9 +4941,9 @@ E.g. "highway=road;amenity=school"
 * Data Type: string
 * Default Value: ``
 
-The plugin name of an element criterion used to select tags to keep/remove used by
-KeepTagsVisitor/RemoveTagsVisitor.  To pass in complex nested criteria for tag filtering, use the
-Hootenanny Javascript interface instead.
+The class name of an element criterion used to select tags to keep/remove used by
+RemoveTagsVisitor.  To pass in complex nested criteria for tag filtering, use the Hootenanny
+Javascript interface instead.
 
 === tag.filter.keys
 
@@ -5149,6 +5201,42 @@ runs. Especially if the machine Hoot is running on is under heavy load. If the "
 is changing between runs and GLPK isn't finding an optimal solution then this is likely causing
 different output.  Just because the output is changing doesn't mean it is wrong, but this can be
 problematic if you're doing testing or expecting repeatable output for other.
+
+=== unlikely.road.remover.heading.delta
+
+* Data Type: double
+* Default Value: `5.0`
+
+Way heading delta used by UnlikelyRoadRemover. See `way.matcher.heading.delta`.
+
+=== unlikely.road.remover.max.heading.variance
+
+* Data Type: double
+* Default Value: `60.0`
+
+The heading variance a road may have at or above which it will be considered for removal by
+UnlikelyRoadRemover.
+
+=== unlikely.road.remover.max.length
+
+* Data Type: double
+* Default Value: `25.0`
+
+The maximum length a road may have to be considered for removal by UnlikelyRoadRemover.
+
+=== unlikely.road.remover.num.bins
+
+* Data Type: int
+* Default Value: `16`
+
+Number of histogram bins used by UnlikelyRoadRemover. See `angle.histogram.extractor.bins`.
+
+=== unlikely.road.remover.sample.distance
+
+* Data Type: double
+* Default Value: `1.0`
+
+Way sample distance used by UnlikelyRoadRemover. See `way.angle.sample.distance`.
 
 === uuid.helper.repeatable
 

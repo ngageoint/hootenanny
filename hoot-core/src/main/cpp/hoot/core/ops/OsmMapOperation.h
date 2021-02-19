@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef OsmMapOperation_H
@@ -64,7 +64,7 @@ public:
 
   static QString className() { return "hoot::OsmMapOperation"; }
 
-  OsmMapOperation() : _numAffected(0), _numProcessed(0) {}
+  OsmMapOperation() = default;
   virtual ~OsmMapOperation() = default;
 
   /**
@@ -84,22 +84,12 @@ public:
   /**
    * @see OperationStatus
    */
-  virtual long getNumFeaturesAffected() const { return _numAffected; }
+  QString getInitStatusMessage() const override { return ""; }
 
   /**
    * @see OperationStatus
    */
-  virtual long getNumFeaturesProcessed() const { return _numProcessed; }
-
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getInitStatusMessage() const { return ""; }
-
-  /**
-   * @see OperationStatus
-   */
-  virtual QString getCompletedStatusMessage() const { return ""; }
+  QString getCompletedStatusMessage() const override { return ""; }
 
   /**
    * @see FilteredByGeometryTypeCriteria
@@ -109,15 +99,10 @@ public:
    * they are run against during conflation should populate this list. The list is treated in a
    * logical OR fashion.
    */
-  virtual QStringList getCriteria() const { return QStringList(); }
+  QStringList getCriteria() const override { return QStringList(); }
 
-  virtual QString toString() const override { return ""; }
+  QString toString() const override { return ""; }
 
-protected:
-
-  // These will only be used by those implementing OperationStatus.
-  long _numAffected;    // how many elements the operation actually counted or did something to
-  long _numProcessed;   // how many elements the operation processed total
 };
 
 }

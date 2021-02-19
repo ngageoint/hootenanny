@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "LinearTagOnlyMerger.h"
 
@@ -112,7 +112,7 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
   LOG_TRACE("LinearTagOnlyMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
   // If just one of the features is a bridge, we want the bridge feature to separate from the road
-  // feature its being merged with.  So, use a geometry AND tag merger.
+  // feature its being merged with. So, use a geometry AND tag merger.
 
   std::vector<ConstElementPtr> elements;
   elements.push_back(e1);
@@ -168,10 +168,10 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
       elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, map, replaced);
 }
 
-bool LinearTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
-                                      ElementPtr elementWithTagsToRemove,
-                                      const bool removeSecondaryElement, const OsmMapPtr& map,
-                                      std::vector<std::pair<ElementId, ElementId>>& replaced)
+bool LinearTagOnlyMerger::_mergeWays(
+  ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
+  const bool removeSecondaryElement, const OsmMapPtr& map,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {

@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "BaseComparator.h"
@@ -53,7 +53,8 @@ using namespace geos::geom;
 namespace hoot
 {
 
-BaseComparator::BaseComparator(const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2)
+BaseComparator::BaseComparator(
+  const std::shared_ptr<OsmMap>& map1, const std::shared_ptr<OsmMap>& map2)
 {
   _init(map1, map2);
 }
@@ -113,7 +114,6 @@ double BaseComparator::_calculateError(const cv::Mat& image1, const cv::Mat& ima
 void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
 {
   double m = v / 60.0;
-  //double m = v / 2.7;
   if (v >= 0.0)
   {
     if (m >= 0.0 && m <= 10.0)
@@ -143,7 +143,8 @@ void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
   }
 }
 
-Coordinate BaseComparator::_findNearestPointOnFeature(const std::shared_ptr<OsmMap>& map, const Coordinate& c)
+Coordinate BaseComparator::_findNearestPointOnFeature(
+  const std::shared_ptr<OsmMap>& map, const Coordinate& c)
 {
   Coordinate result;
 

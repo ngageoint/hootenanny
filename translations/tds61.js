@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2014, 2019 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -574,9 +574,7 @@ tds61 = {
     }
   },
 
-  // #####################################################################################################
-  // ##### Start of the xxToOsmxx Block #####
-  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  cleanAttrs : function (attrs)
   {
     // Drop the FCSUBTYPE since we don't use it
     if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
@@ -651,7 +649,12 @@ tds61 = {
         }
       }
     } // End closureList
+  }, // End cleanAttrs
 
+  // #####################################################################################################
+  // ##### Start of the xxToOsmxx Block #####
+  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  {
     // Tag retired
     if (tags.controlling_authority)
     {
@@ -906,7 +909,9 @@ tds61 = {
 
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
-    if ((attrs.F_CODE == 'AL013' || attrs.F_CODE == 'AH055') && !(tags.building)) tags.building = 'yes';
+    if (attrs.F_CODE == 'AH055' && !(tags.building)) tags.building = 'bunker';
+
+    if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
 
     // Fix building tags
     if (tags.building == 'yes')
@@ -924,9 +929,6 @@ tds61 = {
       //    tags.shop = tags.use;
       //    delete tags.use;
       // }
-
-      // Undo the blanket AL013/AL055 building assignment if required
-      if (tags.military == 'bunker') delete tags.building;
     } // End fix building tags
 
     // Education:
@@ -2435,6 +2437,9 @@ tds61 = {
 
       tds61.lookup = translate.createLookup(tds61.rules.one2one);
     }
+
+    // Clean out the usless values
+    tds61.cleanAttrs(attrs);
 
     // Untangle TDS attributes & OSM tags
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import

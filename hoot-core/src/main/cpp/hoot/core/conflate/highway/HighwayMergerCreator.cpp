@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #include "HighwayMergerCreator.h"
 
@@ -56,32 +56,33 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
   set<pair<ElementId, ElementId>> eids;
 
   std::shared_ptr<SublineStringMatcher> sublineMatcher;
-  // go through all the matches
+  // Go through all the matches.
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
     ConstMatchPtr m = *it;
     LOG_VART(m->toString());
     const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(m.get());
-    // check to make sure all the input matches are highway matches.
+    // Check to make sure all the input matches are highway matches.
     if (hm == 0)
     {
       // return an empty result
-      LOG_TRACE("Returning empty result due to match not being HighwayMatch: " << m->toString());
+      LOG_TRACE(
+        "Returning empty result due to match not being " << HighwayMatch::className() << ": " <<
+        m->toString());
       return false;
     }
-    // add all the element to element pairs to a set
+    // Add all the element to element pairs to a set.
     else
     {
-      // there should only be one HighwayMatch in a set.
+      // There should only be one HighwayMatch in a set.
       sublineMatcher = hm->getSublineMatcher();
       set<pair<ElementId, ElementId>> s = hm->getMatchPairs();
-      //LOG_VART(s);
       eids.insert(s.begin(), s.end());
     }
   }
   LOG_VART(eids);
 
-  // only add the highway merge if there are elements to merge.
+  // Only add the highway merge if there are elements to merge.
   if (eids.size() > 0)
   {
     if (!ConfigOptions().getHighwayMergeTagsOnly())

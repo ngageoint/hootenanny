@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef CONFIGURATION_H
@@ -56,9 +56,9 @@ class Settings
 {
 public:
 
-  // Technically, this is a Singleton and this constructor should not be publicly accessible.  There
+  // Technically, this is a Singleton and this constructor should not be publicly accessible. There
   // does seem to be a use case for passing around temporary settings, though, which then makes
-  // sense for it to remain public.  Possibly, we need a separate class for HootSettings that would
+  // sense for it to remain public. Possibly, we need a separate class for HootSettings that would
   // then be a true Singleton?
   Settings();
 
@@ -102,7 +102,7 @@ public:
   double getDouble(const QString& key) const;
   double getDouble(const QString& key, double defaultValue) const;
   double getDouble(const QString& key, double defaultValue, double minValue,
-                   double maxValue ) const;
+                   double maxValue) const;
   /**
    * Returns the double represented in the supplied string. Where necessary variables will be
    * resolved.

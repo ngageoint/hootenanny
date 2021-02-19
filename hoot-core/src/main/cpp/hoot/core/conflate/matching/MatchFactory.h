@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef MATCHFACTORY_H
 #define MATCHFACTORY_H
@@ -85,6 +85,14 @@ public:
   std::vector<std::shared_ptr<MatchCreator>> getCreators() const { return _creators; }
 
   /**
+   * Returns a MatchCreator with the specified name
+   *
+   * @param name name of the match creator to return
+   * @return a match creator
+   */
+  std::shared_ptr<MatchCreator> getCreatorByName(const QString& name);
+
+  /**
    * Registers the specified creator with the MergeFactory and takes ownership of the creator.
    */
   void registerCreator(const std::shared_ptr<MatchCreator>& creator)
@@ -110,8 +118,10 @@ public:
 
 private:
 
-  // allows for matching a subset of the input data
-  QString _tagFilter;
+  // These allow for matching a subset of the input data.
+  QString _tagFilterJson;
+  QString _critFilterClassName;
+  bool _negateCritFilter;
 
   std::vector<std::shared_ptr<MatchCreator>> _creators;
 
@@ -121,7 +131,8 @@ private:
   void _checkMatchCreatorBoundable(const std::shared_ptr<MatchCreator>& matchCreator,
                                    const std::shared_ptr<geos::geom::Geometry>& bounds) const;
   void _setMatchCreators(QStringList matchCreatorsList);
-  void _setTagFilter(QString filter) { _tagFilter = filter; }
+  ElementCriterionPtr _createFilter();
+  void _setTagFilterJson(QString json) { _tagFilterJson = json; }
 
   friend class MatchCandidateCountVisitorTest;
   friend class MatchCandidateCountVisitorRndTest;

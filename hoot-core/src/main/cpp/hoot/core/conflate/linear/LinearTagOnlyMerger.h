@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef LINEAR_TAG_ONLY_MERGER_H
 #define LINEAR_TAG_ONLY_MERGER_H
@@ -36,10 +36,11 @@ namespace hoot
 {
 
 /**
- * merges roads together by merging tags only, keeping ref1 tags
- * merges bridges separately from roads; merges tags and optionally geometries for bridges
+ * Merges roads together by merging tags only, keeping ref1 tags
+ * Merges bridges separately from roads; merges tags and optionally geometries for bridges
  *
- * The inheritance from LinearSnapMerger is to support the geometry merging option for bridges.
+ * The inheritance from LinearSnapMerger is in part to support the geometry merging option for
+ * bridges.
  */
 class LinearTagOnlyMerger : public LinearSnapMerger
 {

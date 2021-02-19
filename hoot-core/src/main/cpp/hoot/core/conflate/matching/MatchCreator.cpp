@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2021 Maxar (http://www.maxar.com/)
  */
 
 #include "MatchCreator.h"
@@ -45,7 +45,19 @@ _boundsAddedToFilter(false)
 void MatchCreator::createMatches(
   const ConstOsmMapPtr& map, std::vector<ConstMatchPtr>& /*matches*/,
   ConstMatchThresholdPtr /*threshold*/)
-{
+{    
+  if (_filter)
+  {
+    // We weren't able to set the map when this filter was created by MatchFactory b/c we didn't
+    // have one yet.
+    std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+      std::dynamic_pointer_cast<ConstOsmMapConsumer>(_filter);
+    if (mapConsumer)
+    {
+      mapConsumer->setOsmMap(map.get());
+    }
+  }
+
   if (!_boundsAddedToFilter && ConfigUtils::boundsOptionEnabled())
   {
     // The default behavior is to match against everything in the input unless a bounds is

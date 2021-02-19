@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2018, 2019, 2020, 2021 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
 #ifndef REPLACETAGVISITOR_H
 #define REPLACETAGVISITOR_H
@@ -37,11 +37,7 @@ namespace hoot
 /**
  * The ReplaceTagVisitor class replaces matching tags with the specified replacement tag.
  *
- * This was written for the building outline project: the input data had tag BUILDING=yes, but the
- * output data needed to have tag building=yes.
- *
- * Feel free to extend this class. Maybe add a flag for case-insensitive matching. Or support for
- * wildcards.
+ * @todo Bring this class more in line with the options available in SetTagValueVisitor.
  */
 class ReplaceTagVisitor : public ElementVisitor, public Configurable
 {

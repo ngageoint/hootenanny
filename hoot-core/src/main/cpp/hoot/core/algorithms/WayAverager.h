@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
 
 #ifndef WAYAVERAGER_H
@@ -81,6 +81,7 @@ public:
   Meters getMeanMovement2() { return _meanMovement2; }
 
 protected:
+
   WayPtr _w1;
   WayPtr _w2;
   OsmMap& _map;
@@ -98,13 +99,15 @@ protected:
    * Moves the node with id n half way to the specified line string. The input node id is returned
    * for convenience.
    */
-  long _moveToLine(long ni, double nWeight, const geos::geom::LineString* ls, double lWeight, int w1OrW2);
+  long _moveToLine(
+    long ni, double nWeight, const geos::geom::LineString* ls, double lWeight, int w1OrW2);
 
   /**
    * Returns the coordinate if you were to move the node with id n halfway toward the specified
    * line string.
    */
-  geos::geom::Coordinate _moveToLineAsCoordinate(long n, double nWeight, const geos::geom::LineString* ls, double lWeight);
+  geos::geom::Coordinate _moveToLineAsCoordinate(
+    long n, double nWeight, const geos::geom::LineString* ls, double lWeight);
 };
 
 }

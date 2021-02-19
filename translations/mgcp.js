@@ -19,10 +19,10 @@
  * The following copyright notices are generated automatically. If you
  * have a new notice to add, please use the format:
  * " * @copyright Copyright ..."
- * This will properly maintain the copyright information. DigitalGlobe
+ * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2013, 2014 DigitalGlobe (http://www.digitalglobe.com/)
+ * @copyright Copyright (C) 2013, 2014 Maxar (http://www.maxar.com/)
  */
 
 /*
@@ -837,7 +837,14 @@ mgcp = {
 
       case 'AH050': // Fortification
         // Castles are not Bunkers but they get stored in the same layer
-        if (tags.military == 'bunker' && tags.historic == 'castle') delete tags.military;
+        if (tags.military == 'bunker' && tags.historic == 'castle')
+        {
+          delete tags.military;
+        }
+        else if (!tags.building)
+        {
+          tags.building = 'bunker';
+        }
         break;
 
       // BA040 - Tidal Water
@@ -1077,6 +1084,7 @@ mgcp = {
       ["t.leisure == 'stadium' && t.building","delete t.building"],
       ["t.man_made && t.building == 'yes'","delete t.building"],
       ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
+      ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
       ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'disappearing'; delete t.natural"],
       ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
       ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
