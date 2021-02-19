@@ -148,7 +148,8 @@ public:
     conflator.conflate(input, args[1]);
 
     LOG_STATUS(
-      "Conflation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+      "Cumulative conflation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      " total.");
 
     return 0;
   }

@@ -66,6 +66,16 @@ _sortIncreasing(false)
 {
 }
 
+void CumulativeConflator2::setInputSortScoreType(QString scoreTypeStr)
+{
+  if (scoreTypeStr != "graph" && scoreTypeStr != "raster")
+  {
+    throw IllegalArgumentException("Invalid score type: " + scoreTypeStr);
+  }
+
+  _inputSortScoreType = scoreTypeStr;
+}
+
 void CumulativeConflator2::conflate(const QDir& input, const QString& output)
 {
   QDir::SortFlags sortFlags;
@@ -84,7 +94,8 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
   if (!_inputSortScoreType.isEmpty())
   {
     // Sort our inputs by some scoring method in the hopes the conflation output is cleaner when
-    // they are conflated in this order.
+    // they are conflated in this order. The lower the score means the two inputs are the most
+    // different from each other.
     _sortInputsByScore(input, inputs, firstInputMap);
   }
 
@@ -98,6 +109,9 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
     _transferTagsToInputs(input, inputs, output);
     _initDropDividedRoadsConfig();
   }
+
+  QElapsedTimer timer;
+  timer.start();
 
   QString tempOutput;
   QString outId;
@@ -159,6 +173,9 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
     }
   }
 
+  LOG_STATUS(
+    "Conflation took " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+
   if (transferTags && !_leaveTransferredTags)
   {
     _resetInitConfig(_args);  // This gets us back to our initial conflate settings.
@@ -171,7 +188,9 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
 
   if (!_inputSortScoreType.isEmpty() && !TEST_RUN)
   {
-    // Score the very first input (base input) against the final output to see how they compare.
+    // Score the very first input (base input) against the final output to see how they compare. The
+    // lower the score, the more different the two maps are from each other and potentially the more
+    // we've added to the initial map via conflation.
     LOG_STATUS("Reading output map for comparison: ... " << output << "...");
     OsmMapPtr outputMap(new OsmMap());
     OsmMapReaderFactory::read(outputMap, true, true, output);
@@ -235,6 +254,9 @@ void CumulativeConflator2::_initDropDividedRoadsConfig()
 void CumulativeConflator2::_transferTagsToInputs(
   const QDir& input, QStringList& inputs, const QString& output)
 {
+  QElapsedTimer timer;
+  timer.start();
+
   QStringList args = _args;
   // TODO: use case specific
   args.replaceInStrings("ReferenceConflation.conf", "AttributeConflation.conf");
@@ -279,6 +301,9 @@ void CumulativeConflator2::_transferTagsToInputs(
   inputs = modifiedInputs;
 
   _resetInitConfig(_args);  // This gets us back to our initial conflate settings.
+
+  LOG_STATUS(
+    "Tag transfer ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 
 void CumulativeConflator2::_removeTransferredTags(const QString& url)
@@ -309,11 +334,15 @@ void CumulativeConflator2::_removeTransferredTags(const QString& url)
 void CumulativeConflator2::_sortInputsByScore(
   const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap)
 {
+  QElapsedTimer timer;
+  timer.start();
+
   const QString sortOrderStr = _sortIncreasing ? "increasing" : "decreasing";
   LOG_STATUS(
-    "Sorting inputs in " << sortOrderStr << " order based on: " << _inputSortScoreType << "...");
+    "Sorting inputs in " << sortOrderStr << " " << _inputSortScoreType << " score order...");
 
-  QMultiMap<double, QString> scoresToInputs;
+  // multimap since two comparisons could have the same score
+  QMultiMap<int, QString> scoresToInputs;
 
   // Compare our first input against every other input.
   LOG_STATUS("Loading base comparison map...");
@@ -322,41 +351,67 @@ void CumulativeConflator2::_sortInputsByScore(
     firstInputMap.reset(new OsmMap());
     OsmMapReaderFactory::read(firstInputMap, true, true, input.path() + "/" + inputs.at(0));
   }
-  // Score ranges are 0 to 1000, so give the first input a score of 1001 to ensure it remains at
+  // Score ranges are 0 to 1000, so give the first input a score that ensures it remains at
   // the start of the inputs list after scoring the other inputs.
-  scoresToInputs.insert(1001, inputs.at(0));
+  int baseMapDummyScore;
+  if (!_sortIncreasing)
+  {
+    baseMapDummyScore = 1001;
+  }
+  else
+  {
+    baseMapDummyScore = -1;
+  }
+  scoresToInputs.insert(baseMapDummyScore, inputs.at(0));
 
   for (int i = 1; i < inputs.size(); i++)
   {
+    LOG_STATUS("******************************************************");
     LOG_STATUS(
-      "Scoring base map against comparison map (" << i << "/" << (inputs.size() - 1) << "): " +
-      inputs.at(i) + "...");
+      "Loading comparison map (" << i << "/" << (inputs.size() - 1) << "): " + inputs.at(i) +
+      "...");
     OsmMapPtr map2(new OsmMap());
     if (!TEST_RUN)
     {
       OsmMapReaderFactory::read(map2, true, true, input.path() + "/" + inputs.at(i));
     }
 
+    LOG_STATUS(
+      "Scoring base map against comparison map (" << i << "/" << (inputs.size() - 1) << "): " +
+      inputs.at(i) + "...");
     int score = -1;
     if (!TEST_RUN)
     {
-      if (_inputSortScoreType == "graph")
+      try
       {
-        score = MapCompareUtils::getGraphComparisonFinalScore(firstInputMap, map2);
+        if (_inputSortScoreType == "graph")
+        {
+          score = MapCompareUtils::getGraphComparisonFinalScore(firstInputMap, map2);
+        }
+        else if (_inputSortScoreType == "raster")
+        {
+          score = MapCompareUtils::getRasterComparisonFinalScore(firstInputMap, map2);
+        }
+        LOG_STATUS(
+          _inputSortScoreType << " comparison score for " << inputs.at(i) << ": " << score);
       }
-      else if (_inputSortScoreType == "raster")
+      catch (const EmptyMapInputException&)
       {
-        score = MapCompareUtils::getRasterComparisonFinalScore(firstInputMap, map2);
+        LOG_STATUS("Comparison map empty, skipping input...");
       }
-      LOG_STATUS(_inputSortScoreType << " comparison score for " << inputs.at(i) << ": " << score);
     }
-    scoresToInputs.insert(score, inputs.at(i));
+    if (score != -1)
+    {
+      scoresToInputs.insert(score, inputs.at(i));
+    }
   }
+  const QList<int> scores = scoresToInputs.keys();
+  LOG_STATUS("Score range: " << scores[1] << " to " << scores[scores.size() - 1]);
 
   // values in increasing order by default
   QStringList scoreIncreasingSortedInputs = scoresToInputs.values();
   LOG_VARD(scoreIncreasingSortedInputs);
-  LOG_STATUS("Inputs before sorting: " << inputs);
+  LOG_DEBUG("Inputs before sorting: " << inputs);
   if (!_sortIncreasing)
   {
     StringUtils::reverse(scoreIncreasingSortedInputs);
@@ -366,7 +421,10 @@ void CumulativeConflator2::_sortInputsByScore(
   {
     inputs = scoreIncreasingSortedInputs;
   }
-  LOG_STATUS("Inputs after sorting: " << inputs);
+  LOG_DEBUG("Inputs after sorting: " << inputs);
+
+  LOG_STATUS(
+    "Input sorting ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
 }
 
 void CumulativeConflator2::_printOutputScore(

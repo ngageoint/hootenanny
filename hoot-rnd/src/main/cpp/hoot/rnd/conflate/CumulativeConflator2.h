@@ -41,7 +41,7 @@ namespace hoot
 /**
  * Allows for conflating multiple maps in a cumulative fashion.
  *
- * Sample test command:
+ * Best test command (v7):
  *
  * hoot conflate-cumulative --status \
  *   -C ReferenceConflation.conf \
@@ -98,16 +98,20 @@ public:
   void setMaxIterations(int max) { _maxIterations = max; }
   void setArgs(const QStringList& args) { _args = args; }
   void setKeepIntermediateOutputs(bool keep) { _keepIntermediateOutputs = keep; }
-  void setInputSortScoreType(QString scoreTypeStr) { _inputSortScoreType = scoreTypeStr; }
+  void setInputSortScoreType(QString scoreTypeStr);
   void setSortIncreasing(bool sortIncreasing) { _sortIncreasing = sortIncreasing; }
 
 private:
 
   bool _reverseInputs;
+
   QString _transferTagsInput;
   bool _leaveTransferredTags;
+
   int _maxIterations;
+
   bool _keepIntermediateOutputs;
+
   QString _inputSortScoreType;
   bool _sortIncreasing;
 
