@@ -51,10 +51,14 @@
 #include <hoot/core/scoring/MapCompareUtils.h>
 #include <hoot/rnd/ops/UnlikelyRoadRemover.h>
 
+// Qt
+#include <QElapsedTimer>
+
 namespace hoot
 {
 
-// runs through input processing w/o conflating, scoring, etc; useful for debugging
+// runs through input processing w/o conflating, scoring, etc; useful for debugging input ordering,
+// etc.
 const bool CumulativeConflator2::TEST_RUN = false;
 
 CumulativeConflator2::CumulativeConflator2() :
@@ -88,7 +92,6 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
     sortFlags = QDir::Name | QDir::Reversed;
   }
   QStringList inputs = input.entryList(QDir::Files, sortFlags);
-  QFileInfo outputInfo(output);
 
   OsmMapPtr firstInputMap;
   if (!_inputSortScoreType.isEmpty())
@@ -110,11 +113,40 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
     _initDropDividedRoadsConfig();
   }
 
-  QElapsedTimer timer;
-  timer.start();
+  _conflate(input, inputs, output, transferTags);
 
+  if (transferTags && !_leaveTransferredTags)
+  {
+    _resetInitConfig(_args);  // This gets us back to our initial conflate settings.
+    // TODO: hack specific to current use case; generalize
+    if (!TEST_RUN)
+    {
+      _removeTransferredTags(output);
+    }
+  }
+
+  if (!_inputSortScoreType.isEmpty() && !TEST_RUN)
+  {
+    // Score the very first input (base input) against the final output to see how they compare. The
+    // lower the score, the more different the two maps are from each other and potentially the more
+    // we've added to the initial map via conflation.
+    LOG_STATUS("Reading output map for creating comparison score: ... " << output << "...");
+    OsmMapPtr outputMap(new OsmMap());
+    OsmMapReaderFactory::read(outputMap, true, true, output);
+    _printOutputScore(firstInputMap, outputMap);
+  }
+}
+
+void CumulativeConflator2::_conflate(
+  const QDir& input, const QStringList& inputs, const QString& output, const bool transferTags)
+{
+  QElapsedTimer totalTimer;
+  totalTimer.start();
+
+  QElapsedTimer singleJobTimer;
   QString tempOutput;
   QString outId;
+  QFileInfo outputInfo(output);
   const QString inDir = transferTags ? outputInfo.path() : input.path();
   QString input1 = inDir + "/" + inputs.at(0);
   const int numIterations = _getNumIterations(inputs);
@@ -146,7 +178,7 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
     QFileInfo input2Info(input2);
     QFileInfo tempOutputInfo(tempOutput);
 
-    _conflateTimer.restart();
+    singleJobTimer.restart();
     LOG_STATUS("******************************************************");
     LOG_STATUS(
       "Conflating (" << i << "/" << numIterations << ") " << input1Info.fileName() <<
@@ -156,7 +188,7 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
     {
       ConflateExecutor().conflate(input1, input2, tempOutput);
     }
-    LOG_STATUS("Conflation took: " << StringUtils::millisecondsToDhms(_conflateTimer.elapsed()));
+    LOG_STATUS("Conflation took: " << StringUtils::millisecondsToDhms(singleJobTimer.elapsed()));
 
     if (i != 1 && !_keepIntermediateOutputs)
     {
@@ -174,28 +206,8 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
   }
 
   LOG_STATUS(
-    "Conflation took " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
-
-  if (transferTags && !_leaveTransferredTags)
-  {
-    _resetInitConfig(_args);  // This gets us back to our initial conflate settings.
-    // TODO: hack specific to current use case; generalize
-    if (!TEST_RUN)
-    {
-      _removeTransferredTags(output);
-    }
-  }
-
-  if (!_inputSortScoreType.isEmpty() && !TEST_RUN)
-  {
-    // Score the very first input (base input) against the final output to see how they compare. The
-    // lower the score, the more different the two maps are from each other and potentially the more
-    // we've added to the initial map via conflation.
-    LOG_STATUS("Reading output map for comparison: ... " << output << "...");
-    OsmMapPtr outputMap(new OsmMap());
-    OsmMapReaderFactory::read(outputMap, true, true, output);
-    _printOutputScore(firstInputMap, outputMap);
-  }
+    "All conflation jobs took " << StringUtils::millisecondsToDhms(totalTimer.elapsed()) <<
+    " total.");
 }
 
 int CumulativeConflator2::_getNumIterations(const QStringList& inputs) const
@@ -254,8 +266,8 @@ void CumulativeConflator2::_initDropDividedRoadsConfig()
 void CumulativeConflator2::_transferTagsToInputs(
   const QDir& input, QStringList& inputs, const QString& output)
 {
-  QElapsedTimer timer;
-  timer.start();
+  QElapsedTimer totalTimer;
+  totalTimer.start();
 
   QStringList args = _args;
   // TODO: use case specific
@@ -272,6 +284,7 @@ void CumulativeConflator2::_transferTagsToInputs(
   LOG_VARD(ConfigOptions().getWayJoiner());
   LOG_VARD(ConfigOptions().getConflatePreOps());
 
+  QElapsedTimer singleJobTimer;
   QFileInfo tagInputInfo(_transferTagsInput);
   QFileInfo outputInfo(output);
   QStringList modifiedInputs;
@@ -288,7 +301,7 @@ void CumulativeConflator2::_transferTagsToInputs(
       "Performing tag transfer (" << (i + 1) << "/" << numIterations << ") for " << inputs.at(i) <<
       " from " << tagInputInfo.fileName() << " to " << tagTransferredInput << "...");
 
-    _conflateTimer.restart();
+    singleJobTimer.restart();
     if (!TEST_RUN)
     {
       ConflateExecutor().conflate(
@@ -296,14 +309,14 @@ void CumulativeConflator2::_transferTagsToInputs(
     }
     modifiedInputs.append(tagTransferredInput);
 
-    LOG_STATUS("Transfer took: " << StringUtils::millisecondsToDhms(_conflateTimer.elapsed()));
+    LOG_STATUS("Transfer took: " << StringUtils::millisecondsToDhms(singleJobTimer.elapsed()));
   }
   inputs = modifiedInputs;
 
   _resetInitConfig(_args);  // This gets us back to our initial conflate settings.
 
   LOG_STATUS(
-    "Tag transfer ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    "Tag transfer ran in " << StringUtils::millisecondsToDhms(totalTimer.elapsed()) << " total.");
 }
 
 void CumulativeConflator2::_removeTransferredTags(const QString& url)
@@ -334,8 +347,8 @@ void CumulativeConflator2::_removeTransferredTags(const QString& url)
 void CumulativeConflator2::_sortInputsByScore(
   const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap)
 {
-  QElapsedTimer timer;
-  timer.start();
+  QElapsedTimer totalTimer;
+  totalTimer.start();
 
   const QString sortOrderStr = _sortIncreasing ? "increasing" : "decreasing";
   LOG_STATUS(
@@ -346,26 +359,17 @@ void CumulativeConflator2::_sortInputsByScore(
 
   // Compare our first input against every other input.
   LOG_STATUS("Loading base comparison map...");
+  const QString baseMapInput = inputs.at(0);
   if (!TEST_RUN)
   {
     firstInputMap.reset(new OsmMap());
-    OsmMapReaderFactory::read(firstInputMap, true, true, input.path() + "/" + inputs.at(0));
+    OsmMapReaderFactory::read(firstInputMap, true, true, input.path() + "/" + baseMapInput);
   }
-  // Score ranges are 0 to 1000, so give the first input a score that ensures it remains at
-  // the start of the inputs list after scoring the other inputs.
-  int baseMapDummyScore;
-  if (!_sortIncreasing)
-  {
-    baseMapDummyScore = 1001;
-  }
-  else
-  {
-    baseMapDummyScore = -1;
-  }
-  scoresToInputs.insert(baseMapDummyScore, inputs.at(0));
 
+  QElapsedTimer singleJobTimer;
   for (int i = 1; i < inputs.size(); i++)
   {
+    singleJobTimer.restart();
     LOG_STATUS("******************************************************");
     LOG_STATUS(
       "Loading comparison map (" << i << "/" << (inputs.size() - 1) << "): " + inputs.at(i) +
@@ -404,9 +408,18 @@ void CumulativeConflator2::_sortInputsByScore(
     {
       scoresToInputs.insert(score, inputs.at(i));
     }
+
+    LOG_STATUS("Scoring took: " << StringUtils::millisecondsToDhms(singleJobTimer.elapsed()));
   }
   const QList<int> scores = scoresToInputs.keys();
-  LOG_STATUS("Score range: " << scores[1] << " to " << scores[scores.size() - 1]);
+  if (!_sortIncreasing)
+  {
+    LOG_STATUS("Score range: " << scores[scores.size() - 1] << " to " << scores[0]);
+  }
+  else
+  {
+    LOG_STATUS("Score range: " << scores[0] << " to " << scores[scores.size() - 1]);
+  }
 
   // values in increasing order by default
   QStringList scoreIncreasingSortedInputs = scoresToInputs.values();
@@ -422,32 +435,29 @@ void CumulativeConflator2::_sortInputsByScore(
     inputs = scoreIncreasingSortedInputs;
   }
   LOG_DEBUG("Inputs after sorting: " << inputs);
+  // Add the base map input back in.
+  inputs.prepend(baseMapInput);
 
   LOG_STATUS(
-    "Input sorting ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
+    "Input sorting ran in " << StringUtils::millisecondsToDhms(totalTimer.elapsed()) << " total.");
 }
 
 void CumulativeConflator2::_printOutputScore(
   const OsmMapPtr& firstInputMap, const OsmMapPtr& outputMap)
 {
   LOG_STATUS("Scoring initial input against final output...");
-  int inputOutputComparisonScore = -1;
+  int graphInputOutputComparisonScore = -1;
+  int rasterInputOutputComparisonScore = -1;
   if (!TEST_RUN)
   {
-    if (_inputSortScoreType == "graph")
-    {
-      inputOutputComparisonScore =
-        MapCompareUtils::getGraphComparisonFinalScore(firstInputMap, outputMap);
-    }
-    else if (_inputSortScoreType == "raster")
-    {
-      inputOutputComparisonScore =
-        MapCompareUtils::getRasterComparisonFinalScore(firstInputMap, outputMap);
-    }
+    graphInputOutputComparisonScore =
+      MapCompareUtils::getGraphComparisonFinalScore(firstInputMap, outputMap);
+    rasterInputOutputComparisonScore =
+      MapCompareUtils::getRasterComparisonFinalScore(firstInputMap, outputMap);
   }
   LOG_STATUS(
-    _inputSortScoreType << " comparison score first input vs output: " <<
-    inputOutputComparisonScore);
+    "Comparison score first input vs output - graph: " <<
+    graphInputOutputComparisonScore << ", raster: " << rasterInputOutputComparisonScore);
 }
 
 }

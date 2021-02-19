@@ -30,10 +30,10 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+
 // Qt
 #include <QStringList>
 #include <QDir>
-#include <QElapsedTimer>
 
 namespace hoot
 {
@@ -119,8 +119,6 @@ private:
 
   static const int FILE_NUMBER_PAD_SIZE = 3;
 
-  QElapsedTimer _conflateTimer;
-
   static const bool TEST_RUN;
 
   int _getNumIterations(const QStringList& inputs) const;
@@ -130,6 +128,9 @@ private:
 
   void _transferTagsToInputs(const QDir& input, QStringList& inputs, const QString& output);
   void _removeTransferredTags(const QString& url);
+
+  void _conflate(
+    const QDir& input, const QStringList& inputs, const QString& output, const bool transferTags);
 
   void _sortInputsByScore(const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap);
   void _printOutputScore(const OsmMapPtr& firstInputMap, const OsmMapPtr& outputMap);
