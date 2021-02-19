@@ -108,14 +108,14 @@ public:
       keepIntermediateOutputs = true;
       args.removeAll("--keep-intermediate-outputs");
     }
-//    QString inputSortScoreType;
-//    if (args.contains("--sort-inputs-by-score"))
-//    {
-//      const int optionNameIndex = args.indexOf("--sort-inputs-by-score");
-//      inputSortScoreType = args.at(optionNameIndex + 1).trimmed();
-//      args.removeAt(optionNameIndex + 1);
-//      args.removeAt(optionNameIndex);
-//    }
+    QString inputSortScoreType;
+    if (args.contains("--sort-inputs-by-score"))
+    {
+      const int optionNameIndex = args.indexOf("--sort-inputs-by-score");
+      inputSortScoreType = args.at(optionNameIndex + 1).trimmed().toLower();
+      args.removeAt(optionNameIndex + 1);
+      args.removeAt(optionNameIndex);
+    }
 
     if (args.size() != 2)
     {
@@ -134,10 +134,10 @@ public:
     conflator.setLeaveTransferredTags(leaveTransferredTags);
     conflator.setMaxIterations(maxIterations);
     conflator.setKeepIntermediateOutputs(keepIntermediateOutputs);
-//    if (!inputSortScoreType.isEmpty())
-//    {
-//      conflator.setInputSortScoreType(inputSortScoreType);
-//    }
+    if (!inputSortScoreType.isEmpty())
+    {
+      conflator.setInputSortScoreType(inputSortScoreType);
+    }
     conflator.conflate(input, args[1]);
 
     LOG_STATUS(

@@ -43,11 +43,12 @@ class DirectedGraph;
 class ShortestPath
 {
 public:
+
   ShortestPath(const std::shared_ptr<const DirectedGraph>& graph);
 
   void calculateCost();
 
-  double getNodeCost(long nodeId) { return _cost.contains(nodeId) ? _cost[nodeId] : -1; }
+  double getNodeCost(long nodeId) const { return _cost.contains(nodeId) ? _cost[nodeId] : -1; }
 
   /**
    * Set the cost for any starting nodes.
@@ -73,12 +74,11 @@ private:
   /**
    * Comparison struct for the priority queue. Puts the lowest scoring results on top.
    */
-  class LesserNode
-    : public std::binary_function<const Node&, const Node&, bool>
+  class LesserNode : public std::binary_function<const Node&, const Node&, bool>
   {
   public:
-    bool operator()(const Node& left,
-                    const Node& right) const
+
+    bool operator()(const Node& left, const Node& right) const
     {
       return left.cost > right.cost;
     }

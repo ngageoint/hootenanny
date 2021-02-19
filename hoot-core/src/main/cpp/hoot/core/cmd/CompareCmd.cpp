@@ -30,13 +30,11 @@
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/ops/SuperfluousWayRemover.h>
-#include <hoot/core/scoring/AttributeComparator.h>
-#include <hoot/core/scoring/GraphComparator.h>
-#include <hoot/core/scoring/RasterComparator.h>
 #include <hoot/core/visitors/KeepHighwaysVisitor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/scoring/MapCompareUtils.h>
 
 // tgs
 #include <tgs/Optimization/NelderMead.h>
@@ -59,71 +57,7 @@ public:
 
   virtual QString getName() const override { return "compare"; }
 
-  virtual QString getDescription() const override
-  { return "Compares maps using metrics"; }
-
-  void attributeCompare(OsmMapPtr map1, OsmMapPtr map2, OsmMapPtr outMap,
-                        int& mean, int& confidence)
-  {
-    Tgs::Random::instance()->seed(100);
-
-    int iterations = 600;
-    {
-      AttributeComparator attr(map1, outMap);
-      attr.setIterations(iterations);
-      attr.compareMaps();
-      int thisConfidence = attr.getConfidenceInterval() * 1000.0 + 0.5;
-      int thisMean = attr.getMeanScore() * 1000.0 + 0.5;
-      if (map2 != 0)
-      {
-        cout << "Attribute Score 1: " << thisMean << " +/-" << thisConfidence << endl;
-        cout.flush();
-      }
-
-      confidence = thisConfidence;
-      mean = thisMean;
-    }
-
-    if (map2 != 0)
-    {
-      AttributeComparator attr(map2, outMap);
-      attr.setIterations(iterations);
-      attr.compareMaps();
-      int thisConfidence = attr.getConfidenceInterval() * 1000.0 + 0.5;
-      int thisMean = attr.getMeanScore() * 1000.0 + 0.5;
-      cout << "Attribute Score 2: " << thisMean << " +/-" << thisConfidence << endl;
-
-      confidence += thisConfidence;
-      mean += thisMean;
-
-      confidence /= 2;
-      mean /= 2;
-    }
-  }
-
-  void graphCompare(OsmMapPtr map1, OsmMapPtr map2, double& mean,
-                    double& confidence)
-  {
-    Tgs::Random::instance()->seed(0);
-    GraphComparator graph(map1, map2);
-    graph.setDebugImages(ConfigOptions().getScoreGraphDebugImages());
-    graph.setIterations(1000);
-    graph.setPixelSize(10);
-    graph.setMaxThreads(ConfigOptions().getGraphComparatorMaxThreads());
-    graph.compareMaps();
-    double thisConfidence = graph.getConfidenceInterval();
-    double thisMean = graph.getMeanScore();
-
-    confidence += thisConfidence;
-    mean += thisMean;
-  }
-
-  void rasterCompare(OsmMapPtr map1, OsmMapPtr map2, double& mean)
-  {
-    RasterComparator raster(map1, map2);
-    raster.setPixelSize(5);
-    mean += raster.compareMaps();
-  }
+  virtual QString getDescription() const override { return "Compares maps using metrics"; }
 
   int compareMaps(QString in1, QString in2, QString out)
   {
@@ -136,45 +70,55 @@ public:
     OsmMapPtr outMap = loadMap(out);
 
     int aic, aim;
-    attributeCompare(map1, map2, outMap, aim, aic);
+    MapCompareUtils::getAttributeComparisonFinalScores(map1, map2, outMap, aim, aic, 600);
+//    MapCompareUtils::getAttributeComparisonFinalScores(map1, outMap, aim, aic, 600);
+//    if (map2 != 0)
+//    {
+//      int aic2, aim2;
+//      MapCompareUtils::getAttributeComparisonFinalScores(map2, outMap, aim2, aic2, 600);
+//      aic2 += aic;
+//      aim2 += aim;
+//      aic /= 2;
+//      aim /= 2;
+//    }
     cout << "Attribute Score: " << aim <<
             " +/-" << aic << " (" << aim - aic << " to " << aim + aic << ")" << endl;
 
     double rMean = 0.0;
-    rasterCompare(map1, outMap, rMean);
+    MapCompareUtils::getRasterComparisonRawScores(map1, outMap, rMean);
     if (map2 != 0)
     {
       double rMean2 = 0.0;
-      rasterCompare(map2, outMap, rMean2);
-      cout << "Raster Score 1: " << int(rMean * 1000.0 + 0.5) << endl;
-      cout << "Raster Score 2: " << int(rMean2 * 1000.0 + 0.5) << endl;
+      MapCompareUtils::getRasterComparisonRawScores(map2, outMap, rMean2);
+      cout << "Raster Score 1: " << MapCompareUtils::convertRawScoreToFinalScore(rMean) << endl;
+      cout << "Raster Score 2: " << MapCompareUtils::convertRawScoreToFinalScore(rMean2) << endl;
       rMean = (rMean + rMean2) / 2.0;
     }
-    int rasterScore = int(rMean * 1000.0 + 0.5);
+    int rasterScore = MapCompareUtils::convertRawScoreToFinalScore(rMean);
     cout << "Raster Score: " << rasterScore << endl;
 
     double gMean = 0.0;
     double gConfidence = 0.0;
-    graphCompare(map1, outMap, gMean, gConfidence);
+    MapCompareUtils::getGraphComparisonRawScores(map1, outMap, gMean, gConfidence);
     if (map2 != 0)
     {
       double gMean2 = 0.0;
       double gConfidence2 = 0.0;
-      graphCompare(map2, outMap, gMean2, gConfidence2);
-      int gic = gConfidence * 1000.0 + 0.5;
-      int gim = gMean * 1000.0 + 0.5;
+      MapCompareUtils::getGraphComparisonRawScores(map2, outMap, gMean2, gConfidence2);
+      int gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence);
+      int gim = MapCompareUtils::convertRawScoreToFinalScore(gMean);
       cout << "Graph Score 1: " << gim <<
               " +/-" << gic << " (" << gim - gic << " to " << gim + gic << ")" << endl;
-      gic = gConfidence2 * 1000.0 + 0.5;
-      gim = gMean2 * 1000.0 + 0.5;
+      gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence2);
+      gim = MapCompareUtils::convertRawScoreToFinalScore(gMean2);
       cout << "Graph Score 2: " << gim <<
               " +/-" << gic << " (" << gim - gic << " to " << gim + gic << ")" << endl;
 
       gConfidence = (gConfidence + gConfidence2) / 2.0;
       gMean = (gMean + gMean2) / 2.0;
     }
-    int gic = gConfidence * 1000.0 + 0.5;
-    int gim = gMean * 1000.0 + 0.5;
+    int gic = MapCompareUtils::convertRawScoreToFinalScore(gConfidence);
+    int gim = MapCompareUtils::convertRawScoreToFinalScore(gMean);
 
     cout << "Graph Score: " << gim <<
             " +/-" << gic << " (" << gim - gic << " to " << gim + gic << ")" << endl;
