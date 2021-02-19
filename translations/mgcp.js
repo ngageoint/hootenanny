@@ -339,7 +339,7 @@ mgcp = {
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
   {
     // Drop the FCSUBTYPE since we don't use it
-    if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+    delete attrs.FCSUBTYPE;
 
     // The swap list. These are the same attr, just named differently
     // These may get converted back on output
@@ -969,10 +969,10 @@ mgcp = {
   applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
-    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-    if (tags.area) delete tags.area;
-    if (tags['error:circular']) delete tags['error:circular'];
-    if (tags['hoot:status']) delete tags['hoot:status'];
+    delete tags['source:ingest:datetime'];
+    delete tags.area;
+    delete tags['error:circular'];
+    delete tags['hoot:status'];
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -1259,7 +1259,7 @@ mgcp = {
         attrs.F_CODE = 'AL010'; // Facility
 
         // If the user has also set a building tag, delete it
-        if (tags.building) delete tags.building;
+        delete tags.building;
       }
       else
       {
@@ -2253,9 +2253,9 @@ mgcp = {
     // not in v8 yet: // var tTags = Object.assign({},tags);
     var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-    if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+    delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
+    delete notUsedTags['hoot:id'];
 
     // apply the simple number and text biased rules
     translate.numToOgr(attrs, notUsedTags, mgcp.rules.numBiasedV4,mgcp.rules.intList,transMap);

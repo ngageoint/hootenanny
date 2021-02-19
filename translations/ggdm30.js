@@ -1132,10 +1132,10 @@ ggdm30 = {
   applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
-    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-    if (tags.area) delete tags.area;
-    if (tags['error:circular']) delete tags['error:circular'];
-    if (tags['hoot:status']) delete tags['hoot:status'];
+    delete tags['source:ingest:datetime'];
+    delete tags.area;
+    delete tags['error:circular'];
+    delete tags['hoot:status'];
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -1557,8 +1557,7 @@ ggdm30 = {
     if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
     {
       tags.sidetrack = 'yes';
-      if (tags.railway) delete tags.railway;
-
+      delete tags.railway;
     }
 
     // Movable Bridges
@@ -1699,10 +1698,7 @@ ggdm30 = {
     }
 
     // Protected areas have two attributes that need sorting out
-    if (tags.protection_object == 'habitat' || tags.protection_object == 'breeding_ground')
-    {
-      if (tags.protect_class) delete tags.protect_class;
-    }
+    if (tags.protection_object == 'habitat' || tags.protection_object == 'breeding_ground') delete tags.protect_class;
 
     // Split link roads. GGDM30 & TDSv61 now have an attribute for this
     //        if (tags.highway && (tags['highway'].indexOf('_link') !== -1))
@@ -2434,9 +2430,9 @@ ggdm30 = {
     // not in v8 yet: // var tTags = Object.assign({},tags);
     var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-    if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+    delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
+    delete notUsedTags['hoot:id'];
 
     // Apply the simple number and text biased rules
     // NOTE: These are BACKWARD, not forward!

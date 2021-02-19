@@ -393,12 +393,15 @@ tds70 = {
 
     // Quit early if we don't need to check anything. We are only looking at linework
     if (geometryType !== 'Line') return returnData;
-
+print('Many: Start');
     // Only looking at roads & railways with something else tacked on
     if (!(tags.highway || tags.railway)) return returnData;
+  print('Many: After railway');
 
     // Check the list of secondary/tertiary etc features
+    // Need to think about: tags.covered
     if (!(tags.bridge || tags.tunnel || tags.embankment || tags.cutting || tags.ford)) return returnData;
+  print('Many: After bridge tunnel');
 
     // We are going to make another feature so copy tags and trash the UUID so it gets a new one
     var newFeatures = [];
@@ -511,6 +514,14 @@ tds70 = {
       delete nTags.embankment;
     }
 
+    // Need to think about this
+    // if (nTags.covered)
+    // {
+    //   newAttributes.F_CODE = 'AQ151'; // Arcade
+    //   newFeatures.push({attrs: JSON.parse(JSON.stringify(newAttributes)), tags: JSON.parse(JSON.stringify(nTags))});
+    //   delete nTags.covered;
+    // }
+
     // Loop through the new features and process them.
     for (var i = 0, nFeat = newFeatures.length; i < nFeat; i++)
     {
@@ -560,7 +571,7 @@ tds70 = {
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
   {
     // Drop the FCSUBTYPE since we don't use it
-    if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+    delete attrs.FCSUBTYPE;
 
     // Backward compatibility
     if (attrs.AEI)
@@ -1148,10 +1159,10 @@ tds70 = {
   applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
-    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-    if (tags.area) delete tags.area;
-    if (tags['error:circular']) delete tags['error:circular'];
-    if (tags['hoot:status']) delete tags['hoot:status'];
+    delete tags['source:ingest:datetime'];
+    delete tags.area;
+    delete tags['error:circular'];
+    delete tags['hoot:status'];
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -1353,6 +1364,23 @@ tds70 = {
 
       delete tags.barrier; // Take away the walls...
     }
+
+    // Railways and other features
+    if (tags.building == 'yes' && tags.railway == 'rail')
+    {
+      delete tags.railway;
+      attrs.FFN = '490'; // Railway Transport
+    }
+
+    // Area Embankments can't be transportation features as well.
+    if (tags.embankment == 'yes' && geometryType == 'Area')
+    {
+      // Hot sure if we should delete highway features as well. Have not seen any in the data so far.
+      delete tags.railway;
+    }
+
+    // VERY data specific...
+    if (tags.covered == 'arcade' && tags.railway) attrs.F_CODE = 'AN010'; // Railway
 
     // Some tags imply that they are buildings but don't actually say so.
     // Most of these are taken from raw OSM and the OSM Wiki
@@ -1648,12 +1676,11 @@ tds70 = {
     // If we have a point, we need to make sure that it becomes a bridge, not a road.
     if (tags.bridge && geometryType =='Point') attrs.F_CODE = 'AQ040';
 
-
     // Railway sidetracks
     if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
     {
       tags.sidetrack = 'yes';
-      if (tags.railway) delete tags.railway;
+      delete tags.railway;
     }
 
     // Movable Bridges
@@ -1777,7 +1804,7 @@ tds70 = {
     // Protected areas have two attributes that need sorting out
     if (tags.protection_object == 'habitat' || tags.protection_object == 'breeding_ground')
     {
-      if (tags.protect_class) delete tags.protect_class;
+      delete tags.protect_class;
     }
 
     // Split link roads. TDSv61 now has an attribute for this
@@ -1826,7 +1853,7 @@ tds70 = {
     // Embankments & Railways
     if (tags.embankment == 'yes' && geometryType == 'Area')
     {
-      if (tags.railway) delete tags.railway;
+      delete tags.railway;
     }
 
     // Now set the relative levels and transportation types for various features
@@ -2564,9 +2591,9 @@ tds70 = {
     // not in v8 yet: // var tTags = Object.assign({},tags);
     var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-    if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+    delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
+    delete notUsedTags['hoot:id'];
 
     // Apply the simple number and text biased rules
     // NOTE: These are BACKWARD, not forward!
