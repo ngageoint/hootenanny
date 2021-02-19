@@ -48,7 +48,7 @@ public:
 
   Histogram(int bins);
 
-  const std::vector<double>& getAllBins() const { return _bins; }
+  const std::vector<double>& getBins() const { return _bins; }
 
   size_t numBins() const { return _bins.size(); }
 
@@ -76,14 +76,25 @@ public:
    */
   void smooth(Radians sigma);
 
+  /**
+   * Creates a printable string for all histogram bins
+   *
+   * @return a histogram string
+   */
   QString toString() const;
+
+  /**
+   * Creates a printable string for histogram bins with positive values only
+   *
+   * @return a histogram string
+   */
+  QString printPositiveBins() const;
 
 private:
 
   std::vector<double> _bins;
 
   Radians _getBinAngle(size_t i);
-
 };
 
 }

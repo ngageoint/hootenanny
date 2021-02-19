@@ -196,8 +196,6 @@ bool WaySublineMatchString::touches(const WaySublineMatchString& other) const
 QString WaySublineMatchString::toString() const
 {
   QString result;
-  //result += "subline 1: " + getSublineString1().toString() + "\n";
-  //result += "subline 2: " + getSublineString2().toString() + "\n";
   result += QString("matches:\n");
   QStringList l;
   for (size_t i = 0; i < _matches.size(); i++)

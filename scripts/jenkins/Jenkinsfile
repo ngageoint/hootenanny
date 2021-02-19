@@ -98,12 +98,11 @@ pipeline {
                 anyOf {
                     // Configure for sonar if user selected it, pull-request, or nightly run of master
                     expression { return params.Sonar }
-//  Disable sonar until it works
-//                    changeRequest()
-//                    allOf {
-//                        triggeredBy 'TimerTrigger'
-//                        branch 'master'
-//                    }
+                    changeRequest()
+                    allOf {
+                        triggeredBy 'TimerTrigger'
+                        branch 'master'
+                    }
                 }
             }
             steps {
@@ -163,12 +162,11 @@ pipeline {
             when {
                 anyOf {
                     expression { return params.Sonar }
-//  Disable sonar until it works
-//                    changeRequest()
-//                    allOf {
-//                        triggeredBy 'TimerTrigger'
-//                        branch 'master'
-//                    }
+                    changeRequest()
+                    allOf {
+                        triggeredBy 'TimerTrigger'
+                        branch 'master'
+                    }
                 }
             }
             steps{

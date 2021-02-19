@@ -28,31 +28,12 @@
 #define UNIFYINGCONFLATOR_H
 
 // hoot
-#include <hoot/core/conflate/matching/MatchGraph.h>
-#include <hoot/core/conflate/merging/Merger.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/info/SingleStat.h>
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/Boundable.h>
-#include <hoot/core/util/Configurable.h>
-#include <hoot/core/util/ProgressReporter.h>
-#include <hoot/core/util/Settings.h>
-
-// tgs
-#include <tgs/HashMap.h>
-
-// Qt
-#include <QString>
+#include <hoot/core/conflate/AbstractConflator.h>
 
 namespace hoot
 {
 
-class Match;
-class MatchClassification;
-class MatchFactory;
 class MatchThreshold;
-class MergerFactory;
-class ElementId;
 
 /**
  * A different conflation algorithm compared to the original greedy conflation alg. This is named
@@ -61,8 +42,7 @@ class ElementId;
  *
  * Re-entrant but not thread safe.
  */
-class UnifyingConflator : public OsmMapOperation, public Boundable, public Configurable,
-  public ProgressReporter
+class UnifyingConflator : public AbstractConflator
 {
 public:
 
@@ -70,8 +50,6 @@ public:
 
   UnifyingConflator();
   UnifyingConflator(const std::shared_ptr<MatchThreshold>& matchThreshold);
-
-  virtual ~UnifyingConflator();
 
   /**
    * Conflates the specified map. If the map is not in a planar projection it is reprojected. The
@@ -83,69 +61,23 @@ public:
 
   virtual QString getClassName() const override { return className(); }
 
-  QList<SingleStat> getStats() const { return _stats; }
-
-  virtual void setConfiguration(const Settings &conf) override;
-
-  /**
-   * Set the factory to use when creating mergers. This method is likely only useful when testing.
-   */
-  void setMergerFactory(const std::shared_ptr<MergerFactory>& mf) { _mergerFactory = mf; }
-
   virtual QString getDescription() const override
   { return "Conflates two inputs maps into one with Unifying Conflation"; }
 
-  virtual void setProgress(Progress progress) override { _progress = progress; }
   virtual unsigned int getNumSteps() const override { return 3; }
+
+protected:
+
+  virtual void _createMergers(
+    MatchSetVector& matchSets, std::vector<MergerPtr>& relationMergers);
+  virtual void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
 
 private:
 
-  const MatchFactory& _matchFactory;
-  std::shared_ptr<MatchThreshold> _matchThreshold;
-  std::shared_ptr<MergerFactory> _mergerFactory;
-  Settings _settings;   // Why is this needed?
-  HashMap<ElementId, std::vector<MergerPtr>> _e2m;
-  std::vector<ConstMatchPtr> _matches;
-  std::vector<MergerPtr> _mergers;
-
-  QList<SingleStat> _stats;
-
-  int _taskStatusUpdateInterval;
-  Progress _progress;
-
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 
-  void _addReviewAndScoreTags(const OsmMapPtr &map, const std::vector<ConstMatchPtr> &matches);
+  void _addReviewAndScoreTags();
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
-
-  /**
-   * Populates the _e2m map with a mapping of ElementIds to their respective Merger objects. This
-   * is helpful when replacing element ids with new ids.
-   *
-   * @optimize It may make sense to write a custom multi-map for storing values. Check out this
-   * for an example:
-   * http://stackoverflow.com/questions/10064422/java-on-memory-efficient-key-value-store
-   */
-  void _mapElementIdsToMergers();
-
-  void _removeWholeGroups(std::vector<ConstMatchPtr> &matches, MatchSetVector &matchSets,
-    const OsmMapPtr &map);
-
-  void _replaceElementIds(const std::vector<std::pair<ElementId, ElementId>>& replaced);
-
-  /**
-   * Cleans up any resources used by the object during conflation. This also makes exceptions that
-   * might be thrown during apply() clean up the leftovers nicely (albeit delayed).
-   */
-  void _reset();
-
-  void _printMatches(std::vector<ConstMatchPtr> matches);
-  void _printMatches(std::vector<ConstMatchPtr> matches, const MatchType& typeFilter);
-  QString _matchSetToString(const MatchSet& matchSet) const;
-
-  void _updateProgress(const int currentStep, const QString message);
-
-  void _applyMergers(const std::vector<MergerPtr>& mergers, OsmMapPtr& map);
 };
 
 }

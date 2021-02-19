@@ -72,6 +72,8 @@ public:
     MapProjector::projectToPlanar(map);
 
     SampledAngleHistogramExtractor angleHistogramExtractor;
+    angleHistogramExtractor.setBins(8);
+    angleHistogramExtractor.setSmoothing(0.0);
     angleHistogramExtractor.setHeadingDelta(ConfigOptions().getWayMatcherHeadingDelta());
     angleHistogramExtractor.setSampleDistance(ConfigOptions().getWayAngleSampleDistance());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
@@ -79,14 +81,15 @@ public:
       angleHistogramExtractor.extract(
         *map,
         map->getWay(
-          ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref1(), "001f4b")[0]),
+          ElementIdsVisitor::findElementsByTag(
+            map, ElementType::Way, MetadataTags::Ref1(), "001f4b")[0]),
         map->getWay(
-          ElementIdsVisitor::findElementsByTag(map, ElementType::Way, MetadataTags::Ref2(), "001f4b")[0])),
+          ElementIdsVisitor::findElementsByTag(
+            map, ElementType::Way, MetadataTags::Ref2(), "001f4b")[0])),
       1e-6);
   }
 };
 
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SampledAngleHistogramExtractorTest, "current");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(SampledAngleHistogramExtractorTest, "quick");
 
 }

@@ -43,7 +43,7 @@ public:
 
   static QString className() { return "hoot::OneWayCriterion"; }
 
-  OneWayCriterion(bool isOneWay = true);
+  OneWayCriterion() = default;
   virtual ~OneWayCriterion() = default;
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
@@ -58,10 +58,6 @@ public:
   virtual QString getName() const override { return className(); }
 
   virtual QString getClassName() const override { return className(); }
-
-private:
-
-  bool _isOneWay;
 };
 
 }

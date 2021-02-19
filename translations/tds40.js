@@ -577,96 +577,102 @@ tds40 = {
     }
   },
 
+// Clean up the attributes
+cleanAttrs : function (attrs)
+{
+  // Drop the FCSUBTYPE since we don't use it
+  delete attrs.FCSUBTYPE;
+
+  // List of data values to drop/ignore
+  var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
+
+  // List of attributes that can't have '0' as a value
+  var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
+
+  // This is a handy loop. We use it to:
+  // 1) Remove all of the "No Information" and -999999 fields
+  // 2) Convert all of the Attrs to uppercase - if needed
+  // 3) Swap some of the funky named attrs around
+  for (var col in attrs)
+  {
+    // slightly ugly but we would like to account for: 'No Information','noInformation' etc
+    // First, push to lowercase
+    var attrValue = attrs[col].toString().toLowerCase();
+
+    // Get rid of the spaces in the text
+    attrValue = attrValue.replace(/\s/g, '');
+
+    // Wipe out the useless values
+    if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
+    {
+      delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
+      continue;
+    }
+
+    // Remove attributes with '0' values if they can't be '0'
+    if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
+    {
+      delete attrs[col];
+      continue;
+    }
+
+    // Now see if we need to swap attr names
+    if (col in tds40.rules.swapListIn)
+    {
+      // Debug:
+      // print('Swapped: ' + tds40.rules.swapList[i]);
+      attrs[tds40.rules.swapListIn[col]] = attrs[col];
+      delete attrs[col];
+      continue;
+    }
+
+    // The following is to account for TDSv30 vs TDSv40 attribute naming. Somehow
+    // they had the bright idea to rename XXX1 to XXX for a stack of features:
+    // E.g. FFN1 -> FFN
+    var endChar = col.charAt(col.length - 1);
+    if (endChar == 1 && ['LC1','ZI016_WD1','ZI020_FI1','MGL1'].indexOf(col) == -1)
+    {
+      attrs[col.slice(0,-1)] = attrs[col];
+      // Debug:
+      // print('Swapped: ' + col);
+      delete attrs[col];
+      continue;
+    }
+  } // End in attrs loop
+
+  // Undergrowth Density in Thicket & Swamp
+  if (attrs.DMBL && (attrs.DMBL == attrs.DMBU))
+  {
+    tags['undergrowth:density'] = attrs.DMBL;
+    delete attrs.DMBU;
+    delete attrs.DMBL;
+  }
+
+  // Drop all of the XXX Closure default values IFF the associated attributes are not set
+  // Doing this after the main cleaning loop so all of the -999999 values are
+  // already gone and we can just check for existance
+  for (var i in tds40.rules.closureList)
+  {
+    if (attrs[i])
+    {
+      if (attrs[tds40.rules.closureList[i][0]] || attrs[tds40.rules.closureList[i][1]])
+      {
+        continue;
+      }
+      else
+      {
+        delete attrs[i];
+      }
+    }
+  } // End closureList
+
+}, // End cleanAttrs
+
+
   // #####################################################################################################
   // ##### Start of the xxToOsmxx Block #####
   applyToOsmPreProcessing: function(attrs, layerName, geometryType)
   {
-    // Drop the FCSUBTYPE since we don't use it
-    delete attrs.FCSUBTYPE;
-
-    // List of data values to drop/ignore
-    var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
-
-    // List of attributes that can't have '0' as a value
-    var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
-
-    // This is a handy loop. We use it to:
-    // 1) Remove all of the "No Information" and -999999 fields
-    // 2) Convert all of the Attrs to uppercase - if needed
-    // 3) Swap some of the funky named attrs around
-    for (var col in attrs)
-    {
-      // slightly ugly but we would like to account for: 'No Information','noInformation' etc
-      // First, push to lowercase
-      var attrValue = attrs[col].toString().toLowerCase();
-
-      // Get rid of the spaces in the text
-      attrValue = attrValue.replace(/\s/g, '');
-
-      // Wipe out the useless values
-      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
-      {
-        delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
-        continue;
-      }
-
-      // Remove attributes with '0' values if they can't be '0'
-      if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
-      {
-        delete attrs[col];
-        continue;
-      }
-
-      // Now see if we need to swap attr names
-      if (col in tds40.rules.swapListIn)
-      {
-        // Debug:
-        // print('Swapped: ' + tds40.rules.swapList[i]);
-        attrs[tds40.rules.swapListIn[col]] = attrs[col];
-        delete attrs[col];
-        continue;
-      }
-
-      // The following is to account for TDSv30 vs TDSv40 attribute naming. Somehow
-      // they had the bright idea to rename XXX1 to XXX for a stack of features:
-      // E.g. FFN1 -> FFN
-      var endChar = col.charAt(col.length - 1);
-      if (endChar == 1 && ['LC1','ZI016_WD1','ZI020_FI1','MGL1'].indexOf(col) == -1)
-      {
-        attrs[col.slice(0,-1)] = attrs[col];
-        // Debug:
-        // print('Swapped: ' + col);
-        delete attrs[col];
-        continue;
-      }
-    } // End in attrs loop
-
-    // Undergrowth Density in Thicket & Swamp
-    if (attrs.DMBL && (attrs.DMBL == attrs.DMBU))
-    {
-      tags['undergrowth:density'] = attrs.DMBL;
-      delete attrs.DMBU;
-      delete attrs.DMBL;
-    }
-
-    // Drop all of the XXX Closure default values IFF the associated attributes are not set
-    // Doing this after the main cleaning loop so all of the -999999 values are
-    // already gone and we can just check for existance
-    for (var i in tds40.rules.closureList)
-    {
-      if (attrs[i])
-      {
-        if (attrs[tds40.rules.closureList[i][0]] || attrs[tds40.rules.closureList[i][1]])
-        {
-          continue;
-        }
-        else
-        {
-          delete attrs[i];
-        }
-      }
-    } // End closureList
-
     // Tag retired
     if (tags.controlling_authority)
     {
@@ -986,22 +992,19 @@ tds40 = {
 
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
-    if ((attrs.F_CODE == 'AL013' || attrs.F_CODE == 'AH055') && !(tags.building)) tags.building = 'yes';
+    if (attrs.F_CODE == 'AH055' && !(tags.building)) tags.building = 'bunker';
+
+    if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
 
     if (tags.building == 'yes')
     {
       // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
       if (tags.use && ((tags.use.indexOf('manufacturing') > -1) || (tags.use.indexOf('processing') > -1))) tags.building = 'industrial';
-      /*
-            else if (tags.use in facilityList)
-            {
-                tags.building = facilityList[tags.use];
-                // delete tags.use;
-            }
-       */
-
-      // Undo the blanket AL013/AL055 building assignment if required
-      if (tags.military == 'bunker') delete tags.building;
+      // else if (tags.use in facilityList)
+      // {
+      //     tags.building = facilityList[tags.use];
+      //     // delete tags.use;
+      // }
     }
 
     // Education:
@@ -2339,6 +2342,9 @@ tds40 = {
 
       tds40.lookup = translate.createLookup(tds40.rules.one2one);
     }
+
+    // Clean out the usless values
+    tds40.cleanAttrs(attrs);
 
     // Untangle TDS attributes & OSM tags
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import

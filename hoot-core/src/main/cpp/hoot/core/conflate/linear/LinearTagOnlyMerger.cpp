@@ -112,7 +112,7 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
   LOG_TRACE("LinearTagOnlyMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
   // If just one of the features is a bridge, we want the bridge feature to separate from the road
-  // feature its being merged with.  So, use a geometry AND tag merger.
+  // feature its being merged with. So, use a geometry AND tag merger.
 
   std::vector<ConstElementPtr> elements;
   elements.push_back(e1);
@@ -168,10 +168,10 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
       elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement, map, replaced);
 }
 
-bool LinearTagOnlyMerger::_mergeWays(ElementPtr elementWithTagsToKeep,
-                                      ElementPtr elementWithTagsToRemove,
-                                      const bool removeSecondaryElement, const OsmMapPtr& map,
-                                      std::vector<std::pair<ElementId, ElementId>>& replaced)
+bool LinearTagOnlyMerger::_mergeWays(
+  ElementPtr elementWithTagsToKeep, ElementPtr elementWithTagsToRemove,
+  const bool removeSecondaryElement, const OsmMapPtr& map,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   if (_conflictExists(elementWithTagsToKeep, elementWithTagsToRemove))
   {

@@ -38,7 +38,6 @@ namespace hoot
 {
 
 /**
- * Rename to NetworkMerger and delete NetworkMerger?
  * Merges one or more partial matches. The matches must not be conflicting.
  */
 class PartialNetworkMerger : public MergerBase, public EidMapper

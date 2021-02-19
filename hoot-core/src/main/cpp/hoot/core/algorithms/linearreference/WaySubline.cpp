@@ -146,7 +146,8 @@ QString WaySubline::toString() const
   return "start: " + getStart().toString() + " end: " + getEnd().toString();
 }
 
-WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf, bool reuse) const
+WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf,
+                         bool reuse) const
 {
   ConstWayPtr way = _start.getWay();
 
