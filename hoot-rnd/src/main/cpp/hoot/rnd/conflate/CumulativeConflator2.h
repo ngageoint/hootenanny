@@ -28,6 +28,8 @@
 #ifndef CUMULATIVE_CONFLATOR_2_H
 #define CUMULATIVE_CONFLATOR_2_H
 
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
 // Qt
 #include <QStringList>
 #include <QDir>
@@ -96,7 +98,8 @@ public:
   void setMaxIterations(int max) { _maxIterations = max; }
   void setArgs(const QStringList& args) { _args = args; }
   void setKeepIntermediateOutputs(bool keep) { _keepIntermediateOutputs = keep; }
-  //void setInputSortScoreType(QString scoreTypeStr) { _inputSortScoreType = scoreTypeStr; }
+  void setInputSortScoreType(QString scoreTypeStr) { _inputSortScoreType = scoreTypeStr; }
+  void setSortIncreasing(bool sortIncreasing) { _sortIncreasing = sortIncreasing; }
 
 private:
 
@@ -105,13 +108,16 @@ private:
   bool _leaveTransferredTags;
   int _maxIterations;
   bool _keepIntermediateOutputs;
-  //QString _inputSortScoreType;
+  QString _inputSortScoreType;
+  bool _sortIncreasing;
 
   QStringList _args;
 
   static const int FILE_NUMBER_PAD_SIZE = 3;
 
   QElapsedTimer _conflateTimer;
+
+  static const bool TEST_RUN;
 
   int _getNumIterations(const QStringList& inputs) const;
 
@@ -120,6 +126,9 @@ private:
 
   void _transferTagsToInputs(const QDir& input, QStringList& inputs, const QString& output);
   void _removeTransferredTags(const QString& url);
+
+  void _sortInputsByScore(const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap);
+  void _printOutputScore(const OsmMapPtr& firstInputMap, const OsmMapPtr& outputMap);
 };
 
 }

@@ -109,12 +109,18 @@ public:
       args.removeAll("--keep-intermediate-outputs");
     }
     QString inputSortScoreType;
-    if (args.contains("--sort-inputs-by-score"))
+    if (args.contains("--sort-inputs"))
     {
-      const int optionNameIndex = args.indexOf("--sort-inputs-by-score");
+      const int optionNameIndex = args.indexOf("--sort-inputs");
       inputSortScoreType = args.at(optionNameIndex + 1).trimmed().toLower();
       args.removeAt(optionNameIndex + 1);
       args.removeAt(optionNameIndex);
+    }
+    bool sortIncreasing = false;
+    if (args.contains("--sort-increasing"))
+    {
+      sortIncreasing = true;
+      args.removeAll("--sort-increasing");
     }
 
     if (args.size() != 2)
@@ -138,6 +144,7 @@ public:
     {
       conflator.setInputSortScoreType(inputSortScoreType);
     }
+    conflator.setSortIncreasing(sortIncreasing);
     conflator.conflate(input, args[1]);
 
     LOG_STATUS(

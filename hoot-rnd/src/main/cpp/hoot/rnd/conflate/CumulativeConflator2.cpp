@@ -48,17 +48,21 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/rnd/ops/SmallDisconnectedWayRemover.h>
 #include <hoot/core/algorithms/extractors/FeatureExtractor.h>
-#include <hoot/core/scoring/BaseComparator.h>
+#include <hoot/core/scoring/MapCompareUtils.h>
 #include <hoot/rnd/ops/UnlikelyRoadRemover.h>
 
 namespace hoot
 {
 
+// runs through input processing w/o conflating, scoring, etc; useful for debugging
+const bool CumulativeConflator2::TEST_RUN = false;
+
 CumulativeConflator2::CumulativeConflator2() :
 _reverseInputs(false),
 _leaveTransferredTags(false),
 _maxIterations(-1),
-_keepIntermediateOutputs(false)
+_keepIntermediateOutputs(false),
+_sortIncreasing(false)
 {
 }
 
@@ -75,6 +79,14 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
   }
   QStringList inputs = input.entryList(QDir::Files, sortFlags);
   QFileInfo outputInfo(output);
+
+  OsmMapPtr firstInputMap;
+  if (!_inputSortScoreType.isEmpty())
+  {
+    // Sort our inputs by some scoring method in the hopes the conflation output is cleaner when
+    // they are conflated in this order.
+    _sortInputsByScore(input, inputs, firstInputMap);
+  }
 
   const bool transferTags = !_transferTagsInput.isEmpty();
   if (transferTags)
@@ -126,7 +138,10 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
       "Conflating (" << i << "/" << numIterations << ") " << input1Info.fileName() <<
       " with " << input2Info.fileName() << " and writing output to " <<
       tempOutputInfo.fileName() << "...");
-    ConflateExecutor().conflate(input1, input2, tempOutput);
+    if (!TEST_RUN)
+    {
+      ConflateExecutor().conflate(input1, input2, tempOutput);
+    }
     LOG_STATUS("Conflation took: " << StringUtils::millisecondsToDhms(_conflateTimer.elapsed()));
 
     if (i != 1 && !_keepIntermediateOutputs)
@@ -148,7 +163,19 @@ void CumulativeConflator2::conflate(const QDir& input, const QString& output)
   {
     _resetInitConfig(_args);  // This gets us back to our initial conflate settings.
     // TODO: hack specific to current use case; generalize
-    _removeTransferredTags(output);
+    if (!TEST_RUN)
+    {
+      _removeTransferredTags(output);
+    }
+  }
+
+  if (!_inputSortScoreType.isEmpty() && !TEST_RUN)
+  {
+    // Score the very first input (base input) against the final output to see how they compare.
+    LOG_STATUS("Reading output map for comparison: ... " << output << "...");
+    OsmMapPtr outputMap(new OsmMap());
+    OsmMapReaderFactory::read(outputMap, true, true, output);
+    _printOutputScore(firstInputMap, outputMap);
   }
 }
 
@@ -240,9 +267,11 @@ void CumulativeConflator2::_transferTagsToInputs(
       " from " << tagInputInfo.fileName() << " to " << tagTransferredInput << "...");
 
     _conflateTimer.restart();
-    ConflateExecutor().conflate(
-      input.path() + "/" + inputs.at(i), _transferTagsInput, tagTransferredInputFullPath);
-
+    if (!TEST_RUN)
+    {
+      ConflateExecutor().conflate(
+        input.path() + "/" + inputs.at(i), _transferTagsInput, tagTransferredInputFullPath);
+    }
     modifiedInputs.append(tagTransferredInput);
 
     LOG_STATUS("Transfer took: " << StringUtils::millisecondsToDhms(_conflateTimer.elapsed()));
@@ -275,6 +304,92 @@ void CumulativeConflator2::_removeTransferredTags(const QString& url)
   map->visitWaysRw(tagPreserver);
 
   OsmMapWriterFactory::write(map, url);
+}
+
+void CumulativeConflator2::_sortInputsByScore(
+  const QDir& input, QStringList& inputs, OsmMapPtr& firstInputMap)
+{
+  const QString sortOrderStr = _sortIncreasing ? "increasing" : "decreasing";
+  LOG_STATUS(
+    "Sorting inputs in " << sortOrderStr << " order based on: " << _inputSortScoreType << "...");
+
+  QMultiMap<double, QString> scoresToInputs;
+
+  // Compare our first input against every other input.
+  LOG_STATUS("Loading base comparison map...");
+  if (!TEST_RUN)
+  {
+    firstInputMap.reset(new OsmMap());
+    OsmMapReaderFactory::read(firstInputMap, true, true, input.path() + "/" + inputs.at(0));
+  }
+  // Score ranges are 0 to 1000, so give the first input a score of 1001 to ensure it remains at
+  // the start of the inputs list after scoring the other inputs.
+  scoresToInputs.insert(1001, inputs.at(0));
+
+  for (int i = 1; i < inputs.size(); i++)
+  {
+    LOG_STATUS(
+      "Scoring base map against comparison map (" << i << "/" << (inputs.size() - 1) << "): " +
+      inputs.at(i) + "...");
+    OsmMapPtr map2(new OsmMap());
+    if (!TEST_RUN)
+    {
+      OsmMapReaderFactory::read(map2, true, true, input.path() + "/" + inputs.at(i));
+    }
+
+    int score = -1;
+    if (!TEST_RUN)
+    {
+      if (_inputSortScoreType == "graph")
+      {
+        score = MapCompareUtils::getGraphComparisonFinalScore(firstInputMap, map2);
+      }
+      else if (_inputSortScoreType == "raster")
+      {
+        score = MapCompareUtils::getRasterComparisonFinalScore(firstInputMap, map2);
+      }
+      LOG_STATUS(_inputSortScoreType << " comparison score for " << inputs.at(i) << ": " << score);
+    }
+    scoresToInputs.insert(score, inputs.at(i));
+  }
+
+  // values in increasing order by default
+  QStringList scoreIncreasingSortedInputs = scoresToInputs.values();
+  LOG_VARD(scoreIncreasingSortedInputs);
+  LOG_STATUS("Inputs before sorting: " << inputs);
+  if (!_sortIncreasing)
+  {
+    StringUtils::reverse(scoreIncreasingSortedInputs);
+    inputs = scoreIncreasingSortedInputs; // now in decreasing order
+  }
+  else
+  {
+    inputs = scoreIncreasingSortedInputs;
+  }
+  LOG_STATUS("Inputs after sorting: " << inputs);
+}
+
+void CumulativeConflator2::_printOutputScore(
+  const OsmMapPtr& firstInputMap, const OsmMapPtr& outputMap)
+{
+  LOG_STATUS("Scoring initial input against final output...");
+  int inputOutputComparisonScore = -1;
+  if (!TEST_RUN)
+  {
+    if (_inputSortScoreType == "graph")
+    {
+      inputOutputComparisonScore =
+        MapCompareUtils::getGraphComparisonFinalScore(firstInputMap, outputMap);
+    }
+    else if (_inputSortScoreType == "raster")
+    {
+      inputOutputComparisonScore =
+        MapCompareUtils::getRasterComparisonFinalScore(firstInputMap, outputMap);
+    }
+  }
+  LOG_STATUS(
+    _inputSortScoreType << " comparison score first input vs output: " <<
+    inputOutputComparisonScore);
 }
 
 }
