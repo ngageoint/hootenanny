@@ -29,8 +29,6 @@
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/rnd/conflate/CumulativeConflator.h>
-#include <hoot/rnd/conflate/CumulativeConflator2.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -80,7 +78,7 @@ public:
     const QStringList inputs = inputsTemp;
     const QString output = args.last();
 
-    CumulativeConflator2::conflate(inputs, output);
+    //CumulativeConflator2::conflate(inputs, output);
 
     LOG_STATUS(
       "Conflation ran in " << StringUtils::millisecondsToDhms(timer.elapsed()) << " total.");
