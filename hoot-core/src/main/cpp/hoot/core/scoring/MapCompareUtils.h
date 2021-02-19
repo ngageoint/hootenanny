@@ -47,7 +47,8 @@ public:
    * @param numIterations
    */
   static void getAttributeComparisonFinalScores(
-    OsmMapPtr map1, OsmMapPtr map2, int& mean, int& confidence, const int numIterations);
+    const OsmMapPtr& map1, const OsmMapPtr& map2, int& mean, int& confidence,
+    const int numIterations);
 
   /**
    * TODO
@@ -59,7 +60,7 @@ public:
    * @return
    */
   static int getAttributeComparisonFinalScore(
-    OsmMapPtr map1, OsmMapPtr map2, const int numIterations);
+    const OsmMapPtr& map1, const OsmMapPtr& map2, const int numIterations);
 
   /**
    * TODO
@@ -70,7 +71,7 @@ public:
    * @param confidence
    */
   static void getGraphComparisonRawScores(
-    OsmMapPtr map1, OsmMapPtr map2, double& mean, double& confidence);
+    const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean, double& confidence);
 
   /**
    * TODO
@@ -79,7 +80,7 @@ public:
    * @param map2
    * @return
    */
-  static int getGraphComparisonFinalScore(OsmMapPtr map1, OsmMapPtr map2);
+  static int getGraphComparisonFinalScore(const OsmMapPtr& map1, const OsmMapPtr& map2);
 
   /**
    * TODO
@@ -88,7 +89,8 @@ public:
    * @param map2
    * @param mean
    */
-  static void getRasterComparisonRawScores(OsmMapPtr map1, OsmMapPtr map2, double& mean);
+  static void getRasterComparisonRawScores(
+    const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean);
 
   /**
    * TODO
@@ -97,7 +99,7 @@ public:
    * @param map2
    * @return
    */
-  static int getRasterComparisonFinalScore(OsmMapPtr map1, OsmMapPtr map2);
+  static int getRasterComparisonFinalScore(const OsmMapPtr& map1, const OsmMapPtr& map2);
 
   /**
    * TODO

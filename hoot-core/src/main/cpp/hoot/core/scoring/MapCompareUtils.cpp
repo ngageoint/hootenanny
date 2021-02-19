@@ -35,7 +35,7 @@ namespace hoot
 {
 
 void MapCompareUtils::getAttributeComparisonFinalScores(
-  OsmMapPtr map1, OsmMapPtr map2, int& mean, int& confidence, const int numIterations)
+  const OsmMapPtr& map1, const OsmMapPtr& map2, int& mean, int& confidence, const int numIterations)
 {
   Tgs::Random::instance()->seed(100);
 
@@ -52,7 +52,7 @@ void MapCompareUtils::getAttributeComparisonFinalScores(
 }
 
 int MapCompareUtils::getAttributeComparisonFinalScore(
-  OsmMapPtr map1, OsmMapPtr map2, const int numIterations)
+  const OsmMapPtr& map1, const OsmMapPtr& map2, const int numIterations)
 {
   int mean;
   int confidence;
@@ -61,7 +61,7 @@ int MapCompareUtils::getAttributeComparisonFinalScore(
 }
 
 void MapCompareUtils::getGraphComparisonRawScores(
-  OsmMapPtr map1, OsmMapPtr map2, double& mean, double& confidence)
+  const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean, double& confidence)
 {
   Tgs::Random::instance()->seed(0);
   GraphComparator graph(map1, map2);
@@ -77,7 +77,7 @@ void MapCompareUtils::getGraphComparisonRawScores(
   mean += thisMean;
 }
 
-int MapCompareUtils::getGraphComparisonFinalScore(OsmMapPtr map1, OsmMapPtr map2)
+int MapCompareUtils::getGraphComparisonFinalScore(const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
   double mean;
   double confidence;
@@ -85,14 +85,15 @@ int MapCompareUtils::getGraphComparisonFinalScore(OsmMapPtr map1, OsmMapPtr map2
   return convertRawScoreToFinalScore(mean);
 }
 
-void MapCompareUtils::getRasterComparisonRawScores(OsmMapPtr map1, OsmMapPtr map2, double& mean)
+void MapCompareUtils::getRasterComparisonRawScores(
+  const OsmMapPtr& map1, const OsmMapPtr& map2, double& mean)
 {
   RasterComparator raster(map1, map2);
   raster.setPixelSize(5);
   mean += raster.compareMaps();
 }
 
-int MapCompareUtils::getRasterComparisonFinalScore(OsmMapPtr map1, OsmMapPtr map2)
+int MapCompareUtils::getRasterComparisonFinalScore(const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
   double mean;
   getRasterComparisonRawScores(map1, map2, mean);
