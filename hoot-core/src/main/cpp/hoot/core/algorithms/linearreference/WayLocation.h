@@ -71,6 +71,8 @@ public:
 
   WayLocation(ConstOsmMapPtr map, ConstWayPtr way, int segmentIndex, double segmentFraction);
 
+  WayLocation(const WayLocation& other);
+
   virtual ~WayLocation() {}
 
   Meters calculateDistanceFromEnd() const;
@@ -95,7 +97,7 @@ public:
   /**
    * Construct a way location that represents the end of the specified way.
    */
-  static WayLocation createAtEndOfWay(const ConstOsmMapPtr &map, const ConstWayPtr way);
+  static WayLocation createAtEndOfWay(const ConstOsmMapPtr& map, const ConstWayPtr way);
 
   /**
    * Computes the location of a point a given length along a line segment.  If the length exceeds
@@ -152,7 +154,7 @@ public:
 
   QString toString() const;
 
-protected:
+private:
 
   ConstOsmMapPtr _map;
   ConstWayPtr _way;
