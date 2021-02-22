@@ -150,25 +150,18 @@ bool ElementCacheLRU::hasMoreElements()
 
 ElementPtr ElementCacheLRU::readNextElement()
 {
-  ElementPtr returnElement;
+  ConstElementPtr returnElement;
 
   if ( hasMoreElements() == true )
   {
     if ( _nodesIter != _nodes.end() )
-    {
-      *returnElement = *getNextNode();
-    }
+      returnElement = std::dynamic_pointer_cast<const Element>(getNextNode());
     else if ( _waysIter != _ways.end() )
-    {
-      *returnElement = *getNextWay();
-    }
+      returnElement = std::dynamic_pointer_cast<const Element>(getNextWay());
     else
-    {
-      *returnElement = *getNextRelation();
-    }
+      returnElement = std::dynamic_pointer_cast<const Element>(getNextRelation());
   }
-
-  return returnElement;
+  return std::const_pointer_cast<Element>(returnElement);
 }
 
 void ElementCacheLRU::writeElement(ElementPtr& element)

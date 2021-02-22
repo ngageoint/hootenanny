@@ -56,7 +56,7 @@ namespace Tgs
     class LeafDistance
     {
     public:
-      LeafDistance() {}
+      LeafDistance() : distance(0.0), fid(0) { }
 
       LeafDistance(double dist, int fid)
       {
