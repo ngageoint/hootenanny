@@ -1225,6 +1225,13 @@ If true, multiple debug maps will be generated during a conflation job.  The out
 is controlled by debug.maps.filename.  The maps can be large and slow things down
 significantly.
 
+=== differential.remove.partial.matches.as.whole
+
+* Data Type: bool
+* Default Value: `true`
+
+TODO
+
 === differential.remove.reference.data
 
 * Data Type: bool
