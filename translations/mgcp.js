@@ -927,7 +927,7 @@ mgcp = {
     if (geometryType == 'Area' && ! translate.isOsmArea(tags))
     {
       // Debug
-      print('Adding area=yes');
+      // print('Adding area=yes');
       tags.area = 'yes';
     }
 
@@ -1098,7 +1098,7 @@ mgcp = {
       ["t.military == 'bunker' && t.building == 'bunker'","delete t.building"],
       ["t.natural == 'sinkhole'","a.F_CODE = 'BH145'; t['water:sink:type'] = 'disappearing'; delete t.natural"],
       ["t.natural == 'spring' && !(t['spring:type'])","t['spring:type'] = 'spring'"],
-      ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
+      // ["t.power == 'generator'","a.F_CODE = 'AL015'; t.use = 'power_generation'"],
       //["t.power == 'line'","t['cable:type'] = 'power'; t.cable = 'yes'"],
       ["t.power == 'tower'","t['cable:type'] = 'power'; t.pylon = 'yes'; delete t.power"],
       ["t.rapids == 'yes'","t.waterway = 'rapids'"],
@@ -1214,6 +1214,18 @@ mgcp = {
 
       delete tags.barrier; // Take away the walls...
     }
+
+    // Wind Turbines vs power plants
+    if (tags['generator:source'] == 'wind')
+    {
+      attrs.F_CODE = 'AJ051';
+    }
+    else if (tags.power == 'generator')
+    {
+      attrs.F_CODE = 'AL015';
+      tags.use = 'power_generation';
+    }
+
 
     // Going out on a limb and processing OSM specific tags:
     // - Building == a thing,
@@ -1470,7 +1482,7 @@ mgcp = {
     if (attrs.F_CODE == 'AL013')
     {
       // Debug
-      print('Swapped AL013');
+      // print('Swapped AL013');
       attrs.F_CODE = 'AL015';
     }
 
