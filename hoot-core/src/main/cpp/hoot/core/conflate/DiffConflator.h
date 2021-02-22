@@ -233,7 +233,16 @@ private:
     const std::vector<ConstMatchPtr>& matches);
 
   void _removeRefData();
-  void _removeMatches(const Status& status);
+  bool _satisfiesElementRemovalCondition(
+    const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const;
+  void _removeMatchElementsCompletely(const Status& status);
+  std::set<std::pair<ElementId, ElementId>> _getMatchElementIds(
+    const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
+    const Status& status) const;
+  void _removeMatchElementPairCompletely(
+    const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
+    const Status& status);
+  void _removeMatchElementsPartially(const Status& status);
   void _removeMetadataTags();
 };
 
