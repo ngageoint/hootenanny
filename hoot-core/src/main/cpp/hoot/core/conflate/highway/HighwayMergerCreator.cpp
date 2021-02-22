@@ -59,25 +59,25 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
   // Go through all the matches.
   for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
   {
-    ConstMatchPtr m = *it;
-    LOG_VART(m->toString());
-    const HighwayMatch* hm = dynamic_cast<const HighwayMatch*>(m.get());
+    ConstMatchPtr match = *it;
+    LOG_VART(match->toString());
+    const HighwayMatch* highwayMatch = dynamic_cast<const HighwayMatch*>(match.get());
     // Check to make sure all the input matches are highway matches.
-    if (hm == 0)
+    if (highwayMatch == 0)
     {
       // return an empty result
       LOG_TRACE(
         "Returning empty result due to match not being " << HighwayMatch::className() << ": " <<
-        m->toString());
+        match->toString());
       return false;
     }
     // Add all the element to element pairs to a set.
     else
     {
       // There should only be one HighwayMatch in a set.
-      sublineMatcher = hm->getSublineMatcher();
-      set<pair<ElementId, ElementId>> s = hm->getMatchPairs();
-      eids.insert(s.begin(), s.end());
+      sublineMatcher = highwayMatch->getSublineMatcher();
+      set<pair<ElementId, ElementId>> matchPairs = highwayMatch->getMatchPairs();
+      eids.insert(matchPairs.begin(), matchPairs.end());
     }
   }
   LOG_VART(eids);
