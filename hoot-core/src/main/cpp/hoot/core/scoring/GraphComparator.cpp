@@ -82,17 +82,24 @@ GraphComparator::GraphComparator(OsmMapPtr map1, OsmMapPtr map2) :
 cv::Mat GraphComparator::_calculateCostDistance(
   OsmMapPtr map, Coordinate c, double& maxGraphCost, const RandomPtr& random)
 {
+  LOG_TRACE("Calculating cost distance for: " << c << "...");
+
   // make a copy of the map so we can manipulate it.
   map.reset(new OsmMap(map));
 
   // find the nearest feature
+  LOG_TRACE("Finding nearest feature...");
   long wId = map->getIndex().findNearestWay(c);
   WayPtr w = map->getWay(wId);
+  LOG_VART(w.get());
 
   // split way at c
+  LOG_TRACE("Splitting way...");
   WayLocation wl = LocationOfPoint::locate(map, w, c);
+  LOG_VART(wl.isValid());
   vector<WayPtr > v = WaySplitter::split(map, w, wl);
   wl = LocationOfPoint::locate(map, v[0], c);
+  LOG_VART(wl.isValid());
   if (wl.isNode() == false)
   {
     // I haven't been able to recreate the case when this happens.
@@ -101,9 +108,11 @@ cv::Mat GraphComparator::_calculateCostDistance(
   assert(wl.isNode() == true);
 
   // populate graph
+  LOG_TRACE("Populating graph...");
   std::shared_ptr<DirectedGraph> graph(new DirectedGraph());
   graph->deriveEdges(map);
 
+  LOG_TRACE("Calculating cost...");
   ShortestPath sp(graph);
   // set cost at c to zero.
   long sourceId = v[0]->getNodeId(wl.getSegmentIndex());
@@ -124,6 +133,8 @@ cv::Mat GraphComparator::_calculateCostDistance(
 
 void GraphComparator::_calculateRasterCost(cv::Mat& mat, const RandomPtr& random)
 {
+  LOG_TRACE("Calculating raster cost...");
+
   ProbablePathCalculator ppc(random);
   ppc.setRandomNoise(0.0);
   ppc.setRandomPatches(0.0, 1);
@@ -306,7 +317,6 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
   std::shared_ptr<DirectedGraph> graph(new DirectedGraph());
   graph->deriveEdges(map);
 
-  LOG_DEBUG("Running cost");
   ShortestPath sp(graph);
 
   for (size_t i = 0; i < c.size(); i++)
@@ -323,7 +333,6 @@ void GraphComparator::drawCostDistance(OsmMapPtr map, vector<Coordinate>& c,
 
   // calculate cost
   sp.calculateCost();
-  LOG_DEBUG("Cost done");
 
   cv::Mat mat = _paintGraph(map, *graph, sp, maxGraphCost);
 
@@ -422,7 +431,7 @@ void GraphComparator::_exportGraphImage(OsmMapPtr map, DirectedGraph& /*graph*/,
 
 void GraphComparator::_init()
 {
-  // make sure the intersections only lay on end nodes.
+  // Make sure the intersections only lay on end nodes.
   IntersectionSplitter::splitIntersections(_mapP1);
   IntersectionSplitter::splitIntersections(_mapP2);
   _debugImages = false;
@@ -431,6 +440,8 @@ void GraphComparator::_init()
 cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, ShortestPath& sp,
                                      double& maxGraphCost)
 {
+  LOG_TRACE("Painting graph...");
+
   const WayMap& ways = map->getWays();
 
   cv::Mat mat(cvSize(_width, _height), CV_32FC1);
@@ -447,7 +458,14 @@ cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, Shorte
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     WayPtr w = it->second;
+    LOG_VART(w.get());
+    LOG_VART(w->getNodeIds().size());
+    if (w->getNodeIds().size() == 0)
+    {
+      continue;
+    }
     double cost = sp.getNodeCost(w->getNodeIds()[0]);
+    LOG_VART(cost);
     if (cost >= 0)
     {
       double friction = graph.determineCost(w);
