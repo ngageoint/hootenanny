@@ -11,7 +11,7 @@ function usage() {
   echo "  --remove-unlikely         remove features that are unlikely to be roads"
   echo "  --resolve                 resolve reviews automatically"
   echo "  --snap-unconnected        snap roads unconnected on one end to nearby roads"
-  echo "  --quiet            run Hootenanny in quiet mode"
+  echo "  --quiet                   run Hootenanny in quiet mode"
 }
 
 START_POSITION=0
@@ -96,14 +96,6 @@ HOOT_OPTS+=" -D conflate.pre.ops-=hoot::RemoveRoundabouts"
 HOOT_OPTS+=" -D conflate.post.ops-=hoot::ReplaceRoundabouts"
 HOOT_OPTS+=" -D conflate.post.ops-=hoot::RoadCrossingPolyReviewMarker"
 HOOT_OPTS+=" -D conflate.post.ops-=hoot::AddHilbertReviewSortOrderOp"
-
-#TODO: Figure out how to make these work with parallel
-#HOOT_OPTS+=" -D map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::SmallHighwayMerger"
-#HOOT_OPTS+=" -D conflate.post.ops=hoot::RemoveMissingElementsVisitor;hoot::SuperfluousNodeRemover;hoot::SmallHighwayMerger;hoot::RemoveMissingElementsVisitor;hoot::RemoveInvalidReviewRelationsVisitor;hoot::RemoveDuplicateReviewsOp;hoot::RemoveInvalidRelationVisitor;hoot::RemoveInvalidMultilineStringMembersVisitor;hoot::SuperfluousWayRemover;hoot::RemoveDuplicateWayNodesVisitor;hoot::DuplicateWayRemover;hoot::RemoveDuplicateRelationMembersVisitor;hoot::RemoveEmptyRelationsOp;hoot::RelationCircularRefRemover;hoot::AddHilbertReviewSortOrderOp"
-
-#HOOT_OPTS+=" -D highway.review.threshold=1.0"
-#HOOT_OPTS+=" -D highway.match.threshold=0.5"
-#HOOT_OPTS+=" -D highway.miss.threshold=0.7"
 HOOT_OPTS+=" -D writer.sort.tags.imagery.source=true"
 HOOT_OPTS+=$RESOLVE_REVIEWS
 HOOT_OPTS+=$REMOVE_DISCONNECTED
