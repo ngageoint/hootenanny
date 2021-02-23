@@ -473,9 +473,12 @@ void OsmXmlReader::read(const OsmMapPtr& map)
 
   // If cropping was run with missing element being removed, then this shouldn't be necessary.
   ReportMissingElementsVisitor visitor;
-  LOG_INFO("\t" << visitor.getInitStatusMessage());
   _map->visitRw(visitor);
-  LOG_DEBUG("\t" << visitor.getCompletedStatusMessage());
+  if (visitor.getMissingCount() > 0)
+  {
+    LOG_INFO("\t" << visitor.getInitStatusMessage());
+    LOG_DEBUG("\t" << visitor.getCompletedStatusMessage());
+  }
 
   _map.reset();
 }

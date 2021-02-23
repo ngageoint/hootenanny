@@ -68,7 +68,8 @@ _osmSchema(ConfigOptions().getMapWriterSchema()),
 _precision(ConfigOptions().getWriterPrecision()),
 _encodingErrorCount(0),
 _numWritten(0),
-_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10)
+_statusUpdateInterval(ConfigOptions().getTaskStatusUpdateInterval() * 10),
+_sortSourceImageryTag(ConfigOptions().getWriterSortTagsImagerySource())
 {
 }
 
@@ -321,10 +322,24 @@ void OsmXmlWriter::_writeTags(const ConstElementPtr& element)
       tags.insert(MetadataTags::HootWayNodeCount(), QString("%1").arg(way->getNodeCount()));
   }
 
+  //  Sort the keys for output
   QList<QString> keys = tags.keys();
   if (_sortTags)
     keys.sort();
 
+  //  Sort the `source:imagery` value for output
+  if (_sortSourceImageryTag && keys.contains(MetadataTags::SourceImagery()))
+  {
+    QString v = tags.get(MetadataTags::SourceImagery());
+    if (v.contains(";"))
+    {
+      QStringList values = v.split(";");
+      values.sort();
+      tags.set(MetadataTags::SourceImagery(), values.join(";"));
+    }
+  }
+
+  //  Write out the tags with their key/value pairs
   for (QList<QString>::iterator it = keys.begin(); it != keys.end(); ++it)
   {
     QString key = *it;
