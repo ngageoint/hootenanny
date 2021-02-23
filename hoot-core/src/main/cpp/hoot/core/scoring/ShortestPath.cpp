@@ -27,7 +27,9 @@
 
 #include "ShortestPath.h"
 
+// Hoot
 #include <hoot/core/scoring/DirectedGraph.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <cassert>
@@ -43,6 +45,8 @@ ShortestPath::ShortestPath(const std::shared_ptr<const DirectedGraph>& graph)
 void ShortestPath::calculateCost()
 {
   assert(_queue.empty() == true);
+
+  LOG_TRACE("Calculating cost...");
 
   for (QHash<long, double>::const_iterator it = _cost.begin(); it != _cost.end(); ++it)
   {

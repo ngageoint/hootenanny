@@ -146,6 +146,8 @@ void BaseComparator::_calculateRingColor(double v, double, QRgb& c)
 Coordinate BaseComparator::_findNearestPointOnFeature(
   const std::shared_ptr<OsmMap>& map, const Coordinate& c)
 {
+  LOG_TRACE("Finding nearest point to: " << c << "...");
+
   Coordinate result;
 
   // find the nearest feature

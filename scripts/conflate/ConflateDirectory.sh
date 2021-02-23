@@ -4,10 +4,13 @@ set -e
 function usage() {
   echo "Usage: ConflateDirectory.sh [OPTIONS...] [START POSITION] DIRECTORY..."
   echo ""
-  echo "  -h, --help         show usage"
-  echo "  --network          use Hootenanny network conflation algorithm"
-  echo "  --parallel         run conflation jobs in parallel"
-  echo "  --resolve          resolve reviews automatically"
+  echo "  -h, --help                show usage"
+  echo "  --network                 use Hootenanny network conflation algorithm"
+  echo "  --parallel                run conflation jobs in parallel"
+  echo "  --remove-disconnected     remove small and completely disconnected roads"
+  echo "  --remove-unlikely         remove features that are unlikely to be roads"
+  echo "  --resolve                 resolve reviews automatically"
+  echo "  --snap-unconnected        snap roads unconnected on one end to nearby roads"
   echo "  --quiet            run Hootenanny in quiet mode"
 }
 
@@ -16,6 +19,9 @@ ALGORITHM_CONF="UnifyingAlgorithm.conf -D match.creators=hoot::HighwayMatchCreat
 FILE_PATH=
 PARALLEL="no"
 RESOLVE_REVIEWS=
+REMOVE_DISCONNECTED=
+SNAP_UNCONNECTED=
+REMOVE_UNLIKELY=
 QUIET="--status"
 
 if [ $# -eq 0 ]
@@ -37,12 +43,21 @@ do
   elif [ $(( ARGUMENT )) -gt 0 ]
   then
     START_POSITION=$ARGUMENT
+  elif [ $ARGUMENT == "--remove-disconnected" ]
+  then
+    REMOVE_DISCONNECTED=" -D small.disconnected.way.remover.max.length=20.0 -D small.disconnected.way.remover.max.node.count=3 -D conflate.pre.ops+=hoot::SmallDisconnectedWayRemover"
   elif [ $ARGUMENT == "--parallel" ]
   then
     PARALLEL="yes"
   elif [ $ARGUMENT == "--resolve" ]
   then
     RESOLVE_REVIEWS=" -D resolve.review.type=resolve -D conflate.post.ops+=hoot::ResolveReviewsOp"
+  elif [ $ARGUMENT == "--snap-unconnected" ]
+  then
+    SNAP_UNCONNECTED=" -D snap.unconnected.ways.snap.tolerance=7.0 -D snap.unconnected.ways.snap.way.statuses=Input1 -D snap.unconnected.ways.snap.to.way.statuses=Input1 -D conflate.post.ops+=hoot::UnconnectedWaySnapper"
+  elif [ $ARGUMENT == "--remove-unlikely" ]
+  then
+    REMOVE_UNLIKELY=" -D unlikely.road.remover.max.heading.variance=60.0 -D unlikely.road.remover.max.length=25.0 -D conflate.pre.ops+=hoot::UnlikelyRoadRemover"
   elif [ $ARGUMENT == "-h" ] || [ $ARGUMENT == "--help" ]
   then
     usage
@@ -75,15 +90,30 @@ LENGTH=${#FILE_ARRAY[@]}
 CONFLATION_CONF=ReferenceConflation.conf
 
 HOOT_OPTS="-C ${ALGORITHM_CONF} -C ${CONFLATION_CONF}"
-HOOT_OPTS+=" -D conflate.pre.ops=hoot::MapCleaner"
+
+# ops we don't need
+HOOT_OPTS+=" -D conflate.pre.ops-=hoot::RemoveRoundabouts"
+HOOT_OPTS+=" -D conflate.post.ops-=hoot::ReplaceRoundabouts"
+HOOT_OPTS+=" -D conflate.post.ops-=hoot::RoadCrossingPolyReviewMarker"
+HOOT_OPTS+=" -D conflate.post.ops-=hoot::AddHilbertReviewSortOrderOp"
+
 #TODO: Figure out how to make these work with parallel
 #HOOT_OPTS+=" -D map.cleaner.transforms=hoot::ReprojectToPlanarOp;hoot::DuplicateWayRemover;hoot::SuperfluousWayRemover;hoot::SmallHighwayMerger"
 #HOOT_OPTS+=" -D conflate.post.ops=hoot::RemoveMissingElementsVisitor;hoot::SuperfluousNodeRemover;hoot::SmallHighwayMerger;hoot::RemoveMissingElementsVisitor;hoot::RemoveInvalidReviewRelationsVisitor;hoot::RemoveDuplicateReviewsOp;hoot::RemoveInvalidRelationVisitor;hoot::RemoveInvalidMultilineStringMembersVisitor;hoot::SuperfluousWayRemover;hoot::RemoveDuplicateWayNodesVisitor;hoot::DuplicateWayRemover;hoot::RemoveDuplicateRelationMembersVisitor;hoot::RemoveEmptyRelationsOp;hoot::RelationCircularRefRemover;hoot::AddHilbertReviewSortOrderOp"
-HOOT_OPTS+=" -D highway.review.threshold=1.0"
-HOOT_OPTS+=" -D highway.match.threshold=0.5"
-HOOT_OPTS+=" -D highway.miss.threshold=0.7"
+
+#HOOT_OPTS+=" -D highway.review.threshold=1.0"
+#HOOT_OPTS+=" -D highway.match.threshold=0.5"
+#HOOT_OPTS+=" -D highway.miss.threshold=0.7"
 HOOT_OPTS+=" -D writer.sort.tags.imagery.source=true"
 HOOT_OPTS+=$RESOLVE_REVIEWS
+HOOT_OPTS+=$REMOVE_DISCONNECTED
+HOOT_OPTS+=$SNAP_UNCONNECTED
+HOOT_OPTS+=$REMOVE_UNLIKELY
+
+# for debugging only
+# HOOT_OPTS+=" -D bounds=8.4762,12.0504,8.4793,12.0526 -D bounds.keep.entire.features.crossing.bounds=false"
+
+# TODO: implement attribute transfer and divided highway handling
 
 if [ $PARALLEL == "no" ]
 then
