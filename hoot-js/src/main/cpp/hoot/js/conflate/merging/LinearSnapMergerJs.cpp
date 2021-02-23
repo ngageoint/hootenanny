@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/linear/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/MultipleSublineMatcherSnapMerger.h>
 
 #include <hoot/js/JsRegistrar.h>

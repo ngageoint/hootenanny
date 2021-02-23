@@ -287,6 +287,13 @@ public:
   static QString splitAndGetAtIndex(
     const QString& input, const QRegExp& splitExp, const int index);
 
+  /**
+   * Reverses the ordering of a string list
+   *
+   * @param strList the list to reverse
+   */
+  static void reverse(QStringList& strList);
+
 private:
 
   static QString _splitAndRemoveAtIndex(

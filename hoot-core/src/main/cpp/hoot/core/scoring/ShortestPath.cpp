@@ -27,7 +27,9 @@
 
 #include "ShortestPath.h"
 
+// Hoot
 #include <hoot/core/scoring/DirectedGraph.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <cassert>
@@ -44,6 +46,8 @@ void ShortestPath::calculateCost()
 {
   assert(_queue.empty() == true);
 
+  LOG_TRACE("Calculating cost...");
+
   for (QHash<long, double>::const_iterator it = _cost.begin(); it != _cost.end(); ++it)
   {
     _queue.push(Node(it.key(), it.value()));
@@ -56,7 +60,7 @@ void ShortestPath::calculateCost()
     _queue.pop();
 
     for (QMultiHash<long, DirectedGraph::Edge>::const_iterator it = edges.find(top.id);
-      it != edges.end() && it.key() == top.id; ++it)
+         it != edges.end() && it.key() == top.id; ++it)
     {
       double c = top.cost + it.value().weight;
       long nId = it.value().to;

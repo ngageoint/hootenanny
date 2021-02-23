@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/conflate/IdSwap.h>
-#include <hoot/core/conflate/linear/LinearSnapMerger.h>
+#include <hoot/core/conflate/merging/LinearSnapMerger.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
 
 namespace hoot

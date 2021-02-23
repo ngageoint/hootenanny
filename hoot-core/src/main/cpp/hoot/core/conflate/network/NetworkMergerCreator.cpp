@@ -27,7 +27,7 @@
 #include "NetworkMergerCreator.h"
 
 // hoot
-#include <hoot/core/conflate/linear/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
