@@ -52,16 +52,16 @@ public:
   static int logWarnCount;
 
   ScriptMatch() = default;
+  ScriptMatch(
+    const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
+    const ConstOsmMapPtr& map, const v8::Handle<v8::Object>& mapObj, const ElementId& eid1,
+    const ElementId& eid2, const ConstMatchThresholdPtr& mt);
   virtual ~ScriptMatch() = default;
-  /**
-   * @param mapObj This could be derived from the map, but destructing an OsmMapJs object is quite
-   *  expensive due to the amount of memory cleanup we must do in the general case.
-   */
-  ScriptMatch(const std::shared_ptr<PluginContext>& script, const v8::Persistent<v8::Object>& plugin,
-              const ConstOsmMapPtr& map, const v8::Handle<v8::Object>& mapObj,
-              const ElementId& eid1, const ElementId& eid2, const ConstMatchThresholdPtr& mt);
 
   virtual const MatchClassification& getClassification() const override { return _p; }
+
+  virtual MatchMembers getMatchMembers() const override { return _matchMembers; }
+  void setMatchMembers(const MatchMembers& matchMembers) { _matchMembers = matchMembers; }
 
   virtual QString explain() const override { return _explainText; }
 
@@ -78,7 +78,7 @@ public:
   virtual bool isWholeGroup() const override { return _isWholeGroup; }
 
   /**
-   * Simply returns the two elements that were matched.
+   * Returns the two elements that were matched
    */
   virtual std::set<std::pair<ElementId, ElementId>> getMatchPairs() const override;
 
@@ -91,9 +91,19 @@ public:
   virtual std::map<QString, double> getFeatures(const ConstOsmMapPtr& map) const override;
 
   virtual QString getDescription() const override
-  { return "Matches elements with Generic Conflation"; }
+  { return "Matches elements using Generic Conflation via Javascript"; }
+
+  /**
+   * TODO
+   *
+   * @param geometryType
+   * @return
+   */
+  static MatchMembers geometryTypeToMatchMembers(const QString& geometryType);
 
 private:
+
+  friend class ScriptMatchTest;
 
   ElementId _eid1, _eid2;
 
@@ -101,6 +111,7 @@ private:
   QString _matchName;
   bool _neverCausesConflict;
   MatchClassification _p;
+  MatchMembers _matchMembers;
 
   v8::Persistent<v8::Object> _plugin;
   std::shared_ptr<PluginContext> _script;
@@ -109,10 +120,8 @@ private:
   typedef std::pair<ElementId, ElementId> ConflictKey;
   mutable QHash<ConflictKey, bool> _conflicts;
 
-  friend class ScriptMatchTest;
-
-  void _calculateClassification(const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj,
-    v8::Handle<v8::Object> plugin);
+  void _calculateClassification(
+    const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj, v8::Handle<v8::Object> plugin);
 
   v8::Handle<v8::Value> _call(
     const ConstOsmMapPtr& map, v8::Handle<v8::Object> mapObj, v8::Handle<v8::Object> plugin);

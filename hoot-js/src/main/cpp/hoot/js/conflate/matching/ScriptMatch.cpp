@@ -535,6 +535,32 @@ std::map<QString, double> ScriptMatch::getFeatures(const ConstOsmMapPtr& map) co
   return result;
 }
 
+MatchMembers ScriptMatch::geometryTypeToMatchMembers(const QString& geometryType)
+{
+  if (geometryType == "point")
+  {
+    return MatchMembers(MatchMembers::Poi);
+  }
+  else if (geometryType == "line")
+  {
+    return MatchMembers(MatchMembers::Polyline);
+  }
+  else if (geometryType == "polygon")
+  {
+    return MatchMembers(MatchMembers::Polygon);
+  }
+  else if (geometryType == "unknown")
+  {
+    // Workaround for the Point/Polygon script since it doesn't identify a base feature type. See
+    // note in ScriptMatchVisitor::getIndex and rules/PointPolygon.js.
+    return MatchMembers(MatchMembers::Poi | MatchMembers::Polygon);
+  }
+  else
+  {
+    throw HootException("Invalid geometry type: " + geometryType);
+  }
+}
+
 QString ScriptMatch::toString() const
 {
   stringstream ss;

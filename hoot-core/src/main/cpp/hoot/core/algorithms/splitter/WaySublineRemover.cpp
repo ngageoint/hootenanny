@@ -22,7 +22,6 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
@@ -39,22 +38,43 @@
 namespace hoot
 {
 
-void WaySublineRemover::remove(
+std::vector<ElementId> WaySublineRemover::remove(
   WayPtr way, WayLocation& start, WayLocation& end, const OsmMapPtr& map)
 {
-  LOG_TRACE(
+  LOG_DEBUG(
     "Removing subline for: " << way->getElementId() << " starting at: " << start <<
     " and ending at: " << end << "...");
 
+  std::vector<ElementId> newWayIds;
+
   WaySplitter splitter(map, way);
   // split at start
-  splitter.split(start);
+  const std::vector<WayPtr> splitWays1 = splitter.split(start);
+  LOG_VARD(splitWays1);
+  if (splitWays1.size() == 1)
+  {
+    RecursiveElementRemover(splitWays1.at(0)->getElementId()).apply(map);
+    return newWayIds;
+  }
   // split at end
-  const std::vector<WayPtr> splitWays = splitter.split(end);
-  LOG_VART(splitWays);
+  const std::vector<WayPtr> splitWays2 = splitter.split(end);
+  LOG_VARD(splitWays2);
+  if (splitWays2.size() == 1)
+  {
+    RecursiveElementRemover(splitWays2.at(0)->getElementId()).apply(map);
+    return newWayIds;
+  }
 
   // remove middle section
-  RecursiveElementRemover(splitWays.at(0)->getElementId()).apply(map);
+  RecursiveElementRemover(splitWays2.at(0)->getElementId()).apply(map);
+
+  newWayIds.push_back(splitWays1.at(0)->getElementId());
+  //if (splitWays2.size() > 0)
+  //{
+    newWayIds.push_back(splitWays2.at(1)->getElementId());
+  //}
+  LOG_VARD(newWayIds);
+  return newWayIds;
 }
 
 }

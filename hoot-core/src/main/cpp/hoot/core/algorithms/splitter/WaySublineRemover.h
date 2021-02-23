@@ -22,7 +22,6 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2021 DigitalGlobe (http://www.digitalglobe.com/)
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
@@ -51,8 +50,10 @@ public:
    * @param start the starting point at which to remove a subline
    * @param end the ending point at which to remove a subline
    * @param map the map owring the way
+   * @return todo
    */
-  static void remove(WayPtr way, WayLocation& start, WayLocation& end, const OsmMapPtr& map);
+  static std::vector<ElementId> remove(
+    WayPtr way, WayLocation& start, WayLocation& end, const OsmMapPtr& map);
 };
 
 }

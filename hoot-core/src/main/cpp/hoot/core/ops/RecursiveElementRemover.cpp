@@ -140,7 +140,7 @@ void RecursiveElementRemover::_remove(const std::shared_ptr<OsmMap>& map, Elemen
     return;
   }
 
-  LOG_TRACE("Removing: " << eid << "...");
+  LOG_DEBUG("Removing: " << eid << "...");
   if (eid.getType() == ElementType::Relation)
   {
     const RelationPtr& r = map->getRelation(eid.getId());

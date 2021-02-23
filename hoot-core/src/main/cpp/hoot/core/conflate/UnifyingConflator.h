@@ -66,18 +66,17 @@ public:
 
   virtual unsigned int getNumSteps() const override { return 3; }
 
-protected:
-
-  virtual void _createMergers(
-    MatchSetVector& matchSets, std::vector<MergerPtr>& relationMergers);
-  virtual void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
-
 private:
+
+  MatchSetVector _matchSets;
 
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   void _addReviewAndScoreTags();
   void _addScoreTags(const ElementPtr& e, const MatchClassification& mc);
+
+  void _createMergers(std::vector<MergerPtr>& relationMergers);
+  void _mergeFeatures(const std::vector<MergerPtr>& relationMergers);
 };
 
 }

@@ -102,13 +102,13 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   _currentStep++;
 
   _updateProgress(_currentStep - 1, "Optimizing feature matches...");
-  MatchSetVector matchSets = _optimizeMatches();
+  _matchSets = _optimizeMatches();
   _currentStep++;
 
   _updateProgress(_currentStep - 1, "Merging feature matches...");
 
   std::vector<MergerPtr> relationMergers;
-  _createMergers(matchSets, relationMergers);
+  _createMergers(relationMergers);
 
   _mergeFeatures(relationMergers);
   _currentStep++;
@@ -124,8 +124,7 @@ void UnifyingConflator::apply(OsmMapPtr& map)
   }
 }
 
-void UnifyingConflator::_createMergers(
-  MatchSetVector& matchSets, std::vector<MergerPtr>& relationMergers)
+void UnifyingConflator::_createMergers(std::vector<MergerPtr>& relationMergers)
 {
   // POI/Polygon matching is unique in that it is the only non-generic geometry type matcher that
   // can duplicate matches with other non-generic geometry type matchers (namely POI and Building).
@@ -144,21 +143,22 @@ void UnifyingConflator::_createMergers(
   if (!ConfigOptions().getPoiPolygonMatchTakesPrecedenceOverPoiToPoiReview())
   {
     // TODO: need a way to not hardcode the POI match name...get it from ScriptMatch somehow?
-    PoiPolygonMergerCreator::convertSharedMatchesToReviews(matchSets, _mergers, QStringList("POI"));
+    PoiPolygonMergerCreator::convertSharedMatchesToReviews(
+      _matchSets, _mergers, QStringList("POI"));
   }
 
   // TODO: Would it help to sort the matches so the biggest or best ones get merged first? (#2912)
 
   LOG_DEBUG(
-    "Converting " << StringUtils::formatLargeNumber(matchSets.size()) <<
+    "Converting " << StringUtils::formatLargeNumber(_matchSets.size()) <<
     " match sets to mergers...");
-  for (size_t i = 0; i < matchSets.size(); ++i)
+  for (size_t i = 0; i < _matchSets.size(); ++i)
   {
     PROGRESS_INFO(
       "Converting match set " << StringUtils::formatLargeNumber(i + 1) << " / " <<
-      StringUtils::formatLargeNumber(matchSets.size()) << " to a merger...");
+      StringUtils::formatLargeNumber(_matchSets.size()) << " to a merger...");
 
-    _mergerFactory->createMergers(_map, matchSets[i], _mergers);
+    _mergerFactory->createMergers(_map, _matchSets[i], _mergers);
 
     LOG_TRACE(
       "Converted match set " << StringUtils::formatLargeNumber(i + 1) << " to " <<
@@ -204,7 +204,7 @@ void UnifyingConflator::_mergeFeatures(const std::vector<MergerPtr>& relationMer
   QElapsedTimer mergersTimer;
   mergersTimer.start();
 
-  LOG_INFO(
+  LOG_STATUS(
     "Applying " << StringUtils::formatLargeNumber(_mergers.size() + relationMergers.size()) <<
     " mergers...");
   _applyMergers(_mergers, _map);

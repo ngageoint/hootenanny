@@ -18,8 +18,9 @@ exports.reviewThreshold = parseFloat(hoot.get("conflate.review.threshold.default
 exports.searchRadius = parseFloat(hoot.get("search.radius.generic.point.polygon"));
 exports.typeThreshold = parseFloat(hoot.get("generic.point.polygon.type.threshold"));
 exports.writeDebugTags = hoot.get("writer.include.debug.tags");
-// The baseFeatureType and geometryType vars don't work for Point/Polygon with stats due to it conflating different geometry types.
-// Logic has been added to ScriptMatchCreator to handle this, so they can remain empty.
+// The baseFeatureType and geometryType vars don't work for Point/Polygon with stats due to it
+// conflating different geometry types. Logic has been added to ScriptMatchCreator to handle this,
+// so they can remain empty.
 //exports.baseFeatureType = ""; // 
 //exports.geometryType = "";
 

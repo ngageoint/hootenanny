@@ -116,9 +116,9 @@ public:
   { return "Creates a map with features from the second input which are not in the first"; }
 
   /**
-   * @brief getTagDiff - Gets the tag differential that was calculated during the
-   * conflation. This will be a list of 'modify' changes that contain tag updates
-   * for elements that matched between the input maps.
+   * @brief getTagDiff - Gets the tag differential that was calculated during the conflation. This
+   * will be a list of 'modify' changes that contain tag updates for elements that matched between
+   * the input maps.
    *
    * To calculate these changes we look through all of the matches, and compare tags. A set of newer
    * tags is returned as a changeset (because updating the tags requires a modify operation).
@@ -127,9 +127,9 @@ public:
   MemChangesetProviderPtr getTagDiff() { return _tagChanges; }
 
   /**
-   * @brief storeOriginalMap - Stores the original map. This is necessary
-   * for calculating the tag differential, and it's important to call this
-   * after loading the Input1 map, and before loading the Input2 map.
+   * @brief storeOriginalMap - Stores the original map. This is necessary for calculating the tag
+   * differential, and it's important to call this after loading the Input1 map, and before loading
+   * the Input2 map.
    * @param map - Map that should be holding only the original "Input1" elements
    */
   void storeOriginalMap(OsmMapPtr& map);
@@ -141,9 +141,8 @@ public:
   void markInputElements(OsmMapPtr map);
 
   /**
-   * @brief addChangesToMap - Adds the changes to a map, as regular elements.
-   *                          This is useful for visualizing tag-diff output
-   *                          in JOSM and the hoot UI
+   * @brief addChangesToMap - Adds the changes to a map, as regular elements. This is useful for
+   * visualizing tag-diff output in JOSM and the hoot UI.
    * @param map - Map to add the changes to
    * @param pChanges - Changeset provider
    */
@@ -166,19 +165,12 @@ public:
 
   void calculateStats(OsmMapPtr pResultMap, QList<SingleStat>& stats);
 
-  virtual unsigned int getNumSteps() const { return 3; }
+  virtual unsigned int getNumSteps() const { return /*4*/3; }
 
   QString getGeometryChangesetStats() const { return _geometryChangesetStats; }
   QString getTagChangesetStats() const { return _tagChangesetStats; }
   QString getUnifiedChangesetStats() const { return _unifiedChangesetStats; }
   long getNumUnconflatableElementsDiscarded() const { return _numUnconflatableElementsDiscarded; }
-
-protected:
-
-  // TODO: implement
-  virtual void _createMergers(
-    MatchSetVector& /*matchSets*/, std::vector<MergerPtr>& /*relationMergers*/) {}
-  virtual void _mergeFeatures(const std::vector<MergerPtr>& /*relationMergers*/) {}
 
 private:
 
@@ -235,14 +227,13 @@ private:
   void _removeRefData();
   bool _satisfiesElementRemovalCondition(
     const ConstElementPtr& element, const Status& status, const ConstMatchPtr& match) const;
-  void _removeMatchElementsCompletely(const Status& status);
+  void _removeMatchElements(const Status& status, const bool forceComplete = false);
   std::set<std::pair<ElementId, ElementId>> _getMatchElementIds(
     const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
     const Status& status) const;
   void _removeMatchElementPairCompletely(
     const ConstMatchPtr& match, const std::pair<ElementId, ElementId>& elementPair,
     const Status& status);
-  void _removeMatchElementsPartially(const Status& status);
   void _removeMetadataTags();
 };
 

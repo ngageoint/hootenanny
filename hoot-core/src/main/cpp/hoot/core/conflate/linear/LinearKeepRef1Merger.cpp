@@ -101,92 +101,86 @@ void LinearKeepRef1Merger::apply(
   }
 }
 
-bool LinearKeepRef1Merger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-  std::vector<std::pair<ElementId, ElementId>>& /*replaced*/)
+bool LinearKeepRef1Merger::_mergePair(
+  const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
 {
   ElementPtr e1 = map->getElement(eid1);
   ElementPtr e2 = map->getElement(eid2);
 
+  if (!e1 || !e2)
+  {
+    return false;
+  }
+
+  WayPtr way1 = std::dynamic_pointer_cast<Way>(e1);
+  WayPtr way2 = std::dynamic_pointer_cast<Way>(e2);
+
+  if (!way1 || !way2)
+  {
+    return false;
+  }
+
+  LOG_VARD(eid1);
+  LOG_VARD(eid2);
+
   WaySublineMatchString match;
   try
   {
-    match = _sublineMatcher->findMatch(map, e1, e2);
+    match = _sublineMatcher->findMatch(map, way1, way2);
   }
   catch (const NeedsReviewException& e)
   {
     LOG_VART(e.getWhat());
-    // TODO: fix
-    /*_markNeedsReview(result, e1, e2, e.getWhat(), HighwayMatch::getHighwayMatchName());
-    return true;*/
   }
 
   if (!match.isValid())
   {
-    // TODO: fix
-    /*LOG_TRACE("Complex conflict causes an empty match");
-    _markNeedsReview(result, e1, e2, "Complex conflict causes an empty match",
-                       HighwayMatch::getHighwayMatchName());
-    return true;*/
+    return false;
   }
 
   // TODO: explain
-  // TODO: update partial match removal for non-highway linear types and for Network alg
-//    if (!ConfigOptions().getDifferentialRemovePartialMatchesAsWhole() &&
-//        match->getName() == HighwayMatch::MATCH_NAME &&
-//        match->getMatchPairs().size() == 1) // TODO: size check necessary?
-//    {
-//      LOG_DEBUG(
-//        "Removing matching partial portion from: " << element->getElementId() <<
-//        " involved in match of type: " << matchType << "...");
+  // Remove only the portion of the way that matched.
+  WaySublineMatchString::MatchCollection matches = match.getMatches();
+  LOG_VARD(matches.size());
+  WaySubline subline1 = matches.at(0).getSubline1();
+  LOG_VARD(subline1.getWay() == way1);
+  LOG_VARD(subline1.getWay()->getElementId() == way1->getElementId());
+  WaySubline subline2 = matches.at(0).getSubline2();
+  LOG_VARD(subline2.getWay() == way2);
+  LOG_VARD(subline2.getWay()->getElementId() == way2->getElementId());
+  //if (subline1.getWay() == way)
+  std::vector<ElementId> newWayIds1;
+  if (subline1.getWay()->getElementId() == way1->getElementId())
+  {
+    LOG_DEBUG("Removing subline 1 from " << way1->getElementId() << "...");
+    WayLocation start(subline1.getStart());
+    WayLocation end(subline1.getEnd());
+    newWayIds1 = WaySublineRemover::remove(way1, start, end, map);
+  }
+  //if (subline2.getWay() == way)
+  std::vector<ElementId> newWayIds2;
+  if (subline2.getWay()->getElementId() == way2->getElementId())
+  {
+    LOG_DEBUG("Removing subline 2 from " << way2->getElementId() << "...");
+    WayLocation start(subline2.getStart());
+    WayLocation end(subline2.getEnd());
+    newWayIds2 = WaySublineRemover::remove(way2, start, end, map);
+  }
 
-//      std::shared_ptr<const HighwayMatch> highwayMatch =
-//        std::dynamic_pointer_cast<const HighwayMatch>(match);
-//      LOG_VARD(highwayMatch->getSublineMatch());
-
-//      // Remove only the portion of the way that matched.
-//      WayPtr way = std::dynamic_pointer_cast<Way>(element);
-//      if (way)
-//      {
-//        WaySublineMatchString::MatchCollection matches =
-//          highwayMatch->getSublineMatch().getMatches();
-//        LOG_VARD(matches.size());
-//        WaySubline subline1 = matches.at(0).getSubline1();
-//        LOG_VARD(subline1.getWay() == way);
-//        LOG_VARD(subline1.getWay()->getElementId() == way->getElementId());
-//        WaySubline subline2 = matches.at(0).getSubline2();
-//        LOG_VARD(subline2.getWay() == way);
-//        LOG_VARD(subline2.getWay()->getElementId() == way->getElementId());
-//        //if (subline1.getWay() == way)
-//        if (subline1.getWay()->getElementId() == way->getElementId())
-//        {
-//          LOG_DEBUG("Removing subline 1 from " << way->getElementId() << "...");
-//          WayLocation start(subline1.getStart());
-//          WayLocation end(subline1.getEnd());
-//          WaySublineRemover::remove(way, start, end, _pMap);
-//        }
-//        //if (subline2.getWay() == way)
-//        if (subline2.getWay()->getElementId() == way->getElementId())
-//        {
-//          LOG_DEBUG("Removing subline 2 from " << way->getElementId() << "...");
-//          WayLocation start(subline2.getStart());
-//          WayLocation end(subline2.getEnd());
-//          WaySublineRemover::remove(way, start, end, _pMap);
-//        }
-//      }
-//    }
-//    else
-//    {
-//      LOG_DEBUG(
-//        "Removing entire element: " << element->getElementId() << " involved in match of type: " <<
-//         matchType << "...");
-//      RecursiveElementRemover(element->getElementId()).apply(_pMap);
-  //}
-
-//  if (WRITE_DETAILED_DEBUG_MAPS)
-//  {
-//    OsmMapWriterFactory::writeDebugMap(
-//      _pMap, "after-removing-match-" + element->getElementId().toString());
-//  }
+  for (std::vector<ElementId>::const_iterator newWayIdsItr = newWayIds1.begin();
+       newWayIdsItr != newWayIds1.end(); ++newWayIdsItr)
+  {
+    replaced.push_back(
+      std::pair<ElementId, ElementId>(way1->getElementId(), *newWayIdsItr));
+  }
+  for (std::vector<ElementId>::const_iterator newWayIdsItr = newWayIds2.begin();
+       newWayIdsItr != newWayIds2.end(); ++newWayIdsItr)
+  {
+    replaced.push_back(
+      std::pair<ElementId, ElementId>(way2->getElementId(), *newWayIdsItr));
+  }
+  LOG_VARD(replaced);
 
   return false;
 }
