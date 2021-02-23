@@ -28,7 +28,7 @@
 #define MULTIPLE_SUBLINE_MATCHER_SNAP_MERGER_H
 
 // Hoot
-#include <hoot/core/conflate/linear/LinearSnapMerger.h>
+#include <hoot/core/conflate/merging/LinearSnapMerger.h>
 
 namespace hoot
 {
