@@ -288,9 +288,9 @@ public:
     const QString& input, const QRegExp& splitExp, const int index);
 
   /**
-   * TODO
+   * Reverses the ordering of a string list
    *
-   * @param strList
+   * @param strList the list to reverse
    */
   static void reverse(QStringList& strList);
 

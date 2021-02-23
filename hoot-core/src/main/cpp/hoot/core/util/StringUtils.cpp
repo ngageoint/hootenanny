@@ -350,7 +350,7 @@ QString StringUtils::splitAndGetAtIndex(
 
 void StringUtils::reverse(QStringList& strList)
 {
-  // sure there's a qt way to do this...didn't see it yet
+  // sure there's a better qt way to do this...
   std::list<QString> strStdList = strList.toStdList();
   std::reverse(strStdList.begin(), strStdList.end());
   strList = QStringList::fromStdList(strStdList);
