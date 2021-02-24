@@ -27,118 +27,118 @@
 #include "LinearAverageMerger.h"
 
 // geos
-#include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/GeometryFactory.h>
-#include <geos/geom/LineString.h>
+//#include <geos/geom/CoordinateSequence.h>
+//#include <geos/geom/CoordinateSequenceFactory.h>
+//#include <geos/geom/GeometryFactory.h>
+//#include <geos/geom/LineString.h>
 
-// hoot
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/IdSwapOp.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/algorithms/WayAverager.h>
-#include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/conflate/highway/HighwayMatch.h>
+//// hoot
+//#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+//#include <hoot/core/geometry/ElementToGeometryConverter.h>
+//#include <hoot/core/io/OsmMapWriterFactory.h>
+//#include <hoot/core/ops/IdSwapOp.h>
+//#include <hoot/core/util/Factory.h>
+//#include <hoot/core/util/Log.h>
+//#include <hoot/core/algorithms/WayAverager.h>
+//#include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
+//#include <hoot/core/ops/RemoveWayByEid.h>
+//#include <hoot/core/conflate/highway/HighwayMatch.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
+//HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
 
-// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-// produce a very large number of files.
-const bool LinearAverageMerger::WRITE_DETAILED_DEBUG_MAPS = false;
-int LinearAverageMerger::logWarnCount = 0;
+//// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+//// produce a very large number of files.
+//const bool LinearAverageMerger::WRITE_DETAILED_DEBUG_MAPS = false;
+//int LinearAverageMerger::logWarnCount = 0;
 
-LinearAverageMerger::LinearAverageMerger() :
-LinearMergerAbstract(),
-_matchedBy(HighwayMatch::MATCH_NAME)
-{
-}
+//LinearAverageMerger::LinearAverageMerger() :
+//LinearMergerAbstract(),
+//_matchedBy(HighwayMatch::MATCH_NAME)
+//{
+//}
 
-LinearAverageMerger::LinearAverageMerger(
-  const std::set<std::pair<ElementId, ElementId>>& pairs,
-  const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
-LinearMergerAbstract(),
-_sublineMatcher(sublineMatcher),
-_matchedBy(HighwayMatch::MATCH_NAME)
-{
-  _pairs = pairs;
-  LOG_VART(_pairs);
-}
+//LinearAverageMerger::LinearAverageMerger(
+//  const std::set<std::pair<ElementId, ElementId>>& pairs,
+//  const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+//LinearMergerAbstract(),
+//_sublineMatcher(sublineMatcher),
+//_matchedBy(HighwayMatch::MATCH_NAME)
+//{
+//  _pairs = pairs;
+//  LOG_VART(_pairs);
+//}
 
-bool LinearAverageMerger::_mergePair(
-  const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-  std::vector<std::pair<ElementId, ElementId>>& replaced)
-{
-  if (LinearMergerAbstract::_mergePair(map, eid1, eid2, replaced))
-  {
-    return true;
-  }
+//bool LinearAverageMerger::_mergePair(
+//  const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+//  std::vector<std::pair<ElementId, ElementId>>& replaced)
+//{
+//  if (LinearMergerAbstract::_mergePair(map, eid1, eid2, replaced))
+//  {
+//    return true;
+//  }
 
-  WayPtr way1 = std::dynamic_pointer_cast<Way>(map->getElement(eid1));
-  WayPtr way2 = std::dynamic_pointer_cast<Way>(map->getElement(eid2));
+//  WayPtr way1 = std::dynamic_pointer_cast<Way>(map->getElement(eid1));
+//  WayPtr way2 = std::dynamic_pointer_cast<Way>(map->getElement(eid2));
 
-  if (!way1 || !way2)
-  {
-    return false;
-  }
+//  if (!way1 || !way2)
+//  {
+//    return false;
+//  }
 
-  ElementToGeometryConverter geomConverter(map);
-  Meters minSplitSize = ConfigOptions().getWayMergerMinSplitSize();
-  minSplitSize = std::min(minSplitSize, geomConverter.convertToLineString(way1)->getLength() * .7);
-  minSplitSize = std::min(minSplitSize, geomConverter.convertToLineString(way2)->getLength() * .7);
+//  ElementToGeometryConverter geomConverter(map);
+//  Meters minSplitSize = ConfigOptions().getWayMergerMinSplitSize();
+//  minSplitSize = std::min(minSplitSize, geomConverter.convertToLineString(way1)->getLength() * .7);
+//  minSplitSize = std::min(minSplitSize, geomConverter.convertToLineString(way2)->getLength() * .7);
 
-  // split left into its maximal nearest sublines
-  MaximalNearestSubline mns1(
-    map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
-  int mnsLeftIndex;
-  std::vector<WayPtr> splitsLeft = mns1.splitWay(map, mnsLeftIndex);
-  assert(splitsLeft.size() != 0);
-  WayPtr mnsLeft = splitsLeft[mnsLeftIndex];
+//  // split left into its maximal nearest sublines
+//  MaximalNearestSubline mns1(
+//    map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
+//  int mnsLeftIndex;
+//  std::vector<WayPtr> splitsLeft = mns1.splitWay(map, mnsLeftIndex);
+//  assert(splitsLeft.size() != 0);
+//  WayPtr mnsLeft = splitsLeft[mnsLeftIndex];
 
-  // split right into its maximal nearest sublines
-  MaximalNearestSubline mns2(
-    map, way2, mnsLeft, minSplitSize, way1->getCircularError() + way2->getCircularError());
-  int mnsRightIndex;
-  std::vector<WayPtr> splitsRight = mns2.splitWay(map, mnsRightIndex);
-  assert(splitsRight.size() != 0);
-  WayPtr mnsRight = splitsRight[mnsRightIndex];
+//  // split right into its maximal nearest sublines
+//  MaximalNearestSubline mns2(
+//    map, way2, mnsLeft, minSplitSize, way1->getCircularError() + way2->getCircularError());
+//  int mnsRightIndex;
+//  std::vector<WayPtr> splitsRight = mns2.splitWay(map, mnsRightIndex);
+//  assert(splitsRight.size() != 0);
+//  WayPtr mnsRight = splitsRight[mnsRightIndex];
 
-  for (size_t i = 0; i < splitsLeft.size(); i++)
-  {
-//    if ((int)i != mnsLeftIndex)
-//    {
-//      newElements.insert(ElementId::way(splitsLeft[i]->getId()));
-//    }
-    map->addWay(splitsLeft[i]);
-  }
+//  for (size_t i = 0; i < splitsLeft.size(); i++)
+//  {
+////    if ((int)i != mnsLeftIndex)
+////    {
+////      newElements.insert(ElementId::way(splitsLeft[i]->getId()));
+////    }
+//    map->addWay(splitsLeft[i]);
+//  }
 
-  for (size_t i = 0; i < splitsRight.size(); i++)
-  {
-//    if ((int)i != mnsRightIndex)
-//    {
-//      newElements.insert(ElementId::way(splitsRight[i]->getId()));
-//    }
-    map->addWay(splitsRight[i]);
-  }
+//  for (size_t i = 0; i < splitsRight.size(); i++)
+//  {
+////    if ((int)i != mnsRightIndex)
+////    {
+////      newElements.insert(ElementId::way(splitsRight[i]->getId()));
+////    }
+//    map->addWay(splitsRight[i]);
+//  }
 
-  // average the two MNSs
-  WayPtr w = WayAverager::average(map, mnsRight, mnsLeft);
-  w->setStatus(Status::Conflated);
+//  // average the two MNSs
+//  WayPtr w = WayAverager::average(map, mnsRight, mnsLeft);
+//  w->setStatus(Status::Conflated);
 
-  RemoveWayByEid::removeWay(map, way1->getId());
-  RemoveWayByEid::removeWay(map, way2->getId());
+//  RemoveWayByEid::removeWay(map, way1->getId());
+//  RemoveWayByEid::removeWay(map, way2->getId());
 
-  map->addWay(w);
+//  map->addWay(w);
 
-  // TODO: update replaced
+//  // TODO: update replaced
 
-  return false;
-}
+//  return false;
+//}
 
 }

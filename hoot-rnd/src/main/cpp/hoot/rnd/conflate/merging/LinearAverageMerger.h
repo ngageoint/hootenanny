@@ -28,8 +28,8 @@
 #define LINEAR_AVERAGE_MERGER_H
 
 // Hoot
-#include <hoot/core/conflate/merging/LinearMergerAbstract.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+//#include <hoot/core/conflate/merging/LinearMergerAbstract.h>
+//#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot
 {
@@ -37,44 +37,42 @@ namespace hoot
 /**
  * TODO
  */
-class LinearAverageMerger : public LinearMergerAbstract
+class LinearAverageMerger// : public LinearMergerAbstract
 {
 
 public:
 
   static QString className() { return "hoot::LinearAverageMerger"; }
 
-  LinearAverageMerger();
-  LinearAverageMerger(
-    const std::set<std::pair<ElementId, ElementId>>& pairs,
-    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  LinearAverageMerger() = default;
+//  LinearAverageMerger(
+//    const std::set<std::pair<ElementId, ElementId>>& pairs,
+//    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearAverageMerger() = default;
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+  //void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
 
-  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
+  //virtual QString getDescription() const override { return "Merges road geometries and tags"; }
 
-  virtual QString getDescription() const override { return "Merges road geometries and tags"; }
+  //virtual QString getName() const override { return className(); }
 
-  virtual QString getName() const override { return className(); }
-
-  virtual QString getClassName() const override { return className(); }
+  //virtual QString getClassName() const override { return className(); }
 
 protected:
 
-  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+  //std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
-  virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-                          std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  //virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+                          //std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
 private:
 
-  static int logWarnCount;
+  //static int logWarnCount;
 
   // indicates which matcher matched the elements being processed by this merger
-  QString _matchedBy;
+  //QString _matchedBy;
 
-  static const bool WRITE_DETAILED_DEBUG_MAPS;
+  //static const bool WRITE_DETAILED_DEBUG_MAPS;
 };
 
 //typedef std::shared_ptr<LinearAverageMerger> LinearAverageMergerPtr;
