@@ -88,12 +88,14 @@ public:
   LinearMergerAbstract() = default;
   virtual ~LinearMergerAbstract() = default;
 
-  virtual void apply(const OsmMapPtr& map,
-                     std::vector<std::pair<ElementId, ElementId>>& replaced) override = 0;
+  virtual void apply(
+    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
 
   virtual QString toString() const override;
 
 protected:
+
+  ReviewMarker _reviewMarker;
 
   static int logWarnCount;
 
@@ -111,7 +113,19 @@ protected:
   virtual void _markNeedsReview(const OsmMapPtr& map, ElementPtr e1, ElementPtr e2, QString note,
                                 QString reviewType);
 
-  ReviewMarker _reviewMarker;
+  void _removeSpans(OsmMapPtr map, const ElementPtr& w1, const ElementPtr& w2) const;
+  void _removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const;
+
+private:
+
+  /*
+   * Returns true if the way directly connects the left and right ways. There is some tolerance
+   * for "directly". See ticket #951 for details.
+   */
+  bool _directConnect(const ConstOsmMapPtr &map, WayPtr w) const;
+
+  bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
+
 };
 
 }
