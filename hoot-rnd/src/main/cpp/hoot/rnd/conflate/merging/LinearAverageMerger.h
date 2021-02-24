@@ -61,8 +61,8 @@ public:
 
 protected:
 
-  //virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-                          //std::vector<std::pair<ElementId, ElementId>>& replaced) override;
+  virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+                          std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
 private:
 

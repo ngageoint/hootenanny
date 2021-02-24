@@ -49,8 +49,8 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
 
-//// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
-//// produce a very large number of files.
+// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
+// produce a very large number of files.
 const bool LinearAverageMerger::WRITE_DETAILED_DEBUG_MAPS = false;
 
 LinearAverageMerger::LinearAverageMerger() :
@@ -69,74 +69,74 @@ _matchedBy(HighwayMatch::MATCH_NAME)
   LOG_VART(_pairs);
 }
 
-//bool LinearAverageMerger::_mergePair(
-//  const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-//  std::vector<std::pair<ElementId, ElementId>>& replaced)
-//{
-//  if (LinearMergerAbstract::_mergePair(map, eid1, eid2, replaced))
-//  {
-//    return true;
-//  }
+bool LinearAverageMerger::_mergePair(
+  const OsmMapPtr& map, ElementId eid1, ElementId eid2,
+  std::vector<std::pair<ElementId, ElementId>>& replaced)
+{
+  if (LinearMergerAbstract::_mergePair(map, eid1, eid2, replaced))
+  {
+    return true;
+  }
 
-//  WayPtr way1 = std::dynamic_pointer_cast<Way>(map->getElement(eid1));
-//  WayPtr way2 = std::dynamic_pointer_cast<Way>(map->getElement(eid2));
+  WayPtr way1 = std::dynamic_pointer_cast<Way>(map->getElement(eid1));
+  WayPtr way2 = std::dynamic_pointer_cast<Way>(map->getElement(eid2));
 
-//  if (!way1 || !way2)
-//  {
-//    return false;
-//  }
+  if (!way1 || !way2)
+  {
+    return false;
+  }
 
-//  ElementToGeometryConverter geomConverter(map);
-//  Meters minSplitSize = ConfigOptions().getWayMergerMinSplitSize();
-//  minSplitSize = std::min(minSplitSize, geomConverter.convertToLineString(way1)->getLength() * .7);
-//  minSplitSize = std::min(minSplitSize, geomConverter.convertToLineString(way2)->getLength() * .7);
+  ElementToGeometryConverter geomConverter(map);
+  Meters minSplitSize = ConfigOptions().getWayMergerMinSplitSize();
+  minSplitSize = std::min(minSplitSize, geomConverter.convertToLineString(way1)->getLength() * .7);
+  minSplitSize = std::min(minSplitSize, geomConverter.convertToLineString(way2)->getLength() * .7);
 
-//  // split left into its maximal nearest sublines
-//  MaximalNearestSubline mns1(
-//    map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
-//  int mnsLeftIndex;
-//  std::vector<WayPtr> splitsLeft = mns1.splitWay(map, mnsLeftIndex);
-//  assert(splitsLeft.size() != 0);
-//  WayPtr mnsLeft = splitsLeft[mnsLeftIndex];
+  // split left into its maximal nearest sublines
+  MaximalNearestSubline mns1(
+    map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
+  int mnsLeftIndex;
+  std::vector<WayPtr> splitsLeft = mns1.splitWay(map, mnsLeftIndex);
+  assert(splitsLeft.size() != 0);
+  WayPtr mnsLeft = splitsLeft[mnsLeftIndex];
 
-//  // split right into its maximal nearest sublines
-//  MaximalNearestSubline mns2(
-//    map, way2, mnsLeft, minSplitSize, way1->getCircularError() + way2->getCircularError());
-//  int mnsRightIndex;
-//  std::vector<WayPtr> splitsRight = mns2.splitWay(map, mnsRightIndex);
-//  assert(splitsRight.size() != 0);
-//  WayPtr mnsRight = splitsRight[mnsRightIndex];
+  // split right into its maximal nearest sublines
+  MaximalNearestSubline mns2(
+    map, way2, mnsLeft, minSplitSize, way1->getCircularError() + way2->getCircularError());
+  int mnsRightIndex;
+  std::vector<WayPtr> splitsRight = mns2.splitWay(map, mnsRightIndex);
+  assert(splitsRight.size() != 0);
+  WayPtr mnsRight = splitsRight[mnsRightIndex];
 
-//  for (size_t i = 0; i < splitsLeft.size(); i++)
-//  {
-////    if ((int)i != mnsLeftIndex)
-////    {
-////      newElements.insert(ElementId::way(splitsLeft[i]->getId()));
-////    }
-//    map->addWay(splitsLeft[i]);
-//  }
+  for (size_t i = 0; i < splitsLeft.size(); i++)
+  {
+//    if ((int)i != mnsLeftIndex)
+//    {
+//      newElements.insert(ElementId::way(splitsLeft[i]->getId()));
+//    }
+    map->addWay(splitsLeft[i]);
+  }
 
-//  for (size_t i = 0; i < splitsRight.size(); i++)
-//  {
-////    if ((int)i != mnsRightIndex)
-////    {
-////      newElements.insert(ElementId::way(splitsRight[i]->getId()));
-////    }
-//    map->addWay(splitsRight[i]);
-//  }
+  for (size_t i = 0; i < splitsRight.size(); i++)
+  {
+//    if ((int)i != mnsRightIndex)
+//    {
+//      newElements.insert(ElementId::way(splitsRight[i]->getId()));
+//    }
+    map->addWay(splitsRight[i]);
+  }
 
-//  // average the two MNSs
-//  WayPtr w = WayAverager::average(map, mnsRight, mnsLeft);
-//  w->setStatus(Status::Conflated);
+  // average the two MNSs
+  WayPtr w = WayAverager::average(map, mnsRight, mnsLeft);
+  w->setStatus(Status::Conflated);
 
-//  RemoveWayByEid::removeWay(map, way1->getId());
-//  RemoveWayByEid::removeWay(map, way2->getId());
+  RemoveWayByEid::removeWay(map, way1->getId());
+  RemoveWayByEid::removeWay(map, way2->getId());
 
-//  map->addWay(w);
+  map->addWay(w);
 
-//  // TODO: update replaced
+  // TODO: update replaced
 
-//  return false;
-//}
+  return false;
+}
 
 }
