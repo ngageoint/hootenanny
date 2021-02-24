@@ -53,22 +53,21 @@ HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
 //// produce a very large number of files.
 const bool LinearAverageMerger::WRITE_DETAILED_DEBUG_MAPS = false;
 
-//LinearAverageMerger::LinearAverageMerger() :
-//LinearMergerAbstract(),
-//_matchedBy(HighwayMatch::MATCH_NAME)
-//{
-//}
+LinearAverageMerger::LinearAverageMerger() :
+LinearMergerAbstract(),
+_matchedBy(HighwayMatch::MATCH_NAME)
+{
+}
 
-//LinearAverageMerger::LinearAverageMerger(
-//  const std::set<std::pair<ElementId, ElementId>>& pairs,
-//  const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
-//LinearMergerAbstract(),
-//_sublineMatcher(sublineMatcher),
-//_matchedBy(HighwayMatch::MATCH_NAME)
-//{
-//  _pairs = pairs;
-//  LOG_VART(_pairs);
-//}
+LinearAverageMerger::LinearAverageMerger(
+  const std::set<std::pair<ElementId, ElementId>>& pairs,
+  const std::shared_ptr<SublineStringMatcher>& /*sublineMatcher*/) :
+LinearMergerAbstract(),
+_matchedBy(HighwayMatch::MATCH_NAME)
+{
+  _pairs = pairs;
+  LOG_VART(_pairs);
+}
 
 //bool LinearAverageMerger::_mergePair(
 //  const OsmMapPtr& map, ElementId eid1, ElementId eid2,

@@ -29,7 +29,7 @@
 
 // Hoot
 #include <hoot/core/conflate/merging/LinearMergerAbstract.h>
-//#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot
 {
@@ -44,10 +44,10 @@ public:
 
   static QString className() { return "hoot::LinearAverageMerger"; }
 
-  LinearAverageMerger() = default;
-//  LinearAverageMerger(
-//    const std::set<std::pair<ElementId, ElementId>>& pairs,
-//    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
+  LinearAverageMerger();
+  LinearAverageMerger(
+    const std::set<std::pair<ElementId, ElementId>>& pairs,
+    const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearAverageMerger() = default;
 
   //void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
