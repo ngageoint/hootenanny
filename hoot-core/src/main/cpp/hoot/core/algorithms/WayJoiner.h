@@ -113,6 +113,12 @@ protected:
   virtual void _rejoinSiblings(std::deque<long>& way_ids);
 
   /**
+   * @brief joinSiblings Joining algorithm that searches for all ways that have the same parent id,
+   *    attempts to order them into adjoining way order, then joins them
+   */
+  virtual void _joinSiblings();
+
+  /**
    * @brief joinWays Function to rejoin two ways
    * @param parent Way that is modified to include the child way
    * @param child Way that will be merged into the parent and then deleted
@@ -121,12 +127,6 @@ protected:
   virtual bool _joinWays(const WayPtr& parent, const WayPtr& child);
 
 private:
-
-  /**
-   * @brief joinSiblings Joining algorithm that searches for all ways that have the same parent id,
-   *    attempts to order them into adjoining way order, then joins them
-   */
-  void _joinSiblings();
 
   /**
    * @brief resetParents Resets parent id for all ways after joining operation has completed

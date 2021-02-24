@@ -27,6 +27,7 @@
 
 //  Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/algorithms/NonIntersectionWayJoiner.h>
 #include <hoot/core/algorithms/WayJoinerAdvanced.h>
 #include <hoot/core/algorithms/WayJoinerBasic.h>
 #include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
@@ -50,6 +51,7 @@ class WayJoinerTest : public HootTestFixture
   CPPUNIT_TEST(runIntersectionSplitterTest);
   CPPUNIT_TEST(runConflateTest);
   CPPUNIT_TEST(runAdvancedConflateTest);
+  CPPUNIT_TEST(runNonIntersectionJoinerTest);
   CPPUNIT_TEST_SUITE_END();
 public:
 
@@ -178,6 +180,25 @@ public:
 
     HOOT_FILE_EQUALS(_outputPath + "WayJoinerAdvancedConflateOutput.osm",
                      _inputPath + "WayJoinerAdvancedConflateExpected.osm");
+  }
+
+  void runNonIntersectionJoinerTest()
+  {
+    OsmXmlReader reader;
+    OsmMapPtr map(new OsmMap());
+    reader.setDefaultStatus(Status::Unknown1);
+    reader.setUseDataSourceIds(true);
+    reader.read(_inputPath + "NonIntersectionWayJoinerInput.osm", map);
+
+    NonIntersectionWayJoiner::joinWays(map);
+
+    OsmXmlWriter writer;
+    writer.setIncludeCompatibilityTags(false);
+    writer.write(map, _outputPath + "NonIntersectionWayJoinerOutput.osm");
+
+    HOOT_FILE_EQUALS(_outputPath + "NonIntersectionWayJoinerOutput.osm",
+                     _inputPath + "NonIntersectionWayJoinerExpected.osm");
+
   }
 
 };
