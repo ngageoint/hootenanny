@@ -50,7 +50,7 @@ public:
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearAverageMerger() = default;
 
-  //void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
+  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
 
   virtual QString getDescription() const override
   { return "Merges linear features by averaging geometries"; }
