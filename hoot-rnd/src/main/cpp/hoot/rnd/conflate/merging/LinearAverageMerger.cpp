@@ -43,6 +43,7 @@
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
+
 namespace hoot
 {
 
@@ -63,6 +64,7 @@ _matchedBy(HighwayMatch::MATCH_NAME)
 LinearAverageMerger::LinearAverageMerger(
   const std::set<std::pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+LinearMergerAbstract(),
 _sublineMatcher(sublineMatcher),
 _matchedBy(HighwayMatch::MATCH_NAME)
 {

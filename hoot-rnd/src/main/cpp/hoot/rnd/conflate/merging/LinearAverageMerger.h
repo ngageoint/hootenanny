@@ -34,8 +34,6 @@
 namespace hoot
 {
 
-class WaySublineCollection;
-
 /**
  * TODO
  */
@@ -69,11 +67,6 @@ protected:
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced);
 
-  /*
-   * Finds a matching subline between two elements with the configured subline matcher
-   */
-  virtual WaySublineMatchString _matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2);
-
 private:
 
   static int logWarnCount;
@@ -88,4 +81,4 @@ typedef std::shared_ptr<LinearAverageMerger> LinearAverageMergerPtr;
 
 }
 
-#endif // LINEAR_SNAP_MERGER_H
+#endif // LINEAR_AVERAGE_MERGER_H
