@@ -68,6 +68,7 @@ const QString ConflateExecutor::JOB_SOURCE = "Conflate";
 ConflateExecutor::ConflateExecutor() :
 _isDiffConflate(false),
 _diffConflateSeparateOutput(false),
+_isAttributeConflate(false),
 _displayStats(false),
 _displayChangesetStats(false),
 _filterOps(ConfigOptions().getConflateRemoveSuperfluousOps()),
@@ -87,8 +88,13 @@ void ConflateExecutor::_initConfig()
   // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
   // use it as the sole identifier for it. If that ever changes, then we'll need a different way
   // to recognize when AC is occurring.
-  const bool isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
-  if (isAttributeConflate)
+  _isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
+  if (_isAttributeConflate && _isDiffConflate) // This is a little kludgy but seems useful for now.
+  {
+    throw IllegalArgumentException(
+      "Differential and Attribute Conflation configurations may not both be used at the same time.");
+  }
+  if (_isAttributeConflate)
   {
     _updateConfigOptionsForAttributeConflation();
   }
@@ -97,7 +103,7 @@ void ConflateExecutor::_initConfig()
   {
     _updateConfigOptionsForDifferentialConflation();
   }
-  if (_isDiffConflate || isAttributeConflate)
+  if (_isDiffConflate || _isAttributeConflate)
   {
     _disableRoundaboutRemoval();
   }
@@ -183,6 +189,10 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
     {
       msg = msg.replace("Conflating", "Differentially conflating ");
     }
+  }
+  else if (_isAttributeConflate)
+  {
+    msg = msg.replace("Conflating", "Attribute conflating ");
   }
   _progress->set(0.0, msg);
 

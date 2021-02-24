@@ -185,6 +185,7 @@ HOOT_DEFINE_EXCEPTION(NeedsReviewException)
 HOOT_DEFINE_EXCEPTION(UnsupportedException)
 HOOT_DEFINE_EXCEPTION_STR(RecursiveComplexityException, "RecursiveComplexityException")
 HOOT_DEFINE_EXCEPTION_STR(NotImplementedException, "Not Implemented")
+HOOT_DEFINE_EXCEPTION_STR(EmptyMapInputException, "Empty map input.")
 
 }
 
