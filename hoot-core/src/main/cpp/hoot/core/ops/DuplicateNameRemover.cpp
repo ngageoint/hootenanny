@@ -40,11 +40,12 @@
 
 // TGS
 #include <tgs/StreamUtils.h>
+
 using namespace Tgs;
+using namespace std;
 
 namespace hoot
 {
-  using namespace std;
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, DuplicateNameRemover)
 
