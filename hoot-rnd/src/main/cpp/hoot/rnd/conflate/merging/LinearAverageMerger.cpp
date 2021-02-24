@@ -27,32 +27,31 @@
 #include "LinearAverageMerger.h"
 
 // geos
-//#include <geos/geom/CoordinateSequence.h>
-//#include <geos/geom/CoordinateSequenceFactory.h>
-//#include <geos/geom/GeometryFactory.h>
-//#include <geos/geom/LineString.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
 
-//// hoot
-//#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
-//#include <hoot/core/geometry/ElementToGeometryConverter.h>
-//#include <hoot/core/io/OsmMapWriterFactory.h>
-//#include <hoot/core/ops/IdSwapOp.h>
-//#include <hoot/core/util/Factory.h>
-//#include <hoot/core/util/Log.h>
-//#include <hoot/core/algorithms/WayAverager.h>
-//#include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
-//#include <hoot/core/ops/RemoveWayByEid.h>
-//#include <hoot/core/conflate/highway/HighwayMatch.h>
+// hoot
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/IdSwapOp.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/algorithms/WayAverager.h>
+#include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/conflate/highway/HighwayMatch.h>
 
 namespace hoot
 {
 
-//HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
+HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
 
 //// ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 //// produce a very large number of files.
-//const bool LinearAverageMerger::WRITE_DETAILED_DEBUG_MAPS = false;
-//int LinearAverageMerger::logWarnCount = 0;
+const bool LinearAverageMerger::WRITE_DETAILED_DEBUG_MAPS = false;
 
 //LinearAverageMerger::LinearAverageMerger() :
 //LinearMergerAbstract(),
