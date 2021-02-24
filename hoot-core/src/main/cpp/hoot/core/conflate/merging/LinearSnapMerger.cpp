@@ -71,12 +71,11 @@ using namespace std;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(Merger, LinearSnapMerger)
+
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // produce a very large number of files.
 const bool LinearSnapMerger::WRITE_DETAILED_DEBUG_MAPS = false;
-
-HOOT_FACTORY_REGISTER(Merger, LinearSnapMerger)
-
 int LinearSnapMerger::logWarnCount = 0;
 
 LinearSnapMerger::LinearSnapMerger() :

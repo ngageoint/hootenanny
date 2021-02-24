@@ -89,7 +89,7 @@ public:
   virtual ~LinearMergerAbstract() = default;
 
   virtual void apply(
-    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
+    const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   virtual QString toString() const override;
 
@@ -125,7 +125,6 @@ private:
   bool _directConnect(const ConstOsmMapPtr &map, WayPtr w) const;
 
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
-
 };
 
 }

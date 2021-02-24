@@ -47,12 +47,11 @@
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
+
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // produce a very large number of files.
 const bool LinearAverageMerger::WRITE_DETAILED_DEBUG_MAPS = false;
-
-HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
-
 int LinearAverageMerger::logWarnCount = 0;
 
 LinearAverageMerger::LinearAverageMerger() :
