@@ -56,7 +56,7 @@ public:
   virtual ~MultipleSublineMatcherSnapMerger() = default;
 
   virtual QString getDescription() const override
-  { return "Merges ways with one or more subline matchers"; }
+  { return "Merges ways using snapping with one or more subline matchers"; }
 
   virtual QString getName() const override { return className(); }
 

@@ -57,7 +57,8 @@ public:
 
   void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
 
-  virtual QString getDescription() const override { return "Merges road geometries and tags"; }
+  virtual QString getDescription() const override
+  { return "Merges linear features by snapping geometries"; }
 
   virtual QString getName() const override { return className(); }
 
