@@ -44,7 +44,15 @@ mgcp = {
 
   // These have been moved to mgcp.rules as static lists
   // Now build the FCODE/layername lookup table.
+  // NOTE: If we change the output to be ROAD_C instead of LAP030, we need to rebuild this using the function in translate.
   // mgcp.layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
+
+  // Quick list generator
+  // mgcp.layerNameLookup = [];
+  // mgcp.rawSchema.forEach( function (item) {mgcp.layerNameLookup.push(item.geom.charAt(0) + item.fcode);});
+  // print('###');
+  // print(mgcp.layerNameLookup);
+  // print('###');
 
   // Quick lookup list for valid FCODES
   // mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
@@ -502,6 +510,9 @@ mgcp = {
         }
       }
     } // End of Find an FCode
+
+    // Posible Building F_CODE screwup
+    if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
 
     // Swap the F_CODE for a Ferry Terminal
     if (attrs.F_CODE == 'AQ125' && attrs.TRS == '7')
@@ -982,7 +993,6 @@ mgcp = {
       // print('Adding area=yes');
       tags.area = 'yes';
     }
-
   }, // End of applyToOsmPostProcessing
 
   // ##### Start of the xxToOgrxx Block #####
@@ -2324,7 +2334,10 @@ mgcp = {
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
     // push the feature to the o2s layer
-    if (mgcp.rules.layerNameLookup[tableName])
+
+    // Change this back if we need to change the lookup table
+    // if (mgcp.rules.layerNameLookup[tableName])
+    if (mgcp.rules.layerNameLookup.includes(tableName))
     {
       // Check if we need to return more than one feature
       // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -2341,7 +2354,10 @@ mgcp = {
         // Now make sure that we have a valid feature _before_ trying to validate and jam it into the list of
         // features to return
         var gFcode = gType + returnData[i]['attrs']['FCODE'];
-        if (mgcp.rules.layerNameLookup[gFcode.toUpperCase()])
+
+        // Change this back if we need to change the lookup table
+        // if (mgcp.rules.layerNameLookup[gFcode.toUpperCase()])
+        if (mgcp.rules.layerNameLookup.includes(gFcode.toUpperCase()))
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           mgcp.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
@@ -2353,8 +2369,9 @@ mgcp = {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
             returnData[i]['attrs']['TXT'] = translate.appendValue(returnData[i]['attrs']['TXT'],tStr,';');
           }
-
-          returnData[i]['tableName'] = mgcp.rules.layerNameLookup[gFcode.toUpperCase()];
+        // Change this back if we need to change the lookup table
+          // returnData[i]['tableName'] = mgcp.rules.layerNameLookup[gFcode.toUpperCase()];
+          returnData[i]['tableName'] = gFcode.toUpperCase();
         }
         else
         {

@@ -3,18 +3,12 @@
         "isA": "place",
         "name": "abandoned:place=farm",
         "objectType": "tag",
-        "similarTo": {
-            "name": "place=farm",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "place=farm", "weight": 0.8 }
     },
     {
         "isA": "place",
         "name": "abandoned:place=populated",
         "objectType": "tag",
-        "similarTo": {
-            "name": "place=populated",
-            "weight": 0.4
-        }
+        "similarTo": { "name": "place=populated", "weight": 0.4 }
     }
 ]

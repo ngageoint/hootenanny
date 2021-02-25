@@ -36,6 +36,12 @@
         "objectType": "tag"
     },
     {
+        "geometries": ["node","area"],
+        "isA": "military",
+        "name": "military=anti_air_artillery",
+        "objectType": "tag"
+    },
+    {
         "description": "Used for facilities and land used by the military, including the Navy, Army, Airforce and Marines. There's also landuse=military for tagging land areas owned/used by the military for whatever purpose.",
         "isA": "military",
         "mismatchScore": 0.4,
@@ -63,14 +69,8 @@
         "name": "military=cantonment",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "landuse=installation",
-                "weight": 0.9
-            },
-            {
-                "name": "landuse=residential",
-                "weight": 0.9
-            }
+            {"name": "landuse=installation", "weight": 0.9 },
+            {"name": "landuse=residential", "weight": 0.9 }
         ]
     }
 ]

@@ -924,24 +924,29 @@ cleanAttrs : function (attrs)
       if (tags.leisure && tags.tourism) delete tags.tourism;
       break;
 
-    // BA040 - Tidal Water
-    case 'BA040':
+    case 'BA040': // Tidal Water
       tags.natural = 'water';
       break;
 
-    // BH082 - Inland Water
-    case 'BH082':
+    case 'BH082': // Inland Water
       // This leaves us with just "natural=water"
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
       break;
 
-      // EC015 - Forest
-      case 'EC015':
+      case 'EA031': // Botanic Garden
+        if (! tags.leisure) tags.leisure = 'garden';
+        break;
+
+      case 'EC015': // Forest
         if (geometryType == 'Line')
         {
           delete tags.landuse; // Default EC015 translation
           tags.natural = 'tree_row';
         }
+        break;
+
+      case 'FA012': // Contaminated Area
+        if (! tags.boundary) tags.boundary = 'hazard';
         break;
     } // End switch F_CODE
 

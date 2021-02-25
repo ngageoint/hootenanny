@@ -14,27 +14,9 @@
         "name": "station=light_rail",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "public_transport=station",
-                "weight": [
-                    0.8,
-                    0.4
-                ]
-            },
-            {
-                "name": "transport=station",
-                "weight": [
-                    0.8,
-                    0.4
-                ]
-            },
-            {
-                "name": "building=transportation",
-                "weight": [
-                    0.8,
-                    0.4
-                ]
-            }
+            { "name": "public_transport=station", "weight": [ 0.8, 0.4 ] },
+            { "name": "transport=station", "weight": [ 0.8, 0.4 ] },
+            { "name": "building=transportation", "weight": [ 0.8, 0.4 ] }
         ]
     },
     {

@@ -1,8 +1,6 @@
 [
     {
-        "categories": [
-            "combination"
-        ],
+        "categories": [ "combination" ],
         "isA": "source",
         "name": "regex?source:.*",
         "objectType": "tag"
@@ -108,9 +106,7 @@
         "objectType": "tag"
     },
     {
-        "aliases": [
-            "source_ref"
-        ],
+        "aliases": [ "source_ref" ],
         "isA": "source",
         "name": "source:ref",
         "objectType": "tag"

@@ -384,7 +384,7 @@ fcodeCommon = {
       ['F_CODE','FA000','boundary','administrative'], // GGDM3/NAS7 Administrative Boundary
       ['F_CODE','FA002','place','geopolitical_entity'], // GGDM3/NAS7 GEOPOLITICAL_ENTITY
       ['F_CODE','FA003','place','administrative_subdivision'], // GGDM3/NAS7 ADMINISTRATIVE_SUBDIVISION
-      ['F_CODE','FA012','protect_class','16'], // Contaminated Region
+      ['F_CODE','FA012','hazard','contamination'], // Contaminated Region
       ['F_CODE','FA015','military','range'], // Firing Range/Gunnery Range
       ['F_CODE','FA100','landuse','test_area'], // Test Area, Test Site
       ['F_CODE','FA110','boundary','date_line'], // GGDM3/NAS7 International Date Line

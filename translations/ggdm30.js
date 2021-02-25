@@ -974,6 +974,12 @@ ggdm30 = {
       }
       break;
 
+      case 'AK030': // Amusement Park
+        // F_CODE translation == tourism but FFN translation could be leisure
+        // E.g. water parks
+        if (tags.leisure && tags.tourism) delete tags.tourism;
+        break;
+
       // Add defaults for common features
       case 'AP020':
         if (! tags.junction) tags.junction = 'yes';
@@ -987,24 +993,29 @@ ggdm30 = {
         if (! tags.waterway) tags.waterway = 'river';
         break;
 
-      // Tidal Water
-      case 'BA040':
+      case 'BA040': // Tidal Water
         tags.natural = 'water';
         break;
 
-      // BH082 - Inland Water
-      case 'BH082':
+      case 'BH082': // Inland Water
         // This leaves us with just "natural=water"
         if (tags.water == 'undifferentiated_water_body') delete tags.water;
         break;
 
-      // EC015 - Forest
-      case 'EC015':
+      case 'EA031': // Botanic Garden
+        if (! tags.leisure) tags.leisure = 'garden';
+        break;
+
+      case 'EC015': // Forest
         if (geometryType == 'Line')
         {
           delete tags.landuse; // Default EC015 translation
           tags.natural = 'tree_row';
         }
+        break;
+
+      case 'FA012': // Contaminated Area
+        if (! tags.boundary) tags.boundary = 'hazard';
         break;
     } // End switch F_CODE
 
@@ -1088,15 +1099,13 @@ ggdm30 = {
     // if (attrs.F_CODE == 'BH070' && !(tags.highway)) tags.highway = 'road';
     // if ('ford' in tags && !(tags.highway)) tags.highway = 'road';
 
-    // AK030 - Amusement Parks
-    // F_CODE translation == tourism but FFN translation could be leisure
-    // E.g. water parks
-    if (attrs.F_CODE == 'AK030')
+    // Fix up areas
+    // The thought is: If Hoot thinks it's an area but OSM doesn't think it's an area, make it an area.
+    if (geometryType == 'Area' && ! translate.isOsmArea(tags))
     {
-      if (tags.leisure && tags.tourism)
-      {
-        delete tags.tourism;
-      }
+      // Debug
+      // print('Adding area=yes');
+      tags.area = 'yes';
     }
 
     // Fix the ZI020_GE4X Values
@@ -2576,7 +2585,7 @@ ggdm30 = {
         else
         {
           //throw new Error(geometryType.toString() + ' geometry is not valid for F_CODE ' + attrs.F_CODE);
-          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in TDSv61'}, tableName: ''});
+          returnData.push({attrs:{'error':geometryType + ' geometry is not valid for ' + attrs.F_CODE + ' in GGDMv3'}, tableName: ''});
           return returnData;
         }
       }

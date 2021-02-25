@@ -1,13 +1,8 @@
 [
     {
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "linestring"
-        ],
+        "geometries": [ "node", "linestring" ],
         "influence": 1,
         "name": "power",
         "objectType": "tag"
@@ -18,64 +13,52 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": [ "node" ],
         "isA": "power",
         "name": "power=pole",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": [ "node" ],
         "isA": "power",
         "name": "power=tower",
         "objectType": "tag",
-        "similarTo": {
-            "name": "power=pole",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "power=pole", "weight": 0.7 }
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "power",
         "name": "power=line",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "power",
         "name": "power=minor_line",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "power",
         "name": "power=cable",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "area"
-        ],
+        "geometries": [ "area" ],
         "isA": "power",
         "name": "power=substation",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "area",
-            "node"
-        ],
+        "geometries": [ "area", "node" ],
         "isA": "power",
         "name": "power=plant",
+        "objectType": "tag"
+    },
+    {
+        "geometries": [ "area", "node" ],
+        "isA": "power",
+        "name": "power=generator",
         "objectType": "tag"
     }
 ]

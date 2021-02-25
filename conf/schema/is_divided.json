@@ -1,9 +1,7 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "influence": 1,
         "name": "is_divided",
         "objectType": "tag"

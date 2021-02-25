@@ -13,293 +13,146 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "railway",
         "name": "railway=halt",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "public_transport=platform",
-                "weight": [
-                    0.8,
-                    0.3
-                ]
-            },
-            {
-                "name": "public_transport=stop_position",
-                "weight": [
-                    0.8,
-                    0.3
-                ]
-            },
-            {
-                "name": "railway=station",
-                "weight": 0.8
-            },
-            {
-                "name": "railway=subway_entrance",
-                "weight": 0.8
-            },
-            {
-                "name": "station=subway_entrance",
-                "weight": 0.8
-            },
-            {
-                "name": "station=light_rail",
-                "weight": 0.8
-            },
-            {
-                "name": "transport=station",
-                "weight": [
-                    0.8,
-                    0.3
-                ]
+            {"name": "public_transport=platform", "weight": [0.8, 0.3 ] },
+            {"name": "public_transport=stop_position", "weight": [0.8, 0.3 ] },
+            {"name": "railway=station", "weight": 0.8 },
+            {"name": "railway=subway_entrance", "weight": 0.8 },
+            {"name": "station=subway_entrance", "weight": 0.8 },
+            {"name": "station=light_rail", "weight": 0.8 },
+            {"name": "transport=station", "weight": [0.8, 0.3 ]
             }
         ]
     },
     {
-        "geometries": [
-            "linestring",
-            "area",
-            "relation"
-        ],
+        "geometries": ["linestring", "area", "relation"],
         "isA": "railway",
         "name": "railway=platform",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "public_transport=platform",
-                "weight": [
-                    0.8,
-                    0.3
-                ]
-            },
-            {
-                "name": "public_transport=stop_position",
-                "weight": [
-                    0.8,
-                    0.3
-                ]
-            },
-            {
-                "name": "railway=station",
-                "weight": 0.7
-            },
-            {
-                "name": "railway=subway_entrance",
-                "weight": 0.6
-            },
-            {
-                "name": "station=subway_entrance",
-                "weight": 0.6
-            },
-            {
-                "name": "station=light_rail",
-                "weight": 0.7
-            },
-            {
-                "name": "transport=station",
-                "weight": [
-                    0.7,
-                    0.3
-                ]
-            }
+            {"name": "public_transport=platform", "weight": [0.8, 0.3 ] },
+            {"name": "public_transport=stop_position", "weight": [0.8, 0.3 ] },
+            {"name": "railway=station", "weight": 0.7 },
+            {"name": "railway=subway_entrance", "weight": 0.6 },
+            {"name": "station=subway_entrance", "weight": 0.6 },
+            {"name": "station=light_rail", "weight": 0.7 },
+            {"name": "transport=station", "weight": [0.7, 0.3 ] }
         ]
     },
     {
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": ["node", "area"],
         "isA": "railway",
         "name": "railway=station",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "building=train_station",
-                "weight": 0.8
-            },
-            {
-                "name": "railway=halt",
-                "weight": 0.8
-            },
-            {
-                "name": "railway=subway_entrance",
-                "weight": 0.8
-            },
-            {
-                "name": "station=station",
-                "weight": [
-                    0.8,
-                    0.5
-                ]
-            },
-            {
-                "name": "station=subway_entrance",
-                "weight": 0.8
-            },
-            {
-                "name": "station=light_rail",
-                "weight": 0.8
-            },
-            {
-                "name": "transport=station",
-                "weight": [
-                    0.8,
-                    0.5
-                ]
-            }
+            {"name": "building=train_station", "weight": 0.8 },
+            {"name": "railway=halt", "weight": 0.8 },
+            {"name": "railway=subway_entrance", "weight": 0.8 },
+            {"name": "station=station", "weight": [0.8, 0.5 ] },
+            {"name": "station=subway_entrance", "weight": 0.8 },
+            {"name": "station=light_rail", "weight": 0.8 },
+            {"name": "transport=station", "weight": [0.8, 0.5 ] }
         ]
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "railway",
         "name": "railway=stop",
         "objectType": "tag",
-        "similarTo": {
-            "name": "railway=halt",
-            "weight": 0.7
-        }
+        "similarTo": {"name": "railway=halt", "weight": 0.7 }
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "railway",
         "name": "railway=buffer_stop",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node","area"],
         "isA": "railway",
         "name": "railway=turntable",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node","area"],
+        "isA": "railway",
+        "name": "railway=roundhouse",
+        "objectType": "tag",
+        "similarTo": {"name": "railway=turntable", "weight": 0.7}
+    },
+    {
+        "geometries": ["node"],
         "isA": "railway",
         "name": "railway=level_crossing",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "railway",
         "name": "railway=tram_stop",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "public_transport=stop_position",
-                "weight": [
-                    0.8,
-                    0.4
-                ]
-            }
+            {"name": "public_transport=stop_position", "weight": [0.8, 0.4 ] }
         ]
     },
     {
-        "geometries": [
-            "node"
-        ],
+        "geometries": ["node"],
         "isA": "railway",
         "name": "railway=subway_entrance",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "station=subway_entrance",
-                "weight": 0.8
-            },
-            {
-                "name": "station=light_rail",
-                "weight": 0.8
-            },
-            {
-                "name": "transport=station",
-                "weight": [
-                    0.8,
-                    0.3
-                ]
-            }
+            {"name": "station=subway_entrance", "weight": 0.8 },
+            {"name": "station=light_rail", "weight": 0.8 },
+            {"name": "transport=station", "weight": [0.8, 0.3 ] }
         ]
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "railway",
         "name": "railway=rail",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "railway=light_rail",
-                "weight": 0.8
-            }
+            {"name": "railway=light_rail", "weight": 0.8 }
         ]
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "railway",
         "name": "railway=light_rail",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "railway=rail",
-                "weight": 0.8
-            }
+            {"name": "railway=rail", "weight": 0.8 }
         ]
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "railway",
         "name": "electrified=*",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "railway=rail",
-                "weight": 0.8
-            }
+            {"name": "railway=rail", "weight": 0.8 }
         ]
     },
     {
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "railway",
         "name": "railway=disused",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "railway=rail",
-                "weight": 0.8
-            }
+            {"name": "railway=rail", "weight": 0.8 }
         ]
     },
     {
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "railway",
         "name": "railway=construction",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "railway=rail",
-                "weight": 0.8
-            }
+            {"name": "railway=rail", "weight": 0.8 }
         ]
     }
 ]

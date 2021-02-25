@@ -13,10 +13,22 @@
         "isA": "historic",
         "name": "historic=castle",
         "objectType": "tag",
-        "similarTo": {
-            "name": "building=fort",
-            "weight": 0.8
-        }
+        "similarTo": [
+            {"name": "building=fort", "weight": 0.8 },
+            {"name": "historic=castle_complex", "weight": 0.8 }
+        ]
+    },
+    {
+        "geometries": ["node","area"],
+        "isA": "historic",
+        "name": "historic=castle_complex",
+        "objectType": "tag"
+    },
+    {
+        "geometries": ["node","area"],
+        "isA": "historic",
+        "name": "historic=wreck",
+        "objectType": "tag"
     },
     {
         "geometries": ["node","area"],
@@ -29,50 +41,31 @@
         "name": "historic=memorial",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "leisure=park",
-                "weight": 0.2
-            },
-            {
-                "name": "historic=monument",
-                "weight": 0.8
-            },
-            {
-                "name": "landuse=cemetery",
-                "weight": 0.6
-            }
+            {"name": "leisure=park", "weight": 0.2 },
+            {"name": "historic=monument", "weight": 0.8 },
+            {"name": "landuse=cemetery", "weight": 0.6 }
         ]
     },
     {
         "isA": "historic",
         "name": "historic=monument",
         "objectType": "tag",
-        "similarTo": {
-            "name": "tourism=artwork",
-            "weight": 0.4
-        },
-        "similarTo": {
-            "name": "amenity=place_of_worship",
-            "weight": 0.3
-        }
+        "similarTo": [
+            {"name": "tourism=artwork", "weight": 0.4 },
+            {"name": "amenity=place_of_worship", "weight": 0.3 }
+            ]
     },
     {
         "geometries": ["node","linestring","area"],
         "isA": "historic",
         "name": "historic=ruins",
         "objectType": "tag",
-        "similarTo": {
-            "name": "place=populated",
-            "weight": 0.4
-        }
+        "similarTo": {"name": "place=populated", "weight": 0.4 }
     },
     {
         "isA": "historic",
         "name": "historic=building",
         "objectType": "tag",
-        "similarTo": {
-            "name": "historic=monument",
-            "weight": 0.8
-        }
+        "similarTo": {"name": "historic=monument", "weight": 0.8 }
     }
 ]

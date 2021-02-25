@@ -1,10 +1,7 @@
 [
     {
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": [ "node", "area" ],
         "influence": 1,
         "isA": "poi",
         "name": "man_made",
@@ -17,9 +14,7 @@
         "objectType": "tag"
     },
     {
-        "categories": [
-            "multiuse"
-        ],
+        "categories": [ "multiuse" ],
         "isA": "man_made",
         "name": "man_made=observatory",
         "objectType": "tag"
@@ -43,38 +38,28 @@
     },
     {
         "categories": [],
-        "geometries": [
-            "node",
-            "linestring"
-        ],
+        "geometries": ["node", "linestring"],
         "isA": "man_made",
         "name": "man_made=basin_gate",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "man_made",
         "name": "man_made=breakwater",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "man_made",
         "name": "man_made=causeway",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "man_made",
         "name": "man_made=embankment",
         "objectType": "tag"
@@ -86,9 +71,7 @@
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "man_made",
         "name": "man_made=goods_conveyor",
         "objectType": "tag"
@@ -102,28 +85,21 @@
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "man_made",
         "name": "man_made=groyne",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": [ "linestring" ],
         "isA": "man_made",
         "name": "man_made=jetty",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "man_made",
         "name": "man_made=marine_revetment",
         "objectType": "tag"
@@ -135,108 +111,77 @@
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "man_made",
         "name": "man_made=mole",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "node",
-            "linestring"
-        ],
+        "geometries": [ "node", "linestring" ],
         "isA": "man_made",
         "name": "man_made=outdoor_theatre_screen",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "categories": [ "poi" ],
+        "geometries": ["linestring", "area"],
         "isA": "man_made",
         "name": "man_made=pier",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "man_made",
         "name": "man_made=pipeline",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "man_made",
         "name": "man_made=promenade",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "man_made",
         "name": "man_made=quay",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "man_made",
         "name": "man_made=recreational_pier",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "man_made",
         "name": "man_made=rock_and_snow_fence",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "man_made",
         "name": "man_made=scoreboard",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "node",
-            "linestring"
-        ],
+        "geometries": ["node", "linestring"],
         "isA": "man_made",
         "name": "man_made=ski_jump",
         "objectType": "tag"
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring"
-        ],
+        "geometries": ["linestring"],
         "isA": "man_made",
         "name": "man_made=snow_fence",
         "objectType": "tag"
@@ -261,18 +206,13 @@
     },
     {
         "categories": [],
-        "geometries": [
-            "linestring",
-            "area"
-        ],
+        "geometries": ["linestring", "area"],
         "isA": "man_made",
         "name": "man_made=training_wall",
         "objectType": "tag"
     },
     {
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "isA": "man_made",
         "name": "man_made=water_works",
         "objectType": "tag",
@@ -282,24 +222,15 @@
         ]
     },
     {
-        "geometries": [
-            "area"
-        ],
-        "categories": [
-            "poi"
-        ],
+        "geometries": ["area"],
+        "categories": [ "poi" ],
         "isA": "man_made",
         "name": "man_made=reservoir_covered",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "area",
-            "node"
-        ],
-        "categories": [
-            "poi"
-        ],
+        "geometries": ["area", "node"],
+        "categories": [ "poi" ],
         "isA": "man_made",
         "name": "man_made=water_tower",
         "objectType": "tag",
@@ -310,6 +241,11 @@
     {
         "isA": "man_made",
         "name": "man_made=surveillance",
+        "objectType": "tag"
+    },
+    {
+        "isA": "man_made",
+        "name": "man_made=survey_point",
         "objectType": "tag"
     },
     {

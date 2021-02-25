@@ -11,31 +11,21 @@
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "area"
-        ],
-        "categories": [
-            "poi"
-        ],
+        "geometries": [ "area" ],
+        "categories": [ "poi" ],
         "isA": "water",
         "name": "water=pond",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "area"
-        ],
-        "categories": [
-            "poi"
-        ],
+        "geometries": [ "area" ],
+        "categories": [ "poi" ],
         "isA": "water",
         "name": "water=lake",
         "objectType": "tag"
     },
     {
-        "geometries": [
-            "area"
-        ],
+        "geometries": [ "area" ],
         "isA": "waterway=riverbank",
         "name": "water=river",
         "objectType": "tag"

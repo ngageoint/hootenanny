@@ -1,14 +1,9 @@
 [
     {
-        "categories": [
-            "poi"
-        ],
+        "categories": [ "poi" ],
         "isA": "building",
         "name": "abstract_building_place_of_worship",
         "objectType": "tag",
-        "similarTo": {
-            "name": "amenity=place_of_worship",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "amenity=place_of_worship", "weight": 0.9 }
     }
 ]

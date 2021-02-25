@@ -6,10 +6,7 @@
             "combination"
         ],
         "dataType": "enumeration",
-        "geometries": [
-            "node",
-            "area"
-        ],
+        "geometries": [ "node", "area" ],
         "influence": 1,
         "name": "sport",
         "objectType": "tag"
@@ -33,10 +30,7 @@
         "isA": "sport",
         "name": "sport=9pin",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=10pin",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=10pin", "weight": 0.9 }
     },
     {
         "isA": "sport=martial_arts",
@@ -47,10 +41,7 @@
         "isA": "sport",
         "name": "sport=american_football",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=football",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=football", "weight": 0.9 }
     },
     {
         "isA": "sport",
@@ -71,34 +62,22 @@
         "isA": "sport",
         "name": "sport=australian_football",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=football",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=football", "weight": 0.9 }
     },
     {
         "isA": "sport",
         "name": "sport=badminton",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "sport=racquet",
-                "weight": 0.6
-            },
-            {
-                "name": "sport=volleyball",
-                "weight": 0.4
-            }
+            { "name": "sport=racquet", "weight": 0.6 },
+            { "name": "sport=volleyball", "weight": 0.4 }
         ]
     },
     {
         "isA": "sport",
         "name": "sport=bandy",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=ice_hockey",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=ice_hockey", "weight": 0.8 }
     },
     {
         "isA": "sport=skydiving",
@@ -130,14 +109,8 @@
         "name": "sport=biathlon",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "sport=skiing",
-                "weight": 0.8
-            },
-            {
-                "name": "sport=shooting",
-                "weight": 0.7
-            }
+            { "name": "sport=skiing", "weight": 0.8 },
+            { "name": "sport=shooting", "weight": 0.7 }
         ]
     },
     {
@@ -178,10 +151,7 @@
         "name": "sport=bocce",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "sport=pelota",
-                "weight": 0.8
-            }
+            { "name": "sport=pelota", "weight": 0.8 }
         ]
     },
     {
@@ -218,10 +188,7 @@
         "isA": "sport",
         "name": "sport=canadian_football",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=football",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=football", "weight": 0.9 }
     },
     {
         "isA": "sport",
@@ -237,10 +204,7 @@
         "isA": "sport",
         "name": "sport=car_racing",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=motor",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=motor", "weight": 0.8 }
     },
     {
         "isA": "sport",
@@ -266,10 +230,7 @@
         "isA": "sport",
         "name": "sport=climbing_adventure",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=climbing",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=climbing", "weight": 0.9 }
     },
     {
         "isA": "sport",
@@ -336,14 +297,8 @@
         "name": "sport=diving",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "sport=scuba_diving",
-                "weight": 0.5
-            },
-            {
-                "name": "sport=swimming",
-                "weight": 0.7
-            }
+            { "name": "sport=scuba_diving", "weight": 0.5 },
+            { "name": "sport=swimming", "weight": 0.7 }
         ]
     },
     {
@@ -380,19 +335,13 @@
         "isA": "sport",
         "name": "sport=fencing",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=martial_arts",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=martial_arts", "weight": 0.8 }
     },
     {
         "isA": "sport",
         "name": "sport=field_hockey",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=hockey",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=hockey", "weight": 0.7 }
     },
     {
         "isA": "sport",
@@ -403,10 +352,7 @@
         "isA": "sport",
         "name": "sport=fistball",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=volleyball",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=volleyball", "weight": 0.8 }
     },
     {
         "isA": "sport",
@@ -422,10 +368,7 @@
         "isA": "sport",
         "name": "sport=four_square",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=handball",
-            "weight": 0.6
-        }
+        "similarTo": { "name": "sport=handball", "weight": 0.6 }
     },
     {
         "isA": "sport",
@@ -456,10 +399,7 @@
         "isA": "sport",
         "name": "sport=gaelic_football",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=football",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=football", "weight": 0.9 }
     },
     {
         "isA": "sport",
@@ -470,10 +410,7 @@
         "isA": "sport",
         "name": "sport=gateball",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=croquet",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=croquet", "weight": 0.7 }
     },
     {
         "isA": "sport",
@@ -489,10 +426,7 @@
         "isA": "sport",
         "name": "sport=gliding",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=free_flying",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=free_flying", "weight": 0.8 }
     },
     {
         "isA": "sport=karting",
@@ -513,10 +447,7 @@
         "isA": "sport",
         "name": "sport=gym",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=fitness",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=fitness", "weight": 0.9 }
     },
     {
         "isA": "sport",
@@ -567,28 +498,19 @@
         "isA": "sport",
         "name": "sport=ice_hockey",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=hockey",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=hockey", "weight": 0.7 }
     },
     {
         "isA": "sport",
         "name": "sport=ice_skating",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=skating",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=skating", "weight": 0.9 }
     },
     {
         "isA": "sport",
         "name": "sport=ice_stock",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=curling",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=curling", "weight": 0.8 }
     },
     {
         "isA": "sport=ice_hockey",
@@ -599,19 +521,13 @@
         "isA": "sport",
         "name": "sport=inline_skating",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=roller_skating",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=roller_skating", "weight": 0.8 }
     },
     {
         "isA": "sport",
         "name": "sport=jogging",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=running",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=running", "weight": 0.9 }
     },
     {
         "isA": "sport=martial_arts",
@@ -632,10 +548,7 @@
         "isA": "sport",
         "name": "sport=karting",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=motor",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=motor", "weight": 0.8 }
     },
     {
         "isA": "sport",
@@ -646,10 +559,7 @@
         "isA": "sport",
         "name": "sport=kitesurfing",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=windsurfing",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=windsurfing", "weight": 0.7 }
     },
     {
         "isA": "sport=korfball",
@@ -680,10 +590,7 @@
         "isA": "sport",
         "name": "sport=long_jump",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=athletics",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=athletics", "weight": 0.7 }
     },
     {
         "isA": "sport=wrestling",
@@ -704,10 +611,7 @@
         "isA": "sport",
         "name": "sport=mini_tennis",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=tennis",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=tennis", "weight": 0.8 }
     },
     {
         "isA": "sport",
@@ -738,10 +642,7 @@
         "isA": "sport",
         "name": "sport=motocross",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=motor",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=motor", "weight": 0.8 }
     },
     {
         "isA": "sport",
@@ -792,10 +693,7 @@
         "isA": "sport",
         "name": "sport=paddle_tennis",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=tennis",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=tennis", "weight": 0.7 }
     },
     {
         "isA": "sport=paddle_tennis",
@@ -811,10 +709,7 @@
         "isA": "sport",
         "name": "sport=paragliding",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=free_flying",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=free_flying", "weight": 0.8 }
     },
     {
         "isA": "sport",
@@ -840,10 +735,7 @@
         "isA": "sport",
         "name": "sport=pilates",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=fitness",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=fitness", "weight": 0.9 }
     },
     {
         "isA": "sport",
@@ -860,14 +752,8 @@
         "name": "sport=pool",
         "objectType": "tag",
         "similarTo": [
-            {
-                "name": "sport=swimming",
-                "weight": 0.6
-            },
-            {
-                "name": "sport=billiards",
-                "weight": 0.5
-            }
+            { "name": "sport=swimming", "weight": 0.6 },
+            { "name": "sport=billiards", "weight": 0.5 }
         ]
     },
     {
@@ -909,10 +795,7 @@
         "isA": "sport",
         "name": "sport=roller_skating",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=skating",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=skating", "weight": 0.8 }
     },
     {
         "isA": "sport=roller_skating",
@@ -933,19 +816,13 @@
         "isA": "sport",
         "name": "sport=rugby",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=football",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=football", "weight": 0.9 }
     },
     {
         "isA": "sport",
         "name": "sport=rugby_league",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=rugby",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=rugby", "weight": 0.8 }
     },
     {
         "isA": "sport=rugby",
@@ -956,10 +833,7 @@
         "isA": "sport",
         "name": "sport=running",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=athletics",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=athletics", "weight": 0.9 }
     },
     {
         "isA": "sport",
@@ -980,10 +854,7 @@
         "isA": "sport",
         "name": "sport=shinty",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=field_hockey",
-            "weight": 0.5
-        }
+        "similarTo": { "name": "sport=field_hockey", "weight": 0.5 }
     },
     {
         "isA": "sport",
@@ -1004,10 +875,7 @@
         "isA": "sport",
         "name": "sport=shotput",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=athletics",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=athletics", "weight": 0.7 }
     },
     {
         "isA": "sport",
@@ -1053,28 +921,19 @@
         "isA": "sport",
         "name": "sport=sled",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=bobsleigh",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=bobsleigh", "weight": 0.7 }
     },
     {
         "isA": "sport",
         "name": "sport=snooker",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=billiards",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=billiards", "weight": 0.8 }
     },
     {
         "isA": "sport",
         "name": "sport=soccer",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=football",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=football", "weight": 0.9 }
     },
     {
         "isA": "sport=softball",
@@ -1085,10 +944,7 @@
         "isA": "sport",
         "name": "sport=softball",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=baseball",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=baseball", "weight": 0.9 }
     },
     {
         "isA": "sport=car_racing",
@@ -1099,19 +955,13 @@
         "isA": "sport",
         "name": "sport=squash",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=racquetball",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=racquetball", "weight": 0.7 }
     },
     {
         "isA": "sport",
         "name": "sport=streetball",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=basketball",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=basketball", "weight": 0.7 }
     },
     {
         "isA": "sport=surfing",
@@ -1177,10 +1027,7 @@
         "isA": "sport",
         "name": "sport=toboggan",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=bobsleigh",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=bobsleigh", "weight": 0.8 }
     },
     {
         "isA": "sport=athletics",
@@ -1191,28 +1038,19 @@
         "isA": "sport",
         "name": "sport=trampoline",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=gymnastics",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=gymnastics", "weight": 0.8 }
     },
     {
         "isA": "sport",
         "name": "sport=ultralight_aviation",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=free_flying",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=free_flying", "weight": 0.8 }
     },
     {
         "isA": "sport",
         "name": "sport=via_ferrata",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=climbing",
-            "weight": 0.7
-        }
+        "similarTo": { "name": "sport=climbing", "weight": 0.7 }
     },
     {
         "isA": "sport",
@@ -1233,10 +1071,7 @@
         "isA": "sport",
         "name": "sport=weightlifting",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=gym",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=gym", "weight": 0.8 }
     },
     {
         "isA": "sport",
@@ -1252,19 +1087,13 @@
         "isA": "sport",
         "name": "sport=wrestling",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=martial_arts",
-            "weight": 0.8
-        }
+        "similarTo": { "name": "sport=martial_arts", "weight": 0.8 }
     },
     {
         "isA": "sport",
         "name": "sport=yoga",
         "objectType": "tag",
-        "similarTo": {
-            "name": "sport=fitness",
-            "weight": 0.9
-        }
+        "similarTo": { "name": "sport=fitness", "weight": 0.9 }
     },
     {
         "isA": "sport=exercise_area",
