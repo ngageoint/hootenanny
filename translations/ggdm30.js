@@ -38,8 +38,8 @@
 ggdm30 = {
   // getDbSchema - Load the standard schema or modify it into the Thematic structure
   getDbSchema: function() {
-    layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-    ggdmAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+    ggdm30.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
+    ggdm30.ggdmAttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 
     // Warning: This is <GLOBAL> so we can get access to it from other functions
     ggdm30.rawSchema = ggdm30.schema.getDbSchema();
@@ -51,19 +51,19 @@ ggdm30 = {
     if (config.getOgrNoteExtra() == 'file') ggdm30.rawSchema = translate.addExtraFeature(ggdm30.rawSchema);
 
     // Build the GGDM fcode/attrs lookup table. Note: This is <GLOBAL>
-    ggdmAttrLookup = translate.makeAttrLookup(ggdm30.rawSchema);
+    ggdm30.ggdmAttrLookup = translate.makeAttrLookup(ggdm30.rawSchema);
 
     // Debug:
-    // print("ggdmAttrLookup: Start");
-    // translate.dumpLookup(ggdmAttrLookup);
-    // print("ggdmAttrLookup: End");
+    // print("ggdm30.ggdmAttrLookup: Start");
+    // translate.dumpLookup(ggdm30.ggdmAttrLookup);
+    // print("ggdm30.ggdmAttrLookup: End");
 
     // Decide if we are going to use the Thematic structure or 1 FCODE / File
     // if we DON't want the new structure, just return the ggdm30.rawSchema
     if (config.getOgrThematicStructure() == 'false')
     {
       // Now build the FCODE/layername lookup table. Note: This is <GLOBAL>
-      layerNameLookup = translate.makeLayerNameLookup(ggdm30.rawSchema);
+      ggdm30.layerNameLookup = translate.makeLayerNameLookup(ggdm30.rawSchema);
 
       // Now add an o2s[A,L,P] feature to the ggdm30.rawSchema
       // We can drop features but this is a nice way to see what we would drop
@@ -197,12 +197,12 @@ ggdm30 = {
     } // end ggdm30.rawSchema loop
 
     // Create a lookup table of TDS like structures attributes. Note this is <GLOBAL>
-    ggdmThematicLookup = translate.makeTdsAttrLookup(newSchema);
+    ggdm30.thematicLookup = translate.makeThematicAttrLookup(newSchema);
 
     // Debug:
-    //print("ggdmThematicLookup: Start");
-    //translate.dumpLookup(ggdmThematicLookup);
-    //print("ggdmThematicLookup: End");
+    //print("ggdm30.thematicLookup: Start");
+    //translate.dumpLookup(ggdm30.thematicLookup);
+    //print("ggdm30.thematicLookup: End");
 
     // Add the ESRI Feature Dataset name to the schema
     if (config.getOgrEsriFdname() !== '') newSchema = translate.addFdName(newSchema,config.getOgrEsriFdname());
@@ -239,7 +239,7 @@ ggdm30 = {
   validateAttrs: function(geometryType,attrs,notUsed,transMap) {
     // First, use the lookup table to quickly drop all attributes that are not part of the feature
     // This is quicker than going through the Schema due to the way the Schema is arranged
-    var attrList = ggdmAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+    var attrList = ggdm30.ggdmAttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
     var othList = {};
 
@@ -376,17 +376,17 @@ ggdm30 = {
   }, // End validateAttrs
 
 
-  // validateTDSAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
-  validateTDSAttrs: function(gFcode, attrs) {
+  // validateThematicAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
+  validateThematicAttrs: function(gFcode, attrs) {
 
-    var thematicAttrList = ggdmThematicLookup[ggdm30.rules.thematicGroupList[gFcode]];
-    var ggdmAttrList = ggdmAttrLookup[gFcode];
+    var thematicAttrList = ggdm30.thematicLookup[ggdm30.rules.thematicGroupList[gFcode]];
+    var ggdmAttrList = ggdm30.ggdmAttrLookup[gFcode];
 
     for (var i = 0, len = thematicAttrList.length; i < len; i++)
     {
       if (ggdmAttrList.indexOf(thematicAttrList[i]) == -1) attrs[thematicAttrList[i]] = undefined;
     }
-  }, // End validateTDSAttrs
+  }, // End validateThematicAttrs
 
 
   // Sort out if we need to return more than one feature
@@ -2472,7 +2472,7 @@ ggdm30 = {
     // push the feature to o2s layer
     var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-    if (ggdmAttrLookup[gFcode])
+    if (ggdm30.ggdmAttrLookup[gFcode])
     {
       // Check if we need to make more features
       // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -2487,7 +2487,7 @@ ggdm30 = {
       {
         var gFcode = gType + returnData[i]['attrs']['F_CODE'];
 
-        if (ggdmAttrLookup[gFcode.toUpperCase()])
+        if (ggdm30.ggdmAttrLookup[gFcode.toUpperCase()])
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           ggdm30.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
@@ -2520,11 +2520,11 @@ ggdm30 = {
           if (ggdm30.config.OgrThematicStructure == 'true')
           {
             returnData[i]['tableName'] = ggdm30.rules.thematicGroupList[gFcode];
-            ggdm30.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+            ggdm30.validateThematicAttrs(gFcode, returnData[i]['attrs']);
           }
           else
           {
-            returnData[i]['tableName'] = layerNameLookup[gFcode.toUpperCase()];
+            returnData[i]['tableName'] = ggdm30.layerNameLookup[gFcode.toUpperCase()];
           }
         }
         else
