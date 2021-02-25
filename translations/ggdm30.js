@@ -1279,7 +1279,7 @@ ggdm30 = {
         ['t.highway == "crossing"','t["transport:type"] = "road";a.F_CODE = "AQ062"; delete t.highway'],
         ['t.highway == "give-way"','a.F_CODE = "AQ062"'],
         ['t.highway == "mini_roundabout"','t.junction = "roundabout"'],
-        ['t.highway == "steps"','t.highway = "footway"'],
+        // ['t.highway == "steps"','t.highway = "footway"'],
         ['t.highway == "stop"','a.F_CODE = "AQ062"'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
@@ -2223,9 +2223,9 @@ ggdm30 = {
     if (ggdm30.config == undefined)
     {
       ggdm30.config = {};
+      ggdm30.config.OgrAddUuid = config.getOgrAddUuid();
       ggdm30.config.OgrDebugAddfcode = config.getOgrDebugAddfcode();
       ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
-      ggdm30.config.OgrAddUuid = config.getOgrAddUuid();
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -2263,13 +2263,13 @@ ggdm30 = {
     if (ggdm30.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Import
-      fcodeCommon.one2one.push.apply(fcodeCommon.one2one,ggdm30.rules.fcodeOne2oneIn);
-
-      ggdm30.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+      fcodeCommon.one2one.forEach( function(item) { if (ggdm30.rules.subtypeList[item[1]]) ggdm30.rules.fcodeOne2oneIn.push(item); });
+      ggdm30.fcodeLookup = translate.createLookup(ggdm30.rules.fcodeOne2oneIn);
       // Debug
       // print('Start Dump FCODE:');
       // translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
       // print('End Dump FCODE:');
+
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode
       ggdm30.fcodeLookupOut = translate.createBackwardsLookup(ggdm30.rules.fcodeOne2oneOut);
@@ -2366,13 +2366,13 @@ ggdm30 = {
     if (ggdm30.config == undefined)
     {
       ggdm30.config = {};
+      ggdm30.config.OgrAddUuid = config.getOgrAddUuid();
       ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
       ggdm30.config.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
-      ggdm30.config.OgrNoteExtra = config.getOgrNoteExtra();
       ggdm30.config.OgrFormat = config.getOgrOutputFormat();
+      ggdm30.config.OgrNoteExtra = config.getOgrNoteExtra();
       ggdm30.config.OgrThematicStructure = config.getOgrThematicStructure();
       ggdm30.config.OgrThrowError = config.getOgrThrowError();
-      ggdm30.config.OgrAddUuid = config.getOgrAddUuid();
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -2401,9 +2401,8 @@ ggdm30 = {
     if (ggdm30.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Export
-      // fcodeCommon.one2one.push.apply(fcodeCommon.one2one,ggdm30.rules.fcodeOne2oneOut);
-
-      ggdm30.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+      fcodeCommon.one2one.forEach( function(item) { if (ggdm30.rules.subtypeList[item[1]]) ggdm30.rules.fcodeOne2oneIn.push(item); });
+      ggdm30.fcodeLookup = translate.createBackwardsLookup(ggdm30.rules.fcodeOne2oneIn);
 
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode

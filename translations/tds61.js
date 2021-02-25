@@ -1346,7 +1346,7 @@ tds61 = {
         ['t.highway == "crossing"','t["transport:type"] = "road";a.F_CODE = "AQ062"; delete t.highway'],
         ['t.highway == "give-way"','a.F_CODE = "AQ062"'],
         ['t.highway == "mini_roundabout"','t.junction = "roundabout"'],
-        ['t.highway == "steps"','t.highway = "footway"'],
+        // ['t.highway == "steps"','t.highway = "footway"'],
         ['t.highway == "stop"','a.F_CODE = "AQ062"'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
@@ -2361,9 +2361,9 @@ tds61 = {
     if (tds61.configIn == undefined)
     {
       tds61.configIn = {};
+      tds61.configIn.OgrAddUuid = config.getOgrAddUuid();
       tds61.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
       tds61.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-      tds61.configIn.OgrAddUuid = config.getOgrAddUuid();
 
       // Get any changes
       tds61.toChange = hoot.Settings.get('schema.translation.override');
@@ -2378,12 +2378,8 @@ tds61 = {
       tags = translate.parseO2S(attrs);
 
       // Add some metadata
-      if (! tags.uuid)
-      {
-        if (tds61.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
-      }
-
-      if (! tags.source) tags.source = 'tdsv61:' + layerName.toLowerCase();
+      if (!tags.uuid && tds61.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (!tags.source) tags.source = 'tdsv61:' + layerName.toLowerCase();
 
       // Debug:
       if (tds61.configIn.OgrDebugDumptags == 'true')
@@ -2400,8 +2396,8 @@ tds61 = {
     if (tds61.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Import
-      fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.rules.fcodeOne2oneIn);
-      tds61.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+      fcodeCommon.one2one.forEach( function(item) { if (tds61.rules.subtypeList[item[1]]) tds61.rules.fcodeOne2oneIn.push(item); });
+      tds61.fcodeLookup = translate.createLookup(tds61.rules.fcodeOne2oneIn);
 
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode
@@ -2515,13 +2511,13 @@ tds61 = {
     if (tds61.configOut == undefined)
     {
       tds61.configOut = {};
+      tds61.configOut.OgrAddUuid = config.getOgrAddUuid();
       tds61.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
       tds61.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
-      tds61.configOut.OgrNoteExtra = config.getOgrNoteExtra();
       tds61.configOut.OgrFormat = config.getOgrOutputFormat();
+      tds61.configOut.OgrNoteExtra = config.getOgrNoteExtra();
       tds61.configOut.OgrThematicStructure = config.getOgrThematicStructure();
       tds61.configOut.OgrThrowError = config.getOgrThrowError();
-      tds61.configOut.OgrAddUuid = config.getOgrAddUuid();
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -2550,8 +2546,8 @@ tds61 = {
     if (tds61.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Export
-      // fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds61.rules.fcodeOne2oneOut);
-      tds61.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+      fcodeCommon.one2one.forEach( function(item) { if (tds61.rules.subtypeList[item[1]]) tds61.rules.fcodeOne2oneIn.push(item); });
+      tds61.fcodeLookup = translate.createBackwardsLookup(tds61.rules.fcodeOne2oneIn);
 
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode

@@ -2072,9 +2072,9 @@ mgcp = {
     if (mgcp.configIn == undefined)
     {
       mgcp.configIn = {};
+      mgcp.configIn.OgrAddUuid = config.getOgrAddUuid();
       mgcp.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
       mgcp.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-      mgcp.configIn.OgrAddUuid = config.getOgrAddUuid();
 
       // Get any changes
       mgcp.toChange = hoot.Settings.get("schema.translation.override");
@@ -2241,11 +2241,11 @@ mgcp = {
     if (mgcp.configOut == undefined)
     {
       mgcp.configOut = {};
-      mgcp.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
-      mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
-      mgcp.configOut.OgrFormat = config.getOgrOutputFormat();
-      mgcp.configOut.OgrThrowError = config.getOgrThrowError();
       mgcp.configOut.OgrAddUuid = config.getOgrAddUuid();
+      mgcp.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
+      mgcp.configOut.OgrFormat = config.getOgrOutputFormat();
+      mgcp.configOut.OgrNoteExtra = config.getOgrNoteExtra();
+      mgcp.configOut.OgrThrowError = config.getOgrThrowError();
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon

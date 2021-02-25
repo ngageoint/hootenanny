@@ -1354,7 +1354,7 @@ cleanAttrs : function (attrs)
         ['t.highway == "crossing"','t["transport:type"] = "road";a.F_CODE = "AQ062"; delete t.highway'],
         ['t.highway == "give-way"','a.F_CODE = "AQ062"'],
         ['t.highway == "mini_roundabout"','t.junction = "roundabout"'],
-        ['t.highway == "steps"','t.highway = "footway"'],
+        // ['t.highway == "steps"','t.highway = "footway"'],
         ['t.highway == "stop"','a.F_CODE = "AQ062"'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
@@ -2266,9 +2266,9 @@ cleanAttrs : function (attrs)
     if (tds40.configIn == undefined)
     {
       tds40.configIn = {};
+      tds40.configIn.OgrAddUuid = config.getOgrAddUuid();
       tds40.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
       tds40.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
-      tds40.configIn.OgrAddUuid = config.getOgrAddUuid();
 
       // Get any changes
       tds40.toChange = hoot.Settings.get('schema.translation.override');
@@ -2305,9 +2305,8 @@ cleanAttrs : function (attrs)
     if (tds40.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Import
-      fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds40.rules.fcodeOne2oneIn);
-
-      tds40.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+      fcodeCommon.one2one.forEach( function(item) { if (tds40.rules.subtypeList[item[1]]) tds40.rules.fcodeOne2oneIn.push(item); });
+      tds40.fcodeLookup = translate.createLookup(tds40.rules.fcodeOne2oneIn);
 
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode
@@ -2420,13 +2419,13 @@ cleanAttrs : function (attrs)
     if (tds40.configOut == undefined)
     {
       tds40.configOut = {};
+      tds40.configOut.OgrAddUuid = config.getOgrAddUuid();
       tds40.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
       tds40.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
-      tds40.configOut.OgrNoteExtra = config.getOgrNoteExtra();
       tds40.configOut.OgrFormat = config.getOgrOutputFormat();
+      tds40.configOut.OgrNoteExtra = config.getOgrNoteExtra();
       tds40.configOut.OgrThematicStructure = config.getOgrThematicStructure();
       tds40.configOut.OgrThrowError = config.getOgrThrowError();
-      tds40.configOut.OgrAddUuid = config.getOgrAddUuid();
 
       // Get any changes to OSM tags
       // NOTE: the rest of the config variables will change to this style of assignment soon
@@ -2455,9 +2454,8 @@ cleanAttrs : function (attrs)
     if (tds40.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Export
-      // fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds40.rules.fcodeOne2oneOut);
-
-      tds40.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+      fcodeCommon.one2one.forEach( function(item) { if (tds40.rules.subtypeList[item[1]]) tds40.rules.fcodeOne2oneIn.push(item); });
+      tds40.fcodeLookup = translate.createBackwardsLookup(tds40.rules.fcodeOne2oneIn);
 
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode

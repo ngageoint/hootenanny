@@ -802,9 +802,8 @@ tds70 = {
     }
     else
     {
-      tags.uuid = createUuid();
+      if (tds70.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
     }
-
 
     if (tds70.osmPostRules == undefined)
     {
@@ -1280,7 +1279,7 @@ tds70 = {
         ['t.highway == "crossing"','t["transport:type"] = "road";a.F_CODE = "AQ062"; delete t.highway'],
         ['t.highway == "give-way"','a.F_CODE = "AQ062"'],
         ['t.highway == "mini_roundabout"','t.junction = "roundabout"'],
-        ['t.highway == "steps"','t.highway = "footway"'],
+        // ['t.highway == "steps"','t.highway = "footway"'],
         ['t.highway == "stop"','a.F_CODE = "AQ062"'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
@@ -2013,7 +2012,7 @@ tds70 = {
     }
     else
     {
-      attrs.UFI = createUuid().replace('{','').replace('}','');
+      if (tds70.configOut.OgrAddUuid == 'true') attrs.UFI = createUuid().replace('{','').replace('}','');
     }
 
     // Add Weather Restrictions to transportation features
@@ -2333,6 +2332,7 @@ tds70 = {
     if (tds70.configIn == undefined)
     {
       tds70.configIn = {};
+      tds70.configIn.OgrAddUuid = config.getOgrAddUuid();
       tds70.configIn.OgrDebugAddfcode = config.getOgrDebugAddfcode();
       tds70.configIn.OgrDebugDumptags = config.getOgrDebugDumptags();
 
@@ -2349,8 +2349,8 @@ tds70 = {
       tags = translate.parseO2S(attrs);
 
       // Add some metadata
-      if (! tags.uuid) tags.uuid = createUuid();
-      if (! tags.source) tags.source = 'tdsv70:' + layerName.toLowerCase();
+      if (!tags.uuid && tds70.configIn.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (!tags.source) tags.source = 'tdsv70:' + layerName.toLowerCase();
 
       // Debug:
       if (tds70.configIn.OgrDebugDumptags == 'true')
@@ -2367,12 +2367,11 @@ tds70 = {
     if (tds70.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Import
-      fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds70.rules.fcodeOne2oneIn);
-      tds70.fcodeLookup = translate.createLookup(fcodeCommon.one2one);
+      fcodeCommon.one2one.forEach( function(item) { if (tds70.rules.subtypeList[item[1]]) tds70.rules.fcodeOne2oneIn.push(item); });
+      tds70.fcodeLookup = translate.createLookup(tds70.rules.fcodeOne2oneIn);
 
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode
-
       tds70.fcodeLookupOut = translate.createBackwardsLookup(tds70.rules.fcodeOne2oneOut);
 
       // Debug
@@ -2485,11 +2484,12 @@ tds70 = {
     if (tds70.configOut == undefined)
     {
       tds70.configOut = {};
+      tds70.configOut.OgrAddUuid = config.getOgrAddUuid();
       tds70.configOut.OgrDebugDumptags = config.getOgrDebugDumptags();
       tds70.configOut.OgrDebugDumpvalidate = config.getOgrDebugDumpvalidate();
       tds70.configOut.OgrEsriFcsubtype = config.getOgrEsriFcsubtype();
-      tds70.configOut.OgrNoteExtra = config.getOgrNoteExtra();
       tds70.configOut.OgrFormat = config.getOgrOutputFormat();
+      tds70.configOut.OgrNoteExtra = config.getOgrNoteExtra();
       tds70.configOut.OgrThematicStructure = config.getOgrThematicStructure();
       tds70.configOut.OgrThrowError = config.getOgrThrowError();
 
@@ -2520,8 +2520,8 @@ tds70 = {
     if (tds70.fcodeLookup == undefined)
     {
       // Add the FCODE rules for Export
-      // fcodeCommon.one2one.push.apply(fcodeCommon.one2one,tds70.rules.fcodeOne2oneOut);
-      tds70.fcodeLookup = translate.createBackwardsLookup(fcodeCommon.one2one);
+      fcodeCommon.one2one.forEach( function(item) { if (tds70.rules.subtypeList[item[1]]) tds70.rules.fcodeOne2oneIn.push(item); });
+      tds70.fcodeLookup = translate.createBackwardsLookup(tds70.rules.fcodeOne2oneIn);
 
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode
