@@ -4610,6 +4610,7 @@ tds70.rules = {
     'LAF020':'IndustryCrv', // CONVEYOR_C
     'LAH025':'MilitaryCrv', // ENGINEERED_EARTHWORK_C
     'LAK020':'RecreationCrv', // AMUSEMENT_PARK_ATTRACTION_C
+    'LAK080':'RecreationCrv', // OUTDOOR_THEATRE_SCREEN_C
     'LAK130':'RecreationCrv', // RACETRACK_C
     'LAK150':'RecreationCrv', // SKI_JUMP_C
     'LAL018':'StructureCrv', // BUILDING_SUPERSTRUCTURE_C
@@ -4723,6 +4724,7 @@ tds70.rules = {
     'PAK170':'RecreationPnt', // SWIMMING_POOL_P
     'PAK180':'RecreationPnt', // ZOO_P
     'PAL010':'FacilityPnt', // FACILITY_P
+    'PAL011':'FacilityPnt', // INSTALLATION_P
     'PAL012':'CulturePnt', // ARCHEOLOGICAL_SITE_P
     'PAL013':'StructurePnt', // BUILDING_P
     'PAL014':'StructurePnt', // NON_BUILDING_STRUCTURE_P
