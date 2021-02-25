@@ -503,6 +503,9 @@ mgcp = {
       }
     } // End of Find an FCode
 
+    // Posible Building F_CODE screwup
+    if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
+
     // Swap the F_CODE for a Ferry Terminal
     if (attrs.F_CODE == 'AQ125' && attrs.TRS == '7')
     {
