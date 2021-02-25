@@ -39,7 +39,7 @@
 #include <hoot/core/algorithms/subline-matching/MaximalSublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayExpertClassifier.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/linear/LinearSnapMerger.h>
+#include <hoot/core/conflate/merging/LinearSnapMerger.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -77,8 +77,8 @@ public:
 
   LinearSnapMergerTest() :
   HootTestFixture(
-    "test-files/conflate/linear/LinearSnapMergerTest/",
-    "test-output/conflate/linear/LinearSnapMergerTest/")
+    "test-files/conflate/merging/LinearSnapMergerTest/",
+    "test-output/conflate/merging/LinearSnapMergerTest/")
   {
     setResetType(ResetBasic);
   }

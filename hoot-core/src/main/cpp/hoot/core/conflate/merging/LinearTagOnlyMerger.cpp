@@ -28,7 +28,6 @@
 
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/conflate/linear/LinearSnapMerger.h>
 #include <hoot/core/criterion/BridgeCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/CriterionUtils.h>
