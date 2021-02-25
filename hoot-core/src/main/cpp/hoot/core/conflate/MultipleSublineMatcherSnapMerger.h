@@ -55,7 +55,8 @@ public:
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher2);
   virtual ~MultipleSublineMatcherSnapMerger() = default;
 
-  virtual QString getDescription() const { return "Merges ways with one or more subline matchers"; }
+  virtual QString getDescription() const override
+  { return "Merges ways using snapping with one or more subline matchers"; }
 
   virtual QString getName() const override { return className(); }
 

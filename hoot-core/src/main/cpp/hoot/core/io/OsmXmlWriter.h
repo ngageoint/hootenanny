@@ -119,6 +119,9 @@ public:
    */
   QString removeInvalidCharacters(const QString& s);
 
+  bool getSortSourceImageryTag() { return _sortSourceImageryTag; }
+  void setSortSourceImageryTag(bool sort) { _sortSourceImageryTag = sort; }
+
 private:
 
   static int logWarnCount;
@@ -138,6 +141,7 @@ private:
   long _numWritten;
   long _statusUpdateInterval;
   AddExportTagsVisitor _addExportTagsVisitor;
+  bool _sortSourceImageryTag;
 
   static QString _typeName(ElementType e);
 

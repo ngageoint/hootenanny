@@ -12,7 +12,7 @@ LLIST=`ogrinfo -ro -so $FILE_PATH | grep Line | awk '{print $2}'`
 for LAYER in $LLIST; do
   echo "Converting: ${FILE_NAME} ${LAYER}"
   LAYER_DATE=`echo $LAYER | sed --regexp-extended 's|([0-9]+)-([0-9]+)-([0-9]+)_.*|\1-\2-\3|g'`
-  LAYER_SRC=`echo $LAYER | sed --regexp-extended 's|[0-9]+-[0-9]+-[0-9]+_(.*)|\1|g'`
+  LAYER_SRC=$LAYER
 
   hoot convert --error $HOOT_OPT \
     -D convert.ops=hoot::SetTagValueVisitor \

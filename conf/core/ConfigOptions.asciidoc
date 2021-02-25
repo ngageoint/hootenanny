@@ -5588,6 +5588,13 @@ Set the output precision when writing. Not honored by all writers.
 If true, sorts all tag key/value pairs alphabetically when written out.  Not honored by all
 writers.
 
+=== writer.sort.tags.imagery.source
+
+* Data Type: bool
+* Default Value: `false`
+
+If true, sorts the `source:imagery` tag's value on output.  Not honored by all writers.
+
 === writer.text.status
 
 * Data Type: bool

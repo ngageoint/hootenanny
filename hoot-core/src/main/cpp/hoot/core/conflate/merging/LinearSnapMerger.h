@@ -55,11 +55,10 @@ public:
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearSnapMerger() = default;
 
-  virtual void apply(const OsmMapPtr& map, std::vector<std::pair<ElementId, ElementId>>& replaced);
-
   void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
 
-  virtual QString getDescription() const { return "Merges road geometries and tags"; }
+  virtual QString getDescription() const override
+  { return "Merges linear features by snapping geometries"; }
 
   virtual QString getName() const override { return className(); }
 
@@ -78,7 +77,7 @@ protected:
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
-                          std::vector<std::pair<ElementId, ElementId>>& replaced);
+                          std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
   /*
    * Finds a matching subline between two elements with the configured subline matcher
@@ -98,15 +97,6 @@ private:
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 
   /*
-   * Returns true if the way directly connects the left and right ways. There is some tolerance
-   * for "directly". See ticket #951 for details.
-   */
-  bool _directConnect(const ConstOsmMapPtr &map, WayPtr w) const;
-
-  void _removeSpans(OsmMapPtr map, const ElementPtr& w1, const ElementPtr& w2) const;
-  void _removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const;
-
-  /*
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.
    */
   void _snapEnds(const OsmMapPtr& map, ElementPtr snapee, ElementPtr snapTo) const;
@@ -123,8 +113,6 @@ private:
                      const std::vector<bool>& reverse,
                      std::vector<std::pair<ElementId, ElementId>>& replaced,
                      const ConstElementPtr& splitee, ElementPtr& match, ElementPtr& scrap) const;
-
-  bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
 
   void _updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap);
 };
