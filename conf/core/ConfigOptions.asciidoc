@@ -1201,6 +1201,14 @@ The maximum number of nodes to be cropped out when running either the `crop-rand
 
 The pixel size used when running either the `crop-random` command or `RandomMapCropper`.
 
+=== data.summary.tag.sources
+
+* Data Type: list
+* Default Value:
+** ``
+
+List of valid values for data sources used to calculate the summary data for multiple conflations
+
 === debug.maps.filename
 
 * Data Type: string
