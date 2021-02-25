@@ -42,11 +42,12 @@ mgcp = {
 
   mgcp.rawSchema = mgcp.schema.getDbSchema(); // This is <GLOBAL> so we can access it from other areas
 
-  // Now build the FCODE/layername lookup table
-  mgcp.layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
+  // These have been moved to mgcp.rules as static lists
+  // Now build the FCODE/layername lookup table.
+  // mgcp.layerNameLookup = translate.makeLayerNameLookup(mgcp.rawSchema);
 
   // Quick lookup list for valid FCODES
-  mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
+  // mgcp.fcodeList = translate.makeFcodeList(mgcp.rawSchema);
 
   // Build the MGCP fcode/attrs lookup table
   mgcp.attrLookup = translate.makeAttrLookup(mgcp.rawSchema);
@@ -334,12 +335,12 @@ mgcp = {
   }, // End manyFeatures
 
 
-  // ##### Start of the xxToOsmxx Block #####
-
-  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  // Cleanup the attributes
+  cleanAttrs: function (attrs)
   {
-    // Drop the FCSUBTYPE since we don't use it
-    if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+      // Clean up BEFORE trying to untangle
+    delete attrs.FCSUBTYPE;
+    delete attrs.FCSubtype;
 
     // The swap list. These are the same attr, just named differently
     // These may get converted back on output
@@ -352,8 +353,8 @@ mgcp = {
 
     // List of data values to drop/ignore
     var ignoreList = { '-32765':1,'-32767':1,'-32768':1,
-               '998':1,'-999999':1,
-               'n_a':1,'noinformation':1,'unknown':1,'unk':1 };
+               '998':1,'-999999':1,'fcsubtype':1,
+               'n_a':1,'n/a':1,'noinformation':1,'unknown':1,'unk':1 };
 
     // Unit conversion. Some attributes are in centimetres, others in decimetres
     // var unitList = { 'GAW':100,'HCA':10,'WD1':10,'WD2':10,'WD3':10,'WT2':10 };
@@ -388,7 +389,12 @@ mgcp = {
         continue
       }
     } // End col in attrs loop
+  }, // End cleanAttrs
 
+
+  // ##### Start of the xxToOsmxx Block #####
+  applyToOsmPreProcessing: function(attrs, layerName, geometryType)
+  {
     if (attrs.F_CODE)
     {
       // Drop the the "Not Found" F_CODE. This is from the UI
@@ -496,9 +502,6 @@ mgcp = {
         }
       }
     } // End of Find an FCode
-
-    // The FCODE for Buildings is different. TDS uses AL013
-    if (attrs.F_CODE == 'AL015') attrs.F_CODE = 'AL013';
 
     // Swap the F_CODE for a Ferry Terminal
     if (attrs.F_CODE == 'AQ125' && attrs.TRS == '7')
@@ -809,7 +812,7 @@ mgcp = {
         if (!tags['tower:type']) tags['tower:type'] = 'cooling';
         break;
 
-      case 'AL013': // Building  NOTE this is the TDS F_CODE for Building. This was swapped during pre-processing
+      case 'AL015': // Building
         if (tags.surface == 'unknown') delete tags.surface;
         break;
 
@@ -1238,7 +1241,6 @@ mgcp = {
         break;
     } // End switch landuse
 
-
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
     {
@@ -1492,9 +1494,6 @@ mgcp = {
     // if (tags.amenity && notBuildingList.indexOf(tags.amenity) == -1 && !tags.building) attrs.F_CODE = 'AL015';
     if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL015';
 
-    // The FCODE for Buildings changed...
-    if (attrs.F_CODE == 'AL013') attrs.F_CODE = 'AL015';
-
     // Tag changed
     if (tags.vertical_obstruction_identifier)
     {
@@ -1663,7 +1662,7 @@ mgcp = {
       var fcodeMap = {
         'highway':'AP030','railway':'AN010','building':'AL015',
         'ford':'BH070','waterway':'BH140','bridge':'AQ040','tomb':'AL036',
-        'railway:in_road':'AN010','tourism':'AL013','mine:access':'AA010',
+        'railway:in_road':'AN010','tourism':'AL015','mine:access':'AA010',
         'cutting':'DB070','shop':'AL015','office':'AL015'
       };
 
@@ -1698,7 +1697,7 @@ mgcp = {
     // if (attrs.F_CODE == 'AN010' && tags.railway == 'yes') attrs.RRC = '0';
 
     // Not a great fit
-    if (tags.public_transportation == 'station' && tags.bus == 'yes') attrs.FFN = '481';
+    if (tags.public_transport == 'station' && tags.bus == 'yes') attrs.FFN = '481';
 
     // Mapping Senior Citizens home to Accomodation. Not great
     if (tags.amenity == 'social_facility' && tags['social_facility:for'] == 'senior') attrs.FFN = 550;
@@ -2106,6 +2105,9 @@ mgcp = {
       for (var i in mgcp.rules.numBiasedV3) mgcp.rules.numBiased[i] = mgcp.rules.numBiasedV3[i];
     }
 
+    // Clean out the usless values
+    mgcp.cleanAttrs(attrs);
+
     // Untangle MGCP attributes & OSM tags
     // NOTE: This could get wrapped with an ENV variable so it only gets called during import
     translate.untangleAttributes(attrs,tags,mgcp);
@@ -2286,7 +2288,7 @@ mgcp = {
     // Now check for invalid feature geometry
     // E.g. If the spec says a runway is a polygon and we have a line, throw error and
     // push the feature to the o2s layer
-    if (mgcp.layerNameLookup[tableName])
+    if (mgcp.rules.layerNameLookup[tableName])
     {
       // Check if we need to return more than one feature
       // NOTE: This returns structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -2303,7 +2305,7 @@ mgcp = {
         // Now make sure that we have a valid feature _before_ trying to validate and jam it into the list of
         // features to return
         var gFcode = gType + returnData[i]['attrs']['FCODE'];
-        if (mgcp.layerNameLookup[gFcode.toUpperCase()])
+        if (mgcp.rules.layerNameLookup[gFcode.toUpperCase()])
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           mgcp.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
@@ -2316,7 +2318,7 @@ mgcp = {
             returnData[i]['attrs']['TXT'] = translate.appendValue(returnData[i]['attrs']['TXT'],tStr,';');
           }
 
-          returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];
+          returnData[i]['tableName'] = mgcp.rules.layerNameLookup[gFcode.toUpperCase()];
         }
         else
         {
