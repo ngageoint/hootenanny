@@ -32,6 +32,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
 #include <QDebug>
@@ -72,11 +73,19 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
   for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
   {
     const WayPtr& w = it->second;
+    _numProcessed++;
     if (!w)
     {
       continue;
     }
-    LOG_VART(w);
+    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, _map))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher.");
+      continue;
+    }
+    LOG_VART(w->getElementId());
 
     // If we have a name that is not an alt name, let's record it here so we can preserve it
     // as the main name later on.

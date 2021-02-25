@@ -22,40 +22,38 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "PowerLineCriterion.h"
+#include "PolygonWayNodeCriterion.h"
 
 // hoot
+#include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/PowerLineWayNodeCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, PowerLineCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, PolygonWayNodeCriterion)
 
-bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
+PolygonWayNodeCriterion::PolygonWayNodeCriterion() :
+WayNodeCriterion()
 {
-  if (e->getElementType() == ElementType::Way)
+  _parentCriterion.reset(new PolygonCriterion());
+}
+
+PolygonWayNodeCriterion::PolygonWayNodeCriterion(ConstOsmMapPtr map) :
+WayNodeCriterion(map)
+{
+  _parentCriterion.reset(new PolygonCriterion(_map));
+}
+
+void PolygonWayNodeCriterion::setOsmMap(const OsmMap* map)
+{
+  _map = map->shared_from_this();
+  if (_parentCriterion)
   {
-    const Tags& tags = e->getTags();
-    const QString powerVal = tags.get("power").toLower().trimmed();
-    if (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable")
-    {
-      return true;
-    }
+    _parentCriterion.reset(new PolygonCriterion(_map));
   }
-  return false;
-}
-
-QStringList PowerLineCriterion::getChildCriteria() const
-{
-  QStringList criteria;
-  criteria.append(PowerLineWayNodeCriterion::className());
-  return criteria;
 }
 
 }
-

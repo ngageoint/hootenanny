@@ -47,13 +47,14 @@ namespace hoot
 {
 
 /**
- * Caches data about elements and their relationships that may in speeding up conflation jobs.
+ * Caches data about elements and their relationships that may aid in speeding up conflation jobs.
  *
- * This is generally expected to be initialized only once by each match creator. It is done this way
+ * This is generally expected to be initialized only once by each match creator. Currently, this
+ * cache is only used by the match creator used by POI/Polygon conflation. It is done this way
  * rather than implementing a Singleton, since case tests are launched as multiple threads within
- * the same process, which would result in a conflicted cache state. Also, since different match
- * creators deal with different data types and shouldn't have too much cache overlap between
- * different caches. Currently, this cache is only used by POI/Polygon conflation.
+ * the same process, which would result in a conflicted cache state if the cache was shared by the
+ * threads (different elements with the same ID having different info). Since different match
+ * creators deal with different data types, the various caches shouldn't have too much data overlap.
  *
  * The caches used in this class (and in PoiPolygonInfoCache) were determined on 9/30/18 running
  * POI/Polygon conflation against the regression test
@@ -66,6 +67,9 @@ namespace hoot
  * tweaks with fairly large improvements and ignore the smaller performance improvements.
  *
  * WARNING: This class can get very memory hungry depending on how the cache size is configured.
+ *
+ * @todo May be able to use thread_local storage for this with static member vars to make
+ * initialization more intuitive during conflation.
  */
 class ConflateInfoCache : public Configurable
 {

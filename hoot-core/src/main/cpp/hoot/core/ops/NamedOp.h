@@ -53,7 +53,7 @@ public:
   static QString className() { return "hoot::NamedOp"; }
 
   NamedOp();
-  NamedOp(QStringList namedOps);
+  NamedOp(const QStringList& namedOps, const bool operateOnlyOnConflatableElements = false);
   virtual ~NamedOp() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
@@ -81,6 +81,7 @@ private:
   Progress _progress;
   QMap<QString, std::shared_ptr<OsmMapOperation>> _appliedOps;
   QMap<QString, std::shared_ptr<ElementVisitor>> _appliedVis;
+  bool _operateOnlyOnConflatableElements;
 
   /*
    * If an op is made of a list of other ops, then this will substitute those ops in from the list.

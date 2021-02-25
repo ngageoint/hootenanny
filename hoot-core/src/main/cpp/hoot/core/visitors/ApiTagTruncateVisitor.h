@@ -45,6 +45,10 @@ namespace hoot
  *  `source:datetime` and `source:ingest:datetime` are date lists that are truncated down
  *  to include only the last date in the list.  Thirdly the `uuid` field is handled the
  *  same way, only the last UUID in the list is preserved.
+ *
+ * No need to implement FilteredByGeometryTypeCriteria or ElementConflatableCheck here, as this op
+ * is necessary for any element to be written back to an OSM data store via HTTP and should always
+ * be run.
  */
 class ApiTagTruncateVisitor : public ElementVisitor, public Configurable
 {

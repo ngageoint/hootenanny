@@ -32,6 +32,7 @@
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
 #include <hoot/core/info/OperationStatus.h>
+#include <hoot/core/conflate/ElementConflatableCheck.h>
 
 // Standard
 #include <string>
@@ -48,23 +49,23 @@ namespace hoot
 class OsmMap;
 
 /**
- * Modifies an OsmMap in some way.
+ * Modifies an OsmMap in some manner.
  *
  * Due to needing an entire map, this does not support streaming I/O.  If you do not need the
  * entire input map in memory at one time (operation logic does not require it and you are not
  * running in the conflate pipeline), consider using ElementVisitor instead.
  *
- * @todo We should eventually remove the default empty string implementations of OperationStatus
- * methods and require them to be implemented in children.
+ * @see notes in ElementVisitor about FilteredByGeometryTypeCriteria, ElementConflatableCheck, and
+ * OperationStatus implementation
  */
 class OsmMapOperation : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
-  public OperationStatus
+  public OperationStatus, public ElementConflatableCheck
 {
 public:
 
   static QString className() { return "hoot::OsmMapOperation"; }
 
-  OsmMapOperation() = default;
+  OsmMapOperation() : _checkConflatable(false) {}
   virtual ~OsmMapOperation() = default;
 
   /**
@@ -94,15 +95,28 @@ public:
   /**
    * @see FilteredByGeometryTypeCriteria
    *
-   * An empty list returned here means that the operation is associated no specific criteria and
-   * can be run against any feature type. Any operations that want to control which feature types
-   * they are run against during conflation should populate this list. The list is treated in a
-   * logical OR fashion.
+   * An empty list returned here means that the visitor is associated with no specific element type
+   * criteria and can be run against any feature type. Any visitors that want to control which
+   * feature types they are run against during conflation should populate this list. The list is
+   * treated in a logical OR fashion.
    */
   QStringList getCriteria() const override { return QStringList(); }
 
   QString toString() const override { return ""; }
 
+  /**
+   * @see ElementConflatableCheck
+   */
+  virtual bool getCheckConflatable() const { return _checkConflatable; }
+  /**
+   * @see ElementConflatableCheck
+   */
+  virtual void setCheckConflatable(const bool checkConflatable)
+  { _checkConflatable = checkConflatable; }
+
+protected:
+
+  bool _checkConflatable;
 };
 
 }

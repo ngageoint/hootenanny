@@ -30,7 +30,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/BuildingWayNodeCriterion.h>
 
 using namespace std;
 
@@ -107,5 +107,13 @@ bool BuildingCriterion::isSatisfied(const Tags& tags, const ElementType& element
   return
     elementType != ElementType::Node && OsmSchema::getInstance().hasCategory(tags, "building");
 }
+
+QStringList BuildingCriterion::getChildCriteria() const
+{
+  QStringList criteria;
+  criteria.append(BuildingWayNodeCriterion::className());
+  return criteria;
+}
+
 
 }

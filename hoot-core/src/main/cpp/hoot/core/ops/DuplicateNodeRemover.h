@@ -43,16 +43,16 @@ namespace hoot
 
 /**
  * Merges together nodes that are within a small configurable distance of each other and don't have
- * differing tags (outside of metadata tags).
+ * differing tags (outside of metadata tags). Due to how Way::replaceNode is being called, we could
+ * end up with some duplicate way nodes, so its best to put RemoveDuplicateWayNodesVisitor in the
+ * cleaning chain immediately after this runs.
  *
- * Due to how Way::replaceNode is being called, we could end up with some duplicate way nodes, so
- * its best to put RemoveDuplicateWayNodesVisitor in the cleaning chain immediately after this runs.
- *
- * This class works with four pass conflation as long as distance is less than the four pass buffer.
- * The input map can be in either a planar or geographic projection.
+ * This class works with four pass conflation (Hadoop), as long as distance is less than the four
+ * pass buffer. The input map can be in either a planar or geographic projection.
  *
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
- * with no nodes.
+ * with no nodes. ElementConflatableCheck does need to be implemented here to prevent removal of a
+ * conflatable node or a node belonging to a conflatable way/relation.
  */
 class DuplicateNodeRemover : public OsmMapOperation, public Boundable
 {

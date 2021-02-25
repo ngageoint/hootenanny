@@ -118,6 +118,7 @@ void SpatialIndexer::visit(const ConstElementPtr& e)
       _numAffected++;
     }
   }
+  _numProcessed++;
 }
 
 set<ElementId> SpatialIndexer::findNeighbors(

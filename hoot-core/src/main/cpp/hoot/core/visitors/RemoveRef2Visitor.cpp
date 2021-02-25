@@ -205,6 +205,7 @@ void RemoveRef2Visitor::visit(const ElementPtr& e)
     {
       _checkAndDeleteRef2(e, _ref2Keys[i]);
     }
+    _numProcessed++;
   }
 }
 

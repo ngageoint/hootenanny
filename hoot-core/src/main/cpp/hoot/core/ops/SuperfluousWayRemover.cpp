@@ -34,6 +34,7 @@
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 using namespace std;
 
@@ -60,6 +61,11 @@ void SuperfluousWayRemover::setConfiguration(const Settings& conf)
   LOG_VARD(_excludeIds.size());
 }
 
+void SuperfluousWayRemover::apply(std::shared_ptr<OsmMap>& map)
+{
+  _removeWays(map);
+}
+
 long SuperfluousWayRemover::removeWays(std::shared_ptr<OsmMap>& map)
 {
   SuperfluousWayRemover wayRemover;
@@ -81,12 +87,19 @@ void SuperfluousWayRemover::_removeWays(std::shared_ptr<OsmMap>& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     const ConstWayPtr& w = it->second;
+    _numProcessed++;
     if (!w)
     {
       continue;
     }
+    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, map))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
+      continue;
+    }
     LOG_VART(w->getElementId());
-    //LOG_VART(w);
 
     if (_excludeIds.contains(w->getId()))
     {
@@ -122,11 +135,6 @@ void SuperfluousWayRemover::_removeWays(std::shared_ptr<OsmMap>& map)
       _numAffected++;
     }
   }
-}
-
-void SuperfluousWayRemover::apply(std::shared_ptr<OsmMap>& map)
-{
-  _removeWays(map);
 }
 
 QStringList SuperfluousWayRemover::getCriteria() const

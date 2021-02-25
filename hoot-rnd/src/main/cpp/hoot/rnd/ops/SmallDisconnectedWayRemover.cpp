@@ -37,6 +37,7 @@
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/criterion/WayNodeCountCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 namespace hoot
 {
@@ -93,6 +94,13 @@ void SmallDisconnectedWayRemover::apply(OsmMapPtr& map)
     _numProcessed++;
     if (!way)
     {
+      continue;
+    }
+    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(way, _map))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << way->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
       continue;
     }
     LOG_VART(way->getElementId());

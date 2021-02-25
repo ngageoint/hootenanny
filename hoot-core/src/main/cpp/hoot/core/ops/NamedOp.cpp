@@ -49,13 +49,15 @@ namespace hoot
 HOOT_FACTORY_REGISTER(OsmMapOperation, NamedOp)
 
 NamedOp::NamedOp() :
-_conf(&conf())
+_conf(&conf()),
+_operateOnlyOnConflatableElements(false)
 {
 }
 
-NamedOp::NamedOp(QStringList namedOps) :
+NamedOp::NamedOp(const QStringList& namedOps, const bool operateOnlyOnConflatableElements) :
 _conf(&conf()),
-_namedOps(namedOps)
+_namedOps(namedOps),
+_operateOnlyOnConflatableElements(operateOnlyOnConflatableElements)
 {
   LOG_VART(_namedOps);
   _substituteForContainingOps();
@@ -110,6 +112,7 @@ void NamedOp::apply(OsmMapPtr& map)
     {
       std::shared_ptr<OsmMapOperation> op(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
+      op->setCheckConflatable(_operateOnlyOnConflatableElements);
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(op);
 
       if (_progress.getState() == Progress::JobState::Running)
@@ -136,6 +139,7 @@ void NamedOp::apply(OsmMapPtr& map)
     {
       std::shared_ptr<ElementVisitor> vis(
         Factory::getInstance().constructObject<ElementVisitor>(s));
+      vis->setCheckConflatable(_operateOnlyOnConflatableElements);
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(vis);
 
       Configurable* c = dynamic_cast<Configurable*>(vis.get());

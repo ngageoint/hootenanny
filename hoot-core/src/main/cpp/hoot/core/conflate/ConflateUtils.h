@@ -30,7 +30,7 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -53,7 +53,7 @@ public:
   static int writeNonConflatable(const ConstOsmMapPtr& map, const QString& output);
 
   /**
-   * Writes the differential between to maps
+   * Writes the differential between two maps
    *
    * @param mapUrl1 map 1 URL
    * @param mapUrl2 map 2 URL
@@ -64,7 +64,8 @@ public:
                         const geos::geom::Envelope& bounds, const QString& output);
 
   /**
-   * Checks to see if an element can be conflated by any of the configured matchers for conflation.
+   * Checks to see if an element can be conflated by any of the actively configured matchers for
+   * conflation.
    *
    * @param element element to examine
    * @param map map containing the element
@@ -74,9 +75,24 @@ public:
   static bool elementCanBeConflatedByActiveMatcher(
     const ConstElementPtr& element, const ConstOsmMapPtr& map);
 
+  /**
+   * TODO
+   *
+   * @param criterionClassName
+   * @param map
+   * @return
+   */
+  static bool elementCriterionInUseByActiveMatcher(
+    const QString& criterionClassName, const ConstOsmMapPtr& map);
+
 private:
 
-  static QMap<QString, ElementCriterionPtr> _critCache;
+  // This must store ElementCriterion and not ConflatableElementCriterion, b/c we're also checking
+  // against conflate child criterion (e.g. RailwayWayNodeCriterion), which don't inherit from
+  // ConflatableElementCriterion.
+  static thread_local QHash<QString, ElementCriterionPtr> _conflatableCritCache;
+  static thread_local QHash<ElementId, bool> _conflatableElementCache;
+  static thread_local QHash<QString, bool> _conflatableCritActiveCache;
 };
 
 }

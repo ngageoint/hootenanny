@@ -38,6 +38,8 @@ namespace hoot
 
 /**
  * Identifies polygons for use with POI/Polygon conflation
+ *
+ * @todo this needs to be a map consumer b/c it uses AreaCriterion
  */
 class PoiPolygonPolyCriterion : public ConflatableElementCriterion
 {
@@ -50,12 +52,12 @@ public:
 
   virtual bool isSatisfied(const ConstElementPtr& e) const override;
 
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Polygon; }
+  virtual GeometryType getGeometryType() const { return GeometryType::Polygon; }
 
   virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPolyCriterion()); }
 
-  virtual QString getDescription() const { return ""; }
+  virtual QString getDescription() const
+  { return "Identifies polygons as defined by POI/Polygon Conflation"; }
 
   virtual QString getName() const override { return className(); }
 

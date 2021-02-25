@@ -320,7 +320,6 @@ bool RelationMemberUtils::relationHasConflatableMember(
     if (member)
     {
       LOG_VART(member->getElementId());
-
       if (ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map))
       {
         return true;

@@ -37,6 +37,14 @@
 namespace hoot
 {
 
+/**
+ * @see WayJoiner
+ *
+ * I don't believe we need to honor ElementConflatableCheck in way joiners due to the fact that all
+ * the code that writes parent IDs (what causes rejoins) already uses ElementConflatableCheck and/or
+ * FilteredByGeometryTypeCriteria to prevent rejoining features not configured to be conflatble
+ * during a conflate operation.
+ */
 class WayJoinerOp : public OsmMapOperation, public Configurable
 {
 public:
@@ -53,8 +61,7 @@ public:
 
   virtual void setConfiguration(const Settings& conf);
 
-  virtual QString getDescription() const
-  { return "Joins ways split during cleaning and conflation matching operations"; }
+  virtual QString getDescription() const { return "Rejoins ways split during conflation"; }
 
   virtual QString getInitStatusMessage() const
   { return "Rejoining ways split during conflation..."; }

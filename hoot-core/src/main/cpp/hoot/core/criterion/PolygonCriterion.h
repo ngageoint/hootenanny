@@ -68,6 +68,8 @@ public:
 
   void setAllowMixedChildren(bool allow) { _relationCrit.setAllowMixedChildren(allow); }
 
+  virtual QStringList getChildCriteria() const;
+
 private:
 
   ConstOsmMapPtr _map;

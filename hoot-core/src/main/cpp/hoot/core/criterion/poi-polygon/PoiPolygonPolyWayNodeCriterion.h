@@ -22,55 +22,38 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef POI_POLYGON_POI_CRITERION_H
-#define POI_POLYGON_POI_CRITERION_H
+#ifndef POI_POLYGON_POLY_WAY_NODE_CRITERION_H
+#define POI_POLYGON_POLY_WAY_NODE_CRITERION_H
 
 // hoot
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
-#include <hoot/core/conflate/address/AddressParser.h>
-
-// Qt
-#include <QStringList>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
 
-/**
- * Identifies POIs for use with POI/Polygon conflation
- */
-class PoiPolygonPoiCriterion : public ConflatableElementCriterion
+class PoiPolygonPolyWayNodeCriterion : public WayNodeCriterion
 {
 public:
 
-  static QString className() { return "hoot::PoiPolygonPoiCriterion"; }
+  static QString className() { return "hoot::PoiPolygonPolyWayNodeCriterion"; }
 
-  PoiPolygonPoiCriterion();
-  virtual ~PoiPolygonPoiCriterion() = default;
+  PoiPolygonPolyWayNodeCriterion();
+  PoiPolygonPolyWayNodeCriterion(ConstOsmMapPtr map);
+  virtual ~PoiPolygonPolyWayNodeCriterion() = default;
 
-  virtual bool isSatisfied(const ConstElementPtr& e) const override;
-
-  virtual GeometryType getGeometryType() const
-  { return GeometryType::Point; }
-
-  virtual ElementCriterionPtr clone() { return ElementCriterionPtr(new PoiPolygonPoiCriterion()); }
+  virtual ElementCriterionPtr clone()
+  { return ElementCriterionPtr(new PoiPolygonPolyWayNodeCriterion(_map)); }
 
   virtual QString getDescription() const
-  { return "Identifies POIs as defined by POI/Polygon Conflation"; }
+  { return "Identifies nodes belonging to polygons as identified by POI/Polygon Conflation"; }
 
   virtual QString getName() const override { return className(); }
 
   virtual QString getClassName() const override { return className(); }
-
-  virtual bool supportsSpecificConflation() const { return true; }
-
-private:
-
-  QStringList _tagIgnoreList;
-  AddressParser _addressParser;
 };
 
 }
 
-#endif // POI_POLYGON_POI_CRITERION_H
+#endif // POI_POLYGON_POLY_WAY_NODE_CRITERION_H

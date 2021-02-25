@@ -41,6 +41,7 @@
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/schema/OsmSchema.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -48,7 +49,9 @@
 namespace hoot
 {
 
-QMap<QString, ElementCriterionPtr> ConflateUtils::_critCache;
+thread_local QHash<QString, ElementCriterionPtr> ConflateUtils::_conflatableCritCache;
+thread_local QHash<ElementId, bool> ConflateUtils::_conflatableElementCache;
+thread_local QHash<QString, bool> ConflateUtils::_conflatableCritActiveCache;
 
 int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString& output)
 {
@@ -153,6 +156,134 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
 bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
   const ConstElementPtr& element, const ConstOsmMapPtr& map)
 {
+  //LOG_VARD(element->getElementId());
+  //LOG_VARD(_conflatableElementCache.contains(element->getElementId()));
+
+  if (_conflatableElementCache.contains(element->getElementId()))
+  {
+    return _conflatableElementCache[element->getElementId()];
+  }
+
+  LOG_VARD(element->getElementId());
+  LOG_VART(map.get());
+
+  // Get all the configured matchers.
+  const std::vector<std::shared_ptr<MatchCreator>> activeMatchCreators =
+    MatchFactory::getInstance().getCreators();
+  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = activeMatchCreators.begin();
+       itr != activeMatchCreators.end(); ++itr)
+  {
+    // Get the element criterion this matcher uses for matching elements.
+    std::shared_ptr<MatchCreator> activeMatchCreator = *itr;
+    LOG_VART(activeMatchCreator->getName());
+    const QStringList supportedCriteriaClassNames = activeMatchCreator->getCriteria();
+    for (int i = 0; i < supportedCriteriaClassNames.size(); i++)
+    {
+      const QString criterionClassName = supportedCriteriaClassNames.at(i);
+      LOG_VART(criterionClassName);
+
+      ElementCriterionPtr crit;
+      std::shared_ptr<ConflatableElementCriterion> conflatableCrit;
+      ElementCriterionPtr childCrit;
+      std::shared_ptr<ConflatableElementCriterion> conflatableChildCrit;
+      LOG_VART(_conflatableCritCache.contains(criterionClassName));
+      if (_conflatableCritCache.contains(criterionClassName)) // Check the cache for the criterion.
+      {
+        crit = _conflatableCritCache[criterionClassName];
+      }
+      else
+      {
+        crit.reset(
+          Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
+        conflatableCrit = std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+        if (conflatableCrit)
+        {
+          // Crit creation can be expensive, so cache those created.
+          _conflatableCritCache[criterionClassName] = crit;
+
+          // All ElementCriterion that are map consumers inherit from ConstOsmMapConsumer, so this
+          // works.
+          std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+            std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+          if (mapConsumer)
+          {
+            mapConsumer->setOsmMap(map.get());
+          }
+
+          LOG_VARD(crit->isSatisfied(element));
+          // If any matcher's crit matches the element, return true.
+          if (crit->isSatisfied(element))
+          {
+            _conflatableElementCache[element->getElementId()] = true;
+            return true;
+          }
+          else if (!conflatableCrit->getChildCriteria().isEmpty())
+          {
+            // Also, check for conflate "child" criteria (e.g. RailwayWayNodeCriterion).
+            const QStringList childCritClassNames = conflatableCrit->getChildCriteria();
+            for (int i = 0; i < childCritClassNames.size(); i++)
+            {
+              const QString childCritClassName = childCritClassNames.at(i);
+              LOG_VARD(childCritClassName);
+              LOG_VARD(_conflatableCritCache.contains(childCritClassName));
+              if (_conflatableCritCache.contains(childCritClassName))
+              {
+                childCrit = _conflatableCritCache[criterionClassName];
+              }
+              else
+              {
+                childCrit.reset(
+                  Factory::getInstance().constructObject<ElementCriterion>(childCritClassName));
+                if (childCrit)
+                {
+                  _conflatableCritCache[childCritClassName] = childCrit;
+
+                  std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+                    std::dynamic_pointer_cast<ConstOsmMapConsumer>(childCrit);
+                  if (mapConsumer)
+                  {
+                    mapConsumer->setOsmMap(map.get());
+                  }
+                }
+              }
+
+              // These don't inherit from ConflatableElementCriterion, since matchers look for
+              // their parents only. So, don't check that it casts to ConflatableElementCriterion.
+              if (childCrit)
+              {
+                _conflatableCritCache[childCritClassName] = childCrit;
+
+                LOG_VARD(childCrit->isSatisfied(element));
+                // If any matcher's crit matches the element, return true.
+                if (childCrit->isSatisfied(element))
+                {
+                  _conflatableElementCache[element->getElementId()] = true;
+                  return true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  _conflatableElementCache[element->getElementId()] = false;
+  LOG_VARD(element->getElementId());
+  LOG_VARD(OsmSchema::getInstance().mostSpecificType(element->getTags()));
+  return false;
+}
+
+bool ConflateUtils::elementCriterionInUseByActiveMatcher(
+  const QString& criterionClassName, const ConstOsmMapPtr& map)
+{
+  LOG_VART(criterionClassName);
+
+  if (_conflatableCritActiveCache.contains(criterionClassName))
+  {
+    return _conflatableCritActiveCache[criterionClassName];
+  }
+
   // Get all the configured matchers.
   const std::vector<std::shared_ptr<MatchCreator>> activeMatchCreators =
     MatchFactory::getInstance().getCreators();
@@ -164,38 +295,65 @@ bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
     const QStringList supportedCriteriaClassNames = activeMatchCreator->getCriteria();
     for (int i = 0; i < supportedCriteriaClassNames.size(); i++)
     {
-      const QString criterionClassName = supportedCriteriaClassNames.at(i);
-
-      // Crit creation can be expensive, so cache those created.
-      ElementCriterionPtr crit;
-      if (_critCache.contains(criterionClassName))
+      const QString matcherCriterionClassName = supportedCriteriaClassNames.at(i);
+      LOG_VART(matcherCriterionClassName);
+      if (matcherCriterionClassName == criterionClassName)
       {
-        crit = _critCache[criterionClassName];
+        _conflatableCritActiveCache[criterionClassName] = true;
+        return true;
       }
       else
       {
-        crit.reset(Factory::getInstance().constructObject<ElementCriterion>(criterionClassName));
-        _critCache[criterionClassName] = crit;
-
-        // All ElementCriterion that are map consumers inherit from ConstOsmMapConsumer, so this
-        // works.
-        std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
-          std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
-        LOG_VART(mapConsumer.get());
-        if (mapConsumer)
+        ElementCriterionPtr crit;
+        if (_conflatableCritCache.contains(matcherCriterionClassName))
         {
-          mapConsumer->setOsmMap(map.get());
+          // Check the cache for the criterion.
+          crit = _conflatableCritCache[matcherCriterionClassName];
         }
-      }
+        else
+        {
+          crit.reset(
+            Factory::getInstance().constructObject<ElementCriterion>(matcherCriterionClassName));
+          std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+            std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+          if (conflatableCrit)
+          {
+            // All ElementCriterion that are map consumers inherit from ConstOsmMapConsumer, so this
+            // works.
+            std::shared_ptr<ConstOsmMapConsumer> mapConsumer =
+              std::dynamic_pointer_cast<ConstOsmMapConsumer>(crit);
+            LOG_VART(mapConsumer.get());
+            if (mapConsumer)
+            {
+              mapConsumer->setOsmMap(map.get());
+            }
 
-      // If any matcher's crit matches the element, return true.
-      if (crit->isSatisfied(element))
-      {
-        return true;
+            // Crit creation can be expensive, so cache those created.
+            _conflatableCritCache[matcherCriterionClassName] = crit;
+
+            if (!conflatableCrit->getChildCriteria().isEmpty())
+            {
+              // Also, check for conflate "child" criteria (e.g. RailwayWayNodeCriterion). These
+              // don't inherit from ConflatableElementCriterion, since matchers look for their
+              // parents only.
+              const QStringList childCritClassNames = conflatableCrit->getChildCriteria();
+              for (int i = 0; i < childCritClassNames.size(); i++)
+              {
+                const QString childCritClassName = childCritClassNames.at(i);
+                LOG_VART(childCritClassName);
+                if (childCritClassName == criterionClassName)
+                {
+                  _conflatableCritActiveCache[criterionClassName] = true;
+                  return true;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
-
+  _conflatableCritActiveCache[criterionClassName] = false;
   return false;
 }
 

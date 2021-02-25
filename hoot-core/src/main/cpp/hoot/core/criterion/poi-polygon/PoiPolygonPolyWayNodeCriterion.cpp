@@ -22,40 +22,29 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "PowerLineCriterion.h"
+#include "PoiPolygonPolyWayNodeCriterion.h"
 
 // hoot
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/PowerLineWayNodeCriterion.h>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, PowerLineCriterion)
+HOOT_FACTORY_REGISTER(ElementCriterion, PoiPolygonPolyWayNodeCriterion)
 
-bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
+PoiPolygonPolyWayNodeCriterion::PoiPolygonPolyWayNodeCriterion() :
+WayNodeCriterion()
 {
-  if (e->getElementType() == ElementType::Way)
-  {
-    const Tags& tags = e->getTags();
-    const QString powerVal = tags.get("power").toLower().trimmed();
-    if (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable")
-    {
-      return true;
-    }
-  }
-  return false;
+  _parentCriterion.reset(new PoiPolygonPolyCriterion());
 }
 
-QStringList PowerLineCriterion::getChildCriteria() const
+PoiPolygonPolyWayNodeCriterion::PoiPolygonPolyWayNodeCriterion(ConstOsmMapPtr map) :
+WayNodeCriterion(map)
 {
-  QStringList criteria;
-  criteria.append(PowerLineWayNodeCriterion::className());
-  return criteria;
+  _parentCriterion.reset(new PoiPolygonPolyCriterion());
 }
 
 }
-

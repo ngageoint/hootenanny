@@ -55,7 +55,14 @@ public:
   virtual bool supportsSpecificConflation() const = 0;
 
   /**
-   * Determines which criteria consider an element as conflatable.
+   * TODO
+   *
+   * @return
+   */
+  virtual QStringList getChildCriteria() const { return QStringList(); }
+
+  /**
+   * Determines which element criteria consider an element as conflatable.
    *
    * Adds only specific conflate criteria, if the element supports it. Otherwise, attempts to add
    * non-specific (generic) conflate criteria.
@@ -68,14 +75,14 @@ public:
   static QStringList getConflatableCriteriaForElement(const ConstElementPtr& e, ConstOsmMapPtr map);
 
   /**
-   * Returns instantiations of conflatable criteria index by class name
+   * Returns instantiations of conflatable criteria indexed by class name
    *
    * @return a conflatable criteria map of class names to criterion
    */
   static QMap<QString, ElementCriterionPtr> getConflatableCriteria();
 
   /**
-   * Returns instantiations of conflatable criteria index by class name
+   * Returns instantiations of conflatable criteria indexed by class name
    *
    * @param geometryType a geometry type filter; only criteria supporting the specified geometry
    * type will be returned

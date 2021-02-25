@@ -277,6 +277,7 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
   for (WayMap::iterator wayItr = ways.begin(); wayItr != ways.end(); ++wayItr)
   {
     WayPtr wayToSnap = wayItr->second;
+    _numProcessed++;
     if (wayToSnap)
     {
       LOG_VART(wayToSnap->getElementId());

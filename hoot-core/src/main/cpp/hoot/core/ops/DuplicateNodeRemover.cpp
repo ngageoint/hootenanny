@@ -40,6 +40,7 @@
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/schema/ExactTagDifferencer.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
 #include <QTime>
@@ -119,6 +120,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
     {
       continue;
     }
+
     // We don't need to check for existence of the nodes parent here, b/c if it ends up being a dupe
     // we'll replace it with another node instead of removing it from the map.
     cph.addPoint(n->getX(), n->getY(), n->getId());
@@ -169,12 +171,26 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
             LOG_VART(calcdDistanceSquared);
             if (distanceSquared > calcdDistanceSquared)
             {
-              // if the geographic bounds are not specified.
-              if (!_bounds)
+              //LOG_VARD(n1->getElementId());
+              //LOG_VARD(ConflateUtils::elementCanBeConflatedByActiveMatcher(n1, map));
+              //LOG_VARD(n2->getElementId());
+              //LOG_VARD(ConflateUtils::elementCanBeConflatedByActiveMatcher(n2, map));
+              if (_checkConflatable &&
+                  (!ConflateUtils::elementCanBeConflatedByActiveMatcher(n1, map) ||
+                   !ConflateUtils::elementCanBeConflatedByActiveMatcher(n2, map)))
+              {
+                LOG_DEBUG(
+                  "Skipping processing of " << n1->getElementId() << " and " <<
+                  n2->getElementId() << " at least one of them cannot be conflated by any " <<
+                  "actively configured conflate matcher...");
+                replace = false;
+              }
+              // if the geographic bounds are not specified
+              else if (!_bounds)
               {
                 replace = true;
               }
-              // if the geographic bounds are specified, then make sure both points are inside.
+              // If the geographic bounds are specified, then make sure both points are inside.
               else
               {
                 ConstNodePtr node1 = wgs84->getNode(matchIdI);
@@ -202,7 +218,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               LOG_VART(replace);
               if (replace)
               {
-                LOG_TRACE(
+                LOG_DEBUG(
                   "Merging nodes: " << ElementId(ElementType::Node, matchIdJ) << " and " <<
                   ElementId(ElementType::Node, matchIdI) << "...");
                 map->replaceNode(matchIdJ, matchIdI);

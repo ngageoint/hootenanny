@@ -100,7 +100,7 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(
   QStringList conflatableCriteriaForElement;
   QMap<QString, std::shared_ptr<ConflatableElementCriterion>> genericConflatableCriteria;
 
-  // first go through and mark only with those crits that support specific conflation
+  // First, go through and mark only with those crits that support specific conflation.
 
   for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
        itr != conflatableCriteria.end(); ++itr)
@@ -130,7 +130,7 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(
   }
   LOG_VART(conflatableCriteriaForElement);
 
-  // if no specific conflate crit was available, then try to add a generic one
+  // If no specific conflate crit was available, then try to add a generic one.
 
   if (conflatableCriteriaForElement.size() == 0)
   {

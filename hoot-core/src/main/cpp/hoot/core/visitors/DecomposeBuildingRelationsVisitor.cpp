@@ -50,6 +50,7 @@ void DecomposeBuildingRelationsVisitor::visit(const ConstElementPtr& e)
     {
       _decomposeBuilding(r);
     }
+    _numProcessed++;
   }
 }
 

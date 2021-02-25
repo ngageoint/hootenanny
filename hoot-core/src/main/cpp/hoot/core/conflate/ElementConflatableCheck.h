@@ -22,40 +22,44 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2016, 2017, 2018, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#include "PowerLineCriterion.h"
+#ifndef ELEMENT_CONFLATABLE_CHECK_H
+#define ELEMENT_CONFLATABLE_CHECK_H
 
-// hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/PowerLineWayNodeCriterion.h>
+// Qt
+#include <QStringList>
 
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(ElementCriterion, PowerLineCriterion)
-
-bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
+/**
+ * TODO
+ *
+ * @see ElementVisitor
+ */
+class ElementConflatableCheck
 {
-  if (e->getElementType() == ElementType::Way)
-  {
-    const Tags& tags = e->getTags();
-    const QString powerVal = tags.get("power").toLower().trimmed();
-    if (powerVal == "line" || powerVal == "minor_line" || powerVal == "cable")
-    {
-      return true;
-    }
-  }
-  return false;
+public:
+
+  ElementConflatableCheck() = default;
+  virtual ~ElementConflatableCheck() = default;
+
+  /**
+   * TODO
+   *
+   * @return
+   */
+  virtual bool getCheckConflatable() const = 0;
+
+  /**
+   * TODO
+   *
+   * @param conflatable
+   */
+  virtual void setCheckConflatable(const bool conflatable) = 0;
+};
+
 }
 
-QStringList PowerLineCriterion::getChildCriteria() const
-{
-  QStringList criteria;
-  criteria.append(PowerLineWayNodeCriterion::className());
-  return criteria;
-}
-
-}
-
+#endif // ELEMENT_CONFLATABLE_CHECK_H

@@ -34,6 +34,7 @@
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
 #include <QVector>
@@ -60,6 +61,15 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
   {
     WayPtr way = std::dynamic_pointer_cast<Way>(e);
     assert(way.get());
+
+    if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(way, _map))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << way->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
+      return;
+    }
+
     LOG_TRACE("Looking for duplicate way nodes in: " << way->getElementId() << "...");
     const std::vector<long>& wayNodeIds = way->getNodeIds();
     LOG_VART(wayNodeIds);

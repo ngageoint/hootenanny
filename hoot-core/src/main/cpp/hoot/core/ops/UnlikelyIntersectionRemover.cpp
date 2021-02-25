@@ -36,7 +36,7 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/criterion/LinearCriterion.h>
-
+#include <hoot/core/conflate/ConflateUtils.h>
 
 // Standard
 #include <iostream>
@@ -52,6 +52,25 @@ namespace hoot
 
 HOOT_FACTORY_REGISTER(OsmMapOperation, UnlikelyIntersectionRemover)
 
+void UnlikelyIntersectionRemover::apply(std::shared_ptr<OsmMap>& map)
+{
+  _numAffected = 0;
+  _result = map;
+
+  NodeToWayMap n2w(*_result);
+
+  // go through each node
+  for (NodeToWayMap::const_iterator it = n2w.begin(); it != n2w.end(); ++it)
+  {
+    // if the node is part of multiple ways
+    if (it->second.size() > 1)
+    {
+      // evaluate and split the intersection
+      _evaluateAndSplit(it->first, it->second);
+    }
+  }
+}
+
 void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const set<long>& wayIds)
 {
   // This evaluate and split method uses a simple heuristic for finding a split. It also assumes
@@ -63,36 +82,61 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   // situations with more than two ways this may be non-optimal, but again, for most real world
   // scenarios this should be just fine.
 
-  // create two groups for the ways
+  // Create two groups for the ways.
   vector<std::shared_ptr<Way>> g1, g2;
 
   LOG_VART(intersectingNode);
   LOG_VART(wayIds);
 
-  // put the first valid way in the first group
+  // Put the first valid way in the first group.
   set<long>::const_iterator it = wayIds.begin();
   std::shared_ptr<Way> first;
   while (!first && it != wayIds.end())
   {
     WayPtr way = _result->getWay(*it);
-    if (way)
+    if (!way)
     {
+       continue;
+    }
+//    else if (_checkConflatable &&
+//             !ConflateUtils::elementCanBeConflatedByActiveMatcher(way, _result))
+//    {
+//      LOG_TRACE(
+//        "Skipping processing of " << way->getElementId() << " as it cannot be conflated by any " <<
+//        "actively configured conflate matcher...");
+//    }
+    //else
+    //{
       g1.push_back(way);
       first = g1[0];
-    }
+    //}
     ++it;
   }
+  LOG_VART(first.get());
   if (!first)
   {
     return;
   }
 
-  // go through all the other ways
+  // Go through all the other ways.
   for (set<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
-  // while (it != wayIds.end())
   {
     std::shared_ptr<Way> w = _result->getWay(*it);
-    if (w && w->getElementId() != first->getElementId())
+    _numProcessed++;
+    if (!w)
+    {
+      continue;
+    }
+    else if (_checkConflatable &&
+             !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, _result))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
+      continue;
+    }
+
+    if (w->getElementId() != first->getElementId())
     {
       const double p = _pIntersection(intersectingNode, first, w);
       // If this is a likely intersection with the first way,
@@ -108,8 +152,6 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
         g2.push_back(w);
       }
     }
-
-    //++it;
   }
 
   // If all ways are in the first group, we're done.
@@ -238,29 +280,9 @@ void UnlikelyIntersectionRemover::_splitIntersection(long intersectingNode,
   }
 }
 
-void UnlikelyIntersectionRemover::apply(std::shared_ptr<OsmMap>& map)
-{
-  _numAffected = 0;
-  _result = map;
-
-  NodeToWayMap n2w(*_result);
-
-  // go through each node
-  for (NodeToWayMap::const_iterator it = n2w.begin(); it != n2w.end(); ++it)
-  {
-    // if the node is part of multiple ways
-    if (it->second.size() > 1)
-    {
-      // evaluate and split the intersection
-      _evaluateAndSplit(it->first, it->second);
-    }
-  }
-}
-
 QStringList UnlikelyIntersectionRemover::getCriteria() const
 {
   return QStringList(LinearCriterion::className());
 }
-
 
 }
