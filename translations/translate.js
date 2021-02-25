@@ -1217,8 +1217,8 @@ translate = {
   }, // End applyComplexRules
 
 
-  // makeAttrLookup - build a lookup table for layers and Attrs
-  makeTdsAttrLookup : function(schema)
+  // makeThematicAttrLookup - build a lookup table for layers and Attrs
+  makeThematicAttrLookup : function(schema)
   {
     var lookup = {};
 
