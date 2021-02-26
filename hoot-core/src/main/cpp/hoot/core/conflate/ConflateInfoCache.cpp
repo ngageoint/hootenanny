@@ -611,8 +611,9 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(const ConstElementP
   }
 
   _conflatableElementCache[element->getElementId()] = false;
-  LOG_VARD(element->getElementId());
-  LOG_VARD(OsmSchema::getInstance().mostSpecificType(element->getTags()));
+  LOG_WARN(
+    element->getElementId() << " rejected as conflatable element. Most specific type: " <<
+    OsmSchema::getInstance().mostSpecificType(element->getTags()));
   return false;
 }
 
@@ -700,6 +701,8 @@ bool ConflateInfoCache::elementCriterionInUseByActiveMatcher(const QString& crit
       }
     }
   }
+
+  LOG_WARN("Conflate crit rejected: " << criterionClassName);
   _conflatableCritActiveCache[criterionClassName] = false;
   return false;
 }
