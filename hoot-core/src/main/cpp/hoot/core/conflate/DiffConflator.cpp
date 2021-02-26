@@ -165,18 +165,18 @@ void DiffConflator::apply(OsmMapPtr& map)
   // Eventually, we could extend this snapping to all linear feature types.
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
   {
-    if (ConflateUtils::elementCriterionInUseByActiveMatcher(HighwayCriterion::className(), map))
-    {
+//    if (ConflateUtils::elementCriterionInUseByActiveMatcher(HighwayCriterion::className(), map))
+//    {
       // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
       // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
       // anymore.
       _numSnappedWays = _snapSecondaryRoadsBackToRef();
       MemoryUsageChecker::getInstance().check();
-    }
-    else
-    {
-      LOG_DEBUG("Skipping road snapping as conflation is not configured for road features.")
-    }
+//    }
+//    else
+//    {
+//      LOG_TRACE("Skipping road snapping as conflation is not configured for road features.")
+//    }
   }
 
   if (ConfigOptions().getDifferentialRemoveReferenceData())

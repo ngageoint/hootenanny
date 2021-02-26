@@ -118,14 +118,14 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
       {
         LOG_VART(critName);
 
-        if (_checkConflatable &&
-            !ConflateUtils::elementCriterionInUseByActiveMatcher(critName, map))
-        {
-          LOG_TRACE(
-            "Excluding " << critName << " filter due it not being in use by an active conflate " <<
-            "matcher.");
-          continue;
-        }
+//        if (_checkConflatable &&
+//            !ConflateUtils::elementCriterionInUseByActiveMatcher(critName, map))
+//        {
+//          LOG_TRACE(
+//            "Excluding " << critName << " filter due it not being in use by an active conflate " <<
+//            "matcher.");
+//          continue;
+//        }
 
         ElementCriterionPtr crit =
           std::shared_ptr<ElementCriterion>(

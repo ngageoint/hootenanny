@@ -133,6 +133,7 @@ void NamedOp::apply(OsmMapPtr& map)
 
       op->apply(map);
 
+      op->setCheckConflatable(false);
       _appliedOps[op->getName()] = op;
     }
     else if (f.hasBase<ElementVisitor>(s))
@@ -169,6 +170,7 @@ void NamedOp::apply(OsmMapPtr& map)
 
       map->visitRw(*vis);
 
+      vis->setCheckConflatable(false);
       _appliedVis[vis->getName()] = vis;
     }
     else

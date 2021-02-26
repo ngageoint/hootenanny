@@ -96,20 +96,10 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
     WayPtr way = _result->getWay(*it);
     if (!way)
     {
-       continue;
+     continue;
     }
-//    else if (_checkConflatable &&
-//             !ConflateUtils::elementCanBeConflatedByActiveMatcher(way, _result))
-//    {
-//      LOG_TRACE(
-//        "Skipping processing of " << way->getElementId() << " as it cannot be conflated by any " <<
-//        "actively configured conflate matcher...");
-//    }
-    //else
-    //{
-      g1.push_back(way);
-      first = g1[0];
-    //}
+    g1.push_back(way);
+    first = g1[0];
     ++it;
   }
   LOG_VART(first.get());
@@ -127,14 +117,14 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
     {
       continue;
     }
-    else if (_checkConflatable &&
-             !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, _result))
-    {
-      LOG_TRACE(
-        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
-        "actively configured conflate matcher...");
-      continue;
-    }
+//    else if (_checkConflatable &&
+//             !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, _result))
+//    {
+//      LOG_TRACE(
+//        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+//        "actively configured conflate matcher...");
+//      continue;
+//    }
 
     if (w->getElementId() != first->getElementId())
     {

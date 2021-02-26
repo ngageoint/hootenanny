@@ -92,13 +92,13 @@ void SuperfluousWayRemover::_removeWays(std::shared_ptr<OsmMap>& map)
     {
       continue;
     }
-    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, map))
-    {
-      LOG_TRACE(
-        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
-        "actively configured conflate matcher...");
-      continue;
-    }
+//    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, map))
+//    {
+//      LOG_TRACE(
+//        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+//        "actively configured conflate matcher...");
+//      continue;
+//    }
     LOG_VART(w->getElementId());
 
     if (_excludeIds.contains(w->getId()))

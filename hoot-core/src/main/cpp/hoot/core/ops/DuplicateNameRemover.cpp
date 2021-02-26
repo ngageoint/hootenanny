@@ -78,13 +78,13 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
     {
       continue;
     }
-    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, _map))
-    {
-      LOG_TRACE(
-        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
-        "actively configured conflate matcher.");
-      continue;
-    }
+//    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, _map))
+//    {
+//      LOG_TRACE(
+//        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+//        "actively configured conflate matcher.");
+//      continue;
+//    }
     LOG_VART(w->getElementId());
 
     // If we have a name that is not an alt name, let's record it here so we can preserve it

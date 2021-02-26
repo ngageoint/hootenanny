@@ -84,13 +84,13 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     {
       continue;
     }
-    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, map))
-    {
-      LOG_TRACE(
-        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
-        "actively configured conflate matcher...");
-      continue;
-    }
+//    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, map))
+//    {
+//      LOG_TRACE(
+//        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+//        "actively configured conflate matcher...");
+//      continue;
+//    }
     vector<long> newNodes;
     const vector<long>& nodes = w->getNodeIds();
     for (size_t i = 0; i < nodes.size(); i++)
@@ -112,13 +112,13 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     {
       continue;
     }
-    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, map))
-    {
-      LOG_TRACE(
-        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
-        "actively configured conflate matcher...");
-      continue;
-    }
+//    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, map))
+//    {
+//      LOG_TRACE(
+//        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+//        "actively configured conflate matcher...");
+//      continue;
+//    }
     // If the way isn't in the map anymore (deleted as part of this process) or the way is an
     // area type (different treatment),
     if (_map->containsWay(key) == false || !LinearCriterion().isSatisfied(w))

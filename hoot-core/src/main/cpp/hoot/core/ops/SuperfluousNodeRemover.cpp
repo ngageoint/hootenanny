@@ -180,14 +180,14 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         n->getTags().getNonDebugCount() << " non-metadata tags...");
       _usedNodeIds.insert(n->getId());
     }
-    else if (_checkConflatable && _ignoreInformationTags &&
-             !ConflateUtils::elementCanBeConflatedByActiveMatcher(n->cloneSp(), map))
-    {
-      LOG_TRACE(
-        "Skipping processing of " << n->getElementId() << " as it cannot be conflated by any " <<
-        "actively configured conflate matcher...");
-      _usedNodeIds.insert(n->getId());
-    }
+//    else if (_checkConflatable && _ignoreInformationTags &&
+//             !ConflateUtils::elementCanBeConflatedByActiveMatcher(n->cloneSp(), map))
+//    {
+//      LOG_TRACE(
+//        "Skipping processing of " << n->getElementId() << " as it cannot be conflated by any " <<
+//        "actively configured conflate matcher...");
+//      _usedNodeIds.insert(n->getId());
+//    }
     // There original reason behind adding this is that there a potential bug in
     // LinearSnapMerger::_snapEnds that will leave turning circle nodes orphaned from roads.
     // Turning circles are always expected to be a road way node. If its an actual bug, it should

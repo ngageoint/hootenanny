@@ -185,7 +185,6 @@ bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
       ElementCriterionPtr crit;
       std::shared_ptr<ConflatableElementCriterion> conflatableCrit;
       ElementCriterionPtr childCrit;
-      std::shared_ptr<ConflatableElementCriterion> conflatableChildCrit;
       LOG_VART(_conflatableCritCache.contains(criterionClassName));
       if (_conflatableCritCache.contains(criterionClassName)) // Check the cache for the criterion.
       {
@@ -228,7 +227,7 @@ bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
               LOG_VARD(_conflatableCritCache.contains(childCritClassName));
               if (_conflatableCritCache.contains(childCritClassName))
               {
-                childCrit = _conflatableCritCache[criterionClassName];
+                childCrit = _conflatableCritCache[childCritClassName];
               }
               else
               {
@@ -251,8 +250,6 @@ bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
               // their parents only. So, don't check that it casts to ConflatableElementCriterion.
               if (childCrit)
               {
-                _conflatableCritCache[childCritClassName] = childCrit;
-
                 LOG_VARD(childCrit->isSatisfied(element));
                 // If any matcher's crit matches the element, return true.
                 if (childCrit->isSatisfied(element))
