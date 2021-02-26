@@ -156,8 +156,8 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
 bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
   const ConstElementPtr& element, const ConstOsmMapPtr& map)
 {
-  //LOG_VARD(element->getElementId());
-  //LOG_VARD(_conflatableElementCache.contains(element->getElementId()));
+  LOG_VART(element->getElementId());
+  LOG_VART(_conflatableElementCache.contains(element->getElementId()));
 
   // Check the element can be conflated cache first.
   if (_conflatableElementCache.contains(element->getElementId()))
@@ -165,7 +165,7 @@ bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
     return _conflatableElementCache[element->getElementId()];
   }
 
-  LOG_VARD(element->getElementId());
+  LOG_VART(element->getElementId());
   LOG_VART(map.get());
 
   // Get all the configured matchers.
@@ -216,7 +216,7 @@ bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
         }
       }
 
-      LOG_VARD(crit->isSatisfied(element));
+      // Crit creation can be expensive, so cache those created.(crit->isSatisfied(element));
       // If any matcher's crit matches the element, return true.
       if (crit->isSatisfied(element))
       {
@@ -231,8 +231,8 @@ bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
         for (int i = 0; i < childCritClassNames.size(); i++)
         {
           const QString childCritClassName = childCritClassNames.at(i);
-          LOG_VARD(childCritClassName);
-          LOG_VARD(_conflatableCritCache.contains(childCritClassName));
+          // Crit creation can be expensive, so cache those created.(childCritClassName);
+          LOG_VART(_conflatableCritCache.contains(childCritClassName));
           // Check the cache for the child criterion.
           if (_conflatableCritCache.contains(childCritClassName))
           {
@@ -261,7 +261,7 @@ bool ConflateUtils::elementCanBeConflatedByActiveMatcher(
           // their parents only. So, don't require that it casts to ConflatableElementCriterion.
           if (childCrit)
           {
-            LOG_VARD(childCrit->isSatisfied(element));
+            LOG_VART(childCrit->isSatisfied(element));
             // If any matcher's crit matches the element, return true.
             if (childCrit->isSatisfied(element))
             {
