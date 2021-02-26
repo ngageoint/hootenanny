@@ -59,7 +59,9 @@ namespace hoot
  * ConflateUtils::elementCanBeConflatedByActiveMatcher).
  *
  * We could eventually remove the default empty string implementations of OperationStatus methods
- * and require them to be implemented in children.
+ * and require them to be implemented in children. If we ever have multiple inheritance issues via
+ * inheritance from the OperationStatus or ElementConflatableCheck classes, we can change them to
+ * proper interfaces.
  */
 class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
   public OperationStatus, public ElementConflatableCheck
@@ -68,7 +70,7 @@ public:
 
   static QString className() { return "hoot::ElementVisitor"; }
 
-  ElementVisitor() : _checkConflatable(false) {}
+  ElementVisitor() = default;
   virtual ~ElementVisitor() = default;
 
   /**
@@ -99,20 +101,6 @@ public:
   QStringList getCriteria() const override { return QStringList(); }
 
   QString toString() const override { return ""; }
-
-  /**
-   * @see ElementConflatableCheck
-   */
-  virtual bool getCheckConflatable() const { return _checkConflatable; }
-  /**
-   * @see ElementConflatableCheck
-   */
-  virtual void setCheckConflatable(const bool checkConflatable)
-  { _checkConflatable = checkConflatable; }
-
-protected:
-
-  bool _checkConflatable;
 };
 
 typedef std::shared_ptr<ElementVisitor> ElementVisitorPtr;

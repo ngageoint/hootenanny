@@ -36,28 +36,31 @@ namespace hoot
 /**
  * TODO
  *
+ * Note that this is not a true interface in that parts are implemented. If we ever have
+ * multiple inheritance issues with children, it can be converted to a true interface.
+ *
  * @see ElementVisitor
  */
 class ElementConflatableCheck
 {
 public:
 
-  ElementConflatableCheck() = default;
+  ElementConflatableCheck() : _checkConflatable(false) {}
   virtual ~ElementConflatableCheck() = default;
 
   /**
-   * TODO
-   *
-   * @return
+   * @see ElementConflatableCheck
    */
-  virtual bool getCheckConflatable() const = 0;
-
+  virtual bool getCheckConflatable() const { return _checkConflatable; }
   /**
-   * TODO
-   *
-   * @param conflatable
+   * @see ElementConflatableCheck
    */
-  virtual void setCheckConflatable(const bool conflatable) = 0;
+  virtual void setCheckConflatable(const bool checkConflatable)
+  { _checkConflatable = checkConflatable; }
+
+protected:
+
+  bool _checkConflatable;
 };
 
 }

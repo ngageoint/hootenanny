@@ -57,6 +57,9 @@ class OsmMap;
  *
  * @see notes in ElementVisitor about FilteredByGeometryTypeCriteria, ElementConflatableCheck, and
  * OperationStatus implementation
+ *
+ * If we ever have multiple inheritance issues via inheritance from the OperationStatus or
+ * ElementConflatableCheck classes, we can change them to proper interfaces.
  */
 class OsmMapOperation : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
   public OperationStatus, public ElementConflatableCheck
@@ -65,7 +68,7 @@ public:
 
   static QString className() { return "hoot::OsmMapOperation"; }
 
-  OsmMapOperation() : _checkConflatable(false) {}
+  OsmMapOperation() = default;
   virtual ~OsmMapOperation() = default;
 
   /**
@@ -103,20 +106,6 @@ public:
   QStringList getCriteria() const override { return QStringList(); }
 
   QString toString() const override { return ""; }
-
-  /**
-   * @see ElementConflatableCheck
-   */
-  virtual bool getCheckConflatable() const { return _checkConflatable; }
-  /**
-   * @see ElementConflatableCheck
-   */
-  virtual void setCheckConflatable(const bool checkConflatable)
-  { _checkConflatable = checkConflatable; }
-
-protected:
-
-  bool _checkConflatable;
 };
 
 }
