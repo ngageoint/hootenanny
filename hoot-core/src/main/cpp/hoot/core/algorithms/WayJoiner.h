@@ -83,8 +83,6 @@ protected:
   // mapping of joined ways ids; ID before joining mapped to ID after joining
   QHash<long, long> _joinedWayIdMappings;
 
-  bool g;
-
   int _numJoined;
   int _numProcessed;
   int _totalWays;

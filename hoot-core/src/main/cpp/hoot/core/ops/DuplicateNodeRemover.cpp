@@ -214,7 +214,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
               LOG_VART(replace);
               if (replace)
               {
-                LOG_DEBUG(
+                LOG_TRACE(
                   "Merging nodes: " << ElementId(ElementType::Node, matchIdJ) << " and " <<
                   ElementId(ElementType::Node, matchIdI) << "...");
                 map->replaceNode(matchIdJ, matchIdI);

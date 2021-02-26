@@ -96,13 +96,13 @@ void SmallDisconnectedWayRemover::apply(OsmMapPtr& map)
     {
       continue;
     }
-    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(way, _map))
-    {
-      LOG_TRACE(
-        "Skipping processing of " << way->getElementId() << " as it cannot be conflated by any " <<
-        "actively configured conflate matcher...");
-      continue;
-    }
+//    else if (_checkConflatable && !ConflateUtils::elementCanBeConflatedByActiveMatcher(way, _map))
+//    {
+//      LOG_TRACE(
+//        "Skipping processing of " << way->getElementId() << " as it cannot be conflated by any " <<
+//        "actively configured conflate matcher...");
+//      continue;
+//    }
     LOG_VART(way->getElementId());
 
     LOG_VART(lengthCrit->isSatisfied(way));

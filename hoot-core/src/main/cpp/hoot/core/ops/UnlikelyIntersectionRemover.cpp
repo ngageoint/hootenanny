@@ -94,12 +94,11 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   while (!first && it != wayIds.end())
   {
     WayPtr way = _result->getWay(*it);
-    if (!way)
+    if (way)
     {
-     continue;
+      g1.push_back(way);
+      first = g1[0];
     }
-    g1.push_back(way);
-    first = g1[0];
     ++it;
   }
   LOG_VART(first.get());
