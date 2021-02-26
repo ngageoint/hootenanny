@@ -59,8 +59,8 @@ void MapCompareUtils::getAttributeComparisonFinalScores(
 int MapCompareUtils::getAttributeComparisonFinalScore(
   const OsmMapPtr& map1, const OsmMapPtr& map2, const int numIterations)
 {
-  int mean;
-  int confidence;
+  int mean = 0;
+  int confidence = 0;
   getAttributeComparisonFinalScores(map1, map2, mean, confidence, numIterations);
   return mean;
 }
@@ -89,8 +89,8 @@ void MapCompareUtils::getGraphComparisonRawScores(
 
 int MapCompareUtils::getGraphComparisonFinalScore(const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
-  double mean;
-  double confidence;
+  double mean = 0.0;
+  double confidence = 0.0;
   getGraphComparisonRawScores(map1, map2, mean, confidence);
   return convertRawScoreToFinalScore(mean);
 }
@@ -110,7 +110,7 @@ void MapCompareUtils::getRasterComparisonRawScores(
 
 int MapCompareUtils::getRasterComparisonFinalScore(const OsmMapPtr& map1, const OsmMapPtr& map2)
 {
-  double mean;
+  double mean = 0.0;
   getRasterComparisonRawScores(map1, map2, mean);
   return convertRawScoreToFinalScore(mean);
 }
