@@ -34,6 +34,7 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // GEOS
 #include <geos/geom/Envelope.h>
@@ -54,7 +55,8 @@ namespace hoot
  * with no nodes. ElementConflatableCheck does need to be implemented here to prevent removal of a
  * conflatable node or a node belonging to a conflatable way/relation.
  */
-class DuplicateNodeRemover : public OsmMapOperation, public Boundable
+class DuplicateNodeRemover : public OsmMapOperation, public Boundable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
@@ -85,10 +87,16 @@ public:
   virtual QString getCompletedStatusMessage() const override
   { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " node pairs."; }
 
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
+
 protected:
 
   std::shared_ptr<OsmMap> _map;
+
   Meters _distance;
+
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   void _logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
                        const double distance = -1.0, const double calcdDistance = -1.0);

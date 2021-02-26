@@ -118,8 +118,7 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
       {
         LOG_VART(critName);
 
-        if (_checkConflatable &&
-            !ConflateUtils::elementCriterionInUseByActiveMatcher(critName, map))
+        if (_conflateInfoCache && !_conflateInfoCache->elementCriterionInUseByActiveMatcher(critName))
         {
           LOG_TRACE(
             "Excluding " << critName << " filter due it not being in use by an active conflate " <<

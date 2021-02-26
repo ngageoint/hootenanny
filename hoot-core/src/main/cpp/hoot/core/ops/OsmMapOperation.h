@@ -32,7 +32,6 @@
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
 #include <hoot/core/info/OperationStatus.h>
-#include <hoot/core/conflate/ElementConflatableCheck.h>
 
 // Standard
 #include <string>
@@ -55,14 +54,11 @@ class OsmMap;
  * entire input map in memory at one time (operation logic does not require it and you are not
  * running in the conflate pipeline), consider using ElementVisitor instead.
  *
- * @see notes in ElementVisitor about FilteredByGeometryTypeCriteria, ElementConflatableCheck, and
- * OperationStatus implementation
- *
- * If we ever have multiple inheritance issues via inheritance from the OperationStatus or
- * ElementConflatableCheck classes, we can change them to proper interfaces.
+ * @see notes in ElementVisitor about FilteredByGeometryTypeCriteria, OperationStatus, and
+ * ConflateInfoCacheConsumer implementations
  */
 class OsmMapOperation : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
-  public OperationStatus, public ElementConflatableCheck
+  public OperationStatus
 {
 public:
 

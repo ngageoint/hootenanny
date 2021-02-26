@@ -31,6 +31,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Standard
 #include <set>
@@ -49,7 +50,7 @@ class Way;
  * For example, a motorway overpass intersecting a residential street at a 90° is considered
  * unlikely and "unsnapped". The geometry location is not modified.
  */
-class UnlikelyIntersectionRemover : public OsmMapOperation
+class UnlikelyIntersectionRemover : public OsmMapOperation, public ConflateInfoCacheConsumer
 {
 public:
 
@@ -83,9 +84,14 @@ public:
 
   virtual QString getClassName() const override { return className(); }
 
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
+
 protected:
 
   std::shared_ptr<OsmMap> _result;
+
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   void _evaluateAndSplit(long intersectingNode, const std::set<long>& wayIds);
   double _pIntersection(long intersectingNode, const std::shared_ptr<Way>& w1,

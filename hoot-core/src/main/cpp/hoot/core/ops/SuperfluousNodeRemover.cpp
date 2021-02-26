@@ -192,14 +192,14 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         n->getTags().getNonDebugCount() << " non-metadata tags...");
       _usedNodeIds.insert(n->getId());
     }
-//    else if (_checkConflatable && _ignoreInformationTags &&
-//             !ConflateUtils::elementCanBeConflatedByActiveMatcher(n->cloneSp(), map))
-//    {
-//      LOG_TRACE(
-//        "Skipping processing of " << n->getElementId() << " as it cannot be conflated by any " <<
-//        "actively configured conflate matcher...");
-//      _usedNodeIds.insert(n->getId());
-//    }
+    else if (_conflateInfoCache && _ignoreInformationTags &&
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n->cloneSp()))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << n->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
+      _usedNodeIds.insert(n->getId());
+    }
     else
     {
       LOG_TRACE("Marking " << n->getElementId() << " for removal...");

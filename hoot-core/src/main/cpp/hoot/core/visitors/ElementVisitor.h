@@ -32,7 +32,6 @@
 #include <hoot/core/info/ApiEntityInfo.h>
 #include <hoot/core/criterion/FilteredByGeometryTypeCriteria.h>
 #include <hoot/core/info/OperationStatus.h>
-#include <hoot/core/conflate/ElementConflatableCheck.h>
 
 namespace hoot
 {
@@ -45,26 +44,23 @@ namespace hoot
  * does not require it and you are not running in the conflate pipeline where all map data must
  * be read into memory).
  *
- * Nearly all ElementVisitors that are added to the conflate pipeline (conflate.pre.ops or
- * conflate.post.ops) should override the default implementation of
- * FilteredByGeometryTypeCriteria::getCriteria. Optionally, visitors should make use of
- * ElementConflatableCheck::getCheckConflatable. The only visitors that would not need to implement
- * either of these would be cleaning ops that work against non-typed elements (e.g.
- * NoInformationElementRemover). Implement FilteredByGeometryTypeCriteria::getCriteria and return a
- * list of supported element criteria the visitor operates on (e.g. roads; return HighwayCriterion).
+ * All ElementVisitors that are added to the conflate pipeline (conflate.pre.ops or
+ * conflate.post.ops) should either override the default implementation of
+ * FilteredByGeometryTypeCriteria::getCriteria or implement the ConflateInfoCacheConsumer interface
+ * (doing both is ok). Implement FilteredByGeometryTypeCriteria::getCriteria and return a list of
+ * supported element criteria the visitor operates on (e.g. for roads, return HighwayCriterion).
  * If the visitor operates generically on elements that may have multiple feature types (e.g. all
- * ways and FilteredByGeometryTypeCriteria::getCriteria returns LinearCriterion), add logic to the
- * visitor when ElementConflatableCheck::getCheckConflatable returns 'true' to only operate on
+ * ways and FilteredByGeometryTypeCriteria::getCriteria returns LinearCriterion),
+ * ConflateInfoCacheConsumer should be implemeted and the info in the cache used to only operate on
  * elements that are conflatable in the current conflation configuration (see
- * ConflateUtils::elementCanBeConflatedByActiveMatcher).
+ * ConflateInfoCache::elementCanBeConflatedByActiveMatcher).
  *
  * We could eventually remove the default empty string implementations of OperationStatus methods
  * and require them to be implemented in children. If we ever have multiple inheritance issues via
- * inheritance from the OperationStatus or ElementConflatableCheck classes, we can change them to
- * proper interfaces.
+ * inheritance from the OperationStatus, we can change it to be a proper interface.
  */
 class ElementVisitor : public ApiEntityInfo, public FilteredByGeometryTypeCriteria,
-  public OperationStatus, public ElementConflatableCheck
+  public OperationStatus
 {
 public:
 

@@ -38,6 +38,7 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Standard
 #include <set>
@@ -62,7 +63,8 @@ class OsmMap;
  * with no nodes. ElementConflatableCheck does need to be implemented here to handle the case when
  * _ignoreInformationTags = true.
  */
-class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public Configurable
+class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public Configurable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
@@ -133,6 +135,9 @@ public:
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
   void setRemoveNodes(bool remove) { _removeNodes = remove; }
 
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
+
 protected:
 
   // Turning this off is useful for debugging the existence of orphaned nodes.
@@ -151,6 +156,8 @@ protected:
   bool _ignoreInformationTags;
   // configurable set of tags where if found on a node, we always want to remove it
   QStringList _unallowedOrphanKvps;
+
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   int _taskStatusUpdateInterval;
 };

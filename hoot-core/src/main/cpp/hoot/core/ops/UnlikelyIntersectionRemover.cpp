@@ -112,18 +112,17 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   {
     std::shared_ptr<Way> w = _result->getWay(*it);
     _numProcessed++;
-//    if (!w)
-//    {
-//      continue;
-//    }
-//    else if (_checkConflatable &&
-//             !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, _result))
-//    {
-//      LOG_TRACE(
-//        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
-//        "actively configured conflate matcher...");
-//      continue;
-//    }
+    if (!w)
+    {
+      continue;
+    }
+    else if (_conflateInfoCache && !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
+      continue;
+    }
 
     if (w && w->getElementId() != first->getElementId())
     {

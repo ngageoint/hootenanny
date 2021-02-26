@@ -24,45 +24,31 @@
  *
  * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef ELEMENT_CONFLATABLE_CHECK_H
-#define ELEMENT_CONFLATABLE_CHECK_H
+#ifndef CONFLATE_INFO_CACHE_CONSUMER_H
+#define CONFLATE_INFO_CACHE_CONSUMER_H
 
-// Qt
-#include <QStringList>
+// Hoot
+#include <hoot/core/conflate/ConflateInfoCache.h>
 
 namespace hoot
 {
 
 /**
  * TODO
- *
- * Note that this is not a true interface in that parts are implemented. If we ever have
- * multiple inheritance issues with children, it can be converted to a true interface.
- *
- * @see ElementVisitor
  */
-class ElementConflatableCheck
+class ConflateInfoCacheConsumer
 {
 public:
 
-  ElementConflatableCheck() : _checkConflatable(false) {}
-  virtual ~ElementConflatableCheck() = default;
+  ConflateInfoCacheConsumer() = default;
+  virtual ~ConflateInfoCacheConsumer() = default;
 
   /**
-   * @see ElementConflatableCheck
+   * TODO
    */
-  virtual bool getCheckConflatable() const { return _checkConflatable; }
-  /**
-   * @see ElementConflatableCheck
-   */
-  virtual void setCheckConflatable(const bool checkConflatable)
-  { _checkConflatable = checkConflatable; }
-
-protected:
-
-  bool _checkConflatable;
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) = 0;
 };
 
 }
 
-#endif // ELEMENT_CONFLATABLE_CHECK_H
+#endif // CONFLATE_INFO_CACHE_CONSUMER_H

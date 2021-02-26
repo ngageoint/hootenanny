@@ -39,6 +39,7 @@
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -90,6 +91,12 @@ void NamedOp::apply(OsmMapPtr& map)
   Factory& f = Factory::getInstance();
   QElapsedTimer timer;
 
+  std::shared_ptr<ConflateInfoCache> conflateInfoCache;
+  if (_operateOnlyOnConflatableElements)
+  {
+    conflateInfoCache.reset(new ConflateInfoCache(map));
+  }
+
   int opCount = 1;
   foreach (QString s, _namedOps)
   {
@@ -112,7 +119,6 @@ void NamedOp::apply(OsmMapPtr& map)
     {
       std::shared_ptr<OsmMapOperation> op(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
-      op->setCheckConflatable(_operateOnlyOnConflatableElements);
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(op);
 
       if (_progress.getState() == Progress::JobState::Running)
@@ -131,16 +137,24 @@ void NamedOp::apply(OsmMapPtr& map)
         c->setConfiguration(*_conf);
       }
 
+      if (_operateOnlyOnConflatableElements)
+      {
+        ConflateInfoCacheConsumer* cacheConsumer =
+          dynamic_cast<ConflateInfoCacheConsumer*>(op.get());
+        if (cacheConsumer != 0)
+        {
+          cacheConsumer->setConflateInfoCache(conflateInfoCache);
+        }
+      }
+
       op->apply(map);
 
-      op->setCheckConflatable(false);
       _appliedOps[op->getName()] = op;
     }
     else if (f.hasBase<ElementVisitor>(s))
     {
       std::shared_ptr<ElementVisitor> vis(
         Factory::getInstance().constructObject<ElementVisitor>(s));
-      vis->setCheckConflatable(_operateOnlyOnConflatableElements);
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(vis);
 
       Configurable* c = dynamic_cast<Configurable*>(vis.get());
@@ -168,9 +182,18 @@ void NamedOp::apply(OsmMapPtr& map)
         mapConsumer->setOsmMap(map.get());
       }
 
+      if (_operateOnlyOnConflatableElements)
+      {
+        ConflateInfoCacheConsumer* cacheConsumer =
+          dynamic_cast<ConflateInfoCacheConsumer*>(vis.get());
+        if (cacheConsumer != 0)
+        {
+          cacheConsumer->setConflateInfoCache(conflateInfoCache);
+        }
+      }
+
       map->visitRw(*vis);
 
-      vis->setCheckConflatable(false);
       _appliedVis[vis->getName()] = vis;
     }
     else

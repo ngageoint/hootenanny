@@ -32,6 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {
@@ -45,7 +46,7 @@ namespace hoot
  *
  * Area ways are ignored.
  */
-class DuplicateWayRemover : public OsmMapOperation
+class DuplicateWayRemover : public OsmMapOperation, public ConflateInfoCacheConsumer
 {
 public:
 
@@ -90,6 +91,9 @@ public:
 
   virtual QString getClassName() const override { return className(); }
 
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
+
 protected:
 
   OsmMapPtr _map;
@@ -103,6 +107,8 @@ protected:
  private:
 
   bool _strictTagMatching;
+
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 };
 
 }

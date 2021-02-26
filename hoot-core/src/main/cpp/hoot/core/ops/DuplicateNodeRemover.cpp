@@ -171,9 +171,9 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
             LOG_VART(calcdDistanceSquared);
             if (distanceSquared > calcdDistanceSquared)
             {
-/*              if (_checkConflatable &&
-                  (!ConflateUtils::elementCanBeConflatedByActiveMatcher(n1, map) ||
-                   !ConflateUtils::elementCanBeConflatedByActiveMatcher(n2, map)))
+              if (_conflateInfoCache &&
+                  (!_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n1) ||
+                   !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n2)))
               {
                 LOG_TRACE(
                   "Skipping processing of " << n1->getElementId() << " and " <<
@@ -182,7 +182,7 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
                 replace = false;
               }
               // if the geographic bounds are not specified
-              else*/ if (!_bounds)
+              else if (!_bounds)
               {
                 replace = true;
               }

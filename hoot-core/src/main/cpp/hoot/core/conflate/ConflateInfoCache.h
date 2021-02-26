@@ -169,6 +169,24 @@ public:
    */
   void printCacheInfo();
 
+  /**
+   * Checks to see if an element can be conflated by any of the actively configured matchers for
+   * conflation.
+   *
+   * @param element element to examine
+   * @return true if the conflate matchers are configured with at least one matcher that
+   * can conflate the input element; false otherwise
+   */
+  bool elementCanBeConflatedByActiveMatcher(const ConstElementPtr& element);
+
+  /**
+   * TODO
+   *
+   * @param criterionClassName
+   * @return
+   */
+  bool elementCriterionInUseByActiveMatcher(const QString& criterionClassName);
+
 protected:
 
   static const int CACHE_SIZE_DEFAULT = 10000;
@@ -208,6 +226,13 @@ private:
 
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
+
+  // This must store ElementCriterion and not ConflatableElementCriterion, b/c we're also checking
+  // against conflate child criterion (e.g. RailwayWayNodeCriterion), which don't inherit from
+  // ConflatableElementCriterion.
+  QHash<QString, ElementCriterionPtr> _conflatableCritCache;
+  QHash<ElementId, bool> _conflatableElementCache;
+  QHash<QString, bool> _conflatableCritActiveCache;
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element);
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
