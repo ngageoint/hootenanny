@@ -951,12 +951,10 @@
     <node visible="true" id="4283583967" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6327756000000022" lon="20.8959772999999984"/>
     <node visible="true" id="4283583969" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6334834999999899" lon="20.8964546999999996"/>
     <node visible="true" id="4283583970" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6336683000000107" lon="20.8977985000000004"/>
-    <node visible="true" id="4283584444" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6341238999999916" lon="20.8909844000000007"/>
     <node visible="true" id="4283584520" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6348093000000077" lon="20.9026533000000008"/>
     <node visible="true" id="4283584521" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6348356999999965" lon="20.9027444999999972"/>
     <node visible="true" id="4283584523" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6348714000000086" lon="20.9027150000000006"/>
     <node visible="true" id="4283584525" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6348458000000008" lon="20.9026184999999991"/>
-    <node visible="true" id="4283584567" timestamp="2021-02-24T15:33:50Z" version="2" changeset="54434" lat="54.6358253999999874" lon="20.9012771999999991"/>
     <node visible="true" id="4283585134" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6203940999999986" lon="20.8842587000000002"/>
     <node visible="true" id="4283585135" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6208288999999922" lon="20.8842962999999990"/>
     <node visible="true" id="4283585136" timestamp="2021-02-24T15:33:50Z" version="1" changeset="54434" lat="54.6201487000000014" lon="20.8860343999999998"/>
@@ -4535,7 +4533,7 @@
         <nd ref="4371856576"/>
         <nd ref="4371856574"/>
         <nd ref="4371856575"/>
-        <nd ref="4283584444"/>
+        <nd ref="4375317074"/>
         <nd ref="4371856576"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
@@ -4934,7 +4932,7 @@
         <nd ref="4371856798"/>
         <nd ref="4371856796"/>
         <nd ref="4371856797"/>
-        <nd ref="4283584567"/>
+        <nd ref="4375314619"/>
         <nd ref="4371856798"/>
         <tag k="building" v="yes"/>
         <tag k="error:circular" v="15"/>
