@@ -173,6 +173,18 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       _usedNodeIds.insert(n->getId());
       _numExplicitlyExcluded++;
     }
+    // There original reason behind adding this is that there a potential bug in
+    // LinearSnapMerger::_snapEnds that will leave turning circle nodes orphaned from roads.
+    // Turning circles are always expected to be a road way node. If its an actual bug, it should
+    // eventually be fixed, but this logic will clean them up for the time being. The types we allow
+    // to be orphaned are configurable in case we ever need to add others.
+    else if (_usedNodeIds.find(n->getId()) == _usedNodeIds.end() &&
+             n->getTags().hasAnyKvp(_unallowedOrphanKvps))
+    {
+      LOG_TRACE(
+        "Marking " << n->getElementId() << " for removal with unallowed orphan kvp: " <<
+        n->getTags().getFirstKvp(_unallowedOrphanKvps) << "...");
+    }
     else if (!_ignoreInformationTags && n->getTags().getNonDebugCount() != 0)
     {
       LOG_TRACE(
@@ -188,18 +200,6 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
 //        "actively configured conflate matcher...");
 //      _usedNodeIds.insert(n->getId());
 //    }
-    // There original reason behind adding this is that there a potential bug in
-    // LinearSnapMerger::_snapEnds that will leave turning circle nodes orphaned from roads.
-    // Turning circles are always expected to be a road way node. If its an actual bug, it should
-    // eventually be fixed, but this logic will clean them up for the time being. The types we allow
-    // to be orphaned are configurable in case we ever need to add others.
-    else if (_usedNodeIds.find(n->getId()) == _usedNodeIds.end() &&
-             n->getTags().hasAnyKvp(_unallowedOrphanKvps))
-    {
-      LOG_TRACE(
-        "Marking " << n->getElementId() << " for removal with unallowed orphan kvp: " <<
-        n->getTags().getFirstKvp(_unallowedOrphanKvps) << "...");
-    }
     else
     {
       LOG_TRACE("Marking " << n->getElementId() << " for removal...");
