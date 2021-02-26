@@ -16,6 +16,8 @@ for LAYER in $LLIST; do
 
   hoot convert --error $HOOT_OPT \
     -D convert.ops=hoot::SetTagValueVisitor \
+    -D convert.ops+=hoot::WayJoinerOp \
+    -D way.joiner=hoot::NonIntersectionWayJoiner \
     -D set.tag.value.visitor.keys="highway;source:datetime;source:imagery" \
     -D set.tag.value.visitor.values="road;${LAYER_DATE}T00:00:00Z;${LAYER_SRC}" \
     -D element.criterion.negate=true \

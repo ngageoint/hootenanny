@@ -87,6 +87,9 @@ done
 
 LENGTH=${#FILE_ARRAY[@]}
 
+# The tag sources are the filenames of each file in the source directory
+TAG_SOURCES=`echo $FILE_LIST | sed 's/.osm//g' | sed 's/ /;/g'`
+
 CONFLATION_CONF=ReferenceConflation.conf
 
 HOOT_OPTS="-C ${ALGORITHM_CONF} -C ${CONFLATION_CONF}"
@@ -126,6 +129,7 @@ then
       ${OUTPUT_PATH}/conflation_$(( $INDEX - 1 )).osm \
       ${OUTPUT_PATH}/conflation_${INDEX}.osm
   done
+  CONVERT_SRC="${OUTPUT_PATH}/conflation_$(( $LENGTH - 1 )).osm"
 else
   CONFLATION=1
 
@@ -161,5 +165,8 @@ else
 
   done
 
+  CONVERT_SRC=${RESULT_ARRAY[0]}
 fi
+
+hoot convert ${QUIET} -D convert.ops+="hoot::DataSummaryTagVisitor" -D data.summary.tag.sources="${TAG_SOURCES}" ${CONVERT_SRC} ${OUTPUT_PATH}/results.osm
 
