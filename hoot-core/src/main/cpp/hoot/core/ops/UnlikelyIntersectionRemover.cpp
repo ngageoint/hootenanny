@@ -112,10 +112,10 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   {
     std::shared_ptr<Way> w = _result->getWay(*it);
     _numProcessed++;
-    if (!w)
-    {
-      continue;
-    }
+//    if (!w)
+//    {
+//      continue;
+//    }
 //    else if (_checkConflatable &&
 //             !ConflateUtils::elementCanBeConflatedByActiveMatcher(w, _result))
 //    {
@@ -125,7 +125,7 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
 //      continue;
 //    }
 
-    if (w->getElementId() != first->getElementId())
+    if (w && w->getElementId() != first->getElementId())
     {
       const double p = _pIntersection(intersectingNode, first, w);
       // If this is a likely intersection with the first way,
