@@ -642,7 +642,7 @@ bool ConflateInfoCache::elementCriterionInUseByActiveMatcher(const QString& crit
       LOG_VART(matcherCriterionClassName);
       if (matcherCriterionClassName == criterionClassName)
       {
-        _conflatableCritActiveCache[criterionClassName] = true;
+        _conflatableCritActiveCache[matcherCriterionClassName] = true;
         return true;
       }
       else
@@ -693,7 +693,7 @@ bool ConflateInfoCache::elementCriterionInUseByActiveMatcher(const QString& crit
             // No need to instantiate this child crit. Just check for a crit class name match.
             if (childCritClassName == criterionClassName)
             {
-              _conflatableCritActiveCache[criterionClassName] = true;
+              _conflatableCritActiveCache[childCritClassName] = true;
               return true;
             }
           }

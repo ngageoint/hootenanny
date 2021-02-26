@@ -47,29 +47,28 @@ namespace hoot
 {
 
 /**
- * Caches data about elements and their relationships that may aid in speeding up conflation jobs.
+ * Caches conflatable elements, relationships, and conflation configuration details that may aid in
+ * speeding up conflation jobs.
  *
- * This is generally expected to be initialized only once by each match creator. Currently, this
- * cache is only used by the match creator used by POI/Polygon conflation. It is done this way
- * rather than implementing a Singleton, since case tests are launched as multiple threads within
- * the same process, which would result in a conflicted cache state if the cache was shared by the
- * threads (different elements with the same ID having different info). Since different match
- * creators deal with different data types, the various caches shouldn't have too much data overlap.
+ * This is generally expected to be initialized separately for each section of the code using it. It
+ * is done this way rather than implementing a Singleton or using static instances, since case tests
+ * are launched as multiple threads within the same process. Not using separate instances of the
+ * cache which would result in a conflicted cache state if the cache was shared by different threads
+ * (different elements with the same ID having different info; @todo We may be able to use
+ * thread_local storage for this with static member vars). Currently, this cache is only used in a
+ * few places and not by all match creators.
  *
- * The caches used in this class (and in PoiPolygonInfoCache) were determined on 9/30/18 running
- * POI/Polygon conflation against the regression test
- * unifying-tests.child/somalia.child/somalia-test3.child and also on 1/7/20 against the data in
- * africom/somalia/229_Mogadishu_SOM_Translated. Further caching could be deemed necessary given
- * performance with other datasets.
+ * The caches used in this class were determined on 9/30/18 running POI/Polygon conflation against
+ * the regression test unifying-tests.child/somalia.child/somalia-test3.child and also on 1/7/20
+ * against the data in africom/somalia/229_Mogadishu_SOM_Translated. Further caching enhancements
+ * may be deemed necessary for conflation against other feature types.
  *
- * Its worth noting that if you are doing performance tweaks on a Vagrant VM, the runtimes may vary
- * with subsequent executions of the exact same conflate job. So in that case, its best to look for
- * tweaks with fairly large improvements and ignore the smaller performance improvements.
+ * Its worth noting that if you are doing cache performance tweaks on a Vagrant VM, the runtimes may
+ * vary somewhat widely with subsequent executions of the exact same conflate job. So in that case,
+ * its best to look for tweaks with fairly large improvements and ignore the smaller performance
+ * improvements.
  *
  * WARNING: This class can get very memory hungry depending on how the cache size is configured.
- *
- * @todo May be able to use thread_local storage for this with static member vars to make
- * initialization more intuitive during conflation.
  */
 class ConflateInfoCache : public Configurable
 {
