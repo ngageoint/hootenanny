@@ -46,6 +46,8 @@
 namespace hoot
 {
 
+class MatchCreator;
+
 /**
  * Caches conflatable elements, relationships, and conflation configuration details that may aid in
  * speeding up conflation jobs.
@@ -55,8 +57,8 @@ namespace hoot
  * are launched as multiple threads within the same process. Not using separate instances of the
  * cache which would result in a conflicted cache state if the cache was shared by different threads
  * (different elements with the same ID having different info; @todo We may be able to use
- * thread_local storage for this with static member vars). Currently, this cache is only used in a
- * few places and not by all match creators.
+ * thread_local storage for this with static member vars and avoid using separate instances).
+ * Currently, this cache is only used in a few places and not by all match creators.
  *
  * The caches used in this class were determined on 9/30/18 running POI/Polygon conflation against
  * the regression test unifying-tests.child/somalia.child/somalia-test3.child and also on 1/7/20
@@ -173,10 +175,12 @@ public:
    * conflation.
    *
    * @param element element to examine
+   * @param caller todo
    * @return true if the conflate matchers are configured with at least one matcher that
    * can conflate the input element; false otherwise
    */
-  bool elementCanBeConflatedByActiveMatcher(const ConstElementPtr& element);
+  bool elementCanBeConflatedByActiveMatcher(
+    const ConstElementPtr& element, const QString& caller = QString());
 
   /**
    * TODO
@@ -227,11 +231,12 @@ private:
   QMap<QString, int> _numCacheEntriesByCacheType;
 
   // This must store ElementCriterion and not ConflatableElementCriterion, b/c we're also checking
-  // against conflate child criterion (e.g. RailwayWayNodeCriterion), which don't inherit from
-  // ConflatableElementCriterion.
+  // against conflate child criteria (e.g. RailwayWayNodeCriterion for RailwayCriterion), which
+  // don't inherit from ConflatableElementCriterion.
   QHash<QString, ElementCriterionPtr> _conflatableCritCache;
   QHash<ElementId, bool> _conflatableElementCache;
   QHash<QString, bool> _conflatableCritActiveCache;
+  std::vector<std::shared_ptr<MatchCreator>> _activeMatchCreators;
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element);
   ElementCriterionPtr _getCrit(const QString& criterionClassName);

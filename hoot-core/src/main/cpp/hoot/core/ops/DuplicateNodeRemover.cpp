@@ -172,8 +172,8 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
             if (distanceSquared > calcdDistanceSquared)
             {
               if (_conflateInfoCache &&
-                  (!_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n1) ||
-                   !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n2)))
+                  (!_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n1, className()) ||
+                   !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n2, className())))
               {
                 LOG_TRACE(
                   "Skipping processing of " << n1->getElementId() << " and " <<

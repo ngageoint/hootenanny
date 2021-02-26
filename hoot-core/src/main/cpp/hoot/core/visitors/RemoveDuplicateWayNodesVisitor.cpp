@@ -62,7 +62,8 @@ void RemoveDuplicateWayNodesVisitor::visit(const ElementPtr& e)
     WayPtr way = std::dynamic_pointer_cast<Way>(e);
     assert(way.get());
 
-    if (_conflateInfoCache && !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(way))
+    if (_conflateInfoCache &&
+        !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(way, className()))
     {
       LOG_TRACE(
         "Skipping processing of " << way->getElementId() << " as it cannot be conflated by any " <<

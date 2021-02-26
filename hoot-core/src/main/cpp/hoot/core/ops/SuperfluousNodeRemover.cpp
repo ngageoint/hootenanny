@@ -193,7 +193,7 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
       _usedNodeIds.insert(n->getId());
     }
     else if (_conflateInfoCache && _ignoreInformationTags &&
-             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n->cloneSp()))
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n->cloneSp(), className()))
     {
       LOG_TRACE(
         "Skipping processing of " << n->getElementId() << " as it cannot be conflated by any " <<

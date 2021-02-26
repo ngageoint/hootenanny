@@ -73,7 +73,7 @@ void ConflateInfoCache::setConfiguration(const Settings& conf)
     _hasCriterionCache.setMaxCost(maxCacheSize);
     _numAddressesCache.setMaxCost(maxCacheSize);
     _geometryCache.reset(
-        new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(maxCacheSize));
+      new Tgs::LruCache<ElementId, std::shared_ptr<geos::geom::Geometry>>(maxCacheSize));
   }
   else
   {
@@ -96,6 +96,7 @@ void ConflateInfoCache::clear()
     _numAddressesCache.clear();
     _elementIntersectsCache.clear();
     _numAddressesCache.clear();
+    _activeMatchCreators.clear();
   }
 }
 
@@ -491,7 +492,8 @@ ElementCriterionPtr ConflateInfoCache::_getCrit(const QString& criterionClassNam
   return crit;
 }
 
-bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(const ConstElementPtr& element)
+bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
+  const ConstElementPtr& element, const QString& caller)
 {
   LOG_VART(element->getElementId());
   LOG_VART(_conflatableElementCache.contains(element->getElementId()));
@@ -505,10 +507,12 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(const ConstElementP
   LOG_VART(element->getElementId());
 
   // Get all the configured matchers.
-  const std::vector<std::shared_ptr<MatchCreator>> activeMatchCreators =
-    MatchFactory::getInstance().getCreators();
-  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = activeMatchCreators.begin();
-       itr != activeMatchCreators.end(); ++itr)
+  if (_activeMatchCreators.size() == 0)
+  {
+    _activeMatchCreators = MatchFactory::getInstance().getCreators();
+  }
+  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = _activeMatchCreators.begin();
+       itr != _activeMatchCreators.end(); ++itr)
   {
     // Get the element criterion this matcher uses for matching elements.
     std::shared_ptr<MatchCreator> activeMatchCreator = *itr;
@@ -552,7 +556,6 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(const ConstElementP
         }
       }
 
-      // Crit creation can be expensive, so cache those created.(crit->isSatisfied(element));
       // If any matcher's crit matches the element, return true.
       if (crit->isSatisfied(element))
       {
@@ -567,7 +570,6 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(const ConstElementP
         for (int i = 0; i < childCritClassNames.size(); i++)
         {
           const QString childCritClassName = childCritClassNames.at(i);
-          // Crit creation can be expensive, so cache those created.(childCritClassName);
           LOG_VART(_conflatableCritCache.contains(childCritClassName));
           // Check the cache for the child criterion.
           if (_conflatableCritCache.contains(childCritClassName))
@@ -611,9 +613,17 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(const ConstElementP
   }
 
   _conflatableElementCache[element->getElementId()] = false;
-  LOG_WARN(
-    element->getElementId() << " rejected as conflatable element. Most specific type: " <<
-    OsmSchema::getInstance().mostSpecificType(element->getTags()));
+  if (Log::getInstance().getLevel() <= Log::Trace)
+  {
+    const QString mostSpecificType = OsmSchema::getInstance().mostSpecificType(element->getTags());
+    LOG_TRACE(
+      element->getElementId() << " rejected as conflatable element. Most specific type: " <<
+      mostSpecificType << "; caller: " << caller);
+    if (mostSpecificType.trimmed().isEmpty())
+    {
+      LOG_VART(element);
+    }
+  }
   return false;
 }
 
@@ -628,10 +638,12 @@ bool ConflateInfoCache::elementCriterionInUseByActiveMatcher(const QString& crit
   }
 
   // Get all the configured matchers.
-  const std::vector<std::shared_ptr<MatchCreator>> activeMatchCreators =
-    MatchFactory::getInstance().getCreators();
-  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = activeMatchCreators.begin();
-       itr != activeMatchCreators.end(); ++itr)
+  if (_activeMatchCreators.size() == 0)
+  {
+    _activeMatchCreators = MatchFactory::getInstance().getCreators();
+  }
+  for (std::vector<std::shared_ptr<MatchCreator>>::const_iterator itr = _activeMatchCreators.begin();
+       itr != _activeMatchCreators.end(); ++itr)
   {
     // Get the element criterion this matcher uses for matching elements.
     std::shared_ptr<MatchCreator> activeMatchCreator = *itr;
@@ -702,7 +714,7 @@ bool ConflateInfoCache::elementCriterionInUseByActiveMatcher(const QString& crit
     }
   }
 
-  LOG_WARN("Conflate crit rejected: " << criterionClassName);
+  LOG_TRACE("Conflate crit rejected: " << criterionClassName);
   _conflatableCritActiveCache[criterionClassName] = false;
   return false;
 }

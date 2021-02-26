@@ -96,7 +96,8 @@ void SmallDisconnectedWayRemover::apply(OsmMapPtr& map)
     {
       continue;
     }
-    else if (_conflateInfoCache && !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(way))
+    else if (_conflateInfoCache &&
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(way, className()))
     {
       LOG_TRACE(
         "Skipping processing of " << way->getElementId() << " as it cannot be conflated by any " <<

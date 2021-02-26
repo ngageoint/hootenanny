@@ -115,5 +115,4 @@ QStringList BuildingCriterion::getChildCriteria() const
   return criteria;
 }
 
-
 }

@@ -116,7 +116,8 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
     {
       continue;
     }
-    else if (_conflateInfoCache && !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w))
+    else if (_conflateInfoCache &&
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
     {
       LOG_TRACE(
         "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
