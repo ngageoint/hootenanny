@@ -181,7 +181,6 @@ protected:
 
 private:
 
-  // TODO: should this be static?
   int _badGeomCount;
 
   AddressParser _addressParser;
@@ -209,8 +208,6 @@ private:
 
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
-
-  //static const int CACHE_SIZE_UPDATE_INTERVAL = 100000;
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element);
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
