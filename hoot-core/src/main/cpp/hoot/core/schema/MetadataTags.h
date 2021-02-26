@@ -58,6 +58,7 @@ public:
   inline static const QString& ErrorCircular()          { return ERROR_CIRCULAR; }
   inline static const QString SourceDateTime()          { return "source:datetime"; }
   inline static const QString SourceIngestDateTime()    { return "source:ingest:datetime"; }
+  inline static const QString SourceImagery()           { return "source:imagery"; }
 
   inline static const QString HootBuildingMatch()       { return "hoot:building:match"; }
 
@@ -139,6 +140,13 @@ public:
   inline static const QString HootSplitParentId()       { return "hoot:split_parent_id"; }
 
   inline static const QString HootStub()                { return "hoot:stub"; }
+
+  inline static const QString HootFirstSeen()           { return "hoot:first_seen"; }
+  inline static const QString HootLastSeen()            { return "hoot:last_seen"; }
+  inline static const QString HootTotalObservations()   { return "hoot:total_observations"; }
+  inline static const QString HootTotalMisses()         { return "hoot:total_misses"; }
+  inline static const QString MaxConsecutive()          { return "hoot:max_consecutive"; }
+
 
   inline static const QString Ref1()                    { return "REF1"; }
   inline static const QString Ref2()                    { return "REF2"; }

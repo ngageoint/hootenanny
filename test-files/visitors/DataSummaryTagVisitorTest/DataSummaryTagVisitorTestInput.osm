@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="38.95605497497" minlon="-77.42671609998" maxlat="38.96131924255" maxlon="-77.42282153249"/>
+    <node visible="true" id="1" version="1" lat="38.9603515143000010" lon="-77.4247956383200062"/>
+    <node visible="true" id="2" version="1" lat="38.9598926730100033" lon="-77.4240338909600041"/>
+    <node visible="true" id="3" version="1" lat="38.9590584085100033" lon="-77.4239051449300035"/>
+    <node visible="true" id="4" version="1" lat="38.9582825337099976" lon="-77.4245917904400045"/>
+    <node visible="true" id="5" version="1" lat="38.9582241341800000" lon="-77.4262869465400030"/>
+    <node visible="true" id="6" version="1" lat="38.9588081272399975" lon="-77.4267160999799984"/>
+    <node visible="true" id="7" version="1" lat="38.9572229920299975" lon="-77.4250102150400039"/>
+    <node visible="true" id="8" version="1" lat="38.9571479057999994" lon="-77.4258899796000009"/>
+    <node visible="true" id="9" version="1" lat="38.9560549749700016" lon="-77.4256539452100014"/>
+    <node visible="true" id="10" version="1" lat="38.9580989921900027" lon="-77.4232721436000020"/>
+    <node visible="true" id="11" version="1" lat="38.9572313349399977" lon="-77.4228215324900049"/>
+    <node visible="true" id="12" version="1" lat="38.9572563636600009" lon="-77.4233150589499957"/>
+    <node visible="true" id="13" version="1" lat="38.9613192425499975" lon="-77.4247741806500045"/>
+    <way visible="true" id="1" version="1">
+        <nd ref="13"/>
+        <nd ref="1"/>
+        <nd ref="2"/>
+        <nd ref="3"/>
+        <nd ref="4"/>
+        <tag k="source:imagery" v="b;c;d;e;r;s;t;u;v;w;x;y;z"/>
+    </way>
+    <way visible="true" id="2" version="1">
+        <nd ref="4"/>
+        <nd ref="5"/>
+        <nd ref="6"/>
+        <tag k="source:imagery" v="a;c;e;g;i;k;m;o;r;t;v;x;y;z"/>
+    </way>
+    <way visible="true" id="3" version="1">
+        <nd ref="12"/>
+        <nd ref="11"/>
+        <nd ref="10"/>
+        <nd ref="4"/>
+        <tag k="source:imagery" v="p;q;r;s;t;u;v;w;x;y;z"/>
+    </way>
+    <way visible="true" id="4" version="1">
+        <nd ref="4"/>
+        <nd ref="7"/>
+        <nd ref="8"/>
+        <nd ref="9"/>
+        <tag k="source:imagery" v="c;d;e;f;g;h;i;j;o;s;t;u;v;w;x;y"/>
+    </way>
+</osm>
