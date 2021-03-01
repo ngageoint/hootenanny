@@ -34,6 +34,7 @@
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // GEOS
 #include <geos/geom/Envelope.h>
@@ -43,18 +44,19 @@ namespace hoot
 
 /**
  * Merges together nodes that are within a small configurable distance of each other and don't have
- * differing tags (outside of metadata tags).
+ * differing tags (outside of metadata tags). Due to how Way::replaceNode is being called, we could
+ * end up with some duplicate way nodes, so its best to put RemoveDuplicateWayNodesVisitor in the
+ * cleaning chain immediately after this runs.
  *
- * Due to how Way::replaceNode is being called, we could end up with some duplicate way nodes, so
- * its best to put RemoveDuplicateWayNodesVisitor in the cleaning chain immediately after this runs.
- *
- * This class works with four pass conflation as long as distance is less than the four pass buffer.
- * The input map can be in either a planar or geographic projection.
+ * This class works with four pass conflation (Hadoop), as long as distance is less than the four
+ * pass buffer. The input map can be in either a planar or geographic projection.
  *
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
- * with no nodes.
+ * with no nodes. ElementConflatableCheck does need to be implemented here to prevent removal of a
+ * conflatable node or a node belonging to a conflatable way/relation.
  */
-class DuplicateNodeRemover : public OsmMapOperation, public Boundable
+class DuplicateNodeRemover : public OsmMapOperation, public Boundable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
@@ -85,10 +87,18 @@ public:
   virtual QString getCompletedStatusMessage() const override
   { return "Merged " + StringUtils::formatLargeNumber(_numAffected) + " node pairs."; }
 
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
+
 protected:
 
   std::shared_ptr<OsmMap> _map;
+
   Meters _distance;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   void _logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,
                        const double distance = -1.0, const double calcdDistance = -1.0);

@@ -80,7 +80,7 @@ public:
   void runOpFilter4Test()
   {
     TestUtils::runConflateOpReductionTest(
-      QStringList(PoiPolygonMatchCreator::className()), 2, 13, 11);
+      QStringList(PoiPolygonMatchCreator::className()), 1, 12, 9);
   }
 
   void runOpFilterCombinedTest()

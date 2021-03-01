@@ -37,7 +37,7 @@
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/geometry/GeometryUtils.h>
@@ -136,7 +136,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     _numTotalTasks += 3;
     if (ConfigOptions().getConvertOps().size() > 0)
     {
-      // Convert ops get a single task, which NamedOp will break down into sub-tasks during
+      // Convert ops get a single task, which OpExecutor will break down into sub-tasks during
       // progress reporting.
       _numTotalTasks++;
       if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
@@ -413,7 +413,7 @@ void ChangesetCreator::_handleUnstreamableConvertOpsInMemory(
   // then they some will exhibit undefined behavior if you try to exec them on the inputs
   // separately.
   LOG_DEBUG("Applying convert ops...");
-  NamedOp convertOps(ConfigOptions().getConvertOps());
+  OpExecutor convertOps(ConfigOptions().getConvertOps());
   convertOps.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
@@ -480,7 +480,7 @@ void ChangesetCreator::_handleStreamableConvertOpsInMemory(
 
   // Apply our convert ops to each map separately.
   LOG_DEBUG("Applying convert ops...");
-  NamedOp convertOps(ConfigOptions().getConvertOps());
+  OpExecutor convertOps(ConfigOptions().getConvertOps());
   convertOps.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,

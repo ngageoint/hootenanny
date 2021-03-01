@@ -33,6 +33,7 @@
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 
 namespace hoot
 {
@@ -107,6 +108,13 @@ bool LinearCriterion::isLinearRelation(const ConstRelationPtr& relation)
          relation->getType() == MetadataTags::RelationRouteMaster() ||
          relation->getType() == MetadataTags::RelationSuperRoute() ||
          relation->getType() == MetadataTags::RelationRestriction();
+}
+
+QStringList LinearCriterion::getChildCriteria() const
+{
+  QStringList criteria;
+  criteria.append(WayNodeCriterion::className());
+  return criteria;
 }
 
 }

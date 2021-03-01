@@ -28,7 +28,7 @@
 #define UNIQUE_ELEMENT_ID_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {

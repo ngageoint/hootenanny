@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/criterion/AreaWayNodeCriterion.h>
 
 namespace hoot
 {
@@ -93,6 +94,13 @@ bool AreaCriterion::isSatisfied(const Tags& tags, const ElementType& elementType
 
   LOG_VART(result);
   return result;
+}
+
+QStringList AreaCriterion::getChildCriteria() const
+{
+  QStringList criteria;
+  criteria.append(AreaWayNodeCriterion::className());
+  return criteria;
 }
 
 }

@@ -37,7 +37,9 @@ namespace hoot
 {
 
 /**
- * Interface for way joiners
+ * Interface for way joiners. During conflation, linear features may need to be split in order for
+ * matching and/or merging to perform correctly. The job of the way joiners is to restore such split
+ * features by rejoining them.
  */
 class WayJoiner : public ApiEntityInfo
 {
@@ -72,7 +74,7 @@ protected:
   /** Debugging flag to leave parent IDs intact for output */
   bool _leavePid;
   // If enabled, the ID of any element with a parent ID will be updated with the parent ID's value.
-  // at the end of joinin. In the case of multiple elements with the same parent ID, only the first
+  // at the end of joining. In the case of multiple elements with the same parent ID, only the first
   // element's ID will be updated.
   bool _writePidToChildId;
   /** Pointer to the map to work on */

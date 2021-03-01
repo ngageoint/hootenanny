@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/js/util/JsFunctionConsumer.h>
 #include <hoot/js/SystemNodeJs.h>
 

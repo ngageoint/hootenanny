@@ -33,7 +33,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
@@ -72,11 +72,11 @@ public:
     OsmMapPtr copy(new OsmMap(map));
 
     // Apply any user specified operations.
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(copy);
+    OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);
 
     MultiaryUtilities::conflate(copy);
     // Apply any user specified operations.
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(copy);
+    OpExecutor(ConfigOptions().getConflatePostOps()).apply(copy);
 
     comparator.evaluateMatches(map, copy);
 

@@ -34,7 +34,7 @@
 #include <hoot/core/io/ShapefileWriter.h>
 #include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/ElementCacheLRU.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
@@ -502,7 +502,7 @@ void DataConverter::_convertToOgr(const QStringList& inputs, const QString& outp
     {
       QElapsedTimer timer;
       timer.start();
-      NamedOp convertOps(_convertOps);
+      OpExecutor convertOps(_convertOps);
       convertOps.setProgress(
         Progress(
           ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
@@ -750,7 +750,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
   {
     QElapsedTimer timer;
     timer.start();
-    NamedOp convertOps(_convertOps);
+    OpExecutor convertOps(_convertOps);
     convertOps.setProgress(
       Progress(
         ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
@@ -897,7 +897,7 @@ void DataConverter::_convert(const QStringList& inputs, const QString& output)
     {
       QElapsedTimer timer;
       timer.start();
-      NamedOp convertOps(_convertOps);
+      OpExecutor convertOps(_convertOps);
       convertOps.setProgress(
         Progress(
           ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,

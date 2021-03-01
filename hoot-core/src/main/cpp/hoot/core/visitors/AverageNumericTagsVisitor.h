@@ -29,7 +29,7 @@
 #define AVERAGE_NUMERIC_TAGS_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/info/SingleStatistic.h>
 
