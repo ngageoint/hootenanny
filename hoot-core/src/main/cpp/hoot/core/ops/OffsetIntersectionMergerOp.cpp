@@ -34,6 +34,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/WayLengthCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMap.h>
@@ -73,10 +74,11 @@ void OffsetIntersectionMergerOp::mergeOffsetIntersections(std::shared_ptr<OsmMap
 void OffsetIntersectionMergerOp::apply(std::shared_ptr<OsmMap>& map)
 {
   _numAffected = 0;
+  //  Project to planar for calculating the way length
+  MapProjector::projectToPlanar(map);
   //  Linear ways less than or equal to offset max
-//  ChainCriterion criterion(std::make_shared<LinearCriterion>(),
-//                           std::make_shared<WayLengthCriterion>(_offsetMax, NumericComparisonType::LessThanOrEqualTo, map));
-  WayLengthCriterion criterion(_offsetMax, NumericComparisonType::LessThanOrEqualTo, map);
+  ChainCriterion criterion(std::make_shared<LinearCriterion>(),
+                           std::make_shared<WayLengthCriterion>(_offsetMax, NumericComparisonType::LessThanOrEqualTo, map));
   const WayMap& ways = map->getWays();
   std::shared_ptr<NodeToWayMap> nodeToWays = map->getIndex().getNodeToWayMap();
   std::set<long> intersectionWays;
@@ -84,6 +86,7 @@ void OffsetIntersectionMergerOp::apply(std::shared_ptr<OsmMap>& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ConstWayPtr way = it->second;
+    _numProcessed++;
     //  Small ways only containing two nodes
     if (way->getNodeCount() != 2)
       continue;
