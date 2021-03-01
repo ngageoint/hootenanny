@@ -228,6 +228,8 @@ private:
 
   OrCriterionPtr _criteria;
 
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   bool _calcAndApplyTransform(OsmMapPtr& map);

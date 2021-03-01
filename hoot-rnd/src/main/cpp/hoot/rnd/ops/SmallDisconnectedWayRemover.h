@@ -96,6 +96,8 @@ public:
   // max node count a way can have to be eligible for removal
   int _maxWayNodeCount;
 
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 };
 

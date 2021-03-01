@@ -87,10 +87,12 @@ public:
   virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
   { _conflateInfoCache = cache; }
 
-protected:
+private:
 
   std::shared_ptr<OsmMap> _result;
 
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   void _evaluateAndSplit(long intersectingNode, const std::set<long>& wayIds);

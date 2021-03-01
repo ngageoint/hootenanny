@@ -102,6 +102,8 @@ private:
   // the number of ways that explicitly weren't removed due to configuration
   int _numExplicitlyExcluded;
 
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   void _removeWays(std::shared_ptr<OsmMap>& map);

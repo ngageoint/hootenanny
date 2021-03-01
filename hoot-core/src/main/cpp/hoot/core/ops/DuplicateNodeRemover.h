@@ -96,6 +96,8 @@ protected:
 
   Meters _distance;
 
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   void _logMergeResult(const long nodeId1, const long nodeId2, OsmMapPtr& map, const bool replaced,

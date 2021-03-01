@@ -88,6 +88,8 @@ private:
   // point.
   bool _preserveOriginalName;
 
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
   std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   std::shared_ptr<OsmMap> _map;
