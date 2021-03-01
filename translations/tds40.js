@@ -924,6 +924,15 @@ cleanAttrs : function (attrs)
       if (tags.leisure && tags.tourism) delete tags.tourism;
       break;
 
+      case 'AP010': // Track
+      case 'AP050': // Trail
+          tags.seasonal = 'fair';
+          break;
+
+    case 'AQ075': // Ice Route
+      if (!tags.highway) tags.highway = 'road';
+      break;
+
     case 'BA040': // Tidal Water
       tags.natural = 'water';
       break;
@@ -946,6 +955,7 @@ cleanAttrs : function (attrs)
         break;
 
       case 'FA012': // Contaminated Area
+      case 'AL065': // Minefield
         if (! tags.boundary) tags.boundary = 'hazard';
         break;
     } // End switch F_CODE
@@ -1195,10 +1205,10 @@ cleanAttrs : function (attrs)
   applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
-    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-    if (tags.area) delete tags.area;
-    if (tags['error:circular']) delete tags['error:circular'];
-    if (tags['hoot:status']) delete tags['hoot:status'];
+    delete tags['source:ingest:datetime'];
+    delete tags.area;
+    delete tags['error:circular'];
+    delete tags['hoot:status'];
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -1344,6 +1354,7 @@ cleanAttrs : function (attrs)
         ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
         // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
+        ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
         ['t.communication == "line"','t["cable:type"] = "communication"'],
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
         ['t.construction && t.highway','t.highway = t.construction; t.condition = "construction"; delete t.construction'],
@@ -1570,7 +1581,7 @@ cleanAttrs : function (attrs)
       tags.condition = 'destroyed';
       break;
 
-    case 'commercial':
+    // case 'commercial':
     case 'retail':
       tags.use = 'commercial';
       tags.landuse = 'built_up_area';
@@ -1701,6 +1712,9 @@ cleanAttrs : function (attrs)
         break;
       } // End switch
     }
+
+    // Ice Route is a special case
+    if (tags.ice_route == 'yes') attrs.F_CODE = 'AQ075';
 
     // Bridges & Roads.  If we have an area or a line everything is fine
     // If we have a point, we need to make sure that it becomes a bridge, not a road

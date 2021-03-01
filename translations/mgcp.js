@@ -723,7 +723,8 @@ mgcp = {
       ["t.pylon =='yes' && t['cable:type'] == 'power'"," t.power = 'tower'"],
       ["t['social_facility:for'] == 'senior'","t.amenity = 'social_facility'; t.social_facility = 'group_home'"],
       ["t['tower:type'] && !(t.man_made)","t.man_made = 'tower'"],
-      ["t.water && !(t.natural)","t.natural = 'water'"]
+      ["t.water && !(t.natural)","t.natural = 'water'"],
+      ["t.wetland && !(t.natural)","t.natural = 'wetland'"]
       ];
 
       mgcp.osmPostRules = translate.buildComplexRules(rulesList);
@@ -793,6 +794,33 @@ mgcp = {
 
     // if (tags.building == 'train_station' && !tags.railway) tags.railway = 'station';
     // if ('ford' in tags && !tags.highway) tags.highway = 'road';
+
+    // Sort out TRS (Transport Type)
+    switch (attrs.TRS)
+    {
+      case undefined:
+        break;
+
+      case '9': // Pedestrian
+        // NOTE: This _might_ be a path: AP050 (Trail)
+        if (!tags.highway) tags.highway = 'track';
+        break;
+
+      case '12': // Railway
+        if (!tags.railway) tags.railway = 'rail';
+        break;
+
+      case '3': // TRD3 'Automotive'
+      case '4': // Bus
+      case '13': // Road
+        if (!tags.highway) tags.highway = 'road';
+        break;
+
+      case '14': // Road and Railway. This might be ugly....
+        if (!tags.highway) tags.highway = 'road';
+        if (!tags.railway) tags.railway = 'rail';
+        break;
+    } // End switch TRS
 
     // Some FCODE specific rules
     switch (attrs.F_CODE)
@@ -881,6 +909,15 @@ mgcp = {
 
         break;
 
+      case 'AP010': // Track
+      case 'AP050': // Trail
+          tags.seasonal = 'fair';
+          break;
+
+      case 'AQ075': // Ice Route
+        if (!tags.highway) tags.highway = 'road';
+        break;
+
       case 'AQ125': // Transportation Station
         if (tags.amenity == 'ferry_terminal')
         {
@@ -891,16 +928,9 @@ mgcp = {
         {
           tags.bus = 'yes';
           tags.amenity = 'bus_station';
+          delete tags['transport:type'];
+          delete tags.highway;
         }
-        break;
-
-      case 'BH070': // Ford
-        // Fords are also supposed to be roads
-        if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
-        break;
-
-      case 'GB485': // Approach Lighting System
-        tags.navigationaid = 'als';
         break;
 
       case 'AH050': // Fortification
@@ -920,6 +950,15 @@ mgcp = {
         tags.natural = 'water';
         break;
 
+      case 'BH070': // Ford
+        // Fords are also supposed to be roads
+        if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
+        break;
+
+      case 'ED030': // Mangrove Swamp
+        if (! tags.tidal) tags.tidal = 'yes';
+        break;
+
       // EC030 - Wood
       case 'EC030':
         if (geometryType == 'Line')
@@ -933,34 +972,11 @@ mgcp = {
         if (! tags.landuse) tags.landuse = 'military';
         break;
 
+      case 'GB485': // Approach Lighting System
+        tags.navigationaid = 'als';
+        break;
+
     } // End switch FCODE
-
-    // Sort out TRS (Transport Type)
-    switch (attrs.TRS)
-    {
-      case undefined:
-        break;
-
-      case '9': // Pedestrian
-        // NOTE: This _might_ be a path: AP050 (Trail)
-        if (!tags.highway) tags.highway = 'track';
-        break;
-
-      case '12': // Railway
-        if (!tags.railway) tags.railway = 'rail';
-        break;
-
-      case '3': // TRD3 'Automotive'
-      case '4': // Bus
-      case '13': // Road
-        if (!tags.highway) tags.highway = 'road';
-        break;
-
-      case '14': // Road and Railway. This might be ugly....
-        if (!tags.highway) tags.highway = 'road';
-        if (!tags.railway) tags.railway = 'rail';
-        break;
-    } // End switch TRS
 
     // Content vs Product for storage tanks
     if (tags.product && tags.man_made == 'storage_tank')
@@ -1139,6 +1155,8 @@ mgcp = {
         break;
     } // End highway
 
+    // Ice roads are a special case.
+    if (tags.ice_road == 'yes') attrs.F_CODE = 'AQ075';
 
     if (mgcp.mgcpPreRules == undefined)
     {
@@ -1153,7 +1171,6 @@ mgcp = {
       // ["t.construction && t.railway","t.railway = t.construction; t.condition = 'construction'; delete t.construction"],
       // ["t.construction && t.highway","t.highway = t.construction; t.condition = 'construction'; delete t.construction"],
       ["t.content && !(t.product)","t.product = t.content; delete t.content"],
-      ["t.landuse == 'railway' && t['railway:yard'] == 'marshalling_yard'","a.F_CODE = 'AN060'"],
       ["t.leisure == 'stadium' && t.building","delete t.building"],
       ["t.man_made && t.building == 'yes'","delete t.building"],
       ["t.man_made == 'water_tower'","a.F_CODE = 'AL241'"],
@@ -1256,9 +1273,28 @@ mgcp = {
         delete tags.landuse;
         break;
 
+      case 'railway':
+        if (tags['railway:yard'] == 'marshalling_yard') attrs.F_CODE = 'AN060';
+        break;
+
+      case 'reservoir':
+        tags.water = 'reservoir';
+        delete tags.landuse;
+        break;
+
       case 'residential':
         tags.use = 'residential';
         tags.landuse = 'built_up_area';
+        break;
+
+      case 'retail':
+        tags.landuse = 'built_up_area';
+        tags.use = 'commercial';
+        break;
+
+      case 'scrub':
+        tags.natural = 'scrub';
+        delete tags.landuse;
         break;
     } // End switch landuse
 
@@ -1332,7 +1368,6 @@ mgcp = {
       }
 
     }
-
 
     // More facilities
     switch (tags.amenity)
@@ -1484,7 +1519,7 @@ mgcp = {
     }
 
     // Sort out tidal features
-    if (tags.tidal && (tags.water || tags.waterway))
+    if (tags.tidal && (tags.water || tags.waterway || tags.wetland))
     {
       if (tags.tidal == 'yes') attrs.TID = '1001'; // Tidal
       if (tags.tidal == 'no') attrs.TID = '1000'; // non-Tidal
@@ -1856,12 +1891,12 @@ mgcp = {
 
       case 'AL020': // Built-up Area
         // Allowed values for FUC
-        if (['0','1','2','4','19','999'].indexOf(attrs['FUC']) < 0) attrs.FUC = '999';
+        if (attrs.FUC && ['0','1','2','4','19','999'].indexOf(attrs.FUC) < 0) attrs.FUC = '999';
         break;
 
       case 'AL105': // Settlement
         // Allowed values for FUC
-        if (['0','4','8','19','999'].indexOf(attrs['FUC']) < 0) attrs.FUC = '999';
+        if (attrs.FUC && ['0','4','8','19','999'].indexOf(attrs.FUC) < 0) attrs.FUC = '999';
         break;
 
       case 'AN010': // Railway
@@ -1956,10 +1991,10 @@ mgcp = {
         {
           attrs.FIC = '2'; // Fill
         }
-        else
-        {
-          attrs.FIC = '1'; // Mound
-        }
+        // else
+        // {
+        //   attrs.FIC = '1'; // Mound
+        // }
         break;
 
       case 'EA010': // Crop Land
@@ -2319,6 +2354,8 @@ mgcp = {
 
     // one 2 one
     translate.applyOne2One(notUsedTags, attrs, mgcp.lookup, mgcp.fcodeLookup, transMap);
+
+if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'After one2one: Not used: ');
 
     // post processing
     // mgcp.applyToOgrPostProcessing(attrs, tableName, geometryType);

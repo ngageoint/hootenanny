@@ -963,6 +963,10 @@ ggdm30 = {
     case undefined: // Break early if no value. Should not get here.....
       break;
 
+      case 'AA052': // Hydrocarbons Field
+        tags.landuse = 'industrial';
+        break;
+
     case 'AA054': // Non-water Well
       if (tags.product)
       {
@@ -974,11 +978,74 @@ ggdm30 = {
       }
       break;
 
+      case 'AF030': // Cooling Tower
+        if (!tags['tower:type']) tags['tower:type'] = 'cooling';
+        break;
+
       case 'AK030': // Amusement Park
         // F_CODE translation == tourism but FFN translation could be leisure
         // E.g. water parks
         if (tags.leisure && tags.tourism) delete tags.tourism;
         break;
+
+      case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
+        tags.place = 'yes'; // Catch All
+
+        switch (tags['place:importance'])
+        {
+          case undefined: // Break early if no value
+            break;
+
+          case 'first':
+            tags.place = 'city';
+            tags.capital = 'yes'
+            break;
+
+          case 'second':
+            tags.place = 'city';
+            break;
+
+          case 'third':
+          case 'fourth':
+            tags.place = 'town';
+            break;
+
+          case 'fifth':
+            tags.place = 'village';
+            break;
+
+          case 'sixth':
+            tags.place = 'hamlet';
+            break;
+        } // End switch
+
+        switch (tags.use) // Fixup the landuse tags
+        {
+          case undefined: // Break early if no value
+            break;
+
+          case 'industrial':
+            tags.landuse = 'industrial';
+            delete tags.use;
+            break;
+
+          case 'commercial':
+            tags.landuse = 'commercial';
+            delete tags.use;
+            break;
+
+          case 'residential':
+            tags.landuse = 'residential';
+            delete tags.use;
+            break;
+        } // End switch
+
+        break;
+
+      case 'AP010': // Track
+      case 'AP050': // Trail
+          tags.seasonal = 'fair';
+          break;
 
       // Add defaults for common features
       case 'AP020':
@@ -987,6 +1054,19 @@ ggdm30 = {
 
       case 'AQ040':
         if (! tags.bridge) tags.bridge = 'yes';
+        break;
+
+      case 'AQ125': // Transportation Station
+        if (tags.amenity == 'ferry_terminal')
+        {
+          tags['transport:type'] = 'maritime';
+          delete tags.bus;
+        }
+        if (!tags.amenity)
+        {
+          tags.bus = 'yes';
+          tags.amenity = 'bus_station';
+        }
         break;
 
       case 'BH140':
@@ -1014,7 +1094,12 @@ ggdm30 = {
         }
         break;
 
+      case 'FA015': // Firing Range
+        if (! tags.landuse) tags.landuse = 'military';
+        break;
+
       case 'FA012': // Contaminated Area
+      case 'AL065': // Minefield
         if (! tags.boundary) tags.boundary = 'hazard';
         break;
     } // End switch F_CODE
@@ -1140,10 +1225,10 @@ ggdm30 = {
   applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
-    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-    if (tags.area) delete tags.area;
-    if (tags['error:circular']) delete tags['error:circular'];
-    if (tags['hoot:status']) delete tags['hoot:status'];
+    delete tags['source:ingest:datetime'];
+    delete tags.area;
+    delete tags['error:circular'];
+    delete tags['hoot:status'];
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -1268,6 +1353,7 @@ ggdm30 = {
         ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
         // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
+        ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
         ['t.communication == "line"','t["cable:type"] = "communication"'],
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
         ['t.control_tower && t.man_made == "tower"','delete t.man_made'],
@@ -1284,23 +1370,10 @@ ggdm30 = {
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
         ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
-        ['t.landuse == "allotments"','t.landuse = "farmland"'],
-        ['t.landuse == "brownfield"','t.landuse = "built_up_area"; t.condition = "destroyed"'],
-        ['t.landuse == "construction"','t.landuse = "built_up_area"; t.condition = "construction"'],
-        ['t.landuse == "farm"','t.landuse = "farmland"'],
-        ['t.landuse == "farmland" && t.crop == "fruit_tree"','t.landuse = "orchard"'],
-        ['t.landuse == "farmyard"','t.facility = "yes"; t.use = "agriculture"; delete t.landuse'],
-        ['t.landuse == "grass"','t.natural = "grassland"; t["grassland:type"] = "grassland";'],
-        ['t.landuse == "meadow"','t.natural = "grassland"; t["grassland:type"] = "meadow";'],
-        ['t.landuse == "military"','t.military = "installation"; delete t.landuse'],
-        ['t.landuse == "railway" && t["railway:yard"] == "marshalling_yard"','a.F_CODE = "AN060"'],
-        ['t.leisure == "recreation_ground"','t.landuse = "recreation_ground"; delete t.leisure'],
-        ['t.landuse == "reservoir"','t.water = "reservoir"; delete t.landuse'],
-        ['t.landuse == "retail"','t.landuse = "built_up_area"; t.use = "commercial"'],
-        ['t.landuse == "scrub"','t.natural = "scrub"; delete t.landuse'],
         ['t.launch_pad','delete t.launch_pad; t.aeroway="launchpad"'],
         ['t.leisure == "sports_centre"','t.facility = "yes"; t.use = "recreation"; delete t.leisure'],
         ['t.leisure == "stadium" && t.building','delete t.building'],
+        ['t.leisure == "recreation_ground"','t.landuse = "recreation_ground"; delete t.leisure'],
         ['t.man_made && t.building == "yes"','delete t.building'],
         ['t.man_made == "embankment"','t.embankment = "yes"; delete t.man_made'],
         ['t.man_made == "launch_pad"','delete t.man_made; t.aeroway="launchpad"'],
@@ -1340,6 +1413,110 @@ ggdm30 = {
     {
       if (ggdm30.ggdmPrePules[i][0](tags)) ggdm30.ggdmPrePules[i][1](tags,attrs);
     }
+
+    // Sort out landuse
+    switch (tags.landuse)
+    {
+      case undefined: // Break early if no value
+        break;
+
+      case 'brownfield':
+        tags.landuse = 'built_up_area';
+        tags.condition = 'destroyed';
+        break
+
+      case 'construction':
+        tags.condition = 'construction';
+        tags.landuse = 'built_up_area';
+        break;
+
+      // case 'commercial':
+      case 'retail':
+        tags.use = 'commercial';
+        tags.landuse = 'built_up_area';
+        break;
+
+      case 'farm':
+      case 'allotments':
+        tags.landuse = 'farmland';
+        break;
+
+      case 'farmyard': // NOTE: This is different to farm
+        tags.facility = 'yes';
+        tags.use = 'agriculture';
+        delete tags.landuse;
+        break;
+
+      case 'farmland':
+        if (tags.crop == 'fruit_tree') tags.landuse = 'orchard';
+        break;
+
+      case 'grass':
+      case 'meadow':
+        tags.natural = 'grassland';
+        tags['grassland:type'] = 'grassland';
+        delete tags.landuse;
+        break;
+
+      case 'industrial': // Deconflict with AA052 Hydrocarbons Field
+        switch (tags.industrial)
+        {
+          case undefined: // Built up Area
+            tags.use = 'industrial';
+            tags.landuse = 'built_up_area';
+            break;
+
+          case 'oil':
+            tags.product = 'petroleum';
+            tags.industrial = 'hydrocarbons_field';
+            delete tags.landuse;
+            break;
+
+          case 'gas':
+            tags.product = 'gas';
+            tags.industrial = 'hydrocarbons_field';
+            delete tags.landuse;
+            break;
+
+          case 'hydrocarbons_field':
+            delete tags.landuse;
+            break;
+
+          case 'refinery':
+            delete tags.landuse;
+            break;
+        }
+        break;
+
+      case 'military':
+        if (tags.military !== 'range') tags.military = 'installation';
+        delete tags.landuse;
+        break;
+
+      case 'railway':
+        if (tags['railway:yard'] == 'marshalling_yard') attrs.F_CODE = 'AN060';
+        break;
+
+      case 'reservoir':
+        tags.water = 'reservoir';
+        delete tags.landuse;
+        break;
+
+      case 'residential':
+        tags.use = 'residential';
+        tags.landuse = 'built_up_area';
+        break;
+
+      case 'retail':
+        tags.landuse = 'built_up_area';
+        tags.use = 'commercial';
+        break;
+
+      case 'scrub':
+        tags.natural = 'scrub';
+        delete tags.landuse;
+        break;
+    } // End switch landuse
 
     // Fix Keeps and Martello Towers
     if (tags.defensive)
@@ -1493,14 +1670,19 @@ ggdm30 = {
     }
 
     // Places, localities and regions
-    if (tags.place)
+    switch (tags.place)
     {
-      switch (tags.place)
-      {
+      case undefined: // Break early
+        break;
+
+      case 'neighbourhood':
+        attrs.F_CODE = 'AL024'; // Neighbourhood
+        delete tags.place;
+        break;
+
       case 'city':
       case 'town':
       case 'suburb':
-      case 'neighbourhood':
       case 'quarter':
       case 'village':
       case 'hamlet':
@@ -1554,8 +1736,7 @@ ggdm30 = {
         }
         break;
 
-      } // End switch
-    }
+    } // End switch
 
     // Bridges & Roads.  If we have an area or a line everything is fine
     // If we have a point, we need to make sure that it becomes a bridge, not a road

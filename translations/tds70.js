@@ -959,6 +959,25 @@ tds70 = {
     case undefined: // Break early if no value. Should not get here.....
       break;
 
+    // Fix oil/gas/petroleum fields
+    case 'AA052':
+      tags.landuse = 'industrial';
+
+      switch (tags.product)
+      {
+      case undefined:
+        break;
+
+      case 'gas':
+        tags.industrial = 'gas';
+        break;
+
+      case 'petroleum':
+        tags.industrial = 'oil';
+        break;
+      }
+      break;
+
     case 'AA054': // Non-water Well
       if (tags.product)
       {
@@ -994,24 +1013,10 @@ tds70 = {
       } // End switch
       break;
 
-    // Fix oil/gas/petroleum fields
-    case 'AA052':
-      tags.landuse = 'industrial';
-
-      switch (tags.product)
-      {
-      case undefined:
+    case 'AP010': // Track
+    case 'AP050': // Trail
+        tags.seasonal = 'fair';
         break;
-
-      case 'gas':
-        tags.industrial = 'gas';
-        break;
-
-      case 'petroleum':
-        tags.industrial = 'oil';
-        break;
-      }
-      break;
 
       // Add defaults for common features
     case 'AP020':
@@ -1020,10 +1025,6 @@ tds70 = {
 
     case 'AQ040':
       if (! tags.bridge) tags.bridge = 'yes';
-      break;
-
-    case 'BH140':
-      if (! tags.waterway) tags.waterway = 'river';
       break;
 
     case 'BA040': // Tidal Water
@@ -1035,9 +1036,13 @@ tds70 = {
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
       break;
 
-      case 'EA031': // Botanic Garden
-        if (! tags.leisure) tags.leisure = 'garden';
-        break;
+    case 'BH140':
+      if (! tags.waterway) tags.waterway = 'river';
+      break;
+
+    case 'EA031': // Botanic Garden
+      if (! tags.leisure) tags.leisure = 'garden';
+      break;
 
     case 'EC015': // Forest
       if (geometryType == 'Line')
@@ -1046,6 +1051,11 @@ tds70 = {
         tags.natural = 'tree_row';
       }
       break;
+
+      case 'FA012': // Contaminated Area
+      case 'AL065': // Minefield
+        if (! tags.boundary) tags.boundary = 'hazard';
+        break;
     } // End switch F_CODE
 
     // Fix up lifestyle tags.
@@ -1268,6 +1278,7 @@ tds70 = {
         ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
         ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
+        ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
         ['t.communication == "line"','t["cable:type"] = "communication"'],
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
         ['t.control_tower && t.man_made == "tower"','delete t.man_made'],

@@ -2098,7 +2098,7 @@ mgcp.rules = {
 
     // MFC - Military Facility Type
     ['FFN','835','military','administration'],
-    ['FFN','835','military','range'],
+    // ['FFN','835','military','range'],
     ['FFN','835','military','dormitory'],
     ['FFN','835','military','dependent_housing'],
     ['FFN','835','military','battery'],

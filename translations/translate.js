@@ -213,7 +213,7 @@ translate = {
         if ((key in fCodeList) && (value in fCodeList[key]))
         {
           // Debug
-          // print('UsedFCode:' + key+ ' = ' + inList[col]);
+          // print('UsedFCode:' + key+ ' = ' + inList[key]);
           delete inList[key];
           continue;
         }

@@ -958,6 +958,11 @@ tds61 = {
       }
       break;
 
+    case 'AP010': // Track
+    case 'AP050': // Trail
+        tags.seasonal = 'fair';
+        break;
+
     case 'AP020':
       if (! tags.junction) tags.junction = 'yes';
       break;
@@ -1027,9 +1032,9 @@ tds61 = {
       if (! tags.waterway) tags.waterway = 'river';
       break;
 
-      case 'EA031': // Botanic Garden
-        if (! tags.leisure) tags.leisure = 'garden';
-        break;
+    case 'EA031': // Botanic Garden
+      if (! tags.leisure) tags.leisure = 'garden';
+      break;
 
     case 'EC015': // Forest
       if (geometryType == 'Line')
@@ -1040,6 +1045,7 @@ tds61 = {
       break;
 
       case 'FA012': // Contaminated Area
+      case 'AL065': // Minefield
         if (! tags.boundary) tags.boundary = 'hazard';
         break;
     } // End switch F_CODE
@@ -1335,6 +1341,7 @@ tds61 = {
         ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
         // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
+        ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
         ['t.communication == "line"','t["cable:type"] = "communication"'],
         ['t.content && !(t.product)','t.product = t.content; delete t.content'],
         ['t.control_tower && t.man_made == "tower"','delete t.man_made'],
@@ -1563,7 +1570,7 @@ tds61 = {
       tags.condition = 'destroyed';
       break;
 
-    case 'commercial':
+    // case 'commercial':
     case 'retail':
       tags.use = 'commercial';
       tags.landuse = 'built_up_area';
@@ -2138,6 +2145,9 @@ tds61 = {
         attrs.ZI016_WTC = '1'; // All Weather
       }
     }
+
+    // Preserveing a highway value
+    if (tags.highway == 'road') notUsedTags.highway = 'road';
 
     // Rules for specific F_CODES
     switch (attrs.F_CODE)
