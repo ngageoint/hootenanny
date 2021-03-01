@@ -35,6 +35,7 @@
 #include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // tgs
 #include <tgs/Interpolation/Interpolator.h>
@@ -52,7 +53,7 @@ class RubberSheetTest;
 class OsmMap;
 class Status;
 
-class RubberSheet : public OsmMapOperation, public Configurable
+class RubberSheet : public OsmMapOperation, public Configurable, public ConflateInfoCacheConsumer
 {
 public:
 
@@ -79,6 +80,9 @@ public:
   virtual ~RubberSheet() = default;
 
   RubberSheet* clone() const { return new RubberSheet(*this); }
+
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
 
   /**
    * @see OsmMapOperation
@@ -223,6 +227,10 @@ private:
   int _maxAllowedWays;
 
   OrCriterionPtr _criteria;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   bool _calcAndApplyTransform(OsmMapPtr& map);
   void _filterCalcAndApplyTransform(OsmMapPtr& map);

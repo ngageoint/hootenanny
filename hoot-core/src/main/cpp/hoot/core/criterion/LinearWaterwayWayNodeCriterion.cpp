@@ -47,9 +47,4 @@ WayNodeCriterion(map)
   _parentCriterion.reset(new LinearWaterwayCriterion());
 }
 
-void LinearWaterwayWayNodeCriterion::setOsmMap(const OsmMap* map)
-{
-  _map = map->shared_from_this();
-}
-
 }

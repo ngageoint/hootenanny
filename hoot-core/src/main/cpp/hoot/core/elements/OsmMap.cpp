@@ -33,7 +33,7 @@
 // Hoot
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/conflate/IdSwap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/elements/ElementId.h>

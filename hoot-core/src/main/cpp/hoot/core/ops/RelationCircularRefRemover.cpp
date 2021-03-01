@@ -44,6 +44,7 @@ void RelationCircularRefRemover::apply(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr relation = it->second;
+    _numProcessed++;
     if (!relation)
     {
       continue;

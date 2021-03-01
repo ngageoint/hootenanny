@@ -34,6 +34,7 @@
 // Hoot
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {
@@ -43,7 +44,8 @@ class OsmMap;
  * Searches for ways that contain the same name multiple times in the name and/or alt_name fields.
  * Any duplicates in the alt_name field will be removed.
  */
-class DuplicateNameRemover : public OsmMapOperation, public Configurable
+class DuplicateNameRemover : public OsmMapOperation, public Configurable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
@@ -74,6 +76,9 @@ public:
 
   virtual QString getClassName() const override { return className(); }
 
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
+
 private:
 
   bool _caseSensitive;
@@ -82,6 +87,10 @@ private:
   // used by Attribute Conflation only, but possibly could be made the default behavior at some
   // point.
   bool _preserveOriginalName;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   std::shared_ptr<OsmMap> _map;
 

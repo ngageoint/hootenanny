@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="hootenanny" srs="+epsg:4326">
+    <bounds minlat="54.623230556" minlon="20.886080556" maxlat="54.632511111" maxlon="20.9006"/>
+    <node visible="true" id="-3302057" timestamp="1970-01-01T00:00:00Z" version="1" lat="54.6325111109999995" lon="20.9006000000000007">
+        <tag k="building" v="school"/>
+        <tag k="description" v="State budgetary educational institution of the Samara region secondary school of the village of Ozerki"/>
+    </node>
+    <node visible="true" id="-3302055" timestamp="1970-01-01T00:00:00Z" version="1" lat="54.6232305560000029" lon="20.8860805559999996">
+        <tag k="building" v="cultural and historical institution"/>
+        <tag k="description" v="House of Culture"/>
+    </node>
+</osm>

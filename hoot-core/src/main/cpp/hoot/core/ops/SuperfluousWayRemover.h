@@ -32,6 +32,7 @@
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/util/Units.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Qt
 #include <QSet>
@@ -47,7 +48,8 @@ class OsmMap;
  *
  * @todo what about one node ways?
  */
-class SuperfluousWayRemover : public OsmMapOperation, public Configurable
+class SuperfluousWayRemover : public OsmMapOperation, public Configurable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
@@ -90,12 +92,19 @@ public:
 
   virtual QString getClassName() const override { return className(); }
 
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
+
 private:
 
   // ways with these IDs will never be removed
   QSet<long> _excludeIds;
   // the number of ways that explicitly weren't removed due to configuration
   int _numExplicitlyExcluded;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   void _removeWays(std::shared_ptr<OsmMap>& map);
 };

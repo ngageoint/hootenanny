@@ -22,45 +22,33 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
+#ifndef CONFLATE_INFO_CACHE_CONSUMER_H
+#define CONFLATE_INFO_CACHE_CONSUMER_H
 
-#ifndef CONSTELEMENTVISITOR_H
-#define CONSTELEMENTVISITOR_H
-
-// hoot
-#include <hoot/core/visitors/ElementVisitor.h>
+// Hoot
+#include <hoot/core/conflate/ConflateInfoCache.h>
 
 namespace hoot
 {
 
 /**
- * Visits elements in a collection. See Element::visit* and OsmMap::visit* for ways to use the
- * class. See hoot::AddRefVisitor for an example implementation.
- *
- * This is also used by hoot::VisitorOp and hoot::NamedOp.
- *
- * @todo move this to the visitors folder
+ * Interface for classes that make use of a ConflateInfoCache
  */
-class ConstElementVisitor : public ElementVisitor
+class ConflateInfoCacheConsumer
 {
 public:
 
-  ConstElementVisitor() = default;
-  virtual ~ConstElementVisitor() = default;
+  ConflateInfoCacheConsumer() = default;
+  virtual ~ConflateInfoCacheConsumer() = default;
 
-  static QString className() { return "hoot::ConstElementVisitor"; }
-
-  virtual void visit(const ConstElementPtr& e) = 0;
-
-  void visit(const ElementPtr& e) override
-  {
-    visit(std::dynamic_pointer_cast<const Element>(e));
-  }
+  /**
+   * Sets a ConflateInfoCache instance on the consumer
+   */
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache) = 0;
 };
-
-typedef std::shared_ptr<ConstElementVisitor> ConstElementVisitorPtr;
 
 }
 
-#endif // CONSTELEMENTVISITOR_H
+#endif // CONFLATE_INFO_CACHE_CONSUMER_H

@@ -28,7 +28,7 @@
 #include "OsmXmlReader.h"
 
 // Hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/DateTimeUtils.h>

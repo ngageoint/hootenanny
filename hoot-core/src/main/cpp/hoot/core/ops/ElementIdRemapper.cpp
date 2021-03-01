@@ -69,6 +69,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_remapFilter && !_remapFilter->isSatisfied(currentElement)))
     {
       continue;
@@ -90,6 +91,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_remapFilter && !_remapFilter->isSatisfied(currentElement)))
     {
       continue;
@@ -111,6 +113,7 @@ void ElementIdRemapper::apply(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_remapFilter && !_remapFilter->isSatisfied(currentElement)))
     {
       continue;
@@ -134,6 +137,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   LOG_INFO("Restoring original element IDs for: " << map->getName() << "...");
 
   _restoredIds = 0;
+  _numProcessed = 0;
   if (!_restoreFilter)
   {
     _restoreFilter = _remapFilter;
@@ -145,6 +149,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_restoreFilter && !_restoreFilter->isSatisfied(currentElement)))
     {
       continue;
@@ -173,6 +178,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_restoreFilter && !_restoreFilter->isSatisfied(currentElement)))
     {
       continue;
@@ -201,6 +207,7 @@ void ElementIdRemapper::restore(OsmMapPtr& map)
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
     ElementPtr currentElement = it->second;
+    _numProcessed++;
     if (!currentElement || (_restoreFilter && !_restoreFilter->isSatisfied(currentElement)))
     {
       continue;

@@ -28,7 +28,7 @@
 #define UNIQUE_TAG_VALUES_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {
