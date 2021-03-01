@@ -171,11 +171,11 @@ public:
   void printCacheInfo();
 
   /**
-   * Checks to see if an element can be conflated by any of the actively configured matchers for
+   * Determines if an element can be conflated by any of the actively configured matchers for
    * conflation.
    *
    * @param element element to examine
-   * @param caller todo
+   * @param caller optional name of the class calling this method for debugging purposes
    * @return true if the conflate matchers are configured with at least one matcher that
    * can conflate the input element; false otherwise
    */
@@ -183,10 +183,10 @@ public:
     const ConstElementPtr& element, const QString& caller = QString());
 
   /**
-   * TODO
+   * Determines if a ConflatableCriterion is in use by any actively configured conflate matcher
    *
-   * @param criterionClassName
-   * @return
+   * @param criterionClassName class name of the criterion
+   * @return true if an active matcher uses the criterion with the specified name; false otherwise
    */
   bool elementCriterionInUseByActiveMatcher(const QString& criterionClassName);
 

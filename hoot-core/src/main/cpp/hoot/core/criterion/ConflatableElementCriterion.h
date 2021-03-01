@@ -55,9 +55,12 @@ public:
   virtual bool supportsSpecificConflation() const = 0;
 
   /**
-   * TODO
+   * Returns all associated GeometryTypeCriterion class names associated with children elements of
+   * this conflatable element (e.g. RailwayWayNodeCriterion for RailwayCriterion). The criteria are
+   * logically OR'd together. If a class that doesn't inherit from GeometryTypeCriterion is returned
+   * by an implementer, an exception will be thrown.
    *
-   * @return
+   * @return a list of class names
    */
   virtual QStringList getChildCriteria() const { return QStringList(); }
 
