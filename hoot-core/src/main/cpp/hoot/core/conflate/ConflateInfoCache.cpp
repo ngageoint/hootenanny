@@ -613,7 +613,7 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
   }
 
   _conflatableElementCache[element->getElementId()] = false;
-  if (Log::getInstance().getLevel() <= Log::TraCE)
+  if (Log::getInstance().getLevel() <= Log::Trace)
   {
     const QString mostSpecificType = OsmSchema::getInstance().mostSpecificType(element->getTags());
     const QString name = element->getTags().getName();
