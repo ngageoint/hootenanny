@@ -36,9 +36,9 @@ namespace hoot
 /**
  * This interface allows for identifying feature geometry types associated with a hoot operator.
  * This is used during conflation to weed out unnecessary conflate ops specified in the
- * configuration. A list of class names is returned instead of instantiated criterion classes for
- * performance reasons. Callers are responsible for verifying that the classes are valid
- * GeometryTypeCriterion classes.
+ * configuration (SuperfluousConflateOpRemover). A list of class names is returned instead of
+ * instantiated criterion classes for performance reasons. Callers are responsible for verifying
+ * that the classes are valid GeometryTypeCriterion classes.
  */
 class FilteredByGeometryTypeCriteria
 {

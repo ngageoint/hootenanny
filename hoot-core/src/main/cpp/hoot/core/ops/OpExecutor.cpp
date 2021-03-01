@@ -152,6 +152,8 @@ void OpExecutor::apply(OsmMapPtr& map)
           dynamic_cast<ConflateInfoCacheConsumer*>(op.get());
         if (cacheConsumer != 0)
         {
+          // This info cache will allow the op to verify whether elements it operates on should be
+          // modified or not based on the current conflation configuration.
           cacheConsumer->setConflateInfoCache(conflateInfoCache);
         }
       }

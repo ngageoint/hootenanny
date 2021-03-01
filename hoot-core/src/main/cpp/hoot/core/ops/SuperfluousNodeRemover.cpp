@@ -192,6 +192,9 @@ void SuperfluousNodeRemover::apply(std::shared_ptr<OsmMap>& map)
         n->getTags().getNonDebugCount() << " non-metadata tags...");
       _usedNodeIds.insert(n->getId());
     }
+    // Since this class operates on elements with generic types, an additional check must be
+    // performed here during conflation to enure we don't modify any element not associated with
+    // and active conflate matcher in the current conflation configuration.
     else if (_conflateInfoCache && _ignoreInformationTags &&
              !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n->cloneSp(), className()))
     {

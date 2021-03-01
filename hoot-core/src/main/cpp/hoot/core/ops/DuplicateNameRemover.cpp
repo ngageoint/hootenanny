@@ -78,6 +78,9 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
     {
       continue;
     }
+    // Since this class operates on elements with generic types, an additional check must be
+    // performed here during conflation to enure we don't modify any element not associated with
+    // and active conflate matcher in the current conflation configuration.
     else if (_conflateInfoCache &&
              !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
     {

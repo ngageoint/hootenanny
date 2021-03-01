@@ -118,7 +118,11 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
       {
         LOG_VART(critName);
 
-        if (_conflateInfoCache && !_conflateInfoCache->elementCriterionInUseByActiveMatcher(critName))
+        // Element criteria are used to control what gets rubbersheeted at conflate time. An
+        // additional check is done here against the conflate configuration to ensure we don't
+        // rubbersheet any elements we're not conflating.
+        if (_conflateInfoCache &&
+            !_conflateInfoCache->elementCriterionInUseByActiveMatcher(critName))
         {
           LOG_TRACE(
             "Excluding " << critName << " filter due it not being in use by an active conflate " <<

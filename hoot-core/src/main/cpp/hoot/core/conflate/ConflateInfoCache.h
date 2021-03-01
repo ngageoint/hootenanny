@@ -49,16 +49,17 @@ namespace hoot
 class MatchCreator;
 
 /**
- * Caches conflatable elements, relationships, and conflation configuration details that may aid in
- * speeding up conflation jobs.
+ * Caches conflatable elements, their relationships with other elements, and conflation
+ * configuration details that may aid in speeding up conflation jobs.
  *
  * This is generally expected to be initialized separately for each section of the code using it. It
- * is done this way rather than implementing a Singleton or using static instances, since case tests
- * are launched as multiple threads within the same process. Not using separate instances of the
- * cache which would result in a conflicted cache state if the cache was shared by different threads
- * (different elements with the same ID having different info; @todo We may be able to use
- * thread_local storage for this with static member vars and avoid using separate instances).
- * Currently, this cache is only used in a few places and not by all match creators.
+ * is done this way rather than implementing a Singleton or using global static instances, since
+ * conflate case tests are launched as multiple threads within the same process. Not using separate
+ * instances of the cache which would result in a conflicted cache state if the cache was shared by
+ * different threads (different elements with the same ID could have different info; @todo We may be
+ * able to use thread_local storage for this purpose with static member vars and avoid using
+ * separate instances). Currently, this cache is only used in a few places and not by all match
+ * creators.
  *
  * The caches used in this class were determined on 9/30/18 running POI/Polygon conflation against
  * the regression test unifying-tests.child/somalia.child/somalia-test3.child and also on 1/7/20
@@ -230,9 +231,9 @@ private:
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
 
-  // This must store ElementCriterion and not ConflatableElementCriterion, b/c we're also checking
-  // against conflate child criteria (e.g. RailwayWayNodeCriterion for RailwayCriterion), which
-  // don't inherit from ConflatableElementCriterion.
+  // This cache must store ElementCriterion and not ConflatableElementCriterion, b/c we're also
+  // checking against conflate child criteria (e.g. RailwayWayNodeCriterion for RailwayCriterion),
+  // which don't inherit from ConflatableElementCriterion.
   QHash<QString, ElementCriterionPtr> _conflatableCritCache;
   QHash<ElementId, bool> _conflatableElementCache;
   QHash<QString, bool> _conflatableCritActiveCache;

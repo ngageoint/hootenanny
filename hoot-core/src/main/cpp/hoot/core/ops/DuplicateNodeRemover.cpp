@@ -171,6 +171,10 @@ void DuplicateNodeRemover::apply(std::shared_ptr<OsmMap>& map)
             LOG_VART(calcdDistanceSquared);
             if (distanceSquared > calcdDistanceSquared)
             {
+              // Since this class operates on elements with generic types, an additional check must
+              // be performed here during conflation to enure we don't modify any element not
+              // associated with and active conflate matcher in the current conflation
+              // configuration.
               if (_conflateInfoCache &&
                   (!_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n1, className()) ||
                    !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(n2, className())))
