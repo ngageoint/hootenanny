@@ -3007,6 +3007,14 @@ If false, in order for a relation to be deemed not conflatable all of its member
 conflatable. If true, a relation can be deemed not conflatable even if any of its members are also
 conflatable.
 
+=== offset.intersection.max
+
+* Data Type: double
+* Default Value: `5`
+
+The offset intersection merger joins two closely spaced intersections within this max threshold to
+form one single intersection.
+
 === ogr.add.uuid
 
 * Data Type: bool
