@@ -22,63 +22,69 @@
  * This will properly maintain the copyright information. Maxar
  * copyrights will be updated automatically.
  *
- * @copyright Copyright (C) 2014, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
+ * @copyright Copyright (C) 2021 Maxar (http://www.maxar.com/)
  */
 
 // CPP Unit
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/extensions/TestFactoryRegistry.h>
 
-// hoot
+// Hoot
 #include <hoot/core/TestUtils.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/visitors/DataSummaryTagVisitor.h>
+#include <hoot/core/ops/OffsetIntersectionMergerOp.h>
+#include <hoot/core/util/Log.h>
+
+using namespace geos::geom;
 
 namespace hoot
 {
 
-class DataSummaryTagVisitorTest : public HootTestFixture
+class OffsetIntersectionMergerOpTest : public HootTestFixture
 {
-  CPPUNIT_TEST_SUITE(DataSummaryTagVisitorTest);
-  CPPUNIT_TEST(runDataSummaryTest);
+  CPPUNIT_TEST_SUITE(OffsetIntersectionMergerOpTest);
+  CPPUNIT_TEST(runOffsetMergeTest);
   CPPUNIT_TEST_SUITE_END();
 
 public:
 
-  DataSummaryTagVisitorTest()
-    : HootTestFixture("test-files/visitors/DataSummaryTagVisitorTest/",
-                      "test-output/visitors/DataSummaryTagVisitorTest/")
+  OffsetIntersectionMergerOpTest()
+    : HootTestFixture("test-files/ops/OffsetIntersectionMergerOpTest/",
+                      "test-output/ops/OffsetIntersectionMergerOpTest/")
   {
     setResetType(ResetBasic);
   }
 
-  void runDataSummaryTest()
+  void runOffsetMergeTest()
   {
     OsmMapPtr map(new OsmMap());
     OsmXmlReader reader;
     reader.setDefaultStatus(Status::Unknown1);
     reader.setUseDataSourceIds(true);
-    reader.read(_inputPath + "DataSummaryTagVisitorTestInput.osm", map);
+    reader.read(_inputPath + "OffsetIntersectionMergerOpTestInput.osm", map);
 
-    DataSummaryTagVisitor visitor("a;b;c;d;e;f;g;h;i;j;k;l;m;n;o;p;q;r;s;t;u;v;w;x;y;z");
-    map->visitRw(visitor);
+    MapProjector::projectToPlanar(map);
+
+    OffsetIntersectionMergerOp::mergeOffsetIntersections(map);
+
+    MapProjector::projectToWgs84(map);
 
     OsmXmlWriter writer;
     writer.setIncludeCompatibilityTags(false);
-    writer.write(map, _outputPath + "DataSummaryTagVisitorTestOutput.osm");
+    writer.write(map, _outputPath + "OffsetIntersectionMergerOpTestOutput.osm");
 
-    HOOT_FILE_EQUALS( _inputPath + "DataSummaryTagVisitorTestExpected.osm",
-                     _outputPath + "DataSummaryTagVisitorTestOutput.osm");
+    HOOT_FILE_EQUALS( _inputPath + "OffsetIntersectionMergerOpTestExpected.osm",
+                     _outputPath + "OffsetIntersectionMergerOpTestOutput.osm");
   }
 
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(DataSummaryTagVisitorTest, "quick");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(OffsetIntersectionMergerOpTest, "quick");
 
 }
-
 
