@@ -33,7 +33,7 @@
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>

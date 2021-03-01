@@ -48,7 +48,7 @@ void PoiPolygonInfoCache::setConfiguration(const Settings& conf)
 {
   ConflateInfoCache::setConfiguration(conf);
 
-  const int maxCacheSize = ConfigOptions(conf).getPoiPolygonMaxSizePerCache();
+  const int maxCacheSize = ConfigOptions(conf).getConflateInfoMaxSizePerCache();
   if (maxCacheSize > 0)
   {
     _isTypeCache.setMaxCost(maxCacheSize);

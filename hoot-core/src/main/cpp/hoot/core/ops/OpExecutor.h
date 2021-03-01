@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#ifndef NAMEDOP_H
-#define NAMEDOP_H
+#ifndef OP_EXECUTOR_H
+#define OP_EXECUTOR_H
 
 // hoot
 #include <hoot/core/info/OperationStatus.h>
@@ -43,18 +43,18 @@ namespace hoot
 class ElementVisitor;
 
 /**
- * Applies a list of named operations to the given map. The named operations must implement either
- * OsmMapOperation or ConstElementVisitor and must be registered with the factory.
+ * Applies a list of named operations to the given map. The named operations must inherit from
+ * either OsmMapOperation or ElementVisitor and must be registered with the factory.
  */
-class NamedOp : public OsmMapOperation, public Configurable, public ProgressReporter
+class OpExecutor : public OsmMapOperation, public Configurable, public ProgressReporter
 {
 public:
 
   static QString className() { return "hoot::NamedOp"; }
 
-  NamedOp();
-  NamedOp(const QStringList& namedOps, const bool operateOnlyOnConflatableElements = false);
-  virtual ~NamedOp() = default;
+  OpExecutor();
+  OpExecutor(const QStringList& namedOps, const bool operateOnlyOnConflatableElements = false);
+  virtual ~OpExecutor() = default;
 
   virtual void apply(std::shared_ptr<OsmMap>& map) override;
 
@@ -98,4 +98,4 @@ private:
 
 }
 
-#endif // NAMEDOP_H
+#endif // OP_EXECUTOR_H

@@ -33,7 +33,7 @@
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
@@ -429,7 +429,7 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
   // operate on any elements that aren't considered conflatable. Superfluous conflate op removal has
   // already taken care of this for any ops that conflate specific feature types, however, for those
   // who don't, they must examine each element (@see ElementConflatableCheck).
-  NamedOp ops(opNames, true);
+  OpExecutor ops(opNames, true);
   ops.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,

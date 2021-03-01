@@ -36,19 +36,16 @@
 #include <hoot/core/ops/RemoveRoundabouts.h>
 #include <hoot/core/ops/ReplaceRoundabouts.h>
 #include <hoot/core/io/IoUtils.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/conflate/DiffConflator.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 // Qt
 #include <QElapsedTimer>
 
 namespace hoot
 {
-
-thread_local QHash<QString, ElementCriterionPtr> ConflateUtils::_conflatableCritCache;
-thread_local QHash<ElementId, bool> ConflateUtils::_conflatableElementCache;
-thread_local QHash<QString, bool> ConflateUtils::_conflatableCritActiveCache;
 
 int ConflateUtils::writeNonConflatable(const ConstOsmMapPtr& map, const QString& output)
 {
@@ -129,10 +126,10 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
     StringUtils::formatLargeNumber(diffMap->size() - replacementMapSize) <<
     " and replacement data of size: " << StringUtils::formatLargeNumber(replacementMapSize)  <<
     "...");
-  NamedOp(ConfigOptions().getConflatePreOps()).apply(diffMap);
+  OpExecutor(ConfigOptions().getConflatePreOps()).apply(diffMap);
   DiffConflator diffGen;
   diffGen.apply(diffMap);
-  NamedOp(ConfigOptions().getConflatePostOps()).apply(diffMap);
+  OpExecutor(ConfigOptions().getConflatePostOps()).apply(diffMap);
   LOG_STATUS(
     "Calculated a diff with: " << StringUtils::formatLargeNumber(diffMap->size()) <<
     " features in: " << StringUtils::millisecondsToDhms(timer.elapsed()) << " (skipped " <<
@@ -148,6 +145,42 @@ void ConflateUtils::writeDiff(const QString& mapUrl1, const QString& mapUrl2,
     "Wrote the diff output of size: " << StringUtils::formatLargeNumber(diffMap->size()) <<
     " in: " << StringUtils::millisecondsToDhms(timer.elapsed()));
   timer.restart();
+}
+
+bool ConflateUtils::operatesOnGenericElementsOnly(const std::shared_ptr<OsmMapOperation>& op)
+{
+  const QStringList geometryTypeCriteriaClassNames = op->getCriteria();
+  if (geometryTypeCriteriaClassNames.size() == 0)
+  {
+    return true;
+  }
+  for (int i = 0; i < geometryTypeCriteriaClassNames.size(); i++)
+  {
+    if (ConflatableElementCriterion::supportsSpecificConflation(
+          geometryTypeCriteriaClassNames.at(i)))
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool ConflateUtils::operatesOnGenericElementsOnly(const std::shared_ptr<ElementVisitor>& vis)
+{
+  const QStringList geometryTypeCriteriaClassNames = vis->getCriteria();
+  if (geometryTypeCriteriaClassNames.size() == 0)
+  {
+    return true;
+  }
+  for (int i = 0; i < geometryTypeCriteriaClassNames.size(); i++)
+  {
+    if (ConflatableElementCriterion::supportsSpecificConflation(
+          geometryTypeCriteriaClassNames.at(i)))
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 }

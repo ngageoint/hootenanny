@@ -34,7 +34,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/conflate/ConflateInfoCache.h>
 
 namespace hoot
 {
@@ -313,6 +313,8 @@ bool RelationMemberUtils::relationHasConflatableMember(
     return false;
   }
 
+  std::shared_ptr<ConflateInfoCache> conflateInfoCache(new ConflateInfoCache(map));
+
   const std::vector<RelationData::Entry>& relationMembers = relation->getMembers();
   for (size_t i = 0; i < relationMembers.size(); i++)
   {
@@ -320,7 +322,7 @@ bool RelationMemberUtils::relationHasConflatableMember(
     if (member)
     {
       LOG_VART(member->getElementId());
-      if (ConflateUtils::elementCanBeConflatedByActiveMatcher(member, map))
+      if (conflateInfoCache->elementCanBeConflatedByActiveMatcher(member))
       {
         return true;
       }

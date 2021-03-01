@@ -39,21 +39,24 @@ namespace hoot
 /**
  * Visits elements in a way that they can be modified.
  *
- * This allows for streaming I/O if not combined with an OsmMapConsumer.  Favor this over
- * OsmMapOperation when you do not need the entire input map in memory at once (visitor logic
- * does not require it and you are not running in the conflate pipeline where all map data must
- * be read into memory).
+ * This allows for streaming I/O during data conversions if not combined with an OsmMapConsumer.
+ * Favor this over OsmMapOperation when you do not need the entire input map in memory at once
+ * (visitor logic does not require it and you are not running in the conflate pipeline where all map
+ * data must be read into memory).
  *
- * All ElementVisitors that are added to the conflate pipeline (conflate.pre.ops or
- * conflate.post.ops) should either override the default implementation of
+ * Most ElementVisitors added to the conflate pipeline (conflate.pre.ops, conflate.post.ops, and
+ * map.cleaner.transforms) should either override the default implementation of
  * FilteredByGeometryTypeCriteria::getCriteria or implement the ConflateInfoCacheConsumer interface
  * (doing both is ok). Implement FilteredByGeometryTypeCriteria::getCriteria and return a list of
- * supported element criteria the visitor operates on (e.g. for roads, return HighwayCriterion).
- * If the visitor operates generically on elements that may have multiple feature types (e.g. all
- * ways and FilteredByGeometryTypeCriteria::getCriteria returns LinearCriterion),
- * ConflateInfoCacheConsumer should be implemeted and the info in the cache used to only operate on
- * elements that are conflatable in the current conflation configuration (see
- * ConflateInfoCache::elementCanBeConflatedByActiveMatcher).
+ * supported element criteria the visitor operates on (e.g. for roads, return HighwayCriterion). If
+ * the visitor only operates generically on elements that may have multiple feature types (e.g.
+ * operates on all ways and FilteredByGeometryTypeCriteria::getCriteria returns LinearCriterion),
+ * ConflateInfoCacheConsumer should be implemented and the info in the cache be used to ensure that
+ * only elements that are conflatable in the current conflation configuration are modified (see
+ * ConflateInfoCache::elementCanBeConflatedByActiveMatcher). An example of a visitor that doesn't
+ * need to implement either interface is RemoveMissingElementsVisitor, due to the fact that we
+ * always want to remove references to all missing elements regardless of whether they are
+ * conflatable in the current configuration or not.
  *
  * We could eventually remove the default empty string implementations of OperationStatus methods
  * and require them to be implemented in children. If we ever have multiple inheritance issues via

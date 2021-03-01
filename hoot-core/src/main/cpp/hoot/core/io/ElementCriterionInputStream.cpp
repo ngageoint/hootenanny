@@ -27,7 +27,7 @@
 
 #include "ElementCriterionInputStream.h"
 
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/io/ElementInputStream.h>
 

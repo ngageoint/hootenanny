@@ -32,7 +32,7 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 #include <hoot/core/visitors/ElementVisitorConsumer.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
 {

@@ -66,7 +66,7 @@ void ConflateInfoCache::setConfiguration(const Settings& conf)
 {
   _addressParser.setConfiguration(conf);
 
-  const int maxCacheSize = ConfigOptions(conf).getPoiPolygonMaxSizePerCache();
+  const int maxCacheSize = ConfigOptions(conf).getConflateInfoMaxSizePerCache();
   if (maxCacheSize > 0)
   {
     _elementIntersectsCache.setMaxCost(maxCacheSize);

@@ -891,6 +891,15 @@ Criteria used for filtering elements before conflating them.
 
 Negates conflate.element.criterion.
 
+=== conflate.info.max.size.per.cache
+
+* Data Type: int
+* Default Value: `100000`
+
+The maximum number of elements to cache information for per cache when running Conflation. This
+maximum size is repeated across multiple internal element information caches. To disable caching,
+completely specify a value less than one.
+
 === conflate.mark.merge.created.multilinestring.relations
 
 * Data Type: bool
@@ -3685,15 +3694,6 @@ if these matches are kept when they have features that overlap with a POI/POI ma
 overall number of reviews can increase substantially otherwise. Disabling this setting will force
 all POI/Polygon matches to be converted to reviews if they contain a feature that overlaps with a
 POI/POI review.
-
-=== poi.polygon.max.size.per.cache
-
-* Data Type: int
-* Default Value: `100000`
-
-The maximum number of elements to cache information for when using POI/Polygon Conflation. This
-maximum size is repeated across multiple internal element information caches. To disable caching,
-specify a value less than one.
 
 === poi.polygon.name.score.threshold
 

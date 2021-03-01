@@ -102,6 +102,14 @@ public:
    */
   static QStringList getCriterionClassNamesByGeometryType(const GeometryType& geometryType);
 
+  /**
+   * TODO
+   *
+   * @param criterionClassName
+   * @return
+   */
+  static bool supportsSpecificConflation(const QString& criterionClassName);
+
 private:
 
   // criterion class names to criterion objects

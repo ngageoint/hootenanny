@@ -24,10 +24,10 @@
  *
  * @copyright Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021 Maxar (http://www.maxar.com/)
  */
-#include "NamedOp.h"
+#include "OpExecutor.h"
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/visitors/ElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -47,15 +47,15 @@
 namespace hoot
 {
 
-HOOT_FACTORY_REGISTER(OsmMapOperation, NamedOp)
+HOOT_FACTORY_REGISTER(OsmMapOperation, OpExecutor)
 
-NamedOp::NamedOp() :
+OpExecutor::OpExecutor() :
 _conf(&conf()),
 _operateOnlyOnConflatableElements(false)
 {
 }
 
-NamedOp::NamedOp(const QStringList& namedOps, const bool operateOnlyOnConflatableElements) :
+OpExecutor::OpExecutor(const QStringList& namedOps, const bool operateOnlyOnConflatableElements) :
 _conf(&conf()),
 _namedOps(namedOps),
 _operateOnlyOnConflatableElements(operateOnlyOnConflatableElements)
@@ -65,12 +65,12 @@ _operateOnlyOnConflatableElements(operateOnlyOnConflatableElements)
   LOG_VART(_namedOps);
 }
 
-void NamedOp::setConfiguration(const Settings& conf)
+void OpExecutor::setConfiguration(const Settings& conf)
 {
   _conf = &conf;
 }
 
-void NamedOp::_substituteForContainingOps()
+void OpExecutor::_substituteForContainingOps()
 {
   const QString mapCleanerName = MapCleaner::className();
   if (_namedOps.contains(mapCleanerName))
@@ -86,7 +86,7 @@ void NamedOp::_substituteForContainingOps()
   }
 }
 
-void NamedOp::apply(OsmMapPtr& map)
+void OpExecutor::apply(OsmMapPtr& map)
 {
   Factory& f = Factory::getInstance();
   QElapsedTimer timer;
@@ -119,8 +119,8 @@ void NamedOp::apply(OsmMapPtr& map)
     {
       std::shared_ptr<OsmMapOperation> op(
         Factory::getInstance().constructObject<OsmMapOperation>(s));
-      statusInfo = std::dynamic_pointer_cast<OperationStatus>(op);
 
+      statusInfo = std::dynamic_pointer_cast<OperationStatus>(op);
       if (_progress.getState() == Progress::JobState::Running)
       {
         _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
@@ -139,6 +139,15 @@ void NamedOp::apply(OsmMapPtr& map)
 
       if (_operateOnlyOnConflatableElements)
       {
+        // Would like to add error checking code here and in the vis code block below that makes
+        // sure any op being applied either operates on only specific geometry type features OR
+        // implements ConflateInfoCacheConsumer and does conflatable element checks to prevent
+        // unnecessarily modifying features not meant to modified for the active conflate
+        // configuration. Unfortunately, some ops (e.g. RemoveMissingElementsVisitor) should really
+        // always operate on elements, even if they're not being conflated. Because of that, we'll
+        // just have to be careful as we add ops to the conflate pipeline that they aren't modifying
+        // feature that they shouldn't be.
+
         ConflateInfoCacheConsumer* cacheConsumer =
           dynamic_cast<ConflateInfoCacheConsumer*>(op.get());
         if (cacheConsumer != 0)
@@ -155,14 +164,8 @@ void NamedOp::apply(OsmMapPtr& map)
     {
       std::shared_ptr<ElementVisitor> vis(
         Factory::getInstance().constructObject<ElementVisitor>(s));
+
       statusInfo = std::dynamic_pointer_cast<OperationStatus>(vis);
-
-      Configurable* c = dynamic_cast<Configurable*>(vis.get());
-      if (_conf != 0 && c != 0)
-      {
-        c->setConfiguration(*_conf);
-      }
-
       if (_progress.getState() == Progress::JobState::Running)
       {
         _updateProgress(opCount - 1, _getInitMessage(s, statusInfo));
@@ -171,6 +174,12 @@ void NamedOp::apply(OsmMapPtr& map)
       {
         // In case the caller isn't using progress, we still want to get status logging.
         LOG_STATUS(_getInitMessage(s, statusInfo));
+      }
+
+      Configurable* c = dynamic_cast<Configurable*>(vis.get());
+      if (_conf != 0 && c != 0)
+      {
+        c->setConfiguration(*_conf);
       }
 
       // The ordering of setting the config before the map here seems to make sense, but all
@@ -220,7 +229,7 @@ void NamedOp::apply(OsmMapPtr& map)
   }
 }
 
-void NamedOp::_updateProgress(const int currentStep, const QString& message)
+void OpExecutor::_updateProgress(const int currentStep, const QString& message)
 {
   // Always check for a valid task weight and that the job was set to running. Otherwise, this is
   // just an empty progress object, and we shouldn't log progress.
@@ -233,8 +242,8 @@ void NamedOp::_updateProgress(const int currentStep, const QString& message)
   }
 }
 
-QString NamedOp::_getInitMessage(const QString& message,
-                                 const std::shared_ptr<OperationStatus>& statusInfo) const
+QString OpExecutor::_getInitMessage(
+  const QString& message, const std::shared_ptr<OperationStatus>& statusInfo) const
 {
   QString initMessage;
   if (statusInfo.get() && !statusInfo->getInitStatusMessage().trimmed().isEmpty())

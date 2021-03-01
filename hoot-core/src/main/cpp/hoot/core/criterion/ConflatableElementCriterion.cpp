@@ -59,7 +59,6 @@ QMap<QString, ElementCriterionPtr> ConflatableElementCriterion::getConflatableCr
   else
   {
     const QMap<QString, ElementCriterionPtr> conflatableCriteria = getConflatableCriteria();
-
     for (QMap<QString, ElementCriterionPtr>::const_iterator itr = conflatableCriteria.begin();
          itr != conflatableCriteria.end(); ++itr)
     {
@@ -182,6 +181,21 @@ QStringList ConflatableElementCriterion::getCriterionClassNamesByGeometryType(
     }
   }
   return classNamesByType;
+}
+
+bool ConflatableElementCriterion::supportsSpecificConflation(const QString& criterionClassName)
+{
+  ElementCriterionPtr crit = getConflatableCriteria()[criterionClassName];
+  if (crit)
+  {
+    std::shared_ptr<ConflatableElementCriterion> conflatableCrit =
+      std::dynamic_pointer_cast<ConflatableElementCriterion>(crit);
+    if (conflatableCrit)
+    {
+      return conflatableCrit->supportsSpecificConflation();
+    }
+  }
+  return false;
 }
 
 }

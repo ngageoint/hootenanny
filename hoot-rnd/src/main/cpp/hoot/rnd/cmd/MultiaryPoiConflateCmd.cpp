@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/rnd/visitors/MultiaryPoiHashVisitor.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
@@ -107,13 +107,13 @@ public:
     map->visitRw(hashVisitor);
 
     LOG_INFO("Applying pre-conflation operations...");
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePreOps()).apply(map);
 
     MultiaryUtilities::conflate(map);
 
     // Apply any user specified operations.
     LOG_INFO("Applying post-conflation operations...");
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePostOps()).apply(map);
 
     MapProjector::projectToWgs84(map);
 

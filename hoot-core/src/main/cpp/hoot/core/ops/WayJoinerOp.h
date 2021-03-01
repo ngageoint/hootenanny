@@ -40,10 +40,10 @@ namespace hoot
 /**
  * @see WayJoiner
  *
- * I don't believe we need to honor ElementConflatableCheck in way joiners due to the fact that all
- * the code that writes parent IDs (what causes rejoins) already uses ElementConflatableCheck and/or
- * FilteredByGeometryTypeCriteria to prevent rejoining features not configured to be conflatble
- * during a conflate operation.
+ * I don't believe we need to conflatable element checks in way joiners due to the fact that all
+ * the code that writes parent IDs (what causes rejoins) already uses conflatable element checks
+ * and/or FilteredByGeometryTypeCriteria to prevent rejoining features not configured to be
+ * conflatable during a conflate operation.
  */
 class WayJoinerOp : public OsmMapOperation, public Configurable
 {

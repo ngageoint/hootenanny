@@ -30,7 +30,7 @@
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
@@ -40,7 +40,7 @@ HOOT_FACTORY_REGISTER(OsmMapOperation, MapCleaner)
 
 void MapCleaner::apply(std::shared_ptr<OsmMap>& map)
 {
-  NamedOp cleaningOps(ConfigOptions().getMapCleanerTransforms());
+  OpExecutor cleaningOps(ConfigOptions().getMapCleanerTransforms());
   cleaningOps.setProgress(_progress);
   cleaningOps.apply(map);
 }

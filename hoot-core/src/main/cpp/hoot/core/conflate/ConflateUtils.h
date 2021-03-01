@@ -30,6 +30,9 @@
 
 // Hoot
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/OsmMapOperation.h>
+#include <hoot/core/visitors/ElementVisitor.h>
+//#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -61,6 +64,22 @@ public:
    */
   static void writeDiff(const QString& mapUrl1, const QString& mapUrl2,
                         const geos::geom::Envelope& bounds, const QString& output);
+
+  /**
+   * TODO
+   *
+   * @param op
+   * @return
+   */
+  static bool operatesOnGenericElementsOnly(const std::shared_ptr<OsmMapOperation>& op);
+
+  /**
+   * TODO
+   *
+   * @param vis
+   * @return
+   */
+  static bool operatesOnGenericElementsOnly(const std::shared_ptr<ElementVisitor>& vis);
 };
 
 }

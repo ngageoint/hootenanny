@@ -27,7 +27,7 @@
 #ifndef ELEMENT_IDS_VISITOR_H
 #define ELEMENT_IDS_VISITOR_H
 
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/criterion/TagCriterion.h>
 
