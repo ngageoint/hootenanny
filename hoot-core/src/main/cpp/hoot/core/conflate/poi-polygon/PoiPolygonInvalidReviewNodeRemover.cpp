@@ -35,8 +35,8 @@
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
-#include <hoot/core/criterion/PoiCriterion.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
 
 namespace hoot
 {
@@ -142,7 +142,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
     }
   }
 
-  // make a copy here, since we may be removing some of these nodes
+  // Make a copy here, since we may be removing some of these nodes.
   const NodeMap nodes = map->getNodes();
   _numProcessed = 0;
   for (NodeMap::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
@@ -177,8 +177,8 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
 QStringList PoiPolygonInvalidReviewNodeRemover::getCriteria() const
 {
   QStringList criteria;
-  criteria.append(PoiCriterion::className());
-  criteria.append(BuildingCriterion::className());
+  criteria.append(PoiPolygonPoiCriterion::className());
+  criteria.append(PoiPolygonPolyCriterion::className());
   return criteria;
 }
 
