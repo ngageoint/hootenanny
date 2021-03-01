@@ -196,7 +196,7 @@ protected:
   static const int CACHE_SIZE_DEFAULT = 10000;
 
   ConstOsmMapPtr _map;
-  bool _cacheEnabled;
+  bool _cachingEnabled; // If disabled, no info is actually cached.
 
   void _incrementCacheHitCount(const QString& cacheTypeKey);
   void _incrementCacheSizeCount(const QString& cacheTypeKey);
@@ -228,16 +228,16 @@ private:
 
   QCache<ElementId, int> _numAddressesCache;
 
-  QMap<QString, int> _numCacheHitsByCacheType;
-  QMap<QString, int> _numCacheEntriesByCacheType;
-
-  // This cache must store ElementCriterion and not ConflatableElementCriterion, b/c we're also
-  // checking against conflate child criteria (e.g. RailwayWayNodeCriterion for RailwayCriterion),
-  // which don't inherit from ConflatableElementCriterion.
-  QHash<QString, ElementCriterionPtr> _conflatableCritCache;
-  QHash<ElementId, bool> _conflatableElementCache;
+  // No need to size limit the crit cache, as their aren't that many crits total. The crit cache
+  // must store ElementCriterion and not ConflatableElementCriterion, b/c we're also checking
+  // against conflate child criteria (e.g. RailwayWayNodeCriterion for RailwayCriterion), which
+  // don't inherit from ConflatableElementCriterion.
+  QCache<ElementId, bool> _conflatableElementCache;
   QHash<QString, bool> _conflatableCritActiveCache;
   std::vector<std::shared_ptr<MatchCreator>> _activeMatchCreators;
+
+  QMap<QString, int> _numCacheHitsByCacheType;
+  QMap<QString, int> _numCacheEntriesByCacheType;
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element);
   ElementCriterionPtr _getCrit(const QString& criterionClassName);
