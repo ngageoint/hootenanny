@@ -32,7 +32,6 @@
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/OsmMapOperation.h>
 #include <hoot/core/visitors/ElementVisitor.h>
-//#include <hoot/core/criterion/ConflatableElementCriterion.h>
 
 namespace hoot
 {
@@ -66,18 +65,21 @@ public:
                         const geos::geom::Envelope& bounds, const QString& output);
 
   /**
-   * TODO
+   * Determines whether an OsmMapOperation operates on generically typed elements exclusively (e.g.
+   * node or way)
    *
-   * @param op
-   * @return
+   * @param op the operation to examine
+   * @return true if the input operation only operates on generically typed elements; false
+   * otherwise
    */
   static bool operatesOnGenericElementsOnly(const std::shared_ptr<OsmMapOperation>& op);
 
   /**
-   * TODO
+   * Determines whether an ElementVisitor operates on generically typed elements exclusively (e.g.
+   * node or way)
    *
-   * @param vis
-   * @return
+   * @param vis the visitor to examine
+   * @return true if the input visitor only operates on generically typed elements; false otherwise
    */
   static bool operatesOnGenericElementsOnly(const std::shared_ptr<ElementVisitor>& vis);
 };

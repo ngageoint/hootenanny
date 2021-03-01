@@ -103,10 +103,12 @@ public:
   static QStringList getCriterionClassNamesByGeometryType(const GeometryType& geometryType);
 
   /**
-   * TODO
+   * Determines if the ConflatableCriterion with the input class name conflates specifically typed
+   * elements (e.g. buildings, roads)
    *
-   * @param criterionClassName
-   * @return
+   * @param criterionClassName the class name of the ConflatableElementCriterion to examine
+   * @return true if a ConflatableElementCriterion with the input name exists and is configured to
+   * conflate specifically typed elements
    */
   static bool supportsSpecificConflation(const QString& criterionClassName);
 
