@@ -166,6 +166,7 @@ MingsSuperAwesomePrompt.sh
 id_rsa.pub
 coverage/
 userfiles/
+test-files/cases/**/out
 
 ###### hoot-services ignores
 hoot-services/.idea

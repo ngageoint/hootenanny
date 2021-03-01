@@ -613,12 +613,13 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
   }
 
   _conflatableElementCache[element->getElementId()] = false;
-  if (Log::getInstance().getLevel() <= Log::Trace)
+  if (Log::getInstance().getLevel() <= Log::TraCE)
   {
     const QString mostSpecificType = OsmSchema::getInstance().mostSpecificType(element->getTags());
+    const QString name = element->getTags().getName();
     LOG_TRACE(
-      element->getElementId() << " rejected as conflatable element. Most specific type: " <<
-      mostSpecificType << "; caller: " << caller);
+      element->getElementId() << " rejected as conflatable element. Name: " << name <<
+      ", most specific type: " << mostSpecificType << ", caller: " << caller);
     if (mostSpecificType.trimmed().isEmpty())
     {
       LOG_VART(element);
