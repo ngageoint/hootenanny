@@ -7219,6 +7219,21 @@
         <tag k="source:imagery:sensor" v="Multiple"/>
         <tag k="type" v="route"/>
     </relation>
+    <relation visible="true" id="1440119" timestamp="2021-02-24T15:33:55Z" version="3" changeset="54435">
+        <member type="relation" ref="-2" role="outer"/>
+        <tag k="error:circular" v="15"/>
+        <tag k="feature_area" v="1002614.1"/>
+        <tag k="length" v="12171.5"/>
+        <tag k="natural" v="water"/>
+        <tag k="security:classification" v="UNCLASSIFIED"/>
+        <tag k="source:datetime" v="2012-02-03T06:18:57.000Z"/>
+        <tag k="source:imagery" v="DigitalGlobe"/>
+        <tag k="source:imagery:datetime" v="2019-09-24 10:21:17"/>
+        <tag k="source:imagery:id" v="2b741b1764e89c7b36df56ff26093951"/>
+        <tag k="source:imagery:layerName" v="2019-09-24 - WV03_VNIR"/>
+        <tag k="source:imagery:sensor" v="WV03_VNIR"/>
+        <tag k="type" v="multipolygon"/>
+    </relation>
     <relation visible="true" id="1440120" timestamp="2021-02-24T15:33:55Z" version="3" changeset="54435">
         <member type="relation" ref="-2" role="outer"/>
         <tag k="error:circular" v="15"/>
