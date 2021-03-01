@@ -77,11 +77,19 @@ public:
 private:
 
   const Settings* _conf;
+
   QStringList _namedOps;
-  Progress _progress;
+  // If enabled, a conflate info cache will be passed to all exected ops implementing
+  // ConflateInfoCacheConsumer. This enables them to check each element being modified against the
+  // active conflate configuration to avoid modifying elements that aren't to be conflated. Don't
+  // love introducing this dependency here of conflation on op execution but so far haven't found
+  // a better way to do it.
+  bool _operateOnlyOnConflatableElements;
+
   QMap<QString, std::shared_ptr<OsmMapOperation>> _appliedOps;
   QMap<QString, std::shared_ptr<ElementVisitor>> _appliedVis;
-  bool _operateOnlyOnConflatableElements;
+
+  Progress _progress;
 
   /*
    * If an op is made of a list of other ops, then this will substitute those ops in from the list.
