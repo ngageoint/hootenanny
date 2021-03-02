@@ -51,6 +51,8 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearAverageMerger.h>
 
 // Qt
 #include <QFileInfo>
@@ -85,14 +87,21 @@ void ConflateExecutor::_initConfig()
   allOps += ConfigOptions().getConflatePostOps();
   ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
 
-  // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
-  // use it as the sole identifier for it. If that ever changes, then we'll need a different way
-  // to recognize when AC is occurring.
-  _isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
+  // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
+  _isAttributeConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
+  // Use of LinearAverageMerger for geometries signifies that we're doing Average Conflation.
+  const bool isAverageConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearAverageMerger::className();
   if (_isAttributeConflate && _isDiffConflate) // This is a little kludgy but seems useful for now.
   {
     throw IllegalArgumentException(
       "Differential and Attribute Conflation configurations may not both be used at the same time.");
+  }
+  else if (_isAttributeConflate && isAverageConflate)
+  {
+    throw IllegalArgumentException(
+      "Attribute and Average Conflation configurations may not both be used at the same time.");
   }
   if (_isAttributeConflate)
   {

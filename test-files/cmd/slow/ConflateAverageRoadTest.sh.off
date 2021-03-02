@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+mkdir -p $HOOT_HOME/tmp/
+mkdir -p test-output/cmd/ConflateAverageRoadTest
+
+hoot conflate -C AverageConflation.conf -C UnifyingAlgorithm.conf -D match.creators="hoot::HighwayMatchCreator" -D merger.creators="hoot::HighwayMergerCreator" test-files/DcGisRoads.osm test-files/DcTigerRoads.osm test-output/cmd/ConflateAverageRoadTest/output-unifying.osm
+hoot diff test-output/cmd/ConflateAverageRoadTest/output-unifying.osm test-files/cmd/slow/ConflateAverageRoadTest/output-unifying.osm || diff test-output/cmd/ConflateAverageRoadTest/output-unifying.osm test-files/cmd/slow/ConflateAverageRoadTest/output-unifying.osm
+
+hoot conflate -C AverageConflation.conf -C NetworkAlgorithm.conf -D match.creators="hoot::HighwayMatchCreator" -D merger.creators="hoot::HighwayMergerCreator" test-files/DcGisRoads.osm test-files/DcTigerRoads.osm test-output/cmd/ConflateAverageRoadTest/output-network.osm
+hoot diff test-output/cmd/ConflateAverageRoadTest/output-network.osm test-files/cmd/slow/ConflateAverageRoadTest/output-network.osm || diff test-output/cmd/ConflateAverageRoadTest/output-network.osm test-files/cmd/slow/ConflateAverageRoadTest/output-network.osm

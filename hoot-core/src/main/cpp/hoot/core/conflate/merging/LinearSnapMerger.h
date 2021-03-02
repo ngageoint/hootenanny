@@ -29,7 +29,6 @@
 
 // Hoot
 #include <hoot/core/conflate/merging/LinearMergerAbstract.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot
 {
@@ -55,8 +54,6 @@ public:
     const std::shared_ptr<SublineStringMatcher>& sublineMatcher);
   virtual ~LinearSnapMerger() = default;
 
-  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
-
   virtual QString getDescription() const override
   { return "Merges linear features by snapping geometries"; }
 
@@ -74,8 +71,6 @@ protected:
   // This is useful for getting rid of them later, if necessary.
   bool _markAddedMultilineStringRelations;
 
-  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
-
   virtual bool _mergePair(const OsmMapPtr& map, ElementId eid1, ElementId eid2,
                           std::vector<std::pair<ElementId, ElementId>>& replaced) override;
 
@@ -90,9 +85,6 @@ private:
   friend class LinearSnapMergerTest;
 
   static int logWarnCount;
-
-  // indicates which matcher matched the elements being processed by this merger
-  QString _matchedBy;
 
   static const bool WRITE_DETAILED_DEBUG_MAPS;
 

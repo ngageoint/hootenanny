@@ -41,8 +41,9 @@
 #include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/WayAverager.h>
 #include <hoot/core/algorithms/subline-matching/MaximalNearestSubline.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
+//#include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 
 namespace hoot
 {
@@ -54,19 +55,18 @@ HOOT_FACTORY_REGISTER(Merger, LinearAverageMerger)
 const bool LinearAverageMerger::WRITE_DETAILED_DEBUG_MAPS = false;
 
 LinearAverageMerger::LinearAverageMerger() :
-LinearMergerAbstract(),
-_matchedBy(HighwayMatch::MATCH_NAME)
+LinearMergerAbstract()
 {
+  _matchedBy = HighwayMatch::MATCH_NAME;
 }
 
 LinearAverageMerger::LinearAverageMerger(
-  const std::set<std::pair<ElementId, ElementId>>& pairs,
-  const std::shared_ptr<SublineStringMatcher>& /*sublineMatcher*/) :
-LinearMergerAbstract(),
-_matchedBy(HighwayMatch::MATCH_NAME)
+  const std::set<std::pair<ElementId, ElementId>>& pairs) :
+LinearMergerAbstract()
 {
   _pairs = pairs;
   LOG_VART(_pairs);
+  _matchedBy = HighwayMatch::MATCH_NAME;
 }
 
 bool LinearAverageMerger::_mergePair(
@@ -88,15 +88,29 @@ bool LinearAverageMerger::_mergePair(
 
   ElementToGeometryConverter geomConverter(map);
   Meters minSplitSize = ConfigOptions().getWayMergerMinSplitSize();
-  minSplitSize = std::min(minSplitSize, geomConverter.convertToLineString(way1)->getLength() * .7);
-  minSplitSize = std::min(minSplitSize, geomConverter.convertToLineString(way2)->getLength() * .7);
+  std::shared_ptr<geos::geom::LineString> lineString1 = geomConverter.convertToLineString(way1);
+  std::shared_ptr<geos::geom::LineString> lineString2 = geomConverter.convertToLineString(way2);
+  if (!lineString1 || !lineString2)
+  {
+    return false;
+  }
+  LOG_VART(lineString1->getLength());
+  LOG_VART(lineString2->getLength());
+  // TODO: where does 0.7 come from?
+  minSplitSize = std::min(minSplitSize, lineString1->getLength() * .7);
+  minSplitSize = std::min(minSplitSize, lineString2->getLength() * .7);
+  LOG_VART(minSplitSize);
 
   // split left into its maximal nearest sublines
   MaximalNearestSubline mns1(
     map, way1, way2, minSplitSize, way1->getCircularError() + way2->getCircularError());
   int mnsLeftIndex;
   std::vector<WayPtr> splitsLeft = mns1.splitWay(map, mnsLeftIndex);
-  assert(splitsLeft.size() != 0);
+  LOG_VART(splitsLeft.size());
+  if (splitsLeft.size() == 0)
+  {
+    return false;
+  }
   WayPtr mnsLeft = splitsLeft[mnsLeftIndex];
 
   // split right into its maximal nearest sublines
@@ -104,7 +118,11 @@ bool LinearAverageMerger::_mergePair(
     map, way2, mnsLeft, minSplitSize, way1->getCircularError() + way2->getCircularError());
   int mnsRightIndex;
   std::vector<WayPtr> splitsRight = mns2.splitWay(map, mnsRightIndex);
-  assert(splitsRight.size() != 0);
+  LOG_VART(splitsRight.size());
+  if (splitsRight.size() == 0)
+  {
+    return false;
+  }
   WayPtr mnsRight = splitsRight[mnsRightIndex];
 
   for (size_t i = 0; i < splitsLeft.size(); i++)
@@ -126,15 +144,32 @@ bool LinearAverageMerger::_mergePair(
   }
 
   // average the two MNSs
-  WayPtr w = WayAverager::average(map, mnsRight, mnsLeft);
-  w->setStatus(Status::Conflated);
+  WayPtr averagedWay = WayAverager::average(map, mnsRight, mnsLeft);
+  LOG_VART(averagedWay.get());
+  LOG_VART(averagedWay->getElementId());
 
-  RemoveWayByEid::removeWay(map, way1->getId());
-  RemoveWayByEid::removeWay(map, way2->getId());
+  // merge tags
+  LOG_VART(averagedWay->getTags().size());
+  Tags mergedTags =
+    TagMergerFactory::mergeTags(averagedWay->getTags(), way1->getTags(), ElementType::Way);
+  averagedWay->setTags(mergedTags);
+  LOG_VART(averagedWay->getTags().size());
+  mergedTags =
+    TagMergerFactory::mergeTags(averagedWay->getTags(), way2->getTags(), ElementType::Way);
+  averagedWay->setTags(mergedTags);
+  LOG_VART(averagedWay->getTags().size());
+  averagedWay->setStatus(Status::Conflated);
 
-  map->addWay(w);
+  //RemoveWayByEid::removeWay(map, way1->getId());
+  //RemoveWayByEid::removeWay(map, way2->getId());
 
-  // TODO: update replaced
+  map->addWay(averagedWay);
+
+  replaced.push_back(
+    std::pair<ElementId, ElementId>(way1->getElementId(), averagedWay->getElementId()));
+  replaced.push_back(
+    std::pair<ElementId, ElementId>(way2->getElementId(), averagedWay->getElementId()));
+  LOG_VART(replaced);
 
   return false;
 }

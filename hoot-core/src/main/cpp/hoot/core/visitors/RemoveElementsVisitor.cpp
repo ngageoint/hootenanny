@@ -130,7 +130,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
   }
   else
   {
-    LOG_DEBUG("Not removing element: " << e->getElementId());
+    LOG_TRACE("Not removing element: " << e->getElementId());
   }
   _numProcessed++;
 }

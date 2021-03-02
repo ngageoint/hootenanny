@@ -31,6 +31,7 @@
 #include <hoot/core/conflate/merging/MergerBase.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/visitors/LengthOfWaysVisitor.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot
 {
@@ -93,6 +94,11 @@ public:
 
   virtual QString toString() const override;
 
+  void setPairs(const std::set<std::pair<ElementId, ElementId>>& pairs) { _pairs = pairs; }
+  void setMatchedBy(const QString& matchedBy) { _matchedBy = matchedBy; }
+  void setSublineMatcher(const std::shared_ptr<SublineStringMatcher>& sublineMatcher)
+  { _sublineMatcher = sublineMatcher; }
+
 protected:
 
   ReviewMarker _reviewMarker;
@@ -103,6 +109,11 @@ protected:
   virtual const PairsSet& _getPairs() const override { return _pairs; }
 
   std::set<std::pair<ElementId, ElementId>> _pairs;
+
+  std::shared_ptr<SublineStringMatcher> _sublineMatcher;
+
+  // indicates which matcher matched the elements being processed by this merger
+  QString _matchedBy;
 
   /*
    * Return true if pair needs review.
@@ -120,7 +131,7 @@ private:
 
   /*
    * Returns true if the way directly connects the left and right ways. There is some tolerance
-   * for "directly". See ticket #951 for details.
+   * for "directly". See Redmine ticket #951 for details.
    */
   bool _directConnect(const ConstOsmMapPtr &map, WayPtr w) const;
 

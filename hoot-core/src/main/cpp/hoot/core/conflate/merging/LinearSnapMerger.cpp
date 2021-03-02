@@ -82,9 +82,9 @@ LinearSnapMerger::LinearSnapMerger() :
 LinearMergerAbstract(),
 _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations
-  (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations()),
-_matchedBy(HighwayMatch::MATCH_NAME)
+  (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations())
 {
+  //_matchedBy = HighwayMatch::MATCH_NAME;
   LOG_VART(_markAddedMultilineStringRelations);
 }
 
@@ -94,11 +94,11 @@ LinearSnapMerger::LinearSnapMerger(
 LinearMergerAbstract(),
 _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations
-  (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations()),
-_sublineMatcher(sublineMatcher),
-_matchedBy(HighwayMatch::MATCH_NAME)
+  (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations())
 {
   _pairs = pairs;
+  _sublineMatcher = sublineMatcher;
+  //_matchedBy = HighwayMatch::MATCH_NAME;
 
   LOG_VART(_markAddedMultilineStringRelations);
   LOG_VART(_pairs);

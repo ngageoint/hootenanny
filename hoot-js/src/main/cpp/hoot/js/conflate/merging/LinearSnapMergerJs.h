@@ -34,16 +34,11 @@
 // node.js
 #include <hoot/js/HootBaseJs.h>
 
-// Qt
-#include <QString>
-
 // Standard
 #include <memory>
 
 namespace hoot
 {
-
-class OsmMapOperation;
 
 class LinearSnapMergerJs : public HootBaseJs
 {

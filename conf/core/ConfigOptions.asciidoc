@@ -394,6 +394,7 @@ The value to compare with AttributeValueCriterion.
 The type of attribute to compare with AttributeValueCriterion. Valid key values are: changeset,
 timestamp, user, uid, or version.
 
+
 === autocorrect.options
 
 * Data Type: bool
@@ -1512,6 +1513,13 @@ conflatable by specific Hootenanny conflation routines is considered to have sim
 Tag similarity threshold (0.0 to 1.0) at or above which an polygon element not conflatable by
 specific Hootenanny conflation routines is considered to have similar tags.
 
+=== geometry.linear.merger.default
+
+* Data Type: string
+* Default Value: `hoot::LinearSnapMerger`
+
+TODO
+
 === geometry.modifier.rules.file
 
 * Data Type: string
@@ -1660,13 +1668,6 @@ for match. For example:
 
 * "highway=primary" vs "highway=secondary" has a diff of 0.2.
 * "highway=primary" vs "highway=footway" has a diff of 0.67.
-
-=== highway.merge.tags.only
-
-* Data Type: bool
-* Default Value: `false`
-
-If true, road conflation merges tag changes into the reference only and makes no geometry changes.
 
 === highway.miss.threshold
 

@@ -46,7 +46,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(Merger, LinearTagOnlyMerger)
 
 LinearTagOnlyMerger::LinearTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-                                           std::shared_ptr<PartialNetworkMerger> networkMerger) :
+                                         std::shared_ptr<PartialNetworkMerger> networkMerger) :
 LinearSnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
 _performBridgeGeometryMerging(
   ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
@@ -111,7 +111,7 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
   LOG_TRACE("LinearTagOnlyMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
   // If just one of the features is a bridge, we want the bridge feature to separate from the road
-  // feature its being merged with. So, use a geometry AND tag merger.
+  // feature its being merged with. So, use a geometry merger AND a tag merger.
 
   std::vector<ConstElementPtr> elements;
   elements.push_back(e1);
