@@ -2668,7 +2668,7 @@ tds61 = {
           if (Object.keys(notUsedTags).length > 0 && tds61.configOut.OgrNoteExtra == 'attribute')
           {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
+            returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
           }
 
           // Now set the FCSubtype

@@ -2313,7 +2313,8 @@ mgcp = {
           if (Object.keys(notUsedTags).length > 0 && mgcp.configOut.OgrNoteExtra == 'attribute')
           {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
+            // attrs.TXT = translate.appendValue(attrs.TXT,tStr,';');
+            returnData[i]['attrs']['TXT'] = translate.appendValue(returnData[i]['attrs']['TXT'],tStr,';');
           }
 
           returnData[i]['tableName'] = mgcp.layerNameLookup[gFcode.toUpperCase()];

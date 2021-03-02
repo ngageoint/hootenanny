@@ -981,6 +981,19 @@ print('Many: Start');
       }
       break;
 
+    case 'AF040': // Crane
+        if (tags['transport:type'] == 'railway' && !(tags.railway))
+        {
+          tags.railway = 'rail';
+          delete tags['transport:type'];
+        }
+        if (tags['transport:type'] == 'road' && !(tags.highway))
+        {
+          tags.highway = 'road';
+          delete tags['transport:type'];
+        }
+      break;
+
     // Fix up landuse tags
     case 'AL020':
       switch (tags.use) // Fixup the landuse tags
@@ -1352,6 +1365,13 @@ print('Many: Start');
       delete tags.man_made;
     }
 
+    // Cranes
+    if (tags.man_made == 'crane')
+    {
+      attrs.F_CODE = 'AF040'; // Crane
+      if (tags.railway) tags['transport:type'] = 'railway';
+      if (tags.highway) tags['transport:type'] = 'road';
+    } // End Cranes
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
@@ -1714,6 +1734,13 @@ print('Many: Start');
         delete tags.junction;
       }
     } // End AP020 not Point
+
+    // Railway Crossings.
+    if (tags.railway == 'crossing_box')
+    {
+      // Push this to Crossing but try and keep the tags
+      attrs.F_CODE = 'AQ062'; // Crossing
+    }
 
     // Cables
     if (tags.man_made == 'submarine_cable')
@@ -2720,7 +2747,7 @@ print('Many: Start');
           if (Object.keys(notUsedTags).length > 0 && tds70.configOut.OgrNoteExtra == 'attribute')
           {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
+            returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
           }
 
           // Now set the FCSubtype.
