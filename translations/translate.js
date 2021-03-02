@@ -375,7 +375,7 @@ translate = {
             continue;
           }
 
-          hoot.logDebug('Lookup value not found for column:: (' + key + '=' + value + ')');
+          hoot.logDebug('Lookup value not found for column:: ' + key + '=' + value);
 
           // The following is used for export. If we have an attribute value that can't
           // find a rule for, we add it to the OTH Field.
@@ -414,7 +414,7 @@ translate = {
         }
         else
         {
-          if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: (' + key + '=' + value + ')');
+          if (config.getOgrDebugLookupcolumn() == 'true') hoot.logTrace('Column not found:: ' + key + '=' + value);
         }
       } // End !key in lookup
     } // End for key in inList

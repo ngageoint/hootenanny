@@ -173,7 +173,7 @@ fcodeCommon = {
       ['F_CODE','AM080','man_made','water_tower'], // Water Tower
       ['F_CODE','AN010','railway','rail'], // Railway
       ['F_CODE','AN050','sidetrack','yes'], // Railway Sidetrack
-      ['F_CODE','AN060','service','yard'], // Railway Yard
+      ['F_CODE','AN060','landuse','railway'], // Railway Yard
       ['F_CODE','AN075','railway','turntable'], // Railway Turntable
       ['F_CODE','AN076','railway','roundhouse'], // Roundhouse
       ['F_CODE','AN080','railway','switch'], // Railway Signal
