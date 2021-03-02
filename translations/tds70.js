@@ -230,7 +230,6 @@ tds70 = {
     // print('##########');
 
     return newSchema;
-
   }, // End getDbSchema
 
   // validateAttrs: Clean up the supplied attr list by dropping anything that should not be part of the

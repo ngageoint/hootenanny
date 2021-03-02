@@ -2234,7 +2234,7 @@ cleanAttrs : function (attrs)
     } // End Wetlands
 
     // Undergrowth Density is not in Brush (EB070)
-    if (attrs.F_CODE !== 'EB070' || notUsedTags['undergrowth:density'])
+    if (attrs.F_CODE !== 'EB070' && notUsedTags['undergrowth:density'])
     {
       if (!(attrs.DMBL || attrs.DMBU))
       {
