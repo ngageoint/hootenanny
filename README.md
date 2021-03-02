@@ -59,10 +59,7 @@ A conflation workflow defines the manner in which two maps are merged together. 
   * There is an option available to transfer tags to existing features in map A from matching features in map B where there is feature overlap in addition to generating the differential output.
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to existing geometries_
   * Conflate map A with B where only tags are transferred from B to matching features in A and no changes are made to A's geometries.
-  * Use this type of conflation when the first dataset's geometry is superior to a second dataset, but the attributes of the second dataset are superior to that of the first dataset. 
-  * This is similar to Differential Conflation With Tags but does not have the capability
-of adding new non-conflicting featues.
-  * This output of this differs from Differential Conflation with Tags in that it does not output a geometry differential that includes features from the secondary dataset.
+  * Use this type of conflation when the first dataset's geometry is superior to a second dataset, but the attributes of the second dataset are superior to that of the first dataset.
   
 # Attribute Translation
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports the following schemas: 
