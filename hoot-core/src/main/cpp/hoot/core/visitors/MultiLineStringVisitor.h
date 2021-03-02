@@ -31,7 +31,7 @@
 #include <geos/geom/MultiLineString.h>
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/ElementProvider.h>
 
 // standard

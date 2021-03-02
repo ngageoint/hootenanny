@@ -37,7 +37,7 @@ tds70 = {
   // getDbSchema - Load the standard schema or modify it into the TDS structure.
   getDbSchema: function() {
     tds70.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-    tds70.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+    tds70.attrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 
     // Warning: This is <GLOBAL> so we can get access to it from other functions
     tds70.rawSchema = tds70.schema.getDbSchema();
@@ -49,11 +49,11 @@ tds70 = {
     if (config.getOgrNoteExtra() == 'file') tds70.rawSchema = translate.addExtraFeature(tds70.rawSchema);
 
     // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
-    tds70.AttrLookup = translate.makeAttrLookup(tds70.rawSchema);
+    tds70.attrLookup = translate.makeAttrLookup(tds70.rawSchema);
 
     // Debug:
-    // print("tds70.AttrLookup");
-    // translate.dumpLookup(tds70.AttrLookup);
+    // print("tds70.attrLookup");
+    // translate.dumpLookup(tds70.attrLookup);
     // print("##########");
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
@@ -194,12 +194,12 @@ tds70 = {
       } // End newSchema loop
     } // end tds70.rawSchema loop
 
-    // Create a lookup table of TDS structures attributes. Note this is <GLOBAL>
-    tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
+    // Create a lookup table of TDS structures attributes.
+    tds70.thematicLookup = translate.makeThematicAttrLookup(newSchema);
 
     // Debug:
-    // print("tdsAttrLookup");
-    // translate.dumpLookup(tdsAttrLookup);
+    // print("thematicLookup");
+    // translate.dumpLookup(tds70.thematicLookup);
     // print('##########');
 
     // Add the ESRI Feature Dataset name to the schema
@@ -238,7 +238,7 @@ tds70 = {
   validateAttrs: function(geometryType,attrs,notUsed,transMap) {
     // First, use the lookup table to quickly drop all attributes that are not part of the feature.
     // This is quicker than going through the Schema due to the way the Schema is arranged
-    var attrList = tds70.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+    var attrList = tds70.attrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
     var othList = {};
 
@@ -371,17 +371,17 @@ tds70 = {
   }, // End validateAttrs
 
 
-  // validateTDSAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
-  validateTDSAttrs: function(gFcode, attrs) {
-    var tdsAttrList = tdsAttrLookup[tds70.rules.thematicGroupList[gFcode]];
-    var AttrList = tds70.AttrLookup[gFcode];
+  // validateThematicAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
+  validateThematicAttrs: function(gFcode, attrs) {
+    var tdsAttrList = tds70.thematicLookup[tds70.rules.thematicGroupList[gFcode]];
+    var attrList = tds70.attrLookup[gFcode];
 
     for (var i = 0, len = tdsAttrList.length; i < len; i++)
     {
-      if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
-      //if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
+      if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
+      //if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = null;
     }
-  }, // End validateTDSAttrs
+  }, // End validateThematicAttrs
 
 
   // Sort out if we need to return more than one feature.
@@ -2664,7 +2664,7 @@ print('Many: Start');
     // push the feature to o2s layer
     var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-    if (!(tds70.AttrLookup[gFcode.toUpperCase()]))
+    if (!(tds70.attrLookup[gFcode.toUpperCase()]))
     {
       // For the UI: Throw an error and die if we don't have a valid feature
       if (tds70.configOut.getOgrThrowError == 'true')
@@ -2738,7 +2738,7 @@ print('Many: Start');
       {
         // Make sure that we have a valid FCODE
         var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-        if (tds70.AttrLookup[gFcode.toUpperCase()])
+        if (tds70.attrLookup[gFcode.toUpperCase()])
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           tds70.validateAttrs(geometryType,returnData[i]['attrs'], notUsedTags,transMap);
@@ -2761,7 +2761,7 @@ print('Many: Start');
           if (tds70.configOut.OgrThematicStructure == 'true')
           {
             returnData[i]['tableName'] = tds70.rules.thematicGroupList[gFcode];
-            tds70.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+            tds70.validateThematicAttrs(gFcode, returnData[i]['attrs']);
           }
           else
           {

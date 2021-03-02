@@ -37,8 +37,11 @@ namespace hoot
 
 /**
  * Recursively removes all elements that do not contain any information and are not in use by
-   another element (e.g. only contains UUID and source, but not FCODE equivalent or other
-   informative tags).
+ * another element (e.g. only contains UUID and source, but not FCODE equivalent or other
+ * informative tags).
+ *
+ * No need to implement FilteredByGeometryTypeCriteria or ElementConflatableCheck here, as this op
+ * only works against elements with no type.
  */
 class NoInformationElementRemover : public OsmMapOperation
 {

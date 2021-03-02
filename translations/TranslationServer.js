@@ -425,7 +425,7 @@ var ogr2osm = function(params) {
         createUuid = hoot.UuidHelper.createUuid;
         var osm = fcodeLookup[params.translation].toOSM({
             'Feature Code': params.fcode
-        }, '', '');
+        }, '', params.geom || '');
 
         return osm;
     }

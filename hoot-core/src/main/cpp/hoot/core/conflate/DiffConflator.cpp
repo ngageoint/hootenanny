@@ -60,6 +60,8 @@
 #include <hoot/core/ops/WayJoinerOp.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/io/OsmChangesetFileWriter.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/conflate/ConflateInfoCache.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -115,6 +117,7 @@ void DiffConflator::apply(OsmMapPtr& map)
   _reset();
   // Store the map, as we might need it for tag diff later.
   _map = map;
+  std::shared_ptr<ConflateInfoCache> conflateInfoCache(new ConflateInfoCache(map));
 
   // If we skip this part, then any unmatchable data will simply pass through to output, which can
   // be useful during debugging.
@@ -160,13 +163,21 @@ void DiffConflator::apply(OsmMapPtr& map)
   _removeMatches(Status::Unknown2);
   MemoryUsageChecker::getInstance().check();
 
+  // Eventually, we could extend this snapping to all linear feature types.
   if (ConfigOptions().getDifferentialSnapUnconnectedRoads())
   {
-    // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
-    // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
-    // anymore.
-    _numSnappedWays = _snapSecondaryRoadsBackToRef();
-    MemoryUsageChecker::getInstance().check();
+    if (conflateInfoCache->elementCriterionInUseByActiveMatcher(HighwayCriterion::className()))
+    {
+      // Let's try to snap disconnected ref2 roads back to ref1 roads. This has to done before
+      // dumping the ref elements in the matches, or the roads we need to snap back to won't be there
+      // anymore.
+      _numSnappedWays = _snapSecondaryRoadsBackToRef();
+      MemoryUsageChecker::getInstance().check();
+    }
+    else
+    {
+      LOG_TRACE("Skipping road snapping as conflation is not configured for road features.")
+    }
   }
 
   if (ConfigOptions().getDifferentialRemoveReferenceData())

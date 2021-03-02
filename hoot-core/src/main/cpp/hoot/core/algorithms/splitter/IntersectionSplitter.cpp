@@ -109,6 +109,8 @@ void IntersectionSplitter::_mapNodesToWays()
 
 void IntersectionSplitter::_removeWayFromMap(const std::shared_ptr<Way>& way)
 {
+  LOG_TRACE("Removing " << way->getElementId() << " from map...");
+
   long wId = way->getId();
 
   const std::vector<long>& nodes = way->getNodeIds();
@@ -185,8 +187,9 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
       break;
     }
   }
+  LOG_VART(firstIndex);
 
-  // if the first index wasn't an endpoint.
+  // if the first index wasn't an endpoint
   if (firstIndex != -1)
   {
     QList<long> ways = _nodeToWays.values(nodeId);
@@ -197,14 +200,19 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
     {
       long compWayId = *it;
       LOG_VART(compWayId);
-      //  Don't compare it against itself
+      //  Don't compare it against itself.
       if (wayId == compWayId)
         continue;
 
       std::shared_ptr<Way> comp = _map->getWay(compWayId);
       LOG_VART(comp.get());
+      if (!comp)
+      {
+        continue;
+      }
       const std::vector<long>& compIds = comp->getNodeIds();
       long idx = comp->getNodeIndex(nodeId);
+      LOG_VART(idx);
 
       //  Endpoints of the other way should be split
       if (idx < 1 || idx > (long)compIds.size() - 1)
@@ -216,11 +224,13 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         concurrent_count++;
     }
 
+    LOG_VART(concurrent_count);
     //  A split point is found when there is at least one non-concurrent way at this node
     if (concurrent_count < otherWays_count)
     {
       // split the way and remove it from the map
       WayLocation wl(_map, way, firstIndex, 0.0);
+      LOG_VART(wl.isValid());
       vector<std::shared_ptr<Way>> splits = WaySplitter::split(_map, way, wl);
 
       // if a split occurred.
@@ -230,6 +240,7 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
 
         LOG_VART(way->getElementId());
         LOG_VART(way->getStatus());
+        LOG_VART(splits[0].get());
         LOG_VART(splits[0]->getElementId());
 
         const ElementId splitWayId = way->getElementId();
@@ -237,11 +248,12 @@ void IntersectionSplitter::_splitWay(long wayId, long nodeId)
         QList<ElementPtr> newWays;
         foreach (const std::shared_ptr<Way>& w, splits)
         {
+          LOG_VART(w.get());
           newWays.append(w);
         }
 
-        // make sure any ways that are part of relations continue to be part of those relations after
-        // they're split.
+        // Make sure any ways that are part of relations continue to be part of those relations
+        // after they're split.
         _map->replace(way, newWays);
 
         _removeWayFromMap(way);

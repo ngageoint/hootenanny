@@ -41,6 +41,7 @@ HOOT_REGISTER_EXCEPTION(InternalErrorException)
 HOOT_REGISTER_EXCEPTION(NeedsReviewException)
 HOOT_REGISTER_EXCEPTION(UnsupportedException)
 HOOT_REGISTER_EXCEPTION(NotImplementedException)
+HOOT_REGISTER_EXCEPTION(EmptyMapInputException)
 
 HootExceptionThrower& HootExceptionThrower::getInstance()
 {

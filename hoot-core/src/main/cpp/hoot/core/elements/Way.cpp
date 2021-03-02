@@ -28,7 +28,7 @@
 #include "Way.h"
 
 // Hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/geometry/GeometryUtils.h>

@@ -28,8 +28,8 @@
 
 // hoot
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/linear/LinearSnapMerger.h>
-#include <hoot/core/conflate/linear/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearSnapMerger.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>

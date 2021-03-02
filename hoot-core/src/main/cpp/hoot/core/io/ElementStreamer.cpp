@@ -27,7 +27,7 @@
 #include "ElementStreamer.h"
 
 // Hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>

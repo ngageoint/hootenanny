@@ -28,7 +28,7 @@
 #define LINEAR_SNAP_MERGER_H
 
 // Hoot
-#include <hoot/core/conflate/linear/LinearMergerAbstract.h>
+#include <hoot/core/conflate/merging/LinearMergerAbstract.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 
 namespace hoot
@@ -37,7 +37,7 @@ namespace hoot
 class WaySublineCollection;
 
 /**
- * Merges linear geometries and tags
+ * Merges linear geometries and tags by snapping the secondary geometry to the reference geometry
  *
  * Note that this was originally written specifically for roads, but now is used by several linear
  * script routines, including railway and river.
@@ -87,6 +87,9 @@ protected:
 
 private:
 
+  // for white box testing
+  friend class LinearSnapMergerTest;
+
   static int logWarnCount;
 
   // indicates which matcher matched the elements being processed by this merger
@@ -124,9 +127,6 @@ private:
   bool _doesWayConnect(long node1, long node2, const ConstWayPtr& w) const;
 
   void _updateScrapParent(const OsmMapPtr& map, long id, const ElementPtr& scrap);
-
-  // for white box testing.
-  friend class LinearSnapMergerTest;
 };
 
 typedef std::shared_ptr<LinearSnapMerger> LinearSnapMergerPtr;

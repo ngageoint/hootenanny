@@ -76,8 +76,7 @@ void AddressScoreExtractor::setConfiguration(const Settings& conf)
   _cacheEnabled = config.getAddressScorerEnableCaching();
   if (_cacheEnabled)
   {
-    // Sharing this setting with POI/Poly's max cache sizes for now.
-    const int maxCacheSize = config.getPoiPolygonMaxSizePerCache();
+    const int maxCacheSize = config.getConflateInfoMaxSizePerCache();
     if (maxCacheSize > 0)
     {
       _addressesCache.setMaxCost(maxCacheSize);

@@ -58,6 +58,8 @@ public:
   virtual QString getClassName() const override { return className(); }
 
   virtual bool supportsSpecificConflation() const { return true; }
+
+  virtual QStringList getChildCriteria() const;
 };
 
 }

@@ -43,6 +43,7 @@
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 // Standard
 #include <iostream>
@@ -83,6 +84,17 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     {
       continue;
     }
+    // Since this class operates on elements with generic types, an additional check must be
+    // performed here during conflation to enure we don't modify any element not associated with
+    // and active conflate matcher in the current conflation configuration.
+    else if (_conflateInfoCache &&
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
+      continue;
+    }
     vector<long> newNodes;
     const vector<long>& nodes = w->getNodeIds();
     for (size_t i = 0; i < nodes.size(); i++)
@@ -102,6 +114,14 @@ void DuplicateWayRemover::apply(OsmMapPtr& map)
     const WayPtr& w = it->second;
     if (!w)
     {
+      continue;
+    }
+    else if (_conflateInfoCache &&
+             !_conflateInfoCache->elementCanBeConflatedByActiveMatcher(w, className()))
+    {
+      LOG_TRACE(
+        "Skipping processing of " << w->getElementId() << " as it cannot be conflated by any " <<
+        "actively configured conflate matcher...");
       continue;
     }
     // If the way isn't in the map anymore (deleted as part of this process) or the way is an

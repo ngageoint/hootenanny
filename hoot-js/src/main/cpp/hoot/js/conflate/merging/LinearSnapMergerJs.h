@@ -28,7 +28,7 @@
 #define LINEAR_SNAP_MERGER_JS_H
 
 // hoot
-#include <hoot/core/conflate/linear/LinearSnapMerger.h>
+#include <hoot/core/conflate/merging/LinearSnapMerger.h>
 #include <hoot/js/io/DataConvertJs.h>
 
 // node.js

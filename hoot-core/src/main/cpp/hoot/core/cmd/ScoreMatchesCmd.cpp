@@ -32,7 +32,7 @@
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/scoring/MatchComparator.h>
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
 #include <hoot/core/util/Log.h>
@@ -185,10 +185,10 @@ public:
 
       LOG_INFO("Applying pre conflation operations...");
       LOG_VART(ConfigOptions().getConflatePreOps());
-      NamedOp(ConfigOptions().getConflatePreOps()).apply(copy);
+      OpExecutor(ConfigOptions().getConflatePreOps()).apply(copy);
       UnifyingConflator(mt).apply(copy);
       LOG_INFO("Applying post conflation operations...");
-      NamedOp(ConfigOptions().getConflatePostOps()).apply(copy);
+      OpExecutor(ConfigOptions().getConflatePostOps()).apply(copy);
 
       comparator.evaluateMatches(maps[i], copy);
 

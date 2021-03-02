@@ -33,6 +33,7 @@
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
+#include <hoot/core/criterion/poi-polygon/PoiPolygonPolyWayNodeCriterion.h>
 
 using namespace std;
 
@@ -90,6 +91,13 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
 
   LOG_VART(isPoly);
   return isPoly;
+}
+
+QStringList PoiPolygonPolyCriterion::getChildCriteria() const
+{
+  QStringList criteria;
+  criteria.append(PoiPolygonPolyWayNodeCriterion::className());
+  return criteria;
 }
 
 }

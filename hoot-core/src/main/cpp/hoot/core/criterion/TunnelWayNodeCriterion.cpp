@@ -47,9 +47,4 @@ WayNodeCriterion(map)
   _parentCriterion.reset(new TunnelCriterion());
 }
 
-void TunnelWayNodeCriterion::setOsmMap(const OsmMap* map)
-{
-  _map = map->shared_from_this();
-}
-
 }

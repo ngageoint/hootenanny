@@ -28,7 +28,7 @@
 #define ELEMENT_ID_TO_TAG_VALUE_MAPPER_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/criterion/ElementCriterionConsumer.h>
 

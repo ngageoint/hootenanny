@@ -37,7 +37,7 @@ tds61 = {
   // getDbSchema - Load the standard schema or modify it into the TDS structure.
   getDbSchema: function() {
     tds61.layerNameLookup = {}; // <GLOBAL> Lookup table for converting an FCODE to a layername
-    tds61.AttrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
+    tds61.attrLookup = {}; // <GLOBAL> Lookup table for checking what attrs are in an FCODE
 
     // Warning: This is <GLOBAL> so we can get access to it from other functions
     tds61.rawSchema = tds61.schema.getDbSchema();
@@ -48,32 +48,12 @@ tds61 = {
     // Add empty "extra" feature layers if needed
     if (config.getOgrNoteExtra() == 'file') tds61.rawSchema = translate.addExtraFeature(tds61.rawSchema);
 
-    /*
-        // This has been removed since we no longer have text enumerations in the schema
-
-        // Go go through the Schema and fix/add attributes
-        for (var i=0, slen = tds61.rawSchema.length; i < slen; i++)
-        {
-            // Cycle throught he columns and "edit" the attribute fields with Text Enumerations
-            // We convert these to plain String types and avoid having to handle String enumerations
-            for (var j=0, clen = tds61.rawSchema[i].columns.length; j < clen; j++)
-            {
-                // exploit the Object and avoid a Switch :-)
-                if (tds61.rawSchema[i].columns[j].name in {'ZI004_RCG':1,'ZSAX_RS0':1,'ZI020_IC2':1})
-                {
-                    tds61.rawSchema[i].columns[j].type = "String";
-                    delete tds61.rawSchema[i].columns[j].enumerations;
-                }
-            } // End For tds61.rawSchema.columns.length
-        } // End For tds61.rawSchema.length
-     */
-
     // Build the TDS fcode/attrs lookup table. Note: This is <GLOBAL>
-    tds61.AttrLookup = translate.makeAttrLookup(tds61.rawSchema);
+    tds61.attrLookup = translate.makeAttrLookup(tds61.rawSchema);
 
     // Debug:
-    // print("tds61.AttrLookup");
-    // translate.dumpLookup(tds61.AttrLookup);
+    // print("tds61.attrLookup");
+    // translate.dumpLookup(tds61.attrLookup);
 
     // Decide if we are going to use TDS structure or 1 FCODE / File
     // if we DON't want the new structure, just return the tds61.rawSchema
@@ -213,12 +193,12 @@ tds61 = {
       } // End newSchema loop
     } // end tds61.rawSchema loop
 
-    // Create a lookup table of TDS structures attributes. Note this is <GLOBAL>
-    tdsAttrLookup = translate.makeTdsAttrLookup(newSchema);
+    // Create a lookup table of TDS structures attributes.
+    tds61.thematicLookup = translate.makeThematicAttrLookup(newSchema);
 
     // Debug:
-    // print("tdsAttrLookup");
-    // translate.dumpLookup(tdsAttrLookup);
+    // print("ttds61.dsAttrLookup");
+    // translate.dumpLookup(tds61.thematicLookup);
 
     // Add the ESRI Feature Dataset name to the schema
     //  newSchema = translate.addFdName(newSchema,'TDS');
@@ -255,7 +235,7 @@ tds61 = {
   {
     // First, use the lookup table to quickly drop all attributes that are not part of the feature.
     // This is quicker than going through the Schema due to the way the Schema is arranged
-    var attrList = tds61.AttrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
+    var attrList = tds61.attrLookup[geometryType.toString().charAt(0) + attrs.F_CODE];
 
     var othList = {};
 
@@ -389,17 +369,16 @@ tds61 = {
   }, // End validateAttrs
 
 
-  // validateTDSAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
-  validateTDSAttrs: function(gFcode, attrs) {
-
-    var tdsAttrList = tdsAttrLookup[tds61.rules.thematicGroupList[gFcode]];
-    var AttrList = tds61.AttrLookup[gFcode];
+  // validateThematicAttrs - Clean up the TDS format attrs.  This sets all of the extra attrs to be "undefined"
+  validateThematicAttrs: function(gFcode, attrs) {
+    var tdsAttrList = tds61.thematicLookup[tds61.rules.thematicGroupList[gFcode]];
+    var attrList = tds61.attrLookup[gFcode];
 
     for (var i = 0, len = tdsAttrList.length; i < len; i++)
     {
-      if (AttrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
+      if (attrList.indexOf(tdsAttrList[i]) == -1) attrs[tdsAttrList[i]] = undefined;
     }
-  }, // End validateTDSAttrs
+  }, // End validateThematicAttrs
 
 
   // Sort out if we need to return more than one feature.
@@ -2644,7 +2623,7 @@ tds61 = {
     // push the feature to o2s layer
     var gFcode = geometryType.toString().charAt(0) + attrs.F_CODE;
 
-    if (tds61.AttrLookup[gFcode.toUpperCase()])
+    if (tds61.attrLookup[gFcode.toUpperCase()])
     {
       // Check if we need to make more features
       // NOTE: This returns the structure we are going to send back to Hoot:  {attrs: attrs, tableName: 'Name'}
@@ -2659,7 +2638,7 @@ tds61 = {
       {
         // Make sure that we have a valid FCODE
         var gFcode = gType + returnData[i]['attrs']['F_CODE'];
-        if (tds61.AttrLookup[gFcode.toUpperCase()])
+        if (tds61.attrLookup[gFcode.toUpperCase()])
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           tds61.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
@@ -2682,7 +2661,7 @@ tds61 = {
           if (tds61.configOut.OgrThematicStructure == 'true')
           {
             returnData[i]['tableName'] = tds61.rules.thematicGroupList[gFcode];
-            tds61.validateTDSAttrs(gFcode, returnData[i]['attrs']);
+            tds61.validateThematicAttrs(gFcode, returnData[i]['attrs']);
           }
           else
           {

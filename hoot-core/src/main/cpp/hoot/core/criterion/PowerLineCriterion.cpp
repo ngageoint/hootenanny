@@ -29,6 +29,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/criterion/PowerLineWayNodeCriterion.h>
 
 namespace hoot
 {
@@ -47,6 +48,13 @@ bool PowerLineCriterion::isSatisfied(const ConstElementPtr& e) const
     }
   }
   return false;
+}
+
+QStringList PowerLineCriterion::getChildCriteria() const
+{
+  QStringList criteria;
+  criteria.append(PowerLineWayNodeCriterion::className());
+  return criteria;
 }
 
 }

@@ -44,6 +44,7 @@ public:
   class Edge
   {
   public:
+
     Edge(long from, long to, double weight)
     {
       this->from = from;
