@@ -151,7 +151,7 @@ tgs/src/main/cpp/tgs/TgsConfig.h: config.h
 	/bin/sed -r -e 's/^(#[ \t]*define) /\1 TGS_/' config.h >> tgs/src/main/cpp/tgs/TgsConfig.h
 	echo "#endif" >> tgs/src/main/cpp/tgs/TgsConfig.h
 
-# We now have different versions of the NFDD Schema that are built from Excel files:
+# We now have different versions of the TDS Schema that are built from Excel files:
 # LTDSv40.csv.gz - Local TDS v4.0
 # SUTDSv40.csv.gz - Specialized Urban TDS v4.0
 # TDSv40.csv.gz - Full TDS v4.0
