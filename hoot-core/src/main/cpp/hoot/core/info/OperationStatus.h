@@ -33,18 +33,19 @@ namespace hoot
 {
 
 /**
- * Interface to describe information about an operation performed on data.  e.g. OsmMapOperation,
+ * Interface used to describe information about an operation performed on data.  e.g. OsmMapOperation,
  * ElementVisitor, etc.
  *
- * Implementing this interface may not make sense on some operations.  If desired, implementers
+ * Implementing this interface may not make sense on some operations. If desired, implementers
  * can force a subset of any of the status messages to not be displayed by returning an empty
- * string.
+ * string. Note that this is not a true interface in that parts are implemented. If we ever have
+ * multiple inheritance issues with children, it can be converted to a true interface.
  */
 class OperationStatus
 {
 public:
 
-  OperationStatus() : _numAffected(0), _numProcessed(0) { }
+  OperationStatus() : _numAffected(0), _numProcessed(0) {}
   virtual ~OperationStatus() = default;
 
   /**
@@ -81,7 +82,6 @@ protected:
   long _numAffected;
   /** Number of elements the operation processed in total */
   long _numProcessed;
-
 };
 
 }

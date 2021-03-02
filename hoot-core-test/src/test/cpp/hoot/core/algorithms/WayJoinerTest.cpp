@@ -35,7 +35,7 @@
 #include <hoot/core/conflate/UnifyingConflator.h>
 #include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/RemoveTagsVisitor.h>
@@ -128,12 +128,12 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyTestB.osm", map);
 
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePreOps()).apply(map);
 
     UnifyingConflator conflator;
     conflator.apply(map);
 
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePostOps()).apply(map);
     MapProjector::projectToWgs84(map);
 
     RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));
@@ -158,7 +158,7 @@ public:
     reader.setDefaultStatus(Status::Unknown2);
     reader.read("test-files/ToyTestB.osm", map);
 
-    NamedOp(ConfigOptions().getConflatePreOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePreOps()).apply(map);
 
     UnifyingConflator conflator;
     Settings conf;
@@ -166,7 +166,7 @@ public:
     conf.set(ConfigOptions::getWayJoinerKey(), WayJoinerAdvanced::className());
     conflator.apply(map);
 
-    NamedOp(ConfigOptions().getConflatePostOps()).apply(map);
+    OpExecutor(ConfigOptions().getConflatePostOps()).apply(map);
     MapProjector::projectToWgs84(map);
 
     RemoveTagsVisitor hashRemover(QStringList(MetadataTags::HootHash()));

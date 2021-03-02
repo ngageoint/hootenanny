@@ -66,6 +66,8 @@ public:
 
   virtual bool supportsSpecificConflation() const { return true; }
 
+  virtual QStringList getChildCriteria() const;
+
 private:
 
   ConstOsmMapPtr _map;

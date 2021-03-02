@@ -56,6 +56,12 @@ namespace hoot
  * Additionally, this class can be configured to mark any snapped roads as needing review or mark
  * them for review without snapping them.
  *
+ * Not implementing ElementConflatableCheck here yet, since the only time this op is currently used
+ * in the conflate pipeline is for Differential Conflation when roads are configured to be snapped.
+ * DiffConflator already has a check to skip snapping if a road matcher isn't configured. If this
+ * class is ever added to the default conflate pipeline, then it would need to perform elemnt
+ * conflatable checks.
+ *
  * *Possible* future enhancements:
  *
  * - If a way is snapped to another way and the ways end up being parallel and overlap, snapping

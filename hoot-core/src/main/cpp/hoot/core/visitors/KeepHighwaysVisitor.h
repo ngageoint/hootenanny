@@ -28,7 +28,7 @@
 #define KEEPHIGHWAYSVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 
 namespace hoot

@@ -28,7 +28,7 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/MapProjector.h>
@@ -208,7 +208,7 @@ void PertyOp::apply(std::shared_ptr<OsmMap>& map)
   OsmMapWriterFactory::writeDebugMap(map, "perty-after-perty-op");
 
   // apply any custom perturbation ops
-  NamedOp namedOps(_namedOps);
+  OpExecutor namedOps(_namedOps);
   namedOps.setConfiguration(_settings);
   namedOps.apply(map);
 }

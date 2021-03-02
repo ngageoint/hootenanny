@@ -45,6 +45,7 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/conflate/ConflateUtils.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>
@@ -116,6 +117,19 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
       if (!critName.isEmpty())
       {
         LOG_VART(critName);
+
+        // Element criteria are used to control what gets rubbersheeted at conflate time. An
+        // additional check is done here against the conflate configuration to ensure we don't
+        // rubbersheet any elements we're not conflating.
+        if (_conflateInfoCache &&
+            !_conflateInfoCache->elementCriterionInUseByActiveMatcher(critName))
+        {
+          LOG_TRACE(
+            "Excluding " << critName << " filter due it not being in use by an active conflate " <<
+            "matcher.");
+          continue;
+        }
+
         ElementCriterionPtr crit =
           std::shared_ptr<ElementCriterion>(
             Factory::getInstance().constructObject<ElementCriterion>(critName.trimmed()));
@@ -132,6 +146,7 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
           throw IllegalArgumentException(
             "RubberSheet ElementCrition must be a ConflatableElementCriterion or WayNodeCriterion.");
         }
+
         if (conflatableCrit)
         {
           const GeometryTypeCriterion::GeometryType geometryType =
@@ -159,66 +174,6 @@ void RubberSheet::setCriteria(const QStringList& criteria, OsmMapPtr map)
         _criteria->addCriterion(crit);
       }
     }
-  }
-}
-
-void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
-{
-  NodePtr from = _map->getNode(nid);
-  LOG_VART(from->getElementId());
-  // the status type we're searching for
-  Status s;
-  if (from->getStatus() == Status::Unknown1)
-  {
-    s = Status::Unknown2;
-  }
-  else if (from->getStatus() == Status::Unknown2)
-  {
-    s = Status::Unknown1;
-  }
-  else
-  {
-    throw HootException("Expected either Unknown1 or Unknown2.");
-  }
-  LOG_VART(s);
-
-  std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
-  double sum = 0.0;
-  list<Match>& matches = _matches[nid];
-  LOG_VART(matches.size());
-  vector<long> neighbors = _map->getIndex().findNodes(from->toCoordinate(), _searchRadius);
-  for (size_t i = 0; i < neighbors.size(); ++i)
-  {
-    NodePtr aNeighbor = _map->getNode(neighbors[i]);
-    LOG_VART(aNeighbor->getElementId());
-    NodeToWayMap::const_iterator it = n2w->find(neighbors[i]);
-    if (aNeighbor->getStatus() == s && it != n2w->end() && it->second.size() >= 2)
-    {
-      double score = _nm.scorePair(nid, neighbors[i]);
-      LOG_VART(QString::number(score, 'g', 10));
-
-      if (score > 0.0)
-      {
-        Match m;
-        m.nid1 = nid;
-        m.nid2 = neighbors[i];
-        m.score = score;
-        matches.push_back(m);
-        sum += m.score;
-      }
-    }
-  }
-  LOG_VART(matches.size());
-
-  // don't go any lower than 1.0, that would scale the values up and made it look unrealistically
-  // confident if there was only one intersection in a region.
-  sum = max(1.0, sum);
-  LOG_VART(sum);
-
-  for (list<Match>::iterator it = matches.begin(); it != matches.end(); ++it)
-  {
-    it->p = it->score / sum;
-    LOG_VART(it->p);
   }
 }
 
@@ -763,6 +718,66 @@ Coordinate RubberSheet::_translate(const Coordinate& c, Status s)
   }
 
   return Coordinate(c.x + (*delta)[0], c.y + (*delta)[1]);
+}
+
+void RubberSheet::_addIntersection(long nid, const set<long>& /*wids*/)
+{
+  NodePtr from = _map->getNode(nid);
+  LOG_VART(from->getElementId());
+  // the status type we're searching for
+  Status s;
+  if (from->getStatus() == Status::Unknown1)
+  {
+    s = Status::Unknown2;
+  }
+  else if (from->getStatus() == Status::Unknown2)
+  {
+    s = Status::Unknown1;
+  }
+  else
+  {
+    throw HootException("Expected either Unknown1 or Unknown2.");
+  }
+  LOG_VART(s);
+
+  std::shared_ptr<NodeToWayMap> n2w = _map->getIndex().getNodeToWayMap();
+  double sum = 0.0;
+  list<Match>& matches = _matches[nid];
+  LOG_VART(matches.size());
+  vector<long> neighbors = _map->getIndex().findNodes(from->toCoordinate(), _searchRadius);
+  for (size_t i = 0; i < neighbors.size(); ++i)
+  {
+    NodePtr aNeighbor = _map->getNode(neighbors[i]);
+    LOG_VART(aNeighbor->getElementId());
+    NodeToWayMap::const_iterator it = n2w->find(neighbors[i]);
+    if (aNeighbor->getStatus() == s && it != n2w->end() && it->second.size() >= 2)
+    {
+      double score = _nm.scorePair(nid, neighbors[i]);
+      LOG_VART(QString::number(score, 'g', 10));
+
+      if (score > 0.0)
+      {
+        Match m;
+        m.nid1 = nid;
+        m.nid2 = neighbors[i];
+        m.score = score;
+        matches.push_back(m);
+        sum += m.score;
+      }
+    }
+  }
+  LOG_VART(matches.size());
+
+  // don't go any lower than 1.0, that would scale the values up and made it look unrealistically
+  // confident if there was only one intersection in a region.
+  sum = max(1.0, sum);
+  LOG_VART(sum);
+
+  for (list<Match>::iterator it = matches.begin(); it != matches.end(); ++it)
+  {
+    it->p = it->score / sum;
+    LOG_VART(it->p);
+  }
 }
 
 void RubberSheet::_writeInterpolator(

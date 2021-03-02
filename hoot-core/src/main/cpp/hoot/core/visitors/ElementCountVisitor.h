@@ -28,7 +28,7 @@
 #define ELEMENTCOUNTVISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/SingleStatistic.h>
 
 namespace hoot

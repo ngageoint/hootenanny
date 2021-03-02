@@ -33,6 +33,7 @@
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 namespace hoot
 {
@@ -44,7 +45,8 @@ namespace hoot
  * duplicated nodes appears to be in the conflation routines somewhere and should eventually be
  * found and fixed.
  */
-class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsumer
+class RemoveDuplicateWayNodesVisitor : public ElementVisitor, public OsmMapConsumer,
+  public ConflateInfoCacheConsumer
 {
 public:
 
@@ -83,9 +85,16 @@ public:
 
   virtual QString getClassName() const override { return className(); }
 
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
+
 private:
 
   OsmMapPtr _map;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 };
 
 }

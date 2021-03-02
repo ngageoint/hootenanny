@@ -35,7 +35,7 @@
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 #include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/scoring/MatchScoringMapPreparer.h>
@@ -256,16 +256,9 @@ std::shared_ptr<MatchComparator> PertyMatchScorer::_conflateAndScoreMatches(
 
   // TODO: We're not applying pre/post conflate ops here, since they tank scores. Should we be? We
   // are, however, cleaning each input map with MapCleaner beforehand.
-
-  //NamedOp preOps(ConfigOptions().getConflatePreOps());
-  //preOps.apply(conflationCopy);
-
   UnifyingConflator conflator;
   conflator.apply(conflationCopy);
   OsmMapWriterFactory::writeDebugMap(conflationCopy, "perty-conflated-map");
-
-  //NamedOp postOps(ConfigOptions().getConflatePostOps());
-  //postOps.apply(conflationCopy);
 
   try
   {

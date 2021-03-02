@@ -31,6 +31,7 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/LinearWaterwayWayNodeCriterion.h>
 
 namespace hoot
 {
@@ -80,6 +81,13 @@ bool LinearWaterwayCriterion::isSatisfied(const ConstElementPtr& e) const
   }
 
   return passedTagFilter;
+}
+
+QStringList LinearWaterwayCriterion::getChildCriteria() const
+{
+  QStringList criteria;
+  criteria.append(LinearWaterwayWayNodeCriterion::className());
+  return criteria;
 }
 
 }

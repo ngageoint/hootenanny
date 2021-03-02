@@ -58,6 +58,7 @@ void RemoveEmptyRelationsOp::_deleteEmptyRelations(const OsmMapPtr& map, const b
   for (RelationMap::const_iterator it = relations.begin(); it != relations.end(); ++it)
   {
     RelationPtr relation = it->second;
+    _numProcessed++;
     if (!relation)
     {
       continue;

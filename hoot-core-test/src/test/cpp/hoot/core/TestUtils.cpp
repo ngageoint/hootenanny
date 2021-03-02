@@ -44,6 +44,40 @@
 #include <hoot/core/conflate/SuperfluousConflateOpRemover.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/BuildingOutlineRemoveOp.h>
+#include <hoot/core/ops/RemoveRoundabouts.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/algorithms/splitter/HighwayCornerSplitter.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/SmallHighwayMerger.h>
+#include <hoot/core/ops/ReplaceRoundabouts.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
+#include <hoot/core/visitors/RemoveInvalidReviewRelationsVisitor.h>
+#include <hoot/core/ops/RemoveDuplicateReviewsOp.h>
+#include <hoot/core/ops/WayJoinerOp.h>
+#include <hoot/core/visitors/RemoveInvalidRelationVisitor.h>
+#include <hoot/core/visitors/RemoveInvalidMultilineStringMembersVisitor.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/visitors/ApiTagTruncateVisitor.h>
+#include <hoot/core/ops/AddHilbertReviewSortOrderOp.h>
+#include <hoot/core/ops/ReprojectToPlanarOp.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
+#include <hoot/core/visitors/OneWayRoadStandardizer.h>
+#include <hoot/core/ops/DuplicateWayRemover.h>
+#include <hoot/core/algorithms/splitter/IntersectionSplitter.h>
+#include <hoot/core/ops/UnlikelyIntersectionRemover.h>
+#include <hoot/core/algorithms/splitter/DualHighwaySplitter.h>
+#include <hoot/core/ops/HighwayImpliedDividedMarker.h>
+#include <hoot/core/ops/DuplicateNameRemover.h>
+#include <hoot/core/visitors/RemoveEmptyAreasVisitor.h>
+#include <hoot/core/visitors/RemoveDuplicateRelationMembersVisitor.h>
+#include <hoot/core/ops/RelationCircularRefRemover.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/visitors/RemoveDuplicateAreasVisitor.h>
+#include <hoot/core/ops/NoInformationElementRemover.h>
+#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
 
 //  tgs
 #include <tgs/Statistics/Random.h>
@@ -318,54 +352,54 @@ void TestUtils::verifyStdMatchesOutputIgnoreDate(const QString& stdFilePath,
 QStringList TestUtils::getConflateCmdSnapshotPreOps()
 {
   QStringList conflatePreOps;
-  conflatePreOps.append("hoot::BuildingOutlineRemoveOp");
-  conflatePreOps.append("hoot::RemoveRoundabouts");
-  conflatePreOps.append("hoot::MapCleaner");
-  conflatePreOps.append("hoot::HighwayCornerSplitter");
+  conflatePreOps.append(BuildingOutlineRemoveOp::className());
+  conflatePreOps.append(RemoveRoundabouts::className());
+  conflatePreOps.append(MapCleaner::className());
+  conflatePreOps.append(HighwayCornerSplitter::className());
   return conflatePreOps;
 }
 
 QStringList TestUtils::getConflateCmdSnapshotPostOps()
 {
   QStringList conflatePostOps;
-  conflatePostOps.append("hoot::SuperfluousNodeRemover");
-  conflatePostOps.append("hoot::SmallHighwayMerger");
-  conflatePostOps.append("hoot::ReplaceRoundabouts");
-  conflatePostOps.append("hoot::RemoveMissingElementsVisitor");
-  conflatePostOps.append("hoot::RemoveInvalidReviewRelationsVisitor");
-  conflatePostOps.append("hoot::RemoveDuplicateReviewsOp");
-  conflatePostOps.append("hoot::BuildingOutlineUpdateOp");
-  conflatePostOps.append("hoot::WayJoinerOp");
-  conflatePostOps.append("hoot::RemoveInvalidRelationVisitor");
-  conflatePostOps.append("hoot::RemoveInvalidMultilineStringMembersVisitor");
-  conflatePostOps.append("hoot::SuperfluousWayRemover");
-  conflatePostOps.append("hoot::RemoveDuplicateWayNodesVisitor");
-  conflatePostOps.append("hoot::RemoveEmptyRelationsOp");
-  conflatePostOps.append("hoot::ApiTagTruncateVisitor");
-  conflatePostOps.append("hoot::AddHilbertReviewSortOrderOp");
+  conflatePostOps.append(SuperfluousNodeRemover::className());
+  conflatePostOps.append(SmallHighwayMerger::className());
+  conflatePostOps.append(ReplaceRoundabouts::className());
+  conflatePostOps.append(RemoveMissingElementsVisitor::className());
+  conflatePostOps.append(RemoveInvalidReviewRelationsVisitor::className());
+  conflatePostOps.append(RemoveDuplicateReviewsOp::className());
+  conflatePostOps.append(BuildingOutlineUpdateOp::className());
+  conflatePostOps.append(WayJoinerOp::className());
+  conflatePostOps.append(RemoveInvalidRelationVisitor::className());
+  conflatePostOps.append(RemoveInvalidMultilineStringMembersVisitor::className());
+  conflatePostOps.append(SuperfluousWayRemover::className());
+  conflatePostOps.append(RemoveDuplicateWayNodesVisitor::className());
+  conflatePostOps.append(RemoveEmptyRelationsOp::className());
+  conflatePostOps.append(ApiTagTruncateVisitor::className());
+  conflatePostOps.append(AddHilbertReviewSortOrderOp::className());
   return conflatePostOps;
 }
 
 QStringList TestUtils::getConflateCmdSnapshotCleaningOps()
 {
   QStringList mapCleanerTransforms;
-  mapCleanerTransforms.append("hoot::ReprojectToPlanarOp");
-  mapCleanerTransforms.append("hoot::DuplicateNodeRemover");
-  mapCleanerTransforms.append("hoot::OneWayRoadStandardizer");
-  mapCleanerTransforms.append("hoot::DuplicateWayRemover");
-  mapCleanerTransforms.append("hoot::SuperfluousWayRemover");
-  mapCleanerTransforms.append("hoot::IntersectionSplitter");
-  mapCleanerTransforms.append("hoot::UnlikelyIntersectionRemover");
-  mapCleanerTransforms.append("hoot::DualHighwaySplitter");
-  mapCleanerTransforms.append("hoot::HighwayImpliedDividedMarker");
-  mapCleanerTransforms.append("hoot::DuplicateNameRemover");
-  mapCleanerTransforms.append("hoot::SmallHighwayMerger");
-  mapCleanerTransforms.append("hoot::RemoveEmptyAreasVisitor");
-  mapCleanerTransforms.append("hoot::RemoveDuplicateRelationMembersVisitor");
-  mapCleanerTransforms.append("hoot::RelationCircularRefRemover");
-  mapCleanerTransforms.append("hoot::RemoveEmptyRelationsOp");
-  mapCleanerTransforms.append("hoot::RemoveDuplicateAreasVisitor");
-  mapCleanerTransforms.append("hoot::NoInformationElementRemover");
+  mapCleanerTransforms.append(ReprojectToPlanarOp::className());
+  mapCleanerTransforms.append(DuplicateNodeRemover::className());
+  mapCleanerTransforms.append(OneWayRoadStandardizer::className());
+  mapCleanerTransforms.append(DuplicateWayRemover::className());
+  mapCleanerTransforms.append(SuperfluousWayRemover::className());
+  mapCleanerTransforms.append(IntersectionSplitter::className());
+  mapCleanerTransforms.append(UnlikelyIntersectionRemover::className());
+  mapCleanerTransforms.append(DualHighwaySplitter::className());
+  mapCleanerTransforms.append(HighwayImpliedDividedMarker::className());
+  mapCleanerTransforms.append(DuplicateNameRemover::className());
+  mapCleanerTransforms.append(SmallHighwayMerger::className());
+  mapCleanerTransforms.append(RemoveEmptyAreasVisitor::className());
+  mapCleanerTransforms.append(RemoveDuplicateRelationMembersVisitor::className());
+  mapCleanerTransforms.append(RelationCircularRefRemover::className());
+  mapCleanerTransforms.append(RemoveEmptyRelationsOp::className());
+  mapCleanerTransforms.append(RemoveDuplicateAreasVisitor::className());
+  mapCleanerTransforms.append(NoInformationElementRemover::className());
   return mapCleanerTransforms;
 }
 
@@ -375,9 +409,9 @@ void TestUtils::runConflateOpReductionTest(
 {
   QStringList actualOps;
 
-  CPPUNIT_ASSERT_EQUAL(4,  TestUtils::getConflateCmdSnapshotPreOps().size());
-  CPPUNIT_ASSERT_EQUAL(15,  TestUtils::getConflateCmdSnapshotPostOps().size());
-  CPPUNIT_ASSERT_EQUAL(17,  TestUtils::getConflateCmdSnapshotCleaningOps().size());
+  CPPUNIT_ASSERT_EQUAL(4, TestUtils::getConflateCmdSnapshotPreOps().size());
+  CPPUNIT_ASSERT_EQUAL(15, TestUtils::getConflateCmdSnapshotPostOps().size());
+  CPPUNIT_ASSERT_EQUAL(17, TestUtils::getConflateCmdSnapshotCleaningOps().size());
 
   MatchFactory::getInstance().reset();
   MatchFactory::getInstance()._setMatchCreators(matchCreators);
@@ -392,12 +426,15 @@ void TestUtils::runConflateOpReductionTest(
   SuperfluousConflateOpRemover::removeSuperfluousOps();
 
   actualOps = conf().getList(ConfigOptions::getConflatePreOpsKey());
+  LOG_VART(actualOps);
   CPPUNIT_ASSERT_EQUAL(expectedPreOpSize, actualOps.size());
 
   actualOps = conf().getList(ConfigOptions::getConflatePostOpsKey());
+  LOG_VART(actualOps);
   CPPUNIT_ASSERT_EQUAL(expectedPostOpsSize, actualOps.size());
 
   actualOps = conf().getList(ConfigOptions::getMapCleanerTransformsKey());
+  LOG_VART(actualOps);
   CPPUNIT_ASSERT_EQUAL(expectedCleaningOpsSize, actualOps.size());
 }
 
