@@ -556,7 +556,7 @@ tds61 = {
   cleanAttrs : function (attrs)
   {
     // Drop the FCSUBTYPE since we don't use it
-    if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+    delete attrs.FCSUBTYPE;
 
     // List of data values to drop/ignore
     var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
@@ -1182,10 +1182,10 @@ tds61 = {
   applyToOgrPreProcessing: function(tags, attrs, geometryType)
   {
     // Remove Hoot assigned tags for the source of the data
-    if (tags['source:ingest:datetime']) delete tags['source:ingest:datetime'];
-    if (tags.area) delete tags.area;
-    if (tags['error:circular']) delete tags['error:circular'];
-    if (tags['hoot:status']) delete tags['hoot:status'];
+    delete tags['source:ingest:datetime'];
+    delete tags.area;
+    delete tags['error:circular'];
+    delete tags['hoot:status'];
 
     // If we use ogr2osm, the GDAL driver jams any tag it doesn't know about into an "other_tags" tag.
     // We need to unpack this before we can do anything.
@@ -1431,7 +1431,7 @@ tds61 = {
         attrs.F_CODE = 'AL010'; // Facility
 
         // If the user has also set a building tag, delete it
-        if (tags.building) delete tags.building;
+        delete tags.building;
       }
       else
       {
@@ -1698,7 +1698,7 @@ tds61 = {
     if (tags.service == 'siding' || tags.service == 'spur' || tags.service == 'passing' || tags.service == 'crossover')
     {
       tags.sidetrack = 'yes';
-      if (tags.railway) delete tags.railway;
+      delete tags.railway;
     }
 
     // Movable Bridges
@@ -1840,7 +1840,7 @@ tds61 = {
     // Protected areas have two attributes that need sorting out
     if (tags.protection_object == 'habitat' || tags.protection_object == 'breeding_ground')
     {
-      if (tags.protect_class) delete tags.protect_class;
+      delete tags.protect_class;
     }
 
     // Split link roads. TDSv61 now has an attribute for this
@@ -2589,9 +2589,9 @@ tds61 = {
     // not in v8 yet: // var tTags = Object.assign({},tags);
     var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-    if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+    delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
+    delete notUsedTags['hoot:id'];
 
     // Apply the simple number and text biased rules
     // NOTE: These are BACKWARD, not forward!
@@ -2647,7 +2647,7 @@ tds61 = {
           if (Object.keys(notUsedTags).length > 0 && tds61.configOut.OgrNoteExtra == 'attribute')
           {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
+            returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
           }
 
           // Now set the FCSubtype
@@ -2748,14 +2748,14 @@ tds61 = {
       if (tds61.configOut.OgrFormat == 'shp')
       {
         // Throw a warning that text will get truncated.
-        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
+        if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
         // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
         // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,253),
-          tag2:str.substring(253,506),
-          tag3:str.substring(506,759),
-          tag4:str.substring(759,1012)};
+        attrs = {tag1:str.substring(0,225),
+          tag2:str.substring(225,450),
+          tag3:str.substring(450,675),
+          tag4:str.substring(675,900)};
       }
       else
       {

@@ -2026,6 +2026,29 @@ mgcp.rules = {
     [undefined,undefined,'amenity','hospital'], // To stop warnings. Fixed in biased rules
     [undefined,undefined,'natural','water'], // To stop warnings. Fixed in biased rules
 
+    // CAA - Controlling Authority - TRD3/NFDD values. Convert to 'civilian'
+    ['CAA','16','operator','national'],
+    ['CAA','16','operator','state'],
+    ['CAA','16','operator','tribal'], // From NFDD
+    ['CAA','16','operator','municipal'], // From NFDD
+    ['CAA','16','operator','international'],
+    ['CAA','16','operator','province'], // From NFDD
+    ['CAA','16','operator','regional'], // From NFDD
+    ['CAA','16','operator','public'], // From NFDD
+
+    // AP020 - Interchange
+    ['CON','35','junction','cloverleaf'],
+    ['CON','35','junction','diamond'],
+    ['CON','35','junction','fork'],
+    ['CON','35','junction','roundabout'],
+    ['CON','35','junction','staggered_ramps'],
+    ['CON','35','junction','standard_ramps'],
+    ['CON','35','junction','symetrical_ramps'],
+    ['CON','35','junction','trumpet'],
+    ['CON','35','junction','turban'],
+    ['CON','35','junction','wye'],
+    ['CON','35','junction','other'],
+
     ['COS','4','operational_status','non_operational'], // Non-operational
 
     ['FIC','1','embankment:type','mound'], // Mound
@@ -2174,30 +2197,51 @@ mgcp.rules = {
     ['FFN','99','building','manufacturing'],
     ['FFN','192','product','petroleum'],
 
-    // CAA - Controlling Authority - TRD3/NFDD values. Convert to 'civilian'
-    ['CAA','16','operator','national'],
-    ['CAA','16','operator','state'],
-    ['CAA','16','operator','tribal'], // From NFDD
-    ['CAA','16','operator','municipal'], // From NFDD
-    ['CAA','16','operator','international'],
-    ['CAA','16','operator','province'], // From NFDD
-    ['CAA','16','operator','regional'], // From NFDD
-    ['CAA','16','operator','public'], // From NFDD
+    // Building
+    ['FFN','563','building','detached'],
+    ['FFN','563','building','terrace'],
+    ['FFN','440','building','retail'],
+    ['FFN','999','building','civic'],
+    ['FFN','999','building','public'],
+    ['FFN','999','building','bridge'],
+    ['FFN','835','building','bunker'], // Possibly another FCODE AM060
+    ['FFN','563','building','cabin'],
+    ['FFN','535','building','garage'],
+    ['FFN','535','building','garages'],
+    ['FFN','999','building','roof'],
+    ['FFN','919','building','stable'],
+    ['FFN','811','amenity','public_building'], // Not good - Government
+    ['FFN','481','amenity','bus_station'], // Not good - terminal
+    ['FFN','999','amenity','arts_centre'], // Nothing close to this, going with Other
 
-    // AP020 - Interchange
-    ['CON','35','junction','cloverleaf'],
-    ['CON','35','junction','diamond'],
-    ['CON','35','junction','fork'],
-    ['CON','35','junction','roundabout'],
-    ['CON','35','junction','staggered_ramps'],
-    ['CON','35','junction','standard_ramps'],
-    ['CON','35','junction','symetrical_ramps'],
-    ['CON','35','junction','trumpet'],
-    ['CON','35','junction','turban'],
-    ['CON','35','junction','wye'],
-    ['CON','35','junction','other'],
+    // Office: Things that are not "commerce"
+    ['FFN','720','office','research'], // Scientific R&D
+    ['FFN','810','office','association'], // Administrative
+    ['FFN','810','office','educational_institution'], // Administrative
+    ['FFN','810','office','religion'], // Administrative
+    ['FFN','810','office','foundation'], // Administrative
+    ['FFN','825','office','diplomatic'], // Diplomacy
+    ['FFN','841','office','police'], // Law Enforcement
+    ['FFN','859','office','ngo'], // Institution
+    ['FFN','859','office','charity'], // Institution
+    ['FFN','860','office','physician'], // Human Health
+    ['FFN','860','office','therapist'], // Human Health
+    ['FFN','860','office','medical'], // Human Health
+    ['FFN','440','information','office'], // Commerce - Tourist information as a "service"
+    ['FFN','192','industrial','oil_gas_facility'],
 
-    // From UFD
+    // Tags from "native" OSM start here - for export
+    ['FFN','550','tourism','hotel'], // Accomodation
+    ['FFN','550','tourism','guest_house'], // Accomodation
+    ['FFN','550','amenity','doctors'], // Healthcare
+    ['FFN','572','amenity','cafe'],
+    ['FFN','850','use','education'],
+    ['FFN','850','amenity','school'],
+    ['FFN','850','amenity','kindergarten'],
+    ['FFN','850','amenity','college'],
+    ['FFN','850','amenity','university'],
+
+    ['FUN','6','condition','intact'],
     ['FUN','6','condition','not_isolated'], // Changed to Fully Functional
 
     // Highway
@@ -2232,42 +2276,6 @@ mgcp.rules = {
     ['RST','999','surface','ice'],
     ['RST','999','surface','snow'],
 
-    // Building
-    ['FFN','563','building','detached'],
-    ['FFN','563','building','terrace'],
-    ['FFN','440','building','retail'],
-    ['FFN','999','building','civic'],
-    ['FFN','999','building','public'],
-    ['FFN','999','building','bridge'],
-    ['FFN','835','building','bunker'], // Possibly another FCODE AM060
-    ['FFN','563','building','cabin'],
-    ['FFN','535','building','garage'],
-    ['FFN','535','building','garages'],
-    ['FFN','999','building','roof'],
-    ['FFN','919','building','stable'],
-    ['FFN','811','amenity','public_building'], // Not good - Government
-    ['FFN','481','amenity','bus_station'], // Not good - terminal
-    ['FFN','999','amenity','arts_centre'], // Nothing close to this, going with Other
-
-    // Office: Things that are not "commerce"
-    ['FFN','720','office','research'], // Scientific R&D
-    ['FFN','810','office','association'], // Administrative
-    ['FFN','810','office','educational_institution'], // Administrative
-    ['FFN','810','office','religion'], // Administrative
-    ['FFN','810','office','foundation'], // Administrative
-    ['FFN','825','office','diplomatic'], // Diplomacy
-    ['FFN','841','office','police'], // Law Enforcement
-    ['FFN','859','office','ngo'], // Institution
-    ['FFN','859','office','charity'], // Institution
-    ['FFN','860','office','physician'], // Human Health
-    ['FFN','860','office','therapist'], // Human Health
-    ['FFN','860','office','medical'], // Human Health
-
-    ['FFN','440','information','office'], // Commerce - Tourist information as a "service"
-
-    // UFD
-    ['FFN','192','industrial','oil_gas_facility'],
-
     // Source stuff from UFD
     ['SRT','116','source:name','landsat'], // Landsat
     ['SRT','999','source:name','foundation_feature_data/relocatable_target_data_(ffd/rtad)'], //  Foundation Feature Data/Relocatable Target Data (FFD/RTAD)
@@ -2276,23 +2284,12 @@ mgcp.rules = {
     ['SRT','999','source:name','digital_globe'], // Digital Globe
     ['SRT','999','source:name','boundaries_(international_boundaries_database)'], // Boundaries (International Boundaries Database)
 
-    // Tags from "native" OSM start here - for export
-    ['FFN','550','tourism','hotel'], // Accomodation
-    ['FFN','550','tourism','guest_house'], // Accomodation
-    ['FFN','550','amenity','doctors'], // Healthcare
-    ['FFN','572','amenity','cafe'],
-    ['FFN','850','use','education'],
-    ['FFN','850','amenity','school'],
-    ['FFN','850','amenity','kindergarten'],
-    ['FFN','850','amenity','college'],
-    ['FFN','850','amenity','university'],
-
     // TRE - Foliage Type
     ['TRE','1','wood','deciduous'], // Deciduous
     ['TRE','2','wood','evergreen'], // Evergreen
     ['TRE','3','wood','mixed'], // Mixed
 
-      ], // End one2oneOut
+    ], // End one2oneOut
     // ##### End of One2One Rules #####
 
     // Stuff to be ignored or that gets swapped later
