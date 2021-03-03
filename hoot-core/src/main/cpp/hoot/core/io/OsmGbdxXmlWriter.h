@@ -59,13 +59,13 @@ public:
   OsmGbdxXmlWriter();
   virtual ~OsmGbdxXmlWriter();
 
-  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".gxml"); }
+  bool isSupported(const QString& url) override { return url.toLower().endsWith(".gxml"); }
 
-  virtual QString supportedFormats() override {return ".gxml";}
+  QString supportedFormats() override {return ".gxml";}
 
-  virtual void open(const QString& url) override;
+  void open(const QString& url) override;
 
-  void close();
+  void close() override;
 
   // Set the precision for writing coordinates
   void setPrecision(int p) { _precision = p; }
@@ -85,12 +85,12 @@ public:
    */
   void write(const ConstOsmMapPtr& map, const QString& path);
 
-  virtual void write(const ConstOsmMapPtr& map) override;
+  void write(const ConstOsmMapPtr& map) override;
 
-  virtual void writePartial(const ConstNodePtr& node) override;
-  virtual void writePartial(const ConstWayPtr& way) override;
-  virtual void writePartial(const ConstRelationPtr& relation) override;
-  virtual void finalizePartial();
+  void writePartial(const ConstNodePtr& node) override;
+  void writePartial(const ConstWayPtr& way) override;
+  void writePartial(const ConstRelationPtr& relation) override;
+  void finalizePartial();
 
   /**
    * Remove any invalid characters from the string s and print an error if one is found.

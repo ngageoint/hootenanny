@@ -48,19 +48,19 @@ public:
   HootApiDbWriter();
   virtual ~HootApiDbWriter();
 
-  void close();
+  void close() override;
 
-  virtual void finalizePartial();
+  void finalizePartial() override;
 
   long getMapId() const { return _hootdb.getMapId(); }
 
-  virtual bool isSupported(const QString& urlStr) override;
+  bool isSupported(const QString& urlStr) override;
 
-  virtual void open(const QString& urlStr) override;
+  void open(const QString& urlStr) override;
 
-  virtual void deleteMap(const QString& urlStr);
+  void deleteMap(const QString& urlStr);
 
-  virtual void setConfiguration(const Settings &conf) override;
+  void setConfiguration(const Settings &conf) override;
 
   void setCreateUser(bool createIfNotFound) { _createUserIfNotFound = createIfNotFound; }
   void setOverwriteMap(bool overwriteMap) { _overwriteMap = overwriteMap; }
@@ -77,19 +77,19 @@ public:
   void setJobId(const QString& id) { _jobId = id; }
   void setPreserveVersionOnInsert(bool preserve) { _preserveVersionOnInsert = preserve; }
 
-  virtual void writePartial(const ConstNodePtr& n) override;
-  virtual void writePartial(const ConstWayPtr& w) override;
-  virtual void writePartial(const ConstRelationPtr& r) override;
+  void writePartial(const ConstNodePtr& n) override;
+  void writePartial(const ConstWayPtr& w) override;
+  void writePartial(const ConstRelationPtr& r) override;
 
   /**
    * @see OsmChangeWriter
    */
-  virtual void writeChange(const Change& change) override;
-  virtual void setElementPayloadFormat(const QString& /*format*/) override {}
+  void writeChange(const Change& change) override;
+  void setElementPayloadFormat(const QString& /*format*/) override {}
 
   void setCopyBulkInsertActivated(bool activated) { _copyBulkInsertActivated = activated; }
 
-  virtual QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
+  QString supportedFormats() override { return MetadataTags::HootApiDbScheme() + "://"; }
 
 protected:
 
