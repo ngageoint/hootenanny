@@ -46,24 +46,30 @@
 namespace hoot
 {
 
+class MatchCreator;
+
 /**
- * Caches data about elements and their relationships that may in speeding up conflation jobs.
+ * Caches conflatable elements, their relationships with other elements, and conflation
+ * configuration details that may aid in speeding up conflation jobs.
  *
- * This is generally expected to be initialized only once by each match creator. It is done this way
- * rather than implementing a Singleton, since case tests are launched as multiple threads within
- * the same process, which would result in a conflicted cache state. Also, since different match
- * creators deal with different data types and shouldn't have too much cache overlap between
- * different caches. Currently, this cache is only used by POI/Polygon conflation.
+ * This is generally expected to be initialized separately for each section of the code using it. It
+ * is done this way rather than implementing a Singleton or using global static instances, since
+ * conflate case tests are launched as multiple threads within the same process. Not using separate
+ * instances of the cache which would result in a conflicted cache state if the cache was shared by
+ * different threads (different elements with the same ID could have different info; @todo We may be
+ * able to use thread_local storage for this purpose with static member vars and avoid using
+ * separate instances). Currently, this cache is only used in a few places and not by all match
+ * creators.
  *
- * The caches used in this class (and in PoiPolygonInfoCache) were determined on 9/30/18 running
- * POI/Polygon conflation against the regression test
- * unifying-tests.child/somalia.child/somalia-test3.child and also on 1/7/20 against the data in
- * africom/somalia/229_Mogadishu_SOM_Translated. Further caching could be deemed necessary given
- * performance with other datasets.
+ * The caches used in this class were determined on 9/30/18 running POI/Polygon conflation against
+ * the regression test unifying-tests.child/somalia.child/somalia-test3.child and also on 1/7/20
+ * against the data in africom/somalia/229_Mogadishu_SOM_Translated. Further caching enhancements
+ * may be deemed necessary for conflation against other feature types.
  *
- * Its worth noting that if you are doing performance tweaks on a Vagrant VM, the runtimes may vary
- * with subsequent executions of the exact same conflate job. So in that case, its best to look for
- * tweaks with fairly large improvements and ignore the smaller performance improvements.
+ * Its worth noting that if you are doing cache performance tweaks on a Vagrant VM, the runtimes may
+ * vary somewhat widely with subsequent executions of the exact same conflate job. So in that case,
+ * its best to look for tweaks with fairly large improvements and ignore the smaller performance
+ * improvements.
  *
  * WARNING: This class can get very memory hungry depending on how the cache size is configured.
  */
@@ -165,19 +171,38 @@ public:
    */
   void printCacheInfo();
 
+  /**
+   * Determines if an element can be conflated by any of the actively configured matchers for
+   * conflation.
+   *
+   * @param element element to examine
+   * @param caller optional name of the class calling this method for debugging purposes
+   * @return true if the conflate matchers are configured with at least one matcher that
+   * can conflate the input element; false otherwise
+   */
+  bool elementCanBeConflatedByActiveMatcher(
+    const ConstElementPtr& element, const QString& caller = QString());
+
+  /**
+   * Determines if a ConflatableCriterion is in use by any actively configured conflate matcher
+   *
+   * @param criterionClassName class name of the criterion
+   * @return true if an active matcher uses the criterion with the specified name; false otherwise
+   */
+  bool elementCriterionInUseByActiveMatcher(const QString& criterionClassName);
+
 protected:
 
   static const int CACHE_SIZE_DEFAULT = 10000;
 
   ConstOsmMapPtr _map;
-  bool _cacheEnabled;
+  bool _cachingEnabled; // If disabled, no info is actually cached.
 
   void _incrementCacheHitCount(const QString& cacheTypeKey);
   void _incrementCacheSizeCount(const QString& cacheTypeKey);
 
 private:
 
-  // TODO: should this be static?
   int _badGeomCount;
 
   AddressParser _addressParser;
@@ -203,10 +228,16 @@ private:
 
   QCache<ElementId, int> _numAddressesCache;
 
+  // No need to size limit the crit cache, as their aren't that many crits total. The crit cache
+  // must store ElementCriterion and not ConflatableElementCriterion, b/c we're also checking
+  // against conflate child criteria (e.g. RailwayWayNodeCriterion for RailwayCriterion), which
+  // don't inherit from ConflatableElementCriterion.
+  QCache<ElementId, bool> _conflatableElementCache;
+  QHash<QString, bool> _conflatableCritActiveCache;
+  std::vector<std::shared_ptr<MatchCreator>> _activeMatchCreators;
+
   QMap<QString, int> _numCacheHitsByCacheType;
   QMap<QString, int> _numCacheEntriesByCacheType;
-
-  //static const int CACHE_SIZE_UPDATE_INTERVAL = 100000;
 
   std::shared_ptr<geos::geom::Geometry> _getGeometry(const ConstElementPtr& element);
   ElementCriterionPtr _getCrit(const QString& criterionClassName);

@@ -27,7 +27,7 @@
 #ifndef WAYSVISITOR_H
 #define WAYSVISITOR_H
 
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 
 namespace hoot

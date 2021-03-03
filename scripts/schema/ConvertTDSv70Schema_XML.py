@@ -183,15 +183,31 @@ def readFeatures(xmlDoc,funcList):
 
     # Setup handy lists
     geoList = {'C':'Line', 'S':'Area', 'P':'Point','_':'None' }
+    fdName = '' # Feature Dataset Name
 
     itemList = xmlDoc.getElementsByTagName('DataElement')
 
     for feature in itemList:
         featureName = feature.getElementsByTagName('Name')[0].firstChild.data
 
-        # Drop this one. It seems to be the catch all
-        if featureName == 'TDS' or featureName == 'TDS_CARTO':
+        featureType = feature.getAttributeNS('http://www.w3.org/2001/XMLSchema-instance','type')
+        # Debug
+        print "featureName:",featureName
+        print 'fType:' + featureType
+
+        # Skip Tables
+        if featureType == 'esri:DETable':
             continue
+
+        if featureType == 'esri:DEFeatureDataset':
+        # if featureName == 'TDS' or featureName == 'TDS_CARTO':
+            fdName = featureName
+            print 'Got DEFeatureDataset:',fdName
+            continue
+
+        # Drop this one. It seems to be the catch all
+        # if featureName == 'TDS' or featureName == 'TDS_CARTO':
+        #     continue
 
         # Build the basic feature
         tSchema[featureName] = {}
@@ -199,6 +215,8 @@ def readFeatures(xmlDoc,funcList):
         tSchema[featureName]['geom'] = geoList[featureName[-1]]
         tSchema[featureName]['desc'] = ''
         # tSchema[featureName]['description'] = ''
+        tSchema[featureName]['fcsubtype'] = ''
+        tSchema[featureName]['fdname'] = fdName
         tSchema[featureName]['columns'] = {}
 
         # Debug

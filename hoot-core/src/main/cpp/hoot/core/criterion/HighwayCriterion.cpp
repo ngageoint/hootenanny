@@ -32,6 +32,7 @@
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/criterion/HighwayWayNodeCriterion.h>
 
 namespace hoot
 {
@@ -89,6 +90,13 @@ bool HighwayCriterion::isSatisfied(const ConstElementPtr& element) const
 
   LOG_TRACE(element->getElementId() << " result: " << result);
   return result;
+}
+
+QStringList HighwayCriterion::getChildCriteria() const
+{
+  QStringList criteria;
+  criteria.append(HighwayWayNodeCriterion::className());
+  return criteria;
 }
 
 }

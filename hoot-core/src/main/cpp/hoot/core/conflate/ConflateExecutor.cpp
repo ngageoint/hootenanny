@@ -33,7 +33,7 @@
 #include <hoot/core/criterion/StatusCriterion.h>
 #include <hoot/core/io/MapStatsWriter.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/NamedOp.h>
+#include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
@@ -423,14 +423,22 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
   LOG_STATUS("Running " << opStr.toLower() << "-conflate operations...");
   QElapsedTimer opsTimer;
   opsTimer.start();
-  NamedOp ops(opNames);
+
+  // Since this is a conflate operation, tell NamedOp to require that all ops it runs check to make
+  // sure the elements they encounter are conflatable in the current configuration. We don't want to
+  // operate on any elements that aren't considered conflatable. Superfluous conflate op removal has
+  // already taken care of this for any ops that conflate specific feature types, however, for those
+  // who don't, they must examine each element (@see ElementConflatableCheck).
+  OpExecutor ops(opNames, true);
   ops.setProgress(
     Progress(
       ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
       _getJobPercentComplete(_currentTask - 1), _getTaskWeight()));
   ops.apply(map);
+
   _stats.append(
     SingleStat("Apply " + opStr + "-Conflate Ops Time (sec)", _taskTimer.getElapsedAndRestart()));
+
   OsmMapWriterFactory::writeDebugMap(map, "after-" + opStr.toLower() + "-ops");
   _currentTask++;
   LOG_STATUS(

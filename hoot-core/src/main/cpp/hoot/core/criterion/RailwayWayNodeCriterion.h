@@ -43,8 +43,6 @@ public:
   RailwayWayNodeCriterion(ConstOsmMapPtr map);
   virtual ~RailwayWayNodeCriterion() = default;
 
-  virtual void setOsmMap(const OsmMap* map) override;
-
   virtual ElementCriterionPtr clone() override
   { return ElementCriterionPtr(new RailwayWayNodeCriterion(_map)); }
 

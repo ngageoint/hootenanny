@@ -29,7 +29,7 @@
 #define BUILDING_LEVELS_VISITOR_H
 
 // hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/info/NumericStatistic.h>
 #include <hoot/core/info/OperationStatus.h>
 #include <hoot/core/criterion/BuildingCriterion.h>

@@ -27,7 +27,7 @@
 #include "OsmNetworkExtractor.h"
 
 #include <hoot/core/elements/Element.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/criterion/LinearCriterion.h>

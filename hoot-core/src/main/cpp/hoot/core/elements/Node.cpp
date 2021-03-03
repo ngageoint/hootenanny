@@ -34,7 +34,7 @@
 using namespace geos::geom;
 
 // Hoot
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/ConfigOptions.h>
 

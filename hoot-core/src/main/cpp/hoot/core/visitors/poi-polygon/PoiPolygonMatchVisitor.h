@@ -29,7 +29,7 @@
 
 // hoot
 #include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonRfClassifier.h>

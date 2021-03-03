@@ -61,6 +61,8 @@ public:
   virtual bool supportsSpecificConflation() const { return false; }
 
   static bool isLinearRelation(const ConstRelationPtr& relation);
+
+  virtual QStringList getChildCriteria() const;
 };
 
 }

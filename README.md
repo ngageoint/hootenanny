@@ -56,16 +56,10 @@ A conflation workflow defines the manner in which two maps are merged together. 
 * **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Add new features that do not conflict_
   * Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A. 
   * Use this type of conflation when you want to fill holes in your dataset with data from another source without modifying any of the data in the first dataset.
-* **[Differential Conflation with Tags](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Add new features that do not conflict and transfer attributes to existing features_
-  * This workflow is the same as Differential Conflation with the added step of transferring tags to existing features in map A from matching features in map B where there is feature overlap. 
-  * Use this type of conflation when you want to fill holes in your dataset with data from another source without modifying geometries in your original data but possibly modifying its tags. 
-  * This output of this differs from Attribute Conflation in that it outputs a geometry differential that includes features from the secondary dataset.
+  * There is an option available to transfer tags to existing features in map A from matching features in map B where there is feature overlap in addition to generating the differential output.
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to existing geometries_
   * Conflate map A with B where only tags are transferred from B to matching features in A and no changes are made to A's geometries.
-  * Use this type of conflation when the first dataset's geometry is superior to a second dataset, but the attributes of the second dataset are superior to that of the first dataset. 
-  * This is similar to Differential Conflation With Tags but does not have the capability
-of adding new non-conflicting featues.
-  * This output of this differs from Differential Conflation with Tags in that it does not output a geometry differential that includes features from the secondary dataset.
+  * Use this type of conflation when the first dataset's geometry is superior to a second dataset, but the attributes of the second dataset are superior to that of the first dataset.
   
 # Attribute Translation
 Hootenanny leverages the OSM key value pair tag concept to support translation between various data schemas and supports the following schemas: 

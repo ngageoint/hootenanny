@@ -38,6 +38,7 @@
 #include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/util/Configurable.h>
+#include <hoot/core/conflate/ConflateInfoCacheConsumer.h>
 
 // Standard
 #include <set>
@@ -56,12 +57,14 @@ class OsmMap;
  *
  * If the bounds have been set via Boundable's setBounds then only nodes that are both not part
  * of a way and inside the bounds will be removed. This is most useful when performing tile based
- * operations such as the FourPassDriver.
+ * operations such as the FourPassDriver (Hadoop).
  *
  * No point in implementing FilteredByGeometryTypeCriteria here, as there is no such thing as a map
- * with no nodes.
+ * with no nodes. ElementConflatableCheck does need to be implemented here to handle the case when
+ * _ignoreInformationTags = true.
  */
-class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public Configurable
+class SuperfluousNodeRemover : public OsmMapOperation, public Boundable, public Configurable,
+  public ConflateInfoCacheConsumer
 {
 public:
 
@@ -132,9 +135,12 @@ public:
   void setIgnoreInformationTags(bool ignore) { _ignoreInformationTags = ignore; }
   void setRemoveNodes(bool remove) { _removeNodes = remove; }
 
+  virtual void setConflateInfoCache(const std::shared_ptr<ConflateInfoCache>& cache)
+  { _conflateInfoCache = cache; }
+
 protected:
 
-  // turning this off is useful for debugging the existence of orphaned nodes
+  // Turning this off is useful for debugging the existence of orphaned nodes.
   bool _removeNodes;
   // nodes with these IDs will never be removed
   QSet<long> _excludeIds;
@@ -150,6 +156,10 @@ protected:
   bool _ignoreInformationTags;
   // configurable set of tags where if found on a node, we always want to remove it
   QStringList _unallowedOrphanKvps;
+
+  // Existence of this cache tells us that elements must be individually checked to see that they
+  // are conflatable given the current configuration before modifying them.
+  std::shared_ptr<ConflateInfoCache> _conflateInfoCache;
 
   int _taskStatusUpdateInterval;
 };

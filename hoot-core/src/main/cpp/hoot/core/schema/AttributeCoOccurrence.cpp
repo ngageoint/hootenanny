@@ -32,7 +32,7 @@
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/MeanWordSetDistance.h>
 #include <hoot/core/algorithms/extractors/NameExtractor.h>
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/language/ToEnglishTranslateStringDistance.h>
 #include <hoot/core/scoring/TextTable.h>

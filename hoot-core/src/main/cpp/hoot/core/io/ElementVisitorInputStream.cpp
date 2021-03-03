@@ -27,7 +27,7 @@
 
 #include "ElementVisitorInputStream.h"
 
-#include <hoot/core/elements/ConstElementVisitor.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot

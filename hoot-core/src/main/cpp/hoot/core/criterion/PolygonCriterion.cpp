@@ -30,6 +30,7 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/criterion/PolygonWayNodeCriterion.h>
 
 namespace hoot
 {
@@ -82,6 +83,13 @@ bool PolygonCriterion::isSatisfied(const ConstElementPtr& e) const
   }
 
   return false;
+}
+
+QStringList PolygonCriterion::getChildCriteria() const
+{
+  QStringList criteria;
+  criteria.append(PolygonWayNodeCriterion::className());
+  return criteria;
 }
 
 }

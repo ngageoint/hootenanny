@@ -560,7 +560,7 @@ tds40 = {
 cleanAttrs : function (attrs)
 {
   // Drop the FCSUBTYPE since we don't use it
-  if (attrs.FCSUBTYPE) delete attrs.FCSUBTYPE;
+  delete attrs.FCSUBTYPE;
 
   // List of data values to drop/ignore
   var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
@@ -1454,7 +1454,7 @@ cleanAttrs : function (attrs)
         attrs.F_CODE = 'AL010'; // Facility
 
         // If the user has also set a building tag, delete it
-        if (tags.building) delete tags.building;
+        delete tags.building;
       }
       else
       {
@@ -1859,7 +1859,7 @@ cleanAttrs : function (attrs)
     // Protected areas have two attributes that need sorting out
     if (tags.protection_object == 'habitat' || tags.protection_object == 'breeding_ground')
     {
-      if (tags.protect_class) delete tags.protect_class;
+      delete tags.protect_class;
     }
 
 
@@ -2253,7 +2253,7 @@ cleanAttrs : function (attrs)
     } // End Wetlands
 
     // Undergrowth Density is not in Brush (EB070)
-    if (attrs.F_CODE !== 'EB070' || notUsedTags['undergrowth:density'])
+    if (attrs.F_CODE !== 'EB070' && notUsedTags['undergrowth:density'])
     {
       if (!(attrs.DMBL || attrs.DMBU))
       {
@@ -2500,9 +2500,9 @@ cleanAttrs : function (attrs)
     // not in v8 yet: // var tTags = Object.assign({},tags);
     var notUsedTags = (JSON.parse(JSON.stringify(tags)));
 
-    if (notUsedTags.hoot) delete notUsedTags.hoot; // Added by the UI
+    delete notUsedTags.hoot; // Added by the UI
     // Debug info. We use this in postprocessing via "tags"
-    if (notUsedTags['hoot:id']) delete notUsedTags['hoot:id'];
+    delete notUsedTags['hoot:id'];
 
     // Apply the simple number and text biased rules
     // NOTE: These are BACKWARD, not forward!
@@ -2554,7 +2554,7 @@ cleanAttrs : function (attrs)
           if (Object.keys(notUsedTags).length > 0 && tds40.configOut.OgrNoteExtra == 'attribute')
           {
             var tStr = '<OSM>' + JSON.stringify(notUsedTags) + '</OSM>';
-            attrs.ZI006_MEM = translate.appendValue(attrs.ZI006_MEM,tStr,';');
+            returnData[i]['attrs']['ZI006_MEM'] = translate.appendValue(returnData[i]['attrs']['ZI006_MEM'],tStr,';');
           }
 
           // Now set the FCSubtype
@@ -2655,14 +2655,14 @@ cleanAttrs : function (attrs)
       if (tds40.configOut.OgrFormat == 'shp')
       {
         // Throw a warning that text will get truncated.
-        if (str.length > 1012) hoot.logWarn('o2s tags truncated to fit in available space.');
+        if (str.length > 900) hoot.logWarn('o2s tags truncated to fit in available space.');
 
         // NOTE: if the start & end of the substring are grater than the length of the string, they get assigned to the length of the string
         // which means that it returns an empty string.
-        attrs = {tag1:str.substring(0,253),
-          tag2:str.substring(253,506),
-          tag3:str.substring(506,759),
-          tag4:str.substring(759,1012)};
+        attrs = {tag1:str.substring(0,225),
+          tag2:str.substring(225,450),
+          tag3:str.substring(450,675),
+          tag4:str.substring(675,900)};
       }
       else
       {
