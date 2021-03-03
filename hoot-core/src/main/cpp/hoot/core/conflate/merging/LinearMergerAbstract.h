@@ -105,15 +105,15 @@ protected:
 
   static int logWarnCount;
 
-  virtual PairsSet& _getPairs() override { return _pairs; }
-  virtual const PairsSet& _getPairs() const override { return _pairs; }
-
   std::set<std::pair<ElementId, ElementId>> _pairs;
 
   std::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   // indicates which matcher matched the elements being processed by this merger
   QString _matchedBy;
+
+  virtual PairsSet& _getPairs() override { return _pairs; }
+  virtual const PairsSet& _getPairs() const override { return _pairs; }
 
   /*
    * Return true if pair needs review.

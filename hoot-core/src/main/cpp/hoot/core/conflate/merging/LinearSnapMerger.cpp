@@ -84,7 +84,6 @@ _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations
   (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations())
 {
-  //_matchedBy = HighwayMatch::MATCH_NAME;
   LOG_VART(_markAddedMultilineStringRelations);
 }
 
@@ -98,7 +97,6 @@ _markAddedMultilineStringRelations
 {
   _pairs = pairs;
   _sublineMatcher = sublineMatcher;
-  //_matchedBy = HighwayMatch::MATCH_NAME;
 
   LOG_VART(_markAddedMultilineStringRelations);
   LOG_VART(_pairs);
@@ -117,9 +115,7 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
   // TODO: This monster method needs to be refactored into smaller parts where possible.
 
   LOG_VART(eid1);
-  //LOG_VART(map->getElement(eid1));
   LOG_VART(eid2);
-  //LOG_VART(map->getElement(eid2));
   const QString eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
 
   if (LinearMergerAbstract::_mergePair(map, eid1, eid2, replaced))
@@ -131,8 +127,6 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
-  //LOG_TRACE("LinearSnapMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
-  //LOG_TRACE("LinearSnapMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
   // If the two elements being merged are identical, then there's no point of going through
   // splitting and trying to match sections of them together. Just set the match equal to the
