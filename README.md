@@ -46,7 +46,7 @@ You can create your own custom conflation algorithms for additional feature type
 
 A conflation workflow defines the manner in which two maps are merged together. Hootenanny has the following workflows:
 * **[Reference Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/user/OldDocs.asciidoc)** **(default)** - _Keep the best of both maps while favoring the first_
-  * Conflate the best geometry and tag parts of map B into map A, favoring map A's data. 
+  * Merge geometry and tag from map B into map A, and favor map A's data when there are conflicts. 
   * Use this type of conflation when you want conflated output based on the best state of both input datasets while favoring one of them.
 * **[Horizontal Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/commands/cut.asciidoc)** (aka Cookie Cutter Conflation) - _Completely replace a section_
   * Either:
@@ -54,11 +54,11 @@ A conflation workflow defines the manner in which two maps are merged together. 
     * Define a region in map A to preserve and replace data outside of it with data outside of the region from map B. 
   * Use this type of conflation if you have a specific region of your dataset that you would like to replace with data from another dataset or you would like to surround your dataset with new data.
 * **[Differential Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/DifferentialConflation.asciidoc)** - _Add new features that do not conflict_
-  * Conflate map A with B where the only data added to the output from B is in areas that don't overlap with A. 
+  * Merge map A with B where the only data added to the output from B is in areas that don't overlap with A. 
   * Use this type of conflation when you want to fill holes in your dataset with data from another source without modifying any of the data in the first dataset.
   * There is an option available to transfer tags to existing features in map A from matching features in map B where there is feature overlap in addition to generating the differential output.
 * **[Attribute Conflation](https://github.com/ngageoint/hootenanny/blob/master/docs/algorithms/AttributeConflation.asciidoc)** - _Transfer attributes over to existing geometries_
-  * Conflate map A with B where only tags are transferred from B to matching features in A and no changes are made to A's geometries.
+  * Merge map A with B where only tags are transferred from B to matching features in A and no changes are made to A's geometries.
   * Use this type of conflation when the first dataset's geometry is superior to a second dataset, but the attributes of the second dataset are superior to that of the first dataset.
   
 # Attribute Translation
