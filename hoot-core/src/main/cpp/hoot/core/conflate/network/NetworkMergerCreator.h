@@ -45,7 +45,8 @@ public:
   NetworkMergerCreator();
   virtual ~NetworkMergerCreator() = default;
 
-  virtual bool createMergers(const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
+  virtual bool createMergers(
+    const MatchSet& matches, std::vector<MergerPtr>& mergers) const override;
 
   virtual std::vector<CreatorDescription> getAllCreators() const override;
 

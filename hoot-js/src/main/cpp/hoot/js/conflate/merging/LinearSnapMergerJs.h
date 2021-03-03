@@ -34,17 +34,17 @@
 // node.js
 #include <hoot/js/HootBaseJs.h>
 
-// Qt
-#include <QString>
-
 // Standard
 #include <memory>
 
 namespace hoot
 {
 
-class OsmMapOperation;
-
+/**
+ * Facade around linear features mergers in core
+ *
+ * @todo This class should be renamed to LinearMergerJs.
+ */
 class LinearSnapMergerJs : public HootBaseJs
 {
 public:

@@ -75,7 +75,6 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
 {
   if (!_tagMerger)
   {
-    LOG_VART(ConfigOptions().getHighwayMergeTagsOnly());
     LOG_VART(_autoMergeManyPoiToOnePolyMatches);
     LOG_VART(_tagMergerClass);
     LOG_VART(ConfigOptions().getPoiPolygonTagMerger());

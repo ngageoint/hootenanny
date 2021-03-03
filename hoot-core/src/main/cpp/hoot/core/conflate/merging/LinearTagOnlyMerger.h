@@ -62,7 +62,7 @@ public:
   virtual ~LinearTagOnlyMerger() = default;
 
   virtual QString getDescription() const
-  { return "Merges road tags only with minimal geometry exceptions"; }
+  { return "Merges linear feature tags only with minimal geometry exceptions"; }
 
 protected:
 

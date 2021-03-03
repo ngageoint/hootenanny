@@ -51,6 +51,7 @@
 #include <hoot/core/util/MemoryUsageChecker.h>
 #include <hoot/core/ops/RoadCrossingPolyReviewMarker.h>
 #include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 
 // Qt
 #include <QFileInfo>
@@ -85,10 +86,9 @@ void ConflateExecutor::_initConfig()
   allOps += ConfigOptions().getConflatePostOps();
   ConfigUtils::checkForDuplicateElementCorrectionMismatch(allOps);
 
-  // The highway.merge.tags.only option only gets used with Attribute Conflation for now, so we'll
-  // use it as the sole identifier for it. If that ever changes, then we'll need a different way
-  // to recognize when AC is occurring.
-  _isAttributeConflate = ConfigOptions().getHighwayMergeTagsOnly();
+  // Use of LinearTagOnlyMerger for geometries signifies that we're doing Attribute Conflation.
+  _isAttributeConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
   if (_isAttributeConflate && _isDiffConflate) // This is a little kludgy but seems useful for now.
   {
     throw IllegalArgumentException(
@@ -136,8 +136,8 @@ void ConflateExecutor::_initTaskCount()
     _numTotalTasks++;
   }
 
-  // Only add one task for each set of conflate ops, since NamedOp will create its own task step for
-  // each op internally.
+  // Only add one task for each set of conflate ops, since OpExecutor will create its own task step
+  // for each op internally.
   if (ConfigOptions().getConflatePreOps().size() > 0)
   {
     _numTotalTasks++;
@@ -424,11 +424,11 @@ void ConflateExecutor::_runConflateOps(OsmMapPtr& map, const bool runPre)
   QElapsedTimer opsTimer;
   opsTimer.start();
 
-  // Since this is a conflate operation, tell NamedOp to require that all ops it runs check to make
-  // sure the elements they encounter are conflatable in the current configuration. We don't want to
-  // operate on any elements that aren't considered conflatable. Superfluous conflate op removal has
-  // already taken care of this for any ops that conflate specific feature types, however, for those
-  // who don't, they must examine each element (@see ElementConflatableCheck).
+  // Since this is a conflate operation, tell OpExecutor to require that all ops it runs check to
+  // make sure the elements they encounter are conflatable in the current configuration. We don't
+  // want to operate on any elements that aren't considered conflatable. Superfluous conflate op
+  // removal has already taken care of this for any ops that conflate specific feature types,
+  // however, for those who don't, they must examine each element (@see ElementConflatableCheck).
   OpExecutor ops(opNames, true);
   ops.setProgress(
     Progress(
