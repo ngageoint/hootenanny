@@ -31,8 +31,8 @@
 #include <ogr_spatialref.h>
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/algorithms/changeset/Change.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {

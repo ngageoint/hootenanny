@@ -58,7 +58,7 @@ void MemChangesetProvider::addChange(Change newChange)
   _changes.push_back(newChange);
 }
 
-size_t MemChangesetProvider::getNumChanges()
+int MemChangesetProvider::getNumChanges() const
 {
   return _changes.size();
 }
