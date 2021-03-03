@@ -714,7 +714,7 @@ mgcp = {
       ["t['building:religious'] == 'other'","t.amenity = 'religion'"],
       ["t['cable:type'] && !(t.cable)","t.cable = 'yes'"],
       ["t.control_tower == 'yes'","t['tower:type'] = 'observation'; t.use = 'air_traffic_control'"],
-      ["t['generator:source'] == 'wind'","t.power = 'generator'"],
+      ["t['generator:source']","t.power = 'generator'"],
       ["(t.landuse == 'built_up_area' || t.place == 'settlement') && t.building","t['settlement:type'] = t.building; delete t.building"],
       ["t.leisure == 'stadium'","t.building = 'yes'"],
       ["t['monitoring:weather'] == 'yes'","t.man_made = 'monitoring_station'"],
@@ -909,10 +909,10 @@ mgcp = {
 
         break;
 
-      case 'AP010': // Track
-      case 'AP050': // Trail
-          tags.seasonal = 'fair';
-          break;
+      // case 'AP010': // Track
+      // case 'AP050': // Trail
+      //     tags.seasonal = 'fair';
+      //     break;
 
       case 'AQ075': // Ice Route
         if (!tags.highway) tags.highway = 'road';
@@ -950,10 +950,11 @@ mgcp = {
         tags.natural = 'water';
         break;
 
-      case 'BH070': // Ford
-        // Fords are also supposed to be roads
-        if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
-        break;
+      //
+      // case 'BH070': // Ford
+      //   // Fords are also supposed to be roads
+      //   if (geometryType == 'Line' && !tags.highway) tags.highway = 'road';
+      //   break;
 
       case 'ED030': // Mangrove Swamp
         if (! tags.tidal) tags.tidal = 'yes';
@@ -1156,7 +1157,11 @@ mgcp = {
     } // End highway
 
     // Ice roads are a special case.
-    if (tags.ice_road == 'yes') attrs.F_CODE = 'AQ075';
+    if (tags.ice_road == 'yes')
+    {
+    attrs.F_CODE = 'AQ075';
+    if (tags.highway == 'road') delete tags.highway;
+    }
 
     if (mgcp.mgcpPreRules == undefined)
     {
@@ -1313,17 +1318,16 @@ mgcp = {
       delete tags.barrier; // Take away the walls...
     }
 
-    // Wind Turbines vs power plants
-    if (tags['generator:source'] == 'wind')
+    // Wind Turbines, Solar Panels etc  vs power plants
+    if (tags['generator:source'])
     {
-      attrs.F_CODE = 'AJ051';
+      delete tags.power;
     }
     else if (tags.power == 'generator')
     {
       attrs.F_CODE = 'AL015';
       tags.use = 'power_generation';
     }
-
 
     // Going out on a limb and processing OSM specific tags:
     // - Building == a thing,
@@ -1953,6 +1957,18 @@ mgcp = {
         if (geometryType == 'Point') attrs.F_CODE = 'AL015'; // Parking Garage Building
         break;
 
+      case 'AT060': // Communications Cable
+        // Drop these since the F_CODE does not have them and validate will try to re-add them
+        delete attrs.CAB;
+        delete notUsedTags.cable;
+        break;
+
+      case 'BA040': // Tidal Water
+        // It's tidal so we don't need to store this
+        delete attrs.TID;
+        break;
+
+
       case 'BA050': // Beach
         if (attrs.MCC)
         {
@@ -2398,6 +2414,7 @@ if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags
         {
           // Validate attrs: remove all that are not supposed to be part of a feature
           mgcp.validateAttrs(geometryType,returnData[i]['attrs'],notUsedTags,transMap);
+    if (mgcp.configOut.OgrDebugDumptags == 'true') translate.debugOutput(notUsedTags,'',geometryType,elementType,'Validate: Not used: ');
 
           // If we have unused tags, add them to the TXT field
           // NOTE: We are not checking if this is longer than 255 characters

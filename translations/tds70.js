@@ -1013,10 +1013,10 @@ tds70 = {
       } // End switch
       break;
 
-    case 'AP010': // Track
-    case 'AP050': // Trail
-        tags.seasonal = 'fair';
-        break;
+    // case 'AP010': // Track
+    // case 'AP050': // Trail
+    //     tags.seasonal = 'fair';
+    //     break;
 
       // Add defaults for common features
     case 'AP020':

@@ -432,7 +432,7 @@ mgcp.rules = {
     ['FFN','511','building','maritime_pilotage'],
     ['FFN','513','building','harbour_control'],
     ['FFN','530','building','warehouse'],
-    ['FFN','535','amenity','parking'],
+    ['FFN','535','building','parking'],
     ['FFN','540','amenity','post_office'],
     ['FFN','550','building','accomodation'],
     ['FFN','563','building','residence'],
@@ -746,16 +746,16 @@ mgcp.rules = {
     ['PBY','999','by_product','other'], // Other
 
     // PPC - Power Station Type
-    //['PPC','0','generator:source','unknown'], // Unknown
+    //['PPC','0','plant:source','unknown'], // Unknown
     ['PPC','0',undefined,undefined], // Unknown
-    ['PPC','1','generator:source','hydro'], // Hydro-electric
-    ['PPC','2','generator:source','nuclear'], // Nuclear
-    ['PPC','3','generator:source','solar'], // Solar
-    ['PPC','4','generator:source','geothermal'], // Geothermal
-    ['PPC','5','generator:source','wind'], // Wind
-    ['PPC','6','generator:source','tidal'], // Tidal
-    ['PPC','7','generator:source','thermal'], // Thermal
-    ['PPC','999','generator:source','other'], // Other
+    ['PPC','1','plant:source','hydro'], // Hydro-electric
+    ['PPC','2','plant:source','nuclear'], // Nuclear
+    ['PPC','3','plant:source','solar'], // Solar
+    ['PPC','4','plant:source','geothermal'], // Geothermal
+    ['PPC','5','plant:source','wind'], // Wind
+    ['PPC','6','plant:source','tidal'], // Tidal
+    ['PPC','7','plant:source','thermal'], // Thermal
+    ['PPC','999','plant:source','other'], // Other
 
     // PPO Product
     // ['PPO','0','product','unknown'],
@@ -2042,7 +2042,7 @@ mgcp.rules = {
 
     // AFC - Agricultural Facility Type
     ['FFN','2','building','farm'],
-    ['FFN','2','building','greenhouse'],
+    // ['FFN','2','building','greenhouse'],
     ['FFN','2','building','farm_auxiliary'],
     ['FFN','2','building','barn'],
     ['FFN','999','building','agricultural'],

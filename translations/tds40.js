@@ -924,10 +924,10 @@ cleanAttrs : function (attrs)
       if (tags.leisure && tags.tourism) delete tags.tourism;
       break;
 
-      case 'AP010': // Track
-      case 'AP050': // Trail
-          tags.seasonal = 'fair';
-          break;
+      // case 'AP010': // Track
+      // case 'AP050': // Trail
+      //     tags.seasonal = 'fair';
+      //     break;
 
     case 'AQ075': // Ice Route
       if (!tags.highway) tags.highway = 'road';
