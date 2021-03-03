@@ -36,21 +36,25 @@ namespace hoot
 {
 
 /**
- * A factory for creating a linear feature merger.
+ * A factory for creating a merger capable of merging a feature with a linear geometry
  *
- * @todo
+ * The class hierarchy for linear mergers has become unnecessarily complex over time due to the
+ * introduction of the Network Algorithm and Attribute Conflation. This attempts to shield some of
+ * that complexity from callers. This class should not be confused with Mergerfactory which
+ * generates MergerCreators. MergerCreators dealing with linear features call this class to
+ * determine which Merger to use.
  */
 class LinearMergerFactory
 {
 public:
 
   /**
-   * TODO
+   * Creates a linear feature merger matched by the Unifying Algorithm.
    *
-   * @param eids
-   * @param sublineMatcher
-   * @param matchedBy
-   * @return
+   * @param eids element IDs of the features to be merged
+   * @param sublineMatcher the subline matcher to be used to match the features
+   * @param matchedBy optional text to mark a feature with the type of matcher that matched it
+   * @return a merger
    */
   static MergerPtr getMerger(
     const std::set<std::pair<ElementId, ElementId>>& eids,
@@ -58,13 +62,13 @@ public:
     const QString matchedBy = QString());
 
   /**
-   * TODO
+   * Creates a linear feature merger matched by the Network Algorithm.
    *
-   * @param eids
-   * @param edgeMatches
-   * @param details
-   * @param matchedBy
-   * @return
+   * @param eids element IDs of the features to be merged
+   * @param edgeMatches network edge matches involved in the matching of the features
+   * @param details details of the network the features belong to
+   * @param matchedBy optional text to mark a feature with the type of matcher that matched it
+   * @return a merger
    */
   static MergerPtr getMerger(
     const std::set<std::pair<ElementId, ElementId>>& eids,
@@ -72,13 +76,15 @@ public:
     const QString matchedBy = QString());
 
   /**
-   * TODO
+   * Creates a linear feature merger matched by the Unifying Algorithm and using two subline
+   * matchers
    *
-   * @param eids
-   * @param sublineMatcher1
-   * @param sublineMatcher2
-   * @param matchedBy
-   * @return
+   * @param eids element IDs of the features to be merged
+   * @param sublineMatcher1 the primary subline matcher to be used to match the features
+   * @param sublineMatcher2 a secondary subline matcher to be used to match the features if the
+   * first results in a poor runtime
+   * @param matchedBy optional text to mark a feature with the type of matcher that matched it
+   * @return a merger
    */
   static MergerPtr getMerger(
     const std::set<std::pair<ElementId, ElementId>>& eids,

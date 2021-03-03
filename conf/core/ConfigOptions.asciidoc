@@ -1518,7 +1518,8 @@ specific Hootenanny conflation routines is considered to have similar tags.
 * Data Type: string
 * Default Value: `hoot::LinearSnapMerger`
 
-TODO
+The merger to use when merging features with linear geometries during conflation. Must inherit from
+`LinearMergerAbstract`.
 
 === geometry.modifier.rules.file
 
