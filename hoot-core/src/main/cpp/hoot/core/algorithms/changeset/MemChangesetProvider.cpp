@@ -60,7 +60,7 @@ void MemChangesetProvider::addChange(Change newChange)
 
 int MemChangesetProvider::getNumChanges() const
 {
-  return _changes.size();
+  return static_cast<int>(_changes.size());
 }
 
 bool MemChangesetProvider::containsChange(ElementId eID)
