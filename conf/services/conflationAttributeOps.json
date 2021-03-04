@@ -54,15 +54,6 @@
         "hoot_key": "building.keep.more.complex.geometry.when.auto.merging"
       },
       {
-        "id":"building_match_threshold",
-        "elem_type":"double",
-        "description":"The threshold at which a match is called a match for buildings. The higher the value, the more strict the matching becomes.",
-        "defaultvalue":"0.6",
-        "minvalue":"0.01",
-        "maxvalue":"1.0",
-        "hoot_key":"building.match.threshold"
-      },
-      {
         "id": "building_merge_many_to_many_matches",
         "elem_type": "bool",
         "description": "If false, many to many building matches will result in a review. If true, they will all be merged together when matched.",
@@ -111,46 +102,6 @@
         "hoot_key": "poi.polygon.auto.merge.many.poi.to.one.poly.matches"
       },
       {
-        "id": "conflate_use_data_source_ids_1",
-        "elem_type": "bool",
-        "description": "Determines whether the reader used by the conflate command to read the first input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
-        "name": "Use Ref IDs During Conflation",
-        "defaultvalue": "false",
-        "hoot_key": "conflate.use.data.source.ids.1"
-      },
-      {
-        "id": "remove_elements_visitor_chain.element_criteria",
-        "elem_type": "bool",
-        "description": "If set to true and multiple criterion are specified in remove.elements.visitor.element.criteria, elements will be removed only if they satisfy all of the criteria.  If set to false, then only one of the specified criteria must be met in order to remove an element.",
-        "name": "Chain Together Criteria When Removing Elements",
-        "defaultvalue": "false",
-        "hoot_key": "remove.elements.visitor.chain.element.criteria"
-      },
-      {
-        "id": "attribute_override_visitor_criteria",
-        "elem_type": "string",
-        "description": "The criteria for the RemoveElementsVisitor above",
-        "name": "Remove Elements Visitor Criteria",
-        "defaultvalue": "hoot::TagKeyCriterion;hoot::ReviewRelationCriterion",
-        "hoot_key": "remove.elements.visitor.element.criteria"
-      },
-      {
-        "id": "attribute_override_remove_elements_visitor_recursive",
-        "elem_type": "bool",
-        "description": "Remove elements recusively",
-        "name": "Remove elements recusively",
-        "defaultvalue": "false",
-        "hoot_key": "remove.elements.visitor.recursive",
-      },
-      {
-        "id": "review_score_invert_thresholding",
-        "elem_type": "bool",
-        "description": "If true, reviews outside of the score range specified by review.score.criterion.min/max.threshold will pass the filter.",
-        "name": "Invert Review Score Thresholding",
-        "defaultvalue": "true",
-        "hoot_key": "review.score.criterion.invert.thresholding"
-      },
-      {
         "id":"review_score_max_threshold",
         "elem_type":"double",
         "description":"The score threshold above which reviews will not pass the filter.  A value of 1.0 signifies no maximum score threshold.  This currently works with Attribute Conflation only and can be enabled with attribute.conflation.allow.reviews.by.score.",
@@ -169,38 +120,6 @@
         "minvalue":"0.0",
         "maxvalue":"1.0",
         "hoot_key":"review.score.criterion.min.threshold"
-      },
-      {
-        "id": "tag_key_criterion_keys",
-        "elem_type": "string",
-        "description": "Tag keys that TagKeyCriterion uses to filter elements.",
-        "name": "Tag Key Criterion Keys",
-        "defaultvalue": "hoot:multilinestring",
-        "hoot_key": "tag.key.criterion.keys"
-      },
-      {
-        "id": "tag_merger_default",
-        "elem_type": "string",
-        "description": "The tag merging strategy to use",
-        "name": "Tag Merger",
-        "defaultvalue": "hoot::OverwriteTag1Merger",
-        "hoot_key": "tag.merger.default"
-      },
-      {
-        "id": "way_joiner",
-        "elem_type": "string",
-        "description": "The way joiner to use to rejoin ways split during cleaning and conflation matching",
-        "name": "WayJoiner",
-        "defaultvalue": "hoot::WayJoinerAdvanced",
-        "hoot_key": "way.joiner"
-      },
-      {
-        "id": "writer_include_circular_error_tags",
-        "elem_type": "bool",
-        "description": "When true, writers will include circular error information. Not honored by all writers.",
-        "name": "Export Circular Error Tags",
-        "defaultvalue": "false",
-        "hoot_key": "writer.include.circular.error.tags"
       }
     ]
 }
