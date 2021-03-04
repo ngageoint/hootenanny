@@ -42,7 +42,7 @@ function initialize()
 // Create the output Schema
 function getDbSchema()
 {
-  print('schema: ' + enc311.schema);
+  // print('schema: ' + enc311.schema);
   if (enc311.schema == undefined) hoot.require('encv311_schema');
 
   // Warning: This is <GLOBAL> so we can get access to it from other functions
@@ -634,12 +634,12 @@ enc311 = {
       if (enc311.rawSchema == undefined)
       {
         // Debug
-        print('## Loading Schema');
+        // print('## Loading Schema');
         // enc311.rawSchema = enc311.schema.getDbSchema();
         enc311.rawSchema = getDbSchema();
       }
 
-      enc311.attrLookup = translate.makeTdsAttrLookup(enc311.rawSchema);
+      enc311.attrLookup = translate.makeThematicAttrLookup(enc311.rawSchema);
       delete enc311.rawSchema; // We don't need this any more
     }
 
