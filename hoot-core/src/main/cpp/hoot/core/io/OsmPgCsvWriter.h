@@ -54,21 +54,21 @@ public:
    * @param url Filename ending in ".pgcsv"
    * @return
    */
-  virtual bool isSupported(const QString& url) override { return url.toLower().endsWith(".pgcsv"); }
+  bool isSupported(const QString& url) override { return url.toLower().endsWith(".pgcsv"); }
   /**
    * @brief supportedFormats
    * @return
    */
-  virtual QString supportedFormats() override { return ".pgcsv"; }
+  QString supportedFormats() override { return ".pgcsv"; }
   /**
    * @brief open
    * @param url
    */
-  virtual void open(const QString& url) override;
+  void open(const QString& url) override;
   /**
    * @brief close
    */
-  void close();
+  void close() override;
   /**
    * @brief toString Write map to one large string containing all PGCSV files,
    * @param map Pointer to map object to write PGCSV data to a string
@@ -79,23 +79,23 @@ public:
    * @brief write Write map to set of PGCSV files
    * @param map Pointer to map object to write to PGCSV
    */
-  virtual void write(const ConstOsmMapPtr& map) override;
+  void write(const ConstOsmMapPtr& map) override;
   /**
    * @brief writePartial Write a single node/way/relation to the correct stream
    * @param n/w/r - Pointer to the node/way/relation to write to PGCSV
    */
-  virtual void writePartial(const ConstNodePtr& n) override;
-  virtual void writePartial(const ConstWayPtr& w) override;
-  virtual void writePartial(const ConstRelationPtr& r) override;
+  void writePartial(const ConstNodePtr& n) override;
+  void writePartial(const ConstWayPtr& w) override;
+  void writePartial(const ConstRelationPtr& r) override;
   /**
    * @brief finalizePartial Finalize the map write
    */
-  virtual void finalizePartial();
+  void finalizePartial() override;
   /**
    * @brief setConfiguration allows configuration settings to override the defaults
    * @param conf Configuration settings object
    */
-  virtual void setConfiguration(const Settings& conf);
+  void setConfiguration(const Settings& conf) override;
 
 private:
   /**

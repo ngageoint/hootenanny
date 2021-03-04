@@ -139,16 +139,16 @@ public:
   OsmApiDbBulkInserter();
   virtual ~OsmApiDbBulkInserter();
 
-  virtual bool isSupported(const QString& url) override;
-  virtual void open(const QString& url) override;
-  void close();
+  bool isSupported(const QString& url) override;
+  void open(const QString& url) override;
+  void close() override;
 
-  virtual void finalizePartial() override;
-  virtual void writePartial(const ConstNodePtr& node) override;
-  virtual void writePartial(const ConstWayPtr& way) override;
-  virtual void writePartial(const ConstRelationPtr& relation) override;
+  void finalizePartial() override;
+  void writePartial(const ConstNodePtr& node) override;
+  void writePartial(const ConstWayPtr& way) override;
+  void writePartial(const ConstRelationPtr& relation) override;
 
-  virtual void setConfiguration(const Settings& conf) override;
+  void setConfiguration(const Settings& conf) override;
 
   void setFileOutputElementBufferSize(long size) { _fileOutputElementBufferSize = size; }
   void setStatusUpdateInterval(long interval) { _statusUpdateInterval = interval; }
@@ -191,7 +191,7 @@ public:
   void setWriteIdSequenceUpdates(bool write)
   { _writeIdSequenceUpdates = write; }
 
-  virtual QString supportedFormats() { return MetadataTags::OsmApiDbScheme() + "://"; }
+  QString supportedFormats() override { return MetadataTags::OsmApiDbScheme() + "://"; }
 
 protected:
 
