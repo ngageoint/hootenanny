@@ -56,40 +56,40 @@ public:
   /**
    * @see OsmMapWriter
    */
-  virtual void close() override { if (_fp.get()) { _fp->close(); _fp.reset(); } }
+  void close() override { if (_fp.get()) { _fp->close(); _fp.reset(); } }
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void finalizePartial() override { close(); }
+  void finalizePartial() override { close(); }
 
   /**
    * @see OsmMapWriter
    */
-  virtual bool isSupported(const QString& url) override { return url.endsWith(".spark"); }
+  bool isSupported(const QString& url) override { return url.endsWith(".spark"); }
 
   /**
    * Open the specified filename for writing.
    */
-  virtual void open(const QString& fileName) override;
+  void open(const QString& fileName) override;
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstNodePtr& n) override;
+  void writePartial(const ConstNodePtr& n) override;
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstWayPtr&) override { throw NotImplementedException(); }
+  void writePartial(const ConstWayPtr&) override { throw NotImplementedException(); }
 
   /**
    * @see PartialOsmMapWriter
    */
-  virtual void writePartial(const ConstRelationPtr&) override { throw NotImplementedException(); }
+  void writePartial(const ConstRelationPtr&) override { throw NotImplementedException(); }
 
   //no point in showing this in the format list at this point, since its not actively maintained
-  virtual QString supportedFormats() override { return ""; }
+  QString supportedFormats() override { return ""; }
 
 private:
 

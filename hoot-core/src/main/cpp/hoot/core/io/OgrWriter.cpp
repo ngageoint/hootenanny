@@ -666,7 +666,7 @@ void OgrWriter::finalizePartial()
 {
 }
 
-void OgrWriter::writePartial(const std::shared_ptr<const hoot::Node>& newNode)
+void OgrWriter::writePartial(const ConstNodePtr& newNode)
 {
   LOG_TRACE("Writing node " << newNode->getId());
 
@@ -679,51 +679,51 @@ void OgrWriter::writePartial(const std::shared_ptr<const hoot::Node>& newNode)
   _writePartial(cacheProvider, newNode);
 }
 
-void OgrWriter::writePartial(const std::shared_ptr<const hoot::Way>& newWay)
+void OgrWriter::writePartial(const ConstWayPtr& way)
 {
-  LOG_TRACE("Writing way " << newWay->getId() );
+  LOG_TRACE("Writing way " << way->getId() );
 
   /*
    * Make sure this way has any hope of working (i.e., are there enough spots in the cache
    * for all its nodes?
    */
-  if ((unsigned long)newWay->getNodeCount() > _elementCache->getNodeCacheSize())
+  if ((unsigned long)way->getNodeCount() > _elementCache->getNodeCacheSize())
   {
-    throw HootException("Cannot do partial write of Way ID " + QString::number(newWay->getId()) +
-      " as it contains " + QString::number(newWay->getNodeCount()) + " nodes, but our cache can " +
+    throw HootException("Cannot do partial write of Way ID " + QString::number(way->getId()) +
+      " as it contains " + QString::number(way->getNodeCount()) + " nodes, but our cache can " +
       " only hold " + QString::number(_elementCache->getNodeCacheSize()) + ".  If you have enough " +
       " memory to load this way, you can increase the element.cache.size.node setting to " +
-      " an appropriate value larger than " + QString::number(newWay->getNodeCount()) +
+      " an appropriate value larger than " + QString::number(way->getNodeCount()) +
       " to allow for loading it.");
   }
 
   // Make sure all the nodes in the way are in our cache
-  const std::vector<long> wayNodeIds = newWay->getNodeIds();
+  const std::vector<long> wayNodeIds = way->getNodeIds();
   std::vector<long>::const_iterator nodeIdIterator;
 
   for (nodeIdIterator = wayNodeIds.begin(); nodeIdIterator != wayNodeIds.end(); ++nodeIdIterator)
   {
     if (_elementCache->containsNode(*nodeIdIterator) == false)
     {
-      throw HootException("Way " + QString::number(newWay->getId()) + " contains node " +
+      throw HootException("Way " + QString::number(way->getId()) + " contains node " +
         QString::number(*nodeIdIterator) + ", which is not present in the cache.  If you have the " +
           "memory to support this number of nodes, you can increase the element.cache.size.node " +
           "setting above: " + QString::number(_elementCache->getNodeCacheSize()) + ".");
     }
-    LOG_TRACE("Way " << newWay->getId() << " contains node " << *nodeIdIterator <<
+    LOG_TRACE("Way " << way->getId() << " contains node " << *nodeIdIterator <<
                  ": " << _elementCache->getNode(*nodeIdIterator)->getX() << ", " <<
                 _elementCache->getNode(*nodeIdIterator)->getY() );
   }
 
   // Add to the element cache
-  ConstElementPtr constWay(newWay);
+  ConstElementPtr constWay(way);
   _elementCache->addElement(constWay);
 
   ElementProviderPtr cacheProvider(_elementCache);
-  _writePartial(cacheProvider, newWay);
+  _writePartial(cacheProvider, way);
 }
 
-void OgrWriter::writePartial(const std::shared_ptr<const hoot::Relation>& newRelation)
+void OgrWriter::writePartial(const ConstRelationPtr& newRelation)
 {
   LOG_TRACE("Writing relation " << newRelation->getId());
 
@@ -833,11 +833,6 @@ void OgrWriter::writePartial(const std::shared_ptr<const hoot::Relation>& newRel
 
 void OgrWriter::writeElement(ElementPtr &element)
 {
-  writeElement(element, false);
-}
-
-void OgrWriter::writeElement(ElementPtr &element, bool debug)
-{
   //  Do not attempt to write empty elements
   if (!element)
     return;
@@ -852,11 +847,6 @@ void OgrWriter::writeElement(ElementPtr &element, bool debug)
   }
   // Now that all the empties are gone, update our element
   element->setTags(destTags);
-
-  if (debug == true)
-  {
-    LOG_TRACE(element->toString());
-  }
 
   PartialOsmMapWriter::writePartial(element);
 }
