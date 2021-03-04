@@ -95,14 +95,6 @@
         "hoot_key": "duplicate.name.preserve.original.name"
       },
       {
-        "id": "attribute_override_highway_merge_tags_only",
-        "elem_type": "bool",
-        "description": "If true, road conflation merges tag changes into the reference only and makes no geometry changes.",
-        "name": "Tag only merger creator",
-        "defaultvalue": "true",
-        "hoot_key": "highway.merge.tags.only"
-      },
-      {
         "id": "poi_polygon_allow_cross_conflation_merging",
         "elem_type": "bool",
         "description": "If false, when a match found by Building Conflation involves the same feature in a match found by POI to Polygon Conflation, a review will be generated. If true, then that situation will result in a merge between all features involved in the Building and POI to Polygon conflation matches.",
