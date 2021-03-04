@@ -58,9 +58,9 @@ void MemChangesetProvider::addChange(Change newChange)
   _changes.push_back(newChange);
 }
 
-size_t MemChangesetProvider::getNumChanges()
+int MemChangesetProvider::getNumChanges() const
 {
-  return _changes.size();
+  return static_cast<int>(_changes.size());
 }
 
 bool MemChangesetProvider::containsChange(ElementId eID)

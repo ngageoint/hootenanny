@@ -53,24 +53,24 @@ public:
   /**
    * @see ChangesetProvider
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   void open(QString fileName);
 
   /**
    * @see ChangesetProvider
    */
-  virtual void close();
+  void close() override;
 
   /**
    * @see ChangesetProvider
    */
-  virtual bool hasMoreChanges();
+  bool hasMoreChanges() override;
 
   /**
    * @see ChangesetProvider
    */
-  virtual Change readNextChange();
+  Change readNextChange() override;
 
 private:
 
