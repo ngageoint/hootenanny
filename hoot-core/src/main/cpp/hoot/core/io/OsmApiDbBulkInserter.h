@@ -191,7 +191,7 @@ public:
   void setWriteIdSequenceUpdates(bool write)
   { _writeIdSequenceUpdates = write; }
 
-  QString supportedFormats() { return MetadataTags::OsmApiDbScheme() + "://"; }
+  QString supportedFormats() override { return MetadataTags::OsmApiDbScheme() + "://"; }
 
 protected:
 

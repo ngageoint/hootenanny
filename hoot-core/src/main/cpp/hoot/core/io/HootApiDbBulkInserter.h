@@ -62,7 +62,7 @@ public:
   bool isSupported(const QString& url) override;
   void open(const QString& url) override;
 
-  void finalizePartial();
+  void finalizePartial() override;
   void writePartial(const ConstNodePtr& node) override;
   void writePartial(const ConstWayPtr& way) override;
   void writePartial(const ConstRelationPtr& relation) override;

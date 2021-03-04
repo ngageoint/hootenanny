@@ -90,7 +90,7 @@ public:
   void writePartial(const ConstNodePtr& node) override;
   void writePartial(const ConstWayPtr& way) override;
   void writePartial(const ConstRelationPtr& relation) override;
-  void finalizePartial();
+  void finalizePartial() override;
 
   /**
    * Remove any invalid characters from the string s and print an error if one is found.
