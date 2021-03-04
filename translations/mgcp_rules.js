@@ -2061,7 +2061,7 @@ mgcp.rules = {
     ['FIC','999','embankment','divider'], // TDS etc
     ['FIC','999','embankment:type','levee'], // TDS etc
     ['FIC','999','embankment:type','divider'], // TDS etc
-    ['FIC','999','embankment:type','other'], // Other
+    // ['FIC','999','embankment:type','other'], // Other
 
     // AFC - Agricultural Facility Type
     ['FFN','2','building','farm'],

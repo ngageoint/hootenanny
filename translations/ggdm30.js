@@ -733,7 +733,7 @@ ggdm30 = {
     } // End process tags.note
 
     // Roads. GGDM30 is the same as TDSv61
-    if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
+    if ((attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') && !tags.highway) // Road & Ice Road
     {
       // Set a Default: "It is a road but we don't know what it is"
       tags.highway = 'road';
@@ -785,6 +785,8 @@ ggdm30 = {
       }
     } // End if AP030
 
+    // Remove a default
+    if (tags.highway == 'road' && tags['ref:road:class'] == 'local') delete tags['ref:road:class'];
 
     // ROR (Road Interchange Ramp)
     if (tags.highway && tags.interchange_ramp == 'yes')
@@ -1343,6 +1345,43 @@ ggdm30 = {
       }
     } // End cycleList
 
+    // SOme highway cleanup
+    switch (tags.highway)
+    {
+      case undefined:
+        break;
+
+      case 'bus_stop':
+        tags["transport:type"] = 'bus';
+        break;
+
+      case 'crossing':
+      case 'give-way':
+      case 'stop':
+        // Special type of crossing
+        if (tags.crossing == 'tank')
+        {
+          attrs.F_CODE = 'AP056';
+          break;
+        }
+        tags['transport:type'] = 'road';
+        attrs.F_CODE = 'AQ062';
+        delete tags.highway;
+        break;
+
+      case 'mini_roundabout':
+        tags.junction = 'roundabout';
+        break;
+        // ['t.highway == "steps"','t.highway = "footway"'],
+    } // End Highway cleanup
+
+    // Ice roads are a special case.
+    if (tags.ice_road == 'yes')
+    {
+      attrs.F_CODE = 'AQ075';
+      if (tags.highway == 'road') delete tags.highway;
+    }
+
 
     if (ggdm30.preRules == undefined)
     {
@@ -1360,12 +1399,6 @@ ggdm30 = {
         ['t.diplomatic && t.amenity == "embassy"','delete t.amenity'],
         ['t.dock && t.waterway == "dock"','delete t.waterway'],
         ['t.golf == "driving_range" && t.leisure == "golf_course"','delete t.leisure'],
-        ['t.highway == "bus_stop"','t["transport:type"] = "bus"'],
-        ['t.highway == "crossing"','t["transport:type"] = "road";a.F_CODE = "AQ062"; delete t.highway'],
-        ['t.highway == "give-way"','a.F_CODE = "AQ062"'],
-        ['t.highway == "mini_roundabout"','t.junction = "roundabout"'],
-        // ['t.highway == "steps"','t.highway = "footway"'],
-        ['t.highway == "stop"','a.F_CODE = "AQ062"'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
         ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
@@ -1385,7 +1418,6 @@ ggdm30 = {
         ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
         ['t.power == "tower"','t["cable:type"] = "power"'],
         ['t.power == "line"','t["cable:type"] = "power"; t.cable = "yes"; delete t.power'],
-        ['t.power == "generator"','t.use = "power_generation"; a.F_CODE = "AL013"'],
         ['t.rapids == "yes"','t.waterway = "rapids"; delete t.rapids'],
         ['t.railway == "station"','t.public_transport = "station";  t["transport:type"] = "railway"'],
         ['t.railway == "level_crossing"','t["transport:type"] = "railway";t["transport:type2"] = "road"; a.F_CODE = "AQ062"; delete t.railway'],
@@ -1394,7 +1426,6 @@ ggdm30 = {
         ['t.route == "road" && !(t.highway)','t.highway = "road"; delete t.route'],
         // ["(t.shop || t.office) &&  !(t.building)","a.F_CODE = 'AL013'"],
         ['t.social_facility == "shelter"','t.social_facility = t["social_facility:for"]; delete t.amenity; delete t["social_facility:for"]'],
-        ['t["tower:type"] == "minaret" && t.man_made == "tower"','delete t.man_made'],
         ['t.tunnel == "building_passage"','t.tunnel = "yes"'],
         ['t.use == "islamic_prayer_hall" && t.amenity == "place_of_worship"','delete t.amenity'],
         ['t.wetland && t.natural == "wetland"','delete t.natural'],
@@ -1411,6 +1442,56 @@ ggdm30 = {
     for (var i = 0, rLen = ggdm30.ggdmPrePules.length; i < rLen; i++)
     {
       if (ggdm30.ggdmPrePules[i][0](tags)) ggdm30.ggdmPrePules[i][1](tags,attrs);
+    }
+
+    // Specific case for "Dolphins"
+    if (tags['seamark:mooring:category'] && tags['seamark:type']) delete tags['seamark:type']
+
+    // Aircraft Shelters
+    if (tags.bunker_type == 'hardened_aircraft_shelter') attrs.F_CODE = 'GB250';
+
+    // Towers
+    if (tags['tower:type'] && tags.man_made == 'tower')
+    {
+      switch(tags['tower:type'])
+      {
+        case 'minaret':
+          // Debug
+          print('Got Minaret');
+          delete tags.man_made;
+          break;
+
+        case 'cooling':
+          delete tags.man_made;
+          break;
+
+        case 'light':
+          delete tags.man_made;
+          break;
+      }
+    }
+
+    // Wind Turbines, Solar Panels etc  vs power plants
+    if (tags['generator:source'])
+    {
+      delete tags.power;
+    }
+    else if (tags.power == 'generator')
+    {
+      attrs.F_CODE = 'AL013';
+      tags.use = 'power_generation';
+    }
+
+    // Fix up bus,train & ferry stations
+    if (tags.public_transport == 'station')
+    {
+      if (tags.amenity == 'bus_station' || tags.bus == 'yes')
+      {
+        delete tags.amenity;
+        delete tags.bus;
+        tags['transport:type'] = 'road'; // Bus is not valid on AQ125
+        tags.use = 'road_transport';
+      }
     }
 
     // Sort out landuse
@@ -2203,6 +2284,9 @@ ggdm30 = {
     // - Fix the "highway=" stuff that cant be done in the one2one rules
     if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
     {
+      // Tag preservation
+      if (tags.highway == 'road') notUsedTags.highway = 'road';
+
       // If we havent fixed up the road type/class, have a go with the
       // highway tag
       if (!attrs.RTY && !attrs.RIN_ROI)

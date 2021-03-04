@@ -316,7 +316,7 @@ ggdm30.rules = {
     'DZC':'deck_count', // Deck Count
     'DZP':'depth:maximum_below_surface', // Deepest Depth Below Surface Level
     // 'EOL':'raw:EOL', // Light Elevation - BC040_EOL
-    'EPW':'generator:output:electricity', // Electrical Power Generation Capacity
+    'EPW':'plant:output:electricity', // Electrical Power Generation Capacity
     'EQS':'density_equivalent_scale', // Density Equivalent Scale
     'EVA':'source:accuracy:elevation', // Elevation Vertical Accuracy (90%)
     'FCL':'ferry:crossing_distance', // Ferry Crossing Distance
@@ -3862,12 +3862,12 @@ ggdm30.rules = {
 
     // POS - Power Source
     // ['POS','-999999',undefined,undefined], // No Information
-    ['POS','1','generator:source','geothermal'], // Geothermal
-    ['POS','2','generator:source','hydro'], // Hydro-electric
-    ['POS','3','generator:source','nuclear'], // Nuclear
-    ['POS','4','generator:source','thermal'], // Thermal
-    ['POS','5','generator:source','tidal'], // Tidal
-    ['POS','999','generator:source','other'], // Other
+    ['POS','1','plant:source','geothermal'], // Geothermal
+    ['POS','2','plant:source','hydro'], // Hydro-electric
+    ['POS','3','plant:source','nuclear'], // Nuclear
+    ['POS','4','plant:source','thermal'], // Thermal
+    ['POS','5','plant:source','tidal'], // Tidal
+    ['POS','999','plant:source','other'], // Other
 
     // POS2 - Power Source [2]
     // POS3 - Power Source [3]

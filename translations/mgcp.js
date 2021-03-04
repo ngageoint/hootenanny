@@ -1159,8 +1159,8 @@ mgcp = {
     // Ice roads are a special case.
     if (tags.ice_road == 'yes')
     {
-    attrs.F_CODE = 'AQ075';
-    if (tags.highway == 'road') delete tags.highway;
+      attrs.F_CODE = 'AQ075';
+      if (tags.highway == 'road') delete tags.highway;
     }
 
     if (mgcp.mgcpPreRules == undefined)
