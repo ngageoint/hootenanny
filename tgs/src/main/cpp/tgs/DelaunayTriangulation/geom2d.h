@@ -121,7 +121,7 @@ public:
 class Line
 {
 public:
-  Line()	{}
+  Line() : a(0.0), b(0.0), c(0.0) { }
   Line(const Point2d&, const Point2d&);
   Real eval(const Point2d&) const;
   int classify(const Point2d&) const;

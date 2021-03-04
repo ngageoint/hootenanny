@@ -56,7 +56,7 @@ class TDistribution
 {
 public:
 
-  TDistribution();
+  TDistribution() = default;
 
   /**
    * Similar to calling initialize.

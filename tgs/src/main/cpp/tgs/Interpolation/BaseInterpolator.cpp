@@ -38,9 +38,9 @@
 
 // Tgs
 #include <tgs/StreamUtils.h>
+#include <tgs/RandomForest/DataFrame.h>
 #include <tgs/RStarTree/HilbertRTree.h>
 #include <tgs/RStarTree/MemoryPageStore.h>
-#include <tgs/RandomForest/DataFrame.h>
 
 using namespace std;
 

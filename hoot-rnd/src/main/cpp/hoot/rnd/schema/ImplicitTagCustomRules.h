@@ -42,7 +42,7 @@ class ImplicitTagCustomRules
 
 public:
 
-  ImplicitTagCustomRules();
+  ImplicitTagCustomRules() = default;
 
   void init();
 

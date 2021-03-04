@@ -48,7 +48,7 @@ public:
    */
   WordCountWriter(long maxFrequent) : _maxFrequent(maxFrequent) {}
 
-  virtual ~WordCountWriter() {}
+  virtual ~WordCountWriter() = default;
 
   void write(QString basePath, QVector<WordCount> words);
 

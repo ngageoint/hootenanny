@@ -122,7 +122,7 @@ class TGS_EXPORT RTreeNode
 {
 public:
 
-  virtual ~RTreeNode();
+  virtual ~RTreeNode() = default;
 
   /**
    * This is only intended for RStarTree class

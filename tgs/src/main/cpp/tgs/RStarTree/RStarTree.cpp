@@ -79,10 +79,6 @@ RStarTree::RStarTree(const std::shared_ptr<PageStore>& ps, int dimensions)
   _dimensions = dimensions;
 }
 
-RStarTree::~RStarTree()
-{
-}
-
 void RStarTree::_addChild(RTreeNode* parent, const Box& b, int id)
 {
   if (id < 0)
@@ -372,7 +368,7 @@ public:
   Box b;
   int id;
 
-  Child() {}
+  Child() : id(0) { }
 
   Child(int id, const BoxInternalData& b) : b(b.toBox()), id(id) { }
 };

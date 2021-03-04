@@ -47,7 +47,7 @@ public:
    */
   StdIoDevice(std::istream& in);
 
-  virtual ~StdIoDevice();
+  virtual ~StdIoDevice() = default;
 
   virtual bool atEnd() const;
 
