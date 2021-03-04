@@ -45,7 +45,7 @@ public:
 
   static QString className() { return "hoot::EmptyWayCriterion"; }
 
-  EmptyWayCriterion();
+  EmptyWayCriterion() = default;
   virtual ~EmptyWayCriterion() = default;
 
   /**

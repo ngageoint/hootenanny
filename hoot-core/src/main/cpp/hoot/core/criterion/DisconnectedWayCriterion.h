@@ -44,7 +44,7 @@ public:
 
   static QString className() { return "hoot::DisconnectedWayCriterion"; }
 
-  DisconnectedWayCriterion();
+  DisconnectedWayCriterion() = default;
   DisconnectedWayCriterion(ConstOsmMapPtr map);
   virtual ~DisconnectedWayCriterion() = default;
 

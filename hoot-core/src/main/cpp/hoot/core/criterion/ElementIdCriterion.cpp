@@ -28,18 +28,14 @@
 #include "ElementIdCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, ElementIdCriterion)
-
-ElementIdCriterion::ElementIdCriterion()
-{
-}
 
 ElementIdCriterion::ElementIdCriterion(const ElementId& id)
 {

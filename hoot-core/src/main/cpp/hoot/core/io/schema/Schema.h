@@ -39,7 +39,7 @@ namespace hoot
 class Schema
 {
 public:
-  Schema();
+  Schema() = default;
 
   void addLayer(const std::shared_ptr<Layer>& l);
 

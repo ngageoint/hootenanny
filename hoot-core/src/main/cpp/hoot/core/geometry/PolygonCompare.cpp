@@ -27,14 +27,6 @@
 
 #include "PolygonCompare.h"
 
-// Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/geometry/GeometryToElementConverter.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/StringUtils.h>
-
 // GEOS
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
@@ -42,10 +34,19 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/util/IllegalArgumentException.h>
-using namespace geos::geom;
 
 // TGS
 #include <tgs/RStarTree/HilbertCurve.h>
+
+// Hoot
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/GeometryToElementConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
+
+using namespace geos::geom;
 using namespace Tgs;
 
 namespace hoot
@@ -56,13 +57,6 @@ PolygonCompare::PolygonCompare(Envelope e)
   _curve.reset(new HilbertCurve(2, 8));
   _e = e;
   _size = (1 << 8) - 1;
-}
-
-PolygonCompare::PolygonCompare(const PolygonCompare& other)
-{
-  _curve = other._curve;
-  _e = other._e;
-  _size = other._size;
 }
 
 bool PolygonCompare::operator()(const std::shared_ptr<geos::geom::Geometry>& p1,

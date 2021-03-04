@@ -51,7 +51,7 @@ public:
 
   ZCurveRanger(const ZValue& zv);
 
-  ~ZCurveRanger() {}
+  ~ZCurveRanger() = default;
 
   /** Find a good break point for the given box based on major z-value breaks
    * and break the box into two children.

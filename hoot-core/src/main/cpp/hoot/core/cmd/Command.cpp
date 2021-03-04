@@ -33,8 +33,4 @@
 namespace hoot
 {
 
-Command::Command()
-{
-}
-
 }

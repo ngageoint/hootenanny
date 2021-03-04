@@ -28,8 +28,8 @@
 #define MULTIARY_INGEST_CHANGESET_READER_H
 
 // hoot
-#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
+#include <hoot/core/io/OsmJsonReader.h>
 #include <hoot/core/io/OsmXmlReader.h>
 
 // Qt

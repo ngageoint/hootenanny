@@ -45,11 +45,11 @@ public:
 
   static QString className() { return "hoot::Range"; }
 
-  Range() {}
+  Range() = default;
 
   Range(long int min, long int max);
 
-  virtual ~Range() {}
+  virtual ~Range() = default;
 
   bool hashCode();
 

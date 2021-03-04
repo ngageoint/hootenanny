@@ -41,7 +41,7 @@ class RubberSheetDeriver
 {
 public:
 
-  RubberSheetDeriver();
+  RubberSheetDeriver() = default;
 
   /**
    * Derives rubber sheet transforms for rubber sheeting either direction between two inputs

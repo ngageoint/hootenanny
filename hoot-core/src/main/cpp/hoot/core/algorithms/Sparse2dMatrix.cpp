@@ -31,10 +31,6 @@
 namespace hoot
 {
 
-Sparse2dMatrix::Sparse2dMatrix()
-{
-}
-
 QString Sparse2dMatrix::toString() const
 {
   QStringList sl;

@@ -52,7 +52,7 @@ public:
 
   static int logWarnCount;
 
-  WayString();
+  WayString() = default;
 
   void append(const WaySubline& subline);
 

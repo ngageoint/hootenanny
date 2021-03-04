@@ -45,10 +45,6 @@ using namespace std;
 namespace hoot
 {
 
-NodeReplacements::NodeReplacements()
-{
-}
-
 long NodeReplacements::_getFinalReplacement(long oldId)
 {
   set<long> touched;

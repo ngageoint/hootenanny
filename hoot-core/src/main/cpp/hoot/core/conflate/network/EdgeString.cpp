@@ -62,26 +62,12 @@ bool operator==(const ConstEdgeStringPtr& es1, const ConstEdgeStringPtr& es2)
     }
   }
 
-//  bool strResult = es1->toString() == es2->toString();
-//  if (result != strResult)
-//  {
-//    LOG_VARE(result);
-//    LOG_VARE(strResult);
-//    LOG_VARE(es1);
-//    LOG_VARE(es2);
-//    throw HootException();
-//  }
-
   return result;
 }
 
 QString EdgeString::EdgeEntry::toString() const
 {
   return hoot::toString(_subline);
-}
-
-EdgeString::EdgeString()
-{
 }
 
 void EdgeString::addFirstEdge(const ConstNetworkEdgePtr& e)

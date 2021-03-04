@@ -52,7 +52,7 @@ public:
 
   SchemaChecker(OsmSchema& osmSchema);
 
-  ~SchemaChecker() {}
+  ~SchemaChecker() = default;
 
   /**
    * Print out error message if schemavertex is unkonw vertex type.

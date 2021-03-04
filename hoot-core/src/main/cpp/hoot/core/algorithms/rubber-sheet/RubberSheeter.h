@@ -41,7 +41,7 @@ class RubberSheeter
 {
 public:
 
-  RubberSheeter();
+  RubberSheeter() = default;
 
   /**
    * Rubber sheets two inputs together

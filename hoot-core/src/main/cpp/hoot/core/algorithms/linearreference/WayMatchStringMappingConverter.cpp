@@ -29,10 +29,6 @@
 namespace hoot
 {
 
-WayMatchStringMappingConverter::WayMatchStringMappingConverter()
-{
-}
-
 WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString(
   WayMatchStringMappingPtr mapping)
 {

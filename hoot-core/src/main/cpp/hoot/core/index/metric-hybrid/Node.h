@@ -44,7 +44,7 @@ class Node
 {
 public:
 
-  virtual ~Node() {}
+  virtual ~Node() = default;
 
   virtual const Node<KeyType, DataType>* getChild(size_t i) const = 0;
 

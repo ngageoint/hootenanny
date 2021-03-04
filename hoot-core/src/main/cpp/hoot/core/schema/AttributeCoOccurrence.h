@@ -43,7 +43,7 @@ public:
 
   typedef HashMap<QString, HashMap<QString, int>> CoOccurrenceHash;
 
-  AttributeCoOccurrence();
+  AttributeCoOccurrence() = default;
 
   void addToMatrix(const ConstOsmMapPtr& in);
 

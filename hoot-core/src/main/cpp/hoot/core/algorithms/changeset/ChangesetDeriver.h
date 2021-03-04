@@ -29,8 +29,8 @@
 
 // Hoot
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
-#include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/ElementComparer.h>
+#include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot
 {
