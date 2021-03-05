@@ -54,6 +54,15 @@
         "hoot_key": "building.keep.more.complex.geometry.when.auto.merging"
       },
       {
+        "id":"building_match_threshold",
+        "elem_type":"double",
+        "description":"The threshold at which a match is called a match for buildings. The higher the value, the more strict the matching becomes.",
+        "defaultvalue":"0.6",
+        "minvalue":"0.01",
+        "maxvalue":"1.0",
+        "hoot_key":"building.match.threshold"
+      },
+      {
         "id": "building_merge_many_to_many_matches",
         "elem_type": "bool",
         "description": "If false, many to many building matches will result in a review. If true, they will all be merged together when matched.",
@@ -70,6 +79,14 @@
         "defaultvalue":"hoot::RemoveElementsVisitor;hoot::RemoveUnknown2Visitor"
       },
       {
+        "id": "conflate_mark_merger_created_multilinestring_relations",
+        "elem_type": "bool",
+        "description": "Marks any multilinestring relations created as a result of merging during conflation with a custom tag.",
+        "name": "Mark Conflated Multilinestring Relations",
+        "defaultvalue": "true",
+        "hoot_key": "conflate.mark.merge.created.multilinestring.relations"
+      },
+      {
         "id": "corner_splitter_rounded_split",
         "elem_type": "bool",
         "description": "Rounded corners in one dataset can cause non-rounded corners in the secondary dataset to not conflate",
@@ -78,12 +95,28 @@
         "hoot_key": "highway.corner.splitter.rounded.split"
       },
       {
+        "id": "hootapi_db_writer_preserve_version_on_insert",
+        "elem_type": "bool",
+        "description": "If true, versions for elements are retained on new writes to the Hootenanny API database.",
+        "name": "Preserve Version on insert",
+        "defaultvalue": "true",
+        "hoot_key": "hootapi.db.writer.preserve.version.on.insert"
+      },
+      {
         "id": "duplicate_name_preserve_original_name",
         "elem_type": "bool",
         "description": "If true, the Duplicate Name Remover will always preserve the original name tag.  Otherwise, it will treat name and alternate name tags equally.",
         "name": "Preserve Original Name During Duplicate Name Removal",
         "defaultvalue": "true",
         "hoot_key": "duplicate.name.preserve.original.name"
+      },
+      {
+        "id": "geometry_linear_merger_default",
+        "elem_type": "string",
+        "description": "The merger to use when merging features with linear geometries during conflation.",
+        "name": "Default Linear Geometry Merger",
+        "defaultvalue": "hoot::LinearTagOnlyMerger",
+        "hoot_key": "geometry.linear.merger.default"
       },
       {
         "id": "poi_polygon_allow_cross_conflation_merging",
@@ -100,6 +133,62 @@
         "name": "Automatically Merge Many to One POI to Polygon Conflation Matches",
         "defaultvalue": "true",
         "hoot_key": "poi.polygon.auto.merge.many.poi.to.one.poly.matches"
+      },
+      {
+        "id": "poi_polygon_tag_merger",
+        "elem_type": "string",
+        "description": "The tag merger used by POI/Polygon conflation.",
+        "name": "POI/Polygon tag merger",
+        "defaultvalue": "hoot::OverwriteTag1Merger",
+        "hoot_key": "poi.polygon.tag.merger"
+      },
+      {
+        "id": "conflate_use_data_source_ids_1",
+        "elem_type": "bool",
+        "description": "Determines whether the reader used by the conflate command to read the first input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
+        "name": "Use Ref IDs During Conflation",
+        "defaultvalue": "false",
+        "hoot_key": "conflate.use.data.source.ids.1"
+      },
+      {
+        "id": "conflate_use_data_source_ids_2",
+        "elem_type": "bool",
+        "description": "Determines whether the reader used by the conflate command to read the second input dataset will use the element ID's specified by the input datasets (true) or use internal ID management for the inputs (false).",
+        "name": "Use Secondary IDs During Conflation",
+        "defaultvalue": "true",
+        "hoot_key": "conflate.use.data.source.ids.2"
+      },
+      {
+        "id": "remove_elements_visitor_chain.element_criteria",
+        "elem_type": "bool",
+        "description": "If set to true and multiple criterion are specified in remove.elements.visitor.element.criteria, elements will be removed only if they satisfy all of the criteria.  If set to false, then only one of the specified criteria must be met in order to remove an element.",
+        "name": "Chain Together Criteria When Removing Elements",
+        "defaultvalue": "false",
+        "hoot_key": "remove.elements.visitor.chain.element.criteria"
+      },
+      {
+        "id": "attribute_override_visitor_criteria",
+        "elem_type": "string",
+        "description": "The criteria for the RemoveElementsVisitor above",
+        "name": "Remove Elements Visitor Criteria",
+        "defaultvalue": "hoot::TagKeyCriterion;hoot::ReviewRelationCriterion",
+        "hoot_key": "remove.elements.visitor.element.criteria"
+      },
+      {
+        "id": "attribute_override_remove_elements_visitor_recursive",
+        "elem_type": "bool",
+        "description": "Remove elements recusively",
+        "name": "Remove elements recusively",
+        "defaultvalue": "false",
+        "hoot_key": "remove.elements.visitor.recursive",
+      },
+      {
+        "id": "review_score_invert_thresholding",
+        "elem_type": "bool",
+        "description": "If true, reviews outside of the score range specified by review.score.criterion.min/max.threshold will pass the filter.",
+        "name": "Invert Review Score Thresholding",
+        "defaultvalue": "true",
+        "hoot_key": "review.score.criterion.invert.thresholding"
       },
       {
         "id":"review_score_max_threshold",
@@ -120,6 +209,46 @@
         "minvalue":"0.0",
         "maxvalue":"1.0",
         "hoot_key":"review.score.criterion.min.threshold"
+      },
+      {
+        "id": "tag_key_criterion_keys",
+        "elem_type": "string",
+        "description": "Tag keys that TagKeyCriterion uses to filter elements.",
+        "name": "Tag Key Criterion Keys",
+        "defaultvalue": "hoot:multilinestring",
+        "hoot_key": "tag.key.criterion.keys"
+      },
+      {
+        "id": "tag_merger_default",
+        "elem_type": "string",
+        "description": "The tag merging strategy to use",
+        "name": "Tag Merger",
+        "defaultvalue": "hoot::OverwriteTag1Merger",
+        "hoot_key": "tag.merger.default"
+      },
+      {
+        "id": "tag_merger_overwrite_exclude",
+        "elem_type": "string",
+        "description": "A list of tag keys not to be overwritten on target features during tag merging when using OverwriteTagMerger or ReplaceTagMerger.",
+        "name": "Tag Merger Overwrite Exclude",
+        "defaultvalue": "source;source:imagery;source:imagery:datetime;source:imagery:id;source:imagery:sensor",
+        "hoot_key": "tag.merger.overwrite.exclude"
+      },
+      {
+        "id": "way_joiner",
+        "elem_type": "string",
+        "description": "The way joiner to use to rejoin ways split during cleaning and conflation matching",
+        "name": "WayJoiner",
+        "defaultvalue": "hoot::WayJoinerAdvanced",
+        "hoot_key": "way.joiner"
+      },
+      {
+        "id": "writer_include_circular_error_tags",
+        "elem_type": "bool",
+        "description": "When true, writers will include circular error information. Not honored by all writers.",
+        "name": "Export Circular Error Tags",
+        "defaultvalue": "false",
+        "hoot_key": "writer.include.circular.error.tags"
       }
     ]
 }
