@@ -35,15 +35,6 @@
 namespace Tgs
 {
 
-
-  MultithreadedRandomForestManager::MultithreadedRandomForestManager()
-  {
-
-  }
-
-  MultithreadedRandomForestManager::~MultithreadedRandomForestManager(){}
-
-
   void MultithreadedRandomForestManager::_initForests(int numForests)
   {
     try

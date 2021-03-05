@@ -81,11 +81,6 @@ PluginContext::PluginContext()
   }
 }
 
-PluginContext::~PluginContext()
-{
-
-}
-
 Local<Value> PluginContext::call(Handle<Object> obj, QString name, QList<QVariant> args)
 {
   Isolate* current = obj->GetIsolate();

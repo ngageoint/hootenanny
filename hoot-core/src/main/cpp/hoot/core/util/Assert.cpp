@@ -32,10 +32,6 @@
 namespace hoot
 {
 
-Assert::Assert()
-{
-}
-
 void Assert::isTrue(bool exp, QString s)
 {
   if (exp)

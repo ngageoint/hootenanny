@@ -49,14 +49,13 @@ class PolygonCompare
 public:
 
   PolygonCompare(geos::geom::Envelope e);
-  PolygonCompare(const PolygonCompare& other);
 
   bool operator()(const std::shared_ptr<geos::geom::Geometry>& p1,
                   const std::shared_ptr<geos::geom::Geometry>& p2);
 
 private:
 
-  PolygonCompare();
+  PolygonCompare() = default;
   PolygonCompare& operator=(PolygonCompare& other);
 
   geos::geom::Envelope _e;

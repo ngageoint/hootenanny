@@ -31,10 +31,6 @@
 namespace hoot
 {
 
-OsmNetwork::OsmNetwork()
-{
-}
-
 void OsmNetwork::addEdge(NetworkEdgePtr edge)
 {
   if (_eidToVertex.contains(edge->getFrom()->getElementId()) == false ||

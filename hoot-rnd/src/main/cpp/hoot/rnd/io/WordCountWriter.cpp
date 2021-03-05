@@ -27,8 +27,9 @@
 
 #include "WordCountWriter.h"
 
-// hoot
 #include <hoot/rnd/io/WordCount.h>
+
+// hoot
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>

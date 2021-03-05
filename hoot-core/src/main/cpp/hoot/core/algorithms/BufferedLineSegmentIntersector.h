@@ -39,7 +39,7 @@ namespace hoot
 class BufferedLineSegmentIntersector
 {
 public:
-  BufferedLineSegmentIntersector();
+  BufferedLineSegmentIntersector() = default;
 
   /**
    * Buffer a and intersect it with b. The result is put into @a result. Return true if the line

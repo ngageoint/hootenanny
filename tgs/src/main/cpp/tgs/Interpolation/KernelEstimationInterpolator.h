@@ -52,7 +52,7 @@ public:
    */
   KernelEstimationInterpolator(double sigma = -1);
 
-  virtual ~KernelEstimationInterpolator();
+  virtual ~KernelEstimationInterpolator() = default;
 
   virtual QString getName() const { return className(); }
 

@@ -38,7 +38,7 @@ namespace Tgs
 class StateDescription
 {
 public:
-  StateDescription();
+  StateDescription() = default;
 
   void addVariable(ConstVariableDescriptionPtr v) { _variables.append(v); }
   void addVariable(VariableDescription* v) { _variables.append(VariableDescriptionPtr(v)); }

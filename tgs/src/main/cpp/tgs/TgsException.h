@@ -106,10 +106,7 @@ namespace Tgs
     /**
      * A destructor
      */
-    ~Exception() throw ()
-    {
-
-    }
+    ~Exception() throw () = default;
 
     /** 
     * @returns the error string provided in the constructor

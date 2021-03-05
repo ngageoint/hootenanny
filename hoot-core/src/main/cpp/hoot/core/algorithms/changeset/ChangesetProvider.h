@@ -31,8 +31,8 @@
 #include <ogr_spatialref.h>
 
 // hoot
-#include <hoot/core/elements/Element.h>
 #include <hoot/core/algorithms/changeset/Change.h>
+#include <hoot/core/elements/Element.h>
 
 namespace hoot
 {
@@ -53,7 +53,7 @@ public:
    * If the stream is open when the destructor is called, closeStream must be called in the
    * destructor
    */
-  virtual ~ChangesetProvider() {}
+  virtual ~ChangesetProvider() = default;
 
   /**
    * @brief closeStream

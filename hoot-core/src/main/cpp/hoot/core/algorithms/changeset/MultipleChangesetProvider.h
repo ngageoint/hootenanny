@@ -46,22 +46,22 @@ public:
 
   virtual ~MultipleChangesetProvider() = default;
 
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual void close();
+  void close() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual bool hasMoreChanges();
+  bool hasMoreChanges() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange() override;
+  Change readNextChange() override;
 
   void addChangesetProvider(ChangesetProviderPtr newChangeset);
 

@@ -31,10 +31,6 @@
 namespace hoot
 {
 
-Schema::Schema()
-{
-}
-
 void Schema::addLayer(const std::shared_ptr<Layer>& l)
 {
   _layers.push_back(l);

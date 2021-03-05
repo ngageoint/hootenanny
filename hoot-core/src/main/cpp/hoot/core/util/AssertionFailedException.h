@@ -41,9 +41,9 @@ class AssertionFailedException : public HootException
 {
 public:
 
-  AssertionFailedException(QString str) : HootException(str) {}
+  AssertionFailedException(QString str) : HootException(str) { }
 
-  virtual ~AssertionFailedException() throw() {}
+  virtual ~AssertionFailedException() throw() = default;
 };
 
 }

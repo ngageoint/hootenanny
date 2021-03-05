@@ -27,17 +27,13 @@
 #include "DisconnectedWayCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, DisconnectedWayCriterion)
-
-DisconnectedWayCriterion::DisconnectedWayCriterion()
-{
-}
 
 DisconnectedWayCriterion::DisconnectedWayCriterion(ConstOsmMapPtr map) :
 _map(map)

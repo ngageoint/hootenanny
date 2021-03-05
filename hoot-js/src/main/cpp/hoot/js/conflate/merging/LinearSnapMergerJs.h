@@ -40,6 +40,11 @@
 namespace hoot
 {
 
+/**
+ * Facade around linear features mergers in core
+ *
+ * @todo This class should be renamed to LinearMergerJs.
+ */
 class LinearSnapMergerJs : public HootBaseJs
 {
 public:

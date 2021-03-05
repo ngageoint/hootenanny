@@ -41,8 +41,6 @@ namespace Tgs
     _makeBalanced = makeBalanced;
   }
 
-  RandomForestThread::~RandomForestThread(){}
-
   void RandomForestThread::run()
   {
     try

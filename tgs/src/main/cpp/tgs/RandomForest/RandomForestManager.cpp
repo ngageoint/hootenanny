@@ -48,11 +48,6 @@ namespace Tgs
 
   }
 
-  RandomForestManager::~RandomForestManager()
-  {
-
-  }
-
   void RandomForestManager::_initForests(int numForests)
   {
     try

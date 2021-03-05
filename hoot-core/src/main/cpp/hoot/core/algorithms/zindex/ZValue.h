@@ -39,8 +39,6 @@ public:
 
   static QString className() { return "hoot::ZValue"; }
 
-  ZValue() {}
-
   ZValue(int dimensions, int depth, const std::vector<double>& min, const std::vector<double>& max);
 
   ~ZValue();

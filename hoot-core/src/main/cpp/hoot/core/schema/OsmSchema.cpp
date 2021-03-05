@@ -141,7 +141,7 @@ namespace hoot
 
 struct AverageResult
 {
-  AverageResult() {}
+  AverageResult() = default;
 
   AverageResult(VertexId vid, double score)
   {
@@ -157,9 +157,9 @@ class SimilarToOnly
 {
 public:
 
-  SimilarToOnly() : _graph(0) {}
+  SimilarToOnly() : _graph(0) { }
 
-  SimilarToOnly(TagGraph& graph) : _graph(&graph) {}
+  SimilarToOnly(TagGraph& graph) : _graph(&graph) { }
 
   bool operator()(const EdgeId& edge_id) const
   {
@@ -176,7 +176,7 @@ class VertexNameComparator
 {
 public:
 
-  VertexNameComparator(const TagGraph& graph) : _graph(graph) {}
+  VertexNameComparator(const TagGraph& graph) : _graph(graph) { }
 
   bool operator()(VertexId v1, VertexId v2)
   {

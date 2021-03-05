@@ -51,11 +51,6 @@ KernelEstimationInterpolator::KernelEstimationInterpolator(double sigma)
   _stopDelta = 1.0;
 }
 
-KernelEstimationInterpolator::~KernelEstimationInterpolator()
-{
-  //cout << "KernelEstimationInterpolator::~KernelEstimationInterpolator()" << endl << flush;
-}
-
 class OptimizeFunction : public NelderMead::Function
 {
 public:

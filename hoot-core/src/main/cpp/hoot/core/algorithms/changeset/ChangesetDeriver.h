@@ -29,8 +29,8 @@
 
 // Hoot
 #include <hoot/core/algorithms/changeset/ChangesetProvider.h>
-#include <hoot/core/io/ElementInputStream.h>
 #include <hoot/core/elements/ElementComparer.h>
+#include <hoot/core/io/ElementInputStream.h>
 
 namespace hoot
 {
@@ -49,35 +49,35 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   virtual ~ChangesetDeriver();
 
   /**
    * @see ChangeSetProvider
    */
-  virtual void close();
+  void close() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual bool hasMoreChanges();
+  bool hasMoreChanges() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange() override;
+  Change readNextChange() override;
 
-  virtual int getNumFromElementsParsed() const override { return _numFromElementsParsed; }
-  virtual int getNumToElementsParsed() const override { return _numToElementsParsed; }
+  int getNumFromElementsParsed() const override { return _numFromElementsParsed; }
+  int getNumToElementsParsed() const override { return _numToElementsParsed; }
 
-  virtual int getNumCreateChanges() const override
+  int getNumCreateChanges() const override
   { return _changesByType[Change::ChangeType::Create]; }
-  virtual int getNumModifyChanges() const override
+  int getNumModifyChanges() const override
   { return _changesByType[Change::ChangeType::Modify]; }
-  virtual int getNumDeleteChanges() const override
+  int getNumDeleteChanges() const override
   { return _changesByType[Change::ChangeType::Delete]; }
-  virtual int getNumChanges() const override
+  int getNumChanges() const override
   { return getNumCreateChanges() + getNumModifyChanges() + getNumDeleteChanges(); }
 
   void setAllowDeletingReferenceFeatures(bool allow) { _allowDeletingReferenceFeatures = allow; }

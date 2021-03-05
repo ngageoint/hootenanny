@@ -44,7 +44,7 @@ public:
 
   static QString className() { return "hoot::ElementIdCriterion"; }
 
-  ElementIdCriterion();
+  ElementIdCriterion() = default;
   ElementIdCriterion(const ElementId& id);
   ElementIdCriterion(const std::set<ElementId>& ids);
   ElementIdCriterion(const ElementType& elementType, const std::set<long>& ids);

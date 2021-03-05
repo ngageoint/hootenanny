@@ -66,9 +66,6 @@ public:
 
   Edge() { _ie = 0; }
   Edge(InternalEdge* ie);
-  Edge(const Edge& e) : _ie(e._ie) {}
-  Edge(Edge& e) : _ie(e._ie) {}
-  Edge& operator=(const Edge& e) { _ie = e._ie; return *this; }
   bool operator==(const Edge& e) const
   {
     if (_ie == e._ie)

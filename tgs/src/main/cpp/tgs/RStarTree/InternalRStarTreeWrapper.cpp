@@ -43,11 +43,6 @@ namespace Tgs
     _tree = std::shared_ptr<HilbertRTree>(new HilbertRTree(mps, dimensions));
   }
 
-  InternalRStarTreeWrapper::~InternalRStarTreeWrapper()
-  {
-
-  }
-
   void InternalRStarTreeWrapper::bulkInsert(const std::vector<int>& uniqueId,
     const std::vector<double>& minBounds,
     const std::vector<double>& maxBounds)

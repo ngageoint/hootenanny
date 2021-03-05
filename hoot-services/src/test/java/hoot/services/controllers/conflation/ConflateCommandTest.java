@@ -252,14 +252,14 @@ public class ConflateCommandTest {
 
         Map<String, String> hoot2Opts = new HashMap<>();
 
-        hoot2Opts.put("HighwayMergeTagsOnly", "true");
+        hoot2Opts.put("GeometryLinearMergerDefault", "hoot::LinearSnapMerger");
         hoot2Opts.put("AddressAdditionalTagKeys", "[foo=bar,blim=blam]");
         conflateParams.setHoot2AdvOptions(hoot2Opts);
 
         conflateCommand = new ConflateCommandFactory().build(jobId, conflateParams, debugLevel, this.getClass());
         options = conflateCommand.getSubstitutionMap().get("HOOT_OPTIONS").toString();
         assertTrue(options.contains("\"address.additional.tag.keys=foo=bar;blim=blam\""));
-        assertTrue(options.contains("\"highway.merge.tags.only=true\""));
+        assertTrue(options.contains("\"geometry.linear.merger.default=hoot::LinearSnapMerger\""));
 
         // handles cleaning options...
         conflateParams.setCleaningOpts(Arrays.asList("DualHighwaySplitter"));

@@ -46,7 +46,7 @@ public:
   {
     QString role;
 
-    Entry() {}
+    Entry() = default;
     Entry(QString r, ElementId eid) : role(r), _eid(eid)  { }
     Entry(ElementId eid) : _eid(eid) { }
 

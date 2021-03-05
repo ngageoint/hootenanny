@@ -113,10 +113,6 @@ private:
   const LineSegment& _ls;
 };
 
-BufferedLineSegmentIntersector::BufferedLineSegmentIntersector()
-{
-}
-
 inline double sgn(double x)
 {
   if (x < 0)

@@ -50,7 +50,7 @@ public:
     _error = error;
   }
 
-  virtual ~Exception() throw() {}
+  virtual ~Exception() throw() = default;
 
   virtual const char* what() const throw()
   {

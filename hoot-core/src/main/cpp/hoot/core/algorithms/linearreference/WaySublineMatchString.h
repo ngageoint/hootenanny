@@ -29,8 +29,8 @@
 
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Std
 #include <string>
@@ -55,8 +55,7 @@ public:
 
   typedef std::vector<WaySublineMatch> MatchCollection;
 
-  WaySublineMatchString() {}
-  WaySublineMatchString(const WaySublineMatchString& other);
+  WaySublineMatchString() = default;
   /**
    * Makes a new WaySublineMatchString where all the WayLocations are remapped to reference the
    * new map.

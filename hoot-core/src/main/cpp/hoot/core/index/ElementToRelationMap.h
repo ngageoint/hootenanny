@@ -52,7 +52,7 @@ class ElementToRelationMap
 {
 public:
 
-  ElementToRelationMap();
+  ElementToRelationMap() = default;
 
   /**
    * Recursively traverses the relation and adds all child elements to the reference.

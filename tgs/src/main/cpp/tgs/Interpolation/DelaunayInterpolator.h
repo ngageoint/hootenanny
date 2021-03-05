@@ -57,7 +57,7 @@ public:
 
   DelaunayInterpolator();
 
-  virtual ~DelaunayInterpolator() {}
+  virtual ~DelaunayInterpolator() = default;
 
   /**
    * Use k-fold cross validation to estimate the error.

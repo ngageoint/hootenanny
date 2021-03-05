@@ -46,10 +46,6 @@ using namespace std;
 namespace hoot
 {
 
-ConfPath::ConfPath()
-{
-}
-
 QStringList ConfPath::find(QStringList filters, QString searchDir)
 {
   QString hootHome = getHootHome();

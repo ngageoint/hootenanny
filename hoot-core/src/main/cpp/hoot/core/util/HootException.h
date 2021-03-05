@@ -46,12 +46,12 @@ public:
 
   static QString className() { return "hoot::HootException"; }
 
-  HootException() { }
+  HootException() = default;
   HootException(const char* str) { _what = QString::fromUtf8(str); }
   HootException(const std::string& str) { _what = QString::fromStdString(str); }
   HootException(QString str) { _what = str; }
   HootException(const HootException& e) { _what = e._what; }
-  virtual ~HootException() throw() {}
+  virtual ~HootException() throw() = default;
 
   virtual HootException* clone() const { return new HootException(*this); }
 

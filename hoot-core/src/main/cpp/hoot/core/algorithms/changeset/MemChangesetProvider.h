@@ -49,26 +49,29 @@ public:
   /**
    * @see ChangeSetProvider
    */
-  virtual std::shared_ptr<OGRSpatialReference> getProjection() const override;
+  std::shared_ptr<OGRSpatialReference> getProjection() const override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual void close();
+  void close() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual bool hasMoreChanges();
+  bool hasMoreChanges() override;
 
   /**
    * @see ChangeSetProvider
    */
-  virtual Change readNextChange() override;
+  Change readNextChange() override;
+
+  /**
+   * @see ChangeSetProvider
+   */
+  int getNumChanges() const override;
 
   void addChange(Change newChange);
-
-  size_t getNumChanges();
 
   bool containsChange(ElementId eID);
 

@@ -28,9 +28,9 @@
 #define MERGER_FACTORY_H
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/conflate/merging/MergerCreator.h>
 #include <hoot/core/conflate/matching/MatchSet.h>
+#include <hoot/core/conflate/merging/MergerCreator.h>
+#include <hoot/core/elements/OsmMap.h>
 
 // Qt
 #include <QString>
@@ -109,7 +109,7 @@ private:
   friend class AbstractConflator;
   friend class MultiaryUtilities;
 
-  MergerFactory();
+  MergerFactory() = default;
 
   static std::shared_ptr<MergerFactory> _theInstance;
 
