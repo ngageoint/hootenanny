@@ -32,10 +32,6 @@
 namespace Tgs
 {
 
-State::State()
-{
-}
-
 QString State::toString() const
 {
   QStringList result;

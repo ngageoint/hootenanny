@@ -49,7 +49,7 @@ public:
   static const double UNSPECIFIED_DEFAULT;
 
   PluginContext();
-  ~PluginContext();
+  ~PluginContext() = default;
 
   /**
    * Method that simplifies calling a function.

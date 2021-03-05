@@ -41,10 +41,6 @@ int WayString::logWarnCount = 0;
 // if the difference is smaller than this we consider it to be equivalent.
 Meters WayString::_epsilon = 1e-9;
 
-WayString::WayString()
-{
-}
-
 Meters WayString::_aggregateCircularError() const
 {
   // I considered averaging the circular errors, but I think that could cause undesireable behaviour

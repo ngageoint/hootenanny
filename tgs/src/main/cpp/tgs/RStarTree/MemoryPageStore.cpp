@@ -35,11 +35,7 @@
 namespace Tgs
 {
   MemoryPageStore::MemoryPageStore(int pageSize)
-  {
-    _pageSize = pageSize;
-  }
-
-  MemoryPageStore::~MemoryPageStore()
+    : _pageSize(pageSize)
   {
   }
 

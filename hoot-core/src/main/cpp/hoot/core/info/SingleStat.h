@@ -40,9 +40,9 @@ public:
   QString name;
   double value;
 
-  SingleStat() {}
+  SingleStat() = default;
 
-  SingleStat(const QString& n, double v) : name(n), value(v) {}
+  SingleStat(const QString& n, double v) : name(n), value(v) { }
 
   QString toString() const
   {

@@ -42,7 +42,7 @@ class MapMatchScoringUtils
 {
   public:
 
-    MapMatchScoringUtils();
+    MapMatchScoringUtils() = default;
 
     /**
       Returns a printable string with match scoring results

@@ -56,9 +56,11 @@ namespace Tgs
 
     PpPoint();
 
-    PpPoint(int row, int col) : row(row), col(col) { }
+    PpPoint(int row, int col)
+      : row(row), col(col), cost(0.0f) { }
 
-    PpPoint(int row, int col, std::string name) : row(row), col(col), name(name) { }
+    PpPoint(int row, int col, std::string name)
+      : row(row), col(col), name(name), cost(0.0f) { }
 
     bool operator!=(const PpPoint& p)
     {
@@ -103,7 +105,7 @@ namespace Tgs
     ProbablePathCalculator();
     ProbablePathCalculator(const RandomPtr& random);
 
-    virtual ~ProbablePathCalculator();
+    virtual ~ProbablePathCalculator() = default;
 
     /**
      * Calculates the most probable paths with the specified number of iterations.

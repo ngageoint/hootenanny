@@ -38,10 +38,6 @@
 
 namespace Tgs
 {
-  InfoGainCalculator::InfoGainCalculator(){}
-
-  InfoGainCalculator::~InfoGainCalculator(){}
-
   double InfoGainCalculator::_calcLogFunc(double n)
   {
     if (n < std::numeric_limits<double>::epsilon())

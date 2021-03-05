@@ -46,7 +46,7 @@ namespace Tgs
   public:
     MemoryPageStore(int pageSize);
 
-    virtual ~MemoryPageStore();
+    virtual ~MemoryPageStore() = default;
 
     virtual std::shared_ptr<Page> createPage();
 

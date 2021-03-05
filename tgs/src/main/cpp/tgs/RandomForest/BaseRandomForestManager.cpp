@@ -52,8 +52,6 @@ namespace Tgs
     }
   }
 
-  BaseRandomForestManager::~BaseRandomForestManager(){}
-
   void BaseRandomForestManager::addTrainingVector(std::string classLabel,
     const std::vector<double>& trainVec)
   {

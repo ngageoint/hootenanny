@@ -41,7 +41,7 @@ public:
 
   BaseInterpolator();
 
-  virtual ~BaseInterpolator() {}
+  virtual ~BaseInterpolator() = default;
 
   virtual double estimateError();
 

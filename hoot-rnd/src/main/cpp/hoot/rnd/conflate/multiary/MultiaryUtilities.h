@@ -52,12 +52,12 @@ class MultiarySimpleMatch
 
 public:
 
-  MultiarySimpleMatch() {}
+  MultiarySimpleMatch() = default;
 
-  MultiarySimpleMatch(int nIndex, double s) : neighborIndex(nIndex), score(s) {}
+  MultiarySimpleMatch(int nIndex, double s) : neighborIndex(nIndex), score(s) { }
 
-  QString toString() const { return QString("{neighborIndex: %1, score: %2}").arg(neighborIndex).
-        arg(score); }
+  QString toString() const
+  { return QString("{neighborIndex: %1, score: %2}").arg(neighborIndex).arg(score); }
 
   // The index of the elements that match in the provided vector.
   int neighborIndex;
@@ -72,7 +72,7 @@ class MultiaryElement
 
 public:
 
-  MultiaryElement() {}
+  MultiaryElement() = default;
 
 #ifndef SWIG
   MultiaryElement(QByteArray h, geos::geom::Envelope b, QByteArray p) :

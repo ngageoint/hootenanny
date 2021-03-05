@@ -92,10 +92,6 @@ namespace Tgs
   {
   }
 
-  ProbablePathCalculator::~ProbablePathCalculator()
-  {
-  }
-
   bool ProbablePathCalculator::_addReturnPaths(const PpPoint& source,
     const Destination& destination)
   {

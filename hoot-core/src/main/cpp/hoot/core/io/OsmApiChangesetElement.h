@@ -76,11 +76,6 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetElement(const XmlObject& object, ElementIdToIdMap* idMap);
-  /**
-   * @brief XmlElement copy constructor
-   * @param element XmlElement object to copy
-   */
-  ChangesetElement(const ChangesetElement& element);
 
   virtual ~ChangesetElement() = default;
   /**
@@ -217,11 +212,6 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetNode(const XmlObject& node, ElementIdToIdMap* idMap);
-  /**
-   * @brief ChangesetNode copy constructor
-   * @param node ChangesetNode object to copy
-   */
-  ChangesetNode(const ChangesetNode& node);
   /** Virtual destructor */
   virtual ~ChangesetNode() = default;
   /**
@@ -252,11 +242,6 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetWay(const XmlObject& way, ElementIdToIdMap* idMap);
-  /**
-   * @brief ChangesetWay copy constructor
-   * @param way ChangesetWay object to copy
-   */
-  ChangesetWay(const ChangesetWay& way);
   /** Virtual destructor */
   virtual ~ChangesetWay() = default;
   /**
@@ -370,11 +355,6 @@ public:
    * @param idMap ID to ID Map for updated IDs
    */
   ChangesetRelation(const XmlObject& relation, ElementIdToIdMap* idMap);
-  /**
-   * @brief ChangesetRelation copy constructor
-   * @param relation ChangesetRelation object to copy
-   */
-  ChangesetRelation(const ChangesetRelation& relation);
   /** Virtual destructor */
   virtual ~ChangesetRelation() = default;
   /**

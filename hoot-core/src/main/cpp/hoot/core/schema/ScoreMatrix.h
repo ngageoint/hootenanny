@@ -57,7 +57,7 @@ class ScoreMatrix
 {
 public:
 
-  ScoreMatrix() { }
+  ScoreMatrix() = default;
   ScoreMatrix(int width, int height) { resize(width, height); }
 
   void resize(size_t i, size_t j);

@@ -31,9 +31,6 @@
 // Qt
 #include <QString>
 
-// Standard
-#include <string>
-
 namespace hoot
 {
 
@@ -48,9 +45,9 @@ public:
 
   static QString className() { return "hoot::Command"; }
 
-  Command();
+  Command() = default;
 
-  virtual ~Command() {}
+  virtual ~Command() = default;
 
   /**
    * Returns true if the command should be displayed in the help list.

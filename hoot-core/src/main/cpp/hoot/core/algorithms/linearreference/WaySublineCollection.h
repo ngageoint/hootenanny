@@ -54,7 +54,7 @@ public:
 
   typedef std::vector<WaySubline> SublineCollection;
 
-  WaySublineCollection();
+  WaySublineCollection() = default;
 
   void addSubline(const WaySubline& subline);
 

@@ -53,7 +53,7 @@ public:
    * If the stream is open when the destructor is called, closeStream must be called in the
    * destructor
    */
-  virtual ~ChangesetProvider() {}
+  virtual ~ChangesetProvider() = default;
 
   /**
    * @brief closeStream

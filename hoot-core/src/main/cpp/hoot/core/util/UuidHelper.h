@@ -43,7 +43,7 @@ class UuidHelper
 {
 public:
 
-  UuidHelper();
+  UuidHelper() = default;
 
   /**
    * Create a uuid using the global settings for defining the technique.

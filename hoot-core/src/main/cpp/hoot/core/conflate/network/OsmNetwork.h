@@ -61,7 +61,7 @@ public:
   typedef QMultiHash<ElementId, ConstNetworkEdgePtr> EdgeMap;
   typedef QMultiHash<ConstNetworkVertexPtr, ConstNetworkEdgePtr> VertexToEdgeMap;
 
-  OsmNetwork();
+  OsmNetwork() = default;
 
   void addEdge(NetworkEdgePtr edge);
 

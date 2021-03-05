@@ -77,11 +77,6 @@ namespace Tgs
     }
   }
 
-  DataFrame::~DataFrame()
-  {
-
-  }
-
   void DataFrame::addDataVector(std::string label, const std::vector<double>& dataItem,
     double eventWeight /*= 1.*/)
   {

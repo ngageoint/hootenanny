@@ -30,9 +30,9 @@
 
 
 // Hoot
-#include <hoot/core/util/OpenCv.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/OpenCv.h>
 
 // Qt
 #include <QString>
@@ -109,14 +109,6 @@ public:
     int maxX;
     int maxY;
 
-    PixelBox(const PixelBox& pb)
-    {
-      minX = pb.minX;
-      maxX = pb.maxX;
-      minY = pb.minY;
-      maxY = pb.maxY;
-    }
-
     PixelBox()
     {
       minX = -1;
@@ -140,15 +132,6 @@ public:
     PixelBox getRowBox(int row) const { return PixelBox(minX, maxX, row, row); }
 
     int getWidth() const { return maxX - minX + 1; }
-
-    PixelBox& operator=(const PixelBox& pb)
-    {
-      minX = pb.minX;
-      maxX = pb.maxX;
-      minY = pb.minY;
-      maxY = pb.maxY;
-      return *this;
-    }
 
     QString toString() const
     {

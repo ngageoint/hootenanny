@@ -58,11 +58,7 @@ namespace Tgs
     public:
       LeafDistance() : distance(0.0), fid(0) { }
 
-      LeafDistance(double dist, int fid)
-      {
-        this->distance = dist;
-        this->fid = fid;
-      }
+      LeafDistance(double dist, int fid) : distance(dist), fid(fid) { }
 
       double distance;
       int fid;
@@ -90,7 +86,7 @@ namespace Tgs
     class NodeDistance
     {
     public:
-      NodeDistance() {}
+      NodeDistance() : minPossibleDistance(0.0), id(0) { }
 
       NodeDistance(double dist, int nodeId)
       {
