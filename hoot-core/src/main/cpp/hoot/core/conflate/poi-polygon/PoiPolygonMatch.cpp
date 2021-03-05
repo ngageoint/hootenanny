@@ -793,11 +793,11 @@ set<pair<ElementId, ElementId>> PoiPolygonMatch::getMatchPairs() const
   // arbitrarily adding poi id first for consistency
   if (_e1IsPoi)
   {
-    result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
+    result.emplace(pair<ElementId, ElementId>(_eid1, _eid2));
   }
   else
   {
-    result.insert(pair<ElementId, ElementId>(_eid2, _eid1));
+    result.emplace(pair<ElementId, ElementId>(_eid2, _eid1));
   }
   return result;
 }
