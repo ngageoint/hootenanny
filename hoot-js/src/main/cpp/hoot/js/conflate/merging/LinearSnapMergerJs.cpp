@@ -29,7 +29,6 @@
 // hoot
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
-//#include <hoot/core/conflate/merging/MultipleSublineMatcherSnapMerger.h>
 #include <hoot/core/conflate/merging/LinearAverageMerger.h>
 #include <hoot/core/conflate/merging/LinearMergerFactory.h>
 
