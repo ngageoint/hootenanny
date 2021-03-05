@@ -28,15 +28,15 @@
 #include "UnlikelyIntersectionRemover.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Standard
 #include <iostream>
@@ -108,9 +108,9 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
   }
 
   // Go through all the other ways.
-  for (set<long>::const_iterator it = wayIds.begin(); it != wayIds.end(); ++it)
+  for (set<long>::const_iterator way_it = wayIds.begin(); way_it != wayIds.end(); ++way_it)
   {
-    std::shared_ptr<Way> w = _result->getWay(*it);
+    std::shared_ptr<Way> w = _result->getWay(*way_it);
     _numProcessed++;
     if (!w)
     {

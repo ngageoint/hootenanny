@@ -55,10 +55,10 @@ int RelationMemberNodeCounter::numNodes(const ConstRelationPtr& relation) const
     }
     else if (type == ElementType::Relation)
     {
-      ConstRelationPtr relation = _map->getRelation(member.getElementId().getId());
-      if (relation)
+      ConstRelationPtr r = _map->getRelation(member.getElementId().getId());
+      if (r)
       {
-        count += numNodes(relation);
+        count += numNodes(r);
       }
     }
   }

@@ -27,10 +27,10 @@
 #include "RemoveRef2Visitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
 namespace hoot
@@ -138,9 +138,9 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
     }
     else
     {
-      ElementPtr e = _map->getElement(eid);
+      ElementPtr element = _map->getElement(eid);
       // if the REF1 element meets the criterion.
-      if (ref1CriterionSatisfied(e))
+      if (ref1CriterionSatisfied(element))
       {
         // remove the specified REF2 from the appropriate REF2 field.
         refs.removeAll(r);

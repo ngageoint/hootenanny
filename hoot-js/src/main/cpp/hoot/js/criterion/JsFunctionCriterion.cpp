@@ -30,8 +30,8 @@
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
 #include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 using namespace v8;
 
@@ -69,8 +69,8 @@ bool JsFunctionCriterion::isSatisfied(const ConstElementPtr& e) const
     Local<Value> exception = trycatch.Exception();
     if (HootExceptionJs::isHootException(exception))
     {
-      std::shared_ptr<HootException> e = toCpp<std::shared_ptr<HootException>>(exception);
-      HootExceptionThrower::getInstance().rethrowPointer(e);
+      std::shared_ptr<HootException> ex = toCpp<std::shared_ptr<HootException>>(exception);
+      HootExceptionThrower::getInstance().rethrowPointer(ex);
     }
     else
     {

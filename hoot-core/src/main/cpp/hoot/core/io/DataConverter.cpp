@@ -27,30 +27,30 @@
 #include "DataConverter.h"
 
 #include <hoot/core/criterion/ElementCriterion.h>
-#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/io/ElementCacheLRU.h>
 #include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OgrWriter.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/ShapefileWriter.h>
-#include <hoot/core/io/OgrWriter.h>
-#include <hoot/core/io/ElementCacheLRU.h>
+#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
+#include <hoot/core/ops/BuildingPartMergeOp.h>
+#include <hoot/core/ops/DuplicateNodeRemover.h>
 #include <hoot/core/ops/OpExecutor.h>
+#include <hoot/core/ops/SchemaTranslationOp.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/io/IoUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
-#include <hoot/js/v8Engine.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/SchemaTranslationOp.h>
-#include <hoot/core/visitors/SchemaTranslationVisitor.h>
-#include <hoot/core/ops/BuildingPartMergeOp.h>
-#include <hoot/core/ops/DuplicateNodeRemover.h>
-#include <hoot/core/ops/BuildingOutlineUpdateOp.h>
-#include <hoot/core/visitors/WayGeneralizeVisitor.h>
+#include <hoot/core/visitors/ElementVisitor.h>
+#include <hoot/core/visitors/ProjectToGeographicVisitor.h>
 #include <hoot/core/visitors/RemoveDuplicateWayNodesVisitor.h>
+#include <hoot/core/visitors/SchemaTranslationVisitor.h>
+#include <hoot/core/visitors/WayGeneralizeVisitor.h>
+#include <hoot/js/v8Engine.h>
 
 // std
 #include <vector>
@@ -719,16 +719,16 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
     const QStringList layers = _getOgrLayersFromPath(reader, input);
     const std::vector<float> progressWeights = _getOgrInputProgressWeights(reader, input, layers);
     // read each layer's data
-    for (int i = 0; i < layers.size(); i++)
+    for (int j = 0; j < layers.size(); j++)
     {
       PROGRESS_INFO(
-        "Reading layer " << i + 1 << " of " << layers.size() << ": " << layers[i] << "...");
-      LOG_VART(progressWeights[i]);
+        "Reading layer " << j + 1 << " of " << layers.size() << ": " << layers[j] << "...");
+      LOG_VART(progressWeights[j]);
       reader.setProgress(
         Progress(
           ConfigOptions().getJobId(), JOB_SOURCE, Progress::JobState::Running,
-          (float)i / (float)(layers.size() * numTasks), progressWeights[i]));
-      reader.read(input, layers[i], map);
+          (float)j / (float)(layers.size() * numTasks), progressWeights[j]));
+      reader.read(input, layers[j], map);
     }
   }
 
@@ -748,8 +748,8 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
 
   if (_convertOps.size() > 0)
   {
-    QElapsedTimer timer;
-    timer.start();
+    QElapsedTimer timer2;
+    timer2.start();
     OpExecutor convertOps(_convertOps);
     convertOps.setProgress(
       Progress(
@@ -758,7 +758,7 @@ void DataConverter::_convertFromOgr(const QStringList& inputs, const QString& ou
     convertOps.apply(map);
     currentTask++;
     LOG_STATUS(
-      "Convert operations ran in " + StringUtils::millisecondsToDhms(timer.elapsed()) <<
+      "Convert operations ran in " + StringUtils::millisecondsToDhms(timer2.elapsed()) <<
       " total.");
   }
 

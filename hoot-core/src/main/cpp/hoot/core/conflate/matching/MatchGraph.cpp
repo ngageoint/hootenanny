@@ -201,12 +201,12 @@ public:
       }
 
       // while this is O(n^2) matches should generally be pretty small.
-      for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+      for (MatchSet::const_iterator m1_it = matches.begin(); m1_it != matches.end(); ++m1_it)
       {
-        ConstMatchPtr m1 = *it;
-        for (MatchSet::const_iterator jt = matches.begin(); jt != matches.end(); ++jt)
+        ConstMatchPtr m1 = *m1_it;
+        for (MatchSet::const_iterator m2_it = matches.begin(); m2_it != matches.end(); ++m2_it)
         {
-          ConstMatchPtr m2 = *jt;
+          ConstMatchPtr m2 = *m2_it;
           if (m1 != m2)
           {
             if (checkForConflicts &&

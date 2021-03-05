@@ -27,12 +27,12 @@
 #include "ImplicitTagRulesDatabaseDeriver.h"
 
 // hoot
+#include <hoot/core/algorithms/string/StringTokenizer.h>
 #include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/algorithms/string/StringTokenizer.h>
+#include <hoot/core/util/StringUtils.h>
 #include <hoot/rnd/io/ImplicitTagRulesSqliteWriter.h>
 
 // Qt
@@ -356,9 +356,9 @@ void ImplicitTagRulesDatabaseDeriver::_applyFiltering(const QString& input)
           //write the valid count line
           const long count = lineParts[0].trimmed().toLong();
           LOG_VART(count);
-          const QString line = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
-          LOG_VART(line);
-          _filteredCountFile->write(line.toUtf8());
+          const QString count_line = QString::number(count) % "\t" % word % "\t" % kvp % "\n";
+          LOG_VART(count_line);
+          _filteredCountFile->write(count_line.toUtf8());
           linesWrittenCount++;
         }
       }

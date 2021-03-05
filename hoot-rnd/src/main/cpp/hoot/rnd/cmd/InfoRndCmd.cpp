@@ -27,11 +27,11 @@
 
 // Hoot
 #include <hoot/core/cmd/BaseCommand.h>
-#include <hoot/rnd/language/LanguageInfoProvider.h>
-#include <hoot/rnd/language/HootServicesLanguageInfoResponseParser.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/rnd/language/LanguageInfoProvider.h>
+#include <hoot/rnd/language/HootServicesLanguageInfoResponseParser.h>
 
 // Qt
 #include <QUrl>
@@ -87,26 +87,26 @@ public:
       }
 
       // only allowing one option per command
-      const QStringList supportedOpts = _getSupportedLanguageOptions();
-      QStringList specifiedOpts;
+      const QStringList supportedLangOpts = _getSupportedLanguageOptions();
+      QStringList specifiedLangOpts;
       for (int i = 0; i < args.size(); i++)
       {
         const QString arg = args.at(i);
-        if (specifiedOpts.contains(arg) ||
-            (supportedOpts.contains(arg) && specifiedOpts.size() > 0))
+        if (specifiedLangOpts.contains(arg) ||
+            (supportedLangOpts.contains(arg) && specifiedLangOpts.size() > 0))
         {
           std::cout << getHelp() << std::endl << std::endl;
           throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
         }
-        specifiedOpts.append(arg);
+        specifiedLangOpts.append(arg);
       }
-      if (specifiedOpts.size() == 0)
+      if (specifiedLangOpts.size() == 0)
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(
           QString("%1 with the --languages option takes a single option.").arg(getName()));
       }
-      LOG_VARD(specifiedOpts.size());
+      LOG_VARD(specifiedLangOpts.size());
 
       ConfigOptions opts = ConfigOptions(conf());
 

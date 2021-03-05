@@ -28,23 +28,23 @@
 
 // hoot
 #include <hoot/core/algorithms/DirectionFinder.h>
-#include <hoot/core/algorithms/subline-matching/MaximalSublineMatcher.h>
 #include <hoot/core/algorithms/ProbabilityOfMatch.h>
-#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/WayMatchStringMerger.h>
-#include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
-#include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
-#include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/algorithms/extractors/AngleHistogramExtractor.h>
 #include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/algorithms/extractors/HausdorffDistanceExtractor.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/algorithms/linearreference/NaiveWayMatchStringMapping.h>
+#include <hoot/core/algorithms/linearreference/WayMatchStringMappingConverter.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
+#include <hoot/core/algorithms/subline-matching/MaximalSublineMatcher.h>
+#include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
+#include <hoot/core/conflate/highway/HighwayClassifier.h>
 #include <hoot/core/elements/ElementGeometryUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -1111,17 +1111,17 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
 
   for (int i = 0; i < edges.size(); ++i)
   {
-    ConstNetworkEdgePtr e = edges[i].getEdge();
+    ConstNetworkEdgePtr edge = edges[i].getEdge();
     const ConstEdgeSublinePtr& subline = edges[i].getSubline();
     // ignore stubs while building way strings.
-    if (e->isStub() == false)
+    if (edge->isStub() == false)
     {
-      if (e->getMembers().size() != 1 || e->getMembers()[0]->getElementType() != ElementType::Way)
+      if (edge->getMembers().size() != 1 || edge->getMembers()[0]->getElementType() != ElementType::Way)
       {
-        LOG_VART(e);
+        LOG_VART(edge);
         throw IllegalArgumentException("Expected a network edge with exactly 1 way.");
       }
-      ElementId eid = mapper.mapEid(e->getMembers()[0]->getElementId());
+      ElementId eid = mapper.mapEid(edge->getMembers()[0]->getElementId());
 
       ConstWayPtr w = std::dynamic_pointer_cast<const Way>(_map->getWay(eid));
       if (!w)
@@ -1130,7 +1130,7 @@ WayStringPtr NetworkDetails::toWayString(ConstEdgeStringPtr e, const EidMapper& 
         throw IllegalArgumentException("Way: " + eid.toString() + " does not exist in the map.");
       }
 
-      Meters l = calculateLength(e);
+      Meters l = calculateLength(edge);
       double startP = subline->getStart()->getPortion();
       double endP = subline->getEnd()->getPortion();
 

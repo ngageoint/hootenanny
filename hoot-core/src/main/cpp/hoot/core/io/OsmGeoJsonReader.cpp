@@ -29,13 +29,13 @@
 
 // hoot
 #include <hoot/core/Hoot.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // Boost
 #include <boost/property_tree/json_parser.hpp>
@@ -537,10 +537,10 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
         else if (type == "GeometryCollection")
         {
           //  Relation
-          long relation_id = _map->createNextRelationId();
-          string rel = boost::lexical_cast<string>(relation_id);
+          long r_id = _map->createNextRelationId();
+          string rel = boost::lexical_cast<string>(r_id);
           _parseGeoJsonRelation(rel, empty, geo);
-          relation->addElement(role, ElementType::Relation, relation_id);
+          relation->addElement(role, ElementType::Relation, r_id);
           other++;
         }
         else if (type == "MultiPoint" ||
