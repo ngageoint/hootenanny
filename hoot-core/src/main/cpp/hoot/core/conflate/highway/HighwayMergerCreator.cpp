@@ -28,8 +28,7 @@
 
 // hoot
 #include <hoot/core/conflate/highway/HighwayMatch.h>
-#include <hoot/core/conflate/merging/LinearSnapMerger.h>
-#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearMergerFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
@@ -82,17 +81,11 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
   }
   LOG_VART(eids);
 
-  // Only add the highway merge if there are elements to merge.
+  // Only add the highway merger if there are elements to merge.
   if (eids.size() > 0)
   {
-    if (!ConfigOptions().getHighwayMergeTagsOnly())
-    {
-      mergers.push_back(MergerPtr(new LinearSnapMerger(eids, sublineMatcher)));
-    }
-    else
-    {
-      mergers.push_back(MergerPtr(new LinearTagOnlyMerger(eids, sublineMatcher)));
-    }
+    mergers.push_back(
+      LinearMergerFactory::getMerger(eids, sublineMatcher, HighwayMatch::MATCH_NAME));
     result = true;
   }
 

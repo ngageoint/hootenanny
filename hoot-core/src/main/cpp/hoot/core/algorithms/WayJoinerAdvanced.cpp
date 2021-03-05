@@ -711,7 +711,7 @@ void WayJoinerAdvanced::_joinUnsplitWaysAtNode()
 void WayJoinerAdvanced::_determineKeeperFeatureForTags(WayPtr parent, WayPtr child, WayPtr& keeper,
                                                        WayPtr& toRemove) const
 {
-  // This logic is kind of a mess.
+  // This logic is kind of a mess but works.
 
   const QString tagMergerClassName = ConfigOptions().getTagMergerDefault();
   LOG_VART(tagMergerClassName);

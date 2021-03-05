@@ -57,6 +57,7 @@
 #include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 
 using namespace std;
 
@@ -683,10 +684,12 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   relationTags = parentRelation->getTags();
   LOG_VART(relationTags);
 
+  const bool isAttributeConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
   // Doing this for multipoly relations in Attribute Conflation only for the time being.
   const bool suppressBuildingTagOnConstituents =
-    // relatively loose way to identify AC; also used in ConflateCmd
-    ConfigOptions().getHighwayMergeTagsOnly() &&
+    // relatively loose way to identify AC; also used in ConflateExecutor
+    isAttributeConflate &&
     // allAreBuildingParts = building relation
     !allAreBuildingParts &&
     ConfigOptions().getAttributeConflationSuppressBuildingTagOnMultipolyRelationConstituents();

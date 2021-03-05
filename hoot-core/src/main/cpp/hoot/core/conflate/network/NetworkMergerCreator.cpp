@@ -27,14 +27,13 @@
 #include "NetworkMergerCreator.h"
 
 // hoot
-#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/merging/LinearMergerFactory.h>
 #include <hoot/core/conflate/matching/MatchFactory.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MarkForReviewMerger.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/conflate/network/NetworkMatch.h>
 #include <hoot/core/conflate/network/PartialNetworkMerger.h>
-#include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 
@@ -54,7 +53,8 @@ NetworkMergerCreator::NetworkMergerCreator()
   _minMatchOverlapPercentage = ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage();
 }
 
-bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<MergerPtr>& mergers) const
+bool NetworkMergerCreator::createMergers(
+  const MatchSet& matchesIn, vector<MergerPtr>& mergers) const
 {
   LOG_DEBUG("Creating mergers with " << className() << "...");
   LOG_TRACE("Creating mergers for match set: " << matchesIn);
@@ -105,22 +105,9 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
             "Added match " << count << " / " << matches.size() << " to partial network merger...");
         }
       }
-
-      if (!ConfigOptions().getHighwayMergeTagsOnly())
-      {
-        mergers.push_back(
-          MergerPtr(
-            new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails())));
-      }
-      else
-      {
-        mergers.push_back(
-          MergerPtr(
-            new LinearTagOnlyMerger(
-              pairs,
-              std::shared_ptr<PartialNetworkMerger>(
-                new PartialNetworkMerger(pairs, edgeMatches, m->getNetworkDetails())))));
-      }
+      mergers.push_back(
+        LinearMergerFactory::getMerger(
+          pairs, edgeMatches, m->getNetworkDetails(), HighwayMatch::MATCH_NAME));
     }
     else
     {
@@ -129,26 +116,12 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
       if (const NetworkMatch* larger = _getLargestContainer(matches))
       {
         LOG_DEBUG("Adding the larger match to the partial network merger...");
-
-        if (!ConfigOptions().getHighwayMergeTagsOnly())
-        {
-          mergers.push_back(
-            MergerPtr(
-              new PartialNetworkMerger(
-                larger->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
-                larger->getNetworkDetails())));
-        }
-        else
-        {
-          mergers.push_back(
-            MergerPtr(
-              new LinearTagOnlyMerger(
-                larger->getMatchPairs(),
-                std::shared_ptr<PartialNetworkMerger>(
-                  new PartialNetworkMerger(
-                    larger->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
-                    larger->getNetworkDetails())))));
-        }
+        mergers.push_back(
+          LinearMergerFactory::getMerger(
+            larger->getMatchPairs(),
+            QSet<ConstEdgeMatchPtr>() << larger->getEdgeMatch(),
+            larger->getNetworkDetails(),
+            HighwayMatch::MATCH_NAME));
       }
       else
       {
@@ -157,26 +130,12 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
         {
           const NetworkMatch* largest = _getLargest(matches);
           LOG_TRACE("Merging largest Match: " << largest->getEdgeMatch()->getUid());
-
-          if (!ConfigOptions().getHighwayMergeTagsOnly())
-          {
-            mergers.push_back(
-              MergerPtr(
-                new PartialNetworkMerger(
-                  largest->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
-                  largest->getNetworkDetails())));
-          }
-          else
-          {
-            mergers.push_back(
-              MergerPtr(
-                new LinearTagOnlyMerger(
-                  largest->getMatchPairs(),
-                  std::shared_ptr<PartialNetworkMerger>(
-                    new PartialNetworkMerger(
-                      largest->getMatchPairs(), QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
-                      largest->getNetworkDetails())))));
-          }
+          mergers.push_back(
+            LinearMergerFactory::getMerger(
+              largest->getMatchPairs(),
+              QSet<ConstEdgeMatchPtr>() << largest->getEdgeMatch(),
+              largest->getNetworkDetails(),
+              HighwayMatch::MATCH_NAME));
         }
         else // Throw a review
         {
@@ -186,7 +145,8 @@ bool NetworkMergerCreator::createMergers(const MatchSet& matchesIn, vector<Merge
           {
             set<pair<ElementId, ElementId>> s = (*it)->getMatchPairs();
             set<ElementId> eids;
-            for (set<pair<ElementId, ElementId>>::const_iterator jt = s.begin(); jt != s.end(); ++jt)
+            for (set<pair<ElementId, ElementId>>::const_iterator jt = s.begin(); jt != s.end();
+                 ++jt)
             {
               eids.insert(jt->first);
               eids.insert(jt->second);

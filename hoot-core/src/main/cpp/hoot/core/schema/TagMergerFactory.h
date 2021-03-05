@@ -42,7 +42,7 @@ class Tags;
 class ElementType;
 
 /**
- * (Singleton)
+ * Factory for creating tag mergers based on the configured tag merging strategy (Singleton)
  */
 class TagMergerFactory
 {
