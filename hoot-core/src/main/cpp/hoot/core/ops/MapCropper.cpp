@@ -37,30 +37,30 @@
 #include <geos/util/GEOSException.h>
 
 // Hoot
+#include <hoot/core/algorithms/FindNodesInWayFactory.h>
+#include <hoot/core/elements/ElementIdUtils.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/WayUtils.h>
 #include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/algorithms/FindNodesInWayFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveWayByEid.h>
+#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/ops/SuperfluousWayRemover.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/util/Validate.h>
-#include <hoot/core/ops/RemoveEmptyRelationsOp.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/elements/WayUtils.h>
-#include <hoot/core/elements/ElementIdUtils.h>
-#include <hoot/core/ops/SuperfluousWayRemover.h>
-#include <hoot/core/ops/SuperfluousNodeRemover.h>
+#include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
 
 // Standard
 #include <limits>
@@ -357,7 +357,6 @@ void MapCropper::apply(OsmMapPtr& map)
       LOG_TRACE(
         "Skipping delete for: " << node->getElementId() <<
         " belonging to explicitly included way(s)...");
-      nodeInside = true;
     }
     else
     {

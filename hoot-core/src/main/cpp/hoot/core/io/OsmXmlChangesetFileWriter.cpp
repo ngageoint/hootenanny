@@ -27,16 +27,16 @@
 #include "OsmXmlChangesetFileWriter.h"
 
 // hoot
-#include <hoot/core/io/OsmXmlWriter.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/util/DateTimeUtils.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/io/OsmXmlWriter.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/DateTimeUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QFile>
@@ -287,7 +287,7 @@ void OsmXmlChangesetFileWriter::_writeNode(QXmlStreamWriter& writer, ConstElemen
     _newElementIdMappings[ElementType::Node].insert(n->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
-  long version = ElementData::VERSION_EMPTY;
+  long version;
   //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
@@ -344,7 +344,7 @@ void OsmXmlChangesetFileWriter::_writeWay(QXmlStreamWriter& writer, ConstElement
     _newElementIdMappings[ElementType::Way].insert(w->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
-  long version = ElementData::VERSION_EMPTY;
+  long version;
   // for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
@@ -413,7 +413,7 @@ void OsmXmlChangesetFileWriter::_writeRelation(QXmlStreamWriter& writer, ConstEl
     _newElementIdMappings[ElementType::Relation].insert(r->getId(), id);
   }
   writer.writeAttribute("id", QString::number(id));
-  long version = ElementData::VERSION_EMPTY;
+  long version;
   //  for xml changeset OSM rails port expects created elements to have version = 0
   if (_change.getType() == Change::Create)
     version = 0;
