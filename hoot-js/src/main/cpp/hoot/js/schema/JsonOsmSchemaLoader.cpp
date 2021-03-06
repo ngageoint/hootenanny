@@ -312,9 +312,9 @@ void JsonOsmSchemaLoader::_loadCompoundTags(SchemaVertex& tv, const QVariant& va
       }
 
       QList<KeyValuePairPtr> rule;
-      for (int i = 0; i < a2.size(); i++)
+      for (int j = 0; j < a2.size(); j++)
       {
-        QVariant v3 = a2[i];
+        QVariant v3 = a2[j];
         if (v3.type() != QVariant::String)
         {
           throw HootException("A compound tag rule must be an array of strings.");
@@ -341,9 +341,9 @@ void JsonOsmSchemaLoader::_loadGeometries(SchemaVertex& tv, const QVariant& v) c
     uint16_t g = 0;
     for (int i = 0; i < arr.size(); i++)
     {
-      QString v = toString(_asString(arr[i])).toLower();
-      LOG_VART(v);
-      uint16_t e = OsmGeometries::fromString(v);
+      QString value = toString(_asString(arr[i])).toLower();
+      LOG_VART(value);
+      uint16_t e = OsmGeometries::fromString(value);
       g |= e;
     }
     LOG_VART(g);

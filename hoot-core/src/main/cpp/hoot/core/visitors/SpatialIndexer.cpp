@@ -27,14 +27,14 @@
 #include "SpatialIndexer.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/ElementCriterion.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 // TGS
 #include <tgs/RStarTree/IntersectionIterator.h>
@@ -153,9 +153,9 @@ set<ElementId> SpatialIndexer::findNeighbors(
         // Check for relations that contain this element
         const set<long>& relations =
           pMap->getIndex().getElementToRelationMap()->getRelationByElement(eid);
-        for (set<long>::const_iterator it = relations.begin(); it != relations.end(); ++it)
+        for (set<long>::const_iterator relation_it = relations.begin(); relation_it != relations.end(); ++relation_it)
         {
-          neighborIds.insert(ElementId(ElementType::Relation, *it));
+          neighborIds.insert(ElementId(ElementType::Relation, *relation_it));
         }
       }
     }

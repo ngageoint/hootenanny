@@ -117,14 +117,14 @@ bool NodeToWayMap::validate(const OsmMap& map)
     // this assumption causes problems when a OsmMap is incomplete (think map reduce)
     //assert(map.containsNode(nid) || s.size() == 0);
 
-    for (set<long>::const_iterator it = s.begin(); it != s.end(); ++it)
+    for (set<long>::const_iterator s_it = s.begin(); s_it != s.end(); ++s_it)
     {
-      assert(*it != 0);
-      if (map.containsWay(*it) == false)
+      assert(*s_it != 0);
+      if (map.containsWay(*s_it) == false)
       {
         if (logWarnCount < Log::getWarnMessageLimit())
         {
-          LOG_WARN(QString("Map does not contain way: %1 ref by node: %2").arg(*it).arg(nid));
+          LOG_WARN(QString("Map does not contain way: %1 ref by node: %2").arg(*s_it).arg(nid));
         }
         else if (logWarnCount == Log::getWarnMessageLimit())
         {

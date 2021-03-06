@@ -302,10 +302,10 @@ void GeometryPainter::drawPolygon(QPainter& pt, const OGRPolygon* polygon, const
 
     lpt->end();
 
-    QMatrix m = pt.matrix();
+    QMatrix matrix = pt.matrix();
     pt.resetMatrix();
     pt.drawImage(pt.window(), *image);
-    pt.setMatrix(m);
+    pt.setMatrix(matrix);
 
     delete lpt;
     delete image;

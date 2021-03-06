@@ -179,23 +179,23 @@ Meters BuildingHeightVisitor::_parseFeetVal(const QString& heightStr,
   bool noParseErrors = true;
   bool successfulParse = true;
   // These shouldn't really ever be in decimal format, but let's support it anyway.
-  const double feet = _parseFeetToken(feetCaptureGroupName, regexMatch, successfulParse);
+  const double ft = _parseFeetToken(feetCaptureGroupName, regexMatch, successfulParse);
   noParseErrors &= successfulParse;
   const double inches = _parseFeetToken(inchesCaptureGroupName, regexMatch, successfulParse);
   noParseErrors &= successfulParse;
   LOG_VARD(noParseErrors);
-  LOG_VART(feet);
+  LOG_VART(ft);
   LOG_VART(inches);
 
   // warn about invalid values
-  if (!noParseErrors || feet < 0.0 || inches < 0.0)
+  if (!noParseErrors || ft < 0.0 || inches < 0.0)
   {
     _logInvalidFeetHeight(heightStr);
     return 0.0;
   }
 
   // return height in meters
-  return (feet + (inches / 12)) / 3.2808;
+  return (ft + (inches / 12)) / 3.2808;
 }
 
 Meters BuildingHeightVisitor::_parseFeetToken(const QString& type,

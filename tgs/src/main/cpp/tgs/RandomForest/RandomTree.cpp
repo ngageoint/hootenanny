@@ -918,11 +918,11 @@ namespace Tgs
         {
           QStringList classList = nodeElement.text().split(" ");
 
-          for (unsigned int i = 0; i < (unsigned int)classList.size(); i++)
+          for (unsigned int j = 0; j < (unsigned int)classList.size(); j++)
           {
-            node->classLabel += classList[i].toLatin1().constData();
+            node->classLabel += classList[j].toLatin1().constData();
 
-            if (i != (unsigned int)classList.size() - 1)
+            if (j != (unsigned int)classList.size() - 1)
             {
               node->classLabel += " ";
             }
@@ -938,9 +938,9 @@ namespace Tgs
 
             bool parsedOk;
 
-            for (unsigned int i = 0; i < (unsigned int)dataList.size(); i++)
+            for (unsigned int j = 0; j < (unsigned int)dataList.size(); j++)
             {
-              QString dataIndexString = dataList[i];
+              QString dataIndexString = dataList[j];
 
               unsigned int dataIndex = dataIndexString.toUInt(&parsedOk);
 

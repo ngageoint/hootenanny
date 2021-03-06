@@ -28,12 +28,12 @@
 #include "TagAdvancedCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/elements/Element.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 // Boost
 #include <boost/foreach.hpp>
@@ -210,8 +210,8 @@ bool TagAdvancedCriterion::_hasAuxMatch(const ConstElementPtr& e, const TagFilte
     const QStringList tagValues = tagValue.split(";");
     for (int i = 0; i < tagValues.length(); i++)
     {
-      const QString tagValue = tagValues.at(i).trimmed().toLower();
-      if (!tagValue.isEmpty() && _filterMatchesAnyTag(TagFilter(tagKey, tagValue), e->getTags()))
+      const QString splitValue = tagValues.at(i).trimmed().toLower();
+      if (!splitValue.isEmpty() && _filterMatchesAnyTag(TagFilter(tagKey, splitValue), e->getTags()))
       {
         LOG_TRACE("Found " << matchType << " match.");
         return true;

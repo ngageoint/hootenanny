@@ -136,7 +136,6 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
 
     for (int i = 0; i < sm.size(); ++i)
     {
-      WayPtr w;
       w = splits[c++];
       if (!w)
         throw NeedsReviewException(_overlyAggressiveMergeReviewText);

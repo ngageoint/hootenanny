@@ -27,14 +27,14 @@
 #include "ImplicitTypeTaggerBase.h"
 
 #include <hoot/core/algorithms/string/StringTokenizer.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/rnd/schema/ImplicitTagUtils.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonSchema.h>
-#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QSet>
@@ -351,10 +351,10 @@ QStringList ImplicitTypeTaggerBase::_cleanNames(Tags& tags)
 {
   //the normal hoot convention is to split the name tag on ';' into multiple names; bypassing that
   //here, as it seems to cause more harm to implicit tagging than good
-  QString name = tags.get("name");
-  if (name.contains(";"))
+  QString nameValue = tags.get("name");
+  if (nameValue.contains(";"))
   {
-    tags.set("name", name.replace(";", "").trimmed());
+    tags.set("name", nameValue.replace(";", "").trimmed());
   }
 
   QStringList names = _getNames(tags);
