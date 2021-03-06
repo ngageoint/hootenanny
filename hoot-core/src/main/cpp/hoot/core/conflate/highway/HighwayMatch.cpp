@@ -165,7 +165,7 @@ map<QString, double> HighwayMatch::getFeatures(const ConstOsmMapPtr& m) const
 set<pair<ElementId, ElementId>> HighwayMatch::getMatchPairs() const
 {
   set<pair<ElementId, ElementId>> result;
-  result.emplace(pair<ElementId, ElementId>(_eid1, _eid2));
+  result.emplace(_eid1, _eid2);
   return result;
 }
 

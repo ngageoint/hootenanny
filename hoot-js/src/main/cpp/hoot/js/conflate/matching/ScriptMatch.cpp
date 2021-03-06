@@ -144,7 +144,7 @@ void ScriptMatch::_calculateClassification(
 set<pair<ElementId, ElementId>> ScriptMatch::getMatchPairs() const
 {
   set<pair<ElementId, ElementId>> result;
-  result.emplace(pair<ElementId, ElementId>(_eid1, _eid2));
+  result.emplace(_eid1, _eid2);
   return result;
 }
 

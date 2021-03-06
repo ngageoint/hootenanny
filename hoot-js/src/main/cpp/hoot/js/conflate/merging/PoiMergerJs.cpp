@@ -85,7 +85,7 @@ void PoiMergerJs::mergePois(OsmMapPtr map, const ElementId& mergeTargetId, Isola
       LOG_VART(node);
 
       std::set<std::pair<ElementId, ElementId>> matches;
-      matches.emplace(std::pair<ElementId,ElementId>(mergeTargetId, node->getElementId()));
+      matches.emplace(mergeTargetId, node->getElementId());
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
       std::vector<std::pair<ElementId, ElementId>> replacedNodes;
