@@ -206,7 +206,6 @@ QString HootServicesLanguageDetectorClient::detect(const QString& text)
       "Text for language being detected determined to already be in English.  Skipping " <<
       "language detection for text: " << text);
     _numEnglishTextsSkipped++;
-    englishTextSkipped = true;
     return "";
   }
 

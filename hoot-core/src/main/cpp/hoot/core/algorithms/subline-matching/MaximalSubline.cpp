@@ -36,10 +36,10 @@
 #include <hoot/core/algorithms/WayHeading.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/algorithms/linearreference/WaySublineMatch.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/util/Exception.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 using namespace cv;
@@ -552,7 +552,6 @@ Sparse2dMatrix::CellId MaximalSubline::_findStartMatch(Sparse2dMatrix& sublines,
     s = sublines.get(result.row() - 1, result.col());
     if (s > bestScore)
     {
-      bestScore = s;
       best = Sparse2dMatrix::CellId(result.row() - 1, result.col());
     }
 

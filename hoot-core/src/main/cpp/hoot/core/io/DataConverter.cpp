@@ -159,7 +159,6 @@ void ogrWriterThread::run()
     // Write element or sleep
     if (doSleep)
     {
-      doSleep = false;
       msleep(100);
     }
     else
