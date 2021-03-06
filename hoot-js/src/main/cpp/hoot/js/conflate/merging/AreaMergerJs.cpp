@@ -84,7 +84,7 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
       LOG_TRACE("Merging way area: " << way << " into " << mergeTargetId);
 
       std::set<std::pair<ElementId, ElementId>> matches;
-      matches.insert(std::pair<ElementId,ElementId>(mergeTargetId, ElementId::way(way->getId())));
+      matches.emplace(std::pair<ElementId,ElementId>(mergeTargetId, ElementId::way(way->getId())));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
       std::vector<std::pair<ElementId, ElementId>> replacedWays;
@@ -106,7 +106,7 @@ void AreaMergerJs::mergeAreas(OsmMapPtr map, const ElementId& mergeTargetId, Iso
       LOG_TRACE("Merging relation area: " << relation << " into " << mergeTargetId);
 
       std::set<std::pair<ElementId, ElementId>> matches;
-      matches.insert(
+      matches.emplace(
         std::pair<ElementId,ElementId>(mergeTargetId, ElementId::relation(relation->getId())));
       // apply script merging
       ScriptMerger merger(script, plugin, matches);
