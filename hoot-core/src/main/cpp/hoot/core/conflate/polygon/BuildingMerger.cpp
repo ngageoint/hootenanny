@@ -289,13 +289,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   {
     // if we replaced the second group of buildings
     if (it->second != keeper->getElementId())
-    {
-      replacedSet.emplace(pair<ElementId, ElementId>(it->second, keeper->getElementId()));
-    }
+      replacedSet.emplace(it->second, keeper->getElementId());
+
     if (it->first != keeper->getElementId())
-    {
-      replacedSet.emplace(pair<ElementId, ElementId>(it->first, keeper->getElementId()));
-    }
+      replacedSet.emplace(it->first, keeper->getElementId());
   }
   replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
 }
@@ -830,7 +827,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
       }
 
       std::set<std::pair<ElementId, ElementId>> pairs;
-      pairs.emplace(std::pair<ElementId, ElementId>(mergeTargetId, way->getElementId()));
+      pairs.emplace(mergeTargetId, way->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId>> replacedElements;
@@ -852,7 +849,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
       }
 
       std::set<std::pair<ElementId, ElementId>> pairs;
-      pairs.emplace(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
+      pairs.emplace(mergeTargetId, relation->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId>> replacedElements;
