@@ -39,7 +39,7 @@ namespace Tgs
 class State
 {
 public:
-  State();
+  State() : _score(0.0) { }
 
   double get(QString name) const { return _values[name]; }
 

@@ -55,7 +55,7 @@ _needsReview(false)
 }
 
 PartialNetworkMerger::PartialNetworkMerger(const set<pair<ElementId, ElementId>>& pairs,
-  QSet<ConstEdgeMatchPtr> edgeMatches, ConstNetworkDetailsPtr details) :
+  const QSet<ConstEdgeMatchPtr>& edgeMatches, const ConstNetworkDetailsPtr& details) :
   _pairs(pairs),
   _edgeMatches(edgeMatches),
   _details(details)

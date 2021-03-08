@@ -49,9 +49,7 @@ public:
 
   struct EdgeEntry
   {
-    EdgeEntry(const ConstEdgeSublinePtr& subline) : _subline(subline)
-    {
-    }
+    EdgeEntry(const ConstEdgeSublinePtr& subline) : _subline(subline) { }
 
     const ConstNetworkEdgePtr& getEdge() const { return _subline->getEdge(); }
 
@@ -93,7 +91,7 @@ public:
 
   static int logWarnCount;
 
-  EdgeString();
+  EdgeString() = default;
 
   void addFirstEdge(const ConstNetworkEdgePtr& e);
 

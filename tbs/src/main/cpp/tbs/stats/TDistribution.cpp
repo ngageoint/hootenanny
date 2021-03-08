@@ -68,12 +68,6 @@ private:
   const vector<double>& _ELogH;
 };
 
-
-TDistribution::TDistribution()
-{
-
-}
-
 TDistribution::TDistribution(const Mat& m)
 {
   initialize(m);

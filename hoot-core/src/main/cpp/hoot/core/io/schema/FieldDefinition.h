@@ -51,7 +51,7 @@ public:
     {
     }
 
-    virtual ~InvalidValueException() throw() {}
+    virtual ~InvalidValueException() throw() = default;
 
   private:
 

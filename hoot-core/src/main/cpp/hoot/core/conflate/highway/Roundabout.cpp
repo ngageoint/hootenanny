@@ -28,20 +28,20 @@
 #include "Roundabout.h"
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/NodeUtils.h>
+#include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/ops/UnconnectedWaySnapper.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/visitors/ElementIdsVisitor.h>
-#include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/elements/WayUtils.h>
 
-#include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
 
 using geos::geom::CoordinateSequence;
@@ -200,13 +200,13 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
               _connectingWays.push_back(newWays[j]);
 
               // Now make connector way
-              WayPtr pWay(new Way(_otherStatus, pMap->createNextWayId(), 15));
-              pWay->addNode(pCenterNode->getId());
-              pWay->setTag("highway", "unclassified");
-              pWay->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
+              WayPtr w(new Way(_otherStatus, pMap->createNextWayId(), 15));
+              w->addNode(pCenterNode->getId());
+              w->setTag("highway", "unclassified");
+              w->setTag(MetadataTags::HootSpecial(), MetadataTags::RoundaboutConnector());
               //  Also add in the connector ways to later remove
-              LOG_TRACE("Adding temp way: " << pWay->getId() << "...");
-              _tempWays.push_back(pWay);
+              LOG_TRACE("Adding temp way: " << w->getId() << "...");
+              _tempWays.push_back(w);
 
               // Take the new way. Whichever is closest, first node or last, connect it to our
               // center point.
@@ -219,13 +219,13 @@ void Roundabout::handleCrossingWays(OsmMapPtr pMap)
               // Connect to center node
               if (firstD < lastD)
               {
-                pWay->addNode(pFirstNode->getId());
+                w->addNode(pFirstNode->getId());
               }
               else
               {
-                pWay->addNode(pLastNode->getId());
+                w->addNode(pLastNode->getId());
               }
-              pMap->addWay(pWay);
+              pMap->addWay(w);
               replace = true;
             }
           }

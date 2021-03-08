@@ -38,10 +38,6 @@ StdIoDevice::StdIoDevice(istream& in) : _in(&in)
   open(QIODevice::ReadOnly);
 }
 
-StdIoDevice::~StdIoDevice()
-{
-}
-
 bool StdIoDevice::atEnd() const
 {
   return _in->eof();

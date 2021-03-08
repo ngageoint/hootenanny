@@ -31,10 +31,6 @@
 namespace hoot
 {
 
-IdSwap::IdSwap()
-{
-}
-
 void IdSwap::add(ElementId id_1, ElementId id_2)
 {
   LOG_TRACE("Adding " << id_1.getType().toString() << " " << id_1.getId()

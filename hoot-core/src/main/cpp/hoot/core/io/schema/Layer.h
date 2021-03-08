@@ -44,7 +44,7 @@ class FeatureDefinition;
 class Layer
 {
 public:
-  Layer();
+  Layer() = default;
 
   const std::shared_ptr<const FeatureDefinition>& getFeatureDefinition() const { return _definition; }
 

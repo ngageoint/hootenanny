@@ -28,17 +28,17 @@
 #include "AttributeCoOccurrence.h"
 
 // Hoot
-#include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/algorithms/extractors/NameExtractor.h>
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
 #include <hoot/core/algorithms/string/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/extractors/NameExtractor.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/language/ToEnglishTranslateStringDistance.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/scoring/TextTable.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // tgs
 #include <tgs/HashMap.h>
@@ -57,7 +57,7 @@ public:
 
   typedef map<QString, set<ElementId>> RefToEid;
 
-  explicit RefToEidVisitor(QString ref) : _ref(ref) {}
+  explicit RefToEidVisitor(QString ref) : _ref(ref) { }
 
   virtual ~RefToEidVisitor() = default;
 
@@ -100,7 +100,7 @@ class CoOccurrenceVisitor : public ConstElementVisitor, public ConstOsmMapConsum
 public:
 
   CoOccurrenceVisitor(RefToEidVisitor::RefToEid refSet, AttributeCoOccurrence::CoOccurrenceHash& h) :
-  _refSet(refSet), _coOccurrence(h) {}
+  _refSet(refSet), _coOccurrence(h) { }
 
   virtual ~CoOccurrenceVisitor() = default;
 
@@ -237,8 +237,6 @@ private:
 
 };
 
-
-AttributeCoOccurrence::AttributeCoOccurrence() {}
 
 void AttributeCoOccurrence::addToMatrix(const ConstOsmMapPtr& in)
 

@@ -27,10 +27,10 @@
 #include "MatchScoringMapPreparer.h"
 
 // hoot
-#include <hoot/core/ops/MapCleaner.h>
-#include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/ops/MapCleaner.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/visitors/AddUuidVisitor.h>
 #include <hoot/core/visitors/FilteredVisitor.h>
@@ -47,7 +47,7 @@ public:
   ConvertUuidToRefVisitor() = default;
   virtual ~ConvertUuidToRefVisitor() = default;
 
-  virtual void visit(const std::shared_ptr<Element>& e)
+  void visit(const ElementPtr& e) override
   {
     if (!e->getTags().contains(MetadataTags::Ref1()) &&
         !e->getTags().contains(MetadataTags::Ref2()) && e->getTags().contains("uuid"))
@@ -64,14 +64,10 @@ public:
     }
   }
 
-  virtual QString getDescription() const { return ""; }
-  virtual QString getName() const { return ""; }
-  virtual QString getClassName() const override { return ""; }
+  QString getDescription() const override { return ""; }
+  QString getName() const override { return ""; }
+  QString getClassName() const override { return ""; }
 };
-
-MatchScoringMapPreparer::MatchScoringMapPreparer()
-{
-}
 
 void MatchScoringMapPreparer::prepMap(OsmMapPtr map, const bool removeNodes)
 {

@@ -41,7 +41,7 @@ class RubberSheetApplier
 {
 public:
 
-  RubberSheetApplier();
+  RubberSheetApplier() = default;
 
   /**
    * Applies a rubber sheet transform to input and writes to output

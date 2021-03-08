@@ -144,7 +144,7 @@ void ScriptMatch::_calculateClassification(
 set<pair<ElementId, ElementId>> ScriptMatch::getMatchPairs() const
 {
   set<pair<ElementId, ElementId>> result;
-  result.insert(pair<ElementId, ElementId>(_eid1, _eid2));
+  result.emplace(_eid1, _eid2);
   return result;
 }
 
@@ -262,9 +262,9 @@ bool ScriptMatch::_isOrderedConflicting(
   Context::Scope context_scope(_script->getContext(current));
 
   set<ElementId> eids;
-  eids.insert(sharedEid);
-  eids.insert(other1);
-  eids.insert(other2);
+  eids.emplace(sharedEid);
+  eids.emplace(other1);
+  eids.emplace(other2);
 
   OsmMapPtr copiedMap(new OsmMap(map->getProjection()));
   CopyMapSubsetOp(map, eids).apply(copiedMap);
@@ -301,7 +301,7 @@ bool ScriptMatch::_isOrderedConflicting(
 
   std::shared_ptr<const ScriptMatch> m1 = _getMatch(copiedMap, copiedMapJs, eid11, eid12, matches);
   MatchSet ms;
-  ms.insert(m1);
+  ms.emplace(m1);
   vector<MergerPtr> mergers;
   ScriptMergerCreator creator;
   creator.createMergers(ms, mergers);

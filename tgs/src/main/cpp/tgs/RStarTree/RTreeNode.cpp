@@ -179,10 +179,6 @@ RTreeNode::RTreeNode(int dimensions, const std::shared_ptr<Page>& page)
   _getHeader()->childCount = *childCount;
 }
 
-RTreeNode::~RTreeNode()
-{
-}
-
 void RTreeNode::addChild(const Box& envelope, int id)
 {
   assert(getChildCount() < _maxChildCount);

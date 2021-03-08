@@ -57,9 +57,9 @@ public:
     double weight;
   };
 
-  DirectedGraph();
+  DirectedGraph() = default;
 
-  virtual ~DirectedGraph() {}
+  virtual ~DirectedGraph() = default;
 
   void addEdge(long from, long to, double weight);
 

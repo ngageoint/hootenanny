@@ -45,7 +45,7 @@ public:
 
   static QString className() { return "Tgs::Interpolator"; }
 
-  virtual ~Interpolator() {}
+  virtual ~Interpolator() = default;
 
   virtual QString getName() const = 0;
 

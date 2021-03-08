@@ -32,10 +32,6 @@
 namespace hoot
 {
 
-FeatureDefinition::FeatureDefinition()
-{
-}
-
 bool FeatureDefinition::hasField(const QString& name) const
 {
   for (size_t i = 0; i < _fields.size(); ++i)

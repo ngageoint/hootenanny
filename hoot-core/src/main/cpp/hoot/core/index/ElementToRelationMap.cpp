@@ -27,19 +27,15 @@
 #include "ElementToRelationMap.h"
 
 // hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/elements/Relation.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/util/Log.h>
 
 using namespace std;
 
 namespace hoot
 {
-
-ElementToRelationMap::ElementToRelationMap()
-{
-}
 
 void ElementToRelationMap::addRelation(const OsmMap& map,
                                        const std::shared_ptr<const Relation>& r)

@@ -29,8 +29,8 @@
 #define __MULTI_LINE_STRING_LOCATION_H__
 
 // Hoot
-#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
+#include <hoot/core/algorithms/linearreference/WaySublineCollection.h>
 
 namespace hoot
 {
@@ -47,7 +47,7 @@ public:
 
   // Don't like having a default constructor here, but its needed by PertyWaySplitVisitor
   // for now.
-  MultiLineStringLocation() {}
+  MultiLineStringLocation() = default;
 
   /**
    * Creates a location along the multi-line string

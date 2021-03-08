@@ -57,6 +57,7 @@
 #include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 
 using namespace std;
 
@@ -135,10 +136,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   for (set<pair<ElementId, ElementId>>::const_iterator sit = _pairs.begin(); sit != _pairs.end();
        ++sit)
   {
-    firstPairs.insert(sit->first);
-    secondPairs.insert(sit->second);
-    combined.insert(sit->first);
-    combined.insert(sit->second);
+    firstPairs.emplace(sit->first);
+    secondPairs.emplace(sit->second);
+    combined.emplace(sit->first);
+    combined.emplace(sit->second);
   }
   _manyToManyMatch = firstPairs.size() > 1 && secondPairs.size() > 1;
 
@@ -288,13 +289,10 @@ void BuildingMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementI
   {
     // if we replaced the second group of buildings
     if (it->second != keeper->getElementId())
-    {
-      replacedSet.insert(pair<ElementId, ElementId>(it->second, keeper->getElementId()));
-    }
+      replacedSet.emplace(it->second, keeper->getElementId());
+
     if (it->first != keeper->getElementId())
-    {
-      replacedSet.insert(pair<ElementId, ElementId>(it->first, keeper->getElementId()));
-    }
+      replacedSet.emplace(it->first, keeper->getElementId());
   }
   replaced.insert(replaced.end(), replacedSet.begin(), replacedSet.end());
 }
@@ -683,10 +681,12 @@ RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   relationTags = parentRelation->getTags();
   LOG_VART(relationTags);
 
+  const bool isAttributeConflate =
+    ConfigOptions().getGeometryLinearMergerDefault() == LinearTagOnlyMerger::className();
   // Doing this for multipoly relations in Attribute Conflation only for the time being.
   const bool suppressBuildingTagOnConstituents =
-    // relatively loose way to identify AC; also used in ConflateCmd
-    ConfigOptions().getHighwayMergeTagsOnly() &&
+    // relatively loose way to identify AC; also used in ConflateExecutor
+    isAttributeConflate &&
     // allAreBuildingParts = building relation
     !allAreBuildingParts &&
     ConfigOptions().getAttributeConflationSuppressBuildingTagOnMultipolyRelationConstituents();
@@ -827,7 +827,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
       }
 
       std::set<std::pair<ElementId, ElementId>> pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, way->getElementId()));
+      pairs.emplace(mergeTargetId, way->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId>> replacedElements;
@@ -849,7 +849,7 @@ void BuildingMerger::mergeBuildings(OsmMapPtr map, const ElementId& mergeTargetI
       }
 
       std::set<std::pair<ElementId, ElementId>> pairs;
-      pairs.insert(std::pair<ElementId, ElementId>(mergeTargetId, relation->getElementId()));
+      pairs.emplace(mergeTargetId, relation->getElementId());
       BuildingMerger merger(pairs);
       LOG_VART(pairs.size());
       std::vector<std::pair<ElementId, ElementId>> replacedElements;

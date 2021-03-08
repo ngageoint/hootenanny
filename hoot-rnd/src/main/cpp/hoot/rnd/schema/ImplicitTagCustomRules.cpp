@@ -27,19 +27,15 @@
 #include "ImplicitTagCustomRules.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/HootException.h>
 #include <hoot/core/schema/TagListReader.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QFile>
 
 namespace hoot
 {
-
-ImplicitTagCustomRules::ImplicitTagCustomRules()
-{
-}
 
 void ImplicitTagCustomRules::init()
 {

@@ -46,7 +46,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(Merger, LinearTagOnlyMerger)
 
 LinearTagOnlyMerger::LinearTagOnlyMerger(const std::set<std::pair<ElementId, ElementId>>& pairs,
-                                           std::shared_ptr<PartialNetworkMerger> networkMerger) :
+                                         std::shared_ptr<PartialNetworkMerger> networkMerger) :
 LinearSnapMerger(pairs, std::shared_ptr<SublineStringMatcher>()),
 _performBridgeGeometryMerging(
   ConfigOptions().getAttributeConflationAllowRefGeometryChangesForBridges()),
@@ -110,37 +110,41 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
   LOG_TRACE("LinearTagOnlyMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
   LOG_TRACE("LinearTagOnlyMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
-  // If just one of the features is a bridge, we want the bridge feature to separate from the road
-  // feature its being merged with. So, use a geometry AND tag merger.
+  // If just one of the features is a bridge and we allow bridge geometry merging, we want the
+  // bridge feature to separate from the road feature its being merged with. So, in that case use a
+  // geometry merger AND a tag merger.
 
-  std::vector<ConstElementPtr> elements;
-  elements.push_back(e1);
-  elements.push_back(e2);
-  const bool onlyOneIsABridge =
-    CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
-  if (onlyOneIsABridge)
+  if (_performBridgeGeometryMerging)
   {
-    LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
+    std::vector<ConstElementPtr> elements;
+    elements.push_back(e1);
+    elements.push_back(e2);
+    const bool onlyOneIsABridge =
+      CriterionUtils::containsSatisfyingElements<BridgeCriterion>(elements, OsmMapPtr(), 1, true);
+    if (onlyOneIsABridge)
+    {
+      LOG_TRACE("Using tag and geometry merger, since just one of the features is a bridge...");
 
-    bool needsReview = false;
-    QString mergerName;
-    if (!_networkMerger)
-    {
-      mergerName = LinearSnapMerger::className();
-      needsReview = LinearSnapMerger::_mergePair(map, eid1, eid2, replaced);
+      bool needsReview = false;
+      QString mergerName;
+      if (!_networkMerger)
+      {
+        mergerName = LinearSnapMerger::className();
+        needsReview = LinearSnapMerger::_mergePair(map, eid1, eid2, replaced);
+      }
+      else
+      {
+        mergerName = PartialNetworkMerger::className();
+        _networkMerger->apply(map, replaced);
+      }
+      if (needsReview)
+      {
+        LOG_TRACE(mergerName << " returned review.");
+      }
+      LOG_VART(map->getElement(eid1));
+      LOG_VART(map->getElement(eid2));
+      return needsReview;
     }
-    else
-    {
-      mergerName = PartialNetworkMerger::className();
-      _networkMerger->apply(map, replaced);
-    }
-    if (needsReview)
-    {
-      LOG_TRACE(mergerName << " returned review.");
-    }
-    LOG_VART(map->getElement(eid1));
-    LOG_VART(map->getElement(eid2));
-    return needsReview;
   }
 
   // Otherwise, proceed with tag only merging.
@@ -157,10 +161,6 @@ bool LinearTagOnlyMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, Eleme
     e1, e2, elementWithTagsToKeep, elementWithTagsToRemove, removeSecondaryElement);
   LOG_VART(elementWithTagsToKeep->getElementId());
   LOG_VART(elementWithTagsToRemove->getElementId());
-//  OsmUtils::logElementDetail(
-//    elementWithTagsToKeep, map, Log::Trace, "LinearTagOnlyMerger: elementWithTagsToKeep");
-//  OsmUtils::logElementDetail(
-//    elementWithTagsToRemove, map, Log::Trace, "LinearTagOnlyMerger: elementWithTagsToRemove");
 
   return
     _mergeWays(

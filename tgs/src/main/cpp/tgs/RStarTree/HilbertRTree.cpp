@@ -332,11 +332,7 @@ public:
   HilbertRTree::BoxPair boxPair;
   int hilbertValue;
 
-  BoxHolder(const BoxHolder& bh) :
-    boxPair(bh.boxPair)
-  {
-    hilbertValue = bh.hilbertValue;
-  }
+  BoxHolder(const BoxHolder&)  = default;
 
   BoxHolder(const HilbertRTree::BoxPair& bp, int hv) :
     boxPair(bp)

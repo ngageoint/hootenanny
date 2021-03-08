@@ -477,9 +477,9 @@ Tags ImplicitTagRulesSqliteReader::_getTagsForWords(const QSet<long>& queriedWor
       if (matchingWords != inputWords)
       {
         //also cache the originally passed in words
-        Tags tagsToCache;
-        tagsToCache.insert("wordsInvolvedInMultipleRules", "true");
-        _cacheTags(inputWords, tagsToCache);
+        Tags moreTagsToCache;
+        moreTagsToCache.insert("wordsInvolvedInMultipleRules", "true");
+        _cacheTags(inputWords, moreTagsToCache);
       }
       LOG_TRACE(
         "Words: " << matchingWords << " involved in multiple rules due to tag sets not matching.");

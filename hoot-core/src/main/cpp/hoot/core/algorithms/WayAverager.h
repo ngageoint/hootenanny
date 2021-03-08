@@ -48,6 +48,7 @@ class Way;
 class WayAverager
 {
 public:
+
   WayAverager(OsmMapPtr map, WayPtr w1, WayPtr w2);
 
   /**

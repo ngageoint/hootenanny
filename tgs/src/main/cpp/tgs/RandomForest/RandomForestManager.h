@@ -55,7 +55,7 @@ namespace Tgs
     /**
     *  Destructor
     */
-    virtual ~RandomForestManager();
+    virtual ~RandomForestManager() = default;
 
   protected:
     /**

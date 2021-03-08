@@ -77,11 +77,6 @@ namespace Tgs
     }
   }
 
-  DataFrame::~DataFrame()
-  {
-
-  }
-
   void DataFrame::addDataVector(std::string label, const std::vector<double>& dataItem,
     double eventWeight /*= 1.*/)
   {
@@ -1337,19 +1332,19 @@ namespace Tgs
 
         if (childList.at(i).isElement())
         {
-          QDomElement e = childList.at(i).toElement(); // try to convert the node to an element.
+          QDomElement element = childList.at(i).toElement(); // try to convert the node to an element.
 
-          QString tag = e.tagName().toUpper();
+          QString tag = element.tagName().toUpper();
 
           bool parseOk = true;
 
           if (tag == "CLASSNAME")
           {
-            _trainingLabels.push_back(e.text().toLatin1().constData());
+            _trainingLabels.push_back(element.text().toLatin1().constData());
           }
           else if (tag == "DATA")
           {
-            QStringList factorList = e.text().split(" ");
+            QStringList factorList = element.text().split(" ");
 
             std::vector<double> dataVector(factorList.size());
 
@@ -1372,9 +1367,9 @@ namespace Tgs
         }
       }
     }
-    catch(const Exception & e)
+    catch(const Exception & ex)
     {
-      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, e);
+      throw Exception(typeid(this).name(), __FUNCTION__, __LINE__, ex);
     }
   }
 

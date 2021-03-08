@@ -30,9 +30,9 @@
 #include <hoot/core/algorithms/FrechetDistance.h>
 #include <hoot/core/conflate/network/EdgeMatch.h>
 #include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -449,6 +449,7 @@ void ConflictsNetworkMatcher::_iterateRank()
       relationCount = max(1, relationCount);
 
       //s = s / (double)supportCount;
+      LOG_VART(supportCount);
       s = s / (double)relationCount;
 
       if (r->isConflict() == false)
@@ -557,6 +558,8 @@ void ConflictsNetworkMatcher::_iterateSimple()
       }
       supportCount = max(1, supportCount);
       relationCount = max(1, relationCount);
+
+      LOG_VART(supportCount);
 
       s = s * _weights[r->getEdge()];
       LOG_VART(s);

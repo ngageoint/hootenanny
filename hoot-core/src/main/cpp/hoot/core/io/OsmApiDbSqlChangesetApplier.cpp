@@ -28,9 +28,9 @@
 
 // hoot
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt
@@ -157,9 +157,9 @@ void OsmApiDbSqlChangesetApplier::write(const QString& sql)
         if (pos > -1)
         {
           // first capture is the whole string...skip it
-          for (int i = 1; i < 5; i++)
+          for (int j = 1; j < 5; j++)
           {
-            const QString oldCoordStr = captures.at(i);
+            const QString oldCoordStr = captures.at(j);
             const double newCoord = OsmApiDb::fromOsmApiDbCoord(oldCoordStr.toLong());
             _changesetDetailsStr=
               _changesetDetailsStr.replace(

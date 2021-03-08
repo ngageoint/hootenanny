@@ -73,17 +73,6 @@ ChangesetElement::ChangesetElement(const XmlObject& object, ElementIdToIdMap* id
   }
 }
 
-ChangesetElement::ChangesetElement(const ChangesetElement& element)
-  : _type(element._type),
-    _id(element._id),
-    _version(element._version),
-    _object(element._object),
-    _tags(element._tags),
-    _idMap(element._idMap),
-    _status(element._status)
-{
-}
-
 void ChangesetElement::addTag(const XmlObject& tag)
 {
   //  Make sure that the object is in fact a tag before adding it
@@ -291,11 +280,6 @@ ChangesetNode::ChangesetNode(const XmlObject& node, ElementIdToIdMap* idMap)
   _type = ElementType::Node;
 }
 
-ChangesetNode::ChangesetNode(const ChangesetNode &node)
-  : ChangesetElement(node)
-{
-}
-
 QString ChangesetNode::toString(long changesetId, ChangesetType type) const
 {
   QString buffer;
@@ -341,12 +325,6 @@ ChangesetWay::ChangesetWay(const XmlObject& way, ElementIdToIdMap* idMap)
 {
   //  Override the type
   _type = ElementType::Way;
-}
-
-ChangesetWay::ChangesetWay(const ChangesetWay &way)
-  : ChangesetElement(way),
-    _nodes(way._nodes)
-{
 }
 
 void ChangesetWay::removeNodes(int position, int count)
@@ -434,12 +412,6 @@ ChangesetRelation::ChangesetRelation(const XmlObject& relation, ElementIdToIdMap
 {
   //  Override the type
   _type = ElementType::Relation;
-}
-
-ChangesetRelation::ChangesetRelation(const ChangesetRelation &relation)
-  : ChangesetElement(relation),
-    _members(relation._members)
-{
 }
 
 bool ChangesetRelation::hasMember(ElementType::Type type, long id) const

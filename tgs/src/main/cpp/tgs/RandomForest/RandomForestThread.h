@@ -52,7 +52,7 @@ namespace Tgs
     /**
      * @brief ~RandomForestThread Destructor
      */
-    ~RandomForestThread();
+    ~RandomForestThread() = default;
 
 
   signals:

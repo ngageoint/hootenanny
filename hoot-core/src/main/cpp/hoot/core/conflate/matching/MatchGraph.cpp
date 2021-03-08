@@ -45,11 +45,11 @@
 #endif
 
 // hoot
+#include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/merging/MergerFactory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/conflate/matching/Match.h>
 
 // Qt
 #include <QHash>
@@ -74,8 +74,8 @@ public:
     InvalidMatch
   } MatchType;
 
-  MatchEdge() : match(0), type(InvalidMatch) {}
-  MatchEdge(ConstMatchPtr m, MatchType t) : match(m), type(t) {}
+  MatchEdge() : match(0), type(InvalidMatch) { }
+  MatchEdge(ConstMatchPtr m, MatchType t) : match(m), type(t) { }
 
   ConstMatchPtr match;
   MatchType type;
@@ -85,8 +85,8 @@ class MatchVertex
 {
 public:
 
-  MatchVertex() {}
-  MatchVertex(ElementId e) : eid(e) {}
+  MatchVertex() = default;
+  MatchVertex(ElementId e) : eid(e) { }
 
   ElementId eid;
 };
@@ -109,7 +109,7 @@ class MatchGraphInternal
 {
 public:
 
-  MatchGraphInternal(const vector<ConstMatchPtr>& matches) : _matches(matches) {}
+  MatchGraphInternal(const vector<ConstMatchPtr>& matches) : _matches(matches) { }
 
   /**
    * Only return true for edges that are matches and meet the specified threshold.
@@ -120,11 +120,11 @@ public:
 
     MatchThresholdFilter() :
       _graph(0),
-      _threshold(-1) {}
+      _threshold(-1) { }
 
     MatchThresholdFilter(MatchBoostGraph& graph, double threshold) :
       _graph(&graph),
-      _threshold(threshold) {}
+      _threshold(threshold) { }
 
     bool operator()(const MatchEdgeId& edgeId) const
     {
@@ -201,12 +201,12 @@ public:
       }
 
       // while this is O(n^2) matches should generally be pretty small.
-      for (MatchSet::const_iterator it = matches.begin(); it != matches.end(); ++it)
+      for (MatchSet::const_iterator m1_it = matches.begin(); m1_it != matches.end(); ++m1_it)
       {
-        ConstMatchPtr m1 = *it;
-        for (MatchSet::const_iterator jt = matches.begin(); jt != matches.end(); ++jt)
+        ConstMatchPtr m1 = *m1_it;
+        for (MatchSet::const_iterator m2_it = matches.begin(); m2_it != matches.end(); ++m2_it)
         {
-          ConstMatchPtr m2 = *jt;
+          ConstMatchPtr m2 = *m2_it;
           if (m1 != m2)
           {
             if (checkForConflicts &&

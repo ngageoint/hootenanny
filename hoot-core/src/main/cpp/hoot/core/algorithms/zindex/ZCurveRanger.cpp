@@ -53,7 +53,7 @@ class LongBoxContainer
 {
 public:
 
-  LongBoxContainer() {}
+  LongBoxContainer() = default;
 
   LongBoxContainer(LongBox box, long int excess)
     : _box(box), _excess(excess)

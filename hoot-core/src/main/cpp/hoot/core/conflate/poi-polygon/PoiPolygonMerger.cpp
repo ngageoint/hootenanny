@@ -75,7 +75,6 @@ std::shared_ptr<TagMerger> PoiPolygonMerger::_getTagMerger()
 {
   if (!_tagMerger)
   {
-    LOG_VART(ConfigOptions().getHighwayMergeTagsOnly());
     LOG_VART(_autoMergeManyPoiToOnePolyMatches);
     LOG_VART(_tagMergerClass);
     LOG_VART(ConfigOptions().getPoiPolygonTagMerger());
@@ -399,8 +398,7 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
     size_t i1 = min(i, buildings1.size() - 1);
     size_t i2 = min(i, buildings2.size() - 1);
 
-    pair<ElementId, ElementId> p(buildings1[i1], buildings2[i2]);
-    pairs.insert(p);
+    pairs.emplace(buildings1[i1], buildings2[i2]);
   }
 
   BuildingMerger(pairs).apply(map, replaced);
@@ -408,7 +406,7 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
   set<ElementId> newElement;
   for (size_t i = 0; i < replaced.size(); i++)
   {
-    newElement.insert(replaced[i].second);
+    newElement.emplace(replaced[i].second);
   }
 
   return *newElement.begin();
@@ -510,7 +508,7 @@ ElementId PoiPolygonMerger::mergeOnePoiAndOnePolygon(OsmMapPtr map)
   // do the merging
   std::set<std::pair<ElementId, ElementId>> pairs;
   // Ordering doesn't matter here, since the poi is always merged into the poly.
-  pairs.insert(std::pair<ElementId, ElementId>(polyId, poiId));
+  pairs.emplace(polyId, poiId);
   PoiPolygonMerger merger(pairs);
   std::vector<std::pair<ElementId, ElementId>> replacedElements;
   merger.apply(map, replacedElements);

@@ -443,7 +443,7 @@ private:
   /** For white box testing */
   friend class OsmApiWriterTest;
   /** Default constructor for testing purposes only */
-  OsmApiWriter() {}
+  OsmApiWriter() = default;
 };
 
 }

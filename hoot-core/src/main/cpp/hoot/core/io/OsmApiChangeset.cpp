@@ -1213,10 +1213,10 @@ size_t XmlChangeset::getObjectCount(const ChangesetInfoPtr& changeset, Changeset
         {
           if (!changeset || changeset->contains(ElementType::Relation, (ChangesetType)current_type, id))
           {
-            ChangesetRelation* relation = NULL;
+            ChangesetRelation* r = NULL;
             if (_allRelations.find(id) != _allRelations.end())
-              relation = dynamic_cast<ChangesetRelation*>(_allRelations[id].get());
-            count += getObjectCount(changeset, relation, elements, countSent);
+              r = dynamic_cast<ChangesetRelation*>(_allRelations[id].get());
+            count += getObjectCount(changeset, r, elements, countSent);
           }
         }
       }

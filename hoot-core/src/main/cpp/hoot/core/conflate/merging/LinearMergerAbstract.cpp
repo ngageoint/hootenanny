@@ -26,9 +26,19 @@
  */
 #include "LinearMergerAbstract.h"
 
+// geos
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
+
 // hoot
 #include <hoot/core/conflate/highway/HighwayMatch.h>
 #include <hoot/core/util/Log.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -37,6 +47,75 @@ namespace hoot
 {
 
 int LinearMergerAbstract::logWarnCount = 0;
+
+void LinearMergerAbstract::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
+{
+  LOG_TRACE("Applying LinearSnapMerger...");
+  LOG_VART(hoot::toString(_pairs));
+  LOG_VART(hoot::toString(replaced));
+
+  vector<pair<ElementId, ElementId>> pairs;
+  pairs.reserve(_pairs.size());
+
+  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
+       ++it)
+  {
+    ElementId eid1 = it->first;
+    ElementId eid2 = it->second;
+
+    if (map->containsElement(eid1) && map->containsElement(eid2))
+    {
+      pairs.push_back(pair<ElementId, ElementId>(eid1, eid2));
+    }
+    else
+    {
+      LOG_TRACE(
+        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
+    }
+  }
+  LOG_VART(hoot::toString(pairs));
+
+  ShortestFirstComparator shortestFirst;
+  shortestFirst.map = map;
+  sort(pairs.begin(), pairs.end(), shortestFirst);
+  for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
+       it != pairs.end(); ++it)
+  {
+    ElementId eid1 = it->first;
+    ElementId eid2 = it->second;
+
+    for (size_t i = 0; i < replaced.size(); i++)
+    {
+      LOG_VART(eid1);
+      LOG_VART(eid2);
+      LOG_VART(replaced[i].first);
+      LOG_VART(replaced[i].second);
+
+      //LOG_TRACE("eid1 before replacement check: " << eid1);
+      //LOG_TRACE("eid2 before replacement check: " << eid2);
+      LOG_TRACE("e1 before replacement check: " << map->getElement(eid1));
+      LOG_TRACE("e2 before replacement check: " << map->getElement(eid2));
+
+      if (eid1 == replaced[i].first)
+      {
+        LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
+        eid1 = replaced[i].second;
+      }
+      if (eid2 == replaced[i].first)
+      {
+        LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
+        eid2 = replaced[i].second;
+      }
+
+      //LOG_TRACE("eid1 after replacement check: " << eid1);
+      //LOG_TRACE("eid2 after replacement check: " << eid2);
+      LOG_TRACE("e1 after replacement check: " << map->getElement(eid1));
+      LOG_TRACE("e2 after replacement check: " << map->getElement(eid2));
+    }
+
+    _mergePair(map, eid1, eid2, replaced);
+  }
+}
 
 void LinearMergerAbstract::_markNeedsReview(
   const OsmMapPtr &map, ElementPtr e1, ElementPtr e2, QString note, QString reviewType)
@@ -114,6 +193,108 @@ bool LinearMergerAbstract::_mergePair(
     return true;
   }
   return false;
+}
+
+void LinearMergerAbstract::_removeSpans(OsmMapPtr map, const ElementPtr& e1,
+                                        const ElementPtr& e2) const
+{
+  if (e1->getElementType() != e2->getElementType())
+  {
+    throw InternalErrorException("Expected both elements to have the same type "
+                                 "when removing spans.");
+  }
+
+  if (e1->getElementType() == ElementType::Way)
+  {
+    WayPtr w1 = std::dynamic_pointer_cast<Way>(e1);
+    WayPtr w2 = std::dynamic_pointer_cast<Way>(e2);
+
+    _removeSpans(map, w1, w2);
+  }
+  else
+  {
+    RelationPtr r1 = std::dynamic_pointer_cast<Relation>(e1);
+    RelationPtr r2 = std::dynamic_pointer_cast<Relation>(e2);
+
+    if (r1->getMembers().size() != r2->getMembers().size())
+    {
+      throw InternalErrorException("Expected both relations to have the same number of children "
+                                   "when removing spans.");
+    }
+
+    for (size_t i = 0; i < r1->getMembers().size(); i++)
+    {
+      ElementId m1 = r1->getMembers()[i].getElementId();
+      ElementId m2 = r2->getMembers()[i].getElementId();
+      assert(m1.getType() == ElementType::Way && m2.getType() == ElementType::Way);
+      _removeSpans(map, map->getWay(m1), map->getWay(m2));
+    }
+  }
+}
+
+void LinearMergerAbstract::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const
+{
+  LOG_TRACE("Removing spans...");
+
+  std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+
+  // find all the ways that connect to the beginning or end of w1. There shouldn't be any that
+  // connect in the middle.
+  set<long> wids = n2w->getWaysByNode(w1->getNodeIds()[0]);
+  const set<long>& wids2 = n2w->getWaysByNode(w1->getLastNodeId());
+  wids.insert(wids2.begin(), wids2.end());
+
+  for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
+  {
+    if (*it != w1->getId() && *it != w2->getId())
+    {
+      const WayPtr& w = map->getWay(*it);
+      // if this isn't one of the ways we're evaluating for a connection between and it is part of
+      // the data set we're conflating in
+      if (w->getElementId() != w1->getElementId() &&
+          w->getElementId() != w2->getElementId() &&
+          w->getStatus() == Status::Unknown2)
+      {
+        // if this way connects w1 to w2 at the beginning or the end
+        if (_doesWayConnect(w1->getNodeId(0), w2->getNodeId(0), w) ||
+            _doesWayConnect(w1->getLastNodeId(), w2->getLastNodeId(), w))
+        {
+          // if the connection is more or less a straight shot. Don't want to worry about round
+          // about connections (e.g. lollipop style).
+          if (_directConnect(map, w))
+          {
+            // This should likely remove the way even if it is part of another relation - #2938
+            RecursiveElementRemover(w->getElementId()).apply(map);
+          }
+        }
+      }
+    }
+  }
+}
+
+bool LinearMergerAbstract::_directConnect(const ConstOsmMapPtr& map, WayPtr w) const
+{
+  std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
+
+  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
+    create(2, 2);
+
+  cs->setAt(map->getNode(w->getNodeId(0))->toCoordinate(), 0);
+  cs->setAt(map->getNode(w->getLastNodeId())->toCoordinate(), 1);
+
+  // create a straight line and buffer it
+  std::shared_ptr<LineString> straight(GeometryFactory::getDefaultInstance()->createLineString(cs));
+  std::shared_ptr<Geometry> g(straight->buffer(w->getCircularError()));
+
+  // is the way in question completely contained in the buffer?
+  return g->contains(ls.get());
+}
+
+bool LinearMergerAbstract::_doesWayConnect(long node1, long node2, const ConstWayPtr& w) const
+{
+  return
+    (w->getNodeId(0) == node1 && w->getLastNodeId() == node2) ||
+    (w->getNodeId(0) == node2 && w->getLastNodeId() == node1);
 }
 
 QString LinearMergerAbstract::toString() const

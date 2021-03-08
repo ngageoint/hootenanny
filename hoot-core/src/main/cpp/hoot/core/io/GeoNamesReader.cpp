@@ -27,9 +27,9 @@
 #include "GeoNamesReader.h"
 
 // hoot
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 
 // qt
 #include <QDir>
@@ -195,7 +195,6 @@ ElementPtr GeoNamesReader::readNextElement()
   long id;
   if (_useDataSourceIds)
   {
-    bool ok;
     id = fields[_GEONAMESID].toLong(&ok);
     if (!ok)
     {

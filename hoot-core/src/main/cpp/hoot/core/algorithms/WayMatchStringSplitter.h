@@ -36,7 +36,7 @@ class WayMatchStringSplitter
 {
 public:
 
-  WayMatchStringSplitter();
+  WayMatchStringSplitter() = default;
 
   /**
    * Traverses all mappings, splits ways where appropriate and updates the subline mappings in

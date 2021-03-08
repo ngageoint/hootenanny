@@ -30,8 +30,8 @@
 #include <geos/geom/LineString.h>
 
 // hoot
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/algorithms/FindNodesInWayFactory.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/visitors/ConstElementVisitor.h>
 
 using namespace geos::geom;
@@ -39,10 +39,6 @@ using namespace std;
 
 namespace hoot
 {
-
-WaySubline::WaySubline()
-{
-}
 
 WaySubline::WaySubline(const WaySubline& from) :
   _start(from.getStart()),

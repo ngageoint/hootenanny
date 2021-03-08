@@ -46,7 +46,6 @@
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
-#include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/ops/RemoveElementByEid.h>
 #include <hoot/core/ops/RemoveReviewsByEidOp.h>
@@ -62,7 +61,6 @@
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QSet>
@@ -73,20 +71,18 @@ using namespace std;
 namespace hoot
 {
 
+HOOT_FACTORY_REGISTER(Merger, LinearSnapMerger)
+
 // ONLY ENABLE THIS DURING DEBUGGING; We don't want to tie it to debug.maps.write, as it may
 // produce a very large number of files.
 const bool LinearSnapMerger::WRITE_DETAILED_DEBUG_MAPS = false;
-
-HOOT_FACTORY_REGISTER(Merger, LinearSnapMerger)
-
 int LinearSnapMerger::logWarnCount = 0;
 
 LinearSnapMerger::LinearSnapMerger() :
 LinearMergerAbstract(),
 _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations
-  (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations()),
-_matchedBy(HighwayMatch::MATCH_NAME)
+  (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations())
 {
   LOG_VART(_markAddedMultilineStringRelations);
 }
@@ -94,110 +90,16 @@ _matchedBy(HighwayMatch::MATCH_NAME)
 LinearSnapMerger::LinearSnapMerger(
   const set<pair<ElementId, ElementId>>& pairs,
   const std::shared_ptr<SublineStringMatcher>& sublineMatcher) :
+LinearMergerAbstract(),
 _removeTagsFromWayMembers(true),
 _markAddedMultilineStringRelations
-  (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations()),
-_sublineMatcher(sublineMatcher),
-_matchedBy(HighwayMatch::MATCH_NAME)
+  (ConfigOptions().getConflateMarkMergeCreatedMultilinestringRelations())
 {
   _pairs = pairs;
+  _sublineMatcher = sublineMatcher;
 
   LOG_VART(_markAddedMultilineStringRelations);
   LOG_VART(_pairs);
-}
-
-void LinearSnapMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, ElementId>>& replaced)
-{
-  LOG_TRACE("Applying LinearSnapMerger...");
-  LOG_VART(hoot::toString(_pairs));
-  LOG_VART(hoot::toString(replaced));
-
-  vector<pair<ElementId, ElementId>> pairs;
-  pairs.reserve(_pairs.size());
-
-  for (set<pair<ElementId, ElementId>>::const_iterator it = _pairs.begin(); it != _pairs.end();
-       ++it)
-  {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
-
-    if (map->containsElement(eid1) && map->containsElement(eid2))
-    {
-      pairs.push_back(pair<ElementId, ElementId>(eid1, eid2));
-    }
-    else
-    {
-      LOG_TRACE(
-        "Map doesn't contain one or more of the following elements: " << eid1 << ", " << eid2);
-    }
-  }
-  LOG_VART(hoot::toString(pairs));
-
-  ShortestFirstComparator shortestFirst;
-  shortestFirst.map = map;
-  sort(pairs.begin(), pairs.end(), shortestFirst);
-  for (vector<pair<ElementId, ElementId>>::const_iterator it = pairs.begin();
-       it != pairs.end(); ++it)
-  {
-    ElementId eid1 = it->first;
-    ElementId eid2 = it->second;
-
-    for (size_t i = 0; i < replaced.size(); i++)
-    {
-      LOG_VART(eid1);
-      LOG_VART(eid2);
-      LOG_VART(replaced[i].first);
-      LOG_VART(replaced[i].second);
-
-      //LOG_TRACE("eid1 before replacement check: " << eid1);
-      //LOG_TRACE("eid2 before replacement check: " << eid2);
-      LOG_TRACE("e1 before replacement check: " << map->getElement(eid1));
-      LOG_TRACE("e2 before replacement check: " << map->getElement(eid2));
-
-      if (eid1 == replaced[i].first)
-      {
-        LOG_TRACE("Changing " << eid1 << " to " << replaced[i].second << "...");
-        eid1 = replaced[i].second;
-      }
-      if (eid2 == replaced[i].first)
-      {
-        LOG_TRACE("Changing " << eid2 << " to " << replaced[i].second << "...");
-        eid2 = replaced[i].second;
-      }
-
-      //LOG_TRACE("eid1 after replacement check: " << eid1);
-      //LOG_TRACE("eid2 after replacement check: " << eid2);
-      LOG_TRACE("e1 after replacement check: " << map->getElement(eid1));
-      LOG_TRACE("e2 after replacement check: " << map->getElement(eid2));
-    }
-
-    _mergePair(map, eid1, eid2, replaced);
-  }
-}
-
-bool LinearSnapMerger::_directConnect(const ConstOsmMapPtr& map, WayPtr w) const
-{
-  std::shared_ptr<LineString> ls = ElementToGeometryConverter(map).convertToLineString(w);
-
-  CoordinateSequence* cs = GeometryFactory::getDefaultInstance()->getCoordinateSequenceFactory()->
-    create(2, 2);
-
-  cs->setAt(map->getNode(w->getNodeId(0))->toCoordinate(), 0);
-  cs->setAt(map->getNode(w->getLastNodeId())->toCoordinate(), 1);
-
-  // create a straight line and buffer it
-  std::shared_ptr<LineString> straight(GeometryFactory::getDefaultInstance()->createLineString(cs));
-  std::shared_ptr<Geometry> g(straight->buffer(w->getCircularError()));
-
-  // is the way in question completely contained in the buffer?
-  return g->contains(ls.get());
-}
-
-bool LinearSnapMerger::_doesWayConnect(long node1, long node2, const ConstWayPtr& w) const
-{
-  return
-    (w->getNodeId(0) == node1 && w->getLastNodeId() == node2) ||
-    (w->getNodeId(0) == node2 && w->getLastNodeId() == node1);
 }
 
 WaySublineMatchString LinearSnapMerger::_matchSubline(OsmMapPtr map, ElementPtr e1, ElementPtr e2)
@@ -213,9 +115,7 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
   // TODO: This monster method needs to be refactored into smaller parts where possible.
 
   LOG_VART(eid1);
-  //LOG_VART(map->getElement(eid1));
   LOG_VART(eid2);
-  //LOG_VART(map->getElement(eid2));
   const QString eidLogString = "-" + eid1.toString() + "-" + eid2.toString();
 
   if (LinearMergerAbstract::_mergePair(map, eid1, eid2, replaced))
@@ -227,8 +127,6 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
 
   ElementPtr e1 = result->getElement(eid1);
   ElementPtr e2 = result->getElement(eid2);
-  //LOG_TRACE("LinearSnapMerger: e1\n" << OsmUtils::getElementDetailString(e1, map));
-  //LOG_TRACE("LinearSnapMerger: e2\n" << OsmUtils::getElementDetailString(e2, map));
 
   // If the two elements being merged are identical, then there's no point of going through
   // splitting and trying to match sections of them together. Just set the match equal to the
@@ -650,82 +548,6 @@ bool LinearSnapMerger::_mergePair(const OsmMapPtr& map, ElementId eid1, ElementI
   LOG_VART(replaced);
 
   return false;
-}
-
-void LinearSnapMerger::_removeSpans(OsmMapPtr map, const ElementPtr& e1, const ElementPtr& e2) const
-{
-  if (e1->getElementType() != e2->getElementType())
-  {
-    throw InternalErrorException("Expected both elements to have the same type "
-                                 "when removing spans.");
-  }
-
-  if (e1->getElementType() == ElementType::Way)
-  {
-    WayPtr w1 = std::dynamic_pointer_cast<Way>(e1);
-    WayPtr w2 = std::dynamic_pointer_cast<Way>(e2);
-
-    _removeSpans(map, w1, w2);
-  }
-  else
-  {
-    RelationPtr r1 = std::dynamic_pointer_cast<Relation>(e1);
-    RelationPtr r2 = std::dynamic_pointer_cast<Relation>(e2);
-
-    if (r1->getMembers().size() != r2->getMembers().size())
-    {
-      throw InternalErrorException("Expected both relations to have the same number of children "
-                                   "when removing spans.");
-    }
-
-    for (size_t i = 0; i < r1->getMembers().size(); i++)
-    {
-      ElementId m1 = r1->getMembers()[i].getElementId();
-      ElementId m2 = r2->getMembers()[i].getElementId();
-      assert(m1.getType() == ElementType::Way && m2.getType() == ElementType::Way);
-      _removeSpans(map, map->getWay(m1), map->getWay(m2));
-    }
-  }
-}
-
-void LinearSnapMerger::_removeSpans(OsmMapPtr map, const WayPtr& w1, const WayPtr& w2) const
-{
-  LOG_TRACE("Removing spans...");
-
-  std::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
-
-  // find all the ways that connect to the beginning or end of w1. There shouldn't be any that
-  // connect in the middle.
-  set<long> wids = n2w->getWaysByNode(w1->getNodeIds()[0]);
-  const set<long>& wids2 = n2w->getWaysByNode(w1->getLastNodeId());
-  wids.insert(wids2.begin(), wids2.end());
-
-  for (set<long>::const_iterator it = wids.begin(); it != wids.end(); ++it)
-  {
-    if (*it != w1->getId() && *it != w2->getId())
-    {
-      const WayPtr& w = map->getWay(*it);
-      // if this isn't one of the ways we're evaluating for a connection between and it is part of
-      // the data set we're conflating in
-      if (w->getElementId() != w1->getElementId() &&
-          w->getElementId() != w2->getElementId() &&
-          w->getStatus() == Status::Unknown2)
-      {
-        // if this way connects w1 to w2 at the beginning or the end
-        if (_doesWayConnect(w1->getNodeId(0), w2->getNodeId(0), w) ||
-            _doesWayConnect(w1->getLastNodeId(), w2->getLastNodeId(), w))
-        {
-          // if the connection is more or less a straight shot. Don't want to worry about round
-          // about connections (e.g. lollipop style).
-          if (_directConnect(map, w))
-          {
-            // This should likely remove the way even if it is part of another relation - #2938
-            RecursiveElementRemover(w->getElementId()).apply(map);
-          }
-        }
-      }
-    }
-  }
 }
 
 void LinearSnapMerger::_snapEnds(const OsmMapPtr& map, ElementPtr snapee, ElementPtr snapTo) const

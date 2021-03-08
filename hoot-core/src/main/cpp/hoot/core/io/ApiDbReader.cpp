@@ -28,12 +28,12 @@
 
 // Hoot
 #include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/io/TableType.h>
 #include <hoot/core/io/ApiDb.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/TableType.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/IoUtils.h>
 
 // tgs
 #include <tgs/System/Time.h>
@@ -185,7 +185,6 @@ void ApiDbReader::_updateMetadataOnElement(ElementPtr element)
   if (tags.contains(MetadataTags::HootStatus()))
   {
     QString statusStr = tags.get(MetadataTags::HootStatus());
-    bool ok;
     const int statusInt = statusStr.toInt(&ok);
     Status status = static_cast<Status::Type>(statusInt);
     if (ok && status.getEnum() >= Status::Invalid && status.getEnum() <= Status::Conflated)
@@ -478,11 +477,11 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         newNodes = newNodes.subtract(nodeIds);
         if (newNodes.size() > 0)
         {
-          std::shared_ptr<QSqlQuery> nodeItr =
+          std::shared_ptr<QSqlQuery> queryItr =
             _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
-          while (nodeItr->next())
+          while (queryItr->next())
           {
-            const QSqlQuery resultIterator = *nodeItr;
+            const QSqlQuery resultIterator = *queryItr;
             NodePtr node = _resultToNode(resultIterator, *map);
             LOG_VART(node);
             map->addElement(node);

@@ -50,7 +50,7 @@ public:
   IntersectionIterator(const RStarTree* tree, const std::vector<double>& minBounds,
                        const std::vector<double>& maxBounds);
 
-  virtual ~IntersectionIterator() {}
+  virtual ~IntersectionIterator() = default;
 
   virtual const Box& getBox() const;
 

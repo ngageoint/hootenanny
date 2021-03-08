@@ -27,11 +27,11 @@
 #include "MergerFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/conflate/matching/Match.h>
 #include <hoot/core/conflate/matching/MatchType.h>
+#include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/StringUtils.h>
@@ -44,10 +44,6 @@ namespace hoot
 int MergerFactory::logWarnCount = 0;
 
 std::shared_ptr<MergerFactory> MergerFactory::_theInstance;
-
-MergerFactory::MergerFactory()
-{
-}
 
 MergerFactory::~MergerFactory()
 {

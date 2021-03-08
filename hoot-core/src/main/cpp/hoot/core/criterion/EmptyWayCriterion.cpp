@@ -27,17 +27,13 @@
 #include "EmptyWayCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
 
 HOOT_FACTORY_REGISTER(ElementCriterion, EmptyWayCriterion)
-
-EmptyWayCriterion::EmptyWayCriterion()
-{
-}
 
 bool EmptyWayCriterion::isSatisfied(const ConstElementPtr& e) const
 {

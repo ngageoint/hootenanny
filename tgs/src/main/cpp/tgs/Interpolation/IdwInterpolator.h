@@ -52,7 +52,7 @@ public:
    */
   IdwInterpolator(double p = -1.0);
 
-  virtual ~IdwInterpolator();
+  virtual ~IdwInterpolator() = default;
 
   virtual QString getName() const { return className(); }
 

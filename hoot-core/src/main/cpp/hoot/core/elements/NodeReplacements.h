@@ -45,7 +45,7 @@ class NodeReplacements
 {
 public:
 
-  NodeReplacements();
+  NodeReplacements() = default;
 
   HashMap<long, long>& getReplacements() { return _r; }
 

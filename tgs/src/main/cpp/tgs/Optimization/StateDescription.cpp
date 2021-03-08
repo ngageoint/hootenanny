@@ -29,8 +29,4 @@
 namespace Tgs
 {
 
-StateDescription::StateDescription()
-{
-}
-
 }

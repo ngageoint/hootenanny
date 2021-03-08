@@ -33,7 +33,6 @@
 // Hoot
 #include <hoot/core/algorithms/rubber-sheet/RubberSheet.h>
 #include <hoot/core/conflate/IdSwap.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
 #include <hoot/core/elements/ElementComparer.h>
 #include <hoot/core/elements/ElementId.h>
@@ -48,8 +47,9 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/SignalCatcher.h>
-#include <hoot/core/util/Validate.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/util/Validate.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 using namespace hoot::elements;
 
 // Qt
@@ -235,10 +235,10 @@ void OsmMap::append(const ConstOsmMapPtr& appendFromMap, const bool throwOutDupe
   }
 
   const RelationMap& allRelations = appendFromMap->getRelations();
-  for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  for (RelationMap::const_iterator r_it = allRelations.begin(); r_it != allRelations.end(); ++r_it)
   {
     bool appendElement = true;
-    RelationPtr relation = it->second;
+    RelationPtr relation = r_it->second;
     if (containsElement(ElementId(relation->getElementId())))
     {
       ElementPtr existingElement = getElement(relation->getElementId());
@@ -441,9 +441,9 @@ void OsmMap::_copy(const ConstOsmMapPtr& from)
     ++itn;
   }
 
-  for (size_t i = 0; i < from->getListeners().size(); i++)
+  for (size_t idx = 0; idx < from->getListeners().size(); idx++)
   {
-    std::shared_ptr<OsmMapListener> l = from->getListeners()[i];
+    std::shared_ptr<OsmMapListener> l = from->getListeners()[idx];
     _listeners.push_back(l->clone());
   }
 }
@@ -1205,9 +1205,9 @@ void OsmMap::_replaceNodeInRelations(long oldId, long newId)
   ConstElementPtr oldNode = getNode(oldId);
   ConstElementPtr newNode = getNode(newId);
 
-  for ( RelationMap::iterator it = allRelations.begin(); it != allRelations.end(); ++it)
+  for ( RelationMap::iterator r_it = allRelations.begin(); r_it != allRelations.end(); ++r_it)
   {
-    RelationPtr currRelation = it->second;
+    RelationPtr currRelation = r_it->second;
 
     if (currRelation->contains(oldNodeId) == true)
     {

@@ -42,7 +42,7 @@ class FieldDefinition;
 class FeatureDefinition
 {
 public:
-  FeatureDefinition();
+  FeatureDefinition() = default;
 
   void addField(const std::shared_ptr<FieldDefinition>& fd) { _fields.push_back(fd); }
 
