@@ -493,7 +493,8 @@ void Settings::_validateOperatorRefs(const QStringList& operators)
 {
   for (int i = 0; i < operators.size(); i++)
   {
-    const QString operatorName = operators[i];
+    QString operatorName = operators[i];
+    operatorName = operatorName.remove("\"");
     LOG_VART(operatorName);
     const QString errorMsg = "Invalid option operator class name: " + operatorName;
 
