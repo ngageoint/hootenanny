@@ -636,7 +636,7 @@ Edge EdgeIterator::operator++(int)
 
 Edge& EdgeIterator::operator++()
 {
-  while (_todo.size() == 0 && _it != _edges->end())
+  while (_todo.empty() && _it != _edges->end())
   {
     QuadEdge* qe = *_it;
     ++_it;
@@ -649,7 +649,7 @@ Edge& EdgeIterator::operator++()
     }
   }
 
-  if (_todo.size() == 0 && _it == _edges->end())
+  if (_todo.empty() && _it == _edges->end())
   {
     _atEnd = true;
     return _e;
@@ -900,7 +900,7 @@ EdgeIterator DelaunayTriangulation::getEdgeIterator() const
 
 const vector<Face>& DelaunayTriangulation::getFaces()
 {
-  if (_faces.size() == 0)
+  if (_faces.empty())
   {
     for (FaceIterator fi = getFaceIterator(); fi != getFaceEnd(); ++fi)
     {

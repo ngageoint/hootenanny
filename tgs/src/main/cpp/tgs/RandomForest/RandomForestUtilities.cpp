@@ -261,7 +261,7 @@ namespace Tgs
             tokenList.push_back(token);
           }
 
-          if (tokenList.size() == 0)
+          if (tokenList.empty())
           {
             continue;
           }

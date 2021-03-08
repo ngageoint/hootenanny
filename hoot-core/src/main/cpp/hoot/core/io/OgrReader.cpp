@@ -38,8 +38,10 @@ using namespace geos::geom;
 // Hoot
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/elements/ElementIterator.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Tags.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/PythonSchemaTranslator.h>
@@ -47,10 +49,8 @@ using namespace geos::geom;
 #include <hoot/core/schema/ScriptSchemaTranslatorFactory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 
 // Qt

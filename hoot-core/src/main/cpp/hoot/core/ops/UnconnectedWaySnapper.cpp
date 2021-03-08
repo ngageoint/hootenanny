@@ -30,21 +30,21 @@
 // hoot
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/criterion/ChainCriterion.h>
+#include <hoot/core/criterion/OrCriterion.h>
 #include <hoot/core/criterion/StatusCriterion.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/StringUtils.h>
 #include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/OrCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
 
 // tgs
 #include <tgs/RStarTree/MemoryPageStore.h>

@@ -27,12 +27,12 @@
 #include "OsmApiDbReader.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementId.h>
 #include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/DbUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
 
 // Qt
 #include <QUrl>

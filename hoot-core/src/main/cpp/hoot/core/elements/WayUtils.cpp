@@ -28,17 +28,17 @@
 #include "WayUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
+#include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/NodeUtils.h>
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // GEOS
 #include <geos/geom/Coordinate.h>

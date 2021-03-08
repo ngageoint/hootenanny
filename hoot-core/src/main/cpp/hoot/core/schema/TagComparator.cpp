@@ -29,11 +29,11 @@
 
 // Hoot
 #include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/Tags.h>
 
 // Standard
 #include <assert.h>

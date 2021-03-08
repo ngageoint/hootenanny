@@ -36,8 +36,8 @@ using namespace geos::geom;
 // Hoot
 #include <hoot/core/algorithms/Distance.h>
 #include <hoot/core/algorithms/WayDiscretizer.h>
-#include <hoot/core/elements/Way.h>
 #include <hoot/core/algorithms/WayHeading.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Units.h>
 
 // Standard

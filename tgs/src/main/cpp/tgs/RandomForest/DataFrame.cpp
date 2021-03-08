@@ -692,9 +692,7 @@ namespace Tgs
   {
     try
     {
-      //std::cout << "isDataPure ";
-      //std::cout << indices.size() << std::endl;
-      if (indices.size() > 0)
+      if (!indices.empty())
       {
         HashMap<std::string, int> populations;
 
@@ -729,7 +727,7 @@ namespace Tgs
       {
         return true;
       }
-      if (_factorType.size() == 0)
+      if (_factorType.empty())
       {
         return false;
       }

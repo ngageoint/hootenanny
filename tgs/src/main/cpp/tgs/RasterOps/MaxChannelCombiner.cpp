@@ -50,7 +50,7 @@ namespace Tgs
   Image<unsigned char> MaxChannelCombiner::combineChannels(
     const std::vector<const Image<unsigned char>* >& channels)
   {
-    if (channels.size() == 0 || channels.size() > 254)
+    if (channels.empty() || channels.size() > 254)
     {
       throw Tgs::Exception("There must be between 1 and 254 channels.");
     }

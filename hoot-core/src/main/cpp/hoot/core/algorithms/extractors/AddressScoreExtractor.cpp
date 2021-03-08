@@ -27,14 +27,14 @@
 #include "AddressScoreExtractor.h"
 
 // hoot
+#include <hoot/core/algorithms/string/LevenshteinDistance.h>
+#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
+#include <hoot/core/conflate/address/Address.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/conflate/address/Address.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/algorithms/string/MeanWordSetDistance.h>
-#include <hoot/core/algorithms/string/LevenshteinDistance.h>
 
 using namespace std;
 

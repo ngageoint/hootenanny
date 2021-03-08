@@ -27,15 +27,15 @@
 #include "MatchFactory.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Boundable.h>
-#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/TagAdvancedCriterion.h>
 #include <hoot/core/conflate/matching/OptionsValidator.h>
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/TagAdvancedCriterion.h>
+#include <hoot/core/util/Boundable.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 //Qt
 #include <QString>

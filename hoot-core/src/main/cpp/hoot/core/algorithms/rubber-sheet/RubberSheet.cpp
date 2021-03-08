@@ -28,24 +28,24 @@
 #include "RubberSheet.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
 #include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/criterion/ConflatableElementCriterion.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
-#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/visitors/WorstCircularErrorVisitor.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>

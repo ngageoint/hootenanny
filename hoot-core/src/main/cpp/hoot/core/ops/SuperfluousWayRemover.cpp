@@ -28,13 +28,13 @@
 #include "SuperfluousWayRemover.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 

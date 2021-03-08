@@ -88,7 +88,7 @@ namespace Tgs
   {
     bool result = false;
     _populateNext();
-    if (_pendingResults.size() != 0)
+    if (!_pendingResults.empty())
     {
       _currentResult = _pendingResults.front();
       _pendingResults.pop_front();
@@ -99,9 +99,9 @@ namespace Tgs
 
   void IntersectionIterator::_populateNext()
   {
-    while (_pendingResults.size() == 0 && !_done)
+    while (_pendingResults.empty() && !_done)
     {
-      if (_pendingNodes.size() == 0) //If the tree has been completely searched, stop
+      if (_pendingNodes.empty()) //If the tree has been completely searched, stop
       {
         _done = true;
       }

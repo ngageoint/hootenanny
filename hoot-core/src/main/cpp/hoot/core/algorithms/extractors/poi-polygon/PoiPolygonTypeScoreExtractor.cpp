@@ -28,10 +28,10 @@
 
 // hoot
 #include <hoot/core/conflate/poi-polygon/PoiPolygonDistanceTruthRecorder.h>
+#include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonSchemaType.h>
 
 // Qt
 #include <QSet>

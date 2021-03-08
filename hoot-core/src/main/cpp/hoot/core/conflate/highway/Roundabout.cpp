@@ -26,6 +26,7 @@
  */
 
 #include "Roundabout.h"
+
 #include <hoot/core/algorithms/linearreference/LocationOfPoint.h>
 #include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/elements/MapProjector.h>

@@ -28,9 +28,9 @@
 #include "DistanceNodeCriterion.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/Node.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 

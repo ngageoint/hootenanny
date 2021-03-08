@@ -31,6 +31,7 @@
 #include <hoot/core/criterion/ChainCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/OgrReader.h>
 #include <hoot/core/io/OgrUtilities.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
@@ -41,7 +42,6 @@
 #include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/Progress.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QFileInfo>

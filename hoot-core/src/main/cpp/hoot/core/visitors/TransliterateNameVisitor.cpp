@@ -27,8 +27,8 @@
 #include "TransliterateNameVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/language/ToEnglishDictionaryTranslator.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

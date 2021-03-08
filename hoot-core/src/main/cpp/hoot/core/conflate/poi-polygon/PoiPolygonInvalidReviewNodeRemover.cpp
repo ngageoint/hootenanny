@@ -28,15 +28,15 @@
 #include "PoiPolygonInvalidReviewNodeRemover.h"
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/conflate/poi-polygon/PoiPolygonMatch.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPoiCriterion.h>
 #include <hoot/core/criterion/poi-polygon/PoiPolygonPolyCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/StringUtils.h>
 
 namespace hoot
 {

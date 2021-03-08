@@ -55,7 +55,7 @@ _iterations(0)
 
 void BaseInterpolator::_checkRebuild()
 {
-  if (_indColumns.size() > 0 && _depColumns.size() > 0 && _df.get() != 0)
+  if (!_indColumns.empty() && !_depColumns.empty() && _df.get() != 0)
   {
     _buildModel();
   }

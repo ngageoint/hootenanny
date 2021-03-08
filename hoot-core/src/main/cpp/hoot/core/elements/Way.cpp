@@ -28,11 +28,11 @@
 #include "Way.h"
 
 // Hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Geos
 #include <geos/geom/CoordinateSequenceFactory.h>

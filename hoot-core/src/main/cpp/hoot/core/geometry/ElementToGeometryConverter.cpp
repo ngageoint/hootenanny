@@ -40,18 +40,18 @@
 #include <geos/geom/Polygon.h>
 
 // hoot
-#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/criterion/StatsAreaCriterion.h>
 #include <hoot/core/criterion/LinearCriterion.h>
 #include <hoot/core/criterion/CollectionRelationCriterion.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/geometry/GeometryUtils.h>
+#include <hoot/core/geometry/RelationToMultiPolygonConverter.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/NotImplementedException.h>
 #include <hoot/core/visitors/MultiLineStringVisitor.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 
 // Qt
 #include <QString>

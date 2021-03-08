@@ -27,11 +27,11 @@
 #include "AddAttributesVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Settings.h>
 #include <hoot/core/elements/ElementAttributeType.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/DateTimeUtils.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Settings.h>
 
 namespace hoot
 {

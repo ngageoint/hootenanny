@@ -28,12 +28,12 @@
 #include "RemoveInvalidRelationVisitor.h"
 
 //  hoot
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 //  Standard library
 #include <unordered_map>

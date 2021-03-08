@@ -86,7 +86,7 @@ HootServicesLanguageDetectorClient::~HootServicesLanguageDetectorClient()
     LOG_DEBUG("Language detection cache size: " << _cacheSize);
     LOG_DEBUG("Language detection cache max possible size: " << _cacheMaxSize);
   }
-  if (_langCodesWithNoLangNamesAvailable.size() > 0)
+  if (!_langCodesWithNoLangNamesAvailable.empty())
   {
     LOG_INFO(_getUnvailableLangNamesStr());
   }
@@ -94,7 +94,7 @@ HootServicesLanguageDetectorClient::~HootServicesLanguageDetectorClient()
   {
     LOG_INFO("No language codes returned without language names.");
   }
-  if (_confidenceCounts.size() > 0)
+  if (!_confidenceCounts.empty())
   {
     LOG_INFO(_getCountsStr("Detection confidence counts", _confidenceCounts));
   }

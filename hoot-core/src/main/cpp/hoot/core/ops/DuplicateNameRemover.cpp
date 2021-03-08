@@ -28,11 +28,11 @@
 #include "DuplicateNameRemover.h"
 
 // Hoot
+#include <hoot/core/conflate/ConflateUtils.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
 #include <QDebug>

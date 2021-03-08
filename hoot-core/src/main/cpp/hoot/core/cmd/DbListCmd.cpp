@@ -26,9 +26,9 @@
  */
 
 // Hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/cmd/BaseCommand.h>
 #include <hoot/core/io/HootApiDb.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {

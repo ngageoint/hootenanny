@@ -28,11 +28,11 @@
 #include "TagDistribution.h"
 
 // Hoot
-#include <hoot/core/io/OsmMapReaderFactory.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/io/ElementCriterionInputStream.h>
-#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/io/ElementCriterionInputStream.h>
+#include <hoot/core/io/OsmMapReaderFactory.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Configurable.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>

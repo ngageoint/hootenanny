@@ -30,9 +30,9 @@
 #include <hoot/core/info/ApiEntityDisplayInfo.h>
 #include <hoot/core/info/ConfigOptionsDisplayer.h>
 #include <hoot/core/info/FormatsDisplayer.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QUrl>

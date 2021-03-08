@@ -25,13 +25,13 @@
  * @copyright Copyright (C) 2005 VividSolutions (http://www.vividsolutions.com/)
  * @copyright Copyright (C) 2015, 2017, 2018, 2019, 2021 Maxar (http://www.maxar.com/)
  */
+#include "MultiLineStringLocation.h"
 
 // Hoot
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/elements/Relation.h>
-#include <hoot/core/elements/OsmMap.h>
-#include "MultiLineStringLocation.h"
 #include <hoot/core/algorithms/linearreference/WaySubline.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Relation.h>
+#include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Log.h>
 
 using namespace std;

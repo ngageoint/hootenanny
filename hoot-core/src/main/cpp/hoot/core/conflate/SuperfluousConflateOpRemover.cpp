@@ -27,15 +27,15 @@
 #include "SuperfluousConflateOpRemover.h"
 
 // hoot
+#include <hoot/core/conflate/matching/MatchFactory.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/PointCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/ops/MapCleaner.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/PointCriterion.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/conflate/matching/MatchFactory.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ElementVisitor.h>
-#include <hoot/core/ops/MapCleaner.h>
 
 namespace hoot
 {

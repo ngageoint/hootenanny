@@ -29,19 +29,19 @@
 
 // Hoot
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/elements/NodeToWayMap.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/criterion/LinearWaterwayCriterion.h>
 #include <hoot/core/criterion/PowerLineCriterion.h>
 #include <hoot/core/criterion/RailwayCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 // Tgs
 #include <tgs/Statistics/Normal.h>

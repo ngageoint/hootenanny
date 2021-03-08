@@ -28,18 +28,18 @@
 #include "ConflateUtils.h"
 
 // Hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/visitors/RemoveElementsVisitor.h>
-#include <hoot/core/criterion/NonConflatableCriterion.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
-#include <hoot/core/ops/RemoveRoundabouts.h>
-#include <hoot/core/ops/ReplaceRoundabouts.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/ops/OpExecutor.h>
-#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 #include <hoot/core/conflate/DiffConflator.h>
 #include <hoot/core/criterion/ConflatableElementCriterion.h>
+#include <hoot/core/criterion/NonConflatableCriterion.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/ops/OpExecutor.h>
+#include <hoot/core/ops/RemoveRoundabouts.h>
+#include <hoot/core/ops/ReplaceRoundabouts.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/visitors/RemoveElementsVisitor.h>
+#include <hoot/core/visitors/RemoveMissingElementsVisitor.h>
 
 // Qt
 #include <QElapsedTimer>

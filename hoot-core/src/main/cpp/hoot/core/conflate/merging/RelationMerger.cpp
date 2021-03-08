@@ -27,12 +27,12 @@
 #include "RelationMerger.h"
 
 // hoot
-#include <hoot/core/schema/TagMergerFactory.h>
-#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/elements/RelationMemberComparison.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
-#include <hoot/core/elements/RelationMemberComparison.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/ops/ReplaceElementOp.h>
+#include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/util/ConfigUtils.h>
 
 namespace hoot

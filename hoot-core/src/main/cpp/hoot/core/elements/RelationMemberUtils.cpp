@@ -28,13 +28,13 @@
 #include "RelationMemberUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

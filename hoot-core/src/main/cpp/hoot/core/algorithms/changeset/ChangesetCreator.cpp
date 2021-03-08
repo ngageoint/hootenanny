@@ -27,33 +27,33 @@
 #include "ChangesetCreator.h"
 
 // Hoot
+#include <hoot/core/algorithms/changeset/ChangesetCleaner.h>
+#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/criterion/TagKeyCriterion.h>
 #include <hoot/core/elements/ExternalMergeElementSorter.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/ElementCriterionVisitorInputStream.h>
 #include <hoot/core/io/ElementStreamer.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmChangesetFileWriter.h>
+#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
 #include <hoot/core/io/OsmMapReaderFactory.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/io/OsmPbfReader.h>
 #include <hoot/core/io/PartialOsmMapReader.h>
 #include <hoot/core/ops/OpExecutor.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/DbUtils.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/geometry/GeometryUtils.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/util/FileUtils.h>
 #include <hoot/core/util/Progress.h>
 #include <hoot/core/visitors/ApiTagTruncateVisitor.h>
 #include <hoot/core/visitors/RemoveElementsVisitor.h>
 #include <hoot/core/visitors/RemoveUnknownVisitor.h>
-#include <hoot/core/util/ConfigUtils.h>
-#include <hoot/core/algorithms/changeset/ChangesetDeriver.h>
-#include <hoot/core/algorithms/changeset/ChangesetCleaner.h>
-#include <hoot/core/io/OsmChangesetFileWriterFactory.h>
-#include <hoot/core/io/OsmChangesetFileWriter.h>
-#include <hoot/core/util/FileUtils.h>
-#include <hoot/core/util/DbUtils.h>
 
 //GEOS
 #include <geos/geom/Envelope.h>

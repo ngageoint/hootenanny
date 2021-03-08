@@ -28,12 +28,12 @@
 #include "ToEnglishDictionaryTranslator.h"
 
 // Hoot
+#include <hoot/core/conflate/address/Address.h>
 #include <hoot/core/language/ToEnglishTranslateDictionary.h>
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/conflate/address/Address.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 // Qt
 #include <QMap>

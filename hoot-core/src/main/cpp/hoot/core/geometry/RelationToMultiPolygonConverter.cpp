@@ -39,11 +39,11 @@
 #include <geos/util/TopologyException.h>
 
 // hoot
+#include <hoot/core/criterion/AreaCriterion.h>
 #include <hoot/core/elements/ElementProvider.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/AreaCriterion.h>
 
 // tgs
 #include <tgs/DisjointSet/DisjointSetMap.h>

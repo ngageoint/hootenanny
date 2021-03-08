@@ -27,10 +27,10 @@
 #include "BuildingRelationMemberTagMerger.h"
 
 // hoot
+#include <hoot/core/schema/MetadataTags.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/schema/TagComparator.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
 
 // Qt
 #include <QStringBuilder>

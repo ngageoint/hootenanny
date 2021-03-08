@@ -27,13 +27,13 @@
 #include "UselessElementCriterion.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/elements/Tags.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/elements/Element.h>
 #include <hoot/core/elements/NodeToWayMap.h>
+#include <hoot/core/elements/Tags.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {

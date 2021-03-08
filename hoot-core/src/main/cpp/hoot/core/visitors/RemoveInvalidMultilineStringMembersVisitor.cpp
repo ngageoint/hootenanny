@@ -28,9 +28,9 @@
 #include "RemoveInvalidMultilineStringMembersVisitor.h"
 
 //  hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace geos::geom;
 using namespace std;

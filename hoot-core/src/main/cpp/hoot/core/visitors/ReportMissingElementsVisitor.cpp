@@ -27,9 +27,9 @@
 #include "ReportMissingElementsVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Relation.h>
+#include <hoot/core/util/Factory.h>
 
 using namespace std;
 

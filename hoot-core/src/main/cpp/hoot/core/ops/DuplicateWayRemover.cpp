@@ -28,10 +28,13 @@
 #include "DuplicateWayRemover.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/algorithms/DirectionFinder.h>
 #include <hoot/core/algorithms/LongestCommonNodeString.h>
+#include <hoot/core/criterion/LinearCriterion.h>
+#include <hoot/core/criterion/OneWayCriterion.h>
+#include <hoot/core/criterion/PolygonCriterion.h>
+#include <hoot/core/conflate/ConflateUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/index/OsmMapIndex.h>
@@ -39,11 +42,8 @@
 #include <hoot/core/schema/TagMergerFactory.h>
 #include <hoot/core/ops/RemoveWayByEid.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/criterion/LinearCriterion.h>
-#include <hoot/core/criterion/OneWayCriterion.h>
-#include <hoot/core/criterion/PolygonCriterion.h>
-#include <hoot/core/conflate/ConflateUtils.h>
 
 // Standard
 #include <iostream>

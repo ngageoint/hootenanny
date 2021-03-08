@@ -28,9 +28,9 @@
 #include "ParallelBoundedApiReader.h"
 
 //  Hootenanny
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/StringUtils.h>
 

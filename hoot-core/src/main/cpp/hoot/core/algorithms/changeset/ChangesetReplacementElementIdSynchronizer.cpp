@@ -28,14 +28,14 @@
 #include "ChangesetReplacementElementIdSynchronizer.h"
 
 // Hoot
+#include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/visitors/ElementHashVisitor.h>
-#include <hoot/core/elements/WayUtils.h>
-#include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/algorithms/extractors/EuclideanDistanceExtractor.h>
 #include <hoot/core/util/StringUtils.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/visitors/ElementHashVisitor.h>
 
 namespace hoot
 {

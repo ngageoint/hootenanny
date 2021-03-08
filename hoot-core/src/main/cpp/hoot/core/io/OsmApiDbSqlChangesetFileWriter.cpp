@@ -27,13 +27,13 @@
 #include "OsmApiDbSqlChangesetFileWriter.h"
 
 // hoot
+#include <hoot/core/criterion/InBoundsCriterion.h>
+#include <hoot/core/elements/ElementType.h>
 #include <hoot/core/io/ApiDb.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/util/Log.h>
-#include <hoot/core/elements/ElementType.h>
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/criterion/InBoundsCriterion.h>
 #include <hoot/core/util/ConfigUtils.h>
+#include <hoot/core/util/Log.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QSqlError>

@@ -26,19 +26,19 @@
  */
 #include "ScoreMatchesDiff.h"
 
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/io/IoUtils.h>
-#include <hoot/core/conflate/matching/MatchType.h>
-#include <hoot/core/visitors/ElementIdToTagValueMapper.h>
-#include <hoot/core/io/OsmXmlReader.h>
 #include <hoot/core/conflate/matching/MatchStatusChange.h>
-#include <hoot/core/visitors/UniqueElementIdVisitor.h>
-#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/visitors/FilteredVisitor.h>
+#include <hoot/core/io/IoUtils.h>
+#include <hoot/core/io/OsmXmlReader.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/CollectionUtils.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/CountManualMatchesVisitor.h>
 #include <hoot/core/visitors/CountUniqueReviewsVisitor.h>
+#include <hoot/core/visitors/ElementIdToTagValueMapper.h>
+#include <hoot/core/visitors/UniqueElementIdVisitor.h>
+#include <hoot/core/visitors/FilteredVisitor.h>
 
 namespace hoot
 {

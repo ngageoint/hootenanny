@@ -27,20 +27,24 @@
 #include "BuildingMerger.h"
 
 // hoot
+#include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
 #include <hoot/core/conflate/IdSwap.h>
+#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
+#include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/review/ReviewMarker.h>
 #include <hoot/core/criterion/BuildingCriterion.h>
 #include <hoot/core/criterion/BuildingPartCriterion.h>
 #include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/criterion/ElementTypeCriterion.h>
+#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/InMemoryElementSorter.h>
 #include <hoot/core/elements/OsmUtils.h>
-#include <hoot/core/elements/ElementIdUtils.h>
 #include <hoot/core/elements/TagUtils.h>
 #include <hoot/core/elements/Relation.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
+#include <hoot/core/ops/RemoveRelationByEid.h>
 #include <hoot/core/ops/ReplaceElementOp.h>
 #include <hoot/core/ops/ReuseNodeIdsOnWayOp.h>
 #include <hoot/core/schema/BuildingRelationMemberTagMerger.h>
@@ -54,10 +58,6 @@
 #include <hoot/core/visitors/FilteredVisitor.h>
 #include <hoot/core/visitors/UniqueElementIdVisitor.h>
 #include <hoot/core/visitors/WorstCircularErrorVisitor.h>
-#include <hoot/core/algorithms/extractors/IntersectionOverUnionExtractor.h>
-#include <hoot/core/conflate/polygon/BuildingMatch.h>
-#include <hoot/core/ops/RemoveRelationByEid.h>
-#include <hoot/core/conflate/merging/LinearTagOnlyMerger.h>
 
 using namespace std;
 

@@ -27,10 +27,10 @@
 #include "RelationMemberSimilarityExtractor.h"
 
 // hoot
+#include <hoot/core/elements/RelationMemberComparison.h>
+#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/elements/RelationMemberComparison.h>
 
 namespace hoot
 {

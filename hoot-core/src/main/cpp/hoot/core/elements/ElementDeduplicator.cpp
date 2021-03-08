@@ -28,15 +28,15 @@
 #include "ElementDeduplicator.h"
 
 // Hoot
+#include <hoot/core/criterion/TagCriterion.h>
+#include <hoot/core/criterion/WayNodeCriterion.h>
+#include <hoot/core/elements/RelationMemberUtils.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/ops/RemoveElementByEid.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/visitors/ElementHashVisitor.h>
-#include <hoot/core/elements/WayUtils.h>
-#include <hoot/core/ops/RemoveElementByEid.h>
-#include <hoot/core/criterion/WayNodeCriterion.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/TagCriterion.h>
-#include <hoot/core/elements/RelationMemberUtils.h>
 
 namespace hoot
 {

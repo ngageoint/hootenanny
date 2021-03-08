@@ -28,17 +28,17 @@
 #include "RemoveRoundabouts.h"
 
 // Hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/elements/Way.h>
-#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/algorithms/WayHeading.h>
-#include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/algorithms/linearreference/WayLocation.h>
-#include <hoot/core/elements/OsmMap.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/criterion/RoundaboutCriterion.h>
-#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/algorithms/splitter/WaySplitter.h>
 #include <hoot/core/criterion/HighwayCriterion.h>
+#include <hoot/core/criterion/RoundaboutCriterion.h>
+#include <hoot/core/elements/MapProjector.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/Way.h>
+#include <hoot/core/index/OsmMapIndex.h>
+#include <hoot/core/io/OsmMapWriterFactory.h>
+#include <hoot/core/util/Factory.h>
 
 // Qt
 #include <QDebug>
