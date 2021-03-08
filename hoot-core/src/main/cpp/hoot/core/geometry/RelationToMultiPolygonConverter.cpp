@@ -271,7 +271,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
   std::vector<LinearRing*>& outers) const
 {
   // Empty == nothing else to do
-  if (noRole.size() == 0)
+  if (noRole.empty())
   {
     return;
   }
@@ -281,7 +281,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
     inners.size());
 
   // One polygon, no inners or outers
-  if (noRole.size() == 1 && inners.size() == 0 && outers.size() == 0)
+  if (noRole.size() == 1 && inners.empty() && outers.empty())
   {
     outers.push_back(noRole[0]);
     return;
@@ -343,7 +343,7 @@ void RelationToMultiPolygonConverter::_classifyRings(
   }
 
   // Now go through the things we didn't find.
-  while (notFound.size() > 0)
+  while (!notFound.empty())
   {
     if (notFound.size() == 1)
     {
@@ -449,7 +449,7 @@ void RelationToMultiPolygonConverter::_createRings(
   }
   LOG_VART(partials.size());
 
-  if (partials.size() > 0)
+  if (!partials.empty())
   {
     _createRingsFromPartials(partials, rings);
   }

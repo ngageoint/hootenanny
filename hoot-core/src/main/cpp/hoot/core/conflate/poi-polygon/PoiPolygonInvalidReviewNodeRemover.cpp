@@ -82,7 +82,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
           if (element)
           {
             LOG_VART(map->getElement(member.getElementId())->getTags().size());
-            if (map->getElement(member.getElementId())->getTags().size() == 0)
+            if (map->getElement(member.getElementId())->getTags().empty())
             {
               LOG_TRACE("Marking " << member.getElementId() << " for removal...");
               _nodesToRemove.insert(member.getElementId().getId());
@@ -108,7 +108,7 @@ void PoiPolygonInvalidReviewNodeRemover::apply(const std::shared_ptr<OsmMap>& ma
   }
   LOG_VART(_nodesToRemove.size());
 
-  if (_nodesToRemove.size() == 0)
+  if (_nodesToRemove.empty())
   {
     return;
   }

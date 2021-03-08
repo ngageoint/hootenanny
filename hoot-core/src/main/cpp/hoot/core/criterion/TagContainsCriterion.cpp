@@ -79,7 +79,7 @@ void TagContainsCriterion::setKvps(const QStringList kvps)
 
 bool TagContainsCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (_keys.size() == 0 || _valueSubstrings.size() == 0)
+  if (_keys.empty() || _valueSubstrings.empty())
   {
     throw IllegalArgumentException(
       "No tag keys or values specified for: " + className());

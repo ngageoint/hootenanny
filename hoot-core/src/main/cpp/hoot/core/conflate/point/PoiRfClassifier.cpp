@@ -119,7 +119,7 @@ PoiRfClassifier::PoiRfClassifier()
   LOG_VART(missingExtractors);
   LOG_VART(_rfFactorLabels);
 
-  if (missingExtractors.size() > 0)
+  if (!missingExtractors.empty())
   {
     if (logWarnCount < Log::getWarnMessageLimit())
     {
@@ -143,7 +143,7 @@ MatchClassification PoiRfClassifier::classify(const ConstOsmMapPtr& map,
 
   std::map<QString, double> features = getFeatures(map, eid1, eid2);
 
-  if (features.size() == 0)
+  if (features.empty())
   {
     p.setMiss();
   }

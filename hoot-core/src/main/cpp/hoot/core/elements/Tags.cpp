@@ -518,7 +518,7 @@ QString Tags::getName() const
 const QStringList& Tags::getNameKeys()
 {
   // Getting the name tags can be a bit expensive, so we'll just do it once.
-  if (_nameKeys.size() == 0)
+  if (_nameKeys.empty())
   {
     const vector<SchemaVertex>& tags =
       OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::name());
@@ -565,7 +565,7 @@ int Tags::getNonDebugCount() const
 const QStringList& Tags::getPseudoNameKeys() const
 {
   // getting the name tags can be a bit expensive so we'll just do it once.
-  if (_pseudoNameKeys.size() == 0)
+  if (_pseudoNameKeys.empty())
   {
     const vector<SchemaVertex>& tags =
         OsmSchema::getInstance().getTagByCategory(OsmSchemaCategory::pseudoName());

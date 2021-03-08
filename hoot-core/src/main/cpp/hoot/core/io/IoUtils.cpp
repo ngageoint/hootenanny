@@ -115,10 +115,8 @@ bool IoUtils::isSupportedOgrFormat(const QString& input, const bool allowDir)
 
 bool IoUtils::anyAreSupportedOgrFormats(const QStringList& inputs, const bool allowDir)
 {
-  if (inputs.size() == 0)
-  {
+  if (inputs.empty())
     return false;
-  }
 
   for (int i = 0; i < inputs.size(); i++)
   {
@@ -127,19 +125,15 @@ bool IoUtils::anyAreSupportedOgrFormats(const QStringList& inputs, const bool al
     const QString file = input.split(";")[0];
     LOG_VART(file);
     if (isSupportedOgrFormat(file, allowDir))
-    {
       return true;
-    }
   }
   return false;
 }
 
 bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allowDir)
 {
-  if (inputs.size() == 0)
-  {
+  if (inputs.empty())
     return false;
-  }
 
   for (int i = 0; i < inputs.size(); i++)
   {
@@ -148,9 +142,7 @@ bool IoUtils::areSupportedOgrFormats(const QStringList& inputs, const bool allow
     const QString file = input.split(";")[0];
     LOG_VART(file);
     if (!isSupportedOgrFormat(file, allowDir))
-    {
       return false;
-    }
   }
   return true;
 }

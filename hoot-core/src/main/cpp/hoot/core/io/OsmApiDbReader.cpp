@@ -113,7 +113,7 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(const ElementId& elementId,
       tags << tag;
     }
   }
-  if (tags.size() > 0)
+  if (!tags.empty())
   {
     element->setTags(ApiDb::unescapeTags(tags.join(", ")));
   }

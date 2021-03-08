@@ -73,7 +73,7 @@ void TagCriterion::setConfiguration(const Settings &s)
 
 bool TagCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  if (_kvps.size() == 0)
+  if (_kvps.empty())
   {
     throw IllegalArgumentException(
       "No tag key/value pairs specified for: " + className());

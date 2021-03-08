@@ -37,7 +37,7 @@ HOOT_FACTORY_REGISTER(ElementCriterion, HasNameCriterion)
 
 bool HasNameCriterion::isSatisfied(const ConstElementPtr& e) const
 {
-  return e->getTags().getNames().size() > 0;
+  return !e->getTags().getNames().empty();
 }
 
 }

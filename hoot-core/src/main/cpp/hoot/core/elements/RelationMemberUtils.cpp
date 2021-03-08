@@ -175,7 +175,7 @@ bool RelationMemberUtils::isMemberOfRelationWithTagKey(
 bool RelationMemberUtils::elementContainedByAnyRelation(
   const ElementId& elementId, const ConstOsmMapPtr& map)
 {
-  return map->getIndex().getElementToRelationMap()->getRelationByElement(elementId).size() > 0;
+  return !map->getIndex().getElementToRelationMap()->getRelationByElement(elementId).empty();
 }
 
 bool RelationMemberUtils::containsMemberWithCriterion(

@@ -620,7 +620,7 @@ void OgrReaderInternal::_addFeature(OGRFeature* f)
                   QDateTime::currentDateTime().toUTC().toString("yyyy-MM-ddThh:mm:ss.zzzZ"));
   }
 
-  if (t.size() != 0)
+  if (!t.empty())
   {
     _addGeometry(f->GetGeometryRef(), t);
   }

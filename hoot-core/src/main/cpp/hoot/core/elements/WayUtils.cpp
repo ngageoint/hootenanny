@@ -352,12 +352,12 @@ bool WayUtils::nodesAreContainedInTheSameWay(const long nodeId1, const long node
     std::inserter(commonNodesBetweenWayGroups, commonNodesBetweenWayGroups.begin()));
   LOG_VART(commonNodesBetweenWayGroups);
 
-  return commonNodesBetweenWayGroups.size() != 0;
+  return !commonNodesBetweenWayGroups.empty();
 }
 
 bool WayUtils::nodeContainedByAnyWay(const long nodeId, const ConstOsmMapPtr& map)
 {
-  return map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).size() > 0;
+  return !map->getIndex().getNodeToWayMap()->getWaysByNode(nodeId).empty();
 }
 
 bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> wayIds,
@@ -368,7 +368,7 @@ bool WayUtils::nodeContainedByAnyWay(const long nodeId, const std::set<long> way
   std::set_intersection(
     waysContainingNode.begin(), waysContainingNode.end(), wayIds.begin(), wayIds.end(),
     std::inserter(commonWayIds, commonWayIds.begin()));
-  return commonWayIds.size() > 0;
+  return !commonWayIds.empty();
 }
 
 bool WayUtils::nodeContainedByMoreThanOneWay(const long nodeId, const ConstOsmMapPtr& map)

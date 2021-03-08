@@ -627,7 +627,7 @@ unsigned int PoiPolygonMatch::_getTypeEvidence(ConstElementPtr poi, ConstElement
     noTypeFoundCount++;
   }
 
-  if (_typeScorer->getFailedMatchRequirements().size() > 0)
+  if (!_typeScorer->getFailedMatchRequirements().empty())
   {
     QString failedMatchTypes;
     for (int i = 0; i < _typeScorer->getFailedMatchRequirements().size(); i++)

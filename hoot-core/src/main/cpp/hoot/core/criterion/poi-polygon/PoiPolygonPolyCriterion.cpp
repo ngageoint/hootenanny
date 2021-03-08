@@ -87,7 +87,7 @@ bool PoiPolygonPolyCriterion::isSatisfied(const ConstElementPtr& e) const
   LOG_VART(AreaCriterion().isSatisfied(e));
   // isArea includes building too
   const bool isPoly =
-    AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || tags.getNames().size() > 0);
+    AreaCriterion().isSatisfied(e) && (inABuildingOrPoiCategory || !tags.getNames().empty());
 
   LOG_VART(isPoly);
   return isPoly;

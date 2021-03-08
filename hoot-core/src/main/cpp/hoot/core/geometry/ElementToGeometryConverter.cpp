@@ -230,7 +230,7 @@ std::shared_ptr<Polygon> ElementToGeometryConverter::convertToPolygon(const Cons
   }
 
   // if the first and last nodes aren't the same.
-  if (ids.size() > 0 && ids[0] != ids[ids.size() - 1])
+  if (!ids.empty() && ids[0] != ids[ids.size() - 1])
   {
     size++;
   }
@@ -387,7 +387,7 @@ geos::geom::GeometryTypeId ElementToGeometryConverter::getGeometryType(
         else if (linearCrit.isSatisfied(r))
           return GEOS_MULTILINESTRING;
         // an empty geometry, pass back a collection
-        else if (r->getMembers().size() == 0 || CollectionRelationCriterion().isSatisfied(r))
+        else if (r->getMembers().empty() || CollectionRelationCriterion().isSatisfied(r))
           return GEOS_GEOMETRYCOLLECTION;
       }
 

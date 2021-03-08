@@ -54,7 +54,7 @@ void DistanceNodeCriterion::setConfiguration(const Settings& s)
     "Invalid center value passed to DistanceNodeCriterion: " +
     opts.getDistanceNodeCriterionCenter();
   const QStringList centerParts = opts.getDistanceNodeCriterionCenter().split(",");
-  if (centerParts.size() == 0)
+  if (centerParts.empty())
   {
     throw HootException(errorMsg);
   }

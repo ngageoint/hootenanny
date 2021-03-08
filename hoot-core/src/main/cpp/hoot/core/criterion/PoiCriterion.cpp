@@ -49,7 +49,7 @@ bool PoiCriterion::isSatisfied(const ConstElementPtr& e) const
   {
     result =
       OsmSchema::getInstance().hasCategory(e->getTags(), "poi") ||
-      e->getTags().getNames().size() > 0;
+      !e->getTags().getNames().empty();
   }
 
   if (result)

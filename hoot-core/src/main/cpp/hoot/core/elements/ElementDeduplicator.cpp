@@ -365,7 +365,7 @@ bool ElementDeduplicator::_areWayNodesInWaysOfMismatchedType(
 
 void ElementDeduplicator::_removeElements(const QSet<ElementId>& elementsToRemove, OsmMapPtr map)
 {
-  if (elementsToRemove.size() == 0)
+  if (elementsToRemove.empty())
   {
     return;
   }

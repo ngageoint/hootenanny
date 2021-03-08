@@ -51,7 +51,7 @@ bool WayNodeCriterion::isSatisfied(const ConstElementPtr& e) const
 
   const std::set<long>& containingWays =
     _map->getIndex().getNodeToWayMap()->getWaysByNode(e->getId());
-  if (containingWays.size() == 0)
+  if (containingWays.empty())
   {
     return false;
   }

@@ -177,7 +177,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
   // of the features or the conflation workflow chosen.
   Tags finalBuildingTags = finalBuilding->getTags();
   LOG_VART(finalBuildingTags);
-  if (poiTags1.size() > 0)
+  if (!poiTags1.empty())
   {
     // If this is a ref POI, we'll keep its tags and replace the building tags.
     LOG_TRACE("Merging POI tags with building tags for POI status Unknown1...");
@@ -189,7 +189,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
       OsmMapWriterFactory::writeDebugMap(map, "PoiPolygonMerger-after-building-tags-merge-1");
     }
   }
-  if (poiTags2.size() > 0)
+  if (!poiTags2.empty())
   {
     LOG_TRACE("Merging POI tags with building tags for POI status Unknown2...");
     // If this is a sec POI, we'll keep the building's tags and replace its tags.
@@ -373,17 +373,17 @@ ElementId PoiPolygonMerger::_mergeBuildings(const OsmMapPtr& map,
 
   set<pair<ElementId, ElementId>> pairs;
 
-  assert(buildings1.size() != 0 || buildings2.size() != 0);
+  assert(!buildings1.empty() || !buildings2.empty());
   // If there is only one set of buildings, then there is no need to merge. Group all the building
   // parts into a single building.
-  if (buildings1.size() == 0)
+  if (buildings1.empty())
   {
     set<ElementId> eids;
     eids.insert(buildings2.begin(), buildings2.end());
     LOG_VART(eids.size());
     return BuildingMerger::buildBuilding(map, eids)->getElementId();
   }
-  else if (buildings2.size() == 0)
+  else if (buildings2.empty())
   {
     set<ElementId> eids;
     eids.insert(buildings1.begin(), buildings1.end());

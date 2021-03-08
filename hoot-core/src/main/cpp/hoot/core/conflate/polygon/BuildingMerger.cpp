@@ -324,7 +324,7 @@ Tags BuildingMerger::_getMergedTags(const ElementPtr& e1, const ElementPtr& e2)
   ref1.sort();
   ref2.sort();
 
-  if (ref1.size() != 0 || ref2.size() != 0)
+  if (!ref1.empty() || !ref2.empty())
   {
     if (ref1 == ref2)
     {
@@ -445,12 +445,12 @@ QSet<ElementId> BuildingMerger::_getMultiPolyMemberIds(const ConstElementPtr& el
 std::shared_ptr<Element> BuildingMerger::buildBuilding(
   const OsmMapPtr& map, const set<ElementId>& eid, const bool preserveTypes)
 {
-  if (eid.size() > 0)
+  if (!eid.empty())
   {
     LOG_TRACE("Creating building for eid's: " << eid << "...");
   }
 
-  if (eid.size() == 0)
+  if (eid.empty())
   {
     throw IllegalArgumentException("No element ID passed to building builder.");
   }
@@ -571,7 +571,7 @@ std::shared_ptr<Element> BuildingMerger::buildBuilding(
 RelationPtr BuildingMerger::combineConstituentBuildingsIntoRelation(
   const OsmMapPtr& map, std::vector<ElementPtr>& constituentBuildings, const bool preserveTypes)
 {
-  if (constituentBuildings.size() == 0)
+  if (constituentBuildings.empty())
   {
     throw IllegalArgumentException("No constituent buildings passed to building merger.");
   }

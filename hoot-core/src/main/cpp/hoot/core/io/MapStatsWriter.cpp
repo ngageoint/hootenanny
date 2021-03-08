@@ -72,7 +72,7 @@ void MapStatsWriter::writeStatsToJson(QList<QList<SingleStat>>& stats,
     for (int i = 0; i < allStats.size(); i++)
     {
       QStringList statrow = allStats.at(i).split("\t");
-      if (statrow.size() > 0 && !statrow[0].isEmpty())
+      if (!statrow.empty() && !statrow[0].isEmpty())
       {
         QStringList tmpValues;
         //filter out empty values, first one in array is key, so the loop starts with 1

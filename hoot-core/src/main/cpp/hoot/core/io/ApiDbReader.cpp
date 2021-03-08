@@ -286,7 +286,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
   }
   LOG_VART(wayIds.size());
 
-  if (wayIds.size() > 0)
+  if (!wayIds.empty())
   {
     // If the appropriate option is enabled, here we'll add the IDs of all ways that fall outside
     // of the requested bounds but are directly connected to a way that is being returned by the
@@ -340,7 +340,7 @@ void ApiDbReader::_readWaysByNodeIds(OsmMapPtr map, const QSet<QString>& nodeIds
     additionalNodeIds = additionalNodeIds.subtract(nodeIds);
     LOG_VART(additionalNodeIds.size());
 
-    if (additionalNodeIds.size() > 0)
+    if (!additionalNodeIds.empty())
     {
       LOG_DEBUG(
         "Retrieving nodes falling outside of the query bounds but belonging to a selected way...");
@@ -398,7 +398,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
   if (!_returnNodesOnly)
   {
-    if (nodeIds.size() > 0)
+    if (!nodeIds.empty())
     {
       QSet<QString> wayIds;
       QSet<QString> additionalWayNodeIds;
@@ -419,7 +419,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
         LOG_VART(ElementId(ElementType::Relation, relationId));
         relationIds.insert(QString::number(relationId));
       }
-      if (wayIds.size() > 0)
+      if (!wayIds.empty())
       {
         relationIdItr = _getDatabase()->selectRelationIdsByMemberIds(wayIds, ElementType::Way);
         while (relationIdItr->next())
@@ -433,7 +433,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
       //  Iterate all relations (and sub-relations) that are "within" the bounds
       QSet<QString> completedRelationIds;
-      while (relationIds.size() > 0)
+      while (!relationIds.empty())
       {
         QSet<QString> newNodes;
         QSet<QString> newWays;
@@ -475,7 +475,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
         //  Iterate any new nodes that are members of relations that need to be queried
         newNodes = newNodes.subtract(nodeIds);
-        if (newNodes.size() > 0)
+        if (!newNodes.empty())
         {
           std::shared_ptr<QSqlQuery> queryItr =
             _getDatabase()->selectElementsByElementIdList(newNodes, TableType::Node);
@@ -494,7 +494,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
 
         //  Iterate any new ways that are members of relations that need to be queried
         newWays = newWays.subtract(wayIds);
-        if (newWays.size() > 0)
+        if (!newWays.empty())
         {
           QSet<QString> additionalNodeIds;
 
@@ -525,7 +525,7 @@ void ApiDbReader::_readByBounds(OsmMapPtr map, const Envelope& bounds)
           additionalNodeIds = additionalNodeIds.subtract(nodeIds);
           LOG_VART(additionalNodeIds.size());
 
-          if (additionalNodeIds.size() > 0)
+          if (!additionalNodeIds.empty())
           {
             LOG_DEBUG(
               "Retrieving nodes falling outside of the query bounds but belonging to a selected " <<

@@ -114,11 +114,11 @@ void OsmApiDbSqlChangesetFileWriter::write(
     // each dataset, before changes and after.
     ConstOsmMapPtr map1;
     ConstOsmMapPtr map2;
-    if (_map1List.size() > 0)
+    if (!_map1List.empty())
     {
       map1 = _map1List.at(i);
     }
-    if (_map2List.size() > 0)
+    if (!_map2List.empty())
     {
       map2 = _map2List.at(i);
     }

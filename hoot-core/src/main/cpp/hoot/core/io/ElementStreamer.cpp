@@ -146,7 +146,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
 ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
   ElementInputStreamPtr streamToFilter, const QStringList& ops)
 {
-  if (ops.size() == 0)
+  if (ops.empty())
   {
     return streamToFilter;
   }

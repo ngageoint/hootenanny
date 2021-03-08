@@ -67,7 +67,7 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 
   LOG_VART(tags.getNames());
   bool isPoi = false;
-  if (tags.getNames().size() > 0)
+  if (!tags.getNames().empty())
   {
     isPoi = true;
   }

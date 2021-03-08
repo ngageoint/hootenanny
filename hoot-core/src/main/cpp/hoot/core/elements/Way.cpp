@@ -497,7 +497,7 @@ QSet<long> Way::sharedNodeIds(const Way& other) const
 
 bool Way::hasSharedNode(const Way& other) const
 {
-  return sharedNodeIds(other).size() > 0;
+  return !sharedNodeIds(other).empty();
 }
 
 }

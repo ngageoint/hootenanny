@@ -49,7 +49,7 @@ bool UselessElementCriterion::isSatisfied(const ConstElementPtr& e) const
 
   // Is this element part of a relation? If so, it's not useless!
   const std::set<long>& parentRels = e2r->getRelationByElement(eid);
-  if (parentRels.size() > 0)
+  if (!parentRels.empty())
   {
     LOG_TRACE("UselessElementCriterion not satisified: element part of relation");
     return false;
@@ -60,7 +60,7 @@ bool UselessElementCriterion::isSatisfied(const ConstElementPtr& e) const
     // Check ways
     const std::set<long>& parentWays =
       _map->getIndex().getNodeToWayMap()->getWaysByNode(eid.getId());
-    if (parentWays.size() > 0)
+    if (!parentWays.empty())
     {
       LOG_TRACE("UselessElementCriterion not satisified: node has parent");
       return false;
@@ -80,7 +80,7 @@ bool UselessElementCriterion::isSatisfied(const ConstElementPtr& e) const
   else if (ElementType::Relation == eid.getType().getEnum())
   {
     ConstRelationPtr r = std::dynamic_pointer_cast<const Relation>(e);
-    if (r->getMembers().size() > 0)
+    if (!r->getMembers().empty())
     {
       LOG_TRACE("UselessElementCriterion not satisified: relation has children");
       return false;
