@@ -107,7 +107,7 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    if (args.size() != 0)
+    if (!args.empty())
     {
       throw HootException(QString("%1 takes no parameters.").arg(getName()));
     }

@@ -165,7 +165,7 @@ WayLocation WayMatchStringMerger::_findNodeLocation2(WayStringPtr ws, ElementId 
   assert(nodeId.getType() == ElementType::Node);
 
   // if we haven't created the index, create it.
-  if (_nodeToWayLocation2.size() == 0)
+  if (_nodeToWayLocation2.empty())
   {
     // go through the way string and look at each subline.
     for (int i = 0; i < ws->getSize(); ++i)

@@ -107,7 +107,7 @@ vector<double> ExpectationIntersection::snapMatches(const Mat& matches, const Ma
   vector<int> splitsInt(ranges.rows - 1);
   vector<double> splits(ranges.rows - 1);
 
-  if (splits.size() == 0)
+  if (splits.empty())
   {
     return splits;
   }

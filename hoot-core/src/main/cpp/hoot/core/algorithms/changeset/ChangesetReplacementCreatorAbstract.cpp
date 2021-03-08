@@ -209,7 +209,7 @@ void ChangesetReplacementCreatorAbstract::_validateInputs()
     }
   }
 
-  if (ConfigOptions().getConvertOps().size() > 0)
+  if (!ConfigOptions().getConvertOps().empty())
   {
     throw IllegalArgumentException(
       "Replacement changeset derivation does not support convert operations.");

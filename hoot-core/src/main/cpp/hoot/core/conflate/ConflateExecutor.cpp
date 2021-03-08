@@ -138,11 +138,11 @@ void ConflateExecutor::_initTaskCount()
 
   // Only add one task for each set of conflate ops, since OpExecutor will create its own task step
   // for each op internally.
-  if (ConfigOptions().getConflatePreOps().size() > 0)
+  if (!ConfigOptions().getConflatePreOps().empty())
   {
     _numTotalTasks++;
   }
-  if (ConfigOptions().getConflatePostOps().size() > 0)
+  if (!ConfigOptions().getConflatePostOps().empty())
   {
     _numTotalTasks++;
   }
@@ -243,7 +243,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   _stats.append(SingleStat("Initial Element Count", initialElementCount));
   OsmMapWriterFactory::writeDebugMap(map, "after-load");
 
-  if (ConfigOptions().getConflatePreOps().size() > 0)
+  if (!ConfigOptions().getConflatePreOps().empty())
   {
     _runConflateOps(map, true);
   }
@@ -251,7 +251,7 @@ void ConflateExecutor::conflate(const QString& input1, const QString& input2, QS
   OsmMapPtr result = map;
   _runConflate(result);
 
-  if (ConfigOptions().getConflatePostOps().size() > 0)
+  if (!ConfigOptions().getConflatePostOps().empty())
   {
     _runConflateOps(map, false);
   }

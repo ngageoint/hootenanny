@@ -66,7 +66,7 @@ double RelationMemberSimilarityExtractor::extract(
     const int totalMembers = targetMemberIds.size() + candidateMemberIds.size();
     LOG_VART(totalMembers);
 
-    if (targetMemberIds.size() == 0 || candidateMemberIds.size() == 0)
+    if (targetMemberIds.empty() || candidateMemberIds.empty())
     {
       return 0.0;
     }

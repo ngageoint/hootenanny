@@ -63,7 +63,7 @@ vector<ConstMatchPtr> GreedyConstrainedMatches::calculateSubset()
   _score = -1;
   vector<ConstMatchPtr> result;
 
-  if (_matches.size() == 0)
+  if (_matches.empty())
   {
     LOG_DEBUG("No match conflicts found.");
     return result;

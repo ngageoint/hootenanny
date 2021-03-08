@@ -67,7 +67,7 @@ void OptionsValidator::fixMisc()
   LOG_VART(matchCreators);
   LOG_VART(mergerCreators);
 
-  if ((matchCreators.size() == 0 || mergerCreators.size() == 0))
+  if (matchCreators.empty() || mergerCreators.empty())
   {
     LOG_WARN("Match or merger creators empty.  Setting to defaults.");
     matchCreators = ConfigOptions::getMatchCreatorsDefaultValue();

@@ -800,7 +800,7 @@ void RubberSheet::_writeInterpolator(
 
 vector<double> RubberSheet::calculateTiePointDistances()
 {
-  if (_ties.size() == 0)
+  if (_ties.empty())
   {
     throw HootException("No tie points have been generated.");
   }

@@ -156,7 +156,7 @@ void MatchFactory::registerCreator(const QString& c)
 
     registerCreator(mc);
 
-    if (args.size() > 0)
+    if (!args.empty())
     {
       mc->setArguments(args);
     }
@@ -251,7 +251,7 @@ MatchFactory& MatchFactory::getInstance()
   OptionsValidator::validateMatchers();
 
   //only get the match creators that are specified in the config
-  if (instance._creators.size() == 0)
+  if (instance._creators.empty())
     instance._setMatchCreators(ConfigOptions().getMatchCreators());
   return instance;
 }

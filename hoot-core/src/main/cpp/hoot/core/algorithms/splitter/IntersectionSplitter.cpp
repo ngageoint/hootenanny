@@ -142,7 +142,7 @@ void IntersectionSplitter::splitIntersections()
     _todoNodes.remove(nodeId);
     numProcessed++;
 
-    if (numProcessed % (taskStatusUpdateInterval * 10) == 0 && _todoNodes.size() > 0)
+    if (numProcessed % (taskStatusUpdateInterval * 10) == 0 && !_todoNodes.empty())
     {
       PROGRESS_INFO(
         "\tCreated  " <<  StringUtils::formatLargeNumber(numProcessed) <<

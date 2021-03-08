@@ -134,7 +134,7 @@ void ChangesetCreator::create(const QString& output, const QString& input1, cons
     // the larger number of steps. With streaming I/O that isn't possible since all the data
     // conversion operations are executed inline at the same time the data is read in.
     _numTotalTasks += 3;
-    if (ConfigOptions().getConvertOps().size() > 0)
+    if (!ConfigOptions().getConvertOps().empty())
     {
       // Convert ops get a single task, which OpExecutor will break down into sub-tasks during
       // progress reporting.
@@ -324,7 +324,7 @@ bool ChangesetCreator::_isSupportedOutputFormat(const QString& format) const
 bool ChangesetCreator::_inputIsSorted(const QString& input) const
 {
   // ops could change the ordering
-  if (ConfigOptions().getConvertOps().size() > 0)
+  if (!ConfigOptions().getConvertOps().empty())
   {
     return false;
   }
@@ -499,7 +499,7 @@ void ChangesetCreator::_readInputsFully(
   const QString& input1, const QString& input2, OsmMapPtr& map1, OsmMapPtr& map2, Progress progress)
 {  
   LOG_VARD(ConfigOptions().getConvertOps().size());
-  if (ConfigOptions().getConvertOps().size() > 0)
+  if (!ConfigOptions().getConvertOps().empty())
   {
     if (!ElementStreamer::areValidStreamingOps(ConfigOptions().getConvertOps()))
     {

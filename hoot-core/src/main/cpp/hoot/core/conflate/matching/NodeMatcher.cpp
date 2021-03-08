@@ -158,7 +158,7 @@ vector<Radians> NodeMatcher::calculateAngles(const OsmMap* map, long nid,
 
   LOG_VART(badWayIds.size());
   LOG_VART(result.size());
-  if (result.size() > 0 && badWayIds.size() > 0)
+  if (!result.empty() && !badWayIds.empty())
   {
     LOG_TRACE(
       "Found " << badWayIds.size() << " bad spot(s) in NodeMatcher when calculating angles " <<

@@ -101,7 +101,7 @@ const QSet<QString>& MostEnglishName::_getWords()
       }
     }
 
-    if (_englishWords.size() == 0)
+    if (_englishWords.empty())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {

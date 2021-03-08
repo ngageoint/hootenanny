@@ -88,7 +88,7 @@ MatchClassification HighwayRfClassifier::classify(const ConstOsmMapPtr& map,
   {
     std::map<QString, double> features = getFeatures(map, eid1, eid2, match);
 
-    if (features.size() == 0)
+    if (features.empty())
     {
       p.setMiss();
     }
@@ -327,7 +327,7 @@ void HighwayRfClassifier::_init() const
     LOG_VART(missingExtractors);
     LOG_VART(_rfFactorLabels);
 
-    if (missingExtractors.size() > 0)
+    if (!missingExtractors.empty())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {

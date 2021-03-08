@@ -248,7 +248,7 @@ Meters FrechetDistance::distance()
 frechet_subline FrechetDistance::maxSubline(Meters maxDistance)
 {
   vector<frechet_subline> frechet = matchingSublines(maxDistance);
-  if (frechet.size() > 0)
+  if (!frechet.empty())
     return frechet[0];
   return frechet_subline();
 }

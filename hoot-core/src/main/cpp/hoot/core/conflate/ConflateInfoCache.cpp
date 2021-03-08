@@ -524,7 +524,7 @@ bool ConflateInfoCache::elementCanBeConflatedByActiveMatcher(
   LOG_VART(element->getElementId());
 
   // Get all the configured matchers.
-  if (_activeMatchCreators.size() == 0)
+  if (_activeMatchCreators.empty())
   {
     _activeMatchCreators = MatchFactory::getInstance().getCreators();
   }
@@ -614,7 +614,7 @@ bool ConflateInfoCache::elementCriterionInUseByActiveMatcher(const QString& crit
   }
 
   // Get all the configured matchers.
-  if (_activeMatchCreators.size() == 0)
+  if (_activeMatchCreators.empty())
   {
     _activeMatchCreators = MatchFactory::getInstance().getCreators();
   }

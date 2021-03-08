@@ -161,7 +161,7 @@ void AlphaShapeGenerator::_coverStragglers(const ConstOsmMapPtr& map)
   for (int i = 0; i < _maxThreads; ++i)
     threads[i].join();
 
-  if (_stragglers.size() > 0)
+  if (!_stragglers.empty())
   {
     LOG_DEBUG("Adding " << StringUtils::formatLargeNumber(_stragglers.size())
               << " point stragglers to alpha shape.");

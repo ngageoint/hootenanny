@@ -168,7 +168,7 @@ QList<ElementPhoneNumber> PhoneNumberParser::parsePhoneNumbers(const Element& el
         }
       }
 
-      if (parsedPhoneNums.size() == 0)
+      if (parsedPhoneNums.empty())
       {
         LOG_TRACE("Not a phone number: " << tagKey << "=" << tagValue);
       }

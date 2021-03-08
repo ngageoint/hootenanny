@@ -143,7 +143,7 @@ bool EdgeMatchSetFinder::_addEdgeMatches(ConstEdgeMatchPtr em)
         LOG_VART(neighbors1);
         LOG_VART(neighbors2);
 
-        if (neighbors1.size() > 0 || neighbors2.size() > 0)
+        if (!neighbors1.empty() || !neighbors2.empty())
         {
           foundSolution = _addEdgeNeighborsToEnd(em, neighbors1, neighbors2) || foundSolution;
         }
@@ -512,7 +512,7 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimFromEdge(ConstEdgeMatchPtr em)
   QList<EdgeSublineMatchPtr> matches =
     _details->calculateMatchingSublines(em->getString1()->getEdge(0), em->getString2()->getEdge(0));
 
-  if (matches.size() == 0)
+  if (matches.empty())
   {
     return result;
   }
@@ -584,7 +584,7 @@ EdgeMatchPtr EdgeMatchSetFinder::_trimToEdge(ConstEdgeMatchPtr em)
     _details->calculateMatchingSublines(em->getString1()->getLastEdge(),
                                         em->getString2()->getLastEdge());
 
-  if (matches.size() == 0)
+  if (matches.empty())
   {
     return result;
   }

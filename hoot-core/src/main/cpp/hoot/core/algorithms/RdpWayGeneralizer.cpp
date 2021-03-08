@@ -123,7 +123,7 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   LOG_VART(nodeIdsNotAllowedToBeRemoved);
 
   QList<long> updatedWayNodeIds = wayNodeIdsAfterGeneralization;
-  if (nodeIdsNotAllowedToBeRemoved.size() > 0)
+  if (!nodeIdsNotAllowedToBeRemoved.empty())
   {
     // If there were any nodes we removed during generalization but aren't allowed to remove, we
     // need to add those back in here using the pre-generalization node set. We could have tried to

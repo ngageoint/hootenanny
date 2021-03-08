@@ -171,7 +171,7 @@ bool ConflateUtils::operatesOnGenericElementsOnly(const std::shared_ptr<OsmMapOp
 bool ConflateUtils::operatesOnGenericElementsOnly(const std::shared_ptr<ElementVisitor>& vis)
 {
   const QStringList geometryTypeCriteriaClassNames = vis->getCriteria();
-  if (geometryTypeCriteriaClassNames.size() == 0)
+  if (geometryTypeCriteriaClassNames.empty())
   {
     return true;
   }

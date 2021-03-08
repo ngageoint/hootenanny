@@ -310,7 +310,7 @@ void ConflictsNetworkMatcher::_createMatchRelationships()
       MatchRelationshipPtr mr(new MatchRelationship(other, false));
       QSet<ConstEdgeMatchPtr> connectingStubs = _edgeMatches->getConnectingStubs(em, other);
       QSet<ConstEdgeMatchPtr> nonConflictingStubs = connectingStubs - conflict;
-      if (connectingStubs.size() == 0 || nonConflictingStubs.size() >= 1)
+      if (connectingStubs.empty() || nonConflictingStubs.size() >= 1)
       {
         mr->setThroughStubs(_edgeMatches->getConnectingStubs(em, other));
         // if this edge supports through a stub, then record the stub that is used to support it.

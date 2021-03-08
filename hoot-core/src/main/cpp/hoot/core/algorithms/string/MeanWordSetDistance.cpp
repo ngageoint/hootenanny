@@ -66,7 +66,7 @@ double MeanWordSetDistance::compare(const QString& s1, const QString& s2) const
 
   double score = 0;
 
-  if (sl1.size() > 0 && sl2.size() > 0)
+  if (!sl1.empty() && !sl2.empty())
   {
     score = m.meanScore(_p);
   }

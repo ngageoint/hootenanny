@@ -702,7 +702,7 @@ void LinearSnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColle
   LOG_TRACE("Non-modifiable extracted ways: " << ways);
 
   // If there are ways that aren't part of the way subline string,
-  if (ways.size() > 0)
+  if (!ways.empty())
   {
     // add the ways to the scrap relation.
     RelationPtr r;

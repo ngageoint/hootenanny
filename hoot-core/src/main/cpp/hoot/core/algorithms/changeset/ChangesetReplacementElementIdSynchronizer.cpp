@@ -144,7 +144,7 @@ void ChangesetReplacementElementIdSynchronizer::_syncElementIds(
         // If any of them match, we'll proceed to copy the element ID of the first map over to the
         // second map element and be sure to keep the second map element's tags (nodes matched only
         // on coordinate, so that will be the same between the two).
-        if (containingWayIds1.intersect(containingWayIds2).size() > 0 &&
+        if (!containingWayIds1.intersect(containingWayIds2).empty() &&
             !_map2->containsElement(map1IdenticalElement->getElementId()))
         {
           // Due to our lapsing of the coord comparison sensitivity, we'll actually do a distance

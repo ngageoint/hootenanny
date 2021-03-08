@@ -122,7 +122,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
       LOG_INFO(
         "Running test run #" << QString::number(i + 1) << ", simulation #" <<
         QString::number(j + 1));
-      if (_dynamicVariables.size() > 0)
+      if (!_dynamicVariables.empty())
       {
         LOG_INFO(" with dynamic variables: " << _dynamicVariables << " having value: " <<
                  dynamicVariableValue);
@@ -193,7 +193,7 @@ QList<std::shared_ptr<const PertyTestRunResult>> PertyTestRunner::runTest(
   }
   _testScores.clear();
 
-  if (_dynamicVariables.size() > 0)
+  if (!_dynamicVariables.empty())
   {
     _writePlotFile(outputPath, testRunResults);
   }

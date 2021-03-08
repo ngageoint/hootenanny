@@ -359,7 +359,7 @@ GeometryPtr AlphaShape::toGeometry()
     LOG_VARD(faces.size());
 
     // if the result is an empty geometry
-    if (faces.size() == 0 || !success)
+    if (faces.empty() || !success)
     {
       throw IllegalArgumentException(
         "Unable to find alpha value to create alpha shape.");
@@ -374,7 +374,7 @@ GeometryPtr AlphaShape::toGeometry()
     alpha_options.push_back(_alpha);
     alpha_options.push_back(getLongestFaceEdge());
     //  Iterate both options for the alpha value
-    while (faces.size() < 1 && alpha_options.size() > 0)
+    while (faces.size() < 1 && !alpha_options.empty())
     {
       //  Clear out any previous faces that may exist
       faces.clear();
@@ -389,7 +389,7 @@ GeometryPtr AlphaShape::toGeometry()
     LOG_VARD(faces.size());
 
     // if the result is an empty geometry
-    if (faces.size() == 0)
+    if (faces.empty())
     {
       throw IllegalArgumentException(
         "Unable to create alpha shape with alpha value of: " + QString::number(_alpha) + ".");

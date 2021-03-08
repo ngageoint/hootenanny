@@ -43,7 +43,7 @@ std::shared_ptr<OGRSpatialReference> MemChangesetProvider::getProjection() const
 
 bool MemChangesetProvider::hasMoreChanges()
 {
-  return (_changes.size() > 0);
+  return !_changes.empty();
 }
 
 Change MemChangesetProvider::readNextChange()

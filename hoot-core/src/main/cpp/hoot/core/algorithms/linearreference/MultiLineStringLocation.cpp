@@ -42,7 +42,7 @@ namespace hoot
 MultiLineStringLocation::MultiLineStringLocation(ConstOsmMapPtr map, ConstRelationPtr relation,
                                                  const int wayIndex, const WayLocation& wayLocation)
 {
-  if (relation->getMembers().size() == 0)
+  if (relation->getMembers().empty())
   {
     throw HootException(
       "Feature splitting for multi-line string relations requires that the relation has way members.");

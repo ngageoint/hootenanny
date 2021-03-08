@@ -58,7 +58,7 @@ bool DirectionFinder::isSimilarDirection(const ConstOsmMapPtr& map, ConstWayPtr 
   LOG_VART(w2->getNodeIds());
 
   // skip empty ways
-  if (w1->getNodeIds().size() == 0 || w2->getNodeIds().size() == 0)
+  if (w1->getNodeIds().empty() || w2->getNodeIds().empty())
   {
     LOG_TRACE("Skipping one or more empty ways...");
     return false;
@@ -105,7 +105,7 @@ bool DirectionFinder::isSimilarDirection2(const ConstOsmMapPtr& map, ConstWayPtr
   LOG_VART(way2->getNodeIds());
 
   // skip empty ways
-  if (way1->getNodeIds().size() == 0 || way2->getNodeIds().size() == 0)
+  if (way1->getNodeIds().empty() || way2->getNodeIds().empty())
   {
     LOG_TRACE("Skipping one or more empty ways...");
     return false;

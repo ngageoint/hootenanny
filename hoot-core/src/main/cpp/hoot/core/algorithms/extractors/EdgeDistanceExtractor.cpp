@@ -164,7 +164,7 @@ double EdgeDistanceExtractor::_oneDistance(
     std::shared_ptr<Point> p(GeometryFactory::getDefaultInstance()->createPoint(points[i]));
     distances.push_back(g->distance(p.get()));
   }
-  if (distances.size() == 0)
+  if (distances.empty())
   {
     return -1;
   }

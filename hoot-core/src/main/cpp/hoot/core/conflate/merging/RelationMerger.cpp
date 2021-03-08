@@ -304,7 +304,7 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
     relationBeingReplaced->removeElement(currentMemberFromReplaced.getElement()->getElementId());
     numMembersCopied++;
   }
-  if (modifiedMembers.size() > 0)
+  if (!modifiedMembers.empty())
   {
     replacingRelation->setMembers(modifiedMembers);
   }
