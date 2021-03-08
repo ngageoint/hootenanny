@@ -845,7 +845,7 @@ ggdm30 = {
         //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
         ['t.product && t.man_made == "storage_tank"','t.content = t.product; delete t.product'],
         ['t.public_transport == "station" && t["transport:type"] == "railway"','t.railway = "station"'],
-        ['t.public_transport == "station" && t["transport:type"] == "bus"','t.bus = "yes"'],
+        // ['t.public_transport == "station" && t["transport:type"] == "bus"','t.bus = "yes"'],
         ['t.protect_class && !(t.boundary)','t.boundary = "protected_area"'],
         ['t.pylon =="yes" && t["cable:type"] == "cableway"',' t.aerialway = "pylon"'],
         ['t.pylon =="yes" && t["cable:type"] == "power"',' t.power = "tower"'],
@@ -1057,18 +1057,17 @@ ggdm30 = {
         if (! tags.bridge) tags.bridge = 'yes';
         break;
 
-      case 'AQ125': // Transportation Station
-        if (tags.amenity == 'ferry_terminal')
-        {
-          tags['transport:type'] = 'maritime';
-          delete tags.bus;
-        }
-        if (!tags.amenity)
-        {
-          tags.bus = 'yes';
-          tags.amenity = 'bus_station';
-        }
-        break;
+      // case 'AQ125': // Transportation Station
+      //   if (tags.amenity == 'ferry_terminal')
+      //   {
+      //     tags['transport:type'] = 'maritime';
+      //     delete tags.bus;
+      //   }
+      //   if (!tags.amenity)
+      //   {
+      //     tags.amenity = 'bus_station';
+      //   }
+      //   break;
 
       case 'BH140':
         if (! tags.waterway) tags.waterway = 'river';
@@ -1382,13 +1381,12 @@ ggdm30 = {
       if (tags.highway == 'road') delete tags.highway;
     }
 
-
     if (ggdm30.preRules == undefined)
     {
       // See ToOsmPostProcessing for more details about rulesList
       var rulesList = [
         ['t.aeroway == "navigationaid" && t.navigationaid','delete t.navigationaid'],
-        ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
+        // ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
         // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
@@ -1457,7 +1455,7 @@ ggdm30 = {
       {
         case 'minaret':
           // Debug
-          print('Got Minaret');
+          // print('Got Minaret');
           delete tags.man_made;
           break;
 
@@ -1482,16 +1480,20 @@ ggdm30 = {
       tags.use = 'power_generation';
     }
 
-    // Fix up bus,train & ferry stations
-    if (tags.public_transport == 'station')
+    // Cranes
+    if (tags.man_made == 'crane')
     {
-      if (tags.amenity == 'bus_station' || tags.bus == 'yes')
-      {
-        delete tags.amenity;
-        delete tags.bus;
-        tags['transport:type'] = 'road'; // Bus is not valid on AQ125
-        tags.use = 'road_transport';
-      }
+      attrs.F_CODE = 'AF040'; // Crane
+      if (tags.railway) tags['transport:type'] = 'railway';
+      if (tags.highway) tags['transport:type'] = 'road';
+    } // End Cranes
+
+  // Fix up bus,train & ferry stations
+    if (tags.amenity == 'bus_station')
+    {
+      // delete tags.amenity;
+      tags['transport:type'] = 'road'; // Bus is not valid on AQ125
+      tags.use = 'road_transport';
     }
 
     // Sort out landuse
@@ -1507,12 +1509,6 @@ ggdm30 = {
 
       case 'construction':
         tags.condition = 'construction';
-        tags.landuse = 'built_up_area';
-        break;
-
-      // case 'commercial':
-      case 'retail':
-        tags.use = 'commercial';
         tags.landuse = 'built_up_area';
         break;
 
@@ -1587,6 +1583,7 @@ ggdm30 = {
         tags.landuse = 'built_up_area';
         break;
 
+    // case 'commercial':
       case 'retail':
         tags.landuse = 'built_up_area';
         tags.use = 'commercial';
@@ -1620,6 +1617,23 @@ ggdm30 = {
 
       delete tags.barrier; // Take away the walls...
     }
+
+    // Railways and other features
+    if (tags.building == 'yes' && tags.railway == 'rail')
+    {
+      delete tags.railway;
+      attrs.FFN = '490'; // Railway Transport
+    }
+
+    // Area Embankments can't be transportation features as well.
+    if (tags.embankment == 'yes' && geometryType == 'Area')
+    {
+      // Hot sure if we should delete highway features as well. Have not seen any in the data so far.
+      delete tags.railway;
+    }
+
+    // VERY data specific...
+    if (tags.covered == 'arcade' && tags.railway) attrs.F_CODE = 'AN010'; // Railway
 
     // going out on a limb and processing OSM specific tags:
     // - Building == a thing,
@@ -1858,6 +1872,13 @@ ggdm30 = {
         delete tags.junction;
       }
     } // End AP020 not Point
+
+    // Railway Crossings.
+    if (tags.railway == 'crossing_box')
+    {
+      // Push this to Crossing but try and keep the tags
+      attrs.F_CODE = 'AQ062'; // Crossing
+    }
 
     // Cables
     if (tags.man_made == 'submarine_cable')
@@ -2423,20 +2444,32 @@ ggdm30 = {
       }
     } // End for GE4 loop
 
-    //Map alternate source date tags to ZI001_SDV in order of precedence
-    //default is 'source:datetime'
-    if (! attrs.ZI001_SDV)
-      attrs.ZI001_SDV = tags['source:imagery:datetime']
-                || tags['source:date']
-                || tags['source:geometry:date']
-                || '';
+    // ZI039 Entity Collection Metadata is the only feature that has a ZI001_SDP attribute
+    if (attrs.F_CODE == 'ZI039')
+    {
+      //Map alternate source date tags to ZI001_SDV in order of precedence
+      //default is 'source:datetime'
+      if (!attrs.ZI001_SDV)
+        attrs.ZI001_SDV = tags['source:imagery:datetime']
+                  || tags['source:date']
+                  || tags['source:geometry:date']
+                  || '';
 
-    //Map alternate source tags to ZI001_SDP in order of precedence
-    //default is 'source'
-    if (! attrs.ZI001_SDP)
-      attrs.ZI001_SDP = tags['source:imagery']
-                || tags['source:description']
-                || '';
+    // Map alternate source tags to ZI001_SDP in order of precedence
+    // default is 'source'
+      if (!attrs.ZI001_SDP)
+      {
+        attrs.ZI001_SDP = tags['source:imagery']
+                  || tags['source:description']
+                  || '';
+      }
+    }
+    else if (attrs.ZI001_SDP)
+    {
+      // Push to not used and drop the attribute
+      notUsedTags.source = attrs.ZI001_SDP;
+      delete attrs.ZI001_SDP;
+    }
 
     // Wetlands
     // Normally, these go to Marsh
@@ -2488,7 +2521,6 @@ ggdm30 = {
       ggdm30.config.OgrDebugDumptags = config.getOgrDebugDumptags();
 
       // Get any changes to OSM tags
-      // NOTE: the rest of the config variables will change to this style of assignment soon
       ggdm30.toChange = hoot.Settings.get('schema.translation.override');
     }
 
@@ -2501,12 +2533,8 @@ ggdm30 = {
       tags = translate.parseO2S(attrs);
 
       // Add some metadata
-      if (! tags.uuid)
-      {
-        if (ggdm30.config.OgrAddUuid == 'true') tags.uuid = createUuid();
-      }
-
-      if (! tags.source) tags.source = 'ggdmv30:' + layerName.toLowerCase();
+      if (!tags.uuid && ggdm30.config.OgrAddUuid == 'true') tags.uuid = createUuid();
+      if (!tags.source) tags.source = 'ggdmv30:' + layerName.toLowerCase();
 
       // Debug:
       if (ggdm30.config.OgrDebugDumptags == 'true')
@@ -2525,14 +2553,12 @@ ggdm30 = {
       // Add the FCODE rules for Import
       fcodeCommon.one2one.forEach( function(item) { if (ggdm30.rules.subtypeList[item[1]]) ggdm30.rules.fcodeOne2oneIn.push(item); });
       ggdm30.fcodeLookup = translate.createLookup(ggdm30.rules.fcodeOne2oneIn);
-      // Debug
-      // print('Start Dump FCODE:');
-      // translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
-      // print('End Dump FCODE:');
 
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode
       ggdm30.fcodeLookupOut = translate.createBackwardsLookup(ggdm30.rules.fcodeOne2oneOut);
+      // Debug
+      // translate.dumpOne2OneLookup(ggdm30.fcodeLookup);
     }
 
     if (ggdm30.lookup == undefined)
@@ -2544,6 +2570,8 @@ ggdm30 = {
       ggdm30.rules.one2one.push.apply(ggdm30.rules.one2one,ggdm30.rules.one2oneIn);
 
       ggdm30.lookup = translate.createLookup(ggdm30.rules.one2one);
+      // Debug
+      // translate.dumpOne2OneLookup(ggdm30.lookup);
     }
 
     // Cleanput the usless values
@@ -2560,7 +2588,7 @@ ggdm30 = {
       {
         tags[ftag[0]] = ftag[1];
         // Debug: Dump out the tags from the FCODE
-        // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
       }
       else
       {

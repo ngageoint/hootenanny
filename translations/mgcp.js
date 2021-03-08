@@ -918,20 +918,20 @@ mgcp = {
         if (!tags.highway) tags.highway = 'road';
         break;
 
-      case 'AQ125': // Transportation Station
-        if (tags.amenity == 'ferry_terminal')
-        {
-          tags['transport:type'] = 'maritime';
-          delete tags.bus;
-        }
-        if (!tags.amenity)
-        {
-          tags.bus = 'yes';
-          tags.amenity = 'bus_station';
-          delete tags['transport:type'];
-          delete tags.highway;
-        }
-        break;
+      // case 'AQ125': // Transportation Station
+      //   if (tags.amenity == 'ferry_terminal')
+      //   {
+      //     tags['transport:type'] = 'maritime';
+      //     delete tags.bus;
+      //   }
+      //   if (!tags.amenity)
+      //   {
+      //     // tags.bus = 'yes';
+      //     tags.amenity = 'bus_station';
+      //     delete tags['transport:type'];
+      //     delete tags.highway;
+      //   }
+      //   break;
 
       case 'AH050': // Fortification
         // Castles are not Bunkers but they get stored in the same layer
@@ -1292,11 +1292,6 @@ mgcp = {
         tags.landuse = 'built_up_area';
         break;
 
-      case 'retail':
-        tags.landuse = 'built_up_area';
-        tags.use = 'commercial';
-        break;
-
       case 'scrub':
         tags.natural = 'scrub';
         delete tags.landuse;
@@ -1361,16 +1356,11 @@ mgcp = {
       if (tags.product == 'unknown') delete tags.product;
     }
 
-    // Fix up bus,train & ferry stations
-    if (tags.public_transport == 'station')
+  // Fix up bus stations
+    if (tags.amenity == 'bus_station')
     {
-      if (tags.amenity == 'bus_station' || tags.bus == 'yes')
-      {
-        delete tags.amenity;
-        delete tags.bus;
-        tags['transport:type'] = 'bus';
-      }
-
+      delete tags.amenity;
+      tags['transport:type'] = 'bus';
     }
 
     // More facilities

@@ -392,15 +392,13 @@ tds70 = {
 
     // Quit early if we don't need to check anything. We are only looking at linework
     if (geometryType !== 'Line') return returnData;
-print('Many: Start');
+
     // Only looking at roads & railways with something else tacked on
     if (!(tags.highway || tags.railway)) return returnData;
-  print('Many: After railway');
 
     // Check the list of secondary/tertiary etc features
     // Need to think about: tags.covered
     if (!(tags.bridge || tags.tunnel || tags.embankment || tags.cutting || tags.ford)) return returnData;
-  print('Many: After bridge tunnel');
 
     // We are going to make another feature so copy tags and trash the UUID so it gets a new one
     var newFeatures = [];
@@ -741,7 +739,7 @@ print('Many: Start');
 
 
     // Roads
-    if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
+    if ((attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') && !tags.highway) // Road & Ice Road
     {
       // Set a Default: "It is a road but we don't know what it is"
       tags.highway = 'road';
@@ -793,6 +791,8 @@ print('Many: Start');
       }
     } // End if AP030
 
+    // Remove a defaukt
+    if (tags.highway == 'road' && tags['ref:road:class'] == 'local') delete tags['ref:road:class'];
 
     // New TDSv61 Attribute - ROR (Road Interchange Ramp)
     if (tags.highway && tags.interchange_ramp == 'yes')
@@ -836,7 +836,7 @@ print('Many: Start');
         ['t.desert_surface','t.surface = t.desert_surface; delete t.desert_surface'],
         ['t.dock && !(t.waterway)','t.waterway = "dock"'],
         ['t.drive_in == "yes"','t.amenity = "cinema"'],
-        // ["t['generator:source']","t.power = 'generator'"],
+        ["t['generator:source']","t.power = 'generator'"],
         ['t["glacier:type"] == "icecap" && t.natural == "glacier"','delete t.natural'],
         ['t.golf == "driving_range" && !(t.leisure)','t.leisure = "golf_course"'],
         ['t.historic == "castle" && !(t.ruins) && !(t.building)','t.building = "yes"'],
@@ -905,7 +905,6 @@ print('Many: Start');
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
     if (attrs.F_CODE == 'AH055' && !(tags.building)) tags.building = 'bunker';
-
     if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
 
     // Fix the building 'use' tag. If the building has a 'use' and no specific building tag. Give it one
@@ -1228,6 +1227,16 @@ print('Many: Start');
         continue;
       }
 
+      // Convert "demolished:XXX" features
+      if (i.indexOf('demolished:') == 0)
+      {
+        var tTag = i.replace('demolished:','');
+        tags[tTag] = tags[i];
+        tags.condition = 'dismantled';
+        delete tags[i];
+        continue;
+      }
+
       // Convert "construction:XXX" features
       if (i.indexOf('construction:') == 0)
       {
@@ -1237,8 +1246,29 @@ print('Many: Start');
         delete tags[i];
         continue;
       }
-
     } // End Cleanup loop
+
+    // Fix Bunkers. Putting this first to skip the building=* rules
+    if (tags.building == 'bunker')
+    {
+      tags.military = 'bunker';
+      delete tags.building;
+    }
+
+    // Fortified buildings vs Surface Bunkers
+    if (tags.military == 'bunker')
+    {
+      // Making a guess that these are military...
+      // if (! tags.operator) tags.operator = 'military';
+
+      if (tags['bunker_type'] == 'munitions')
+      {
+        attrs.F_CODE = 'AM060'; // Surface Bunker
+        attrs.PPO = '3'; // Ammunition
+        delete tags.military;
+        delete tags['bunker_type'];
+      }
+    }
 
     // Lifecycle tags
     var cycleList = {'highway':'road','bridge':'yes','railway':'rail','building':'yes'};
@@ -1293,12 +1323,48 @@ print('Many: Start');
       }
     } // End cycleList
 
+    // SOme highway cleanup
+    switch (tags.highway)
+    {
+      case undefined:
+        break;
+
+      case 'bus_stop':
+        tags["transport:type"] = 'bus';
+        break;
+
+      case 'crossing':
+      case 'give-way':
+      case 'stop':
+        // Special type of crossing
+        if (tags.crossing == 'tank')
+        {
+          attrs.F_CODE = 'AP056';
+          break;
+        }
+        tags['transport:type'] = 'road';
+        attrs.F_CODE = 'AQ062';
+        delete tags.highway;
+        break;
+
+      case 'mini_roundabout':
+        tags.junction = 'roundabout';
+        break;
+        // ['t.highway == "steps"','t.highway = "footway"'],
+    } // End Highway cleanup
+
+    // Ice roads are a special case.
+    if (tags.ice_road == 'yes')
+    {
+      attrs.F_CODE = 'AQ075';
+      if (tags.highway == 'road') delete tags.highway;
+    }
+
     if (tds70.tdsPreRules == undefined)
     {
       // See ToOsmPostProcessing for more details about rulesList.
       var rulesList = [
-        ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
-        ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
+        // ['t.amenity == "marketplace"  && !(t.building)','t.facility = "yes"'],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
         ['t.communication == "line"','t["cable:type"] = "communication"'],
@@ -1308,19 +1374,10 @@ print('Many: Start');
         ['t.diplomatic && t.amenity == "embassy"','delete t.amenity'],
         ['t.dock && t.waterway == "dock"','delete t.waterway'],
         ['t.golf == "driving_range" && t.leisure == "golf_course"','delete t.leisure'],
-        ['t.highway == "bus_stop"','t["transport:type"] = "bus"'],
-        ['t.highway == "crossing"','t["transport:type"] = "road";a.F_CODE = "AQ062"; delete t.highway'],
-        ['t.highway == "give-way"','a.F_CODE = "AQ062"'],
-        ['t.highway == "mini_roundabout"','t.junction = "roundabout"'],
         // ['t.highway == "steps"','t.highway = "footway"'],
-        ['t.highway == "stop"','a.F_CODE = "AQ062"'],
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
         ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
-        ['t.landuse == "farmland" && t.crop == "fruit_tree"','t.landuse = "orchard"'],
-        ['t.landuse == "railway" && t["railway:yard"] == "marshalling_yard"','a.F_CODE = "AN060"'],
-        ['t.landuse == "reservoir"','t.water = "reservoir"; delete t.landuse'],
-        ['t.landuse == "scrub"','t.natural = "scrub"; delete t.landuse'],
         ['t.leisure == "recreation_ground"','t.landuse = "recreation_ground"; delete t.leisure'],
         ['t.leisure == "sports_centre"','t.facility = "yes"; t.use = "recreation"; delete t.leisure'],
         ['t.leisure == "stadium" && t.building','delete t.building'],
@@ -1338,7 +1395,6 @@ print('Many: Start');
         ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
         ['t.power == "tower"','t["cable:type"] = "power"; t.pylon = "yes"; delete t.power'],
         ['t.power == "line"','t["cable:type"] = "power"; t.cable = "yes"; delete t.power'],
-        ['t.power == "generator"','t.use = "power_generation"; a.F_CODE = "AL013"'],
         ['t.rapids == "yes"','t.waterway = "rapids"; delete t.rapids'],
         ['t.railway == "station"','t.public_transport = "station";  t["transport:type"] = "railway"'],
         ['t.railway == "level_crossing"','t["transport:type"] = "railway";t["transport:type:2"] = "road"; a.F_CODE = "AQ062"; delete t.railway'],
@@ -1375,6 +1431,41 @@ print('Many: Start');
       delete tags.man_made;
     }
 
+    // Aircraft Shelters
+    if (tags.bunker_type == 'hardened_aircraft_shelter') attrs.F_CODE = 'GB250';
+
+    // Towers
+    if (tags['tower:type'] && tags.man_made == 'tower')
+    {
+      switch(tags['tower:type'])
+      {
+        case 'minaret':
+          // Debug
+          // print('Got Minaret');
+          delete tags.man_made;
+          break;
+
+        case 'cooling':
+          delete tags.man_made;
+          break;
+
+        case 'light':
+          delete tags.man_made;
+          break;
+      }
+    }
+
+    // Wind Turbines, Solar Panels etc  vs power plants
+    if (tags['generator:source'])
+    {
+      delete tags.power;
+    }
+    else if (tags.power == 'generator')
+    {
+      attrs.F_CODE = 'AL013';
+      tags.use = 'power_generation';
+    }
+
     // Cranes
     if (tags.man_made == 'crane')
     {
@@ -1382,6 +1473,15 @@ print('Many: Start');
       if (tags.railway) tags['transport:type'] = 'railway';
       if (tags.highway) tags['transport:type'] = 'road';
     } // End Cranes
+
+  // Fix up bus stations
+    if (tags.amenity == 'bus_station' || tags.bus == 'yes')
+    {
+      delete tags.amenity;
+      delete tags.bus;
+      tags['transport:type'] = 'road'; // Bus is not valid on AQ125
+      tags.use = 'road_transport';
+    }
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
@@ -1414,23 +1514,6 @@ print('Many: Start');
 
     // VERY data specific...
     if (tags.covered == 'arcade' && tags.railway) attrs.F_CODE = 'AN010'; // Railway
-
-    // Some tags imply that they are buildings but don't actually say so.
-    // Most of these are taken from raw OSM and the OSM Wiki
-    // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
-    // are not buildings.
-    // Taking "place_of_worship" out of this and making it a building
-    var notBuildingList = [
-      'artwork','atm','bbq','bench','bicycle_parking','bicycle_rental','biergarten','boat_sharing','car_sharing',
-      'charging_station','clock','compressed_air','dog_bin','dog_waste_bin','drinking_water','emergency_phone',
-      'ferry_terminal','fire_hydrant','fountain','game_feeding','grass_strip','grit_bin','hunting_stand','hydrant',
-      'life_ring','loading_dock','nameplate','park','parking','parking_entrance','parking_space','picnic_table',
-      'post_box','recycling','street_light','swimming_pool','taxi','trailer_park','tricycle_station','vending_machine',
-      'waste_basket','waste_disposal','water','water_point','watering_place','yes',
-      'fuel' // NOTE: Fuel goes to a different F_CODE
-    ]; // End notBuildingList
-
-    if (!(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
     // going out on a limb and processing OSM specific tags:
     // - Building == a thing,
@@ -1593,6 +1676,10 @@ print('Many: Start');
       delete tags.landuse;
       break;
 
+    case 'farmland':
+      if (tags.crop == 'fruit_tree') tags.landuse = 'orchard';
+      break;
+
     case 'grass':
       tags.natural = 'grassland';
       tags['grassland:type'] = 'grassland';
@@ -1618,11 +1705,28 @@ print('Many: Start');
         tags.industrial = 'hydrocarbons_field';
         delete tags.landuse;
         break;
+
+      case 'hydrocarbons_field':
+        delete tags.landuse;
+        break;
+
+      case 'refinery':
+        delete tags.landuse;
+        break;
       }
       break;
 
     case 'military':
-      tags.military = 'installation';
+      if (tags.military !== 'range') tags.military = 'installation';
+      delete tags.landuse;
+      break;
+
+    case 'railway':
+      if (tags['railway:yard'] == 'marshalling_yard') attrs.F_CODE = 'AN060';
+      break;
+
+    case 'reservoir':
+      tags.water = 'reservoir';
       delete tags.landuse;
       break;
 
@@ -1637,6 +1741,10 @@ print('Many: Start');
       tags.landuse = 'built_up_area';
       break;
 
+    case 'scrub':
+      tags.natural = 'scrub';
+      delete tags.landuse;
+      break;
     } // End switch landuse
 
     // Places, localities and regions
@@ -1796,6 +1904,24 @@ print('Many: Start');
         }
       }
     } // End find F_CODE
+
+
+    // Some tags imply that they are buildings but don't actually say so.
+    // Most of these are taken from raw OSM and the OSM Wiki
+    // Not sure if the list of amenities that ARE buildings is shorter than the list of ones that
+    // are not buildings.
+    // Taking "place_of_worship" out of this and making it a building
+    var notBuildingList = [
+      'artwork','atm','bbq','bench','bicycle_parking','bicycle_rental','biergarten','boat_sharing','car_sharing',
+      'charging_station','clock','compressed_air','dog_bin','dog_waste_bin','drinking_water','emergency_phone',
+      'ferry_terminal','fire_hydrant','fountain','game_feeding','grass_strip','grit_bin','hunting_stand','hydrant',
+      'life_ring','loading_dock','nameplate','park','parking','parking_entrance','parking_space','picnic_table',
+      'post_box','recycling','street_light','swimming_pool','taxi','trailer_park','tricycle_station','vending_machine',
+      'waste_basket','waste_disposal','water','water_point','watering_place','yes',
+      'fuel' // NOTE: Fuel goes to a different F_CODE
+    ]; // End notBuildingList
+
+    if (!attrs.F_CODE && !tags.facility && tags.amenity && !tags.building && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
     // If we still don't have an FCODE, try looking for individual elements
     if (!attrs.F_CODE)
@@ -2147,6 +2273,9 @@ print('Many: Start');
     // - Fix the "highway=" stuff that cant be done in the one2one rules
     if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
     {
+      // Tag preservation
+      if (tags.highway == 'road') notUsedTags.highway = 'road';
+
       // If we havent fixed up the road type/class, have a go with the
       // highway tag.
       if (!attrs.RTY && !attrs.RIN_ROI)
@@ -2217,7 +2346,7 @@ print('Many: Start');
       if ((attrs.LOC && attrs.LOC !== '44') && (attrs.SBB && attrs.SBB == '1000')) attrs.RLE = '998';
 
       // Road condition
-      if (!attrs.PCF) attrs.PCF = '2'; // Intact
+      // if (!attrs.PCF) attrs.PCF = '2'; // Intact
     } // End AP030 || AQ075
 
     // RLE vs LOC: Need to deconflict this for various features.
@@ -2442,7 +2571,6 @@ print('Many: Start');
       // Segregate the "Output" list from the common list. We use this to try and preserve the tags that give a many-to-one
       // translation to an FCode
       tds70.fcodeLookupOut = translate.createBackwardsLookup(tds70.rules.fcodeOne2oneOut);
-
       // Debug
       // translate.dumpOne2OneLookup(tds70.fcodeLookup);
     }
@@ -2456,7 +2584,6 @@ print('Many: Start');
       tds70.rules.one2one.push.apply(tds70.rules.one2one,tds70.rules.one2oneIn);
 
       tds70.lookup = translate.createLookup(tds70.rules.one2one);
-
       // Debug
       // translate.dumpOne2OneLookup(tds70.lookup);
     }
@@ -2481,6 +2608,7 @@ print('Many: Start');
     // Use the FCODE to add some tags
     if (attrs.F_CODE)
     {
+      print('F_CODE: ' + attrs.F_CODE);
       var ftag = tds70.fcodeLookup['F_CODE'][attrs.F_CODE];
       if (ftag)
       {

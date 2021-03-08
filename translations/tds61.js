@@ -725,7 +725,7 @@ tds61 = {
     } // End process tags.note
 
     // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
-    if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
+    if ((attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') && !tags.highway) // Road & Ice Road
     {
       // Set a Default: "It is a road but we don't know what it is"
       tags.highway = 'road';
@@ -777,6 +777,8 @@ tds61 = {
       }
     } // End if AP030
 
+    // Remove a default
+    if (tags.highway == 'road' && tags['ref:road:class'] == 'local') delete tags['ref:road:class'];
 
     // New TDSv61 Attribute - ROR (Road Interchange Ramp)
     if (tags.highway && tags.interchange_ramp == 'yes')
@@ -821,7 +823,7 @@ tds61 = {
         ['t.desert_surface','t.surface = t.desert_surface; delete t.desert_surface'],
         ['t.dock && !(t.waterway)','t.waterway = "dock"'],
         ['t.drive_in == "yes"','t.amenity = "cinema"'],
-        //             ["t['generator:source']","t.power = 'generator'"],
+        ["t['generator:source']","t.power = 'generator'"],
         ['t["glacier:type"] == "icecap" && t.natural == "glacier"','delete t.natural'],
         ['t.golf == "driving_range" && !(t.leisure)','t.leisure = "golf_course"'],
         ['t.historic == "castle" && !(t.ruins) && !(t.building)','t.building = "yes"'],
@@ -833,7 +835,7 @@ tds61 = {
         ['t.natural =="spring" && t["spring:type"] == "spring"','delete t["spring:type"]'],
         //["t.on_bridge == 'yes' && !(t.bridge)","t.bridge = 'yes'; delete t.on_bridge"],
         ['t.public_transport == "station" && t["transport:type"] == "railway"','t.railway = "station"'],
-        ['t.public_transport == "station" && t["transport:type"] == "bus"','t.bus = "yes"'],
+        // ['t.public_transport == "station" && t["transport:type"] == "bus"','t.bus = "yes"'],
         ['t.product && t.man_made == "storage_tank"','t.content = t.product; delete t.product'],
         ['t.protect_class && !(t.boundary)','t.boundary = "protected_area"'],
         ['t.pylon =="yes" && t["cable:type"] == "cableway"',' t.aerialway = "pylon"'],
@@ -947,6 +949,24 @@ tds61 = {
     case undefined: // Break early if no value. Should not get here.....
       break;
 
+    case 'AA052': // Fix oil/gas/petroleum fields
+      tags.landuse = 'industrial';
+
+      switch (tags.product)
+      {
+      case undefined:
+        break;
+
+      case 'gas':
+        tags.industrial = 'gas';
+        break;
+
+      case 'petroleum':
+        tags.industrial = 'oil';
+        break;
+      }
+      break;
+
     case 'AA054': // Non-water Well
       if (tags.product)
       {
@@ -958,18 +978,15 @@ tds61 = {
       }
       break;
 
-    case 'AP010': // Track
-    case 'AP050': // Trail
-        tags.seasonal = 'fair';
+      case 'AF030': // Cooling Tower
+        if (!tags['tower:type']) tags['tower:type'] = 'cooling';
         break;
 
-    case 'AP020':
-      if (! tags.junction) tags.junction = 'yes';
-      break;
-
-    case 'AQ040':
-      if (! tags.bridge) tags.bridge = 'yes';
-      break;
+      case 'AK030': // Amusement Park
+        // F_CODE translation == tourism but FFN translation could be leisure
+        // E.g. water parks
+        if (tags.leisure && tags.tourism) delete tags.tourism;
+        break;
 
     case 'AL020': // Fix landuse tags
       switch (tags.use) // Fixup the landuse tags
@@ -994,29 +1011,17 @@ tds61 = {
       } // End switch
       break;
 
-    case 'AA052': // Fix oil/gas/petroleum fields
-      tags.landuse = 'industrial';
-
-      switch (tags.product)
-      {
-      case undefined:
+    case 'AP010': // Track
+    case 'AP050': // Trail
+        tags.seasonal = 'fair';
         break;
 
-      case 'gas':
-        tags.industrial = 'gas';
-        break;
-
-      case 'petroleum':
-        tags.industrial = 'oil';
-        break;
-      }
+    case 'AP020':
+      if (! tags.junction) tags.junction = 'yes';
       break;
 
-      // AK030 - Amusement Parks
-      // F_CODE translation == tourism but FFN translation could be leisure
-      // E.g. water parks
-    case 'AK030':
-      if (tags.leisure && tags.tourism) delete tags.tourism;
+    case 'AQ040':
+      if (! tags.bridge) tags.bridge = 'yes';
       break;
 
     case 'BA040': // Tidal Water
@@ -1027,6 +1032,19 @@ tds61 = {
       // This leaves us with just "natural=water"
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
       break;
+
+    // case 'AQ125': // Transportation Station
+    //   if (tags.amenity == 'ferry_terminal')
+    //   {
+    //     tags['transport:type'] = 'maritime';
+    //     delete tags.bus;
+    //   }
+    //   if (!tags.amenity)
+    //   {
+    //     tags.bus = 'yes';
+    //     tags.amenity = 'bus_station';
+    //   }
+    //   break;
 
     case 'BH140':
       if (! tags.waterway) tags.waterway = 'river';
@@ -1043,6 +1061,10 @@ tds61 = {
         tags.natural = 'tree_row';
       }
       break;
+
+      case 'FA015': // Firing Range
+        if (! tags.landuse) tags.landuse = 'military';
+        break;
 
       case 'FA012': // Contaminated Area
       case 'AL065': // Minefield
@@ -1269,7 +1291,7 @@ tds61 = {
     if (tags.military == 'bunker')
     {
       // Making a guess that these are military...
-      if (! tags.operator) tags.operator = 'military';
+      // if (! tags.operator) tags.operator = 'military';
 
       if (tags['bunker_type'] == 'munitions')
       {
@@ -1333,6 +1355,43 @@ tds61 = {
       }
     } // End cycleList
 
+    // SOme highway cleanup
+    switch (tags.highway)
+    {
+      case undefined:
+        break;
+
+      case 'bus_stop':
+        tags["transport:type"] = 'bus';
+        break;
+
+      case 'crossing':
+      case 'give-way':
+      case 'stop':
+        // Special type of crossing
+        if (tags.crossing == 'tank')
+        {
+          attrs.F_CODE = 'AP056';
+          break;
+        }
+        tags['transport:type'] = 'road';
+        attrs.F_CODE = 'AQ062';
+        delete tags.highway;
+        break;
+
+      case 'mini_roundabout':
+        tags.junction = 'roundabout';
+        break;
+        // ['t.highway == "steps"','t.highway = "footway"'],
+    } // End Highway cleanup
+
+
+    // Ice roads are a special case.
+    if (tags.ice_road == 'yes')
+    {
+      attrs.F_CODE = 'AQ075';
+      if (tags.highway == 'road') delete tags.highway;
+    }
 
     if (tds61.tdsPreRules == undefined)
     {
@@ -1377,7 +1436,7 @@ tds61 = {
         ['t.power == "pole"','t["cable:type"] = "power"; t["tower:shape"] = "pole"'],
         ['t.power == "tower"','t["cable:type"] = "power"; t.pylon = "yes"; delete t.power'],
         ['t.power == "line"','t["cable:type"] = "power"; t.cable = "yes"; delete t.power'],
-        ['t.power == "generator"','t.use = "power_generation"; a.F_CODE = "AL013"'],
+        // ['t.power == "generator"','t.use = "power_generation"; a.F_CODE = "AL013"'],
         ['t.rapids == "yes"','t.waterway = "rapids"; delete t.rapids'],
         ['t.railway == "station"','t.public_transport = "station";  t["transport:type"] = "railway"'],
         ['t.railway == "level_crossing"','t["transport:type"] = "railway";t["transport:type:2"] = "road"; a.F_CODE = "AQ062"; delete t.railway'],
@@ -1406,6 +1465,66 @@ tds61 = {
       if (tds61.tdsPreRules[i][0](tags)) tds61.tdsPreRules[i][1](tags,attrs);
     }
 
+    // Fix Keeps and Martello Towers
+    if (tags.defensive)
+    {
+      tags.military = 'bunker';
+      delete tags['tower:type'];
+      delete tags.man_made;
+    }
+
+    // Aircraft Shelters
+    if (tags.bunker_type == 'hardened_aircraft_shelter') attrs.F_CODE = 'GB250';
+
+    // Towers
+    if (tags['tower:type'] && tags.man_made == 'tower')
+    {
+      switch(tags['tower:type'])
+      {
+        case 'minaret':
+          // Debug
+          // print('Got Minaret');
+          delete tags.man_made;
+          break;
+
+        case 'cooling':
+          delete tags.man_made;
+          break;
+
+        case 'light':
+          delete tags.man_made;
+          break;
+      }
+    }
+
+    // Wind Turbines, Solar Panels etc  vs power plants
+    if (tags['generator:source'])
+    {
+      delete tags.power;
+    }
+    else if (tags.power == 'generator')
+    {
+      attrs.F_CODE = 'AL013';
+      tags.use = 'power_generation';
+    }
+
+    // Cranes
+    if (tags.man_made == 'crane')
+    {
+      attrs.F_CODE = 'AF040'; // Crane
+      if (tags.railway) tags['transport:type'] = 'railway';
+      if (tags.highway) tags['transport:type'] = 'road';
+    } // End Cranes
+
+  // Fix up bus stations
+    if (tags.amenity == 'bus_station' || tags.bus == 'yes')
+    {
+      delete tags.amenity;
+      delete tags.bus;
+      tags['transport:type'] = 'road'; // Bus is not valid on AQ125
+      tags.use = 'road_transport';
+    }
+
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
     {
@@ -1421,14 +1540,22 @@ tds61 = {
       delete tags.barrier; // Take away the walls...
     }
 
-    // Fix Keeps and Martello Towers
-    if (tags.defensive)
+    // Railways and other features
+    if (tags.building == 'yes' && tags.railway == 'rail')
     {
-      tags.military = 'bunker';
-      delete tags['tower:type'];
-      delete tags.man_made;
+      delete tags.railway;
+      attrs.FFN = '490'; // Railway Transport
     }
 
+    // Area Embankments can't be transportation features as well.
+    if (tags.embankment == 'yes' && geometryType == 'Area')
+    {
+      // Hot sure if we should delete highway features as well. Have not seen any in the data so far.
+      delete tags.railway;
+    }
+
+    // VERY data specific...
+    if (tags.covered == 'arcade' && tags.railway) attrs.F_CODE = 'AN010'; // Railway
 
     // going out on a limb and processing OSM specific tags:
     // - Building == a thing,
@@ -1570,12 +1697,6 @@ tds61 = {
       tags.condition = 'destroyed';
       break;
 
-    // case 'commercial':
-    case 'retail':
-      tags.use = 'commercial';
-      tags.landuse = 'built_up_area';
-      break;
-
     case 'construction':
       tags.condition = 'construction';
       tags.landuse = 'built_up_area';
@@ -1617,11 +1738,19 @@ tds61 = {
         tags.industrial = 'hydrocarbons_field';
         delete tags.landuse;
         break;
+
+      case 'hydrocarbons_field':
+        delete tags.landuse;
+        break;
+
+      case 'refinery':
+        delete tags.landuse;
+        break;
       }
       break;
 
     case 'military':
-      tags.military = 'installation';
+      if (tags.military !== 'range') tags.military = 'installation';
       delete tags.landuse;
       break;
 
@@ -1631,9 +1760,29 @@ tds61 = {
       delete tags.landuse;
       break;
 
+    case 'railway':
+      if (tags['railway:yard'] == 'marshalling_yard') attrs.F_CODE = 'AN060';
+      break;
+
+    case 'reservoir':
+      tags.water = 'reservoir';
+      delete tags.landuse;
+      break;
+
     case 'residential':
       tags.use = 'residential';
       tags.landuse = 'built_up_area';
+      break;
+
+    // case 'commercial':
+    case 'retail':
+      tags.use = 'commercial';
+      tags.landuse = 'built_up_area';
+      break;
+
+    case 'scrub':
+      tags.natural = 'scrub';
+      delete tags.landuse;
       break;
 
     } // End switch landuse
@@ -1750,6 +1899,13 @@ tds61 = {
       tags.location = 'underwater';
     }
 
+    // Railway Crossings.
+    if (tags.railway == 'crossing_box')
+    {
+      // Push this to Crossing but try and keep the tags
+      attrs.F_CODE = 'AQ062'; // Crossing
+    }
+
     // "service = parking_aisle" is actually the road between rows of car spaces.
     // If this is a line: make it into a road - the default
     // If this is an area: make it into a car park.
@@ -1802,7 +1958,7 @@ tds61 = {
       'fuel' // NOTE: Fuel goes to a different F_CODE
     ]; // End notBuildingList
 
-    if (!(attrs.F_CODE) && !(tags.facility) && tags.amenity && !(tags.building) && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
+    if (!attrs.F_CODE && !tags.facility && tags.amenity && !tags.building && (notBuildingList.indexOf(tags.amenity) == -1)) attrs.F_CODE = 'AL013';
 
     // If we still don't have an FCODE, try looking for individual elements
     if (!attrs.F_CODE)
@@ -2146,14 +2302,14 @@ tds61 = {
       }
     }
 
-    // Preserveing a highway value
-    if (tags.highway == 'road') notUsedTags.highway = 'road';
-
     // Rules for specific F_CODES
     switch (attrs.F_CODE)
     {
     case 'AP030': // Road
     case 'AQ075': // Ice Road
+      // Preserveing a highway value
+      if (tags.highway == 'road') notUsedTags.highway = 'road';
+
       // Fix the "highway=" stuff that cant be done in the one2one rules
       // If we havent fixed up the road type/class, have a go with the
       // highway tag
@@ -2316,20 +2472,33 @@ tds61 = {
       }
     } // End for GE4 loop
 
-    //Map alternate source date tags to ZI001_SDV in order of precedence
-    //default is 'source:datetime'
-    if (! attrs.ZI001_SDV)
-      attrs.ZI001_SDV = tags['source:imagery:datetime']
-                || tags['source:date']
-                || tags['source:geometry:date']
-                || '';
 
-    //Map alternate source tags to ZI001_SDP in order of precedence
-    //default is 'source'
-    if (! attrs.ZI001_SDP)
-      attrs.ZI001_SDP = tags['source:imagery']
-                || tags['source:description']
-                || '';
+    // ZI039 Entity Collection Metadata is the only feature that has a ZI001_SDP attribute
+    if (attrs.F_CODE == 'ZI039')
+    {
+      //Map alternate source date tags to ZI001_SDV in order of precedence
+      //default is 'source:datetime'
+      if (!attrs.ZI001_SDV)
+        attrs.ZI001_SDV = tags['source:imagery:datetime']
+                  || tags['source:date']
+                  || tags['source:geometry:date']
+                  || '';
+
+    // Map alternate source tags to ZI001_SDP in order of precedence
+    // default is 'source'
+      if (!attrs.ZI001_SDP)
+      {
+        attrs.ZI001_SDP = tags['source:imagery']
+                  || tags['source:description']
+                  || '';
+      }
+    }
+    else if (attrs.ZI001_SDP)
+    {
+      // Push to not used and drop the attribute
+      notUsedTags.source = attrs.ZI001_SDP;
+      delete attrs.ZI001_SDP;
+    }
 
     // Wetlands
     // Normally, these go to Marsh
@@ -2345,15 +2514,24 @@ tds61 = {
     } // End Wetlands
 
     // Undergrowth Density in is not in Brush (EB070)
-    if (attrs.F_CODE !== 'EB070' && notUsedTags['undergrowth:density'])
-    {
-      if (!(attrs.DMBL || attrs.DMBU))
+    // if (attrs.F_CODE !== 'EB070' && notUsedTags['undergrowth:density'])
+    // {
+    //   if (notUsedTags['undergrowth:density'] && !(attrs.DMBL || attrs.DMBU))
+    //   {
+    //     attrs.DMBU = notUsedTags['undergrowth:density'];
+    //     attrs.DMBL = notUsedTags['undergrowth:density'];
+    //     delete notUsedTags['undergrowth:density'];
+    //   }
+    // }
+      if (notUsedTags['undergrowth:density'] && !(attrs.DMBL || attrs.DMBU))
       {
         attrs.DMBU = notUsedTags['undergrowth:density'];
         attrs.DMBL = notUsedTags['undergrowth:density'];
         delete notUsedTags['undergrowth:density'];
       }
-    }
+
+
+
   }, // End applyToOgrPostProcessing
 
   // #####################################################################################################

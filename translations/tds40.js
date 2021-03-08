@@ -771,7 +771,7 @@ cleanAttrs : function (attrs)
         ['t.control_tower == "yes" && t.use == "air_traffic_control"','t["tower:type"] = "observation"'],
         ['t.desert_surface','t.surface = t.desert_surface; delete t.desert_surface'],
         ['t.diplomatic && !(t.amenity)','t.amenity = "embassy"'],
-        ['t["generator:source"] == "wind"','t.power = "generator"'],
+        ['t["generator:source"]','t.power = "generator"'],
         ['t.historic == "castle" && !(t.ruins) && !(t.building)','t.building = "yes"'],
         ['t.defensive','t.man_made = "tower";t["tower:type"] = "defensive"'],
         ['(t.landuse == "built_up_area" || t.place == "settlement") && t.building','t["settlement:type"] = t.building; delete t.building'],
@@ -781,7 +781,7 @@ cleanAttrs : function (attrs)
         ['t.natural =="spring" && t["spring:type"] == "spring"','delete t["spring:type"]'],
         ['t.product && t.man_made == "storage_tank"','t.content = t.product; delete t.product'],
         ['t.public_transport == "station" && t["transport:type"] == "railway"','t.railway = "station"'],
-        ['t.public_transport == "station" && t["transport:type"] == "bus"','t.bus = "yes"'],
+        // ['t.public_transport == "station" && t["transport:type"] == "bus"','t.bus = "yes"'],
         ['t.pylon =="yes" && t["cable:type"] == "cableway"',' t.aerialway = "pylon"'],
         ['t.pylon =="yes" && t["cable:type"] == "power"',' t.power = "tower"'],
         ['t.service == "yard"','t.railway = "yes"'],
@@ -823,7 +823,8 @@ cleanAttrs : function (attrs)
       }
       break;
 
-    case 'AP030':
+    case 'AP030': // Road
+    case 'AQ075': // Ice Route
       /* Now sort out Roads
                 HCT, TYP, RTY etc are related. No easy way to use one2one rules
 
@@ -837,6 +838,9 @@ cleanAttrs : function (attrs)
                 HCT -> RTN_ROI -> RIN_ROI -> RIN_ROI
                 TYP -> TYP     -> RTY     -> RTY
                 */
+
+      // Skip this if we already have a highway tag
+      if (tags.highway) break;
 
       // Set a Default: "It is a road but we don't know what it is"
       tags.highway = 'road';
@@ -897,7 +901,6 @@ cleanAttrs : function (attrs)
         tags.highway = 'residential';
         break;
       }
-
       // If we get this far then we are going with the default.
       break;
 
@@ -916,6 +919,10 @@ cleanAttrs : function (attrs)
         break;
       }
       break;
+
+      case 'AF030': // Cooling Tower
+        if (!tags['tower:type']) tags['tower:type'] = 'cooling';
+        break;
 
       // AK030 - Amusement Parks
       // F_CODE translation == tourism but FFN translation could be leisure
@@ -960,6 +967,9 @@ cleanAttrs : function (attrs)
         break;
     } // End switch F_CODE
 
+    // Remove a default
+    if (tags.highway == 'road' && tags['ref:road:class'] == 'local') delete tags['ref:road:class'];
+
     // Road & Railway Crossings
     // Road/Rail = crossing
     // Road + Rail = level_crossing
@@ -987,7 +997,6 @@ cleanAttrs : function (attrs)
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
     if (attrs.F_CODE == 'AH055' && !(tags.building)) tags.building = 'bunker';
-
     if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
 
     if (tags.building == 'yes')
@@ -1282,7 +1291,7 @@ cleanAttrs : function (attrs)
     if (tags.military == 'bunker')
     {
       // Making a guess that these are military...
-      if (! tags.operator) tags.operator = 'military';
+      // if (! tags.operator) tags.operator = 'military';
 
       if (tags['bunker_type'] == 'munitions')
       {
@@ -1346,12 +1355,49 @@ cleanAttrs : function (attrs)
       }
     } // End cycleList
 
+    // SOme highway cleanup
+    switch (tags.highway)
+    {
+      case undefined:
+        break;
+
+      case 'bus_stop':
+        tags["transport:type"] = 'bus';
+        break;
+
+      case 'crossing':
+      case 'give-way':
+      case 'stop':
+        // Special type of crossing
+        if (tags.crossing == 'tank')
+        {
+          attrs.F_CODE = 'AP056';
+          break;
+        }
+        tags['transport:type'] = 'road';
+        attrs.F_CODE = 'AQ062';
+        delete tags.highway;
+        break;
+
+      case 'mini_roundabout':
+        tags.junction = 'roundabout';
+        break;
+        // ['t.highway == "steps"','t.highway = "footway"'],
+    } // End Highway cleanup
+
+    // Ice Route is a special case
+    // Ice roads are a special case.
+    if (tags.ice_road == 'yes')
+    {
+      attrs.F_CODE = 'AQ075';
+      if (tags.highway == 'road') delete tags.highway;
+    }
 
     if (tds40.PreRules == undefined)
     {
       // See ToOsmPostProcessing for more details about rulesList
       var rulesList = [
-        ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
+        // ['t.amenity == "bus_station"','t.public_transport = "station"; t["transport:type"] = "bus"'],
         // ["t.amenity == 'marketplace'","t.facility = 'yes'"],
         ['t.barrier == "tank_trap" && t.tank_trap == "dragons_teeth"','t.barrier = "dragons_teeth"; delete t.tank_trap'],
         ['t.boundary == "hazard" && t.hazard','delete t.boundary'],
@@ -1370,10 +1416,6 @@ cleanAttrs : function (attrs)
         ['t.historic == "castle" && t.building','delete t.building'],
         ['t.historic == "castle" && t.ruins == "yes"','t.condition = "destroyed"; delete t.ruins'],
         ['t.landcover == "snowfield" || t.landcover == "ice-field"','a.F_CODE = "BJ100"'],
-        ['t.landuse == "farmland" && t.crop == "fruit_tree"','t.landuse = "orchard"'],
-        ['t.landuse == "railway" && t["railway:yard"] == "marshalling_yard"','a.F_CODE = "AN060"'],
-        ['t.landuse == "reservoir"','t.water = "reservoir"; delete t.landuse'],
-        ['t.landuse == "scrub"','t.natural = "scrub"; delete t.landuse'],
         ['t.launch_pad','delete t.launch_pad; t.aeroway="launchpad"'],
         ['t.leisure == "recreation_ground"','t.landuse = "recreation_ground"; delete t.leisure'],
         ['t.leisure == "sports_centre"','t.facility = "yes"; t.use = "recreation"; delete t.leisure'],
@@ -1388,7 +1430,6 @@ cleanAttrs : function (attrs)
         ['t.power == "pole"','t["cable:type"] = "power";t["tower:shape"] = "pole"'],
         ['t.power == "tower"','t["cable:type"] = "power"; t.pylon = "yes"; delete t.power'],
         ['t.power == "line"','t["cable:type"] = "power", t.cable = "yes"; delete t.power'],
-        ['t.power == "generator"','t.use = "power_generation"; a.F_CODE = "AL013"'],
         ['t.rapids == "yes"','t.waterway = "rapids"; delete t.rapids'],
         ['t.railway == "station"','t.public_transport = "station";  t["transport:type"] = "railway"'],
         ['t.railway == "level_crossing"','t["transport:type"] = "railway";t["transport:type:2"] = "road"; a.F_CODE = "AQ062"; delete t.railway'],
@@ -1425,6 +1466,48 @@ cleanAttrs : function (attrs)
       delete tags.man_made;
     }
 
+    // Aircraft Shelters
+    if (tags.bunker_type == 'hardened_aircraft_shelter') attrs.F_CODE = 'GB250';
+
+    // Towers
+    if (tags['tower:type'] && tags.man_made == 'tower')
+    {
+      switch(tags['tower:type'])
+      {
+        case 'minaret':
+          // Debug
+          // print('Got Minaret');
+          delete tags.man_made;
+          break;
+
+        case 'cooling':
+          delete tags.man_made;
+          break;
+
+        case 'light':
+          delete tags.man_made;
+          break;
+      }
+    }
+
+    // Wind Turbines, Solar Panels etc  vs power plants
+    if (tags['generator:source'])
+    {
+      delete tags.power;
+    }
+    else if (tags.power == 'generator')
+    {
+      attrs.F_CODE = 'AL013';
+      tags.use = 'power_generation';
+    }
+
+  // Fix up bus,train & ferry stations
+    if (tags.amenity == 'bus_station')
+    {
+      // delete tags.amenity;
+      tags['transport:type'] = 'road'; // Bus is not valid on AQ125
+      tags.use = 'road_transport';
+    }
 
     // Fix up OSM 'walls' around facilities
     if ((tags.barrier == 'wall' || tags.barrier == 'fence') && geometryType == 'Area')
@@ -1581,12 +1664,6 @@ cleanAttrs : function (attrs)
       tags.condition = 'destroyed';
       break;
 
-    // case 'commercial':
-    case 'retail':
-      tags.use = 'commercial';
-      tags.landuse = 'built_up_area';
-      break;
-
     case 'construction':
       tags.condition = 'construction';
       tags.landuse = 'built_up_area';
@@ -1601,6 +1678,10 @@ cleanAttrs : function (attrs)
       tags.facility = 'yes';
       tags.use = 'agriculture';
       delete tags.landuse;
+      break;
+
+    case 'farmland':
+      if (tags.crop == 'fruit_tree') tags.landuse = 'orchard';
       break;
 
     case 'grass':
@@ -1628,11 +1709,19 @@ cleanAttrs : function (attrs)
         tags.industrial = 'hydrocarbons_field';
         delete tags.landuse;
         break;
+
+      case 'hydrocarbons_field':
+        delete tags.landuse;
+        break;
+
+      case 'refinery':
+        delete tags.landuse;
+        break;
       }
       break;
 
     case 'military':
-      tags.military = 'installation';
+      if (tags.military !== 'range') tags.military = 'installation';
       delete tags.landuse;
       break;
 
@@ -1642,11 +1731,30 @@ cleanAttrs : function (attrs)
       delete tags.landuse;
       break;
 
+    case 'railway':
+      if (tags['railway:yard'] == 'marshalling_yard') attrs.F_CODE = 'AN060';
+      break;
+
+    case 'reservoir':
+      tags.water = 'reservoir';
+      delete tags.landuse;
+      break;
+
     case 'residential':
       tags.use = 'residential';
       tags.landuse = 'built_up_area';
       break;
 
+    // case 'commercial':
+    case 'retail':
+      tags.use = 'commercial';
+      tags.landuse = 'built_up_area';
+      break;
+
+    case 'scrub':
+      tags.natural = 'scrub';
+      delete tags.landuse;
+      break;
     } // End switch landuse
 
     // Places, localities and regions
@@ -1713,9 +1821,6 @@ cleanAttrs : function (attrs)
       } // End switch
     }
 
-    // Ice Route is a special case
-    if (tags.ice_route == 'yes') attrs.F_CODE = 'AQ075';
-
     // Bridges & Roads.  If we have an area or a line everything is fine
     // If we have a point, we need to make sure that it becomes a bridge, not a road
     if (tags.bridge && tags.bridge !== 'no' && geometryType =='Point') attrs.F_CODE = 'AQ040';
@@ -1755,6 +1860,13 @@ cleanAttrs : function (attrs)
       delete tags.man_made;
       tags.cable = 'yes';
       tags.location = 'underwater';
+    }
+
+    // Railway Crossings.
+    if (tags.railway == 'crossing_box')
+    {
+      // Push this to Crossing but try and keep the tags
+      attrs.F_CODE = 'AQ062'; // Crossing
     }
 
     // "service = parking_aisle" is actually the road between rows of car spaces.
