@@ -82,7 +82,7 @@ void AddAttributesVisitor::setConfiguration(const Settings& conf)
 
 void AddAttributesVisitor::visit(const std::shared_ptr<Element>& e)
 {
-  if (_criteria.size() > 0 && !_criteriaSatisfied(e))
+  if (!_criteria.empty() && !_criteriaSatisfied(e))
   {
     LOG_TRACE("Element did not satisfy criteria: " << e->getElementId() << ". Skipping...");
     return;

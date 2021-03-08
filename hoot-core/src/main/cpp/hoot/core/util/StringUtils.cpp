@@ -183,7 +183,7 @@ QSet<QString> StringUtils::getDuplicates(const QStringList& input)
 bool StringUtils::containsSubstring(const QStringList& input, const QString& substring,
                                     Qt::CaseSensitivity caseSensitivity)
 {
-  return input.filter(substring, caseSensitivity).size() > 0;
+  return !input.filter(substring, caseSensitivity).empty();
 }
 
 bool StringUtils::containsSubstrings(const QStringList& input, const QStringList& substrings,
@@ -191,7 +191,7 @@ bool StringUtils::containsSubstrings(const QStringList& input, const QStringList
 {
   for (int i = 0; i < substrings.size(); i++)
   {
-    if (input.filter(substrings.at(i), caseSensitivity).size() > 0)
+    if (!input.filter(substrings.at(i), caseSensitivity).empty())
     {
       return true;
     }
@@ -329,7 +329,7 @@ void StringUtils::splitAndRemoveAtIndex(QString& input, const QRegExp& splitExp,
 QString StringUtils::_splitAndRemoveAtIndex(QStringList& input, const int index,
                                             const QString& separator)
 {
-  if (input.size() > 0 && index < input.size())
+  if (!input.empty() && index < input.size())
   {
     input.removeAt(index);
   }

@@ -271,7 +271,7 @@ void OsmJsonWriter::_write(const QString& str, bool newLine)
 
 bool OsmJsonWriter::_hasTags(const ConstElementPtr& e)
 {
-  return e->getTags().size() > 0 ||
+  return !e->getTags().empty() ||
          e->getElementType() != ElementType::Node ||
         (e->getCircularError() >= 0 && e->getTags().getInformationCount() > 0) ||
          _includeDebug;
@@ -302,7 +302,7 @@ void OsmJsonWriter::_writeTags(const ConstElementPtr& e)
 
   bool firstTag = true;
   const Tags& tags = eClone->getTags();
-  if (tags.size() > 0)
+  if (!tags.empty())
   {
     for (Tags::const_iterator it = tags.constBegin(); it != tags.constEnd(); ++it)
     {

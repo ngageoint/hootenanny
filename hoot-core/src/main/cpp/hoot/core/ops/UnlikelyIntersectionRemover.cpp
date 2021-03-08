@@ -146,13 +146,8 @@ void UnlikelyIntersectionRemover::_evaluateAndSplit(long intersectingNode, const
     }
   }
 
-  // If all ways are in the first group, we're done.
-  if (g2.size() == 0)
-  {
-    // pass
-  }
-  // Otherwise, split the intersection into two groups.
-  else
+  // If all ways aren't in the first group, split the intersection into two groups
+  if (!g2.empty())
   {
     _numAffected = g2.size();
     LOG_TRACE("Splitting intersection for ways: " << g2 << " at node " << intersectingNode);

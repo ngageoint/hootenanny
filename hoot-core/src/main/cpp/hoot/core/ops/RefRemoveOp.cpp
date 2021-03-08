@@ -123,7 +123,7 @@ public:
     if (e->getTags().contains(MetadataTags::Ref2()))
     {
       QStringList ref2 = _removeRef1(e->getTags().getList(MetadataTags::Ref2()));
-      if (ref2.size() == 0)
+      if (ref2.empty())
       {
         e->getTags().set(MetadataTags::Ref2(), "none");
       }

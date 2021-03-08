@@ -146,7 +146,7 @@ void RemoveInvalidMultilineStringMembersVisitor::visit(const ElementPtr& e)
       // Don't remove multilinestring relations that are members of a review relation
       // only contains one member that is the original multilinestring
       LOG_VART(map->getParents(r->getElementId()).size());
-      if (map->getParents(r->getElementId()).size() > 0)
+      if (!map->getParents(r->getElementId()).empty())
         return;
 
       // Copy tags from the multiline string tags to the children and remove from relation

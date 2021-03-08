@@ -62,14 +62,14 @@ public:
     for (int i = 0; i < args.size(); i++)
     {
       const QString arg = args.at(i);
-      if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && specifiedOpts.size() > 0))
+      if (specifiedOpts.contains(arg) || (supportedOpts.contains(arg) && !specifiedOpts.empty()))
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
       }
       specifiedOpts.append(arg);
     }
-    if (specifiedOpts.size() == 0)
+    if (specifiedOpts.empty())
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
@@ -93,14 +93,14 @@ public:
       {
         const QString arg = args.at(i);
         if (specifiedLangOpts.contains(arg) ||
-            (supportedLangOpts.contains(arg) && specifiedLangOpts.size() > 0))
+            (supportedLangOpts.contains(arg) && !specifiedLangOpts.empty()))
         {
           std::cout << getHelp() << std::endl << std::endl;
           throw IllegalArgumentException(QString("%1 takes a single option.").arg(getName()));
         }
         specifiedLangOpts.append(arg);
       }
-      if (specifiedLangOpts.size() == 0)
+      if (specifiedLangOpts.empty())
       {
         std::cout << getHelp() << std::endl << std::endl;
         throw IllegalArgumentException(

@@ -58,7 +58,7 @@ void RemoveInvalidReviewRelationsVisitor::visit(const ElementPtr& e)
       }
       // in case the review member count tag didn't get added for some reason, go ahead and at least
       // remove empty relations
-      else if (!hasMemberCountTag && r->getMembers().size() == 0)
+      else if (!hasMemberCountTag && r->getMembers().empty())
       {
         invalidRelation = true;
       }

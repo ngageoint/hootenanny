@@ -57,7 +57,7 @@ SqlBulkInsert::SqlBulkInsert(QSqlDatabase& db, const QString &tableName,
 SqlBulkInsert::~SqlBulkInsert()
 {
   LOG_DEBUG("(" << _tableName << ") Total time inserting: " << _time);
-  if (_pending.size() > 0)
+  if (!_pending.empty())
   {
     LOG_WARN("(" << _tableName << ") There are pending inserts in SqlBulkInsert. You should call "
              "flush before destruction.");
@@ -101,7 +101,7 @@ void SqlBulkInsert::flush()
   LOG_TRACE("Flushing bulk insert...");
   LOG_VART(_pending.size());
 
-  if (_pending.size() > 0)
+  if (!_pending.empty())
   {
     double start = Tgs::Time::getTime();
     QString sql;

@@ -91,7 +91,7 @@ void JavaScriptSchemaTranslator::setConfiguration(const Settings& conf)
 
 JavaScriptSchemaTranslator::~JavaScriptSchemaTranslator()
 {
-  if (_timing.size() != 0)
+  if (!_timing.empty())
   {
     tbs::SampleStats stats(_timing);
     LOG_TRACE("Translation script run time (ms): " << stats.toString());

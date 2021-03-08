@@ -101,7 +101,7 @@ ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString 
 
 void ScriptSchemaTranslatorFactory::_init()
 {
-  if (_translators.size() == 0)
+  if (_translators.empty())
   {
     _translators = Factory::getInstance().getObjectNamesByBase(ScriptSchemaTranslator::className());
   }

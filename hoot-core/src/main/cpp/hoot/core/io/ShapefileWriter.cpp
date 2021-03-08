@@ -108,7 +108,7 @@ ShapefileWriter::ShapefileWriter()
 
 QStringList ShapefileWriter::getColumns(ConstOsmMapPtr map, ElementType type) const
 {
-  if (_columns.size() != 0)
+  if (!_columns.empty())
   {
     return _columns;
   }

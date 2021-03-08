@@ -256,7 +256,7 @@ void TagComparator::compareEnumeratedTags(Tags t1, Tags t2, double& score,
   set<int> used1;
   set<int> used2;
 
-  while (heap.size() > 0)
+  while (!heap.empty())
   {
     e = heap.top();
     heap.pop();
@@ -367,7 +367,7 @@ void TagComparator::compareNames(const Tags& t1, const Tags& t2, double& score, 
     score /= weight;
   }
   // if this is strict checking and one entry doesn't have a name.
-  else if (strict && (n1.size() > 0) != (n2.size() > 0))
+  else if (strict && (!n1.empty()) != (!n2.empty()))
   {
     score = 0.2;
   }
@@ -622,7 +622,7 @@ void TagComparator::mergeNames(Tags& t1, Tags& t2, Tags& result,
   }
   //LOG_VART(l);
 
-  if (l.size() > 0)
+  if (!l.empty())
   {
     result.setList("alt_name", l);
   }
@@ -760,7 +760,7 @@ Tags TagComparator::replaceMerge(const Tags& t1, const Tags& t2,
   result = t1;
 
   // Now see if there are any configurd exclusions we should keep from t2.
-  if (overwriteExcludeTagKeys.size() > 0)
+  if (!overwriteExcludeTagKeys.empty())
   {
     const Qt::CaseSensitivity caseSensitivity =
       caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;

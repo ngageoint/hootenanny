@@ -102,7 +102,7 @@ void ReportMissingElementsVisitor::visit(const ConstElementPtr& e)
 
 void ReportMissingElementsVisitor::_updateWay(const WayPtr& way, const QStringList& missingChildIds)
 {
-  if ( missingChildIds.size() > 0)
+  if (!missingChildIds.empty())
   {
     if (_markWaysForReview && !ReviewMarker::isNeedsReview(_map->shared_from_this(), way))
     {
@@ -124,7 +124,7 @@ void ReportMissingElementsVisitor::_updateWay(const WayPtr& way, const QStringLi
 void ReportMissingElementsVisitor::_updateRelation(const RelationPtr& relation,
                                                    const QStringList& missingChildIds)
 {
-  if ( missingChildIds.size() > 0)
+  if (!missingChildIds.empty())
   {
     if (_markRelationsForReview &&
           !ReviewMarker::isNeedsReview(_map->shared_from_this(), relation))

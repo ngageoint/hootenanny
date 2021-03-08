@@ -103,7 +103,7 @@ void RemoveElementsVisitor::visit(const ElementPtr& e)
     return;
   }
 
-  if (_criteria.size() == 0)
+  if (_criteria.empty())
   {
     throw IllegalArgumentException("No criteria specified for RemoveElementsVisitor.");
   }

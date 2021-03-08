@@ -116,7 +116,7 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
 {
   LOG_VART(l);
   QStringList result;
-  if (l.size() == 0)
+  if (l.empty())
   {
     return result;
   }
@@ -172,7 +172,7 @@ QStringList ToEnglishDictionaryTranslator::toEnglishAll(const QStringList& l)
 
   QStringList children = toEnglishAll(l.mid(biggestMatchSize));
   LOG_VART(children);
-  if (children.size() == 0)
+  if (children.empty())
   {
     result = biggestMatch;
   }
@@ -222,7 +222,7 @@ QString ToEnglishDictionaryTranslator::translateStreet(const QString& input)
     }
   }
 
-  if (l.size() > 0 && _streetTypes.contains(l[0]))
+  if (!l.empty() && _streetTypes.contains(l[0]))
   {
     QString first = l[0];
     l.removeFirst();

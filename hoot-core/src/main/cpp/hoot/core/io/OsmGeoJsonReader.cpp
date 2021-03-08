@@ -317,7 +317,7 @@ void OsmGeoJsonReader::_parseGeoJsonNode(const string& id, const pt::ptree& prop
   vector<Coordinate> coords = _parseGeometry(geometry);
 
   // Defensive: We have seen files with empty coordinate arrays
-  if (coords.size() == 0)
+  if (coords.empty())
   {
     LOG_INFO("Empty Coordinates. Skipping feature");
     return;
@@ -361,7 +361,7 @@ void OsmGeoJsonReader::_parseGeoJsonWay(const string& id, const pt::ptree& prope
   vector<Coordinate> coords = _parseGeometry(geometry);
 
   // Defensive: We have seen files with empty coordinate arrays
-  if (coords.size() == 0)
+  if (coords.empty())
   {
     LOG_INFO("Empty Coordinates. Skipping feature");
     return;
@@ -476,7 +476,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
   string relation_type = properties.get("relation-type", "");
   relation->setType(relation_type.c_str());
 
-  if (_roles.size() == 0)
+  if (_roles.empty())
   {
     //  Get the roles and tokenize them by semicolon
     string roles_values = properties.get("roles", "");
@@ -508,7 +508,7 @@ void OsmGeoJsonReader::_parseGeoJsonRelation(const string& id, const pt::ptree& 
         pt::ptree geo = it->second;
         string type = geo.get("type", "");
         //  Make sure that there is always at least a blank role
-        if (_roles.size() == 0)
+        if (_roles.empty())
           _roles.push("");
         QString role(_roles.front().c_str());
         _roles.pop();

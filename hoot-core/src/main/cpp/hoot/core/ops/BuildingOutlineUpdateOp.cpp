@@ -115,7 +115,7 @@ public:
       const NodeToWayMap& n2w = *_map.getIndex().getNodeToWayMap();
       for (size_t i = 0; i < oldNodes.size(); i++)
       {
-        if (n2w.getWaysByNode(oldNodes[i]).size() == 0 && _map.containsNode(oldNodes[i]))
+        if (n2w.getWaysByNode(oldNodes[i]).empty() && _map.containsNode(oldNodes[i]))
         {
           RemoveNodeByEid::removeNode(_map.shared_from_this(), oldNodes[i]);
         }

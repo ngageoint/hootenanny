@@ -69,7 +69,7 @@ void RandomForestModelBuilder::build(const QStringList trainingData, QString out
     QString className = creatorParts[0];
     creatorParts.removeFirst();
     MatchCreator* mc = Factory::getInstance().constructObject<MatchCreator>(className);
-    if (creatorParts.size() > 0)
+    if (!creatorParts.empty())
     {
       mc->setArguments(creatorParts);
     }

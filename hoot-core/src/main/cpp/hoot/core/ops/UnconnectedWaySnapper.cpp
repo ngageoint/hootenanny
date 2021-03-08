@@ -375,7 +375,7 @@ void UnconnectedWaySnapper::setMinTypeMatchScore(double score)
         }
       }
 
-      if (unconnectedEndNodeIds.size() == 0)
+      if (unconnectedEndNodeIds.empty())
       {
         LOG_TRACE("No unconnected end nodes to snap for " << wayToSnap->getElementId());
       }
@@ -603,7 +603,7 @@ bool UnconnectedWaySnapper::_snapUnconnectedNodeToWayNode(const NodePtr& nodeToS
   // node belongs to.
   const QList<ElementId> wayNodesToSnapTo =
     _getNearbyFeaturesToSnapTo(nodeToSnap, ElementType::Node);
-  if (wayNodesToSnapTo.size() == 0)
+  if (wayNodesToSnapTo.empty())
   {
     LOG_TRACE(
       "No nearby way nodes to snap to for " << nodeToSnap->getElementId() <<

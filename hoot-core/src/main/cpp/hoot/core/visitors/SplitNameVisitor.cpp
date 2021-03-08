@@ -68,7 +68,7 @@ void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames)
     size += thisSize + 1;
   }
 
-  if (names.size() > 0)
+  if (!names.empty())
   {
     lastNameId = _getNextNameId(t, lastNameId);
     QString k = QString("name:%1").arg(lastNameId);

@@ -132,7 +132,7 @@ void SetTagValueVisitor::_setTag(const ElementPtr& e, const QString& k, const QS
 
   LOG_VART(e->getElementId());
 
-  if (_criteria.size() > 0 && !_criteriaSatisfied(e))
+  if (!_criteria.empty() && !_criteriaSatisfied(e))
   {
     return;
   }

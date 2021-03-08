@@ -77,7 +77,7 @@ void SearchRadiusCalculator::apply(std::shared_ptr<OsmMap>& map)
 
   // determine tie points with rubbersheeting
   const std::vector<double> tiePointDistances = _getTiePointDistances(filteredMap);
-  if (tiePointDistances.size() == 0)
+  if (tiePointDistances.empty())
   {
     // no tie points found, so use CE
     _result = _circularError;

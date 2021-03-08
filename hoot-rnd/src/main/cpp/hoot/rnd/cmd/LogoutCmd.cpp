@@ -53,7 +53,7 @@ public:
 
   virtual int runSimple(QStringList& args) override
   {
-    if (args.size() != 0)
+    if (args.empty())
     {
       std::cout << getHelp() << std::endl << std::endl;
       throw HootException(QString("%1 takes zero parameters.").arg(getName()));

@@ -460,7 +460,7 @@ cv::Mat GraphComparator::_paintGraph(OsmMapPtr map, DirectedGraph& graph, Shorte
     WayPtr w = it->second;
     LOG_VART(w.get());
     LOG_VART(w->getNodeIds().size());
-    if (w->getNodeIds().size() == 0)
+    if (w->getNodeIds().empty())
     {
       continue;
     }

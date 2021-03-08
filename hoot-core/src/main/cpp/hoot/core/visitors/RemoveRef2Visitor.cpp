@@ -79,7 +79,7 @@ _errorOnMissingRef1(false)
   // make sure we're re-entrant.
   QMutexLocker ml(&_mutex);
 
-  if (_ref2Keys.size() == 0)
+  if (_ref2Keys.empty())
   {
     _ref2Keys << MetadataTags::Ref2();
     _ref2Keys << "REVIEW";
@@ -131,7 +131,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
       }
       logWarnCount++;
       refs.removeAll(r);
-      if (refs.size() == 0 && key == MetadataTags::Ref2())
+      if (refs.empty() && key == MetadataTags::Ref2())
       {
         refs.append("none");
       }
@@ -144,7 +144,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
       {
         // remove the specified REF2 from the appropriate REF2 field.
         refs.removeAll(r);
-        if (refs.size() == 0 && key == MetadataTags::Ref2())
+        if (refs.empty() && key == MetadataTags::Ref2())
         {
           refs.append("none");
         }
@@ -152,7 +152,7 @@ void RemoveRef2Visitor::_checkAndDeleteRef2(ElementPtr e, QString key)
     }
   }
 
-  if (refs.size() > 0)
+  if (!refs.empty())
   {
     e->getTags().setList(key, refs);
   }

@@ -340,7 +340,7 @@ void MapComparator::_printIdDiff(
 
   const bool printFullElements =
     ConfigOptions().getMapComparatorPrintFullMismatchElementsOnMapSizeDiff();
-  if (idsIn1AndNotIn2Limited.size() > 0)
+  if (!idsIn1AndNotIn2Limited.empty())
   {
     LOG_WARN(
       "\t" << elementType.toString() << "s in map 1 and not in map 2 (limit " << limit << "): " <<
@@ -354,7 +354,7 @@ void MapComparator::_printIdDiff(
       }
     }
   }
-  if (idsIn2AndNotIn1Limited.size() > 0)
+  if (!idsIn2AndNotIn1Limited.empty())
   {
     LOG_WARN(
       "\t" << elementType.toString() << "s in map 2 and not in map 1 (limit " << limit << "): " <<

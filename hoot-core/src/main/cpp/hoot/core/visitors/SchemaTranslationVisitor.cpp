@@ -120,7 +120,7 @@ void SchemaTranslationVisitor::visit(const ElementPtr& e)
     {
       vector<Tags> allTags = _ogrTranslator->translateToOgrTags(tags, e->getElementType(), gtype);
 
-      if (allTags.size() > 0)
+      if (!allTags.empty())
       {
         if (allTags.size() > 1)
         {

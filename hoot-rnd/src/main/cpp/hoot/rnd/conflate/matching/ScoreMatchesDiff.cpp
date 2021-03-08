@@ -423,7 +423,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
   else
   {
     out << "\nNew Wrong Matches:\n\n";
-    if (_newlyWrongMatchSwitches.size() == 0)
+    if (_newlyWrongMatchSwitches.empty())
     {
       out << "none";
     }
@@ -445,7 +445,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
     }
 
     out << "\nNew Correct Matches:\n\n";
-    if (_newlyCorrectMatchSwitches.size() == 0)
+    if (_newlyCorrectMatchSwitches.empty())
     {
       out << "none";
     }
@@ -468,7 +468,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
   }
 
   out << "\n\nAdded Elements:\n\n";
-  if (_elementIdsAdded.size() == 0)
+  if (_elementIdsAdded.empty())
   {
     out << "none";
   }
@@ -485,7 +485,7 @@ void ScoreMatchesDiff::_writeConflateStatusDetail(QTextStream& out)
   }
 
   out << "\nRemoved Elements:\n\n";
-  if (_elementIdsRemoved.size() == 0)
+  if (_elementIdsRemoved.empty())
   {
      out << "none";
   }

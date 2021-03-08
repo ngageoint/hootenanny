@@ -75,7 +75,7 @@ void RemoveRoundabouts::removeRoundabouts(std::vector<RoundaboutPtr>& removed)
   LOG_VART(removed.size());
 
   //  Exit if there are no roundabouts removed
-  if (removed.size() == 0)
+  if (removed.empty())
     return;
 
   // Mangle (in a good way) ways that may cross our roundabouts, provided there
