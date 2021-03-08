@@ -732,11 +732,14 @@ ggdm30 = {
       }
     } // End process tags.note
 
-    // Roads. GGDM30 is the same as TDSv61
-    if ((attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') && !tags.highway) // Road & Ice Road
+    // Ice roads vs highways
+    if (attrs.F_CODE == 'AQ075' && !tags.highway) tags.highway = 'road';
+
+    // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
+    if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
     {
       // Set a Default: "It is a road but we don't know what it is"
-      tags.highway = 'road';
+      // tags.highway = 'road';
 
       // Top level
       if (tags['ref:road:type'] == 'motorway' || tags['ref:road:class'] == 'national_motorway')
@@ -763,7 +766,7 @@ ggdm30 = {
         }
         else
         {
-          tags.highway = 'unclassified';
+          if (tags.highway !== 'road') tags.highway = 'unclassified';
         }
       }
       else if (tags['ref:road:type'] == 'pedestrian')
@@ -776,7 +779,7 @@ ggdm30 = {
       }
       else if (tags['ref:road:type'] == 'street') // RTY=4
       {
-        tags.highway = 'unclassified';
+          if (tags.highway !== 'road') tags.highway = 'unclassified';
       }
       // Other should get picked up by the OTH field
       else if (tags['ref:road:type'] == 'other')
@@ -784,6 +787,9 @@ ggdm30 = {
         tags.highway = 'road';
       }
     } // End if AP030
+
+    // Ugly hack to get around a number of conflicts
+    if (tags.highway == 'yes') tags.highway = 'road';
 
     // Remove a default
     if (tags.highway == 'road' && tags['ref:road:class'] == 'local') delete tags['ref:road:class'];
@@ -988,7 +994,8 @@ ggdm30 = {
         // F_CODE translation == tourism but FFN translation could be leisure
         // E.g. water parks
         if (tags.leisure && tags.tourism) delete tags.tourism;
-        break;
+      // Remove a default
+      if (tags.use == 'recreation') delete tags.use;        break;
 
       case 'AL020': // AL020 (Built-up Area) should become a Place. NOTE: This is a bit vague...
         tags.place = 'yes'; // Catch All
@@ -1057,17 +1064,19 @@ ggdm30 = {
         if (! tags.bridge) tags.bridge = 'yes';
         break;
 
-      // case 'AQ125': // Transportation Station
+      case 'AQ125': // Transportation Station
       //   if (tags.amenity == 'ferry_terminal')
       //   {
       //     tags['transport:type'] = 'maritime';
       //     delete tags.bus;
       //   }
-      //   if (!tags.amenity)
-      //   {
-      //     tags.amenity = 'bus_station';
-      //   }
-      //   break;
+        if (!tags.amenity && (tags['transport:type'] == 'road' && tags.use == 'road_transport'))
+        {
+          tags.amenity = 'bus_station';
+          delete tags['transport:type'];
+          delete tags.use;
+        }
+        break;
 
       case 'BH140':
         if (! tags.waterway) tags.waterway = 'river';
@@ -1350,6 +1359,10 @@ ggdm30 = {
       case undefined:
         break;
 
+      case 'road':
+        tags.highway = 'yes';
+        break;
+
       case 'bus_stop':
         tags["transport:type"] = 'bus';
         break;
@@ -1507,6 +1520,10 @@ ggdm30 = {
         tags.condition = 'destroyed';
         break
 
+      case 'commercial':
+        // Skipping since it has it's own F_CODE
+        break;
+
       case 'construction':
         tags.condition = 'construction';
         tags.landuse = 'built_up_area';
@@ -1583,10 +1600,10 @@ ggdm30 = {
         tags.landuse = 'built_up_area';
         break;
 
-    // case 'commercial':
+
       case 'retail':
-        tags.landuse = 'built_up_area';
         tags.use = 'commercial';
+        tags.landuse = 'built_up_area';
         break;
 
       case 'scrub':
@@ -2306,7 +2323,7 @@ ggdm30 = {
     if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
     {
       // Tag preservation
-      if (tags.highway == 'road') notUsedTags.highway = 'road';
+      if (tags.highway == 'yes') notUsedTags.highway = 'road';
 
       // If we havent fixed up the road type/class, have a go with the
       // highway tag
@@ -2352,6 +2369,7 @@ ggdm30 = {
           attrs.RTY = '4'; // street: Road inside a BUA
           break;
 
+        case 'yes':
         case 'road':
           attrs.RIN_ROI = '5'; // Local. Customer requested this translation value
           attrs.RTY = '-999999'; // No Information
@@ -2588,7 +2606,7 @@ ggdm30 = {
       {
         tags[ftag[0]] = ftag[1];
         // Debug: Dump out the tags from the FCODE
-        print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
+        // print('FCODE: ' + attrs.F_CODE + ' tag=' + ftag[0] + '  value=' + ftag[1]);
       }
       else
       {

@@ -556,96 +556,96 @@ tds40 = {
     }
   },
 
-// Clean up the attributes
-cleanAttrs : function (attrs)
-{
-  // Drop the FCSUBTYPE since we don't use it
-  delete attrs.FCSUBTYPE;
-
-  // List of data values to drop/ignore
-  var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
-
-  // List of attributes that can't have '0' as a value
-  var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
-
-  // This is a handy loop. We use it to:
-  // 1) Remove all of the "No Information" and -999999 fields
-  // 2) Convert all of the Attrs to uppercase - if needed
-  // 3) Swap some of the funky named attrs around
-  for (var col in attrs)
+  // Clean up the attributes
+  cleanAttrs : function (attrs)
   {
-    // slightly ugly but we would like to account for: 'No Information','noInformation' etc
-    // First, push to lowercase
-    var attrValue = attrs[col].toString().toLowerCase();
+    // Drop the FCSUBTYPE since we don't use it
+    delete attrs.FCSUBTYPE;
+    delete attrs.FCSubtype;
+    // List of data values to drop/ignore
+    var ignoreList = { '-999999.0':1,'-999999':1,'noinformation':1 };
 
-    // Get rid of the spaces in the text
-    attrValue = attrValue.replace(/\s/g, '');
+    // List of attributes that can't have '0' as a value
+    var noZeroList = ['BNF','DZC','LC1','LC2','LC3','LC4','LTN','NOS','NPL','VST','WD1','WD2','WT2','ZI016_WD1'];
 
-    // Wipe out the useless values
-    if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
+    // This is a handy loop. We use it to:
+    // 1) Remove all of the "No Information" and -999999 fields
+    // 2) Convert all of the Attrs to uppercase - if needed
+    // 3) Swap some of the funky named attrs around
+    for (var col in attrs)
     {
-      delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
-      continue;
-    }
+      // slightly ugly but we would like to account for: 'No Information','noInformation' etc
+      // First, push to lowercase
+      var attrValue = attrs[col].toString().toLowerCase();
 
-    // Remove attributes with '0' values if they can't be '0'
-    if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
-    {
-      delete attrs[col];
-      continue;
-    }
+      // Get rid of the spaces in the text
+      attrValue = attrValue.replace(/\s/g, '');
 
-    // Now see if we need to swap attr names
-    if (col in tds40.rules.swapListIn)
-    {
-      // Debug:
-      // print('Swapped: ' + tds40.rules.swapList[i]);
-      attrs[tds40.rules.swapListIn[col]] = attrs[col];
-      delete attrs[col];
-      continue;
-    }
-
-    // The following is to account for TDSv30 vs TDSv40 attribute naming. Somehow
-    // they had the bright idea to rename XXX1 to XXX for a stack of features:
-    // E.g. FFN1 -> FFN
-    var endChar = col.charAt(col.length - 1);
-    if (endChar == 1 && ['LC1','ZI016_WD1','ZI020_FI1','MGL1'].indexOf(col) == -1)
-    {
-      attrs[col.slice(0,-1)] = attrs[col];
-      // Debug:
-      // print('Swapped: ' + col);
-      delete attrs[col];
-      continue;
-    }
-  } // End in attrs loop
-
-  // Undergrowth Density in Thicket & Swamp
-  if (attrs.DMBL && (attrs.DMBL == attrs.DMBU))
-  {
-    tags['undergrowth:density'] = attrs.DMBL;
-    delete attrs.DMBU;
-    delete attrs.DMBL;
-  }
-
-  // Drop all of the XXX Closure default values IFF the associated attributes are not set
-  // Doing this after the main cleaning loop so all of the -999999 values are
-  // already gone and we can just check for existance
-  for (var i in tds40.rules.closureList)
-  {
-    if (attrs[i])
-    {
-      if (attrs[tds40.rules.closureList[i][0]] || attrs[tds40.rules.closureList[i][1]])
+      // Wipe out the useless values
+      if (attrs[col] == '' || attrs[col] == ' ' || attrValue in ignoreList || attrs[col] in ignoreList)
       {
+        delete attrs[col]; // debug: Comment this out to leave all of the No Info stuff in for testing
         continue;
       }
-      else
-      {
-        delete attrs[i];
-      }
-    }
-  } // End closureList
 
-}, // End cleanAttrs
+      // Remove attributes with '0' values if they can't be '0'
+      if (noZeroList.indexOf(col) > -1 && attrs[col] == '0')
+      {
+        delete attrs[col];
+        continue;
+      }
+
+      // Now see if we need to swap attr names
+      if (col in tds40.rules.swapListIn)
+      {
+        // Debug:
+        // print('Swapped: ' + tds40.rules.swapList[i]);
+        attrs[tds40.rules.swapListIn[col]] = attrs[col];
+        delete attrs[col];
+        continue;
+      }
+
+      // The following is to account for TDSv30 vs TDSv40 attribute naming. Somehow
+      // they had the bright idea to rename XXX1 to XXX for a stack of features:
+      // E.g. FFN1 -> FFN
+      var endChar = col.charAt(col.length - 1);
+      if (endChar == 1 && ['LC1','ZI016_WD1','ZI020_FI1','MGL1'].indexOf(col) == -1)
+      {
+        attrs[col.slice(0,-1)] = attrs[col];
+        // Debug:
+        // print('Swapped: ' + col);
+        delete attrs[col];
+        continue;
+      }
+    } // End in attrs loop
+
+    // Undergrowth Density in Thicket & Swamp
+    if (attrs.DMBL && (attrs.DMBL == attrs.DMBU))
+    {
+      tags['undergrowth:density'] = attrs.DMBL;
+      delete attrs.DMBU;
+      delete attrs.DMBL;
+    }
+
+    // Drop all of the XXX Closure default values IFF the associated attributes are not set
+    // Doing this after the main cleaning loop so all of the -999999 values are
+    // already gone and we can just check for existance
+    for (var i in tds40.rules.closureList)
+    {
+      if (attrs[i])
+      {
+        if (attrs[tds40.rules.closureList[i][0]] || attrs[tds40.rules.closureList[i][1]])
+        {
+          continue;
+        }
+        else
+        {
+          delete attrs[i];
+        }
+      }
+    } // End closureList
+
+  }, // End cleanAttrs
 
 
   // #####################################################################################################
@@ -823,8 +823,10 @@ cleanAttrs : function (attrs)
       }
       break;
 
-    case 'AP030': // Road
     case 'AQ075': // Ice Route
+      if (!tags.highway) tags.highway = 'road';
+      // Fall through...
+    case 'AP030': // Road
       /* Now sort out Roads
                 HCT, TYP, RTY etc are related. No easy way to use one2one rules
 
@@ -839,11 +841,18 @@ cleanAttrs : function (attrs)
                 TYP -> TYP     -> RTY     -> RTY
                 */
 
+      // Work around ugly conflicts
+      if (tags.highway == 'yes')
+      {
+        tags.highway = 'road';
+        break;
+      }
+
       // Skip this if we already have a highway tag
-      if (tags.highway) break;
+      if (tags.highway && tags.highway !== 'road') break;
 
       // Set a Default: "It is a road but we don't know what it is"
-      tags.highway = 'road';
+      // tags.highway = 'road';
 
       // This was a heap of if, else if, else if etc
       if (tags['ref:road:type'] == 'motorway' || tags['ref:road:class'] == 'national_motorway')
@@ -929,6 +938,8 @@ cleanAttrs : function (attrs)
       // E.g. water parks
     case 'AK030':
       if (tags.leisure && tags.tourism) delete tags.tourism;
+      // Remove a default
+      if (tags.use == 'recreation') delete tags.use;
       break;
 
       // case 'AP010': // Track
@@ -1361,6 +1372,10 @@ cleanAttrs : function (attrs)
       case undefined:
         break;
 
+      case 'road':
+        tags.highway = 'yes';
+        break;
+
       case 'bus_stop':
         tags["transport:type"] = 'bus';
         break;
@@ -1504,6 +1519,7 @@ cleanAttrs : function (attrs)
   // Fix up bus,train & ferry stations
     if (tags.amenity == 'bus_station')
     {
+      if (!attrs.F_CODE) attrs.F_CODE = 'AQ125';
       // delete tags.amenity;
       tags['transport:type'] = 'road'; // Bus is not valid on AQ125
       tags.use = 'road_transport';
@@ -1745,7 +1761,10 @@ cleanAttrs : function (attrs)
       tags.landuse = 'built_up_area';
       break;
 
-    // case 'commercial':
+    case 'commercial':
+      // Skipping since it has it's own F_CODE
+      if (geometryType == 'Area') break;
+      // Fall through
     case 'retail':
       tags.use = 'commercial';
       tags.landuse = 'built_up_area';
@@ -2230,7 +2249,10 @@ cleanAttrs : function (attrs)
     switch (attrs.F_CODE)
     {
     case 'AP030': // Custom Road rules
-      // - Fix the "highway=" stuff that cant be done in the one2one rules
+      // Tag preservation
+      if (tags.highway == 'yes') notUsedTags.highway = 'road';
+
+      // Fix the "highway=" stuff that cant be done in the one2one rules
       // If we haven't sorted out the road type/class, have a try with the
       // "highway" tag. If that doesn't work, we end up with default values
       // These are pretty vague classifications
@@ -2271,6 +2293,7 @@ cleanAttrs : function (attrs)
           attrs.TYP = '33'; // street
           break;
 
+        case 'yes':
         case 'road':
           attrs.RTN_ROI = '-999999'; // No Information
           attrs.TYP = '-999999'; // No Information
@@ -2302,7 +2325,7 @@ cleanAttrs : function (attrs)
     case 'ZI040': // Spatial Metadata Entity Collection
       //Map alternate source date tags to ZI001_SSD in order of precedence
       //default is 'source:datetime'
-      if (! attrs.ZI001_SSD)
+      if (!attrs.ZI001_SSD)
         attrs.ZI001_SSD = tags['source:imagery:datetime']
                         || tags['source:date']
                         || tags['source:geometry:date']
@@ -2310,14 +2333,14 @@ cleanAttrs : function (attrs)
 
       //Map alternate source tags to ZI001_SSN in order of precedence
       //default is 'source'
-      if (! attrs.ZI001_SSN)
+      if (!attrs.ZI001_SSN)
         attrs.ZI001_SSN = tags['source:imagery']
                         || tags['source:description']
                         || '';
       break;
 
     case 'AH025': // Engineered Earthwork
-      if (! attrs.EET) attrs.EET = '3';
+      if (!attrs.EET) attrs.EET = '3';
       break;
 
     case 'AK030': // Amusement Parks

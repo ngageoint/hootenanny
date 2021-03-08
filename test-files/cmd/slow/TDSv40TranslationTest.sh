@@ -12,18 +12,20 @@ mkdir -p $outputDir
 rm -f $outputDir/*
 
 # Normal Hoot options
-HOOT_OPT="--warn  -C Testing.conf"
+HOOT_OPT=""
 
 # Hoot options for debugging the test input and output
 # NOTE: This will generate HEAPS of output.
-#HOOT_OPT="--info -D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
+# HOOT_OPT="-D ogr.debug.dumptags=true -D ogr.debug.lookupcolumn=true -D ogr.debug.lookupclash=true -D ogr.debug.dumpvalidate=true"
 
 # Script to compare shapefiles. NOTE: This might not run on Jenkins.
 COMPARE_SHAPE=$HOOT_HOME/scripts/util/CompareShapefiles.py
 
 ##### Start Tests #####
 #  jam all of the shapefiles into one OSM file
-hoot convert $HOOT_OPT -D schema.translation.script=$TRANS $inputDir/*.shp $outputDir/new_TDSv40.osm # > tmp/TDSv40_to_OSM.txt
+hoot convert --warn  -C Testing.conf $HOOT_OPT \
+  -D schema.translation.script=$TRANS \
+  $inputDir/*.shp $outputDir/new_TDSv40.osm # > tmp/TDSv40_to_OSM.txt
 
 # When the translation changes, uncomment this to update the OSM file
 #cp $outputDir/new_TDSv40.osm $inputDir/TDSv40X.osm
@@ -33,7 +35,9 @@ hoot diff -C Testing.conf $outputDir/new_TDSv40.osm $inputDir/TDSv40.osm || diff
 
 # Make shapefiles
 # NOTE: These are thematic.
-hoot convert --debug -C Testing.conf -D schema.translation.script=$TRANS $outputDir/new_TDSv40.osm $outputDir".shp" # > tmp/TDSv40_toTDSv40.txt
+hoot convert --debug -C Testing.conf $HOOT_OPT \
+  -D schema.translation.script=$TRANS \
+  $outputDir/new_TDSv40.osm $outputDir".shp" # > tmp/TDSv40_toTDSv40.txt
 
 ##################
 # More testing required to get this section of tests to work. In particular, createing two features from one is a problem

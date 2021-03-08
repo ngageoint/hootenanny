@@ -724,11 +724,14 @@ tds61 = {
       }
     } // End process tags.note
 
+    // Ice roads vs highways
+    if (attrs.F_CODE == 'AQ075' && !tags.highway) tags.highway = 'road';
+
     // Roads. TDSv61 are a bit simpler than TDSv30 & TDSv40
-    if ((attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') && !tags.highway) // Road & Ice Road
+    if (attrs.F_CODE == 'AP030' || attrs.F_CODE == 'AQ075') // Road & Ice Road
     {
       // Set a Default: "It is a road but we don't know what it is"
-      tags.highway = 'road';
+      // tags.highway = 'road';
 
       // Top level
       if (tags['ref:road:type'] == 'motorway' || tags['ref:road:class'] == 'national_motorway')
@@ -755,7 +758,7 @@ tds61 = {
         }
         else
         {
-          tags.highway = 'unclassified';
+          if (tags.highway !== 'road') tags.highway = 'unclassified';
         }
       }
       else if (tags['ref:road:type'] == 'pedestrian')
@@ -768,7 +771,7 @@ tds61 = {
       }
       else if (tags['ref:road:type'] == 'street') // RTY=4
       {
-        tags.highway = 'unclassified';
+          if (tags.highway !== 'road') tags.highway = 'unclassified';
       }
       // Other should get picked up by the OTH field
       else if (tags['ref:road:type'] == 'other')
@@ -776,6 +779,9 @@ tds61 = {
         tags.highway = 'road';
       }
     } // End if AP030
+
+    // Ugly hack to get around a number of conflicts
+    if (tags.highway == 'yes') tags.highway = 'road';
 
     // Remove a default
     if (tags.highway == 'road' && tags['ref:road:class'] == 'local') delete tags['ref:road:class'];
@@ -891,7 +897,6 @@ tds61 = {
     // Add a building tag to Buildings and Fortified Buildings if we don't have one
     // We can't do this in the funky rules function as it uses "attrs" _and_ "tags"
     if (attrs.F_CODE == 'AH055' && !(tags.building)) tags.building = 'bunker';
-
     if (attrs.F_CODE == 'AL013' && !(tags.building)) tags.building = 'yes';
 
     // Fix building tags
@@ -986,7 +991,8 @@ tds61 = {
         // F_CODE translation == tourism but FFN translation could be leisure
         // E.g. water parks
         if (tags.leisure && tags.tourism) delete tags.tourism;
-        break;
+      // Remove a default
+      if (tags.use == 'recreation') delete tags.use;        break;
 
     case 'AL020': // Fix landuse tags
       switch (tags.use) // Fixup the landuse tags
@@ -1013,7 +1019,7 @@ tds61 = {
 
     case 'AP010': // Track
     case 'AP050': // Trail
-        tags.seasonal = 'fair';
+        if (!tags.seasonal) tags.seasonal = 'fair';
         break;
 
     case 'AP020':
@@ -1033,18 +1039,19 @@ tds61 = {
       if (tags.water == 'undifferentiated_water_body') delete tags.water;
       break;
 
-    // case 'AQ125': // Transportation Station
+    case 'AQ125': // Transportation Station
     //   if (tags.amenity == 'ferry_terminal')
     //   {
     //     tags['transport:type'] = 'maritime';
     //     delete tags.bus;
     //   }
-    //   if (!tags.amenity)
-    //   {
-    //     tags.bus = 'yes';
-    //     tags.amenity = 'bus_station';
-    //   }
-    //   break;
+      if (!tags.amenity && (tags['transport:type'] == 'road' && tags.use == 'road_transport'))
+      {
+        tags.amenity = 'bus_station';
+        delete tags['transport:type'];
+        delete tags.use;
+      }
+      break;
 
     case 'BH140':
       if (! tags.waterway) tags.waterway = 'river';
@@ -1361,6 +1368,10 @@ tds61 = {
       case undefined:
         break;
 
+      case 'road':
+        tags.highway = 'yes';
+        break;
+
       case 'bus_stop':
         tags["transport:type"] = 'bus';
         break;
@@ -1519,6 +1530,7 @@ tds61 = {
   // Fix up bus stations
     if (tags.amenity == 'bus_station' || tags.bus == 'yes')
     {
+      if (!attrs.F_CODE) attrs.F_CODE = 'AQ125';
       delete tags.amenity;
       delete tags.bus;
       tags['transport:type'] = 'road'; // Bus is not valid on AQ125
@@ -1697,6 +1709,15 @@ tds61 = {
       tags.condition = 'destroyed';
       break;
 
+    case 'commercial':
+      // Skipping since it has it's own F_CODE
+      if (geometryType == 'Area') break;
+      // Fall through
+    case 'retail':
+      tags.use = 'commercial';
+      tags.landuse = 'built_up_area';
+      break;
+
     case 'construction':
       tags.condition = 'construction';
       tags.landuse = 'built_up_area';
@@ -1771,12 +1792,6 @@ tds61 = {
 
     case 'residential':
       tags.use = 'residential';
-      tags.landuse = 'built_up_area';
-      break;
-
-    // case 'commercial':
-    case 'retail':
-      tags.use = 'commercial';
       tags.landuse = 'built_up_area';
       break;
 
@@ -2308,7 +2323,7 @@ tds61 = {
     case 'AP030': // Road
     case 'AQ075': // Ice Road
       // Preserveing a highway value
-      if (tags.highway == 'road') notUsedTags.highway = 'road';
+      if (tags.highway == 'yes') notUsedTags.highway = 'road';
 
       // Fix the "highway=" stuff that cant be done in the one2one rules
       // If we havent fixed up the road type/class, have a go with the
@@ -2355,6 +2370,7 @@ tds61 = {
           attrs.RTY = '4'; // street: Road inside a BUA
           break;
 
+        case 'yes':
         case 'road':
           attrs.RIN_ROI = '5'; // Local. Customer requested this translation value
           attrs.RTY = '-999999'; // No Information

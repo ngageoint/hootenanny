@@ -180,7 +180,7 @@ fcodeCommon = {
       ['F_CODE','AN085','railway','signal'], // Railway Signal
       ['F_CODE','AP010','highway','track'], // Cart Track
       ['F_CODE','AP020','junction','yes'], // Road Interchange - See RIT
-      ['F_CODE','AP030','highway','road'], // Road - See Custom rules
+      ['F_CODE','AP030','highway','yes'], // Road - See Custom rules
       ['F_CODE','AP033','highway','turning_circle'], // Engineered Turn Around Site
       ['F_CODE','AP040','barrier','gate'], // Gate
       ['F_CODE','AP041','barrier','yes'], // Vehicle Barrier

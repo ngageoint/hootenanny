@@ -851,6 +851,18 @@ mgcp = {
         if (!tags['tower:type']) tags['tower:type'] = 'cooling';
         break;
 
+      case 'AH050': // Fortification
+        // Castles are not Bunkers but they get stored in the same layer
+        if (tags.military == 'bunker' && tags.historic == 'castle')
+        {
+          delete tags.military;
+        }
+        else if (!tags.building)
+        {
+          tags.building = 'bunker';
+        }
+        break;
+
       case 'AL015': // Building
         if (tags.surface == 'unknown') delete tags.surface;
         break;
@@ -914,34 +926,24 @@ mgcp = {
       //     tags.seasonal = 'fair';
       //     break;
 
+      case 'AP030': // Trail
+          if (tags.highway == 'yes') tags.highway = 'road';
+          break;
+
       case 'AQ075': // Ice Route
         if (!tags.highway) tags.highway = 'road';
         break;
 
-      // case 'AQ125': // Transportation Station
+      case 'AQ125': // Transportation Station
       //   if (tags.amenity == 'ferry_terminal')
       //   {
       //     tags['transport:type'] = 'maritime';
       //     delete tags.bus;
       //   }
-      //   if (!tags.amenity)
-      //   {
-      //     // tags.bus = 'yes';
-      //     tags.amenity = 'bus_station';
-      //     delete tags['transport:type'];
-      //     delete tags.highway;
-      //   }
-      //   break;
-
-      case 'AH050': // Fortification
-        // Castles are not Bunkers but they get stored in the same layer
-        if (tags.military == 'bunker' && tags.historic == 'castle')
+        if (!tags.amenity && tags['transport:type'] == 'bus')
         {
-          delete tags.military;
-        }
-        else if (!tags.building)
-        {
-          tags.building = 'bunker';
+          tags.amenity = 'bus_station';
+          delete tags['transport:type'];
         }
         break;
 
@@ -1360,6 +1362,7 @@ mgcp = {
     if (tags.amenity == 'bus_station')
     {
       delete tags.amenity;
+      attrs.F_CODE = 'AQ125';
       tags['transport:type'] = 'bus';
     }
 
