@@ -289,7 +289,7 @@ void RubberSheet::_filterCalcAndApplyTransform(OsmMapPtr& map)
     std::vector<std::shared_ptr<Roundabout>> roundabouts = map->getRoundabouts();
     map.reset(); // reduce some unnecessary memory consumption
 
-    if (_projection.get() != 0)
+    if (_projection.get() != nullptr)
     {
       MapProjector::project(toNotModify, _projection);
       MapProjector::project(toModify, _projection);
@@ -328,7 +328,7 @@ bool RubberSheet::applyTransform(std::shared_ptr<OsmMap>& map)
     return false;
   }
 
-  if (_projection.get() != 0)
+  if (_projection.get() != nullptr)
   {
     MapProjector::project(_map, _projection);
   }
@@ -475,7 +475,7 @@ std::shared_ptr<Interpolator> RubberSheet::_buildInterpolator(Status s) const
       StringUtils::millisecondsToDhms(timer.elapsed()) << " total for: " << candidates[i] << ".");
   }
 
-  if (bestCandidate.get() == 0)
+  if (bestCandidate.get() == nullptr)
   {
     throw HootException("Unable to determine rubber sheeting interpolation candidate.");
   }
@@ -789,7 +789,7 @@ void RubberSheet::_writeInterpolator(
     throw HootException("An invalid interpolator was specified. Too few tie points?");
   }
   QDataStream ds(&os);
-  char* projStr = 0;
+  char* projStr = nullptr;
   _projection->exportToProj4(&projStr);
   ds << QString(projStr);
   delete [] projStr;

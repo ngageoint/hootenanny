@@ -148,7 +148,7 @@ WayPtr WaySubline::toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeF
   ConstWayPtr way = _start.getWay();
 
   std::shared_ptr<GeometryToElementConverter::NodeFactory> nfPtr;
-  if (nf == 0)
+  if (nf == nullptr)
   {
     nf = new FindNodesInWayFactory(way);
     // delete it automatically.

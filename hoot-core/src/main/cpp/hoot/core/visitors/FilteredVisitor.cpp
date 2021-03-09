@@ -41,28 +41,28 @@ HOOT_FACTORY_REGISTER(ElementVisitor, FilteredVisitor)
 FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitor& visitor) :
   _criterion(&criterion),
   _visitor(&visitor),
-  _map(NULL)
+  _map(nullptr)
 {
 }
 
 FilteredVisitor::FilteredVisitor(const ElementCriterion& criterion, ElementVisitorPtr visitor) :
   _criterion(&criterion),
   _visitor(visitor.get()),
-  _map(NULL)
+  _map(nullptr)
 {
 }
 
 FilteredVisitor::FilteredVisitor(ElementCriterionPtr criterion, ElementVisitorPtr visitor) :
   _criterion(criterion.get()),
   _visitor(visitor.get()),
-  _map(NULL)
+  _map(nullptr)
 {
 }
 
 FilteredVisitor::FilteredVisitor(ElementCriterion* criterion, ElementVisitor* visitor) :
   _criterion(criterion),
   _visitor(visitor),
-  _map(NULL)
+  _map(nullptr)
 {
 }
 
@@ -87,7 +87,7 @@ void FilteredVisitor::addVisitor(const ElementVisitorPtr& v)
 void FilteredVisitor::setOsmMap(OsmMap* map)
 {
   ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
-  if (c != 0)
+  if (c != nullptr)
   {
     c->setOsmMap(map);
   }
@@ -97,7 +97,7 @@ void FilteredVisitor::setOsmMap(OsmMap* map)
 void FilteredVisitor::setOsmMap(const OsmMap* map)
 {
   ConstOsmMapConsumer* c = dynamic_cast<ConstOsmMapConsumer*>(_visitor);
-  if (c != 0)
+  if (c != nullptr)
   {
     c->setOsmMap(map);
   }
@@ -126,7 +126,7 @@ double FilteredVisitor::getStat(ElementCriterionPtr criterion, ElementVisitorPtr
 {
   FilteredVisitor filteredVisitor(criterion, visitor);
   SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
-  if (stat == 0)
+  if (stat == nullptr)
   {
     throw HootException("Visitor does not implement SingleStatistic.");
   }
@@ -146,7 +146,7 @@ double FilteredVisitor::getStat(ElementCriterion* criterion, ElementVisitor* vis
 {
   FilteredVisitor filteredVisitor(criterion, visitor);
   SingleStatistic* stat = dynamic_cast<SingleStatistic*>(&filteredVisitor.getChildVisitor());
-  if (stat == 0)
+  if (stat == nullptr)
   {
     throw HootException("Visitor does not implement SingleStatistic.");
   }

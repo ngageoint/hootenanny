@@ -121,7 +121,7 @@ public:
    * @param reuse - flag for reusing way id or getting a new one from the map
    * @return the created way
    */
-  WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = 0,
+  WayPtr toWay(const OsmMapPtr& map, GeometryToElementConverter::NodeFactory* nf = nullptr,
                bool reuse = false) const;
 
   /**

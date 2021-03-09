@@ -135,7 +135,7 @@ void OpExecutor::apply(OsmMapPtr& map)
       }
 
       Configurable* c = dynamic_cast<Configurable*>(op.get());
-      if (_conf != 0 && c != 0)
+      if (_conf != nullptr && c != nullptr)
       {
         c->setConfiguration(*_conf);
       }
@@ -153,7 +153,7 @@ void OpExecutor::apply(OsmMapPtr& map)
 
         ConflateInfoCacheConsumer* cacheConsumer =
           dynamic_cast<ConflateInfoCacheConsumer*>(op.get());
-        if (cacheConsumer != 0)
+        if (cacheConsumer != nullptr)
         {
           // This info cache will allow the op to verify whether elements it operates on should be
           // modified or not based on the current conflation configuration.
@@ -182,7 +182,7 @@ void OpExecutor::apply(OsmMapPtr& map)
       }
 
       Configurable* c = dynamic_cast<Configurable*>(vis.get());
-      if (_conf != 0 && c != 0)
+      if (_conf != nullptr && c != nullptr)
       {
         c->setConfiguration(*_conf);
       }
@@ -200,7 +200,7 @@ void OpExecutor::apply(OsmMapPtr& map)
       {
         ConflateInfoCacheConsumer* cacheConsumer =
           dynamic_cast<ConflateInfoCacheConsumer*>(vis.get());
-        if (cacheConsumer != 0)
+        if (cacheConsumer != nullptr)
         {
           cacheConsumer->setConflateInfoCache(conflateInfoCache);
         }

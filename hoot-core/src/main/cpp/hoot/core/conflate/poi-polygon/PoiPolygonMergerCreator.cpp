@@ -49,7 +49,7 @@ namespace hoot
 HOOT_FACTORY_REGISTER(MergerCreator, PoiPolygonMergerCreator)
 
 PoiPolygonMergerCreator::PoiPolygonMergerCreator() :
-_map(0),
+_map(nullptr),
 _autoMergeManyPoiToOnePolyMatches(ConfigOptions().getPoiPolygonAutoMergeManyPoiToOnePolyMatches()),
 _allowCrossConflationMerging(ConfigOptions().getPoiPolygonAllowCrossConflationMerging())
 {
@@ -247,7 +247,7 @@ bool PoiPolygonMergerCreator::isConflicting(const ConstOsmMapPtr& map, ConstMatc
 
     // Return conflict only if it is a miss, a review is ok.
     result = false;
-    if (ma.get() == 0 || ma->getType() == MatchType::Miss)
+    if (ma.get() == nullptr || ma->getType() == MatchType::Miss)
     {
       LOG_TRACE("miss");
       result = true;

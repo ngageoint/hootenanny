@@ -89,7 +89,7 @@ bool HootExceptionJs::isHootException(Handle<Value> v)
   if (v->IsObject())
   {
     Handle<Object> obj = Handle<Object>::Cast(v);
-    HootExceptionJs* e = 0;
+    HootExceptionJs* e = nullptr;
     if (obj->InternalFieldCount() >= 1)
     {
       e = node::ObjectWrap::Unwrap<HootExceptionJs>(obj);

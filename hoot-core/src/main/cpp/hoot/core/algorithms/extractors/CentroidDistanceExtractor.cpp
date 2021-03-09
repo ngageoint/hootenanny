@@ -58,7 +58,7 @@ double CentroidDistanceExtractor::distance(const OsmMap& map,
   std::shared_ptr<Point> tc(g1->getCentroid());
   std::shared_ptr<Point> cc(g2->getCentroid());
 
-  if (tc.get() == 0 || cc.get() == 0)
+  if (tc.get() == nullptr || cc.get() == nullptr)
   {
     return nullValue();
   }

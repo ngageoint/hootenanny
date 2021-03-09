@@ -306,7 +306,7 @@ void RStarTree::_insert(const Box& b, int id, int level)
   else
   {
     // splits 'node' into 'N' and 'newNode'. These nodes contain everything from N
-    RTreeNode* newNode = NULL;
+    RTreeNode* newNode = nullptr;
     int a = _overflowTreatment(N, newNode, level);
     
     // I3 If OverflowTreatment was called and a split was performed, propagate OverflowTreatment

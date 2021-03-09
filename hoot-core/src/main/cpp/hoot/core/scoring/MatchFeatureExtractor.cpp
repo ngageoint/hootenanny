@@ -256,7 +256,7 @@ void MatchFeatureExtractor::processMap(const std::shared_ptr<const OsmMap>& map)
   for (size_t i = 0; i < matches.size(); i++)
   {
     const MatchDetails* d = dynamic_cast<const MatchDetails*>(matches[i].get());
-    if (d == 0)
+    if (d == nullptr)
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {

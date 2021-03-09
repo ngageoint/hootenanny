@@ -167,7 +167,7 @@ bool ScriptMatch::isConflicting(
   bool conflicting = true;
 
   const ScriptMatch* hm = dynamic_cast<const ScriptMatch*>(other.get());
-  if (hm == 0)
+  if (hm == nullptr)
   {
     return true;
   }

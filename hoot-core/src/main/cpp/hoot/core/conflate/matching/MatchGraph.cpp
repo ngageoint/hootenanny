@@ -74,7 +74,7 @@ public:
     InvalidMatch
   } MatchType;
 
-  MatchEdge() : match(0), type(InvalidMatch) { }
+  MatchEdge() : match(nullptr), type(InvalidMatch) { }
   MatchEdge(ConstMatchPtr m, MatchType t) : match(m), type(t) { }
 
   ConstMatchPtr match;
@@ -119,7 +119,7 @@ public:
   public:
 
     MatchThresholdFilter() :
-      _graph(0),
+      _graph(nullptr),
       _threshold(-1) { }
 
     MatchThresholdFilter(MatchBoostGraph& graph, double threshold) :

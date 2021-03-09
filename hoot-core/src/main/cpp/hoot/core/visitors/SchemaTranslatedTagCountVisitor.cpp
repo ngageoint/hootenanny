@@ -48,7 +48,7 @@ HOOT_FACTORY_REGISTER(ElementVisitor, SchemaTranslatedTagCountVisitor)
 
 SchemaTranslatedTagCountVisitor::SchemaTranslatedTagCountVisitor(
   const std::shared_ptr<ScriptSchemaTranslator>& t) :
-  _map(NULL),
+  _map(nullptr),
   _populatedCount(0),
   _defaultCount(0),
   _nullCount(0),

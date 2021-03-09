@@ -55,7 +55,7 @@ MostEnglishName::MostEnglishName()
 
 const MostEnglishNamePtr& MostEnglishName::getInstance()
 {
-  if (_theInstance.get() == 0)
+  if (_theInstance.get() == nullptr)
   {
     _theInstance.reset(new MostEnglishName());
   }

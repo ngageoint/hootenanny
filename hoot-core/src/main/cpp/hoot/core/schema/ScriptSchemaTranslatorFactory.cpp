@@ -65,14 +65,14 @@ ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString 
   sort(st.begin(), st.end(), CompareSt);
   LOG_VART(st);
 
-  ScriptSchemaTranslator* result = 0;
+  ScriptSchemaTranslator* result = nullptr;
   for (size_t i = 0; i < st.size(); ++i)
   {
     try
     {
       st[i]->setScript(scriptPath);
       LOG_VART(st[i]->isValidScript());
-      if (result == 0 && st[i]->isValidScript())
+      if (result == nullptr && st[i]->isValidScript())
       {
         result = st[i];
         LOG_TRACE("Found a valid translator: " + _translators[i]);
@@ -91,7 +91,7 @@ ScriptSchemaTranslator* ScriptSchemaTranslatorFactory::createTranslator(QString 
     }
   }
 
-  if (result == 0)
+  if (result == nullptr)
   {
     throw HootException("Unable to find an appropriate scripting language for: " + scriptPath);
   }

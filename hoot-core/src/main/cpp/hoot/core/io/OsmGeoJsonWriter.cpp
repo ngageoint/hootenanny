@@ -114,7 +114,7 @@ QString OsmGeoJsonWriter::toString(const ConstOsmMapPtr& map)
 
   _out = &buf;
   write(map);
-  _out = 0;
+  _out = nullptr;
 
   return QString::fromUtf8(buf.buffer());
 }
@@ -164,7 +164,7 @@ void OsmGeoJsonWriter::_writeGeometry(ConstRelationPtr r)
   for (vector<RelationData::Entry>::iterator it = members.begin(); it != members.end(); ++it)
   {
     ConstElementPtr e = _map->getElement(it->getElementId());
-    if (e.get() == NULL)
+    if (e.get() == nullptr)
       continue;
     if (first)
       first = false;
@@ -201,7 +201,7 @@ void OsmGeoJsonWriter::_writeGeometry(const vector<long>& nodes, string type)
   vector<long> temp_nodes;
   for (vector<long>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
   {
-    if (_map->getNode(*it).get() != NULL)
+    if (_map->getNode(*it).get() != nullptr)
       temp_nodes.push_back(*it);
   }
   //  Empty nodes list should output an empty coordinate array
@@ -302,7 +302,7 @@ void OsmGeoJsonWriter::_writeNodes()
 
 void OsmGeoJsonWriter::_writeNode(ConstNodePtr node)
 {
-  if (node.get() == NULL)
+  if (node.get() == nullptr)
     return;
   _write("{");
   _writeFeature(node);
@@ -323,7 +323,7 @@ void OsmGeoJsonWriter::_writeWays()
     set<ElementId> parents = _map->getParents(w->getElementId());
     if (!parents.empty())
       continue;
-    if (w.get() == NULL)
+    if (w.get() == nullptr)
       continue;
     if (_firstElement)
       _firstElement = false;
@@ -337,7 +337,7 @@ void OsmGeoJsonWriter::_writeWays()
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
         ConstNodePtr node = _map->getNode(*nodeIt);
-        if (node.get() == NULL)
+        if (node.get() == nullptr)
         {
           valid = false;
           break;
@@ -352,7 +352,7 @@ void OsmGeoJsonWriter::_writeWays()
       for (vector<long>::const_iterator nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt)
       {
         ConstNodePtr node = _map->getNode(*nodeIt);
-        if (node.get() != NULL)
+        if (node.get() != nullptr)
         {
           if (_firstElement)
             _firstElement = false;
@@ -374,7 +374,7 @@ void OsmGeoJsonWriter::_writeWays()
 
 void OsmGeoJsonWriter::_writeWay(ConstWayPtr way)
 {
-  if (way.get() == NULL)
+  if (way.get() == nullptr)
     return;
   //  Write out the way in geojson
   _write("{");
@@ -436,7 +436,7 @@ string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
   for (vector<RelationData::Entry>::const_iterator it = members.begin(); it != members.end(); ++it)
   {
     ConstElementPtr e = _map->getElement(it->getElementId());
-    if (e.get() == NULL)
+    if (e.get() == nullptr)
       continue;
     if (first)
       first = false;
@@ -445,7 +445,7 @@ string OsmGeoJsonWriter::_buildRoles(ConstRelationPtr r, bool& first)
     ss << it->getRole();
     //  Recursively get the roles of the sub-relation that is valid
     if (it->getElementId().getType() == ElementType::Relation &&
-        _map->getRelation(it->getElementId().getId()).get() != NULL)
+        _map->getRelation(it->getElementId().getId()).get() != nullptr)
     {
       ss << ";" << _buildRoles(_map->getRelation(it->getElementId().getId()), first);
     }

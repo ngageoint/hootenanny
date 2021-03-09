@@ -49,7 +49,7 @@ HOOT_FACTORY_REGISTER(MergerCreator, NetworkMergerCreator)
 
 NetworkMergerCreator::NetworkMergerCreator()
 {
-  _map = 0;
+  _map = nullptr;
   _minMatchOverlapPercentage = ConfigOptions().getNetworkMergerMinLargeMatchOverlapPercentage();
 }
 
@@ -340,7 +340,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargest(const MatchSet& matches) c
   if (matches.size() < 1)
   {
     LOG_TRACE("No largest match found.");
-    return 0;
+    return nullptr;
   }
 
   const NetworkMatch* largest = dynamic_cast<const NetworkMatch*>(matches.begin()->get());
@@ -373,7 +373,7 @@ const NetworkMatch* NetworkMergerCreator::_getLargestContainer(const MatchSet& m
     if (nm != largest && largest->getEdgeMatch()->contains(nm->getEdgeMatch()) == false)
     {
       LOG_TRACE("No largest match found.");
-      return 0;
+      return nullptr;
     }
   }
 

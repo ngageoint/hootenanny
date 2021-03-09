@@ -285,14 +285,7 @@ bool BuildingMatch::isConflicting(const ConstMatchPtr& other, const ConstOsmMapP
                                   const QHash<QString, ConstMatchPtr>& /*matches*/) const
 {
   const BuildingMatch* bm = dynamic_cast<const BuildingMatch*>(other.get());
-  if (bm == 0)
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  return (bm == nullptr);
 }
 
 QString BuildingMatch::toString() const

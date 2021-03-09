@@ -149,7 +149,7 @@ std::shared_ptr<Feature> JavaScriptSchemaTranslator::_createFeature(const QVaria
     }
   }
 
-  if (layer == 0)
+  if (layer == nullptr)
   {
     strictError("Table name: " + tableName + " not found in schema.");
   }
@@ -384,7 +384,7 @@ std::shared_ptr<const Schema> JavaScriptSchemaTranslator::getOgrOutputSchema()
 {
   LOG_TRACE("Started getOgrOutputSchema");
 
-  if (_schema == 0)
+  if (_schema == nullptr)
   {
     if (!_initialized)
     {

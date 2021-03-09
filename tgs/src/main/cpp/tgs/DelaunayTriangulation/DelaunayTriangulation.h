@@ -64,7 +64,7 @@ class Edge
 {
 public:
 
-  Edge() { _ie = 0; }
+  Edge() : _ie(nullptr) { }
   Edge(InternalEdge* ie);
   bool operator==(const Edge& e) const
   {
@@ -134,7 +134,7 @@ inline double TriArea2(const Point2d & a, const Point2d & b, const Point2d & c)
 class Face
 {
 public:
-  Face() { _id = -1; }
+  Face() : _id(-1) { }
 
   Face(Face& other);
   Face(const Face& other);
@@ -173,7 +173,7 @@ public:
 
   EdgeIterator(const std::set<QuadEdge*>& edges);
 
-  EdgeIterator() { _atEnd = true; }
+  EdgeIterator() : _atEnd(true) { }
 
   Edge operator*();
   Edge operator++(int);
@@ -207,7 +207,7 @@ public:
   FaceIterator(EdgeIterator it, EdgeIterator end);
   FaceIterator(const FaceIterator& from);
 
-  FaceIterator() { _atEnd = true; }
+  FaceIterator() : _f(nullptr), _atEnd(true) { }
   virtual ~FaceIterator();
 
   const Face& operator*();
