@@ -72,7 +72,7 @@ inline void toCpp(v8::Handle<v8::Value> v, ValueAggregatorPtr& p)
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  ValueAggregatorJs* vaj = 0;
+  ValueAggregatorJs* vaj = nullptr;
   vaj = node::ObjectWrap::Unwrap<ValueAggregatorJs>(obj);
   if (vaj)
   {

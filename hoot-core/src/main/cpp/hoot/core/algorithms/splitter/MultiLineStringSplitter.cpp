@@ -83,7 +83,7 @@ ElementPtr MultiLineStringSplitter::createSublines(const OsmMapPtr& map,
   vector<WayPtr> matches;
 
   std::shared_ptr<FindNodesInWayFactory> nfPtr;
-  if (nf == 0)
+  if (nf == nullptr)
   {
     nfPtr = _createNodeFactory(string);
     nf = nfPtr.get();
@@ -148,7 +148,7 @@ void MultiLineStringSplitter::split(const OsmMapPtr& map, const WaySublineCollec
   LOG_TRACE("Splitting " << string.toString().left(100) << "...");
 
   std::shared_ptr<FindNodesInWayFactory> nfPtr;
-  if (nf == 0)
+  if (nf == nullptr)
   {
     nfPtr = _createNodeFactory(string);
     nf = nfPtr.get();

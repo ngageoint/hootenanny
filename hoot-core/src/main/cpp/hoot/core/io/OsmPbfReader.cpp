@@ -107,7 +107,7 @@ void OsmPbfReader::_init(bool useFileId)
   _status = hoot::Status::Invalid;
   _useFileStatus = false;
   _permissive = true;
-  _in = NULL;
+  _in = nullptr;
   _needToCloseInput = false;
   _typeThenId = false;
 
@@ -1265,7 +1265,7 @@ void OsmPbfReader::initializePartial()
   _firstPartialReadCompleted = false;
 
   // If nothing's been opened yet, this needs to be a no-op to be safe
-  if (_in != NULL)
+  if (_in != nullptr)
   {
     _blobs = loadOsmDataBlobOffsets(*_in);
     _in->seekg (0, ios::end);
@@ -1277,7 +1277,7 @@ void OsmPbfReader::initializePartial()
 bool OsmPbfReader::hasMoreElements()
 {
   // If we've closed/finalized, definitely no
-  if (_in == NULL)
+  if (_in == nullptr)
   {
     return false;
   }
@@ -1406,7 +1406,7 @@ void OsmPbfReader::close()
   }
 
   // Either path, drop our pointer to the stream
-  _in = NULL;
+  _in = nullptr;
 }
 
 void OsmPbfReader::_parseTimestamp(const hoot::pb::Info& info, Tags& t)

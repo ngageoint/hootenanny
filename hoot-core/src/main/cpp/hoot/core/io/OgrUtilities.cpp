@@ -47,7 +47,7 @@ namespace hoot
 void OgrUtilities::loadDriverInfo()
 {
   //  Load the extension-based driver info
-  //                               EXT          DESCRIPTION       EXT/PRE   R/W     VECTOR/RASTER/BOTH
+  //                    EXT          DESCRIPTION       EXT/PRE   R/W     VECTOR/RASTER/BOTH
   _drivers.emplace_back(".shp",      "ESRI Shapefile", true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".dbf",      "ESRI Shapefile", true,     true,   GDAL_OF_VECTOR);
   _drivers.emplace_back(".sqlite",   "SQLite",         true,     true,   GDAL_OF_VECTOR);
@@ -97,7 +97,7 @@ OgrUtilities::~OgrUtilities()
   if (Log::getInstance().getLevel() <= Log::Debug)
   {
     GDALDumpOpenDatasets(stderr);
-    CPLDumpSharedList(NULL);
+    CPLDumpSharedList(nullptr);
   }
 
   GDALDestroyDriverManager();
@@ -141,18 +141,18 @@ std::shared_ptr<GDALDataset> OgrUtilities::createDataSource(const QString& url)
 {
   QString source = url;
   OgrDriverInfo driverInfo = getDriverInfo(url, false);
-  if (driverInfo._driverName == NULL)
+  if (driverInfo._driverName == nullptr)
     throw HootException("Error getting driver info for: " + url);
   GDALDriver *driver = GetGDALDriverManager()->GetDriverByName(driverInfo._driverName);
-  if (driver == 0)
+  if (driver == nullptr)
     throw HootException("Error getting driver by name: " + QString(driverInfo._driverName));
 
   // if the user specifies a shapefile then crop off the .shp and create a directory.
   if (url.toLower().endsWith(".shp"))
     source = url.mid(0, url.length() - 4);
 
-  std::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, NULL));
-  if (result == NULL)
+  std::shared_ptr<GDALDataset> result(driver->Create(source.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr));
+  if (result == nullptr)
   {
     throw HootException("Unable to create data source: " + source +
                         " (" + QString(CPLGetLastErrorMsg()) + ")");
@@ -171,7 +171,7 @@ bool OgrUtilities::isReasonableUrl(const QString& url)
     return true;
   }
 
-  return getDriverInfo(url, true)._driverName != NULL;
+  return getDriverInfo(url, true)._driverName != nullptr;
 }
 
 std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bool readonly)
@@ -192,7 +192,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   LOG_VART(driverInfo._driverType);
   LOG_VART(url.toUtf8().data());
 
-  const char* drivers[2] = { driverInfo._driverName, NULL };
+  const char* drivers[2] = { driverInfo._driverName, nullptr };
 
   // Setup read options for various file types
   OgrOptions options;
@@ -231,7 +231,7 @@ std::shared_ptr<GDALDataset> OgrUtilities::openDataSource(const QString& url, bo
   }
 
   std::shared_ptr<GDALDataset> result(static_cast<GDALDataset*>(GDALOpenEx(url.toUtf8().data(),
-    driverInfo._driverType, (driverInfo._driverName != NULL ? drivers : NULL), options.getCrypticOptions(), NULL)));
+    driverInfo._driverType, (driverInfo._driverName != nullptr ? drivers : nullptr), options.getCrypticOptions(), nullptr)));
 
   if (!result)
     throw HootException("Unable to open: " + url);

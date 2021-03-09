@@ -41,7 +41,7 @@ class ElementOsmMapVisitor : public ConstElementVisitor, public ConstOsmMapConsu
 {
 public:
 
-  ElementOsmMapVisitor() = default;
+  ElementOsmMapVisitor() : _map(nullptr) { }
   virtual ~ElementOsmMapVisitor() = default;
 
   virtual void setOsmMap(OsmMap* map) { _map = map; }

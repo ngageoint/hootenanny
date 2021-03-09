@@ -110,7 +110,7 @@ void SetTagValueVisitor::setConfiguration(const Settings& conf)
     {
       ElementCriterionPtr crit = *it;
       Configurable* c = dynamic_cast<Configurable*>(crit.get());
-      if (c != 0)
+      if (c != nullptr)
       {
         c->setConfiguration(conf);
       }

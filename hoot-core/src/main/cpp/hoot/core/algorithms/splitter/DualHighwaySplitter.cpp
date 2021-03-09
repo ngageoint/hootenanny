@@ -122,7 +122,7 @@ std::shared_ptr<Way> DualHighwaySplitter::_createOneWay(const std::shared_ptr<co
   result->setPid(w->getPid());
 
   // This sometimes happens if the buffer builder returns a multilinestring. See #2275
-  if (newLs == 0)
+  if (newLs == nullptr)
   {
     // TODO: MultiLineString not handled properly See r2275 (need to port issue to github)
 

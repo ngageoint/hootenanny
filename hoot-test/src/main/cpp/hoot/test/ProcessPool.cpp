@@ -121,7 +121,7 @@ QProcess* ProcessThread::createProcess()
 void ProcessThread::run()
 {
   _proc.reset(createProcess());
-  if (_serialJobs != NULL)
+  if (_serialJobs != nullptr)
   {
     processJobs(_serialJobs);
     //  Reset the process between queues
@@ -230,7 +230,7 @@ ProcessPool::ProcessPool(int nproc, double waitTime,
   for (int i = 0; i < nproc; ++i)
   {
     //  First process gets the serial jobs
-    JobQueue* serial = (i == 0) ? &_serialJobs : NULL;
+    JobQueue* serial = (i == 0) ? &_serialJobs : nullptr;
     ProcessThreadPtr thread(new ProcessThread(showTestName,
                                               suppressFailureDetail,
                                               printDiff,

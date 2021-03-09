@@ -71,7 +71,7 @@ bool NonConflatableCriterion::isSatisfied(const ConstElementPtr& e) const
     if (_map)
     {
       ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(crit.get());
-      if (mapConsumer != 0)
+      if (mapConsumer != nullptr)
       {
         mapConsumer->setOsmMap(_map.get());
       }

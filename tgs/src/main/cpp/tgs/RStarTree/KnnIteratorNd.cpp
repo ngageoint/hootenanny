@@ -50,7 +50,7 @@ KnnIteratorNd::KnnIteratorNd(const RStarTree* tree, const std::vector<double>& p
 {
   _searchTree = tree;
 
-  assert(_searchTree->getRoot() != NULL);
+  assert(_searchTree->getRoot() != nullptr);
 
   _knnBounds = searchRegion;
   reset(point);
@@ -80,8 +80,8 @@ void KnnIteratorNd::_calculateNextNn()
   while (!_knnSearchQueue.empty() || !_knnLeafHeap.empty())
   {
     // get the next most likely area to search (minimum distance first)
-    NodeDistance* nd = NULL;
-    const RTreeNode * currNode = NULL;
+    NodeDistance* nd = nullptr;
+    const RTreeNode * currNode = nullptr;
     if (!_knnSearchQueue.empty())
     {
       nd = _knnSearchQueue.top();
@@ -111,7 +111,7 @@ void KnnIteratorNd::_calculateNextNn()
     // the node
     if (!_knnLeafHeap.empty())
     {
-      if (nd == NULL || (ld.distance <= nd->minPossibleDistance && currNode != NULL && !currNode->isLeafNode()))
+      if (nd == nullptr || (ld.distance <= nd->minPossibleDistance && currNode != nullptr && !currNode->isLeafNode()))
       {
         // if the leaf is closer than the next most likely node, return the result
         _knnLeafHeap.pop();
@@ -121,7 +121,7 @@ void KnnIteratorNd::_calculateNextNn()
       }
     }
 
-    if (nd == NULL)
+    if (nd == nullptr)
     {
       throw Exception("Internal Error: RTree::calculateNextNn This state should not occur.");
     }
@@ -132,7 +132,7 @@ void KnnIteratorNd::_calculateNextNn()
 
     _knnSearchQueue.pop();
     
-    if (currNode != NULL)
+    if (currNode != nullptr)
     {
       if (currNode->isLeafNode())
       {
@@ -183,7 +183,7 @@ void KnnIteratorNd::_calculateNextNn()
 //   while (_knnSearchQueue.size() > 0)
 //   {
 //     // get the next most likely area to search (minimum distance first)
-//     NodeDistance* nd = NULL;
+//     NodeDistance* nd = nullptr;
 //     const RTreeNode * currNode;
 //     if (_knnSearchQueue.size() != 0)
 //     {
@@ -202,13 +202,13 @@ void KnnIteratorNd::_calculateNextNn()
 //     // the node
 //     if (distance >= 0)
 //     {
-//       if (nd == NULL || (distance <= nd->minPossibleDistance && !currNode->isLeafNode()))
+//       if (nd == nullptr || (distance <= nd->minPossibleDistance && !currNode->isLeafNode()))
 //       {
 //         break;
 //       }
 //     }
 // 
-//     if (nd == NULL)
+//     if (nd == nullptr)
 //     {
 //       throw Exception("Internal Error: RTree::calculateNextNn This state should not occur.");
 //     }

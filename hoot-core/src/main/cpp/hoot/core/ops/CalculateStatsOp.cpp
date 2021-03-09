@@ -118,7 +118,7 @@ void CalculateStatsOp::_readGenericStatsData()
 
   _quickStatData.clear();
   _slowStatData.clear();
-  QList<StatData>* pCurr = NULL;
+  QList<StatData>* pCurr = nullptr;
   QHash<QString,StatCall> enumLookup({ {"stat", Stat},
                                        {"min", Min},
                                        {"max", Max},
@@ -782,7 +782,7 @@ double CalculateStatsOp::_applyVisitor(const FilteredVisitor& v, boost::any& vis
   _constMap->visitRo(*fv);
 
   DataProducer* dataProducer = dynamic_cast<DataProducer*>(&childVisitor);
-  if (dataProducer != 0)
+  if (dataProducer != nullptr)
   {
     visitorData = dataProducer->getData();
   }
@@ -812,7 +812,7 @@ double CalculateStatsOp::_getApplyVisitor(ConstElementVisitor* v, const QString&
 {
   _applyVisitor(v, statName);
   const SingleStatistic* ss = dynamic_cast<const SingleStatistic*>(v);
-  if (v == 0)
+  if (v == nullptr)
   {
     throw HootException(v->getName() + " does not implement SingleStatistic.");
   }
@@ -885,7 +885,7 @@ void CalculateStatsOp::_generateFeatureStats(const CreatorDescription::BaseFeatu
   LOG_VARD(type);
 
   ConstOsmMapConsumer* mapConsumer = dynamic_cast<ConstOsmMapConsumer*>(criterion.get());
-  if (mapConsumer != 0)
+  if (mapConsumer != nullptr)
   {
     mapConsumer->setOsmMap(_constMap.get());
   }

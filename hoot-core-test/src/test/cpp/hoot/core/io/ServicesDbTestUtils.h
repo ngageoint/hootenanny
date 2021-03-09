@@ -53,7 +53,7 @@ public:
   /**
    * Run a specified query and compare the results against the expected results.
    */
-  static void compareRecords(QString sql, QString expected, QString testName = NULL,
+  static void compareRecords(QString sql, QString expected, QString testName = nullptr,
                              QVariant v1 = QVariant(), QVariant v2 = QVariant());
 
   /**

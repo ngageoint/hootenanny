@@ -59,7 +59,7 @@ int LongestCommonNodeString::apply()
 
   int *curr = new int [_w2->getNodeCount()];
   int *prev = new int [_w2->getNodeCount()];
-  int *swap = 0;
+  int *swap = nullptr;
   int maxSubstr = 0;
 
   for (size_t i = 0; i < str1.size(); ++i)

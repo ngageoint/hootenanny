@@ -221,7 +221,7 @@ bool GeometryUtils::isPolygonString(const QString& str)
   {
     return false;
   }
-  return poly.get() != 0;
+  return poly.get() != nullptr;
 }
 
 QString GeometryUtils::envelopeToString(const Envelope& bounds)

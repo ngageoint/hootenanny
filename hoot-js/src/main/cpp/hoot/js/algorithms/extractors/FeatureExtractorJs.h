@@ -73,7 +73,7 @@ inline void toCpp(v8::Handle<v8::Value> v, FeatureExtractorPtr& p)
   }
 
   v8::Handle<v8::Object> obj = v8::Handle<v8::Object>::Cast(v);
-  FeatureExtractorJs* fej = 0;
+  FeatureExtractorJs* fej = nullptr;
   fej = node::ObjectWrap::Unwrap<FeatureExtractorJs>(obj);
   if (fej)
   {

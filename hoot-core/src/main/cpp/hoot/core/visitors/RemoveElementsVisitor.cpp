@@ -71,7 +71,7 @@ void RemoveElementsVisitor::setConfiguration(const Settings& conf)
     {
       ElementCriterionPtr crit = *it;
       Configurable* c = dynamic_cast<Configurable*>(crit.get());
-      if (c != 0)
+      if (c != nullptr)
       {
         c->setConfiguration(conf);
       }
@@ -91,7 +91,7 @@ void RemoveElementsVisitor::setOsmMap(OsmMap* map)
   {
     ElementCriterionPtr crit = *it;
     OsmMapConsumer* consumer = dynamic_cast<OsmMapConsumer*>(crit.get());
-    if (consumer != 0)
+    if (consumer != nullptr)
       consumer->setOsmMap(map);
   }
 }

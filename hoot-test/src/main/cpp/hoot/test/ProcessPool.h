@@ -101,10 +101,10 @@ public:
    * @param waitTime - number of seconds to wait before reporting that a test took too long
    * @param outMutex - mutex for preserving output ordering to standard out
    * @param parallelJobs - JobQueue object that contains a set of jobs that can all be run in parallel
-   * @param serialJobs - JobQueue object (NULL for all threads but one) that contains a set of all jobs
+   * @param serialJobs - JobQueue object (nullptr for all threads but one) that contains a set of all jobs
    *  that cannot be run in parallel but must be run serially
    */
-  ProcessThread(bool showTestName, bool suppressFailureDetail, bool printDiff, double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = NULL);
+  ProcessThread(bool showTestName, bool suppressFailureDetail, bool printDiff, double waitTime, QMutex* outMutex, JobQueue* parallelJobs, JobQueue* serialJobs = nullptr);
 
   /**
    * @brief run method for thread, called by ::start()

@@ -102,7 +102,7 @@ public:
     runTest(_inputPath + "SampleObjectsWriter.osm", "SampleObjectsWriterHoot.geojson", &s);
   }
 
-  void runTest(const QString& input, const QString& output, Settings* settings = NULL)
+  void runTest(const QString& input, const QString& output, Settings* settings = nullptr)
   {
     OsmXmlReader reader;
 

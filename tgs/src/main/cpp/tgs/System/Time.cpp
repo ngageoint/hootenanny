@@ -51,7 +51,7 @@ namespace Tgs
       result = (double)(liStop.QuadPart) / (double)(liFrequency.QuadPart);
 #   else
       struct timeval tv;
-      gettimeofday(&tv, NULL);
+      gettimeofday(&tv, nullptr);
       result = (double)tv.tv_sec + (double)tv.tv_usec / 1e6;
 #   endif
     return result;

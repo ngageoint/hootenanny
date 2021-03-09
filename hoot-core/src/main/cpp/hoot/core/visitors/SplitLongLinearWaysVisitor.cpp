@@ -51,8 +51,6 @@ HOOT_FACTORY_REGISTER(ElementVisitor, SplitLongLinearWaysVisitor)
 SplitLongLinearWaysVisitor::SplitLongLinearWaysVisitor():
 _maxNodesPerWay(0)
 {
-  _map = NULL;
-
   // Find out if user set our configuration value at cmdline or if we should use default
   ConfigOptions configOptions;
   _maxNodesPerWay = configOptions.getWayMaxNodesPerWay();

@@ -55,7 +55,7 @@ _iterations(0)
 
 void BaseInterpolator::_checkRebuild()
 {
-  if (!_indColumns.empty() && !_depColumns.empty() && _df.get() != 0)
+  if (!_indColumns.empty() && !_depColumns.empty() && _df.get() != nullptr)
   {
     _buildModel();
   }
@@ -74,7 +74,7 @@ double BaseInterpolator::estimateError()
 
 HilbertRTree* BaseInterpolator::_getIndex() const
 {
-  if (_index.get() == 0)
+  if (_index.get() == nullptr)
   {
     const DataFrame& df = *_df;
     // 8 children was picked experimentally with two dimensions.

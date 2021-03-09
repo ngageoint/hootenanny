@@ -33,7 +33,7 @@
 namespace Tgs
 {
 
-DisableCerr::DisableCerr() : _nullStream(0)
+DisableCerr::DisableCerr() : _nullStream(nullptr)
 {
   _oldBuf = std::cerr.rdbuf();
   std::cerr.rdbuf(_nullStream.rdbuf());

@@ -59,7 +59,7 @@ OsmJsonWriter::OsmJsonWriter(int precision)
   : _includeDebug(ConfigOptions().getWriterIncludeDebugTags()),
     _includeCompatibilityTags(true),
     _precision(precision),
-    _out(0),
+    _out(nullptr),
     _pretty(ConfigOptions().getJsonPrettyPrint()),
     _writeEmptyTags(ConfigOptions().getJsonPerserveEmptyTags()),
     _writeHootFormat(ConfigOptions().getJsonFormatHootenanny()),
@@ -112,7 +112,7 @@ QString OsmJsonWriter::toString(const ConstOsmMapPtr& map)
   b.open(QBuffer::WriteOnly);
   _out = &b;
   write(map);
-  _out = 0;
+  _out = nullptr;
   return QString::fromUtf8(b.buffer());
 }
 

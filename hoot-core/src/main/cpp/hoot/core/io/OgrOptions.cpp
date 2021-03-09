@@ -30,7 +30,7 @@ namespace hoot
 {
 
 OgrOptions::OgrOptions() :
-_cryptic(0)
+_cryptic(nullptr)
 {
 
 }
@@ -61,11 +61,11 @@ char** OgrOptions::getCrypticOptions()
 
   if (size() == 0)
   {
-    return 0;
+    return nullptr;
   }
 
   _cryptic = new char*[size() + 1];
-  _cryptic[size()] = 0;
+  _cryptic[size()] = nullptr;
   size_t i = 0;
   for (OgrOptions::const_iterator it = constBegin(); it != constEnd(); ++it)
   {
