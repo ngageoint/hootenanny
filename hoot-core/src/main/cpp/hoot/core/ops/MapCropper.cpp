@@ -347,11 +347,11 @@ void MapCropper::apply(OsmMapPtr& map)
     bool nodeInside = false;
 
     LOG_VART(_explicitlyIncludedWayIds.size());
-    if (_explicitlyIncludedWayIds.size() > 0)
+    if (!_explicitlyIncludedWayIds.empty())
     {
       LOG_VART(WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map));
     }
-    if (_inclusionCrit && _explicitlyIncludedWayIds.size() > 0 &&
+    if (!_inclusionCrit && _explicitlyIncludedWayIds.empty() &&
         WayUtils::nodeContainedByAnyWay(node->getId(), _explicitlyIncludedWayIds, map))
     {
       LOG_TRACE(

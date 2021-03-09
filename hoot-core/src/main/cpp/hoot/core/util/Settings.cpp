@@ -577,7 +577,7 @@ void Settings::parseCommonArguments(QStringList& args)
   const QString optionInputFormatErrorMsg =
     "Define with -D must take the form key=value, key+=value, key++=value, or key-=value";
 
-  while (args.size() > 0 && foundOne)
+  while (!args.empty() && foundOne)
   {
     if (args[0] == "--conf" || args[0] == "-C")
     {

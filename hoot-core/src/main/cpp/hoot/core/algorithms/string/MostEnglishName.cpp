@@ -27,10 +27,10 @@
 #include "MostEnglishName.h"
 
 // Hoot
+#include <hoot/core/elements/Tags.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/Tags.h>
 
 // Qt
 #include <QFile>
@@ -101,7 +101,7 @@ const QSet<QString>& MostEnglishName::_getWords()
       }
     }
 
-    if (_englishWords.size() == 0)
+    if (_englishWords.empty())
     {
       if (logWarnCount < Log::getWarnMessageLimit())
       {

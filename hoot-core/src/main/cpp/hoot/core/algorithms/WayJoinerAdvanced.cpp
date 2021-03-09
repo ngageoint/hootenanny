@@ -197,7 +197,7 @@ void WayJoinerAdvanced::_joinAtNode()
     LOG_VART(currentNumSplitParentIds);
     // If we didn't reduce the number of ways from the previous iteration, or there are none left
     // to reduce, then exit out.
-    if (currentNumSplitParentIds == ids.size() || ids.size() == 0)
+    if (ids.empty() || currentNumSplitParentIds == ids.size())
     {
       break;
     }
@@ -454,7 +454,7 @@ bool WayJoinerAdvanced::_joinWays(const WayPtr& parent, const WayPtr& child)
   //  Check if the two ways are able to be joined back up
 
   //  Make sure that there are nodes in the ways
-  if (parent->getNodeIds().size() == 0 || child->getNodeIds().size() == 0)
+  if (parent->getNodeIds().empty() || child->getNodeIds().empty())
   {
     LOG_TRACE(
       "One or more of the ways: " << parent->getElementId() << " and " << child->getElementId() <<

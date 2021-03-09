@@ -28,13 +28,13 @@
 #include "RelationMemberUtils.h"
 
 // Hoot
-#include <hoot/core/util/HootException.h>
-#include <hoot/core/util/Log.h>
+#include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/criterion/ElementCriterion.h>
 #include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/conflate/ConflateInfoCache.h>
+#include <hoot/core/util/HootException.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -175,7 +175,7 @@ bool RelationMemberUtils::isMemberOfRelationWithTagKey(
 bool RelationMemberUtils::elementContainedByAnyRelation(
   const ElementId& elementId, const ConstOsmMapPtr& map)
 {
-  return map->getIndex().getElementToRelationMap()->getRelationByElement(elementId).size() > 0;
+  return !map->getIndex().getElementToRelationMap()->getRelationByElement(elementId).empty();
 }
 
 bool RelationMemberUtils::containsMemberWithCriterion(

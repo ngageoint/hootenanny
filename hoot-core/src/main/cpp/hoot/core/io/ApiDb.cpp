@@ -183,7 +183,7 @@ void ApiDb::open(const QUrl& url)
     }
   }
 
-  if (_db.tables().size() == 0)
+  if (_db.tables().empty())
   {
     throw HootException("Attempting to open _db " + url.toString(QUrl::RemoveUserInfo) +
                         " but found zero tables. Does the DB exist? Has it been populated?");
@@ -642,7 +642,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectNodesByBounds(const Envelope& bounds)
 
 std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& nodeIds)
 {
-  if (nodeIds.size() == 0)
+  if (nodeIds.empty())
   {
     throw HootException("Empty node ID list.");
   }
@@ -670,7 +670,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayIdsByWayNodeIds(const QSet<QString>& 
 
 QSet<QString> ApiDb::selectConnectedWayIds(const QSet<QString>& wayIds)
 {
-  if (wayIds.size() == 0)
+  if (wayIds.empty())
   {
     throw IllegalArgumentException("Empty way ID list.");
   }
@@ -706,7 +706,7 @@ QSet<QString> ApiDb::selectConnectedWayIds(const QSet<QString>& wayIds)
 std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QString>& elementIds,
                                                                 const TableType& tableType)
 {
-  if (elementIds.size() == 0)
+  if (elementIds.empty())
   {
     throw HootException("Empty element ID list.");
   }
@@ -736,7 +736,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectElementsByElementIdList(const QSet<QStri
 
 std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& wayIds)
 {
-  if (wayIds.size() == 0)
+  if (wayIds.empty())
   {
     throw HootException("Empty way ID list.");
   }
@@ -766,7 +766,7 @@ std::shared_ptr<QSqlQuery> ApiDb::selectWayNodeIdsByWayIds(const QSet<QString>& 
 std::shared_ptr<QSqlQuery> ApiDb::selectRelationIdsByMemberIds(const QSet<QString>& memberIds,
                                                                const ElementType& memberElementType)
 {
-  if (memberIds.size() == 0)
+  if (memberIds.empty())
   {
     throw HootException("Empty member ID list.");
   }

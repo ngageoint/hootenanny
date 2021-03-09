@@ -27,10 +27,10 @@
 #include "RefRemoveOp.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/criterion/NotCriterion.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/Factory.h>
 #include <hoot/core/visitors/ElementConstOsmMapVisitor.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 
@@ -123,7 +123,7 @@ public:
     if (e->getTags().contains(MetadataTags::Ref2()))
     {
       QStringList ref2 = _removeRef1(e->getTags().getList(MetadataTags::Ref2()));
-      if (ref2.size() == 0)
+      if (ref2.empty())
       {
         e->getTags().set(MetadataTags::Ref2(), "none");
       }

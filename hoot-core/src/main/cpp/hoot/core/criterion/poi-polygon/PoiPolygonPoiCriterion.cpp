@@ -27,14 +27,14 @@
 #include "PoiPolygonPoiCriterion.h"
 
 // hoot
+#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/elements/Node.h>
+#include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/schema/OsmSchema.h>
-#include <hoot/core/schema/MetadataTags.h>
-#include <hoot/core/criterion/AreaCriterion.h>
-#include <hoot/core/elements/Node.h>
-#include <hoot/core/conflate/poi-polygon/PoiPolygonTagIgnoreListReader.h>
 
 namespace hoot
 {
@@ -67,7 +67,7 @@ bool PoiPolygonPoiCriterion::isSatisfied(const ConstElementPtr& e) const
 
   LOG_VART(tags.getNames());
   bool isPoi = false;
-  if (tags.getNames().size() > 0)
+  if (!tags.getNames().empty())
   {
     isPoi = true;
   }

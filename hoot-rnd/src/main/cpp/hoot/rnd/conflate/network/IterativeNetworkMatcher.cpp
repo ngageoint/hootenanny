@@ -27,10 +27,10 @@
 #include "IterativeNetworkMatcher.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Log.h>
 #include <hoot/core/conflate/network/EdgeMatch.h>
 #include <hoot/core/conflate/network/EdgeMatchSetFinder.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -244,7 +244,7 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
 
   // if this is relatively simple then modify the graph to add a 0:1 match
   // (AKA intersection:way match)
-  if (unmatched.size() == 0)
+  if (unmatched.empty())
   {
     QList<ConstNetworkVertexPtr> involvedVertices;
 
@@ -282,7 +282,7 @@ void IterativeNetworkMatcher::_createStubIntersection(OsmNetworkPtr na, OsmNetwo
     }
 
     // if there are no unmatched edges, delete va
-    if (edgeVMatch.size() > 0 && unmatched.size() == 0)
+    if (!edgeVMatch.empty() && unmatched.empty())
     {
       LOG_TRACE("Removing vertex: " << va);
       na->removeVertex(va);

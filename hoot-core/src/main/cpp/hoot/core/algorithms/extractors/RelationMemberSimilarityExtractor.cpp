@@ -27,10 +27,10 @@
 #include "RelationMemberSimilarityExtractor.h"
 
 // hoot
+#include <hoot/core/elements/RelationMemberComparison.h>
+#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/elements/RelationMemberComparison.h>
 
 namespace hoot
 {
@@ -66,7 +66,7 @@ double RelationMemberSimilarityExtractor::extract(
     const int totalMembers = targetMemberIds.size() + candidateMemberIds.size();
     LOG_VART(totalMembers);
 
-    if (targetMemberIds.size() == 0 || candidateMemberIds.size() == 0)
+    if (targetMemberIds.empty() || candidateMemberIds.empty())
     {
       return 0.0;
     }

@@ -97,7 +97,7 @@ void JsonOsmSchemaLoader::load(QString path, OsmSchema& s)
   _baseDir.pop_back();
 
   // update implied values via inheritance after all imports are processed
-  if (_baseDir.size() == 0)
+  if (_baseDir.empty())
   {
     s.update();
 

@@ -38,11 +38,15 @@
 #include <hoot/core/algorithms/splitter/MultiLineStringSplitter.h>
 #include <hoot/core/algorithms/subline-matching/SublineStringMatcher.h>
 #include <hoot/core/conflate/highway/HighwayMatch.h>
+#include <hoot/core/conflate/merging/WayNodeCopier.h>
+#include <hoot/core/criterion/NotCriterion.h>
+#include <hoot/core/criterion/NoInformationCriterion.h>
 #include <hoot/core/criterion/OneWayCriterion.h>
 #include <hoot/core/elements/ElementComparer.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/NodeToWayMap.h>
 #include <hoot/core/elements/OsmUtils.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/io/OsmMapWriterFactory.h>
 #include <hoot/core/ops/IdSwapOp.h>
@@ -51,16 +55,12 @@
 #include <hoot/core/ops/RemoveReviewsByEidOp.h>
 #include <hoot/core/ops/RelationMemberSwapper.h>
 #include <hoot/core/schema/TagMergerFactory.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/util/Validate.h>
 #include <hoot/core/visitors/ElementOsmMapVisitor.h>
 #include <hoot/core/visitors/WaysVisitor.h>
-#include <hoot/core/conflate/merging/WayNodeCopier.h>
-#include <hoot/core/criterion/NotCriterion.h>
-#include <hoot/core/criterion/NoInformationCriterion.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 // Qt
 #include <QSet>
@@ -702,7 +702,7 @@ void LinearSnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColle
   LOG_TRACE("Non-modifiable extracted ways: " << ways);
 
   // If there are ways that aren't part of the way subline string,
-  if (ways.size() > 0)
+  if (!ways.empty())
   {
     // add the ways to the scrap relation.
     RelationPtr r;

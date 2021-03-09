@@ -27,9 +27,9 @@
 #include "ImplicitPoiPolygonTypeTagger.h"
 
 #include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -89,7 +89,7 @@ bool ImplicitPoiPolygonTypeTagger::_elementIsATaggablePolygon(const ElementPtr& 
   {
     return true;
   }
-  else if ((elementIsAWay || elementIsARelation) && _getNames(e->getTags()).size() > 0)
+  else if ((elementIsAWay || elementIsARelation) && !_getNames(e->getTags()).empty())
   {
     return true;
   }

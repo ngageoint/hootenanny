@@ -28,11 +28,11 @@
 #include "DuplicateNameRemover.h"
 
 // Hoot
+#include <hoot/core/conflate/ConflateUtils.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/ConfigOptions.h>
-#include <hoot/core/conflate/ConflateUtils.h>
 
 // Qt
 #include <QDebug>
@@ -147,7 +147,7 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
 
     _numAffected = list.size() - filtered.size();
 
-    if (filtered.size() > 0)
+    if (!filtered.empty())
     {
       if (filtered.size() != list.size())
       {
@@ -164,7 +164,7 @@ void DuplicateNameRemover::apply(std::shared_ptr<OsmMap>& map)
           filtered.pop_front();
         }
         LOG_VART(filtered);
-        if (filtered.size() > 0)
+        if (!filtered.empty())
         {
           // If there are additional names, put them in alt_name.
           w->getTags().insert("alt_name", QStringList(filtered).join(";"));

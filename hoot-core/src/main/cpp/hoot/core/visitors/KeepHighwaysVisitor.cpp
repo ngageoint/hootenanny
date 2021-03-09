@@ -27,13 +27,13 @@
 #include "KeepHighwaysVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
+#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/criterion/HighwayCriterion.h>
 #include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/index/OsmMapIndex.h>
 #include <hoot/core/ops/RecursiveElementRemover.h>
 #include <hoot/core/ops/RemoveRelationByEid.h>
-#include <hoot/core/criterion/HighwayCriterion.h>
-#include <hoot/core/criterion/AreaCriterion.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -52,7 +52,7 @@ void KeepHighwaysVisitor::visit(const ConstElementPtr& e)
     // highways.
     if (type == ElementType::Relation)
     {
-      if (_map->getIndex().getParents(e->getElementId()).size() == 0)
+      if (_map->getIndex().getParents(e->getElementId()).empty())
       {
         RemoveRelationByEid::removeRelation(_map->shared_from_this(), id);
       }

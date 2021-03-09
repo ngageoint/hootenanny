@@ -283,7 +283,7 @@ void OsmGbdxJsonWriter::_writeWays()
     ConstWayPtr w = it->second;
     //  Skip any ways that have parents
     set<ElementId> parents = _map->getParents(w->getElementId());
-    if (parents.size() > 0)
+    if (!parents.empty())
       continue;
     if (w.get() == NULL)
       continue;

@@ -66,7 +66,7 @@ void RemoveNodeByEid::_removeNode(const OsmMapPtr& map, long nId)
 {
   const std::shared_ptr<NodeToWayMap>& n2w = map->getIndex().getNodeToWayMap();
   const set<long>& ways = n2w->getWaysByNode(nId);
-  if (ways.size() > 0)
+  if (!ways.empty())
   {
     if (_removeOnlyUnused)
     {

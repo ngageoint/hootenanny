@@ -31,15 +31,15 @@
 #include <cmath>
 
 // Hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/elements/MapProjector.h>
 #include <hoot/core/elements/Node.h>
+#include <hoot/core/elements/NodeUtils.h>
+#include <hoot/core/elements/OsmMap.h>
 #include <hoot/core/elements/Way.h>
+#include <hoot/core/elements/WayUtils.h>
+#include <hoot/core/ops/RemoveNodeByEid.h>
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
-#include <hoot/core/elements/NodeUtils.h>
-#include <hoot/core/elements/MapProjector.h>
-#include <hoot/core/ops/RemoveNodeByEid.h>
-#include <hoot/core/elements/WayUtils.h>
 
 using namespace std;
 
@@ -123,7 +123,7 @@ int RdpWayGeneralizer::generalize(const std::shared_ptr<Way>& way)
   LOG_VART(nodeIdsNotAllowedToBeRemoved);
 
   QList<long> updatedWayNodeIds = wayNodeIdsAfterGeneralization;
-  if (nodeIdsNotAllowedToBeRemoved.size() > 0)
+  if (!nodeIdsNotAllowedToBeRemoved.empty())
   {
     // If there were any nodes we removed during generalization but aren't allowed to remove, we
     // need to add those back in here using the pre-generalization node set. We could have tried to

@@ -246,7 +246,7 @@ void HootApiDb::_copyTableStructure(const QString& from, const QString& to)
 
 void HootApiDb::createPendingMapIndexes()
 {
-  if (_pendingMapIndexes.size() > 0)
+  if (!_pendingMapIndexes.empty())
   {
     LOG_DEBUG("Creating " << _pendingMapIndexes.size() << " map indexes...");
   }
@@ -1601,7 +1601,7 @@ void HootApiDb::_deleteFolderMapMappingsByMapId(const long mapId)
 
 void HootApiDb::_deleteAllFolders(const set<long>& folderIds)
 {
-  if (folderIds.size() == 0)
+  if (folderIds.empty())
   {
     return;
   }

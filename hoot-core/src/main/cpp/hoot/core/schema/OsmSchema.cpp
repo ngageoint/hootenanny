@@ -1728,7 +1728,7 @@ bool OsmSchema::allowsFor(const Tags& t, const ElementType& /*type*/,
                           OsmGeometries::Type geometries)
 {
   //  Empty tags shouldn't allow for anything
-  if (t.size() == 0)
+  if (t.empty())
     return false;
   int usableTags = 0;
   OsmGeometries::Type value = OsmGeometries::All;

@@ -27,7 +27,6 @@
 #include "ElementStreamer.h"
 
 // Hoot
-#include <hoot/core/visitors/ConstElementVisitor.h>
 #include <hoot/core/elements/OsmMapConsumer.h>
 #include <hoot/core/io/ElementCriterionInputStream.h>
 #include <hoot/core/io/ElementOutputStream.h>
@@ -41,6 +40,7 @@
 #include <hoot/core/util/ConfigUtils.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
 
 // Qt
 #include <QElapsedTimer>
@@ -146,7 +146,7 @@ bool ElementStreamer::areValidStreamingOps(const QStringList& ops)
 ElementInputStreamPtr ElementStreamer::getFilteredInputStream(
   ElementInputStreamPtr streamToFilter, const QStringList& ops)
 {
-  if (ops.size() == 0)
+  if (ops.empty())
   {
     return streamToFilter;
   }

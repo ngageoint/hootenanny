@@ -92,14 +92,14 @@ public:
    *
    * @return true if any errors were found; false otherwise
    */
-  bool hasErrors() const { return _errors.size() > 0; }
+  bool hasErrors() const { return !_errors.empty(); }
 
   /**
    * Determines if any warnings were found by validation
    *
    * @return true if any errors were found; false otherwise
    */
-  bool hasWarnings() const { return _warnings.size() > 0; }
+  bool hasWarnings() const { return !_warnings.empty(); }
 
   void setRequireRef1(bool require) { _requireRef1 = require; }
   void setAllowUuidManualMatchIds(bool allow) { _allowUuidManualMatchIds = allow; }

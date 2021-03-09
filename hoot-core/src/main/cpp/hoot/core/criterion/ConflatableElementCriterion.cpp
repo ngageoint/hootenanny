@@ -27,9 +27,9 @@
 #include "ConflatableElementCriterion.h"
 
 // hoot
-#include <hoot/core/util/Log.h>
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/elements/ConstOsmMapConsumer.h>
+#include <hoot/core/util/Factory.h>
+#include <hoot/core/util/Log.h>
 
 namespace hoot
 {
@@ -131,7 +131,7 @@ QStringList ConflatableElementCriterion::getConflatableCriteriaForElement(
 
   // If no specific conflate crit was available, then try to add a generic one.
 
-  if (conflatableCriteriaForElement.size() == 0)
+  if (conflatableCriteriaForElement.empty())
   {
     for (QMap<QString, std::shared_ptr<ConflatableElementCriterion>>::const_iterator itr =
            genericConflatableCriteria.begin();

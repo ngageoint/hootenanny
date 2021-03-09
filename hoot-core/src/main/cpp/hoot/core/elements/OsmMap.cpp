@@ -313,7 +313,7 @@ void OsmMap::addNode(const NodePtr& n)
 
 void OsmMap::addNodes(const std::vector<NodePtr>& nodes)
 {
-  if (nodes.size() > 0)
+  if (!nodes.empty())
   {
     long minId = nodes[0]->getId();
     long maxId = minId;
@@ -520,7 +520,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from,
   // do some error checking before we add the new element.
   if (from->getElementType() == ElementType::Node && to->getElementType() != ElementType::Node)
   {
-    if (n2w->getWaysByNode(from->getId()).size() != 0)
+    if (!n2w->getWaysByNode(from->getId()).empty())
     {
       throw HootException(
         "Trying to replace a node with a non-node when the node is part of a way.");
@@ -558,7 +558,7 @@ void OsmMap::replace(const std::shared_ptr<const Element>& from, const QList<Ele
   if (from->getElementType() == ElementType::Node &&
     (_listContainsNode(to) == false || to.size() > 1))
   {
-    if (n2w->getWaysByNode(from->getId()).size() != 0)
+    if (!n2w->getWaysByNode(from->getId()).empty())
     {
       throw IllegalArgumentException(
         "Trying to replace a node with multiple nodes or a non-node when the node is part of a way.");

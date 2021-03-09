@@ -27,9 +27,9 @@
 #include "SplitNameVisitor.h"
 
 // hoot
-#include <hoot/core/util/Factory.h>
 #include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/ConfigOptions.h>
+#include <hoot/core/util/Factory.h>
 
 namespace hoot
 {
@@ -68,7 +68,7 @@ void SplitNameVisitor::_addExtraNames(Tags& t, const QStringList& extraNames)
     size += thisSize + 1;
   }
 
-  if (names.size() > 0)
+  if (!names.empty())
   {
     lastNameId = _getNextNameId(t, lastNameId);
     QString k = QString("name:%1").arg(lastNameId);

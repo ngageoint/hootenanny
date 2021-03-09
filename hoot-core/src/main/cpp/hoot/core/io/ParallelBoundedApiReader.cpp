@@ -28,9 +28,9 @@
 #include "ParallelBoundedApiReader.h"
 
 //  Hootenanny
+#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/io/HootNetworkRequest.h>
 #include <hoot/core/util/FileUtils.h>
-#include <hoot/core/geometry/GeometryUtils.h>
 #include <hoot/core/util/HootNetworkUtils.h>
 #include <hoot/core/util/StringUtils.h>
 
@@ -123,7 +123,7 @@ bool ParallelBoundedApiReader::getSingleResult(QString& result)
   bool success = true;
   //  takeFirst() pops the first element and returns it
   _resultsMutex.lock();
-  if (_resultsList.size() > 0)
+  if (!_resultsList.empty())
     result = _resultsList.takeFirst();
   else
     success = false;
@@ -135,7 +135,7 @@ bool ParallelBoundedApiReader::getSingleResult(QString& result)
 bool ParallelBoundedApiReader::hasMoreResults()
 {
   _resultsMutex.lock();
-  bool more = _resultsList.size() > 0;
+  bool more = !_resultsList.empty();
   _resultsMutex.unlock();
   bool done = isComplete();
   //  There are more results when the queue contains results
