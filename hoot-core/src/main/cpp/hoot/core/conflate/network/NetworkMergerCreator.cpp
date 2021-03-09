@@ -188,11 +188,10 @@ bool NetworkMergerCreator::createMergers(
 vector<CreatorDescription> NetworkMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates mergers that merge roads conflated with the Network Algorithm",
-      false));
+  result.emplace_back(
+    className(),
+    "Generates mergers that merge roads conflated with the Network Algorithm",
+    false);
   return result;
 }
 

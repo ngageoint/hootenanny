@@ -350,7 +350,7 @@ vector<frechet_subline> FrechetDistance::matchingSublines(Meters maxDistance)
       m = sub[sub.size() - 1];
     }
     if (sub.size() > 1)
-      results.push_back(frechet_subline(sub.size(), sub));
+      results.emplace_back(sub.size(), sub);
   }
 
   sort(results.begin(), results.end(), sort_sublines);

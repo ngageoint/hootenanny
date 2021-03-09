@@ -95,11 +95,10 @@ bool HighwayMergerCreator::createMergers(const MatchSet& matches, vector<MergerP
 vector<CreatorDescription> HighwayMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates mergers that merge roads with the 2nd Generation (Unifying) Algorithm",
-      false));
+  result.emplace_back(
+    className(),
+    "Generates mergers that merge roads with the 2nd Generation (Unifying) Algorithm",
+    false);
   return result;
 }
 

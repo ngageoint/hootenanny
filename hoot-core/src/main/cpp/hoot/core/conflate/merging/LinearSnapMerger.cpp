@@ -827,8 +827,7 @@ void LinearSnapMerger::_splitElement(const OsmMapPtr& map, const WaySublineColle
       scrap->getTags().set(MetadataTags::HootMultilineString(), "yes");
     }
 
-    replaced.push_back(
-      std::pair<ElementId, ElementId>(splitee->getElementId(), scrap->getElementId()));
+    replaced.emplace_back(splitee->getElementId(), scrap->getElementId());
     LOG_VART(replaced);
   }
 }

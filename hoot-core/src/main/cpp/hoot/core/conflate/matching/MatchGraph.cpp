@@ -177,7 +177,7 @@ public:
       // if this is a match that requires review.
       else if (type == MatchType::Review)
       {
-        result.push_back(MatchSet());
+        result.emplace_back();
         MatchSet& matches = result.back();
         matches.insert(m);
       }
@@ -191,7 +191,7 @@ public:
     for (DisjointSetMap<ElementId>::AllGroups::const_iterator it = ag.begin(); it != ag.end(); ++it)
     {
       const vector<ElementId>& v = it->second;
-      result.push_back(MatchSet());
+      result.emplace_back();
       MatchSet& matches = result.back();
 
       for (size_t i = 0; i < v.size(); i++)

@@ -698,7 +698,7 @@ JsonCoordinates OsmGeoJsonReader::_parseGeometry(const pt::ptree& geometry)
     double x = it->second.get_value<double>();
     ++it;
     double y = it->second.get_value<double>();
-    results.push_back(Coordinate(x, y));
+    results.emplace_back(x, y);
   }
   else if (type == "LineString")
   {

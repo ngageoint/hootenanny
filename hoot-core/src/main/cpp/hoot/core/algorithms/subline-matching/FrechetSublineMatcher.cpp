@@ -29,11 +29,11 @@
 // geos
 #include <geos/geom/LineString.h>
 // hoot
+#include <hoot/core/algorithms/FrechetDistance.h>
+#include <hoot/core/geometry/ElementToGeometryConverter.h>
+#include <hoot/core/ops/CopyMapSubsetOp.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/Units.h>
-#include <hoot/core/algorithms/FrechetDistance.h>
-#include <hoot/core/ops/CopyMapSubsetOp.h>
-#include <hoot/core/geometry/ElementToGeometryConverter.h>
 
 using namespace geos::geom;
 using namespace std;
@@ -94,7 +94,7 @@ WaySublineMatchString FrechetSublineMatcher::findMatch(
         insert = false;
     }
     if (insert)
-      v.push_back(WaySublineMatch(match, map));
+      v.emplace_back(match, map);
   }
   return WaySublineMatchString(v);
 }
