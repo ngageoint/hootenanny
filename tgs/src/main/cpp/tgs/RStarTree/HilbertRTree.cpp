@@ -389,7 +389,7 @@ int HilbertRTree::_splitBoxes(BoxVector& boxes)
       assert(point[j] >= 0 && point[j] < (1 << ORDER));
     }
 
-    hilbertBoxes.push_back(BoxHolder(boxes[i], _hilbertCurve->encode(point)));
+    hilbertBoxes.emplace_back(boxes[i], _hilbertCurve->encode(point));
   }
   //sort(hilbertBoxes.begin(), hilbertBoxes.end());
   bool swap = false;

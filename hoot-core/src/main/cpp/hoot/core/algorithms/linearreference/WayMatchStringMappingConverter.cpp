@@ -72,7 +72,7 @@ WaySublineMatchStringPtr WayMatchStringMappingConverter::toWaySublineMatchString
     WaySubline tmp2 = sub2;
     tmp1.ensureForwards();
     tmp2.ensureForwards();
-    coll.push_back(WaySublineMatch(tmp1, tmp2, reversed));
+    coll.emplace_back(tmp1, tmp2, reversed);
 
     wl1 = sub1.getEnd();
     wl2 = sub2.getEnd();

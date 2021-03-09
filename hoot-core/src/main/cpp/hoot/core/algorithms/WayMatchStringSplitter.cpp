@@ -131,7 +131,7 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
     if (w && ElementGeometryUtils::calculateLength(w, map) > 0.0)
     {
       newWays.append(w);
-      replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
+      replaced.emplace_back(way->getElementId(), w->getElementId());
     }
 
     for (int i = 0; i < sm.size(); ++i)
@@ -141,7 +141,7 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
         throw NeedsReviewException(_overlyAggressiveMergeReviewText);
 
       sm.at(i)->setNewWay(wn, w);
-      replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
+      replaced.emplace_back(way->getElementId(), w->getElementId());
       newWays.append(w);
 
       w = splits[c++];
@@ -153,7 +153,7 @@ void WayMatchStringSplitter::_splitWay(WayNumber wn, OsmMapPtr map,
           throw InternalErrorException("Only the last split should be empty.");
 
         newWays.append(w);
-        replaced.push_back(pair<ElementId, ElementId>(way->getElementId(), w->getElementId()));
+        replaced.emplace_back(way->getElementId(), w->getElementId());
       }
     }
 

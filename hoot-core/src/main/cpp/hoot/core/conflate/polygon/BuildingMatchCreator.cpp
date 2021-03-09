@@ -27,25 +27,25 @@
 #include "BuildingMatchCreator.h"
 
 // hoot
-#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
 #include <hoot/core/conflate/matching/MatchThreshold.h>
 #include <hoot/core/conflate/matching/MatchType.h>
 #include <hoot/core/conflate/polygon/BuildingMatch.h>
 #include <hoot/core/conflate/polygon/BuildingRfClassifier.h>
 #include <hoot/core/criterion/ArbitraryCriterion.h>
-#include <hoot/core/visitors/ConstElementVisitor.h>
-#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/elements/OsmMap.h>
+#include <hoot/core/schema/OsmSchema.h>
+#include <hoot/core/util/CollectionUtils.h>
 #include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/ConfPath.h>
 #include <hoot/core/util/Factory.h>
-#include <hoot/core/util/Settings.h>
-#include <hoot/core/visitors/SpatialIndexer.h>
-#include <hoot/core/util/StringUtils.h>
-#include <hoot/core/util/CollectionUtils.h>
-#include <hoot/core/algorithms/extractors/OverlapExtractor.h>
-#include <hoot/core/schema/OsmSchema.h>
 #include <hoot/core/util/MemoryUsageChecker.h>
-#include <hoot/core/criterion/BuildingCriterion.h>
+#include <hoot/core/util/NotImplementedException.h>
+#include <hoot/core/util/Settings.h>
+#include <hoot/core/util/StringUtils.h>
+#include <hoot/core/visitors/ConstElementVisitor.h>
+#include <hoot/core/visitors/SpatialIndexer.h>
 
 // Standard
 #include <fstream>
@@ -474,12 +474,11 @@ void BuildingMatchCreator::createMatches(const ConstOsmMapPtr& map,
 std::vector<CreatorDescription> BuildingMatchCreator::getAllCreators() const
 {
   std::vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates matchers that match buildings",
-      CreatorDescription::Building,
-      false));
+  result.emplace_back(
+    className(),
+    "Generates matchers that match buildings",
+    CreatorDescription::Building,
+    false);
   return result;
 }
 

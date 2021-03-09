@@ -212,7 +212,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
     const pair<ElementId, ElementId>& p = *it;
     if (p.first.getType() == ElementType::Node)
     {
-      replaced.push_back(pair<ElementId, ElementId>(p.first, finalBuildingEid));
+      replaced.emplace_back(p.first, finalBuildingEid);
       // clear the tags just in case it is part of a way
       if (map->containsElement(p.first))
       {
@@ -235,7 +235,7 @@ void PoiPolygonMerger::apply(const OsmMapPtr& map, vector<pair<ElementId, Elemen
 
     if (p.second.getType() == ElementType::Node)
     {
-      replaced.push_back(pair<ElementId, ElementId>(p.second, finalBuildingEid));
+      replaced.emplace_back(p.second, finalBuildingEid);
       // clear the tags just in case it is part of a way
       if (map->containsElement(p.second))
       {

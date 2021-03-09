@@ -36,9 +36,6 @@
 #include <hoot/core/util/HootException.h>
 #include <hoot/core/util/Log.h>
 
-//Boost Includes
-#include <boost/make_shared.hpp>
-
 //Qt includes
 #include <QStringList>
 
@@ -335,7 +332,7 @@ vector<Range> ZCurveRanger::_decomposeRange(LongBox box, LongBox focusBox, int l
 vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
 {
   priority_queue<LongBoxContainer> pq;
-  pq.push(LongBoxContainer(box, calculateExcess(std::make_shared<LongBox>(box))));
+  pq.emplace(box, calculateExcess(std::make_shared<LongBox>(box)));
 
   vector<LongBox> completed;
   while ((!pq.empty()) && (((int)pq.size() + (int)completed.size()) < count))
@@ -357,8 +354,8 @@ vector<Range> ZCurveRanger::_decomposeRangeIterative(LongBox box, int count)
       }
       else if (boxes.size() == 2)
       {
-        pq.push(LongBoxContainer(*boxes[0].get(), calculateExcess(boxes[0])));
-        pq.push(LongBoxContainer(*boxes[1].get(), calculateExcess(boxes[1])));
+        pq.emplace(*boxes[0].get(), calculateExcess(boxes[0]));
+        pq.emplace(*boxes[1].get(), calculateExcess(boxes[1]));
       }
       else
       {

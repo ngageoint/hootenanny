@@ -146,11 +146,10 @@ bool PoiPolygonMergerCreator::createMergers(
 vector<CreatorDescription> PoiPolygonMergerCreator::getAllCreators() const
 {
   vector<CreatorDescription> result;
-  result.push_back(
-    CreatorDescription(
-      className(),
-      "Generates mergers that merge POIs into polygons",
-      false));
+  result.emplace_back(
+    className(),
+    "Generates mergers that merge POIs into polygons",
+    false);
   return result;
 }
 

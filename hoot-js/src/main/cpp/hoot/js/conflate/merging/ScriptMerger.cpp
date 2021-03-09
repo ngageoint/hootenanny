@@ -28,13 +28,13 @@
 
 // hoot
 #include <hoot/core/index/OsmMapIndex.h>
-#include <hoot/js/elements/OsmMapJs.h>
-#include <hoot/js/elements/ElementJs.h>
-#include <hoot/js/elements/ElementIdJs.h>
-#include <hoot/js/io/DataConvertJs.h>
-#include <hoot/js/util/HootExceptionJs.h>
-#include <hoot/js/io/StreamUtilsJs.h>
 #include <hoot/core/util/Factory.h>
+#include <hoot/js/elements/ElementIdJs.h>
+#include <hoot/js/elements/ElementJs.h>
+#include <hoot/js/elements/OsmMapJs.h>
+#include <hoot/js/io/DataConvertJs.h>
+#include <hoot/js/io/StreamUtilsJs.h>
+#include <hoot/js/util/HootExceptionJs.h>
 
 // node.js
 #include <hoot/js/SystemNodeJs.h>
@@ -150,12 +150,12 @@ void ScriptMerger::_applyMergePair(const OsmMapPtr& map,
   LOG_VART(map->containsElement(_eid1));
   if (map->containsElement(_eid1) == false)
   {
-    replaced.push_back(pair<ElementId, ElementId>(_eid1, newElement->getElementId()));
+    replaced.emplace_back(_eid1, newElement->getElementId());
   }
   LOG_VART(map->containsElement(_eid2));
   if (map->containsElement(_eid2) == false)
   {
-    replaced.push_back(pair<ElementId, ElementId>(_eid2, newElement->getElementId()));
+    replaced.emplace_back(_eid2, newElement->getElementId());
   }
 }
 

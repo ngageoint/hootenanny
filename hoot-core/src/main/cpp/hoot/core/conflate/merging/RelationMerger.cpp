@@ -296,10 +296,9 @@ bool RelationMerger::_mergeMembers(RelationPtr replacingRelation, RelationPtr re
   {
     const RelationMemberComparison currentMemberFromReplaced = replacingRelationMemberComps[i];
     // Add the relation member to the relation we're keeping.
-    modifiedMembers.push_back(
-      RelationData::Entry(
+    modifiedMembers.emplace_back(
         currentMemberFromReplaced.getRole(),
-        currentMemberFromReplaced.getElement()->getElementId()));
+        currentMemberFromReplaced.getElement()->getElementId());
     // Remove the member from the relation we may or may not be keeping.
     relationBeingReplaced->removeElement(currentMemberFromReplaced.getElement()->getElementId());
     numMembersCopied++;
