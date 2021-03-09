@@ -28,9 +28,9 @@
 
 // hoot
 #include <hoot/core/schema/MetadataTags.h>
+#include <hoot/core/util/ConfigOptions.h>
 #include <hoot/core/util/Factory.h>
 #include <hoot/core/util/UuidHelper.h>
-#include <hoot/core/util/ConfigOptions.h>
 
 namespace hoot
 {
@@ -64,7 +64,10 @@ void DataSummaryTagVisitor::visit(const ElementPtr& e)
     int observations = 0;
     int misses = 0;
     int consecutive = 0;
+    int consecutive_start = -1;
     int max_consecutive = 0;
+    int max_consecutive_start = -1;
+    std::ostringstream hist;
 
     for (int i = 0; i < _sources.size(); ++i)
     {
@@ -79,25 +82,41 @@ void DataSummaryTagVisitor::visit(const ElementPtr& e)
         last = i;
         //  Update the consecutive
         consecutive++;
+        if (consecutive_start == -1)
+          consecutive_start = i;
+        //  Update the histogram
+        hist << "X";
       }
       else
       {
         //  Missed
         misses++;
         //  Consecutive streak is broken
-        max_consecutive = std::max(max_consecutive, consecutive);
+        if (max_consecutive <= consecutive)
+        {
+          max_consecutive = consecutive;
+          max_consecutive_start = consecutive_start;
+        }
         consecutive = 0;
+        consecutive_start = -1;
+        //  Update the histogram
+        hist << "_";
       }
     }
     //  Save off the max_consecutive if needed
-    if (consecutive != 0)
-      max_consecutive = std::max(max_consecutive, consecutive);
+    if (consecutive != 0 && max_consecutive <= consecutive)
+    {
+      max_consecutive = consecutive;
+      max_consecutive_start = consecutive_start;
+    }
     //  Add the tags
     tags[MetadataTags::HootFirstSeen()] = (first >= 0 ? _sources[first] : "N/A");
     tags[MetadataTags::HootLastSeen()] = (last >= 0 ? _sources[last] : "N/A");
     tags[MetadataTags::HootTotalObservations()] = QString("%1").arg(observations);
     tags[MetadataTags::HootTotalMisses()] = QString("%1").arg(misses);
-    tags[MetadataTags::MaxConsecutive()] = QString("%1").arg(max_consecutive);
+    tags[MetadataTags::HootMaxConsecutive()] = QString("%1").arg(max_consecutive);
+    tags[MetadataTags::HootMaxConsecutiveStart()] = (max_consecutive_start >= 0 ? _sources[max_consecutive_start] : "N/A");
+    tags[MetadataTags::HootHistogram()] = QString(hist.str().c_str());
   }
 }
 
