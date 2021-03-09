@@ -61,7 +61,7 @@ public:
     if (args.size() < 1)
     {
       cout << getHelp() << endl << endl;
-      throw HootException(QString("%1 takes at least one parameter.").arg(getName()));
+      throw IllegalArgumentException(QString("%1 takes at least one parameter.").arg(getName()));
     }
 
     int tagValuesPerKeyLimit = INT_MAX;
@@ -114,6 +114,20 @@ public:
       LOG_VART(args);
     }
 
+    bool delimitedTextOutput = false;
+    if (args.contains("--delimited-text"))
+    {
+      if (!keysOnly)
+      {
+        throw IllegalArgumentException(
+          QString("%1 --delimited-text option is only valid when used with --keys-only.")
+            .arg(getName()));
+      }
+      delimitedTextOutput = true;
+      args.removeAt(args.indexOf("--delimited-text"));
+      LOG_VART(args);
+    }
+
     // everything left is an input
     QStringList inputs;
     for (int i = 0; i < args.size(); i++)
@@ -121,7 +135,8 @@ public:
       inputs.append(args[i]);
     }
 
-    TagInfo tagInfo(tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch);
+    TagInfo tagInfo(
+      tagValuesPerKeyLimit, keys, keysOnly, caseSensitive, exactKeyMatch, delimitedTextOutput);
     cout << tagInfo.getInfo(inputs) << endl;
 
     LOG_STATUS(

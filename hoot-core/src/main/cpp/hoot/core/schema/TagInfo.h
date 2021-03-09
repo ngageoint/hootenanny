@@ -46,7 +46,7 @@ public:
 
   TagInfo(const int tagValuesPerKeyLimit = INT_MAX, const QStringList& keys = QStringList(),
           const bool keysOnly = false, const bool caseSensitive = true,
-          const bool exactKeyMatch = true);
+          const bool exactKeyMatch = true, const bool delimitedTextOutput = false);
 
   /**
    * Returns a JSON string with tag values grouped by keys
@@ -54,7 +54,7 @@ public:
    * @param inputs data sources with tags to examine
    * @return a JSON tags string
    */
-  QString getInfo(const QStringList& inputs);
+  QString getInfo(const QStringList& inputs) const;
 
 private:
 
@@ -77,13 +77,17 @@ private:
   // they match if any part of the feature tag key is contained in the specified tag key
   bool _exactKeyMatch;
 
+  // TODO
+  bool _delimitedTextOutput;
+
   int _taskStatusUpdateInterval;
 
-  QString _getInfo(const QString& input);
+  QString _getInfo(const QString& input) const;
 
-  QString _printJSON(const QString& lName, TagInfoHash& data);
+  QString _printJSON(const QString& lName, TagInfoHash& data) const;
+  QString _printDelimitedText(TagInfoHash& data) const;
 
-  void _parseElement(const ElementPtr& e, TagInfoHash& result);
+  void _parseElement(const ElementPtr& e, TagInfoHash& result) const;
   bool _tagKeysMatch(const QString& tagKey) const;
 };
 
